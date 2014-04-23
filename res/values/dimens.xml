@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="maps_watermark_margin">5.0dip</dimen>
+</resources>

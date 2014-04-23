@@ -1,0 +1,5 @@
+# Disable ProGuard Notes, they won't help here
+-dontnote
+
+# Keep dynamically loaded GMS classes
+-keep public class com.google.android.gms.maps.internal.CreatorImpl

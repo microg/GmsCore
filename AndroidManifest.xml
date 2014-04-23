@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.google.android.gms"
+	android:versionCode="4243036">
+
+	<uses-sdk android:minSdkVersion="16" />
+
+	<uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+	<application
+		android:icon="@drawable/nlp_app_icon"
+		android:label="@string/nlp_app_name">
+		<uses-library
+			android:name="com.android.location.provider"
+			android:required="false" />
+		<uses-library
+			android:name="com.google.android.maps"
+			android:required="false" />
+
+		<!-- Jelly Bean / KitKat -->
+		<service
+			android:name="org.microg.nlp.location.LocationServiceV2"
+			android:exported="true">
+			<intent-filter>
+				<!-- KitKat changed the action name but nothing else, hence we handle it the same -->
+				<action android:name="com.android.location.service.v3.NetworkLocationProvider" />
+				<action android:name="com.android.location.service.v2.NetworkLocationProvider" />
+			</intent-filter>
+
+			<meta-data
+				android:name="serviceVersion"
+				android:value="2" />
+			<meta-data
+				android:name="serviceIsMultiuser"
+				android:value="false" />
+		</service>
+
+		<service
+			android:name="org.microg.nlp.geocode.GeocodeServiceV1"
+			android:exported="true">
+			<intent-filter>
+				<!-- Jelly Bean changed the action name but nothing else, hence we handle it the same -->
+				<action android:name="com.android.location.service.GeocodeProvider" />
+				<action android:name="com.google.android.location.GeocodeProvider" />
+			</intent-filter>
+
+			<meta-data
+				android:name="serviceVersion"
+				android:value="2" />
+			<meta-data
+				android:name="serviceIsMultiuser"
+				android:value="false" />
+		</service>
+
+		<activity
+			android:name="org.microg.nlp.ui.LocationBackendConfig"
+			android:theme="@android:style/Theme.Holo.Light">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<receiver android:name="org.microg.nlp.PackageReceiver" >
+			<intent-filter>
+				<action android:name="android.intent.action.PACKAGE_ADDED" />
+				<action android:name="android.intent.action.PACKAGE_CHANGED" />
+				<action android:name="android.intent.action.PACKAGE_UPGRADED" />
+				<action android:name="android.intent.action.PACKAGE_REMOVED" />
+				<action android:name="android.intent.action.PACKAGE_REPLACED" />
+				<action android:name="android.intent.action.PACKAGE_RESTARTED" />
+
+				<data android:scheme="package" />
+			</intent-filter>
+		</receiver>
+
+
+		<service android:name="com.google.android.location.internal.GoogleLocationManagerService" android:exported="true">
+			<intent-filter>
+				<action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
+			</intent-filter>
+		</service>
+	</application>
+</manifest>
