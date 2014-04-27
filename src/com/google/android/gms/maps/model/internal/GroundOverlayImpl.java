@@ -17,25 +17,22 @@
 package com.google.android.gms.maps.model.internal;
 
 import android.os.RemoteException;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
 
-import java.util.Collections;
-import java.util.List;
-
-/**
- * TODO
- */
-public class PolylineImpl extends IPolylineDelegate.Stub {
-    private List<LatLng> points;
+public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
+    private LatLng position;
+    private float transparency;
     private float zIndex;
-    private boolean geodesic;
     private boolean visible;
     private String id;
     private float width;
-    private int color;
+    private float height;
+    private float bearing;
 
-    public PolylineImpl(PolylineOptions options) {
+    public GroundOverlayImpl(GroundOverlayOptions options) {
 
     }
 
@@ -50,18 +47,24 @@ public class PolylineImpl extends IPolylineDelegate.Stub {
     }
 
     @Override
-    public void setPoints(List<LatLng> points) throws RemoteException {
-        this.points = points;
+    public void setPosition(LatLng pos) throws RemoteException {
+        this.position = pos;
     }
 
     @Override
-    public List<LatLng> getPoints() throws RemoteException {
-        return points == null ? Collections.<LatLng>emptyList() : points;
+    public LatLng getPosition() throws RemoteException {
+        return position;
     }
 
     @Override
-    public void setWidth(float width) throws RemoteException {
+    public void setDimension(float dimension) throws RemoteException {
+        setDimensions(dimension, dimension);
+    }
+
+    @Override
+    public void setDimensions(float width, float height) throws RemoteException {
         this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -70,13 +73,28 @@ public class PolylineImpl extends IPolylineDelegate.Stub {
     }
 
     @Override
-    public void setColor(int color) throws RemoteException {
-        this.color = color;
+    public float getHeight() throws RemoteException {
+        return height;
     }
 
     @Override
-    public int getColor() throws RemoteException {
-        return color;
+    public void setPositionFromBounds(LatLngBounds bounds) throws RemoteException {
+
+    }
+
+    @Override
+    public LatLngBounds getBounds() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void setBearing(float bearing) throws RemoteException {
+        this.bearing = bearing;
+    }
+
+    @Override
+    public float getBearing() throws RemoteException {
+        return bearing;
     }
 
     @Override
@@ -100,22 +118,27 @@ public class PolylineImpl extends IPolylineDelegate.Stub {
     }
 
     @Override
-    public void setGeodesic(boolean geod) throws RemoteException {
-        this.geodesic = geod;
+    public void setTransparency(float transparency) throws RemoteException {
+        this.transparency = transparency;
     }
 
     @Override
-    public boolean isGeodesic() throws RemoteException {
-        return geodesic;
+    public float getTransparency() throws RemoteException {
+        return transparency;
     }
 
     @Override
-    public boolean equalsRemote(IPolylineDelegate other) throws RemoteException {
+    public boolean equalsRemote(IGroundOverlayDelegate other) throws RemoteException {
         return other.getId().equals(getId());
     }
 
     @Override
     public int hashCodeRemote() throws RemoteException {
         return id.hashCode();
+    }
+
+    @Override
+    public void todo(IObjectWrapper obj) throws RemoteException {
+
     }
 }

@@ -18,15 +18,30 @@ package com.google.android.location.internal;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
 import com.google.android.gms.common.internal.AbstractGmsServiceBroker;
+import com.google.android.gms.common.internal.IGmsCallbacks;
 
 public class GoogleLocationManagerService extends Service {
-	@Override
-	public IBinder onBind(Intent intent) {
-		return new Broker().asBinder();
-	}
+    private static final String TAG = GoogleLocationManagerService.class.getName();
 
-	private class Broker extends AbstractGmsServiceBroker {
-	}
+    @Override
+    public IBinder onBind(Intent intent) {
+        return new Broker(intent).asBinder();
+    }
+
+    private class Broker extends AbstractGmsServiceBroker {
+        public Broker(Intent intent) {
+            Log.d(TAG, "Incoming intent: " + intent.toString());
+        }
+
+        @Override
+        public void getGoogleLocationManagerService(IGmsCallbacks callback, int code, String str, Bundle params) throws RemoteException {
+            Log.d(TAG, "getGoogleLocationManagerService: " + code + ", " + str + ", " + params);
+            callback.onPostInitComplete(code, null, params);
+        }
+    }
 }

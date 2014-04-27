@@ -131,17 +131,17 @@ public class GoogleMapImpl {
 
 		@Override
 		public IPolygonDelegate addPolygon(PolygonOptions options) throws RemoteException {
-			return null;
+			return new PolygonImpl(options);
 		}
 
 		@Override
 		public IMarkerDelegate addMarker(MarkerOptions options) throws RemoteException {
-			return null;
+			return new MarkerImpl(options);
 		}
 
 		@Override
 		public IGroundOverlayDelegate addGroundOverlay(GroundOverlayOptions options) throws RemoteException {
-			return null;
+			return new GroundOverlayImpl(options);
 		}
 
 		@Override
@@ -281,7 +281,7 @@ public class GoogleMapImpl {
 
 		@Override
 		public ICircleDelegate addCircle(CircleOptions options) throws RemoteException {
-			return null;
+			return new CircleImpl(options);
 		}
 
 		@Override

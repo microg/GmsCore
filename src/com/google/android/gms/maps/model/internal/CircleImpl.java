@@ -17,25 +17,20 @@
 package com.google.android.gms.maps.model.internal;
 
 import android.os.RemoteException;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.Collections;
-import java.util.List;
-
-/**
- * TODO
- */
-public class PolylineImpl extends IPolylineDelegate.Stub {
-    private List<LatLng> points;
+public class CircleImpl extends ICircleDelegate.Stub {
+    private LatLng center;
+    private double radius;
     private float zIndex;
-    private boolean geodesic;
     private boolean visible;
     private String id;
-    private float width;
-    private int color;
+    private float strokeWidth;
+    private int strokeColor;
+    private int fillColor;
 
-    public PolylineImpl(PolylineOptions options) {
+    public CircleImpl(CircleOptions options) {
 
     }
 
@@ -50,33 +45,53 @@ public class PolylineImpl extends IPolylineDelegate.Stub {
     }
 
     @Override
-    public void setPoints(List<LatLng> points) throws RemoteException {
-        this.points = points;
+    public void setCenter(LatLng center) throws RemoteException {
+        this.center = center;
     }
 
     @Override
-    public List<LatLng> getPoints() throws RemoteException {
-        return points == null ? Collections.<LatLng>emptyList() : points;
+    public LatLng getCenter() throws RemoteException {
+        return center;
     }
 
     @Override
-    public void setWidth(float width) throws RemoteException {
-        this.width = width;
+    public void setRadius(double radius) throws RemoteException {
+        this.radius = radius;
     }
 
     @Override
-    public float getWidth() throws RemoteException {
-        return width;
+    public double getRadius() throws RemoteException {
+        return radius;
     }
 
     @Override
-    public void setColor(int color) throws RemoteException {
-        this.color = color;
+    public void setStrokeWidth(float width) throws RemoteException {
+        this.strokeWidth = width;
     }
 
     @Override
-    public int getColor() throws RemoteException {
-        return color;
+    public float getStrokeWidth() throws RemoteException {
+        return strokeWidth;
+    }
+
+    @Override
+    public void setStrokeColor(int color) throws RemoteException {
+        this.strokeColor = color;
+    }
+
+    @Override
+    public int getStrokeColor() throws RemoteException {
+        return strokeColor;
+    }
+
+    @Override
+    public void setFillColor(int color) throws RemoteException {
+        this.fillColor = color;
+    }
+
+    @Override
+    public int getFillColor() throws RemoteException {
+        return fillColor;
     }
 
     @Override
@@ -100,17 +115,7 @@ public class PolylineImpl extends IPolylineDelegate.Stub {
     }
 
     @Override
-    public void setGeodesic(boolean geod) throws RemoteException {
-        this.geodesic = geod;
-    }
-
-    @Override
-    public boolean isGeodesic() throws RemoteException {
-        return geodesic;
-    }
-
-    @Override
-    public boolean equalsRemote(IPolylineDelegate other) throws RemoteException {
+    public boolean equalsRemote(ICircleDelegate other) throws RemoteException {
         return other.getId().equals(getId());
     }
 
