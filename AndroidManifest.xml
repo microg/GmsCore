@@ -26,18 +26,18 @@
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
+	<uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
 
 	<application
-		android:icon="@drawable/nlp_app_icon"
-		android:label="@string/nlp_app_name">
+		android:label="@string/gms_app_name">
 		<uses-library
 			android:name="com.android.location.provider"
 			android:required="false" />
 		<uses-library
 			android:name="com.google.android.maps"
 			android:required="false" />
-        <meta-data android:name="fake-signature" android:value="@string/fake_signature" />
+
+		<meta-data android:name="fake-signature" android:value="@string/fake_signature" />
 
 		<!-- Jelly Bean / KitKat -->
 		<service
