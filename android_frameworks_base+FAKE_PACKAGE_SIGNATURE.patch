@@ -58,7 +58,7 @@ index 790e166..8e66470 100644
      <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
 +    <string name="permlab_fakePackageSignature">mimic package signature</string>
 +    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-+    <string name="permdesc_fakePackageSignature">Allows the app to use mimic another app's package signature.</string>
++    <string name="permdesc_fakePackageSignature">Allows the app to use mimic another app\'s package signature.</string>
 +
 +    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
      <string name="permlab_installPackages">directly install apps</string>
