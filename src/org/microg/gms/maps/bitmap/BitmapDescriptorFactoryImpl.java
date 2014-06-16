@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.bitmap;
 
 import android.graphics.Bitmap;
 import android.os.RemoteException;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
+import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
 
 public class BitmapDescriptorFactoryImpl extends IBitmapDescriptorFactoryDelegate.Stub {
 

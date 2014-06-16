@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps;
 
 import android.content.Context;
 import android.location.Location;
@@ -28,10 +28,13 @@ import android.widget.FrameLayout;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.internal.*;
 import com.google.android.gms.maps.model.*;
 import com.google.android.gms.maps.model.internal.*;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import org.microg.gms.maps.camera.CameraUpdate;
+import org.microg.gms.maps.markup.*;
 
 public class GoogleMapImpl {
 	private static final String TAG = GoogleMapImpl.class.getName();
@@ -74,11 +77,11 @@ public class GoogleMapImpl {
         return context;
     }
 
-    MapView getMapView() {
+    public MapView getMapView() {
 		return mapView;
 	}
 
-	MapController getController() {
+	public MapController getController() {
 		return mapView != null ? mapView.getController() : null;
 	}
 

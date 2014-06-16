@@ -23,8 +23,12 @@ import android.os.RemoteException;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.model.internal.BitmapDescriptorFactoryImpl;
+import org.microg.gms.maps.bitmap.BitmapDescriptorFactoryImpl;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
+import org.microg.gms.maps.camera.CameraUpdateFactoryImpl;
+import org.microg.gms.maps.MapFragmentImpl;
+import org.microg.gms.maps.MapViewImpl;
+import org.microg.gms.maps.ResourcesContainer;
 
 public class CreatorImpl extends ICreator.Stub {
 	@Override

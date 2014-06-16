@@ -14,27 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.bitmap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
-import com.google.android.gms.maps.internal.ResourcesContainer;
 
-public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
-    private static final String TAG = ResourceBitmapDescriptor.class.getName();
+public class FileBitmapDescriptor extends AbstractBitmapDescriptor {
+    private String fileName;
 
-    private int resourceId;
-
-	public ResourceBitmapDescriptor(int resourceId) {
-        this.resourceId = resourceId;
+	public FileBitmapDescriptor(String fileName) {
+        this.fileName = fileName;
     }
 
     @Override
     public Bitmap generateBitmap(Context context) {
-        return BitmapFactory.decodeResource(context.getResources(), resourceId);
+        return BitmapFactory.decodeFile(fileName);
     }
 }

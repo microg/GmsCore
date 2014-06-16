@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps.camera;
 
 import android.os.RemoteException;
 import android.util.Log;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
+import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.maps.GeoPoint;
+import org.microg.gms.maps.GoogleMapImpl;
 
 public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
 	private static final String TAG = CameraUpdateFactoryImpl.class.getName();

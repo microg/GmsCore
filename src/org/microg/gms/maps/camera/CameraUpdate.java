@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.camera;
 
-public class PathBitmapDescriptor {
-	public PathBitmapDescriptor(String absolutePath) {
-	}
+import org.microg.gms.maps.GoogleMapImpl;
+
+public interface CameraUpdate {
+	void update(GoogleMapImpl map);
 }

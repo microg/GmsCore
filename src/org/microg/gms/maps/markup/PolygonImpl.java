@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.markup;
 
 import android.os.RemoteException;
-import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.internal.IPolygonDelegate;
 
-public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
-    private LatLng position;
-    private float transparency;
+import java.util.List;
+
+public class PolygonImpl extends IPolygonDelegate.Stub {
+    private List<LatLng> points;
+    private List holes;
     private float zIndex;
+    private boolean geodesic;
     private boolean visible;
     private String id;
-    private float width;
-    private float height;
-    private float bearing;
+    private float strokeWidth;
+    private int strokeColor;
+    private int fillColor;
 
-    public GroundOverlayImpl(GroundOverlayOptions options) {
+    public PolygonImpl(PolygonOptions options) {
 
     }
 
@@ -47,54 +49,53 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     }
 
     @Override
-    public void setPosition(LatLng pos) throws RemoteException {
-        this.position = pos;
+    public void setPoints(List<LatLng> points) throws RemoteException {
+        this.points = points;
     }
 
     @Override
-    public LatLng getPosition() throws RemoteException {
-        return position;
+    public List<LatLng> getPoints() throws RemoteException {
+        return points;
     }
 
     @Override
-    public void setDimension(float dimension) throws RemoteException {
-        setDimensions(dimension, dimension);
+    public void setHoles(List holes) throws RemoteException {
+        this.holes = holes;
     }
 
     @Override
-    public void setDimensions(float width, float height) throws RemoteException {
-        this.width = width;
-        this.height = height;
+    public List getHoles() throws RemoteException {
+        return holes;
     }
 
     @Override
-    public float getWidth() throws RemoteException {
-        return width;
+    public void setStrokeWidth(float width) throws RemoteException {
+        this.strokeWidth = width;
     }
 
     @Override
-    public float getHeight() throws RemoteException {
-        return height;
+    public float getStrokeWidth() throws RemoteException {
+        return strokeWidth;
     }
 
     @Override
-    public void setPositionFromBounds(LatLngBounds bounds) throws RemoteException {
-
+    public void setStrokeColor(int color) throws RemoteException {
+        this.strokeColor = color;
     }
 
     @Override
-    public LatLngBounds getBounds() throws RemoteException {
-        return null;
+    public int getStrokeColor() throws RemoteException {
+        return strokeColor;
     }
 
     @Override
-    public void setBearing(float bearing) throws RemoteException {
-        this.bearing = bearing;
+    public void setFillColor(int color) throws RemoteException {
+        this.fillColor = color;
     }
 
     @Override
-    public float getBearing() throws RemoteException {
-        return bearing;
+    public int getFillColor() throws RemoteException {
+        return fillColor;
     }
 
     @Override
@@ -118,27 +119,22 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     }
 
     @Override
-    public void setTransparency(float transparency) throws RemoteException {
-        this.transparency = transparency;
+    public void setGeodesic(boolean geod) throws RemoteException {
+        this.geodesic = geod;
     }
 
     @Override
-    public float getTransparency() throws RemoteException {
-        return transparency;
+    public boolean isGeodesic() throws RemoteException {
+        return geodesic;
     }
 
     @Override
-    public boolean equalsRemote(IGroundOverlayDelegate other) throws RemoteException {
+    public boolean equalsRemote(IPolygonDelegate other) throws RemoteException {
         return other != null && other.getId().equals(getId());
     }
 
     @Override
     public int hashCodeRemote() throws RemoteException {
         return id.hashCode();
-    }
-
-    @Override
-    public void todo(IObjectWrapper obj) throws RemoteException {
-
     }
 }

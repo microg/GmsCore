@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.bitmap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import com.google.android.gms.R;
-import com.google.android.gms.maps.internal.ResourcesContainer;
+import org.microg.gms.maps.ResourcesContainer;
 
 public class DefaultBitmapDescriptor extends AbstractBitmapDescriptor {
 	private float hue;

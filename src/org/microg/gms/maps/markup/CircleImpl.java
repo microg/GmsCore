@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.markup;
 
 import android.os.RemoteException;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.internal.ICircleDelegate;
 
 public class CircleImpl extends ICircleDelegate.Stub {
     private LatLng center;

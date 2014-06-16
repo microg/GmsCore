@@ -21,6 +21,7 @@ import android.os.Parcelable;
 import com.google.android.gms.common.safeparcel.SafeReader;
 import com.google.android.gms.common.safeparcel.SafeWriter;
 import com.google.android.gms.dynamic.IObjectWrapper;
+import org.microg.gms.maps.bitmap.BitmapDescriptor;
 
 public class GroundOverlayOptions implements Parcelable {
 	public static Creator<GroundOverlayOptions> CREATOR = new Creator<GroundOverlayOptions>() {

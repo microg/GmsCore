@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model;
+package org.microg.gms.maps.bitmap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
-import com.google.android.gms.maps.model.internal.AbstractBitmapDescriptor;
 
 public class BitmapDescriptor {
 	private final IObjectWrapper remoteObject;

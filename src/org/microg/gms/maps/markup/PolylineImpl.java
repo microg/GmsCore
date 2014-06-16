@@ -14,26 +14,29 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.markup;
 
 import android.os.RemoteException;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 
+import java.util.Collections;
 import java.util.List;
 
-public class PolygonImpl extends IPolygonDelegate.Stub {
+/**
+ * TODO
+ */
+public class PolylineImpl extends IPolylineDelegate.Stub {
     private List<LatLng> points;
-    private List holes;
     private float zIndex;
     private boolean geodesic;
     private boolean visible;
     private String id;
-    private float strokeWidth;
-    private int strokeColor;
-    private int fillColor;
+    private float width;
+    private int color;
 
-    public PolygonImpl(PolygonOptions options) {
+    public PolylineImpl(PolylineOptions options) {
 
     }
 
@@ -54,47 +57,27 @@ public class PolygonImpl extends IPolygonDelegate.Stub {
 
     @Override
     public List<LatLng> getPoints() throws RemoteException {
-        return points;
+        return points == null ? Collections.<LatLng>emptyList() : points;
     }
 
     @Override
-    public void setHoles(List holes) throws RemoteException {
-        this.holes = holes;
+    public void setWidth(float width) throws RemoteException {
+        this.width = width;
     }
 
     @Override
-    public List getHoles() throws RemoteException {
-        return holes;
+    public float getWidth() throws RemoteException {
+        return width;
     }
 
     @Override
-    public void setStrokeWidth(float width) throws RemoteException {
-        this.strokeWidth = width;
+    public void setColor(int color) throws RemoteException {
+        this.color = color;
     }
 
     @Override
-    public float getStrokeWidth() throws RemoteException {
-        return strokeWidth;
-    }
-
-    @Override
-    public void setStrokeColor(int color) throws RemoteException {
-        this.strokeColor = color;
-    }
-
-    @Override
-    public int getStrokeColor() throws RemoteException {
-        return strokeColor;
-    }
-
-    @Override
-    public void setFillColor(int color) throws RemoteException {
-        this.fillColor = color;
-    }
-
-    @Override
-    public int getFillColor() throws RemoteException {
-        return fillColor;
+    public int getColor() throws RemoteException {
+        return color;
     }
 
     @Override
@@ -128,7 +111,7 @@ public class PolygonImpl extends IPolygonDelegate.Stub {
     }
 
     @Override
-    public boolean equalsRemote(IPolygonDelegate other) throws RemoteException {
+    public boolean equalsRemote(IPolylineDelegate other) throws RemoteException {
         return other != null && other.getId().equals(getId());
     }
 

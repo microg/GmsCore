@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.plus;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.util.AttributeSet;
+import android.view.View;
 
-public class FileBitmapDescriptor extends AbstractBitmapDescriptor {
-    private String fileName;
-
-	public FileBitmapDescriptor(String fileName) {
-        this.fileName = fileName;
-    }
-
-    @Override
-    public Bitmap generateBitmap(Context context) {
-        return BitmapFactory.decodeFile(fileName);
-    }
+public class PlusOneButtonImpl extends View {
+	public PlusOneButtonImpl(Context context, int size, int annotation, String url, String account) {
+		super(context);
+	}
 }

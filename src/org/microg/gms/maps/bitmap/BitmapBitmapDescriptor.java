@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.plus.plusone;
+package org.microg.gms.maps.bitmap;
 
 import android.content.Context;
-import android.util.AttributeSet;
-import android.view.View;
+import android.graphics.Bitmap;
 
-public class PlusOneButtonImpl extends View {
-	public PlusOneButtonImpl(Context context, int size, int annotation, String url, String account) {
-		super(context);
+public class BitmapBitmapDescriptor extends AbstractBitmapDescriptor {
+	private Bitmap bitmap;
+
+	public BitmapBitmapDescriptor(Bitmap bitmap) {
+		this.bitmap = bitmap;
+	}
+
+	@Override
+	public Bitmap generateBitmap(Context context) {
+		return bitmap;
 	}
 }

@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps.bitmap;
 
-import android.content.res.Resources;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
-public class ResourcesContainer {
-	private static Resources resources;
-	public static void set(Resources resources) {
-		ResourcesContainer.resources = resources;
-	}
-	public static Resources get() {
-		if (resources == null) {
-			throw new IllegalStateException("Resources have not been initialized");
-		} else {
-			return resources;
-		}
-	}
+public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
+    private static final String TAG = ResourceBitmapDescriptor.class.getName();
+
+    private int resourceId;
+
+	public ResourceBitmapDescriptor(int resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    @Override
+    public Bitmap generateBitmap(Context context) {
+        return BitmapFactory.decodeResource(context.getResources(), resourceId);
+    }
 }

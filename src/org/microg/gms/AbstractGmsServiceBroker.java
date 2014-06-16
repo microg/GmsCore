@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.common.internal;
+package org.microg.gms;
 
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import com.google.android.gms.common.internal.IGmsCallbacks;
+import com.google.android.gms.common.internal.IGmsServiceBroker;
 
 public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 	@Override

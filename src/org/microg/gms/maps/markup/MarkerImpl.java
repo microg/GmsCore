@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.markup;
 
 import android.graphics.*;
-import android.graphics.drawable.Drawable;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.MotionEvent;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
-import com.google.android.gms.maps.internal.GoogleMapImpl;
+import com.google.android.gms.maps.model.internal.IMarkerDelegate;
 import com.google.android.gms.maps.internal.IOnMarkerClickListener;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import org.microg.gms.maps.bitmap.BitmapDescriptor;
+import org.microg.gms.maps.bitmap.DefaultBitmapDescriptor;
+import org.microg.gms.maps.GoogleMapImpl;
 
 public class MarkerImpl extends IMarkerDelegate.Stub {
     private static final String TAG = MarkerImpl.class.getName();

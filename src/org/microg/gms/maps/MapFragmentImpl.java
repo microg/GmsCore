@@ -14,25 +14,29 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.internal.IGoogleMapDelegate;
+import com.google.android.gms.maps.internal.IMapFragmentDelegate;
 
-public class MapViewImpl extends IMapViewDelegate.Stub {
+public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
 	private GoogleMapImpl map;
 	private GoogleMapOptions options;
 	private Context context;
 
-	public MapViewImpl(Context context, GoogleMapOptions options) {
-		this.context = context;
-		this.options = options;
+	public MapFragmentImpl(Activity activity) {
+		context = activity;
 	}
 
 	private GoogleMapImpl myMap() {
@@ -49,8 +53,28 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
 	}
 
 	@Override
+	public void onInflate(IObjectWrapper activity, GoogleMapOptions options, Bundle savedInstanceState) throws RemoteException {
+
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) throws RemoteException {
 		myMap().onCreate(savedInstanceState);
+	}
+
+	@Override
+	public IObjectWrapper onCreateView(IObjectWrapper layoutInflater, IObjectWrapper container, Bundle savedInstanceState) throws RemoteException {
+		if (map == null) {
+			LayoutInflater inflater = (LayoutInflater) ObjectWrapper.unwrap(layoutInflater);
+			map = new GoogleMapImpl(inflater, options);
+			map.onCreate(savedInstanceState);
+		} else {
+			View view = map.getView();
+			if (view.getParent() instanceof ViewGroup) {
+				((ViewGroup) view.getParent()).removeView(view);
+			}
+		}
+		return ObjectWrapper.wrap(myMap().getView());
 	}
 
 	@Override
@@ -60,6 +84,11 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
 
 	@Override
 	public void onPause() throws RemoteException {
+
+	}
+
+	@Override
+	public void onDestroyView() throws RemoteException {
 
 	}
 
@@ -79,7 +108,7 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
 	}
 
 	@Override
-	public IObjectWrapper getView() throws RemoteException {
-		return ObjectWrapper.wrap(myMap().getView());
+	public boolean isReady() throws RemoteException {
+		return false;
 	}
 }

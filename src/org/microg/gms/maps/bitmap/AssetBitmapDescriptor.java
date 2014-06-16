@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.bitmap;
 
 import android.content.Context;
 import android.graphics.Bitmap;

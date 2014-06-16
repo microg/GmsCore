@@ -14,8 +14,27 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.internal;
+package org.microg.gms.maps.bitmap;
 
-public interface CameraUpdate {
-	void update(GoogleMapImpl map);
+import android.content.Context;
+import android.graphics.Bitmap;
+
+public abstract class AbstractBitmapDescriptor {
+
+    private Bitmap bitmap;
+
+    protected abstract Bitmap generateBitmap(Context context);
+
+    public Bitmap loadBitmap(Context context) {
+        if (bitmap == null) {
+            synchronized (this) {
+                if (bitmap == null) bitmap = generateBitmap(context);
+            }
+        }
+        return bitmap;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
 }

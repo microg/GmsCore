@@ -21,6 +21,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.android.gms.common.safeparcel.SafeReader;
 import com.google.android.gms.dynamic.ObjectWrapper;
+import org.microg.gms.maps.bitmap.BitmapDescriptor;
 
 public class MarkerOptions implements Parcelable {
 

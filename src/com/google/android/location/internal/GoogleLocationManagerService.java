@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
-import com.google.android.gms.common.internal.AbstractGmsServiceBroker;
+import org.microg.gms.AbstractGmsServiceBroker;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 public class GoogleLocationManagerService extends Service {

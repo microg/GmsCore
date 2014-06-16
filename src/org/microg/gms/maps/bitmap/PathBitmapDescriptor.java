@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps.model.internal;
+package org.microg.gms.maps.bitmap;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-
-public class BitmapBitmapDescriptor extends AbstractBitmapDescriptor {
-	private Bitmap bitmap;
-
-	public BitmapBitmapDescriptor(Bitmap bitmap) {
-		this.bitmap = bitmap;
-	}
-
-	@Override
-	public Bitmap generateBitmap(Context context) {
-		return bitmap;
+public class PathBitmapDescriptor {
+	public PathBitmapDescriptor(String absolutePath) {
 	}
 }
