@@ -129,7 +129,7 @@ public class PolygonImpl extends IPolygonDelegate.Stub {
 
     @Override
     public boolean equalsRemote(IPolygonDelegate other) throws RemoteException {
-        return other.getId().equals(getId());
+        return other != null && other.getId().equals(getId());
     }
 
     @Override

@@ -116,7 +116,7 @@ public class CircleImpl extends ICircleDelegate.Stub {
 
     @Override
     public boolean equalsRemote(ICircleDelegate other) throws RemoteException {
-        return other.getId().equals(getId());
+        return other != null &&other.getId().equals(getId());
     }
 
     @Override

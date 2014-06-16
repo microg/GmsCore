@@ -129,7 +129,7 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
 
     @Override
     public boolean equalsRemote(IGroundOverlayDelegate other) throws RemoteException {
-        return other.getId().equals(getId());
+        return other != null && other.getId().equals(getId());
     }
 
     @Override

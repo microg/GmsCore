@@ -16,7 +16,11 @@
 
 package com.google.android.gms.maps.model;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.ObjectWrapper;
+import com.google.android.gms.maps.model.internal.AbstractBitmapDescriptor;
 
 public class BitmapDescriptor {
 	private final IObjectWrapper remoteObject;
@@ -28,4 +32,41 @@ public class BitmapDescriptor {
 	public IObjectWrapper getRemoteObject() {
 		return remoteObject;
 	}
+
+    public AbstractBitmapDescriptor getDescriptor() {
+        if (remoteObject == null) return null;
+        Object unwrap = ObjectWrapper.unwrap(remoteObject);
+        if (unwrap instanceof AbstractBitmapDescriptor) {
+            return ((AbstractBitmapDescriptor) unwrap);
+        } else {
+            return null;
+        }
+    }
+
+    public Bitmap getBitmap() {
+        if (getDescriptor() != null) {
+            return getDescriptor().getBitmap();
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "BitmapDescriptor{" +
+                "remote=" + getDescriptor() +
+                '}';
+    }
+
+    public void loadBitmapAsync(final Context context, final Runnable after) {
+        if (getDescriptor() != null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (getDescriptor().loadBitmap(context) != null) {
+                        after.run();
+                    }
+                }
+            }).start();
+        }
+    }
 }

@@ -32,8 +32,8 @@ public class LatLngBounds implements SafeParcelable {
 		}
 	};
 	private int versionCode;
-	private LatLng southWest;
-	private LatLng northEast;
+	public LatLng southWest;
+	public LatLng northEast;
 
 	public LatLngBounds() {
 	}

@@ -47,11 +47,14 @@ public class GoogleMapImpl {
 	private final Delegate delegate = new Delegate();
 	private MapView mapView;
 	private int mapType = 1;
+    private Context context;
+    private IOnMarkerClickListener markerClickListener;
 
 	public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
-		this.view = new FrameLayout(inflater.getContext());
+        context = inflater.getContext();
+		this.view = new FrameLayout(context);
 		try {
-			mapView = (MapView) Class.forName("com.google.android.maps.MapView").getConstructor(Context.class, String.class).newInstance(inflater.getContext(), null);
+			mapView = (MapView) Class.forName("com.google.android.maps.MapView").getConstructor(Context.class, String.class).newInstance(context, null);
 			view.addView(mapView);
 		} catch (Exception e) {
 			Log.d(TAG, "Sorry, can't create legacy MapView");
@@ -63,7 +66,15 @@ public class GoogleMapImpl {
 
 	}
 
-	MapView getMapView() {
+    public IOnMarkerClickListener getMarkerClickListener() {
+        return markerClickListener;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    MapView getMapView() {
 		return mapView;
 	}
 
@@ -79,7 +90,20 @@ public class GoogleMapImpl {
 		return delegate;
 	}
 
-	private class Delegate extends IGoogleMapDelegate.Stub {
+	public void remove(MarkerImpl marker) {
+        mapView.getOverlays().remove(marker);
+	}
+
+    public void redraw() {
+        mapView.postInvalidate();
+        try {
+            ((MapView.WrappedMapView) mapView.getWrapped()).postInvalidate();
+        } catch (Exception e) {
+            Log.w(TAG, "MapView does not support extended microg features", e);
+        }
+    }
+
+    private class Delegate extends IGoogleMapDelegate.Stub {
 		@Override
 		public CameraPosition getCameraPosition() throws RemoteException {
 			if (mapView == null) return null;
@@ -136,7 +160,10 @@ public class GoogleMapImpl {
 
 		@Override
 		public IMarkerDelegate addMarker(MarkerOptions options) throws RemoteException {
-			return new MarkerImpl(options);
+			MarkerImpl marker = new MarkerImpl(options, GoogleMapImpl.this);
+			mapView.getOverlays().add(marker.getOverlay());
+            redraw();
+			return marker;
 		}
 
 		@Override
@@ -151,7 +178,8 @@ public class GoogleMapImpl {
 
 		@Override
 		public void clear() throws RemoteException {
-
+            mapView.getOverlays().clear();
+            redraw();
 		}
 
 		@Override
@@ -256,7 +284,7 @@ public class GoogleMapImpl {
 
 		@Override
 		public void setOnMarkerClickListener(IOnMarkerClickListener listener) throws RemoteException {
-
+            markerClickListener = listener;
 		}
 
 		@Override

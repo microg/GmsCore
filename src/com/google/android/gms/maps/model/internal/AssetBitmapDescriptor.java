@@ -16,7 +16,26 @@
 
 package com.google.android.gms.maps.model.internal;
 
-public class AssetBitmapDescriptor {
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.IOException;
+
+public class AssetBitmapDescriptor extends AbstractBitmapDescriptor {
+    private String assetName;
+
 	public AssetBitmapDescriptor(String assetName) {
+        this.assetName = assetName;
 	}
+
+    @Override
+    protected Bitmap generateBitmap(Context context) {
+        try {
+            return BitmapFactory.decodeStream(context.getAssets().open(assetName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

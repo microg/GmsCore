@@ -16,8 +16,33 @@
 
 package com.google.android.gms.maps.model.internal;
 
-public class DefaultBitmapDescriptor {
-	public DefaultBitmapDescriptor(float hue) {
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import com.google.android.gms.R;
+import com.google.android.gms.maps.internal.ResourcesContainer;
 
+public class DefaultBitmapDescriptor extends AbstractBitmapDescriptor {
+	private float hue;
+
+	public DefaultBitmapDescriptor(float hue) {
+		this.hue = hue;
+	}
+
+	@Override
+	public Bitmap generateBitmap(Context context) {
+		Bitmap source = BitmapFactory.decodeResource(ResourcesContainer.get(), R.drawable.maps_default_marker);
+		Bitmap bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), source.getConfig());
+		float[] hsv = new float[3];
+		for (int x = 0; x < bitmap.getWidth(); x++) {
+			for (int y = 0; y < bitmap.getHeight(); y++) {
+				int pixel = source.getPixel(x, y);
+				Color.colorToHSV(pixel, hsv);
+				hsv[0] = (hsv[0] + hue) % 360;
+				bitmap.setPixel(x, y, Color.HSVToColor(Color.alpha(pixel), hsv));
+			}
+		}
+		return bitmap;
 	}
 }

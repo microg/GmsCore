@@ -87,6 +87,17 @@ public class SafeReader {
 		readStart(parcel, position, 8);
 		return parcel.readDouble();
 	}
+
+	public static String readString(Parcel parcel, int position) {
+		int length = readStart(parcel, position);
+		int start = parcel.dataPosition();
+		if (length == 0)
+			return null;
+		String string = parcel.readString();
+		parcel.setDataPosition(start + length);
+		return string;
+	}
+
 	public static IBinder readBinder(Parcel parcel, int position) {
 		int length = readStart(parcel, position);
 		int start = parcel.dataPosition();

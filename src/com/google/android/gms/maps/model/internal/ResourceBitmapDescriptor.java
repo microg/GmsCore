@@ -16,8 +16,25 @@
 
 package com.google.android.gms.maps.model.internal;
 
-public class ResourceBitmapDescriptor {
-	public ResourceBitmapDescriptor(int resourceId) {
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+import com.google.android.gms.maps.internal.ResourcesContainer;
 
-	}
+public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
+    private static final String TAG = ResourceBitmapDescriptor.class.getName();
+
+    private int resourceId;
+
+	public ResourceBitmapDescriptor(int resourceId) {
+        this.resourceId = resourceId;
+    }
+
+    @Override
+    public Bitmap generateBitmap(Context context) {
+        return BitmapFactory.decodeResource(context.getResources(), resourceId);
+    }
 }

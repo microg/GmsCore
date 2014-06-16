@@ -111,7 +111,7 @@ public class PolylineImpl extends IPolylineDelegate.Stub {
 
     @Override
     public boolean equalsRemote(IPolylineDelegate other) throws RemoteException {
-        return other.getId().equals(getId());
+        return other != null && other.getId().equals(getId());
     }
 
     @Override

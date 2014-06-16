@@ -130,10 +130,14 @@ public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
 		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
 			@Override
 			public void update(GoogleMapImpl map) {
-				// TODO
-			}
-		});
-	}
+                double latSpan = bounds.northEast.latitude - bounds.southWest.latitude,
+                        lonSpan = bounds.northEast.longitude - bounds.southWest.longitude;
+                map.getController().zoomToSpan((int) (latSpan * 1E6), (int) (lonSpan * 1E6));
+                map.getController().setCenter(new GeoPoint((int) ((bounds.southWest.latitude + latSpan/2) * 1E6),
+                        (int) ((bounds.southWest.longitude + lonSpan/2) * 1E6)));
+            }
+        });
+    }
 
 	@Override
 	public IObjectWrapper newLatLngBoundsWithSize(LatLngBounds bounds, int i1, int i2, int i3) throws RemoteException {

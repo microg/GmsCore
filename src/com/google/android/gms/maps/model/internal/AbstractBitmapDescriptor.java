@@ -19,15 +19,22 @@ package com.google.android.gms.maps.model.internal;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-public class BitmapBitmapDescriptor extends AbstractBitmapDescriptor {
-	private Bitmap bitmap;
+public abstract class AbstractBitmapDescriptor {
 
-	public BitmapBitmapDescriptor(Bitmap bitmap) {
-		this.bitmap = bitmap;
-	}
+    private Bitmap bitmap;
 
-	@Override
-	public Bitmap generateBitmap(Context context) {
-		return bitmap;
-	}
+    protected abstract Bitmap generateBitmap(Context context);
+
+    public Bitmap loadBitmap(Context context) {
+        if (bitmap == null) {
+            synchronized (this) {
+                if (bitmap == null) bitmap = generateBitmap(context);
+            }
+        }
+        return bitmap;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
 }

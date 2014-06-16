@@ -20,6 +20,7 @@ import android.os.Parcel;
 import com.google.android.gms.common.safeparcel.SafeParcelable;
 import com.google.android.gms.common.safeparcel.SafeReader;
 import com.google.android.gms.common.safeparcel.SafeWriter;
+import com.google.android.maps.GeoPoint;
 
 public class LatLng implements SafeParcelable {
 	public static Creator<LatLng> CREATOR = new Creator<LatLng>() {
@@ -97,5 +98,9 @@ public class LatLng implements SafeParcelable {
 		SafeWriter.write(dest, 2, latitude);
 		SafeWriter.write(dest, 3, longitude);
 		SafeWriter.writeEnd(dest, start);
+	}
+
+	public GeoPoint toGeoPoint() {
+		return new GeoPoint((int) (latitude * 1E6F), (int) (longitude * 1E6F));
 	}
 }

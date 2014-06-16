@@ -10,7 +10,7 @@ interface IMarkerDelegate {
     LatLng getPosition();
     void setTitle(String title);
     String getTitle();
-    void setSnippet(String title);
+    void setSnippet(String snippet);
     String getSnippet();
     void setDraggable(boolean drag);
     boolean isDraggable();
@@ -21,7 +21,7 @@ interface IMarkerDelegate {
 	boolean isVisible();
 	boolean equalsRemote(IMarkerDelegate other);
 	int hashCodeRemote();
-	void todo(IObjectWrapper obj);
+	void setIcon(IObjectWrapper obj);
 	void setAnchor(float x, float y);
 	void setFlat(boolean flat);
 	boolean isFlat();
