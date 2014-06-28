@@ -35,11 +35,18 @@ public class LatLngBounds implements SafeParcelable {
 	public LatLng southWest;
 	public LatLng northEast;
 
-	public LatLngBounds() {
-	}
+    public LatLngBounds(int versionCode, LatLng southWest, LatLng northEast) {
+        this.versionCode = versionCode;
+        this.southWest = southWest;
+        this.northEast = northEast;
+    }
 
-	private LatLngBounds(Parcel in) {
-		int end = SafeReader.readStart(in);
+    public LatLngBounds(LatLng southWest, LatLng northEast) {
+        this(1, southWest, northEast);
+    }
+
+    private LatLngBounds(Parcel in) {
+        int end = SafeReader.readStart(in);
 		while (in.dataPosition() < end) {
 			int position = SafeReader.readSingleInt(in);
 			switch (SafeReader.halfOf(position)) {

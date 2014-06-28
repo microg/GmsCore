@@ -17,6 +17,7 @@
 package org.microg.gms.maps;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -48,11 +49,11 @@ public class GoogleMapImpl {
 	private final ViewGroup view;
 	private final GoogleMapOptions options;
 	private final Delegate delegate = new Delegate();
+    private final Projection projection = new Projection();
 	private MapView mapView;
 	private int mapType = 1;
     private Context context;
     private IOnMarkerClickListener markerClickListener;
-
 	public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
         context = inflater.getContext();
 		this.view = new FrameLayout(context);
@@ -110,8 +111,7 @@ public class GoogleMapImpl {
 		@Override
 		public CameraPosition getCameraPosition() throws RemoteException {
 			if (mapView == null) return null;
-			LatLng center = new LatLng(mapView.getMapCenter().getLatitudeE6() / 1E6F, mapView.getMapCenter().getLongitudeE6() / 1E6F);
-			return new CameraPosition(center, mapView.getZoomLevel(), 0, 0);
+			return new CameraPosition(new LatLng(mapView.getMapCenter()), mapView.getZoomLevel(), 0, 0);
 		}
 
 		@Override
@@ -247,7 +247,7 @@ public class GoogleMapImpl {
 
 		@Override
 		public IProjectionDelegate getProjection() throws RemoteException {
-			return null;
+			return projection;
 		}
 
 		@Override
@@ -428,4 +428,28 @@ public class GoogleMapImpl {
 			return false;
 		}
 	}
+
+    public class Projection extends IProjectionDelegate.Stub {
+
+        @Override
+        public IObjectWrapper toScreenLocation(LatLng latLng) throws RemoteException {
+            return ObjectWrapper.wrap(mapView.getProjection().toPixels(latLng.toGeoPoint(), null));
+        }
+
+        @Override
+        public LatLng fromScreenLocation(IObjectWrapper obj) throws RemoteException {
+            Point point = (Point) ObjectWrapper.unwrap(obj);
+            return new LatLng(mapView.getProjection().fromPixels(point.x, point.y));
+        }
+
+        @Override
+        public VisibleRegion getVisibleRegion() throws RemoteException {
+            LatLng nearLeft = new LatLng(mapView.getProjection().fromPixels(0, mapView.getHeight()));
+            LatLng nearRight = new LatLng(mapView.getProjection().fromPixels(mapView.getWidth(), mapView.getHeight()));
+            LatLng farLeft = new LatLng(mapView.getProjection().fromPixels(0, 0));
+            LatLng farRight = new LatLng(mapView.getProjection().fromPixels(mapView.getWidth(), 0));
+
+            return new VisibleRegion(nearLeft, nearRight, farLeft, farRight, new LatLngBounds(farRight, nearLeft));
+        }
+    }
 }

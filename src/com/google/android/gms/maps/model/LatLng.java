@@ -73,6 +73,10 @@ public class LatLng implements SafeParcelable {
 		this(1, latitude, longitude);
 	}
 
+    public LatLng(GeoPoint geoPoint) {
+        this(((double) geoPoint.getLatitudeE6()) / 1E6, ((double) geoPoint.getLongitudeE6()) / 1E6);
+    }
+
 	@Override
 	public final int hashCode() {
 		long lat = Double.doubleToLongBits(latitude);

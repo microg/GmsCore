@@ -29,6 +29,9 @@ public class ObjectWrapper<T> extends IObjectWrapper.Stub {
 	}
 
 	public static Object unwrap(IObjectWrapper obj) {
+        if (obj == null) {
+            return null;
+        }
 		if (obj instanceof ObjectWrapper) {
 			return ((ObjectWrapper) obj).t;
 		}
