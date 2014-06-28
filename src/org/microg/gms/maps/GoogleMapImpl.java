@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.internal.*;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import org.microg.gms.maps.camera.CameraUpdate;
+import org.microg.gms.maps.camera.CameraUpdateFactoryImpl;
 import org.microg.gms.maps.markup.*;
 
 public class GoogleMapImpl {
@@ -49,6 +50,7 @@ public class GoogleMapImpl {
 	private final ViewGroup view;
 	private final GoogleMapOptions options;
 	private final Delegate delegate = new Delegate();
+    private final UiSettings uiSettings = new UiSettings();
     private final Projection projection = new Projection();
 	private MapView mapView;
 	private int mapType = 1;
@@ -63,11 +65,22 @@ public class GoogleMapImpl {
 		} catch (Exception e) {
 			Log.d(TAG, "Sorry, can't create legacy MapView");
 		}
-		this.options = options;
-	}
+        this.options = options;
+    }
 
 	public void onCreate(Bundle savedInstanceState) {
-
+        try {
+            delegate.animateCamera(new CameraUpdateFactoryImpl().newCameraPosition(options.getCamera()));
+            delegate.setMapType(options.getMapType());
+            uiSettings.setCompassEnabled(options.isCompassEnabled());
+            uiSettings.setZoomControlsEnabled(options.isZoomControlsEnabled());
+            uiSettings.setRotateGesturesEnabled(options.isRotateGesturesEnabled());
+            uiSettings.setScrollGesturesEnabled(options.isScrollGesturesEnabled());
+            uiSettings.setTiltGesturesEnabled(options.isTiltGesturesEnabled());
+            uiSettings.setZoomGesturesEnabled(options.isZoomGesturesEnabled());
+        } catch (RemoteException ignored) {
+            // It's not remote...
+        }
 	}
 
     public IOnMarkerClickListener getMarkerClickListener() {
@@ -242,7 +255,7 @@ public class GoogleMapImpl {
 
 		@Override
 		public IUiSettingsDelegate getUiSettings() throws RemoteException {
-			return new UiSettings();
+			return uiSettings;
 		}
 
 		@Override

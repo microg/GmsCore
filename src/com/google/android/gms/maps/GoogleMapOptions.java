@@ -108,7 +108,39 @@ public class GoogleMapOptions implements SafeParcelable {
 		}
 	}
 
-	public static Creator<GoogleMapOptions> CREATOR = new Creator<GoogleMapOptions>() {
+    public int getMapType() {
+        return mapType;
+    }
+
+    public CameraPosition getCamera() {
+        return camera;
+    }
+
+    public boolean isZoomControlsEnabled() {
+        return zoomControlsEnabled;
+    }
+
+    public boolean isCompassEnabled() {
+        return compassEnabled;
+    }
+
+    public boolean isScrollGesturesEnabled() {
+        return scrollGesturesEnabled;
+    }
+
+    public boolean isZoomGesturesEnabled() {
+        return zoomGesturesEnabled;
+    }
+
+    public boolean isTiltGesturesEnabled() {
+        return tiltGesturesEnabled;
+    }
+
+    public boolean isRotateGesturesEnabled() {
+        return rotateGesturesEnabled;
+    }
+
+    public static Creator<GoogleMapOptions> CREATOR = new Creator<GoogleMapOptions>() {
 		public GoogleMapOptions createFromParcel(Parcel source) {
 			return new GoogleMapOptions(source);
 		}
