@@ -104,7 +104,7 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) throws RemoteException {
-
+        myMap().onSaveInstanceState(outState);
 	}
 
 	@Override

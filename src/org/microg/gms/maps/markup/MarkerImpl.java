@@ -35,10 +35,11 @@ import org.microg.gms.maps.GoogleMapImpl;
 public class MarkerImpl extends IMarkerDelegate.Stub {
     private static final String TAG = MarkerImpl.class.getName();
 
+    private final String id;
+
     private float alpha;
     private boolean flat;
     private boolean draggable;
-    private String id = Integer.toHexString(hashCode());
     private LatLng position;
     private float anchorU;
     private float anchorV;
@@ -74,7 +75,7 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
                 }
                 if (!result) {
                     mapView.getController().animateTo(position.toGeoPoint());
-                    // TODO info window
+                    map.showInfoWindow(MarkerImpl.this);
                 }
                 return true;
             }
@@ -109,7 +110,8 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
         }
     };
 
-    public MarkerImpl(MarkerOptions options, GoogleMapImpl map) {
+    public MarkerImpl(String id, MarkerOptions options, GoogleMapImpl map) {
+        this.id = id;
         this.map = map;
         this.alpha = options.getAlpha();
         this.draggable = options.isDraggable();
@@ -124,7 +126,7 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
         this.icon = options.getIcon();
         if (icon == null)
             icon = new BitmapDescriptor(new ObjectWrapper<DefaultBitmapDescriptor>(new DefaultBitmapDescriptor(0)));
-        Log.d(TAG, "New: " + title + " @ " + position + ", " + icon);
+        Log.d(TAG, "New: " + id + " with title " + title + " @ " + position);
     }
 
     @Override
@@ -266,5 +268,11 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
 
     public Overlay getOverlay() {
         return overlay;
+    }
+
+    public int getHeight() {
+        Bitmap bitmap = icon.getBitmap();
+        if (bitmap == null) return -1;
+        return bitmap.getHeight();
     }
 }

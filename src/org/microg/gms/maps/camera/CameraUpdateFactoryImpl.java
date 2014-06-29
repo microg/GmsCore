@@ -100,6 +100,14 @@ public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
 	@Override
 	public IObjectWrapper newCameraPosition(final CameraPosition cameraPosition) throws RemoteException {
 		Log.d(TAG, "newCameraPosition");
+        if (cameraPosition == null) {
+            return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
+                @Override
+                public void update(GoogleMapImpl map) {
+                    // Nothing
+                }
+            });
+        }
 		return newLatLngZoom(cameraPosition.target, cameraPosition.zoom);
 	}
 

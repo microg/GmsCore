@@ -25,7 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
@@ -49,42 +49,102 @@ public class GoogleMapImpl {
 
 	private final ViewGroup view;
 	private final GoogleMapOptions options;
+
 	private final Delegate delegate = new Delegate();
     private final UiSettings uiSettings = new UiSettings();
     private final Projection projection = new Projection();
-	private MapView mapView;
-	private int mapType = 1;
+
+    private MapView mapView;
     private Context context;
+    private InfoWindow infoWindow;
+    private int markerCounter = 0;
+
+    private IOnCameraChangeListener cameraChangeListener;
+    private IOnMapClickListener mapClickListener;
+    private IOnMapLoadedCallback mapLoadedCallback;
+    private IOnMapLongClickListener mapLongClickListener;
     private IOnMarkerClickListener markerClickListener;
-	public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
+    private IOnMarkerDragListener markerDragListener;
+    private IOnInfoWindowClickListener infoWindowClickListener;
+
+    private int mapType = 1;
+    private IInfoWindowAdapter infoWindowAdapter;
+
+    public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
         context = inflater.getContext();
-		this.view = new FrameLayout(context);
-		try {
-			mapView = (MapView) Class.forName("com.google.android.maps.MapView").getConstructor(Context.class, String.class).newInstance(context, null);
-			view.addView(mapView);
-		} catch (Exception e) {
-			Log.d(TAG, "Sorry, can't create legacy MapView");
-		}
+        this.view = new RelativeLayout(context);
+        try {
+            mapView = (MapView) Class.forName("com.google.android.maps.MapView").getConstructor(Context.class, String.class).newInstance(context, null);
+            prepareMapView();
+            view.addView(mapView);
+        } catch (Exception e) {
+            Log.d(TAG, "Sorry, can't create legacy MapView");
+        }
         this.options = options;
     }
 
+    private void prepareMapView() {
+        mapView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick");
+                IOnMapClickListener listener = mapClickListener;
+                if (listener != null) {
+                    try {
+                        // TODO: Handle LatLng right
+                        listener.onMapClick(new LatLng(0, 0));
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
+                }
+            }
+        });
+        mapView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d(TAG, "onLongClick");
+                IOnMapLongClickListener listener = mapLongClickListener;
+                if (listener != null) {
+                    try {
+                        // TODO: Handle LatLng right
+                        listener.onMapLongClick(new LatLng(0, 0));
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
 	public void onCreate(Bundle savedInstanceState) {
-        try {
-            delegate.animateCamera(new CameraUpdateFactoryImpl().newCameraPosition(options.getCamera()));
-            delegate.setMapType(options.getMapType());
-            uiSettings.setCompassEnabled(options.isCompassEnabled());
-            uiSettings.setZoomControlsEnabled(options.isZoomControlsEnabled());
-            uiSettings.setRotateGesturesEnabled(options.isRotateGesturesEnabled());
-            uiSettings.setScrollGesturesEnabled(options.isScrollGesturesEnabled());
-            uiSettings.setTiltGesturesEnabled(options.isTiltGesturesEnabled());
-            uiSettings.setZoomGesturesEnabled(options.isZoomGesturesEnabled());
-        } catch (RemoteException ignored) {
-            // It's not remote...
+        if (options != null) {
+            try {
+                delegate.animateCamera(new CameraUpdateFactoryImpl().newCameraPosition(options.getCamera()));
+                delegate.setMapType(options.getMapType());
+                uiSettings.setCompassEnabled(options.isCompassEnabled());
+                uiSettings.setZoomControlsEnabled(options.isZoomControlsEnabled());
+                uiSettings.setRotateGesturesEnabled(options.isRotateGesturesEnabled());
+                uiSettings.setScrollGesturesEnabled(options.isScrollGesturesEnabled());
+                uiSettings.setTiltGesturesEnabled(options.isTiltGesturesEnabled());
+                uiSettings.setZoomGesturesEnabled(options.isZoomGesturesEnabled());
+            } catch (RemoteException ignored) {
+                // It's not remote...
+            }
         }
-	}
+        if (savedInstanceState != null) {
+            savedInstanceState.setClassLoader(GoogleMapImpl.class.getClassLoader());
+            mapView.onRestoreInstanceState(savedInstanceState);
+        }
+    }
 
     public IOnMarkerClickListener getMarkerClickListener() {
         return markerClickListener;
+    }
+
+    public IOnInfoWindowClickListener getInfoWindowClickListener() {
+        return infoWindowClickListener;
     }
 
     public Context getContext() {
@@ -108,8 +168,15 @@ public class GoogleMapImpl {
 	}
 
 	public void remove(MarkerImpl marker) {
-        mapView.getOverlays().remove(marker);
-	}
+        mapView.getOverlays().remove(marker.getOverlay());
+        try {
+            if (infoWindow != null && infoWindow.getMarker().getId().equals(marker.getId())) {
+                hideInfoWindow();
+            }
+        } catch (RemoteException e) {
+            // It's not remote...
+        }
+    }
 
     public void redraw() {
         mapView.postInvalidate();
@@ -117,6 +184,49 @@ public class GoogleMapImpl {
             ((MapView.WrappedMapView) mapView.getWrapped()).postInvalidate();
         } catch (Exception e) {
             Log.w(TAG, "MapView does not support extended microg features", e);
+        }
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        mapView.onSaveInstanceState(outState);
+    }
+
+    public void hideInfoWindow() {
+        if (infoWindow != null) {
+            mapView.getOverlays().remove(infoWindow);
+            infoWindow.destroy();
+        }
+        infoWindow = null;
+    }
+
+    public void showInfoWindow(final MarkerImpl marker) {
+        hideInfoWindow();
+        InfoWindow window = new InfoWindow(context, this, marker);
+        if (infoWindowAdapter != null) {
+            try {
+                IObjectWrapper infoWindow = infoWindowAdapter.getInfoWindow(marker);
+                window.setWindow((View) ObjectWrapper.unwrap(infoWindow));
+            } catch (RemoteException e) {
+                Log.w(TAG, e);
+            }
+        }
+        if (!window.isComplete()) {
+            if (infoWindowAdapter != null) {
+                try {
+                    IObjectWrapper contents = infoWindowAdapter.getInfoContents(marker);
+                    window.setContent((View) ObjectWrapper.unwrap(contents));
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        }
+        if (!window.isComplete()) {
+            window.buildDefault();
+        }
+        if (window.isComplete()) {
+            infoWindow = window;
+            Log.d(TAG, "Showing info window " + infoWindow + " for marker " + marker);
+            mapView.getOverlays().add(infoWindow);
         }
     }
 
@@ -176,8 +286,10 @@ public class GoogleMapImpl {
 
 		@Override
 		public IMarkerDelegate addMarker(MarkerOptions options) throws RemoteException {
-			MarkerImpl marker = new MarkerImpl(options, GoogleMapImpl.this);
-			mapView.getOverlays().add(marker.getOverlay());
+            MarkerImpl marker = new MarkerImpl("m" + markerCounter++, options, GoogleMapImpl.this);
+            if (infoWindow != null) mapView.getOverlays().remove(infoWindow);
+            mapView.getOverlays().add(marker.getOverlay());
+            if (infoWindow != null) mapView.getOverlays().add(infoWindow);
             redraw();
 			return marker;
 		}
@@ -195,6 +307,7 @@ public class GoogleMapImpl {
 		@Override
 		public void clear() throws RemoteException {
             mapView.getOverlays().clear();
+            hideInfoWindow();
             redraw();
 		}
 
@@ -265,38 +378,18 @@ public class GoogleMapImpl {
 
 		@Override
 		public void setOnCameraChangeListener(IOnCameraChangeListener listener) throws RemoteException {
-
-		}
+            cameraChangeListener = listener;
+        }
 
 		@Override
 		public void setOnMapClickListener(final IOnMapClickListener listener) throws RemoteException {
-			mapView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					try {
-						Log.d(TAG, "onMapClick:");
-						listener.onMapClick(new LatLng(0, 0));
-					} catch (RemoteException ignored) {
-					}
-				}
-			});
-		}
+            mapClickListener = listener;
+        }
 
 		@Override
 		public void setOnMapLongClickListener(final IOnMapLongClickListener listener) throws RemoteException {
-			mapView.setOnLongClickListener(new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					try {
-						Log.d(TAG, "onMapLongClick:");
-						listener.onMapLongClick(new LatLng(0, 0));
-					} catch (RemoteException e) {
-						return false;
-					}
-					return true;
-				}
-			});
-		}
+            mapLongClickListener = listener;
+        }
 
 		@Override
 		public void setOnMarkerClickListener(IOnMarkerClickListener listener) throws RemoteException {
@@ -305,18 +398,18 @@ public class GoogleMapImpl {
 
 		@Override
 		public void setOnMarkerDragListener(IOnMarkerDragListener listener) throws RemoteException {
-
-		}
+            markerDragListener = listener;
+        }
 
 		@Override
 		public void setOnInfoWindowClickListener(IOnInfoWindowClickListener listener) throws RemoteException {
-
-		}
+            infoWindowClickListener = listener;
+        }
 
 		@Override
 		public void setInfoWindowAdapter(IInfoWindowAdapter adapter) throws RemoteException {
-
-		}
+            infoWindowAdapter = adapter;
+        }
 
 		@Override
 		public IObjectWrapper getTestingHelper() throws RemoteException {
@@ -360,9 +453,9 @@ public class GoogleMapImpl {
 
 		@Override
 		public void setOnMapLoadedCallback(IOnMapLoadedCallback callback) throws RemoteException {
-
-		}
-	}
+            mapLoadedCallback = callback;
+        }
+    }
 
 	private class UiSettings extends IUiSettingsDelegate.Stub {
 
