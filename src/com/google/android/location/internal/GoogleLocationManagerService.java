@@ -16,14 +16,20 @@
 
 package com.google.android.location.internal;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.internal.IGeofencerCallbacks;
+import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 import org.microg.gms.AbstractGmsServiceBroker;
 import com.google.android.gms.common.internal.IGmsCallbacks;
+
+import java.util.List;
 
 public class GoogleLocationManagerService extends Service {
     private static final String TAG = GoogleLocationManagerService.class.getName();
@@ -39,9 +45,16 @@ public class GoogleLocationManagerService extends Service {
         }
 
         @Override
-        public void getGoogleLocationManagerService(IGmsCallbacks callback, int code, String str, Bundle params) throws RemoteException {
-            Log.d(TAG, "getGoogleLocationManagerService: " + code + ", " + str + ", " + params);
-            callback.onPostInitComplete(code, null, params);
+        public void getGoogleLocationManagerService(IGmsCallbacks callback, int versionCode, String packageName, Bundle params) throws RemoteException {
+            params.keySet();
+            Log.d(TAG, "getGoogleLocationManagerService: " + versionCode + ", " + packageName + ", " + params);
+            callback.onPostInitComplete(0, new IGoogleLocationManagerService.Stub() {
+
+                @Override
+                public void addGeofences(List<Geofence> geofences, PendingIntent pendingIntent, IGeofencerCallbacks callback, String str) throws RemoteException {
+
+                }
+            }, params);
         }
     }
 }

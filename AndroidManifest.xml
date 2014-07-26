@@ -96,8 +96,22 @@
 			</intent-filter>
 		</receiver>
 
+        <service
+            android:name="com.google.android.location.internal.server.GoogleLocationService"
+            android:permission="android.permission.ACCESS_COARSE_LOCATION"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.location.internal.GMS_NLP" />
+            </intent-filter>
+            <meta-data android:name="minProtocolVersion" android:value="1" />
+            <meta-data android:name="maxProtocolVersion" android:value="1" />
+            <meta-data android:name="releaseVersion" android:value="2007" />
+            <meta-data android:name="nlpServiceIntent" android:value="com.google.android.location.internal.GMS_NLP" />
+        </service>
 
-		<service android:name="com.google.android.location.internal.GoogleLocationManagerService" android:exported="true">
+		<service
+            android:name="com.google.android.location.internal.GoogleLocationManagerService"
+            android:exported="true">
 			<intent-filter>
 				<action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
 			</intent-filter>
