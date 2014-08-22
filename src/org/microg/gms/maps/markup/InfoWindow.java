@@ -86,14 +86,20 @@ public class InfoWindow extends Overlay {
 
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-        if (window != null && marker.getHeight() != -1) {
+        if (window != null && marker.getHeight() != -1 && !shadow) {
             try {
-                Point zero = mapView.getProjection().toPixels(new GeoPoint(0, 0), null);
+                Log.d(TAG, "draw InfoWindow");
+                window.measure(0, 0);
+                window.layout(0, 0, window.getMeasuredWidth(), window.getMeasuredHeight());
                 Point point = mapView.getProjection().toPixels(marker.getPosition().toGeoPoint(), null);
+                /*
+                // osmdroid 4.1 bugfix
+                Point zero = mapView.getProjection().toPixels(new GeoPoint(0, 0), null);
                 point.offset(-zero.x, -zero.y);
+                */
+
                 point.offset(-window.getMeasuredWidth() / 2, -window.getMeasuredHeight() - marker.getHeight());
                 Log.d(TAG, point.toString());
-                window.layout(0, 0, window.getMeasuredWidth(), window.getMeasuredHeight());
                 canvas.save();
                 canvas.translate(point.x, point.y);
                 window.draw(canvas);

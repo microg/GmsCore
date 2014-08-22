@@ -17,6 +17,9 @@
 package org.microg.gms.maps.markup;
 
 import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.RemoteException;
 import android.util.Log;
 import com.google.android.gms.dynamic.IObjectWrapper;
@@ -84,28 +87,32 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
 
         @Override
         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-            if (!shadow) {
-                Bitmap bitmap = icon.getBitmap();
-                if (bitmap != null) {
-                    mapView.getProjection().toPixels(position.toGeoPoint(), point);
-                    float x = point.x - bitmap.getWidth() * anchorU;
-                    float y = point.y - bitmap.getHeight() * anchorV;
-                    Paint paint = new Paint();
-                    paint.setAlpha((int) (alpha * 255));
-                    Matrix matrix = new Matrix();
-                    matrix.setRotate(rotation, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
-                    matrix.postTranslate(x, y);
-                    canvas.drawBitmap(bitmap, matrix, paint);
-                } else {
-                    icon.loadBitmapAsync(map.getContext(), new Runnable() {
-                        @Override
-                        public void run() {
-                            map.redraw();
-                        }
-                    });
+            if (shadow /*&& flat*/) return; // shadows are broken right now, we skip them
+            Bitmap bitmap = icon.getBitmap();
+            if (bitmap != null) {
+                mapView.getProjection().toPixels(position.toGeoPoint(), point);
+                float x = point.x - bitmap.getWidth() * anchorU;
+                float y = point.y - bitmap.getHeight() * anchorV;
+                Paint paint = new Paint();
+                paint.setAlpha((int) (alpha * 255));
+                if (shadow) {
+                    paint.setColorFilter(new PorterDuffColorFilter(Color.argb((int) (128 * alpha), 0, 0, 0), PorterDuff.Mode.SRC_IN));
                 }
+                Matrix matrix = new Matrix();
+                matrix.setRotate(rotation, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+                if (shadow) {
+                    matrix.postSkew(-0.9F, 0);
+                    matrix.postScale(1, 0.5F);
+                }
+                matrix.postTranslate(x, y);
+                canvas.drawBitmap(bitmap, matrix, paint);
             } else {
-                // TODO: shadow based on flat
+                icon.loadBitmapAsync(map.getContext(), new Runnable() {
+                    @Override
+                    public void run() {
+                        map.redraw();
+                    }
+                });
             }
         }
     };
@@ -126,7 +133,7 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
         this.icon = options.getIcon();
         if (icon == null)
             icon = new BitmapDescriptor(new ObjectWrapper<DefaultBitmapDescriptor>(new DefaultBitmapDescriptor(0)));
-        Log.d(TAG, "New: " + id + " with title " + title + " @ " + position);
+        Log.d(TAG, "New marker " + id + " with title " + title + " @ " + position);
     }
 
     @Override

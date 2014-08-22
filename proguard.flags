@@ -3,3 +3,8 @@
 
 # Keep dynamically loaded GMS classes
 -keep public class com.google.android.gms.maps.internal.CreatorImpl
+-keep public class com.google.android.gms.common.security.ProviderInstallerImpl
+
+-keepclassmembers class com.google.android.gms.common.security.ProviderInstallerImpl {
+	public *;
+}

@@ -16,10 +16,13 @@
 
 package org.microg.gms.maps;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -230,6 +233,10 @@ public class GoogleMapImpl {
         }
     }
 
+    private void runLater(Runnable runnable) {
+        new Handler(Looper.getMainLooper()).post(runnable);
+    }
+
     private class Delegate extends IGoogleMapDelegate.Stub {
 		@Override
 		public CameraPosition getCameraPosition() throws RemoteException {
@@ -248,25 +255,53 @@ public class GoogleMapImpl {
 		}
 
 		@Override
-		public void moveCamera(IObjectWrapper cameraUpdate) throws RemoteException {
-			((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
+		public void moveCamera(final IObjectWrapper cameraUpdate) throws RemoteException {
+            runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
+                }
+            });
 		}
 
 		@Override
-		public void animateCamera(IObjectWrapper cameraUpdate) throws RemoteException {
-			((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
+		public void animateCamera(final IObjectWrapper cameraUpdate) throws RemoteException {
+            runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
+                }
+            });
 		}
 
 		@Override
-		public void animateCameraWithCallback(IObjectWrapper cameraUpdate, ICancelableCallback callback) throws RemoteException {
-			((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
-			if (callback != null) callback.onFinish();
+		public void animateCameraWithCallback(final IObjectWrapper cameraUpdate, final ICancelableCallback callback) throws RemoteException {
+            runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
+                    if (callback != null) try {
+                        callback.onFinish();
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
+                }
+            });
 		}
 
 		@Override
-		public void animateCameraWithDurationAndCallback(IObjectWrapper cameraUpdate, int duration, ICancelableCallback callback) throws RemoteException {
-			((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
-			if (callback != null) callback.onFinish();
+		public void animateCameraWithDurationAndCallback(final IObjectWrapper cameraUpdate, int duration, final ICancelableCallback callback) throws RemoteException {
+            runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ((CameraUpdate) ObjectWrapper.unwrap(cameraUpdate)).update(GoogleMapImpl.this);
+                    if (callback != null) try {
+                        callback.onFinish();
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
+                }
+            });
 		}
 
 		@Override

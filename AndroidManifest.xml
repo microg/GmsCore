@@ -17,7 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.google.android.gms"
-	android:versionCode="4452036">
+	android:versionCode="5089036">
 
 	<uses-sdk android:minSdkVersion="16" />
 
@@ -27,6 +27,8 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
 	<application
 		android:label="@string/gms_app_name">
@@ -116,5 +118,16 @@
 				<action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
 			</intent-filter>
 		</service>
+
+        <activity android:name="org.microg.tools.AccountPickerActivity" android:exported="true"
+            android:excludeFromRecents="true" android:theme="@android:style/Theme.Holo.Dialog">
+            <intent-filter>
+                <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".auth.GetToken" android:exported="true" />
+        <activity android:name=".auth.TokenActivity" android:exported="true" />
 	</application>
 </manifest>
