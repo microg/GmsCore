@@ -28,6 +28,8 @@ import android.os.RemoteException;
 import android.util.Log;
 import com.google.android.auth.IAuthManagerService;
 
+import java.util.Arrays;
+
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
 
@@ -58,8 +60,9 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle getToken(String accountName, String scope, Bundle extras) throws RemoteException {
-        String packageName = extras.containsKey(KEY_ANDROID_PACKAGE_NAME) ? extras.getString(KEY_ANDROID_PACKAGE_NAME)
-                : extras.containsKey(KEY_CLIENT_PACKAGE_NAME) ? extras.getString(KEY_CLIENT_PACKAGE_NAME) : null;
+        String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME, extras.getString(KEY_CLIENT_PACKAGE_NAME, null));
+        int callerUid = extras.getInt(KEY_CALLER_UID, 0);
+        checkPackage(packageName, callerUid, getCallingUid());
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
         Log.d("AuthManagerService", "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras);
@@ -80,6 +83,16 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         } catch (Exception e) {
             Log.w("AuthManagerService", e);
             throw new RemoteException(e.getMessage());
+        }
+    }
+
+    private void checkPackage(String packageName, int callerUid, int callingUid) {
+        if (callerUid != callingUid) {
+            throw new SecurityException("callerUid [" + callerUid + "] and real calling uid [" + callingUid + "] mismatch!");
+        }
+        String[] packagesForUid = context.getPackageManager().getPackagesForUid(callerUid);
+        if (!Arrays.asList(packagesForUid).contains(packageName)) {
+            throw new SecurityException("callerUid [" + callerUid + "] is not related to packageName [" + packageName + "]");
         }
     }
 
