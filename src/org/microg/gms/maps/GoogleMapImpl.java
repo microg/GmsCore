@@ -87,21 +87,24 @@ public class GoogleMapImpl {
     }
 
     private void prepareMapView() {
-        mapView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mapView.getOverlays().add(new com.google.android.maps.Overlay() {
+          @Override
+          public boolean onTap(com.google.android.maps.GeoPoint p, MapView mapView)
+          {
                 Log.d(TAG, "onClick");
                 IOnMapClickListener listener = mapClickListener;
                 if (listener != null) {
                     try {
-                        // TODO: Handle LatLng right
-                        listener.onMapClick(new LatLng(0, 0));
+                        listener.onMapClick(new LatLng(p));
                     } catch (RemoteException e) {
                         Log.w(TAG, e);
                     }
+                    return true;
                 }
-            }
+              return false;
+          }
         });
+        // TODO: this is actually never called
         mapView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
