@@ -17,19 +17,34 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS := optional
 unified_dir := ../UnifiedNlp
-res_dir := res $(unified_dir)/res
+appcompat_dir := ../../../prebuilts/sdk/current/support/v7/appcompat
+res_dir := res $(unified_dir)/res $(appcompat_dir)/res
 
-LOCAL_SRC_FILES := $(call all-java-files-under, src)
-LOCAL_SRC_FILES += $(call all-Iaidl-files-under, src)
-LOCAL_SRC_FILES += $(call all-java-files-under, $(unified_dir)/src)
+LOCAL_SRC_FILES := $(call all-java-files-under, src) \
+                   $(call all-Iaidl-files-under, src) \
+                   $(call all-java-files-under, $(unified_dir)/src) \
+
 LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dir))
-LOCAL_AAPT_FLAGS := --auto-add-overlay --extra-packages org.microg.nlp
+
+LOCAL_AAPT_FLAGS := --auto-add-overlay \
+                    --extra-packages android.support.v7.appcompat \
+                    --extra-packages org.microg.nlp \
 
 # For some reason framework has to be added here else GeocoderParams is not found, 
 # this way everything else is duplicated, but atleast compiles...
-LOCAL_JAVA_LIBRARIES := com.google.android.maps framework com.android.location.provider
+LOCAL_JAVA_LIBRARIES := com.google.android.maps \
+                        framework \
+                        com.android.location.provider
 
-LOCAL_STATIC_JAVA_LIBRARIES := UnifiedNlpApi
+# Include compat v9 files if necassary
+ifeq ($(shell [ $(PLATFORM_SDK_VERSION) -ge 17 ] && echo true), true)
+LOCAL_JAVA_LIBRARIES += UnifiedNlpCompatV9
+endif
+
+LOCAL_STATIC_JAVA_LIBRARIES := UnifiedNlpApi \
+                               android-support-v4 \
+                               android-support-v7-appcompat \
+
 LOCAL_PACKAGE_NAME := GmsCore
 LOCAL_SDK_VERSION := current
 LOCAL_PRIVILEGED_MODULE := true

@@ -87,12 +87,12 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     }
 
     private void checkPackage(String packageName, int callerUid, int callingUid) {
-        if (callerUid != callingUid) {
+        if (callerUid != 0 && callerUid != callingUid) {
             throw new SecurityException("callerUid [" + callerUid + "] and real calling uid [" + callingUid + "] mismatch!");
         }
-        String[] packagesForUid = context.getPackageManager().getPackagesForUid(callerUid);
-        if (!Arrays.asList(packagesForUid).contains(packageName)) {
-            throw new SecurityException("callerUid [" + callerUid + "] is not related to packageName [" + packageName + "]");
+        String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
+        if (packagesForUid != null && !Arrays.asList(packagesForUid).contains(packageName)) {
+            throw new SecurityException("callingUid [" + callingUid + "] is not related to packageName [" + packageName + "]");
         }
     }
 

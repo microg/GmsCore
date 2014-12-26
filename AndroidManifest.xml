@@ -17,7 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.google.android.gms"
-	android:versionCode="5089036">
+	android:versionCode="6111030">
 
 	<uses-sdk android:minSdkVersion="16" />
 
@@ -31,6 +31,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
 	<application
+		android:theme="@style/AppTheme"
 		android:label="@string/gms_app_name">
 		<uses-library
 			android:name="com.android.location.provider"
@@ -77,8 +78,8 @@
 		</service>
 
 		<activity
-			android:name="org.microg.nlp.ui.LocationBackendConfig"
-			android:theme="@android:style/Theme.Holo.Light">
+			android:name="org.microg.nlp.ui.SettingsActivity"
+			android:label="@string/nlp_settings_label">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
