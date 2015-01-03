@@ -16,88 +16,86 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.google.android.gms"
-	android:versionCode="6111030">
+    package="com.google.android.gms"
+    android:versionCode="6111030">
 
-	<uses-sdk android:minSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="16" />
 
-	<uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
+    <uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
-	<application
-		android:theme="@style/AppTheme"
-		android:label="@string/gms_app_name">
-		<uses-library
-			android:name="com.android.location.provider"
-			android:required="false" />
-		<uses-library
-			android:name="com.google.android.maps"
-			android:required="false" />
+    <application
+        android:theme="@style/AppTheme"
+        android:label="@string/gms_app_name">
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="false" />
 
-		<meta-data android:name="fake-signature" android:value="@string/fake_signature" />
+        <meta-data android:name="fake-signature"
+            android:value="@string/fake_signature" />
 
-		<!-- Jelly Bean / KitKat -->
-		<service
-			android:name="org.microg.nlp.location.LocationServiceV2"
-			android:exported="true">
-			<intent-filter>
-				<!-- KitKat changed the action name but nothing else, hence we handle it the same -->
-				<action android:name="com.android.location.service.v3.NetworkLocationProvider" />
-				<action android:name="com.android.location.service.v2.NetworkLocationProvider" />
-			</intent-filter>
+        <!-- Jelly Bean / KitKat -->
+        <service
+            android:name="org.microg.nlp.location.LocationServiceV2"
+            android:exported="true">
+            <intent-filter>
+                <!-- KitKat changed the action name but nothing else, hence we handle it the same -->
+                <action android:name="com.android.location.service.v3.NetworkLocationProvider" />
+                <action android:name="com.android.location.service.v2.NetworkLocationProvider" />
+            </intent-filter>
 
-			<meta-data
-				android:name="serviceVersion"
-				android:value="2" />
-			<meta-data
-				android:name="serviceIsMultiuser"
-				android:value="false" />
-		</service>
+            <meta-data
+                android:name="serviceVersion"
+                android:value="2" />
+            <meta-data
+                android:name="serviceIsMultiuser"
+                android:value="false" />
+        </service>
 
-		<service
-			android:name="org.microg.nlp.geocode.GeocodeServiceV1"
-			android:exported="true">
-			<intent-filter>
-				<!-- Jelly Bean changed the action name but nothing else, hence we handle it the same -->
-				<action android:name="com.android.location.service.GeocodeProvider" />
-				<action android:name="com.google.android.location.GeocodeProvider" />
-			</intent-filter>
+        <service
+            android:name="org.microg.nlp.geocode.GeocodeServiceV1"
+            android:exported="true">
+            <intent-filter>
+                <!-- Jelly Bean changed the action name but nothing else, hence we handle it the same -->
+                <action android:name="com.android.location.service.GeocodeProvider" />
+                <action android:name="com.google.android.location.GeocodeProvider" />
+            </intent-filter>
 
-			<meta-data
-				android:name="serviceVersion"
-				android:value="2" />
-			<meta-data
-				android:name="serviceIsMultiuser"
-				android:value="false" />
-		</service>
+            <meta-data
+                android:name="serviceVersion"
+                android:value="2" />
+            <meta-data
+                android:name="serviceIsMultiuser"
+                android:value="false" />
+        </service>
 
-		<activity
-			android:name="org.microg.nlp.ui.SettingsActivity"
-			android:label="@string/nlp_settings_label">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
+        <activity
+            android:name="org.microg.nlp.ui.SettingsActivity"
+            android:label="@string/nlp_settings_label">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-		<receiver android:name="org.microg.nlp.PackageReceiver" >
-			<intent-filter>
-				<action android:name="android.intent.action.PACKAGE_ADDED" />
-				<action android:name="android.intent.action.PACKAGE_CHANGED" />
-				<action android:name="android.intent.action.PACKAGE_UPGRADED" />
-				<action android:name="android.intent.action.PACKAGE_REMOVED" />
-				<action android:name="android.intent.action.PACKAGE_REPLACED" />
-				<action android:name="android.intent.action.PACKAGE_RESTARTED" />
+        <receiver android:name="org.microg.nlp.PackageReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+                <action android:name="android.intent.action.PACKAGE_UPGRADED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
 
-				<data android:scheme="package" />
-			</intent-filter>
-		</receiver>
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
 
         <service
             android:name="com.google.android.location.internal.server.GoogleLocationService"
@@ -106,29 +104,37 @@
             <intent-filter>
                 <action android:name="com.google.android.location.internal.GMS_NLP" />
             </intent-filter>
-            <meta-data android:name="minProtocolVersion" android:value="1" />
-            <meta-data android:name="maxProtocolVersion" android:value="1" />
-            <meta-data android:name="releaseVersion" android:value="2007" />
-            <meta-data android:name="nlpServiceIntent" android:value="com.google.android.location.internal.GMS_NLP" />
+            <meta-data android:name="minProtocolVersion"
+                android:value="1" />
+            <meta-data android:name="maxProtocolVersion"
+                android:value="1" />
+            <meta-data android:name="releaseVersion"
+                android:value="2007" />
+            <meta-data android:name="nlpServiceIntent"
+                android:value="com.google.android.location.internal.GMS_NLP" />
         </service>
 
-		<service
+        <service
             android:name="com.google.android.location.internal.GoogleLocationManagerService"
             android:exported="true">
-			<intent-filter>
-				<action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
-			</intent-filter>
-		</service>
+            <intent-filter>
+                <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
+            </intent-filter>
+        </service>
 
-        <activity android:name="org.microg.tools.AccountPickerActivity" android:exported="true"
-            android:excludeFromRecents="true" android:theme="@android:style/Theme.Holo.Dialog">
+        <activity android:name="org.microg.tools.AccountPickerActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Holo.Dialog">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <service android:name=".auth.GetToken" android:exported="true" />
-        <activity android:name=".auth.TokenActivity" android:exported="true" />
-	</application>
+        <service android:name=".auth.GetToken"
+            android:exported="true" />
+        <activity android:name=".auth.TokenActivity"
+            android:exported="true" />
+    </application>
 </manifest>

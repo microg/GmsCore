@@ -187,7 +187,9 @@ public class GoogleMapImpl {
     public void redraw() {
         mapView.postInvalidate();
         try {
-            ((MapView.WrappedMapView) mapView.getWrapped()).postInvalidate();
+            Class.forName("com.google.android.maps.MapView.WrappedMapView")
+                    .getDeclaredMethod("postInvalidate")
+                    .invoke(MapView.class.getDeclaredMethod("getWrapped").invoke(mapView));
         } catch (Exception e) {
             Log.w(TAG, "MapView does not support extended microg features", e);
         }

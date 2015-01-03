@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+    compile 'com.android.support:support-v4:21.0.2'
+    compile 'com.android.support:appcompat-v7:21.0.2'
+    compile project(':UnifiedNlpLib')
+}
+
+android {
+    /**
+     * Temporarily use Google APIs for the Maps API.
+     * Maps API v2 will stop redirecting to Maps API v1 in the future so this is
+     * not a big problem right now.
+     */
+    compileSdkVersion 'Google Inc.:Google APIs:21'
+    buildToolsVersion "21.0.2"
+    lintOptions.abortOnError false
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
+
+    productFlavors {
+        GmsCore
+    }
+}
+
+if (file('user.gradle').exists()) {
+    apply from: 'user.gradle'
+}
