@@ -17,6 +17,7 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.gms"
+    android:versionName="1.0"
     android:versionCode="6111030">
 
     <uses-sdk android:minSdkVersion="16" />
@@ -33,6 +34,9 @@
     <application
         android:theme="@style/AppTheme"
         android:label="@string/gms_app_name">
+        <uses-library
+            android:name="com.android.location.provider"
+            android:required="false" />
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
