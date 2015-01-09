@@ -24,139 +24,158 @@ import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.maps.GeoPoint;
-import org.microg.gms.maps.GoogleMapImpl;
+import org.microg.gms.maps.GmsMapsTypeHelper;
+import org.oscim.core.MapPosition;
+import org.oscim.map.Map;
 
 public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
-	private static final String TAG = CameraUpdateFactoryImpl.class.getName();
+    private static final String TAG = CameraUpdateFactoryImpl.class.getName();
 
-	@Override
-	public IObjectWrapper zoomIn() throws RemoteException {
-		Log.d(TAG, "zoomIn");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				map.getController().zoomIn();
-			}
-		});
-	}
+    @Override
+    public IObjectWrapper zoomIn() throws RemoteException {
+        Log.d(TAG, "zoomIn");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
 
-	@Override
-	public IObjectWrapper zoomOut() throws RemoteException {
-		Log.d(TAG, "zoomOut");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				map.getController().zoomOut();
-			}
-		});
-	}
-
-	@Override
-	public IObjectWrapper scrollBy(final float x, final float y) throws RemoteException {
-		Log.d(TAG, "scrollBy");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				map.getController().scrollBy((int) x, (int) y);
-			}
-		});
-	}
-
-	@Override
-	public IObjectWrapper zoomTo(final float zoom) throws RemoteException {
-		Log.d(TAG, "zoomTo");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				map.getController().setZoom((int) zoom);
-			}
-		});
-	}
-
-	@Override
-	public IObjectWrapper zoomBy(final float zoomDelta) throws RemoteException {
-		Log.d(TAG, "zoomBy");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				map.getController().setZoom((int) (map.getMapView().getZoomLevel() + zoomDelta));
-			}
-		});
-	}
-
-	@Override
-	public IObjectWrapper zoomByWithFocus(final float zoomDelta, int x, int y) throws RemoteException {
-		Log.d(TAG, "zoomByWithFocus");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				// TODO focus
-				map.getController().setZoom((int) (map.getMapView().getZoomLevel() + zoomDelta));
-			}
-		});
-	}
-
-	@Override
-	public IObjectWrapper newCameraPosition(final CameraPosition cameraPosition) throws RemoteException {
-		Log.d(TAG, "newCameraPosition");
-        if (cameraPosition == null) {
-            return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-                @Override
-                public void update(GoogleMapImpl map) {
-                    // Nothing
-                }
-            });
-        }
-		return newLatLngZoom(cameraPosition.target, cameraPosition.zoom);
-	}
-
-	@Override
-	public IObjectWrapper newLatLng(final LatLng latLng) throws RemoteException {
-		Log.d(TAG, "newLatLng");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				map.getController().setCenter(new GeoPoint((int) (latLng.latitude * 1E6), (int) (latLng.longitude * 1E6)));
-			}
-		});
-	}
-
-	@Override
-	public IObjectWrapper newLatLngZoom(final LatLng latLng, final float zoom) throws RemoteException {
-		Log.d(TAG, "newLatLngZoom");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				map.getController().setZoom((int) zoom);
-				map.getController().setCenter(new GeoPoint((int) (latLng.latitude * 1E6), (int) (latLng.longitude * 1E6)));
-			}
-		});
-	}
-
-	@Override
-	public IObjectWrapper newLatLngBounds(final LatLngBounds bounds, int i) throws RemoteException {
-		Log.d(TAG, "newLatLngBounds");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-                double latSpan = bounds.northEast.latitude - bounds.southWest.latitude,
-                        lonSpan = bounds.northEast.longitude - bounds.southWest.longitude;
-                map.getController().setCenter(new GeoPoint((int) ((bounds.southWest.latitude + latSpan/2) * 1E6),
-                        (int) ((bounds.southWest.longitude + lonSpan/2) * 1E6)));
-                map.getController().zoomToSpan((int) (latSpan * 1E6), (int) (lonSpan * 1E6));
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setScale(GmsMapsTypeHelper.fromZoom(
+                        GmsMapsTypeHelper.toZoom(mapPosition.getScale()) + 1));
+                return mapPosition;
             }
         });
     }
 
-	@Override
-	public IObjectWrapper newLatLngBoundsWithSize(LatLngBounds bounds, int i1, int i2, int i3) throws RemoteException {
-		Log.d(TAG, "newLatLngBoundsWithSize");
-		return new ObjectWrapper<CameraUpdate>(new CameraUpdate() {
-			@Override
-			public void update(GoogleMapImpl map) {
-				// TODO
-			}
-		});
-	}
+    @Override
+    public IObjectWrapper zoomOut() throws RemoteException {
+        Log.d(TAG, "zoomOut");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setScale(GmsMapsTypeHelper.fromZoom(
+                        GmsMapsTypeHelper.toZoom(mapPosition.getScale()) - 1));
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper scrollBy(final float x, final float y) throws RemoteException {
+        Log.d(TAG, "scrollBy");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setPosition(map.viewport()
+                        .fromScreenPoint((float) (map.getWidth() / 2.0 + x),
+                                (float) (map.getHeight() / 2.0 + y)));
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper zoomTo(final float zoom) throws RemoteException {
+        Log.d(TAG, "zoomTo");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setScale(GmsMapsTypeHelper.fromZoom(zoom));
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper zoomBy(final float zoomDelta) throws RemoteException {
+        Log.d(TAG, "zoomBy");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setScale(GmsMapsTypeHelper.fromZoom(
+                        GmsMapsTypeHelper.toZoom(mapPosition.getScale()) + zoomDelta));
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper zoomByWithFocus(final float zoomDelta, int x, int y)
+            throws RemoteException {
+        Log.d(TAG, "zoomByWithFocus");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setScale(GmsMapsTypeHelper.fromZoom(
+                        GmsMapsTypeHelper.toZoom(mapPosition.getScale()) + zoomDelta));
+                Log.w(TAG, "zoomBy with focus not yet supported"); // TODO
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper newCameraPosition(final CameraPosition cameraPosition)
+            throws RemoteException {
+        Log.d(TAG, "newCameraPosition");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                return GmsMapsTypeHelper.fromCameraPosition(cameraPosition);
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper newLatLng(final LatLng latLng) throws RemoteException {
+        Log.d(TAG, "newLatLng");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setPosition(GmsMapsTypeHelper.fromLatLng(latLng));
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper newLatLngZoom(final LatLng latLng, final float zoom)
+            throws RemoteException {
+        Log.d(TAG, "newLatLngZoom");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setPosition(GmsMapsTypeHelper.fromLatLng(latLng));
+                mapPosition.setScale(GmsMapsTypeHelper.fromZoom(zoom));
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper newLatLngBounds(final LatLngBounds bounds, int i) throws RemoteException {
+        Log.d(TAG, "newLatLngBounds");
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setByBoundingBox(GmsMapsTypeHelper.fromLatLngBounds(bounds),
+                        map.getWidth(), map.getHeight());
+                return mapPosition;
+            }
+        });
+    }
+
+    @Override
+    public IObjectWrapper newLatLngBoundsWithSize(LatLngBounds bounds, int i1, int i2, int i3)
+            throws RemoteException {
+        Log.d(TAG, "newLatLngBoundsWithSize");
+        return new ObjectWrapper<CameraUpdate>(new NoCameraUpdate());
+    }
 }

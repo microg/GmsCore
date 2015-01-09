@@ -25,7 +25,7 @@ public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
 
     private int resourceId;
 
-	public ResourceBitmapDescriptor(int resourceId) {
+    public ResourceBitmapDescriptor(int resourceId) {
         this.resourceId = resourceId;
     }
 

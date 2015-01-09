@@ -17,6 +17,6 @@
 package org.microg.gms.maps.bitmap;
 
 public class PathBitmapDescriptor {
-	public PathBitmapDescriptor(String absolutePath) {
-	}
+    public PathBitmapDescriptor(String absolutePath) {
+    }
 }

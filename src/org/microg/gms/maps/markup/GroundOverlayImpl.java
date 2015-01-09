@@ -34,7 +34,7 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     private float bearing;
 
     public GroundOverlayImpl(GroundOverlayOptions options) {
-
+        
     }
 
     @Override

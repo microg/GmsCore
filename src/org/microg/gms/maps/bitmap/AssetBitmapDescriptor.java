@@ -25,9 +25,9 @@ import java.io.IOException;
 public class AssetBitmapDescriptor extends AbstractBitmapDescriptor {
     private String assetName;
 
-	public AssetBitmapDescriptor(String assetName) {
+    public AssetBitmapDescriptor(String assetName) {
         this.assetName = assetName;
-	}
+    }
 
     @Override
     protected Bitmap generateBitmap(Context context) {

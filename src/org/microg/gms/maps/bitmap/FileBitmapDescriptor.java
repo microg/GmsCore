@@ -23,7 +23,7 @@ import android.graphics.BitmapFactory;
 public class FileBitmapDescriptor extends AbstractBitmapDescriptor {
     private String fileName;
 
-	public FileBitmapDescriptor(String fileName) {
+    public FileBitmapDescriptor(String fileName) {
         this.fileName = fileName;
     }
 

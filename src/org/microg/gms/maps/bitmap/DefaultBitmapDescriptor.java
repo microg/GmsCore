@@ -24,25 +24,31 @@ import com.google.android.gms.R;
 import org.microg.gms.maps.ResourcesContainer;
 
 public class DefaultBitmapDescriptor extends AbstractBitmapDescriptor {
-	private float hue;
+    private float hue;
 
-	public DefaultBitmapDescriptor(float hue) {
-		this.hue = hue;
-	}
+    public DefaultBitmapDescriptor() {
+        this(0);
+    }
 
-	@Override
-	public Bitmap generateBitmap(Context context) {
-		Bitmap source = BitmapFactory.decodeResource(ResourcesContainer.get(), R.drawable.maps_default_marker);
-		Bitmap bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), source.getConfig());
-		float[] hsv = new float[3];
-		for (int x = 0; x < bitmap.getWidth(); x++) {
-			for (int y = 0; y < bitmap.getHeight(); y++) {
-				int pixel = source.getPixel(x, y);
-				Color.colorToHSV(pixel, hsv);
-				hsv[0] = (hsv[0] + hue) % 360;
-				bitmap.setPixel(x, y, Color.HSVToColor(Color.alpha(pixel), hsv));
-			}
-		}
-		return bitmap;
-	}
+    public DefaultBitmapDescriptor(float hue) {
+        this.hue = hue;
+    }
+
+    @Override
+    public Bitmap generateBitmap(Context context) {
+        Bitmap source = BitmapFactory
+                .decodeResource(ResourcesContainer.get(), R.drawable.maps_default_marker);
+        Bitmap bitmap = Bitmap
+                .createBitmap(source.getWidth(), source.getHeight(), source.getConfig());
+        float[] hsv = new float[3];
+        for (int x = 0; x < bitmap.getWidth(); x++) {
+            for (int y = 0; y < bitmap.getHeight(); y++) {
+                int pixel = source.getPixel(x, y);
+                Color.colorToHSV(pixel, hsv);
+                hsv[0] = (hsv[0] + hue) % 360;
+                bitmap.setPixel(x, y, Color.HSVToColor(Color.alpha(pixel), hsv));
+            }
+        }
+        return bitmap;
+    }
 }

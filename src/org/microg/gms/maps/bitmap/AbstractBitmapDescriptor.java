@@ -28,7 +28,8 @@ public abstract class AbstractBitmapDescriptor {
     public Bitmap loadBitmap(Context context) {
         if (bitmap == null) {
             synchronized (this) {
-                if (bitmap == null) bitmap = generateBitmap(context);
+                if (bitmap == null)
+                    bitmap = generateBitmap(context);
             }
         }
         return bitmap;

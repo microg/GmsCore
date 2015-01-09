@@ -17,25 +17,16 @@
 package org.microg.gms.maps.markup;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.os.RemoteException;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.gms.R;
-import com.google.android.gms.maps.internal.IOnInfoWindowClickListener;
 import com.google.android.gms.maps.model.internal.IMarkerDelegate;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
 import org.microg.gms.maps.GoogleMapImpl;
 import org.microg.gms.maps.ResourcesContainer;
 
-public class InfoWindow extends Overlay {
+public class InfoWindow {
     private static final String TAG = InfoWindow.class.getName();
     private Context context;
     private View window;
@@ -61,17 +52,14 @@ public class InfoWindow extends Overlay {
     }
 
     public void setContent(View view) {
-        if (view == null) return;
+        if (view == null)
+            return;
         setWindow(new DefaultWindow(view));
     }
 
     public void buildDefault() {
-        try {
-            if (marker.getTitle() != null)
+        if (marker.getTitle() != null)
             setContent(new DefaultContent());
-        } catch (RemoteException e) {
-            // Not remote...
-        }
     }
 
     public void destroy() {
@@ -84,6 +72,7 @@ public class InfoWindow extends Overlay {
         return marker;
     }
 
+    /*
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {
         if (window != null && marker.getHeight() != -1 && !shadow) {
@@ -91,20 +80,21 @@ public class InfoWindow extends Overlay {
                 Log.d(TAG, "draw InfoWindow");
                 window.measure(0, 0);
                 window.layout(0, 0, window.getMeasuredWidth(), window.getMeasuredHeight());
-                Point point = mapView.getProjection().toPixels(marker.getPosition().toGeoPoint(), null);
-                /*
+                //Point point = mapView.getProjection().toPixels(marker.getPosition().toGeoPoint(), null);
+                
                 // osmdroid 4.1 bugfix
                 Point zero = mapView.getProjection().toPixels(new GeoPoint(0, 0), null);
                 point.offset(-zero.x, -zero.y);
-                */
+                
 
+                
                 point.offset(-window.getMeasuredWidth() / 2, -window.getMeasuredHeight() - marker.getHeight());
                 Log.d(TAG, point.toString());
                 canvas.save();
                 canvas.translate(point.x, point.y);
                 window.draw(canvas);
                 canvas.restore();
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 // This is not remote...
             }
         }
@@ -113,7 +103,7 @@ public class InfoWindow extends Overlay {
     @Override
     public boolean onTap(GeoPoint p, MapView mapView) {
         try {
-            IOnInfoWindowClickListener listener = map.getInfoWindowClickListener();
+            IOnInfoWindowClickListener listener = null; //map.getInfoWindowClickListener();
             if (listener != null) {
                 Point clickPoint = mapView.getProjection().toPixels(p, null);
                 Point markerPoint = mapView.getProjection().toPixels(marker.getPosition().toGeoPoint(), null);
@@ -129,12 +119,14 @@ public class InfoWindow extends Overlay {
                     }
                     return true;
                 }
+                
             }
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             // This is not remote...
         }
         return false;
     }
+*/
 
     private class DefaultWindow extends FrameLayout {
         public DefaultWindow(View view) {
@@ -148,19 +140,17 @@ public class InfoWindow extends Overlay {
         public DefaultContent() {
             super(context);
             setOrientation(LinearLayout.VERTICAL);
-            try {
-                TextView title = new TextView(context);
-                title.setTextAppearance(context, android.R.style.TextAppearance_DeviceDefault_Medium_Inverse);
-                title.setText(marker.getTitle());
-                addView(title);
-                if (marker.getSnippet() != null) {
-                    TextView snippet = new TextView(context);
-                    snippet.setTextAppearance(context, android.R.style.TextAppearance_DeviceDefault_Inverse);
-                    snippet.setText(marker.getSnippet());
-                    addView(snippet);
-                }
-            } catch (RemoteException e) {
-                // ...
+            TextView title = new TextView(context);
+            title.setTextAppearance(context,
+                    android.R.style.TextAppearance_DeviceDefault_Medium_Inverse);
+            title.setText(marker.getTitle());
+            addView(title);
+            if (marker.getSnippet() != null) {
+                TextView snippet = new TextView(context);
+                snippet.setTextAppearance(context,
+                        android.R.style.TextAppearance_DeviceDefault_Inverse);
+                snippet.setText(marker.getSnippet());
+                addView(snippet);
             }
         }
     }

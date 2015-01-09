@@ -24,38 +24,38 @@ import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelega
 
 public class BitmapDescriptorFactoryImpl extends IBitmapDescriptorFactoryDelegate.Stub {
 
-	@Override
-	public IObjectWrapper fromResource(int resourceId) throws RemoteException {
-		return ObjectWrapper.wrap(new ResourceBitmapDescriptor(resourceId));
-	}
+    @Override
+    public IObjectWrapper fromResource(int resourceId) throws RemoteException {
+        return ObjectWrapper.wrap(new ResourceBitmapDescriptor(resourceId));
+    }
 
-	@Override
-	public IObjectWrapper fromAsset(String assetName) throws RemoteException {
-		return ObjectWrapper.wrap(new AssetBitmapDescriptor(assetName));
-	}
+    @Override
+    public IObjectWrapper fromAsset(String assetName) throws RemoteException {
+        return ObjectWrapper.wrap(new AssetBitmapDescriptor(assetName));
+    }
 
-	@Override
-	public IObjectWrapper fromFile(String fileName) throws RemoteException {
-		return ObjectWrapper.wrap(new FileBitmapDescriptor(fileName));
-	}
+    @Override
+    public IObjectWrapper fromFile(String fileName) throws RemoteException {
+        return ObjectWrapper.wrap(new FileBitmapDescriptor(fileName));
+    }
 
-	@Override
-	public IObjectWrapper defaultMarker() throws RemoteException {
-		return ObjectWrapper.wrap(new DefaultBitmapDescriptor(0));
-	}
+    @Override
+    public IObjectWrapper defaultMarker() throws RemoteException {
+        return ObjectWrapper.wrap(new DefaultBitmapDescriptor());
+    }
 
-	@Override
-	public IObjectWrapper defaultMarkerWithHue(float hue) throws RemoteException {
-		return ObjectWrapper.wrap(new DefaultBitmapDescriptor(hue));
-	}
+    @Override
+    public IObjectWrapper defaultMarkerWithHue(float hue) throws RemoteException {
+        return ObjectWrapper.wrap(new DefaultBitmapDescriptor(hue));
+    }
 
-	@Override
-	public IObjectWrapper fromBitmap(Bitmap bitmap) throws RemoteException {
-		return ObjectWrapper.wrap(new BitmapBitmapDescriptor(bitmap));
-	}
+    @Override
+    public IObjectWrapper fromBitmap(Bitmap bitmap) throws RemoteException {
+        return ObjectWrapper.wrap(new BitmapBitmapDescriptor(bitmap));
+    }
 
-	@Override
-	public IObjectWrapper fromPath(String absolutePath) throws RemoteException {
-		return ObjectWrapper.wrap(new PathBitmapDescriptor(absolutePath));
-	}
+    @Override
+    public IObjectWrapper fromPath(String absolutePath) throws RemoteException {
+        return ObjectWrapper.wrap(new PathBitmapDescriptor(absolutePath));
+    }
 }

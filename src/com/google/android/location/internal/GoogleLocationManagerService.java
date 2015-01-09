@@ -26,7 +26,7 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
-import org.microg.gms.AbstractGmsServiceBroker;
+import com.google.android.gms.common.AbstractGmsServiceBroker;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import java.util.List;

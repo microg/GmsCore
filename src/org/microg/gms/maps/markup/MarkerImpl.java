@@ -16,53 +16,39 @@
 
 package org.microg.gms.maps.markup;
 
-import android.graphics.*;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.RemoteException;
 import android.util.Log;
 import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.dynamic.ObjectWrapper;
-import com.google.android.gms.maps.model.internal.IMarkerDelegate;
-import com.google.android.gms.maps.internal.IOnMarkerClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import org.microg.gms.maps.bitmap.BitmapDescriptor;
-import org.microg.gms.maps.bitmap.DefaultBitmapDescriptor;
-import org.microg.gms.maps.GoogleMapImpl;
+import com.google.android.gms.maps.model.internal.IMarkerDelegate;
+import org.microg.gms.maps.GmsMapsTypeHelper;
+import org.microg.gms.maps.bitmap.BitmapDescriptorImpl;
+import org.oscim.android.canvas.AndroidBitmap;
+import org.oscim.layers.marker.MarkerItem;
+import org.oscim.layers.marker.MarkerSymbol;
 
-public class MarkerImpl extends IMarkerDelegate.Stub {
+public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
     private static final String TAG = MarkerImpl.class.getName();
 
     private final String id;
 
-    private float alpha;
-    private boolean flat;
-    private boolean draggable;
-    private LatLng position;
-    private float anchorU;
-    private float anchorV;
-    private float rotation;
-    private String snippet;
-    private String title;
-    private boolean visible;
+    private MarkerOptions options;
+    private BitmapDescriptorImpl icon;
 
-    private BitmapDescriptor icon;
-
-    private GoogleMapImpl map;
-    private Overlay overlay = new Overlay() {
+    private MarkupListener listener;
+    /*private Overlay overlay = new Overlay() {
         private Point point = new Point();
 
         @Override
         public boolean onTap(GeoPoint p, MapView mapView) {
             Point touchPoint = mapView.getProjection().toPixels(p, null);
             Bitmap bitmap = icon.getBitmap();
-            if (bitmap == null) return false;
-            mapView.getProjection().toPixels(position.toGeoPoint(), point);
+            if (bitmap == null)
+                return false;
+            //mapView.getProjection().toPixels(position.toGeoPoint(), point);
             float xTest = bitmap.getWidth() * anchorU + touchPoint.x - point.x;
             float yTest = bitmap.getHeight() * anchorV + touchPoint.y - point.y;
             if (0 < xTest && xTest < bitmap.getWidth() && 0 < yTest && yTest < bitmap.getHeight()) {
@@ -87,16 +73,19 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
 
         @Override
         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-            if (shadow /*&& flat*/) return; // shadows are broken right now, we skip them
+            if (shadow && flat)
+                return; // shadows are broken right now, we skip them
             Bitmap bitmap = icon.getBitmap();
             if (bitmap != null) {
-                mapView.getProjection().toPixels(position.toGeoPoint(), point);
+                //mapView.getProjection().toPixels(position.toGeoPoint(), point);
                 float x = point.x - bitmap.getWidth() * anchorU;
                 float y = point.y - bitmap.getHeight() * anchorV;
                 Paint paint = new Paint();
                 paint.setAlpha((int) (alpha * 255));
                 if (shadow) {
-                    paint.setColorFilter(new PorterDuffColorFilter(Color.argb((int) (128 * alpha), 0, 0, 0), PorterDuff.Mode.SRC_IN));
+                    paint.setColorFilter(
+                            new PorterDuffColorFilter(Color.argb((int) (128 * alpha), 0, 0, 0),
+                                    PorterDuff.Mode.SRC_IN));
                 }
                 Matrix matrix = new Matrix();
                 matrix.setRotate(rotation, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
@@ -115,100 +104,95 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
                 });
             }
         }
-    };
+    };*/
 
-    public MarkerImpl(String id, MarkerOptions options, GoogleMapImpl map) {
+    public MarkerImpl(String id, MarkerOptions options, MarkupListener listener) {
         this.id = id;
-        this.map = map;
-        this.alpha = options.getAlpha();
-        this.draggable = options.isDraggable();
-        this.position = options.getPosition();
-        if (position == null) position = new LatLng(0, 0);
-        this.rotation = options.getRotation();
-        this.anchorU = options.getAnchorU();
-        this.anchorV = options.getAnchorV();
-        this.snippet = options.getSnippet();
-        this.title = options.getTitle();
-        this.visible = options.isVisible();
-        this.icon = options.getIcon();
-        if (icon == null)
-            icon = new BitmapDescriptor(new ObjectWrapper<DefaultBitmapDescriptor>(new DefaultBitmapDescriptor(0)));
-        Log.d(TAG, "New marker " + id + " with title " + title + " @ " + position);
+        this.listener = listener;
+        this.options = options == null ? new MarkerOptions() : options;
+        if (options.getPosition() == null) {
+            options.position(new LatLng(0, 0));
+        }
+        icon = options.getIcon() == null ? null : new BitmapDescriptorImpl(options.getIcon());
+        Log.d(TAG, "New marker " + id + " with title " + options.getTitle() + " @ " +
+                options.getPosition());
     }
 
     @Override
-    public void remove() throws RemoteException {
-        map.remove(this);
+    public void remove() {
+        listener.remove(this);
     }
 
     @Override
-    public String getId() throws RemoteException {
+    public String getId() {
         return id;
     }
 
     @Override
-    public void setPosition(LatLng pos) throws RemoteException {
-        this.position = pos;
+    public void setPosition(LatLng pos) {
+        options.position(pos);
+        listener.update(this);
     }
 
     @Override
-    public LatLng getPosition() throws RemoteException {
-        return position;
+    public LatLng getPosition() {
+        return options.getPosition();
     }
 
     @Override
-    public void setTitle(String title) throws RemoteException {
-        this.title = title;
+    public void setTitle(String title) {
+        options.title(title);
+        listener.update(this);
     }
 
     @Override
-    public String getTitle() throws RemoteException {
-        return title;
+    public String getTitle() {
+        return options.getTitle();
     }
 
     @Override
-    public void setSnippet(String snippet) throws RemoteException {
-        this.snippet = snippet;
+    public void setSnippet(String snippet) {
+        options.snippet(snippet);
     }
 
     @Override
-    public String getSnippet() throws RemoteException {
-        return snippet;
+    public String getSnippet() {
+        return options.getSnippet();
     }
 
     @Override
-    public void setDraggable(boolean drag) throws RemoteException {
-        this.draggable = drag;
+    public void setDraggable(boolean drag) {
+        options.draggable(drag);
     }
 
     @Override
-    public boolean isDraggable() throws RemoteException {
-        return draggable;
+    public boolean isDraggable() {
+        return options.isDraggable();
     }
 
     @Override
-    public void showInfoWindow() throws RemoteException {
-
-    }
-
-    @Override
-    public void hideInfoWindow() throws RemoteException {
+    public void showInfoWindow() {
 
     }
 
     @Override
-    public boolean isInfoWindowShown() throws RemoteException {
+    public void hideInfoWindow() {
+
+    }
+
+    @Override
+    public boolean isInfoWindowShown() {
         return false;
     }
 
     @Override
-    public void setVisible(boolean visible) throws RemoteException {
-        this.visible = visible;
+    public void setVisible(boolean visible) {
+        options.visible(visible);
     }
 
     @Override
-    public boolean isVisible() throws RemoteException {
-        return visible;
+    public boolean isVisible() {
+        return options.isVisible();
     }
 
     @Override
@@ -217,69 +201,89 @@ public class MarkerImpl extends IMarkerDelegate.Stub {
     }
 
     @Override
-    public int hashCodeRemote() throws RemoteException {
+    public int hashCodeRemote() {
         return hashCode();
     }
 
     @Override
-    public void setIcon(IObjectWrapper obj) throws RemoteException {
-        icon = new BitmapDescriptor(obj);
-        if (icon == null)
-            icon = new BitmapDescriptor(new ObjectWrapper<DefaultBitmapDescriptor>(new DefaultBitmapDescriptor(0)));
-        map.redraw();
+    public void setIcon(IObjectWrapper obj) {
+        if (obj == null) {
+            icon = new BitmapDescriptorImpl();
+        } else {
+            icon = new BitmapDescriptorImpl(obj);
+        }
+        listener.update(this);
     }
 
     @Override
-    public void setAnchor(float x, float y) throws RemoteException {
-        anchorU = x;
-        anchorV = y;
-        map.redraw();
+    public void setAnchor(float x, float y) {
+        options.anchor(x, y);
+        listener.update(this);
     }
 
     @Override
-    public void setFlat(boolean flat) throws RemoteException {
-        map.redraw();
+    public void setFlat(boolean flat) {
+        options.flat(flat);
+        listener.update(this);
     }
 
     @Override
-    public boolean isFlat() throws RemoteException {
-        return false;
+    public boolean isFlat() {
+        return options.isFlat();
     }
 
     @Override
-    public void setRotation(float rotation) throws RemoteException {
-        this.rotation = rotation;
-        map.redraw();
+    public void setRotation(float rotation) {
+        options.rotation(rotation);
+        listener.update(this);
     }
 
     @Override
-    public float getRotation() throws RemoteException {
-        return rotation;
+    public float getRotation() {
+        return options.getRotation();
     }
 
     @Override
-    public void setInfoWindowAnchor(float x, float y) throws RemoteException {
-
+    public void setInfoWindowAnchor(float x, float y) {
+        options.infoWindowAnchor(x, y);
     }
 
     @Override
-    public void setAlpha(float alpha) throws RemoteException {
-        this.alpha = alpha;
-        map.redraw();
+    public void setAlpha(float alpha) {
+        options.alpha(alpha);
+        listener.update(this);
     }
 
     @Override
-    public float getAlpha() throws RemoteException {
-        return alpha;
-    }
-
-    public Overlay getOverlay() {
-        return overlay;
+    public float getAlpha() {
+        return options.getAlpha();
     }
 
     public int getHeight() {
         Bitmap bitmap = icon.getBitmap();
-        if (bitmap == null) return -1;
+        if (bitmap == null)
+            return -1;
         return bitmap.getHeight();
+    }
+
+    @Override
+    public MarkerItem getMarkerItem(Context context) {
+        MarkerItem item = new MarkerItem(getId(), getTitle(), getSnippet(),
+                GmsMapsTypeHelper.fromLatLng(getPosition()));
+        if (icon != null) {
+            if (icon.getBitmap() != null) {
+                item.setMarker(
+                        new MarkerSymbol(new AndroidBitmap(icon.getBitmap()), options.getAnchorU(),
+                                options.getAnchorV(), isFlat()));
+            } else {
+                icon.loadBitmapAsync(context, new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.update(MarkerImpl.this);
+                    }
+                });
+            }
+        }
+        return item;
     }
 }

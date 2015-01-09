@@ -16,8 +16,9 @@
 
 package org.microg.gms.maps.camera;
 
-import org.microg.gms.maps.GoogleMapImpl;
+import org.oscim.map.Map;
 
 public interface CameraUpdate {
-	void update(GoogleMapImpl map);
+    void apply(Map map);
+    void applyAnimated(Map map, int duration);
 }
