@@ -20,6 +20,10 @@ import android.os.Parcel;
 import org.microg.safeparcel.SafeParcelUtil;
 import org.microg.safeparcel.SafeParcelable;
 
+/**
+ * Defines options for a polygon.
+ * TODO
+ */
 public class PolygonOptions implements SafeParcelable {
     @Override
     public int describeContents() {

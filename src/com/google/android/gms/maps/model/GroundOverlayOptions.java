@@ -251,14 +251,9 @@ public class GroundOverlayOptions implements SafeParcelable {
      */
     public GroundOverlayOptions position(LatLng location, float width, float height)
             throws IllegalArgumentException, IllegalStateException {
-        if (location == null)
-            throw new IllegalArgumentException("location must not be null");
-        if (width < 0 || height < 0)
-            throw new IllegalArgumentException("Width and height must not be negative");
-        if (bounds != null)
-            throw new IllegalStateException("Position already set using positionFromBounds");
-        this.location = location;
-        this.width = width;
+        position(location, width);
+        if (height < 0)
+            throw new IllegalArgumentException("height must not be negative");
         this.height = height;
         return this;
     }
@@ -284,10 +279,10 @@ public class GroundOverlayOptions implements SafeParcelable {
             throws IllegalArgumentException, IllegalStateException {
         if (location == null)
             throw new IllegalArgumentException("location must not be null");
-        if (width < 0 || height < 0)
-            throw new IllegalArgumentException("Width must not be negative");
+        if (width < 0)
+            throw new IllegalArgumentException("width must not be negative");
         if (bounds != null)
-            throw new IllegalStateException("Position already set using positionFromBounds");
+            throw new IllegalStateException("Position already set using positionFromBounds()");
         this.location = location;
         this.width = width;
         return this;
@@ -305,6 +300,8 @@ public class GroundOverlayOptions implements SafeParcelable {
      */
     public GroundOverlayOptions positionFromBounds(LatLngBounds bounds)
             throws IllegalStateException {
+        if (location != null)
+            throw new IllegalStateException("Position already set using position()");
         this.bounds = bounds;
         return this;
     }
@@ -320,6 +317,8 @@ public class GroundOverlayOptions implements SafeParcelable {
      * @throws IllegalArgumentException if the transparency is outside the range [0..1].
      */
     public GroundOverlayOptions transparency(float transparency) throws IllegalArgumentException {
+        if (transparency < 0 || transparency > 1)
+            throw new IllegalArgumentException("transparency must be in range [0..1]");
         this.transparency = transparency;
         return this;
     }

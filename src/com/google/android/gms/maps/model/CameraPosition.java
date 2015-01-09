@@ -173,7 +173,12 @@ public final class CameraPosition implements SafeParcelable {
 
     @Override
     public String toString() {
-        return super.toString(); // TODO
+        return "CameraPosition{" +
+                "target=" + target +
+                ", zoom=" + zoom +
+                ", tilt=" + tilt +
+                ", bearing=" + bearing +
+                '}';
     }
 
     @Override
@@ -222,7 +227,7 @@ public final class CameraPosition implements SafeParcelable {
          * Builds a {@link CameraPosition}.
          */
         public CameraPosition build() {
-            return null;
+            return new CameraPosition(target, zoom, tilt, bearing);
         }
 
         /**

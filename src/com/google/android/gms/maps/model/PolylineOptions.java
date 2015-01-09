@@ -23,6 +23,10 @@ import org.microg.safeparcel.SafeParceled;
 
 import java.util.List;
 
+/**
+ * Defines options for a polyline.
+ * TODO
+ */
 public class PolylineOptions implements SafeParcelable {
     @SafeParceled(1)
     private int versionCode;

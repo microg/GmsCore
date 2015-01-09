@@ -96,10 +96,10 @@ public final class LatLng implements SafeParcelable {
 
     @Override
     public final int hashCode() {
-        long lat = Double.doubleToLongBits(latitude);
-        int tmp = 31 + (int) (lat ^ lat >>> 32);
-        long lon = Double.doubleToLongBits(longitude);
-        return tmp * 31 + (int) (lon ^ lon >>> 32);
+        long tmp1 = Double.doubleToLongBits(latitude);
+        int tmp2 = 31 + (int) (tmp1 ^ tmp1 >>> 32);
+        tmp1 = Double.doubleToLongBits(longitude);
+        return tmp2 * 31 + (int) (tmp1 ^ tmp1 >>> 32);
     }
 
     @Override
