@@ -22,21 +22,12 @@ import org.microg.safeparcel.SafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class LatLng implements SafeParcelable {
-    public static Creator<LatLng> CREATOR = new Creator<LatLng>() {
-        public LatLng createFromParcel(Parcel source) {
-            return new LatLng(source);
-        }
-
-        public LatLng[] newArray(int size) {
-            return new LatLng[size];
-        }
-    };
+    @SafeParceled(1)
+    private int versionCode;
     @SafeParceled(2)
     public double latitude;
     @SafeParceled(3)
     public double longitude;
-    @SafeParceled(1)
-    private int versionCode;
 
     public LatLng(int versionCode, double latitude, double longitude) {
         this.versionCode = versionCode;
@@ -78,4 +69,14 @@ public class LatLng implements SafeParcelable {
     public void writeToParcel(Parcel dest, int flags) {
         SafeParcelUtil.writeObject(this, dest, flags);
     }
+
+    public static Creator<LatLng> CREATOR = new Creator<LatLng>() {
+        public LatLng createFromParcel(Parcel source) {
+            return new LatLng(source);
+        }
+
+        public LatLng[] newArray(int size) {
+            return new LatLng[size];
+        }
+    };
 }

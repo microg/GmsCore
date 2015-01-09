@@ -50,6 +50,16 @@ public class VisibleRegion implements SafeParcelable {
         this(1, nearLeft, nearRight, farLeft, farRight, bounds);
     }
 
+    /**
+     * This is assuming that the visible region matches the bounds, which means that it's a north
+     * orientated top view
+     */
+    public VisibleRegion(LatLngBounds bounds) {
+        this(bounds.southWest, new LatLng(bounds.southWest.latitude, bounds.northEast.longitude),
+                new LatLng(bounds.northEast.latitude, bounds.southWest.longitude), bounds.northEast,
+                bounds);
+    }
+
     public VisibleRegion(Parcel in) {
         SafeParcelUtil.readObject(this, in);
     }

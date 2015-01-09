@@ -16,38 +16,36 @@
 
 package com.google.android.gms.maps.model;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import org.microg.safeparcel.SafeParcelUtil;
 import org.microg.safeparcel.SafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+/**
+ * Defines options for a Circle.
+ */
 public class CircleOptions implements SafeParcelable {
-    public static Creator<CircleOptions> CREATOR = new Creator<CircleOptions>() {
-        public CircleOptions createFromParcel(Parcel source) {
-            return new CircleOptions(source);
-        }
-
-        public CircleOptions[] newArray(int size) {
-            return new CircleOptions[size];
-        }
-    };
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
     private LatLng center;
     @SafeParceled(3)
-    private double radius;
+    private double radius = 0;
     @SafeParceled(4)
-    private float strokeWidth;
+    private float strokeWidth = 10;
     @SafeParceled(5)
-    private int strokeColor;
+    private int strokeColor = Color.BLACK;
     @SafeParceled(6)
-    private int fillColor;
+    private int fillColor = Color.TRANSPARENT;
     @SafeParceled(7)
-    private float zIndex;
+    private float zIndex = 0;
     @SafeParceled(8)
-    private boolean visisble;
+    private boolean visible = true;
 
+    /**
+     * Creates circle options.
+     */
     public CircleOptions() {
     }
 
@@ -60,8 +58,185 @@ public class CircleOptions implements SafeParcelable {
         return 0;
     }
 
+    /**
+     * Sets the center using a {@link LatLng}.
+     * <p/>
+     * The center must not be {@code null}.
+     * <p/>
+     * This method is mandatory because there is no default center.
+     *
+     * @param center The geographic center as a {@link LatLng}.
+     * @return this {@link CircleOptions} object
+     */
+    public CircleOptions center(LatLng center) {
+        this.center = center;
+        return this;
+    }
+
+    /**
+     * Sets the fill color.
+     * <p/>
+     * The fill color is the color inside the circle, in the integer format specified by
+     * {@link Color}. If TRANSPARENT is used then no fill is drawn.
+     * <p/>
+     * By default the fill color is transparent ({@code 0x00000000}).
+     *
+     * @param color color in the {@link Color} format
+     * @return this {@link CircleOptions} object
+     */
+    public CircleOptions fillColor(int color) {
+        this.fillColor = color;
+        return this;
+    }
+
+    /**
+     * Returns the center as a {@link LatLng}.
+     *
+     * @return The geographic center as a {@link LatLng}.
+     */
+    public LatLng getCenter() {
+        return center;
+    }
+
+    /**
+     * Returns the fill color.
+     *
+     * @return The color in the {@link Color} format.
+     */
+    public int getFillColor() {
+        return fillColor;
+    }
+
+    /**
+     * Returns the circle's radius, in meters.
+     *
+     * @return The radius in meters.
+     */
+    public double getRadius() {
+        return radius;
+    }
+
+    /**
+     * Returns the stroke color.
+     *
+     * @return The color in the {@link Color} format.
+     */
+    public int getStrokeColor() {
+        return strokeColor;
+    }
+
+    /**
+     * Returns the stroke width.
+     *
+     * @return The width in screen pixels.
+     */
+    public float getStrokeWidth() {
+        return strokeWidth;
+    }
+
+    /**
+     * Returns the zIndex.
+     *
+     * @return The zIndex value.
+     */
+    public float getZIndex() {
+        return zIndex;
+    }
+
+    /**
+     * Checks whether the circle is visible.
+     *
+     * @return {code true} if the circle is visible; {@code false} if it is invisible.
+     */
+    public boolean isVisible() {
+        return visible;
+    }
+
+    /**
+     * Sets the radius in meters.
+     * <p/>
+     * The radius must be zero or greater. The default radius is zero.
+     *
+     * @param radius radius in meters
+     * @return this {@link CircleOptions} object
+     */
+    public CircleOptions radius(double radius) {
+        this.radius = radius;
+        return this;
+    }
+
+    /**
+     * Sets the stroke color.
+     * <p/>
+     * The stroke color is the color of this circle's outline, in the integer format specified by
+     * {@link Color}. If TRANSPARENT is used then no outline is drawn.
+     * <p/>
+     * By default the stroke color is black ({@code 0xff000000}).
+     *
+     * @param color color in the {@link Color} format
+     * @return this {@link CircleOptions} object
+     */
+    public CircleOptions strokeColor(int color) {
+        this.strokeColor = color;
+        return this;
+    }
+
+    /**
+     * Sets the stroke width.
+     * <p/>
+     * The stroke width is the width (in screen pixels) of the circle's outline. It must be zero or
+     * greater. If it is zero then no outline is drawn.
+     * <p/>
+     * The default width is 10 pixels.
+     *
+     * @param width width in screen pixels
+     * @return this {@link CircleOptions} object
+     */
+    public CircleOptions strokeWidth(float width) {
+        this.strokeWidth = width;
+        return this;
+    }
+
+    /**
+     * Sets the visibility.
+     * <p/>
+     * If this circle is not visible then it is not drawn, but all other state is preserved.
+     *
+     * @param visible {@code false} to make this circle invisible
+     * @return this {@link CircleOptions} object
+     */
+    public CircleOptions visible(boolean visible) {
+        this.visible = visible;
+        return this;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         SafeParcelUtil.writeObject(this, dest, flags);
     }
+
+    /**
+     * Sets the zIndex.
+     * <p/>
+     * Overlays (such as circles) with higher zIndices are drawn above those with lower indices.
+     * <p/>
+     * By default the zIndex is {@code 0.0}.
+     *
+     * @param zIndex zIndex value
+     * @return this {@link CircleOptions} object
+     */
+    public CircleOptions zIndex(float zIndex) {
+        this.zIndex = zIndex;
+        return this;
+    }
+
+    public static Creator<CircleOptions> CREATOR = new Creator<CircleOptions>() {
+        public CircleOptions createFromParcel(Parcel source) {
+            return new CircleOptions(source);
+        }
+
+        public CircleOptions[] newArray(int size) {
+            return new CircleOptions[size];
+        }
+    };
 }
