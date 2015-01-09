@@ -21,26 +21,41 @@ import org.microg.safeparcel.SafeParcelUtil;
 import org.microg.safeparcel.SafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class LatLngBounds implements SafeParcelable {
+/**
+ * An immutable class representing a latitude/longitude aligned rectangle.
+ */
+public final class LatLngBounds implements SafeParcelable {
     @SafeParceled(1)
-    private int versionCode;
+    private final int versionCode;
+    /**
+     * Southwest corner of the bound.
+     */
     @SafeParceled(2)
-    public LatLng southWest;
+    public final LatLng southwest;
+    /**
+     * Northeast corner of the bound.
+     */
     @SafeParceled(3)
-    public LatLng northEast;
+    public final LatLng northeast;
 
-    public LatLngBounds(int versionCode, LatLng southWest, LatLng northEast) {
-        this.versionCode = versionCode;
-        this.southWest = southWest;
-        this.northEast = northEast;
-    }
-
-    public LatLngBounds(LatLng southWest, LatLng northEast) {
-        this(1, southWest, northEast);
+    /**
+     * This constructor is dirty setting the final fields to make the compiler happy.
+     * In fact, those are replaced by their real values later using SafeParcelUtil.
+     */
+    private LatLngBounds() {
+        this.versionCode = -1;
+        southwest = northeast = null;
     }
 
     private LatLngBounds(Parcel in) {
+        this();
         SafeParcelUtil.readObject(this, in);
+    }
+
+    public LatLngBounds(LatLng southwest, LatLng northeast) throws IllegalArgumentException {
+        this.versionCode = 1;
+        this.southwest = southwest;
+        this.northeast = northeast;
     }
 
     @Override

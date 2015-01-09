@@ -211,8 +211,8 @@ public class CircleOptions implements SafeParcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
+    public void writeToParcel(Parcel out, int flags) {
+        SafeParcelUtil.writeObject(this, out, flags);
     }
 
     /**

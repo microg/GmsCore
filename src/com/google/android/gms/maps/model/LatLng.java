@@ -21,16 +21,47 @@ import org.microg.safeparcel.SafeParcelUtil;
 import org.microg.safeparcel.SafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class LatLng implements SafeParcelable {
+/**
+ * An immutable class representing a pair of latitude and longitude coordinates, stored as degrees.
+ */
+public final class LatLng implements SafeParcelable {
     @SafeParceled(1)
-    private int versionCode;
+    private final int versionCode;
+    /**
+     * Latitude, in degrees. This value is in the range [-90, 90].
+     */
     @SafeParceled(2)
-    public double latitude;
+    public final double latitude;
+    /**
+     * Longitude, in degrees. This value is in the range [-180, 180).
+     */
     @SafeParceled(3)
-    public double longitude;
+    public final double longitude;
 
-    public LatLng(int versionCode, double latitude, double longitude) {
-        this.versionCode = versionCode;
+    /**
+     * This constructor is dirty setting the final fields to make the compiler happy.
+     * In fact, those are replaced by their real values later using SafeParcelUtil.
+     */
+    private LatLng() {
+        versionCode = -1;
+        latitude = longitude = 0;
+    }
+
+    private LatLng(Parcel in) {
+        this();
+        SafeParcelUtil.readObject(this, in);
+    }
+
+    /**
+     * Constructs a LatLng with the given latitude and longitude, measured in degrees.
+     *
+     * @param latitude  The point's latitude. This will be clamped to between -90 degrees and
+     *                  +90 degrees inclusive.
+     * @param longitude The point's longitude. This will be normalized to be within -180 degrees
+     *                  inclusive and +180 degrees exclusive.
+     */
+    public LatLng(double latitude, double longitude) {
+        this.versionCode = 1;
         this.latitude = Math.max(-90, Math.min(90, latitude));
         if ((-180 <= longitude) && (longitude < 180)) {
             this.longitude = longitude;
@@ -39,12 +70,28 @@ public class LatLng implements SafeParcelable {
         }
     }
 
-    private LatLng(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
+    /**
+     * Tests if this LatLng is equal to another.
+     * <p/>
+     * Two points are considered equal if and only if their latitudes are bitwise equal and their
+     * longitudes are bitwise equal. This means that two {@link LatLng}s that are very near, in
+     * terms of geometric distance, might not be considered {@code .equal()}.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
-    public LatLng(double latitude, double longitude) {
-        this(1, latitude, longitude);
+        LatLng latLng = (LatLng) o;
+
+        if (Double.compare(latLng.latitude, latitude) != 0)
+            return false;
+        if (Double.compare(latLng.longitude, longitude) != 0)
+            return false;
+
+        return true;
     }
 
     @Override
@@ -66,8 +113,8 @@ public class LatLng implements SafeParcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
+    public void writeToParcel(Parcel out, int flags) {
+        SafeParcelUtil.writeObject(this, out, flags);
     }
 
     public static Creator<LatLng> CREATOR = new Creator<LatLng>() {

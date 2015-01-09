@@ -55,8 +55,8 @@ public class VisibleRegion implements SafeParcelable {
      * orientated top view
      */
     public VisibleRegion(LatLngBounds bounds) {
-        this(bounds.southWest, new LatLng(bounds.southWest.latitude, bounds.northEast.longitude),
-                new LatLng(bounds.northEast.latitude, bounds.southWest.longitude), bounds.northEast,
+        this(bounds.southwest, new LatLng(bounds.southwest.latitude, bounds.northeast.longitude),
+                new LatLng(bounds.northeast.latitude, bounds.southwest.longitude), bounds.northeast,
                 bounds);
     }
 

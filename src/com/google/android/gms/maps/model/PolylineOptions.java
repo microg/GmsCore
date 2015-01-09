@@ -17,50 +17,47 @@
 package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import org.microg.safeparcel.SafeParcelUtil;
 import org.microg.safeparcel.SafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PolylineOptions implements SafeParcelable {
-	@SafeParceled(1)
-	private int versionCode;
-	// TODO
-	private List<LatLng> points;
-	private float width;
-	private int color;
-	private float zIndex;
-	private boolean visible;
-	private boolean geodesic;
+    @SafeParceled(1)
+    private int versionCode;
+    // TODO
+    private List<LatLng> points;
+    private float width;
+    private int color;
+    private float zIndex;
+    private boolean visible;
+    private boolean geodesic;
 
+    public PolylineOptions() {
+    }
 
-	public PolylineOptions() {
-	}
+    private PolylineOptions(Parcel in) {
+        SafeParcelUtil.readObject(this, in);
+    }
 
-	private PolylineOptions(Parcel in) {
-		SafeParcelUtil.readObject(this, in);
-	}
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        SafeParcelUtil.writeObject(this, dest, flags);
+    }
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		SafeParcelUtil.writeObject(this, dest, flags);
-	}
+    public static Creator<PolylineOptions> CREATOR = new Creator<PolylineOptions>() {
+        public PolylineOptions createFromParcel(Parcel source) {
+            return new PolylineOptions(source);
+        }
 
-	public static Creator<PolylineOptions> CREATOR = new Creator<PolylineOptions>() {
-		public PolylineOptions createFromParcel(Parcel source) {
-			return new PolylineOptions(source);
-		}
-
-		public PolylineOptions[] newArray(int size) {
-			return new PolylineOptions[size];
-		}
-	};
+        public PolylineOptions[] newArray(int size) {
+            return new PolylineOptions[size];
+        }
+    };
 }
