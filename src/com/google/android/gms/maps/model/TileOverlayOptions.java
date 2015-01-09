@@ -16,19 +16,33 @@
 
 package com.google.android.gms.maps.model;
 
+import android.os.IBinder;
 import android.os.Parcel;
+import android.os.RemoteException;
+import com.google.android.gms.maps.model.internal.ITileProviderDelegate;
 import org.microg.safeparcel.SafeParcelUtil;
 import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a TileOverlay.
  */
 public class TileOverlayOptions implements SafeParcelable {
 
+    @SafeParceled(1)
+    private final int versionCode = 1;
+    /**
+     * This is a IBinder to the {@link #tileProvider}, built using {@link ITileProviderDelegate}.
+     */
+    @SafeParceled(2)
+    private IBinder tileProviderBinder;
     private TileProvider tileProvider;
+    @SafeParceled(3)
     private boolean visible = true;
-    private boolean fadeIn = true;
+    @SafeParceled(4)
     private float zIndex;
+    @SafeParceled(5)
+    private boolean fadeIn = true;
 
     /**
      * Creates a new set of tile overlay options.
@@ -97,8 +111,14 @@ public class TileOverlayOptions implements SafeParcelable {
      * @param tileProvider the {@link TileProvider} to use for this tile overlay.
      * @return the object for which the method was called, with the new tile provider set.
      */
-    public TileOverlayOptions tileProvider(TileProvider tileProvider) {
+    public TileOverlayOptions tileProvider(final TileProvider tileProvider) {
         this.tileProvider = tileProvider;
+        this.tileProviderBinder = new ITileProviderDelegate.Stub() {
+            @Override
+            public Tile getTile(int x, int y, int zoom) throws RemoteException {
+                return tileProvider.getTile(x, y, zoom);
+            }
+        };
         return this;
     }
 

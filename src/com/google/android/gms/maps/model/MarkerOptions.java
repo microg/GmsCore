@@ -37,11 +37,8 @@ public class MarkerOptions implements SafeParcelable {
      * This is a IBinder to the remote BitmapDescriptor created using BitmapDescriptorFactory
      */
     @SafeParceled(5)
-    private IBinder icon;
-    /**
-     * The real BitmapDescriptor. Not transferred through Parcel.
-     */
-    private BitmapDescriptor iconDescriptor;
+    private IBinder iconBinder;
+    private BitmapDescriptor icon;
     @SafeParceled(6)
     private float anchorU = 0.5F;
     @SafeParceled(7)
@@ -167,10 +164,10 @@ public class MarkerOptions implements SafeParcelable {
      * custom icon is set.
      */
     public BitmapDescriptor getIcon() {
-        if (iconDescriptor == null && icon != null) {
-            iconDescriptor = new BitmapDescriptor(ObjectWrapper.asInterface(icon));
+        if (icon == null && iconBinder != null) {
+            icon = new BitmapDescriptor(ObjectWrapper.asInterface(iconBinder));
         }
-        return iconDescriptor;
+        return icon;
     }
 
     /**
@@ -234,8 +231,8 @@ public class MarkerOptions implements SafeParcelable {
      * @return the object for which the method was called, with the new icon set.
      */
     public MarkerOptions icon(BitmapDescriptor icon) {
-        this.iconDescriptor = icon;
-        this.icon = icon == null ? null : icon.getRemoteObject().asBinder();
+        this.icon = icon;
+        this.iconBinder = icon == null ? null : icon.getRemoteObject().asBinder();
         return this;
     }
 
