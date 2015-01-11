@@ -2,6 +2,12 @@ package org.microg.gms.maps;
 
 public class Constants {
     /**
+     * This is the highest version that was looked at during development.
+     * Does not necessarily mean anything.
+     */
+    public static final int MAX_REFERENCE_VERSION = 6599436;
+
+    /**
      * No base map tiles.
      */
     public static final int MAP_TYPE_NONE = 0;
@@ -25,4 +31,7 @@ public class Constants {
      * Satellite maps with a transparent layer of major streets.
      */
     public static final int MAP_TYPE_HYBRID = 4;
+
+    public static final String ACTION_GMS_LOCATION_MANAGER_SERVICE_START = "com.google.android.location.internal.GoogleLocationManagerService.START";
+    public static final String KEY_MOCK_LOCATION = "mockLocation";
 }
