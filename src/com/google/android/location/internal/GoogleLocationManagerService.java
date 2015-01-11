@@ -30,6 +30,8 @@ import static org.microg.gms.maps.Constants.ACTION_GMS_LOCATION_MANAGER_SERVICE_
 
 public class GoogleLocationManagerService extends Service {
     private static final String TAG = "GmsLMS";
+
+    private GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this);
     private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker() {
         @Override
         public void getGoogleLocationManagerService(IGmsCallbacks callback, int versionCode,
@@ -38,7 +40,6 @@ public class GoogleLocationManagerService extends Service {
             callback.onPostInitComplete(0, impl.asBinder(), null);
         }
     };
-    private GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this);
 
     @Override
     public IBinder onBind(Intent intent) {

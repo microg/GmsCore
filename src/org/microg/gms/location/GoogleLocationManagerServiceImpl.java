@@ -12,7 +12,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationStatus;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
-import com.google.android.gms.location.internal.ILocationListener;
+import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.location.places.*;
 import com.google.android.gms.location.places.internal.IPlacesCallbacks;
@@ -89,21 +89,21 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void requestLocationUpdatesWithIntent(LocationRequest request,
             PendingIntent callbackIntent) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesWithIntent: " + request);
-        getLocationManager().requestLocationUpdates(request, callbackIntent);
+        getLocationManager().requestLocationUpdates(request, callbackIntent, null);
     }
 
     @Override
     public void removeLocationUpdatesWithListener(ILocationListener listener)
             throws RemoteException {
         Log.d(TAG, "removeLocationUpdatesWithListener: " + listener);
-        getLocationManager().removeLocationUpdates(listener);
+        getLocationManager().removeLocationUpdates(listener, null);
     }
 
     @Override
     public void removeLocationUpdatesWithIntent(PendingIntent callbackIntent)
             throws RemoteException {
         Log.d(TAG, "removeLocationUpdatesWithIntent: " + callbackIntent);
-        getLocationManager().removeLocationUpdates(callbackIntent);
+        getLocationManager().removeLocationUpdates(callbackIntent, null);
     }
 
     @Override
@@ -154,9 +154,9 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     }
 
     @Override
-    public void requestLocationUpdates(LocationRequest request, ILocationListener listener,
+    public void requestLocationUpdatesWithPackage(LocationRequest request, ILocationListener listener,
             String packageName) throws RemoteException {
-        Log.d(TAG, "requestLocationUpdates: " + request);
+        Log.d(TAG, "requestLocationUpdatesWithPackage: " + request);
         getLocationManager().requestLocationUpdates(request, listener, packageName);
     }
 
