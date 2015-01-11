@@ -2,6 +2,7 @@ package com.google.android.gms.common;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.IntentSender;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -130,7 +131,7 @@ public class ConnectionResult {
      * @return the error code, or {@link #SUCCESS} if no error occurred.
      */
     public int getErrorCode() {
-        return this.statusCode;
+        return statusCode;
     }
 
     /**
@@ -141,7 +142,7 @@ public class ConnectionResult {
      * @return The pending intent to resolve the connection failure.
      */
     public PendingIntent getResolution() {
-        return this.pendingIntent;
+        return pendingIntent;
     }
 
     /**
@@ -160,7 +161,7 @@ public class ConnectionResult {
      * @return {@code true} if the connection was successful, {@code false} if there was an error.
      */
     public boolean isSuccess() {
-        return this.statusCode == 0;
+        return statusCode == 0;
     }
 
     /**
