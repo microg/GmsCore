@@ -3,7 +3,7 @@ package org.microg.gms.location;
 import android.location.Location;
 import android.os.Bundle;
 
-import static org.microg.gms.maps.Constants.KEY_MOCK_LOCATION;
+import static org.microg.gms.Constants.KEY_MOCK_LOCATION;
 
 public class MockLocationProvider {
     private boolean mockEnabled = false;

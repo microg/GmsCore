@@ -22,11 +22,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
-import com.google.android.gms.common.AbstractGmsServiceBroker;
+import org.microg.gms.AbstractGmsServiceBroker;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.location.GoogleLocationManagerServiceImpl;
 
-import static org.microg.gms.maps.Constants.ACTION_GMS_LOCATION_MANAGER_SERVICE_START;
+import static org.microg.gms.Constants.ACTION_GMS_LOCATION_MANAGER_SERVICE_START;
 
 public class GoogleLocationManagerService extends Service {
     private static final String TAG = "GmsLMS";
