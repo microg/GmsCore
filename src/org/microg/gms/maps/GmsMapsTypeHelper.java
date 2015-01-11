@@ -44,8 +44,8 @@ public class GmsMapsTypeHelper {
     }
 
     public static BoundingBox fromLatLngBounds(LatLngBounds bounds) {
-        return new BoundingBox(bounds.southWest.latitude, bounds.southWest.longitude,
-                bounds.northEast.latitude, bounds.northEast.longitude);
+        return new BoundingBox(bounds.southwest.latitude, bounds.southwest.longitude,
+                bounds.northeast.latitude, bounds.northeast.longitude);
     }
 
     public static float fromBearing(float bearing) {
