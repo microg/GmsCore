@@ -16,13 +16,11 @@
 
 package com.google.android.gms.maps;
 
-import android.os.Parcel;
 import com.google.android.gms.maps.model.CameraPosition;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public final class GoogleMapOptions implements SafeParcelable {
+public final class GoogleMapOptions extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
@@ -46,21 +44,7 @@ public final class GoogleMapOptions implements SafeParcelable {
     @SafeParceled(11)
     private boolean rotateGesturesEnabled;
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
-    }
-
     public GoogleMapOptions() {
-    }
-
-    private GoogleMapOptions(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
     }
 
     public int getMapType() {
@@ -95,13 +79,5 @@ public final class GoogleMapOptions implements SafeParcelable {
         return rotateGesturesEnabled;
     }
 
-    public static Creator<GoogleMapOptions> CREATOR = new Creator<GoogleMapOptions>() {
-        public GoogleMapOptions createFromParcel(Parcel source) {
-            return new GoogleMapOptions(source);
-        }
-
-        public GoogleMapOptions[] newArray(int size) {
-            return new GoogleMapOptions[size];
-        }
-    };
+    public static Creator<GoogleMapOptions> CREATOR = new AutoCreator<>(GoogleMapOptions.class);
 }

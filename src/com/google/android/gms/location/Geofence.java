@@ -16,33 +16,9 @@
 
 package com.google.android.gms.location;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 
-public class Geofence implements SafeParcelable {
+public class Geofence extends AutoSafeParcelable {
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
-    }
-
-
-    public static Creator<Geofence> CREATOR = new Creator<Geofence>() {
-        @Override
-        public Geofence createFromParcel(Parcel source) {
-            return new Geofence();
-        }
-
-        @Override
-        public Geofence[] newArray(int size) {
-            return new Geofence[size];
-        }
-    };
+    public static Creator<Geofence> CREATOR = new AutoCreator<>(Geofence.class);
 }

@@ -16,39 +16,15 @@
 
 package com.google.android.gms.maps.model;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 
 /**
  * Defines options for a polygon.
  * TODO
  */
-public class PolygonOptions implements SafeParcelable {
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
-    }
-
+public class PolygonOptions extends AutoSafeParcelable {
     public PolygonOptions() {
     }
 
-    private PolygonOptions(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
-
-    public static Creator<PolygonOptions> CREATOR = new Creator<PolygonOptions>() {
-        public PolygonOptions createFromParcel(Parcel source) {
-            return new PolygonOptions(source);
-        }
-
-        public PolygonOptions[] newArray(int size) {
-            return new PolygonOptions[size];
-        }
-    };
+    public static Creator<PolygonOptions> CREATOR = new AutoCreator<>(PolygonOptions.class);
 }

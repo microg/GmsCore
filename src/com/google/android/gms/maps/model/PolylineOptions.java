@@ -16,9 +16,7 @@
 
 package com.google.android.gms.maps.model;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.List;
@@ -27,7 +25,7 @@ import java.util.List;
  * Defines options for a polyline.
  * TODO
  */
-public class PolylineOptions implements SafeParcelable {
+public class PolylineOptions extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode;
     // TODO
@@ -41,27 +39,5 @@ public class PolylineOptions implements SafeParcelable {
     public PolylineOptions() {
     }
 
-    private PolylineOptions(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
-    }
-
-    public static Creator<PolylineOptions> CREATOR = new Creator<PolylineOptions>() {
-        public PolylineOptions createFromParcel(Parcel source) {
-            return new PolylineOptions(source);
-        }
-
-        public PolylineOptions[] newArray(int size) {
-            return new PolylineOptions[size];
-        }
-    };
+    public static Creator<PolylineOptions> CREATOR = new AutoCreator<>(PolylineOptions.class);
 }

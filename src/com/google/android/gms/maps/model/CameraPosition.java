@@ -17,10 +17,8 @@
 package com.google.android.gms.maps.model;
 
 import android.content.Context;
-import android.os.Parcel;
 import android.util.AttributeSet;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
@@ -28,7 +26,7 @@ import java.util.Arrays;
 /**
  * An immutable class that aggregates all camera position parameters.
  */
-public final class CameraPosition implements SafeParcelable {
+public final class CameraPosition extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;
     /**
@@ -60,15 +58,8 @@ public final class CameraPosition implements SafeParcelable {
      */
     private CameraPosition() {
         target = null;
-        versionCode = -1;
+        versionCode = 1;
         zoom = tilt = bearing = 0;
-    }
-
-    private CameraPosition(Parcel in) {
-        this();
-        SafeParcelUtil.readObject(this, in);
-        if (target == null)
-            throw new NullPointerException("Target must not be null");
     }
 
     /**
@@ -127,11 +118,6 @@ public final class CameraPosition implements SafeParcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -181,20 +167,7 @@ public final class CameraPosition implements SafeParcelable {
                 '}';
     }
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
-    public static Creator<CameraPosition> CREATOR = new Creator<CameraPosition>() {
-        public CameraPosition createFromParcel(Parcel source) {
-            return new CameraPosition(source);
-        }
-
-        public CameraPosition[] newArray(int size) {
-            return new CameraPosition[size];
-        }
-    };
+    public static Creator<CameraPosition> CREATOR = new AutoCreator<>(CameraPosition.class);
 
     /**
      * Builds camera position.

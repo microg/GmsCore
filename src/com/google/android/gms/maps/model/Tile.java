@@ -1,15 +1,13 @@
 package com.google.android.gms.maps.model;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * Contains information about a Tile that is returned by a {@link TileProvider}.
  * TODO SafeParceled
  */
-public class Tile implements SafeParcelable {
+public class Tile extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;
     /**
@@ -30,14 +28,9 @@ public class Tile implements SafeParcelable {
     public final byte[] data;
 
     private Tile() {
-        versionCode = -1;
+        versionCode = 1;
         width = height = 0;
         data = null;
-    }
-
-    private Tile(Parcel in) {
-        this();
-        SafeParcelUtil.readObject(this, in);
     }
 
     /**
@@ -56,23 +49,5 @@ public class Tile implements SafeParcelable {
         this.data = data;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
-    public static Creator<Tile> CREATOR = new Creator<Tile>() {
-        public Tile createFromParcel(Parcel source) {
-            return new Tile(source);
-        }
-
-        public Tile[] newArray(int size) {
-            return new Tile[size];
-        }
-    };
+    public static Creator<Tile> CREATOR = new AutoCreator<>(Tile.class);
 }

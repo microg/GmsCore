@@ -8,6 +8,7 @@ public class Constants {
     public static final int MAX_REFERENCE_VERSION = 6599436;
     public static final String ACTION_GMS_LOCATION_MANAGER_SERVICE_START = "com.google.android.location.internal.GoogleLocationManagerService.START";
     public static final String KEY_MOCK_LOCATION = "mockLocation";
+    public static final String DEFAULT_ACCOUNT = "<<default account>>";
 
     /**
      * No base map tiles.

@@ -16,12 +16,10 @@
 
 package com.google.android.gms.maps.model;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class VisibleRegion implements SafeParcelable {
+public class VisibleRegion extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
@@ -34,6 +32,9 @@ public class VisibleRegion implements SafeParcelable {
     private LatLng farRight;
     @SafeParceled(6)
     private LatLngBounds bounds;
+
+    private VisibleRegion() {
+    }
 
     public VisibleRegion(int versionCode, LatLng nearLeft, LatLng nearRight, LatLng farLeft,
             LatLng farRight, LatLngBounds bounds) {
@@ -60,27 +61,5 @@ public class VisibleRegion implements SafeParcelable {
                 bounds);
     }
 
-    public VisibleRegion(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
-    }
-
-    public static Creator<VisibleRegion> CREATOR = new Creator<VisibleRegion>() {
-        public VisibleRegion createFromParcel(Parcel source) {
-            return new VisibleRegion(source);
-        }
-
-        public VisibleRegion[] newArray(int size) {
-            return new VisibleRegion[size];
-        }
-    };
+    public static Creator<VisibleRegion> CREATOR = new AutoCreator<>(VisibleRegion.class);
 }

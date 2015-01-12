@@ -1,13 +1,11 @@
 package com.google.android.gms.location;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 
-public class LocationStatus implements SafeParcelable {
+public class LocationStatus extends AutoSafeParcelable {
     public static final int STATUS_SUCCESSFUL = 0;
     public static final int STATUS_UNKNOWN = 1;
     public static final int STATUS_TIMED_OUT_ON_SCAN = 2;
@@ -26,14 +24,8 @@ public class LocationStatus implements SafeParcelable {
     @SafeParceled(3)
     long elapsedRealtimeNanos;
 
-    private LocationStatus(Parcel in) {
+    private LocationStatus() {
         versionCode = 1;
-        SafeParcelUtil.readObject(this, in);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     @Override
@@ -84,20 +76,5 @@ public class LocationStatus implements SafeParcelable {
         }
     }
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
-    public static final Creator<LocationStatus> CREATOR = new Creator<LocationStatus>() {
-        @Override
-        public LocationStatus createFromParcel(Parcel parcel) {
-            return new LocationStatus(parcel);
-        }
-
-        @Override
-        public LocationStatus[] newArray(int i) {
-            return new LocationStatus[i];
-        }
-    };
+    public static final Creator<LocationStatus> CREATOR = new AutoCreator<>(LocationStatus.class);
 }

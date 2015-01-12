@@ -17,15 +17,13 @@
 package com.google.android.gms.maps.model;
 
 import android.graphics.Color;
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a Circle.
  */
-public class CircleOptions implements SafeParcelable {
+public class CircleOptions extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode;
     @SafeParceled(2)
@@ -47,15 +45,6 @@ public class CircleOptions implements SafeParcelable {
      * Creates circle options.
      */
     public CircleOptions() {
-    }
-
-    private CircleOptions(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     /**
@@ -210,11 +199,6 @@ public class CircleOptions implements SafeParcelable {
         return this;
     }
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
     /**
      * Sets the zIndex.
      * <p/>
@@ -230,13 +214,5 @@ public class CircleOptions implements SafeParcelable {
         return this;
     }
 
-    public static Creator<CircleOptions> CREATOR = new Creator<CircleOptions>() {
-        public CircleOptions createFromParcel(Parcel source) {
-            return new CircleOptions(source);
-        }
-
-        public CircleOptions[] newArray(int size) {
-            return new CircleOptions[size];
-        }
-    };
+    public static Creator<CircleOptions> CREATOR = new AutoCreator<>(CircleOptions.class);
 }

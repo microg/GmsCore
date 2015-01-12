@@ -16,9 +16,7 @@
 
 package com.google.android.gms.maps.model;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
@@ -26,7 +24,7 @@ import java.util.Arrays;
 /**
  * An immutable class representing a latitude/longitude aligned rectangle.
  */
-public final class LatLngBounds implements SafeParcelable {
+public final class LatLngBounds extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;
     /**
@@ -45,13 +43,8 @@ public final class LatLngBounds implements SafeParcelable {
      * In fact, those are replaced by their real values later using SafeParcelUtil.
      */
     private LatLngBounds() {
-        this.versionCode = -1;
+        this.versionCode = 1;
         southwest = northeast = null;
-    }
-
-    private LatLngBounds(Parcel in) {
-        this();
-        SafeParcelUtil.readObject(this, in);
     }
 
     /**
@@ -108,11 +101,6 @@ public final class LatLngBounds implements SafeParcelable {
                 southwest.longitude >= longitude && longitude < 180 ||
                         longitude >= -180 && longitude <= northeast.longitude
         );
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     @Override
@@ -190,20 +178,7 @@ public final class LatLngBounds implements SafeParcelable {
                 '}';
     }
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
-    public static Creator<LatLngBounds> CREATOR = new Creator<LatLngBounds>() {
-        public LatLngBounds createFromParcel(Parcel source) {
-            return new LatLngBounds(source);
-        }
-
-        public LatLngBounds[] newArray(int size) {
-            return new LatLngBounds[size];
-        }
-    };
+    public static Creator<LatLngBounds> CREATOR = new AutoCreator<>(LatLngBounds.class);
 
     /**
      * This is a builder that is able to create a minimum bound based on a set of LatLng points.

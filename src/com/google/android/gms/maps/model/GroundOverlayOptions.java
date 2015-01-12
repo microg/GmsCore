@@ -17,16 +17,14 @@
 package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
-import android.os.Parcel;
 import com.google.android.gms.dynamic.ObjectWrapper;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a ground overlay.
  */
-public class GroundOverlayOptions implements SafeParcelable {
+public class GroundOverlayOptions extends AutoSafeParcelable {
     /**
      * Flag for when no dimension is specified for the height.
      */
@@ -64,10 +62,6 @@ public class GroundOverlayOptions implements SafeParcelable {
     public GroundOverlayOptions() {
     }
 
-    private GroundOverlayOptions(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
-
     /**
      * Specifies the anchor to be at a particular point in the image.
      * <p/>
@@ -102,11 +96,6 @@ public class GroundOverlayOptions implements SafeParcelable {
     public GroundOverlayOptions bearing(float bearing) {
         this.bearing = bearing;
         return this;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     /**
@@ -333,11 +322,6 @@ public class GroundOverlayOptions implements SafeParcelable {
         return this;
     }
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
     /**
      * Specifies the ground overlay's zIndex, i.e., the order in which it will be drawn. See the
      * documentation at the top of this class for more information about zIndex.
@@ -349,13 +333,6 @@ public class GroundOverlayOptions implements SafeParcelable {
         return this;
     }
 
-    public static Creator<GroundOverlayOptions> CREATOR = new Creator<GroundOverlayOptions>() {
-        public GroundOverlayOptions createFromParcel(Parcel source) {
-            return new GroundOverlayOptions(source);
-        }
-
-        public GroundOverlayOptions[] newArray(int size) {
-            return new GroundOverlayOptions[size];
-        }
-    };
+    public static Creator<GroundOverlayOptions> CREATOR = new AutoCreator<>(
+            GroundOverlayOptions.class);
 }

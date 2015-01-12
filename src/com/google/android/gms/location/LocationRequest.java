@@ -1,9 +1,7 @@
 package com.google.android.gms.location;
 
-import android.os.Parcel;
 import android.os.SystemClock;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
@@ -55,10 +53,8 @@ import java.util.Arrays;
  * <p/>
  * All location requests are considered hints, and you may receive locations that are more/less
  * accurate, and faster/slower than requested.
- * <p/>
- * TODO: Works on wire, but methods not yet implemented.
  */
-public class LocationRequest implements SafeParcelable {
+public class LocationRequest extends AutoSafeParcelable {
 
     /**
      * Used with {@link #setPriority(int)} to request "block" level accuracy.
@@ -120,11 +116,6 @@ public class LocationRequest implements SafeParcelable {
         this.maxWaitTime = 0;
     }
 
-    public LocationRequest(Parcel in) {
-        this();
-        SafeParcelUtil.readObject(this, in);
-    }
-
     /**
      * Create a location request with default parameters.
      * <p/>
@@ -135,11 +126,6 @@ public class LocationRequest implements SafeParcelable {
      */
     public static LocationRequest create() {
         return new LocationRequest();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     /**
@@ -426,20 +412,5 @@ public class LocationRequest implements SafeParcelable {
         return super.toString();
     }
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
-    public static final Creator<LocationRequest> CREATOR = new Creator<LocationRequest>() {
-        @Override
-        public LocationRequest createFromParcel(Parcel parcel) {
-            return new LocationRequest(parcel);
-        }
-
-        @Override
-        public LocationRequest[] newArray(int i) {
-            return new LocationRequest[i];
-        }
-    };
+    public static final Creator<LocationRequest> CREATOR = new AutoCreator<>(LocationRequest.class);
 }

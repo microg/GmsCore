@@ -17,17 +17,15 @@
 package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
-import android.os.Parcel;
 import android.os.RemoteException;
 import com.google.android.gms.maps.model.internal.ITileProviderDelegate;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a TileOverlay.
  */
-public class TileOverlayOptions implements SafeParcelable {
+public class TileOverlayOptions extends AutoSafeParcelable {
 
     @SafeParceled(1)
     private final int versionCode = 1;
@@ -48,15 +46,6 @@ public class TileOverlayOptions implements SafeParcelable {
      * Creates a new set of tile overlay options.
      */
     public TileOverlayOptions() {
-    }
-
-    private TileOverlayOptions(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     /**
@@ -132,11 +121,6 @@ public class TileOverlayOptions implements SafeParcelable {
         return this;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
-    }
-
     /**
      * Specifies the tile overlay's zIndex, i.e., the order in which it will be drawn where
      * overlays with larger values are drawn above those with lower values. See the documentation
@@ -149,13 +133,5 @@ public class TileOverlayOptions implements SafeParcelable {
         return this;
     }
 
-    public static Creator<TileOverlayOptions> CREATOR = new Creator<TileOverlayOptions>() {
-        public TileOverlayOptions createFromParcel(Parcel source) {
-            return new TileOverlayOptions(source);
-        }
-
-        public TileOverlayOptions[] newArray(int size) {
-            return new TileOverlayOptions[size];
-        }
-    };
+    public static Creator<TileOverlayOptions> CREATOR = new AutoCreator<>(TileOverlayOptions.class);
 }

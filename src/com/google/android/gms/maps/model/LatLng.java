@@ -16,15 +16,13 @@
 
 package com.google.android.gms.maps.model;
 
-import android.os.Parcel;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * An immutable class representing a pair of latitude and longitude coordinates, stored as degrees.
  */
-public final class LatLng implements SafeParcelable {
+public final class LatLng extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;
     /**
@@ -43,13 +41,8 @@ public final class LatLng implements SafeParcelable {
      * In fact, those are replaced by their real values later using SafeParcelUtil.
      */
     private LatLng() {
-        versionCode = -1;
+        versionCode = 1;
         latitude = longitude = 0;
-    }
-
-    private LatLng(Parcel in) {
-        this();
-        SafeParcelUtil.readObject(this, in);
     }
 
     /**
@@ -106,24 +99,6 @@ public final class LatLng implements SafeParcelable {
     public String toString() {
         return "lat/lng: (" + latitude + "," + longitude + ")";
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        SafeParcelUtil.writeObject(this, out, flags);
-    }
-
-    public static Creator<LatLng> CREATOR = new Creator<LatLng>() {
-        public LatLng createFromParcel(Parcel source) {
-            return new LatLng(source);
-        }
-
-        public LatLng[] newArray(int size) {
-            return new LatLng[size];
-        }
-    };
+    
+    public static Creator<LatLng> CREATOR = new AutoCreator<>(LatLng.class);
 }

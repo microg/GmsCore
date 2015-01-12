@@ -17,13 +17,11 @@
 package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
-import android.os.Parcel;
 import com.google.android.gms.dynamic.ObjectWrapper;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParcelable;
+import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class MarkerOptions implements SafeParcelable {
+public class MarkerOptions extends AutoSafeParcelable {
 
     @SafeParceled(1)
     private int versionCode = 1;
@@ -62,15 +60,6 @@ public class MarkerOptions implements SafeParcelable {
      * Creates a new set of marker options.
      */
     public MarkerOptions() {
-    }
-
-    private MarkerOptions(Parcel in) {
-        SafeParcelUtil.readObject(this, in);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     /**
@@ -334,18 +323,5 @@ public class MarkerOptions implements SafeParcelable {
         return this;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        SafeParcelUtil.writeObject(this, dest, flags);
-    }
-
-    public static Creator<MarkerOptions> CREATOR = new Creator<MarkerOptions>() {
-        public MarkerOptions createFromParcel(Parcel source) {
-            return new MarkerOptions(source);
-        }
-
-        public MarkerOptions[] newArray(int size) {
-            return new MarkerOptions[size];
-        }
-    };
+    public static Creator<MarkerOptions> CREATOR = new AutoCreator<>(MarkerOptions.class);
 }
