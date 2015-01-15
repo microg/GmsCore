@@ -31,7 +31,7 @@ android {
      * not a big problem right now.
      */
     compileSdkVersion 'Google Inc.:Google APIs:21'
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.2"
     lintOptions.abortOnError false
 
     sourceSets {
