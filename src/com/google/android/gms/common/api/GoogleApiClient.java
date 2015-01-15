@@ -3,12 +3,19 @@ package com.google.android.gms.common.api;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import com.google.android.gms.common.ConnectionResult;
+import org.microg.gms.Constants;
+import org.microg.gms.common.api.GoogleApiClientImpl;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
 
 /**
  * The main entry point for Google Play services integration.
@@ -209,13 +216,27 @@ public interface GoogleApiClient {
      * Builder to configure a {@link GoogleApiClient}.
      */
     public class Builder {
+        private final Context context;
+        private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
+        private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<>();
+        private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<>();
+        private final Set<String> scopes = new HashSet<>();
+        private String accountName;
+        private int clientId = -1;
+        private FragmentActivity fragmentActivity;
+        private Looper looper;
+        private int gravityForPopups;
+        private OnConnectionFailedListener unresolvedConnectionFailedListener;
+        private View viewForPopups;
+
         /**
          * Builder to help construct the {@link GoogleApiClient} object.
          *
          * @param context The context to use for the connection.
          */
         public Builder(Context context) {
-
+            this.context = context;
+            this.looper = context.getMainLooper();
         }
 
         /**
@@ -242,7 +263,7 @@ public interface GoogleApiClient {
          * @see Api
          */
         public <O extends Api.ApiOptions.HasOptions> Builder addApi(Api<O> api, O options) {
-            // TODO
+            apis.put(api, options);
             return this;
         }
 
@@ -253,7 +274,7 @@ public interface GoogleApiClient {
          * @see Api
          */
         public Builder addApi(Api<? extends Api.ApiOptions.NotRequiredOptions> api) {
-            // TODO
+            apis.put(api, null);
             return this;
         }
 
@@ -273,7 +294,7 @@ public interface GoogleApiClient {
          *                 call are delivered.
          */
         public Builder addConnectionCallbacks(ConnectionCallbacks listener) {
-            // TODO
+            connectionCallbacks.add(listener);
             return this;
         }
 
@@ -293,7 +314,7 @@ public interface GoogleApiClient {
          *                 call are delivered.
          */
         public Builder addOnConnectionFailedListener(OnConnectionFailedListener listener) {
-            // TODO
+            connectionFailedListeners.add(listener);
             return this;
         }
 
@@ -305,7 +326,7 @@ public interface GoogleApiClient {
          * @see com.google.android.gms.common.Scopes
          */
         public Builder addScope(Scope scope) {
-            // TODO
+            scopes.add(scope.getScopeUri());
             return this;
         }
 
@@ -315,13 +336,20 @@ public interface GoogleApiClient {
          * @return The {@link GoogleApiClient} object.
          */
         public GoogleApiClient build() {
-            return null; // TODO
+            return new GoogleApiClientImpl(context, looper, getAccountInfo(), apis,
+                    connectionCallbacks, connectionFailedListeners, clientId);
+        }
+
+        private AccountInfo getAccountInfo() {
+            return null;
         }
 
         public Builder enableAutoManage(FragmentActivity fragmentActivity, int cliendId,
                 OnConnectionFailedListener unresolvedConnectionFailedListener)
                 throws NullPointerException, IllegalArgumentException, IllegalStateException {
-            // TODO
+            this.fragmentActivity = fragmentActivity;
+            this.clientId = cliendId;
+            this.unresolvedConnectionFailedListener = unresolvedConnectionFailedListener;
             return this;
         }
 
@@ -334,7 +362,7 @@ public interface GoogleApiClient {
          *                    {@link GoogleApiClient}.
          */
         public Builder setAccountName(String accountName) {
-            // TODO
+            this.accountName = accountName;
             return this;
         }
 
@@ -345,7 +373,7 @@ public interface GoogleApiClient {
          * @param gravityForPopups The gravity which controls the placement of games service popups.
          */
         public Builder setGravityForPopups(int gravityForPopups) {
-            // TODO
+            this.gravityForPopups = gravityForPopups;
             return this;
         }
 
@@ -355,7 +383,7 @@ public interface GoogleApiClient {
          * thread will be used.
          */
         public Builder setHandler(Handler handler) {
-            // TODO
+            this.looper = handler.getLooper();
             return this;
         }
 
@@ -365,7 +393,7 @@ public interface GoogleApiClient {
          * @param viewForPopups The view to use as a content view for popups. View cannot be null.
          */
         public Builder setViewForPopups(View viewForPopups) {
-            // TODO
+            this.viewForPopups = viewForPopups;
             return this;
         }
 
@@ -373,13 +401,13 @@ public interface GoogleApiClient {
          * Specify that the default account should be used when connecting to services.
          */
         public Builder useDefaultAccount() {
-            // TODO
+            this.accountName = Constants.DEFAULT_ACCOUNT;
             return this;
         }
     }
 
     /**
-     * Provides callbacks that are called when the client is connected or disconnected from the 
+     * Provides callbacks that are called when the client is connected or disconnected from the
      * service. Most applications implement {@link #onConnected(Bundle)} to start making requests.
      */
     public interface ConnectionCallbacks {

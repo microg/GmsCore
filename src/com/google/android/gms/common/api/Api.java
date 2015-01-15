@@ -1,5 +1,8 @@
 package com.google.android.gms.common.api;
 
+import android.content.Context;
+import android.os.Looper;
+
 /**
  * Describes a section of the Google Play Services API that should be made available. Instances of
  * this should be passed into {@link GoogleApiClient.Builder#addApi(Api)} to enable the appropriate
@@ -13,6 +16,16 @@ package com.google.android.gms.common.api;
  * See {@link GoogleApiClient.Builder} for usage examples.
  */
 public final class Api<O extends Api.ApiOptions> {
+    
+    private final Builder<O> builder;
+    
+    public Api(Builder<O> builder) {
+        this.builder = builder;
+    }
+
+    public Builder<O> getBuilder() {
+        return builder;
+    }
 
     /**
      * Base interface for API options. These are used to configure specific parameters for
@@ -34,7 +47,7 @@ public final class Api<O extends Api.ApiOptions> {
         /**
          * {@link ApiOptions} implementation for {@link Api}s that do not take any options.
          */
-        public class NoOptions implements NotRequiredOptions {
+        public final class NoOptions implements NotRequiredOptions {
         }
 
         /**
@@ -42,5 +55,17 @@ public final class Api<O extends Api.ApiOptions> {
          */
         public interface Optional extends HasOptions, NotRequiredOptions {
         }
+    }
+
+    public interface Connection {
+        public void connect();
+        public void disconnect();
+        public boolean isConnected();
+    }
+
+    public interface Builder<O extends ApiOptions> {
+        Connection build(Context context, Looper looper, O options, AccountInfo accountInfo,
+                GoogleApiClient.ConnectionCallbacks callbacks,
+                GoogleApiClient.OnConnectionFailedListener connectionFailedListener);
     }
 }

@@ -49,7 +49,8 @@ public class GooglePlayServicesUtil {
     }
 
     public static int isGooglePlayServicesAvailable(Context context) {
-        return 0; // TODO
+        // As we can't know right now if the later desired feature is available, we just pretend it to be.
+        return ConnectionResult.SUCCESS;
     }
 
     public static boolean isGoogleSignedUid(PackageManager packageManager, int uid) {
