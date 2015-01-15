@@ -15,7 +15,7 @@ dependencies {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.2"
     lintOptions.abortOnError false
 
     sourceSets {
