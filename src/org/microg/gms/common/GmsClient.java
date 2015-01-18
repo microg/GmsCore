@@ -9,11 +9,11 @@ import android.os.IInterface;
 import android.os.RemoteException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.Api;
+import org.microg.gms.common.api.ApiConnection;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
 
-public abstract class GmsClient<I extends IInterface> implements Api.Connection {
+public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     private static final String TAG = "GmsClient";
 
     private final Context context;

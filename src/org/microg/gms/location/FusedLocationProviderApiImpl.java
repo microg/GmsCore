@@ -11,6 +11,8 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
+import org.microg.gms.common.GmsConnector;
+
 public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     private static final String TAG = "GmsFusedApiImpl";
     
@@ -27,6 +29,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     @Override
     public PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
             LocationListener listener) {
+
         //LocationClientImpl.get(client).requestLocationUpdates(request, listener);
         return null;
     }

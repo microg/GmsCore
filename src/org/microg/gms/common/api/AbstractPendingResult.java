@@ -11,13 +11,13 @@ import java.util.concurrent.TimeUnit;
 public class AbstractPendingResult<R extends Result> implements PendingResult<R> {
     private final Object lock = new Object();
     private final CountDownLatch countDownLatch = new CountDownLatch(1);
-    private final CallbackHandler handler;
+    private final CallbackHandler<R> handler;
     private boolean canceled;
     private R result;
     private ResultCallback<R> resultCallback;
 
     public AbstractPendingResult(Looper looper) {
-        handler = new CallbackHandler(looper);
+        handler = new CallbackHandler<R>(looper);
     }
 
     private R getResult() {
@@ -92,4 +92,7 @@ public class AbstractPendingResult<R extends Result> implements PendingResult<R>
         
     }
 
+    public void setResult(R result) {
+        this.result = result;
+    }
 }

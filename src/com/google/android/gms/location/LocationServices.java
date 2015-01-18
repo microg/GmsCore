@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Looper;
 import com.google.android.gms.common.api.AccountInfo;
 import com.google.android.gms.common.api.Api;
+import org.microg.gms.common.api.ApiConnection;
+
+import org.microg.gms.common.api.ApiBuilder;
 import com.google.android.gms.common.api.GoogleApiClient;
 import org.microg.gms.location.FusedLocationProviderApiImpl;
 import org.microg.gms.location.GeofencingApiImpl;
@@ -14,9 +17,9 @@ import org.microg.gms.location.LocationClientImpl;
  */
 public class LocationServices {
     public static final Api<Api.ApiOptions.NoOptions> API = new Api<>(
-            new Api.Builder<Api.ApiOptions.NoOptions>() {
+            new ApiBuilder<Api.ApiOptions.NoOptions>() {
                 @Override
-                public Api.Connection build(Context context, Looper looper,
+                public ApiConnection build(Context context, Looper looper,
                         Api.ApiOptions.NoOptions options,
                         AccountInfo accountInfo, GoogleApiClient.ConnectionCallbacks callbacks,
                         GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {

@@ -28,7 +28,10 @@ class CallbackHandler<R extends Result> extends Handler {
     }
 
     public void sendResultCallback(ResultCallback<R> callback, R result) {
-        
+        Message message = new Message();
+        message.what = CALLBACK_ON_COMPLETE;
+        message.obj = new OnCompleteObject<R>(callback, result);
+        sendMessage(message);
     }
 
     public void sendTimeoutResultCallback(AbstractPendingResult pendingResult, long millis) {
@@ -38,5 +41,10 @@ class CallbackHandler<R extends Result> extends Handler {
     public static class OnCompleteObject<R extends Result> {
         public ResultCallback<R> callback;
         public R result;
+
+        public OnCompleteObject(ResultCallback<R> callback, R result) {
+            this.callback = callback;
+            this.result = result;
+        }
     }
 }

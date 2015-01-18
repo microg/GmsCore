@@ -1,7 +1,6 @@
 package com.google.android.gms.common.api;
 
-import android.content.Context;
-import android.os.Looper;
+import org.microg.gms.common.api.ApiBuilder;
 
 /**
  * Describes a section of the Google Play Services API that should be made available. Instances of
@@ -17,13 +16,13 @@ import android.os.Looper;
  */
 public final class Api<O extends Api.ApiOptions> {
     
-    private final Builder<O> builder;
+    private final ApiBuilder<O> builder;
     
-    public Api(Builder<O> builder) {
+    public Api(ApiBuilder<O> builder) {
         this.builder = builder;
     }
 
-    public Builder<O> getBuilder() {
+    public ApiBuilder<O> getBuilder() {
         return builder;
     }
 
@@ -57,15 +56,4 @@ public final class Api<O extends Api.ApiOptions> {
         }
     }
 
-    public interface Connection {
-        public void connect();
-        public void disconnect();
-        public boolean isConnected();
-    }
-
-    public interface Builder<O extends ApiOptions> {
-        Connection build(Context context, Looper looper, O options, AccountInfo accountInfo,
-                GoogleApiClient.ConnectionCallbacks callbacks,
-                GoogleApiClient.OnConnectionFailedListener connectionFailedListener);
-    }
 }

@@ -18,9 +18,10 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private final Looper looper;
     private final AccountInfo accountInfo;
     private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
-    private final Map<Api, Api.Connection> apiConnections = new HashMap<>();
+    private final Map<Api, ApiConnection> apiConnections = new HashMap<>();
     private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<>();
     private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<>();
+    private final int clientId;
     private final ConnectionCallbacks baseConnectionCallbacks = new ConnectionCallbacks() {
         @Override
         public void onConnected(Bundle connectionHint) {
@@ -44,7 +45,6 @@ public class GoogleApiClientImpl implements GoogleApiClient {
             }
         }
     };
-    private final int clientId;
 
     public GoogleApiClientImpl(Context context, Looper looper, AccountInfo accountInfo,
             Map<Api, Api.ApiOptions> apis,
@@ -64,8 +64,12 @@ public class GoogleApiClientImpl implements GoogleApiClient {
                     baseConnectionFailedListener));
         }
     }
-    
-    public Api.Connection getApiConnection(Api api) {
+
+    public Looper getLooper() {
+        return looper;
+    }
+
+    public ApiConnection getApiConnection(Api api) {
         return apiConnections.get(api);
     }
 
@@ -86,21 +90,21 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public void connect() {
-        for (Api.Connection connection : apiConnections.values()) {
+        for (ApiConnection connection : apiConnections.values()) {
             connection.connect();
         }
     }
 
     @Override
     public void disconnect() {
-        for (Api.Connection connection : apiConnections.values()) {
+        for (ApiConnection connection : apiConnections.values()) {
             connection.disconnect();
         }
     }
 
     @Override
     public boolean isConnected() {
-        for (Api.Connection connection : apiConnections.values()) {
+        for (ApiConnection connection : apiConnections.values()) {
             if (!connection.isConnected()) return false;
         }
         return true;
