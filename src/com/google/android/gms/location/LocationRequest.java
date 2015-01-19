@@ -399,7 +399,7 @@ public class LocationRequest extends AutoSafeParcelable {
      * @return the same object, so that setters can be chained
      * @throws IllegalArgumentException if smallestDisplacementMeters is negative
      */
-    public LocationRequest setSmallestDesplacement(float smallestDisplacementMeters) {
+    public LocationRequest setSmallestDisplacement(float smallestDisplacementMeters) {
         if (smallestDisplacementMeters < 0)
             throw new IllegalArgumentException("smallestDisplacementMeters must not be negative");
         this.smallestDesplacement = smallestDisplacementMeters;

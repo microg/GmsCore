@@ -14,6 +14,7 @@ public final class Status extends AutoSafeParcelable implements Result {
 
     public static final Status INTERRUPTED = new Status(STATUS_CODE_INTERRUPTED);
     public static final Status CANCELED = new Status(STATUS_CODE_CANCELED);
+    public static final Status SUCCESS = new Status(0);
 
     private final int versionCode;
     private final int statusCode;
