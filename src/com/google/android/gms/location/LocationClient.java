@@ -1,78 +1,63 @@
 package com.google.android.gms.location;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.location.Location;
+import android.os.Looper;
+import android.os.RemoteException;
+
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+
 import org.microg.gms.common.ForwardConnectionCallbacks;
 import org.microg.gms.common.ForwardConnectionFailedListener;
+import org.microg.gms.common.api.AbstractPlayServicesClient;
+import org.microg.gms.common.api.GoogleApiClientImpl;
+import org.microg.gms.location.LocationClientImpl;
 
 @Deprecated
-public class LocationClient implements GooglePlayServicesClient {
-    private GoogleApiClient googleApiClient;
-    
-    public LocationClient(Context context, ConnectionCallbacks callbacks) {
-        googleApiClient = new GoogleApiClient.Builder(context)
+public class LocationClient extends AbstractPlayServicesClient {
+    public static final String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
+
+    public LocationClient(Context context, ConnectionCallbacks callbacks,
+                          OnConnectionFailedListener connectionFailedListener) {
+        super(new GoogleApiClient.Builder(context)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(new ForwardConnectionCallbacks(callbacks))
-                .build();
+                .addOnConnectionFailedListener(new ForwardConnectionFailedListener(connectionFailedListener))
+                .build());
     }
 
-    @Override
-    public void connect() {
-        googleApiClient.connect();
+    public Location getLastLocation() {
+        return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
 
-    @Override
-    public void disconnect() {
-        googleApiClient.disconnect();
+    public PendingResult requestLocationUpdates(LocationRequest request, LocationListener listener) {
+        return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, listener);
     }
 
-    @Override
-    public boolean isConnected() {
-        return googleApiClient.isConnected();
+    public PendingResult requestLocationUpdates(LocationRequest request, LocationListener listener, Looper looper) {
+        return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, listener, looper);
     }
 
-    @Override
-    public boolean isConnecting() {
-        return googleApiClient.isConnecting();
+    public PendingResult requestLocationUpdates(LocationRequest request, PendingIntent callbackIntent) {
+        return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, callbackIntent);
     }
 
-    @Override
-    public void registerConnectionCallbacks(final ConnectionCallbacks listener) {
-        googleApiClient.registerConnectionCallbacks(new ForwardConnectionCallbacks(listener));
+    public PendingResult removeLocationUpdates(LocationListener listener) {
+        return LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, listener);
     }
 
-    @Override
-    public boolean isConnectionCallbacksRegistered(ConnectionCallbacks listener) {
-        return googleApiClient
-                .isConnectionCallbacksRegistered(new ForwardConnectionCallbacks(listener));
+    public PendingResult removeLocationUpdates(PendingIntent callbackIntent) {
+        return LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, callbackIntent);
     }
 
-    @Override
-    public void unregisterConnectionCallbacks(
-            ConnectionCallbacks listener) {
-        googleApiClient.unregisterConnectionCallbacks(new ForwardConnectionCallbacks(listener));
+    public PendingResult setMockMode(boolean isMockMode) {
+        return LocationServices.FusedLocationApi.setMockMode(googleApiClient, isMockMode);
     }
 
-    @Override
-    public void registerConnectionFailedListener(
-            OnConnectionFailedListener listener) {
-        googleApiClient.registerConnectionFailedListener(
-                new ForwardConnectionFailedListener(listener));
+    public PendingResult setMockLocation(Location mockLocation) {
+        return LocationServices.FusedLocationApi.setMockLocation(googleApiClient, mockLocation);
     }
-
-    @Override
-    public boolean isConnectionFailedListenerRegistered(
-            OnConnectionFailedListener listener) {
-        return googleApiClient.isConnectionFailedListenerRegistered(
-                new ForwardConnectionFailedListener(listener));
-    }
-
-    @Override
-    public void unregisterConnectionFailedListener(
-            OnConnectionFailedListener listener) {
-        googleApiClient.unregisterConnectionFailedListener(
-                new ForwardConnectionFailedListener(listener));
-    }
-
 }

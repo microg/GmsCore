@@ -30,14 +30,24 @@ import com.google.android.gms.common.api.Result;
 
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
-public class GmsConnector {
-    public static <C extends ApiConnection, R extends Result, O extends Api.ApiOptions>
-    AbstractPendingResult<R> connect(GoogleApiClient apiClient, Api<O> api, Callback<C, R> callback) {
+public class GmsConnector<C extends ApiConnection, R extends Result, O extends Api.ApiOptions> {
+    private final GoogleApiClientImpl apiClient;
+    private final Api<O> api;
+    private final Callback<C, R> callback;
+
+    public GmsConnector(GoogleApiClient apiClient, Api<O> api, Callback<C, R> callback) {
+        this.apiClient = (GoogleApiClientImpl) apiClient;
+        this.api = api;
+        this.callback = callback;
+    }
+
+
+    public AbstractPendingResult<R> connect() {
         Looper looper = ((GoogleApiClientImpl) apiClient).getLooper();
         final AbstractPendingResult<R> result = new AbstractPendingResult<>(looper);
         Message msg = new Message();
-        msg.obj = new ConnectRequest<C, R, O>((GoogleApiClientImpl) apiClient, api, result, callback);
-        new Handler<C, R, O>(looper).sendMessage(msg);
+        msg.obj = result;
+        new Handler(looper).sendMessage(msg);
         return result;
     }
 
@@ -45,35 +55,21 @@ public class GmsConnector {
         public R onClientAvailable(C client) throws RemoteException;
     }
 
-    private static class Handler<C extends ApiConnection, R extends Result, O extends Api.ApiOptions> extends android.os.Handler {
+    private class Handler extends android.os.Handler {
         private Handler(Looper looper) {
             super(looper);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            ConnectRequest<C, R, O> request = (ConnectRequest<C, R, O>) msg.obj;
-            ApiConnection apiConnection = request.apiClient.getApiConnection(request.api);
+            AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
+            ApiConnection apiConnection = apiClient.getApiConnection(api);
             apiConnection.connect();
             try {
-                request.result.setResult(request.callback.onClientAvailable((C) apiConnection));
+                result.setResult(callback.onClientAvailable((C) apiConnection));
             } catch (RemoteException ignored) {
 
             }
-        }
-    }
-
-    private static class ConnectRequest<C extends ApiConnection, R extends Result, O extends Api.ApiOptions> {
-        GoogleApiClientImpl apiClient;
-        Api<O> api;
-        AbstractPendingResult<R> result;
-        Callback<C, R> callback;
-
-        private ConnectRequest(GoogleApiClientImpl apiClient, Api<O> api, AbstractPendingResult<R> result, Callback<C, R> callback) {
-            this.apiClient = apiClient;
-            this.api = api;
-            this.result = result;
-            this.callback = callback;
         }
     }
 }

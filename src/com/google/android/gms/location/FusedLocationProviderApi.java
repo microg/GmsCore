@@ -8,8 +8,8 @@ import com.google.android.gms.common.api.PendingResult;
 import org.microg.gms.Constants;
 
 public interface FusedLocationProviderApi {
-    String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
-    String KEY_MOCK_LOCATION = Constants.KEY_MOCK_LOCATION;
+    public static final String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
+    public static final String KEY_MOCK_LOCATION = Constants.KEY_MOCK_LOCATION;
 
     public Location getLastLocation(GoogleApiClient client);
 

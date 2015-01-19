@@ -5,17 +5,22 @@ import android.location.Location;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import org.microg.gms.common.GmsConnector;
+import org.microg.gms.common.api.ApiConnection;
 
 public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     private static final String TAG = "GmsFusedApiImpl";
-    
+
     @Override
     public Location getLastLocation(GoogleApiClient client) {
         try {
@@ -27,49 +32,98 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
-            LocationListener listener) {
-
-        //LocationClientImpl.get(client).requestLocationUpdates(request, listener);
-        return null;
+    public PendingResult requestLocationUpdates(GoogleApiClient client,
+                                                final LocationRequest request,
+                                                final LocationListener listener) {
+        return callVoid(client, new Runnable() {
+            @Override
+            public void run(LocationClientImpl client) throws RemoteException {
+                client.requestLocationUpdates(request, listener);
+            }
+        });
     }
 
     @Override
-    public PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
-            LocationListener listener, Looper looper) {
-        //LocationClientImpl.get(client).requestLocationUpdates(request, listener, looper);
-        return null;
+    public PendingResult requestLocationUpdates(GoogleApiClient client,
+                                                final LocationRequest request,
+                                                final LocationListener listener,
+                                                final Looper looper) {
+        return callVoid(client, new Runnable() {
+            @Override
+            public void run(LocationClientImpl client) throws RemoteException {
+                client.requestLocationUpdates(request, listener, looper);
+            }
+        });
     }
 
     @Override
-    public PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
-            PendingIntent callbackIntent) {
-        //LocationClientImpl.get(client).requestLocationUpdates(request, callbackIntent);
-        return null;
-    }
-
-    @Override
-    public PendingResult removeLocationUpdates(GoogleApiClient client, LocationListener listener) {
-        //LocationClientImpl.get(client).removeLocationUpdates(listener);
-        return null;
+    public PendingResult requestLocationUpdates(GoogleApiClient client,
+                                                final LocationRequest request,
+                                                final PendingIntent callbackIntent) {
+        return callVoid(client, new Runnable() {
+            @Override
+            public void run(LocationClientImpl client) throws RemoteException {
+                client.requestLocationUpdates(request, callbackIntent);
+            }
+        });
     }
 
     @Override
     public PendingResult removeLocationUpdates(GoogleApiClient client,
-            PendingIntent callbackIntent) {
-        //LocationClientImpl.get(client).removeLocationUpdates(callbackIntent);
-        return null;
+                                               final LocationListener listener) {
+        return callVoid(client, new Runnable() {
+            @Override
+            public void run(LocationClientImpl client) throws RemoteException {
+                client.removeLocationUpdates(listener);
+            }
+        });
     }
 
     @Override
-    public PendingResult setMockMode(GoogleApiClient client, boolean isMockMode) {
-        //LocationClientImpl.get(client).setMockMode(isMockMode);
-        return null;
+    public PendingResult removeLocationUpdates(GoogleApiClient client,
+                                               final PendingIntent callbackIntent) {
+        return callVoid(client, new Runnable() {
+            @Override
+            public void run(LocationClientImpl client) throws RemoteException {
+                client.removeLocationUpdates(callbackIntent);
+            }
+        });
     }
 
     @Override
-    public PendingResult setMockLocation(GoogleApiClient client, Location mockLocation) {
-        //LocationClientImpl.get(client).setMockLocation(mockLocation);
-        return null;
+    public PendingResult setMockMode(GoogleApiClient client, final boolean isMockMode) {
+        return callVoid(client, new Runnable() {
+            @Override
+            public void run(LocationClientImpl client) throws RemoteException {
+                client.setMockMode(isMockMode);
+            }
+        });
     }
+
+    @Override
+    public PendingResult setMockLocation(GoogleApiClient client, final Location mockLocation) {
+        return callVoid(client, new Runnable() {
+            @Override
+            public void run(LocationClientImpl client) throws RemoteException {
+                client.setMockLocation(mockLocation);
+            }
+        });
+    }
+
+    private PendingResult callVoid(GoogleApiClient client, final Runnable runnable) {
+        return new GmsConnector<>(client, LocationServices.API,
+                new GmsConnector.Callback<LocationClientImpl, Result>() {
+                    @Override
+                    public Result onClientAvailable(LocationClientImpl client) throws
+                            RemoteException {
+                        runnable.run(client);
+                        return Status.SUCCESS;
+                    }
+                }).connect();
+    }
+
+    private interface Runnable {
+        public void run(LocationClientImpl client) throws RemoteException;
+    }
+
 }
