@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,8 @@ import java.util.Set;
 import static org.microg.gms.Constants.GMS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
+    private static final String TAG = "GmsMultiConnectionKeeper";
+
     private static MultiConnectionKeeper INSTANCE;
 
     private final Context context;
@@ -45,7 +48,7 @@ public class MultiConnectionKeeper {
         }
         return con.isBound();
     }
-    
+
     public void unbind(String action, ServiceConnection connection) {
         Connection con = connections.get(action);
         if (con != null) {
@@ -68,6 +71,7 @@ public class MultiConnectionKeeper {
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 binder = iBinder;
                 component = componentName;
+                Log.d(TAG, "bound to " + actionString);
                 for (ServiceConnection connection : connectionForwards) {
                     connection.onServiceConnected(componentName, iBinder);
                 }
@@ -92,7 +96,8 @@ public class MultiConnectionKeeper {
         public void bind() {
             Intent intent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
             bound = context.bindService(intent, serviceConnection,
-                    Context.BIND_ADJUST_WITH_ACTIVITY & Context.BIND_AUTO_CREATE);
+                    Context.BIND_ADJUST_WITH_ACTIVITY | Context.BIND_AUTO_CREATE);
+            Log.d(TAG, "binding to " + actionString + ": " + bound);
             if (!bound) {
                 context.unbindService(serviceConnection);
             }
@@ -108,6 +113,7 @@ public class MultiConnectionKeeper {
 
         public void unbind() {
             context.unbindService(serviceConnection);
+            Log.d(TAG, "unbinding from " + actionString);
             bound = false;
         }
 
@@ -128,7 +134,7 @@ public class MultiConnectionKeeper {
         public boolean forwardsConnection(ServiceConnection connection) {
             return connectionForwards.contains(connection);
         }
-        
+
         public boolean hasForwards() {
             return !connectionForwards.isEmpty();
         }

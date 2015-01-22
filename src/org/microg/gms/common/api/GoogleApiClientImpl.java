@@ -2,7 +2,9 @@ package org.microg.gms.common.api;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.*;
@@ -19,6 +21,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private final AccountInfo accountInfo;
     private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
     private final Map<Api, ApiConnection> apiConnections = new HashMap<>();
+    private final Handler handler;
     private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<>();
     private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<>();
     private final int clientId;
@@ -52,6 +55,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
             Set<OnConnectionFailedListener> connectionFailedListeners, int clientId) {
         this.context = context;
         this.looper = looper;
+        this.handler = new Handler(looper);
         this.accountInfo = accountInfo;
         this.apis.putAll(apis);
         this.connectionCallbacks.addAll(connectionCallbacks);
@@ -155,5 +159,24 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     @Override
     public void unregisterConnectionFailedListener(OnConnectionFailedListener listener) {
         connectionFailedListeners.remove(listener);
+    }
+
+    private class Handler extends android.os.Handler {
+        private Handler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0 && msg.obj instanceof Runnable) {
+                ((Runnable) msg.obj).run();
+            } else {
+                super.handleMessage(msg);
+            }
+        }
+
+        public void sendRunnable(Runnable runnable) {
+            sendMessage(obtainMessage(1, runnable));
+        }
     }
 }

@@ -21,12 +21,15 @@ import java.util.concurrent.TimeUnit;
  */
 public interface PendingResult<R extends Result> {
     /**
-     * Blocks until the task is completed. This is not allowed on the UI thread. The returned result object can have an additional failure mode of INTERRUPTED.
+     * Blocks until the task is completed. This is not allowed on the UI thread. The returned
+     * result object can have an additional failure mode of INTERRUPTED.
      */
     public R await();
 
     /**
-     * Blocks until the task is completed or has timed out waiting for the result. This is not allowed on the UI thread. The returned result object can have an additional failure mode of either INTERRUPTED or TIMEOUT.
+     * Blocks until the task is completed or has timed out waiting for the result. This is not
+     * allowed on the UI thread. The returned result object can have an additional failure mode
+     * of either INTERRUPTED or TIMEOUT.
      */
     public R await(long time, TimeUnit unit);
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.ILocationListener;
@@ -18,8 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LocationClientImpl extends GoogleLocationManagerClient {
-    public LocationClientImpl(Context context) {
-        super(context);
+    private static final String TAG = "GmsLocationClientImpl";
+
+    public LocationClientImpl(Context context, GoogleApiClient.ConnectionCallbacks callbacks,
+            GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+        super(context, callbacks, connectionFailedListener);
+        Log.d(TAG, "<init>");
     }
 
     public static LocationClientImpl get(GoogleApiClient apiClient) {
@@ -55,7 +60,7 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
     }
 
     public void requestLocationUpdates(LocationRequest request, LocationListener listener,
-                                       Looper looper) throws RemoteException {
+            Looper looper) throws RemoteException {
         requestLocationUpdates(request, listener); // TODO
     }
 

@@ -1,6 +1,7 @@
 package org.microg.gms.common.api;
 
 import android.os.Looper;
+
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
@@ -85,11 +86,11 @@ public class AbstractPendingResult<R extends Result> implements PendingResult<R>
             }
         }
     }
-    
+
     private void deliverResult(R result) {
         this.result = result;
         countDownLatch.countDown();
-        
+
     }
 
     public void setResult(R result) {

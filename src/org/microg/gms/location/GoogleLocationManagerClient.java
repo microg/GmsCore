@@ -4,14 +4,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
+
 import org.microg.gms.Constants;
 import org.microg.gms.common.GmsClient;
 
 public class GoogleLocationManagerClient extends GmsClient<IGoogleLocationManagerService> {
-    public GoogleLocationManagerClient(Context context) {
-        super(context);
+    public GoogleLocationManagerClient(Context context, GoogleApiClient.ConnectionCallbacks
+            callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+        super(context, callbacks, connectionFailedListener);
     }
 
     @Override

@@ -21,13 +21,11 @@ import android.os.Message;
 import android.os.RemoteException;
 
 import com.google.android.gms.common.api.Api;
-
-import org.microg.gms.common.api.AbstractPendingResult;
-import org.microg.gms.common.api.ApiConnection;
-
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 
+import org.microg.gms.common.api.AbstractPendingResult;
+import org.microg.gms.common.api.ApiConnection;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
 public class GmsConnector<C extends ApiConnection, R extends Result, O extends Api.ApiOptions> {
@@ -43,7 +41,7 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
 
 
     public AbstractPendingResult<R> connect() {
-        Looper looper = ((GoogleApiClientImpl) apiClient).getLooper();
+        Looper looper = apiClient.getLooper();
         final AbstractPendingResult<R> result = new AbstractPendingResult<>(looper);
         Message msg = new Message();
         msg.obj = result;

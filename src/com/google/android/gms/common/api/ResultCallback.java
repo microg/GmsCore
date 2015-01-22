@@ -1,7 +1,8 @@
 package com.google.android.gms.common.api;
 
 /**
- * An interface for receiving a {@link Result} from a {@link PendingResult} as an asynchronous callback.
+ * An interface for receiving a {@link Result} from a {@link PendingResult} as an asynchronous
+ * callback.
  */
 public interface ResultCallback<R extends Result> {
     /**

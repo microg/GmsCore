@@ -18,6 +18,8 @@ package org.microg.gms.common.api;
 
 public interface ApiConnection {
     public void connect();
+
     public void disconnect();
+
     public boolean isConnected();
 }

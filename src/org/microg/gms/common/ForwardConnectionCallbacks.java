@@ -1,9 +1,9 @@
 package org.microg.gms.common;
 
 import android.os.Bundle;
+
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationClient;
 
 public final class ForwardConnectionCallbacks implements GoogleApiClient.ConnectionCallbacks {
     private final GooglePlayServicesClient.ConnectionCallbacks callbacks;

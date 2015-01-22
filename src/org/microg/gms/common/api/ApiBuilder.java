@@ -23,10 +23,8 @@ import com.google.android.gms.common.api.AccountInfo;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.microg.gms.common.api.ApiConnection;
-
 public interface ApiBuilder<O extends Api.ApiOptions> {
     ApiConnection build(Context context, Looper looper, O options, AccountInfo accountInfo,
-                        GoogleApiClient.ConnectionCallbacks callbacks,
-                        GoogleApiClient.OnConnectionFailedListener connectionFailedListener);
+            GoogleApiClient.ConnectionCallbacks callbacks,
+            GoogleApiClient.OnConnectionFailedListener connectionFailedListener);
 }

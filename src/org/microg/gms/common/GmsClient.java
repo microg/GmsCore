@@ -7,22 +7,31 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.RemoteException;
+import android.util.Log;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import org.microg.gms.common.api.ApiConnection;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
+
+import org.microg.gms.common.api.ApiConnection;
 
 public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     private static final String TAG = "GmsClient";
 
     private final Context context;
+    private final GoogleApiClient.ConnectionCallbacks callbacks;
+    private final GoogleApiClient.OnConnectionFailedListener connectionFailedListener;
     private ConnectionState state = ConnectionState.CONNECTED;
     private ServiceConnection serviceConnection;
     private I serviceInterface;
 
-    public GmsClient(Context context) {
+    public GmsClient(Context context, GoogleApiClient.ConnectionCallbacks callbacks,
+            GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
         this.context = context;
+        this.callbacks = callbacks;
+        this.connectionFailedListener = connectionFailedListener;
     }
 
     protected abstract String getActionString();
@@ -67,7 +76,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     public Context getContext() {
         return context;
     }
-    
+
     public I getServiceInterface() {
         return serviceInterface;
     }
@@ -81,7 +90,9 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             try {
-                onConnectedToBroker(IGmsServiceBroker.Stub.asInterface(iBinder), new GmsCallbacks());
+                Log.d(TAG, "Connecting to broker for " + componentName);
+                onConnectedToBroker(IGmsServiceBroker.Stub.asInterface(iBinder),
+                        new GmsCallbacks());
             } catch (RemoteException e) {
                 disconnect();
             }
@@ -99,6 +110,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         public void onPostInitComplete(int statusCode, IBinder binder, Bundle params)
                 throws RemoteException {
             serviceInterface = interfaceFromBinder(binder);
+            callbacks.onConnected(params);
         }
     }
 

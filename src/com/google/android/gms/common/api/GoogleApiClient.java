@@ -7,7 +7,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+
 import com.google.android.gms.common.ConnectionResult;
+
 import org.microg.gms.Constants;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 

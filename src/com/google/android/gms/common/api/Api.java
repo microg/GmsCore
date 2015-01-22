@@ -15,9 +15,9 @@ import org.microg.gms.common.api.ApiBuilder;
  * See {@link GoogleApiClient.Builder} for usage examples.
  */
 public final class Api<O extends Api.ApiOptions> {
-    
+
     private final ApiBuilder<O> builder;
-    
+
     public Api(ApiBuilder<O> builder) {
         this.builder = builder;
     }

@@ -16,7 +16,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import org.microg.gms.common.GmsConnector;
-import org.microg.gms.common.api.ApiConnection;
 
 public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     private static final String TAG = "GmsFusedApiImpl";
@@ -33,8 +32,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult requestLocationUpdates(GoogleApiClient client,
-                                                final LocationRequest request,
-                                                final LocationListener listener) {
+            final LocationRequest request, final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -45,9 +43,8 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult requestLocationUpdates(GoogleApiClient client,
-                                                final LocationRequest request,
-                                                final LocationListener listener,
-                                                final Looper looper) {
+            final LocationRequest request, final LocationListener listener,
+            final Looper looper) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -58,8 +55,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult requestLocationUpdates(GoogleApiClient client,
-                                                final LocationRequest request,
-                                                final PendingIntent callbackIntent) {
+            final LocationRequest request, final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -70,7 +66,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult removeLocationUpdates(GoogleApiClient client,
-                                               final LocationListener listener) {
+            final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -81,7 +77,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult removeLocationUpdates(GoogleApiClient client,
-                                               final PendingIntent callbackIntent) {
+            final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
