@@ -23,6 +23,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     @Override
     public Location getLastLocation(GoogleApiClient client) {
         try {
+            Log.d(TAG, "getLastLocation(" + client + ")");
             return LocationClientImpl.get(client).getLastLocation();
         } catch (RemoteException e) {
             Log.w(TAG, e);

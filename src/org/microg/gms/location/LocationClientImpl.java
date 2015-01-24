@@ -38,6 +38,7 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
     private Map<LocationListener, ILocationListener> listenerMap = new HashMap<>();
 
     public Location getLastLocation() throws RemoteException {
+        Log.d(TAG, "getLastLocation()");
         return getServiceInterface().getLastLocation();
     }
 

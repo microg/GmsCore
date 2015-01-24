@@ -23,7 +23,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     private final Context context;
     private final GoogleApiClient.ConnectionCallbacks callbacks;
     private final GoogleApiClient.OnConnectionFailedListener connectionFailedListener;
-    private ConnectionState state = ConnectionState.CONNECTED;
+    private ConnectionState state = ConnectionState.NOT_CONNECTED;
     private ServiceConnection serviceConnection;
     private I serviceInterface;
 
@@ -43,6 +43,8 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
 
     @Override
     public void connect() {
+        Log.d(TAG, "connect()");
+        if (state == ConnectionState.CONNECTED || state == ConnectionState.CONNECTING) return;
         state = ConnectionState.CONNECTING;
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) !=
                 ConnectionResult.SUCCESS) {
@@ -60,6 +62,12 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
 
     @Override
     public void disconnect() {
+        Log.d(TAG, "disconnect()");
+        if (state == ConnectionState.DISCONNECTING) return;
+        if (state == ConnectionState.CONNECTING) {
+            state = ConnectionState.DISCONNECTING;
+            return;
+        }
         serviceInterface = null;
         if (serviceConnection != null) {
             MultiConnectionKeeper.getInstance(context).unbind(getActionString(), serviceConnection);
@@ -73,6 +81,11 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         return state == ConnectionState.CONNECTED;
     }
 
+    @Override
+    public boolean isConnecting() {
+        return state == ConnectionState.CONNECTING;
+    }
+
     public Context getContext() {
         return context;
     }
@@ -82,7 +95,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     }
 
     private enum ConnectionState {
-        NOT_CONNECTED, CONNECTING, CONNECTED, ERROR
+        NOT_CONNECTED, CONNECTING, CONNECTED, DISCONNECTING, ERROR
     }
 
     private class GmsServiceConnection implements ServiceConnection {
@@ -90,7 +103,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             try {
-                Log.d(TAG, "Connecting to broker for " + componentName);
+                Log.d(TAG, "ServiceConnection : onServiceConnected(" + componentName + ")");
                 onConnectedToBroker(IGmsServiceBroker.Stub.asInterface(iBinder),
                         new GmsCallbacks());
             } catch (RemoteException e) {
@@ -100,7 +113,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            state = ConnectionState.ERROR;
+            state = ConnectionState.NOT_CONNECTED;
         }
     }
 
@@ -109,7 +122,14 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         @Override
         public void onPostInitComplete(int statusCode, IBinder binder, Bundle params)
                 throws RemoteException {
+            if (state == ConnectionState.DISCONNECTING) {
+                state = ConnectionState.CONNECTED;
+                disconnect();
+                return;
+            }
+            state = ConnectionState.CONNECTED;
             serviceInterface = interfaceFromBinder(binder);
+            Log.d(TAG, "GmsCallbacks : onPostInitComplete(" + serviceInterface + ")");
             callbacks.onConnected(params);
         }
     }

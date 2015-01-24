@@ -19,6 +19,7 @@ package org.microg.gms.common;
 import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -29,6 +30,8 @@ import org.microg.gms.common.api.ApiConnection;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
 public class GmsConnector<C extends ApiConnection, R extends Result, O extends Api.ApiOptions> {
+    private static final String TAG = "GmsConnector";
+
     private final GoogleApiClientImpl apiClient;
     private final Api<O> api;
     private final Callback<C, R> callback;
@@ -41,6 +44,7 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
 
 
     public AbstractPendingResult<R> connect() {
+        Log.d(TAG, "connect()");
         Looper looper = apiClient.getLooper();
         final AbstractPendingResult<R> result = new AbstractPendingResult<>(looper);
         Message msg = new Message();
@@ -60,11 +64,10 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
 
         @Override
         public void handleMessage(Message msg) {
+            Log.d(TAG, "Handler : onClientAvailable");
             AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
-            ApiConnection apiConnection = apiClient.getApiConnection(api);
-            apiConnection.connect();
             try {
-                result.setResult(callback.onClientAvailable((C) apiConnection));
+                result.deliverResult(callback.onClientAvailable((C) apiClient.getApiConnection(api)));
             } catch (RemoteException ignored) {
 
             }

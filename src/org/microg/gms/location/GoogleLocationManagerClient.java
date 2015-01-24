@@ -12,7 +12,7 @@ import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 import org.microg.gms.Constants;
 import org.microg.gms.common.GmsClient;
 
-public class GoogleLocationManagerClient extends GmsClient<IGoogleLocationManagerService> {
+public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocationManagerService> {
     public GoogleLocationManagerClient(Context context, GoogleApiClient.ConnectionCallbacks
             callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener);

@@ -22,7 +22,7 @@ public class GooglePlayServicesUtil {
     private static final String TAG = "GooglePlayServicesUtil";
 
     public static final String GMS_ERROR_DIALOG = "GooglePlayServicesErrorDialog";
-    public static final String GOOGLE_PLAY_SERVICES_PACKAGE = "com.google.android.gms";
+    public static final String GOOGLE_PLAY_SERVICES_PACKAGE = Constants.GMS_PACKAGE_NAME;
     public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = Constants.MAX_REFERENCE_VERSION;
     public static final String GOOGLE_PLAY_STORE_PACKAGE = "com.android.vending";
 
@@ -31,12 +31,12 @@ public class GooglePlayServicesUtil {
     }
 
     public static Dialog getErrorDialog(int errorCode, Activity activity, int requestCode,
-                                        DialogInterface.OnCancelListener cancelListener) {
+            DialogInterface.OnCancelListener cancelListener) {
         return null; // TODO
     }
 
     public static PendingIntent getErrorPendingIntent(int errorCode, Activity activity,
-                                                      int requestCode) {
+            int requestCode) {
         return null; // TODO
     }
 
@@ -67,18 +67,17 @@ public class GooglePlayServicesUtil {
     }
 
     public static boolean showErrorDialogFragment(int errorCode, Activity activity,
-                                                  int requestCode) {
+            int requestCode) {
         return false; // TODO
     }
 
     public static boolean showErrorDialogFragment(int errorCode, Activity activity,
-                                                  Fragment fragment, int requestCode,
-                                                  DialogInterface.OnCancelListener cancelListener) {
+            Fragment fragment, int requestCode, DialogInterface.OnCancelListener cancelListener) {
         return false; // TODO
     }
 
     public static boolean showErrorDialogFragment(int errorCode, Activity activity, int requestCode,
-                                                  DialogInterface.OnCancelListener cancelListener) {
+            DialogInterface.OnCancelListener cancelListener) {
         return false; // TODO
     }
 

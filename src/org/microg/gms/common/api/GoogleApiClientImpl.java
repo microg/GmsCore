@@ -2,12 +2,17 @@ package org.microg.gms.common.api;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.*;
+import com.google.android.gms.common.api.AccountInfo;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +21,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class GoogleApiClientImpl implements GoogleApiClient {
+    private static final String TAG = "GmsApiClientImpl";
+
     private final Context context;
     private final Looper looper;
     private final AccountInfo accountInfo;
@@ -28,6 +35,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private final ConnectionCallbacks baseConnectionCallbacks = new ConnectionCallbacks() {
         @Override
         public void onConnected(Bundle connectionHint) {
+            Log.d(TAG, "ConnectionCallbacks : onConnected()");
             for (ConnectionCallbacks callback : connectionCallbacks) {
                 callback.onConnected(connectionHint);
             }
@@ -35,14 +43,17 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
         @Override
         public void onConnectionSuspended(int cause) {
+            Log.d(TAG, "ConnectionCallbacks : onConnectionSuspended()");
             for (ConnectionCallbacks callback : connectionCallbacks) {
                 callback.onConnectionSuspended(cause);
             }
         }
     };
-    private final OnConnectionFailedListener baseConnectionFailedListener = new OnConnectionFailedListener() {
+    private final OnConnectionFailedListener baseConnectionFailedListener = new
+            OnConnectionFailedListener() {
         @Override
         public void onConnectionFailed(ConnectionResult result) {
+            Log.d(TAG, "OnConnectionFailedListener : onConnectionFailed()");
             for (OnConnectionFailedListener listener : connectionFailedListeners) {
                 listener.onConnectionFailed(result);
             }
@@ -61,7 +72,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
         this.connectionCallbacks.addAll(connectionCallbacks);
         this.connectionFailedListeners.addAll(connectionFailedListeners);
         this.clientId = clientId;
-        
+
         for (Api api : apis.keySet()) {
             apiConnections.put(api, api.getBuilder().build(context, looper,
                     apis.get(api), accountInfo, baseConnectionCallbacks,
@@ -94,15 +105,21 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public void connect() {
+        Log.d(TAG, "connect()");
         for (ApiConnection connection : apiConnections.values()) {
-            connection.connect();
+            if (!connection.isConnected()) {
+                connection.connect();
+            }
         }
     }
 
     @Override
     public void disconnect() {
+        Log.d(TAG, "disconnect()");
         for (ApiConnection connection : apiConnections.values()) {
-            connection.disconnect();
+            if (connection.isConnected()) {
+                connection.disconnect();
+            }
         }
     }
 
@@ -116,7 +133,10 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public boolean isConnecting() {
-        return false; // TODO
+        for (ApiConnection connection : apiConnections.values()) {
+            if (connection.isConnecting()) return true;
+        }
+        return false;
     }
 
     @Override
@@ -132,6 +152,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public void reconnect() {
+        Log.d(TAG, "reconnect()");
         disconnect();
         connect();
     }

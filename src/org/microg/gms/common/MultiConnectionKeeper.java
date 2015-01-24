@@ -26,13 +26,14 @@ public class MultiConnectionKeeper {
         this.context = context;
     }
 
-    public static MultiConnectionKeeper getInstance(Context context) {
+    public synchronized static MultiConnectionKeeper getInstance(Context context) {
         if (INSTANCE == null)
             INSTANCE = new MultiConnectionKeeper(context);
         return INSTANCE;
     }
 
     public boolean bind(String action, ServiceConnection connection) {
+        Log.d(TAG, "bind(" + action + ", " + connection + ")");
         Connection con = connections.get(action);
         if (con != null) {
             if (!con.forwardsConnection(connection)) {
@@ -50,11 +51,13 @@ public class MultiConnectionKeeper {
     }
 
     public void unbind(String action, ServiceConnection connection) {
+        Log.d(TAG, "unbind(" + action + ", " + connection + ")");
         Connection con = connections.get(action);
         if (con != null) {
             con.removeConnectionForward(connection);
             if (!con.hasForwards() && con.isBound()) {
                 con.unbind();
+                connections.remove(action);
             }
         }
     }
@@ -69,9 +72,10 @@ public class MultiConnectionKeeper {
         private ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                Log.d(TAG, "Connection(" + actionString + ") : ServiceConnection : " +
+                        "onServiceConnected("+componentName+")");
                 binder = iBinder;
                 component = componentName;
-                Log.d(TAG, "bound to " + actionString);
                 for (ServiceConnection connection : connectionForwards) {
                     connection.onServiceConnected(componentName, iBinder);
                 }
@@ -80,6 +84,8 @@ public class MultiConnectionKeeper {
 
             @Override
             public void onServiceDisconnected(ComponentName componentName) {
+                Log.d(TAG, "Connection(" + actionString + ") : ServiceConnection : " +
+                        "onServiceDisconnected("+componentName+")");
                 binder = null;
                 component = componentName;
                 for (ServiceConnection connection : connectionForwards) {
@@ -94,10 +100,10 @@ public class MultiConnectionKeeper {
         }
 
         public void bind() {
+            Log.d(TAG, "Connection(" + actionString + ") : bind()");
             Intent intent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
             bound = context.bindService(intent, serviceConnection,
                     Context.BIND_ADJUST_WITH_ACTIVITY | Context.BIND_AUTO_CREATE);
-            Log.d(TAG, "binding to " + actionString + ": " + bound);
             if (!bound) {
                 context.unbindService(serviceConnection);
             }
@@ -112,8 +118,8 @@ public class MultiConnectionKeeper {
         }
 
         public void unbind() {
+            Log.d(TAG, "Connection(" + actionString + ") : unbind()");
             context.unbindService(serviceConnection);
-            Log.d(TAG, "unbinding from " + actionString);
             bound = false;
         }
 

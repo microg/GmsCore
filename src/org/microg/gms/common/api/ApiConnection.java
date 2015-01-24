@@ -22,4 +22,6 @@ public interface ApiConnection {
     public void disconnect();
 
     public boolean isConnected();
+
+    boolean isConnecting();
 }
