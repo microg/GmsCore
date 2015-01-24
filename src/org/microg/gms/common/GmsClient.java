@@ -10,7 +10,6 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
@@ -21,9 +20,9 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     private static final String TAG = "GmsClient";
 
     private final Context context;
-    private final GoogleApiClient.ConnectionCallbacks callbacks;
-    private final GoogleApiClient.OnConnectionFailedListener connectionFailedListener;
-    private ConnectionState state = ConnectionState.NOT_CONNECTED;
+    protected final GoogleApiClient.ConnectionCallbacks callbacks;
+    protected final GoogleApiClient.OnConnectionFailedListener connectionFailedListener;
+    protected ConnectionState state = ConnectionState.NOT_CONNECTED;
     private ServiceConnection serviceConnection;
     private I serviceInterface;
 
@@ -46,18 +45,21 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         Log.d(TAG, "connect()");
         if (state == ConnectionState.CONNECTED || state == ConnectionState.CONNECTING) return;
         state = ConnectionState.CONNECTING;
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) !=
-                ConnectionResult.SUCCESS) {
-            state = ConnectionState.NOT_CONNECTED;
-        } else {
-            if (serviceConnection != null) {
-                MultiConnectionKeeper.getInstance(context)
-                        .unbind(getActionString(), serviceConnection);
-            }
-            serviceConnection = new GmsServiceConnection();
-            MultiConnectionKeeper.getInstance(context).bind(getActionString(),
-                    serviceConnection);
+        if (serviceConnection != null) {
+            MultiConnectionKeeper.getInstance(context)
+                    .unbind(getActionString(), serviceConnection);
         }
+        serviceConnection = new GmsServiceConnection();
+        if (!MultiConnectionKeeper.getInstance(context).bind(getActionString(),
+                serviceConnection)) {
+            state = ConnectionState.ERROR;
+            handleConnectionFailed();
+        }
+    }
+
+    public void handleConnectionFailed() {
+        connectionFailedListener.onConnectionFailed(new ConnectionResult(ConnectionResult
+                .API_UNAVAILABLE, null));
     }
 
     @Override
@@ -78,12 +80,16 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
 
     @Override
     public boolean isConnected() {
-        return state == ConnectionState.CONNECTED;
+        return state == ConnectionState.CONNECTED || state == ConnectionState.PSEUDO_CONNECTED;
     }
 
     @Override
     public boolean isConnecting() {
         return state == ConnectionState.CONNECTING;
+    }
+
+    public boolean hasError() {
+        return state == ConnectionState.ERROR;
     }
 
     public Context getContext() {
@@ -94,8 +100,8 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         return serviceInterface;
     }
 
-    private enum ConnectionState {
-        NOT_CONNECTED, CONNECTING, CONNECTED, DISCONNECTING, ERROR
+    protected enum ConnectionState {
+        NOT_CONNECTED, CONNECTING, CONNECTED, DISCONNECTING, ERROR, PSEUDO_CONNECTED
     }
 
     private class GmsServiceConnection implements ServiceConnection {
