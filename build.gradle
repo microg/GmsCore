@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile project('SafeParcel')
+    compile project(':SafeParcel')
 }
 
 android {
