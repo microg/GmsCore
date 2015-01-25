@@ -16,10 +16,17 @@
 
 package org.microg.gms;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * An class, method or field is named public, if it can be used with the original play services
  * client library.
  */
+@Retention(RetentionPolicy.SOURCE)
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR})
 public @interface PublicApi {
     /**
      * @return the first version that contains the given class, method or field
