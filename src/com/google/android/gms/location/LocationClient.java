@@ -12,6 +12,10 @@ import org.microg.gms.common.ForwardConnectionCallbacks;
 import org.microg.gms.common.ForwardConnectionFailedListener;
 import org.microg.gms.common.api.AbstractPlayServicesClient;
 
+/**
+ * This class is deprecated as of play services 6.5, do not use it in production systems,
+ * it's just a forwarder for the {@link FusedLocationProviderApi}.
+ */
 @Deprecated
 public class LocationClient extends AbstractPlayServicesClient {
     public static final String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";

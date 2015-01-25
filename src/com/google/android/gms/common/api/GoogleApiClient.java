@@ -11,6 +11,7 @@ import android.view.View;
 import com.google.android.gms.common.ConnectionResult;
 
 import org.microg.gms.Constants;
+import org.microg.gms.PublicApi;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
  * method and then call {@link #connect()} in {@link Activity#onStart()} and {@link #disconnect()}
  * in {@link Activity#onStop()}, regardless of the state.
  */
+@PublicApi
 public interface GoogleApiClient {
     /**
      * Connects the client to Google Play services. Blocks until the connection either succeeds or
@@ -217,6 +219,7 @@ public interface GoogleApiClient {
     /**
      * Builder to configure a {@link GoogleApiClient}.
      */
+    @PublicApi
     public class Builder {
         private final Context context;
         private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
@@ -412,6 +415,7 @@ public interface GoogleApiClient {
      * Provides callbacks that are called when the client is connected or disconnected from the
      * service. Most applications implement {@link #onConnected(Bundle)} to start making requests.
      */
+    @PublicApi
     public interface ConnectionCallbacks {
         /**
          * A suspension cause informing that the service has been killed.
@@ -456,6 +460,7 @@ public interface GoogleApiClient {
      * the service. See {@link ConnectionResult} for a list of error codes and suggestions for
      * resolution.
      */
+    @PublicApi
     public interface OnConnectionFailedListener {
         /**
          * Called when there was an error connecting the client to the service.

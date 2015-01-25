@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import org.microg.gms.Constants;
+import org.microg.gms.PublicApi;
 
 /**
  * Utility class for verifying that the Google Play services APK is available and up-to-date on
@@ -19,6 +20,7 @@ import org.microg.gms.Constants;
  * TODO: methods :)
  */
 public class GooglePlayServicesUtil {
+    @PublicApi(exclude = true)
     private static final String TAG = "GooglePlayServicesUtil";
 
     public static final String GMS_ERROR_DIALOG = "GooglePlayServicesErrorDialog";
