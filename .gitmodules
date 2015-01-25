@@ -1,3 +1,6 @@
 [submodule "GmsApi"]
 	path = GmsApi
 	url = https://github.com/microg/android_external_GmsApi.git
+[submodule "SafeParcel"]
+	path = SafeParcel
+	url = https://github.com/microg/android_external_SafeParcel.git

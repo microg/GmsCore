@@ -1,1 +1,1 @@
-include ':GmsApi', ':GmsApi:SafeParcel'
+include ':GmsApi', ':SafeParcel'
