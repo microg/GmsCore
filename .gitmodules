@@ -1,0 +1,3 @@
+[submodule "GmsApi"]
+	path = GmsApi
+	url = https://github.com/microg/android_external_GmsApi.git
