@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 
+import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 
@@ -70,7 +71,7 @@ public class NativeLocationClientImpl {
     }
 
     public Location getLastLocation() {
-        Log.d(TAG,"getLastLocation()");
+        Log.d(TAG, "getLastLocation()");
         return locationManager.getLastKnownLocation(
                 locationManager.getBestProvider(DEFAULT_CRITERIA, true));
     }
@@ -80,7 +81,7 @@ public class NativeLocationClientImpl {
     }
 
     public void requestLocationUpdates(LocationRequest request, PendingIntent pendingIntent) {
-        Log.d(TAG,"requestLocationUpdates()");
+        Log.d(TAG, "requestLocationUpdates()");
         Intent i = new Intent(context, NativePendingIntentForwarder.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_PENDING_INTENT, pendingIntent);
@@ -94,7 +95,7 @@ public class NativeLocationClientImpl {
 
     public void requestLocationUpdates(LocationRequest request, LocationListener listener, Looper
             looper) {
-        Log.d(TAG,"requestLocationUpdates()");
+        Log.d(TAG, "requestLocationUpdates()");
         if (nativeListenerMap.containsKey(listener)) {
             removeLocationUpdates(listener);
         }
@@ -105,25 +106,25 @@ public class NativeLocationClientImpl {
     }
 
     public void removeLocationUpdates(LocationListener listener) {
-        Log.d(TAG,"removeLocationUpdates()");
+        Log.d(TAG, "removeLocationUpdates()");
         locationManager.removeUpdates(nativeListenerMap.get(listener));
         nativeListenerMap.remove(listener);
     }
 
     public void removeLocationUpdates(PendingIntent pendingIntent) {
-        Log.d(TAG,"removeLocationUpdates()");
+        Log.d(TAG, "removeLocationUpdates()");
         locationManager.removeUpdates(nativePendingMap.get(pendingIntent));
         nativePendingMap.remove(pendingIntent);
         pendingCount.remove(pendingIntent);
     }
 
     public void setMockMode(boolean isMockMode) {
-        Log.d(TAG,"setMockMode()");
+        Log.d(TAG, "setMockMode()");
         // not yet supported
     }
 
     public void setMockLocation(Location mockLocation) {
-        Log.d(TAG,"setMockLocation()");
+        Log.d(TAG, "setMockLocation()");
         // not yet supported
     }
 
@@ -135,6 +136,8 @@ public class NativeLocationClientImpl {
                 PendingIntent pendingIntent = intent.getExtras().getParcelable
                         (EXTRA_PENDING_INTENT);
                 try {
+                    intent.putExtra(FusedLocationProviderApi.KEY_LOCATION_CHANGED,
+                            intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED));
                     pendingIntent.send(context, 0, intent);
                     pendingCount.put(pendingIntent, pendingCount.get(pendingIntent) - 1);
                     if (pendingCount.get(pendingIntent) == 0) {
