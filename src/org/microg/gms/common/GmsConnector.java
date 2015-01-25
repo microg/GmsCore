@@ -67,7 +67,8 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
             Log.d(TAG, "Handler : onClientAvailable");
             AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
             try {
-                result.deliverResult(callback.onClientAvailable((C) apiClient.getApiConnection(api)));
+                result.deliverResult(callback.onClientAvailable((C) apiClient.getApiConnection
+                        (api)));
             } catch (RemoteException ignored) {
 
             }
