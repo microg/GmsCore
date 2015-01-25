@@ -1,6 +1,8 @@
 package com.google.android.gms.common.api;
 
 import android.app.PendingIntent;
+
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 /**
@@ -8,6 +10,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
  * <p/>
  * TODO: Docs
  */
+@PublicApi
 public final class Status extends AutoSafeParcelable implements Result {
     private static final int STATUS_CODE_INTERRUPTED = 14;
     private static final int STATUS_CODE_CANCELED = 16;

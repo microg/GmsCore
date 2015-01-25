@@ -19,12 +19,15 @@ package com.google.android.gms.maps.model;
 import android.os.IBinder;
 import android.os.RemoteException;
 import com.google.android.gms.maps.model.internal.ITileProviderDelegate;
+
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a TileOverlay.
  */
+@PublicApi
 public class TileOverlayOptions extends AutoSafeParcelable {
 
     @SafeParceled(1)

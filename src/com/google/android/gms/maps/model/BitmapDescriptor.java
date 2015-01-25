@@ -18,10 +18,13 @@ package com.google.android.gms.maps.model;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 
+import org.microg.gms.PublicApi;
+
 /**
  * Defines an image. For a marker, it can be used to set the image of the marker icon. For a ground
  * overlay, it can be used to set the image to place on the surface of the earth.
  */
+@PublicApi
 public class BitmapDescriptor {
     private final IObjectWrapper remoteObject;
 

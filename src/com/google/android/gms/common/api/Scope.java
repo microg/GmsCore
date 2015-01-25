@@ -1,5 +1,6 @@
 package com.google.android.gms.common.api;
 
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -7,6 +8,7 @@ import org.microg.safeparcel.SafeParceled;
  * Describes an OAuth 2.0 scope to request. This has security implications for the user, and
  * requesting additional scopes will result in authorization dialogs.
  */
+@PublicApi
 public class Scope extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;

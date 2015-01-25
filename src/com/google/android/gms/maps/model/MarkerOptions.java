@@ -18,9 +18,12 @@ package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
 import com.google.android.gms.dynamic.ObjectWrapper;
+
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+@PublicApi
 public class MarkerOptions extends AutoSafeParcelable {
 
     @SafeParceled(1)

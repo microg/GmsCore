@@ -16,12 +16,14 @@
 
 package com.google.android.gms.maps.model;
 
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * An immutable class representing a pair of latitude and longitude coordinates, stored as degrees.
  */
+@PublicApi
 public final class LatLng extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;

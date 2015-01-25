@@ -18,12 +18,15 @@ package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
 import com.google.android.gms.dynamic.ObjectWrapper;
+
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a ground overlay.
  */
+@PublicApi
 public class GroundOverlayOptions extends AutoSafeParcelable {
     /**
      * Flag for when no dimension is specified for the height.

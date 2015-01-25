@@ -1,5 +1,6 @@
 package com.google.android.gms.maps.model;
 
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -7,6 +8,7 @@ import org.microg.safeparcel.SafeParceled;
  * Contains information about a Tile that is returned by a {@link TileProvider}.
  * TODO SafeParceled
  */
+@PublicApi
 public class Tile extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;

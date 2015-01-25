@@ -16,6 +16,7 @@
 
 package com.google.android.gms.maps.model;
 
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -24,6 +25,7 @@ import java.util.Arrays;
 /**
  * An immutable class representing a latitude/longitude aligned rectangle.
  */
+@PublicApi
 public final class LatLngBounds extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;

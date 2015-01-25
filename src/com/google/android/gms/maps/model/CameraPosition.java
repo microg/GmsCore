@@ -18,6 +18,8 @@ package com.google.android.gms.maps.model;
 
 import android.content.Context;
 import android.util.AttributeSet;
+
+import org.microg.gms.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -26,6 +28,7 @@ import java.util.Arrays;
 /**
  * An immutable class that aggregates all camera position parameters.
  */
+@PublicApi
 public final class CameraPosition extends AutoSafeParcelable {
     @SafeParceled(1)
     private final int versionCode;
