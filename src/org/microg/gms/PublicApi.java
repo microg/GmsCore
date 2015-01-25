@@ -16,8 +16,24 @@
 
 package org.microg.gms;
 
+/**
+ * An class, method or field is named public, if it can be used with the original play services
+ * client library.
+ */
 public @interface PublicApi {
-    String since() default "-1";
+    /**
+     * @return the first version that contains the given class, method or field
+     */
+    String since() default "0";
 
-    String until() default "-1";
+    /**
+     * @return the last version that contains the given class, method or field
+     */
+    String until() default "latest";
+
+    /**
+     * @return used on a method or field to exclude it from the public api if the corresponding
+     * class was marked as public api
+     */
+    boolean exclude() default false;
 }
