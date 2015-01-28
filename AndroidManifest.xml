@@ -44,9 +44,12 @@
             android:value="@string/fake_signature" />
 
         <service
-            android:name="com.google.android.location.internal.server.GoogleLocationService"
+            android:name="com.google.android.location.internal.GoogleLocationManagerService"
             android:permission="android.permission.ACCESS_COARSE_LOCATION"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.location.internal.GMS_NLP" />
             </intent-filter>
@@ -58,14 +61,6 @@
                 android:value="2007" />
             <meta-data android:name="nlpServiceIntent"
                 android:value="com.google.android.location.internal.GMS_NLP" />
-        </service>
-
-        <service
-            android:name="com.google.android.location.internal.GoogleLocationManagerService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
-            </intent-filter>
         </service>
 
         <activity android:name="org.microg.tools.AccountPickerActivity"

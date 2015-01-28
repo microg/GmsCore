@@ -21,6 +21,6 @@ import android.util.Log;
 
 public class ProviderInstallerImpl {
     public static void insertProvider(Context context) {
-        Log.d("ProviderInstallerImpl", "yep, i should do something with OpenSSL here...");
+        Log.d("ProviderInstallerImpl", "yep, i should do something with Security here...");
     }
 }

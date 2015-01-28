@@ -21,13 +21,15 @@ import android.os.RemoteException;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.plus.internal.IPlusOneButtonCreator;
+
+import org.microg.gms.Constants;
 import org.microg.gms.plus.PlusOneButtonImpl;
 
 public class PlusOneButtonCreatorImpl  extends IPlusOneButtonCreator.Stub {
 	@Override
 	public IObjectWrapper create(IObjectWrapper context, int size, int annotation, String url, int activityRequestCode) throws RemoteException {
 		Context ctx = (Context) ObjectWrapper.unwrap(context);
-		return ObjectWrapper.wrap(new PlusOneButtonImpl(ctx, size, annotation, url, "<< default account >>"));
+		return ObjectWrapper.wrap(new PlusOneButtonImpl(ctx, size, annotation, url, Constants.DEFAULT_ACCOUNT));
 	}
 
 	@Override

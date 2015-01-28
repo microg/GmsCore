@@ -43,10 +43,6 @@ android {
             assets.srcDirs = ['assets']
         }
     }
-
-    productFlavors {
-        GmsCore
-    }
 }
 
 if (file('user.gradle').exists()) {
