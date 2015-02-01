@@ -22,7 +22,7 @@ import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.plus.internal.IPlusOneButtonCreator;
 
-import org.microg.gms.Constants;
+import org.microg.gms.common.Constants;
 import org.microg.gms.plus.PlusOneButtonImpl;
 
 public class PlusOneButtonCreatorImpl  extends IPlusOneButtonCreator.Stub {

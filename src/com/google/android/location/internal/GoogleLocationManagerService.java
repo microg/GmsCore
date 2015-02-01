@@ -26,7 +26,7 @@ import org.microg.gms.AbstractGmsServiceBroker;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.location.GoogleLocationManagerServiceImpl;
 
-import static org.microg.gms.Constants.ACTION_GMS_LOCATION_MANAGER_SERVICE_START;
+import static org.microg.gms.common.Constants.ACTION_GMS_LOCATION_MANAGER_SERVICE_START;
 
 public class GoogleLocationManagerService extends Service {
     private static final String TAG = "GmsLMS";

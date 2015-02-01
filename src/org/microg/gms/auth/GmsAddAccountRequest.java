@@ -16,9 +16,20 @@
 
 package org.microg.gms.auth;
 
+import android.content.Context;
+import android.os.Build;
+
+import org.microg.gms.common.Constants;
+import org.microg.gms.common.Utils;
+
 import java.util.Locale;
 
 public class GmsAddAccountRequest extends AuthRequest {
+
+    public GmsAddAccountRequest(Context context, String token) {
+        this(Locale.getDefault(), Build.VERSION.SDK_INT, Constants.MAX_REFERENCE_VERSION,
+                Build.DEVICE, Build.ID, Utils.getAndroidIdHex(context), token);
+    }
 
     public GmsAddAccountRequest(Locale locale, int sdkVersion, int gmsVersion, String deviceName,
                                 String buildVersion, String androidIdHex, String token) {
@@ -30,7 +41,7 @@ public class GmsAddAccountRequest extends AuthRequest {
         this.app = "com.google.android.gms";
         this.appSignature = "38918a453d07199354f8b19af05ec6562ced5788";
 
-        this.androidIdHex = "3bc26ad601111308"; // TODO: androidIdHex;
+        this.androidIdHex = androidIdHex;
         this.deviceName = deviceName;
         this.buildVersion = buildVersion;
         this.countryCode = locale.getCountry();
@@ -39,6 +50,5 @@ public class GmsAddAccountRequest extends AuthRequest {
         this.locale = locale.toString();
         this.sdkVersion = sdkVersion;
         this.token = token;
-        this.droidguardResults = null; // TODO
     }
 }

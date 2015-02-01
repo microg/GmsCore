@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package org.microg.gms.auth;
+package org.microg.gms.common;
 
 import android.content.Context;
 
-/**
- * This request will retrieve a rt token (oauth2rt) from an access token (oauth2)
- */
-public class RetrieveRtTokenRequest extends GmsAddAccountRequest {
-
-    public RetrieveRtTokenRequest(Context context, String token) {
-        super(context, token);
-        this.isAccessToken = true;
-        this.droidguardResults = null; // TODO
+public class Utils {
+    public static String getAndroidIdHex(Context context) {
+        return null;
     }
+
 }
