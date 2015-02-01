@@ -1,5 +1,8 @@
 *.iml
-gen
-bin
-build
+gen/
+bin/
+build/
 user.gradle
+.gradle/
+gradlew
+gradle/

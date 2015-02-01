@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2014 μg Project Team
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2013-2015 µg Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~     http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,27 +20,31 @@
     android:versionName="1.0"
     android:versionCode="6599436">
 
-    <uses-sdk android:minSdkVersion="16" />
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="21" />
 
-    <uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_UPDATES" />
+    <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
+
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
-        android:theme="@style/AppTheme"
         android:label="@string/gms_app_name"
-        tools:replace="android:label">
-        <uses-library
-            android:name="com.google.android.maps"
-            android:required="false" />
-
-        <meta-data android:name="fake-signature"
+        android:icon="@drawable/ic_microg_app"
+        tools:replace="android:label,android:icon">
+        <meta-data
+            android:name="fake-signature"
             android:value="@string/fake_signature" />
+
+        <!-- Location -->
 
         <service
             android:name="com.google.android.location.internal.GoogleLocationManagerService"
@@ -53,17 +56,43 @@
             <intent-filter>
                 <action android:name="com.google.android.location.internal.GMS_NLP" />
             </intent-filter>
-            <meta-data android:name="minProtocolVersion"
+
+            <meta-data
+                android:name="minProtocolVersion"
                 android:value="1" />
-            <meta-data android:name="maxProtocolVersion"
+            <meta-data
+                android:name="maxProtocolVersion"
                 android:value="1" />
-            <meta-data android:name="releaseVersion"
+            <meta-data
+                android:name="releaseVersion"
                 android:value="2007" />
-            <meta-data android:name="nlpServiceIntent"
+            <meta-data
+                android:name="nlpServiceIntent"
                 android:value="com.google.android.location.internal.GMS_NLP" />
         </service>
 
-        <activity android:name="org.microg.tools.AccountPickerActivity"
+        <!-- Auth -->
+
+        <service
+            android:name="org.microg.gms.auth.loginservice.GoogleLoginService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gsf.action.GET_GLS" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator.customTokens"
+                android:value="1" />
+        </service>
+
+        <activity
+            android:name="org.microg.tools.AccountPickerActivity"
             android:exported="true"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.Holo.Dialog">
@@ -73,9 +102,22 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".auth.GetToken"
+        <activity
+            android:name="org.microg.gms.auth.login.LoginActivity"
+            android:theme="@style/LoginBlueTheme"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.login.LOGIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".auth.GetToken"
             android:exported="true" />
-        <activity android:name=".auth.TokenActivity"
+        <activity
+            android:name=".auth.TokenActivity"
             android:exported="true" />
     </application>
 </manifest>
