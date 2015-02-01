@@ -18,7 +18,7 @@ package com.google.android.gms.maps.model;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 
-import org.microg.gms.PublicApi;
+import org.microg.gms.common.PublicApi;
 
 /**
  * Defines an image. For a marker, it can be used to set the image of the marker icon. For a ground

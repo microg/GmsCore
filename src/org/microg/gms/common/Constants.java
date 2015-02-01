@@ -1,4 +1,4 @@
-package org.microg.gms;
+package org.microg.gms.common;
 
 public class Constants {
     /**

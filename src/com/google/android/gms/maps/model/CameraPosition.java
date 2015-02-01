@@ -19,7 +19,7 @@ package com.google.android.gms.maps.model;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import org.microg.gms.PublicApi;
+import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 

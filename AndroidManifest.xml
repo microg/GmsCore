@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.microg.gms.api">
-<!-- This is not needed, it's just here to stop build systems from complaining -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.microg.gms.api">
+
+    <uses-sdk android:minSdkVersion="9"/>
 </manifest>

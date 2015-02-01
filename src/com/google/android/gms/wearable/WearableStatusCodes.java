@@ -18,7 +18,7 @@ package com.google.android.gms.wearable;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
-import org.microg.gms.PublicApi;
+import org.microg.gms.common.PublicApi;
 
 /**
  * Error codes for wearable API failures. These values may be returned by APIs to indicate the

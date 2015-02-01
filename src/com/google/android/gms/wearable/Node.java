@@ -16,7 +16,7 @@
 
 package com.google.android.gms.wearable;
 
-import org.microg.gms.PublicApi;
+import org.microg.gms.common.PublicApi;
 
 /**
  * Information about a particular node in the Android Wear network.
