@@ -1,6 +1,6 @@
 package com.google.android.gms.common.api;
 
-import org.microg.gms.PublicApi;
+import org.microg.gms.common.PublicApi;
 import org.microg.gms.common.api.ApiBuilder;
 
 /**

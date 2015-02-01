@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static org.microg.gms.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConnectionKeeper";
@@ -48,7 +48,7 @@ public class MultiConnectionKeeper {
         return INSTANCE;
     }
 
-    public boolean bind(String action, ServiceConnection connection) {
+    public synchronized boolean bind(String action, ServiceConnection connection) {
         Log.d(TAG, "bind(" + action + ", " + connection + ")");
         Connection con = connections.get(action);
         if (con != null) {
@@ -66,7 +66,7 @@ public class MultiConnectionKeeper {
         return con.isBound();
     }
 
-    public void unbind(String action, ServiceConnection connection) {
+    public synchronized void unbind(String action, ServiceConnection connection) {
         Log.d(TAG, "unbind(" + action + ", " + connection + ")");
         Connection con = connections.get(action);
         if (con != null) {
@@ -108,6 +108,7 @@ public class MultiConnectionKeeper {
                     connection.onServiceDisconnected(componentName);
                 }
                 connected = false;
+                bound = false;
             }
         };
 
@@ -135,7 +136,11 @@ public class MultiConnectionKeeper {
 
         public void unbind() {
             Log.d(TAG, "Connection(" + actionString + ") : unbind()");
-            context.unbindService(serviceConnection);
+            try {
+                context.unbindService(serviceConnection);
+            } catch (IllegalArgumentException e) { // not bound (whatever reason)
+                Log.w(TAG, e);
+            }
             bound = false;
         }
 

@@ -10,8 +10,8 @@ import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 
-import org.microg.gms.Constants;
-import org.microg.gms.PublicApi;
+import org.microg.gms.common.Constants;
+import org.microg.gms.common.PublicApi;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
 import java.util.HashMap;

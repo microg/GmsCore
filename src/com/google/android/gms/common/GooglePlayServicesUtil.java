@@ -9,8 +9,8 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import org.microg.gms.Constants;
-import org.microg.gms.PublicApi;
+import org.microg.gms.common.Constants;
+import org.microg.gms.common.PublicApi;
 
 /**
  * Utility class for verifying that the Google Play services APK is available and up-to-date on

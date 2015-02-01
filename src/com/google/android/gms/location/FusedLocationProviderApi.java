@@ -7,7 +7,7 @@ import android.os.Looper;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 
-import org.microg.gms.Constants;
+import org.microg.gms.common.Constants;
 
 public interface FusedLocationProviderApi {
     public static final String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";

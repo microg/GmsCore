@@ -25,7 +25,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 
-import org.microg.gms.Constants;
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.GmsClient;
 
 public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocationManagerService> {
