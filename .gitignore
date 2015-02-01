@@ -6,3 +6,4 @@ user.gradle
 .gradle/
 gradlew
 gradle/
+local.properties
