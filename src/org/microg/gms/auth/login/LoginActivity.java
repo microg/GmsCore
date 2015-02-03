@@ -18,14 +18,11 @@ package org.microg.gms.auth.login;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,30 +38,30 @@ import android.widget.RelativeLayout;
 import com.google.android.gms.R;
 
 import org.microg.gms.auth.AuthClient;
+import org.microg.gms.auth.AuthManager;
+import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
-import org.microg.gms.auth.GmsAddAccountRequest;
-import org.microg.gms.auth.RetrieveRtTokenRequest;
+import org.microg.gms.common.Constants;
+import org.microg.gms.common.Utils;
 
 import java.util.Locale;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
     public static final String EXTRA_TMPL = "tmpl";
+    public static final String EXTRA_EMAIL = "email";
+    public static final String EXTRA_TOKEN = "masterToken";
 
     private static final String TAG = "GmsAuthLoginBrowser";
     private static final String EMBEDDED_SETUP_URL = "https://accounts.google.com/EmbeddedSetup";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
-    private static final int TITLE_MIN_HEIGHT = 64;
-    public static final double TITLE_WIDTH_FACTOR = (8.0 / 18.0);
 
     private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_base);
-        formatTitle();
         webView = createWebView(this);
         webView.addJavascriptInterface(new JsBridge(), "mm");
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
@@ -75,18 +72,29 @@ public class LoginActivity extends Activity {
                     closeWeb();
             }
         });
-        CookieManager.getInstance().setAcceptCookie(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().removeAllCookies(new ValueCallback<Boolean>() {
-                @Override
-                public void onReceiveValue(Boolean value) {
-                    load();
-                }
-            });
+        if (getIntent().hasExtra(EXTRA_TOKEN)) {
+            if (getIntent().hasExtra(EXTRA_EMAIL)) {
+                AccountManager accountManager = AccountManager.get(LoginActivity.this);
+                Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), "com.google");
+                accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
+                retrieveGmsToken(account);
+            } else {
+                retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
+            }
         } else {
-            //noinspection deprecation
-            CookieManager.getInstance().removeAllCookie();
-            load();
+            CookieManager.getInstance().setAcceptCookie(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                CookieManager.getInstance().removeAllCookies(new ValueCallback<Boolean>() {
+                    @Override
+                    public void onReceiveValue(Boolean value) {
+                        load();
+                    }
+                });
+            } else {
+                //noinspection deprecation
+                CookieManager.getInstance().removeAllCookie();
+                load();
+            }
         }
     }
 
@@ -119,24 +127,9 @@ public class LoginActivity extends Activity {
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
     }
 
-    private void formatTitle() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            double widthPixels = (double) (getResources().getDisplayMetrics().widthPixels);
-            findViewById(R.id.title_container).getLayoutParams().height =
-                    (int) (dpToPx(TITLE_MIN_HEIGHT) + (TITLE_WIDTH_FACTOR * widthPixels));
-        } else {
-            findViewById(R.id.title_container).getLayoutParams().height = dpToPx(TITLE_MIN_HEIGHT);
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        formatTitle();
-    }
-
     private void load() {
-        webView.loadUrl(buildUrl(getIntent().hasExtra(EXTRA_TMPL) ? getIntent().getStringExtra(EXTRA_TMPL) : TMPL_NEW_ACCOUNT, Locale.getDefault()));
+        String tmpl = getIntent().hasExtra(EXTRA_TMPL) ? getIntent().getStringExtra(EXTRA_TMPL) : TMPL_NEW_ACCOUNT;
+        webView.loadUrl(buildUrl(tmpl, Utils.getLocale(this)));
     }
 
     private void closeWeb() {
@@ -151,15 +144,23 @@ public class LoginActivity extends Activity {
         for (String ar1 : temp) {
             if (ar1.trim().startsWith(COOKIE_OAUTH_TOKEN + "=")) {
                 String[] temp1 = ar1.split("=");
-                sendRetrieveRtToken(temp1[1]);
+                retrieveRtToken(temp1[1]);
             }
         }
         // TODO: Error message
     }
 
-    private void sendRetrieveRtToken(String oAuthToken) {
-        AuthClient.request(new RetrieveRtTokenRequest(this, oAuthToken),
-                new AuthClient.GmsAuthCallback() {
+    private void retrieveRtToken(String oAuthToken) {
+        new AuthRequest().fromContext(this)
+                .appIsGms()
+                .service("ac2dm")
+                .token(oAuthToken).isAccessToken()
+                .addAccount()
+                .getAccountId()
+                .systemPartition()
+                .hasPermission()
+                .droidguardResults(null /*TODO*/)
+                .getResponseAsync(new AuthClient.GmsAuthCallback() {
                     @Override
                     public void onResponse(AuthResponse response) {
                         AccountManager accountManager = AccountManager.get(LoginActivity.this);
@@ -167,9 +168,14 @@ public class LoginActivity extends Activity {
                         if (accountManager.addAccountExplicitly(account, response.token, null)) {
                             accountManager.setAuthToken(account, "SID", response.Sid);
                             accountManager.setAuthToken(account, "LSID", response.LSid);
+                            accountManager.setUserData(account, "flags", "1");
+                            accountManager.setUserData(account, "services", response.services);
+                            accountManager.setUserData(account, "oauthAccessToken", "1");
+                            accountManager.setUserData(account, "firstName", response.firstName);
+                            accountManager.setUserData(account, "lastName", response.lastName);
+
+                            retrieveGmsToken(account);
                             setResult(RESULT_OK);
-                            // TODO: hand over to account setup
-                            finish();
                         } else {
                             // TODO: Error message
                             Log.w(TAG, "Account NOT created!");
@@ -184,14 +190,62 @@ public class LoginActivity extends Activity {
                 });
     }
 
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    private void retrieveGmsToken(final Account account) {
+        final String service = "ac2dm";
+        new AuthRequest().fromContext(this)
+                .appIsGms()
+                .service(service)
+                .email(account.name)
+                .token(AccountManager.get(this).getPassword(account))
+                .systemPartition()
+                .hasPermission()
+                .addAccount()
+                .getAccountId()
+                .getResponseAsync(new AuthClient.GmsAuthCallback() {
+                    @Override
+                    public void onResponse(AuthResponse response) {
+                        AuthManager.storeResponse(LoginActivity.this, account,
+                                Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
+                                service, response);
+                        retrieveGmsKeyUserinfoProfile(account);
+                    }
+
+                    @Override
+                    public void onException(Exception exception) {
+                        Log.w(TAG, "onException: " + exception);
+                    }
+                });
+    }
+
+    private void retrieveGmsKeyUserinfoProfile(final Account account) {
+        final String service = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
+        new AuthRequest().fromContext(this)
+                .appIsGms().callerIsGms()
+                .service(service)
+                .email(account.name)
+                .token(AccountManager.get(this).getPassword(account))
+                .systemPartition()
+                .hasPermission()
+                .getAccountId()
+                .getResponseAsync(new AuthClient.GmsAuthCallback() {
+                    @Override
+                    public void onResponse(AuthResponse response) {
+                        AuthManager.storeResponse(LoginActivity.this, account,
+                                Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
+                                service, response);
+                        finish();
+                    }
+
+                    @Override
+                    public void onException(Exception exception) {
+                        Log.w(TAG, "onException: " + exception);
+                    }
+                });
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack() && webView.getVisibility() == View.VISIBLE) {
             webView.goBack();
             return true;
         }

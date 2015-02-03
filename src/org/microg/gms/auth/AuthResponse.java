@@ -41,7 +41,7 @@ public class AuthResponse {
     @ResponseField("Email")
     public String email;
     @ResponseField("services")
-    public Set<String> services = new HashSet<>();
+    public String services;
     @ResponseField("GooglePlusUpgrade")
     public boolean isGooglePlusUpgrade;
     @ResponseField("PicasaUser")
@@ -56,12 +56,18 @@ public class AuthResponse {
     public String lastName;
     @ResponseField("issueAdvice")
     public String issueAdvice;
+    @ResponseField("accountId")
+    public String accountId;
+    @ResponseField("Expiry")
+    public long expiry = -1;
+    @ResponseField("storeConsentRemotely")
+    public boolean storeConsentRemotely;
 
     public static AuthResponse parse(String result) {
         AuthResponse response = new AuthResponse();
         String[] entries = result.split("\n");
         for (String s : entries) {
-            String[] keyValuePair = s.split("=");
+            String[] keyValuePair = s.split("=", 2);
             String key = keyValuePair[0].trim();
             String value = keyValuePair[1].trim();
             try {
@@ -72,11 +78,10 @@ public class AuthResponse {
                             field.set(response, value);
                         } else if (field.getType().equals(boolean.class)) {
                             field.setBoolean(response, value.equals("1"));
+                        } else if (field.getType().equals(long.class)) {
+                            field.setLong(response, Long.parseLong(value));
                         } else if (field.getType().equals(int.class)) {
                             field.setInt(response, Integer.parseInt(value));
-                        } else if (field.getType().isAssignableFrom(Set.class)) {
-                            //noinspection unchecked
-                            ((Set)field.get(response)).addAll(Arrays.asList(value.split(",")));
                         }
                     }
                 }

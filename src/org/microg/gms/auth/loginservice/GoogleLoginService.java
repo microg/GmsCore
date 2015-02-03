@@ -19,39 +19,69 @@ package org.microg.gms.auth.loginservice;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
+
+import com.google.android.gms.R;
+
+import org.microg.gms.auth.AuthClient;
+import org.microg.gms.auth.AuthManager;
+import org.microg.gms.auth.AuthRequest;
+import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.auth.login.LoginActivity;
+import org.microg.gms.common.Utils;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class GoogleLoginService extends Service {
+    private static final String TAG = "GmsLoginService";
+
+    private String accountType;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        accountType = getString(R.string.google_account_type);
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         if (intent.getAction().equals(android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT)) {
             return new AbstractAccountAuthenticator(this) {
                 @Override
                 public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
+                    Log.d(TAG, "editProperties: " + accountType);
                     return null;
                 }
 
                 @Override
                 public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+                    if (accountType.equals(GoogleLoginService.this.accountType)) {
+                        return GoogleLoginService.this.addAccount(response, authTokenType, requiredFeatures, options);
+                    }
                     return null;
                 }
 
                 @Override
                 public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
+                    Log.d(TAG, "confirmCredentials: " + account + ", " + options);
                     return null;
                 }
 
                 @Override
                 public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-                    return null;
+                    return GoogleLoginService.this.getAuthToken(response, account, authTokenType, options);
                 }
 
                 @Override
                 public String getAuthTokenLabel(String authTokenType) {
+                    Log.d(TAG, "getAuthTokenLabel: " + authTokenType);
                     return null;
                 }
 
@@ -62,10 +92,55 @@ public class GoogleLoginService extends Service {
 
                 @Override
                 public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
-                    return null;
+                    Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
+                    Bundle b = new Bundle();
+                    b.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+                    return b;
                 }
             }.getIBinder();
         }
         return null;
+    }
+
+    private Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) {
+        options.keySet();
+        Log.d(TAG, "getAuthToken: " + account + ", " + authTokenType + ", " + options);
+        String app = options.getString(AccountManager.KEY_ANDROID_PACKAGE_NAME);
+        Utils.checkPackage(this, app, options.getInt(AccountManager.KEY_CALLER_UID), options.getInt(AccountManager.KEY_CALLER_UID));
+        String appSignature = Utils.getFirstPackageSignatureDigest(this, app);
+        try {
+            AuthRequest request = new AuthRequest().fromContext(this)
+                    .email(account.name)
+                    .token(AccountManager.get(this).getPassword(account))
+                    .service(authTokenType)
+                    .app(app, appSignature)
+                    .callerIsGms()
+                    .calledFromAccountManager();
+            if (AuthManager.isPermitted(this, account, app, appSignature, authTokenType)) {
+                request.hasPermission();
+            }
+            AuthResponse r = request.getResponse();
+            AuthManager.storeResponse(this, account, app, appSignature, authTokenType, r);
+            if (r.expiry == 0)
+            Log.d(TAG, "Auth: " + r.auth);
+            Bundle bundle = new Bundle();
+            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            bundle.putString(AccountManager.KEY_AUTHTOKEN, r.auth);
+            return bundle;
+        } catch (IOException e) {
+            Log.w(TAG, e);
+        }
+        return null;
+    }
+
+    private Bundle addAccount(AccountAuthenticatorResponse response, String authTokenType, String[] requiredFeatures, Bundle options) {
+        final Intent i = new Intent(GoogleLoginService.this, LoginActivity.class);
+        i.putExtras(options);
+        i.putExtra(LoginActivity.EXTRA_TMPL, LoginActivity.TMPL_NEW_ACCOUNT);
+        i.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        final Bundle result = new Bundle();
+        result.putParcelable(AccountManager.KEY_INTENT, i);
+        return result;
     }
 }

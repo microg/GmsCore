@@ -16,8 +16,12 @@
 
 package org.microg.gms.auth;
 
+import android.accounts.Account;
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+
+import org.microg.gms.auth.loginservice.GoogleLoginService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,6 +53,7 @@ public class AuthClient {
                 content.append("&");
             content.append(Uri.encode(key)).append("=").append(Uri.encode(formContent.get(key)));
         }
+        Log.d(TAG, "-- Request --\n" + content);
         OutputStream os = connection.getOutputStream();
         os.write(content.toString().getBytes());
         os.close();
@@ -56,6 +61,7 @@ public class AuthClient {
             throw new IOException(connection.getResponseMessage());
         }
         String result = new String(readStreamToEnd(connection.getInputStream()));
+        Log.d(TAG, "-- Response --\n" + result);
         return AuthResponse.parse(result);
     }
 

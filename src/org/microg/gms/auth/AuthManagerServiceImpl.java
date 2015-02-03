@@ -26,9 +26,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
+
 import com.google.android.auth.IAuthManagerService;
 
-import java.util.Arrays;
+import org.microg.gms.common.Utils;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
@@ -62,37 +63,38 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public Bundle getToken(String accountName, String scope, Bundle extras) throws RemoteException {
         String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME, extras.getString(KEY_CLIENT_PACKAGE_NAME, null));
         int callerUid = extras.getInt(KEY_CALLER_UID, 0);
-        checkPackage(packageName, callerUid, getCallingUid());
+        Utils.checkPackage(context, packageName, callerUid, getCallingUid());
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
         Log.d("AuthManagerService", "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras);
-        AccountManagerFuture<Bundle> authToken = AccountManager.get(context).getAuthToken(new Account(accountName, GOOGLE_ACCOUNT_TYPE), scope, extras, notify, null, new Handler(Looper.getMainLooper()));
+
+        //AccountManagerFuture<Bundle> authToken = AccountManager.get(context).getAuthToken(new Account(accountName, GOOGLE_ACCOUNT_TYPE), scope, extras, notify, null, new Handler(Looper.getMainLooper()));
         try {
-            Bundle requestResult = authToken.getResult();
-            if (!requestResult.containsKey(AccountManager.KEY_AUTHTOKEN) && requestResult.containsKey(AccountManager.KEY_INTENT)) {
+            Account account = new Account(accountName, GOOGLE_ACCOUNT_TYPE);
+            String sig = Utils.getFirstPackageSignatureDigest(context, packageName);
+            AuthResponse response = new AuthRequest().fromContext(context)
+                    .app(packageName, sig)
+                    .callerIsApp()
+                    .email(accountName)
+                    .token(AccountManager.get(context).getPassword(account))
+                    .service(scope)
+                    .getResponse();
+            AuthManager.storeResponse(context, account, packageName, sig, scope, response);
+            //Bundle requestResult = authToken.getResult();
+            /*if (!requestResult.containsKey(AccountManager.KEY_AUTHTOKEN) && requestResult.containsKey(AccountManager.KEY_INTENT)) {
                 Intent intent = requestResult.getParcelable(AccountManager.KEY_INTENT);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
-            }
-            Log.d("getToken", requestResult.toString());
+            }*/
+            Log.d("getToken", response.auth);
             Bundle result = new Bundle();
-            result.putString(KEY_AUTH_TOKEN, requestResult.getString(AccountManager.KEY_AUTHTOKEN));
+            result.putString(KEY_AUTH_TOKEN, response.auth);
             result.putString(KEY_ERROR, "Unknown");
-            result.putParcelable(KEY_USER_RECOVERY_INTENT, requestResult.getParcelable(AccountManager.KEY_INTENT));
+            //result.putParcelable(KEY_USER_RECOVERY_INTENT, requestResult.getParcelable(AccountManager.KEY_INTENT));
             return result;
         } catch (Exception e) {
             Log.w("AuthManagerService", e);
             throw new RemoteException(e.getMessage());
-        }
-    }
-
-    private void checkPackage(String packageName, int callerUid, int callingUid) {
-        if (callerUid != 0 && callerUid != callingUid) {
-            throw new SecurityException("callerUid [" + callerUid + "] and real calling uid [" + callingUid + "] mismatch!");
-        }
-        String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
-        if (packagesForUid != null && !Arrays.asList(packagesForUid).contains(packageName)) {
-            throw new SecurityException("callingUid [" + callingUid + "] is not related to packageName [" + packageName + "]");
         }
     }
 
