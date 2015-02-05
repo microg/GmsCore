@@ -2,7 +2,10 @@ GmsCore
 =======
 Implementation of the "Play Services" library application.
 
-More details follow.
+Building
+--------
+This can be build using Gradle. 
+Prebuilt libraries of [vtm](https://github.com/opensciencemap/vtm) for are included within ./libs.
 
 License
 -------
