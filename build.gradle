@@ -1,17 +1,17 @@
 /*
- Copyright 2013-2015 µg Project Team
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+ * Copyright 2013-2015 µg Project Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 buildscript {
@@ -26,18 +26,31 @@ buildscript {
 apply plugin: 'com.android.application'
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 dependencies {
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'org.oscim:vtm-android:0.6.0-SNAPSHOT'
-    compile 'org.oscim:vtm-extras:0.6.0-SNAPSHOT'
-    compile 'org.oscim:vtm-themes:0.6.0-SNAPSHOT'
+
     compile project(':GmsApi')
     compile project(':UnifiedNlpLib')
+
+    # vtm from ./libs
+    compile group: 'org.oscim', name: 'vtm-android', version: '0.6.0-SNAPSHOT', ext: 'aar'
+    compile group: 'org.oscim', name: 'vtm-themes', version: '0.6.0-SNAPSHOT'
+    compile group: 'org.oscim', name: 'vtm-extras', version: '0.6.0-SNAPSHOT'
+    compile group: 'org.oscim', name: 'vtm', version: '0.6.0-SNAPSHOT'
+
+    # Dependencies for vtm
+    compile 'com.fasterxml.jackson.core:jackson-core:2.3.0'
+    compile 'com.vividsolutions:jts:1.13'
+    compile 'com.google.protobuf:protobuf-java:2.4.1'
+    compile 'org.openstreetmap.osmosis:osmosis-osm-binary:0.43.1'
+    compile 'org.slf4j:slf4j-android:1.7.6'
 }
 
 android {
