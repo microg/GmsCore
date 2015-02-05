@@ -1,1 +1,4 @@
-include 'UnifiedNlpLib', 'UnifiedNlpLib:compat', 'UnifiedNlpApi'
+include 'UnifiedNlpApi'
+include 'UnifiedNlpLib', 'UnifiedNlpLib:compat'
+include 'SafeParcel'
+include 'GmsApi'
