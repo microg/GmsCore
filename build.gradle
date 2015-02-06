@@ -39,13 +39,13 @@ dependencies {
     compile project(':GmsApi')
     compile project(':UnifiedNlpLib')
 
-    # vtm from ./libs
+    // vtm from ./libs
     compile group: 'org.oscim', name: 'vtm-android', version: '0.6.0-SNAPSHOT', ext: 'aar'
     compile group: 'org.oscim', name: 'vtm-themes', version: '0.6.0-SNAPSHOT'
     compile group: 'org.oscim', name: 'vtm-extras', version: '0.6.0-SNAPSHOT'
     compile group: 'org.oscim', name: 'vtm', version: '0.6.0-SNAPSHOT'
 
-    # Dependencies for vtm
+    // Dependencies for vtm
     compile 'com.fasterxml.jackson.core:jackson-core:2.3.0'
     compile 'com.vividsolutions:jts:1.13'
     compile 'com.google.protobuf:protobuf-java:2.4.1'
