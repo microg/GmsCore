@@ -30,6 +30,10 @@ public class AbstractPlayServicesClient implements GooglePlayServicesClient {
         this.googleApiClient = googleApiClient;
     }
 
+    public void assertConnected() {
+        if (!isConnected()) throw new IllegalStateException("Not connected!");
+    }
+
     @Override
     public void connect() {
         googleApiClient.connect();

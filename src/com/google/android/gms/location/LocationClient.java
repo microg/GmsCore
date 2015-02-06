@@ -31,41 +31,49 @@ public class LocationClient extends AbstractPlayServicesClient {
     }
 
     public Location getLastLocation() {
+        assertConnected();
         return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
 
     public PendingResult requestLocationUpdates(LocationRequest request,
             LocationListener listener) {
+        assertConnected();
         return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
                 listener);
     }
 
     public PendingResult requestLocationUpdates(LocationRequest request,
             LocationListener listener, Looper looper) {
+        assertConnected();
         return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
                 listener, looper);
     }
 
     public PendingResult requestLocationUpdates(LocationRequest request,
             PendingIntent callbackIntent) {
+        assertConnected();
         return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
                 callbackIntent);
     }
 
     public PendingResult removeLocationUpdates(LocationListener listener) {
+        assertConnected();
         return LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, listener);
     }
 
     public PendingResult removeLocationUpdates(PendingIntent callbackIntent) {
+        assertConnected();
         return LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,
                 callbackIntent);
     }
 
     public PendingResult setMockMode(boolean isMockMode) {
+        assertConnected();
         return LocationServices.FusedLocationApi.setMockMode(googleApiClient, isMockMode);
     }
 
     public PendingResult setMockLocation(Location mockLocation) {
+        assertConnected();
         return LocationServices.FusedLocationApi.setMockLocation(googleApiClient, mockLocation);
     }
 }

@@ -43,7 +43,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     private I serviceInterface;
 
     public GmsClient(Context context, GoogleApiClient.ConnectionCallbacks callbacks,
-            GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+                     GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
         this.context = context;
         this.callbacks = callbacks;
         this.connectionFailedListener = connectionFailedListener;
@@ -57,9 +57,11 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     protected abstract I interfaceFromBinder(IBinder binder);
 
     @Override
-    public void connect() {
+    public synchronized void connect() {
         Log.d(TAG, "connect()");
-        if (state == ConnectionState.CONNECTED || state == ConnectionState.CONNECTING) return;
+        if (state == ConnectionState.CONNECTED || state == ConnectionState.CONNECTING) {
+            Log.d(TAG, "Already connected/connecting - nothing to do");
+        }
         state = ConnectionState.CONNECTING;
         if (serviceConnection != null) {
             MultiConnectionKeeper.getInstance(context)
@@ -79,7 +81,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     }
 
     @Override
-    public void disconnect() {
+    public synchronized void disconnect() {
         Log.d(TAG, "disconnect()");
         if (state == ConnectionState.DISCONNECTING) return;
         if (state == ConnectionState.CONNECTING) {
@@ -95,16 +97,16 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     }
 
     @Override
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         return state == ConnectionState.CONNECTED || state == ConnectionState.PSEUDO_CONNECTED;
     }
 
     @Override
-    public boolean isConnecting() {
+    public synchronized boolean isConnecting() {
         return state == ConnectionState.CONNECTING;
     }
 
-    public boolean hasError() {
+    public synchronized boolean hasError() {
         return state == ConnectionState.ERROR;
     }
 
@@ -112,7 +114,13 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         return context;
     }
 
-    public I getServiceInterface() {
+    public synchronized I getServiceInterface() {
+        if (isConnecting()) {
+            // TODO: wait for connection to be established and return afterwards.
+            throw new IllegalStateException("Waiting for connection");
+        } else if (!isConnected()) {
+            throw new IllegalStateException("interface only available once connected!");
+        }
         return serviceInterface;
     }
 
@@ -135,7 +143,9 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            state = ConnectionState.NOT_CONNECTED;
+            synchronized (GmsClient.this) {
+                state = ConnectionState.NOT_CONNECTED;
+            }
         }
     }
 
@@ -144,13 +154,15 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         @Override
         public void onPostInitComplete(int statusCode, IBinder binder, Bundle params)
                 throws RemoteException {
-            if (state == ConnectionState.DISCONNECTING) {
+            synchronized (GmsClient.this) {
+                if (state == ConnectionState.DISCONNECTING) {
+                    state = ConnectionState.CONNECTED;
+                    disconnect();
+                    return;
+                }
                 state = ConnectionState.CONNECTED;
-                disconnect();
-                return;
+                serviceInterface = interfaceFromBinder(binder);
             }
-            state = ConnectionState.CONNECTED;
-            serviceInterface = interfaceFromBinder(binder);
             Log.d(TAG, "GmsCallbacks : onPostInitComplete(" + serviceInterface + ")");
             callbacks.onConnected(params);
         }

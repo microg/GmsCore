@@ -120,8 +120,12 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
-    public void connect() {
+    public synchronized void connect() {
         Log.d(TAG, "connect()");
+        if (isConnected() || isConnecting()) {
+            Log.d(TAG, "Already connected/connecting, noting to do");
+            return;
+        }
         for (ApiConnection connection : apiConnections.values()) {
             if (!connection.isConnected()) {
                 connection.connect();
@@ -130,7 +134,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
-    public void disconnect() {
+    public synchronized void disconnect() {
         Log.d(TAG, "disconnect()");
         for (ApiConnection connection : apiConnections.values()) {
             if (connection.isConnected()) {
@@ -140,7 +144,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         for (ApiConnection connection : apiConnections.values()) {
             if (!connection.isConnected()) return false;
         }
@@ -148,7 +152,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
-    public boolean isConnecting() {
+    public synchronized boolean isConnecting() {
         for (ApiConnection connection : apiConnections.values()) {
             if (connection.isConnecting()) return true;
         }
@@ -167,7 +171,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     }
 
     @Override
-    public void reconnect() {
+    public synchronized void reconnect() {
         Log.d(TAG, "reconnect()");
         disconnect();
         connect();

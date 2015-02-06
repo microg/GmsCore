@@ -64,7 +64,7 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
 
         @Override
         public void handleMessage(Message msg) {
-            Log.d(TAG, "Handler : onClientAvailable");
+            Log.d(TAG, "Handler : handleMessage");
             AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
             try {
                 result.deliverResult(callback.onClientAvailable((C) apiClient.getApiConnection
