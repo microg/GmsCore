@@ -113,6 +113,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.microg.gms.auth.AskPermissionActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:exported="true" />
+
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
             android:authorities="subscribedfeeds"

@@ -23,14 +23,14 @@ import android.util.DisplayMetrics;
 
 import com.google.android.gms.R;
 
-public abstract class BaseActivity extends Activity {
+public abstract class AssistantActivity extends Activity {
     private static final int TITLE_MIN_HEIGHT = 64;
     private static final double TITLE_WIDTH_FACTOR = (8.0 / 18.0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_base);
+        setContentView(R.layout.login_assistant);
         formatTitle();
     }
 

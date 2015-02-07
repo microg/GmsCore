@@ -60,6 +60,12 @@ public class AuthManager {
         return true;
     }
 
+    public static void storePermission(Context context, Account account, String packageName,
+                                       String sig, String service) {
+        AccountManager accountManager = AccountManager.get(context);
+        accountManager.setUserData(account, buildPermKey(packageName, sig, service), "1");
+    }
+
     private static String buildTokenKey(String packageName, String sig, String service) {
         return packageName + ":" + sig + ":" + service;
     }

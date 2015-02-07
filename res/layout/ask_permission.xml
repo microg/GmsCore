@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2013-2015 µg Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@color/login_blue_theme_accent"
+            android:id="@+id/account_photo"
+            android:layout_marginRight="-5dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:border_width="1dp"
+            app:border_color="?attr/colorControlHighlight"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:src="@color/login_blue_theme_primary"
+            android:id="@+id/app_icon"
+            android:layout_marginLeft="-5dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:border_width="1dp"
+            app:border_color="?attr/colorControlHighlight"/>
+    </LinearLayout>
+
+</LinearLayout>

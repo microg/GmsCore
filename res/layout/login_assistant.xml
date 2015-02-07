@@ -50,7 +50,7 @@
             android:layout_height="0dip"
             android:layout_weight="1">
 
-            <include layout="@layout/login_loading" />
+            <include layout="@layout/login_assistant_loading" />
         </FrameLayout>
 
         <View

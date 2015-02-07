@@ -46,7 +46,7 @@ import org.microg.gms.common.Utils;
 
 import java.util.Locale;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
     public static final String EXTRA_TMPL = "tmpl";
     public static final String EXTRA_EMAIL = "email";

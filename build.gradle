@@ -36,6 +36,8 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.android.support:appcompat-v7:21.0.3'
 
+    compile 'de.hdodenhof:circleimageview:1.2.1'
+
     compile project(':GmsApi')
     compile project(':UnifiedNlpLib')
 
