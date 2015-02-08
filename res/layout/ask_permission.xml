@@ -25,22 +25,61 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:src="@color/login_blue_theme_accent"
             android:id="@+id/account_photo"
             android:layout_marginRight="-5dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            app:border_width="1dp"
-            app:border_color="?attr/colorControlHighlight"/>
+            app:border_width="10dp"
+            app:border_color="#88888888" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:src="@color/login_blue_theme_primary"
             android:id="@+id/app_icon"
             android:layout_marginLeft="-5dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            app:border_width="1dp"
-            app:border_color="?attr/colorControlHighlight"/>
+            app:border_width="10dp"
+            app:border_color="#88888888" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:padding="10dp"
+        android:gravity="center_horizontal"
+        android:textSize="18sp"
+        android:text="%NAME% would like to:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ListView
+        android:id="@+id/permissions"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dip" />
+
+    <TextView
+        android:padding="10dp"
+        android:text="By continuing, you will allow this app and Google to use your information in accordance with their respective terms of service and privacy services."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:text="@android:string/cancel"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="@android:string/ok"
+            android:layout_weight="1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>
