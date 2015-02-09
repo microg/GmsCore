@@ -43,6 +43,7 @@ import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.Utils;
+import org.microg.gms.userinfo.ProfileManager;
 
 import java.util.Locale;
 
@@ -218,21 +219,14 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void retrieveGmsKeyUserinfoProfile(final Account account) {
-        final String service = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
-        new AuthRequest().fromContext(this)
-                .appIsGms().callerIsGms()
-                .service(service)
-                .email(account.name)
-                .token(AccountManager.get(this).getPassword(account))
-                .systemPartition()
-                .hasPermission()
-                .getAccountId()
+        ProfileManager.getAuthKeyRequest(this, account)
                 .getResponseAsync(new AuthClient.GmsAuthCallback() {
                     @Override
                     public void onResponse(AuthResponse response) {
                         AuthManager.storeResponse(LoginActivity.this, account,
                                 Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
-                                service, response);
+                                ProfileManager.SERVICE_TOKEN, response);
+                        ProfileManager.storeAuthKey(LoginActivity.this, account, response.auth);
                         finish();
                     }
 

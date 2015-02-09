@@ -61,7 +61,7 @@ public class AuthResponse {
     @ResponseField("Expiry")
     public long expiry = -1;
     @ResponseField("storeConsentRemotely")
-    public boolean storeConsentRemotely;
+    public boolean storeConsentRemotely = true;
 
     public static AuthResponse parse(String result) {
         AuthResponse response = new AuthResponse();

@@ -21,6 +21,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -39,7 +42,7 @@ public class Utils {
         return new Build();
     }
 
-    public static void checkPackage(Context context, String packageName,int callingUid) {
+    public static void checkPackage(Context context, String packageName, int callingUid) {
         String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
         if (packagesForUid != null && !Arrays.asList(packagesForUid).contains(packageName)) {
             throw new SecurityException("callingUid [" + callingUid + "] is not related to packageName [" + packageName + "]");
@@ -90,5 +93,21 @@ public class Utils {
             }
         }
         return null;
+    }
+
+    public static byte[] readStreamToEnd(final InputStream is) throws IOException {
+        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        if (is != null) {
+            final byte[] buff = new byte[1024];
+            while (true) {
+                final int nb = is.read(buff);
+                if (nb < 0) {
+                    break;
+                }
+                bos.write(buff, 0, nb);
+            }
+            is.close();
+        }
+        return bos.toByteArray();
     }
 }

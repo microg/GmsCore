@@ -15,46 +15,72 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/account_manager_title"
+        android:textColor="?attr/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:background="@color/dialog_border_color"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
     <LinearLayout
-        android:padding="50dp"
+        android:paddingTop="15dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:src="@color/login_blue_theme_accent"
-            android:id="@+id/account_photo"
-            android:layout_marginRight="-5dp"
+        <FrameLayout
+            android:background="@drawable/circle_shape_background"
+            android:layout_marginEnd="-3dp"
+            android:layout_marginRight="-3dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            app:border_width="10dp"
-            app:border_color="#88888888" />
+            android:padding="10dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:src="@color/login_blue_theme_primary"
-            android:id="@+id/app_icon"
-            android:layout_marginLeft="-5dp"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:src="@drawable/ic_generic_man"
+                android:id="@+id/account_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:background="@drawable/circle_shape_background"
+            android:layout_marginStart="-3dp"
+            android:layout_marginLeft="-3dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
-            app:border_width="10dp"
-            app:border_color="#88888888" />
+            android:padding="10dp">
+
+            <ImageView
+                android:src="@drawable/ic_microg_app"
+                android:id="@+id/app_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
     </LinearLayout>
 
     <TextView
         android:id="@+id/title"
-        android:padding="10dp"
+        android:padding="15dp"
         android:gravity="center_horizontal"
         android:textSize="18sp"
-        android:text="%NAME% would like to:"
+        android:textColor="?attr/colorAccent"
+        android:text="@string/ask_permission_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <ListView
+        android:padding="5dp"
         android:id="@+id/permissions"
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -62,23 +88,33 @@
 
     <TextView
         android:padding="10dp"
-        android:text="By continuing, you will allow this app and Google to use your information in accordance with their respective terms of service and privacy services."
+        android:textColor="?attr/colorPrimary"
+        android:textSize="12sp"
+        android:text="@string/ask_permission_tos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:layout_gravity="end"
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingBottom="5dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <Button
-            android:text="@android:string/cancel"
-            android:layout_weight="1"
-            android:layout_width="0dip"
+            android:id="@android:id/button2"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/deny"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <Button
-            android:text="@android:string/ok"
-            android:layout_weight="1"
-            android:layout_width="0dip"
+            android:id="@android:id/button1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/allow"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 

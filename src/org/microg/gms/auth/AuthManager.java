@@ -21,6 +21,8 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.Log;
 
+import org.microg.gms.common.Utils;
+
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
@@ -36,11 +38,10 @@ public class AuthManager {
             accountManager.setAuthToken(account, buildTokenKey(packageName, sig, "LSID"), response.LSid);
         if (response.expiry > 0)
             accountManager.setUserData(account, buildExpireKey(packageName, sig, service), Long.toString(response.expiry));
-        if (response.auth != null && response.expiry != 0) {
+        if (response.auth != null && response.expiry != 0 && response.storeConsentRemotely) {
             accountManager.setAuthToken(account, buildTokenKey(packageName, sig, service), response.auth);
             accountManager.setUserData(account, buildPermKey(packageName, sig, service), "1");
         }
-
     }
 
     public static boolean isPermitted(Context context, Account account, String packageName,
@@ -58,6 +59,10 @@ public class AuthManager {
             }
         }
         return true;
+    }
+
+    public static void storePermission(Context context, Account account, String packageName, String service) {
+        storePermission(context, account, packageName, Utils.getFirstPackageSignatureDigest(context, packageName), service);
     }
 
     public static void storePermission(Context context, Account account, String packageName,

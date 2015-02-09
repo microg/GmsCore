@@ -13,11 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountPreferences="@xml/account_preferences"
-    android:accountType="@string/google_account_type"
-    android:customTokens="true"
-    android:icon="@drawable/proprietary_auth_gls_ic_google_selected"
-    android:smallIcon="@drawable/proprietary_auth_gls_ic_google_minitab_selected"
-    android:label="@string/google_account_label" />
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/dialog_border_color" />
+</shape>

@@ -16,16 +16,12 @@
 
 package org.microg.gms.auth;
 
-import android.accounts.Account;
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import org.microg.gms.auth.loginservice.GoogleLoginService;
+import org.microg.gms.common.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,7 +32,6 @@ public class AuthClient {
     private static final String SERVICE_URL = "https://android.clients.google.com/auth";
 
     public static AuthResponse request(AuthRequest request) throws IOException {
-        AuthResponse authResponse = new AuthResponse();
         HttpURLConnection connection = (HttpURLConnection) new URL(SERVICE_URL).openConnection();
         connection.setRequestMethod("POST");
         connection.setDoInput(true);
@@ -60,25 +55,9 @@ public class AuthClient {
         if (connection.getResponseCode() != 200) {
             throw new IOException(connection.getResponseMessage());
         }
-        String result = new String(readStreamToEnd(connection.getInputStream()));
+        String result = new String(Utils.readStreamToEnd(connection.getInputStream()));
         Log.d(TAG, "-- Response --\n" + result);
         return AuthResponse.parse(result);
-    }
-
-    protected static byte[] readStreamToEnd(final InputStream is) throws IOException {
-        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        if (is != null) {
-            final byte[] buff = new byte[1024];
-            while (true) {
-                final int nb = is.read(buff);
-                if (nb < 0) {
-                    break;
-                }
-                bos.write(buff, 0, nb);
-            }
-            is.close();
-        }
-        return bos.toByteArray();
     }
 
     public static void request(final AuthRequest request, final GmsAuthCallback callback) {
