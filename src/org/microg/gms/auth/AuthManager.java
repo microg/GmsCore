@@ -19,6 +19,7 @@ package org.microg.gms.auth;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import org.microg.gms.common.Utils;
@@ -26,6 +27,7 @@ import org.microg.gms.common.Utils;
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
+    public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
 
     public static void storeResponse(Context context, Account account, String packageName,
                                      String sig, String service, AuthResponse response) {
@@ -44,12 +46,31 @@ public class AuthManager {
         }
     }
 
+    public static String getToken(Context context, Account account, String packageName,
+                                  String sig, String service) {
+        AccountManager accountManager = AccountManager.get(context);
+        return accountManager.peekAuthToken(account, buildTokenKey(packageName, sig, service));
+    }
+
     public static boolean isPermitted(Context context, Account account, String packageName,
                                       String sig, String service) {
+        if (service.startsWith("audience:server:client_id:")) {
+            // https://developers.google.com/accounts/docs/CrossClientAuth
+            Log.d(TAG, "Always permitting scope: " + service);
+            return true;
+        }
+        if (!service.startsWith("oauth")) {
+            if (context.getPackageManager().checkPermission(PERMISSION_TREE_BASE + service, packageName) == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "Permitting, permission is present");
+                return true;
+            }
+        }
         AccountManager accountManager = AccountManager.get(context);
         String perm = accountManager.getUserData(account, buildPermKey(packageName, sig, service));
-        if (!"1".equals(perm))
+        if (!"1".equals(perm)) {
+            Log.d(TAG, "Not permitting, permission not stored for " + packageName + ": " + service);
             return false;
+        }
         String exp = accountManager.getUserData(account, buildExpireKey(packageName, sig, service));
         if (exp != null) {
             long expLong = Long.parseLong(exp);

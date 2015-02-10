@@ -28,10 +28,14 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.auth.IAuthManagerService;
+import com.google.android.gms.auth.AccountChangeEventsRequest;
+import com.google.android.gms.auth.AccountChangeEventsResponse;
 
 import org.microg.gms.common.Utils;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
+    private static final String TAG = "GmsAuthManagerService";
+
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
 
     public static final String KEY_AUTHORITY = "authority";
@@ -51,10 +55,6 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     private Context context;
 
-    private class State {
-        String authToken;
-    }
-
     public AuthManagerServiceImpl(Context context) {
         this.context = context;
     }
@@ -66,12 +66,23 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         Utils.checkPackage(context, packageName, callerUid, getCallingUid());
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
-        Log.d("AuthManagerService", "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras);
+        Log.d(TAG, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras);
+        Account account = new Account(accountName, GOOGLE_ACCOUNT_TYPE);
+        String sig = Utils.getFirstPackageSignatureDigest(context, packageName);
 
-        //AccountManagerFuture<Bundle> authToken = AccountManager.get(context).getAuthToken(new Account(accountName, GOOGLE_ACCOUNT_TYPE), scope, extras, notify, null, new Handler(Looper.getMainLooper()));
+        if (!AuthManager.isPermitted(context, account, packageName, sig, scope)) {
+            Bundle result = new Bundle();
+            result.putString(KEY_ERROR, "Unknown");
+            Intent i = new Intent(context, AskPermissionActivity.class);
+            i.putExtras(extras);
+            i.putExtra(AccountManager.KEY_ANDROID_PACKAGE_NAME, packageName);
+            i.putExtra(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            i.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            i.putExtra(AccountManager.KEY_AUTHTOKEN, scope);
+            result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
+            return result;
+        }
         try {
-            Account account = new Account(accountName, GOOGLE_ACCOUNT_TYPE);
-            String sig = Utils.getFirstPackageSignatureDigest(context, packageName);
             AuthResponse response = new AuthRequest().fromContext(context)
                     .app(packageName, sig)
                     .callerIsApp()
@@ -80,22 +91,20 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                     .service(scope)
                     .getResponse();
             AuthManager.storeResponse(context, account, packageName, sig, scope, response);
-            //Bundle requestResult = authToken.getResult();
-            /*if (!requestResult.containsKey(AccountManager.KEY_AUTHTOKEN) && requestResult.containsKey(AccountManager.KEY_INTENT)) {
-                Intent intent = requestResult.getParcelable(AccountManager.KEY_INTENT);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            }*/
             Log.d("getToken", response.auth);
             Bundle result = new Bundle();
             result.putString(KEY_AUTH_TOKEN, response.auth);
             result.putString(KEY_ERROR, "Unknown");
-            //result.putParcelable(KEY_USER_RECOVERY_INTENT, requestResult.getParcelable(AccountManager.KEY_INTENT));
             return result;
         } catch (Exception e) {
             Log.w("AuthManagerService", e);
             throw new RemoteException(e.getMessage());
         }
+    }
+
+    @Override
+    public AccountChangeEventsResponse getChangeEvents(AccountChangeEventsRequest request) {
+        return new AccountChangeEventsResponse();
     }
 
     @Override

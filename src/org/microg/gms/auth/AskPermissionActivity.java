@@ -17,6 +17,9 @@
 package org.microg.gms.auth;
 
 import android.accounts.Account;
+import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -35,9 +38,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.R;
 
+import org.microg.gms.common.Utils;
 import org.microg.gms.userinfo.ProfileManager;
 
-public class AskPermissionActivity extends Activity {
+public class AskPermissionActivity extends AccountAuthenticatorActivity {
     private static final String TAG = "GmsAuthAskPermission";
     private Account account;
     private String packageName;
@@ -55,6 +59,13 @@ public class AskPermissionActivity extends Activity {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(lp);
 
+        account = new Account(getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_NAME),
+                getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+        packageName = getIntent().getStringExtra(AccountManager.KEY_ANDROID_PACKAGE_NAME);
+        service = getIntent().getStringExtra(AccountManager.KEY_AUTHTOKEN);
+        int callerUid = getIntent().getIntExtra(AccountManager.KEY_CALLER_UID, 0);
+        Utils.checkPackage(this, packageName, callerUid);
+
         // receive package info
         PackageManager packageManager = getPackageManager();
         ApplicationInfo applicationInfo;
@@ -69,6 +80,7 @@ public class AskPermissionActivity extends Activity {
         Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
         Bitmap profileIcon = ProfileManager.getProfilePicture(this, account, false);
 
+        // receive profile icon
         if (profileIcon != null) {
             ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(profileIcon);
         } else {
@@ -113,6 +125,11 @@ public class AskPermissionActivity extends Activity {
         finish();
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
     private class PermissionAdapter extends BaseAdapter {
 
         private boolean isOAuth() {
@@ -155,7 +172,7 @@ public class AskPermissionActivity extends Activity {
             if (view == null) {
                 view = LayoutInflater.from(AskPermissionActivity.this).inflate(R.layout.ask_permission_list_entry, null);
             }
-            ((TextView)view.findViewById(android.R.id.text1)).setText(label);
+            ((TextView) view.findViewById(android.R.id.text1)).setText(label);
             return view;
         }
     }

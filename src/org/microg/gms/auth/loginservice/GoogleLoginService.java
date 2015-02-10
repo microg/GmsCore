@@ -29,7 +29,7 @@ import android.util.Log;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.auth.AuthClient;
+import org.microg.gms.auth.AskPermissionActivity;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
@@ -93,9 +93,9 @@ public class GoogleLoginService extends Service {
                 @Override
                 public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
                     Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
-                    Bundle b = new Bundle();
-                    b.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
-                    return b;
+                    Bundle result = new Bundle();
+                    result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+                    return result;
                 }
             }.getIBinder();
         }
@@ -108,30 +108,41 @@ public class GoogleLoginService extends Service {
         String app = options.getString(AccountManager.KEY_ANDROID_PACKAGE_NAME);
         Utils.checkPackage(this, app, options.getInt(AccountManager.KEY_CALLER_UID), options.getInt(AccountManager.KEY_CALLER_UID));
         String appSignature = Utils.getFirstPackageSignatureDigest(this, app);
-        try {
-            AuthRequest request = new AuthRequest().fromContext(this)
-                    .email(account.name)
-                    .token(AccountManager.get(this).getPassword(account))
-                    .service(authTokenType)
-                    .app(app, appSignature)
-                    .callerIsGms()
-                    .calledFromAccountManager();
-            if (AuthManager.isPermitted(this, account, app, appSignature, authTokenType)) {
-                request.hasPermission();
-            }
-            AuthResponse r = request.getResponse();
-            AuthManager.storeResponse(this, account, app, appSignature, authTokenType, r);
-            if (r.expiry == 0)
-            Log.d(TAG, "Auth: " + r.auth);
-            Bundle bundle = new Bundle();
-            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            bundle.putString(AccountManager.KEY_AUTHTOKEN, r.auth);
-            return bundle;
-        } catch (IOException e) {
-            Log.w(TAG, e);
+        if (!AuthManager.isPermitted(this, account, app, appSignature, authTokenType)) {
+            Bundle result = new Bundle();
+            Intent i = new Intent(this, AskPermissionActivity.class);
+            i.putExtras(options);
+            i.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+            i.putExtra(AccountManager.KEY_ANDROID_PACKAGE_NAME, app);
+            i.putExtra(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            i.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            i.putExtra(AccountManager.KEY_AUTHTOKEN, authTokenType);
+            result.putParcelable(AccountManager.KEY_INTENT, i);
+            return result;
         }
-        return null;
+        String token = AuthManager.getToken(this, account, app, appSignature, authTokenType);
+        if (token == null) {
+            try {
+                AuthRequest request = new AuthRequest().fromContext(this)
+                        .email(account.name)
+                        .token(AccountManager.get(this).getPassword(account))
+                        .service(authTokenType)
+                        .app(app, appSignature)
+                        .callerIsGms()
+                        .calledFromAccountManager()
+                        .hasPermission();
+                AuthResponse r = request.getResponse();
+                AuthManager.storeResponse(this, account, app, appSignature, authTokenType, r);
+                token = r.auth;
+            } catch (IOException e) {
+                Log.w(TAG, e);
+            }
+        }
+        Bundle result = new Bundle();
+        result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+        result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+        result.putString(AccountManager.KEY_AUTHTOKEN, token);
+        return result;
     }
 
     private Bundle addAccount(AccountAuthenticatorResponse response, String authTokenType, String[] requiredFeatures, Bundle options) {

@@ -24,6 +24,16 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
+    <permission-tree android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
+    <permission
+        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.local"
+        android:label="@string/permission_service_local_label"
+        android:description="@string/permission_service_local_description" />
+    <permission
+        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.mail"
+        android:label="@string/permission_service_mail_label"
+        android:description="@string/permission_service_mail_description" />
+
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -70,6 +80,12 @@
                 android:name="nlpServiceIntent"
                 android:value="com.google.android.location.internal.GMS_NLP" />
         </service>
+
+        <!-- Services Framework -->
+        <provider
+            android:exported="true"
+            android:authorities="com.google.android.gsf.gservices"
+            android:name="org.microg.gms.gservices.GServicesProvider" />
 
         <!-- Auth -->
 
