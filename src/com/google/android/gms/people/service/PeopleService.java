@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.location.internal;
+package com.google.android.gms.people.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -26,18 +26,17 @@ import android.util.Log;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.AbstractGmsServiceBroker;
-import org.microg.gms.location.GoogleLocationManagerServiceImpl;
+import org.microg.gms.people.service.PeopleServiceImpl;
 
-import static org.microg.gms.common.Constants.ACTION_GMS_LOCATION_MANAGER_SERVICE_START;
+import static org.microg.gms.common.Constants.ACTION_GMS_PEOPLE_SERVICE_START;
 
-public class GoogleLocationManagerService extends Service {
-    private static final String TAG = "GmsLMS";
+public class PeopleService extends Service {
+    private static final String TAG = "GmsPeopleService";
 
-    private GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this);
+    private PeopleServiceImpl impl = new PeopleServiceImpl(this);
     private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker() {
         @Override
-        public void getGoogleLocationManagerService(IGmsCallbacks callback, int versionCode,
-                                                    String packageName, Bundle params) throws RemoteException {
+        public void getPeopleService(IGmsCallbacks callback, int versionCode, String packageName, Bundle params) throws RemoteException {
             Log.d(TAG, "bound by: " + packageName);
             callback.onPostInitComplete(0, impl.asBinder(), null);
         }
@@ -45,7 +44,7 @@ public class GoogleLocationManagerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        if (ACTION_GMS_LOCATION_MANAGER_SERVICE_START.equals(intent.getAction())) {
+        if (ACTION_GMS_PEOPLE_SERVICE_START.equals(intent.getAction())) {
             return broker.asBinder();
         } else {
             return null;

@@ -19,6 +19,7 @@ package org.microg.gms.gservices;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 
 public class GServicesProvider extends ContentProvider{
@@ -29,7 +30,9 @@ public class GServicesProvider extends ContentProvider{
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;
+        MatrixCursor cursor = new MatrixCursor(new String[]{"name", "value"});
+        cursor.addRow(new Object[]{"", null});
+        return cursor;
     }
 
     @Override

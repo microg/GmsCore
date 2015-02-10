@@ -18,9 +18,8 @@ package org.microg.gms.auth;
 
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
-import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
-import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -41,11 +40,16 @@ import com.google.android.gms.R;
 import org.microg.gms.common.Utils;
 import org.microg.gms.userinfo.ProfileManager;
 
+import java.io.IOException;
+
 public class AskPermissionActivity extends AccountAuthenticatorActivity {
+    public static final String EXTRA_FROM_ACCOUNT_MANAGER = "from_account_manager";
+
     private static final String TAG = "GmsAuthAskPermission";
     private Account account;
     private String packageName;
     private String service;
+    private boolean fromAccountManager = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
                 getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         packageName = getIntent().getStringExtra(AccountManager.KEY_ANDROID_PACKAGE_NAME);
         service = getIntent().getStringExtra(AccountManager.KEY_AUTHTOKEN);
+        if (getIntent().hasExtra(EXTRA_FROM_ACCOUNT_MANAGER)) fromAccountManager = true;
         int callerUid = getIntent().getIntExtra(AccountManager.KEY_CALLER_UID, 0);
         Utils.checkPackage(this, packageName, callerUid);
 
@@ -100,7 +105,11 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         }
 
         ((ImageView) findViewById(R.id.app_icon)).setImageDrawable(appIcon);
-        ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_permission_title, appLabel));
+        if (isOAuth()) {
+            ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_scope_permission_title, appLabel));
+        } else {
+            ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_service_permission_title, appLabel));
+        }
         findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +127,43 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
 
     public void onAllow() {
         AuthManager.storePermission(this, account, packageName, service);
-        finish();
+        findViewById(android.R.id.button1).setEnabled(false);
+        findViewById(android.R.id.button2).setEnabled(false);
+        findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
+        findViewById(R.id.no_progress_bar).setVisibility(View.GONE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Context context = AskPermissionActivity.this;
+                String sig = Utils.getFirstPackageSignatureDigest(context, packageName);
+                AuthRequest request = new AuthRequest().fromContext(context)
+                        .email(account.name)
+                        .token(AccountManager.get(context).getPassword(account))
+                        .service(service)
+                        .app(packageName, sig)
+                        .hasPermission();
+                if (fromAccountManager) {
+                    request.callerIsGms().calledFromAccountManager();
+                } else {
+                    request.callerIsApp();
+                }
+                try {
+                    AuthResponse response = request.getResponse();
+                    AuthManager.storeResponse(context, account, packageName, sig, service, response);
+                    Bundle result = new Bundle();
+                    result.putString(AccountManager.KEY_AUTHTOKEN, response.auth);
+                    result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+                    result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+                    result.putString(AccountManager.KEY_ANDROID_PACKAGE_NAME, packageName);
+                    result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+                    setAccountAuthenticatorResult(result);
+                } catch (IOException e) {
+                    Log.w(TAG, e);
+                }
+                finish();
+
+            }
+        }).start();
     }
 
     public void onDeny() {
@@ -130,11 +175,11 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         super.finish();
     }
 
-    private class PermissionAdapter extends BaseAdapter {
+    private boolean isOAuth() {
+        return service.startsWith("oauth2:") || service.startsWith("oauth:");
+    }
 
-        private boolean isOAuth() {
-            return service.startsWith("oauth2:") || service.startsWith("oauth:");
-        }
+    private class PermissionAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -162,11 +207,19 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             String item = getItem(position);
             String label = "unknown";
-            if (!isOAuth()) {
-                int stringId = getResources().getIdentifier("permission_service_" + item + "_label", "string", getPackageName());
-                if (stringId != 0) {
-                    label = getString(stringId);
+            String labelResourceId;
+            if (isOAuth()) {
+                if (item.startsWith("https://")) {
+                    labelResourceId = "permission_scope_" + item.substring(8).replace("/", "_").replace("-", "_");
+                } else {
+                    labelResourceId = "permission_scope_" + item.replace("/", "_").replace("-", "_");
                 }
+            } else {
+                labelResourceId = "permission_service_" + item + "_label";
+            }
+            int labelResource = getResources().getIdentifier(labelResourceId, "string", getPackageName());
+            if (labelResource != 0) {
+                label = getString(labelResource);
             }
             View view = convertView;
             if (view == null) {

@@ -20,7 +20,8 @@
     <string name="google_account_type">com.google</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">By continuing, you allow this app and Google to use your information in accordance with their respective terms of service and privacy policies.</string>
-    <string name="ask_permission_title">%s would like to:</string>
+    <string name="ask_scope_permission_title">%s would like to:</string>
+    <string name="ask_service_permission_title">%s would like to use:</string>
     <string name="account_manager_title">µg Google Account Manager</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>

@@ -21,16 +21,29 @@
 
     <TextView
         android:gravity="center_horizontal"
-        android:padding="10dp"
+        android:paddingTop="10dp"
         android:text="@string/account_manager_title"
         android:textColor="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <View
+        android:id="@+id/no_progress_bar"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/dialog_border_color"
         android:layout_width="match_parent"
         android:layout_height="1dp" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="3dp"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleHorizontal" />
 
     <LinearLayout
         android:paddingTop="15dp"
@@ -75,7 +88,7 @@
         android:gravity="center_horizontal"
         android:textSize="18sp"
         android:textColor="?attr/colorAccent"
-        android:text="@string/ask_permission_title"
+        android:text="@string/ask_scope_permission_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

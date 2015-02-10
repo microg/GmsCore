@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.Utils;
 
 public class AuthManager {
@@ -31,6 +32,7 @@ public class AuthManager {
 
     public static void storeResponse(Context context, Account account, String packageName,
                                      String sig, String service, AuthResponse response) {
+        if (service.startsWith("weblogin:")) return;
         AccountManager accountManager = AccountManager.get(context);
         if (response.accountId != null)
             accountManager.setUserData(account, "GoogleUserId", response.accountId);
@@ -48,6 +50,7 @@ public class AuthManager {
 
     public static String getToken(Context context, Account account, String packageName,
                                   String sig, String service) {
+        if (service.startsWith("weblogin:")) return null;
         AccountManager accountManager = AccountManager.get(context);
         return accountManager.peekAuthToken(account, buildTokenKey(packageName, sig, service));
     }
@@ -58,8 +61,13 @@ public class AuthManager {
             // https://developers.google.com/accounts/docs/CrossClientAuth
             Log.d(TAG, "Always permitting scope: " + service);
             return true;
-        }
-        if (!service.startsWith("oauth")) {
+        } else if (service.startsWith("weblogin:")) {
+            if (Constants.GMS_PACKAGE_SIGNATURE_SHA1.equals(sig)) {
+                Log.d(TAG, "Permitting weblogin, is Google singed app!");
+                return true;
+            }
+            return false;
+        } else if (!service.startsWith("oauth:") && !service.startsWith("oauth2:")) {
             if (context.getPackageManager().checkPermission(PERMISSION_TREE_BASE + service, packageName) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "Permitting, permission is present");
                 return true;
@@ -92,7 +100,8 @@ public class AuthManager {
         accountManager.setUserData(account, buildPermKey(packageName, sig, service), "1");
     }
 
-    private static String buildTokenKey(String packageName, String sig, String service) {
+    public static String buildTokenKey(String packageName, String sig, String service) {
+        if (service.startsWith("weblogin:")) return null;
         return packageName + ":" + sig + ":" + service;
     }
 

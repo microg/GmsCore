@@ -25,6 +25,7 @@
         android:targetSdkVersion="21" />
 
     <permission-tree android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
+
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.local"
         android:label="@string/permission_service_local_label"
@@ -83,9 +84,28 @@
 
         <!-- Services Framework -->
         <provider
+            android:name="org.microg.gms.gservices.GServicesProvider"
             android:exported="true"
-            android:authorities="com.google.android.gsf.gservices"
-            android:name="org.microg.gms.gservices.GServicesProvider" />
+            android:authorities="com.google.android.gsf.gservices"/>
+
+        <provider
+            android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
+            android:authorities="subscribedfeeds"
+            android:exported="true"
+            android:multiprocess="false"
+            android:readPermission="android.permission.SUBSCRIBED_FEEDS_READ"
+            android:writePermission="android.permission.SUBSCRIBED_FEEDS_WRITE" />
+
+        <!-- People -->
+
+        <service
+            android:name=".people.service.PeopleService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.people.service.START" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
 
         <!-- Auth -->
 
@@ -132,15 +152,8 @@
         <activity
             android:name="org.microg.gms.auth.AskPermissionActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog"
-            android:exported="true" />
-
-        <provider
-            android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
-            android:authorities="subscribedfeeds"
             android:exported="true"
-            android:multiprocess="false"
-            android:readPermission="android.permission.SUBSCRIBED_FEEDS_READ"
-            android:writePermission="android.permission.SUBSCRIBED_FEEDS_WRITE" />
+            android:excludeFromRecents="true" />
 
         <service
             android:name=".auth.GetToken"
