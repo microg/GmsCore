@@ -7,6 +7,7 @@ public class Constants {
      */
     public static final int MAX_REFERENCE_VERSION = 6599436;
     public static final String ACTION_GMS_LOCATION_MANAGER_SERVICE_START = "com.google.android.location.internal.GoogleLocationManagerService.START";
+    public static final String ACTION_GMS_PEOPLE_SERVICE_START = "com.google.android.gms.people.service.START";
     public static final String KEY_MOCK_LOCATION = "mockLocation";
     public static final String DEFAULT_ACCOUNT = "<<default account>>";
     public static final String GMS_PACKAGE_NAME = "com.google.android.gms";
