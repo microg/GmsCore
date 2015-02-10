@@ -1,4 +1,7 @@
 package com.google.android.gms.auth;
 
-public class AccountChangeEvent {
+import org.microg.safeparcel.AutoSafeParcelable;
+
+public class AccountChangeEvent extends AutoSafeParcelable {
+    public static Creator<AccountChangeEvent> CREATOR = new AutoCreator<>(AccountChangeEvent.class);
 }
