@@ -45,6 +45,7 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
 
     public AbstractPendingResult<R> connect() {
         Log.d(TAG, "connect()");
+        apiClient.getApiConnection(api);
         Looper looper = apiClient.getLooper();
         final AbstractPendingResult<R> result = new AbstractPendingResult<>(looper);
         Message msg = new Message();
@@ -67,8 +68,8 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
             Log.d(TAG, "Handler : handleMessage");
             AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
             try {
-                result.deliverResult(callback.onClientAvailable((C) apiClient.getApiConnection
-                        (api)));
+                C connection = (C)apiClient.getApiConnection(api);
+                result.deliverResult(callback.onClientAvailable(connection));
             } catch (RemoteException ignored) {
 
             }

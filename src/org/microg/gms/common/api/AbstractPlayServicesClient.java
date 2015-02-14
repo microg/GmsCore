@@ -16,6 +16,8 @@
 
 package org.microg.gms.common.api;
 
+import android.util.Log;
+
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -23,6 +25,7 @@ import org.microg.gms.common.ForwardConnectionCallbacks;
 import org.microg.gms.common.ForwardConnectionFailedListener;
 
 public class AbstractPlayServicesClient implements GooglePlayServicesClient {
+    private static final String TAG = "GmsPlatServicesClient";
 
     protected final GoogleApiClient googleApiClient;
 
@@ -36,11 +39,13 @@ public class AbstractPlayServicesClient implements GooglePlayServicesClient {
 
     @Override
     public void connect() {
+        Log.d(TAG, "connect()");
         googleApiClient.connect();
     }
 
     @Override
     public void disconnect() {
+        Log.d(TAG, "disconnect()");
         googleApiClient.disconnect();
     }
 

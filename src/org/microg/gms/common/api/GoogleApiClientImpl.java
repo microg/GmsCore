@@ -123,7 +123,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     public synchronized void connect() {
         Log.d(TAG, "connect()");
         if (isConnected() || isConnecting()) {
-            Log.d(TAG, "Already connected/connecting, noting to do");
+            Log.d(TAG, "Already connected/connecting, nothing to do");
             return;
         }
         for (ApiConnection connection : apiConnections.values()) {

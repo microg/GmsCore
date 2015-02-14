@@ -129,8 +129,8 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
                     @Override
                     public Result onClientAvailable(LocationClientImpl client) throws
                             RemoteException {
-                        runnable.run(client);
-                        return Status.SUCCESS;
+                            runnable.run(client);
+                            return Status.SUCCESS;
                     }
                 }).connect();
     }

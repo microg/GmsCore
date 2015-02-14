@@ -35,45 +35,45 @@ public class LocationClient extends AbstractPlayServicesClient {
         return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
 
-    public PendingResult requestLocationUpdates(LocationRequest request,
+    public void requestLocationUpdates(LocationRequest request,
             LocationListener listener) {
         assertConnected();
-        return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
-                listener);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
+                listener).await();
     }
 
-    public PendingResult requestLocationUpdates(LocationRequest request,
+    public void requestLocationUpdates(LocationRequest request,
             LocationListener listener, Looper looper) {
         assertConnected();
-        return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
-                listener, looper);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
+                listener, looper).await();
     }
 
-    public PendingResult requestLocationUpdates(LocationRequest request,
+    public void requestLocationUpdates(LocationRequest request,
             PendingIntent callbackIntent) {
         assertConnected();
-        return LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
-                callbackIntent);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request,
+                callbackIntent).await();
     }
 
-    public PendingResult removeLocationUpdates(LocationListener listener) {
+    public void removeLocationUpdates(LocationListener listener) {
         assertConnected();
-        return LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, listener);
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, listener).await();
     }
 
-    public PendingResult removeLocationUpdates(PendingIntent callbackIntent) {
+    public void removeLocationUpdates(PendingIntent callbackIntent) {
         assertConnected();
-        return LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,
-                callbackIntent);
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,
+                callbackIntent).await();
     }
 
-    public PendingResult setMockMode(boolean isMockMode) {
+    public void setMockMode(boolean isMockMode) {
         assertConnected();
-        return LocationServices.FusedLocationApi.setMockMode(googleApiClient, isMockMode);
+        LocationServices.FusedLocationApi.setMockMode(googleApiClient, isMockMode).await();
     }
 
-    public PendingResult setMockLocation(Location mockLocation) {
+    public void setMockLocation(Location mockLocation) {
         assertConnected();
-        return LocationServices.FusedLocationApi.setMockLocation(googleApiClient, mockLocation);
+        LocationServices.FusedLocationApi.setMockLocation(googleApiClient, mockLocation).await();
     }
 }
