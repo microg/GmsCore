@@ -33,6 +33,7 @@ import static android.location.LocationManager.NETWORK_PROVIDER;
 
 public class GoogleLocationManager implements LocationChangeListener {
     private static final String MOCK_PROVIDER = "mock";
+    private static final long SWITCH_ON_FRESHNESS_CLIFF_MS = 30000; // 30 seconds
 
     private Context context;
     private LocationManager locationManager;
@@ -63,12 +64,12 @@ public class GoogleLocationManager implements LocationChangeListener {
                 return gps;
             if (gps == null)
                 return network;
-            if (gps.getTime() > network.getTime() - 10000)
+            if (gps.getTime() > network.getTime() - SWITCH_ON_FRESHNESS_CLIFF_MS)
                 return gps;
             return network;
         } else if (networkPermission) {
             Location network = networkProvider.getLastLocation();
-            if (network.getExtras() != null &&
+            if (network != null && network.getExtras() != null &&
                     network.getExtras().getParcelable("no_gps_location") instanceof Location) {
                 network = network.getExtras().getParcelable("no_gps_location");
             }
