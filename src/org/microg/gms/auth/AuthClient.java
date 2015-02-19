@@ -48,13 +48,16 @@ public class AuthClient {
                 content.append("&");
             content.append(Uri.encode(key)).append("=").append(Uri.encode(formContent.get(key)));
         }
+
         Log.d(TAG, "-- Request --\n" + content);
         OutputStream os = connection.getOutputStream();
         os.write(content.toString().getBytes());
         os.close();
+
         if (connection.getResponseCode() != 200) {
             throw new IOException(connection.getResponseMessage());
         }
+
         String result = new String(Utils.readStreamToEnd(connection.getInputStream()));
         Log.d(TAG, "-- Response --\n" + result);
         return AuthResponse.parse(result);

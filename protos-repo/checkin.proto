@@ -1,0 +1,115 @@
+option java_package = "org.microg.gms.checkin";
+
+option java_outer_classname = "CheckinProto";
+
+message CheckinRequest {
+    message DeviceConfig {
+        optional int32 touchScreen = 1; // ConfigurationInfo.reqTouchScreen
+        optional int32 keyboardType = 2; // ConfigurationInfo.reqKeyboardType
+        optional int32 navigation = 3; // ConfigurationInfo.reqNavigation
+        optional int32 screenLayout = 4; // ConfigurationInfo.screenLayout
+        optional bool hasHardKeyboard = 5; // ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD
+        optional bool hasFiveWayNavigation = 6; // ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV
+        optional int32 densityDpi = 7; // DisplayMetrics.densityDpi
+        optional int32 glEsVersion = 8; // ConfigurationInfo.reqGlEsVersion
+        repeated string sharedLibrary = 9; // PackageManager.getSystemSharedLibraryNames
+        repeated string availableFeature = 10; // PackageManager.getSystemAvailableFeatures
+        repeated string nativePlatform = 11; // Build.CPU_ABI (and Build.CPU_ABI2 != "unknown")
+        optional int32 widthPixels = 12; // DisplayMetrics.widthPixels
+        optional int32 heightPixels = 13; // DisplayMetrics.heightPixels
+        repeated string locale = 14; // Context.getAssets.getLocales
+        repeated string glExtension = 15; // GLES10.glGetString(GLES10.GL_EXTENSIONS)
+        optional int32 deviceClass = 16; // unused
+        optional int32 maxApkDownloadSizeMb = 17; // unused
+    }
+    message Checkin {
+        message Event {
+            optional string tag = 1;
+            optional string value = 2;
+            optional int64 timeMs = 3;
+        }
+        message Statistic {
+            optional string tag = 1;
+            optional int32 count = 2;
+            optional float sum = 3;
+        }
+        message Build {
+            optional string fingerprint = 1; // Build.FINGERPRINT
+            optional string hardware = 2; // Build.HARDWARE
+            optional string brand = 3; // Build.BRAND
+            optional string radio = 4; // Build.getRadioVersion()
+            optional string bootloader = 5; // Build.BOOTLOADER
+            optional string clientId = 6; // GoogleSettingsContract.Partner["client_id"]
+            optional int64 time = 7; // Build.TIME / 1000L
+            optional int32 packageVersionCode = 8; // PackageInfo.versionCode
+            optional string device = 9; // Build.DEVICE
+            optional int32 sdkVersion = 10; // Build.VERSION.SDK_INT
+            optional string model = 11; // Build.MODEL
+            optional string manufacturer = 12; // Build.MANUFACTURER
+            optional string product = 13; // Build.PRODUCT
+            optional bool otaInstalled = 14; // fileExists("/system/recovery-from-boot.p")
+        }
+
+        optional Build build = 1;
+        optional int64 lastCheckinMs = 2; // or 0
+        repeated Event event = 3;
+        repeated Statistic stat = 4;
+        repeated string requestedGroup = 5; // unused
+        optional string cellOperator = 6; // TelephonyManager.getNetworkOperator != null|empty
+        optional string simOperator = 7; // TelephonyManager.getSimOperator != null|empty
+        optional string roaming = 8; // "mobile/notmobile/unknown-roaming/notroaming/unknown"
+        optional int32 userNumber = 9; // UserHandle.myUserId
+    }
+    optional string imei = 1; // unused
+    optional int64 androidId = 2; // Gservices["android_id"] or 0
+    optional string digest = 3; // Gservices["digest"] or ""
+    optional Checkin checkin = 4;
+    optional string desiredBuild = 5; // unused
+    optional string locale = 6; // Locale.toString
+    optional int64 loggingId = 7; // GoogleSettingsContract.Partner["logging_id2"]
+    optional string marketCheckin = 8; // unused
+    repeated string macAddress = 9; // NetworkInfo.getExtraInfo, WifiInfo.getMacAddress (12 hex-digits)
+    optional string meid = 10; // TelephonyManager.getDeviceId (14 hex-digits)
+    repeated string accountCookie = 11; // "[<email>]" followed by "<authToken>"
+    optional string timeZone = 12; // TimeZone.getId
+    optional fixed64 securityToken = 13;
+    optional int32 version = 14; // 3 if securityToken != 0 OR androidId == 0
+    repeated string otaCert = 15; // SHA-1 of each in /system/etc/security/otacerts.zip or "--IOException--" or "--no-output--"
+    optional string serial = 16; // Build.SERIAL != "unknown"
+    optional string esn = 17; // TelephonyManager.getDeviceId (8 hex-digits)
+    optional DeviceConfig deviceConfiguration = 18;
+    repeated string macAddressType = 19; // "ethernet", "wifi"
+    optional int32 fragment = 20; // unknown (use 0)
+    optional string userName = 21; // unused
+    optional int32 userSerialNumber = 22; // UserManager.getUserSerialNumber (if != 0)
+}
+
+message CheckinResponse {
+    message Intent {
+        message Extra {
+            optional string name = 6;
+            optional string value = 7;
+        }
+        optional string action = 1;
+        optional string dataUri = 2;
+        optional string mimeType = 3;
+        optional string javaClass = 4;
+        repeated Extra extra = 5;
+    }
+
+    message GservicesSetting {
+        optional bytes name = 1;
+        optional bytes value = 2;
+    }
+
+    optional bool statsOk = 1;
+    repeated Intent intent = 2;
+    optional int64 timeMs = 3;
+    optional string digest = 4;
+    repeated GservicesSetting setting = 5;
+    optional bool marketOk = 6;
+    optional fixed64 androidId = 7;
+    optional fixed64 securityToken = 8;
+    optional bool settingsDiff = 9;
+    repeated string deleteSetting = 10;
+}

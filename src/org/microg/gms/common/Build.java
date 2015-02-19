@@ -17,7 +17,25 @@
 package org.microg.gms.common;
 
 public class Build {
-    public int sdk = android.os.Build.VERSION.SDK_INT;
-    public String id = android.os.Build.ID;
+    public String fingerprint = android.os.Build.FINGERPRINT;
+    public String hardware = android.os.Build.HARDWARE;
+    public String brand = android.os.Build.BRAND;
+    public String radio = getRadio();
+    public String bootloader = android.os.Build.BOOTLOADER;
+    public long time = android.os.Build.TIME;
     public String device = android.os.Build.DEVICE;
+    public int sdk = android.os.Build.VERSION.SDK_INT;
+    public String model = android.os.Build.MODEL;
+    public String manufacturer = android.os.Build.MANUFACTURER;
+    public String product = android.os.Build.PRODUCT;
+    public String id = android.os.Build.ID;
+
+    private static String getRadio() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            return android.os.Build.getRadioVersion();
+        } else {
+            //noinspection deprecation
+            return android.os.Build.RADIO;
+        }
+    }
 }
