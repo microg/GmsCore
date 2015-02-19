@@ -21,17 +21,58 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
 
-public class GServicesProvider extends ContentProvider{
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Originally found in Google Services Framework (com.google.android.gsf), this provides a generic
+ * key-value store, that is written by the checkin service and read from various Google Apps.
+ * <p/>
+ * Google uses the checkin process to store various device or country specific settings and
+ * if certain "experiments" are enabled on the device.
+ */
+public class GServicesProvider extends ContentProvider {
+    public static final Uri MAIN_URI = Uri.parse("content://com.google.android.gsf.gservices/main");
+    public static final Uri OVERRIDE_URI = Uri.parse("content://com.google.android.gsf.gservices/override");
+
+    private static final String TAG = "GmsServicesProvider";
+
+    private DatabaseHelper databaseHelper;
+    private Map<String, String> cache = new HashMap<>();
+
     @Override
     public boolean onCreate() {
-        return false;
+        databaseHelper = new DatabaseHelper(getContext());
+        return true;
+    }
+
+    private String getCallingPackageName() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return getCallingPackage();
+        } else {
+            return "unknown";
+        }
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         MatrixCursor cursor = new MatrixCursor(new String[]{"name", "value"});
-        cursor.addRow(new Object[]{"", null});
+        for (String name : selectionArgs) {
+            String value;
+            if (cache.containsKey(name)) {
+                value = cache.get(name);
+            } else {
+                value = databaseHelper.get(name);
+                cache.put(name, value);
+            }
+            Log.d(TAG, "query caller=" + getCallingPackageName() + " name=" + name + " value=" + value);
+            if (value != null) {
+                cursor.addRow(new String[]{name, value});
+            }
+        }
         return cursor;
     }
 
@@ -42,16 +83,24 @@ public class GServicesProvider extends ContentProvider{
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        Log.d(TAG, "update caller=" + getCallingPackageName() + " table=" + uri.getLastPathSegment()
+                + " name=" + values.getAsString("name") + " value=" + values.getAsString("value"));
+        if (uri.equals(MAIN_URI)) {
+            databaseHelper.put("main", values);
+        } else if (uri.equals(OVERRIDE_URI)) {
+            databaseHelper.put("override", values);
+        }
+        cache.remove(values.getAsString("name"));
+        return 1;
     }
 }
