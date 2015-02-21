@@ -22,14 +22,48 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.internal.*;
-import com.google.android.gms.maps.model.*;
-import com.google.android.gms.maps.model.internal.*;
+import com.google.android.gms.maps.internal.ICancelableCallback;
+import com.google.android.gms.maps.internal.IGoogleMapDelegate;
+import com.google.android.gms.maps.internal.IInfoWindowAdapter;
+import com.google.android.gms.maps.internal.ILocationSourceDelegate;
+import com.google.android.gms.maps.internal.IOnCameraChangeListener;
+import com.google.android.gms.maps.internal.IOnInfoWindowClickListener;
+import com.google.android.gms.maps.internal.IOnMapClickListener;
+import com.google.android.gms.maps.internal.IOnMapLoadedCallback;
+import com.google.android.gms.maps.internal.IOnMapLongClickListener;
+import com.google.android.gms.maps.internal.IOnMarkerClickListener;
+import com.google.android.gms.maps.internal.IOnMarkerDragListener;
+import com.google.android.gms.maps.internal.IOnMyLocationButtonClickListener;
+import com.google.android.gms.maps.internal.IOnMyLocationChangeListener;
+import com.google.android.gms.maps.internal.IProjectionDelegate;
+import com.google.android.gms.maps.internal.ISnapshotReadyCallback;
+import com.google.android.gms.maps.internal.IUiSettingsDelegate;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.internal.ICircleDelegate;
+import com.google.android.gms.maps.model.internal.IGroundOverlayDelegate;
+import com.google.android.gms.maps.model.internal.IMarkerDelegate;
+import com.google.android.gms.maps.model.internal.IPolygonDelegate;
+import com.google.android.gms.maps.model.internal.IPolylineDelegate;
+import com.google.android.gms.maps.model.internal.ITileOverlayDelegate;
+
 import org.microg.gms.maps.camera.CameraUpdate;
-import org.microg.gms.maps.markup.*;
+import org.microg.gms.maps.markup.CircleImpl;
+import org.microg.gms.maps.markup.GroundOverlayImpl;
+import org.microg.gms.maps.markup.MarkerImpl;
+import org.microg.gms.maps.markup.Markup;
+import org.microg.gms.maps.markup.PolygonImpl;
+import org.microg.gms.maps.markup.PolylineImpl;
+import org.microg.gms.maps.markup.TileOverlayImpl;
 import org.oscim.event.Event;
 import org.oscim.event.MotionEvent;
 import org.oscim.map.Map;
@@ -45,6 +79,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     private final ProjectionImpl projection;
 
     private int markerCounter = 0;
+    private int circleCounter = 0;
 
     public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
         context = inflater.getContext();
@@ -73,6 +108,10 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     private String getNextMarkerId() {
         return "m" + markerCounter++;
+    }
+
+    private String getNextCircleId() {
+        return "c" + circleCounter++;
     }
     
     /*
@@ -115,7 +154,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public void animateCameraWithDurationAndCallback(IObjectWrapper cameraUpdate, int duration,
-            ICancelableCallback callback) throws RemoteException {
+                                                     ICancelableCallback callback) throws RemoteException {
         CameraUpdate camUpdate = (CameraUpdate) ObjectWrapper.unwrap(cameraUpdate);
         backendMap.applyCameraUpdateAnimated(camUpdate, duration);
     }
@@ -136,7 +175,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public ICircleDelegate addCircle(CircleOptions options) throws RemoteException {
-        return new CircleImpl(options); // TODO
+        return backendMap.add(new CircleImpl(getNextCircleId(), options, this));
     }
 
     @Override
@@ -242,7 +281,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     /*
     Ui Settings
      */
-    
+
     @Override
     public IUiSettingsDelegate getUiSettings() throws RemoteException {
         return uiSettings;

@@ -27,84 +27,18 @@ import com.google.android.gms.maps.model.internal.IMarkerDelegate;
 import org.microg.gms.maps.GmsMapsTypeHelper;
 import org.microg.gms.maps.bitmap.BitmapDescriptorImpl;
 import org.oscim.android.canvas.AndroidBitmap;
+import org.oscim.layers.Layer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
+import org.oscim.map.Map;
 
 public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
     private static final String TAG = MarkerImpl.class.getName();
 
     private final String id;
-
-    private MarkerOptions options;
+    private final MarkerOptions options;
+    private final MarkupListener listener;
     private BitmapDescriptorImpl icon;
-
-    private MarkupListener listener;
-    /*private Overlay overlay = new Overlay() {
-        private Point point = new Point();
-
-        @Override
-        public boolean onTap(GeoPoint p, MapView mapView) {
-            Point touchPoint = mapView.getProjection().toPixels(p, null);
-            Bitmap bitmap = icon.getBitmap();
-            if (bitmap == null)
-                return false;
-            //mapView.getProjection().toPixels(position.toGeoPoint(), point);
-            float xTest = bitmap.getWidth() * anchorU + touchPoint.x - point.x;
-            float yTest = bitmap.getHeight() * anchorV + touchPoint.y - point.y;
-            if (0 < xTest && xTest < bitmap.getWidth() && 0 < yTest && yTest < bitmap.getHeight()) {
-                Log.d(TAG, "touched " + title);
-                IOnMarkerClickListener markerClickListener = map.getMarkerClickListener();
-                boolean result = false;
-                if (markerClickListener != null) {
-                    try {
-                        result = markerClickListener.onMarkerClick(MarkerImpl.this);
-                    } catch (RemoteException e) {
-                        Log.w(TAG, e);
-                    }
-                }
-                if (!result) {
-                    mapView.getController().animateTo(position.toGeoPoint());
-                    map.showInfoWindow(MarkerImpl.this);
-                }
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-            if (shadow && flat)
-                return; // shadows are broken right now, we skip them
-            Bitmap bitmap = icon.getBitmap();
-            if (bitmap != null) {
-                //mapView.getProjection().toPixels(position.toGeoPoint(), point);
-                float x = point.x - bitmap.getWidth() * anchorU;
-                float y = point.y - bitmap.getHeight() * anchorV;
-                Paint paint = new Paint();
-                paint.setAlpha((int) (alpha * 255));
-                if (shadow) {
-                    paint.setColorFilter(
-                            new PorterDuffColorFilter(Color.argb((int) (128 * alpha), 0, 0, 0),
-                                    PorterDuff.Mode.SRC_IN));
-                }
-                Matrix matrix = new Matrix();
-                matrix.setRotate(rotation, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
-                if (shadow) {
-                    matrix.postSkew(-0.9F, 0);
-                    matrix.postScale(1, 0.5F);
-                }
-                matrix.postTranslate(x, y);
-                canvas.drawBitmap(bitmap, matrix, paint);
-            } else {
-                icon.loadBitmapAsync(map.getContext(), new Runnable() {
-                    @Override
-                    public void run() {
-                        map.redraw();
-                    }
-                });
-            }
-        }
-    };*/
 
     public MarkerImpl(String id, MarkerOptions options, MarkupListener listener) {
         this.id = id;
@@ -274,7 +208,7 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
             if (icon.getBitmap() != null) {
                 item.setMarker(
                         new MarkerSymbol(new AndroidBitmap(icon.getBitmap()), options.getAnchorU(),
-                                options.getAnchorV(), isFlat()));
+                                options.getAnchorV(), !options.isFlat()));
             } else {
                 icon.loadBitmapAsync(context, new Runnable() {
                     @Override
@@ -285,5 +219,15 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
             }
         }
         return item;
+    }
+
+    @Override
+    public Layer getLayer(Context context, Map map) {
+        return null;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.MARKER;
     }
 }

@@ -18,9 +18,11 @@ package org.microg.gms.maps;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
+
 import com.google.android.gms.R;
-import org.microg.gms.maps.bitmap.DefaultBitmapDescriptor;
+
 import org.microg.gms.maps.camera.CameraUpdate;
 import org.microg.gms.maps.markup.Markup;
 import org.oscim.android.MapView;
@@ -40,6 +42,8 @@ import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
 public class BackendMap {
+    private final static String TAG = "GmsBackendMap";
+
     private final Context context;
     private final MapView mapView;
     private final BuildingLayer buildings;
@@ -135,8 +139,21 @@ public class BackendMap {
     }
 
     public <T extends Markup> T add(T markup) {
-        items.addItem(markup.getMarkerItem(context));
-        redraw();
+        switch (markup.getType()) {
+            case MARKER:
+                items.addItem(markup.getMarkerItem(context));
+                redraw();
+                break;
+            case LAYER:
+                Layers layers = mapView.map().layers();
+                layers.add(markup.getLayer(context, mapView.map()));
+                layers.remove(items);
+                layers.add(items);
+                redraw();
+                break;
+            default:
+                Log.d(TAG, "Unknown markup: " + markup);
+        }
         return markup;
     }
 
@@ -146,14 +163,29 @@ public class BackendMap {
     }
 
     public void remove(Markup markup) {
-        items.removeItem(items.getByUid(markup.getId()));
-        redraw();
+        switch (markup.getType()) {
+            case MARKER:
+                items.removeItem(items.getByUid(markup.getId()));
+                redraw();
+                break;
+            default:
+                Log.d(TAG, "Unknown markup: " + markup);
+        }
     }
 
     public void update(Markup markup) {
-        // TODO: keep order
-        items.removeItem(items.getByUid(markup.getId()));
-        items.addItem(markup.getMarkerItem(context));
-        redraw();
+        switch (markup.getType()) {
+            case MARKER:
+                // TODO: keep order
+                items.removeItem(items.getByUid(markup.getId()));
+                items.addItem(markup.getMarkerItem(context));
+                redraw();
+                break;
+            case LAYER:
+                redraw();
+                break;
+            default:
+                Log.d(TAG, "Unknown markup: " + markup);
+        }
     }
 }

@@ -17,12 +17,23 @@
 package org.microg.gms.maps.markup;
 
 import android.content.Context;
+
+import org.oscim.layers.Layer;
 import org.oscim.layers.marker.MarkerItem;
+import org.oscim.map.Map;
 
 public interface Markup {
     public MarkerItem getMarkerItem(Context context);
 
+    public Layer getLayer(Context context, Map map);
+
+    public Type getType();
+
     public String getId();
+
+    public static enum Type {
+        MARKER, LAYER
+    }
 
     public static interface MarkupListener {
         void update(Markup markup);
