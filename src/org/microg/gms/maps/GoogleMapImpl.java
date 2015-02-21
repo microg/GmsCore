@@ -80,6 +80,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     private int markerCounter = 0;
     private int circleCounter = 0;
+    private IOnMarkerClickListener onMarkerClickListener;
 
     public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
         context = inflater.getContext();
@@ -212,6 +213,8 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void clear() throws RemoteException {
         backendMap.clear();
+        circleCounter = 0;
+        markerCounter = 0;
     }
 
     @Override
@@ -222,6 +225,22 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void remove(Markup markup) {
         backendMap.remove(markup);
+    }
+
+    @Override
+    public boolean onClick(Markup markup) {
+        if (markup instanceof IMarkerDelegate) {
+            if (onMarkerClickListener != null) {
+                try {
+                    if (onMarkerClickListener.onMarkerClick((IMarkerDelegate) markup))
+                        return true;
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+            // TODO: open InfoWindow
+        }
+        return false;
     }
     
     /*
@@ -321,7 +340,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public void setOnMarkerClickListener(IOnMarkerClickListener listener) throws RemoteException {
-
+        this.onMarkerClickListener = listener;
     }
 
     @Override

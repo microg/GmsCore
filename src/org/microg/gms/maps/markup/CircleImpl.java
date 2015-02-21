@@ -50,6 +50,7 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     private CircleLayer layer;
     private Point point;
     private float drawRadius;
+    private boolean removed = false;
 
     public CircleImpl(String id, CircleOptions options, MarkupListener listener) {
         this.id = id;
@@ -65,6 +66,9 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public void remove() throws RemoteException {
         listener.remove(this);
+        removed = true;
+        layer.setEnabled(false);
+        layer = null;
     }
 
     @Override
@@ -156,6 +160,16 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public int hashCodeRemote() throws RemoteException {
         return id.hashCode();
+    }
+
+    @Override
+    public boolean onClick() {
+        return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        return !removed;
     }
 
     @Override

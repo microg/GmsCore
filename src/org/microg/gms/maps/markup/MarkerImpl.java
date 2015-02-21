@@ -20,12 +20,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.RemoteException;
 import android.util.Log;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.internal.IMarkerDelegate;
+
 import org.microg.gms.maps.GmsMapsTypeHelper;
 import org.microg.gms.maps.bitmap.BitmapDescriptorImpl;
+import org.microg.gms.maps.bitmap.DefaultBitmapDescriptor;
 import org.oscim.android.canvas.AndroidBitmap;
 import org.oscim.layers.Layer;
 import org.oscim.layers.marker.MarkerItem;
@@ -39,6 +42,8 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
     private final MarkerOptions options;
     private final MarkupListener listener;
     private BitmapDescriptorImpl icon;
+    private AndroidBitmap oldBitmap;
+    private boolean removed = false;
 
     public MarkerImpl(String id, MarkerOptions options, MarkupListener listener) {
         this.id = id;
@@ -55,6 +60,9 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
     @Override
     public void remove() {
         listener.remove(this);
+        removed = true;
+        icon = null;
+        oldBitmap = null;
     }
 
     @Override
@@ -201,24 +209,46 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
     }
 
     @Override
+    public boolean onClick() {
+        return listener.onClick(this);
+    }
+
+    @Override
+    public boolean isValid() {
+        return !removed;
+    }
+
+    @Override
     public MarkerItem getMarkerItem(Context context) {
         MarkerItem item = new MarkerItem(getId(), getTitle(), getSnippet(),
                 GmsMapsTypeHelper.fromLatLng(getPosition()));
-        if (icon != null) {
-            if (icon.getBitmap() != null) {
-                item.setMarker(
-                        new MarkerSymbol(new AndroidBitmap(icon.getBitmap()), options.getAnchorU(),
-                                options.getAnchorV(), !options.isFlat()));
-            } else {
-                icon.loadBitmapAsync(context, new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.update(MarkerImpl.this);
-                    }
-                });
+        BitmapDescriptorImpl icon = this.icon;
+        if (icon == null)
+            icon = DefaultBitmapDescriptor.DEFAULT_DESCRIPTOR_IMPL;
+        if (icon.getBitmap() != null) {
+            oldBitmap = new AndroidBitmap(icon.getBitmap());
+            prepareMarkerIcon(item);
+        } else {
+            if (!icon.loadBitmapAsync(context, new Runnable() {
+                @Override
+                public void run() {
+                    listener.update(MarkerImpl.this);
+                }
+            })) {
+                // Was loaded since last check...
+                oldBitmap = new AndroidBitmap(icon.getBitmap());
+                prepareMarkerIcon(item);
+            }
+            // Keep old icon while loading new
+            if (oldBitmap != null) {
+                prepareMarkerIcon(item);
             }
         }
         return item;
+    }
+
+    private void prepareMarkerIcon(MarkerItem item) {
+        item.setMarker(new MarkerSymbol(oldBitmap, options.getAnchorU(), options.getAnchorV(), !options.isFlat()));
     }
 
     @Override

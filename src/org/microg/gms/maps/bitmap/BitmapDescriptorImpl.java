@@ -19,13 +19,18 @@ package org.microg.gms.maps.bitmap;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class BitmapDescriptorImpl {
     private BitmapDescriptor descriptor;
     private boolean loadStarted = false;
+    private Set<Runnable> waitingForLoad = new HashSet<>();
 
     public BitmapDescriptorImpl(IObjectWrapper remoteObject) {
         this(new BitmapDescriptor(remoteObject));
@@ -57,9 +62,13 @@ public class BitmapDescriptorImpl {
         return null;
     }
 
-    public synchronized void loadBitmapAsync(final Context context, final Runnable after) {
+    public synchronized boolean loadBitmapAsync(final Context context, Runnable after) {
+        if (getBitmap() != null) {
+            return false;
+        }
+        waitingForLoad.add(after);
         if (loadStarted)
-            return;
+            return true;
         loadStarted = true;
         if (getDescriptor() != null) {
             new Thread(new Runnable() {
@@ -67,11 +76,18 @@ public class BitmapDescriptorImpl {
                 public void run() {
                     Log.d("BitmapDescriptor", "Start loading " + getDescriptor());
                     if (getDescriptor().loadBitmap(context) != null) {
-                        after.run();
+                        Set<Runnable> waitingForLoad;
+                        synchronized (BitmapDescriptorImpl.this) {
+                            waitingForLoad = BitmapDescriptorImpl.this.waitingForLoad;
+                        }
+                        for (Runnable after : waitingForLoad) {
+                            after.run();
+                        }
                     }
                     Log.d("BitmapDescriptor", "Done loading " + getDescriptor());
                 }
             }).start();
         }
+        return true;
     }
 }

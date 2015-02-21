@@ -41,7 +41,7 @@ public class BitmapDescriptorFactoryImpl extends IBitmapDescriptorFactoryDelegat
 
     @Override
     public IObjectWrapper defaultMarker() throws RemoteException {
-        return ObjectWrapper.wrap(new DefaultBitmapDescriptor());
+        return ObjectWrapper.wrap(DefaultBitmapDescriptor.DEFAULT_DESCRIPTOR);
     }
 
     @Override

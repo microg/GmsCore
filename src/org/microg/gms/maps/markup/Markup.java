@@ -31,6 +31,10 @@ public interface Markup {
 
     public String getId();
 
+    public boolean onClick();
+
+    public boolean isValid();
+
     public static enum Type {
         MARKER, LAYER
     }
@@ -39,5 +43,7 @@ public interface Markup {
         void update(Markup markup);
 
         void remove(Markup markup);
+
+        boolean onClick(Markup markup);
     }
 }

@@ -41,7 +41,9 @@ import org.oscim.map.Viewport;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
-public class BackendMap {
+import java.util.HashMap;
+
+public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem> {
     private final static String TAG = "GmsBackendMap";
 
     private final Context context;
@@ -51,6 +53,8 @@ public class BackendMap {
     private final OSciMap4TileSource tileSource;
     private final TileCache cache;
     private final ItemizedLayer<MarkerItem> items;
+    private java.util.Map<String, Markup> markupMap = new HashMap<>();
+    private boolean redrawPosted = false;
 
     public BackendMap(Context context) {
         this.context = context;
@@ -65,7 +69,8 @@ public class BackendMap {
         layers.add(buildings = new BuildingLayer(mapView.map(), baseLayer));
         layers.add(new LabelLayer(mapView.map(), baseLayer));
         layers.add(items = new ItemizedLayer<>(mapView.map(), new MarkerSymbol(new AndroidBitmap(BitmapFactory
-                .decodeResource(ResourcesContainer.get(), R.drawable.maps_default_marker)), 0.5F, 1)));
+                .decodeResource(ResourcesContainer.get(), R.drawable.nop)), 0.5F, 1)));
+        items.setOnItemGestureListener(this);
         mapView.map().setTheme(VtmThemes.DEFAULT);
     }
 
@@ -138,9 +143,10 @@ public class BackendMap {
         mapView.map().animator().cancel();
     }
 
-    public <T extends Markup> T add(T markup) {
+    public synchronized <T extends Markup> T add(T markup) {
         switch (markup.getType()) {
             case MARKER:
+                markupMap.put(markup.getId(), markup);
                 items.addItem(markup.getMarkerItem(context));
                 redraw();
                 break;
@@ -157,14 +163,16 @@ public class BackendMap {
         return markup;
     }
 
-    public void clear() {
+    public synchronized void clear() {
+        markupMap.clear();
         items.removeAllItems();
         redraw();
     }
 
-    public void remove(Markup markup) {
+    public synchronized void remove(Markup markup) {
         switch (markup.getType()) {
             case MARKER:
+                markupMap.remove(markup.getId());
                 items.removeItem(items.getByUid(markup.getId()));
                 redraw();
                 break;
@@ -173,7 +181,11 @@ public class BackendMap {
         }
     }
 
-    public void update(Markup markup) {
+    public synchronized void update(Markup markup) {
+        if (markup == null || !markup.isValid()) {
+            Log.d(TAG, "Tried to update() invalid markup!");
+            return;
+        }
         switch (markup.getType()) {
             case MARKER:
                 // TODO: keep order
@@ -187,5 +199,21 @@ public class BackendMap {
             default:
                 Log.d(TAG, "Unknown markup: " + markup);
         }
+    }
+
+    @Override
+    public boolean onItemSingleTapUp(int index, MarkerItem item) {
+        Markup markup = markupMap.get(item.getUid());
+        if (markup != null) {
+            if (markup.onClick()) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onItemLongPress(int index, MarkerItem item) {
+        // TODO: start drag+drop
+        Log.d(TAG, "onItemLongPress: " + markupMap.get(item.getUid()));
+        return false;
     }
 }
