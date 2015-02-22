@@ -14,7 +14,11 @@ import static com.squareup.wire.Message.Datatype.INT32;
 import static com.squareup.wire.Message.Datatype.INT64;
 import static com.squareup.wire.Message.Datatype.STRING;
 import static com.squareup.wire.Message.Label.REPEATED;
+import static com.squareup.wire.Message.Label.REQUIRED;
 
+/**
+ * Sample data, if provided, is fished from a Nexus 7 (2013) / flo running Android 5.0
+ */
 public final class CheckinRequest extends Message {
 
   public static final String DEFAULT_IMEI = "";
@@ -38,122 +42,135 @@ public final class CheckinRequest extends Message {
   public static final String DEFAULT_USERNAME = "";
   public static final Integer DEFAULT_USERSERIALNUMBER = 0;
 
+  /**
+   * unused
+   */
   @ProtoField(tag = 1, type = STRING)
   public final String imei;
 
   /**
-   * unused
+   * Gservices["android_id"] or 0 on first-checkin
    */
   @ProtoField(tag = 2, type = INT64)
   public final Long androidId;
 
   /**
-   * Gservices["android_id"] or 0
+   * Gservices["digest"] or ""
    */
   @ProtoField(tag = 3, type = STRING)
   public final String digest;
 
-  /**
-   * Gservices["digest"] or ""
-   */
-  @ProtoField(tag = 4)
+  @ProtoField(tag = 4, label = REQUIRED)
   public final Checkin checkin;
 
+  /**
+   * unused
+   */
   @ProtoField(tag = 5, type = STRING)
   public final String desiredBuild;
 
   /**
-   * unused
+   * Locale.toString
    */
   @ProtoField(tag = 6, type = STRING)
   public final String locale;
 
   /**
-   * Locale.toString
+   * GoogleSettingsContract.Partner["logging_id2"] (choosen randomly on first checkin)
+   * eg. 12561488293572742346
    */
   @ProtoField(tag = 7, type = INT64)
   public final Long loggingId;
 
   /**
-   * GoogleSettingsContract.Partner["logging_id2"]
+   * unused
    */
   @ProtoField(tag = 8, type = STRING)
   public final String marketCheckin;
 
   /**
-   * unused
+   * NetworkInfo.getExtraInfo, WifiInfo.getMacAddress (12 hex-digits)
+   * eg. d850e6abcdef
    */
   @ProtoField(tag = 9, type = STRING, label = REPEATED)
   public final List<String> macAddress;
 
   /**
-   * NetworkInfo.getExtraInfo, WifiInfo.getMacAddress (12 hex-digits)
+   * TelephonyManager.getDeviceId (14 hex-digits), not set on tablets
    */
   @ProtoField(tag = 10, type = STRING)
   public final String meid;
 
   /**
-   * TelephonyManager.getDeviceId (14 hex-digits)
+   * "[<email>]" followed by "<authToken>", empty string on first checkin
    */
   @ProtoField(tag = 11, type = STRING, label = REPEATED)
   public final List<String> accountCookie;
 
   /**
-   * "[<email>]" followed by "<authToken>"
+   * TimeZone.getId
+   * eg. GMT
    */
   @ProtoField(tag = 12, type = STRING)
   public final String timeZone;
 
   /**
-   * TimeZone.getId
+   * security token as given on first checkin, not set on first checkin
    */
   @ProtoField(tag = 13, type = FIXED64)
   public final Long securityToken;
 
+  /**
+   * use 3
+   */
   @ProtoField(tag = 14, type = INT32)
   public final Integer version;
 
   /**
-   * 3 if securityToken != 0 OR androidId == 0
+   * SHA-1 of each in /system/etc/security/otacerts.zip or "--IOException--" or "--no-output--"
+   * eg. dKXTm1QH9QShGQwBM/4rg6/lCNQ=
    */
   @ProtoField(tag = 15, type = STRING, label = REPEATED)
   public final List<String> otaCert;
 
   /**
-   * SHA-1 of each in /system/etc/security/otacerts.zip or "--IOException--" or "--no-output--"
+   * Build.SERIAL != "unknown"
+   * eg. 07d90b18
    */
   @ProtoField(tag = 16, type = STRING)
   public final String serial;
 
   /**
-   * Build.SERIAL != "unknown"
+   * TelephonyManager.getDeviceId (8 hex-digits), not set on tablets
    */
   @ProtoField(tag = 17, type = STRING)
   public final String esn;
 
-  /**
-   * TelephonyManager.getDeviceId (8 hex-digits)
-   */
   @ProtoField(tag = 18)
   public final DeviceConfig deviceConfiguration;
 
+  /**
+   * "ethernet" or "wifi"
+   */
   @ProtoField(tag = 19, type = STRING, label = REPEATED)
   public final List<String> macAddressType;
 
   /**
-   * "ethernet", "wifi"
+   * unknown, use 0 on pre- and first-checkin, and 1 for later checkins
+   * also present on pre-checkin
    */
-  @ProtoField(tag = 20, type = INT32)
+  @ProtoField(tag = 20, type = INT32, label = REQUIRED)
   public final Integer fragment;
 
   /**
-   * unknown (use 0)
+   * unknown
    */
   @ProtoField(tag = 21, type = STRING)
   public final String userName;
 
   /**
-   * unused
+   * UserManager.getUserSerialNumber
+   * eg. 0
    */
   @ProtoField(tag = 22, type = INT32)
   public final Integer userSerialNumber;
@@ -303,13 +320,16 @@ public final class CheckinRequest extends Message {
       this.userSerialNumber = message.userSerialNumber;
     }
 
+    /**
+     * unused
+     */
     public Builder imei(String imei) {
       this.imei = imei;
       return this;
     }
 
     /**
-     * unused
+     * Gservices["android_id"] or 0 on first-checkin
      */
     public Builder androidId(Long androidId) {
       this.androidId = androidId;
@@ -317,28 +337,28 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * Gservices["android_id"] or 0
+     * Gservices["digest"] or ""
      */
     public Builder digest(String digest) {
       this.digest = digest;
       return this;
     }
 
-    /**
-     * Gservices["digest"] or ""
-     */
     public Builder checkin(Checkin checkin) {
       this.checkin = checkin;
       return this;
     }
 
+    /**
+     * unused
+     */
     public Builder desiredBuild(String desiredBuild) {
       this.desiredBuild = desiredBuild;
       return this;
     }
 
     /**
-     * unused
+     * Locale.toString
      */
     public Builder locale(String locale) {
       this.locale = locale;
@@ -346,7 +366,8 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * Locale.toString
+     * GoogleSettingsContract.Partner["logging_id2"] (choosen randomly on first checkin)
+     * eg. 12561488293572742346
      */
     public Builder loggingId(Long loggingId) {
       this.loggingId = loggingId;
@@ -354,7 +375,7 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * GoogleSettingsContract.Partner["logging_id2"]
+     * unused
      */
     public Builder marketCheckin(String marketCheckin) {
       this.marketCheckin = marketCheckin;
@@ -362,7 +383,8 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * unused
+     * NetworkInfo.getExtraInfo, WifiInfo.getMacAddress (12 hex-digits)
+     * eg. d850e6abcdef
      */
     public Builder macAddress(List<String> macAddress) {
       this.macAddress = checkForNulls(macAddress);
@@ -370,7 +392,7 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * NetworkInfo.getExtraInfo, WifiInfo.getMacAddress (12 hex-digits)
+     * TelephonyManager.getDeviceId (14 hex-digits), not set on tablets
      */
     public Builder meid(String meid) {
       this.meid = meid;
@@ -378,7 +400,7 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * TelephonyManager.getDeviceId (14 hex-digits)
+     * "[<email>]" followed by "<authToken>", empty string on first checkin
      */
     public Builder accountCookie(List<String> accountCookie) {
       this.accountCookie = checkForNulls(accountCookie);
@@ -386,7 +408,8 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * "[<email>]" followed by "<authToken>"
+     * TimeZone.getId
+     * eg. GMT
      */
     public Builder timeZone(String timeZone) {
       this.timeZone = timeZone;
@@ -394,20 +417,24 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * TimeZone.getId
+     * security token as given on first checkin, not set on first checkin
      */
     public Builder securityToken(Long securityToken) {
       this.securityToken = securityToken;
       return this;
     }
 
+    /**
+     * use 3
+     */
     public Builder version(Integer version) {
       this.version = version;
       return this;
     }
 
     /**
-     * 3 if securityToken != 0 OR androidId == 0
+     * SHA-1 of each in /system/etc/security/otacerts.zip or "--IOException--" or "--no-output--"
+     * eg. dKXTm1QH9QShGQwBM/4rg6/lCNQ=
      */
     public Builder otaCert(List<String> otaCert) {
       this.otaCert = checkForNulls(otaCert);
@@ -415,7 +442,8 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * SHA-1 of each in /system/etc/security/otacerts.zip or "--IOException--" or "--no-output--"
+     * Build.SERIAL != "unknown"
+     * eg. 07d90b18
      */
     public Builder serial(String serial) {
       this.serial = serial;
@@ -423,28 +451,29 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * Build.SERIAL != "unknown"
+     * TelephonyManager.getDeviceId (8 hex-digits), not set on tablets
      */
     public Builder esn(String esn) {
       this.esn = esn;
       return this;
     }
 
-    /**
-     * TelephonyManager.getDeviceId (8 hex-digits)
-     */
     public Builder deviceConfiguration(DeviceConfig deviceConfiguration) {
       this.deviceConfiguration = deviceConfiguration;
       return this;
     }
 
+    /**
+     * "ethernet" or "wifi"
+     */
     public Builder macAddressType(List<String> macAddressType) {
       this.macAddressType = checkForNulls(macAddressType);
       return this;
     }
 
     /**
-     * "ethernet", "wifi"
+     * unknown, use 0 on pre- and first-checkin, and 1 for later checkins
+     * also present on pre-checkin
      */
     public Builder fragment(Integer fragment) {
       this.fragment = fragment;
@@ -452,7 +481,7 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * unknown (use 0)
+     * unknown
      */
     public Builder userName(String userName) {
       this.userName = userName;
@@ -460,7 +489,8 @@ public final class CheckinRequest extends Message {
     }
 
     /**
-     * unused
+     * UserManager.getUserSerialNumber
+     * eg. 0
      */
     public Builder userSerialNumber(Integer userSerialNumber) {
       this.userSerialNumber = userSerialNumber;
@@ -469,7 +499,763 @@ public final class CheckinRequest extends Message {
 
     @Override
     public CheckinRequest build() {
+      checkRequiredFields();
       return new CheckinRequest(this);
+    }
+  }
+
+  public static final class Checkin extends Message {
+
+    public static final Long DEFAULT_LASTCHECKINMS = 0L;
+    public static final List<Checkin.Event> DEFAULT_EVENT = Collections.emptyList();
+    public static final List<Checkin.Statistic> DEFAULT_STAT = Collections.emptyList();
+    public static final List<String> DEFAULT_REQUESTEDGROUP = Collections.emptyList();
+    public static final String DEFAULT_CELLOPERATOR = "";
+    public static final String DEFAULT_SIMOPERATOR = "";
+    public static final String DEFAULT_ROAMING = "";
+    public static final Integer DEFAULT_USERNUMBER = 0;
+
+    /**
+     * empty Build on pre-checkin
+     */
+    @ProtoField(tag = 1, label = REQUIRED)
+    public final Checkin.Build build;
+
+    /**
+     * last checkin ms or 0 if first checkin
+     * eg. 0
+     */
+    @ProtoField(tag = 2, type = INT64)
+    public final Long lastCheckinMs;
+
+    /**
+     * eg. ("event_log_start",~,1424612602652) on first checkin
+     */
+    @ProtoField(tag = 3, label = REPEATED, messageType = Checkin.Event.class)
+    public final List<Checkin.Event> event;
+
+    /**
+     * unknown, n/a on first checkin
+     */
+    @ProtoField(tag = 4, label = REPEATED, messageType = Checkin.Statistic.class)
+    public final List<Checkin.Statistic> stat;
+
+    /**
+     * unused
+     */
+    @ProtoField(tag = 5, type = STRING, label = REPEATED)
+    public final List<String> requestedGroup;
+
+    /**
+     * TelephonyManager.getNetworkOperator != null|empty
+     */
+    @ProtoField(tag = 6, type = STRING)
+    public final String cellOperator;
+
+    /**
+     * TelephonyManager.getSimOperator != null|empty
+     */
+    @ProtoField(tag = 7, type = STRING)
+    public final String simOperator;
+
+    /**
+     * "WIFI::" | ("mobile" | "notmobile" | "unknown") + "-" + ("roaming" | "notroaming" | "unknown")
+     */
+    @ProtoField(tag = 8, type = STRING)
+    public final String roaming;
+
+    /**
+     * UserHandle.myUserId
+     * eg. 0
+     */
+    @ProtoField(tag = 9, type = INT32)
+    public final Integer userNumber;
+
+    public Checkin(Checkin.Build build, Long lastCheckinMs, List<Checkin.Event> event, List<Checkin.Statistic> stat, List<String> requestedGroup, String cellOperator, String simOperator, String roaming, Integer userNumber) {
+      this.build = build;
+      this.lastCheckinMs = lastCheckinMs;
+      this.event = immutableCopyOf(event);
+      this.stat = immutableCopyOf(stat);
+      this.requestedGroup = immutableCopyOf(requestedGroup);
+      this.cellOperator = cellOperator;
+      this.simOperator = simOperator;
+      this.roaming = roaming;
+      this.userNumber = userNumber;
+    }
+
+    private Checkin(Builder builder) {
+      this(builder.build, builder.lastCheckinMs, builder.event, builder.stat, builder.requestedGroup, builder.cellOperator, builder.simOperator, builder.roaming, builder.userNumber);
+      setBuilder(builder);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (other == this) return true;
+      if (!(other instanceof Checkin)) return false;
+      Checkin o = (Checkin) other;
+      return equals(build, o.build)
+          && equals(lastCheckinMs, o.lastCheckinMs)
+          && equals(event, o.event)
+          && equals(stat, o.stat)
+          && equals(requestedGroup, o.requestedGroup)
+          && equals(cellOperator, o.cellOperator)
+          && equals(simOperator, o.simOperator)
+          && equals(roaming, o.roaming)
+          && equals(userNumber, o.userNumber);
+    }
+
+    @Override
+    public int hashCode() {
+      int result = hashCode;
+      if (result == 0) {
+        result = build != null ? build.hashCode() : 0;
+        result = result * 37 + (lastCheckinMs != null ? lastCheckinMs.hashCode() : 0);
+        result = result * 37 + (event != null ? event.hashCode() : 1);
+        result = result * 37 + (stat != null ? stat.hashCode() : 1);
+        result = result * 37 + (requestedGroup != null ? requestedGroup.hashCode() : 1);
+        result = result * 37 + (cellOperator != null ? cellOperator.hashCode() : 0);
+        result = result * 37 + (simOperator != null ? simOperator.hashCode() : 0);
+        result = result * 37 + (roaming != null ? roaming.hashCode() : 0);
+        result = result * 37 + (userNumber != null ? userNumber.hashCode() : 0);
+        hashCode = result;
+      }
+      return result;
+    }
+
+    public static final class Builder extends Message.Builder<Checkin> {
+
+      public Checkin.Build build;
+      public Long lastCheckinMs;
+      public List<Checkin.Event> event;
+      public List<Checkin.Statistic> stat;
+      public List<String> requestedGroup;
+      public String cellOperator;
+      public String simOperator;
+      public String roaming;
+      public Integer userNumber;
+
+      public Builder() {
+      }
+
+      public Builder(Checkin message) {
+        super(message);
+        if (message == null) return;
+        this.build = message.build;
+        this.lastCheckinMs = message.lastCheckinMs;
+        this.event = copyOf(message.event);
+        this.stat = copyOf(message.stat);
+        this.requestedGroup = copyOf(message.requestedGroup);
+        this.cellOperator = message.cellOperator;
+        this.simOperator = message.simOperator;
+        this.roaming = message.roaming;
+        this.userNumber = message.userNumber;
+      }
+
+      /**
+       * empty Build on pre-checkin
+       */
+      public Builder build(Checkin.Build build) {
+        this.build = build;
+        return this;
+      }
+
+      /**
+       * last checkin ms or 0 if first checkin
+       * eg. 0
+       */
+      public Builder lastCheckinMs(Long lastCheckinMs) {
+        this.lastCheckinMs = lastCheckinMs;
+        return this;
+      }
+
+      /**
+       * eg. ("event_log_start",~,1424612602652) on first checkin
+       */
+      public Builder event(List<Checkin.Event> event) {
+        this.event = checkForNulls(event);
+        return this;
+      }
+
+      /**
+       * unknown, n/a on first checkin
+       */
+      public Builder stat(List<Checkin.Statistic> stat) {
+        this.stat = checkForNulls(stat);
+        return this;
+      }
+
+      /**
+       * unused
+       */
+      public Builder requestedGroup(List<String> requestedGroup) {
+        this.requestedGroup = checkForNulls(requestedGroup);
+        return this;
+      }
+
+      /**
+       * TelephonyManager.getNetworkOperator != null|empty
+       */
+      public Builder cellOperator(String cellOperator) {
+        this.cellOperator = cellOperator;
+        return this;
+      }
+
+      /**
+       * TelephonyManager.getSimOperator != null|empty
+       */
+      public Builder simOperator(String simOperator) {
+        this.simOperator = simOperator;
+        return this;
+      }
+
+      /**
+       * "WIFI::" | ("mobile" | "notmobile" | "unknown") + "-" + ("roaming" | "notroaming" | "unknown")
+       */
+      public Builder roaming(String roaming) {
+        this.roaming = roaming;
+        return this;
+      }
+
+      /**
+       * UserHandle.myUserId
+       * eg. 0
+       */
+      public Builder userNumber(Integer userNumber) {
+        this.userNumber = userNumber;
+        return this;
+      }
+
+      @Override
+      public Checkin build() {
+        checkRequiredFields();
+        return new Checkin(this);
+      }
+    }
+
+    public static final class Build extends Message {
+
+      public static final String DEFAULT_FINGERPRINT = "";
+      public static final String DEFAULT_HARDWARE = "";
+      public static final String DEFAULT_BRAND = "";
+      public static final String DEFAULT_RADIO = "";
+      public static final String DEFAULT_BOOTLOADER = "";
+      public static final String DEFAULT_CLIENTID = "";
+      public static final Long DEFAULT_TIME = 0L;
+      public static final Integer DEFAULT_PACKAGEVERSIONCODE = 0;
+      public static final String DEFAULT_DEVICE = "";
+      public static final Integer DEFAULT_SDKVERSION = 0;
+      public static final String DEFAULT_MODEL = "";
+      public static final String DEFAULT_MANUFACTURER = "";
+      public static final String DEFAULT_PRODUCT = "";
+      public static final Boolean DEFAULT_OTAINSTALLED = false;
+
+      /**
+       * Build.FINGERPRINT
+       * eg. google/razor/flo:5.0.1/LRX22C/1602158:user/release-keys
+       */
+      @ProtoField(tag = 1, type = STRING)
+      public final String fingerprint;
+
+      /**
+       * Build.HARDWARE
+       * eg. flo
+       */
+      @ProtoField(tag = 2, type = STRING)
+      public final String hardware;
+
+      /**
+       * Build.BRAND
+       * eg. google
+       */
+      @ProtoField(tag = 3, type = STRING)
+      public final String brand;
+
+      /**
+       * Build.getRadioVersion()
+       */
+      @ProtoField(tag = 4, type = STRING)
+      public final String radio;
+
+      /**
+       * Build.BOOTLOADER
+       * eg. FLO-04.04
+       */
+      @ProtoField(tag = 5, type = STRING)
+      public final String bootloader;
+
+      /**
+       * GoogleSettingsContract.Partner["client_id"]
+       * eg. android-google
+       */
+      @ProtoField(tag = 6, type = STRING)
+      public final String clientId;
+
+      /**
+       * Build.TIME / 1000L
+       * eg. 1416533192
+       */
+      @ProtoField(tag = 7, type = INT64)
+      public final Long time;
+
+      /**
+       * PackageInfo.versionCode
+       * eg. 6188736
+       */
+      @ProtoField(tag = 8, type = INT32)
+      public final Integer packageVersionCode;
+
+      /**
+       * Build.DEVICE
+       * eg. flo
+       */
+      @ProtoField(tag = 9, type = STRING)
+      public final String device;
+
+      /**
+       * Build.VERSION.SDK_INT
+       * eg. 21
+       */
+      @ProtoField(tag = 10, type = INT32)
+      public final Integer sdkVersion;
+
+      /**
+       * Build.MODEL
+       * eg. Nexus 7
+       */
+      @ProtoField(tag = 11, type = STRING)
+      public final String model;
+
+      /**
+       * Build.MANUFACTURER
+       * eg. asus
+       */
+      @ProtoField(tag = 12, type = STRING)
+      public final String manufacturer;
+
+      /**
+       * Build.PRODUCT
+       * eg. razor
+       */
+      @ProtoField(tag = 13, type = STRING)
+      public final String product;
+
+      /**
+       * fileExists("/system/recovery-from-boot.p")
+       * eg. false
+       */
+      @ProtoField(tag = 14, type = BOOL)
+      public final Boolean otaInstalled;
+
+      public Build(String fingerprint, String hardware, String brand, String radio, String bootloader, String clientId, Long time, Integer packageVersionCode, String device, Integer sdkVersion, String model, String manufacturer, String product, Boolean otaInstalled) {
+        this.fingerprint = fingerprint;
+        this.hardware = hardware;
+        this.brand = brand;
+        this.radio = radio;
+        this.bootloader = bootloader;
+        this.clientId = clientId;
+        this.time = time;
+        this.packageVersionCode = packageVersionCode;
+        this.device = device;
+        this.sdkVersion = sdkVersion;
+        this.model = model;
+        this.manufacturer = manufacturer;
+        this.product = product;
+        this.otaInstalled = otaInstalled;
+      }
+
+      private Build(Builder builder) {
+        this(builder.fingerprint, builder.hardware, builder.brand, builder.radio, builder.bootloader, builder.clientId, builder.time, builder.packageVersionCode, builder.device, builder.sdkVersion, builder.model, builder.manufacturer, builder.product, builder.otaInstalled);
+        setBuilder(builder);
+      }
+
+      @Override
+      public boolean equals(Object other) {
+        if (other == this) return true;
+        if (!(other instanceof Build)) return false;
+        Build o = (Build) other;
+        return equals(fingerprint, o.fingerprint)
+            && equals(hardware, o.hardware)
+            && equals(brand, o.brand)
+            && equals(radio, o.radio)
+            && equals(bootloader, o.bootloader)
+            && equals(clientId, o.clientId)
+            && equals(time, o.time)
+            && equals(packageVersionCode, o.packageVersionCode)
+            && equals(device, o.device)
+            && equals(sdkVersion, o.sdkVersion)
+            && equals(model, o.model)
+            && equals(manufacturer, o.manufacturer)
+            && equals(product, o.product)
+            && equals(otaInstalled, o.otaInstalled);
+      }
+
+      @Override
+      public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+          result = fingerprint != null ? fingerprint.hashCode() : 0;
+          result = result * 37 + (hardware != null ? hardware.hashCode() : 0);
+          result = result * 37 + (brand != null ? brand.hashCode() : 0);
+          result = result * 37 + (radio != null ? radio.hashCode() : 0);
+          result = result * 37 + (bootloader != null ? bootloader.hashCode() : 0);
+          result = result * 37 + (clientId != null ? clientId.hashCode() : 0);
+          result = result * 37 + (time != null ? time.hashCode() : 0);
+          result = result * 37 + (packageVersionCode != null ? packageVersionCode.hashCode() : 0);
+          result = result * 37 + (device != null ? device.hashCode() : 0);
+          result = result * 37 + (sdkVersion != null ? sdkVersion.hashCode() : 0);
+          result = result * 37 + (model != null ? model.hashCode() : 0);
+          result = result * 37 + (manufacturer != null ? manufacturer.hashCode() : 0);
+          result = result * 37 + (product != null ? product.hashCode() : 0);
+          result = result * 37 + (otaInstalled != null ? otaInstalled.hashCode() : 0);
+          hashCode = result;
+        }
+        return result;
+      }
+
+      public static final class Builder extends Message.Builder<Build> {
+
+        public String fingerprint;
+        public String hardware;
+        public String brand;
+        public String radio;
+        public String bootloader;
+        public String clientId;
+        public Long time;
+        public Integer packageVersionCode;
+        public String device;
+        public Integer sdkVersion;
+        public String model;
+        public String manufacturer;
+        public String product;
+        public Boolean otaInstalled;
+
+        public Builder() {
+        }
+
+        public Builder(Build message) {
+          super(message);
+          if (message == null) return;
+          this.fingerprint = message.fingerprint;
+          this.hardware = message.hardware;
+          this.brand = message.brand;
+          this.radio = message.radio;
+          this.bootloader = message.bootloader;
+          this.clientId = message.clientId;
+          this.time = message.time;
+          this.packageVersionCode = message.packageVersionCode;
+          this.device = message.device;
+          this.sdkVersion = message.sdkVersion;
+          this.model = message.model;
+          this.manufacturer = message.manufacturer;
+          this.product = message.product;
+          this.otaInstalled = message.otaInstalled;
+        }
+
+        /**
+         * Build.FINGERPRINT
+         * eg. google/razor/flo:5.0.1/LRX22C/1602158:user/release-keys
+         */
+        public Builder fingerprint(String fingerprint) {
+          this.fingerprint = fingerprint;
+          return this;
+        }
+
+        /**
+         * Build.HARDWARE
+         * eg. flo
+         */
+        public Builder hardware(String hardware) {
+          this.hardware = hardware;
+          return this;
+        }
+
+        /**
+         * Build.BRAND
+         * eg. google
+         */
+        public Builder brand(String brand) {
+          this.brand = brand;
+          return this;
+        }
+
+        /**
+         * Build.getRadioVersion()
+         */
+        public Builder radio(String radio) {
+          this.radio = radio;
+          return this;
+        }
+
+        /**
+         * Build.BOOTLOADER
+         * eg. FLO-04.04
+         */
+        public Builder bootloader(String bootloader) {
+          this.bootloader = bootloader;
+          return this;
+        }
+
+        /**
+         * GoogleSettingsContract.Partner["client_id"]
+         * eg. android-google
+         */
+        public Builder clientId(String clientId) {
+          this.clientId = clientId;
+          return this;
+        }
+
+        /**
+         * Build.TIME / 1000L
+         * eg. 1416533192
+         */
+        public Builder time(Long time) {
+          this.time = time;
+          return this;
+        }
+
+        /**
+         * PackageInfo.versionCode
+         * eg. 6188736
+         */
+        public Builder packageVersionCode(Integer packageVersionCode) {
+          this.packageVersionCode = packageVersionCode;
+          return this;
+        }
+
+        /**
+         * Build.DEVICE
+         * eg. flo
+         */
+        public Builder device(String device) {
+          this.device = device;
+          return this;
+        }
+
+        /**
+         * Build.VERSION.SDK_INT
+         * eg. 21
+         */
+        public Builder sdkVersion(Integer sdkVersion) {
+          this.sdkVersion = sdkVersion;
+          return this;
+        }
+
+        /**
+         * Build.MODEL
+         * eg. Nexus 7
+         */
+        public Builder model(String model) {
+          this.model = model;
+          return this;
+        }
+
+        /**
+         * Build.MANUFACTURER
+         * eg. asus
+         */
+        public Builder manufacturer(String manufacturer) {
+          this.manufacturer = manufacturer;
+          return this;
+        }
+
+        /**
+         * Build.PRODUCT
+         * eg. razor
+         */
+        public Builder product(String product) {
+          this.product = product;
+          return this;
+        }
+
+        /**
+         * fileExists("/system/recovery-from-boot.p")
+         * eg. false
+         */
+        public Builder otaInstalled(Boolean otaInstalled) {
+          this.otaInstalled = otaInstalled;
+          return this;
+        }
+
+        @Override
+        public Build build() {
+          return new Build(this);
+        }
+      }
+    }
+
+    public static final class Event extends Message {
+
+      public static final String DEFAULT_TAG = "";
+      public static final String DEFAULT_VALUE = "";
+      public static final Long DEFAULT_TIMEMS = 0L;
+
+      @ProtoField(tag = 1, type = STRING)
+      public final String tag;
+
+      @ProtoField(tag = 2, type = STRING)
+      public final String value;
+
+      @ProtoField(tag = 3, type = INT64)
+      public final Long timeMs;
+
+      public Event(String tag, String value, Long timeMs) {
+        this.tag = tag;
+        this.value = value;
+        this.timeMs = timeMs;
+      }
+
+      private Event(Builder builder) {
+        this(builder.tag, builder.value, builder.timeMs);
+        setBuilder(builder);
+      }
+
+      @Override
+      public boolean equals(Object other) {
+        if (other == this) return true;
+        if (!(other instanceof Event)) return false;
+        Event o = (Event) other;
+        return equals(tag, o.tag)
+            && equals(value, o.value)
+            && equals(timeMs, o.timeMs);
+      }
+
+      @Override
+      public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+          result = tag != null ? tag.hashCode() : 0;
+          result = result * 37 + (value != null ? value.hashCode() : 0);
+          result = result * 37 + (timeMs != null ? timeMs.hashCode() : 0);
+          hashCode = result;
+        }
+        return result;
+      }
+
+      public static final class Builder extends Message.Builder<Event> {
+
+        public String tag;
+        public String value;
+        public Long timeMs;
+
+        public Builder() {
+        }
+
+        public Builder(Event message) {
+          super(message);
+          if (message == null) return;
+          this.tag = message.tag;
+          this.value = message.value;
+          this.timeMs = message.timeMs;
+        }
+
+        public Builder tag(String tag) {
+          this.tag = tag;
+          return this;
+        }
+
+        public Builder value(String value) {
+          this.value = value;
+          return this;
+        }
+
+        public Builder timeMs(Long timeMs) {
+          this.timeMs = timeMs;
+          return this;
+        }
+
+        @Override
+        public Event build() {
+          return new Event(this);
+        }
+      }
+    }
+
+    public static final class Statistic extends Message {
+
+      public static final String DEFAULT_TAG = "";
+      public static final Integer DEFAULT_COUNT = 0;
+      public static final Float DEFAULT_SUM = 0F;
+
+      @ProtoField(tag = 1, type = STRING, label = REQUIRED)
+      public final String tag;
+
+      @ProtoField(tag = 2, type = INT32)
+      public final Integer count;
+
+      @ProtoField(tag = 3, type = FLOAT)
+      public final Float sum;
+
+      public Statistic(String tag, Integer count, Float sum) {
+        this.tag = tag;
+        this.count = count;
+        this.sum = sum;
+      }
+
+      private Statistic(Builder builder) {
+        this(builder.tag, builder.count, builder.sum);
+        setBuilder(builder);
+      }
+
+      @Override
+      public boolean equals(Object other) {
+        if (other == this) return true;
+        if (!(other instanceof Statistic)) return false;
+        Statistic o = (Statistic) other;
+        return equals(tag, o.tag)
+            && equals(count, o.count)
+            && equals(sum, o.sum);
+      }
+
+      @Override
+      public int hashCode() {
+        int result = hashCode;
+        if (result == 0) {
+          result = tag != null ? tag.hashCode() : 0;
+          result = result * 37 + (count != null ? count.hashCode() : 0);
+          result = result * 37 + (sum != null ? sum.hashCode() : 0);
+          hashCode = result;
+        }
+        return result;
+      }
+
+      public static final class Builder extends Message.Builder<Statistic> {
+
+        public String tag;
+        public Integer count;
+        public Float sum;
+
+        public Builder() {
+        }
+
+        public Builder(Statistic message) {
+          super(message);
+          if (message == null) return;
+          this.tag = message.tag;
+          this.count = message.count;
+          this.sum = message.sum;
+        }
+
+        public Builder tag(String tag) {
+          this.tag = tag;
+          return this;
+        }
+
+        public Builder count(Integer count) {
+          this.count = count;
+          return this;
+        }
+
+        public Builder sum(Float sum) {
+          this.sum = sum;
+          return this;
+        }
+
+        @Override
+        public Statistic build() {
+          checkRequiredFields();
+          return new Statistic(this);
+        }
+      }
     }
   }
 
@@ -493,95 +1279,115 @@ public final class CheckinRequest extends Message {
     public static final Integer DEFAULT_DEVICECLASS = 0;
     public static final Integer DEFAULT_MAXAPKDOWNLOADSIZEMB = 0;
 
+    /**
+     * ConfigurationInfo.reqTouchScreen
+     * eg. 3
+     */
     @ProtoField(tag = 1, type = INT32)
     public final Integer touchScreen;
 
     /**
-     * ConfigurationInfo.reqTouchScreen
+     * ConfigurationInfo.reqKeyboardType
+     * eg. 1
      */
     @ProtoField(tag = 2, type = INT32)
     public final Integer keyboardType;
 
     /**
-     * ConfigurationInfo.reqKeyboardType
+     * ConfigurationInfo.reqNavigation
+     * eg. 1
      */
     @ProtoField(tag = 3, type = INT32)
     public final Integer navigation;
 
     /**
-     * ConfigurationInfo.reqNavigation
+     * ConfigurationInfo.screenLayout
+     * eg. 3
      */
     @ProtoField(tag = 4, type = INT32)
     public final Integer screenLayout;
 
     /**
-     * ConfigurationInfo.screenLayout
+     * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD
+     * eg. 0
      */
     @ProtoField(tag = 5, type = BOOL)
     public final Boolean hasHardKeyboard;
 
     /**
-     * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD
+     * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV
+     * eg. 0
      */
     @ProtoField(tag = 6, type = BOOL)
     public final Boolean hasFiveWayNavigation;
 
     /**
-     * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV
+     * DisplayMetrics.densityDpi
+     * eg. 320
      */
     @ProtoField(tag = 7, type = INT32)
     public final Integer densityDpi;
 
     /**
-     * DisplayMetrics.densityDpi
+     * ConfigurationInfo.reqGlEsVersion
+     * eg. 196608
      */
     @ProtoField(tag = 8, type = INT32)
     public final Integer glEsVersion;
 
     /**
-     * ConfigurationInfo.reqGlEsVersion
+     * PackageManager.getSystemSharedLibraryNames
+     * eg. "android.test.runner", "com.android.future.usb.accessory", "com.android.location.provider",
+     *     "com.android.media.remotedisplay", "com.android.mediadrm.signer", "com.google.android.maps",
+     *     "com.google.android.media.effects", "com.google.widevine.software.drm", "javax.obex"
      */
     @ProtoField(tag = 9, type = STRING, label = REPEATED)
     public final List<String> sharedLibrary;
 
     /**
-     * PackageManager.getSystemSharedLibraryNames
+     * PackageManager.getSystemAvailableFeatures
+     * eg. android.hardware.[...]
      */
     @ProtoField(tag = 10, type = STRING, label = REPEATED)
     public final List<String> availableFeature;
 
     /**
-     * PackageManager.getSystemAvailableFeatures
+     * Build.CPU_ABI and Build.CPU_ABI2 != "unknown"
+     * eg. "armeabi-v7a", "armeabi"
      */
     @ProtoField(tag = 11, type = STRING, label = REPEATED)
     public final List<String> nativePlatform;
 
     /**
-     * Build.CPU_ABI (and Build.CPU_ABI2 != "unknown")
+     * DisplayMetrics.widthPixels
+     * eg. 1200
      */
     @ProtoField(tag = 12, type = INT32)
     public final Integer widthPixels;
 
     /**
-     * DisplayMetrics.widthPixels
+     * DisplayMetrics.heightPixels
+     * eg. 1824
      */
     @ProtoField(tag = 13, type = INT32)
     public final Integer heightPixels;
 
     /**
-     * DisplayMetrics.heightPixels
+     * Context.getAssets.getLocales
+     * eg. [...], "en-US", [...]
      */
     @ProtoField(tag = 14, type = STRING, label = REPEATED)
     public final List<String> locale;
 
     /**
-     * Context.getAssets.getLocales
+     * GLES10.glGetString(GLES10.GL_EXTENSIONS)
+     * eg. "GL_AMD_compressed_ATC_texture", [...]
      */
     @ProtoField(tag = 15, type = STRING, label = REPEATED)
     public final List<String> glExtension;
 
     /**
-     * GLES10.glGetString(GLES10.GL_EXTENSIONS)
+     * unused
      */
     @ProtoField(tag = 16, type = INT32)
     public final Integer deviceClass;
@@ -712,13 +1518,18 @@ public final class CheckinRequest extends Message {
         this.maxApkDownloadSizeMb = message.maxApkDownloadSizeMb;
       }
 
+      /**
+       * ConfigurationInfo.reqTouchScreen
+       * eg. 3
+       */
       public Builder touchScreen(Integer touchScreen) {
         this.touchScreen = touchScreen;
         return this;
       }
 
       /**
-       * ConfigurationInfo.reqTouchScreen
+       * ConfigurationInfo.reqKeyboardType
+       * eg. 1
        */
       public Builder keyboardType(Integer keyboardType) {
         this.keyboardType = keyboardType;
@@ -726,7 +1537,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * ConfigurationInfo.reqKeyboardType
+       * ConfigurationInfo.reqNavigation
+       * eg. 1
        */
       public Builder navigation(Integer navigation) {
         this.navigation = navigation;
@@ -734,7 +1546,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * ConfigurationInfo.reqNavigation
+       * ConfigurationInfo.screenLayout
+       * eg. 3
        */
       public Builder screenLayout(Integer screenLayout) {
         this.screenLayout = screenLayout;
@@ -742,7 +1555,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * ConfigurationInfo.screenLayout
+       * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD
+       * eg. 0
        */
       public Builder hasHardKeyboard(Boolean hasHardKeyboard) {
         this.hasHardKeyboard = hasHardKeyboard;
@@ -750,7 +1564,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD
+       * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV
+       * eg. 0
        */
       public Builder hasFiveWayNavigation(Boolean hasFiveWayNavigation) {
         this.hasFiveWayNavigation = hasFiveWayNavigation;
@@ -758,7 +1573,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV
+       * DisplayMetrics.densityDpi
+       * eg. 320
        */
       public Builder densityDpi(Integer densityDpi) {
         this.densityDpi = densityDpi;
@@ -766,7 +1582,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * DisplayMetrics.densityDpi
+       * ConfigurationInfo.reqGlEsVersion
+       * eg. 196608
        */
       public Builder glEsVersion(Integer glEsVersion) {
         this.glEsVersion = glEsVersion;
@@ -774,7 +1591,10 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * ConfigurationInfo.reqGlEsVersion
+       * PackageManager.getSystemSharedLibraryNames
+       * eg. "android.test.runner", "com.android.future.usb.accessory", "com.android.location.provider",
+       *     "com.android.media.remotedisplay", "com.android.mediadrm.signer", "com.google.android.maps",
+       *     "com.google.android.media.effects", "com.google.widevine.software.drm", "javax.obex"
        */
       public Builder sharedLibrary(List<String> sharedLibrary) {
         this.sharedLibrary = checkForNulls(sharedLibrary);
@@ -782,7 +1602,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * PackageManager.getSystemSharedLibraryNames
+       * PackageManager.getSystemAvailableFeatures
+       * eg. android.hardware.[...]
        */
       public Builder availableFeature(List<String> availableFeature) {
         this.availableFeature = checkForNulls(availableFeature);
@@ -790,7 +1611,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * PackageManager.getSystemAvailableFeatures
+       * Build.CPU_ABI and Build.CPU_ABI2 != "unknown"
+       * eg. "armeabi-v7a", "armeabi"
        */
       public Builder nativePlatform(List<String> nativePlatform) {
         this.nativePlatform = checkForNulls(nativePlatform);
@@ -798,7 +1620,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * Build.CPU_ABI (and Build.CPU_ABI2 != "unknown")
+       * DisplayMetrics.widthPixels
+       * eg. 1200
        */
       public Builder widthPixels(Integer widthPixels) {
         this.widthPixels = widthPixels;
@@ -806,7 +1629,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * DisplayMetrics.widthPixels
+       * DisplayMetrics.heightPixels
+       * eg. 1824
        */
       public Builder heightPixels(Integer heightPixels) {
         this.heightPixels = heightPixels;
@@ -814,7 +1638,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * DisplayMetrics.heightPixels
+       * Context.getAssets.getLocales
+       * eg. [...], "en-US", [...]
        */
       public Builder locale(List<String> locale) {
         this.locale = checkForNulls(locale);
@@ -822,7 +1647,8 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * Context.getAssets.getLocales
+       * GLES10.glGetString(GLES10.GL_EXTENSIONS)
+       * eg. "GL_AMD_compressed_ATC_texture", [...]
        */
       public Builder glExtension(List<String> glExtension) {
         this.glExtension = checkForNulls(glExtension);
@@ -830,7 +1656,7 @@ public final class CheckinRequest extends Message {
       }
 
       /**
-       * GLES10.glGetString(GLES10.GL_EXTENSIONS)
+       * unused
        */
       public Builder deviceClass(Integer deviceClass) {
         this.deviceClass = deviceClass;
@@ -848,699 +1674,6 @@ public final class CheckinRequest extends Message {
       @Override
       public DeviceConfig build() {
         return new DeviceConfig(this);
-      }
-    }
-  }
-
-  public static final class Checkin extends Message {
-
-    public static final Long DEFAULT_LASTCHECKINMS = 0L;
-    public static final List<Checkin.Event> DEFAULT_EVENT = Collections.emptyList();
-    public static final List<Checkin.Statistic> DEFAULT_STAT = Collections.emptyList();
-    public static final List<String> DEFAULT_REQUESTEDGROUP = Collections.emptyList();
-    public static final String DEFAULT_CELLOPERATOR = "";
-    public static final String DEFAULT_SIMOPERATOR = "";
-    public static final String DEFAULT_ROAMING = "";
-    public static final Integer DEFAULT_USERNUMBER = 0;
-
-    @ProtoField(tag = 1)
-    public final Checkin.Build build;
-
-    @ProtoField(tag = 2, type = INT64)
-    public final Long lastCheckinMs;
-
-    /**
-     * or 0
-     */
-    @ProtoField(tag = 3, label = REPEATED, messageType = Checkin.Event.class)
-    public final List<Checkin.Event> event;
-
-    @ProtoField(tag = 4, label = REPEATED, messageType = Checkin.Statistic.class)
-    public final List<Checkin.Statistic> stat;
-
-    @ProtoField(tag = 5, type = STRING, label = REPEATED)
-    public final List<String> requestedGroup;
-
-    /**
-     * unused
-     */
-    @ProtoField(tag = 6, type = STRING)
-    public final String cellOperator;
-
-    /**
-     * TelephonyManager.getNetworkOperator != null|empty
-     */
-    @ProtoField(tag = 7, type = STRING)
-    public final String simOperator;
-
-    /**
-     * TelephonyManager.getSimOperator != null|empty
-     */
-    @ProtoField(tag = 8, type = STRING)
-    public final String roaming;
-
-    /**
-     * "mobile/notmobile/unknown-roaming/notroaming/unknown"
-     */
-    @ProtoField(tag = 9, type = INT32)
-    public final Integer userNumber;
-
-    public Checkin(Checkin.Build build, Long lastCheckinMs, List<Checkin.Event> event, List<Checkin.Statistic> stat, List<String> requestedGroup, String cellOperator, String simOperator, String roaming, Integer userNumber) {
-      this.build = build;
-      this.lastCheckinMs = lastCheckinMs;
-      this.event = immutableCopyOf(event);
-      this.stat = immutableCopyOf(stat);
-      this.requestedGroup = immutableCopyOf(requestedGroup);
-      this.cellOperator = cellOperator;
-      this.simOperator = simOperator;
-      this.roaming = roaming;
-      this.userNumber = userNumber;
-    }
-
-    private Checkin(Builder builder) {
-      this(builder.build, builder.lastCheckinMs, builder.event, builder.stat, builder.requestedGroup, builder.cellOperator, builder.simOperator, builder.roaming, builder.userNumber);
-      setBuilder(builder);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (other == this) return true;
-      if (!(other instanceof Checkin)) return false;
-      Checkin o = (Checkin) other;
-      return equals(build, o.build)
-          && equals(lastCheckinMs, o.lastCheckinMs)
-          && equals(event, o.event)
-          && equals(stat, o.stat)
-          && equals(requestedGroup, o.requestedGroup)
-          && equals(cellOperator, o.cellOperator)
-          && equals(simOperator, o.simOperator)
-          && equals(roaming, o.roaming)
-          && equals(userNumber, o.userNumber);
-    }
-
-    @Override
-    public int hashCode() {
-      int result = hashCode;
-      if (result == 0) {
-        result = build != null ? build.hashCode() : 0;
-        result = result * 37 + (lastCheckinMs != null ? lastCheckinMs.hashCode() : 0);
-        result = result * 37 + (event != null ? event.hashCode() : 1);
-        result = result * 37 + (stat != null ? stat.hashCode() : 1);
-        result = result * 37 + (requestedGroup != null ? requestedGroup.hashCode() : 1);
-        result = result * 37 + (cellOperator != null ? cellOperator.hashCode() : 0);
-        result = result * 37 + (simOperator != null ? simOperator.hashCode() : 0);
-        result = result * 37 + (roaming != null ? roaming.hashCode() : 0);
-        result = result * 37 + (userNumber != null ? userNumber.hashCode() : 0);
-        hashCode = result;
-      }
-      return result;
-    }
-
-    public static final class Builder extends Message.Builder<Checkin> {
-
-      public Checkin.Build build;
-      public Long lastCheckinMs;
-      public List<Checkin.Event> event;
-      public List<Checkin.Statistic> stat;
-      public List<String> requestedGroup;
-      public String cellOperator;
-      public String simOperator;
-      public String roaming;
-      public Integer userNumber;
-
-      public Builder() {
-      }
-
-      public Builder(Checkin message) {
-        super(message);
-        if (message == null) return;
-        this.build = message.build;
-        this.lastCheckinMs = message.lastCheckinMs;
-        this.event = copyOf(message.event);
-        this.stat = copyOf(message.stat);
-        this.requestedGroup = copyOf(message.requestedGroup);
-        this.cellOperator = message.cellOperator;
-        this.simOperator = message.simOperator;
-        this.roaming = message.roaming;
-        this.userNumber = message.userNumber;
-      }
-
-      public Builder build(Checkin.Build build) {
-        this.build = build;
-        return this;
-      }
-
-      public Builder lastCheckinMs(Long lastCheckinMs) {
-        this.lastCheckinMs = lastCheckinMs;
-        return this;
-      }
-
-      /**
-       * or 0
-       */
-      public Builder event(List<Checkin.Event> event) {
-        this.event = checkForNulls(event);
-        return this;
-      }
-
-      public Builder stat(List<Checkin.Statistic> stat) {
-        this.stat = checkForNulls(stat);
-        return this;
-      }
-
-      public Builder requestedGroup(List<String> requestedGroup) {
-        this.requestedGroup = checkForNulls(requestedGroup);
-        return this;
-      }
-
-      /**
-       * unused
-       */
-      public Builder cellOperator(String cellOperator) {
-        this.cellOperator = cellOperator;
-        return this;
-      }
-
-      /**
-       * TelephonyManager.getNetworkOperator != null|empty
-       */
-      public Builder simOperator(String simOperator) {
-        this.simOperator = simOperator;
-        return this;
-      }
-
-      /**
-       * TelephonyManager.getSimOperator != null|empty
-       */
-      public Builder roaming(String roaming) {
-        this.roaming = roaming;
-        return this;
-      }
-
-      /**
-       * "mobile/notmobile/unknown-roaming/notroaming/unknown"
-       */
-      public Builder userNumber(Integer userNumber) {
-        this.userNumber = userNumber;
-        return this;
-      }
-
-      @Override
-      public Checkin build() {
-        return new Checkin(this);
-      }
-    }
-
-    public static final class Event extends Message {
-
-      public static final String DEFAULT_TAG = "";
-      public static final String DEFAULT_VALUE = "";
-      public static final Long DEFAULT_TIMEMS = 0L;
-
-      @ProtoField(tag = 1, type = STRING)
-      public final String tag;
-
-      @ProtoField(tag = 2, type = STRING)
-      public final String value;
-
-      @ProtoField(tag = 3, type = INT64)
-      public final Long timeMs;
-
-      public Event(String tag, String value, Long timeMs) {
-        this.tag = tag;
-        this.value = value;
-        this.timeMs = timeMs;
-      }
-
-      private Event(Builder builder) {
-        this(builder.tag, builder.value, builder.timeMs);
-        setBuilder(builder);
-      }
-
-      @Override
-      public boolean equals(Object other) {
-        if (other == this) return true;
-        if (!(other instanceof Event)) return false;
-        Event o = (Event) other;
-        return equals(tag, o.tag)
-            && equals(value, o.value)
-            && equals(timeMs, o.timeMs);
-      }
-
-      @Override
-      public int hashCode() {
-        int result = hashCode;
-        if (result == 0) {
-          result = tag != null ? tag.hashCode() : 0;
-          result = result * 37 + (value != null ? value.hashCode() : 0);
-          result = result * 37 + (timeMs != null ? timeMs.hashCode() : 0);
-          hashCode = result;
-        }
-        return result;
-      }
-
-      public static final class Builder extends Message.Builder<Event> {
-
-        public String tag;
-        public String value;
-        public Long timeMs;
-
-        public Builder() {
-        }
-
-        public Builder(Event message) {
-          super(message);
-          if (message == null) return;
-          this.tag = message.tag;
-          this.value = message.value;
-          this.timeMs = message.timeMs;
-        }
-
-        public Builder tag(String tag) {
-          this.tag = tag;
-          return this;
-        }
-
-        public Builder value(String value) {
-          this.value = value;
-          return this;
-        }
-
-        public Builder timeMs(Long timeMs) {
-          this.timeMs = timeMs;
-          return this;
-        }
-
-        @Override
-        public Event build() {
-          return new Event(this);
-        }
-      }
-    }
-
-    public static final class Statistic extends Message {
-
-      public static final String DEFAULT_TAG = "";
-      public static final Integer DEFAULT_COUNT = 0;
-      public static final Float DEFAULT_SUM = 0F;
-
-      @ProtoField(tag = 1, type = STRING)
-      public final String tag;
-
-      @ProtoField(tag = 2, type = INT32)
-      public final Integer count;
-
-      @ProtoField(tag = 3, type = FLOAT)
-      public final Float sum;
-
-      public Statistic(String tag, Integer count, Float sum) {
-        this.tag = tag;
-        this.count = count;
-        this.sum = sum;
-      }
-
-      private Statistic(Builder builder) {
-        this(builder.tag, builder.count, builder.sum);
-        setBuilder(builder);
-      }
-
-      @Override
-      public boolean equals(Object other) {
-        if (other == this) return true;
-        if (!(other instanceof Statistic)) return false;
-        Statistic o = (Statistic) other;
-        return equals(tag, o.tag)
-            && equals(count, o.count)
-            && equals(sum, o.sum);
-      }
-
-      @Override
-      public int hashCode() {
-        int result = hashCode;
-        if (result == 0) {
-          result = tag != null ? tag.hashCode() : 0;
-          result = result * 37 + (count != null ? count.hashCode() : 0);
-          result = result * 37 + (sum != null ? sum.hashCode() : 0);
-          hashCode = result;
-        }
-        return result;
-      }
-
-      public static final class Builder extends Message.Builder<Statistic> {
-
-        public String tag;
-        public Integer count;
-        public Float sum;
-
-        public Builder() {
-        }
-
-        public Builder(Statistic message) {
-          super(message);
-          if (message == null) return;
-          this.tag = message.tag;
-          this.count = message.count;
-          this.sum = message.sum;
-        }
-
-        public Builder tag(String tag) {
-          this.tag = tag;
-          return this;
-        }
-
-        public Builder count(Integer count) {
-          this.count = count;
-          return this;
-        }
-
-        public Builder sum(Float sum) {
-          this.sum = sum;
-          return this;
-        }
-
-        @Override
-        public Statistic build() {
-          return new Statistic(this);
-        }
-      }
-    }
-
-    public static final class Build extends Message {
-
-      public static final String DEFAULT_FINGERPRINT = "";
-      public static final String DEFAULT_HARDWARE = "";
-      public static final String DEFAULT_BRAND = "";
-      public static final String DEFAULT_RADIO = "";
-      public static final String DEFAULT_BOOTLOADER = "";
-      public static final String DEFAULT_CLIENTID = "";
-      public static final Long DEFAULT_TIME = 0L;
-      public static final Integer DEFAULT_PACKAGEVERSIONCODE = 0;
-      public static final String DEFAULT_DEVICE = "";
-      public static final Integer DEFAULT_SDKVERSION = 0;
-      public static final String DEFAULT_MODEL = "";
-      public static final String DEFAULT_MANUFACTURER = "";
-      public static final String DEFAULT_PRODUCT = "";
-      public static final Boolean DEFAULT_OTAINSTALLED = false;
-
-      @ProtoField(tag = 1, type = STRING)
-      public final String fingerprint;
-
-      /**
-       * Build.FINGERPRINT
-       */
-      @ProtoField(tag = 2, type = STRING)
-      public final String hardware;
-
-      /**
-       * Build.HARDWARE
-       */
-      @ProtoField(tag = 3, type = STRING)
-      public final String brand;
-
-      /**
-       * Build.BRAND
-       */
-      @ProtoField(tag = 4, type = STRING)
-      public final String radio;
-
-      /**
-       * Build.getRadioVersion()
-       */
-      @ProtoField(tag = 5, type = STRING)
-      public final String bootloader;
-
-      /**
-       * Build.BOOTLOADER
-       */
-      @ProtoField(tag = 6, type = STRING)
-      public final String clientId;
-
-      /**
-       * GoogleSettingsContract.Partner["client_id"]
-       */
-      @ProtoField(tag = 7, type = INT64)
-      public final Long time;
-
-      /**
-       * Build.TIME / 1000L
-       */
-      @ProtoField(tag = 8, type = INT32)
-      public final Integer packageVersionCode;
-
-      /**
-       * PackageInfo.versionCode
-       */
-      @ProtoField(tag = 9, type = STRING)
-      public final String device;
-
-      /**
-       * Build.DEVICE
-       */
-      @ProtoField(tag = 10, type = INT32)
-      public final Integer sdkVersion;
-
-      /**
-       * Build.VERSION.SDK_INT
-       */
-      @ProtoField(tag = 11, type = STRING)
-      public final String model;
-
-      /**
-       * Build.MODEL
-       */
-      @ProtoField(tag = 12, type = STRING)
-      public final String manufacturer;
-
-      /**
-       * Build.MANUFACTURER
-       */
-      @ProtoField(tag = 13, type = STRING)
-      public final String product;
-
-      /**
-       * Build.PRODUCT
-       */
-      @ProtoField(tag = 14, type = BOOL)
-      public final Boolean otaInstalled;
-
-      public Build(String fingerprint, String hardware, String brand, String radio, String bootloader, String clientId, Long time, Integer packageVersionCode, String device, Integer sdkVersion, String model, String manufacturer, String product, Boolean otaInstalled) {
-        this.fingerprint = fingerprint;
-        this.hardware = hardware;
-        this.brand = brand;
-        this.radio = radio;
-        this.bootloader = bootloader;
-        this.clientId = clientId;
-        this.time = time;
-        this.packageVersionCode = packageVersionCode;
-        this.device = device;
-        this.sdkVersion = sdkVersion;
-        this.model = model;
-        this.manufacturer = manufacturer;
-        this.product = product;
-        this.otaInstalled = otaInstalled;
-      }
-
-      private Build(Builder builder) {
-        this(builder.fingerprint, builder.hardware, builder.brand, builder.radio, builder.bootloader, builder.clientId, builder.time, builder.packageVersionCode, builder.device, builder.sdkVersion, builder.model, builder.manufacturer, builder.product, builder.otaInstalled);
-        setBuilder(builder);
-      }
-
-      @Override
-      public boolean equals(Object other) {
-        if (other == this) return true;
-        if (!(other instanceof Build)) return false;
-        Build o = (Build) other;
-        return equals(fingerprint, o.fingerprint)
-            && equals(hardware, o.hardware)
-            && equals(brand, o.brand)
-            && equals(radio, o.radio)
-            && equals(bootloader, o.bootloader)
-            && equals(clientId, o.clientId)
-            && equals(time, o.time)
-            && equals(packageVersionCode, o.packageVersionCode)
-            && equals(device, o.device)
-            && equals(sdkVersion, o.sdkVersion)
-            && equals(model, o.model)
-            && equals(manufacturer, o.manufacturer)
-            && equals(product, o.product)
-            && equals(otaInstalled, o.otaInstalled);
-      }
-
-      @Override
-      public int hashCode() {
-        int result = hashCode;
-        if (result == 0) {
-          result = fingerprint != null ? fingerprint.hashCode() : 0;
-          result = result * 37 + (hardware != null ? hardware.hashCode() : 0);
-          result = result * 37 + (brand != null ? brand.hashCode() : 0);
-          result = result * 37 + (radio != null ? radio.hashCode() : 0);
-          result = result * 37 + (bootloader != null ? bootloader.hashCode() : 0);
-          result = result * 37 + (clientId != null ? clientId.hashCode() : 0);
-          result = result * 37 + (time != null ? time.hashCode() : 0);
-          result = result * 37 + (packageVersionCode != null ? packageVersionCode.hashCode() : 0);
-          result = result * 37 + (device != null ? device.hashCode() : 0);
-          result = result * 37 + (sdkVersion != null ? sdkVersion.hashCode() : 0);
-          result = result * 37 + (model != null ? model.hashCode() : 0);
-          result = result * 37 + (manufacturer != null ? manufacturer.hashCode() : 0);
-          result = result * 37 + (product != null ? product.hashCode() : 0);
-          result = result * 37 + (otaInstalled != null ? otaInstalled.hashCode() : 0);
-          hashCode = result;
-        }
-        return result;
-      }
-
-      public static final class Builder extends Message.Builder<Build> {
-
-        public String fingerprint;
-        public String hardware;
-        public String brand;
-        public String radio;
-        public String bootloader;
-        public String clientId;
-        public Long time;
-        public Integer packageVersionCode;
-        public String device;
-        public Integer sdkVersion;
-        public String model;
-        public String manufacturer;
-        public String product;
-        public Boolean otaInstalled;
-
-        public Builder() {
-        }
-
-        public Builder(Build message) {
-          super(message);
-          if (message == null) return;
-          this.fingerprint = message.fingerprint;
-          this.hardware = message.hardware;
-          this.brand = message.brand;
-          this.radio = message.radio;
-          this.bootloader = message.bootloader;
-          this.clientId = message.clientId;
-          this.time = message.time;
-          this.packageVersionCode = message.packageVersionCode;
-          this.device = message.device;
-          this.sdkVersion = message.sdkVersion;
-          this.model = message.model;
-          this.manufacturer = message.manufacturer;
-          this.product = message.product;
-          this.otaInstalled = message.otaInstalled;
-        }
-
-        public Builder fingerprint(String fingerprint) {
-          this.fingerprint = fingerprint;
-          return this;
-        }
-
-        /**
-         * Build.FINGERPRINT
-         */
-        public Builder hardware(String hardware) {
-          this.hardware = hardware;
-          return this;
-        }
-
-        /**
-         * Build.HARDWARE
-         */
-        public Builder brand(String brand) {
-          this.brand = brand;
-          return this;
-        }
-
-        /**
-         * Build.BRAND
-         */
-        public Builder radio(String radio) {
-          this.radio = radio;
-          return this;
-        }
-
-        /**
-         * Build.getRadioVersion()
-         */
-        public Builder bootloader(String bootloader) {
-          this.bootloader = bootloader;
-          return this;
-        }
-
-        /**
-         * Build.BOOTLOADER
-         */
-        public Builder clientId(String clientId) {
-          this.clientId = clientId;
-          return this;
-        }
-
-        /**
-         * GoogleSettingsContract.Partner["client_id"]
-         */
-        public Builder time(Long time) {
-          this.time = time;
-          return this;
-        }
-
-        /**
-         * Build.TIME / 1000L
-         */
-        public Builder packageVersionCode(Integer packageVersionCode) {
-          this.packageVersionCode = packageVersionCode;
-          return this;
-        }
-
-        /**
-         * PackageInfo.versionCode
-         */
-        public Builder device(String device) {
-          this.device = device;
-          return this;
-        }
-
-        /**
-         * Build.DEVICE
-         */
-        public Builder sdkVersion(Integer sdkVersion) {
-          this.sdkVersion = sdkVersion;
-          return this;
-        }
-
-        /**
-         * Build.VERSION.SDK_INT
-         */
-        public Builder model(String model) {
-          this.model = model;
-          return this;
-        }
-
-        /**
-         * Build.MODEL
-         */
-        public Builder manufacturer(String manufacturer) {
-          this.manufacturer = manufacturer;
-          return this;
-        }
-
-        /**
-         * Build.MANUFACTURER
-         */
-        public Builder product(String product) {
-          this.product = product;
-          return this;
-        }
-
-        /**
-         * Build.PRODUCT
-         */
-        public Builder otaInstalled(Boolean otaInstalled) {
-          this.otaInstalled = otaInstalled;
-          return this;
-        }
-
-        @Override
-        public Build build() {
-          return new Build(this);
-        }
       }
     }
   }
