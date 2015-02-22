@@ -20,110 +20,74 @@ import android.content.Context;
 
 import org.microg.gms.common.Build;
 import org.microg.gms.common.Constants;
+import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-public class AuthRequest {
+import static org.microg.gms.common.HttpFormClient.RequestContent;
+import static org.microg.gms.common.HttpFormClient.RequestHeader;
+
+public class AuthRequest extends HttpFormClient.Request {
+    private static final String SERVICE_URL = "https://android.clients.google.com/auth";
     private static final String USER_AGENT = "GoogleAuth/1.4 (%s %s)";
 
+    @RequestHeader("User-Agent")
+    private String userAgent;
+
+    @RequestHeader("app")
+    @RequestContent("app")
     public String app;
+    @RequestContent("client_sig")
     public String appSignature;
+    @RequestContent("callerPkg")
     public String caller;
+    @RequestContent("callerSig")
     public String callerSignature;
+    @RequestHeader(value = "device", nullPresent = true)
+    @RequestContent(value = "androidId", nullPresent = true)
     public String androidIdHex;
+    @RequestContent("sdk_version")
+    public int sdkVersion;
+    @RequestContent("device_country")
+    public String countryCode;
+    @RequestContent("operatorCountry")
+    public String operatorCountryCode;
+    @RequestContent("lang")
+    public String locale;
+    @RequestContent("google_play_services_version")
+    public int gmsVersion = Constants.MAX_REFERENCE_VERSION;
+    @RequestContent("accountType")
+    public String accountType = "HOSTED_OR_GOOGLE";
+    @RequestContent("Email")
+    public String email;
+    @RequestContent("service")
+    public String service;
+    @RequestContent("source")
+    public String source = "android";
+    @RequestContent({"is_called_from_account_manager", "_opt_is_called_from_account_manager"})
+    public boolean isCalledFromAccountManager;
+    @RequestContent("Token")
+    public String token;
+    @RequestContent("system_partition")
+    public boolean systemPartition;
+    @RequestContent("get_accountid")
+    public boolean getAccountId;
+    @RequestContent("ACCESS_TOKEN")
+    public boolean isAccessToken;
+    @RequestContent("droidguard_results")
+    public String droidguardResults;
+    @RequestContent("has_permission")
+    public boolean hasPermission;
+    @RequestContent("add_account")
+    public boolean addAccount;
     public String deviceName;
     public String buildVersion;
-    public int sdkVersion;
-    public String countryCode;
-    public String operatorCountryCode;
-    public String locale;
-    public int gmsVersion = Constants.MAX_REFERENCE_VERSION;
-    public String accountType = "HOSTED_OR_GOOGLE";
-    public String email;
-    public String service;
-    public String source = "android";
-    public boolean isCalledFromAccountManager;
-    public String token;
-    public boolean systemPartition;
-    public boolean getAccountId;
-    public boolean isAccessToken;
-    public String droidguardResults;
-    public boolean hasPermission;
-    public boolean addAccount;
 
-    public AuthRequest() {
-
-    }
-
-
-    @Deprecated
-    public AuthRequest(Context context, String token) {
-        this(Utils.getLocale(context), Utils.getBuild(context), Utils.getAndroidIdHex(context), token);
-    }
-
-    @Deprecated
-    public AuthRequest(Locale locale, Build build, String androidIdHex, String token) {
-        this(locale, build.sdk, Constants.MAX_REFERENCE_VERSION, build.device, build.id, androidIdHex, token);
-    }
-
-    @Deprecated
-    public AuthRequest(Locale locale, int sdkVersion, int gmsVersion, String deviceName,
-                       String buildVersion, String androidIdHex, String token) {
-        this.androidIdHex = androidIdHex;
-        this.deviceName = deviceName;
-        this.buildVersion = buildVersion;
-        this.countryCode = locale.getCountry();
-        this.gmsVersion = gmsVersion;
-        this.operatorCountryCode = locale.getCountry();
-        this.locale = locale.toString();
-        this.sdkVersion = sdkVersion;
-        this.token = token;
-    }
-
-
-    public Map<String, String> getHttpHeaders() {
-        Map<String, String> map = new HashMap<>();
-        map.put("app", app);
-        map.put("device", androidIdHex);
-        map.put("User-Agent", String.format(USER_AGENT, deviceName, buildVersion));
-        map.put("Content-Type", "application/x-www-form-urlencoded");
-        return map;
-    }
-
-    public Map<String, String> getFormContent() {
-        Map<String, String> map = new HashMap<>();
-        map.put("device_country", countryCode);
-        map.put("operatorCountry", operatorCountryCode);
-        map.put("lang", locale);
-        map.put("sdk_version", Integer.toString(sdkVersion));
-        map.put("google_play_services_version", Integer.toString(gmsVersion));
-        map.put("accountType", accountType);
-        if (systemPartition) map.put("system_partition", "1");
-        if (hasPermission) map.put("has_permission", "1");
-        if (addAccount) map.put("add_account", "1");
-        if (email != null) map.put("Email", email);
-        map.put("service", service);
-        map.put("source", source);
-        map.put("androidId", androidIdHex);
-        if (getAccountId) map.put("get_accountid", "1");
-        map.put("app", app);
-        map.put("client_sig", appSignature);
-        if (caller != null) {
-            map.put("callerPkg", caller);
-            map.put("callerSig", callerSignature);
-        }
-        if (isCalledFromAccountManager) {
-            map.put("is_called_from_account_manager", "1");
-            map.put("_opt_is_called_from_account_manager", "1");
-        }
-        if (isAccessToken) map.put("ACCESS_TOKEN", "1");
-        map.put("Token", token);
-        if (droidguardResults != null) map.put("droidguard_results", droidguardResults);
-        return map;
+    @Override
+    protected void prepare() {
+        userAgent = String.format(USER_AGENT, deviceName, buildVersion);
     }
 
     public AuthRequest build(Build build) {
@@ -222,10 +186,10 @@ public class AuthRequest {
     }
 
     public AuthResponse getResponse() throws IOException {
-        return AuthClient.request(this);
+        return HttpFormClient.request(SERVICE_URL, this, AuthResponse.class);
     }
 
-    public void getResponseAsync(AuthClient.GmsAuthCallback callback) {
-        AuthClient.request(this, callback);
+    public void getResponseAsync(HttpFormClient.Callback<AuthResponse> callback) {
+        HttpFormClient.requestAsync(SERVICE_URL, this, AuthResponse.class, callback);
     }
 }

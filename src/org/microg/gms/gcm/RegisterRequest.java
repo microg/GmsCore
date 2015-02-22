@@ -26,6 +26,7 @@ import static org.microg.gms.common.HttpFormClient.RequestContent;
 import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
 public class RegisterRequest extends HttpFormClient.Request {
+    private static final String SERVICE_URL = "https://android.clients.google.com/c2dm/register3";
     private static final String USER_AGENT = "Android-GCM/1.3 (%s %s)";
 
     @RequestHeader("Authorization")
@@ -86,10 +87,10 @@ public class RegisterRequest extends HttpFormClient.Request {
     }
 
     public RegisterResponse getResponse() throws IOException {
-        return HttpFormClient.request(Constants.REGISTER_URL, this, RegisterResponse.class);
+        return HttpFormClient.request(SERVICE_URL, this, RegisterResponse.class);
     }
 
     public void getResponseAsync(HttpFormClient.Callback<RegisterResponse> callback) {
-        HttpFormClient.requestAsync(Constants.REGISTER_URL, this, RegisterResponse.class, callback);
+        HttpFormClient.requestAsync(SERVICE_URL, this, RegisterResponse.class, callback);
     }
 }

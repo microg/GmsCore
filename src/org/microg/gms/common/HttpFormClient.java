@@ -43,16 +43,30 @@ public class HttpFormClient {
         for (Field field : request.getClass().getDeclaredFields()) {
             try {
                 field.setAccessible(true);
-                String value = String.valueOf(field.get(request));
+                Object objVal = field.get(request);
+                String value = objVal != null ? String.valueOf(objVal) : null;
+                Boolean boolVal = null;
+                if (field.getType().equals(boolean.class)) {
+                    boolVal = field.getBoolean(request);
+                }
                 if (field.isAnnotationPresent(RequestHeader.class)) {
-                    for (String key : field.getAnnotation(RequestHeader.class).value()) {
-                        connection.setRequestProperty(key, value);
+                    RequestHeader annotation = field.getAnnotation(RequestHeader.class);
+                    value = valueFromBoolVal(value, boolVal, annotation.truePresent(), annotation.falsePresent());
+                    if (value != null || annotation.nullPresent()) {
+                        for (String key : annotation.value()) {
+                            connection.setRequestProperty(key, String.valueOf(value));
+                        }
                     }
-                } else if (field.isAnnotationPresent(RequestContent.class)) {
-                    for (String key : field.getAnnotation(RequestHeader.class).value()) {
-                        if (content.length() > 0)
-                            content.append("&");
-                        content.append(Uri.encode(key)).append("=").append(Uri.encode(value));
+                }
+                if (field.isAnnotationPresent(RequestContent.class)) {
+                    RequestContent annotation = field.getAnnotation(RequestContent.class);
+                    value = valueFromBoolVal(value, boolVal, annotation.truePresent(), annotation.falsePresent());
+                    if (value != null || annotation.nullPresent()) {
+                        for (String key : annotation.value()) {
+                            if (content.length() > 0)
+                                content.append("&");
+                            content.append(Uri.encode(key)).append("=").append(Uri.encode(String.valueOf(value)));
+                        }
                     }
                 }
             } catch (Exception ignored) {
@@ -71,6 +85,20 @@ public class HttpFormClient {
         String result = new String(Utils.readStreamToEnd(connection.getInputStream()));
         Log.d(TAG, "-- Response --\n" + result);
         return parseResponse(tClass, result);
+    }
+
+    private static String valueFromBoolVal(String value, Boolean boolVal, boolean truePresent, boolean falsePresent) {
+        if (boolVal != null) {
+            if (boolVal && truePresent) {
+                return "1";
+            } else if (!boolVal && falsePresent) {
+                return "0";
+            } else {
+                return null;
+            }
+        } else {
+            return value;
+        }
     }
 
     private static <T> T parseResponse(Class<T> tClass, String result) {
@@ -136,12 +164,24 @@ public class HttpFormClient {
     @Target(ElementType.FIELD)
     public @interface RequestHeader {
         public String[] value();
+
+        public boolean truePresent() default true;
+
+        public boolean falsePresent() default false;
+
+        public boolean nullPresent() default false;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface RequestContent {
         public String[] value();
+
+        public boolean truePresent() default true;
+
+        public boolean falsePresent() default false;
+
+        public boolean nullPresent() default false;
     }
 
     @Retention(RetentionPolicy.RUNTIME)

@@ -37,11 +37,11 @@ import android.widget.RelativeLayout;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.auth.AuthClient;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.common.Constants;
+import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.userinfo.ProfileManager;
 
@@ -161,7 +161,7 @@ public class LoginActivity extends AssistantActivity {
                 .systemPartition()
                 .hasPermission()
                 .droidguardResults(null /*TODO*/)
-                .getResponseAsync(new AuthClient.GmsAuthCallback() {
+                .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
                         AccountManager accountManager = AccountManager.get(LoginActivity.this);
@@ -202,7 +202,7 @@ public class LoginActivity extends AssistantActivity {
                 .hasPermission()
                 .addAccount()
                 .getAccountId()
-                .getResponseAsync(new AuthClient.GmsAuthCallback() {
+                .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
                         AuthManager.storeResponse(LoginActivity.this, account,
@@ -220,7 +220,7 @@ public class LoginActivity extends AssistantActivity {
 
     private void retrieveGmsKeyUserinfoProfile(final Account account) {
         ProfileManager.getAuthKeyRequest(this, account)
-                .getResponseAsync(new AuthClient.GmsAuthCallback() {
+                .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
                         AuthManager.storeResponse(LoginActivity.this, account,
