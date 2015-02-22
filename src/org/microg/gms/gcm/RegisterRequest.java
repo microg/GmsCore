@@ -1,0 +1,95 @@
+/*
+ * Copyright 2013-2015 µg Project Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.microg.gms.gcm;
+
+import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.Build;
+import org.microg.gms.common.HttpFormClient;
+
+import java.io.IOException;
+
+import static org.microg.gms.common.HttpFormClient.RequestContent;
+import static org.microg.gms.common.HttpFormClient.RequestHeader;
+
+public class RegisterRequest extends HttpFormClient.Request {
+    private static final String USER_AGENT = "Android-GCM/1.3 (%s %s)";
+
+    @RequestHeader("Authorization")
+    private String auth;
+    @RequestHeader("User-Agent")
+    private String userAgent;
+
+    @RequestHeader("app")
+    @RequestContent("app")
+    public String app;
+    @RequestContent("cert")
+    public String appSignature;
+    @RequestContent("app_ver")
+    public int appVersion;
+    @RequestContent("info")
+    public String info;
+    @RequestContent("sender")
+    public String sender;
+    @RequestContent({"X-GOOG.USER_AID", "device"})
+    public long androidId;
+    public long securityToken;
+    public String deviceName;
+    public String buildVersion;
+
+    @Override
+    public void prepare() {
+        userAgent = String.format(USER_AGENT, deviceName, buildVersion);
+        auth = "AidLogin " + androidId + ":" + securityToken;
+    }
+
+    public RegisterRequest checkin(LastCheckinInfo lastCheckinInfo) {
+        androidId = lastCheckinInfo.androidId;
+        securityToken = lastCheckinInfo.securityToken;
+        return this;
+    }
+
+    public RegisterRequest app(String app, String appSignature, int appVersion) {
+        this.app = app;
+        this.appSignature = appSignature;
+        this.appVersion = appVersion;
+        return this;
+    }
+
+    public RegisterRequest info(String info) {
+        this.info = info;
+        return this;
+    }
+
+    public RegisterRequest sender(String sender) {
+        this.sender = sender;
+        return this;
+    }
+
+    public RegisterRequest build(Build build) {
+        deviceName = build.device;
+        buildVersion = build.id;
+        return this;
+    }
+
+    public RegisterResponse getResponse() throws IOException {
+        return HttpFormClient.request(Constants.REGISTER_URL, this, RegisterResponse.class);
+    }
+
+    public void getResponseAsync(HttpFormClient.Callback<RegisterResponse> callback) {
+        HttpFormClient.requestAsync(Constants.REGISTER_URL, this, RegisterResponse.class, callback);
+    }
+}
