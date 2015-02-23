@@ -82,11 +82,26 @@
                 android:value="com.google.android.location.internal.GMS_NLP" />
         </service>
 
+        <!-- Device Checkin -->
+
+        <!-- Cloud Messaging -->
+        <service
+            android:name="org.microg.gms.gcm.PushRegisterService"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.RECEIVE">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.UNREGISTER" />
+            </intent-filter>
+        </service>
+
         <!-- Services Framework -->
         <provider
             android:name="org.microg.gms.gservices.GServicesProvider"
             android:exported="true"
-            android:authorities="com.google.android.gsf.gservices"/>
+            android:authorities="com.google.android.gsf.gservices" />
 
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
@@ -103,7 +118,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.people.service.START" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
 
