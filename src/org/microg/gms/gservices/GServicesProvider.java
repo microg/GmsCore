@@ -25,7 +25,10 @@ import android.os.Build;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Originally found in Google Services Framework (com.google.android.gsf), this provides a generic
@@ -35,13 +38,16 @@ import java.util.Map;
  * if certain "experiments" are enabled on the device.
  */
 public class GServicesProvider extends ContentProvider {
-    public static final Uri MAIN_URI = Uri.parse("content://com.google.android.gsf.gservices/main");
-    public static final Uri OVERRIDE_URI = Uri.parse("content://com.google.android.gsf.gservices/override");
+    public static final Uri CONTENT_URI = Uri.parse("content://com.google.android.gsf.gservices/");
+    public static final Uri MAIN_URI = Uri.withAppendedPath(CONTENT_URI, "main");
+    public static final Uri OVERRIDE_URI = Uri.withAppendedPath(CONTENT_URI, "override");
+    public static final Uri PREFIX_URI = Uri.withAppendedPath(CONTENT_URI, "prefix");
 
     private static final String TAG = "GmsServicesProvider";
 
     private DatabaseHelper databaseHelper;
     private Map<String, String> cache = new HashMap<>();
+    private Set<String> cachedPrefixes = new HashSet<>();
 
     @Override
     public boolean onCreate() {
@@ -60,17 +66,34 @@ public class GServicesProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         MatrixCursor cursor = new MatrixCursor(new String[]{"name", "value"});
-        for (String name : selectionArgs) {
-            String value;
-            if (cache.containsKey(name)) {
-                value = cache.get(name);
-            } else {
-                value = databaseHelper.get(name);
-                cache.put(name, value);
+        if (PREFIX_URI.equals(uri)) {
+            for (String prefix : selectionArgs) {
+                if (!cachedPrefixes.contains(prefix)) {
+                    cache.putAll(databaseHelper.search(prefix + "%"));
+                    cachedPrefixes.add(prefix);
+                }
+
+                for (String name : cache.keySet()) {
+                    if (name.startsWith(prefix)) {
+                        String value = cache.get(name);
+                        Log.d(TAG, "query caller=" + getCallingPackageName() + " name=" + name + " value=" + value);
+                        cursor.addRow(new String[]{name, value});
+                    }
+                }
             }
-            Log.d(TAG, "query caller=" + getCallingPackageName() + " name=" + name + " value=" + value);
-            if (value != null) {
-                cursor.addRow(new String[]{name, value});
+        } else {
+            for (String name : selectionArgs) {
+                String value;
+                if (cache.containsKey(name)) {
+                    value = cache.get(name);
+                } else {
+                    value = databaseHelper.get(name);
+                    cache.put(name, value);
+                }
+                Log.d(TAG, "query caller=" + getCallingPackageName() + " name=" + name + " value=" + value);
+                if (value != null) {
+                    cursor.addRow(new String[]{name, value});
+                }
             }
         }
         return cursor;
@@ -100,7 +123,10 @@ public class GServicesProvider extends ContentProvider {
         } else if (uri.equals(OVERRIDE_URI)) {
             databaseHelper.put("override", values);
         }
-        cache.remove(values.getAsString("name"));
+        String name = values.getAsString("name");
+        cache.remove(name);
+        Iterator<String> iterator = cachedPrefixes.iterator();
+        while (iterator.hasNext()) if (name.startsWith(iterator.next())) iterator.remove();
         return 1;
     }
 }

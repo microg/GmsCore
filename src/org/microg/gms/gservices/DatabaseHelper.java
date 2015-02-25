@@ -22,6 +22,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 3;
     private static final int DB_VERSION_OLD = 1;
@@ -68,6 +71,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return result;
+    }
+
+    public Map<String, String> search(String search) {
+        Map<String, String> map = new HashMap<>();
+        Cursor cursor = getReadableDatabase().query("overrides", new String[]{"name", "value"},
+                "name LIKE ?", new String[]{search}, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                map.put(cursor.getString(0), cursor.getString(1));
+            }
+            cursor.close();
+        }
+        cursor = getReadableDatabase().query("main", new String[]{"name", "value"},
+                "name LIKE ?", new String[]{search}, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                if (!map.containsKey(cursor.getString(0)))
+                    map.put(cursor.getString(0), cursor.getString(1));
+            }
+            cursor.close();
+        }
+        return map;
+
     }
 
     public void put(String table, ContentValues values) {
