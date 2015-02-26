@@ -18,6 +18,7 @@ package org.microg.gms.gservices;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 
 public class GServices {
@@ -25,10 +26,48 @@ public class GServices {
     public static final Uri MAIN_URI = Uri.parse("content://com.google.android.gsf.gservices/main");
     public static final Uri OVERRIDE_URI = Uri.parse("content://com.google.android.gsf.gservices/override");
 
-    public static void setString(ContentResolver resolver, String key, String value) {
+    public static int setString(ContentResolver resolver, String key, String value) {
         ContentValues values = new ContentValues();
         values.put("name", key);
         values.put("value", value);
-        resolver.update(MAIN_URI, values, null, null);
+        return resolver.update(MAIN_URI, values, null, null);
+    }
+
+    public static String getString(ContentResolver resolver, String key) {
+        return getString(resolver, key, null);
+    }
+
+    public static String getString(ContentResolver resolver, String key, String defaultValue) {
+        String result = defaultValue;
+        Cursor cursor = resolver.query(CONTENT_URI, null, null, new String[]{key}, null);
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                result = cursor.getString(1);
+            }
+            cursor.close();
+        }
+        return result;
+    }
+
+    public static int getInt(ContentResolver resolver, String key, int defaultValue) {
+        String result = getString(resolver, key);
+        if (result != null) {
+            try {
+                return Integer.parseInt(result);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return defaultValue;
+    }
+
+    public static long getLong(ContentResolver resolver, String key, long defaultValue) {
+        String result = getString(resolver, key);
+        if (result != null) {
+            try {
+                return Long.parseLong(result);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return defaultValue;
     }
 }

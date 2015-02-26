@@ -35,7 +35,7 @@ import java.util.List;
 
 public class CheckinClient {
     private static final String TAG = "GmsCheckinClient";
-    private static final Object TODO = null;
+    private static final Object TODO = null; // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
 
     public static CheckinResponse request(CheckinRequest request) throws IOException {
@@ -146,7 +146,7 @@ public class CheckinClient {
 
     }
 
-    private static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
+    public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
                                               DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                               LastCheckinInfo checkinInfo) {
         return makeRequest(makeCheckin(makeBuild(build), phoneInfo, checkinInfo),

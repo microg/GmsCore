@@ -16,8 +16,36 @@
 
 package org.microg.gms.checkin;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 public class LastCheckinInfo {
+    public static final String PREFERENCES_NAME = "checkin";
+    public static final String PREF_ANDROID_ID = "androidId";
+    public static final String PREF_DIGEST = "digest";
+    public static final String PREF_LAST_CHECKIN = "lastCheckin";
+    public static final String PREF_SECURITY_TOKEN = "securityToken";
     public long lastCheckin;
     public long androidId;
     public long securityToken;
+    public String digest;
+
+    public static LastCheckinInfo read(Context context) {
+        LastCheckinInfo info = new LastCheckinInfo();
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+        info.androidId = preferences.getLong(PREF_ANDROID_ID, 0);
+        info.digest = preferences.getString(PREF_DIGEST, null);
+        info.lastCheckin = preferences.getLong(PREF_LAST_CHECKIN, 0);
+        info.securityToken = preferences.getLong(PREF_SECURITY_TOKEN, 0);
+        return info;
+    }
+
+    public void write(Context context) {
+        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+                .putLong(PREF_ANDROID_ID, androidId)
+                .putString(PREF_DIGEST, digest)
+                .putLong(PREF_LAST_CHECKIN, lastCheckin)
+                .putLong(PREF_SECURITY_TOKEN, securityToken)
+                .apply();
+    }
 }
