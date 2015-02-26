@@ -21,7 +21,6 @@ import java.util.List;
 public class DeviceConfiguration {
     public List<String> availableFeatures;
     public int densityDpi;
-    public int deviceClass;
     public int glEsVersion;
     public List<String> glExtensions;
     public boolean hasFiveWayNavigation;

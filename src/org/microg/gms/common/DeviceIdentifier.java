@@ -17,7 +17,6 @@
 package org.microg.gms.common;
 
 public class DeviceIdentifier {
-    public String bluetoothMac;
     public String wifiMac;
     public String meid;
     public String esn;

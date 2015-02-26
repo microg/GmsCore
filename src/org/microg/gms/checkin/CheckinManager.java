@@ -30,7 +30,7 @@ public class CheckinManager {
     public static synchronized LastCheckinInfo checkin(Context context) throws IOException {
         LastCheckinInfo info = LastCheckinInfo.read(context);
         if (info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL) return null;
-        CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context), null, null, null, info);
+        CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context), null, null, null, info); // TODO
         return handleResponse(context, CheckinClient.request(request));
     }
 

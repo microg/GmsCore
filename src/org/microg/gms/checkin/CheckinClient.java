@@ -21,6 +21,7 @@ import android.util.Log;
 import com.squareup.wire.Wire;
 
 import org.microg.gms.common.Build;
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
@@ -72,7 +73,7 @@ public class CheckinClient {
                 .manufacturer(build.manufacturer)
                 .model(build.model)
                 .otaInstalled(false) // TODO?
-                .packageVersionCode(build.sdk) // TODO?
+                .packageVersionCode(Constants.MAX_REFERENCE_VERSION)
                 .product(build.product)
                 .radio(build.radio)
                 .sdkVersion(build.sdk)
@@ -84,7 +85,6 @@ public class CheckinClient {
         return new CheckinRequest.DeviceConfig.Builder()
                 .availableFeature(deviceConfiguration.availableFeatures)
                 .densityDpi(deviceConfiguration.densityDpi)
-                .deviceClass(deviceConfiguration.deviceClass)
                 .glEsVersion(deviceConfiguration.glEsVersion)
                 .glExtension(deviceConfiguration.glExtensions)
                 .hasFiveWayNavigation(deviceConfiguration.hasFiveWayNavigation)
@@ -92,7 +92,6 @@ public class CheckinClient {
                 .heightPixels(deviceConfiguration.heightPixels)
                 .keyboardType(deviceConfiguration.keyboardType)
                 .locale(deviceConfiguration.locales)
-                .maxApkDownloadSizeMb((Integer) TODO)
                 .nativePlatform(deviceConfiguration.nativePlatforms)
                 .navigation(deviceConfiguration.navigation)
                 .screenLayout(deviceConfiguration.screenLayout)
@@ -120,35 +119,33 @@ public class CheckinClient {
     private static CheckinRequest makeRequest(CheckinRequest.Checkin checkin,
                                               CheckinRequest.DeviceConfig deviceConfig,
                                               DeviceIdentifier deviceIdent, LastCheckinInfo checkinInfo) {
-        return new CheckinRequest.Builder()
-                .accountCookie((List<String>) TODO)
+        CheckinRequest.Builder builder = new CheckinRequest.Builder()
+                .accountCookie(Arrays.asList("")) // TODO
                 .androidId(checkinInfo.androidId)
                 .checkin(checkin)
-                .desiredBuild((String) TODO)
                 .deviceConfiguration(deviceConfig)
-                .digest((String) TODO)
+                .digest(checkinInfo.digest)
                 .esn(deviceIdent.esn)
                 .fragment((Integer) TODO)
                 .locale((String) TODO)
                 .loggingId((Long) TODO)
-                .macAddress(Arrays.asList(deviceIdent.wifiMac, deviceIdent.bluetoothMac))
-                .macAddressType(Arrays.asList("wifi", "bt")) // TODO
-                .marketCheckin((String) TODO)
+                .macAddress(Arrays.asList(deviceIdent.wifiMac))
+                .macAddressType(Arrays.asList("wifi"))
                 .meid(deviceIdent.meid)
                 .otaCert((List<String>) TODO)
-                .securityToken(checkinInfo.securityToken)
                 .serial((String) TODO)
                 .timeZone((String) TODO)
                 .userName((String) TODO)
                 .userSerialNumber((Integer) TODO)
-                .version((Integer) TODO)
-                .build();
+                .version(3);
+        if (checkinInfo.securityToken != 0) builder.securityToken(checkinInfo.securityToken);
+        return builder.build();
 
     }
 
     public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
-                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
-                                              LastCheckinInfo checkinInfo) {
+                                             DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
+                                             LastCheckinInfo checkinInfo) {
         return makeRequest(makeCheckin(makeBuild(build), phoneInfo, checkinInfo),
                 makeDeviceConfig(deviceConfiguration), deviceIdent, checkinInfo);
     }
