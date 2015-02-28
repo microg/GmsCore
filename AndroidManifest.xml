@@ -84,6 +84,24 @@
 
         <!-- Device Checkin -->
 
+        <service android:name="org.microg.gms.checkin.CheckinService" />
+
+        <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
+            <intent-filter>
+                <action android:name="android.server.checkin.CHECKIN" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="android.server.checkin.CHECKIN" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SECRET_CODE" />
+                <data
+                    android:host="2432546"
+                    android:scheme="android_secret_code" />
+            </intent-filter>
+        </receiver>
+
         <!-- Cloud Messaging -->
         <service
             android:name="org.microg.gms.gcm.PushRegisterService"

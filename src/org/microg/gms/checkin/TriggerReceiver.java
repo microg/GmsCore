@@ -16,29 +16,17 @@
 
 package org.microg.gms.checkin;
 
-import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import java.io.IOException;
-
-public class CheckinService extends IntentService {
-    private static final String TAG = "GmsCheckinService";
-
-    public CheckinService() {
-        super(TAG);
-    }
+public class TriggerReceiver extends BroadcastReceiver {
+    private static final String TAG = "GmsCheckinTrigger";
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        try {
-            LastCheckinInfo info = CheckinManager.checkin(this);
-            if (info != null) {
-                Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
-            }
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-        stopSelf();
+    public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "Trigger checkin: " + intent);
+        context.startService(new Intent(context, CheckinService.class));
     }
 }

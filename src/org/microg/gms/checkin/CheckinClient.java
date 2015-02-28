@@ -126,11 +126,9 @@ public class CheckinClient {
                 .deviceConfiguration(deviceConfig)
                 .digest(checkinInfo.digest)
                 .esn(deviceIdent.esn)
-                .fragment((Integer) TODO)
+                .fragment(0)
                 .locale((String) TODO)
                 .loggingId((Long) TODO)
-                .macAddress(Arrays.asList(deviceIdent.wifiMac))
-                .macAddressType(Arrays.asList("wifi"))
                 .meid(deviceIdent.meid)
                 .otaCert((List<String>) TODO)
                 .serial((String) TODO)
@@ -138,7 +136,14 @@ public class CheckinClient {
                 .userName((String) TODO)
                 .userSerialNumber((Integer) TODO)
                 .version(3);
-        if (checkinInfo.securityToken != 0) builder.securityToken(checkinInfo.securityToken);
+        if (deviceIdent.wifiMac != null) {
+            builder.macAddress(Arrays.asList(deviceIdent.wifiMac))
+                    .macAddressType(Arrays.asList("wifi"));
+        }
+        if (checkinInfo.securityToken != 0) {
+            builder.securityToken(checkinInfo.securityToken)
+                    .fragment(1);
+        }
         return builder.build();
 
     }
