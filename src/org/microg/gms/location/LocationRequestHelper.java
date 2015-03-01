@@ -26,7 +26,7 @@ import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
 
 public class LocationRequestHelper {
-    public static final String TAG = "GmsLocationRequestHelper";
+    public static final String TAG = "GmsLocRequestHelper";
     private final Context context;
     public final LocationRequest locationRequest;
     public final boolean hasFinePermission;
@@ -90,10 +90,7 @@ public class LocationRequestHelper {
         }
         lastReport = location;
         numReports++;
-        if (numReports >= locationRequest.getNumUpdates()) {
-            return false;
-        }
-        return true;
+        return numReports < locationRequest.getNumUpdates();
     }
 
     @Override

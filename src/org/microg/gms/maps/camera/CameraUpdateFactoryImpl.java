@@ -29,7 +29,7 @@ import org.oscim.core.MapPosition;
 import org.oscim.map.Map;
 
 public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
-    private static final String TAG = CameraUpdateFactoryImpl.class.getName();
+    private static final String TAG = "GmsMapCamUpdateFactory";
 
     @Override
     public IObjectWrapper zoomIn() throws RemoteException {

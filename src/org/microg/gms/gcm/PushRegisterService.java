@@ -23,7 +23,7 @@ import android.os.Build;
 import android.util.Log;
 
 public class PushRegisterService extends IntentService {
-    private static final String TAG = "GmsGcmRegisterService";
+    private static final String TAG = "GmsGcmRegisterSvc";
 
     public PushRegisterService() {
         super(TAG);

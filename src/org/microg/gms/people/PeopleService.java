@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.people.service;
+package org.microg.gms.people;
 
 import android.app.Service;
 import android.content.Intent;
@@ -26,12 +26,11 @@ import android.util.Log;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.AbstractGmsServiceBroker;
-import org.microg.gms.people.service.PeopleServiceImpl;
 
 import static org.microg.gms.common.Constants.ACTION_GMS_PEOPLE_SERVICE_START;
 
 public class PeopleService extends Service {
-    private static final String TAG = "GmsPeopleService";
+    private static final String TAG = "GmsPeopleSvc";
 
     private PeopleServiceImpl impl = new PeopleServiceImpl(this);
     private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker() {

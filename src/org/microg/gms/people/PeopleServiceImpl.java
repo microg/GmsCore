@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.microg.gms.people.service;
+package org.microg.gms.people;
 
 import android.content.Context;
 import android.os.Binder;

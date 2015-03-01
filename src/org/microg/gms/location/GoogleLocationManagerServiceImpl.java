@@ -39,7 +39,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.List;
 
 public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerService.Stub {
-    private static final String TAG = "GmsLMSImpl";
+    private static final String TAG = "GmsLocManagerSvcImpl";
 
     private final Context context;
     private GoogleLocationManager locationManager;

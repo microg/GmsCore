@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package org.microg.gms.maps.bitmap;
+package com.google.android.gms.ads;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.Activity;
 
-public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
-    private int resourceId;
-
-    public ResourceBitmapDescriptor(int resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    @Override
-    public Bitmap generateBitmap(Context context) {
-        return BitmapFactory.decodeResource(context.getResources(), resourceId);
-    }
+public class AdActivity extends Activity {
 }

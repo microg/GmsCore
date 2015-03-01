@@ -36,7 +36,7 @@ import org.oscim.layers.marker.MarkerSymbol;
 import org.oscim.map.Map;
 
 public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
-    private static final String TAG = MarkerImpl.class.getName();
+    private static final String TAG = "GmsMapMarkerImpl";
 
     private final String id;
     private final MarkerOptions options;

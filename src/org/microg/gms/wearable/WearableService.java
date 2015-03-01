@@ -14,31 +14,19 @@
  * limitations under the License.
  */
 
-package org.microg.gms.checkin;
+package org.microg.gms.wearable;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
+import android.os.IBinder;
 import android.util.Log;
 
-import java.io.IOException;
-
-public class CheckinService extends IntentService {
-    private static final String TAG = "GmsCheckinSvc";
-
-    public CheckinService() {
-        super(TAG);
-    }
+public class WearableService extends Service {
+    private static final String TAG = "GmsWearSvc";
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-        try {
-            LastCheckinInfo info = CheckinManager.checkin(this);
-            if (info != null) {
-                Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
-            }
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
-        stopSelf();
+    public IBinder onBind(Intent intent) {
+        Log.d(TAG, "onBind: " + intent);
+        return null;
     }
 }

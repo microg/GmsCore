@@ -58,29 +58,45 @@
         <!-- Location -->
 
         <service
-            android:name="com.google.android.location.internal.GoogleLocationManagerService"
-            android:permission="android.permission.ACCESS_COARSE_LOCATION"
+            android:name="org.microg.gms.location.GoogleLocationManagerService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.location.internal.GMS_NLP" />
-            </intent-filter>
-
-            <meta-data
-                android:name="minProtocolVersion"
-                android:value="1" />
-            <meta-data
-                android:name="maxProtocolVersion"
-                android:value="1" />
-            <meta-data
-                android:name="releaseVersion"
-                android:value="2007" />
-            <meta-data
-                android:name="nlpServiceIntent"
-                android:value="com.google.android.location.internal.GMS_NLP" />
         </service>
+
+        <!--
+        ~ TODO: maybe this should go in UnifiedNlp?
+        ~ Only if fake signature is not required
+        -->
+        <service android:name="org.microg.gms.location.ReportingAndroidService">
+            <intent-filter>
+                <action android:name="com.google.android.location.reporting.service.START" />
+                <action android:name="com.google.android.gms.location.reporting.service.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- Services Framework -->
+
+        <provider
+            android:name="org.microg.gms.gservices.GServicesProvider"
+            android:exported="true"
+            android:authorities="com.google.android.gsf.gservices" />
+
+        <provider
+            android:name="org.microg.gms.settings.GoogleSettingsProvider"
+            android:exported="true"
+            android:authorities="com.google.settings" />
+
+        <provider
+            android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
+            android:authorities="subscribedfeeds"
+            android:exported="true"
+            android:multiprocess="false"
+            android:readPermission="android.permission.SUBSCRIBED_FEEDS_READ"
+            android:writePermission="android.permission.SUBSCRIBED_FEEDS_WRITE" />
 
         <!-- Device Checkin -->
 
@@ -115,28 +131,24 @@
             </intent-filter>
         </service>
 
-        <!-- Services Framework -->
-        <provider
-            android:name="org.microg.gms.gservices.GServicesProvider"
-            android:exported="true"
-            android:authorities="com.google.android.gsf.gservices" />
-
-        <provider
-            android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
-            android:authorities="subscribedfeeds"
-            android:exported="true"
-            android:multiprocess="false"
-            android:readPermission="android.permission.SUBSCRIBED_FEEDS_READ"
-            android:writePermission="android.permission.SUBSCRIBED_FEEDS_WRITE" />
-
         <!-- People -->
 
         <service
-            android:name=".people.service.PeopleService"
+            android:name="org.microg.gms.people.PeopleService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.people.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <!-- Wearable -->
+
+        <service
+            android:name="org.microg.gms.wearable.WearableService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND" />
             </intent-filter>
         </service>
 
@@ -194,5 +206,24 @@
         <activity
             android:name=".auth.TokenActivity"
             android:exported="true" />
+
+        <!-- Other -->
+
+        <service
+            android:name="org.microg.gms.mdm.NetworkQualityService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.mdm.services.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.icing.LightweightIndexService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

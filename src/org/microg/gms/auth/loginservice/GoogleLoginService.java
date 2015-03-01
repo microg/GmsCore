@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class GoogleLoginService extends Service {
-    private static final String TAG = "GmsLoginService";
+    private static final String TAG = "GmsAuthLoginSvc";
 
     private String accountType;
 

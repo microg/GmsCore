@@ -44,7 +44,7 @@ import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 import java.util.HashMap;
 
 public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem> {
-    private final static String TAG = "GmsBackendMap";
+    private final static String TAG = "GmsMapBackend";
 
     private final Context context;
     private final MapView mapView;

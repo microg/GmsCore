@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RealLocationProvider {
 
-    public static final String TAG = "GmsRealLocationProvider";
+    public static final String TAG = "GmsLocProviderReal";
     private Location lastLocation;
     private LocationManager locationManager;
     private String name;

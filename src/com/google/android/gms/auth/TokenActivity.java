@@ -16,22 +16,20 @@
 
 package com.google.android.gms.auth;
 
-import android.accounts.*;
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
-import java.io.IOException;
-
 public class TokenActivity extends Activity {
+    private static final String TAG = "GmsAuthTokenActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         extras.get("KEY");
-        Log.d("TokenActivity", extras.toString());
-        AccountManager accountManager = AccountManager.get(this);
+        Log.d(TAG, extras.toString());
+        /*AccountManager accountManager = AccountManager.get(this);
         accountManager.getAuthToken(new Account(extras.getString("authAccount"), "com.google"), extras.getString("service"), extras.getBundle("callerExtras"), this, new AccountManagerCallback<Bundle>() {
             @Override
             public void run(AccountManagerFuture<Bundle> future) {
@@ -51,6 +49,6 @@ public class TokenActivity extends Activity {
                     e.printStackTrace();
                 }
             }
-        }, new Handler(getMainLooper()));
+        }, new Handler(getMainLooper()));*/
     }
 }

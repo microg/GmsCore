@@ -35,7 +35,7 @@ import com.google.android.gms.auth.AccountChangeEventsResponse;
 import org.microg.gms.common.Utils;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
-    private static final String TAG = "GmsAuthManagerService";
+    private static final String TAG = "GmsAuthManagerSvc";
 
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
 
