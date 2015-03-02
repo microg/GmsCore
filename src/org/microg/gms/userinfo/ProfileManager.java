@@ -99,7 +99,7 @@ public class ProfileManager {
             byte[] bytes = Utils.readStreamToEnd(conn.getInputStream());
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             if (bitmap != null)
-                preferences.edit().putString("profile_picture", Base64.encodeToString(bytes, Base64.DEFAULT)).commit();
+                preferences.edit().putString("profile_picture", Base64.encodeToString(bytes, Base64.DEFAULT)).apply();
             return bitmap;
         } catch (Exception e) {
             Log.w(TAG, e);
