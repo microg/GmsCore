@@ -16,6 +16,8 @@
 
 package org.microg.gms.icing;
 
+import android.os.Parcel;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.appdatasearch.UsageInfo;
@@ -29,5 +31,12 @@ public class LightweightAppDataSearchImpl extends ILightweightAppDataSearch.Stub
 
     public void view(ILightweightAppDataSearchCallbacks callbacks, String packageName, UsageInfo[] usageInfos) {
         Log.d(TAG, "view: " + Arrays.toString(usageInfos));
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
     }
 }
