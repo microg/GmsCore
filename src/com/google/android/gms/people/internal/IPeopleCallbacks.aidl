@@ -3,5 +3,6 @@ package com.google.android.gms.people.internal;
 import com.google.android.gms.common.data.DataHolder;
 
 interface IPeopleCallbacks {
-    void onDataHolders(int code, in Bundle meta, in DataHolder[] data) = 3;
+    void onDataHolder(int code, in Bundle resolution, in DataHolder holder) = 1;
+    void onDataHolders(int code, in Bundle resolution, in DataHolder[] holders) = 3;
 }
