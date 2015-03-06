@@ -23,7 +23,7 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import org.microg.gms.common.Constants;
-import org.microg.gms.common.Utils;
+import org.microg.gms.common.PackageUtils;
 
 public class AuthManager {
 
@@ -91,7 +91,7 @@ public class AuthManager {
     }
 
     public static void storePermission(Context context, Account account, String packageName, String service) {
-        storePermission(context, account, packageName, Utils.getFirstPackageSignatureDigest(context, packageName), service);
+        storePermission(context, account, packageName, PackageUtils.firstSignatureDigest(context, packageName), service);
     }
 
     public static void storePermission(Context context, Account account, String packageName,

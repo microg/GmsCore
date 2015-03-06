@@ -17,16 +17,31 @@
 package org.microg.gms.gcm;
 
 import android.content.Context;
+import android.util.Log;
 
+import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.Utils;
 
+import java.io.IOException;
+
 public class GcmManager {
+    private static final String TAG = "GmsGcmManager";
+
     public static String register(Context context, String app, String sender, String info) {
-        new RegisterRequest()
-                .build(Utils.getBuild(context))
-                .sender(sender)
-                .info(info)
-                .app(app, Utils.getFirstPackageSignatureDigest(context, app), 0); // TODO
+        try {
+            return new RegisterRequest()
+                    .build(Utils.getBuild(context))
+                    .sender(sender)
+                    .info(info)
+                    .checkin(LastCheckinInfo.read(context))
+                    .app(app, PackageUtils.firstSignatureDigest(context, app), PackageUtils.versionCode(context, app))
+                    .getResponse()
+                    .token;
+        } catch (IOException e) {
+            Log.w(TAG, e);
+        }
+
         return null;
     }
 }

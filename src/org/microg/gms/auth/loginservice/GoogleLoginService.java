@@ -34,7 +34,7 @@ import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.auth.login.LoginActivity;
-import org.microg.gms.common.Utils;
+import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -106,8 +106,8 @@ public class GoogleLoginService extends Service {
         options.keySet();
         Log.d(TAG, "getAuthToken: " + account + ", " + authTokenType + ", " + options);
         String app = options.getString(AccountManager.KEY_ANDROID_PACKAGE_NAME);
-        Utils.checkPackage(this, app, options.getInt(AccountManager.KEY_CALLER_UID), options.getInt(AccountManager.KEY_CALLER_UID));
-        String appSignature = Utils.getFirstPackageSignatureDigest(this, app);
+        PackageUtils.checkPackageUid(this, app, options.getInt(AccountManager.KEY_CALLER_UID), options.getInt(AccountManager.KEY_CALLER_UID));
+        String appSignature = PackageUtils.firstSignatureDigest(this, app);
         if (!AuthManager.isPermitted(this, account, app, appSignature, authTokenType)) {
             Bundle result = new Bundle();
             Intent i = new Intent(this, AskPermissionActivity.class);

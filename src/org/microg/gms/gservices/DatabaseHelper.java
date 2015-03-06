@@ -28,9 +28,10 @@ import java.util.Map;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 3;
     private static final int DB_VERSION_OLD = 1;
+    public static final String DB_NAME = "gservices.db";
 
     public DatabaseHelper(Context context) {
-        super(context, "gservices.db", null, DB_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override

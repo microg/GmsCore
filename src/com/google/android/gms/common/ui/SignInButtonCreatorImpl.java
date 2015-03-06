@@ -16,5 +16,18 @@
 
 package com.google.android.gms.common.ui;
 
-public class SignInButtonCreatorImpl {
+import android.content.Context;
+import android.view.View;
+
+import com.google.android.gms.common.internal.ISignInButtonCreator;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.ObjectWrapper;
+
+public class SignInButtonCreatorImpl extends ISignInButtonCreator.Stub {
+    @Override
+    public IObjectWrapper createSignInButton(IObjectWrapper contextWrapper, int size, int color) {
+        Context context = (Context) ObjectWrapper.unwrap(contextWrapper);
+        // TODO: real view :)
+        return ObjectWrapper.wrap(new View(context));
+    }
 }

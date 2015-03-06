@@ -37,7 +37,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.common.Utils;
+import org.microg.gms.common.PackageUtils;
 import org.microg.gms.userinfo.ProfileManager;
 
 import java.io.IOException;
@@ -69,7 +69,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         service = getIntent().getStringExtra(AccountManager.KEY_AUTHTOKEN);
         if (getIntent().hasExtra(EXTRA_FROM_ACCOUNT_MANAGER)) fromAccountManager = true;
         int callerUid = getIntent().getIntExtra(AccountManager.KEY_CALLER_UID, 0);
-        Utils.checkPackage(this, packageName, callerUid);
+        PackageUtils.checkPackageUid(this, packageName, callerUid);
 
         // receive package info
         PackageManager packageManager = getPackageManager();
@@ -135,7 +135,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
             @Override
             public void run() {
                 Context context = AskPermissionActivity.this;
-                String sig = Utils.getFirstPackageSignatureDigest(context, packageName);
+                String sig = PackageUtils.firstSignatureDigest(context, packageName);
                 AuthRequest request = new AuthRequest().fromContext(context)
                         .email(account.name)
                         .token(AccountManager.get(context).getPassword(account))

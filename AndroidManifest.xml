@@ -24,6 +24,11 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
+    <permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission
+        android:name="com.google.android.c2dm.permission.SEND"
+        android:protectionLevel="dangerous" />
+
     <permission-tree android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
 
     <permission
@@ -47,6 +52,9 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.SEND" />
 
     <application
         android:label="@string/gms_app_name"

@@ -20,6 +20,7 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 public class PushRegisterService extends IntentService {
@@ -58,14 +59,18 @@ public class PushRegisterService extends IntentService {
         PendingIntent pendingIntent = intent.getParcelableExtra("app");
         String sender = intent.getStringExtra("sender");
         String app = packageFromPendingIntent(pendingIntent);
+        Bundle extras = intent.getExtras();
+        extras.keySet();
+        Log.d(TAG, "register[req]: " + extras);
         Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
         outIntent.setPackage(app);
-        String regId = GcmManager.register(this, app, sender, null); // TODO
+        String regId = GcmManager.register(this, app, sender, null);
         if (regId != null) {
             outIntent.putExtra("registration_id", regId);
         } else {
             outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
         }
+        Log.d(TAG, "register[res]: " + outIntent);
         sendOrderedBroadcast(outIntent, null);
     }
 

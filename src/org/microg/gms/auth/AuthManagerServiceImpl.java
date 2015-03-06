@@ -18,21 +18,17 @@ package org.microg.gms.auth;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
 
-import org.microg.gms.common.Utils;
+import org.microg.gms.common.PackageUtils;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     private static final String TAG = "GmsAuthManagerSvc";
@@ -64,12 +60,12 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public Bundle getToken(String accountName, String scope, Bundle extras) throws RemoteException {
         String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME, extras.getString(KEY_CLIENT_PACKAGE_NAME, null));
         int callerUid = extras.getInt(KEY_CALLER_UID, 0);
-        Utils.checkPackage(context, packageName, callerUid, getCallingUid());
+        PackageUtils.checkPackageUid(context, packageName, callerUid, getCallingUid());
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
         Log.d(TAG, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
         Account account = new Account(accountName, GOOGLE_ACCOUNT_TYPE);
-        String sig = Utils.getFirstPackageSignatureDigest(context, packageName);
+        String sig = PackageUtils.firstSignatureDigest(context, packageName);
 
         if (!AuthManager.isPermitted(context, account, packageName, sig, scope)) {
             Bundle result = new Bundle();

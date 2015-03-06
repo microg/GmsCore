@@ -27,7 +27,6 @@ import android.util.Log;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.people.internal.IPeopleCallbacks;
 import com.google.android.gms.people.internal.IPeopleService;
-import com.google.android.gms.people.model.AccountMetadata;
 
 public class PeopleServiceImpl extends IPeopleService.Stub {
     private static final String TAG = "GmsPeopleSvcImpl";
@@ -47,12 +46,15 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
                 Bundle result = new Bundle();
                 for (Account account : accountManager.getAccountsByType("com.google")) {
                     if (accountName == null || account.name.equals(accountName)) {
-                        result.putParcelable(account.name, new AccountMetadata());
+                        result.putParcelable(account.name, null);
                     }
                 }
                 try {
-                    callbacks.onDataHolders(0, result, new DataHolder[0]);
-                } catch (RemoteException e) {
+                    DatabaseHelper databaseHelper = new DatabaseHelper(context);
+                    DataHolder dataHolder = DataHolder.fromCursor(databaseHelper.getOwners(), 0, result);
+                    Log.d(TAG, "loadOwners[result]: " + dataHolder);
+                    callbacks.onDataHolder(0, result, dataHolder);
+                } catch (Exception e) {
                     Log.w(TAG, e);
                 }
             }
