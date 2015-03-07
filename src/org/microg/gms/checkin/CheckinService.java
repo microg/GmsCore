@@ -20,8 +20,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import java.io.IOException;
-
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
 
@@ -32,7 +30,7 @@ public class CheckinService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            LastCheckinInfo info = CheckinManager.checkin(this);
+            LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra("force", false));
             if (info != null) {
                 Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
             }

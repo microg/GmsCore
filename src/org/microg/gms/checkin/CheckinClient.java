@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -118,7 +119,9 @@ public class CheckinClient {
 
     private static CheckinRequest makeRequest(CheckinRequest.Checkin checkin,
                                               CheckinRequest.DeviceConfig deviceConfig,
-                                              DeviceIdentifier deviceIdent, LastCheckinInfo checkinInfo) {
+                                              DeviceIdentifier deviceIdent,
+                                              LastCheckinInfo checkinInfo,
+                                              List<Account> accounts) {
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
                 .accountCookie(Arrays.asList("")) // TODO
                 .androidId(checkinInfo.androidId)
@@ -136,6 +139,11 @@ public class CheckinClient {
                 .userName((String) TODO)
                 .userSerialNumber((Integer) TODO)
                 .version(3);
+        builder.accountCookie(new ArrayList<String>());
+        for (Account account : accounts) {
+            builder.accountCookie.add("[" + account.name + "]");
+            builder.accountCookie.add(account.authToken);
+        }
         if (deviceIdent.wifiMac != null) {
             builder.macAddress(Arrays.asList(deviceIdent.wifiMac))
                     .macAddressType(Arrays.asList("wifi"));
@@ -150,8 +158,19 @@ public class CheckinClient {
 
     public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
-                                             LastCheckinInfo checkinInfo) {
+                                             LastCheckinInfo checkinInfo,
+                                             List<Account> accounts) {
         return makeRequest(makeCheckin(makeBuild(build), phoneInfo, checkinInfo),
-                makeDeviceConfig(deviceConfiguration), deviceIdent, checkinInfo);
+                makeDeviceConfig(deviceConfiguration), deviceIdent, checkinInfo, accounts);
+    }
+
+    public static class Account {
+        public final String name;
+        public final String authToken;
+
+        public Account(String accountName, String authToken) {
+            this.name = accountName;
+            this.authToken = authToken;
+        }
     }
 }

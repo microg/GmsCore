@@ -27,6 +27,10 @@ public class TriggerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Trigger checkin: " + intent);
-        context.startService(new Intent(context, CheckinService.class));
+        Intent subIntent = new Intent(context, CheckinService.class);
+        if ("android.provider.Telephony.SECRET_CODE".equals(intent.getAction())) {
+            subIntent.putExtra("force", true);
+        }
+        context.startService(subIntent);
     }
 }

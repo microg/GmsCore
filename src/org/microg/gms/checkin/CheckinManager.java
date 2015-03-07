@@ -16,9 +16,13 @@
 
 package org.microg.gms.checkin;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 
+import org.microg.gms.auth.AuthManager;
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
@@ -26,14 +30,26 @@ import org.microg.gms.common.Utils;
 import org.microg.gms.gservices.GServices;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CheckinManager {
     private static final long MIN_CHECKIN_INTERVAL = 3 * 60 * 60 * 1000; // 3 hours
 
-    public static synchronized LastCheckinInfo checkin(Context context) throws IOException {
+    public static synchronized LastCheckinInfo checkin(Context context, boolean force) throws IOException {
         LastCheckinInfo info = LastCheckinInfo.read(context);
-        if (info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL) return null;
-        CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context), new DeviceConfiguration(), new DeviceIdentifier(), new PhoneInfo(), info); // TODO
+        if (!force && info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
+            return null;
+        List<CheckinClient.Account> accounts = new ArrayList<>();
+        AccountManager accountManager = AccountManager.get(context);
+        for (Account account : accountManager.getAccountsByType("com.google")) {
+            String token = AuthManager.getToken(context, account, Constants.GMS_PACKAGE_NAME,
+                    Constants.GMS_PACKAGE_SIGNATURE_SHA1, "ac2dm");
+            accounts.add(new CheckinClient.Account(account.name, token));
+        }
+        CheckinRequest request =
+                CheckinClient.makeRequest(Utils.getBuild(context), new DeviceConfiguration(context),
+                        new DeviceIdentifier(), new PhoneInfo(), info, accounts); // TODO
         return handleResponse(context, CheckinClient.request(request));
     }
 
