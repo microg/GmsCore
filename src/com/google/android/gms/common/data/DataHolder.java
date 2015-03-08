@@ -49,6 +49,8 @@ public class DataHolder extends AutoSafeParcelable {
                 cursorWindow = new CursorWindow(false);
                 cursorWindow.setNumColumns(cursor.getColumnCount());
                 windows.add(cursorWindow);
+                if (!cursorWindow.allocRow())
+                    throw new RuntimeException("Impossible to store Cursor in CursorWindows");
                 row = 0;
             }
             for (int i = 0; i < cursor.getColumnCount(); i++) {

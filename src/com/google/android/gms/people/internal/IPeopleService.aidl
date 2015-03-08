@@ -13,7 +13,7 @@ interface IPeopleService {
     // Bundle syncRawContact(in Uri var1);
     // void loadPeopleForAggregation8(IPeopleCallbacks var1, String var2, String var3, String var4, boolean var5, int var6);
     // void setSyncToContactsSettings(IPeopleCallbacks var1, String var2, boolean var3, in String[] var4);
-    // Bundle registerDataChangedListener(IPeopleCallbacks var1, boolean var2, String var3, String var4, int var5);
+
     // Bundle startSync(String var1, String var2);
     // void requestSync(IPeopleCallbacks var1, String var2, String var3, in Uri var4);
     // void updatePersonCirclesOld(IPeopleCallbacks var1, String var2, String var3, String var4, in List<String> var5, in List<String> var6);
@@ -31,5 +31,6 @@ interface IPeopleService {
     // void addCircle(IPeopleCallbacks var1, String var2, String var3, String var4, String var5);
     // void addPeopleToCircle(IPeopleCallbacks var1, String var2, String var3, String var4, in List<String> var5);
 
-    void loadOwners(IPeopleCallbacks callbacks, boolean var2, boolean var3, String var4, String var5, int var6) = 304;
+    Bundle registerDataChangedListener(IPeopleCallbacks callbacks, boolean register, String var3, String var4, int scopes) = 10;
+    void loadOwners(IPeopleCallbacks callbacks, boolean var2, boolean var3, String account, String var5, int sortOrder) = 304;
 }
