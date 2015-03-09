@@ -57,6 +57,12 @@ public class AuthResponse {
     public long expiry = -1;
     @ResponseField("storeConsentRemotely")
     public boolean storeConsentRemotely = true;
+    @ResponseField("Permission")
+    public String permission;
+    @ResponseField("ScopeConsentDetails")
+    public String scopeConsentDetails;
+    @ResponseField("ConsentDataBase64")
+    public String consentDataBase64;
 
     public static AuthResponse parse(String result) {
         AuthResponse response = new AuthResponse();

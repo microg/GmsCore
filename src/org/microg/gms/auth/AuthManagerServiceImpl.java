@@ -16,12 +16,11 @@
 
 package org.microg.gms.auth;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.auth.IAuthManagerService;
@@ -30,13 +29,18 @@ import com.google.android.gms.auth.AccountChangeEventsResponse;
 
 import org.microg.gms.common.PackageUtils;
 
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
+
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     private static final String TAG = "GmsAuthManagerSvc";
 
     public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
 
     public static final String KEY_AUTHORITY = "authority";
-    public static final String KEY_ANDROID_PACKAGE_NAME = "androidPackageName";
     public static final String KEY_CALLBACK_INTENT = "callback_intent";
     public static final String KEY_CALLER_UID = "callerUid";
     public static final String KEY_CLIENT_PACKAGE_NAME = "clientPackageName";
@@ -50,7 +54,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String KEY_ERROR = "Error";
     public static final String KEY_USER_RECOVERY_INTENT = "userRecoveryIntent";
 
-    private Context context;
+    private final Context context;
 
     public AuthManagerServiceImpl(Context context) {
         this.context = context;
@@ -64,42 +68,36 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
         Log.d(TAG, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
-        Account account = new Account(accountName, GOOGLE_ACCOUNT_TYPE);
-        String sig = PackageUtils.firstSignatureDigest(context, packageName);
-
-        if (!AuthManager.isPermitted(context, account, packageName, sig, scope)) {
-            Bundle result = new Bundle();
-            result.putString(KEY_ERROR, "Unknown");
-            Intent i = new Intent(context, AskPermissionActivity.class);
-            i.putExtras(extras);
-            i.putExtra(AccountManager.KEY_ANDROID_PACKAGE_NAME, packageName);
-            i.putExtra(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-            i.putExtra(AccountManager.KEY_ACCOUNT_NAME, account.name);
-            i.putExtra(AccountManager.KEY_AUTHTOKEN, scope);
-            if (notify) {
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
-            } else {
-                result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
-            }
-            return result;
-        }
+        AuthManager authManager = new AuthManager(context, accountName, packageName, scope);
         try {
-            AuthResponse response = new AuthRequest().fromContext(context)
-                    .app(packageName, sig)
-                    .callerIsApp()
-                    .email(accountName)
-                    .token(AccountManager.get(context).getPassword(account))
-                    .service(scope)
-                    .getResponse();
-            AuthManager.storeResponse(context, account, packageName, sig, scope, response);
-            Log.d("getToken", response.auth);
-            Bundle result = new Bundle();
-            result.putString(KEY_AUTH_TOKEN, response.auth);
-            result.putString(KEY_ERROR, "Unknown");
-            return result;
+            AuthResponse res = authManager.requestAuth(false);
+            if (res.auth != null) {
+                Log.d(TAG, "getToken: " + res.auth);
+                Bundle result = new Bundle();
+                result.putString(KEY_AUTH_TOKEN, res.auth);
+                result.putString(KEY_ERROR, "OK");
+                return result;
+            } else {
+                Bundle result = new Bundle();
+                result.putString(KEY_ERROR, "Unknown");
+                Intent i = new Intent(context, AskPermissionActivity.class);
+                i.putExtras(extras);
+                i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
+                i.putExtra(KEY_ACCOUNT_TYPE, GOOGLE_ACCOUNT_TYPE);
+                i.putExtra(KEY_ACCOUNT_NAME, accountName);
+                i.putExtra(KEY_AUTHTOKEN, scope);
+                if (res.consentDataBase64 != null)
+                    i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.DEFAULT));
+                if (notify) {
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(i);
+                } else {
+                    result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
+                }
+                return result;
+            }
         } catch (Exception e) {
-            Log.w("AuthManagerService", e);
+            Log.w(TAG, e);
             throw new RemoteException(e.getMessage());
         }
     }

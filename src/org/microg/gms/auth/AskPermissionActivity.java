@@ -19,7 +19,6 @@ package org.microg.gms.auth;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -36,19 +35,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.R;
+import com.squareup.wire.Wire;
 
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.people.PeopleManager;
 
 import java.io.IOException;
 
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.accounts.AccountManager.KEY_CALLER_UID;
+
 public class AskPermissionActivity extends AccountAuthenticatorActivity {
     public static final String EXTRA_FROM_ACCOUNT_MANAGER = "from_account_manager";
+    public static final String EXTRA_CONSENT_DATA = "consent_data";
 
     private static final String TAG = "GmsAuthAskPermission";
     private Account account;
     private String packageName;
     private String service;
+    private AuthManager authManager;
+    private ConsentData consentData;
     private boolean fromAccountManager = false;
 
     @Override
@@ -63,13 +72,21 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(lp);
 
-        account = new Account(getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_NAME),
-                getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
-        packageName = getIntent().getStringExtra(AccountManager.KEY_ANDROID_PACKAGE_NAME);
-        service = getIntent().getStringExtra(AccountManager.KEY_AUTHTOKEN);
+        account = new Account(getIntent().getStringExtra(KEY_ACCOUNT_NAME),
+                getIntent().getStringExtra(KEY_ACCOUNT_TYPE));
+        packageName = getIntent().getStringExtra(KEY_ANDROID_PACKAGE_NAME);
+        service = getIntent().getStringExtra(KEY_AUTHTOKEN);
+        if (getIntent().hasExtra(EXTRA_CONSENT_DATA)) {
+            try {
+                consentData = new Wire().parseFrom(getIntent().getByteArrayExtra(EXTRA_CONSENT_DATA), ConsentData.class);
+                Log.d(TAG, "Consent: " + consentData);
+            } catch (Exception ignored) {
+            }
+        }
         if (getIntent().hasExtra(EXTRA_FROM_ACCOUNT_MANAGER)) fromAccountManager = true;
-        int callerUid = getIntent().getIntExtra(AccountManager.KEY_CALLER_UID, 0);
+        int callerUid = getIntent().getIntExtra(KEY_CALLER_UID, 0);
         PackageUtils.checkPackageUid(this, packageName, callerUid);
+        authManager = new AuthManager(this, account.name, packageName, service);
 
         // receive package info
         PackageManager packageManager = getPackageManager();
@@ -126,7 +143,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
     }
 
     public void onAllow() {
-        AuthManager.storePermission(this, account, packageName, service);
+        authManager.setPermitted(true);
         findViewById(android.R.id.button1).setEnabled(false);
         findViewById(android.R.id.button2).setEnabled(false);
         findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
@@ -134,27 +151,13 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Context context = AskPermissionActivity.this;
-                String sig = PackageUtils.firstSignatureDigest(context, packageName);
-                AuthRequest request = new AuthRequest().fromContext(context)
-                        .email(account.name)
-                        .token(AccountManager.get(context).getPassword(account))
-                        .service(service)
-                        .app(packageName, sig)
-                        .hasPermission();
-                if (fromAccountManager) {
-                    request.callerIsGms().calledFromAccountManager();
-                } else {
-                    request.callerIsApp();
-                }
                 try {
-                    AuthResponse response = request.getResponse();
-                    AuthManager.storeResponse(context, account, packageName, sig, service, response);
+                    AuthResponse response = authManager.requestAuth(fromAccountManager);
                     Bundle result = new Bundle();
-                    result.putString(AccountManager.KEY_AUTHTOKEN, response.auth);
-                    result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
-                    result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
-                    result.putString(AccountManager.KEY_ANDROID_PACKAGE_NAME, packageName);
+                    result.putString(KEY_AUTHTOKEN, response.auth);
+                    result.putString(KEY_ACCOUNT_NAME, account.name);
+                    result.putString(KEY_ACCOUNT_TYPE, account.type);
+                    result.putString(KEY_ANDROID_PACKAGE_NAME, packageName);
                     result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
                     setAccountAuthenticatorResult(result);
                 } catch (IOException e) {
@@ -167,6 +170,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
     }
 
     public void onDeny() {
+        authManager.setPermitted(false);
         finish();
     }
 
@@ -177,6 +181,36 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
 
     private boolean isOAuth() {
         return service.startsWith("oauth2:") || service.startsWith("oauth:");
+    }
+
+    private String getScopeLabel(String scope) {
+        if (consentData != null) {
+            for (ConsentData.ScopeDetails scopeDetails : consentData.scopes) {
+                if (scope.equals(scopeDetails.id)) {
+                    return scopeDetails.title;
+                }
+            }
+        }
+        String labelResourceId = "permission_scope_";
+        String escapedScope = scope.replace("/", "_").replace("-", "_");
+        if (scope.startsWith("https://")) {
+            labelResourceId += escapedScope.substring(8);
+        } else {
+            labelResourceId += escapedScope;
+        }
+        int labelResource = getResources().getIdentifier(labelResourceId, "string", getPackageName());
+        if (labelResource != 0) {
+            return getString(labelResource);
+        }
+        return "unknown";
+    }
+
+    private String getServiceLabel(String service) {
+        int labelResource = getResources().getIdentifier("permission_service_" + service + "_label", "string", getPackageName());
+        if (labelResource != 0) {
+            return getString(labelResource);
+        }
+        return "unknown";
     }
 
     private class PermissionAdapter extends BaseAdapter {
@@ -206,20 +240,11 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             String item = getItem(position);
-            String label = "unknown";
-            String labelResourceId;
+            String label;
             if (isOAuth()) {
-                if (item.startsWith("https://")) {
-                    labelResourceId = "permission_scope_" + item.substring(8).replace("/", "_").replace("-", "_");
-                } else {
-                    labelResourceId = "permission_scope_" + item.replace("/", "_").replace("-", "_");
-                }
+                label = getScopeLabel(item);
             } else {
-                labelResourceId = "permission_service_" + item + "_label";
-            }
-            int labelResource = getResources().getIdentifier(labelResourceId, "string", getPackageName());
-            if (labelResource != 0) {
-                label = getString(labelResource);
+                label = getServiceLabel(item);
             }
             View view = convertView;
             if (view == null) {

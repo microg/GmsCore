@@ -20,96 +20,186 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
-import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
+
+import java.io.IOException;
+
+import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
+import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
     public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
+    private static final String PREF_KEY_TRUST_GOOGLE = "auth_manager_trust_google";
 
-    public static void storeResponse(Context context, Account account, String packageName,
-                                     String sig, String service, AuthResponse response) {
-        if (service.startsWith("weblogin:")) return;
-        AccountManager accountManager = AccountManager.get(context);
-        if (response.accountId != null)
-            accountManager.setUserData(account, "GoogleUserId", response.accountId);
-        if (response.Sid != null)
-            accountManager.setAuthToken(account, buildTokenKey(packageName, sig, "SID"), response.Sid);
-        if (response.LSid != null)
-            accountManager.setAuthToken(account, buildTokenKey(packageName, sig, "LSID"), response.LSid);
-        if (response.expiry > 0)
-            accountManager.setUserData(account, buildExpireKey(packageName, sig, service), Long.toString(response.expiry));
-        if (response.auth != null && response.expiry != 0 && response.storeConsentRemotely) {
-            accountManager.setAuthToken(account, buildTokenKey(packageName, sig, service), response.auth);
-            accountManager.setUserData(account, buildPermKey(packageName, sig, service), "1");
-        }
+    private final Context context;
+    private final String accountName;
+    private final String packageName;
+    private final String service;
+    private AccountManager accountManager;
+    private Account account;
+    private String packageSignature;
+
+    public AuthManager(Context context, String accountName, String packageName, String service) {
+        this.context = context;
+        this.accountName = accountName;
+        this.packageName = packageName;
+        this.service = service;
     }
 
-    public static String getToken(Context context, Account account, String packageName,
-                                  String sig, String service) {
-        if (service.startsWith("weblogin:")) return null;
-        AccountManager accountManager = AccountManager.get(context);
-        return accountManager.peekAuthToken(account, buildTokenKey(packageName, sig, service));
+    public AccountManager getAccountManager() {
+        if (accountManager == null)
+            accountManager = AccountManager.get(context);
+        return accountManager;
     }
 
-    public static boolean isPermitted(Context context, Account account, String packageName,
-                                      String sig, String service) {
-        if (service.startsWith("audience:server:client_id:")) {
-            // https://developers.google.com/accounts/docs/CrossClientAuth
-            Log.d(TAG, "Always permitting scope: " + service);
-            return true;
-        } else if (service.startsWith("weblogin:")) {
-            if (Constants.GMS_PACKAGE_SIGNATURE_SHA1.equals(sig)) {
-                Log.d(TAG, "Permitting weblogin, is Google singed app!");
-                return true;
-            }
-            return false;
-        } else if (!service.startsWith("oauth:") && !service.startsWith("oauth2:")) {
+    public Account getAccount() {
+        if (account == null)
+            account = new Account(accountName, "com.google");
+        return account;
+    }
+
+    public String getPackageSignature() {
+        if (packageSignature == null)
+            packageSignature = PackageUtils.firstSignatureDigest(context, packageName);
+        return packageSignature;
+    }
+
+    public String buildTokenKey(String service) {
+        return packageName + ":" + getPackageSignature() + ":" + service;
+    }
+
+    public String buildTokenKey() {
+        return buildTokenKey(service);
+    }
+
+    public String buildPermKey() {
+        return "perm." + buildTokenKey();
+    }
+
+    public void setPermitted(boolean value) {
+        setUserData(buildPermKey(), value ? "1" : "0");
+    }
+
+    public boolean isPermitted() {
+        if (!service.startsWith("oauth")) {
             if (context.getPackageManager().checkPermission(PERMISSION_TREE_BASE + service, packageName) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "Permitting, permission is present");
                 return true;
             }
         }
-        AccountManager accountManager = AccountManager.get(context);
-        String perm = accountManager.getUserData(account, buildPermKey(packageName, sig, service));
+        String perm = getUserData(buildPermKey());
         if (!"1".equals(perm)) {
-            Log.d(TAG, "Not permitting, permission not stored for " + packageName + ": " + service);
             return false;
-        }
-        String exp = accountManager.getUserData(account, buildExpireKey(packageName, sig, service));
-        if (exp != null) {
-            long expLong = Long.parseLong(exp);
-            if (expLong < System.currentTimeMillis() / 1000L) {
-                Log.d(TAG, "Permission for " + packageName + " / " + service + " present, but expired");
-                return false;
-            }
         }
         return true;
     }
 
-    public static void storePermission(Context context, Account account, String packageName, String service) {
-        storePermission(context, account, packageName, PackageUtils.firstSignatureDigest(context, packageName), service);
+    public void setExpiry(long expiry) {
+        setUserData(buildExpireKey(), Long.toString(expiry));
     }
 
-    public static void storePermission(Context context, Account account, String packageName,
-                                       String sig, String service) {
-        AccountManager accountManager = AccountManager.get(context);
-        accountManager.setUserData(account, buildPermKey(packageName, sig, service), "1");
+    public String getUserData(String key) {
+        return getAccountManager().getUserData(getAccount(), key);
     }
 
-    public static String buildTokenKey(String packageName, String sig, String service) {
+    public void setUserData(String key, String value) {
+        getAccountManager().setUserData(getAccount(), key, value);
+    }
+
+    public String peekAuthToken() {
+        return getAccountManager().peekAuthToken(getAccount(), buildTokenKey());
+    }
+
+    public String getAuthToken() {
         if (service.startsWith("weblogin:")) return null;
-        return packageName + ":" + sig + ":" + service;
+        if (getExpiry() != -1 && getExpiry() < System.currentTimeMillis() / 1000L) {
+            Log.d(TAG, "token present, but expired");
+            return null;
+        }
+        return peekAuthToken();
     }
 
-    private static String buildPermKey(String packageName, String sig, String service) {
-        return "perm." + packageName + ":" + sig + ":" + service;
+    public String buildExpireKey() {
+        return "EXP." + buildTokenKey();
     }
 
-    private static String buildExpireKey(String packageName, String sig, String service) {
-        return "EXP." + packageName + ":" + sig + ":" + service;
+    public long getExpiry() {
+        String exp = getUserData(buildExpireKey());
+        if (exp == null) return -1;
+        return Long.parseLong(exp);
+    }
+
+    public void setAuthToken(String auth) {
+        setAuthToken(service, auth);
+    }
+
+    public void setAuthToken(String service, String auth) {
+        getAccountManager().setAuthToken(getAccount(), buildTokenKey(service), auth);
+    }
+
+    public void storeResponse(AuthResponse response) {
+        if (service.startsWith("weblogin:")) return;
+        if (response.accountId != null)
+            setUserData("GoogleUserId", response.accountId);
+        if (response.Sid != null)
+            setAuthToken("SID", response.Sid);
+        if (response.LSid != null)
+            setAuthToken("LSID", response.LSid);
+        if (response.expiry > 0)
+            setExpiry(response.expiry);
+        if (response.auth != null && response.expiry != 0 && response.storeConsentRemotely)
+            setAuthToken(response.auth);
+    }
+
+    public static boolean isTrustGooglePermitted(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_KEY_TRUST_GOOGLE, true);
+    }
+
+    private boolean isSystemApp() {
+        try {
+            int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
+            return (flags & FLAG_SYSTEM) > 0 || (flags & FLAG_UPDATED_SYSTEM_APP) > 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    public AuthResponse requestAuth(boolean legacy) throws IOException {
+        if (isPermitted() || isTrustGooglePermitted(context)) {
+            String token = getAuthToken();
+            if (token != null) {
+                AuthResponse response = new AuthResponse();
+                response.issueAdvice = "stored";
+                response.auth = token;
+                return response;
+            }
+        }
+        AuthRequest request = new AuthRequest().fromContext(context)
+                .app(packageName, getPackageSignature())
+                .email(accountName)
+                .token(getAccountManager().getPassword(account))
+                .service(service);
+        if (isSystemApp()) request.systemPartition();
+        if (isPermitted()) request.hasPermission();
+        if (legacy) {
+            request.callerIsGms().calledFromAccountManager();
+        } else {
+            request.callerIsApp();
+        }
+        AuthResponse response = request.getResponse();
+        if (!isPermitted() && !isTrustGooglePermitted(context)) {
+            response.auth = null;
+        } else {
+            storeResponse(response);
+        }
+        return response;
+    }
+
+    public String getService() {
+        return service;
     }
 }

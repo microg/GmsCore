@@ -47,6 +47,9 @@ import org.microg.gms.people.PeopleManager;
 
 import java.util.Locale;
 
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
     public static final String EXTRA_TMPL = "tmpl";
@@ -192,10 +195,11 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void retrieveGmsToken(final Account account) {
-        final String service = "ac2dm";
+        final AuthManager authManager = new AuthManager(this, account.name, GMS_PACKAGE_NAME, "ac2dm");
+        authManager.setPermitted(true);
         new AuthRequest().fromContext(this)
                 .appIsGms()
-                .service(service)
+                .service(authManager.getService())
                 .email(account.name)
                 .token(AccountManager.get(this).getPassword(account))
                 .systemPartition()
@@ -205,9 +209,7 @@ public class LoginActivity extends AssistantActivity {
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
-                        AuthManager.storeResponse(LoginActivity.this, account,
-                                Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
-                                service, response);
+                        authManager.storeResponse(response);
                         PeopleManager.loadUserInfo(LoginActivity.this, account);
                         finish();
                     }
