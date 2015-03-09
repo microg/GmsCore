@@ -43,8 +43,7 @@ public class CheckinManager {
         List<CheckinClient.Account> accounts = new ArrayList<>();
         AccountManager accountManager = AccountManager.get(context);
         for (Account account : accountManager.getAccountsByType("com.google")) {
-            String token = AuthManager.getToken(context, account, Constants.GMS_PACKAGE_NAME,
-                    Constants.GMS_PACKAGE_SIGNATURE_SHA1, "ac2dm");
+            String token = new AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "ac2dm").getAuthToken();
             accounts.add(new CheckinClient.Account(account.name, token));
         }
         CheckinRequest request =

@@ -91,28 +91,16 @@ public class PeopleManager {
         }
     }
 
-    public static AuthRequest getUserInfoAuthKeyRequest(Context context, Account account) {
-        return new AuthRequest().fromContext(context)
-                .appIsGms().callerIsGms()
-                .service(USERINFO_SCOPE)
-                .email(account.name)
-                .token(AccountManager.get(context).getPassword(account))
-                .systemPartition()
-                .hasPermission()
-                .getAccountId();
-    }
-
     public static String getUserInfoAuthKey(Context context, Account account) {
-        String result = AuthManager.getToken(context, account, Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
-                USERINFO_SCOPE);
+        AuthManager authManager = new AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, USERINFO_SCOPE);
+        authManager.setPermitted(true);
+        String result = authManager.getAuthToken();
         if (result == null) {
             try {
-                AuthResponse response = getUserInfoAuthKeyRequest(context, account).getResponse();
-                AuthManager.storeResponse(context, account,
-                        Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
-                        USERINFO_SCOPE, response);
+                AuthResponse response = authManager.requestAuth(false);
                 result = response.auth;
             } catch (IOException e) {
+                Log.w(TAG, e);
                 return null;
             }
         }

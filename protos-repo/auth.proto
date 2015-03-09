@@ -1,0 +1,17 @@
+option java_package = "org.microg.gms.auth";
+
+option java_outer_classname = "AuthProto";
+
+message ConsentData {
+    message AppDetails {
+        optional string title = 1;
+        optional string email = 3;
+    }
+    optional AppDetails app = 1;
+    message ScopeDetails {
+        optional string title = 1;
+        optional string description = 2;
+        optional string id = 6;
+    }
+    repeated ScopeDetails scopes = 2;
+}

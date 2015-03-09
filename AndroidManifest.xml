@@ -18,7 +18,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.google.android.gms"
     android:versionName="1.0"
-    android:versionCode="6599436">
+    android:versionCode="6772000">
 
     <uses-sdk
         android:minSdkVersion="16"
