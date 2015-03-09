@@ -21,6 +21,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
+import android.os.Messenger;
 import android.util.Log;
 
 public class PushRegisterService extends IntentService {
@@ -71,6 +73,17 @@ public class PushRegisterService extends IntentService {
             outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
         }
         Log.d(TAG, "register[res]: " + outIntent);
+        try {
+            if (intent.hasExtra("google.messenger")) {
+                Messenger messenger = intent.getParcelableExtra("google.messenger");
+                Message message = Message.obtain();
+                message.obj = outIntent;
+                messenger.send(message);
+                return;
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
         sendOrderedBroadcast(outIntent, null);
     }
 
