@@ -151,7 +151,7 @@ public class AuthManager {
             setAuthToken("LSID", response.LSid);
         if (response.expiry > 0)
             setExpiry(response.expiry);
-        if (response.auth != null && response.expiry != 0 && response.storeConsentRemotely)
+        if (response.auth != null && (response.expiry != 0 || response.storeConsentRemotely))
             setAuthToken(response.auth);
     }
 
