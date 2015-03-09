@@ -38,7 +38,7 @@ import android.widget.TextView;
 import com.google.android.gms.R;
 
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.userinfo.ProfileManager;
+import org.microg.gms.people.PeopleManager;
 
 import java.io.IOException;
 
@@ -83,7 +83,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         }
         CharSequence appLabel = packageManager.getApplicationLabel(applicationInfo);
         Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
-        Bitmap profileIcon = ProfileManager.getProfilePicture(this, account, false);
+        Bitmap profileIcon = PeopleManager.getUserPicture(this, account, false);
 
         // receive profile icon
         if (profileIcon != null) {
@@ -92,7 +92,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    final Bitmap profileIcon = ProfileManager.getProfilePicture(AskPermissionActivity.this, account, true);
+                    final Bitmap profileIcon = PeopleManager.getUserPicture(AskPermissionActivity.this, account, true);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

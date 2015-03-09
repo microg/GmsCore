@@ -25,6 +25,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.data.DataHolder;
+import com.google.android.gms.common.internal.ICancelToken;
 import com.google.android.gms.people.internal.IPeopleCallbacks;
 import com.google.android.gms.people.internal.IPeopleService;
 
@@ -39,26 +40,34 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
     @Override
     public void loadOwners(final IPeopleCallbacks callbacks, boolean var2, boolean var3, final String accountName, String var5, int sortOrder) {
         Log.d(TAG, "loadOwners: " + var2 + ", " + var3 + ", " + accountName + ", " + var5 + ", " + sortOrder);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                AccountManager accountManager = AccountManager.get(context);
-                Bundle result = new Bundle();
-                for (Account account : accountManager.getAccountsByType("com.google")) {
-                    if (accountName == null || account.name.equals(accountName)) {
-                        result.putParcelable(account.name, null);
-                    }
-                }
-                try {
-                    DatabaseHelper databaseHelper = new DatabaseHelper(context);
-                    DataHolder dataHolder = DataHolder.fromCursor(databaseHelper.getOwners(), 0, result);
-                    Log.d(TAG, "loadOwners[result]: " + dataHolder);
-                    callbacks.onDataHolder(0, result, dataHolder);
-                } catch (Exception e) {
-                    Log.w(TAG, e);
-                }
+        AccountManager accountManager = AccountManager.get(context);
+        Bundle result = new Bundle();
+        for (Account account : accountManager.getAccountsByType("com.google")) {
+            if (accountName == null || account.name.equals(accountName)) {
+                result.putParcelable(account.name, null);
             }
-        }).start();
+        }
+        try {
+            DatabaseHelper databaseHelper = new DatabaseHelper(context);
+            DataHolder dataHolder = DataHolder.fromCursor(databaseHelper.getOwners(), 0, result);
+            Log.d(TAG, "loadOwners[result]: " + dataHolder);
+            callbacks.onDataHolder(0, result, dataHolder);
+            databaseHelper.close();
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+    }
+
+    @Override
+    public Bundle registerDataChangedListener(IPeopleCallbacks callbacks, boolean register, String var3, String var4, int scopes) {
+        Log.d(TAG, "registerDataChangedListener: " + register + ", " + var3 + ", " + var4 + ", " + scopes);
+        return null;
+    }
+
+    @Override
+    public ICancelToken loadOwnerAvatar(IPeopleCallbacks callbacks, String account, String pageId, int size, int flags) {
+        Log.d(TAG, "loadOwnerAvatar: " + account + ", " + pageId + ", " + size + ", " + flags);
+        return null;
     }
 
     @Override

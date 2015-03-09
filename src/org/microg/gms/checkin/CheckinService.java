@@ -16,9 +16,13 @@
 
 package org.microg.gms.checkin;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+
+import org.microg.gms.people.PeopleManager;
 
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
@@ -33,6 +37,9 @@ public class CheckinService extends IntentService {
             LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra("force", false));
             if (info != null) {
                 Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
+            }
+            for (Account account : AccountManager.get(this).getAccountsByType("com.google")) {
+                PeopleManager.loadUserInfo(this, account);
             }
         } catch (Exception e) {
             Log.w(TAG, e);

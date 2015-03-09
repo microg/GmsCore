@@ -43,7 +43,7 @@ import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
-import org.microg.gms.userinfo.ProfileManager;
+import org.microg.gms.people.PeopleManager;
 
 import java.util.Locale;
 
@@ -208,25 +208,7 @@ public class LoginActivity extends AssistantActivity {
                         AuthManager.storeResponse(LoginActivity.this, account,
                                 Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
                                 service, response);
-                        retrieveGmsKeyUserinfoProfile(account);
-                    }
-
-                    @Override
-                    public void onException(Exception exception) {
-                        Log.w(TAG, "onException: " + exception);
-                    }
-                });
-    }
-
-    private void retrieveGmsKeyUserinfoProfile(final Account account) {
-        ProfileManager.getAuthKeyRequest(this, account)
-                .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
-                    @Override
-                    public void onResponse(AuthResponse response) {
-                        AuthManager.storeResponse(LoginActivity.this, account,
-                                Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1,
-                                ProfileManager.SERVICE_TOKEN, response);
-                        ProfileManager.storeAuthKey(LoginActivity.this, account, response.auth);
+                        PeopleManager.loadUserInfo(LoginActivity.this, account);
                         finish();
                     }
 
