@@ -2,6 +2,7 @@ package com.google.android.gms.people.internal;
 
 import com.google.android.gms.people.internal.IPeopleCallbacks;
 import com.google.android.gms.common.server.FavaDiagnosticsEntity;
+import com.google.android.gms.common.internal.ICancelToken;
 
 interface IPeopleService {
     // void loadOwners1(IPeopleCallbacks var1, boolean var2, boolean var3, String var4, String var5);
@@ -33,4 +34,5 @@ interface IPeopleService {
 
     Bundle registerDataChangedListener(IPeopleCallbacks callbacks, boolean register, String var3, String var4, int scopes) = 10;
     void loadOwners(IPeopleCallbacks callbacks, boolean var2, boolean var3, String account, String var5, int sortOrder) = 304;
+    ICancelToken loadOwnerAvatar(IPeopleCallbacks callbacks, String account, String pageId, int size, int flags) = 504;
 }
