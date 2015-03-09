@@ -39,6 +39,10 @@
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.mail"
         android:label="@string/permission_service_mail_label"
         android:description="@string/permission_service_mail_description" />
+    <permission
+        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.writely"
+        android:label="@string/permission_service_writely_label"
+        android:description="@string/permission_service_writely_description" />
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
 
