@@ -238,5 +238,13 @@
                 <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
             </intent-filter>
         </service>
+
+        <service
+            android:name="org.microg.gms.icing.IndexService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.icing.INDEX_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

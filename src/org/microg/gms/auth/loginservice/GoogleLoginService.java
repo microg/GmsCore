@@ -19,6 +19,7 @@ package org.microg.gms.auth.loginservice;
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.app.Service;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import org.microg.gms.auth.login.LoginActivity;
 import org.microg.gms.common.PackageUtils;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT;
 import static android.accounts.AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE;
@@ -95,19 +97,31 @@ public class GoogleLoginService extends Service {
 
                 @Override
                 public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+                    Log.d(TAG, "updateCredentials: " + account + ", " + authTokenType + ", " + options);
                     return null;
                 }
 
                 @Override
                 public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
-                    Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
-                    Bundle result = new Bundle();
-                    result.putBoolean(KEY_BOOLEAN_RESULT, true);
-                    return result;
+                    return GoogleLoginService.this.hasFeatures(account, features);
                 }
             }.getIBinder();
         }
         return null;
+    }
+
+    private Bundle hasFeatures(Account account, String[] features) {
+        Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
+        AccountManager accountManager = AccountManager.get(this);
+        List<String> services = Arrays.asList(accountManager.getUserData(account, "services").split(","));
+        boolean res = true;
+        for (String feature : features) {
+            if (feature.startsWith("service_") && !services.contains(feature.substring(8)))
+                res = false;
+        }
+        Bundle result = new Bundle();
+        result.putBoolean(KEY_BOOLEAN_RESULT, res);
+        return result;
     }
 
     private Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) {
