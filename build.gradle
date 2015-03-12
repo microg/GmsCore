@@ -4,13 +4,18 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.0.1'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
     }
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'org.microg.gms'
+version = '1.0-SNAPSHOT'
 
 dependencies {
-    compile project('SafeParcel')
+    compile project(':SafeParcel')
 }
 
 android {
