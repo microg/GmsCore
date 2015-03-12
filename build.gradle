@@ -10,19 +10,10 @@ buildscript {
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile project(':SafeParcel')
+    compile project('SafeParcel')
 }
 
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-    lintOptions.abortOnError false
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-        }
-    }
 }
