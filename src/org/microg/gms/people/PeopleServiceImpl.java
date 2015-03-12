@@ -24,6 +24,7 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.R;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.common.internal.ICancelToken;
 import com.google.android.gms.people.internal.IPeopleCallbacks;
@@ -42,7 +43,8 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
         Log.d(TAG, "loadOwners: " + var2 + ", " + var3 + ", " + accountName + ", " + var5 + ", " + sortOrder);
         AccountManager accountManager = AccountManager.get(context);
         Bundle result = new Bundle();
-        for (Account account : accountManager.getAccountsByType("com.google")) {
+        String accountType = context.getString(R.string.google_account_type);
+        for (Account account : accountManager.getAccountsByType(accountType)) {
             if (accountName == null || account.name.equals(accountName)) {
                 result.putParcelable(account.name, null);
             }

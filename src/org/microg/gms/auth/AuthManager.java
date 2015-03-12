@@ -23,6 +23,8 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.R;
+
 import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
@@ -43,12 +45,19 @@ public class AuthManager {
     private AccountManager accountManager;
     private Account account;
     private String packageSignature;
+    private String accountType;
 
     public AuthManager(Context context, String accountName, String packageName, String service) {
         this.context = context;
         this.accountName = accountName;
         this.packageName = packageName;
         this.service = service;
+    }
+
+    public String getAccountType() {
+        if (accountType == null)
+            accountType = context.getString(R.string.google_account_type);
+        return accountType;
     }
 
     public AccountManager getAccountManager() {
@@ -59,7 +68,7 @@ public class AuthManager {
 
     public Account getAccount() {
         if (account == null)
-            account = new Account(accountName, "com.google");
+            account = new Account(accountName, getAccountType());
         return account;
     }
 

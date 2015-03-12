@@ -38,8 +38,6 @@ import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     private static final String TAG = "GmsAuthManagerSvc";
 
-    public static final String GOOGLE_ACCOUNT_TYPE = "com.google";
-
     public static final String KEY_AUTHORITY = "authority";
     public static final String KEY_CALLBACK_INTENT = "callback_intent";
     public static final String KEY_CALLER_UID = "callerUid";
@@ -83,7 +81,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 Intent i = new Intent(context, AskPermissionActivity.class);
                 i.putExtras(extras);
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
-                i.putExtra(KEY_ACCOUNT_TYPE, GOOGLE_ACCOUNT_TYPE);
+                i.putExtra(KEY_ACCOUNT_TYPE, authManager.getAccountType());
                 i.putExtra(KEY_ACCOUNT_NAME, accountName);
                 i.putExtra(KEY_AUTHTOKEN, scope);
                 if (res.consentDataBase64 != null)

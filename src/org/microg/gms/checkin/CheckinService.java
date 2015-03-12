@@ -22,6 +22,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import com.google.android.gms.R;
+
 import org.microg.gms.people.PeopleManager;
 
 public class CheckinService extends IntentService {
@@ -38,7 +40,8 @@ public class CheckinService extends IntentService {
             if (info != null) {
                 Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
             }
-            for (Account account : AccountManager.get(this).getAccountsByType("com.google")) {
+            String accountType = getString(R.string.google_account_type);
+            for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
                 PeopleManager.loadUserInfo(this, account);
             }
         } catch (Exception e) {

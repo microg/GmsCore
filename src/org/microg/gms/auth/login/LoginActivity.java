@@ -62,10 +62,12 @@ public class LoginActivity extends AssistantActivity {
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
 
     private WebView webView;
+    private String accountType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        accountType = getString(R.string.google_account_type);
         webView = createWebView(this);
         webView.addJavascriptInterface(new JsBridge(), "mm");
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
@@ -79,7 +81,7 @@ public class LoginActivity extends AssistantActivity {
         if (getIntent().hasExtra(EXTRA_TOKEN)) {
             if (getIntent().hasExtra(EXTRA_EMAIL)) {
                 AccountManager accountManager = AccountManager.get(LoginActivity.this);
-                Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), "com.google");
+                Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), accountType);
                 accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
                 retrieveGmsToken(account);
             } else {
@@ -168,7 +170,7 @@ public class LoginActivity extends AssistantActivity {
                     @Override
                     public void onResponse(AuthResponse response) {
                         AccountManager accountManager = AccountManager.get(LoginActivity.this);
-                        Account account = new Account(response.email, "com.google");
+                        Account account = new Account(response.email, accountType);
                         if (accountManager.addAccountExplicitly(account, response.token, null)) {
                             accountManager.setAuthToken(account, "SID", response.Sid);
                             accountManager.setAuthToken(account, "LSID", response.LSid);

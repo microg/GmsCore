@@ -21,6 +21,8 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 
+import com.google.android.gms.R;
+
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
@@ -42,7 +44,8 @@ public class CheckinManager {
             return null;
         List<CheckinClient.Account> accounts = new ArrayList<>();
         AccountManager accountManager = AccountManager.get(context);
-        for (Account account : accountManager.getAccountsByType("com.google")) {
+        String accountType = context.getString(R.string.google_account_type);
+        for (Account account : accountManager.getAccountsByType(accountType)) {
             String token = new AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "ac2dm").getAuthToken();
             accounts.add(new CheckinClient.Account(account.name, token));
         }
