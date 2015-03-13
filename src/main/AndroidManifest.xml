@@ -3,4 +3,6 @@
     package="org.microg.gms.api">
 
     <uses-sdk android:minSdkVersion="9" />
+
+    <application />
 </manifest>
