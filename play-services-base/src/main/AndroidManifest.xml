@@ -3,4 +3,6 @@
     package="com.google.android.gms">
 
     <uses-sdk android:minSdkVersion="9" />
+
+    <application />
 </manifest>
