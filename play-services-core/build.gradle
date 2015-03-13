@@ -28,7 +28,7 @@ apply plugin: 'com.android.application'
 repositories {
     mavenCentral()
     flatDir {
-        dirs 'libs'
+        dirs '../libs'
     }
 }
 
@@ -39,7 +39,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.squareup.wire:wire-runtime:1.6.1'
 
-    compile project(':GmsApi')
+    compile project(':play-services-api')
     compile project(':UnifiedNlpLib')
 
     // vtm from ./libs
@@ -59,15 +59,10 @@ dependencies {
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
-    lintOptions.abortOnError false
 
     sourceSets {
         main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src', 'protos-src']
-            aidl.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
+            java.srcDirs += 'src/main/protos-java'
         }
     }
 }

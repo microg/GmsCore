@@ -1,4 +1,7 @@
-include 'UnifiedNlpApi'
-include 'UnifiedNlpLib', 'UnifiedNlpLib:compat'
-include 'SafeParcel'
-include 'GmsApi'
+include ':UnifiedNlpApi'
+include ':UnifiedNlpLib'
+include ':UnifiedNlpLib:compat'
+
+include ':SafeParcel'
+include ':play-services-api'
+include ':play-services-core'

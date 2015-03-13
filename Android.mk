@@ -20,8 +20,8 @@ unified_dir := ../UnifiedNlp
 appcompat_dir := ../../../prebuilts/sdk/current/support/v7/appcompat
 res_dir := res $(unified_dir)/res $(appcompat_dir)/res
 
-LOCAL_SRC_FILES := $(call all-java-files-under, src) \
-                   $(call all-Iaidl-files-under, src) \
+LOCAL_SRC_FILES := $(call all-java-files-under, play-services-core/src/main/java) \
+                   $(call all-java-files-under, play-services-core/src/main/protos-java) \
                    $(call all-java-files-under, $(unified_dir)/src) \
 
 LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dir))
