@@ -15,11 +15,32 @@ Example: DashClock
 However it uses play services as location backend and thus requires proprietary libraries to compile it. 
 
 However, it is possible to build DashClock using GmsLib, supporting all it's location features, with or without play services installed.
-To do this, download and build GmsLib plus its submodules and copy the three resulting .aar files (SafeParcel.aar, GmsApi.aar, GmsLib.aar) to `$DASHCLOCK_DIR/local_aars/`. 
-Then replace `compile 'com.google.android.gms:play-services:4.0.30'` in `$DASHCLOCK_SRC/main/build.gradle` with 
+To do this, download and build GmsLib plus its submodules and install it to the local gradle repository:
 
-	compile(name:'GmsLib', ext:'aar')
-	compile(name:'GmsApi', ext:'aar')
-	compile(name:'SafeParcel', ext:'aar')
+	$ git clone https://github.com/microg/android_external_GmsLib.git GmsLib
+	$ cd GmsLib
+	$ git submodule update --init --recursive
+	$ gradle install
 
-and build as usual.
+Then update the main/build.gradle to point to non-google gms in local maven:
+
+	 repositories {
+	+    maven {   url "${System.env.HOME}/.m2/repository" } // This can be mavenLocal() since Gradle 2.0
+	     mavenCentral()
+	     flatDir {
+	         dirs '../local_aars'
+	     }
+	 }
+	 
+	 dependencies {
+	     compile 'com.android.support:support-v13:22.0.0'
+	-    compile 'com.google.android.gms:play-services:4.0.30'
+	+    compile 'org.microg.gms:play-services:1.0-SNAPSHOT'
+	     //compile 'com.mobeta.android.dslv:drag-sort-listview:0.6.1-SNAPSHOT-AAR'
+	     compile 'com.mobeta.android.dslv:drag-sort-listview:0.6.1-SNAPSHOT-AAR@aar'
+	     compile project(':api')
+	 }
+
+Afterwards you can compile dashclock the usual way:
+
+	$ gradle :main:assembleDebug
