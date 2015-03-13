@@ -1,0 +1,14 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+dependencies {
+    compile 'com.android.support:support-v4:21.0.3'
+    compile project(':play-services-base')
+    compile project(':play-services-location')
+    compile project(':play-services-wearable')
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "22.0.0"
+}

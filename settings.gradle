@@ -1,1 +1,8 @@
-include ':GmsApi', ':SafeParcel'
+include ':SafeParcel'
+include ':play-services-api'
+
+include ':play-services-base'
+include ':play-services-location'
+include ':play-services-wearable'
+
+include ':play-services'

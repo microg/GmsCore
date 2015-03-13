@@ -1,0 +1,12 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+dependencies {
+    compile 'com.android.support:support-v4:22.0.0'
+    compile project(':play-services-api')
+}
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "21.1.2"
+}
