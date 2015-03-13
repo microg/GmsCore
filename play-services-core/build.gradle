@@ -40,7 +40,7 @@ dependencies {
     compile 'com.squareup.wire:wire-runtime:1.6.1'
 
     compile project(':play-services-api')
-    compile project(':UnifiedNlpLib')
+    compile project(':unifiednlp-base')
 
     // vtm from ./libs
     compile group: 'org.oscim', name: 'vtm-android', version: '0.6.0-SNAPSHOT', ext: 'aar'

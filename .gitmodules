@@ -1,6 +1,6 @@
-[submodule "UnifiedNlpLib"]
-	path = UnifiedNlpLib
-	url = https://github.com/microg/android_packages_apps_UnifiedNlp.git
 [submodule "play-services-api"]
 	path = play-services-api
 	url = https://github.com/microg/android_external_GmsApi.git
+[submodule "extern/UnifiedNlp"]
+	path = extern/UnifiedNlp
+	url = https://github.com/microg/android_packages_apps_UnifiedNlp.git
