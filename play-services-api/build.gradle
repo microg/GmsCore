@@ -11,11 +11,11 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'org.microg.gms'
+group = 'org.microg'
 version = '1.0-SNAPSHOT'
 
 dependencies {
-    compile project(':SafeParcel')
+    compile project(':safe-parcel')
 }
 
 android {

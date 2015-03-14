@@ -1,3 +1,2 @@
-rootProject.name = 'play-services-api'
-
-include ':SafeParcel'
+include ':play-services-api'
+include ':safe-parcel'
