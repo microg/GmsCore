@@ -1,7 +1,8 @@
+include ':safe-parcel'
+
 include ':unifiednlp-api'
 include ':unifiednlp-base'
 include ':unifiednlp-compat'
 
-include ':SafeParcel'
 include ':play-services-api'
 include ':play-services-core'
