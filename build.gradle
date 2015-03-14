@@ -1,5 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 subprojects {
-    group = 'org.microg.gms'
+    group = 'org.microg'
     version = '1.0-SNAPSHOT'
 }
