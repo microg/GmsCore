@@ -21,7 +21,7 @@
     android:versionCode="6772000">
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="10"
         android:targetSdkVersion="21" />
 
     <permission android:name="com.google.android.c2dm.permission.RECEIVE" />
