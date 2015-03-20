@@ -22,7 +22,7 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="22" />
 
     <permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <permission
@@ -244,6 +244,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.icing.INDEX_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".analytics.service.AnalyticsService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.analytics.service.START" />
             </intent-filter>
         </service>
     </application>

@@ -17,6 +17,7 @@
 package org.microg.gms.maps.markup;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -25,6 +26,9 @@ import com.google.android.gms.R;
 import com.google.android.gms.maps.model.internal.IMarkerDelegate;
 import org.microg.gms.maps.GoogleMapImpl;
 import org.microg.gms.maps.ResourcesContainer;
+
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1;
 
 public class InfoWindow {
     private static final String TAG = InfoWindow.class.getName();
@@ -132,7 +136,11 @@ public class InfoWindow {
         public DefaultWindow(View view) {
             super(context);
             addView(view);
-            setBackground(ResourcesContainer.get().getDrawable(R.drawable.maps_default_window));
+            if (SDK_INT > ICE_CREAM_SANDWICH_MR1) {
+                setBackground(ResourcesContainer.get().getDrawable(R.drawable.maps_default_window));
+            } else {
+                setBackgroundDrawable(ResourcesContainer.get().getDrawable(R.drawable.maps_default_window));
+            }
         }
     }
 

@@ -186,6 +186,7 @@ public class LoginActivity extends AssistantActivity {
                             // TODO: Error message
                             Log.w(TAG, "Account NOT created!");
                             setResult(RESULT_CANCELED);
+                            finish();
                         }
                     }
 

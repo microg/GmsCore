@@ -49,13 +49,13 @@ import static android.accounts.AccountManager.KEY_INTENT;
 
 class AccountAuthenticator extends AbstractAccountAuthenticator {
     private static final String TAG = "GmsAuthenticator";
-    private Context context;
-    private String accountType;
+    private final Context context;
+    private final String accountType;
 
     public AccountAuthenticator(Context context) {
         super(context);
         this.context = context;
-        accountType = context.getString(R.string.google_account_type);
+        this.accountType = context.getString(R.string.google_account_type);
     }
 
     @Override
@@ -136,11 +136,16 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
         Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
         AccountManager accountManager = AccountManager.get(context);
-        List<String> services = Arrays.asList(accountManager.getUserData(account, "services").split(","));
+        String services = accountManager.getUserData(account, "services");
         boolean res = true;
-        for (String feature : features) {
-            if (feature.startsWith("service_") && !services.contains(feature.substring(8)))
-                res = false;
+        if (services != null) {
+            List<String> servicesList = Arrays.asList(services.split(","));
+            for (String feature : features) {
+                if (feature.startsWith("service_") && !servicesList.contains(feature.substring(8)))
+                    res = false;
+            }
+        } else {
+            res = false;
         }
         Bundle result = new Bundle();
         result.putBoolean(KEY_BOOLEAN_RESULT, res);
