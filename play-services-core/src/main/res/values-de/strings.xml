@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ~ Copyright 2013-2015 µg Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+-->
+
+<resources>
+    <!-- µg Services -->
+    <string name="gms_app_name">µg-Dienste</string>
+    <string name="just_a_sec">Bitte warten…</string>
+    <string name="google_account_type">com.google</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Sobald Sie fortfahren, erlauben Sie dieser App und Google die Nutzung Ihrer Daten im Rahmen der Allgemeinen Geschäftsbedingungen und der Datenschutzerklärung.</string>
+    <string name="ask_scope_permission_title">%s möchte gerne:</string>
+    <string name="ask_service_permission_title">%s möchte gerne auf folgendes zugreifen:</string>
+    <string name="account_manager_title">µg Google Account Manager</string>
+    <string name="allow">Erlauben</string>
+    <string name="deny">Verweigern</string>
+
+    <!-- Actions -->
+    <string name="accept">Akzeptieren</string>
+    <string name="decline">Ablehnen</string>
+
+    <!-- Android Wear -->
+    <string name="common_android_wear_notification_needs_update_text">Für eine App ist die Aktualisierung der Android Wear App erforderlich.</string>
+    <string name="common_android_wear_update_text">Diese App funktioniert erst nach der Aktualisierung der Android Wear App.</string>
+    <string name="common_android_wear_update_title">Android Wear aktualisieren</string>
+
+    <!-- Play Services -->
+    <string name="common_google_play_services_enable_button">Google Play-Dienste aktivieren</string>
+    <string name="common_google_play_services_enable_text">Diese App funktioniert nur, wenn Sie die Google Play-Dienste aktivieren.</string>
+    <string name="common_google_play_services_enable_title">Google Play-Dienste aktivieren</string>
+    <string name="common_google_play_services_error_notification_requested_by_msg">Angefordert von %1$s</string>
+    <string name="common_google_play_services_install_button">Google Play-Dienste installieren</string>
+    <string name="common_google_play_services_install_text_phone">Zur Nutzung dieser App sind Google Play-Dienste erforderlich, die auf Ihrem Telefon nicht installiert sind.</string>
+    <string name="common_google_play_services_install_text_tablet">Zur Nutzung dieser App sind Google Play-Dienste erforderlich, die auf Ihrem Tablet nicht installiert sind.</string>
+    <string name="common_google_play_services_install_title">Google Play-Dienste installieren</string>
+    <string name="common_google_play_services_invalid_account_text">Das angegebene Konto ist auf diesem Gerät nicht vorhanden. Bitte wählen Sie ein anderes Konto aus.</string>
+    <string name="common_google_play_services_invalid_account_title">Ungültiges Konto</string>
+    <string name="common_google_play_services_needs_enabling_title">App erfordert die Aktivierung der Google Play-Dienste</string>
+    <string name="common_google_play_services_network_error_text">Um eine Verbindung zu den Google Play-Diensten herzustellen, ist eine Datenverbindung erforderlich.</string>
+    <string name="common_google_play_services_network_error_title">Netzwerkfehler</string>
+    <string name="common_google_play_services_notification_needs_installation_title">App erfordert die Installation der Google Play-Dienste</string>
+    <string name="common_google_play_services_notification_needs_update_title">App erfordert ein Update der Google Play-Dienste</string>
+    <string name="common_google_play_services_notification_ticker">Fehler bei Zugriff auf Google Play-Dienste</string>
+    <string name="common_google_play_services_sign_in_failed_text">Fehler beim Anmelden im angegebenen Konto. Bitte wählen Sie ein anderes Konto aus.</string>
+    <string name="common_google_play_services_sign_in_failed_title">Anmeldung fehlgeschlagen</string>
+    <string name="common_google_play_services_unknown_issue">Unbekanntes Problem mit Google Play-Diensten</string>
+    <string name="common_google_play_services_unsupported_text">Google Play-Dienste, auf denen einige Ihrer Apps basieren, werden von diesem Gerät nicht unterstützt. Wenden Sie sich für weitere Informationen an den Hersteller.</string>
+    <string name="common_google_play_services_unsupported_title">Google Play-Dienste</string>
+    <string name="common_google_play_services_update_button">Aktualisieren</string>
+    <string name="common_google_play_services_update_text">Diese App wird nur ausgeführt, wenn Sie die Google Play-Dienste aktualisieren.</string>
+    <string name="common_google_play_services_update_title">Google Play-Dienste aktualisieren</string>
+    <string name="commono_google_play_services_api_unavailable_text">Diese App erfordert einen oder mehrere Google Play-Dienste, die derzeit nicht verfügbar sind. Bitte wenden Sie sich an den Entwickler, um Unterstützung zu erhalten.</string>
+
+    <!-- Login -->
+    <string name="common_open_on_phone">Auf Telefon öffnen</string>
+    <string name="common_signin_button_text">Anmelden</string>
+    <string name="common_signin_button_text_long">Über Google anmelden</string>
+
+    <!-- Ads -->
+    <string name="create_calendar_message">Soll dieser Werbung erlaubt werden, ein Kalenderereignis zu erstellen?</string>
+    <string name="create_calendar_title">Kalenderereignis erstellen</string>
+    <string name="store_picture_message">Soll dieser Werbung erlaubt werden, ein Bild in der Galerie zu speichern?</string>
+    <string name="store_picture_title">Bild speichern</string>
+
+    <!-- Wallet -->
+    <string name="wallet_buy_button_place_holder">Mit Google kaufen</string>
+</resources>
