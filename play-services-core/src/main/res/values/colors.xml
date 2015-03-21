@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright 2013-2015 µg Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,43 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
+-->
 
 <resources>
+    <!-- µg Services -->
     <color name="login_blue_theme_primary">#ff4285f4</color>
     <color name="login_blue_theme_primary_dark">#ff3367d6</color>
     <color name="login_blue_theme_accent">#ffFFAB40</color>
-
     <color name="dialog_border_color">#88CCCCCC</color>
+
+    <!-- Play Services -->
+    <color name="common_action_bar_splitter">#ffd2d2d2</color>
+    <color name="common_signin_btn_default_background">#ffdd4b39</color>
+    <color name="common_signin_btn_dark_text_default">#ffffffff</color>
+    <color name="common_signin_btn_dark_text_disabled">#ffaaaaaa</color>
+    <color name="common_signin_btn_dark_text_focused">#ffffffff</color>
+    <color name="common_signin_btn_dark_text_pressed">#ffffffff</color>
+    <color name="common_signin_btn_light_text_default">#ff737373</color>
+    <color name="common_signin_btn_light_text_disabled">#ffaaaaaa</color>
+    <color name="common_signin_btn_light_text_focused">#ff737373</color>
+    <color name="common_signin_btn_light_text_pressed">#ffffffff</color>
+    <color name="common_signin_btn_text_dark">#ffffffff</color>
+    <color name="common_signin_btn_text_light">#ff737373</color>
+
+    <!-- Google Wallet -->
+    <color name="wallet_bright_foreground_disabled_holo_light">#ffb2b2b2</color>
+    <color name="wallet_bright_foreground_holo_dark">#fff3f3f3</color>
+    <color name="wallet_bright_foreground_holo_light">#ff000000</color>
+    <color name="wallet_dim_foreground_disabled_holo_dark">#80bebebe</color>
+    <color name="wallet_dim_foreground_holo_dark">#ffbebebe</color>
+    <color name="wallet_dim_foreground_inverse_disabled_holo_dark">#80323232</color>
+    <color name="wallet_dim_foreground_inverse_holo_dark">#ff323232</color>
+    <color name="wallet_highlighted_text_holo_dark">#6633b5e5</color>
+    <color name="wallet_highlighted_text_holo_light">#6633b5e5</color>
+    <color name="wallet_hint_foreground_holo_dark">#ff808080</color>
+    <color name="wallet_hint_foreground_holo_light">#ff808080</color>
+    <color name="wallet_holo_blue_light">#ff33b5e5</color>
+    <color name="wallet_link_text_light">#ff0000ee</color>
+    <color name="wallet_primary_text_holo_light">#ff000000</color>
+    <color name="wallet_secondary_text_holo_dark">#ffbebebe</color>
 </resources>
