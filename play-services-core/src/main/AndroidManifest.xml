@@ -15,7 +15,6 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.google.android.gms"
     android:versionName="1.0"
     android:versionCode="6772000">
@@ -62,8 +61,7 @@
 
     <application
         android:label="@string/gms_app_name"
-        android:icon="@drawable/ic_microg_app"
-        tools:replace="android:label,android:icon">
+        android:icon="@drawable/ic_microg_app">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
@@ -138,9 +136,26 @@
             android:permission="com.google.android.c2dm.permission.RECEIVE">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.UNREGISTER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.gcm.mcs.McsService"
+            android:exported="true" />
+
+        <!-- DroidGuard -->
+
+        <service
+            android:exported="true"
+            android:name="org.microg.gms.droidguard.DroidGuardService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.droidguard.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
 
@@ -188,8 +203,7 @@
         <activity
             android:name="org.microg.tools.AccountPickerActivity"
             android:exported="true"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.Holo.Dialog">
+            android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
                 <category android:name="android.intent.category.DEFAULT" />

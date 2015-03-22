@@ -18,6 +18,7 @@ package org.microg.gms.auth.login;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -37,24 +39,35 @@ import android.widget.RelativeLayout;
 
 import com.google.android.gms.R;
 
+import org.json.JSONArray;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
-import org.microg.gms.common.Constants;
+import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
 
 import java.util.Locale;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
+import static android.view.KeyEvent.KEYCODE_BACK;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+import static org.microg.gms.common.Constants.MAX_REFERENCE_VERSION;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
     public static final String EXTRA_TMPL = "tmpl";
     public static final String EXTRA_EMAIL = "email";
     public static final String EXTRA_TOKEN = "masterToken";
+    public static final int STATUS_BAR_DISABLE_BACK = 0x00400000;
 
     private static final String TAG = "GmsAuthLoginBrowser";
     private static final String EMBEDDED_SETUP_URL = "https://accounts.google.com/EmbeddedSetup";
@@ -63,11 +76,15 @@ public class LoginActivity extends AssistantActivity {
 
     private WebView webView;
     private String accountType;
+    private AccountManager accountManager;
+    private InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountType = getString(R.string.google_account_type);
+        accountManager = AccountManager.get(LoginActivity.this);
+        inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         webView = createWebView(this);
         webView.addJavascriptInterface(new JsBridge(), "mm");
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
@@ -89,7 +106,7 @@ public class LoginActivity extends AssistantActivity {
             }
         } else {
             CookieManager.getInstance().setAcceptCookie(true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (SDK_INT >= LOLLIPOP) {
                 CookieManager.getInstance().removeAllCookies(new ValueCallback<Boolean>() {
                     @Override
                     public void onReceiveValue(Boolean value) {
@@ -106,7 +123,11 @@ public class LoginActivity extends AssistantActivity {
 
     private static WebView createWebView(Context context) {
         WebView webView = new WebView(context);
-        webView.setVisibility(View.INVISIBLE);
+        if (SDK_INT < LOLLIPOP) {
+            webView.setVisibility(VISIBLE);
+        } else {
+            webView.setVisibility(INVISIBLE);
+        }
         webView.setLayoutParams(new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         webView.setBackgroundColor(Color.TRANSPARENT);
@@ -142,7 +163,7 @@ public class LoginActivity extends AssistantActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webView.setVisibility(View.INVISIBLE);
+                webView.setVisibility(INVISIBLE);
             }
         });
         String cookies = CookieManager.getInstance().getCookie(EMBEDDED_SETUP_URL);
@@ -169,7 +190,6 @@ public class LoginActivity extends AssistantActivity {
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
                     public void onResponse(AuthResponse response) {
-                        AccountManager accountManager = AccountManager.get(LoginActivity.this);
                         Account account = new Account(response.email, accountType);
                         if (accountManager.addAccountExplicitly(account, response.token, null)) {
                             accountManager.setAuthToken(account, "SID", response.Sid);
@@ -226,7 +246,7 @@ public class LoginActivity extends AssistantActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack() && webView.getVisibility() == View.VISIBLE) {
+        if ((keyCode == KEYCODE_BACK) && webView.canGoBack() && (webView.getVisibility() == VISIBLE)) {
             webView.goBack();
             return true;
         }
@@ -247,13 +267,133 @@ public class LoginActivity extends AssistantActivity {
 
     private class JsBridge {
         @JavascriptInterface
-        public void showView() {
+        public final String getAccounts() {
+            Account[] accountsByType = accountManager.getAccountsByType(accountType);
+            JSONArray json = new JSONArray();
+            for (Account account : accountsByType) {
+                json.put(account.name);
+            }
+            return json.toString();
+        }
+
+        @JavascriptInterface
+        public final String getAllowedDomains() {
+            return new JSONArray().toString();
+        }
+
+        @JavascriptInterface
+        public final String getAndroidId() {
+            long androidId = LastCheckinInfo.read(LoginActivity.this).androidId;
+            if (androidId == 0 || androidId == -1) return null;
+            return Long.toHexString(androidId);
+        }
+
+        @JavascriptInterface
+        public final int getBuildVersionSdk() {
+            return SDK_INT;
+        }
+
+        @JavascriptInterface
+        public final void getDroidGuardResult(String s) {
+            Log.d(TAG, "JSBridge: getDroidGuardResult: " + s);
+        }
+
+        @JavascriptInterface
+        public final String getFactoryResetChallenges() {
+            return new JSONArray().toString();
+        }
+
+        @JavascriptInterface
+        public final String getPhoneNumber() {
+            return null;
+        }
+
+        @JavascriptInterface
+        public final int getPlayServicesVersionCode() {
+            return MAX_REFERENCE_VERSION;
+        }
+
+        @JavascriptInterface
+        public final String getSimSerial() {
+            return null;
+        }
+
+        @JavascriptInterface
+        public final int getSimState() {
+            return SIM_STATE_UNKNOWN;
+        }
+
+        @JavascriptInterface
+        public final void goBack() {
+            Log.d(TAG, "JSBridge: goBack");
+        }
+
+        @JavascriptInterface
+        public final boolean hasPhoneNumber() {
+            return false;
+        }
+
+        @JavascriptInterface
+        public final boolean hasTelephony() {
+            return false;
+        }
+
+        @JavascriptInterface
+        public final void hideKeyboard() {
+            Log.d(TAG, "JSBridge: hideKeyboard");
+            inputMethodManager.hideSoftInputFromWindow(webView.getWindowToken(), 0);
+        }
+
+        @JavascriptInterface
+        public final void launchEmergencyDialer() {
+            Log.d(TAG, "JSBridge: launchEmergencyDialer");
+        }
+
+        @JavascriptInterface
+        public final void notifyOnTermsOfServiceAccepted() {
+            Log.d(TAG, "Terms of service accepted. (who cares?)");
+        }
+
+        @TargetApi(HONEYCOMB)
+        @JavascriptInterface
+        public final void setBackButtonEnabled(boolean backButtonEnabled) {
+            Log.d(TAG, "JSBridge: setBackButtonEnabled: " + backButtonEnabled);
+            if (SDK_INT <= GINGERBREAD_MR1) return;
+            int visibility = getWindow().getDecorView().getSystemUiVisibility();
+            if (backButtonEnabled)
+                visibility &= -STATUS_BAR_DISABLE_BACK;
+            else
+                visibility |= STATUS_BAR_DISABLE_BACK;
+            getWindow().getDecorView().setSystemUiVisibility(visibility);
+        }
+
+
+        @JavascriptInterface
+        public final void setNewAccountCreated() {
+            Log.d(TAG, "New account created. (who cares?)");
+        }
+
+        @JavascriptInterface
+        public final void showKeyboard() {
+            Log.d(TAG, "JSBridge: showKeyboard");
+            inputMethodManager.showSoftInput(webView, SHOW_IMPLICIT);
+        }
+
+        @JavascriptInterface
+        public final void showView() {
+            Log.d(TAG, "JSBridge: showView");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    webView.setVisibility(View.VISIBLE);
+                    webView.setVisibility(VISIBLE);
                 }
             });
+        }
+
+        @JavascriptInterface
+        public final void skipLogin() {
+            Log.d(TAG, "JSBridge: skipLogin");
+            finish();
         }
     }
 }
