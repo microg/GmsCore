@@ -28,6 +28,7 @@ import java.io.InputStream;
 import static org.microg.gms.gcm.mcs.Constants.MCS_CLOSE_TAG;
 import static org.microg.gms.gcm.mcs.Constants.MCS_DATA_MESSAGE_STANZA_TAG;
 import static org.microg.gms.gcm.mcs.Constants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.mcs.Constants.MCS_HEARTBEAT_PING_TAG;
 import static org.microg.gms.gcm.mcs.Constants.MCS_IQ_STANZA_TAG;
 import static org.microg.gms.gcm.mcs.Constants.MCS_LOGIN_REQUEST_TAG;
 import static org.microg.gms.gcm.mcs.Constants.MCS_LOGIN_RESPONSE_TAG;
@@ -94,6 +95,8 @@ public class McsInputStream {
     private static Message read(int mcsTag, byte[] bytes, int len) throws IOException {
         Wire wire = new Wire();
         switch (mcsTag) {
+            case MCS_HEARTBEAT_PING_TAG:
+                return wire.parseFrom(bytes, 0, len, HeartbeatPing.class);
             case MCS_HEARTBEAT_ACK_TAG:
                 return wire.parseFrom(bytes, 0, len, HeartbeatAck.class);
             case MCS_LOGIN_REQUEST_TAG:

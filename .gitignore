@@ -2,6 +2,7 @@
 gen/
 bin/
 build/
+.gradle/
 user.gradle
 local.properties
 .directory

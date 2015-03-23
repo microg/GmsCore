@@ -58,6 +58,10 @@ public class McsOutputStream {
         write(ack, MCS_HEARTBEAT_ACK_TAG);
     }
 
+    public void write(HeartbeatPing ping) throws IOException{
+        write(ping, MCS_HEARTBEAT_PING_TAG);
+    }
+
     public synchronized void write(Message message, int tag) throws IOException {
         if (!initialized) {
             Log.d(TAG, "Write MCS version code: " + version);

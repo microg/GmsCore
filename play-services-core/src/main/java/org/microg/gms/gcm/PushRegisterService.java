@@ -18,12 +18,19 @@ package org.microg.gms.gcm;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
+
+import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.PackageUtils;
+import org.microg.gms.common.Utils;
+
+import java.io.IOException;
 
 public class PushRegisterService extends IntentService {
     private static final String TAG = "GmsGcmRegisterSvc";
@@ -66,7 +73,7 @@ public class PushRegisterService extends IntentService {
         Log.d(TAG, "register[req]: " + extras);
         Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
         outIntent.setPackage(app);
-        String regId = GcmManager.register(this, app, sender, null);
+        String regId = register(this, app, sender, null);
         if (regId != null) {
             outIntent.putExtra("registration_id", regId);
         } else {
@@ -85,6 +92,23 @@ public class PushRegisterService extends IntentService {
             Log.w(TAG, e);
         }
         sendOrderedBroadcast(outIntent, null);
+    }
+
+    public static String register(Context context, String app, String sender, String info) {
+        try {
+            return new RegisterRequest()
+                    .build(Utils.getBuild(context))
+                    .sender(sender)
+                    .info(info)
+                    .checkin(LastCheckinInfo.read(context))
+                    .app(app, PackageUtils.firstSignatureDigest(context, app), PackageUtils.versionCode(context, app))
+                    .getResponse()
+                    .token;
+        } catch (IOException e) {
+            Log.w(TAG, e);
+        }
+
+        return null;
     }
 
     private void unregister(Intent intent) {

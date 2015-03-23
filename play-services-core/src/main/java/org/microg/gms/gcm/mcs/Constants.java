@@ -17,6 +17,7 @@
 package org.microg.gms.gcm.mcs;
 
 public class Constants {
+    public static final int MCS_HEARTBEAT_PING_TAG = 0;
     public static final int MCS_HEARTBEAT_ACK_TAG = 1;
     public static final int MCS_LOGIN_REQUEST_TAG = 2;
     public static final int MCS_LOGIN_RESPONSE_TAG = 3;

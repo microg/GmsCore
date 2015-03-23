@@ -29,6 +29,7 @@ import org.microg.gms.checkin.LastCheckinInfo;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLContext;
@@ -45,12 +46,16 @@ public class McsService extends IntentService {
     public static final String SELF_CATEGORY = "com.google.android.gsf.gtalkservice";
     public static final String IDLE_NOTIFICATION = "IdleNotification";
     public static final String FROM_FIELD = "gcm@android.com";
+    public static final int HEARTBEAT_MS = 60000;
     private static AtomicBoolean connected = new AtomicBoolean(false);
 
     private Socket socket;
     private Socket sslSocket;
     private McsInputStream inputStream;
     private McsOutputStream outputStream;
+    private Thread connectionThread;
+    private Thread heartbeatThread;
+    private long lastMsgTime;
 
     public McsService() {
         super(TAG);
@@ -59,15 +64,48 @@ public class McsService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (connected.compareAndSet(false, true)) {
-            new Thread(new Runnable() {
+            connectionThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     connect();
                 }
-            }).start();
+            });
+            connectionThread.start();
         } else {
             Log.d(TAG, "MCS connection already started");
         }
+    }
+
+    private void heartbeatLoop() {
+        try {
+            while (!Thread.interrupted()) {
+                try {
+                    long waitTime;
+                    while ((waitTime = lastMsgTime + HEARTBEAT_MS - System.currentTimeMillis()) > 0) {
+                        synchronized (heartbeatThread) {
+                            Log.d(TAG, "Waiting for " + waitTime + "ms");
+                            heartbeatThread.wait(waitTime);
+                        }
+                    }
+                    HeartbeatPing.Builder ping = new HeartbeatPing.Builder();
+                    if (inputStream.newStreamIdAvailable()) {
+                        ping.last_stream_id_received(inputStream.getStreamId());
+                    }
+                    outputStream.write(ping.build());
+                    lastMsgTime = System.currentTimeMillis();
+                } catch (InterruptedException ie) {
+                    Log.w(TAG, ie);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+            connectionThread.interrupt();
+        }
+        if (heartbeatThread == Thread.currentThread()) {
+            heartbeatThread = null;
+        }
+        Log.d(TAG, "Heartbeating stopped");
     }
 
     private void connect() {
@@ -86,6 +124,7 @@ public class McsService extends IntentService {
             boolean close = false;
             while (!close) {
                 Message o = inputStream.read();
+                lastMsgTime = System.currentTimeMillis();
                 if (o instanceof DataMessageStanza) {
                     handleMessage((DataMessageStanza) o);
                 } else if (o instanceof HeartbeatPing) {
@@ -96,7 +135,7 @@ public class McsService extends IntentService {
                     handleLoginresponse((LoginResponse) o);
                 }
             }
-            socket.close();
+            sslSocket.close();
         } catch (Exception e) {
             Log.w(TAG, e);
             try {
@@ -104,7 +143,12 @@ public class McsService extends IntentService {
             } catch (Exception ignored) {
             }
         }
+        if (heartbeatThread != null) {
+            heartbeatThread.interrupt();
+            heartbeatThread = null;
+        }
         connected.set(false);
+        Log.d(TAG, "Connection closed");
     }
 
     private void handleClose(Close close) throws IOException {
@@ -117,6 +161,15 @@ public class McsService extends IntentService {
             Log.d(TAG, "Logged in");
         } else {
             throw new IOException("Could not login: " + loginResponse.error);
+        }
+        if (heartbeatThread == null) {
+            heartbeatThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    heartbeatLoop();
+                }
+            });
+            heartbeatThread.start();
         }
     }
 
@@ -181,7 +234,7 @@ public class McsService extends IntentService {
                         .sent(System.currentTimeMillis() / 1000)
                         .ttl(0)
                         .category(SELF_CATEGORY)
-                        .app_data(Arrays.asList(new AppData(IDLE_NOTIFICATION, "false")));
+                        .app_data(Collections.singletonList(new AppData(IDLE_NOTIFICATION, "false")));
                 if (inputStream.newStreamIdAvailable()) {
                     msgResponse.last_stream_id_received(inputStream.getStreamId());
                 }
