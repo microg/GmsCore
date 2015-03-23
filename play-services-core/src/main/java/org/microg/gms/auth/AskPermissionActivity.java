@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +48,8 @@ import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static android.accounts.AccountManager.KEY_CALLER_UID;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 public class AskPermissionActivity extends AccountAuthenticatorActivity {
     public static final String EXTRA_FROM_ACCOUNT_MANAGER = "from_account_manager";
@@ -79,9 +82,11 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         if (getIntent().hasExtra(EXTRA_CONSENT_DATA)) {
             try {
                 consentData = new Wire().parseFrom(getIntent().getByteArrayExtra(EXTRA_CONSENT_DATA), ConsentData.class);
-                Log.d(TAG, "Consent: " + consentData);
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                Log.w(TAG, e);
             }
+        } else {
+            Log.d(TAG, "No Consent details attached");
         }
         if (getIntent().hasExtra(EXTRA_FROM_ACCOUNT_MANAGER)) fromAccountManager = true;
         int callerUid = getIntent().getIntExtra(KEY_CALLER_UID, 0);
@@ -146,8 +151,8 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         authManager.setPermitted(true);
         findViewById(android.R.id.button1).setEnabled(false);
         findViewById(android.R.id.button2).setEnabled(false);
-        findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
-        findViewById(R.id.no_progress_bar).setVisibility(View.GONE);
+        findViewById(R.id.progress_bar).setVisibility(VISIBLE);
+        findViewById(R.id.no_progress_bar).setVisibility(GONE);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -205,6 +210,17 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         return "unknown";
     }
 
+    private String getScopeDescription(String scope) {
+        if (consentData != null) {
+            for (ConsentData.ScopeDetails scopeDetails : consentData.scopes) {
+                if (scope.equals(scopeDetails.id)) {
+                    return scopeDetails.description;
+                }
+            }
+        }
+        return null;
+    }
+
     private String getServiceLabel(String service) {
         int labelResource = getResources().getIdentifier("permission_service_" + service + "_label", "string", getPackageName());
         if (labelResource != 0) {
@@ -241,16 +257,26 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             String item = getItem(position);
             String label;
+            String description;
             if (isOAuth()) {
                 label = getScopeLabel(item);
+                description = getScopeDescription(item);
             } else {
                 label = getServiceLabel(item);
+                description = null;
             }
             View view = convertView;
             if (view == null) {
                 view = LayoutInflater.from(AskPermissionActivity.this).inflate(R.layout.ask_permission_list_entry, null);
             }
             ((TextView) view.findViewById(android.R.id.text1)).setText(label);
+            TextView textView = (TextView) view.findViewById(android.R.id.text2);
+            if (description != null && !description.isEmpty()) {
+                textView.setText(Html.fromHtml(description.trim().replace("\n","<br>")));
+                textView.setVisibility(VISIBLE);
+            } else {
+                textView.setVisibility(GONE);
+            }
             return view;
         }
     }

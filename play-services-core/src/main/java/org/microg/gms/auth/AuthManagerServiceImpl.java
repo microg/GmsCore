@@ -60,7 +60,8 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle getToken(String accountName, String scope, Bundle extras) throws RemoteException {
-        String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME, extras.getString(KEY_CLIENT_PACKAGE_NAME, null));
+        String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME);
+        if (packageName == null || packageName.isEmpty()) packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);
         int callerUid = extras.getInt(KEY_CALLER_UID, 0);
         PackageUtils.checkPackageUid(context, packageName, callerUid, getCallingUid());
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
@@ -85,7 +86,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 i.putExtra(KEY_ACCOUNT_NAME, accountName);
                 i.putExtra(KEY_AUTHTOKEN, scope);
                 if (res.consentDataBase64 != null)
-                    i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.DEFAULT));
+                    i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
                 if (notify) {
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(i);
@@ -96,7 +97,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             }
         } catch (Exception e) {
             Log.w(TAG, e);
-            throw new RemoteException(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -107,6 +108,11 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle clearToken(String token, Bundle extras) throws RemoteException {
+        String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME, extras.getString(KEY_CLIENT_PACKAGE_NAME));
+        int callerUid = extras.getInt(KEY_CALLER_UID, 0);
+        PackageUtils.checkPackageUid(context, packageName, callerUid, getCallingUid());
+
+        Log.d(TAG, "clearToken: token:" + token + " extras:" + extras);
         return null;
     }
 }
