@@ -31,7 +31,6 @@ import org.microg.gms.common.PackageUtils;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
 
@@ -41,6 +40,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String KEY_AUTHORITY = "authority";
     public static final String KEY_CALLBACK_INTENT = "callback_intent";
     public static final String KEY_CALLER_UID = "callerUid";
+    public static final String KEY_ANDROID_PACKAGE_NAME = "androidPackageName";
     public static final String KEY_CLIENT_PACKAGE_NAME = "clientPackageName";
     public static final String KEY_HANDLE_NOTIFICATION = "handle_notification";
     public static final String KEY_REQUEST_ACTIONS = "request_visible_actions";
@@ -48,7 +48,6 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String KEY_SUPPRESS_PROGRESS_SCREEN = "suppressProgressScreen";
     public static final String KEY_SYNC_EXTRAS = "sync_extras";
 
-    public static final String KEY_AUTH_TOKEN = "authtoken";
     public static final String KEY_ERROR = "Error";
     public static final String KEY_USER_RECOVERY_INTENT = "userRecoveryIntent";
 
@@ -61,7 +60,8 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     @Override
     public Bundle getToken(String accountName, String scope, Bundle extras) throws RemoteException {
         String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME);
-        if (packageName == null || packageName.isEmpty()) packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);
+        if (packageName == null || packageName.isEmpty())
+            packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);
         int callerUid = extras.getInt(KEY_CALLER_UID, 0);
         PackageUtils.checkPackageUid(context, packageName, callerUid, getCallingUid());
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
@@ -73,12 +73,12 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             if (res.auth != null) {
                 Log.d(TAG, "getToken: " + res.auth);
                 Bundle result = new Bundle();
-                result.putString(KEY_AUTH_TOKEN, res.auth);
+                result.putString(KEY_AUTHTOKEN, res.auth);
                 result.putString(KEY_ERROR, "OK");
                 return result;
             } else {
                 Bundle result = new Bundle();
-                result.putString(KEY_ERROR, "Unknown");
+                result.putString(KEY_ERROR, "NeedPermission");
                 Intent i = new Intent(context, AskPermissionActivity.class);
                 i.putExtras(extras);
                 i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
@@ -87,12 +87,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 i.putExtra(KEY_AUTHTOKEN, scope);
                 if (res.consentDataBase64 != null)
                     i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
-                if (notify) {
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(i);
-                } else {
-                    result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
-                }
+                result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
                 return result;
             }
         } catch (Exception e) {
@@ -108,7 +103,8 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle clearToken(String token, Bundle extras) throws RemoteException {
-        String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME, extras.getString(KEY_CLIENT_PACKAGE_NAME));
+        String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME);
+        if (packageName == null) packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);
         int callerUid = extras.getInt(KEY_CALLER_UID, 0);
         PackageUtils.checkPackageUid(context, packageName, callerUid, getCallingUid());
 
