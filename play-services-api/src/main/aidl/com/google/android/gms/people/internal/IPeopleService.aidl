@@ -33,6 +33,9 @@ interface IPeopleService {
     // void addPeopleToCircle(IPeopleCallbacks var1, String var2, String var3, String var4, in List<String> var5);
 
     Bundle registerDataChangedListener(IPeopleCallbacks callbacks, boolean register, String var3, String var4, int scopes) = 10;
+    void loadCircles(IPeopleCallbacks callbacks, String account, String pageGaiaId, String circleId, int type, String var6, boolean var7) = 18;
+    Bundle requestSync(String account, String var2, long var3, boolean var5, boolean var6) = 204;
     void loadOwners(IPeopleCallbacks callbacks, boolean var2, boolean var3, String account, String var5, int sortOrder) = 304;
+    void loadPeopleForAggregation(IPeopleCallbacks callbacks, String account, String var3, String filter, int var5, boolean var6, int var7, int var8, String var9, boolean var10, int var11, int var12) = 401;
     ICancelToken loadOwnerAvatar(IPeopleCallbacks callbacks, String account, String pageId, int size, int flags) = 504;
 }
