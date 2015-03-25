@@ -1,5 +1,7 @@
 package com.google.android.gms.people.internal;
 
+import android.os.Bundle;
+
 import com.google.android.gms.people.internal.IPeopleCallbacks;
 import com.google.android.gms.common.server.FavaDiagnosticsEntity;
 import com.google.android.gms.common.internal.ICancelToken;

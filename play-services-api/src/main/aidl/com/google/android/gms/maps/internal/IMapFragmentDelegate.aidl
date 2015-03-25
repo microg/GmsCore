@@ -1,5 +1,7 @@
 package com.google.android.gms.maps.internal;
 
+import android.os.Bundle;
+
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.dynamic.IObjectWrapper;

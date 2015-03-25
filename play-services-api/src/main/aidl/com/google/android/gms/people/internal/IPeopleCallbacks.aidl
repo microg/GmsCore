@@ -1,5 +1,7 @@
 package com.google.android.gms.people.internal;
 
+import android.os.Bundle;
+
 import com.google.android.gms.common.data.DataHolder;
 
 interface IPeopleCallbacks {

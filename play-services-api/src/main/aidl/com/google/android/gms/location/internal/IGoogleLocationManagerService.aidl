@@ -1,5 +1,9 @@
 package com.google.android.gms.location.internal;
 
+import android.app.PendingIntent;
+import android.location.Location;
+import android.os.Bundle;
+
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.internal.IPlacesCallbacks;
 import com.google.android.gms.location.internal.LocationRequestInternal;

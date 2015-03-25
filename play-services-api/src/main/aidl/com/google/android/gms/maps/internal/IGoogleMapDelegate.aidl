@@ -1,5 +1,7 @@
 package com.google.android.gms.maps.internal;
 
+import android.location.Location;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.internal.ICancelableCallback;
