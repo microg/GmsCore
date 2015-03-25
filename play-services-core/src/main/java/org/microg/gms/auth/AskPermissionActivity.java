@@ -105,7 +105,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         }
         CharSequence appLabel = packageManager.getApplicationLabel(applicationInfo);
         Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
-        Bitmap profileIcon = PeopleManager.getUserPicture(this, account, false);
+        Bitmap profileIcon = PeopleManager.getOwnerAvatarBitmap(this, account.name, false);
 
         // receive profile icon
         if (profileIcon != null) {
@@ -114,7 +114,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    final Bitmap profileIcon = PeopleManager.getUserPicture(AskPermissionActivity.this, account, true);
+                    final Bitmap profileIcon = PeopleManager.getOwnerAvatarBitmap(AskPermissionActivity.this, account.name, true);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

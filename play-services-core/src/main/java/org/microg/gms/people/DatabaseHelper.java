@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String DB_NAME = "pluscontacts.db";
     private static final String CREATE_OWNERS = "CREATE TABLE owners (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -47,7 +47,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "sync_circles_to_contacts INTEGER NOT NULL DEFAULT 0," + // 0
             "sync_evergreen_to_contacts INTEGER NOT NULL DEFAULT 0," + // 0
             "last_full_people_sync_time INTEGER NOT NULL DEFAULT 0);"; // timestamp
+    private static final String CREATE_CIRCLES = "CREATE TABLE circles (" +
+            "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "owner_id INTEGER NOT NULL," +
+            "circle_id TEXT NOT NULL," +
+            "name TEXT,sort_key TEXT," +
+            "type INTEGER NOT NULL," +
+            "for_sharing INTEGER NOT NULL DEFAULT 0," +
+            "people_count INTEGER NOT NULL DEFAULT -1," +
+            "client_policies INTEGER NOT NULL DEFAULT 0," +
+            "etag TEXT,last_modified INTEGER NOT NULL DEFAULT 0," +
+            "sync_to_contacts INTEGER NOT NULL DEFAULT 0," +
+            "UNIQUE (owner_id,circle_id)," +
+            "FOREIGN KEY (owner_id) REFERENCES owners(_id) ON DELETE CASCADE);";
     public static final String OWNERS_TABLE = "owners";
+    public static final String CIRCLES_TABLE = "circles";
 
 
     public DatabaseHelper(Context context) {
@@ -61,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 2) db.execSQL(CREATE_CIRCLES);
     }
 
     @Override
@@ -79,5 +93,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getOwner(String accountName) {
         return getReadableDatabase().query(OWNERS_TABLE, null, "account_name=?", new String[]{accountName}, null, null, null);
+    }
+
+    public Cursor getCircles(int ownerId, String circleId, int type) {
+        return getReadableDatabase().query(CIRCLES_TABLE, null,
+                "owner_id=?1 AND (circle_id = ?2 OR ?2 = '') AND (type = ?3 OR ?3 = -999 OR (?3 = -998 AND type = -1))",
+                new String[]{Integer.toString(ownerId), circleId != null ? circleId : "", Integer.toString(type)}, null, null, null);
     }
 }

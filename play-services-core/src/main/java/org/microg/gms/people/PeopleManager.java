@@ -33,6 +33,8 @@ import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.Utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -43,9 +45,9 @@ public class PeopleManager {
     public static final String USERINFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     public static final String REGEX_SEARCH_USER_PHOTO = "https?\\:\\/\\/lh([0-9]*)\\.googleusercontent\\.com/";
 
-    public static Bitmap getUserPicture(Context context, Account account, boolean network) {
+    public static File getOwnerAvaterFile(Context context, String accountName, boolean network) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        Cursor cursor = databaseHelper.getOwner(account.name);
+        Cursor cursor = databaseHelper.getOwner(accountName);
         String url = null;
         if (cursor.moveToNext()) {
             int idx = cursor.getColumnIndex("avatar");
@@ -54,20 +56,32 @@ public class PeopleManager {
         cursor.close();
         databaseHelper.close();
         if (url == null) return null;
-        // TODO: load from cache
+        String urlLastPart = url.substring(3);
+        File file = new File(context.getCacheDir(), urlLastPart);
+        if (!file.getParentFile().mkdirs() && file.exists()) {
+            return file;
+        }
         if (!network) return null;
-        url = "https://lh" + url.toCharArray()[1] + ".googleusercontent.com" + url.substring(2);
+        url = "https://lh" + url.toCharArray()[1] + ".googleusercontent.com/" + urlLastPart;
         try {
             URLConnection conn = new URL(url).openConnection();
             conn.setDoInput(true);
             byte[] bytes = Utils.readStreamToEnd(conn.getInputStream());
-            // TODO: store to cache
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            return bitmap;
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(bytes);
+            outputStream.close();
+            return file;
         } catch (Exception e) {
             Log.w(TAG, e);
             return null;
         }
+
+    }
+
+    public static Bitmap getOwnerAvatarBitmap(Context context, String accountName, boolean network) {
+        File avaterFile = getOwnerAvaterFile(context, accountName, network);
+        if (avaterFile == null) return null;
+        return BitmapFactory.decodeFile(avaterFile.getPath());
     }
 
     public static void loadUserInfo(Context context, Account account) {
