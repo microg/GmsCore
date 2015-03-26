@@ -71,6 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_OWNERS);
+        db.execSQL(CREATE_CIRCLES);
     }
 
     @Override

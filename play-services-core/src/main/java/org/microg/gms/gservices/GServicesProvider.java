@@ -76,7 +76,7 @@ public class GServicesProvider extends ContentProvider {
                 for (String name : cache.keySet()) {
                     if (name.startsWith(prefix)) {
                         String value = cache.get(name);
-                        Log.d(TAG, "query caller=" + getCallingPackageName() + " name=" + name + " value=" + value);
+                        Log.d(TAG, "query caller=" + getCallingPackageName() + " prefix=" + prefix + " name=" + name + " value=" + value);
                         cursor.addRow(new String[]{name, value});
                     }
                 }

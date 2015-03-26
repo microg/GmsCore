@@ -97,6 +97,10 @@ public class PeopleManager {
             if (info.has("picture"))
                 contentValues.put("avatar", info.getString("picture").replaceFirst(REGEX_SEARCH_USER_PHOTO, "~$1/"));
             if (info.has("name")) contentValues.put("display_name", info.getString("name"));
+            contentValues.put("last_sync_start_time", System.currentTimeMillis());
+            contentValues.put("last_sync_finish_time", System.currentTimeMillis());
+            contentValues.put("last_successful_sync_time", System.currentTimeMillis());
+            contentValues.put("last_full_people_sync_time", System.currentTimeMillis());
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             databaseHelper.putOwner(contentValues);
             databaseHelper.close();
