@@ -208,8 +208,10 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
             private int matrixPosition;
             private int phase;
             private int scale;
-            private int direction;
             private int color;
+
+            private int borderColor;
+            private int borderWidth;
 
             @Override
             public void update(GLViewport viewport) {
@@ -254,6 +256,7 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
 
                 float radius = (float) (drawRadius * viewport.pos.scale);
                 GL.uniform1f(scale, radius);
+                GL.uniform1f(borderWidth, (float) (options.getStrokeWidth() / (viewport.pos.scale * 10)));
 
                 double x = indicatorPosition.x - viewport.pos.x;
                 double y = indicatorPosition.y - viewport.pos.y;
@@ -263,12 +266,18 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
                 viewport.mvp.multiplyMM(viewport.viewproj, viewport.mvp);
                 viewport.mvp.setAsUniform(matrixPosition);
                 GL.uniform1f(phase, 1);
-                GL.uniform2f(direction, 0, 0);
                 float alpha = Color.aToFloat(options.getFillColor());
                 GL.uniform4f(color,
                         Color.rToFloat(options.getFillColor()) * alpha,
                         Color.gToFloat(options.getFillColor()) * alpha,
                         Color.bToFloat(options.getFillColor()) * alpha,
+                        alpha);
+
+                alpha = Color.aToFloat(options.getStrokeColor());
+                GL.uniform4f(borderColor,
+                        Color.rToFloat(options.getStrokeColor()) * alpha,
+                        Color.gToFloat(options.getStrokeColor()) * alpha,
+                        Color.bToFloat(options.getStrokeColor()) * alpha,
                         alpha);
 
                 GL.drawArrays(GL20.GL_TRIANGLE_STRIP, 0, 4);
@@ -283,13 +292,14 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
                 matrixPosition = GL.getUniformLocation(shader, "u_mvp");
                 phase = GL.getUniformLocation(shader, "u_phase");
                 scale = GL.getUniformLocation(shader, "u_scale");
-                direction = GL.getUniformLocation(shader, "u_dir");
                 color = GL.getUniformLocation(shader, "u_color");
+
+                borderColor = GL.getUniformLocation(shader, "u_border_color");
+                borderWidth = GL.getUniformLocation(shader, "u_border_width");
                 return true;
             }
         }
     }
-
 
     private final static String vShaderStr = ""
             + "precision mediump float;"
@@ -307,13 +317,16 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
             + "precision mediump float;"
             + "varying vec2 v_tex;"
             + "uniform float u_scale;"
-            + "uniform float u_phase;"
-            + "uniform vec2 u_dir;"
             + "uniform vec4 u_color;"
-
+            + "uniform float u_border_width;"
+            + "uniform vec4 u_border_color;"
             + "void main() {"
             + "  float len = 1.0 - length(v_tex);"
             + "  float a = smoothstep(0.0, 2.0 / u_scale, len);"
-            + "  gl_FragColor = u_color * a;"
+            + "  if ( len > u_border_width )"
+            + "    gl_FragColor = u_color;"
+            + "  else "
+            + "    gl_FragColor = u_border_color;"
+            + "  gl_FragColor = gl_FragColor * a;"
             + "}";
 }
