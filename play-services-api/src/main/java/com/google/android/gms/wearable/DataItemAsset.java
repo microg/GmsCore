@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 µg Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,21 @@
 
 package com.google.android.gms.wearable;
 
-import org.microg.gms.common.PublicApi;
+import com.google.android.gms.common.data.Freezable;
 
 /**
- * Information about a particular node in the Android Wear network.
+ * A reference to an asset stored in a data item. Used to fetch file descriptors using
+ * DataApi#getFdForAsset(GoogleApiClient, DataItemAsset).
  */
-@PublicApi
-public interface Node {
+public interface DataItemAsset extends Freezable<DataItemAsset> {
     /**
-     * Returns a human readable description of the node. Sometimes generated from the Bluetooth
-     * device name
+     * @return the identifier used to address this asset in the context of an existing
+     * {@link DataItem}.
      */
-    String getDisplayName();
+    String getDataItemKey();
 
     /**
-     * Returns an opaque string that represents a node in the Android Wear network.
+     * @return the Android Wear-wide unique identifier for a particular asset.
      */
     String getId();
 }

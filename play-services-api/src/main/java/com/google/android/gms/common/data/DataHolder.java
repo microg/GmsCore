@@ -24,16 +24,23 @@ public class DataHolder extends AutoSafeParcelable {
     private int versionCode = 1;
 
     @SafeParceled(1)
-    private String[] columns;
+    public final String[] columns;
 
     @SafeParceled(2)
-    private CursorWindow[] windows;
+    public final CursorWindow[] windows;
 
     @SafeParceled(3)
-    private int statusCode;
+    public final int statusCode;
 
     @SafeParceled(4)
-    private Bundle metadata;
+    public final Bundle metadata;
+
+    private DataHolder() {
+        columns = null;
+        windows = null;
+        statusCode = 0;
+        metadata = null;
+    }
 
     public DataHolder(String[] columns, CursorWindow[] windows, int statusCode, Bundle metadata) {
         this.columns = columns;
@@ -48,13 +55,14 @@ public class DataHolder extends AutoSafeParcelable {
     protected static final int FIELD_TYPE_NULL = 0;
     protected static final int FIELD_TYPE_STRING = 3;
 
+    @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
     static int getCursorType(Cursor cursor, int i) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             return cursor.getType(i);
         }
         if (cursor instanceof AbstractWindowedCursor) {
-            CursorWindow cursorWindow = ((AbstractWindowedCursor)cursor).getWindow();
+            CursorWindow cursorWindow = ((AbstractWindowedCursor) cursor).getWindow();
             int pos = cursor.getPosition();
             int type = -1;
             if (cursorWindow.isNull(pos, i)) {
@@ -111,6 +119,17 @@ public class DataHolder extends AutoSafeParcelable {
         DataHolder dataHolder = new DataHolder(cursor.getColumnNames(), windows.toArray(new CursorWindow[windows.size()]), statusCode, metadata);
         cursor.close();
         return dataHolder;
+    }
+
+
+    public int getCount() {
+        int c = 0;
+        if (windows != null) {
+            for (CursorWindow window : windows) {
+                c += window.getNumRows();
+            }
+        }
+        return c;
     }
 
     @Override

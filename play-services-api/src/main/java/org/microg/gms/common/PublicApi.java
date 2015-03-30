@@ -39,8 +39,10 @@ public @interface PublicApi {
     String until() default "latest";
 
     /**
-     * @return used on a method or field to exclude it from the public api if the corresponding
-     * class was marked as public api
+     * Used on a method or field to exclude it from the public api if the corresponding class was
+     * marked as public api.
+     *
+     * @return true if the method or field is not part of the public api
      */
     boolean exclude() default false;
 }
