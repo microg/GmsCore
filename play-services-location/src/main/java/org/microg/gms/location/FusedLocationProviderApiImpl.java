@@ -136,7 +136,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     private interface Runnable {
-        public void run(LocationClientImpl client) throws RemoteException;
+        void run(LocationClientImpl client) throws RemoteException;
     }
 
 }

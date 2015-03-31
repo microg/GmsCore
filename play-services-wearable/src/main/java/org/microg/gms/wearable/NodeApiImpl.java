@@ -16,7 +16,29 @@
 
 package org.microg.gms.wearable;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.NodeApi;
 
 public class NodeApiImpl implements NodeApi {
+    @Override
+    public PendingResult<Status> addListener(GoogleApiClient client, NodeListener listener) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<GetConnectedNodesResult> getConnectedNodes(GoogleApiClient client) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<GetLocalNodeResult> getLocalNode(GoogleApiClient client) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener) {
+        return null;
+    }
 }

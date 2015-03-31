@@ -16,7 +16,60 @@
 
 package org.microg.gms.wearable;
 
+import android.net.Uri;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataItemAsset;
+import com.google.android.gms.wearable.DataItemBuffer;
+import com.google.android.gms.wearable.PutDataRequest;
 
 public class DataApiImpl implements DataApi {
+    @Override
+    public PendingResult<Status> addListener(GoogleApiClient client, DataListener listener) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<DeleteDataItemsResult> deleteDataItems(GoogleApiClient client, Uri uri) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<DataItemResult> getDataItem(GoogleApiClient client, Uri uri) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client, Uri uri) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, DataItemAsset asset) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, Asset asset) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<DataItemResult> putDataItem(GoogleApiClient client, PutDataRequest request) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<Status> removeListener(GoogleApiClient client, DataListener listener) {
+        return null;
+    }
 }

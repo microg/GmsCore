@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 µg Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,32 @@
  * limitations under the License.
  */
 
-package org.microg.gms.wearable;
+package com.google.android.gms.wearable;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.common.data.DataBuffer;
+import com.google.android.gms.common.data.DataHolder;
 
-public class MessageApiImpl implements MessageApi {
+import org.microg.gms.common.PublicApi;
+
+@PublicApi
+public class DataItemBuffer extends DataBuffer<DataItem> implements Result {
+    private Status status;
+
+    @PublicApi(exclude = true)
+    public DataItemBuffer(DataHolder dataHolder) {
+        super(dataHolder);
+        status = new Status(dataHolder.statusCode);
+    }
+
     @Override
-    public PendingResult<Status> addListener(GoogleApiClient client, MessageListener listener) {
+    public DataItem get(int position) {
         return null;
     }
 
     @Override
-    public PendingResult<Status> removeListener(GoogleApiClient client, MessageListener listener) {
-        return null;
-    }
-
-    @Override
-    public PendingResult<SendMessageResult> sendMessage(GoogleApiClient client, String nodeId, String path, byte[] data) {
+    public Status getStatus() {
         return null;
     }
 }
