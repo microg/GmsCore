@@ -38,7 +38,7 @@ public class PutDataMapRequest {
      */
     public PutDataRequest asPutDataRequest() {
         // TODO
-        return new PutDataRequest();
+        return PutDataRequest.create(null);
     }
 
     /**

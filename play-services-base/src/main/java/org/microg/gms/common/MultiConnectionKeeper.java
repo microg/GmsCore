@@ -16,6 +16,7 @@
 
 package org.microg.gms.common;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -28,10 +29,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
-    private static final String TAG = "GmsMultiConnectionKeeper";
+    private static final String TAG = "GmsMultiConKeeper";
 
     private static MultiConnectionKeeper INSTANCE;
 
@@ -89,7 +92,7 @@ public class MultiConnectionKeeper {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 Log.d(TAG, "Connection(" + actionString + ") : ServiceConnection : " +
-                        "onServiceConnected("+componentName+")");
+                        "onServiceConnected(" + componentName + ")");
                 binder = iBinder;
                 component = componentName;
                 for (ServiceConnection connection : connectionForwards) {
@@ -101,7 +104,7 @@ public class MultiConnectionKeeper {
             @Override
             public void onServiceDisconnected(ComponentName componentName) {
                 Log.d(TAG, "Connection(" + actionString + ") : ServiceConnection : " +
-                        "onServiceDisconnected("+componentName+")");
+                        "onServiceDisconnected(" + componentName + ")");
                 binder = null;
                 component = componentName;
                 for (ServiceConnection connection : connectionForwards) {
@@ -116,11 +119,15 @@ public class MultiConnectionKeeper {
             this.actionString = actionString;
         }
 
+        @SuppressLint("InlinedApi")
         public void bind() {
             Log.d(TAG, "Connection(" + actionString + ") : bind()");
             Intent intent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
-            bound = context.bindService(intent, serviceConnection,
-                    Context.BIND_ADJUST_WITH_ACTIVITY | Context.BIND_AUTO_CREATE);
+            int flags = Context.BIND_AUTO_CREATE;
+            if (SDK_INT >= ICE_CREAM_SANDWICH) {
+                flags |= Context.BIND_ADJUST_WITH_ACTIVITY;
+            }
+            bound = context.bindService(intent, serviceConnection, flags);
             if (!bound) {
                 context.unbindService(serviceConnection);
             }
