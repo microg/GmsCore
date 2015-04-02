@@ -133,6 +133,7 @@ public class InfoWindow {
 */
 
     private class DefaultWindow extends FrameLayout {
+        @SuppressWarnings("deprecation")
         public DefaultWindow(View view) {
             super(context);
             addView(view);

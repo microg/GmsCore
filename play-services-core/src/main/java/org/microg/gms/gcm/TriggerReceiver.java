@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package org.microg.gms.checkin;
+package org.microg.gms.gcm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.preference.PreferenceManager;
 
 public class TriggerReceiver extends BroadcastReceiver {
-    private static final String TAG = "GmsCheckinTrigger";
+    private static final String PREF_ENABLE_GCM = "gcm_enable_mcs_service";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "Trigger checkin: " + intent);
-
-        Intent subIntent = new Intent(context, CheckinService.class);
-        if ("android.provider.Telephony.SECRET_CODE".equals(intent.getAction())) {
-            subIntent.putExtra("force", true);
+        boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
+            if (!McsService.isConnected() || force) {
+                context.startService(new Intent(context, McsService.class));
+            }
         }
-        context.startService(subIntent);
     }
 }

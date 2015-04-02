@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.microg.gms.gcm.mcs;
+package org.microg.gms.gcm;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -25,6 +25,14 @@ import android.util.Log;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.gcm.mcs.AppData;
+import org.microg.gms.gcm.mcs.Close;
+import org.microg.gms.gcm.mcs.DataMessageStanza;
+import org.microg.gms.gcm.mcs.HeartbeatAck;
+import org.microg.gms.gcm.mcs.HeartbeatPing;
+import org.microg.gms.gcm.mcs.LoginRequest;
+import org.microg.gms.gcm.mcs.LoginResponse;
+import org.microg.gms.gcm.mcs.Setting;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -38,18 +46,20 @@ import static android.os.Build.VERSION.SDK_INT;
 
 public class McsService extends IntentService {
     private static final String TAG = "GmsGcmMcsSvc";
+
     public static final String PREFERENCES_NAME = "mcs";
+    public static final String PREF_LAST_PERSISTENT_ID = "last_persistent_id";
 
     public static final String SERVICE_HOST = "mtalk.google.com";
     public static final int SERVICE_PORT = 5228;
-    public static final String PREF_LAST_PERSISTENT_ID = "last_persistent_id";
+
     public static final String SELF_CATEGORY = "com.google.android.gsf.gtalkservice";
     public static final String IDLE_NOTIFICATION = "IdleNotification";
     public static final String FROM_FIELD = "gcm@android.com";
+
     public static final int HEARTBEAT_MS = 60000;
     private static AtomicBoolean connected = new AtomicBoolean(false);
 
-    private Socket socket;
     private Socket sslSocket;
     private McsInputStream inputStream;
     private McsOutputStream outputStream;
@@ -74,6 +84,10 @@ public class McsService extends IntentService {
         } else {
             Log.d(TAG, "MCS connection already started");
         }
+    }
+
+    public static boolean isConnected() {
+        return connected.get();
     }
 
     private void heartbeatLoop() {
@@ -112,7 +126,7 @@ public class McsService extends IntentService {
         try {
             Log.d(TAG, "Starting MCS connection...");
             LastCheckinInfo info = LastCheckinInfo.read(this);
-            socket = new Socket(SERVICE_HOST, SERVICE_PORT);
+            Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
             Log.d(TAG, "Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
             sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, "mtalk.google.com", 5228, true);
             Log.d(TAG, "Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
@@ -121,8 +135,7 @@ public class McsService extends IntentService {
             LoginRequest loginRequest = buildLoginRequest(info);
             Log.d(TAG, "Sending login request...");
             outputStream.write(loginRequest);
-            boolean close = false;
-            while (!close) {
+            while (!Thread.interrupted()) {
                 Message o = inputStream.read();
                 lastMsgTime = System.currentTimeMillis();
                 if (o instanceof DataMessageStanza) {
@@ -211,7 +224,7 @@ public class McsService extends IntentService {
                 .resource(Long.toString(info.androidId))
                 .user(Long.toString(info.androidId))
                 .use_rmq2(true)
-                .setting(Arrays.asList(new Setting("new_vc", "1")))
+                .setting(Collections.singletonList(new Setting("new_vc", "1")))
                 .received_persistent_id(Arrays.asList(getSharedPreferences().getString(PREF_LAST_PERSISTENT_ID, "").split("\\|")))
                 .build();
     }

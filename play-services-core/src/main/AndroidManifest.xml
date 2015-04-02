@@ -12,56 +12,69 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.gms"
-    android:versionName="1.0"
-    android:versionCode="6772000">
+    android:versionCode="6772000"
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="22" />
 
-    <permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission
+        android:name="com.google.android.c2dm.permission.RECEIVE"
+        android:protectionLevel="dangerous"
+        android:permissionGroup="android.permission-group.NETWORK"
+        android:label="@string/perm_c2dm_receive_label" />
     <permission
         android:name="com.google.android.c2dm.permission.SEND"
-        android:protectionLevel="dangerous" />
+        android:protectionLevel="dangerous"
+        android:label="@string/perm_c2dm_send_label" />
 
-    <permission-tree android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
+    <permission-tree
+        android:icon="@drawable/proprietary_auth_ic_scope_icon_default"
+        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
 
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.local"
-        android:label="@string/permission_service_local_label"
-        android:description="@string/permission_service_local_description" />
+        android:protectionLevel="dangerous"
+        android:description="@string/permission_service_local_description"
+        android:label="@string/permission_service_local_label" />
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.mail"
-        android:label="@string/permission_service_mail_label"
-        android:description="@string/permission_service_mail_description" />
+        android:protectionLevel="dangerous"
+        android:description="@string/permission_service_mail_description"
+        android:label="@string/permission_service_mail_label" />
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.writely"
-        android:label="@string/permission_service_writely_label"
-        android:description="@string/permission_service_writely_description" />
+        android:protectionLevel="dangerous"
+        android:description="@string/permission_service_writely_description"
+        android:label="@string/permission_service_writely_label" />
+
+    <permission
+        android:name="org.microg.gms.STATUS_BROADCAST"
+        android:protectionLevel="dangerous"
+        android:label="@string/perm_status_broadcast_label" />
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.c2dm.permission.SEND" />
+    <uses-permission android:name="org.microg.gms.STATUS_BROADCAST" />
+
 
     <application
-        android:label="@string/gms_app_name"
-        android:icon="@drawable/ic_microg_app">
+        android:icon="@drawable/ic_microg_app"
+        android:label="@string/gms_app_name">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
@@ -76,10 +89,6 @@
             </intent-filter>
         </service>
 
-        <!--
-        ~ TODO: maybe this should go in UnifiedNlp?
-        ~ Only if fake signature is not required
-        -->
         <service android:name="org.microg.gms.location.ReportingAndroidService">
             <intent-filter>
                 <action android:name="com.google.android.location.reporting.service.START" />
@@ -93,13 +102,13 @@
 
         <provider
             android:name="org.microg.gms.gservices.GServicesProvider"
-            android:exported="true"
-            android:authorities="com.google.android.gsf.gservices" />
+            android:authorities="com.google.android.gsf.gservices"
+            android:exported="true" />
 
         <provider
             android:name="org.microg.gms.settings.GoogleSettingsProvider"
-            android:exported="true"
-            android:authorities="com.google.settings" />
+            android:authorities="com.google.settings"
+            android:exported="true" />
 
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
@@ -119,10 +128,12 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="android.server.checkin.CHECKIN" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
+
                 <data
                     android:host="2432546"
                     android:scheme="android_secret_code" />
@@ -136,29 +147,38 @@
             android:permission="com.google.android.c2dm.permission.RECEIVE">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTER" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.UNREGISTER" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
 
         <service
-            android:name="org.microg.gms.gcm.mcs.McsService"
+            android:name="org.microg.gms.gcm.McsService"
             android:exported="true" />
 
-        <service
-            android:name="com.google.android.gms.gcm.http.GoogleHttpService"
-            android:exported="true" />
+        <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SECRET_CODE" />
+
+                <data
+                    android:host="42678278"
+                    android:scheme="android_secret_code" />
+            </intent-filter>
+        </receiver>
 
         <!-- DroidGuard -->
 
         <service
-            android:exported="true"
-            android:name="org.microg.gms.droidguard.DroidGuardService">
+            android:name="org.microg.gms.droidguard.DroidGuardService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.droidguard.service.START" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -170,6 +190,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.people.service.START" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -206,36 +227,39 @@
 
         <activity
             android:name="org.microg.tools.AccountPickerActivity"
-            android:exported="true"
-            android:excludeFromRecents="true">
+            android:excludeFromRecents="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
             android:name="org.microg.gms.auth.login.LoginActivity"
-            android:theme="@style/LoginBlueTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/LoginBlueTheme">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.login.LOGIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
             android:name="org.microg.gms.auth.AskPermissionActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:excludeFromRecents="true" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
         <service
-            android:name="com.google.android.gms.auth.GetToken"
+            android:name=".auth.GetToken"
             android:exported="true" />
+
         <activity
-            android:name="com.google.android.gms.auth.TokenActivity"
+            android:name=".auth.TokenActivity"
             android:exported="true" />
 
         <!-- Other -->
@@ -245,6 +269,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.mdm.services.START" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -280,5 +305,10 @@
                 <action android:name="com.google.android.gms.playlog.service.START" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".gcm.http.GoogleHttpService"
+            android:exported="true" />
     </application>
+
 </manifest>

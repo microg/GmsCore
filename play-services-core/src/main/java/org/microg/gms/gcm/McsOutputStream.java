@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package org.microg.gms.gcm.mcs;
+package org.microg.gms.gcm;
 
 import android.util.Log;
 
 import com.squareup.wire.Message;
 
+import org.microg.gms.gcm.mcs.DataMessageStanza;
+import org.microg.gms.gcm.mcs.HeartbeatAck;
+import org.microg.gms.gcm.mcs.HeartbeatPing;
+import org.microg.gms.gcm.mcs.LoginRequest;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.microg.gms.gcm.mcs.Constants.*;
+import static org.microg.gms.gcm.Constants.*;
 
 public class McsOutputStream {
     private static final String TAG = "GmsGcmMcsOutput";

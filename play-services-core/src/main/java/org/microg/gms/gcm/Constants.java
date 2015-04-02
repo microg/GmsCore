@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.microg.gms.gcm.mcs;
+package org.microg.gms.gcm;
 
 public class Constants {
     public static final int MCS_HEARTBEAT_PING_TAG = 0;

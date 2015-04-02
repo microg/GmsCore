@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.microg.gms.gcm.mcs;
+package org.microg.gms.gcm;
 
 import android.util.Base64;
 import android.util.Log;
@@ -22,16 +22,24 @@ import android.util.Log;
 import com.squareup.wire.Message;
 import com.squareup.wire.Wire;
 
+import org.microg.gms.gcm.mcs.Close;
+import org.microg.gms.gcm.mcs.DataMessageStanza;
+import org.microg.gms.gcm.mcs.HeartbeatAck;
+import org.microg.gms.gcm.mcs.HeartbeatPing;
+import org.microg.gms.gcm.mcs.IqStanza;
+import org.microg.gms.gcm.mcs.LoginRequest;
+import org.microg.gms.gcm.mcs.LoginResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.microg.gms.gcm.mcs.Constants.MCS_CLOSE_TAG;
-import static org.microg.gms.gcm.mcs.Constants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.mcs.Constants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.mcs.Constants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.mcs.Constants.MCS_IQ_STANZA_TAG;
-import static org.microg.gms.gcm.mcs.Constants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.mcs.Constants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.Constants.MCS_CLOSE_TAG;
+import static org.microg.gms.gcm.Constants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.Constants.MCS_IQ_STANZA_TAG;
+import static org.microg.gms.gcm.Constants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.Constants.MCS_LOGIN_RESPONSE_TAG;
 
 public class McsInputStream {
     private static final String TAG = "GmsGcmMcsInput";

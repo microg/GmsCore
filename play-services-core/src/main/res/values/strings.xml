@@ -25,4 +25,8 @@
     <string name="account_manager_title">µg Google Account Manager</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
+
+    <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
+    <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
+    <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
 </resources>
