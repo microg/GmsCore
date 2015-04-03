@@ -20,6 +20,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.squareup.wire.Message;
@@ -163,6 +164,7 @@ public class McsService extends IntentService {
             heartbeatThread = null;
         }
         Log.d(TAG, "Connection closed");
+        sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
     }
 
     private void handleClose(Close close) throws IOException {
@@ -170,7 +172,7 @@ public class McsService extends IntentService {
     }
 
     private void handleLoginresponse(LoginResponse loginResponse) throws IOException {
-        getSharedPreferences().edit().putString(PREF_LAST_PERSISTENT_ID, null);
+        getSharedPreferences().edit().putString(PREF_LAST_PERSISTENT_ID, "").apply();
         if (loginResponse.error == null) {
             Log.d(TAG, "Logged in");
         } else {
@@ -189,10 +191,8 @@ public class McsService extends IntentService {
 
     private void handleMessage(DataMessageStanza message) throws IOException {
         if (message.persistent_id != null) {
-            String old = getSharedPreferences().getString(PREF_LAST_PERSISTENT_ID, null);
-            if (old == null) {
-                old = "";
-            } else {
+            String old = getSharedPreferences().getString(PREF_LAST_PERSISTENT_ID, "");
+            if (!old.isEmpty()) {
                 old += "|";
             }
             getSharedPreferences().edit()

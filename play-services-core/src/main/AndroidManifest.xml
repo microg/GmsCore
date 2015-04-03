@@ -86,6 +86,7 @@
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
             </intent-filter>
         </service>
+
         <service android:name="org.microg.gms.location.ReportingAndroidService">
             <intent-filter>
                 <action android:name="com.google.android.location.reporting.service.START" />
@@ -101,10 +102,12 @@
             android:name="org.microg.gms.gservices.GServicesProvider"
             android:authorities="com.google.android.gsf.gservices"
             android:exported="true" />
+
         <provider
             android:name="org.microg.gms.settings.GoogleSettingsProvider"
             android:authorities="com.google.settings"
             android:exported="true" />
+
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
             android:authorities="subscribedfeeds"
@@ -151,6 +154,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
         <service
             android:name="org.microg.gms.gcm.McsService"
             android:exported="true" />
@@ -158,6 +162,18 @@
         <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.microg.gms.gcm.RECONNECT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data
+                    android:scheme="package"
+                    android:path="com.google.android.gms" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
@@ -232,6 +248,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="org.microg.gms.auth.login.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -243,6 +260,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="org.microg.gms.auth.AskPermissionActivity"
             android:excludeFromRecents="true"
