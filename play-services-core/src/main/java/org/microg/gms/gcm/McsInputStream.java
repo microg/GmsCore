@@ -16,7 +16,6 @@
 
 package org.microg.gms.gcm;
 
-import android.util.Base64;
 import android.util.Log;
 
 import com.squareup.wire.Message;
@@ -92,8 +91,9 @@ public class McsInputStream {
         Log.d(TAG, "Reading from MCS tag=" + mcsTag + " size=" + mcsSize);
         byte[] bytes = new byte[mcsSize];
         int len = 0;
-        while ((len += is.read(bytes, len, mcsSize - len)) < mcsSize) ;
-        Log.d(TAG, "Reading from MCS: " + Base64.encodeToString(bytes, 0));
+        while (len < mcsSize) {
+            len += is.read(bytes, len, mcsSize - len);
+        }
         Message read = read(mcsTag, bytes, len);
         Log.d(TAG, "Read from MCS: " + read);
         streamId++;

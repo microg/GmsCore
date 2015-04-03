@@ -19,6 +19,8 @@ package org.microg.gms.gcm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 
 public class TriggerReceiver extends BroadcastReceiver {
@@ -27,9 +29,15 @@ public class TriggerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
-            if (!McsService.isConnected() || force) {
-                context.startService(new Intent(context, McsService.class));
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected() || force) {
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
+                if (!McsService.isConnected() || force) {
+                    context.startService(new Intent(context, McsService.class));
+                }
             }
         }
     }

@@ -29,4 +29,10 @@
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
     <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
+
+    <string name="pref_auth_trust_google">auth_manager_trust_google</string>
+    <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
+    <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
+
+    <string name="gms_settings_name">µg Settings</string>
 </resources>

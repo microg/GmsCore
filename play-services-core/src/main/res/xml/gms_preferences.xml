@@ -15,11 +15,15 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/account_manager_title">
+    <PreferenceCategory android:title="Background services">
         <CheckBoxPreference
-            android:key="@string/pref_auth_trust_google"
-            android:defaultValue="true"
-            android:title="@string/pref_auth_trust_google_title"
-            android:summary="@string/pref_auth_trust_google_summary" />
+            android:key="checkin_enable_service"
+            android:defaultValue="false"
+            android:title="Enable regular checkin" />
+        <CheckBoxPreference
+            android:key="gcm_enable_mcs_service"
+            android:defaultValue="false"
+            android:dependency="checkin_enable_service"
+            android:title="Enable Google Cloud Messaging" />
     </PreferenceCategory>
 </PreferenceScreen>

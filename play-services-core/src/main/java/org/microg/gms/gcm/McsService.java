@@ -58,13 +58,14 @@ public class McsService extends IntentService {
     public static final String FROM_FIELD = "gcm@android.com";
 
     public static final int HEARTBEAT_MS = 60000;
-    private static AtomicBoolean connected = new AtomicBoolean(false);
+    public static final int HEARTBEAT_ALLOWED_OFFSET_MS = 2000;
+    private static final AtomicBoolean connecting = new AtomicBoolean(false);
+    private static Thread connectionThread;
+    private static Thread heartbeatThread;
 
     private Socket sslSocket;
     private McsInputStream inputStream;
     private McsOutputStream outputStream;
-    private Thread connectionThread;
-    private Thread heartbeatThread;
     private long lastMsgTime;
 
     public McsService() {
@@ -73,7 +74,7 @@ public class McsService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (connected.compareAndSet(false, true)) {
+        if (!isConnected()) {
             connectionThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -87,7 +88,7 @@ public class McsService extends IntentService {
     }
 
     public static boolean isConnected() {
-        return connected.get();
+        return connecting.get() || (connectionThread != null && connectionThread.isAlive());
     }
 
     private void heartbeatLoop() {
@@ -95,7 +96,7 @@ public class McsService extends IntentService {
             while (!Thread.interrupted()) {
                 try {
                     long waitTime;
-                    while ((waitTime = lastMsgTime + HEARTBEAT_MS - System.currentTimeMillis()) > 0) {
+                    while ((waitTime = lastMsgTime + HEARTBEAT_MS - System.currentTimeMillis()) > HEARTBEAT_ALLOWED_OFFSET_MS) {
                         synchronized (heartbeatThread) {
                             Log.d(TAG, "Waiting for " + waitTime + "ms");
                             heartbeatThread.wait(waitTime);
@@ -123,6 +124,7 @@ public class McsService extends IntentService {
     }
 
     private void connect() {
+        connecting.set(false);
         try {
             Log.d(TAG, "Starting MCS connection...");
             LastCheckinInfo info = LastCheckinInfo.read(this);
@@ -160,7 +162,6 @@ public class McsService extends IntentService {
             heartbeatThread.interrupt();
             heartbeatThread = null;
         }
-        connected.set(false);
         Log.d(TAG, "Connection closed");
     }
 

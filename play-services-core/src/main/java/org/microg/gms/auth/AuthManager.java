@@ -36,7 +36,7 @@ public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
     public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
-    private static final String PREF_KEY_TRUST_GOOGLE = "auth_manager_trust_google";
+    private static final String PREF_AUTH_TRUST_GOOGLE = "auth_manager_trust_google";
 
     private final Context context;
     private final String accountName;
@@ -165,7 +165,7 @@ public class AuthManager {
     }
 
     public static boolean isTrustGooglePermitted(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_KEY_TRUST_GOOGLE, true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_AUTH_TRUST_GOOGLE, true);
     }
 
     private boolean isSystemApp() {

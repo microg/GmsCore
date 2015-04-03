@@ -24,38 +24,37 @@
 
     <permission
         android:name="com.google.android.c2dm.permission.RECEIVE"
-        android:protectionLevel="dangerous"
+        android:label="@string/perm_c2dm_receive_label"
         android:permissionGroup="android.permission-group.NETWORK"
-        android:label="@string/perm_c2dm_receive_label" />
+        android:protectionLevel="dangerous" />
     <permission
         android:name="com.google.android.c2dm.permission.SEND"
-        android:protectionLevel="dangerous"
-        android:label="@string/perm_c2dm_send_label" />
+        android:label="@string/perm_c2dm_send_label"
+        android:protectionLevel="dangerous" />
 
     <permission-tree
-        android:icon="@drawable/proprietary_auth_ic_scope_icon_default"
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH" />
+        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH"
+        android:icon="@drawable/proprietary_auth_ic_scope_icon_default" />
 
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.local"
-        android:protectionLevel="dangerous"
         android:description="@string/permission_service_local_description"
-        android:label="@string/permission_service_local_label" />
+        android:label="@string/permission_service_local_label"
+        android:protectionLevel="dangerous" />
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.mail"
-        android:protectionLevel="dangerous"
         android:description="@string/permission_service_mail_description"
-        android:label="@string/permission_service_mail_label" />
+        android:label="@string/permission_service_mail_label"
+        android:protectionLevel="dangerous" />
     <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.writely"
-        android:protectionLevel="dangerous"
         android:description="@string/permission_service_writely_description"
-        android:label="@string/permission_service_writely_label" />
-
+        android:label="@string/permission_service_writely_label"
+        android:protectionLevel="dangerous" />
     <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
-        android:protectionLevel="dangerous"
-        android:label="@string/perm_status_broadcast_label" />
+        android:label="@string/perm_status_broadcast_label"
+        android:protectionLevel="dangerous" />
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -70,7 +69,6 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.c2dm.permission.SEND" />
     <uses-permission android:name="org.microg.gms.STATUS_BROADCAST" />
-
 
     <application
         android:icon="@drawable/ic_microg_app"
@@ -88,7 +86,6 @@
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
             </intent-filter>
         </service>
-
         <service android:name="org.microg.gms.location.ReportingAndroidService">
             <intent-filter>
                 <action android:name="com.google.android.location.reporting.service.START" />
@@ -104,12 +101,10 @@
             android:name="org.microg.gms.gservices.GServicesProvider"
             android:authorities="com.google.android.gsf.gservices"
             android:exported="true" />
-
         <provider
             android:name="org.microg.gms.settings.GoogleSettingsProvider"
             android:authorities="com.google.settings"
             android:exported="true" />
-
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
             android:authorities="subscribedfeeds"
@@ -156,12 +151,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-
         <service
             android:name="org.microg.gms.gcm.McsService"
             android:exported="true" />
 
         <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
 
@@ -235,7 +232,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="org.microg.gms.auth.login.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -247,7 +243,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="org.microg.gms.auth.AskPermissionActivity"
             android:excludeFromRecents="true"
@@ -273,7 +268,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-
         <service
             android:name="org.microg.gms.icing.LightweightIndexService"
             android:exported="true">
@@ -281,7 +275,6 @@
                 <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
             </intent-filter>
         </service>
-
         <service
             android:name="org.microg.gms.icing.IndexService"
             android:exported="true">
@@ -289,7 +282,6 @@
                 <action android:name="com.google.android.gms.icing.INDEX_SERVICE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".analytics.service.AnalyticsService"
             android:exported="true">
@@ -297,7 +289,6 @@
                 <action android:name="com.google.android.gms.analytics.service.START" />
             </intent-filter>
         </service>
-
         <service
             android:name="org.microg.gms.playlog.PlayLogService"
             android:exported="true">
@@ -305,10 +296,20 @@
                 <action android:name="com.google.android.gms.playlog.service.START" />
             </intent-filter>
         </service>
-
         <service
             android:name=".gcm.http.GoogleHttpService"
             android:exported="true" />
+
+        <activity
+            android:name="org.microg.gms.ui.SettingsActivity"
+            android:icon="@drawable/ic_microg_app"
+            android:label="@string/gms_settings_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
