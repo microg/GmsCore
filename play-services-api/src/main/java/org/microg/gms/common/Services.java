@@ -16,6 +16,8 @@
 
 package org.microg.gms.common;
 
+import java.lang.reflect.Field;
+
 public final class Services {
     public static final class GAMES {
         public static final int SERVICE_ID = 1;
@@ -43,9 +45,8 @@ public final class Services {
         public static final String ACTION = "com.google.android.gms.people.service.START";
     }
 
-    @Deprecated
     public static final class LOCATION {
-        public static final int SERVICE_ID = 5;
+        public static final int SERVICE_ID = 6;
     }
 
     public static final class APPSTATE {
@@ -128,6 +129,10 @@ public final class Services {
         public static final String ACTION = "com.google.android.location.internal.GoogleLocationManagerService.START";
     }
 
+    public static final class PLAY_LOG {
+        public static final int SERVICE_ID = 24;
+    }
+
     public static final class DROIDGUARD {
         public static final int SERVICE_ID = 25;
         public static final String ACTION = "com.google.android.gms.droidguard.service.START";
@@ -143,7 +148,6 @@ public final class Services {
         public static final String ACTION = "com.google.android.gms.cast_mirroring.service.START";
     }
 
-    @Deprecated
     public static final class NETWORK_QUALITY {
         public static final int SERVICE_ID = 28;
         public static final String ACTION = "com.google.android.gms.mdm.services.START";
@@ -154,14 +158,30 @@ public final class Services {
         public static final String ACTION = "com.google.android.gms.feedback.internal.IFeedbackService";
     }
 
+    public static final class SEARCH_ADMINISTRATION {
+        public static final int SERVICE_ID = 30;
+    }
+
     public static final class PHOTO_AUTO_BACKUP {
         public static final int SERVICE_ID = 31;
         public static final String ACTION = "com.google.android.gms.photos.autobackup.service.START";
     }
 
+    public static final class SEARCH_QUERIES {
+        public static final int SERVICE_ID = 32;
+    }
+
+    public static final class SEARCH_GLOBAL {
+        public static final int SERVICE_ID = 33;
+    }
+
     public static final class UDC {
         public static final int SERVICE_ID = 35;
         public static final String ACTION = "com.google.android.gms.udc.service.START";
+    }
+
+    public static final class SEARCH_CORPORA {
+        public static final int SERVICE_ID = 36;
     }
 
     public static final class DEVICE_MANAGER {
@@ -302,9 +322,31 @@ public final class Services {
         public static final String ACTION = "com.google.android.gms.config.START";
     }
 
+    public static final class GEODATA {
+        public static final int SERVICE_ID = 65;
+    }
+
+    public static final class SEARCH_IME {
+        public static final int SERVICE_ID = 66;
+    }
+
+    public static final class PLACE_DETECTION {
+        public static final int SERVICE_ID = 67;
+    }
+
     public static final class CREDENTIALS {
         public static final int SERVICE_ID = 68;
         public static final String ACTION = "com.google.android.gms.auth.api.credentials.service.START";
     }
 
+    public static String nameFromServiceId(int serviceId) {
+        for (Class cls : Services.class.getDeclaredClasses()) {
+            try {
+                Field serviceIdField = cls.getDeclaredField("SERVICE_ID");
+                if ((Integer) serviceIdField.get(null) == serviceId) return cls.getSimpleName();
+            } catch (Exception e) {
+            }
+        }
+        return "UNKNOWN(" + serviceId + ")";
+    }
 }

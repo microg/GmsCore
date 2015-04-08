@@ -31,7 +31,7 @@ import org.microg.safeparcel.SafeParceled;
 public class TileOverlayOptions extends AutoSafeParcelable {
 
     @SafeParceled(1)
-    private final int versionCode = 1;
+    private final int versionCode;
     /**
      * This is a IBinder to the {@link #tileProvider}, built using {@link ITileProviderDelegate}.
      */
@@ -49,6 +49,7 @@ public class TileOverlayOptions extends AutoSafeParcelable {
      * Creates a new set of tile overlay options.
      */
     public TileOverlayOptions() {
+        versionCode = 1;
     }
 
     /**

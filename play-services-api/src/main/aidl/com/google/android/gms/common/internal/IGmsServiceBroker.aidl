@@ -7,16 +7,16 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.ValidateAccountRequest;
 
 interface IGmsServiceBroker {
-    void getPlusService(IGmsCallbacks callback, int code, String str1, String str2, in String[] paramArrayOfString, String str3, in Bundle params) = 0;
-    void getPanoramaService(IGmsCallbacks callback, int code, String str, in Bundle params) = 1;
-    void getAppDataSearchService(IGmsCallbacks callback, int code, String str) = 2;
+    void getPlusService(IGmsCallbacks callback, int code, String packageName, String authPackage, in String[] scopes, String accountName, in Bundle params) = 0;
+    void getPanoramaService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 1;
+    void getAppDataSearchService(IGmsCallbacks callback, int code, String packageName) = 2;
     void getWalletService(IGmsCallbacks callback, int code) = 3;
     void getPeopleService(IGmsCallbacks callback, int code, String str, in Bundle params) = 4;
     void getReportingService(IGmsCallbacks callback, int code, String str, in Bundle params) = 5;
     void getLocationService(IGmsCallbacks callback, int code, String str, in Bundle params) = 6;
     void getGoogleLocationManagerService(IGmsCallbacks callback, int code, String str, in Bundle params) = 7;
-    void getGamesService(IGmsCallbacks callback, int code, String str1, String str2, in String[] args, String str3, IBinder binder, String str4, in Bundle params) = 8;
-    void getAppStateService(IGmsCallbacks callback, int code, String str1, String str2, in String[] args) = 9;
+    void getGamesService(IGmsCallbacks callback, int code, String packageName, String accountName, in String[] scopes, String gamePackageName, IBinder popupWindowToken, String desiredLocale, in Bundle params) = 8;
+    void getAppStateService(IGmsCallbacks callback, int code, String packageName, String accountName, in String[] scopes) = 9;
     void getPlayLogService(IGmsCallbacks callback, int code, String str, in Bundle params) = 10;
     void getAdMobService(IGmsCallbacks callback, int code, String str, in Bundle params) = 11;
     void getDroidGuardService(IGmsCallbacks callback, int code, String str, in Bundle params) = 12;
@@ -31,6 +31,8 @@ interface IGmsServiceBroker {
     void getSearchAdministrationService(IGmsCallbacks callback, int code, String str) = 21;
     void getAutoBackupService(IGmsCallbacks callback, int code, String str, in Bundle params) = 22;
     void getAddressService(IGmsCallbacks callback, int code, String str) = 23;
+
+    void getWalletServiceWithPackageName(IGmsCallbacks callback, int code, String packageName) = 41;
 
     void getService(IGmsCallbacks callback, in GetServiceRequest request) = 45;
     void validateAccount(IGmsCallbacks callback, in ValidateAccountRequest request) = 46;
