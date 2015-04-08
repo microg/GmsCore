@@ -27,6 +27,7 @@ import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.GmsClient;
+import org.microg.gms.common.Services;
 
 public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocationManagerService> {
     public GoogleLocationManagerClient(Context context, GoogleApiClient.ConnectionCallbacks
@@ -36,7 +37,7 @@ public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocat
 
     @Override
     protected String getActionString() {
-        return Constants.ACTION_GMS_LOCATION_MANAGER_SERVICE_START;
+        return Services.LOCATION_MANAGER.ACTION;
     }
 
     @Override
