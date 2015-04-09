@@ -23,18 +23,20 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.common.Services;
 
 public class PlayLogService extends Service {
     private static final String TAG = "GmsPlayLogSvc";
 
     private PlayLogServiceImpl playLogService = new PlayLogServiceImpl();
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker() {
+    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.PLAY_LOG.SERVICE_ID) {
         @Override
-        public void getPlayLogService(IGmsCallbacks callback, int versionCode, String packageName, Bundle params) throws RemoteException {
-            Log.d(TAG, "bound by: " + packageName);
+        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+            Log.d(TAG, "bound by: " + request);
             callback.onPostInitComplete(0, playLogService.asBinder(), null);
         }
     };

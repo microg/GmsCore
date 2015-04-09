@@ -22,19 +22,20 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.common.Services;
 
 public class LightweightIndexService extends Service {
     private static final String TAG = "GmsIcingLightIndexSvc";
 
     private LightweightAppDataSearchImpl appDataSearch = new LightweightAppDataSearchImpl();
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker() {
+    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.LIGHTWEIGHT_INDEX.SERVICE_ID) {
         @Override
-        public void getLightweightAppDataSearchService(IGmsCallbacks callback, int versionCode,
-                                                       String packageName) throws RemoteException {
-            Log.d(TAG, "bound by: " + packageName);
+        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+            Log.d(TAG, "bound by: " + request);
             callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
         }
     };

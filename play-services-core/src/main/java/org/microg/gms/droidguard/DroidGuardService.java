@@ -23,17 +23,19 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.common.Services;
 
 public class DroidGuardService extends Service {
     private static final String TAG = "GmsDroidGuardSvc";
 
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker() {
+    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.DROIDGUARD.SERVICE_ID) {
         @Override
-        public void getDroidGuardService(IGmsCallbacks callback, int versionCode, String packageName, Bundle params) throws RemoteException {
-            Log.d(TAG, "getDroidGuardService for " + packageName);
+        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+            Log.d(TAG, "getDroidGuardService for " + request);
         }
     };
 

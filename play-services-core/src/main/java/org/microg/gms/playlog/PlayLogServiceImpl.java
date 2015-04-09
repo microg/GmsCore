@@ -21,9 +21,16 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.playlog.internal.IPlayLogService;
+import com.google.android.gms.playlog.internal.LogEvent;
+import com.google.android.gms.playlog.internal.PlayLoggerContext;
 
 public class PlayLogServiceImpl extends IPlayLogService.Stub {
     private static final String TAG = "GmsPlayLogSvcImpl";
+
+    @Override
+    public void event(String packageName, PlayLoggerContext context, LogEvent event) throws RemoteException {
+        Log.d(TAG, packageName + " event:" + event + " context:" + context);
+    }
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {

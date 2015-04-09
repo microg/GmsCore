@@ -22,18 +22,23 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.common.Services;
 
 public class IndexService extends Service {
     private static final String TAG = "GmsIcingIndexSvc";
 
     private AppDataSearchImpl appDataSearch = new AppDataSearchImpl();
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker() {
+    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(
+            Services.INDEX.SERVICE_ID, Services.SEARCH_ADMINISTRATION.SERVICE_ID,
+            Services.SEARCH_CORPORA.SERVICE_ID, Services.SEARCH_GLOBAL.SERVICE_ID,
+            Services.SEARCH_IME.SERVICE_ID, Services.SEARCH_QUERIES.SERVICE_ID) {
         @Override
-        public void getAppDataSearchService(IGmsCallbacks callback, int versionCode, String packageName) throws RemoteException {
-            Log.d(TAG, "bound by: " + packageName);
+        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+            Log.d(TAG, "bound by: " + request);
             callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
         }
     };
