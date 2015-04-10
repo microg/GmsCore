@@ -25,11 +25,15 @@ public class LastCheckinInfo {
     public static final String PREF_DIGEST = "digest";
     public static final String PREF_LAST_CHECKIN = "lastCheckin";
     public static final String PREF_SECURITY_TOKEN = "securityToken";
+    public static final String PREF_VERSION_INFO = "versionInfo";
+    public static final String PREF_DEVICE_DATA_VERSION_INFO = "deviceDataVersionInfo";
     public static final String INITIAL_DIGEST = "1-da39a3ee5e6b4b0d3255bfef95601890afd80709";
     public long lastCheckin;
     public long androidId;
     public long securityToken;
     public String digest;
+    public String versionInfo;
+    public String deviceDataVersionInfo;
 
     public static LastCheckinInfo read(Context context) {
         LastCheckinInfo info = new LastCheckinInfo();
@@ -38,6 +42,8 @@ public class LastCheckinInfo {
         info.digest = preferences.getString(PREF_DIGEST, INITIAL_DIGEST);
         info.lastCheckin = preferences.getLong(PREF_LAST_CHECKIN, 0);
         info.securityToken = preferences.getLong(PREF_SECURITY_TOKEN, 0);
+        info.versionInfo = preferences.getString(PREF_VERSION_INFO, "");
+        info.deviceDataVersionInfo = preferences.getString(PREF_DEVICE_DATA_VERSION_INFO, "");
         return info;
     }
 
@@ -47,6 +53,8 @@ public class LastCheckinInfo {
                 .putString(PREF_DIGEST, digest)
                 .putLong(PREF_LAST_CHECKIN, lastCheckin)
                 .putLong(PREF_SECURITY_TOKEN, securityToken)
+                .putString(PREF_VERSION_INFO, versionInfo)
+                .putString(PREF_DEVICE_DATA_VERSION_INFO, deviceDataVersionInfo)
                 .apply();
     }
 }

@@ -20,14 +20,25 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.R;
+import com.google.android.gms.checkin.internal.ICheckinService;
 
 import org.microg.gms.people.PeopleManager;
 
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
+    public static final String BIND_ACTION = "com.google.android.gms.checkin.BIND_TO_SERVICE";
+
+    private ICheckinService iface = new ICheckinService.Stub() {
+        @Override
+        public String getDeviceDataVersionInfo() throws RemoteException {
+            return LastCheckinInfo.read(CheckinService.this).deviceDataVersionInfo;
+        }
+    };
 
     public CheckinService() {
         super(TAG);
@@ -48,5 +59,14 @@ public class CheckinService extends IntentService {
             Log.w(TAG, e);
         }
         stopSelf();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        if (BIND_ACTION.equals(intent.getAction())) {
+            return iface.asBinder();
+        } else {
+            return super.onBind(intent);
+        }
     }
 }

@@ -118,7 +118,11 @@
 
         <!-- Device Checkin -->
 
-        <service android:name="org.microg.gms.checkin.CheckinService" />
+        <service android:name="org.microg.gms.checkin.CheckinService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.checkin.BIND_TO_SERVICE" />
+            </intent-filter>
+        </service>
 
         <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
             <intent-filter>

@@ -61,6 +61,8 @@ public class CheckinManager {
         info.lastCheckin = response.timeMs;
         info.securityToken = response.securityToken;
         info.digest = response.digest;
+        info.versionInfo = response.versionInfo;
+        info.deviceDataVersionInfo = response.deviceDataVersionInfo;
         info.write(context);
 
         ContentResolver resolver = context.getContentResolver();

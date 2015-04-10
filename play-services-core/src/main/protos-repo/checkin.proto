@@ -265,6 +265,6 @@ message CheckinResponse {
     optional fixed64 securityToken = 8;
     optional bool settingsDiff = 9;
     repeated string deleteSetting = 10;
-    // TODO: optional string ? = 11;
-    // TODO: optional string ? = 12;
+    optional string versionInfo = 11;
+    optional string deviceDataVersionInfo = 12;
 }

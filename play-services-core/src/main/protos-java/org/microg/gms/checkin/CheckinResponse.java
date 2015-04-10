@@ -27,6 +27,8 @@ public final class CheckinResponse extends Message {
   public static final Long DEFAULT_SECURITYTOKEN = 0L;
   public static final Boolean DEFAULT_SETTINGSDIFF = false;
   public static final List<String> DEFAULT_DELETESETTING = Collections.emptyList();
+  public static final String DEFAULT_VERSIONINFO = "";
+  public static final String DEFAULT_DEVICEDATAVERSIONINFO = "";
 
   @ProtoField(tag = 1, type = BOOL)
   public final Boolean statsOk;
@@ -58,7 +60,13 @@ public final class CheckinResponse extends Message {
   @ProtoField(tag = 10, type = STRING, label = REPEATED)
   public final List<String> deleteSetting;
 
-  public CheckinResponse(Boolean statsOk, List<Intent> intent, Long timeMs, String digest, List<GservicesSetting> setting, Boolean marketOk, Long androidId, Long securityToken, Boolean settingsDiff, List<String> deleteSetting) {
+  @ProtoField(tag = 11, type = STRING)
+  public final String versionInfo;
+
+  @ProtoField(tag = 12, type = STRING)
+  public final String deviceDataVersionInfo;
+
+  public CheckinResponse(Boolean statsOk, List<Intent> intent, Long timeMs, String digest, List<GservicesSetting> setting, Boolean marketOk, Long androidId, Long securityToken, Boolean settingsDiff, List<String> deleteSetting, String versionInfo, String deviceDataVersionInfo) {
     this.statsOk = statsOk;
     this.intent = immutableCopyOf(intent);
     this.timeMs = timeMs;
@@ -69,10 +77,12 @@ public final class CheckinResponse extends Message {
     this.securityToken = securityToken;
     this.settingsDiff = settingsDiff;
     this.deleteSetting = immutableCopyOf(deleteSetting);
+    this.versionInfo = versionInfo;
+    this.deviceDataVersionInfo = deviceDataVersionInfo;
   }
 
   private CheckinResponse(Builder builder) {
-    this(builder.statsOk, builder.intent, builder.timeMs, builder.digest, builder.setting, builder.marketOk, builder.androidId, builder.securityToken, builder.settingsDiff, builder.deleteSetting);
+    this(builder.statsOk, builder.intent, builder.timeMs, builder.digest, builder.setting, builder.marketOk, builder.androidId, builder.securityToken, builder.settingsDiff, builder.deleteSetting, builder.versionInfo, builder.deviceDataVersionInfo);
     setBuilder(builder);
   }
 
@@ -90,7 +100,9 @@ public final class CheckinResponse extends Message {
         && equals(androidId, o.androidId)
         && equals(securityToken, o.securityToken)
         && equals(settingsDiff, o.settingsDiff)
-        && equals(deleteSetting, o.deleteSetting);
+        && equals(deleteSetting, o.deleteSetting)
+        && equals(versionInfo, o.versionInfo)
+        && equals(deviceDataVersionInfo, o.deviceDataVersionInfo);
   }
 
   @Override
@@ -107,6 +119,8 @@ public final class CheckinResponse extends Message {
       result = result * 37 + (securityToken != null ? securityToken.hashCode() : 0);
       result = result * 37 + (settingsDiff != null ? settingsDiff.hashCode() : 0);
       result = result * 37 + (deleteSetting != null ? deleteSetting.hashCode() : 1);
+      result = result * 37 + (versionInfo != null ? versionInfo.hashCode() : 0);
+      result = result * 37 + (deviceDataVersionInfo != null ? deviceDataVersionInfo.hashCode() : 0);
       hashCode = result;
     }
     return result;
@@ -124,6 +138,8 @@ public final class CheckinResponse extends Message {
     public Long securityToken;
     public Boolean settingsDiff;
     public List<String> deleteSetting;
+    public String versionInfo;
+    public String deviceDataVersionInfo;
 
     public Builder() {
     }
@@ -141,6 +157,8 @@ public final class CheckinResponse extends Message {
       this.securityToken = message.securityToken;
       this.settingsDiff = message.settingsDiff;
       this.deleteSetting = copyOf(message.deleteSetting);
+      this.versionInfo = message.versionInfo;
+      this.deviceDataVersionInfo = message.deviceDataVersionInfo;
     }
 
     public Builder statsOk(Boolean statsOk) {
@@ -190,6 +208,16 @@ public final class CheckinResponse extends Message {
 
     public Builder deleteSetting(List<String> deleteSetting) {
       this.deleteSetting = checkForNulls(deleteSetting);
+      return this;
+    }
+
+    public Builder versionInfo(String versionInfo) {
+      this.versionInfo = versionInfo;
+      return this;
+    }
+
+    public Builder deviceDataVersionInfo(String deviceDataVersionInfo) {
+      this.deviceDataVersionInfo = deviceDataVersionInfo;
       return this;
     }
 
