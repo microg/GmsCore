@@ -47,7 +47,7 @@ public class LogEvent extends AutoSafeParcelable {
         return "LogEvent{" +
                 "eventTime=" + new Date(eventTime) +
                 ", tag='" + tag + '\'' +
-                ", data='" + new String(data) + '\'' +
+                ", data=" + (data == null ? "null" : ('\'' + new String(data) + '\'')) +
                 '}';
     }
 
