@@ -131,6 +131,7 @@ public final class Services {
 
     public static final class PLAY_LOG {
         public static final int SERVICE_ID = 24;
+        public static final String ACTION = "com.google.android.gms.playlog.service.START";
     }
 
     public static final class DROIDGUARD {
