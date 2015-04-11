@@ -21,12 +21,14 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.appdatasearch.CorpusStatus;
+import com.google.android.gms.appdatasearch.PIMEUpdateResponse;
+import com.google.android.gms.appdatasearch.RequestIndexingSpecification;
 import com.google.android.gms.appdatasearch.SuggestSpecification;
 import com.google.android.gms.appdatasearch.SuggestionResults;
 import com.google.android.gms.appdatasearch.internal.IAppDataSearch;
 
 public class AppDataSearchImpl extends IAppDataSearch.Stub {
-    private static final String TAG = "GmsIcingSearchImpl";
+    private static final String TAG = "GmsIcingAppDataImpl";
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
@@ -41,7 +43,22 @@ public class AppDataSearchImpl extends IAppDataSearch.Stub {
     }
 
     @Override
+    public boolean requestIndexing(String packageName, String accountName, long l, RequestIndexingSpecification specs) throws RemoteException {
+        Log.d(TAG, "requestIndexing: " + accountName + " @ " + packageName + ", " + l);
+        return true;
+    }
+
+    @Override
     public CorpusStatus getStatus(String packageName, String accountName) throws RemoteException {
-        return new CorpusStatus();
+        Log.d(TAG, "getStatus: " + accountName + " @ " + packageName);
+        CorpusStatus status = new CorpusStatus();
+        status.found = true;
+        return status;
+    }
+
+    @Override
+    public PIMEUpdateResponse requestPIMEUpdate(String s1, String s2, int i, byte[] bs) throws RemoteException {
+        Log.d(TAG, "requestPIMEUpdate: " + s1 + ", " + s2 + ", " + i + ", " + (bs == null ? "null" : new String(bs)));
+        return new PIMEUpdateResponse();
     }
 }

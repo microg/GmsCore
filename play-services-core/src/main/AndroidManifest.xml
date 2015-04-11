@@ -332,6 +332,53 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name="org.microg.gms.DummyService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.games.service.START" />
+                <action android:name="com.google.android.gms.plus.service.START" />
+                <action android:name="com.google.android.gms.plus.service.internal.START" />
+                <action android:name="com.google.android.gms.panorama.service.START" />
+                <action android:name="com.google.android.gms.wallet.service.BIND" />
+                <action android:name="com.google.android.gms.appstate.service.START" />
+                <action android:name="com.google.android.gms.ads.service.START" />
+                <action android:name="com.google.android.gms.accounts.ACCOUNT_SERVICE" />
+                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE" />
+                <action android:name="com.google.android.gms.drive.ApiService.START" />
+                <action android:name="com.google.android.gms.identity.service.BIND" />
+                <action android:name="com.google.android.gms.car.service.START" />
+                <action android:name="com.google.android.gms.wearable.BIND" />
+                <action android:name="com.google.android.gms.auth.service.START" />
+                <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START" />
+                <action android:name="com.google.android.gms.reminders.service.START" />
+                <action android:name="com.google.android.gms.deviceconnection.service.START" />
+                <action android:name="com.google.android.gms.droidguard.service.START" />
+                <action android:name="com.google.android.gms.lockbox.service.START" />
+                <action android:name="com.google.android.gms.cast_mirroring.service.START" />
+                <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
+                <action android:name="com.google.android.gms.photos.autobackup.service.START" />
+                <action android:name="com.google.android.gms.udc.service.START" />
+                <action android:name="com.google.android.gms.mdm.services.DeviceManagerApiService.START" />
+                <action android:name="com.google.android.gms.pseudonymous.service.START" />
+                <action android:name="com.google.android.gms.common.service.START" />
+                <action android:name="com.google.android.gms.clearcut.service.START" />
+                <action android:name="com.google.android.gms.usagereporting.service.START" />
+                <action android:name="com.google.android.gms.kids.service.START" />
+                <action android:name="com.google.android.gms.common.download.START" />
+                <action android:name="com.google.android.gms.signin.service.START" />
+                <action android:name="com.google.android.gms.safetynet.service.START" />
+                <action android:name="com.google.android.gms.ads.gservice.START" />
+                <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
+                <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
+                <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START" />
+                <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
+                <action android:name="com.google.android.gms.phenotype.service.START" />
+
+                <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

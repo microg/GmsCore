@@ -96,6 +96,7 @@ public class GServicesProvider extends ContentProvider {
                 }
             }
         }
+        if (cursor.getCount() == 0) return null;
         return cursor;
     }
 

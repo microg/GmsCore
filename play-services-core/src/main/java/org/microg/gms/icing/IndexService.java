@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
+import com.google.android.gms.common.internal.IGmsServiceBroker;
 
 import org.microg.gms.AbstractGmsServiceBroker;
 import org.microg.gms.common.Services;
@@ -32,14 +33,30 @@ public class IndexService extends Service {
     private static final String TAG = "GmsIcingIndexSvc";
 
     private AppDataSearchImpl appDataSearch = new AppDataSearchImpl();
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(
+    private CorporaSearchImpl corporaSearch = new CorporaSearchImpl();
+    private IGmsServiceBroker broker = new AbstractGmsServiceBroker(
             Services.INDEX.SERVICE_ID, Services.SEARCH_ADMINISTRATION.SERVICE_ID,
             Services.SEARCH_CORPORA.SERVICE_ID, Services.SEARCH_GLOBAL.SERVICE_ID,
             Services.SEARCH_IME.SERVICE_ID, Services.SEARCH_QUERIES.SERVICE_ID) {
         @Override
         public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
             Log.d(TAG, "bound by: " + request);
-            callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
+            switch (request.serviceId) {
+                case Services.INDEX.SERVICE_ID:
+                    callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
+                    break;
+                case Services.SEARCH_ADMINISTRATION.SERVICE_ID:
+                    break;
+                case Services.SEARCH_CORPORA.SERVICE_ID:
+                    callback.onPostInitComplete(0, corporaSearch.asBinder(), null);
+                    break;
+                case Services.SEARCH_GLOBAL.SERVICE_ID:
+                    break;
+                case Services.SEARCH_IME.SERVICE_ID:
+                    break;
+                case Services.SEARCH_QUERIES.SERVICE_ID:
+                    break;
+            }
         }
     };
 
