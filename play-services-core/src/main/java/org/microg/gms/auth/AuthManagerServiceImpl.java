@@ -85,8 +85,12 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 i.putExtra(KEY_ACCOUNT_TYPE, authManager.getAccountType());
                 i.putExtra(KEY_ACCOUNT_NAME, accountName);
                 i.putExtra(KEY_AUTHTOKEN, scope);
-                if (res.consentDataBase64 != null)
-                    i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
+                try {
+                    if (res.consentDataBase64 != null)
+                        i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
+                } catch (Exception e) {
+                    Log.w(TAG, "Can't decode consent data: ", e);
+                }
                 result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
                 return result;
             }

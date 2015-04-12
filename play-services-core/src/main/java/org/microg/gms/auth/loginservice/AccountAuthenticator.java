@@ -109,8 +109,12 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
                 i.putExtra(KEY_ACCOUNT_TYPE, account.type);
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
                 i.putExtra(KEY_AUTHTOKEN, authTokenType);
-                if (res.consentDataBase64 != null)
-                    i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.DEFAULT));
+                try {
+                    if (res.consentDataBase64 != null)
+                        i.putExtra(AskPermissionActivity.EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
+                } catch (Exception e) {
+                    Log.w(TAG, "Can't decode consent data: ", e);
+                }
                 result.putParcelable(KEY_INTENT, i);
                 return result;
             }
