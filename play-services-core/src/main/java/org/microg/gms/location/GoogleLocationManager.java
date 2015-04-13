@@ -40,7 +40,7 @@ public class GoogleLocationManager implements LocationChangeListener {
     private RealLocationProvider gpsProvider;
     private RealLocationProvider networkProvider;
     private MockLocationProvider mockProvider;
-    private List<LocationRequestHelper> currentRequests = new ArrayList<>();
+    private List<LocationRequestHelper> currentRequests = new ArrayList<LocationRequestHelper>();
 
     public GoogleLocationManager(Context context) {
         this.context = context;

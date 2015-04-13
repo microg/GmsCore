@@ -104,7 +104,7 @@ public class PeopleManager {
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             databaseHelper.putOwner(contentValues);
             databaseHelper.close();
-        } catch (JSONException | IOException e) {
+        } catch (Exception e) {
             Log.w(TAG, e);
         }
     }

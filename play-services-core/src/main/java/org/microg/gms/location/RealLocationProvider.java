@@ -36,7 +36,7 @@ public class RealLocationProvider {
     private final AtomicBoolean connected = new AtomicBoolean(false);
     private long connectedMinTime;
     private float connectedMinDistance;
-    private List<LocationRequestHelper> requests = new ArrayList<>();
+    private List<LocationRequestHelper> requests = new ArrayList<LocationRequestHelper>();
     private final LocationChangeListener changeListener;
     private LocationListener listener = new LocationListener() {
         @Override

@@ -66,21 +66,21 @@ public class DeviceConfiguration {
         glEsVersion = configurationInfo.reqGlEsVersion;
         PackageManager packageManager = context.getPackageManager();
         sharedLibraries = Arrays.asList(packageManager.getSystemSharedLibraryNames());
-        availableFeatures = new ArrayList<>();
+        availableFeatures = new ArrayList<String>();
         for (FeatureInfo featureInfo : packageManager.getSystemAvailableFeatures()) {
             if (featureInfo.name != null) availableFeatures.add(featureInfo.name);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nativePlatforms = Arrays.asList(Build.SUPPORTED_ABIS);
         } else {
-            nativePlatforms = new ArrayList<>();
+            nativePlatforms = new ArrayList<String>();
             nativePlatforms.add(Build.CPU_ABI);
             if (Build.CPU_ABI2 != null) nativePlatforms.add(Build.CPU_ABI2);
         }
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
         locales = Arrays.asList(context.getAssets().getLocales());
-        glExtensions = new ArrayList<>();
+        glExtensions = new ArrayList<String>();
         addEglExtensions(glExtensions);
     }
 

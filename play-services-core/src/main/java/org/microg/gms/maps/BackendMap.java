@@ -53,7 +53,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     private final OSciMap4TileSource tileSource;
     private final TileCache cache;
     private final ItemizedLayer<MarkerItem> items;
-    private java.util.Map<String, Markup> markupMap = new HashMap<>();
+    private java.util.Map<String, Markup> markupMap = new HashMap<String, Markup>();
     private boolean redrawPosted = false;
 
     public BackendMap(Context context) {
@@ -68,7 +68,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
         Layers layers = mapView.map().layers();
         layers.add(buildings = new BuildingLayer(mapView.map(), baseLayer));
         layers.add(new LabelLayer(mapView.map(), baseLayer));
-        layers.add(items = new ItemizedLayer<>(mapView.map(), new MarkerSymbol(new AndroidBitmap(BitmapFactory
+        layers.add(items = new ItemizedLayer<MarkerItem>(mapView.map(), new MarkerSymbol(new AndroidBitmap(BitmapFactory
                 .decodeResource(ResourcesContainer.get(), R.drawable.nop)), 0.5F, 1)));
         items.setOnItemGestureListener(this);
         mapView.map().setTheme(VtmThemes.DEFAULT);

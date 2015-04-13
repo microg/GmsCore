@@ -35,19 +35,15 @@ repositories {
 dependencies {
     compile 'com.android.support:support-v4:22.0.0'
     compile 'com.android.support:appcompat-v7:22.0.0'
-
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.squareup.wire:wire-runtime:1.6.1'
-
     compile project(':play-services-api')
     compile project(':unifiednlp-base')
-
     // vtm from ./libs
-    compile group: 'org.oscim', name: 'vtm-android', version: '0.6.0-SNAPSHOT', ext: 'aar'
-    compile group: 'org.oscim', name: 'vtm-themes', version: '0.6.0-SNAPSHOT'
-    compile group: 'org.oscim', name: 'vtm-extras', version: '0.6.0-SNAPSHOT'
-    compile group: 'org.oscim', name: 'vtm', version: '0.6.0-SNAPSHOT'
-
+    compile 'org.oscim:vtm-android:0.6.0-SNAPSHOT@aar'
+    compile 'org.oscim:vtm-themes:0.6.0-SNAPSHOT'
+    compile 'org.oscim:vtm-extras:0.6.0-SNAPSHOT'
+    compile 'org.oscim:vtm:0.6.0-SNAPSHOT'
     // Dependencies for vtm
     compile 'com.fasterxml.jackson.core:jackson-core:2.3.0'
     compile 'com.vividsolutions:jts:1.13'
@@ -64,6 +60,9 @@ android {
         main {
             java.srcDirs += 'src/main/protos-java'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
     }
 }
 

@@ -30,7 +30,7 @@ import java.util.Set;
 public class BitmapDescriptorImpl {
     private BitmapDescriptor descriptor;
     private boolean loadStarted = false;
-    private Set<Runnable> waitingForLoad = new HashSet<>();
+    private Set<Runnable> waitingForLoad = new HashSet<Runnable>();
 
     public BitmapDescriptorImpl(IObjectWrapper remoteObject) {
         this(new BitmapDescriptor(remoteObject));
@@ -41,7 +41,7 @@ public class BitmapDescriptorImpl {
     }
 
     public BitmapDescriptorImpl() {
-        this(new ObjectWrapper<>(new DefaultBitmapDescriptor(0)));
+        this(new ObjectWrapper<DefaultBitmapDescriptor>(new DefaultBitmapDescriptor(0)));
     }
 
     public AbstractBitmapDescriptor getDescriptor() {

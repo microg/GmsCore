@@ -42,7 +42,7 @@ public class CheckinManager {
         LastCheckinInfo info = LastCheckinInfo.read(context);
         if (!force && info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
             return null;
-        List<CheckinClient.Account> accounts = new ArrayList<>();
+        List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
         AccountManager accountManager = AccountManager.get(context);
         String accountType = context.getString(R.string.google_account_type);
         for (Account account : accountManager.getAccountsByType(accountType)) {

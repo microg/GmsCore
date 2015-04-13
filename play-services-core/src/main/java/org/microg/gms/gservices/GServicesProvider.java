@@ -46,8 +46,8 @@ public class GServicesProvider extends ContentProvider {
     private static final String TAG = "GmsServicesProvider";
 
     private DatabaseHelper databaseHelper;
-    private Map<String, String> cache = new HashMap<>();
-    private Set<String> cachedPrefixes = new HashSet<>();
+    private Map<String, String> cache = new HashMap<String, String>();
+    private Set<String> cachedPrefixes = new HashSet<String>();
 
     @Override
     public boolean onCreate() {

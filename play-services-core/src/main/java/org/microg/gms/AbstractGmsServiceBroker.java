@@ -40,11 +40,11 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     private final Set<Integer> supportedServiceIds;
 
     public AbstractGmsServiceBroker(Integer supportedServiceId, Integer... supportedServiceIds) {
-        this(new HashSet<>(combine(supportedServiceId, supportedServiceIds)));
+        this(combine(supportedServiceId, supportedServiceIds));
     }
 
     private static Set<Integer> combine(Integer i, Integer... is) {
-        Set<Integer> integers = new HashSet<>(Arrays.asList(is));
+        Set<Integer> integers = new HashSet<Integer>(Arrays.asList(is));
         integers.add(i);
         return integers;
     }
