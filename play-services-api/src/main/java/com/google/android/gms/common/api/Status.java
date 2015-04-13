@@ -79,5 +79,5 @@ public final class Status extends AutoSafeParcelable implements Result {
         return this;
     }
 
-    public static final Creator<Status> CREATOR = new AutoCreator<>(Status.class);
+    public static final Creator<Status> CREATOR = new AutoCreator<Status>(Status.class);
 }

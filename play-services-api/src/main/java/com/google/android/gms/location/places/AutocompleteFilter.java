@@ -15,6 +15,5 @@ public class AutocompleteFilter extends AutoSafeParcelable {
         this.versionCode = 1;
     }
 
-    public static final Creator<AutocompleteFilter> CREATOR = new AutoCreator<>(
-            AutocompleteFilter.class);
+    public static final Creator<AutocompleteFilter> CREATOR = new AutoCreator<AutocompleteFilter>(AutocompleteFilter.class);
 }

@@ -17,6 +17,7 @@
 package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
+
 import com.google.android.gms.dynamic.ObjectWrapper;
 
 import org.microg.gms.common.PublicApi;
@@ -336,6 +337,5 @@ public class GroundOverlayOptions extends AutoSafeParcelable {
         return this;
     }
 
-    public static Creator<GroundOverlayOptions> CREATOR = new AutoCreator<>(
-            GroundOverlayOptions.class);
+    public static Creator<GroundOverlayOptions> CREATOR = new AutoCreator<GroundOverlayOptions>(GroundOverlayOptions.class);
 }

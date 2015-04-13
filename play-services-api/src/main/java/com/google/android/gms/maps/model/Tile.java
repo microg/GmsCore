@@ -51,5 +51,5 @@ public class Tile extends AutoSafeParcelable {
         this.data = data;
     }
 
-    public static Creator<Tile> CREATOR = new AutoCreator<>(Tile.class);
+    public static Creator<Tile> CREATOR = new AutoCreator<Tile>(Tile.class);
 }

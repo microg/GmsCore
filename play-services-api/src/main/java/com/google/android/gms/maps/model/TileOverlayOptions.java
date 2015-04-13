@@ -137,5 +137,5 @@ public class TileOverlayOptions extends AutoSafeParcelable {
         return this;
     }
 
-    public static Creator<TileOverlayOptions> CREATOR = new AutoCreator<>(TileOverlayOptions.class);
+    public static Creator<TileOverlayOptions> CREATOR = new AutoCreator<TileOverlayOptions>(TileOverlayOptions.class);
 }

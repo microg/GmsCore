@@ -170,7 +170,7 @@ public final class CameraPosition extends AutoSafeParcelable {
                 '}';
     }
 
-    public static Creator<CameraPosition> CREATOR = new AutoCreator<>(CameraPosition.class);
+    public static Creator<CameraPosition> CREATOR = new AutoCreator<CameraPosition>(CameraPosition.class);
 
     /**
      * Builds camera position.

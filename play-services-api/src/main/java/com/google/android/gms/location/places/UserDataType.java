@@ -7,5 +7,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 public class UserDataType extends AutoSafeParcelable {
 
-    public static final Creator<UserDataType> CREATOR = new AutoCreator<>(UserDataType.class);
+    public static final Creator<UserDataType> CREATOR = new AutoCreator<UserDataType>(UserDataType.class);
 }

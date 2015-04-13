@@ -96,5 +96,5 @@ public class PutDataRequest extends AutoSafeParcelable {
         return "PutDataRequest{data=" + dataItem + "}";
     }
 
-    public static final Creator<PutDataRequest> CREATOR = new AutoCreator<>(PutDataRequest.class);
+    public static final Creator<PutDataRequest> CREATOR = new AutoCreator<PutDataRequest>(PutDataRequest.class);
 }

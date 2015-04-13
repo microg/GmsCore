@@ -23,5 +23,5 @@ public class SuggestSpecification extends AutoSafeParcelable {
     @SafeParceled(1000)
     private int versionCode = 2;
 
-    public static final Creator<SuggestSpecification> CREATOR = new AutoCreator<>(SuggestSpecification.class);
+    public static final Creator<SuggestSpecification> CREATOR = new AutoCreator<SuggestSpecification>(SuggestSpecification.class);
 }

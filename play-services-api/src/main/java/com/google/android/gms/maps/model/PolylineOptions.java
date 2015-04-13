@@ -41,5 +41,5 @@ public class PolylineOptions extends AutoSafeParcelable {
     public PolylineOptions() {
     }
 
-    public static Creator<PolylineOptions> CREATOR = new AutoCreator<>(PolylineOptions.class);
+    public static Creator<PolylineOptions> CREATOR = new AutoCreator<PolylineOptions>(PolylineOptions.class);
 }

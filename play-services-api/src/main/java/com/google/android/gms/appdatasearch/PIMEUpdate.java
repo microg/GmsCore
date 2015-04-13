@@ -20,5 +20,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class PIMEUpdate extends AutoSafeParcelable {
 
-    public static final Creator<PIMEUpdate> CREATOR = new AutoCreator<>(PIMEUpdate.class);
+    public static final Creator<PIMEUpdate> CREATOR = new AutoCreator<PIMEUpdate>(PIMEUpdate.class);
 }

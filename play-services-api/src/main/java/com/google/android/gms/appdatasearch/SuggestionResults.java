@@ -47,5 +47,5 @@ public class SuggestionResults extends AutoSafeParcelable {
         this.s2 = s2;
     }
 
-    public static final Creator<SuggestionResults> CREATOR = new AutoCreator<>(SuggestionResults.class);
+    public static final Creator<SuggestionResults> CREATOR = new AutoCreator<SuggestionResults>(SuggestionResults.class);
 }

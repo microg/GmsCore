@@ -412,5 +412,5 @@ public class LocationRequest extends AutoSafeParcelable {
         return super.toString();
     }
 
-    public static final Creator<LocationRequest> CREATOR = new AutoCreator<>(LocationRequest.class);
+    public static final Creator<LocationRequest> CREATOR = new AutoCreator<LocationRequest>(LocationRequest.class);
 }

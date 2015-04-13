@@ -47,5 +47,5 @@ public class Scope extends AutoSafeParcelable {
         return scopeUri;
     }
 
-    public static final Creator<Scope> CREATOR = new AutoCreator<>(Scope.class);
+    public static final Creator<Scope> CREATOR = new AutoCreator<Scope>(Scope.class);
 }

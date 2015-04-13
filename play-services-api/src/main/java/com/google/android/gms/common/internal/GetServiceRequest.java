@@ -78,5 +78,5 @@ public class GetServiceRequest extends AutoSafeParcelable {
                 '}';
     }
 
-    public static Creator<GetServiceRequest> CREATOR = new AutoCreator<>(GetServiceRequest.class);
+    public static Creator<GetServiceRequest> CREATOR = new AutoCreator<GetServiceRequest>(GetServiceRequest.class);
 }

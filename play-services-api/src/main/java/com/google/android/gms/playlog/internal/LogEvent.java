@@ -51,5 +51,5 @@ public class LogEvent extends AutoSafeParcelable {
                 '}';
     }
 
-    public static Creator<LogEvent> CREATOR = new AutoCreator<>(LogEvent.class);
+    public static Creator<LogEvent> CREATOR = new AutoCreator<LogEvent>(LogEvent.class);
 }

@@ -7,6 +7,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 public class LocationRequestInternal extends AutoSafeParcelable {
 
-    public static final Creator<LocationRequestInternal> CREATOR = new AutoCreator<>(
-            LocationRequestInternal.class);
+    public static final Creator<LocationRequestInternal> CREATOR = new AutoCreator<LocationRequestInternal>(LocationRequestInternal.class);
 }

@@ -326,5 +326,5 @@ public class MarkerOptions extends AutoSafeParcelable {
         return this;
     }
 
-    public static Creator<MarkerOptions> CREATOR = new AutoCreator<>(MarkerOptions.class);
+    public static Creator<MarkerOptions> CREATOR = new AutoCreator<MarkerOptions>(MarkerOptions.class);
 }

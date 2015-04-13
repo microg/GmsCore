@@ -180,7 +180,7 @@ public final class LatLngBounds extends AutoSafeParcelable {
                 '}';
     }
 
-    public static Creator<LatLngBounds> CREATOR = new AutoCreator<>(LatLngBounds.class);
+    public static Creator<LatLngBounds> CREATOR = new AutoCreator<LatLngBounds>(LatLngBounds.class);
 
     /**
      * This is a builder that is able to create a minimum bound based on a set of LatLng points.

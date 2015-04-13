@@ -102,5 +102,5 @@ public final class LatLng extends AutoSafeParcelable {
         return "lat/lng: (" + latitude + "," + longitude + ")";
     }
     
-    public static Creator<LatLng> CREATOR = new AutoCreator<>(LatLng.class);
+    public static Creator<LatLng> CREATOR = new AutoCreator<LatLng>(LatLng.class);
 }

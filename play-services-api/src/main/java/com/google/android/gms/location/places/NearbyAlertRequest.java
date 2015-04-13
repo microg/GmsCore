@@ -7,6 +7,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 public class NearbyAlertRequest extends AutoSafeParcelable {
 
-    public static final Creator<NearbyAlertRequest> CREATOR = new AutoCreator<>(
-            NearbyAlertRequest.class);
+    public static final Creator<NearbyAlertRequest> CREATOR = new AutoCreator<NearbyAlertRequest>(NearbyAlertRequest.class);
 }

@@ -32,6 +32,6 @@ public class AccountChangeEventsRequest extends AutoSafeParcelable {
         versionCode = 1;
     }
 
-    public static Creator<AccountChangeEventsRequest> CREATOR = new AutoCreator<>(AccountChangeEventsRequest.class);
+    public static Creator<AccountChangeEventsRequest> CREATOR = new AutoCreator<AccountChangeEventsRequest>(AccountChangeEventsRequest.class);
 
 }

@@ -37,5 +37,5 @@ public class ReportingState extends AutoSafeParcelable {
     @SafeParceled(8)
     public Integer deviceTag;
 
-    public static final Creator<ReportingState> CREATOR = new AutoCreator<>(ReportingState.class);
+    public static final Creator<ReportingState> CREATOR = new AutoCreator<ReportingState>(ReportingState.class);
 }

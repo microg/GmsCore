@@ -20,5 +20,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class Geofence extends AutoSafeParcelable {
 
-    public static Creator<Geofence> CREATOR = new AutoCreator<>(Geofence.class);
+    public static Creator<Geofence> CREATOR = new AutoCreator<Geofence>(Geofence.class);
 }

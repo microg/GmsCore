@@ -85,5 +85,5 @@ public class Asset extends AutoSafeParcelable {
         return null;
     }
 
-    public static final Creator<Asset> CREATOR = new AutoCreator<>(Asset.class);
+    public static final Creator<Asset> CREATOR = new AutoCreator<Asset>(Asset.class);
 }

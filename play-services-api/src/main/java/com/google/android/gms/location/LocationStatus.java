@@ -76,5 +76,5 @@ public class LocationStatus extends AutoSafeParcelable {
         }
     }
 
-    public static final Creator<LocationStatus> CREATOR = new AutoCreator<>(LocationStatus.class);
+    public static final Creator<LocationStatus> CREATOR = new AutoCreator<LocationStatus>(LocationStatus.class);
 }

@@ -71,5 +71,5 @@ public class PlayLoggerContext extends AutoSafeParcelable {
                 '}';
     }
 
-    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<>(PlayLoggerContext.class);
+    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<PlayLoggerContext>(PlayLoggerContext.class);
 }

@@ -63,5 +63,5 @@ public class VisibleRegion extends AutoSafeParcelable {
                 bounds);
     }
 
-    public static Creator<VisibleRegion> CREATOR = new AutoCreator<>(VisibleRegion.class);
+    public static Creator<VisibleRegion> CREATOR = new AutoCreator<VisibleRegion>(VisibleRegion.class);
 }

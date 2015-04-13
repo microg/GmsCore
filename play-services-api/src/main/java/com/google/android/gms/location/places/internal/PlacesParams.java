@@ -21,5 +21,5 @@ public class PlacesParams extends AutoSafeParcelable {
         clientPackageName = locale = accountName = gCoreClientName = null;
     }
 
-    public static final Creator<PlacesParams> CREATOR = new AutoCreator<>(PlacesParams.class);
+    public static final Creator<PlacesParams> CREATOR = new AutoCreator<PlacesParams>(PlacesParams.class);
 }

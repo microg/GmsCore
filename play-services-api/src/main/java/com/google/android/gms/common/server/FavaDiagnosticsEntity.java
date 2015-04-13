@@ -20,5 +20,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class FavaDiagnosticsEntity extends AutoSafeParcelable {
 
-    public static final Creator<FavaDiagnosticsEntity> CREATOR = new AutoCreator<>(FavaDiagnosticsEntity.class);
+    public static final Creator<FavaDiagnosticsEntity> CREATOR = new AutoCreator<FavaDiagnosticsEntity>(FavaDiagnosticsEntity.class);
 }

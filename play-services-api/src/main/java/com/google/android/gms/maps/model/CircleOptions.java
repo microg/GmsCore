@@ -217,5 +217,5 @@ public class CircleOptions extends AutoSafeParcelable {
         return this;
     }
 
-    public static Creator<CircleOptions> CREATOR = new AutoCreator<>(CircleOptions.class);
+    public static Creator<CircleOptions> CREATOR = new AutoCreator<CircleOptions>(CircleOptions.class);
 }

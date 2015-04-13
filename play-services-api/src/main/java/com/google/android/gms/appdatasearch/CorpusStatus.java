@@ -38,5 +38,5 @@ public class CorpusStatus extends AutoSafeParcelable {
     @SafeParceled(6)
     public String g;
 
-    public static final Creator<CorpusStatus> CREATOR = new AutoCreator<>(CorpusStatus.class);
+    public static final Creator<CorpusStatus> CREATOR = new AutoCreator<CorpusStatus>(CorpusStatus.class);
 }

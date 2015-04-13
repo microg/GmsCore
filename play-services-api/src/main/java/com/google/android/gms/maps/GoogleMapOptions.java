@@ -79,5 +79,5 @@ public final class GoogleMapOptions extends AutoSafeParcelable {
         return rotateGesturesEnabled;
     }
 
-    public static Creator<GoogleMapOptions> CREATOR = new AutoCreator<>(GoogleMapOptions.class);
+    public static Creator<GoogleMapOptions> CREATOR = new AutoCreator<GoogleMapOptions>(GoogleMapOptions.class);
 }

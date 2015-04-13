@@ -7,6 +7,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 public class GeofencingRequest extends AutoSafeParcelable {
 
-    public static final Creator<GeofencingRequest> CREATOR = new AutoCreator<>(
-            GeofencingRequest.class);
+    public static final Creator<GeofencingRequest> CREATOR = new AutoCreator<GeofencingRequest>(GeofencingRequest.class);
 }

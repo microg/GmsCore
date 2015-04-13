@@ -37,5 +37,5 @@ public class PIMEUpdateResponse extends AutoSafeParcelable {
         this.updates = new PIMEUpdate[0];
     }
 
-    public static final Creator<PIMEUpdateResponse> CREATOR = new AutoCreator<>(PIMEUpdateResponse.class);
+    public static final Creator<PIMEUpdateResponse> CREATOR = new AutoCreator<PIMEUpdateResponse>(PIMEUpdateResponse.class);
 }

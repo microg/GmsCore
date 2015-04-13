@@ -20,5 +20,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class UsageInfo extends AutoSafeParcelable {
 
-    public static Creator<UsageInfo> CREATOR = new AutoCreator<>(UsageInfo.class);
+    public static Creator<UsageInfo> CREATOR = new AutoCreator<UsageInfo>(UsageInfo.class);
 }

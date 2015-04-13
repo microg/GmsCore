@@ -77,5 +77,5 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
         return "NodeParcelable{" + id + "," + displayName + "}";
     }
 
-    public static final Creator<NodeParcelable> CREATOR = new AutoCreator<>(NodeParcelable.class);
+    public static final Creator<NodeParcelable> CREATOR = new AutoCreator<NodeParcelable>(NodeParcelable.class);
 }

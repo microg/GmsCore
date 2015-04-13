@@ -28,5 +28,5 @@ public class PolygonOptions extends AutoSafeParcelable {
     public PolygonOptions() {
     }
 
-    public static Creator<PolygonOptions> CREATOR = new AutoCreator<>(PolygonOptions.class);
+    public static Creator<PolygonOptions> CREATOR = new AutoCreator<PolygonOptions>(PolygonOptions.class);
 }

@@ -30,8 +30,8 @@ public class AccountChangeEventsResponse extends AutoSafeParcelable {
 
     public AccountChangeEventsResponse() {
         versionCode = 1;
-        events = new ArrayList<>();
+        events = new ArrayList<AccountChangeEvent>();
     }
 
-    public static Creator<AccountChangeEventsResponse> CREATOR = new AutoCreator<>(AccountChangeEventsResponse.class);
+    public static Creator<AccountChangeEventsResponse> CREATOR = new AutoCreator<AccountChangeEventsResponse>(AccountChangeEventsResponse.class);
 }

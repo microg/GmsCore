@@ -24,5 +24,5 @@ public class AccountMetadata extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 2;
 
-    public static Creator<AccountMetadata> CREATOR = new AutoCreator<>(AccountMetadata.class);
+    public static Creator<AccountMetadata> CREATOR = new AutoCreator<AccountMetadata>(AccountMetadata.class);
 }

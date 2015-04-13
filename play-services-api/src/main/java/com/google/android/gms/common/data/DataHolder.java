@@ -83,7 +83,7 @@ public class DataHolder extends AutoSafeParcelable {
     }
 
     public static DataHolder fromCursor(Cursor cursor, int statusCode, Bundle metadata) {
-        List<CursorWindow> windows = new ArrayList<>();
+        List<CursorWindow> windows = new ArrayList<CursorWindow>();
         CursorWindow cursorWindow = null;
         int row = 0;
         while (cursor.moveToNext()) {
@@ -142,5 +142,5 @@ public class DataHolder extends AutoSafeParcelable {
                 '}';
     }
 
-    public static final Creator<DataHolder> CREATOR = new AutoCreator<>(DataHolder.class);
+    public static final Creator<DataHolder> CREATOR = new AutoCreator<DataHolder>(DataHolder.class);
 }

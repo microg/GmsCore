@@ -7,5 +7,5 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 public class PlaceFilter extends AutoSafeParcelable {
 
-    public static final Creator<PlaceFilter> CREATOR = new AutoCreator<>(PlaceFilter.class);
+    public static final Creator<PlaceFilter> CREATOR = new AutoCreator<PlaceFilter>(PlaceFilter.class);
 }

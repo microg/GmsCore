@@ -15,5 +15,5 @@ public class UserAddedPlace extends AutoSafeParcelable {
         versionCode = 1;
     }
 
-    public static final Creator<UserAddedPlace> CREATOR = new AutoCreator<>(UserAddedPlace.class);
+    public static final Creator<UserAddedPlace> CREATOR = new AutoCreator<UserAddedPlace>(UserAddedPlace.class);
 }

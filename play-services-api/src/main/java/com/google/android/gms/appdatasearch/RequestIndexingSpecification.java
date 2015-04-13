@@ -24,5 +24,5 @@ public class RequestIndexingSpecification extends AutoSafeParcelable {
     @SafeParceled(1000)
     private int versionCode;
 
-    public static final Creator<RequestIndexingSpecification> CREATOR = new AutoCreator<>(RequestIndexingSpecification.class);
+    public static final Creator<RequestIndexingSpecification> CREATOR = new AutoCreator<RequestIndexingSpecification>(RequestIndexingSpecification.class);
 }
