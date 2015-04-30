@@ -1,6 +1,7 @@
 package com.google.android.gms.people.internal;
 
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 
 import com.google.android.gms.common.data.DataHolder;
 
