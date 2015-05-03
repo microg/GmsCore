@@ -24,13 +24,10 @@ gmscore_dir := $(LOCAL_PATH)
 gmscore_apk := play-services-core/build/outputs/apk/play-services-core-debug.apk
 
 $(LOCAL_PATH)/$(gmscore_apk):
-	old_java_tool_options=$(JAVA_TOOL_OPTIONS)
-	export JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8"
 	echo "sdk.dir=$(ANDROID_HOME)" > $(gmscore_dir)/local.properties
 	cd $(gmscore_dir) && git submodule update --recursive --init
-#	cd $(gmscore_dir) && gradle assembleRelease
-	cd $(gmscore_dir) && gradle assembleDebug
-	export JAVA_TOOL_OPTIONS=$(old_java_tool_options)
+#	cd $(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ./gradlew assembleRelease
+	cd $(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ./gradlew assembleDebug
 
 LOCAL_CERTIFICATE := platform
 LOCAL_SRC_FILES := $(gmscore_apk)
