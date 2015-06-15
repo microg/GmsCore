@@ -200,6 +200,18 @@
             </intent-filter>
         </service>
 
+        <!-- Car -->
+
+        <service
+            android:name="org.microg.gms.car.CarService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.car.service.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <!-- People -->
 
         <service
