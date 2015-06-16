@@ -15,55 +15,24 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
+LOCAL_MODULE := GmsCore
 LOCAL_MODULE_TAGS := optional
-unified_dir := ../UnifiedNlp
-appcompat_dir := ../../../prebuilts/sdk/current/support/v7/appcompat
-res_dir := play-services-core/src/main/res $(unified_dir)/unifiednlp-base/src/main/res $(appcompat_dir)/res
-
-LOCAL_SRC_FILES := $(call all-java-files-under, play-services-core/src/main/java) \
-                   $(call all-java-files-under, play-services-core/src/main/protos-java) \
-                   $(call all-java-files-under, $(unified_dir)/unifiednlp-base/src/main/java)
-
-LOCAL_MANIFEST_FILE := play-services-core/src/main/AndroidManifest.xml
-LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, $(res_dir))
-
-LOCAL_AAPT_FLAGS := --auto-add-overlay \
-                    --extra-packages android.support.v7.appcompat \
-                    --extra-packages org.microg.nlp
-
-# For some reason framework has to be added here else GeocoderParams is not found, 
-# this way everything else is duplicated, but atleast compiles...
-LOCAL_JAVA_LIBRARIES := framework \
-                        com.android.location.provider
-
-# Include compat v9 files if necassary
-ifeq ($(shell [ $(PLATFORM_SDK_VERSION) -ge 17 ] && echo true), true)
-LOCAL_JAVA_LIBRARIES += UnifiedNlpCompatV9
-endif
-
-LOCAL_STATIC_JAVA_LIBRARIES := UnifiedNlpApi \
-                               GmsApi \
-                               android-support-v4 \
-                               android-support-v7-appcompat \
-                               wire-runtime \
-                               vtm vtm-themes vtm-extras vtm-android
-
 LOCAL_PACKAGE_NAME := GmsCore
-LOCAL_SDK_VERSION := current
-LOCAL_PRIVILEGED_MODULE := true
 
-LOCAL_PROGUARD_FLAG_FILES := proguard.flags
+gmscore_dir := $(LOCAL_PATH)
+#gmscore_apk := play-services-core/build/outputs/apk/play-services-core-release-unsigned.apk
+gmscore_apk := play-services-core/build/outputs/apk/play-services-core-debug.apk
 
-include $(BUILD_PACKAGE)
+$(LOCAL_PATH)/$(gmscore_apk):
+	echo "sdk.dir=$(ANDROID_HOME)" > $(gmscore_dir)/local.properties
+	cd $(gmscore_dir) && git submodule update --recursive --init
+	cd $(gmscore_dir) && ./gradlew clean
+#	cd $(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ./gradlew assembleRelease
+	cd $(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ./gradlew assembleDebug
 
-include $(CLEAR_VARS)
+LOCAL_CERTIFICATE := platform
+LOCAL_SRC_FILES := $(gmscore_apk)
+LOCAL_MODULE_CLASS := APPS
+LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
 
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
-   vtm:libs/vtm-0.6.0-SNAPSHOT.jar \
-   vtm-extras:libs/vtm-extras-0.6.0-SNAPSHOT.jar \
-   vtm-themes:libs/vtm-themes-0.6.0-SNAPSHOT.jar \
-   vtm-android:libs/vtm-android-0.6.0-SNAPSHOT.aar
-
-include $(BUILD_MULTI_PREBUILT)
-
-$(warning Building GmsCore using Android.mk is not tested and might be broken. Consider compiling with gradle and using the prebuilt module feature of AOSP build system)
+include $(BUILD_PREBUILT)
