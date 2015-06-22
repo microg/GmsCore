@@ -16,31 +16,20 @@
 
 package org.microg.gms.droidguard;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
-import android.util.Log;
-
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
-import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
-public class DroidGuardService extends Service {
-    private static final String TAG = "GmsDroidGuardSvc";
+public class DroidGuardService extends BaseService {
 
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.DROIDGUARD.SERVICE_ID) {
-        @Override
-        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
-            Log.d(TAG, "getDroidGuardService for " + request);
-        }
-    };
+    public DroidGuardService() {
+        super("GmsDroidGuardSvc", Services.DROIDGUARD.SERVICE_ID);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return broker.asBinder();
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+        // TODO
     }
 }

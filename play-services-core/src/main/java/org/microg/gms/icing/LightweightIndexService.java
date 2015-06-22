@@ -16,32 +16,23 @@
 
 package org.microg.gms.icing;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
-import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
-public class LightweightIndexService extends Service {
-    private static final String TAG = "GmsIcingLightIndexSvc";
-
+public class LightweightIndexService extends BaseService {
     private LightweightAppDataSearchImpl appDataSearch = new LightweightAppDataSearchImpl();
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.LIGHTWEIGHT_INDEX.SERVICE_ID) {
-        @Override
-        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-            Log.d(TAG, "bound by: " + request);
-            callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
-        }
-    };
+
+    public LightweightIndexService() {
+        super("GmsIcingLightIndexSvc", Services.LIGHTWEIGHT_INDEX.SERVICE_ID);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return broker.asBinder();
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+        callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
     }
 }

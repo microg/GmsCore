@@ -16,52 +16,42 @@
 
 package org.microg.gms.icing;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
-import com.google.android.gms.common.internal.IGmsServiceBroker;
 
-import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
-public class IndexService extends Service {
-    private static final String TAG = "GmsIcingIndexSvc";
-
+public class IndexService extends BaseService {
     private AppDataSearchImpl appDataSearch = new AppDataSearchImpl();
     private CorporaSearchImpl corporaSearch = new CorporaSearchImpl();
-    private IGmsServiceBroker broker = new AbstractGmsServiceBroker(
-            Services.INDEX.SERVICE_ID, Services.SEARCH_ADMINISTRATION.SERVICE_ID,
-            Services.SEARCH_CORPORA.SERVICE_ID, Services.SEARCH_GLOBAL.SERVICE_ID,
-            Services.SEARCH_IME.SERVICE_ID, Services.SEARCH_QUERIES.SERVICE_ID) {
-        @Override
-        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-            Log.d(TAG, "bound by: " + request);
-            switch (request.serviceId) {
-                case Services.INDEX.SERVICE_ID:
-                    callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
-                    break;
-                case Services.SEARCH_ADMINISTRATION.SERVICE_ID:
-                    break;
-                case Services.SEARCH_CORPORA.SERVICE_ID:
-                    callback.onPostInitComplete(0, corporaSearch.asBinder(), null);
-                    break;
-                case Services.SEARCH_GLOBAL.SERVICE_ID:
-                    break;
-                case Services.SEARCH_IME.SERVICE_ID:
-                    break;
-                case Services.SEARCH_QUERIES.SERVICE_ID:
-                    break;
-            }
-        }
-    };
+
+    public IndexService() {
+        super("GmsIcingIndexSvc",
+                Services.INDEX.SERVICE_ID, Services.SEARCH_ADMINISTRATION.SERVICE_ID,
+                Services.SEARCH_CORPORA.SERVICE_ID, Services.SEARCH_GLOBAL.SERVICE_ID,
+                Services.SEARCH_IME.SERVICE_ID, Services.SEARCH_QUERIES.SERVICE_ID);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return broker.asBinder();
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+        switch (request.serviceId) {
+            case Services.INDEX.SERVICE_ID:
+                callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
+                break;
+            case Services.SEARCH_ADMINISTRATION.SERVICE_ID:
+                break;
+            case Services.SEARCH_CORPORA.SERVICE_ID:
+                callback.onPostInitComplete(0, corporaSearch.asBinder(), null);
+                break;
+            case Services.SEARCH_GLOBAL.SERVICE_ID:
+                break;
+            case Services.SEARCH_IME.SERVICE_ID:
+                break;
+            case Services.SEARCH_QUERIES.SERVICE_ID:
+                break;
+        }
     }
 }

@@ -16,29 +16,17 @@
 
 package org.microg.gms;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.os.RemoteException;
-import android.util.Log;
-
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
-import com.google.android.gms.common.internal.IGmsServiceBroker;
 
-public class DummyService extends Service {
+public class DummyService extends BaseService {
 
-    private static final String TAG = "GmsDummySvc";
-    private IGmsServiceBroker broker = new AbstractGmsServiceBroker(-1) {
-        @Override
-        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-
-        }
-    };
+    public DummyService() {
+        super("GmsDummySvc", AbstractGmsServiceBroker.ID_ACCEPT_ALL);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind: " + intent);
-        return broker.asBinder();
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+        // Dummy
     }
 }

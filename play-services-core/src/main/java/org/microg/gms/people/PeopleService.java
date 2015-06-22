@@ -16,37 +16,23 @@
 
 package org.microg.gms.people;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
-import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
-public class PeopleService extends Service {
-    private static final String TAG = "GmsPeopleSvc";
-
+public class PeopleService extends BaseService {
     private PeopleServiceImpl impl = new PeopleServiceImpl(this);
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.PEOPLE.SERVICE_ID) {
-        @Override
-        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-            Log.d(TAG, "bound by: " + request);
-            callback.onPostInitComplete(0, impl.asBinder(), null);
-        }
-    };
+
+    public PeopleService() {
+        super("GmsPeopleSvc", Services.PEOPLE.SERVICE_ID);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        if (Services.PEOPLE.ACTION.equals(intent.getAction())) {
-            return broker.asBinder();
-        } else {
-            return null;
-        }
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+        callback.onPostInitComplete(0, impl.asBinder(), null);
     }
 }

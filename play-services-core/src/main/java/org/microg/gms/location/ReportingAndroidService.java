@@ -16,33 +16,23 @@
 
 package org.microg.gms.location;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
-import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
-public class ReportingAndroidService extends Service {
-    private static final String TAG = "GmsLocReportingSvc";
-
+public class ReportingAndroidService extends BaseService {
     private ReportingServiceImpl reportingService = new ReportingServiceImpl();
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.LOCATION_REPORTING.SERVICE_ID) {
-        @Override
-        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-            Log.d(TAG, "bound by: " + request);
-            callback.onPostInitComplete(0, reportingService.asBinder(), null);
-        }
-    };
+
+    public ReportingAndroidService() {
+        super("GmsLocReportingSvc", Services.LOCATION_REPORTING.SERVICE_ID);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind: " + intent);
-        return broker.asBinder();
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+        callback.onPostInitComplete(0, reportingService.asBinder(), null);
     }
 }

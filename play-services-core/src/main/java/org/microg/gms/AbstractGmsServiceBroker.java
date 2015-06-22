@@ -36,6 +36,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
+    public static final int ID_ACCEPT_ALL = -1;
+
     private static final String TAG = "GmsServiceBroker";
     private final Set<Integer> supportedServiceIds;
 
@@ -265,7 +267,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 
     @Override
     public void getService(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-        if (supportedServiceIds.contains(request.serviceId)) {
+        if (supportedServiceIds.contains(request.serviceId) || supportedServiceIds.contains(ID_ACCEPT_ALL)) {
             handleServiceRequest(callback, request);
         } else {
             Log.d(TAG, "Service not supported: " + request);

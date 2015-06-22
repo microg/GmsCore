@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package org.microg.gms.playlog;
-
-import android.os.RemoteException;
+package org.microg.gms.ads;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -24,16 +22,14 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
-public class PlayLogService extends BaseService {
+public class GService extends BaseService {
 
-    private PlayLogServiceImpl playLogService = new PlayLogServiceImpl();
-
-    public PlayLogService() {
-        super("GmsPlayLogSvc", Services.PLAY_LOG.SERVICE_ID);
+    public GService() {
+        super("GmsAdsGSvc", Services.GSERVICES.SERVICE_ID);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-        callback.onPostInitComplete(0, playLogService.asBinder(), null);
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+        // TODO
     }
 }

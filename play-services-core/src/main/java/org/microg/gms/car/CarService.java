@@ -16,29 +16,19 @@
 
 package org.microg.gms.car;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
-
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
-import org.microg.gms.AbstractGmsServiceBroker;
+import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
-public class CarService extends Service {
-    private static final String TAG = "GmsCarSvc";
-
-    private AbstractGmsServiceBroker broker = new AbstractGmsServiceBroker(Services.CAR.SERVICE_ID) {
-        @Override
-        public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
-            Log.d(TAG, "getCarService for " + request);
-        }
-    };
+public class CarService extends BaseService {
+    public CarService() {
+        super("GmsCarSvc", Services.CAR.SERVICE_ID);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return broker.asBinder();
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+        // TODO
     }
 }

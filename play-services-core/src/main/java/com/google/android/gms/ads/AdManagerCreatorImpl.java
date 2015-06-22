@@ -16,5 +16,5 @@
 
 package com.google.android.gms.ads;
 
-public class AdManagerCreatorImpl {
+public class AdManagerCreatorImpl extends AdManagerCreator.Stub {
 }

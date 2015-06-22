@@ -16,6 +16,7 @@
 
 package org.microg.gms.auth;
 
+import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -103,6 +104,11 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     @Override
     public AccountChangeEventsResponse getChangeEvents(AccountChangeEventsRequest request) {
         return new AccountChangeEventsResponse();
+    }
+
+    @Override
+    public Bundle getTokenWithAccount(Account account, String scope, Bundle extras) throws RemoteException {
+        return getToken(account.name, scope, extras);
     }
 
     @Override
