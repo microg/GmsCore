@@ -9,7 +9,7 @@ Prebuilt libraries of [vtm](https://github.com/opensciencemap/vtm) for are inclu
 
 License
 -------
-    Copyright 2014 μg Project Team
+    Copyright 2014-2015 μg Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
