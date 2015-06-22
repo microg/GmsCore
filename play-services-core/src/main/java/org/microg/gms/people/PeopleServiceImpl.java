@@ -32,6 +32,8 @@ import com.google.android.gms.common.internal.ICancelToken;
 import com.google.android.gms.people.internal.IPeopleCallbacks;
 import com.google.android.gms.people.internal.IPeopleService;
 
+import org.microg.gms.common.NonCancelToken;
+
 import java.io.File;
 
 public class PeopleServiceImpl extends IPeopleService.Stub {
@@ -132,6 +134,13 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
                 thread.interrupt();
             }
         };
+    }
+
+    @Override
+    public ICancelToken loadAutocompleteList(IPeopleCallbacks callbacks, String account, String pageId, boolean directorySearch, String var5, String query, int autocompleteType, int var8, int numberOfResults, boolean var10) throws RemoteException {
+        Log.d(TAG, "loadAutocompleteList: " + account + ", " + pageId + ", " + directorySearch + ", " + var5 + ", " + query + ", " + autocompleteType + ", " + var8 + ", " + numberOfResults + ", " + var10);
+        callbacks.onDataHolder(0, new Bundle(), null);
+        return new NonCancelToken();
     }
 
     @Override
