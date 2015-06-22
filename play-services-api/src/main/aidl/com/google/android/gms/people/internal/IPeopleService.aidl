@@ -40,4 +40,5 @@ interface IPeopleService {
     void loadOwners(IPeopleCallbacks callbacks, boolean var2, boolean var3, String account, String var5, int sortOrder) = 304;
     void loadPeopleForAggregation(IPeopleCallbacks callbacks, String account, String var3, String filter, int var5, boolean var6, int var7, int var8, String var9, boolean var10, int var11, int var12) = 401;
     ICancelToken loadOwnerAvatar(IPeopleCallbacks callbacks, String account, String pageId, int size, int flags) = 504;
+    ICancelToken loadAutocompleteList(IPeopleCallbacks callbacks, String account, String pageId, boolean directorySearch, String var5, String query, int autocompleteType, int var8, int numberOfResults, boolean var10) = 506;
 }
