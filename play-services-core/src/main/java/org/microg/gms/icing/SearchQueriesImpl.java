@@ -14,31 +14,25 @@
  * limitations under the License.
  */
 
-package org.microg.gms.playlog;
+package org.microg.gms.icing;
 
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.playlog.internal.IPlayLogService;
-import com.google.android.gms.playlog.internal.LogEvent;
-import com.google.android.gms.playlog.internal.PlayLoggerContext;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.search.queries.QueryRequest;
+import com.google.android.gms.search.queries.QueryResponse;
+import com.google.android.gms.search.queries.internal.ISearchQueriesCallbacks;
+import com.google.android.gms.search.queries.internal.ISearchQueriesService;
 
-import java.util.List;
-
-public class PlayLogServiceImpl extends IPlayLogService.Stub {
-    private static final String TAG = "GmsPlayLogSvcImpl";
-
-    @Override
-    public void onEvent(String packageName, PlayLoggerContext context, LogEvent event) throws RemoteException {
-        Log.d(TAG, "onEvent: context[packageName]:" + context.packageName + " event[tag]:" + event.tag);
-    }
+public class SearchQueriesImpl extends ISearchQueriesService.Stub {
+    private static final String TAG = "GmsIcingQueriesImpl";
 
     @Override
-    public void onMultiEvent(String packageName, PlayLoggerContext context, List<LogEvent> events) throws RemoteException {
-        for (LogEvent event : events) {
-            onEvent(packageName, context, event);
-        }
+    public void query(QueryRequest request, ISearchQueriesCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "query: " + request);
+        callbacks.onQuery(new QueryResponse(Status.CANCELED, null));
     }
 
     @Override

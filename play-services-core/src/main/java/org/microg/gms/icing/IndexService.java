@@ -18,6 +18,7 @@ package org.microg.gms.icing;
 
 import android.os.RemoteException;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
@@ -26,7 +27,9 @@ import org.microg.gms.common.Services;
 
 public class IndexService extends BaseService {
     private AppDataSearchImpl appDataSearch = new AppDataSearchImpl();
-    private CorporaSearchImpl corporaSearch = new CorporaSearchImpl();
+    private GlobalSearchAdminImpl globalSearchAdmin = new GlobalSearchAdminImpl();
+    private SearchCorporaImpl searchCorpora = new SearchCorporaImpl();
+    private SearchQueriesImpl searchQueries = new SearchQueriesImpl();
 
     public IndexService() {
         super("GmsIcingIndexSvc",
@@ -42,15 +45,19 @@ public class IndexService extends BaseService {
                 callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
                 break;
             case Services.SEARCH_ADMINISTRATION.SERVICE_ID:
-                break;
-            case Services.SEARCH_CORPORA.SERVICE_ID:
-                callback.onPostInitComplete(0, corporaSearch.asBinder(), null);
-                break;
-            case Services.SEARCH_GLOBAL.SERVICE_ID:
-                break;
-            case Services.SEARCH_IME.SERVICE_ID:
+                callback.onPostInitComplete(CommonStatusCodes.ERROR, null, null);
                 break;
             case Services.SEARCH_QUERIES.SERVICE_ID:
+                callback.onPostInitComplete(0, searchQueries.asBinder(), null);
+                break;
+            case Services.SEARCH_GLOBAL.SERVICE_ID:
+                callback.onPostInitComplete(0, globalSearchAdmin.asBinder(), null);
+                break;
+            case Services.SEARCH_CORPORA.SERVICE_ID:
+                callback.onPostInitComplete(0, searchCorpora.asBinder(), null);
+                break;
+            case Services.SEARCH_IME.SERVICE_ID:
+                callback.onPostInitComplete(CommonStatusCodes.ERROR, null, null);
                 break;
         }
     }

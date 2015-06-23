@@ -30,6 +30,8 @@ import com.google.android.gms.auth.AccountChangeEventsResponse;
 
 import org.microg.gms.common.PackageUtils;
 
+import java.io.IOException;
+
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
@@ -95,9 +97,11 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
                 return result;
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             Log.w(TAG, e);
-            throw new RuntimeException(e);
+            Bundle result = new Bundle();
+            result.putString(KEY_ERROR, "NetworkError");
+            return result;
         }
     }
 

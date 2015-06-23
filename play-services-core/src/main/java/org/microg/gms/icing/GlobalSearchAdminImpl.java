@@ -20,10 +20,10 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.search.corpora.internal.ISearchCorporaService;
+import com.google.android.gms.search.global.internal.IGlobalSearchAdminService;
 
-public class CorporaSearchImpl extends ISearchCorporaService.Stub {
-    private static final String TAG = "GmsIcingCorporaImpl";
+public class GlobalSearchAdminImpl extends IGlobalSearchAdminService.Stub {
+    private static final String TAG = "GmsIcingGlobalImpl";
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
