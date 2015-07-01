@@ -19,19 +19,22 @@ LOCAL_MODULE := GmsCore
 LOCAL_MODULE_TAGS := optional
 LOCAL_PACKAGE_NAME := GmsCore
 
-gmscore_dir := $(LOCAL_PATH)
-#gmscore_apk := play-services-core/build/outputs/apk/play-services-core-release-unsigned.apk
-gmscore_apk := play-services-core/build/outputs/apk/play-services-core-debug.apk
+module_root  := $(LOCAL_PATH)
+module_dir   := play-services-core
+module_out   := $(OUT_DIR)/target/common/obj/APPS/$(LOCAL_MODULE)_intermediates
+module_build := $(module_root)/$(module_dir)/build
+module_apk   := build/outputs/apk/play-services-core-release-unsigned.apk
 
-$(LOCAL_PATH)/$(gmscore_apk):
-	echo "sdk.dir=$(ANDROID_HOME)" > $(gmscore_dir)/local.properties
-	cd $(gmscore_dir) && git submodule update --recursive --init
-	cd $(gmscore_dir) && ./gradlew clean
-#	cd $(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ./gradlew assembleRelease
-	cd $(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ./gradlew assembleDebug
+$(module_root)/$(module_dir)/$(module_apk):
+	rm -Rf $(module_build)
+	mkdir -p $(module_out)
+	ln -s $(module_out) $(module_build)
+	echo "sdk.dir=$(ANDROID_HOME)" > $(module_root)/local.properties
+	cd $(module_root) && git submodule update --recursive --init
+	cd $(module_root)/$(module_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ../gradlew assembleRelease
 
 LOCAL_CERTIFICATE := platform
-LOCAL_SRC_FILES := $(gmscore_apk)
+LOCAL_SRC_FILES := $(module_dir)/$(module_apk)
 LOCAL_MODULE_CLASS := APPS
 LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
 
