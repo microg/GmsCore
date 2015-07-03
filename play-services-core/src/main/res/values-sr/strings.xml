@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2013-2015 µg Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="gms_app_name">µg сервиси</string>
+    <string name="just_a_sec">Само тренутак…</string>
+    <string name="google_account_type">com.google</string>
+    <string name="google_account_label">Гугл</string>
+    <string name="ask_permission_tos">Ако наставите дозволићете овој апликацији и Гуглу да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
+    <string name="ask_scope_permission_title">%s жели да:</string>
+    <string name="ask_service_permission_title">%s жели да користи:</string>
+    <string name="account_manager_title">µg менаџер Гугл налога</string>
+    <string name="allow">Дозволи</string>
+    <string name="deny">Одбиј</string>
+
+    <string name="perm_status_broadcast_label">слуша унутрашња емитовања стања</string>
+    <string name="perm_c2dm_receive_label">слуша C2DM поруке</string>
+    <string name="perm_c2dm_send_label">шаље C2DM поруке осталим апликацијама</string>
+
+    <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
+    <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
+
+    <string name="gms_settings_name">µg поставке</string>
+</resources>
