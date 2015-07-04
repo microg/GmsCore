@@ -61,6 +61,7 @@ public class McsService extends IntentService {
     public static final int HEARTBEAT_MS = 60000;
     public static final int HEARTBEAT_ALLOWED_OFFSET_MS = 2000;
     private static final AtomicBoolean connecting = new AtomicBoolean(false);
+    private static final AtomicBoolean pending = new AtomicBoolean(false);
     private static Thread connectionThread;
     private static Thread heartbeatThread;
 
@@ -71,6 +72,10 @@ public class McsService extends IntentService {
 
     public McsService() {
         super(TAG);
+    }
+
+    public static AtomicBoolean getPending() {
+        return pending;
     }
 
     @Override
@@ -86,6 +91,7 @@ public class McsService extends IntentService {
         } else {
             Log.d(TAG, "MCS connection already started");
         }
+        pending.set(false);
     }
 
     public static boolean isConnected() {

@@ -19,7 +19,7 @@
     android:versionName="7.5.74 (µg v0.01)">
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="14"
         android:targetSdkVersion="22" />
 
     <permission
@@ -51,6 +51,7 @@
         android:description="@string/permission_service_writely_description"
         android:label="@string/permission_service_writely_label"
         android:protectionLevel="dangerous" />
+
     <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
@@ -187,6 +188,7 @@
                     android:scheme="android_secret_code" />
             </intent-filter>
         </receiver>
+        <receiver android:name="org.microg.gms.gcm.PendingReceiver" />
 
         <!-- DroidGuard -->
 
@@ -337,7 +339,8 @@
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@drawable/ic_microg_app"
-            android:label="@string/gms_settings_name">
+            android:label="@string/gms_settings_name"
+            android:theme="@style/SettingsTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

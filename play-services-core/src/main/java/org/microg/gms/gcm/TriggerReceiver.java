@@ -16,29 +16,39 @@
 
 package org.microg.gms.gcm;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 public class TriggerReceiver extends BroadcastReceiver {
     private static final String PREF_ENABLE_GCM = "gcm_enable_mcs_service";
+    private static final long pendingDelay = 1000;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
 
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (McsService.getPending().compareAndSet(false, true)) {
+            if (!McsService.isConnected() || force) {
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
 
-        if (networkInfo != null && networkInfo.isConnected() || force) {
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
-                if (!McsService.isConnected() || force) {
-                    context.startService(new Intent(context, McsService.class));
+                    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+                    if (networkInfo != null && networkInfo.isConnected() || force) {
+                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                        PendingIntent pendingIntent = PendingIntent.getService(context, 0, new Intent(context, McsService.class), 0);
+                        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + pendingDelay, pendingIntent);
+                        return;
+                    }
                 }
             }
+            McsService.getPending().set(false);
         }
     }
 }

@@ -16,25 +16,25 @@
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.android.tools.build:gradle:1.2.3'
     }
 }
 
 apply plugin: 'com.android.application'
 
 repositories {
-    mavenCentral()
+    jcenter()
     flatDir {
         dirs '../libs'
     }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:22.0.0'
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.squareup.wire:wire-runtime:1.6.1'
     compile project(':play-services-api')
@@ -63,6 +63,10 @@ android {
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
+    }
+    lintOptions {
+        // TODO: Remove MissingTranslation once we have stable strings and proper translations.
+        disable 'MissingTranslation', 'InvalidPackage'
     }
 }
 
