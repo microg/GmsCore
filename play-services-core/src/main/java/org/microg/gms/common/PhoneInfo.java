@@ -17,7 +17,7 @@
 package org.microg.gms.common;
 
 public class PhoneInfo {
-    public String cellOperator;
-    public String roaming;
-    public String simOperator;
+    public String cellOperator = "26207";
+    public String roaming = "mobile-notroaming";
+    public String simOperator = "26207";
 }

@@ -21,11 +21,11 @@ import android.util.Log;
 import com.squareup.wire.Wire;
 
 import org.microg.gms.common.Build;
-import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,7 +33,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.TimeZone;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class CheckinClient {
     private static final String TAG = "GmsCheckinClient";
@@ -46,104 +53,113 @@ public class CheckinClient {
         connection.setDoInput(true);
         connection.setDoOutput(true);
         connection.setRequestProperty("Content-Type", "application/x-protobuffer");
-        connection.setRequestProperty("User-Agent", "Android-Checkin/2.0");
+        connection.setRequestProperty("Content-Encoding", "gzip");
+        connection.setRequestProperty("Accept-Encoding", "gzip");
+        connection.setRequestProperty("User-Agent", "Android-Checkin/2.0 (vbox86p JLS36G); gzip");
 
         Log.d(TAG, "-- Request --\n" + request);
-        OutputStream os = connection.getOutputStream();
+        OutputStream os = new GZIPOutputStream(connection.getOutputStream());
         os.write(request.toByteArray());
         os.close();
 
         if (connection.getResponseCode() != 200) {
-            throw new IOException(connection.getResponseMessage());
+            try {
+                InputStream is = new GZIPInputStream(connection.getErrorStream());
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                if (is != null) {
+                    final byte[] buff = new byte[1024];
+                    while (true) {
+                        final int nb = is.read(buff);
+                        if (nb < 0) {
+                            break;
+                        }
+                        bos.write(buff, 0, nb);
+                    }
+                    is.close();
+                }
+                throw new IOException(bos.toString());
+            } catch (Exception e) {
+                throw new IOException(connection.getResponseMessage(), e);
+            }
         }
 
         InputStream is = connection.getInputStream();
-        CheckinResponse response = new Wire().parseFrom(is, CheckinResponse.class);
+        CheckinResponse response = new Wire().parseFrom(new GZIPInputStream(is), CheckinResponse.class);
         is.close();
         return response;
     }
 
-    private static CheckinRequest.Checkin.Build makeBuild(Build build) {
-        return new CheckinRequest.Checkin.Build.Builder()
-                .bootloader(build.bootloader)
-                .brand(build.brand)
-                .clientId((String) TODO)
-                .device(build.device)
-                .fingerprint(build.fingerprint)
-                .hardware(build.hardware)
-                .manufacturer(build.manufacturer)
-                .model(build.model)
-                .otaInstalled(false) // TODO?
-                .packageVersionCode(Constants.MAX_REFERENCE_VERSION)
-                .product(build.product)
-                .radio(build.radio)
-                .sdkVersion(build.sdk)
-                .time(build.time / 1000)
-                .build();
-    }
-
-    private static CheckinRequest.DeviceConfig makeDeviceConfig(DeviceConfiguration deviceConfiguration) {
-        return new CheckinRequest.DeviceConfig.Builder()
-                .availableFeature(deviceConfiguration.availableFeatures)
-                .densityDpi(deviceConfiguration.densityDpi)
-                .glEsVersion(deviceConfiguration.glEsVersion)
-                .glExtension(deviceConfiguration.glExtensions)
-                .hasFiveWayNavigation(deviceConfiguration.hasFiveWayNavigation)
-                .hasHardKeyboard(deviceConfiguration.hasHardKeyboard)
-                .heightPixels(deviceConfiguration.heightPixels)
-                .keyboardType(deviceConfiguration.keyboardType)
-                .locale(deviceConfiguration.locales)
-                .nativePlatform(deviceConfiguration.nativePlatforms)
-                .navigation(deviceConfiguration.navigation)
-                .screenLayout(deviceConfiguration.screenLayout)
-                .sharedLibrary(deviceConfiguration.sharedLibraries)
-                .touchScreen(deviceConfiguration.touchScreen)
-                .widthPixels(deviceConfiguration.widthPixels)
-                .build();
-    }
-
-    private static CheckinRequest.Checkin makeCheckin(CheckinRequest.Checkin.Build build,
-                                                      PhoneInfo phoneInfo, LastCheckinInfo checkinInfo) {
-        return new CheckinRequest.Checkin.Builder()
-                .build(build)
-                .cellOperator(phoneInfo.cellOperator)
-                .event((List<CheckinRequest.Checkin.Event>) TODO)
-                .lastCheckinMs(checkinInfo.lastCheckin)
-                .requestedGroup((List<String>) TODO)
-                .roaming(phoneInfo.roaming)
-                .simOperator(phoneInfo.simOperator)
-                .stat((List<CheckinRequest.Checkin.Statistic>) TODO)
-                .userNumber((Integer) TODO)
-                .build();
-    }
-
-    private static CheckinRequest makeRequest(CheckinRequest.Checkin checkin,
-                                              CheckinRequest.DeviceConfig deviceConfig,
-                                              DeviceIdentifier deviceIdent,
-                                              LastCheckinInfo checkinInfo,
-                                              List<Account> accounts) {
+    public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
+                                             DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
+                                             LastCheckinInfo checkinInfo, Locale locale,
+                                             List<Account> accounts) {
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
-                .accountCookie(Arrays.asList("")) // TODO
+                .accountCookie(new ArrayList<String>())
                 .androidId(checkinInfo.androidId)
-                .checkin(checkin)
-                .deviceConfiguration(deviceConfig)
+                .checkin(new CheckinRequest.Checkin.Builder()
+                        .build(new CheckinRequest.Checkin.Build.Builder()
+                                .bootloader(build.bootloader)
+                                .brand(build.brand)
+                                .clientId("android-google")
+                                .device(build.device)
+                                .fingerprint(build.fingerprint)
+                                .hardware(build.hardware)
+                                .manufacturer(build.manufacturer)
+                                .model(build.model)
+                                .otaInstalled(false) // TODO?
+                                //.packageVersionCode(Constants.MAX_REFERENCE_VERSION)
+                                .product(build.product)
+                                .radio(build.radio)
+                                .sdkVersion(build.sdk)
+                                .time(build.time / 1000)
+                                .build())
+                        .cellOperator(phoneInfo.cellOperator)
+                        .event(Collections.singletonList(new CheckinRequest.Checkin.Event.Builder()
+                                .tag(checkinInfo.androidId == 0 ? "event_log_start" : "system_update")
+                                .value(checkinInfo.androidId == 0 ? null : "1536,0,-1,NULL")
+                                .timeMs(new Date().getTime())
+                                .build()))
+                        .lastCheckinMs(checkinInfo.lastCheckin)
+                        .requestedGroup((List<String>) TODO)
+                        .roaming(phoneInfo.roaming)
+                        .simOperator(phoneInfo.simOperator)
+                        .stat((List<CheckinRequest.Checkin.Statistic>) TODO)
+                        .userNumber(0)
+                        .build())
+                .deviceConfiguration(new CheckinRequest.DeviceConfig.Builder()
+                        .availableFeature(deviceConfiguration.availableFeatures)
+                        .densityDpi(deviceConfiguration.densityDpi)
+                        .glEsVersion(deviceConfiguration.glEsVersion)
+                        .glExtension(deviceConfiguration.glExtensions)
+                        .hasFiveWayNavigation(deviceConfiguration.hasFiveWayNavigation)
+                        .hasHardKeyboard(deviceConfiguration.hasHardKeyboard)
+                        .heightPixels(deviceConfiguration.heightPixels)
+                        .keyboardType(deviceConfiguration.keyboardType)
+                        .locale(deviceConfiguration.locales)
+                        .nativePlatform(deviceConfiguration.nativePlatforms)
+                        .navigation(deviceConfiguration.navigation)
+                        .screenLayout(deviceConfiguration.screenLayout)
+                        .sharedLibrary(deviceConfiguration.sharedLibraries)
+                        .touchScreen(deviceConfiguration.touchScreen)
+                        .widthPixels(deviceConfiguration.widthPixels)
+                        .build())
                 .digest(checkinInfo.digest)
                 .esn(deviceIdent.esn)
                 .fragment(0)
-                .locale((String) TODO)
-                .loggingId((Long) TODO)
+                .locale(locale.toString())
+                .loggingId(new Random().nextLong()) // TODO: static
                 .meid(deviceIdent.meid)
-                .otaCert((List<String>) TODO)
-                .serial((String) TODO)
-                .timeZone((String) TODO)
+                .otaCert(Collections.singletonList("71Q6Rn2DDZl1zPDVaaeEHItd"))
+                .serial(build.serial)
+                .timeZone(TimeZone.getDefault().getID())
                 .userName((String) TODO)
                 .userSerialNumber((Integer) TODO)
                 .version(3);
-        builder.accountCookie(new ArrayList<String>());
         for (Account account : accounts) {
             builder.accountCookie.add("[" + account.name + "]");
             builder.accountCookie.add(account.authToken);
         }
+        if (builder.accountCookie.isEmpty()) builder.accountCookie.add("");
         if (deviceIdent.wifiMac != null) {
             builder.macAddress(Arrays.asList(deviceIdent.wifiMac))
                     .macAddressType(Arrays.asList("wifi"));
@@ -153,15 +169,6 @@ public class CheckinClient {
                     .fragment(1);
         }
         return builder.build();
-
-    }
-
-    public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
-                                             DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
-                                             LastCheckinInfo checkinInfo,
-                                             List<Account> accounts) {
-        return makeRequest(makeCheckin(makeBuild(build), phoneInfo, checkinInfo),
-                makeDeviceConfig(deviceConfiguration), deviceIdent, checkinInfo, accounts);
     }
 
     public static class Account {

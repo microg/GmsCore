@@ -16,6 +16,8 @@
 
 package org.microg.gms.common;
 
+import java.util.Random;
+
 public class Build {
     public String fingerprint = android.os.Build.FINGERPRINT;
     public String hardware = android.os.Build.HARDWARE;
@@ -29,6 +31,7 @@ public class Build {
     public String manufacturer = android.os.Build.MANUFACTURER;
     public String product = android.os.Build.PRODUCT;
     public String id = android.os.Build.ID;
+    public String serial = generateSerialNumber(); // TODO: static
 
     private static String getRadio() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -37,5 +40,14 @@ public class Build {
             //noinspection deprecation
             return android.os.Build.RADIO;
         }
+    }
+
+    private String generateSerialNumber() {
+        String serial = "008741";
+        Random rand = new Random();
+        for (int i = 0; i < 10; i++)
+            serial += Integer.toString(rand.nextInt(16), 16);
+        serial = serial.toUpperCase();
+        return serial;
     }
 }

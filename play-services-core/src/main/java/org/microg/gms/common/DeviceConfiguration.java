@@ -28,7 +28,10 @@ import android.util.DisplayMetrics;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -65,11 +68,18 @@ public class DeviceConfiguration {
         densityDpi = displayMetrics.densityDpi;
         glEsVersion = configurationInfo.reqGlEsVersion;
         PackageManager packageManager = context.getPackageManager();
-        sharedLibraries = Arrays.asList(packageManager.getSystemSharedLibraryNames());
+        sharedLibraries = new ArrayList<String>(Arrays.asList(packageManager.getSystemSharedLibraryNames()));
+        for (String s : new String[]{"com.google.android.maps", "com.google.android.media.effects", "com.google.widevine.software.drm"}) {
+            if (!sharedLibraries.contains(s)) {
+                sharedLibraries.add(s);
+            }
+        }
+        Collections.sort(sharedLibraries);
         availableFeatures = new ArrayList<String>();
         for (FeatureInfo featureInfo : packageManager.getSystemAvailableFeatures()) {
             if (featureInfo.name != null) availableFeatures.add(featureInfo.name);
         }
+        Collections.sort(availableFeatures);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nativePlatforms = Arrays.asList(Build.SUPPORTED_ABIS);
         } else {
@@ -79,12 +89,18 @@ public class DeviceConfiguration {
         }
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
-        locales = Arrays.asList(context.getAssets().getLocales());
-        glExtensions = new ArrayList<String>();
+        locales = new ArrayList<String>(Arrays.asList(context.getAssets().getLocales()));
+        for (int i = 0; i < locales.size(); i++) {
+            locales.set(i, locales.get(i).replace("-", "_"));
+        }
+        Collections.sort(locales);
+        Set<String> glExtensions = new HashSet<String>();
         addEglExtensions(glExtensions);
+        this.glExtensions = new ArrayList<String>(glExtensions);
+        Collections.sort(this.glExtensions);
     }
 
-    private static void addEglExtensions(List<String> glExtensions) {
+    private static void addEglExtensions(Set<String> glExtensions) {
         EGL10 egl10 = (EGL10) EGLContext.getEGL();
         if (egl10 != null) {
             EGLDisplay display = egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
@@ -120,7 +136,7 @@ public class DeviceConfiguration {
     }
 
     private static void addExtensionsForConfig(EGL10 egl10, EGLDisplay egldisplay, EGLConfig eglconfig, int ai[],
-                                               int ai1[], List<String> set) {
+                                               int ai1[], Set<String> set) {
         EGLContext eglcontext = egl10.eglCreateContext(egldisplay, eglconfig, EGL10.EGL_NO_CONTEXT, ai1);
         if (eglcontext != EGL10.EGL_NO_CONTEXT) {
             javax.microedition.khronos.egl.EGLSurface eglsurface =

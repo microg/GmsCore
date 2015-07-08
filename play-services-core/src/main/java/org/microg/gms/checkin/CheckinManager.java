@@ -24,6 +24,7 @@ import android.content.Context;
 import com.google.android.gms.R;
 
 import org.microg.gms.auth.AuthManager;
+import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
@@ -46,12 +47,18 @@ public class CheckinManager {
         AccountManager accountManager = AccountManager.get(context);
         String accountType = context.getString(R.string.google_account_type);
         for (Account account : accountManager.getAccountsByType(accountType)) {
-            String token = new AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "ac2dm").getAuthToken();
-            accounts.add(new CheckinClient.Account(account.name, token));
+            String token = new AuthRequest()
+                    .email(account.name).token(accountManager.getPassword(account))
+                    .hasPermission().service("ac2dm")
+                    .app("com.google.android.gsf", Constants.GMS_PACKAGE_SIGNATURE_SHA1)
+                    .getResponse().LSid;
+            if (token != null) {
+                accounts.add(new CheckinClient.Account(account.name, token));
+            }
         }
-        CheckinRequest request =
-                CheckinClient.makeRequest(Utils.getBuild(context), new DeviceConfiguration(context),
-                        new DeviceIdentifier(), new PhoneInfo(), info, accounts); // TODO
+        CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context),
+                new DeviceConfiguration(context), new DeviceIdentifier(), new PhoneInfo(), info,
+                Utils.getLocale(context), accounts); // TODO
         return handleResponse(context, CheckinClient.request(request));
     }
 
