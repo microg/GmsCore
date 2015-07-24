@@ -16,17 +16,35 @@
 
 package org.microg.gms.wearable;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
+import android.os.Binder;
+import android.os.RemoteException;
 
-public class WearableService extends Service {
-    private static final String TAG = "GmsWearSvc";
+import com.google.android.gms.common.internal.GetServiceRequest;
+import com.google.android.gms.common.internal.IGmsCallbacks;
+
+import org.microg.gms.BaseService;
+import org.microg.gms.common.PackageUtils;
+import org.microg.gms.common.Services;
+
+public class WearableService extends BaseService {
+
+    private ConfigurationDatabaseHelper configurationDatabaseHelper;
+    private NodeDatabaseHelper nodeDatabaseHelper;
+
+    public WearableService() {
+        super("GmsWearSvc", Services.WEARABLE.SERVICE_ID);
+    }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind: " + intent);
-        return null;
+    public void onCreate() {
+        super.onCreate();
+        configurationDatabaseHelper = new ConfigurationDatabaseHelper(this);
+        nodeDatabaseHelper = new NodeDatabaseHelper(this);
+    }
+
+    @Override
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+        PackageUtils.checkPackageUid(this, request.packageName, Binder.getCallingUid());
+        callback.onPostInitComplete(0, new WearableServiceImpl(this, nodeDatabaseHelper, configurationDatabaseHelper, request.packageName), null);
     }
 }

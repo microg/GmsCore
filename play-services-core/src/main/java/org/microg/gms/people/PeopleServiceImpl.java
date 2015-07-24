@@ -38,7 +38,7 @@ import java.io.File;
 
 public class PeopleServiceImpl extends IPeopleService.Stub {
     private static final String TAG = "GmsPeopleSvcImpl";
-    private Context context;
+    private final Context context;
 
     public PeopleServiceImpl(Context context) {
         this.context = context;
