@@ -52,7 +52,7 @@ public class CheckinClient {
         connection.setRequestMethod("POST");
         connection.setDoInput(true);
         connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "application/x-protobuffer");
+        connection.setRequestProperty("Content-type", "application/x-protobuffer");
         connection.setRequestProperty("Content-Encoding", "gzip");
         connection.setRequestProperty("Accept-Encoding", "gzip");
         connection.setRequestProperty("User-Agent", "Android-Checkin/2.0 (vbox86p JLS36G); gzip");
@@ -138,7 +138,7 @@ public class CheckinClient {
                         .locale(deviceConfiguration.locales)
                         .nativePlatform(deviceConfiguration.nativePlatforms)
                         .navigation(deviceConfiguration.navigation)
-                        .screenLayout(deviceConfiguration.screenLayout)
+                        .screenLayout(deviceConfiguration.screenLayout & 0xF)
                         .sharedLibrary(deviceConfiguration.sharedLibraries)
                         .touchScreen(deviceConfiguration.touchScreen)
                         .widthPixels(deviceConfiguration.widthPixels)

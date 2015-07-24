@@ -27,7 +27,7 @@ public class LastCheckinInfo {
     public static final String PREF_SECURITY_TOKEN = "securityToken";
     public static final String PREF_VERSION_INFO = "versionInfo";
     public static final String PREF_DEVICE_DATA_VERSION_INFO = "deviceDataVersionInfo";
-    public static final String INITIAL_DIGEST = "1-da39a3ee5e6b4b0d3255bfef95601890afd80709";
+    public static final String INITIAL_DIGEST = "1-929a0dca0eee55513280171a8585da7dcd3700f8";
     public long lastCheckin;
     public long androidId;
     public long securityToken;
