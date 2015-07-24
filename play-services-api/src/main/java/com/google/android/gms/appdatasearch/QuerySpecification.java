@@ -24,7 +24,7 @@ import java.util.List;
 public class QuerySpecification extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    public final int versionCode;
+    private int versionCode = 2;
     @SafeParceled(1)
     public final boolean b;
     //@SafeParceled(value = 2, subType = "TODO")
@@ -43,7 +43,6 @@ public class QuerySpecification extends AutoSafeParcelable {
     public final int i;
 
     private QuerySpecification() {
-        versionCode = 2;
         b = false;
         c = null;
         d = null;

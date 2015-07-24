@@ -22,7 +22,7 @@ import org.microg.safeparcel.SafeParceled;
 public class RequestIndexingRequest extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    public final int versionCode;
+    private int versionCode = 1;
 
     @SafeParceled(1)
     public final String packageName;
@@ -34,7 +34,6 @@ public class RequestIndexingRequest extends AutoSafeParcelable {
     public final long sequenceNumber;
 
     private RequestIndexingRequest() {
-        versionCode = 1;
         packageName = null;
         corpus = null;
         sequenceNumber = 0;

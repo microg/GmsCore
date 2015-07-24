@@ -21,7 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class SearchResults extends AutoSafeParcelable {
     @SafeParceled(1000)
-    public final int versionCode = 2;
+    private int versionCode = 2;
 
     public static Creator<SearchResults> CREATOR = new AutoCreator<SearchResults>(SearchResults.class);
 }

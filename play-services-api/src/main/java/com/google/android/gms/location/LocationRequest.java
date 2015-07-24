@@ -86,7 +86,7 @@ public class LocationRequest extends AutoSafeParcelable {
     public static final int PRIORITY_NO_POWER = 105;
 
     @SafeParceled(1000)
-    private final int versionCode;
+    private int versionCode = 1;
     @SafeParceled(1)
     private int priority;
     @SafeParceled(2)
@@ -105,7 +105,6 @@ public class LocationRequest extends AutoSafeParcelable {
     private long maxWaitTime;
 
     public LocationRequest() {
-        this.versionCode = 1;
         this.priority = PRIORITY_BALANCED_POWER_ACCURACY;
         this.interval = 3600000;
         this.fastestInterval = 600000;

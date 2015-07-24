@@ -9,11 +9,7 @@ import org.microg.safeparcel.SafeParceled;
 public class AutocompleteFilter extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    private final int versionCode;
-
-    private AutocompleteFilter() {
-        this.versionCode = 1;
-    }
+    private int versionCode = 1;
 
     public static final Creator<AutocompleteFilter> CREATOR = new AutoCreator<AutocompleteFilter>(AutocompleteFilter.class);
 }

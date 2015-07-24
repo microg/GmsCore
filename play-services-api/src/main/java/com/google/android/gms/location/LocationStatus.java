@@ -16,17 +16,13 @@ public class LocationStatus extends AutoSafeParcelable {
     public static final int STATUS_LOCATION_DISABLED_IN_SETTINGS = 7;
     public static final int STATUS_IN_PROGRESS = 8;
     @SafeParceled(1000)
-    private final int versionCode;
+    private int versionCode = 1;
     @SafeParceled(1)
     int cellStatus;
     @SafeParceled(2)
     int wifiStatus;
     @SafeParceled(3)
     long elapsedRealtimeNanos;
-
-    private LocationStatus() {
-        versionCode = 1;
-    }
 
     @Override
     public boolean equals(Object o) {

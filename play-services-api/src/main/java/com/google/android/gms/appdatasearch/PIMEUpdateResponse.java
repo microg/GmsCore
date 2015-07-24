@@ -21,7 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class PIMEUpdateResponse extends AutoSafeParcelable {
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private int versionCode;
 
     @SafeParceled(1)
     private String b;
@@ -33,6 +33,7 @@ public class PIMEUpdateResponse extends AutoSafeParcelable {
     public final PIMEUpdate[] updates;
 
     public PIMEUpdateResponse() {
+        versionCode = 1;
         this.bytes = null;
         this.updates = new PIMEUpdate[0];
     }

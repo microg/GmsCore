@@ -31,7 +31,7 @@ import java.util.Arrays;
 @PublicApi
 public final class CameraPosition extends AutoSafeParcelable {
     @SafeParceled(1)
-    private final int versionCode;
+    private int versionCode = 1;
     /**
      * The location that the camera is pointing at.
      */
@@ -61,7 +61,6 @@ public final class CameraPosition extends AutoSafeParcelable {
      */
     private CameraPosition() {
         target = null;
-        versionCode = 1;
         zoom = tilt = bearing = 0;
     }
 
@@ -81,7 +80,6 @@ public final class CameraPosition extends AutoSafeParcelable {
      */
     public CameraPosition(LatLng target, float zoom, float tilt, float bearing)
             throws NullPointerException, IllegalArgumentException {
-        versionCode = 1;
         if (target == null) {
             throw new NullPointerException("null camera target");
         }

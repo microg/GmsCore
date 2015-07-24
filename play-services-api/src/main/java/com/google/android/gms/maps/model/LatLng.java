@@ -26,7 +26,7 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public final class LatLng extends AutoSafeParcelable {
     @SafeParceled(1)
-    private final int versionCode;
+    private int versionCode = 1;
     /**
      * Latitude, in degrees. This value is in the range [-90, 90].
      */
@@ -43,7 +43,6 @@ public final class LatLng extends AutoSafeParcelable {
      * In fact, those are replaced by their real values later using SafeParcelUtil.
      */
     private LatLng() {
-        versionCode = 1;
         latitude = longitude = 0;
     }
 
@@ -56,7 +55,6 @@ public final class LatLng extends AutoSafeParcelable {
      *                  inclusive and +180 degrees exclusive.
      */
     public LatLng(double latitude, double longitude) {
-        this.versionCode = 1;
         this.latitude = Math.max(-90, Math.min(90, latitude));
         if ((-180 <= longitude) && (longitude < 180)) {
             this.longitude = longitude;

@@ -9,11 +9,7 @@ import org.microg.safeparcel.SafeParceled;
 public class UserAddedPlace extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    private final int versionCode;
-
-    private UserAddedPlace() {
-        versionCode = 1;
-    }
+    private int versionCode = 1;
 
     public static final Creator<UserAddedPlace> CREATOR = new AutoCreator<UserAddedPlace>(UserAddedPlace.class);
 }

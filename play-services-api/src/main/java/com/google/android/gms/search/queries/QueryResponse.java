@@ -25,7 +25,7 @@ import org.microg.safeparcel.SafeParceled;
 public class QueryResponse extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    public final int versionCode;
+    private int versionCode = 1;
 
     @SafeParceled(1)
     public final Status status;
@@ -34,13 +34,11 @@ public class QueryResponse extends AutoSafeParcelable {
     public final SearchResults results;
 
     private QueryResponse() {
-        versionCode = 1;
         status = null;
         results = null;
     }
 
     public QueryResponse(Status status, SearchResults results) {
-        this.versionCode = 1;
         this.status = status;
         this.results = results;
     }

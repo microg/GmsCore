@@ -22,7 +22,7 @@ import org.microg.safeparcel.SafeParceled;
 public class PlayLoggerContext extends AutoSafeParcelable {
 
     @SafeParceled(1)
-    public final int versionCode;
+    private int versionCode = 1;
 
     @SafeParceled(2)
     public final String packageName;
@@ -43,14 +43,12 @@ public class PlayLoggerContext extends AutoSafeParcelable {
     public final String logSourceName;
 
     private PlayLoggerContext() {
-        this.versionCode = 1;
         packageName = uploadAccount = logSourceName = null;
         logSource = loggingId = -1;
         logAndroidId = false;
     }
 
     public PlayLoggerContext(String packageName, int logSource, String uploadAccount, int loggingId, String logSourceName) {
-        this.versionCode = 1;
         this.packageName = packageName;
         this.logSource = logSource;
         this.uploadAccount = uploadAccount;

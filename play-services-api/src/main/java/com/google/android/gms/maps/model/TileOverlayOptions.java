@@ -18,6 +18,7 @@ package com.google.android.gms.maps.model;
 
 import android.os.IBinder;
 import android.os.RemoteException;
+
 import com.google.android.gms.maps.model.internal.ITileProviderDelegate;
 
 import org.microg.gms.common.PublicApi;
@@ -31,7 +32,7 @@ import org.microg.safeparcel.SafeParceled;
 public class TileOverlayOptions extends AutoSafeParcelable {
 
     @SafeParceled(1)
-    private final int versionCode;
+    private int versionCode = 1;
     /**
      * This is a IBinder to the {@link #tileProvider}, built using {@link ITileProviderDelegate}.
      */
@@ -49,7 +50,6 @@ public class TileOverlayOptions extends AutoSafeParcelable {
      * Creates a new set of tile overlay options.
      */
     public TileOverlayOptions() {
-        versionCode = 1;
     }
 
     /**

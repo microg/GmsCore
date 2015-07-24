@@ -19,13 +19,12 @@ public final class Status extends AutoSafeParcelable implements Result {
     public static final Status CANCELED = new Status(STATUS_CODE_CANCELED);
     public static final Status SUCCESS = new Status(0);
 
-    private final int versionCode;
+    private int versionCode = 1;
     private final int statusCode;
     private final String statusMessage;
     private final PendingIntent resolution;
 
     private Status() {
-        versionCode = 1;
         statusCode = 0;
         statusMessage = null;
         resolution = null;
@@ -40,7 +39,6 @@ public final class Status extends AutoSafeParcelable implements Result {
     }
 
     public Status(int statusCode, String statusMessage, PendingIntent resolution) {
-        this.versionCode = 1;
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.resolution = resolution;

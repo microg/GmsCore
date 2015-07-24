@@ -11,12 +11,11 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class Scope extends AutoSafeParcelable {
     @SafeParceled(1)
-    private final int versionCode;
+    private int versionCode = 1;
     @SafeParceled(2)
     private final String scopeUri;
 
     private Scope() {
-        versionCode = -1;
         scopeUri = null;
     }
 
@@ -24,7 +23,6 @@ public class Scope extends AutoSafeParcelable {
      * Creates a new scope with the given URI.
      */
     public Scope(String scopeUri) {
-        versionCode = 1;
         this.scopeUri = scopeUri;
     }
 

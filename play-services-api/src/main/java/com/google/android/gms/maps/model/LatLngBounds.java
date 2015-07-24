@@ -28,7 +28,7 @@ import java.util.Arrays;
 @PublicApi
 public final class LatLngBounds extends AutoSafeParcelable {
     @SafeParceled(1)
-    private final int versionCode;
+    private int versionCode = 1;
     /**
      * Southwest corner of the bound.
      */
@@ -45,7 +45,6 @@ public final class LatLngBounds extends AutoSafeParcelable {
      * In fact, those are replaced by their real values later using SafeParcelUtil.
      */
     private LatLngBounds() {
-        this.versionCode = 1;
         southwest = northeast = null;
     }
 
@@ -70,7 +69,6 @@ public final class LatLngBounds extends AutoSafeParcelable {
         if (northeast.latitude < southwest.latitude)
             throw new IllegalArgumentException("latitude of northeast corner must not be" +
                     " lower than latitude of southwest corner");
-        this.versionCode = 1;
         this.southwest = southwest;
         this.northeast = northeast;
     }

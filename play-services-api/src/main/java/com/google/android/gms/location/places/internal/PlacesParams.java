@@ -6,7 +6,7 @@ import org.microg.safeparcel.SafeParceled;
 public class PlacesParams extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    private final int versionCode;
+    private int versionCode = 1;
     @SafeParceled(1)
     public final String clientPackageName;
     @SafeParceled(2)
@@ -17,7 +17,6 @@ public class PlacesParams extends AutoSafeParcelable {
     public final String gCoreClientName;
 
     private PlacesParams() {
-        versionCode = 1;
         clientPackageName = locale = accountName = gCoreClientName = null;
     }
 

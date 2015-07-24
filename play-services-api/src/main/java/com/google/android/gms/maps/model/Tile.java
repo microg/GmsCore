@@ -11,7 +11,7 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class Tile extends AutoSafeParcelable {
     @SafeParceled(1)
-    private final int versionCode;
+    private int versionCode = 1;
     /**
      * The width of the image encoded by {@link #data} in pixels.
      */
@@ -30,7 +30,6 @@ public class Tile extends AutoSafeParcelable {
     public final byte[] data;
 
     private Tile() {
-        versionCode = 1;
         width = height = 0;
         data = null;
     }
@@ -45,7 +44,6 @@ public class Tile extends AutoSafeParcelable {
      *               {@link android.graphics.BitmapFactory#decodeByteArray(byte[], int, int)}.
      */
     public Tile(int width, int height, byte[] data) {
-        this.versionCode = 1;
         this.width = width;
         this.height = height;
         this.data = data;

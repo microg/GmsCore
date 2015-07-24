@@ -26,19 +26,17 @@ import org.microg.safeparcel.SafeParceled;
  */
 public class NodeParcelable extends AutoSafeParcelable implements Node {
     @SafeParceled(1)
-    private final int versionCode;
+    private int versionCode = 1;
     @SafeParceled(2)
     private final String id;
     @SafeParceled(3)
     private final String displayName;
 
     private NodeParcelable() {
-        versionCode = 1;
         id = displayName = null;
     }
 
     public NodeParcelable(String id, String displayName) {
-        versionCode = 1;
         this.id = id;
         this.displayName = displayName;
     }
