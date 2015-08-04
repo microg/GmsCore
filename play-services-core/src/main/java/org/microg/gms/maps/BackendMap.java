@@ -41,6 +41,7 @@ import org.oscim.map.Viewport;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem> {
@@ -83,27 +84,27 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     }
 
     public void destroy() {
-        //mapView.map().destroy();
+        mapView.map().destroy();
     }
 
     public void onResume() {
-        /*try {
+        try {
             Method onResume = MapView.class.getDeclaredMethod("onResume");
             onResume.setAccessible(true);
             onResume.invoke(mapView);
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     public void onPause() {
-        /*try {
+        try {
             Method onPause = MapView.class.getDeclaredMethod("onPause");
             onPause.setAccessible(true);
             onPause.invoke(mapView);
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     public MapPosition getMapPosition() {

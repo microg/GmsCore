@@ -18,6 +18,7 @@ package org.microg.gms.maps;
 
 import android.content.Context;
 import android.location.Location;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -181,11 +182,13 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public IPolylineDelegate addPolyline(PolylineOptions options) throws RemoteException {
+        Log.d(TAG, "not yet usable: addPolyline");
         return new PolylineImpl(options); // TODO
     }
 
     @Override
     public IPolygonDelegate addPolygon(PolygonOptions options) throws RemoteException {
+        Log.d(TAG, "not yet usable: addPolygon");
         return new PolygonImpl(options); // TODO
     }
 
@@ -197,17 +200,19 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public IGroundOverlayDelegate addGroundOverlay(GroundOverlayOptions options)
             throws RemoteException {
+        Log.d(TAG, "not yet usable: addGroundOverlay");
         return new GroundOverlayImpl(options); // TODO
     }
 
     @Override
     public ITileOverlayDelegate addTileOverlay(TileOverlayOptions options) throws RemoteException {
+        Log.d(TAG, "not yet usable: addTileOverlay");
         return new TileOverlayImpl(); // TODO
     }
 
     @Override
     public void setInfoWindowAdapter(IInfoWindowAdapter adapter) throws RemoteException {
-
+        Log.d(TAG, "not yet usable: setInfoWindowAdapter");
     }
 
     @Override
@@ -368,7 +373,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public void setOnMapLoadedCallback(IOnMapLoadedCallback callback) throws RemoteException {
-
+        Log.d(TAG, "not yet usable: setOnMapLoadedCallback");
     }
     
     /*
@@ -404,5 +409,12 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void onInputEvent(Event event, MotionEvent motionEvent) {
         Log.d(TAG, "onInputEvent(" + event + ", " + motionEvent + ")");
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
     }
 }

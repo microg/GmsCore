@@ -16,11 +16,16 @@
 
 package org.microg.gms.gcm;
 
+import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.PowerManager;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.squareup.wire.Message;
@@ -35,167 +40,132 @@ import org.microg.gms.gcm.mcs.LoginRequest;
 import org.microg.gms.gcm.mcs.LoginResponse;
 import org.microg.gms.gcm.mcs.Setting;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.net.ssl.SSLContext;
 
 import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.gcm.Constants.MSG_CONNECT;
+import static org.microg.gms.gcm.Constants.MSG_HEARTBEAT;
+import static org.microg.gms.gcm.Constants.MSG_INPUT;
+import static org.microg.gms.gcm.Constants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.Constants.MSG_OUTPUT;
+import static org.microg.gms.gcm.Constants.MSG_OUTPUT_ERROR;
+import static org.microg.gms.gcm.Constants.MSG_OUTPUT_READY;
+import static org.microg.gms.gcm.Constants.MSG_TEARDOWN;
 
-public class McsService extends IntentService {
+public class McsService extends IntentService implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
+
+    public static String ACTION_CONNECT = "org.microg.gms.gcm.mcs.CONNECT";
+    public static String ACTION_HEARTBEAT = "org.microg.gms.gcm.mcs.HEARTBEAT";
 
     public static final String PREFERENCES_NAME = "mcs";
     public static final String PREF_LAST_PERSISTENT_ID = "last_persistent_id";
-
-    public static final String SERVICE_HOST = "mtalk.google.com";
-    public static final int SERVICE_PORT = 5228;
 
     public static final String SELF_CATEGORY = "com.google.android.gsf.gtalkservice";
     public static final String IDLE_NOTIFICATION = "IdleNotification";
     public static final String FROM_FIELD = "gcm@android.com";
 
-    public static final int HEARTBEAT_MS = 60000;
-    public static final int HEARTBEAT_ALLOWED_OFFSET_MS = 2000;
-    private static final AtomicBoolean connecting = new AtomicBoolean(false);
-    private static final AtomicBoolean pending = new AtomicBoolean(false);
-    private static Thread connectionThread;
-    private static Thread heartbeatThread;
+    public static final String SERVICE_HOST = "mtalk.google.com";
+    public static final int SERVICE_PORT = 5228;
 
-    private Socket sslSocket;
-    private McsInputStream inputStream;
-    private McsOutputStream outputStream;
-    private long lastMsgTime;
+    public static final int HEARTBEAT_MS = 60000;
+
+    private static Socket sslSocket;
+    private static McsInputStream inputStream;
+    private static McsOutputStream outputStream;
+
+    private PendingIntent heartbeatIntent;
+
+    private static MainThread mainThread;
+    private static Handler mainHandler;
+    private boolean initialized = false;
+
+    private AlarmManager alarmManager;
+    private PowerManager powerManager;
+    private static PowerManager.WakeLock wakeLock;
 
     public McsService() {
         super(TAG);
     }
 
-    public static AtomicBoolean getPending() {
-        return pending;
+    private class MainThread extends Thread {
+        @Override
+        public void run() {
+            Looper.prepare();
+            mainHandler = new Handler(Looper.myLooper(), McsService.this);
+            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT));
+            Looper.loop();
+        }
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if (mainThread == null) {
+            mainThread = new MainThread();
+            mainThread.start();
+        }
+        heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "mcs");
+        wakeLock.setReferenceCounted(false);
+
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + HEARTBEAT_MS, HEARTBEAT_MS, heartbeatIntent);
+    }
+
+    public static boolean isConnected() {
+        return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (!isConnected()) {
-            connectionThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    connect();
-                }
-            });
-            connectionThread.start();
-        } else {
-            Log.d(TAG, "MCS connection already started");
-        }
-        pending.set(false);
-    }
-
-    public static boolean isConnected() {
-        return connecting.get() || (connectionThread != null && connectionThread.isAlive());
-    }
-
-    private void heartbeatLoop() {
-        try {
-            while (!Thread.interrupted()) {
-                try {
-                    long waitTime;
-                    while ((waitTime = lastMsgTime + HEARTBEAT_MS - System.currentTimeMillis()) > HEARTBEAT_ALLOWED_OFFSET_MS) {
-                        synchronized (heartbeatThread) {
-                            Log.d(TAG, "Waiting for " + waitTime + "ms");
-                            heartbeatThread.wait(waitTime);
-                        }
-                    }
-                    HeartbeatPing.Builder ping = new HeartbeatPing.Builder();
-                    if (inputStream.newStreamIdAvailable()) {
-                        ping.last_stream_id_received(inputStream.getStreamId());
-                    }
-                    outputStream.write(ping.build());
-                    lastMsgTime = System.currentTimeMillis();
-                } catch (InterruptedException ie) {
-                    Log.w(TAG, ie);
-                    return;
-                }
+        wakeLock.acquire();
+        if (mainHandler != null) {
+            if (ACTION_CONNECT.equals(intent.getAction())) {
+                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT, intent));
+            } else if (ACTION_HEARTBEAT.equals(intent.getAction())) {
+                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_HEARTBEAT, intent));
             }
-        } catch (Exception e) {
-            Log.w(TAG, e);
-            connectionThread.interrupt();
         }
-        if (heartbeatThread == Thread.currentThread()) {
-            heartbeatThread = null;
-        }
-        Log.d(TAG, "Heartbeating stopped");
     }
 
-    private void connect() {
-        connecting.set(false);
+    private synchronized void connect() {
         try {
             Log.d(TAG, "Starting MCS connection...");
-            LastCheckinInfo info = LastCheckinInfo.read(this);
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
             Log.d(TAG, "Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
-            sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, "mtalk.google.com", 5228, true);
+            sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, SERVICE_PORT, true);
             Log.d(TAG, "Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
-            inputStream = new McsInputStream(sslSocket.getInputStream());
-            outputStream = new McsOutputStream(sslSocket.getOutputStream());
-            LoginRequest loginRequest = buildLoginRequest(info);
-            Log.d(TAG, "Sending login request...");
-            outputStream.write(loginRequest);
-            while (!Thread.interrupted()) {
-                Message o = inputStream.read();
-                lastMsgTime = System.currentTimeMillis();
-                if (o instanceof DataMessageStanza) {
-                    handleMessage((DataMessageStanza) o);
-                } else if (o instanceof HeartbeatPing) {
-                    handleHearbeatPing((HeartbeatPing) o);
-                } else if (o instanceof Close) {
-                    handleClose((Close) o);
-                } else if (o instanceof LoginResponse) {
-                    handleLoginresponse((LoginResponse) o);
-                }
-            }
-            sslSocket.close();
+            inputStream = new McsInputStream(sslSocket.getInputStream(), mainHandler);
+            outputStream = new McsOutputStream(sslSocket.getOutputStream(), mainHandler);
+            inputStream.start();
+            outputStream.start();
         } catch (Exception e) {
-            Log.w(TAG, e);
-            try {
-                sslSocket.close();
-            } catch (Exception ignored) {
-            }
+            Log.w(TAG, "Exception while connecting!", e);
+            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, e));
         }
-        if (heartbeatThread != null) {
-            heartbeatThread.interrupt();
-            heartbeatThread = null;
-        }
-        Log.d(TAG, "Connection closed");
-        sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
     }
 
-    private void handleClose(Close close) throws IOException {
-        throw new IOException("Server requested close!");
+    private void handleClose(Close close) {
+        throw new RuntimeException("Server requested close!");
     }
 
-    private void handleLoginresponse(LoginResponse loginResponse) throws IOException {
-        getSharedPreferences().edit().putString(PREF_LAST_PERSISTENT_ID, "").apply();
+    private void handleLoginResponse(LoginResponse loginResponse) {
         if (loginResponse.error == null) {
+            getSharedPreferences().edit().putString(PREF_LAST_PERSISTENT_ID, "").apply();
             Log.d(TAG, "Logged in");
+            wakeLock.release();
         } else {
-            throw new IOException("Could not login: " + loginResponse.error);
-        }
-        if (heartbeatThread == null) {
-            heartbeatThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    heartbeatLoop();
-                }
-            });
-            heartbeatThread.start();
+            throw new RuntimeException("Could not login: " + loginResponse.error);
         }
     }
 
-    private void handleMessage(DataMessageStanza message) throws IOException {
+    private void handleCloudMessage(DataMessageStanza message) {
         if (message.persistent_id != null) {
             String old = getSharedPreferences().getString(PREF_LAST_PERSISTENT_ID, "");
             if (!old.isEmpty()) {
@@ -211,15 +181,20 @@ public class McsService extends IntentService {
         }
     }
 
-    private void handleHearbeatPing(HeartbeatPing ping) throws IOException {
+    private void handleHearbeatPing(HeartbeatPing ping) {
         HeartbeatAck.Builder ack = new HeartbeatAck.Builder().status(ping.status);
         if (inputStream.newStreamIdAvailable()) {
             ack.last_stream_id_received(inputStream.getStreamId());
         }
-        outputStream.write(ack.build());
+        send(ack.build());
     }
 
-    private LoginRequest buildLoginRequest(LastCheckinInfo info) {
+    private void handleHeartbeatAck(HeartbeatAck ack) {
+        wakeLock.release();
+    }
+
+    private LoginRequest buildLoginRequest() {
+        LastCheckinInfo info = LastCheckinInfo.read(this);
         return new LoginRequest.Builder()
                 .adaptive_heartbeat(false)
                 .auth_service(LoginRequest.AuthService.ANDROID_ID)
@@ -246,7 +221,7 @@ public class McsService extends IntentService {
         sendOrderedBroadcast(intent, msg.category + ".permission.C2D_MESSAGE");
     }
 
-    private void handleSelfMessage(DataMessageStanza msg) throws IOException {
+    private void handleSelfMessage(DataMessageStanza msg) {
         for (AppData appData : msg.app_data) {
             if (IDLE_NOTIFICATION.equals(appData.key)) {
                 DataMessageStanza.Builder msgResponse = new DataMessageStanza.Builder()
@@ -258,12 +233,106 @@ public class McsService extends IntentService {
                 if (inputStream.newStreamIdAvailable()) {
                     msgResponse.last_stream_id_received(inputStream.getStreamId());
                 }
-                outputStream.write(msgResponse.build());
+                send(msgResponse.build());
             }
         }
     }
 
     private SharedPreferences getSharedPreferences() {
         return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+    }
+
+    private void send(Message message) {
+        mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT, message));
+    }
+
+    private void sendOutputStream(int what, Object obj) {
+        McsOutputStream os = outputStream;
+        if (os != null) {
+            Handler outputHandler = os.getHandler();
+            if (outputHandler != null)
+                outputHandler.dispatchMessage(outputHandler.obtainMessage(what, obj));
+        }
+    }
+
+    @Override
+    public boolean handleMessage(android.os.Message msg) {
+        switch (msg.what) {
+            case MSG_INPUT:
+                Log.d(TAG, "Incoming message: " + msg.obj);
+                handleInput((Message) msg.obj);
+                return true;
+            case MSG_OUTPUT:
+                Log.d(TAG, "Outgoing message: " + msg.obj);
+                sendOutputStream(MSG_OUTPUT, msg.obj);
+                return true;
+            case MSG_INPUT_ERROR:
+            case MSG_OUTPUT_ERROR:
+                Log.d(TAG, "I/O error: " + msg.obj);
+                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, msg.obj));
+                return true;
+            case MSG_TEARDOWN:
+                Log.d(TAG, "Teardown initiated, reason: " + msg.obj);
+                handleTeardown(msg);
+                return true;
+            case MSG_CONNECT:
+                Log.d(TAG, "Connect initiated, reason: " + msg.obj);
+                if (!isConnected()) {
+                    connect();
+                }
+                return true;
+            case MSG_HEARTBEAT:
+                Log.d(TAG, "Heartbeat initiated, reason: " + msg.obj);
+                if (isConnected()) {
+                    HeartbeatPing.Builder ping = new HeartbeatPing.Builder();
+                    if (inputStream.newStreamIdAvailable()) {
+                        ping.last_stream_id_received(inputStream.getStreamId());
+                    }
+                    send(ping.build());
+                } else {
+                    Log.d(TAG, "Ignoring heartbeat, not connected!");
+                }
+                return true;
+            case MSG_OUTPUT_READY:
+                Log.d(TAG, "Sending login request...");
+                send(buildLoginRequest());
+                return true;
+        }
+        Log.w(TAG, "Unknown message: " + msg);
+        return false;
+    }
+
+    private void handleInput(Message message) {
+        try {
+            if (message instanceof DataMessageStanza) {
+                handleCloudMessage((DataMessageStanza) message);
+            } else if (message instanceof HeartbeatPing) {
+                handleHearbeatPing((HeartbeatPing) message);
+            } else if (message instanceof Close) {
+                handleClose((Close) message);
+            } else if (message instanceof LoginResponse) {
+                handleLoginResponse((LoginResponse) message);
+            } else if (message instanceof HeartbeatAck) {
+                handleHeartbeatAck((HeartbeatAck) message);
+            } else {
+                Log.w(TAG, "Unknown message: " + message);
+            }
+        } catch (Exception e) {
+            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, e));
+        }
+    }
+
+    private void handleTeardown(android.os.Message msg) {
+        sendOutputStream(MSG_TEARDOWN, msg.obj);
+        if (inputStream != null) {
+            inputStream.close();
+        }
+        try {
+            sslSocket.close();
+        } catch (Exception ignored) {
+        }
+        sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
+        alarmManager.cancel(heartbeatIntent);
+        wakeLock.release();
     }
 }

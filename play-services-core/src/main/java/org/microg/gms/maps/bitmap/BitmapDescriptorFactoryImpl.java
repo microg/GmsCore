@@ -17,12 +17,16 @@
 package org.microg.gms.maps.bitmap;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
 import android.os.RemoteException;
+import android.util.Log;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
 
 public class BitmapDescriptorFactoryImpl extends IBitmapDescriptorFactoryDelegate.Stub {
+    private static final String TAG = "GmsBitmapDescFactory";
 
     @Override
     public IObjectWrapper fromResource(int resourceId) throws RemoteException {
@@ -57,5 +61,12 @@ public class BitmapDescriptorFactoryImpl extends IBitmapDescriptorFactoryDelegat
     @Override
     public IObjectWrapper fromPath(String absolutePath) throws RemoteException {
         return ObjectWrapper.wrap(new PathBitmapDescriptor(absolutePath));
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
     }
 }

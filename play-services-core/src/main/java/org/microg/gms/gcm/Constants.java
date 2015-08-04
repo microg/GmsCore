@@ -26,4 +26,13 @@ public class Constants {
     public static final int MCS_DATA_MESSAGE_STANZA_TAG = 8;
 
     public static final int MCS_VERSION_CODE = 41;
+
+    public static final int MSG_INPUT = 10;
+    public static final int MSG_INPUT_ERROR = 11;
+    public static final int MSG_OUTPUT = 20;
+    public static final int MSG_OUTPUT_ERROR = 21;
+    public static final int MSG_OUTPUT_READY = 22;
+    public static final int MSG_TEARDOWN = 30;
+    public static final int MSG_CONNECT = 40;
+    public static final int MSG_HEARTBEAT = 41;
 }

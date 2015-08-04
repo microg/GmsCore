@@ -19,45 +19,58 @@ package com.google.android.gms.maps.internal;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Parcel;
 import android.os.RemoteException;
+import android.util.Log;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
-import org.microg.gms.maps.bitmap.BitmapDescriptorFactoryImpl;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
-import org.microg.gms.maps.camera.CameraUpdateFactoryImpl;
+
 import org.microg.gms.maps.MapFragmentImpl;
 import org.microg.gms.maps.MapViewImpl;
 import org.microg.gms.maps.ResourcesContainer;
+import org.microg.gms.maps.bitmap.BitmapDescriptorFactoryImpl;
+import org.microg.gms.maps.camera.CameraUpdateFactoryImpl;
 
 public class CreatorImpl extends ICreator.Stub {
-	@Override
-	public void init(IObjectWrapper resources) throws RemoteException {
-		initV2(resources, 0);
-	}
+    private static final String TAG = "GmsMapCreator";
 
-	@Override
-	public IMapFragmentDelegate newMapFragmentDelegate(IObjectWrapper activity) throws RemoteException {
-		return new MapFragmentImpl((Activity)ObjectWrapper.unwrap(activity));
-	}
+    @Override
+    public void init(IObjectWrapper resources) throws RemoteException {
+        initV2(resources, 0);
+    }
 
-	@Override
-	public IMapViewDelegate newMapViewDelegate(IObjectWrapper context, GoogleMapOptions options) throws RemoteException {
-		return new MapViewImpl((Context)ObjectWrapper.unwrap(context), options);
-	}
+    @Override
+    public IMapFragmentDelegate newMapFragmentDelegate(IObjectWrapper activity) throws RemoteException {
+        return new MapFragmentImpl((Activity) ObjectWrapper.unwrap(activity));
+    }
 
-	@Override
-	public ICameraUpdateFactoryDelegate newCameraUpdateFactoryDelegate() throws RemoteException {
-		return new CameraUpdateFactoryImpl();
-	}
+    @Override
+    public IMapViewDelegate newMapViewDelegate(IObjectWrapper context, GoogleMapOptions options) throws RemoteException {
+        return new MapViewImpl((Context) ObjectWrapper.unwrap(context), options);
+    }
 
-	@Override
-	public IBitmapDescriptorFactoryDelegate newBitmapDescriptorFactoryDelegate() throws RemoteException {
-		return new BitmapDescriptorFactoryImpl();
-	}
+    @Override
+    public ICameraUpdateFactoryDelegate newCameraUpdateFactoryDelegate() throws RemoteException {
+        return new CameraUpdateFactoryImpl();
+    }
 
-	@Override
-	public void initV2(IObjectWrapper resources, int flags) throws RemoteException {
-		ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
-	}
+    @Override
+    public IBitmapDescriptorFactoryDelegate newBitmapDescriptorFactoryDelegate() throws RemoteException {
+        return new BitmapDescriptorFactoryImpl();
+    }
+
+    @Override
+    public void initV2(IObjectWrapper resources, int flags) throws RemoteException {
+        ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
+    }
 }

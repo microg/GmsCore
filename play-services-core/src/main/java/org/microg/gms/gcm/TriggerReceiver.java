@@ -34,21 +34,17 @@ public class TriggerReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
 
-        if (McsService.getPending().compareAndSet(false, true)) {
-            if (!McsService.isConnected() || force) {
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
+        if (!McsService.isConnected() || force) {
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
 
-                    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-                    if (networkInfo != null && networkInfo.isConnected() || force) {
-                        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                        PendingIntent pendingIntent = PendingIntent.getService(context, 0, new Intent(context, McsService.class), 0);
-                        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + pendingDelay, pendingIntent);
-                        return;
-                    }
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected() || force) {
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    PendingIntent pendingIntent = PendingIntent.getService(context, 0, new Intent(McsService.ACTION_CONNECT, null, context, McsService.class), 0);
+                    alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + pendingDelay, pendingIntent);
                 }
             }
-            McsService.getPending().set(false);
         }
     }
 }

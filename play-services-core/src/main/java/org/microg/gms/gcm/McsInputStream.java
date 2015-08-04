@@ -16,6 +16,7 @@
 
 package org.microg.gms.gcm;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.squareup.wire.Message;
@@ -39,8 +40,10 @@ import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_PING_TAG;
 import static org.microg.gms.gcm.Constants.MCS_IQ_STANZA_TAG;
 import static org.microg.gms.gcm.Constants.MCS_LOGIN_REQUEST_TAG;
 import static org.microg.gms.gcm.Constants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.Constants.MSG_INPUT;
+import static org.microg.gms.gcm.Constants.MSG_INPUT_ERROR;
 
-public class McsInputStream {
+public class McsInputStream extends Thread {
     private static final String TAG = "GmsGcmMcsInput";
 
     private final InputStream is;
@@ -48,19 +51,50 @@ public class McsInputStream {
     private int version = -1;
     private int lastStreamIdReported = -1;
     private int streamId = 0;
+    private long lastMsgTime = 0;
+    private Handler mainHandler;
 
-    public McsInputStream(InputStream is) {
-        this(is, false);
+    public McsInputStream(InputStream is, Handler mainHandler) {
+        this(is, mainHandler, false);
     }
 
-    public McsInputStream(InputStream is, boolean initialized) {
+    public McsInputStream(InputStream is, Handler mainHandler, boolean initialized) {
         this.is = is;
+        this.mainHandler = mainHandler;
         this.initialized = initialized;
+        setName("McsInputStream");
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
+                Message message = read();
+                if (message != null) {
+                    lastMsgTime = System.currentTimeMillis();
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT, message));
+                }
+            }
+        } catch (IOException e) {
+            try {
+                is.close();
+            } catch (IOException ignored) {
+            }
+            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT_ERROR, e));
+        }
+    }
+
+    public void close() {
+        interrupt();
     }
 
     public int getStreamId() {
         lastStreamIdReported = streamId;
         return streamId;
+    }
+
+    public long getLastMsgTime() {
+        return lastMsgTime;
     }
 
     public boolean newStreamIdAvailable() {
@@ -88,14 +122,12 @@ public class McsInputStream {
         ensureVersionRead();
         int mcsTag = is.read();
         int mcsSize = readVarint();
-        Log.d(TAG, "Reading from MCS tag=" + mcsTag + " size=" + mcsSize);
         byte[] bytes = new byte[mcsSize];
         int len = 0;
         while (len < mcsSize) {
             len += is.read(bytes, len, mcsSize - len);
         }
         Message read = read(mcsTag, bytes, len);
-        Log.d(TAG, "Read from MCS: " + read);
         streamId++;
         return read;
     }
@@ -118,6 +150,7 @@ public class McsInputStream {
             case MCS_DATA_MESSAGE_STANZA_TAG:
                 return wire.parseFrom(bytes, 0, len, DataMessageStanza.class);
             default:
+                Log.w(TAG, "Unknown tag: " + mcsTag);
                 return null;
         }
     }

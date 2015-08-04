@@ -16,6 +16,8 @@
 
 package org.microg.gms.gcm;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.squareup.wire.Message;
@@ -28,9 +30,17 @@ import org.microg.gms.gcm.mcs.LoginRequest;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.microg.gms.gcm.Constants.*;
+import static org.microg.gms.gcm.Constants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.Constants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.Constants.MCS_VERSION_CODE;
+import static org.microg.gms.gcm.Constants.MSG_OUTPUT;
+import static org.microg.gms.gcm.Constants.MSG_OUTPUT_ERROR;
+import static org.microg.gms.gcm.Constants.MSG_OUTPUT_READY;
+import static org.microg.gms.gcm.Constants.MSG_TEARDOWN;
 
-public class McsOutputStream {
+public class McsOutputStream extends Thread implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsOutput";
 
     private final OutputStream os;
@@ -38,42 +48,73 @@ public class McsOutputStream {
     private int version = MCS_VERSION_CODE;
     private int streamId = 0;
 
-    public McsOutputStream(OutputStream os) {
-        this(os, false);
+    private Handler mainHandler;
+    private Handler myHandler;
+
+    public McsOutputStream(OutputStream os, Handler mainHandler) {
+        this(os, mainHandler, false);
     }
 
-    public McsOutputStream(OutputStream os, boolean initialized) {
+    public McsOutputStream(OutputStream os, Handler mainHandler, boolean initialized) {
         this.os = os;
+        this.mainHandler = mainHandler;
         this.initialized = initialized;
+        setName("McsOutputStream");
     }
 
     public int getStreamId() {
         return streamId;
     }
 
-    public void write(DataMessageStanza message) throws IOException {
-        write(message, MCS_DATA_MESSAGE_STANZA_TAG);
+    @Override
+    public void run() {
+        Looper.prepare();
+        myHandler = new Handler(this);
+        mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_READY));
+        Looper.loop();
     }
 
-    public void write(LoginRequest loginRequest) throws IOException {
-        write(loginRequest, MCS_LOGIN_REQUEST_TAG);
+    @Override
+    public boolean handleMessage(android.os.Message msg) {
+        switch (msg.what) {
+            case MSG_OUTPUT:
+                try {
+                    Message message = (Message) msg.obj;
+                    if (msg.obj instanceof DataMessageStanza) {
+                        writeInternal(message, MCS_DATA_MESSAGE_STANZA_TAG);
+                    } else if (msg.obj instanceof LoginRequest) {
+                        writeInternal(message, MCS_LOGIN_REQUEST_TAG);
+                    } else if (msg.obj instanceof HeartbeatAck) {
+                        writeInternal(message, MCS_HEARTBEAT_ACK_TAG);
+                    } else if (msg.obj instanceof HeartbeatPing) {
+                        writeInternal(message, MCS_HEARTBEAT_PING_TAG);
+                    } else {
+                        Log.w(TAG, "Unknown message: " + msg.obj);
+                    }
+                } catch (IOException e) {
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_ERROR, e));
+                }
+                return true;
+            case MSG_TEARDOWN:
+                try {
+                    os.close();
+                } catch (IOException ignored) {
+                }
+                try {
+                    Looper.myLooper().quit();
+                } catch (Exception ignored) {
+                }
+                return true;
+        }
+        return false;
     }
 
-    public void write(HeartbeatAck ack) throws IOException {
-        write(ack, MCS_HEARTBEAT_ACK_TAG);
-    }
-
-    public void write(HeartbeatPing ping) throws IOException{
-        write(ping, MCS_HEARTBEAT_PING_TAG);
-    }
-
-    public synchronized void write(Message message, int tag) throws IOException {
+    private synchronized void writeInternal(Message message, int tag) throws IOException {
         if (!initialized) {
             Log.d(TAG, "Write MCS version code: " + version);
             os.write(version);
             initialized = true;
         }
-        Log.d(TAG, "Write to MCS: " + message);
         os.write(tag);
         writeVarint(os, message.getSerializedSize());
         os.write(message.toByteArray());
@@ -91,5 +132,9 @@ public class McsOutputStream {
                 value >>>= 7;
             }
         }
+    }
+
+    public Handler getHandler() {
+        return myHandler;
     }
 }

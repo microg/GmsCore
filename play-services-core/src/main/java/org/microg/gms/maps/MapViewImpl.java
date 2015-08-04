@@ -18,20 +18,25 @@ package org.microg.gms.maps;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
 import com.google.android.gms.maps.internal.IMapViewDelegate;
+import com.google.android.gms.maps.internal.IOnMapReadyCallback;
 
 public class MapViewImpl extends IMapViewDelegate.Stub {
+    private static final String TAG = "GmsMapViewImpl";
 
     private GoogleMapImpl map;
     private GoogleMapOptions options;
     private Context context;
+    private IOnMapReadyCallback readyCallback;
 
     public MapViewImpl(Context context, GoogleMapOptions options) {
         this.context = context;
@@ -61,6 +66,16 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     @Override
     public void onResume() throws RemoteException {
         myMap().onResume();
+
+        if (readyCallback != null) {
+            try {
+                readyCallback.onMapReady(map);
+                readyCallback = null;
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
+        }
+
     }
 
     @Override
@@ -86,5 +101,17 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     @Override
     public IObjectWrapper getView() throws RemoteException {
         return ObjectWrapper.wrap(myMap().getView());
+    }
+
+    @Override
+    public void addOnMapReadyCallback(IOnMapReadyCallback callback) throws RemoteException {
+        this.readyCallback = callback;
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
     }
 }

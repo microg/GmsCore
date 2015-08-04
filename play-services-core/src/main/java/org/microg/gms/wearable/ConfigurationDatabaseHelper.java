@@ -102,4 +102,8 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
             return null;
         }
     }
+
+    public void setEnabledState(String name, boolean enabled) {
+        getWritableDatabase().execSQL("UPDATE connectionConfigurations SET connectionEnabled=? WHERE name=?", new String[]{enabled ? "1" : "0", name});
+    }
 }
