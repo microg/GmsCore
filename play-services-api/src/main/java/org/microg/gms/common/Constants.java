@@ -5,7 +5,7 @@ public class Constants {
      * This is the highest version that was looked at during development.
      * Does not necessarily mean anything.
      */
-    public static final int MAX_REFERENCE_VERSION = 7099448;
+    public static final int MAX_REFERENCE_VERSION = 7887000;
     public static final String KEY_MOCK_LOCATION = "mockLocation";
     public static final String DEFAULT_ACCOUNT = "<<default account>>";
     public static final String GMS_PACKAGE_NAME = "com.google.android.gms";

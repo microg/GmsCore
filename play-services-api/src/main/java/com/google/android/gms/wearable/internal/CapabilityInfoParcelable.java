@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable;
+package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 
-public class DeleteDataItemsResponse extends AutoSafeParcelable {
-    public static final Creator<DeleteDataItemsResponse> CREATOR = new AutoCreator<DeleteDataItemsResponse>(DeleteDataItemsResponse.class);
+public class CapabilityInfoParcelable extends AutoSafeParcelable {
+    public static final Creator<CapabilityInfoParcelable> CREATOR = new AutoCreator<CapabilityInfoParcelable>(CapabilityInfoParcelable.class);
 }

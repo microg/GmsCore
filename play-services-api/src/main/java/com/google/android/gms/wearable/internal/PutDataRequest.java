@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable;
+package com.google.android.gms.wearable.internal;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 
-import com.google.android.gms.wearable.internal.DataItemAssetParcelable;
+import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.DataItem;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -129,9 +130,9 @@ public class PutDataRequest extends AutoSafeParcelable {
     }
 
     public String toString(boolean verbose) {
-        return "PutDataRequest[data=" + (data == null ? "null" : Base64.encodeToString(data, Base64.NO_WRAP)) +
-                ", numAssets=" + getAssets().size() +
-                ", uri=" + uri + "]";
+        return "PutDataRequest[uri=" + uri +
+                ", data=" + (data == null ? "null" : Base64.encodeToString(data, Base64.NO_WRAP)) +
+                ", numAssets=" + getAssets().size() + "]";
         // TODO: Verbose: dump all assets
     }
 

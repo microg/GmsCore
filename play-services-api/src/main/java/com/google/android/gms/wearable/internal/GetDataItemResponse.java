@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable;
-
-import com.google.android.gms.wearable.internal.NodeParcelable;
+package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-import java.util.List;
-
-public class GetConnectedNodesResponse extends AutoSafeParcelable {
+public class GetDataItemResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
     public final int statusCode;
     @SafeParceled(3)
-    public final List<NodeParcelable> nodes;
+    public final DataItemParcelable dataItem;
 
-    private GetConnectedNodesResponse() {
+    private GetDataItemResponse() {
         statusCode = 0;
-        nodes = null;
+        dataItem = null;
     }
 
-    public GetConnectedNodesResponse(int statusCode, List<NodeParcelable> nodes) {
+    public GetDataItemResponse(int statusCode, DataItemParcelable dataItem) {
         this.statusCode = statusCode;
-        this.nodes = nodes;
+        this.dataItem = dataItem;
     }
 
-    public static final Creator<GetConnectedNodesResponse> CREATOR = new AutoCreator<GetConnectedNodesResponse>(GetConnectedNodesResponse.class);
+    public static final Creator<GetDataItemResponse> CREATOR = new AutoCreator<GetDataItemResponse>(GetDataItemResponse.class);
 }

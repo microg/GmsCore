@@ -16,47 +16,26 @@
 
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.wearable.DataItemAsset;
-
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class DataItemAssetParcelable extends AutoSafeParcelable implements DataItemAsset {
-
+public class PutDataResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    private String id;
+    public final int statusCode;
     @SafeParceled(3)
-    private String key;
+    public final DataItemParcelable dataItem;
 
-    private DataItemAssetParcelable() {
+    private PutDataResponse() {
+        statusCode = 0;
+        dataItem = null;
     }
 
-    public DataItemAssetParcelable(String id, String key) {
-        this.id = id;
-        this.key = key;
+    public PutDataResponse(int statusCode, DataItemParcelable dataItem) {
+        this.statusCode = statusCode;
+        this.dataItem = dataItem;
     }
 
-    @Override
-    public String getDataItemKey() {
-        return key;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public DataItemAsset freeze() {
-        return this;
-    }
-
-    @Override
-    public boolean isDataValid() {
-        return true;
-    }
-
-    public static final Creator<DataItemAssetParcelable> CREATOR = new AutoCreator<DataItemAssetParcelable>(DataItemAssetParcelable.class);
+    public static final Creator<PutDataResponse> CREATOR = new AutoCreator<PutDataResponse>(PutDataResponse.class);
 }

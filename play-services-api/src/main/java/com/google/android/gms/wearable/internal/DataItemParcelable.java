@@ -29,16 +29,13 @@ public class DataItemParcelable extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    public final Uri uri;
+    private Uri uri;
     @SafeParceled(4)
-    private final Bundle assets;
+    private Bundle assets = new Bundle();
     @SafeParceled(5)
     public byte[] data;
 
     private DataItemParcelable() {
-        uri = null;
-        assets = new Bundle();
-        data = null;
     }
 
     public DataItemParcelable(Uri uri) {
@@ -47,7 +44,6 @@ public class DataItemParcelable extends AutoSafeParcelable {
 
     public DataItemParcelable(Uri uri, Map<String, DataItemAssetParcelable> assets) {
         this.uri = uri;
-        this.assets = new Bundle();
         for (String key : assets.keySet()) {
             this.assets.putParcelable(key, assets.get(key));
         }
@@ -61,6 +57,10 @@ public class DataItemParcelable extends AutoSafeParcelable {
             assets.put(key, (DataItemAssetParcelable) this.assets.getParcelable(key));
         }
         return assets;
+    }
+
+    public Uri getUri() {
+        return uri;
     }
 
     public static final Creator<DataItemParcelable> CREATOR = new AutoCreator<DataItemParcelable>(DataItemParcelable.class);

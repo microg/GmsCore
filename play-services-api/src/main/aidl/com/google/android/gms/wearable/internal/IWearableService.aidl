@@ -1,9 +1,9 @@
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.wearable.AddListenerRequest;
+import com.google.android.gms.wearable.internal.AddListenerRequest;
 import com.google.android.gms.wearable.ConnectionConfiguration;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.RemoveListenerRequest;
+import com.google.android.gms.wearable.internal.PutDataRequest;
+import com.google.android.gms.wearable.internal.RemoveListenerRequest;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
 import com.google.android.gms.wearable.internal.IWearableService;
 
@@ -18,6 +18,8 @@ interface IWearableService {
     void removeListener(IWearableCallbacks callbacks, in RemoveListenerRequest request) = 16;
     void putConfig(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 19;
     void getConfigs(IWearableCallbacks callbacks) = 21;
+    void disableConnection(IWearableCallbacks callbacks, String name) = 23;
     void getDataItemsByUri(IWearableCallbacks callbacks, in Uri uri, int i) = 39;
     void deleteDataItems(IWearableCallbacks callbacks, in Uri uri) = 40;
+    void optInCloudSync(IWearableCallbacks callbacks, boolean enable) = 47;
 }

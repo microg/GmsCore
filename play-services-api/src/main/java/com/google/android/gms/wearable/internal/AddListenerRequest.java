@@ -14,28 +14,30 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable;
+package com.google.android.gms.wearable.internal;
+
+import android.content.IntentFilter;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class GetConfigResponse extends AutoSafeParcelable {
+public class AddListenerRequest extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    public final int statusCode;
+    public final IWearableListener listener;
     @SafeParceled(3)
-    public final ConnectionConfiguration connectionConfiguration;
+    public final IntentFilter[] intentFilters;
 
-    private GetConfigResponse() {
-        statusCode = 0;
-        connectionConfiguration = null;
+    private AddListenerRequest() {
+        listener = null;
+        intentFilters = null;
     }
 
-    public GetConfigResponse(int statusCode, ConnectionConfiguration connectionConfiguration) {
-        this.statusCode = statusCode;
-        this.connectionConfiguration = connectionConfiguration;
+    public AddListenerRequest(IWearableListener listener, IntentFilter[] intentFilters) {
+        this.listener = listener;
+        this.intentFilters = intentFilters;
     }
 
-    public static final Creator<GetConfigResponse> CREATOR = new AutoCreator<GetConfigResponse>(GetConfigResponse.class);
+    public static final Creator<AddListenerRequest> CREATOR = new AutoCreator<AddListenerRequest>(AddListenerRequest.class);
 }

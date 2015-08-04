@@ -19,8 +19,13 @@ package com.google.android.gms.wearable;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 
+import com.google.android.gms.wearable.internal.PutDataRequest;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
+
+import java.util.Arrays;
 
 /**
  * An asset is a binary blob shared between data items that is replicated across the wearable
@@ -32,6 +37,28 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public class Asset extends AutoSafeParcelable {
+
+    @SafeParceled(1)
+    private int versionCode = 1;
+    @SafeParceled(2)
+    @PublicApi(exclude = true)
+    public byte[] data;
+    @SafeParceled(3)
+    private String digest;
+    @SafeParceled(4)
+    private ParcelFileDescriptor fd;
+    @SafeParceled(5)
+    private Uri uri;
+
+    private Asset() {
+    }
+
+    private Asset(byte[] data, String digest, ParcelFileDescriptor fd, Uri uri) {
+        this.data = data;
+        this.digest = digest;
+        this.fd = fd;
+        this.uri = uri;
+    }
 
     /**
      * Creates an Asset using a byte array.
@@ -45,14 +72,20 @@ public class Asset extends AutoSafeParcelable {
      * sent in a putDataItem request.
      */
     public static Asset createFromFd(ParcelFileDescriptor fd) {
-        return null;
+        if (fd == null) {
+            throw new IllegalArgumentException("Asset fd cannot be null");
+        }
+        return new Asset(null, null, fd, null);
     }
 
     /**
      * Create an Asset using an existing Asset's digest.
      */
     public static Asset createFromRef(String digest) {
-        return null;
+        if (digest == null) {
+            throw new IllegalArgumentException("Asset digest cannot be null");
+        }
+        return new Asset(null, digest, null, null);
     }
 
     /**
@@ -68,21 +101,53 @@ public class Asset extends AutoSafeParcelable {
      * identify the asset across devices.
      */
     public String getDigest() {
-        return null;
+        return digest;
     }
 
     /**
      * @return the file descriptor referencing the asset.
      */
     public ParcelFileDescriptor getFd() {
-        return null;
+        return fd;
     }
 
     /**
      * @return the uri referencing the asset data.
      */
     public Uri getUri() {
-        return null;
+        return uri;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Asset asset = (Asset) o;
+
+        if (!Arrays.equals(data, asset.data)) return false;
+        if (digest != null ? !digest.equals(asset.digest) : asset.digest != null) return false;
+        if (fd != null ? !fd.equals(asset.fd) : asset.fd != null) return false;
+        return !(uri != null ? !uri.equals(asset.uri) : asset.uri != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new Object[]{data, digest, fd, uri});
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Asset[@")
+                .append(Integer.toHexString(hashCode()))
+                .append(", ")
+                .append(digest != null ? digest : "nodigest");
+        if (this.data != null) sb.append(", size=").append(data.length);
+        if (this.fd != null) sb.append(", fd=").append(fd);
+        if (this.uri != null) sb.append(", uri=").append(uri);
+        return sb.append("]").toString();
     }
 
     public static final Creator<Asset> CREATOR = new AutoCreator<Asset>(Asset.class);

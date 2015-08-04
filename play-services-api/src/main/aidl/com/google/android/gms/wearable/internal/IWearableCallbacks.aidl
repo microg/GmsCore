@@ -2,16 +2,16 @@ package com.google.android.gms.wearable.internal;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
-import com.google.android.gms.wearable.DeleteDataItemsResponse;
-import com.google.android.gms.wearable.GetConfigResponse;
-import com.google.android.gms.wearable.GetConfigsResponse;
-import com.google.android.gms.wearable.GetConnectedNodesResponse;
-import com.google.android.gms.wearable.GetDataItemResponse;
-import com.google.android.gms.wearable.GetFdForAssetResponse;
-import com.google.android.gms.wearable.GetLocalNodeResponse;
-import com.google.android.gms.wearable.PutDataResponse;
-import com.google.android.gms.wearable.SendMessageResponse;
-import com.google.android.gms.wearable.StorageInfoResponse;
+import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
+import com.google.android.gms.wearable.internal.GetConfigResponse;
+import com.google.android.gms.wearable.internal.GetConfigsResponse;
+import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
+import com.google.android.gms.wearable.internal.GetDataItemResponse;
+import com.google.android.gms.wearable.internal.GetFdForAssetResponse;
+import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
+import com.google.android.gms.wearable.internal.PutDataResponse;
+import com.google.android.gms.wearable.internal.SendMessageResponse;
+import com.google.android.gms.wearable.internal.StorageInfoResponse;
 
 interface IWearableCallbacks {
     void onGetConfigResponse(in GetConfigResponse response) = 1;

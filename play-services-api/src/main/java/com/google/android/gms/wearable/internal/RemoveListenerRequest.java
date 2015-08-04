@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable;
-
-import com.google.android.gms.wearable.internal.DataItemParcelable;
+package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class PutDataResponse extends AutoSafeParcelable {
+public class RemoveListenerRequest extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    public final int statusCode;
-    @SafeParceled(3)
-    public final DataItemParcelable dataItem;
+    public final IWearableListener listener;
 
-    private PutDataResponse() {
-        statusCode = 0;
-        dataItem = null;
+    private RemoveListenerRequest() {
+        listener = null;
     }
 
-    public PutDataResponse(int statusCode, DataItemParcelable dataItem) {
-        this.statusCode = statusCode;
-        this.dataItem = dataItem;
+    public RemoveListenerRequest(IWearableListener listener) {
+        this.listener = listener;
     }
 
-    public static final Creator<PutDataResponse> CREATOR = new AutoCreator<PutDataResponse>(PutDataResponse.class);
+    public static final Creator<RemoveListenerRequest> CREATOR = new AutoCreator<RemoveListenerRequest>(RemoveListenerRequest.class);
 }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable;
+package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 
-public class SendMessageResponse extends AutoSafeParcelable {
-    public static final Creator<SendMessageResponse> CREATOR = new AutoCreator<SendMessageResponse>(SendMessageResponse.class);
+public class MessageEventParcelable extends AutoSafeParcelable {
+    public static final Creator<MessageEventParcelable> CREATOR = new AutoCreator<MessageEventParcelable>(MessageEventParcelable.class);
 }
