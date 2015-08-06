@@ -17,18 +17,12 @@
 package org.microg.gms.common;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class Utils {
@@ -48,13 +42,10 @@ public class Utils {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         if (is != null) {
             final byte[] buff = new byte[1024];
-            while (true) {
-                final int nb = is.read(buff);
-                if (nb < 0) {
-                    break;
-                }
-                bos.write(buff, 0, nb);
-            }
+            int read;
+            do {
+                bos.write(buff, 0, (read = is.read(buff)) < 0 ? 0 : read);
+            } while (read >= 0);
             is.close();
         }
         return bos.toByteArray();

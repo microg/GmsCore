@@ -267,12 +267,13 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
             }
             View view = convertView;
             if (view == null) {
-                view = LayoutInflater.from(AskPermissionActivity.this).inflate(R.layout.ask_permission_list_entry, null);
+                view = LayoutInflater.from(AskPermissionActivity.this)
+                        .inflate(R.layout.ask_permission_list_entry, parent, false);
             }
             ((TextView) view.findViewById(android.R.id.text1)).setText(label);
             TextView textView = (TextView) view.findViewById(android.R.id.text2);
             if (description != null && !description.isEmpty()) {
-                textView.setText(Html.fromHtml(description.trim().replace("\n","<br>")));
+                textView.setText(Html.fromHtml(description.trim().replace("\n", "<br>")));
                 textView.setVisibility(VISIBLE);
             } else {
                 textView.setVisibility(GONE);

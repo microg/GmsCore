@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.opengl.GLES10;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import java.util.ArrayList;
@@ -80,13 +81,7 @@ public class DeviceConfiguration {
             if (featureInfo.name != null) availableFeatures.add(featureInfo.name);
         }
         Collections.sort(availableFeatures);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            nativePlatforms = Arrays.asList(Build.SUPPORTED_ABIS);
-        } else {
-            nativePlatforms = new ArrayList<String>();
-            nativePlatforms.add(Build.CPU_ABI);
-            if (Build.CPU_ABI2 != null) nativePlatforms.add(Build.CPU_ABI2);
-        }
+        this.nativePlatforms = getNativePlatforms();
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
         locales = new ArrayList<String>(Arrays.asList(context.getAssets().getLocales()));
@@ -98,6 +93,19 @@ public class DeviceConfiguration {
         addEglExtensions(glExtensions);
         this.glExtensions = new ArrayList<String>(glExtensions);
         Collections.sort(this.glExtensions);
+    }
+
+    @SuppressWarnings({"deprecation", "InlinedApi"})
+    private static List<String> getNativePlatforms() {
+        List<String> nativePlatforms;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return Arrays.asList(Build.SUPPORTED_ABIS);
+        } else {
+            nativePlatforms = new ArrayList<String>();
+            nativePlatforms.add(Build.CPU_ABI);
+            if (Build.CPU_ABI2 != null) nativePlatforms.add(Build.CPU_ABI2);
+            return nativePlatforms;
+        }
     }
 
     private static void addEglExtensions(Set<String> glExtensions) {

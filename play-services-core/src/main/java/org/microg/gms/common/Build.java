@@ -16,6 +16,7 @@
 
 package org.microg.gms.common;
 
+import java.util.Locale;
 import java.util.Random;
 
 public class Build {
@@ -33,11 +34,11 @@ public class Build {
     public String id = android.os.Build.ID;
     public String serial = generateSerialNumber(); // TODO: static
 
+    @SuppressWarnings("deprecation")
     private static String getRadio() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             return android.os.Build.getRadioVersion();
         } else {
-            //noinspection deprecation
             return android.os.Build.RADIO;
         }
     }
@@ -47,7 +48,7 @@ public class Build {
         Random rand = new Random();
         for (int i = 0; i < 10; i++)
             serial += Integer.toString(rand.nextInt(16), 16);
-        serial = serial.toUpperCase();
+        serial = serial.toUpperCase(Locale.US);
         return serial;
     }
 }

@@ -18,6 +18,7 @@ package org.microg.gms.auth.login;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
@@ -79,6 +80,7 @@ public class LoginActivity extends AssistantActivity {
     private AccountManager accountManager;
     private InputMethodManager inputMethodManager;
 
+    @SuppressLint("AddJavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +143,7 @@ public class LoginActivity extends AssistantActivity {
         return webView;
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private static void prepareWebViewSettings(WebSettings settings) {
         settings.setUserAgentString(settings.getUserAgentString() + MAGIC_USER_AGENT);
         settings.setJavaScriptEnabled(true);
@@ -258,8 +261,8 @@ public class LoginActivity extends AssistantActivity {
                 .appendQueryParameter("source", "android")
                 .appendQueryParameter("xoauth_display_name", "Android Device")
                 .appendQueryParameter("lang", locale.getLanguage())
-                .appendQueryParameter("cc", locale.getCountry().toLowerCase())
-                .appendQueryParameter("langCountry", locale.toString().toLowerCase())
+                .appendQueryParameter("cc", locale.getCountry().toLowerCase(Locale.US))
+                .appendQueryParameter("langCountry", locale.toString().toLowerCase(Locale.US))
                 .appendQueryParameter("hl", locale.toString().replace("_", "-"))
                 .appendQueryParameter("tmpl", tmpl)
                 .build().toString();

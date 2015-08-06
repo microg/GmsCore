@@ -24,6 +24,7 @@ import org.microg.gms.common.Build;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
+import org.microg.gms.common.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -64,20 +65,7 @@ public class CheckinClient {
 
         if (connection.getResponseCode() != 200) {
             try {
-                InputStream is = new GZIPInputStream(connection.getErrorStream());
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                if (is != null) {
-                    final byte[] buff = new byte[1024];
-                    while (true) {
-                        final int nb = is.read(buff);
-                        if (nb < 0) {
-                            break;
-                        }
-                        bos.write(buff, 0, nb);
-                    }
-                    is.close();
-                }
-                throw new IOException(bos.toString());
+                throw new IOException(new String(Utils.readStreamToEnd(new GZIPInputStream(connection.getErrorStream()))));
             } catch (Exception e) {
                 throw new IOException(connection.getResponseMessage(), e);
             }

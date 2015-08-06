@@ -47,12 +47,13 @@ public class McsInputStream extends Thread {
     private static final String TAG = "GmsGcmMcsInput";
 
     private final InputStream is;
+    private final Handler mainHandler;
+
     private boolean initialized;
     private int version = -1;
     private int lastStreamIdReported = -1;
     private int streamId = 0;
     private long lastMsgTime = 0;
-    private Handler mainHandler;
 
     public McsInputStream(InputStream is, Handler mainHandler) {
         this(is, mainHandler, false);
@@ -69,11 +70,7 @@ public class McsInputStream extends Thread {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                Message message = read();
-                if (message != null) {
-                    lastMsgTime = System.currentTimeMillis();
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT, message));
-                }
+                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT, read()));
             }
         } catch (IOException e) {
             try {
@@ -93,10 +90,6 @@ public class McsInputStream extends Thread {
         return streamId;
     }
 
-    public long getLastMsgTime() {
-        return lastMsgTime;
-    }
-
     public boolean newStreamIdAvailable() {
         return lastStreamIdReported != streamId;
     }
@@ -106,7 +99,7 @@ public class McsInputStream extends Thread {
         return version;
     }
 
-    private void ensureVersionRead() {
+    private synchronized void ensureVersionRead() {
         if (!initialized) {
             try {
                 version = is.read();
@@ -122,14 +115,15 @@ public class McsInputStream extends Thread {
         ensureVersionRead();
         int mcsTag = is.read();
         int mcsSize = readVarint();
+        if (mcsTag < 0 || mcsSize < 0) return null;
         byte[] bytes = new byte[mcsSize];
-        int len = 0;
-        while (len < mcsSize) {
-            len += is.read(bytes, len, mcsSize - len);
+        int len = 0, read = 0;
+        while (len < mcsSize && read >= 0) {
+            len += (read = is.read(bytes, len, mcsSize - len)) < 0 ? 0 : read;
         }
-        Message read = read(mcsTag, bytes, len);
+        Message message = read(mcsTag, bytes, len);
         streamId++;
-        return read;
+        return message;
     }
 
     private static Message read(int mcsTag, byte[] bytes, int len) throws IOException {
@@ -156,16 +150,11 @@ public class McsInputStream extends Thread {
     }
 
     private int readVarint() throws IOException {
-        int res = 0;
-        int s = 0;
-        int b = 0x80;
-        while ((b & 0x80) == 0x80) {
-            b = is.read();
-            res |= (b & 0x7F) << s;
-            s += 7;
-        }
+        int res = 0, s = -7, read;
+        do {
+            res |= ((read = is.read()) & 0x7F) << (s += 7);
+        } while (read >= 0 && (read & 0x80) == 0x80 && s < 32);
+        if (read < 0) return -1;
         return res;
     }
-
-
 }
