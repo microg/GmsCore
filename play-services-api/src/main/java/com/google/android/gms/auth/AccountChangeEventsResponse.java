@@ -25,7 +25,7 @@ import java.util.List;
 public class AccountChangeEventsResponse extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
-    @SafeParceled(value = 2, subType = "com.google.android.gms.auth.AccountChangeEvent")
+    @SafeParceled(value = 2, subClass = AccountChangeEvent.class)
     private List<AccountChangeEvent> events;
 
     public AccountChangeEventsResponse() {

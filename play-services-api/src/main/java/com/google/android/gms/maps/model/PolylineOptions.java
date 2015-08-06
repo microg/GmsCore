@@ -16,10 +16,13 @@
 
 package com.google.android.gms.maps.model;
 
+import android.graphics.Color;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,16 +32,89 @@ import java.util.List;
 @PublicApi
 public class PolylineOptions extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode;
-    // TODO
-    private List<LatLng> points;
-    private float width;
-    private int color;
-    private float zIndex;
-    private boolean visible;
-    private boolean geodesic;
+    private int versionCode = 1;
+    @SafeParceled(value = 2, subClass = LatLng.class)
+    private List<LatLng> points = new ArrayList<LatLng>();
+    @SafeParceled(3)
+    private float width = 10;
+    @SafeParceled(4)
+    private int color = Color.BLACK;
+    @SafeParceled(5)
+    private float zIndex = 0;
+    @SafeParceled(6)
+    private boolean visible = true;
+    @SafeParceled(7)
+    private boolean geodesic = false;
 
     public PolylineOptions() {
+    }
+
+    public PolylineOptions add(LatLng point) {
+        points.add(point);
+        return this;
+    }
+
+    public PolylineOptions add(LatLng... points) {
+        for (LatLng point : points) {
+            this.points.add(point);
+        }
+        return this;
+    }
+
+    public PolylineOptions addAll(Iterable<LatLng> points) {
+        for (LatLng point : points) {
+            this.points.add(point);
+        }
+        return this;
+    }
+
+    public PolylineOptions color(int color) {
+        this.color = color;
+        return this;
+    }
+
+    public PolylineOptions geodesic(boolean geodesic) {
+        this.geodesic = geodesic;
+        return this;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public List<LatLng> getPoints() {
+        return points;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getZIndex() {
+        return zIndex;
+    }
+
+    public boolean isGeodesic() {
+        return geodesic;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public PolylineOptions visible(boolean visible) {
+        this.visible = visible;
+        return this;
+    }
+
+    public PolylineOptions width(float width) {
+        this.width = width;
+        return this;
+    }
+
+    public PolylineOptions zIndex(float zIndex) {
+        this.zIndex = zIndex;
+        return this;
     }
 
     public static Creator<PolylineOptions> CREATOR = new AutoCreator<PolylineOptions>(PolylineOptions.class);
