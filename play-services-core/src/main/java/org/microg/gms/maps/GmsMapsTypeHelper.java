@@ -19,9 +19,12 @@ package org.microg.gms.maps;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+
 import org.oscim.core.BoundingBox;
+import org.oscim.core.Box;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.MapPosition;
+import org.oscim.core.MercatorProjection;
 
 public class GmsMapsTypeHelper {
     public static android.graphics.Point toPoint(org.oscim.core.Point in) {
@@ -36,9 +39,12 @@ public class GmsMapsTypeHelper {
         return new LatLng(geoPoint.getLatitude(), geoPoint.getLongitude());
     }
 
-    public static LatLngBounds toLatLngBounds(BoundingBox box) {
-        return new LatLngBounds(new LatLng(box.getMinLatitude(), box.getMinLongitude()),
-                new LatLng(box.getMaxLatitude(), box.getMaxLongitude()));
+    public static LatLngBounds toLatLngBounds(Box box) {
+        double minLon = MercatorProjection.toLongitude(box.xmin);
+        double maxLon = MercatorProjection.toLongitude(box.xmax);
+        double minLat = MercatorProjection.toLatitude(box.ymax);
+        double maxLat = MercatorProjection.toLatitude(box.ymin);
+        return new LatLngBounds(new LatLng(minLat, minLon), new LatLng(maxLat, maxLon));
     }
 
     public static org.oscim.core.Point fromPoint(android.graphics.Point point) {

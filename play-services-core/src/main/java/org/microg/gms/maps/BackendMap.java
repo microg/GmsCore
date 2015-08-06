@@ -49,6 +49,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
 
     private final Context context;
     private final MapView mapView;
+    private final LabelLayer labels;
     private final BuildingLayer buildings;
     private final VectorTileLayer baseLayer;
     private final OSciMap4TileSource tileSource;
@@ -67,10 +68,10 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
         tileSource.setCache(cache);
         baseLayer = mapView.map().setBaseMap(tileSource);
         Layers layers = mapView.map().layers();
-        layers.add(buildings = new BuildingLayer(mapView.map(), baseLayer));
-        layers.add(new LabelLayer(mapView.map(), baseLayer));
+        layers.add(labels = new LabelLayer(mapView.map(), baseLayer));
         layers.add(items = new ItemizedLayer<MarkerItem>(mapView.map(), new MarkerSymbol(new AndroidBitmap(BitmapFactory
                 .decodeResource(ResourcesContainer.get(), R.drawable.nop)), 0.5F, 1)));
+        layers.add(buildings = new BuildingLayer(mapView.map(), baseLayer));
         items.setOnItemGestureListener(this);
         mapView.map().setTheme(VtmThemes.DEFAULT);
     }
@@ -145,22 +146,30 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     }
 
     public synchronized <T extends Markup> T add(T markup) {
-        switch (markup.getType()) {
-            case MARKER:
-                markupMap.put(markup.getId(), markup);
-                items.addItem(markup.getMarkerItem(context));
-                redraw();
-                break;
-            case LAYER:
-                Layers layers = mapView.map().layers();
-                layers.add(markup.getLayer(context, mapView.map()));
-                layers.remove(items);
-                layers.add(items);
-                redraw();
-                break;
-            default:
-                Log.d(TAG, "Unknown markup: " + markup);
-        }
+        if (markup != null && markup.getType() != null)
+            switch (markup.getType()) {
+                case MARKER:
+                    markupMap.put(markup.getId(), markup);
+                    items.addItem(markup.getMarkerItem(context));
+                    redraw();
+                    break;
+                case LAYER:
+                    Layers layers = mapView.map().layers();
+                    // TODO: better sorting code
+                    layers.add(markup.getLayer(context, mapView.map()));
+                    if (hasBuilding()) {
+                        layers.remove(buildings);
+                        layers.add(buildings);
+                    }
+                    layers.remove(items);
+                    layers.add(items);
+                    layers.remove(labels);
+                    layers.add(labels);
+                    redraw();
+                    break;
+                default:
+                    Log.d(TAG, "Unknown markup: " + markup);
+            }
         return markup;
     }
 

@@ -16,14 +16,21 @@
 
 package org.microg.gms.maps.markup;
 
+import android.content.Context;
 import android.os.RemoteException;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.internal.IPolygonDelegate;
 
+import org.microg.gms.maps.GoogleMapImpl;
+import org.oscim.layers.Layer;
+import org.oscim.layers.marker.MarkerItem;
+import org.oscim.map.Map;
+
 import java.util.List;
 
-public class PolygonImpl extends IPolygonDelegate.Stub {
+public class PolygonImpl extends IPolygonDelegate.Stub implements Markup {
     private List<LatLng> points;
     private List holes;
     private float zIndex;
@@ -34,8 +41,8 @@ public class PolygonImpl extends IPolygonDelegate.Stub {
     private int strokeColor;
     private int fillColor;
 
-    public PolygonImpl(PolygonOptions options) {
-
+    public PolygonImpl(String id, PolygonOptions options, MarkupListener listener) {
+        this.id = id;
     }
 
     @Override
@@ -44,8 +51,33 @@ public class PolygonImpl extends IPolygonDelegate.Stub {
     }
 
     @Override
-    public String getId() throws RemoteException {
+    public MarkerItem getMarkerItem(Context context) {
+        return null;
+    }
+
+    @Override
+    public Layer getLayer(Context context, Map map) {
+        return null;
+    }
+
+    @Override
+    public Type getType() {
+        return null;
+    }
+
+    @Override
+    public String getId() {
         return id;
+    }
+
+    @Override
+    public boolean onClick() {
+        return false;
+    }
+
+    @Override
+    public boolean isValid() {
+        return false;
     }
 
     @Override

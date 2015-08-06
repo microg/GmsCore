@@ -36,7 +36,7 @@ public interface Markup {
     public boolean isValid();
 
     public static enum Type {
-        MARKER, LAYER
+        MARKER, LAYER, DRAWABLE
     }
 
     public static interface MarkupListener {

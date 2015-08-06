@@ -81,6 +81,9 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     private int markerCounter = 0;
     private int circleCounter = 0;
+    private int polylineCounter = 0;
+    private int polygonCounter = 0;
+
     private IOnMarkerClickListener onMarkerClickListener;
 
     public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
@@ -114,6 +117,14 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     private String getNextCircleId() {
         return "c" + circleCounter++;
+    }
+
+    private String getNextPolylineId() {
+        return "l" + polylineCounter++;
+    }
+
+    private String getNextPolygonId() {
+        return "p" + polygonCounter++;
     }
     
     /*
@@ -182,14 +193,13 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public IPolylineDelegate addPolyline(PolylineOptions options) throws RemoteException {
-        Log.d(TAG, "not yet usable: addPolyline");
-        return new PolylineImpl(options); // TODO
+        Log.d(TAG, "addPolyline");
+        return backendMap.add(new PolylineImpl(getNextPolylineId(), options, this));
     }
 
     @Override
     public IPolygonDelegate addPolygon(PolygonOptions options) throws RemoteException {
-        Log.d(TAG, "not yet usable: addPolygon");
-        return new PolygonImpl(options); // TODO
+        return backendMap.add(new PolygonImpl(getNextPolygonId(), options, this));
     }
 
     @Override
@@ -218,8 +228,10 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void clear() throws RemoteException {
         backendMap.clear();
-        circleCounter = 0;
         markerCounter = 0;
+        circleCounter = 0;
+        polylineCounter = 0;
+        polygonCounter = 0;
     }
 
     @Override

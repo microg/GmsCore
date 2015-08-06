@@ -17,11 +17,13 @@
 package org.microg.gms.maps;
 
 import android.os.RemoteException;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.internal.IProjectionDelegate;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.VisibleRegion;
+
 import org.oscim.core.Point;
 import org.oscim.map.Viewport;
 
@@ -49,6 +51,6 @@ public class ProjectionImpl extends IProjectionDelegate.Stub {
 
     @Override
     public VisibleRegion getVisibleRegion() throws RemoteException {
-        return new VisibleRegion(GmsMapsTypeHelper.toLatLngBounds(viewport.getBBox()));
+        return new VisibleRegion(GmsMapsTypeHelper.toLatLngBounds(viewport.getBBox(null, 0)));
     }
 }

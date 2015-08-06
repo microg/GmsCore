@@ -16,107 +16,172 @@
 
 package org.microg.gms.maps.markup;
 
+import android.content.Context;
 import android.os.RemoteException;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 
-import java.util.Collections;
+import org.microg.gms.maps.GmsMapsTypeHelper;
+import org.oscim.layers.Layer;
+import org.oscim.layers.PathLayer;
+import org.oscim.layers.marker.MarkerItem;
+import org.oscim.map.Map;
+
 import java.util.List;
 
 /**
  * TODO
  */
-public class PolylineImpl extends IPolylineDelegate.Stub {
-    private List<LatLng> points;
-    private float zIndex;
-    private boolean geodesic;
-    private boolean visible;
-    private String id;
-    private float width;
-    private int color;
+public class PolylineImpl extends IPolylineDelegate.Stub implements Markup {
+    private static final String TAG = "GmsMapsPolylineImpl";
 
-    public PolylineImpl(PolylineOptions options) {
+    private final String id;
+    private final PolylineOptions options;
+    private final MarkupListener listener;
+    private boolean removed = false;
+    private PathLayer pathLayer;
 
+    public PolylineImpl(String id, PolylineOptions options, MarkupListener listener) {
+        this.id = id;
+        this.options = options == null ? new PolylineOptions() : options;
+        this.listener = listener;
     }
 
     @Override
     public void remove() throws RemoteException {
-
+        listener.remove(this);
+        removed = true;
     }
 
     @Override
-    public String getId() throws RemoteException {
+    public MarkerItem getMarkerItem(Context context) {
+        return null;
+    }
+
+    @Override
+    public Layer getLayer(Context context, Map map) {
+        pathLayer = new PathLayer(map, options.getColor(), options.getWidth());
+        for (LatLng point : options.getPoints()) {
+            pathLayer.addPoint(GmsMapsTypeHelper.fromLatLng(point));
+        }
+        return pathLayer;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.LAYER;
+    }
+
+    @Override
+    public String getId() {
         return id;
     }
 
     @Override
+    public boolean onClick() {
+        return listener.onClick(this);
+    }
+
+    @Override
+    public boolean isValid() {
+        return !removed;
+    }
+
+    @Override
     public void setPoints(List<LatLng> points) throws RemoteException {
-        this.points = points;
+        options.getPoints().clear();
+        options.getPoints().addAll(points);
+        if (pathLayer != null) {
+            pathLayer.clearPath();
+            for (LatLng point : points) {
+                pathLayer.addPoint(GmsMapsTypeHelper.fromLatLng(point));
+            }
+            pathLayer.update();
+        }
+        listener.update(this);
     }
 
     @Override
     public List<LatLng> getPoints() throws RemoteException {
-        return points == null ? Collections.<LatLng>emptyList() : points;
+        return options.getPoints();
     }
 
     @Override
     public void setWidth(float width) throws RemoteException {
-        this.width = width;
+        options.width(width);
+        if (pathLayer != null) {
+            pathLayer.setStyle(options.getColor(), options.getWidth());
+            pathLayer.update();
+        }
+        listener.update(this);
     }
 
     @Override
     public float getWidth() throws RemoteException {
-        return width;
+        return options.getWidth();
     }
 
     @Override
     public void setColor(int color) throws RemoteException {
-        this.color = color;
+        this.options.color(color);
+        if (pathLayer != null) {
+            pathLayer.setStyle(options.getColor(), options.getWidth());
+            pathLayer.update();
+        }
+        listener.update(this);
     }
 
     @Override
     public int getColor() throws RemoteException {
-        return color;
+        return options.getColor();
     }
 
     @Override
     public void setZIndex(float zIndex) throws RemoteException {
-        this.zIndex = zIndex;
+        options.zIndex(zIndex);
+        listener.update(this);
     }
 
     @Override
     public float getZIndex() throws RemoteException {
-        return zIndex;
+        return options.getZIndex();
     }
 
     @Override
     public void setVisible(boolean visible) throws RemoteException {
-        this.visible = visible;
+        options.visible(visible);
+        if (pathLayer != null) pathLayer.setEnabled(visible);
+        listener.update(this);
     }
 
     @Override
     public boolean isVisible() throws RemoteException {
-        return visible;
+        return options.isVisible();
     }
 
     @Override
     public void setGeodesic(boolean geod) throws RemoteException {
-        this.geodesic = geod;
+        options.geodesic(geod);
+        listener.update(this);
     }
 
     @Override
     public boolean isGeodesic() throws RemoteException {
-        return geodesic;
+        return options.isGeodesic();
     }
 
     @Override
     public boolean equalsRemote(IPolylineDelegate other) throws RemoteException {
+        Log.d(TAG, "equalsRemote");
         return other != null && other.getId().equals(getId());
     }
 
     @Override
     public int hashCodeRemote() throws RemoteException {
+        Log.d(TAG, "hashcodeRemote");
         return id.hashCode();
     }
 }
