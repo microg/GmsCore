@@ -93,6 +93,7 @@ public class LoginActivity extends AssistantActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+                Log.d(TAG, "pageFinished: "+url);
                 if ("close".equals(Uri.parse(url).getFragment()))
                     closeWeb();
             }
@@ -398,5 +399,11 @@ public class LoginActivity extends AssistantActivity {
             Log.d(TAG, "JSBridge: skipLogin");
             finish();
         }
+
+        @JavascriptInterface
+        public final void startAfw() {
+            Log.d(TAG, "JSBridge: startAfw");
+        }
+
     }
 }
