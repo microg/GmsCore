@@ -260,7 +260,11 @@ public class McsService extends IntentService implements Handler.Callback {
         switch (msg.what) {
             case MSG_INPUT:
                 Log.d(TAG, "Incoming message: " + msg.obj);
-                handleInput((Message) msg.obj);
+                if (msg.obj != null) {
+                    handleInput((Message) msg.obj);
+                } else {
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, "null message"));
+                }
                 return true;
             case MSG_OUTPUT:
                 Log.d(TAG, "Outgoing message: " + msg.obj);
