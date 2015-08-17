@@ -55,7 +55,7 @@
     <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
-        android:protectionLevel="dangerous" />
+        android:protectionLevel="normal" />
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

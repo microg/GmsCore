@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.squareup.wire.Message;
@@ -82,11 +83,14 @@ public class McsService extends IntentService implements Handler.Callback {
 
     private static MainThread mainThread;
     private static Handler mainHandler;
-    private boolean initialized = false;
 
     private AlarmManager alarmManager;
     private PowerManager powerManager;
     private static PowerManager.WakeLock wakeLock;
+
+    private static int delay = 0;
+
+    private Intent connectIntent;
 
     public McsService() {
         super(TAG);
@@ -96,8 +100,15 @@ public class McsService extends IntentService implements Handler.Callback {
         @Override
         public void run() {
             Looper.prepare();
-            mainHandler = new Handler(Looper.myLooper(), McsService.this);
-            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT));
+            wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "mcs");
+            wakeLock.setReferenceCounted(false);
+            synchronized (McsService.class) {
+                mainHandler = new Handler(Looper.myLooper(), McsService.this);
+                if (connectIntent != null) {
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT, connectIntent));
+                    WakefulBroadcastReceiver.completeWakefulIntent(connectIntent);
+                }
+            }
             Looper.loop();
         }
     }
@@ -105,36 +116,42 @@ public class McsService extends IntentService implements Handler.Callback {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (mainThread == null) {
-            mainThread = new MainThread();
-            mainThread.start();
-        }
         heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "mcs");
-        wakeLock.setReferenceCounted(false);
-
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + HEARTBEAT_MS, HEARTBEAT_MS, heartbeatIntent);
+        synchronized (McsService.class) {
+            if (mainThread == null) {
+                mainThread = new MainThread();
+                mainThread.start();
+            }
+        }
     }
 
-    public static boolean isConnected() {
+    public synchronized static boolean isConnected() {
         return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        wakeLock.acquire();
-        if (mainHandler != null) {
-            if (ACTION_CONNECT.equals(intent.getAction())) {
-                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT, intent));
-            } else if (ACTION_HEARTBEAT.equals(intent.getAction())) {
-                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_HEARTBEAT, intent));
+        synchronized (McsService.class) {
+            if (mainHandler != null) {
+                wakeLock.acquire();
+                if (ACTION_CONNECT.equals(intent.getAction())) {
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT, intent));
+                } else if (ACTION_HEARTBEAT.equals(intent.getAction())) {
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_HEARTBEAT, intent));
+                }
+                WakefulBroadcastReceiver.completeWakefulIntent(intent);
+            } else if (connectIntent == null) {
+                connectIntent = intent;
+            } else {
+                WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
         }
     }
 
     private synchronized void connect() {
+        if (delay < 60000) delay += 5000;
         try {
             Log.d(TAG, "Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
@@ -145,6 +162,8 @@ public class McsService extends IntentService implements Handler.Callback {
             outputStream = new McsOutputStream(sslSocket.getOutputStream(), mainHandler);
             inputStream.start();
             outputStream.start();
+
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), HEARTBEAT_MS, heartbeatIntent);
         } catch (Exception e) {
             Log.w(TAG, "Exception while connecting!", e);
             mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, e));
@@ -260,11 +279,7 @@ public class McsService extends IntentService implements Handler.Callback {
         switch (msg.what) {
             case MSG_INPUT:
                 Log.d(TAG, "Incoming message: " + msg.obj);
-                if (msg.obj != null) {
-                    handleInput((Message) msg.obj);
-                } else {
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, "null message"));
-                }
+                handleInput((Message) msg.obj);
                 return true;
             case MSG_OUTPUT:
                 Log.d(TAG, "Outgoing message: " + msg.obj);
@@ -321,6 +336,7 @@ public class McsService extends IntentService implements Handler.Callback {
             } else {
                 Log.w(TAG, "Unknown message: " + message);
             }
+            delay = 0;
         } catch (Exception e) {
             mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, e));
         }
@@ -330,13 +346,20 @@ public class McsService extends IntentService implements Handler.Callback {
         sendOutputStream(MSG_TEARDOWN, msg.obj);
         if (inputStream != null) {
             inputStream.close();
+            inputStream = null;
         }
         try {
             sslSocket.close();
         } catch (Exception ignored) {
         }
-        sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
+        if (delay == 0) {
+            sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
+        } else {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + delay, PendingIntent.getBroadcast(this, 1, new Intent(this, TriggerReceiver.class), 0));
+        }
         alarmManager.cancel(heartbeatIntent);
-        wakeLock.release();
+        if (wakeLock != null) {
+            wakeLock.release();
+        }
     }
 }

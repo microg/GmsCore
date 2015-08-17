@@ -42,6 +42,7 @@ import static org.microg.gms.gcm.Constants.MCS_LOGIN_REQUEST_TAG;
 import static org.microg.gms.gcm.Constants.MCS_LOGIN_RESPONSE_TAG;
 import static org.microg.gms.gcm.Constants.MSG_INPUT;
 import static org.microg.gms.gcm.Constants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.Constants.MSG_TEARDOWN;
 
 public class McsInputStream extends Thread {
     private static final String TAG = "GmsGcmMcsInput";
@@ -70,14 +71,19 @@ public class McsInputStream extends Thread {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT, read()));
+                Message msg = read();
+                if (msg != null) {
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT, msg));
+                } else {
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, "null message"));
+                }
             }
         } catch (IOException e) {
-            try {
-                is.close();
-            } catch (IOException ignored) {
-            }
             mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT_ERROR, e));
+        }
+        try {
+            is.close();
+        } catch (IOException ignored) {
         }
     }
 
@@ -115,7 +121,10 @@ public class McsInputStream extends Thread {
         ensureVersionRead();
         int mcsTag = is.read();
         int mcsSize = readVarint();
-        if (mcsTag < 0 || mcsSize < 0) return null;
+        if (mcsTag < 0 || mcsSize < 0) {
+            Log.w(TAG, "mcsTag: " + mcsTag + " mcsSize: " + mcsSize);
+            return null;
+        }
         byte[] bytes = new byte[mcsSize];
         int len = 0, read = 0;
         while (len < mcsSize && read >= 0) {
