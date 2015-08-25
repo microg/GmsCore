@@ -103,7 +103,8 @@ public class DeviceConfiguration {
         } else {
             nativePlatforms = new ArrayList<String>();
             nativePlatforms.add(Build.CPU_ABI);
-            if (Build.CPU_ABI2 != null) nativePlatforms.add(Build.CPU_ABI2);
+            if (Build.CPU_ABI2 != null && !Build.CPU_ABI2.equals("unknown"))
+                nativePlatforms.add(Build.CPU_ABI2);
             return nativePlatforms;
         }
     }

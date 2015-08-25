@@ -174,12 +174,6 @@
                 <action android:name="org.microg.gms.gcm.RECONNECT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data
-                    android:path="com.google.android.gms"
-                    android:scheme="package" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
             <intent-filter>
@@ -190,7 +184,6 @@
                     android:scheme="android_secret_code" />
             </intent-filter>
         </receiver>
-        <receiver android:name="org.microg.gms.gcm.PendingReceiver" />
 
         <!-- DroidGuard -->
 
