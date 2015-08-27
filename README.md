@@ -1,5 +1,7 @@
 GmsCore
 =======
+[![Build Status](https://travis-ci.org/microg/android_packages_apps_GmsCore.svg?branch=master)](https://travis-ci.org/microg/android_packages_apps_GmsCore)
+
 Implementation of the "Play Services" library application.
 
 Building
