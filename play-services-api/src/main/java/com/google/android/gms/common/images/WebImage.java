@@ -14,30 +14,10 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
-    }
-}
+package com.google.android.gms.common.images;
 
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+import org.microg.safeparcel.AutoSafeParcelable;
 
-group = 'org.microg'
-version = '1.0-SNAPSHOT'
-
-android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-    }
-}
-
-dependencies {
-    compile project(':safe-parcel')
+public class WebImage extends AutoSafeParcelable {
+    public static final Creator<WebImage> CREATOR = new AutoCreator<WebImage>(WebImage.class);
 }
