@@ -14,30 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.location.places;
+package com.google.android.gms.location.reporting;
 
-import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-@PublicApi
-public class PlaceReport extends AutoSafeParcelable {
+public class UploadRequestResult extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode;
+    public int versionCode = 1;
     @SafeParceled(2)
-    private String placeId;
+    public int resultCode;
     @SafeParceled(3)
-    private String tag;
-    @SafeParceled(4)
-    private String source;
+    public long requestId;
 
-    public String getPlaceId() {
-        return placeId;
+    public UploadRequestResult() {
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public static final Creator<PlaceReport> CREATOR = new AutoCreator<PlaceReport>(PlaceReport.class);
+    public static final Creator<UploadRequestResult> CREATOR = new AutoCreator<UploadRequestResult>(UploadRequestResult.class);
 }

@@ -21,7 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class ReportingState extends AutoSafeParcelable {
     @SafeParceled(1)
-    public int versionCode;
+    public int versionCode = 2;
     @SafeParceled(2)
     public int reportingEnabled;
     @SafeParceled(3)
@@ -36,6 +36,8 @@ public class ReportingState extends AutoSafeParcelable {
     public int expectedOptInResult;
     @SafeParceled(8)
     public Integer deviceTag;
+    @SafeParceled(9)
+    public int expectedOptInResultAssumingLocationEnabled;
 
     public static final Creator<ReportingState> CREATOR = new AutoCreator<ReportingState>(ReportingState.class);
 }
