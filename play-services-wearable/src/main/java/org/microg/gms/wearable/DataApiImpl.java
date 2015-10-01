@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataItemAsset;
 import com.google.android.gms.wearable.DataItemBuffer;
-import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.internal.PutDataRequest;
 
 public class DataApiImpl implements DataApi {
     @Override

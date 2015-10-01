@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,11 +42,11 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private final Context context;
     private final Looper looper;
     private final AccountInfo accountInfo;
-    private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
-    private final Map<Api, ApiConnection> apiConnections = new HashMap<>();
+    private final Map<Api, Api.ApiOptions> apis = new HashMap<Api, Api.ApiOptions>();
+    private final Map<Api, ApiConnection> apiConnections = new HashMap<Api, ApiConnection>();
     private final Handler handler;
-    private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<>();
-    private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<>();
+    private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<ConnectionCallbacks>();
+    private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<OnConnectionFailedListener>();
     private final int clientId;
     private final ConnectionCallbacks baseConnectionCallbacks = new ConnectionCallbacks() {
         @Override

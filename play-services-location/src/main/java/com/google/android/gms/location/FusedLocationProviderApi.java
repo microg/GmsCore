@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 microG Project Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.google.android.gms.location;
 
 import android.app.PendingIntent;
@@ -10,26 +26,26 @@ import com.google.android.gms.common.api.PendingResult;
 import org.microg.gms.common.Constants;
 
 public interface FusedLocationProviderApi {
-    public static final String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
-    public static final String KEY_MOCK_LOCATION = Constants.KEY_MOCK_LOCATION;
+    String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
+    String KEY_MOCK_LOCATION = Constants.KEY_MOCK_LOCATION;
 
-    public Location getLastLocation(GoogleApiClient client);
+    Location getLastLocation(GoogleApiClient client);
 
-    public PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
-            LocationListener listener);
+    PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
+                                         LocationListener listener);
 
-    public PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
-            LocationListener listener, Looper looper);
+    PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
+                                         LocationListener listener, Looper looper);
 
-    public PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
-            PendingIntent callbackIntent);
+    PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
+                                         PendingIntent callbackIntent);
 
-    public PendingResult removeLocationUpdates(GoogleApiClient client, LocationListener listener);
+    PendingResult removeLocationUpdates(GoogleApiClient client, LocationListener listener);
 
-    public PendingResult removeLocationUpdates(GoogleApiClient client,
-            PendingIntent callbackIntent);
+    PendingResult removeLocationUpdates(GoogleApiClient client,
+                                        PendingIntent callbackIntent);
 
-    public PendingResult setMockMode(GoogleApiClient client, boolean isMockMode);
+    PendingResult setMockMode(GoogleApiClient client, boolean isMockMode);
 
-    public PendingResult setMockLocation(GoogleApiClient client, Location mockLocation);
+    PendingResult setMockLocation(GoogleApiClient client, Location mockLocation);
 }

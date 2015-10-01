@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,15 +35,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NativeLocationClientImpl {
-    private final static String TAG = "GmsToNativeLocationClient";
+    private final static String TAG = "GmsToNativeLocClient";
     private final static Criteria DEFAULT_CRITERIA = new Criteria();
-    private final static Map<PendingIntent, Integer> pendingCount = new HashMap<>();
-    private final static Map<PendingIntent, PendingIntent> nativePendingMap = new HashMap<>();
+    private final static Map<PendingIntent, Integer> pendingCount = new HashMap<PendingIntent, Integer>();
+    private final static Map<PendingIntent, PendingIntent> nativePendingMap = new HashMap<PendingIntent, PendingIntent>();
     private static final String EXTRA_PENDING_INTENT = "pending_intent";
 
     private final Context context;
     private final LocationManager locationManager;
-    private final Map<LocationListener, NativeListener> nativeListenerMap = new HashMap<>();
+    private final Map<LocationListener, NativeListener> nativeListenerMap = new HashMap<LocationListener, NativeListener>();
 
     public NativeLocationClientImpl(LocationClientImpl client) {
         context = client.getContext();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class MultiConnectionKeeper {
     private static MultiConnectionKeeper INSTANCE;
 
     private final Context context;
-    private final Map<String, Connection> connections = new HashMap<>();
+    private final Map<String, Connection> connections = new HashMap<String, Connection>();
 
     public MultiConnectionKeeper(Context context) {
         this.context = context;
@@ -83,7 +83,7 @@ public class MultiConnectionKeeper {
 
     public class Connection {
         private final String actionString;
-        private final Set<ServiceConnection> connectionForwards = new HashSet<>();
+        private final Set<ServiceConnection> connectionForwards = new HashSet<ServiceConnection>();
         private boolean bound = false;
         private boolean connected = false;
         private IBinder binder;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ public class Wearable {
     /**
      * Token to pass to {@link GoogleApiClient.Builder#addApi(Api)} to enable the Wearable features.
      */
-    public static final Api<WearableOptions> API = new Api<>(new WearableApiBuilder());
+    public static final Api<WearableOptions> API = new Api<WearableOptions>(new WearableApiBuilder());
 
     public static final DataApi DataApi = new DataApiImpl();
     public static final MessageApi MessageApi = new MessageApiImpl();

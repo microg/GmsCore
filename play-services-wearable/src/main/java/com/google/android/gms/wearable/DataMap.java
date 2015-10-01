@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ import java.util.Set;
 public class DataMap {
     public static String TAG = "GmsDataMap";
 
-    private Map<String, Object> data = new HashMap<>();
-    private Map<String, StoredType> types = new HashMap<>();
+    private Map<String, Object> data = new HashMap<String, Object>();
+    private Map<String, StoredType> types = new HashMap<String, StoredType>();
 
     public DataMap() {
 
@@ -45,7 +45,7 @@ public class DataMap {
      * @return an ArrayList of DataMaps from an ArrayList of Bundles. Any elements in the Bundles not supported by DataMap will be dropped.
      */
     public static ArrayList<DataMap> arrayListFromBundleArrayList(ArrayList<Bundle> bundleArrayList) {
-        ArrayList<DataMap> res = new ArrayList<>();
+        ArrayList<DataMap> res = new ArrayList<DataMap>();
         for (Bundle bundle : bundleArrayList) {
             res.add(fromBundle(bundle));
         }

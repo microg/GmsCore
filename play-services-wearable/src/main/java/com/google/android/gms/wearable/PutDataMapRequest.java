@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
 package com.google.android.gms.wearable;
 
 import android.net.Uri;
+
+import com.google.android.gms.wearable.internal.PutDataRequest;
 
 import org.microg.gms.common.PublicApi;
 
@@ -38,7 +40,7 @@ public class PutDataMapRequest {
      */
     public PutDataRequest asPutDataRequest() {
         // TODO
-        return PutDataRequest.create(null);
+        return PutDataRequest.create((Uri) null);
     }
 
     /**

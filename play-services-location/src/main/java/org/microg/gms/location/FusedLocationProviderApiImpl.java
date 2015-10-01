@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
@@ -124,7 +125,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     private PendingResult callVoid(GoogleApiClient client, final Runnable runnable) {
-        return new GmsConnector<>(client, LocationServices.API,
+        return new GmsConnector<LocationClientImpl, Result, Api.ApiOptions.NoOptions>(client, LocationServices.API,
                 new GmsConnector.Callback<LocationClientImpl, Result>() {
                     @Override
                     public Result onClientAvailable(LocationClientImpl client) throws
