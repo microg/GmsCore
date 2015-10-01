@@ -14,8 +14,20 @@
  * limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-subprojects {
-    group = 'org.microg'
-    version = '1.0-SNAPSHOT'
+package com.google.android.gms.cast;
+
+import android.annotation.TargetApi;
+import android.app.Presentation;
+import android.content.Context;
+import android.view.Display;
+
+@TargetApi(17)
+public class CastPresentation extends Presentation {
+    public CastPresentation(Context outerContext, Display display) {
+        super(outerContext, display);
+    }
+
+    public CastPresentation(Context outerContext, Display display, int theme) {
+        super(outerContext, display, theme);
+    }
 }

@@ -37,7 +37,4 @@ android {
 
 dependencies {
     compile project(':play-services-base')
-    compile project(':play-services-cast')
-    compile project(':play-services-location')
-    compile project(':play-services-wearable')
 }
