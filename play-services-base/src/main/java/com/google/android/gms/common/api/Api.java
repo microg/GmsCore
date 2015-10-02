@@ -56,28 +56,28 @@ public final class Api<O extends Api.ApiOptions> {
          * Base interface for {@link ApiOptions} in {@link Api}s that have options.
          */
         @PublicApi
-        public interface HasOptions extends ApiOptions {
+        interface HasOptions extends ApiOptions {
         }
 
         /**
          * Base interface for {@link ApiOptions} that are not required, don't exist.
          */
         @PublicApi
-        public interface NotRequiredOptions extends ApiOptions {
+        interface NotRequiredOptions extends ApiOptions {
         }
 
         /**
          * {@link ApiOptions} implementation for {@link Api}s that do not take any options.
          */
         @PublicApi
-        public final class NoOptions implements NotRequiredOptions {
+        final class NoOptions implements NotRequiredOptions {
         }
 
         /**
          * Base interface for {@link ApiOptions} that are optional.
          */
         @PublicApi
-        public interface Optional extends HasOptions, NotRequiredOptions {
+        interface Optional extends HasOptions, NotRequiredOptions {
         }
     }
 

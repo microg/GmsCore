@@ -16,18 +16,88 @@
 
 package com.google.android.gms.cast;
 
+import android.os.Bundle;
+
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 
+import org.microg.gms.cast.CastApiBuilder;
+import org.microg.gms.cast.CastApiImpl;
+import org.microg.gms.common.PublicApi;
+
 import java.io.IOException;
 
-public class Cast {
+@PublicApi
+public final class Cast {
 
-    public static final Api<CastOptions> API = new Api<CastOptions>(null); // TODO
-    public static final Cast.CastApi CastApi = null; // TODO
+    /**
+     * A constant indicating that the Google Cast device is not the currently active video input.
+     */
+    public static final int ACTIVE_INPUT_STATE_NO = 0;
+
+    /**
+     * A constant indicating that it is not known (and/or not possible to know) whether the Google Cast device is
+     * the currently active video input. Active input state can only be reported when the Google Cast device is
+     * connected to a TV or AVR with CEC support.
+     */
+    public static final int ACTIVE_INPUT_STATE_UNKNOWN = -1;
+
+    /**
+     * A constant indicating that the Google Cast device is the currently active video input.
+     */
+    public static final int ACTIVE_INPUT_STATE_YES = 1;
+
+    /**
+     * A boolean extra for the connection hint bundle passed to
+     * {@link GoogleApiClient.ConnectionCallbacks#onConnected(Bundle)} that indicates that the connection was
+     * re-established, but the receiver application that was in use at the time of the connection loss is no longer
+     * running on the receiver.
+     */
+    public static final String EXTRA_APP_NO_LONGER_RUNNING = "com.google.android.gms.cast.EXTRA_APP_NO_LONGER_RUNNING";
+
+    /**
+     * The maximum raw message length (in bytes) that is supported by a Cast channel.
+     */
+    public static final int MAX_MESSAGE_LENGTH = 65536;
+
+    /**
+     * The maximum length (in characters) of a namespace name.
+     */
+    public static final int MAX_NAMESPACE_LENGTH = 128;
+
+    /**
+     * A constant indicating that the Google Cast device is not currently in standby.
+     */
+    public static final int STANDBY_STATE_NO = 0;
+
+    /**
+     * A constant indicating that it is not known (and/or not possible to know) whether the Google Cast device is
+     * currently in standby. Standby state can only be reported when the Google Cast device is connected to a TV or
+     * AVR with CEC support.
+     */
+    public static final int STANDBY_STATE_UNKNOWN = -1;
+
+    /**
+     * A constant indicating that the Google Cast device is currently in standby.
+     */
+    public static final int STANDBY_STATE_YES = 1;
+
+
+    /**
+     * Token to pass to {@link GoogleApiClient.Builder#addApi(Api)} to enable the Cast features.
+     */
+    public static final Api<CastOptions> API = new Api<CastOptions>(new CastApiBuilder());
+
+    /**
+     * An implementation of the CastApi interface. The interface is used to interact with a cast device.
+     */
+    public static final Cast.CastApi CastApi = new CastApiImpl();
+
+    private Cast() {
+    }
 
     public interface ApplicationConnectionResult extends Result {
         ApplicationMetadata getApplicationMetadata();
