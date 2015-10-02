@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,12 @@
 
 package org.microg.gms.maps.markup;
 
-import android.content.Context;
-
-import org.oscim.layers.Layer;
-import org.oscim.layers.marker.MarkerItem;
-import org.oscim.map.Map;
-
 public interface Markup {
-    public MarkerItem getMarkerItem(Context context);
+    String getId();
 
-    public Layer getLayer(Context context, Map map);
+    boolean onClick();
 
-    public Type getType();
-
-    public String getId();
-
-    public boolean onClick();
-
-    public boolean isValid();
-
-    public static enum Type {
-        MARKER, LAYER, DRAWABLE
-    }
-
-    public static interface MarkupListener {
+    interface MarkupListener {
         void update(Markup markup);
 
         void remove(Markup markup);

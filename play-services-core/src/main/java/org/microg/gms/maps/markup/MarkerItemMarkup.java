@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package org.microg.gms.maps.bitmap;
+package org.microg.gms.maps.markup;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-public class FileBitmapDescriptor extends AbstractBitmapDescriptor {
-    private String fileName;
+import org.oscim.layers.marker.MarkerItem;
 
-    public FileBitmapDescriptor(String fileName) {
-        this.fileName = fileName;
-    }
-
-    @Override
-    public Bitmap generateBitmap(Context context) {
-        return BitmapFactory.decodeFile(fileName);
-    }
+public interface MarkerItemMarkup extends Markup {
+    MarkerItem getMarkerItem(Context context);
 }

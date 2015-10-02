@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,10 @@ import org.microg.gms.maps.GmsMapsTypeHelper;
 import org.microg.gms.maps.bitmap.BitmapDescriptorImpl;
 import org.microg.gms.maps.bitmap.DefaultBitmapDescriptor;
 import org.oscim.android.canvas.AndroidBitmap;
-import org.oscim.layers.Layer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
-import org.oscim.map.Map;
 
-public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
+public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup {
     private static final String TAG = "GmsMapMarkerImpl";
 
     private final String id;
@@ -214,12 +212,8 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
     }
 
     @Override
-    public boolean isValid() {
-        return !removed;
-    }
-
-    @Override
     public MarkerItem getMarkerItem(Context context) {
+        if (removed) return null;
         MarkerItem item = new MarkerItem(getId(), getTitle(), getSnippet(),
                 GmsMapsTypeHelper.fromLatLng(getPosition()));
         BitmapDescriptorImpl icon = this.icon;
@@ -249,15 +243,5 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements Markup {
 
     private void prepareMarkerIcon(MarkerItem item) {
         item.setMarker(new MarkerSymbol(oldBitmap, options.getAnchorU(), options.getAnchorV(), !options.isFlat()));
-    }
-
-    @Override
-    public Layer getLayer(Context context, Map map) {
-        return null;
-    }
-
-    @Override
-    public Type getType() {
-        return Type.MARKER;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,13 @@ import android.view.View;
 
 import com.google.android.gms.R;
 
+import org.microg.gms.maps.data.SharedTileCache;
 import org.microg.gms.maps.camera.CameraUpdate;
+import org.microg.gms.maps.markup.ClearableVectorLayer;
+import org.microg.gms.maps.markup.DrawableMarkup;
+import org.microg.gms.maps.markup.MarkerItemMarkup;
 import org.microg.gms.maps.markup.Markup;
 import org.oscim.android.MapView;
-import org.oscim.android.cache.TileCache;
 import org.oscim.android.canvas.AndroidBitmap;
 import org.oscim.core.MapPosition;
 import org.oscim.layers.marker.ItemizedLayer;
@@ -39,10 +42,15 @@ import org.oscim.map.Layers;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
 import org.oscim.theme.VtmThemes;
+import org.oscim.tiling.ITileCache;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem> {
     private final static String TAG = "GmsMapBackend";
@@ -53,25 +61,26 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     private final BuildingLayer buildings;
     private final VectorTileLayer baseLayer;
     private final OSciMap4TileSource tileSource;
-    private final TileCache cache;
+    private final ITileCache cache;
     private final ItemizedLayer<MarkerItem> items;
     private java.util.Map<String, Markup> markupMap = new HashMap<String, Markup>();
-    private boolean redrawPosted = false;
+    private List<DrawableMarkup> drawableMarkups = new ArrayList<DrawableMarkup>();
+    private ClearableVectorLayer drawables;
 
     public BackendMap(Context context) {
         this.context = context;
         mapView = new MapView(new ContextContainer(context));
-        // TODO: Use a shared tile cache (provider?)
-        cache = new TileCache(context, null, "tile.db");
+        cache = new SharedTileCache(context);
         cache.setCacheSize(512 * (1 << 10));
         tileSource = new OSciMap4TileSource();
         tileSource.setCache(cache);
         baseLayer = mapView.map().setBaseMap(tileSource);
         Layers layers = mapView.map().layers();
         layers.add(labels = new LabelLayer(mapView.map(), baseLayer));
+        layers.add(drawables = new ClearableVectorLayer(mapView.map()));
+        layers.add(buildings = new BuildingLayer(mapView.map(), baseLayer));
         layers.add(items = new ItemizedLayer<MarkerItem>(mapView.map(), new MarkerSymbol(new AndroidBitmap(BitmapFactory
                 .decodeResource(ResourcesContainer.get(), R.drawable.nop)), 0.5F, 1)));
-        layers.add(buildings = new BuildingLayer(mapView.map(), baseLayer));
         items.setOnItemGestureListener(this);
         mapView.map().setTheme(VtmThemes.DEFAULT);
     }
@@ -130,7 +139,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     }
 
     public void redraw() {
-        mapView.map().render();
+        mapView.map().updateMap(true);
     }
 
     public void applyCameraUpdate(CameraUpdate cameraUpdate) {
@@ -145,70 +154,64 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
         mapView.map().animator().cancel();
     }
 
-    public synchronized <T extends Markup> T add(T markup) {
-        if (markup != null && markup.getType() != null)
-            switch (markup.getType()) {
-                case MARKER:
-                    markupMap.put(markup.getId(), markup);
-                    items.addItem(markup.getMarkerItem(context));
-                    redraw();
-                    break;
-                case LAYER:
-                    Layers layers = mapView.map().layers();
-                    // TODO: better sorting code
-                    layers.add(markup.getLayer(context, mapView.map()));
-                    if (hasBuilding()) {
-                        layers.remove(buildings);
-                        layers.add(buildings);
-                    }
-                    layers.remove(items);
-                    layers.add(items);
-                    layers.remove(labels);
-                    layers.add(labels);
-                    redraw();
-                    break;
-                default:
-                    Log.d(TAG, "Unknown markup: " + markup);
+    public synchronized <T extends DrawableMarkup> T add(T markup) {
+        if (markup == null) return null;
+        drawableMarkups.add(markup);
+        Collections.sort(drawableMarkups, new Comparator<DrawableMarkup>() {
+            @Override
+            public int compare(DrawableMarkup lhs, DrawableMarkup rhs) {
+                return Float.compare(lhs.getZIndex(), rhs.getZIndex());
             }
+        });
+        updateDrawableLayer();
+        redraw();
+        return markup;
+    }
+
+    private synchronized void updateDrawableLayer() {
+        drawables.clear();
+        for (DrawableMarkup markup : drawableMarkups) {
+            drawables.add(markup.getDrawable(mapView.map()));
+        }
+    }
+
+    public synchronized <T extends MarkerItemMarkup> T add(T markup) {
+        if (markup == null) return null;
+        markupMap.put(markup.getId(), markup);
+        items.addItem(markup.getMarkerItem(context));
+        redraw();
         return markup;
     }
 
     public synchronized void clear() {
         markupMap.clear();
         items.removeAllItems();
+        drawableMarkups.clear();
+        drawables.clear();
         redraw();
     }
 
     public synchronized void remove(Markup markup) {
-        switch (markup.getType()) {
-            case MARKER:
-                markupMap.remove(markup.getId());
-                items.removeItem(items.getByUid(markup.getId()));
-                redraw();
-                break;
-            default:
-                Log.d(TAG, "Unknown markup: " + markup);
+        if (markup instanceof MarkerItemMarkup) {
+            markupMap.remove(markup.getId());
+            items.removeItem(items.getByUid(markup.getId()));
+            redraw();
+        } else if (markup instanceof DrawableMarkup) {
+            drawableMarkups.remove(markup);
+            updateDrawableLayer();
+            redraw();
         }
     }
 
     public synchronized void update(Markup markup) {
-        if (markup == null || !markup.isValid()) {
-            Log.d(TAG, "Tried to update() invalid markup!");
-            return;
+        if (markup == null) return;
+        if (markup instanceof MarkerItemMarkup) {
+            items.removeItem(items.getByUid(markup.getId()));
+            items.addItem(((MarkerItemMarkup) markup).getMarkerItem(context));
+        } else if (markup instanceof DrawableMarkup) {
+            updateDrawableLayer();
         }
-        switch (markup.getType()) {
-            case MARKER:
-                // TODO: keep order
-                items.removeItem(items.getByUid(markup.getId()));
-                items.addItem(markup.getMarkerItem(context));
-                redraw();
-                break;
-            case LAYER:
-                redraw();
-                break;
-            default:
-                Log.d(TAG, "Unknown markup: " + markup);
-        }
+        redraw();
     }
 
     @Override

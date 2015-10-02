@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package org.microg.gms.maps.markup;
 
-import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -25,24 +24,25 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 
 import org.microg.gms.maps.GmsMapsTypeHelper;
-import org.oscim.layers.Layer;
-import org.oscim.layers.PathLayer;
-import org.oscim.layers.marker.MarkerItem;
+import org.oscim.core.GeoPoint;
+import org.oscim.layers.vector.geometries.Drawable;
+import org.oscim.layers.vector.geometries.LineDrawable;
+import org.oscim.layers.vector.geometries.Style;
 import org.oscim.map.Map;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * TODO
  */
-public class PolylineImpl extends IPolylineDelegate.Stub implements Markup {
+public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMarkup {
     private static final String TAG = "GmsMapsPolylineImpl";
 
     private final String id;
     private final PolylineOptions options;
     private final MarkupListener listener;
     private boolean removed = false;
-    private PathLayer pathLayer;
 
     public PolylineImpl(String id, PolylineOptions options, MarkupListener listener) {
         this.id = id;
@@ -51,28 +51,9 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements Markup {
     }
 
     @Override
-    public void remove() throws RemoteException {
+    public void remove() {
         listener.remove(this);
         removed = true;
-    }
-
-    @Override
-    public MarkerItem getMarkerItem(Context context) {
-        return null;
-    }
-
-    @Override
-    public Layer getLayer(Context context, Map map) {
-        pathLayer = new PathLayer(map, options.getColor(), options.getWidth());
-        for (LatLng point : options.getPoints()) {
-            pathLayer.addPoint(GmsMapsTypeHelper.fromLatLng(point));
-        }
-        return pathLayer;
-    }
-
-    @Override
-    public Type getType() {
-        return Type.LAYER;
     }
 
     @Override
@@ -86,90 +67,69 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements Markup {
     }
 
     @Override
-    public boolean isValid() {
-        return !removed;
-    }
-
-    @Override
-    public void setPoints(List<LatLng> points) throws RemoteException {
+    public void setPoints(List<LatLng> points) {
         options.getPoints().clear();
         options.getPoints().addAll(points);
-        if (pathLayer != null) {
-            pathLayer.clearPath();
-            for (LatLng point : points) {
-                pathLayer.addPoint(GmsMapsTypeHelper.fromLatLng(point));
-            }
-            pathLayer.update();
-        }
         listener.update(this);
     }
 
     @Override
-    public List<LatLng> getPoints() throws RemoteException {
+    public List<LatLng> getPoints() {
         return options.getPoints();
     }
 
     @Override
-    public void setWidth(float width) throws RemoteException {
+    public void setWidth(float width) {
         options.width(width);
-        if (pathLayer != null) {
-            pathLayer.setStyle(options.getColor(), options.getWidth());
-            pathLayer.update();
-        }
         listener.update(this);
     }
 
     @Override
-    public float getWidth() throws RemoteException {
+    public float getWidth() {
         return options.getWidth();
     }
 
     @Override
-    public void setColor(int color) throws RemoteException {
+    public void setColor(int color) {
         this.options.color(color);
-        if (pathLayer != null) {
-            pathLayer.setStyle(options.getColor(), options.getWidth());
-            pathLayer.update();
-        }
         listener.update(this);
     }
 
     @Override
-    public int getColor() throws RemoteException {
+    public int getColor() {
         return options.getColor();
     }
 
     @Override
-    public void setZIndex(float zIndex) throws RemoteException {
+    public void setZIndex(float zIndex) {
         options.zIndex(zIndex);
         listener.update(this);
     }
 
     @Override
-    public float getZIndex() throws RemoteException {
+    public float getZIndex() {
         return options.getZIndex();
     }
 
     @Override
-    public void setVisible(boolean visible) throws RemoteException {
+    public void setVisible(boolean visible) {
         options.visible(visible);
-        if (pathLayer != null) pathLayer.setEnabled(visible);
         listener.update(this);
     }
 
     @Override
-    public boolean isVisible() throws RemoteException {
+    public boolean isVisible() {
         return options.isVisible();
     }
 
     @Override
-    public void setGeodesic(boolean geod) throws RemoteException {
+    public void setGeodesic(boolean geod) {
         options.geodesic(geod);
         listener.update(this);
     }
 
     @Override
-    public boolean isGeodesic() throws RemoteException {
+    public boolean isGeodesic() {
         return options.isGeodesic();
     }
 
@@ -180,8 +140,18 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements Markup {
     }
 
     @Override
-    public int hashCodeRemote() throws RemoteException {
+    public int hashCodeRemote() {
         Log.d(TAG, "hashcodeRemote");
         return id.hashCode();
+    }
+
+    @Override
+    public Drawable getDrawable(Map map) {
+        if (!isVisible() || removed) return null;
+        List<GeoPoint> points = new ArrayList<GeoPoint>();
+        for (LatLng point : options.getPoints()) {
+            points.add(GmsMapsTypeHelper.fromLatLng(point));
+        }
+        return new LineDrawable(points, Style.builder().strokeColor(getColor()).strokeWidth(getWidth()).build());
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,53 +16,40 @@
 
 package org.microg.gms.maps.markup;
 
-import android.content.Context;
 import android.os.RemoteException;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.internal.IPolygonDelegate;
 
-import org.microg.gms.maps.GoogleMapImpl;
-import org.oscim.layers.Layer;
-import org.oscim.layers.marker.MarkerItem;
+import org.microg.gms.maps.GmsMapsTypeHelper;
+import org.oscim.core.GeoPoint;
+import org.oscim.layers.vector.geometries.Drawable;
+import org.oscim.layers.vector.geometries.PolygonDrawable;
+import org.oscim.layers.vector.geometries.Style;
 import org.oscim.map.Map;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PolygonImpl extends IPolygonDelegate.Stub implements Markup {
-    private List<LatLng> points;
-    private List holes;
-    private float zIndex;
-    private boolean geodesic;
-    private boolean visible;
-    private String id;
-    private float strokeWidth;
-    private int strokeColor;
-    private int fillColor;
+public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup {
+    private static final String TAG = "GmsMapsPolygonImpl";
+
+    private final String id;
+    private final PolygonOptions options;
+    private final MarkupListener listener;
+    private boolean removed = false;
 
     public PolygonImpl(String id, PolygonOptions options, MarkupListener listener) {
         this.id = id;
+        this.options = options;
+        this.listener = listener;
     }
 
     @Override
     public void remove() throws RemoteException {
-
-    }
-
-    @Override
-    public MarkerItem getMarkerItem(Context context) {
-        return null;
-    }
-
-    @Override
-    public Layer getLayer(Context context, Map map) {
-        return null;
-    }
-
-    @Override
-    public Type getType() {
-        return null;
+        listener.remove(this);
+        removed = true;
     }
 
     @Override
@@ -72,92 +59,113 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements Markup {
 
     @Override
     public boolean onClick() {
-        return false;
-    }
-
-    @Override
-    public boolean isValid() {
-        return false;
+        return listener.onClick(this);
     }
 
     @Override
     public void setPoints(List<LatLng> points) throws RemoteException {
-        this.points = points;
+        options.getPoints().clear();
+        options.getPoints().addAll(points);
+        listener.update(this);
     }
 
     @Override
     public List<LatLng> getPoints() throws RemoteException {
-        return points;
+        return options.getPoints();
     }
 
     @Override
     public void setHoles(List holes) throws RemoteException {
-        this.holes = holes;
+        options.getHoles().clear();
+        options.getHoles().addAll(holes);
+        listener.update(this);
     }
 
     @Override
     public List getHoles() throws RemoteException {
-        return holes;
+        return options.getHoles();
     }
 
     @Override
     public void setStrokeWidth(float width) throws RemoteException {
-        this.strokeWidth = width;
+        options.strokeWidth(width);
+        listener.update(this);
     }
 
     @Override
-    public float getStrokeWidth() throws RemoteException {
-        return strokeWidth;
+    public float getStrokeWidth() {
+        return options.getStrokeWidth();
     }
 
     @Override
     public void setStrokeColor(int color) throws RemoteException {
-        this.strokeColor = color;
+        options.strokeColor(color);
+        listener.update(this);
     }
 
     @Override
-    public int getStrokeColor() throws RemoteException {
-        return strokeColor;
+    public int getStrokeColor() {
+        return options.getStrokeColor();
     }
 
     @Override
     public void setFillColor(int color) throws RemoteException {
-        this.fillColor = color;
+        options.fillColor(color);
+        listener.update(this);
     }
 
     @Override
-    public int getFillColor() throws RemoteException {
-        return fillColor;
+    public int getFillColor() {
+        return options.getFillColor();
     }
 
     @Override
     public void setZIndex(float zIndex) throws RemoteException {
-        this.zIndex = zIndex;
+        options.zIndex(zIndex);
+        listener.update(this);
     }
 
     @Override
-    public float getZIndex() throws RemoteException {
-        return zIndex;
+    public float getZIndex() {
+        return options.getZIndex();
+    }
+
+    @Override
+    public Drawable getDrawable(Map map) {
+        if (!isVisible() || removed) return null;
+        List<GeoPoint> points = new ArrayList<GeoPoint>();
+        for (LatLng point : options.getPoints()) {
+            points.add(GmsMapsTypeHelper.fromLatLng(point));
+        }
+        // TODO: holes
+        return new PolygonDrawable(points, Style.builder()
+                .fillAlpha(1)
+                .strokeColor(getStrokeColor())
+                .strokeWidth(getStrokeWidth())
+                .fillColor(getFillColor())
+                .build());
     }
 
     @Override
     public void setVisible(boolean visible) throws RemoteException {
-        this.visible = visible;
+        options.visible(visible);
+        listener.update(this);
     }
 
     @Override
-    public boolean isVisible() throws RemoteException {
-        return visible;
+    public boolean isVisible() {
+        return options.isVisible();
     }
 
     @Override
     public void setGeodesic(boolean geod) throws RemoteException {
-        this.geodesic = geod;
+        options.geodesic(geod);
+        listener.update(this);
     }
 
     @Override
     public boolean isGeodesic() throws RemoteException {
-        return geodesic;
+        return options.isGeodesic();
     }
 
     @Override

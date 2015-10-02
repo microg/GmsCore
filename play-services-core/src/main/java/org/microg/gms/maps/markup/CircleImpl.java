@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package org.microg.gms.maps.markup;
 
-import android.content.Context;
 import android.os.RemoteException;
 
 import com.google.android.gms.maps.model.CircleOptions;
@@ -24,22 +23,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.internal.ICircleDelegate;
 
 import org.microg.gms.maps.GmsMapsTypeHelper;
-import org.oscim.layers.Layer;
-import org.oscim.layers.marker.MarkerItem;
-import org.oscim.layers.vector.VectorLayer;
 import org.oscim.layers.vector.geometries.CircleDrawable;
+import org.oscim.layers.vector.geometries.Drawable;
 import org.oscim.layers.vector.geometries.Style;
 import org.oscim.map.Map;
 
-//import org.oscim.backend.GL20;
-
-public class CircleImpl extends ICircleDelegate.Stub implements Markup {
+public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
 
     private final String id;
     private final CircleOptions options;
     private final MarkupListener listener;
-    private VectorLayer vectorLayer;
-    private CircleDrawable circleDrawable;
     private boolean removed = false;
 
     public CircleImpl(String id, CircleOptions options, MarkupListener listener) {
@@ -62,7 +55,7 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public void setCenter(LatLng center) throws RemoteException {
         options.center(center);
-        if (vectorLayer != null) update();
+        listener.update(this);
     }
 
     @Override
@@ -73,7 +66,7 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public void setRadius(double radius) throws RemoteException {
         options.radius(radius);
-        if (vectorLayer != null) update();
+        listener.update(this);
     }
 
     @Override
@@ -84,7 +77,7 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public void setStrokeWidth(float width) throws RemoteException {
         options.strokeWidth(width);
-        if (vectorLayer != null) update();
+        listener.update(this);
     }
 
     @Override
@@ -95,7 +88,7 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public void setStrokeColor(int color) throws RemoteException {
         options.strokeColor(color);
-        if (vectorLayer != null) update();
+        listener.update(this);
     }
 
     @Override
@@ -106,7 +99,6 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public void setFillColor(int color) throws RemoteException {
         options.fillColor(color);
-        if (vectorLayer != null) update();
         listener.update(this);
     }
 
@@ -118,21 +110,22 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
     @Override
     public void setZIndex(float zIndex) throws RemoteException {
         options.zIndex(zIndex);
+        listener.update(this);
     }
 
     @Override
-    public float getZIndex() throws RemoteException {
+    public float getZIndex() {
         return options.getZIndex();
     }
 
     @Override
     public void setVisible(boolean visible) throws RemoteException {
         options.visible(visible);
-        if (vectorLayer != null) update();
+        listener.update(this);
     }
 
     @Override
-    public boolean isVisible() throws RemoteException {
+    public boolean isVisible() {
         return options.isVisible();
     }
 
@@ -148,45 +141,19 @@ public class CircleImpl extends ICircleDelegate.Stub implements Markup {
 
     @Override
     public boolean onClick() {
-        return false;
+        return listener.onClick(this);
     }
 
     @Override
-    public boolean isValid() {
-        return !removed;
-    }
-
-    @Override
-    public MarkerItem getMarkerItem(Context context) {
-        return null;
-    }
-
-    @Override
-    public Layer getLayer(Context context, Map map) {
-        vectorLayer = new VectorLayer(map);
-        update();
-        return vectorLayer;
-    }
-
-    private void update() {
-        if (circleDrawable != null) {
-            vectorLayer.remove(circleDrawable);
-        }
-        if (options.isVisible()) {
-            circleDrawable = new CircleDrawable(
-                    GmsMapsTypeHelper.fromLatLng(options.getCenter()),
-                    options.getRadius() / 1000.0,
-                    Style.builder()
-                            .strokeColor(options.getStrokeColor())
-                            .fillColor(options.getFillColor())
-                            .strokeWidth(options.getStrokeWidth()).build());
-            vectorLayer.add(circleDrawable);
-        }
-        vectorLayer.update();
-    }
-
-    @Override
-    public Type getType() {
-        return Type.LAYER;
+    public Drawable getDrawable(Map map) {
+        if (!isVisible() || removed) return null;
+        return new CircleDrawable(
+                GmsMapsTypeHelper.fromLatLng(options.getCenter()),
+                options.getRadius() / 1000.0,
+                Style.builder()
+                        .strokeColor(options.getStrokeColor())
+                        .fillAlpha(1)
+                        .fillColor(options.getFillColor())
+                        .strokeWidth(options.getStrokeWidth()).build());
     }
 }

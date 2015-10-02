@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package org.microg.gms.maps.bitmap;
+package org.microg.gms.maps.markup;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import org.oscim.layers.vector.VectorLayer;
+import org.oscim.map.Map;
 
-public class FileBitmapDescriptor extends AbstractBitmapDescriptor {
-    private String fileName;
-
-    public FileBitmapDescriptor(String fileName) {
-        this.fileName = fileName;
+public class ClearableVectorLayer extends VectorLayer {
+    public ClearableVectorLayer(Map map) {
+        super(map);
     }
 
-    @Override
-    public Bitmap generateBitmap(Context context) {
-        return BitmapFactory.decodeFile(fileName);
+    public void clear() {
+        mDrawables.clear();
     }
 }

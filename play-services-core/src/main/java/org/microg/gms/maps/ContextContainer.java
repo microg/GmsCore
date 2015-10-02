@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -286,6 +287,7 @@ public class ContextContainer extends Context {
         original.startActivity(intent);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void startActivity(Intent intent, Bundle bundle) {
         original.startActivity(intent, bundle);
@@ -296,6 +298,7 @@ public class ContextContainer extends Context {
         original.startActivities(intents);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void startActivities(Intent[] intents, Bundle bundle) {
         original.startActivities(intents, bundle);
@@ -307,6 +310,7 @@ public class ContextContainer extends Context {
         original.startIntentSender(intentSender, intent, i, i1, i2);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void startIntentSender(IntentSender intentSender, Intent intent, int i, int i1, int i2,
             Bundle bundle) throws IntentSender.SendIntentException {
@@ -449,6 +453,12 @@ public class ContextContainer extends Context {
         return original.getSystemService(s);
     }
 
+    @TargetApi(23)
+    @Override
+    public String getSystemServiceName(Class<?> serviceClass) {
+        return original.getSystemServiceName(serviceClass);
+    }
+
     @Override
     public int checkPermission(String s, int i, int i1) {
         return original.checkPermission(s, i, i1);
@@ -462,6 +472,12 @@ public class ContextContainer extends Context {
     @Override
     public int checkCallingOrSelfPermission(String s) {
         return original.checkCallingOrSelfPermission(s);
+    }
+
+    @TargetApi(23)
+    @Override
+    public int checkSelfPermission(String permission) {
+        return original.checkSelfPermission(permission);
     }
 
     @Override
@@ -536,11 +552,13 @@ public class ContextContainer extends Context {
         return original.createPackageContext(s, i);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public Context createConfigurationContext(Configuration configuration) {
         return original.createConfigurationContext(configuration);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public Context createDisplayContext(Display display) {
         return original.createDisplayContext(display);
