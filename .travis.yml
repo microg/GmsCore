@@ -1,0 +1,17 @@
+language: android
+git:
+  submodules: false
+before_install:
+  - git submodule update --init --recursive
+script:
+  - export JAVA_OPTS="-XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx2048m"
+  - export TERM=dumb
+  - echo sdk.dir $ANDROID_HOME > local.properties
+  - ./gradlew assembleDebug -x lint
+android:
+  components:
+  - extra-android-m2repository
+  - build-tools-23.0.1
+  - android-23
+
+
