@@ -33,28 +33,56 @@ import java.util.List;
 public class CastDevice extends AutoSafeParcelable {
     private static final String EXTRA_CAST_DEVICE = "com.google.android.gms.cast.EXTRA_CAST_DEVICE";
 
+    /**
+     * Video-output device capability.
+     */
     public static final int CAPABILITY_VIDEO_OUT = 1;
+
+    /**
+     * Video-input device capability.
+     */
     public static final int CAPABILITY_VIDEO_IN = 2;
+
+    /**
+     * Audio-output device capability.
+     */
     public static final int CAPABILITY_AUDIO_OUT = 4;
+
+    /**
+     * Audio-input device capability.
+     */
     public static final int CAPABILITY_AUDIO_IN = 8;
 
     @SafeParceled(1)
-    private int versionCode;
+    private int versionCode = 3;
+
+    @SafeParceled(2)
+    private String deviceId;
 
     @SafeParceled(3)
     private String addrString;
     private Inet4Address addr;
 
-    private String deviceId;
-
-    private String deviceVersion;
-
+    @SafeParceled(4)
     private String friendlyName;
 
+    @SafeParceled(5)
+    private String modelName;
+
+    @SafeParceled(6)
+    private String deviceVersion;
+
+    @SafeParceled(7)
     private int servicePort;
 
     @SafeParceled(value = 8, subClass = WebImage.class)
     private ArrayList<WebImage> icons;
+
+    @SafeParceled(8)
+    private int capabilities;
+
+    @SafeParceled(9)
+    private int status;
 
     public String getDeviceId() {
         return deviceId;
@@ -89,7 +117,7 @@ public class CastDevice extends AutoSafeParcelable {
     }
 
     public String getModelName() {
-        return null;
+        return modelName;
     }
 
     public int getServicePort() {
@@ -101,7 +129,7 @@ public class CastDevice extends AutoSafeParcelable {
     }
 
     public boolean hasCapability(int capability) {
-        return false;
+        return (capability & capabilities) == capability;
     }
 
     public boolean hasIcons() {
