@@ -22,6 +22,16 @@
     <string name="ask_scope_permission_title">%s would like to:</string>
     <string name="ask_service_permission_title">%s would like to use:</string>
     <string name="account_manager_title">Google Account Manager</string>
+    <string name="sorry">Sorry…</string>
+    <string name="no_network_error_desc">"You don't have a network connection.
+
+This could be a temporary problem or your Android device may not be provisioned for data services. Try again when connected to a mobile network, or connect to a Wi-Fi network."</string>
+    <string name="auth_general_error_desc">"There was a problem communicating with Google servers.
+
+Try again later."</string>
+    <string name="auth_finalize">"Your device is contacting Google to save information to your account.
+
+This can take a couple of minutes."</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
 

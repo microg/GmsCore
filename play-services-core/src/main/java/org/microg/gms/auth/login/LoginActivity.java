@@ -22,12 +22,12 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -38,6 +38,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.R;
 
@@ -45,11 +46,13 @@ import org.json.JSONArray;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -94,7 +97,7 @@ public class LoginActivity extends AssistantActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.d(TAG, "pageFinished: "+url);
+                Log.d(TAG, "pageFinished: " + url);
                 if ("close".equals(Uri.parse(url).getFragment()))
                     closeWeb();
             }
@@ -114,13 +117,13 @@ public class LoginActivity extends AssistantActivity {
                 CookieManager.getInstance().removeAllCookies(new ValueCallback<Boolean>() {
                     @Override
                     public void onReceiveValue(Boolean value) {
-                        load();
+                        start();
                     }
                 });
             } else {
                 //noinspection deprecation
                 CookieManager.getInstance().removeAllCookie();
-                load();
+                start();
             }
         }
     }
@@ -153,12 +156,41 @@ public class LoginActivity extends AssistantActivity {
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
     }
 
-    private void load() {
+    private void start() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            if (LastCheckinInfo.read(this).androidId == 0) {
+                try {
+                    CheckinManager.checkin(this, false);
+                } catch (IOException e) {
+                    Log.d(TAG, "Checkin failed", e);
+                    showError(R.string.auth_general_error_desc);
+                }
+            }
+            loadLoginPage();
+        } else {
+            showError(R.string.no_network_error_desc);
+        }
+    }
+
+    private void showError(int errorRes) {
+        ((TextView) findViewById(R.id.title)).setText(R.string.sorry);
+        findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
+        setMessage(errorRes);
+    }
+
+    private void setMessage(int res) {
+        ((TextView) findViewById(R.id.description_text)).setText(res);
+    }
+
+    private void loadLoginPage() {
         String tmpl = getIntent().hasExtra(EXTRA_TMPL) ? getIntent().getStringExtra(EXTRA_TMPL) : TMPL_NEW_ACCOUNT;
         webView.loadUrl(buildUrl(tmpl, Utils.getLocale(this)));
     }
 
     private void closeWeb() {
+        setMessage(R.string.auth_finalize);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -171,9 +203,10 @@ public class LoginActivity extends AssistantActivity {
             if (ar1.trim().startsWith(COOKIE_OAUTH_TOKEN + "=")) {
                 String[] temp1 = ar1.split("=");
                 retrieveRtToken(temp1[1]);
+                return;
             }
         }
-        // TODO: Error message
+        showError(R.string.auth_general_error_desc);
     }
 
     private void retrieveRtToken(String oAuthToken) {
@@ -202,9 +235,10 @@ public class LoginActivity extends AssistantActivity {
                             retrieveGmsToken(account);
                             setResult(RESULT_OK);
                         } else {
-                            // TODO: Error message
+                            showError(R.string.auth_general_error_desc);
                             Log.w(TAG, "Account NOT created!");
                             setResult(RESULT_CANCELED);
+                            // TODO: Give the user a chance to read the message :)
                             finish();
                         }
                     }
