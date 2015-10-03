@@ -16,16 +16,15 @@
 
 package org.microg.gms.gcm;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+
+import org.microg.gms.checkin.LastCheckinInfo;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";
@@ -34,12 +33,14 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
                 McsService.resetCurrentDelay();
+            }
+            if (LastCheckinInfo.read(context).androidId == 0) {
+                Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
             }
 
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -49,7 +50,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                 } else {
                     if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
                         Log.d(TAG, "Ignoring " + intent + ": service is running. schedule reconnect instead.");
-                        scheduleReconnect(context, alarmManager);
+                        McsService.scheduleReconnect(context);
                     } else {
                         Log.d(TAG, "Ignoring " + intent + ": service is running. heartbeat instead.");
                         startWakefulService(context, new Intent(McsService.ACTION_HEARTBEAT, null, context, McsService.class));
@@ -57,15 +58,11 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                 }
             } else {
                 Log.d(TAG, "Ignoring " + intent + ": network is offline, scheduling new attempt.");
-                scheduleReconnect(context, alarmManager);
+                McsService.scheduleReconnect(context);
             }
         } else {
             Log.d(TAG, "Ignoring " + intent + ": gcm is disabled");
         }
     }
 
-    private void scheduleReconnect(Context context, AlarmManager alarmManager) {
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + McsService.getCurrentDelay(),
-                PendingIntent.getBroadcast(context, 1, new Intent("org.microg.gms.gcm.RECONNECT", null, context, TriggerReceiver.class), 0));
-    }
 }

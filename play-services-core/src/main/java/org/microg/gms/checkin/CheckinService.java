@@ -22,11 +22,13 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.google.android.gms.R;
 import com.google.android.gms.checkin.internal.ICheckinService;
 
+import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
 public class CheckinService extends IntentService {
@@ -50,15 +52,18 @@ public class CheckinService extends IntentService {
             LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra("force", false));
             if (info != null) {
                 Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
-            }
-            String accountType = getString(R.string.google_account_type);
-            for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
-                PeopleManager.loadUserInfo(this, account);
+                String accountType = getString(R.string.google_account_type);
+                for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
+                    PeopleManager.loadUserInfo(this, account);
+                }
+                McsService.scheduleReconnect(this);
             }
         } catch (Exception e) {
             Log.w(TAG, e);
+        } finally {
+            WakefulBroadcastReceiver.completeWakefulIntent(intent);
+            stopSelf();
         }
-        stopSelf();
     }
 
     @Override

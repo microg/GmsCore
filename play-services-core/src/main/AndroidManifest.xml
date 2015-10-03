@@ -136,6 +136,9 @@
                 <action android:name="android.server.checkin.CHECKIN"/>
             </intent-filter>
             <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+            <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
 
                 <category android:name="android.server.checkin.CHECKIN"/>

@@ -1,4 +1,5 @@
 language: android
+sudo: false
 git:
   submodules: false
 before_install:

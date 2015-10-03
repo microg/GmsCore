@@ -33,10 +33,10 @@
     <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
     <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
 
-    <string name="pref_checkin_enable">checkin_enable_service</string>
+    <string name="pref_checkin_enable" translatable="false">checkin_enable_service</string>
     <string name="pref_checkin_enable_title">Enable device checkin</string>
     <string name="pref_checkin_enable_summary">Device checkin is a hidden process that is used to create an unique identifier for Google services. microG Services strips identifying bits other than your Google account name from this data.</string>
-    <string name="pref_gcm_enable_mcs">gcm_enable_mcs_service</string>
+    <string name="pref_gcm_enable_mcs" translatable="false">gcm_enable_mcs_service</string>
     <string name="pref_gcm_enable_mcs_title">Enable Google Cloud Messaging</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many applications. To use it you must enable device checkin.</string>
 

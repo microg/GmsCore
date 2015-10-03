@@ -16,22 +16,38 @@
 
 package org.microg.gms.checkin;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
-public class TriggerReceiver extends BroadcastReceiver {
+public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";
+    private static final String PREF_ENABLE_CHECKIN = "checkin_enable_service";
+    private static final long REGULAR_CHECKIN_INTERVAL = 12 * 60 * 60 * 1000; // 12 hours
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "Trigger checkin: " + intent);
+        boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        Intent subIntent = new Intent(context, CheckinService.class);
-        if ("android.provider.Telephony.SECRET_CODE".equals(intent.getAction())) {
-            subIntent.putExtra("force", true);
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, false) || force) {
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()) &&
+                    LastCheckinInfo.read(context).lastCheckin > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL) {
+                return;
+            }
+
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected() || force) {
+                Intent subIntent = new Intent(context, CheckinService.class);
+                subIntent.putExtra("force", force);
+                startWakefulService(context, subIntent);
+            }
+        } else {
+            Log.d(TAG, "Ignoring " + intent + ": checkin is disabled");
         }
-        context.startService(subIntent);
     }
 }

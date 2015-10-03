@@ -131,6 +131,12 @@ public class McsService extends IntentService implements Handler.Callback {
         return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive();
     }
 
+    public static void scheduleReconnect(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + getCurrentDelay(),
+                PendingIntent.getBroadcast(context, 1, new Intent("org.microg.gms.gcm.RECONNECT", null, context, TriggerReceiver.class), 0));
+    }
+
     public synchronized static long getCurrentDelay() {
         long delay = currentDelay == 0 ? 5000 : currentDelay;
         if (currentDelay < 60000) currentDelay += 5000;
@@ -365,8 +371,7 @@ public class McsService extends IntentService implements Handler.Callback {
         if (currentDelay == 0) {
             sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
         } else {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + getCurrentDelay(),
-                    PendingIntent.getBroadcast(this, 1, new Intent("org.microg.gms.gcm.RECONNECT", null, this, TriggerReceiver.class), 0));
+            scheduleReconnect(this);
         }
         alarmManager.cancel(heartbeatIntent);
         if (wakeLock != null) {
