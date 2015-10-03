@@ -423,8 +423,16 @@ public class LocationRequest extends AutoSafeParcelable {
 
     @Override
     public String toString() {
-        // TODO
-        return super.toString();
+        return "LocationRequest{" +
+                "priority=" + priority +
+                ", interval=" + interval +
+                ", fastestInterval=" + fastestInterval +
+                ", explicitFastestInterval=" + explicitFastestInterval +
+                ", expirationTime=" + expirationTime +
+                ", numUpdates=" + numUpdates +
+                ", smallestDesplacement=" + smallestDesplacement +
+                ", maxWaitTime=" + maxWaitTime +
+                '}';
     }
 
     public static final Creator<LocationRequest> CREATOR = new AutoCreator<LocationRequest>(LocationRequest.class);

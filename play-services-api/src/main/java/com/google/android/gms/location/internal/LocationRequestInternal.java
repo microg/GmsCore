@@ -16,12 +16,51 @@
 
 package com.google.android.gms.location.internal;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import com.google.android.gms.location.LocationRequest;
 
-/**
- * TODO: usage
- */
+import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
+
+import java.util.List;
+
 public class LocationRequestInternal extends AutoSafeParcelable {
+
+    @SafeParceled(1000)
+    private int versionCode = 1;
+
+    @SafeParceled(1)
+    public LocationRequest request;
+
+    @SafeParceled(2)
+    public boolean requestNlpDebugInfo;
+
+    @SafeParceled(3)
+    public boolean restorePendingIntentListeners;
+
+    @SafeParceled(4)
+    public boolean triggerUpdate;
+
+    @SafeParceled(value = 5, subClass = ClientIdentity.class)
+    public List<ClientIdentity> clients;
+
+    @SafeParceled(6)
+    public String tag;
+
+    @SafeParceled(7)
+    public boolean hideFromAppOps;
+
+    @Override
+    public String toString() {
+        return "LocationRequestInternal{" +
+                "request=" + request +
+                ", requestNlpDebugInfo=" + requestNlpDebugInfo +
+                ", restorePendingIntentListeners=" + restorePendingIntentListeners +
+                ", triggerUpdate=" + triggerUpdate +
+                ", clients=" + clients +
+                ", tag='" + tag + '\'' +
+                ", hideFromAppOps=" + hideFromAppOps +
+                '}';
+    }
 
     public static final Creator<LocationRequestInternal> CREATOR = new AutoCreator<LocationRequestInternal>(LocationRequestInternal.class);
 }

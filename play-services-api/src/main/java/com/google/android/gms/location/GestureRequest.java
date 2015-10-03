@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.location.internal;
+package com.google.android.gms.location;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 
-public class ClientIdentity extends AutoSafeParcelable {
-    public static final Creator<ClientIdentity> CREATOR = new AutoCreator<ClientIdentity>(ClientIdentity.class);
+public class GestureRequest extends AutoSafeParcelable {
+    public static final Creator<GestureRequest> CREATOR = new AutoCreator<GestureRequest>(GestureRequest.class);
 }
