@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:22.2.1'
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.squareup.wire:wire-runtime:1.6.1'
     compile project(':play-services-api')
@@ -53,8 +53,8 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     sourceSets {
         main {

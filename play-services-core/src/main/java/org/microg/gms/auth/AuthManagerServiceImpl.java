@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +70,13 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
         Log.d(TAG, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
+
+        /*
+         * TODO: This scope seems to be invalid (according to https://developers.google.com/oauthplayground/),
+         * but is used in some applications anyway. Removing it is unlikely a good solution, but works for now.
+         */
+        scope = scope.replace("https://www.googleapis.com/auth/identity.plus.page.impersonation ", "");
+
         AuthManager authManager = new AuthManager(context, accountName, packageName, scope);
         try {
             AuthResponse res = authManager.requestAuth(false);

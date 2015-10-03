@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,15 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.RemoteException;
 import android.util.Log;
+
+import com.google.android.gms.location.ILocationCallback;
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.internal.LocationRequestUpdateData;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 public class LocationRequestHelper {
     public static final String TAG = "GmsLocRequestHelper";
@@ -34,30 +41,38 @@ public class LocationRequestHelper {
     public final String packageName;
     private ILocationListener listener;
     private PendingIntent pendingIntent;
+    private ILocationCallback callback;
 
     private Location lastReport;
     private int numReports = 0;
 
-    public LocationRequestHelper(Context context, LocationRequest locationRequest,
-            boolean hasFinePermission, boolean hasCoarsePermission, String packageName,
-            ILocationListener listener) {
+    private LocationRequestHelper(Context context, LocationRequest locationRequest, boolean hasFinePermission,
+                                  boolean hasCoarsePermission, String packageName) {
         this.context = context;
         this.locationRequest = locationRequest;
         this.hasFinePermission = hasFinePermission;
         this.hasCoarsePermission = hasCoarsePermission;
         this.packageName = packageName;
+    }
+
+    public LocationRequestHelper(Context context, LocationRequest locationRequest, boolean hasFinePermission,
+                                 boolean hasCoarsePermission, String packageName, ILocationListener listener) {
+        this(context, locationRequest, hasFinePermission, hasCoarsePermission, packageName);
         this.listener = listener;
     }
 
-    public LocationRequestHelper(Context context, LocationRequest locationRequest,
-            boolean hasFinePermission, boolean hasCoarsePermission, String packageName,
-            PendingIntent pendingIntent) {
-        this.context = context;
-        this.locationRequest = locationRequest;
-        this.hasFinePermission = hasFinePermission;
-        this.hasCoarsePermission = hasCoarsePermission;
-        this.packageName = packageName;
+    public LocationRequestHelper(Context context, LocationRequest locationRequest, boolean hasFinePermission,
+                                 boolean hasCoarsePermission, String packageName, PendingIntent pendingIntent) {
+        this(context, locationRequest, hasFinePermission, hasCoarsePermission, packageName);
         this.pendingIntent = pendingIntent;
+    }
+
+    public LocationRequestHelper(Context context, boolean hasFinePermission, boolean hasCoarsePermission,
+                                 String packageName, LocationRequestUpdateData data) {
+        this(context, data.request.request, hasFinePermission, hasCoarsePermission, packageName);
+        this.listener = data.listener;
+        this.pendingIntent = data.pendingIntent;
+        this.callback = data.callback;
     }
 
     /**
@@ -87,6 +102,12 @@ public class LocationRequestHelper {
             } catch (PendingIntent.CanceledException e) {
                 return false;
             }
+        } else if (callback != null) {
+            try {
+                callback.onLocationResult(LocationResult.create(Arrays.asList(location)));
+            } catch (RemoteException e) {
+                return false;
+            }
         }
         lastReport = location;
         numReports++;
@@ -109,7 +130,42 @@ public class LocationRequestHelper {
                 this.listener.asBinder().equals(listener.asBinder());
     }
 
+    public boolean respondsTo(ILocationCallback callback) {
+        return this.callback != null && callback != null &&
+                this.callback.asBinder().equals(callback.asBinder());
+    }
+
     public boolean respondsTo(PendingIntent pendingIntent) {
         return this.pendingIntent != null && this.pendingIntent.equals(pendingIntent);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LocationRequestHelper that = (LocationRequestHelper) o;
+
+        if (hasFinePermission != that.hasFinePermission) return false;
+        if (hasCoarsePermission != that.hasCoarsePermission) return false;
+        if (!locationRequest.equals(that.locationRequest)) return false;
+        if (packageName != null ? !packageName.equals(that.packageName) : that.packageName != null) return false;
+        if (listener != null ? !listener.equals(that.listener) : that.listener != null) return false;
+        if (pendingIntent != null ? !pendingIntent.equals(that.pendingIntent) : that.pendingIntent != null)
+            return false;
+        return !(callback != null ? !callback.equals(that.callback) : that.callback != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = locationRequest.hashCode();
+        result = 31 * result + (hasFinePermission ? 1 : 0);
+        result = 31 * result + (hasCoarsePermission ? 1 : 0);
+        result = 31 * result + (packageName != null ? packageName.hashCode() : 0);
+        result = 31 * result + (listener != null ? listener.hashCode() : 0);
+        result = 31 * result + (pendingIntent != null ? pendingIntent.hashCode() : 0);
+        result = 31 * result + (callback != null ? callback.hashCode() : 0);
+        return result;
     }
 }

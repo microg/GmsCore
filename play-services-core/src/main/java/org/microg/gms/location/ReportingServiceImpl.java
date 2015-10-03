@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,37 @@
 package org.microg.gms.location;
 
 import android.accounts.Account;
+import android.os.RemoteException;
 
+import com.google.android.gms.location.places.PlaceReport;
 import com.google.android.gms.location.reporting.ReportingState;
+import com.google.android.gms.location.reporting.UploadRequest;
+import com.google.android.gms.location.reporting.UploadRequestResult;
 import com.google.android.gms.location.reporting.internal.IReportingService;
 
 public class ReportingServiceImpl extends IReportingService.Stub {
-    public ReportingState unknown3(Account account) {
-
+    @Override
+    public ReportingState getReportingState(Account account) throws RemoteException {
         return new ReportingState();
+    }
+
+    @Override
+    public int tryOptIn(Account account) throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public UploadRequestResult requestUpload(UploadRequest request) throws RemoteException {
+        return new UploadRequestResult();
+    }
+
+    @Override
+    public int cancelUploadRequest(long l) throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public int reportDeviceAtPlace(Account account, PlaceReport report) throws RemoteException {
+        return 0;
     }
 }

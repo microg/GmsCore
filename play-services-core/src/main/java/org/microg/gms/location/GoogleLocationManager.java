@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,30 @@
 
 package org.microg.gms.location;
 
-import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.internal.LocationRequestUpdateData;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.location.LocationManager.GPS_PROVIDER;
 import static android.location.LocationManager.NETWORK_PROVIDER;
+import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
+import static com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER;
 
 public class GoogleLocationManager implements LocationChangeListener {
     private static final String MOCK_PROVIDER = "mock";
     private static final long SWITCH_ON_FRESHNESS_CLIFF_MS = 30000; // 30 seconds
+    private static final String ACCESS_MOCK_LOCATION = "android.permission.ACCESS_MOCK_LOCATION";
 
     private Context context;
     private LocationManager locationManager;
@@ -69,8 +75,7 @@ public class GoogleLocationManager implements LocationChangeListener {
             return network;
         } else if (networkPermission) {
             Location network = networkProvider.getLastLocation();
-            if (network != null && network.getExtras() != null &&
-                    network.getExtras().getParcelable("no_gps_location") instanceof Location) {
+            if (network != null && network.getExtras() != null && network.getExtras().getParcelable("no_gps_location") instanceof Location) {
                 network = network.getExtras().getParcelable("no_gps_location");
             }
             return network;
@@ -79,42 +84,35 @@ public class GoogleLocationManager implements LocationChangeListener {
     }
 
     private boolean hasCoarseLocationPermission() {
-        return context.checkCallingPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED || hasFineLocationPermission();
+        return context.checkCallingPermission(ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED || hasFineLocationPermission();
     }
 
     private boolean hasFineLocationPermission() {
-        return context.checkCallingPermission(Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED;
+        return context.checkCallingPermission(ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
     }
 
     private boolean hasMockLocationPermission() {
-        return context.checkCallingPermission(Manifest.permission.ACCESS_MOCK_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED;
+        return context.checkCallingPermission(ACCESS_MOCK_LOCATION) == PERMISSION_GRANTED;
     }
 
     private void requestLocationUpdates(LocationRequestHelper request) {
         currentRequests.add(request);
-        if (request.hasFinePermission &&
-                request.locationRequest.getPriority() == LocationRequest.PRIORITY_HIGH_ACCURACY)
+        if (request.hasFinePermission && request.locationRequest.getPriority() == PRIORITY_HIGH_ACCURACY)
             gpsProvider.addRequest(request);
-        if (request.hasCoarsePermission &&
-                request.locationRequest.getPriority() != LocationRequest.PRIORITY_NO_POWER)
+        if (request.hasCoarsePermission && request.locationRequest.getPriority() != PRIORITY_NO_POWER)
             networkProvider.addRequest(request);
     }
 
     public void requestLocationUpdates(LocationRequest request, ILocationListener listener,
-            String packageName) {
-        requestLocationUpdates(
-                new LocationRequestHelper(context, request, hasFineLocationPermission(),
-                        hasCoarseLocationPermission(), packageName, listener));
+                                       String packageName) {
+        requestLocationUpdates(new LocationRequestHelper(context, request, hasFineLocationPermission(),
+                hasCoarseLocationPermission(), packageName, listener));
     }
 
     public void requestLocationUpdates(LocationRequest request, PendingIntent intent,
-            String packageName) {
-        requestLocationUpdates(
-                new LocationRequestHelper(context, request, hasFineLocationPermission(),
-                        hasCoarseLocationPermission(), packageName, intent));
+                                       String packageName) {
+        requestLocationUpdates(new LocationRequestHelper(context, request, hasFineLocationPermission(),
+                hasCoarseLocationPermission(), packageName, intent));
     }
 
     private void removeLocationUpdates(LocationRequestHelper request) {
@@ -141,6 +139,21 @@ public class GoogleLocationManager implements LocationChangeListener {
         }
     }
 
+    public void updateLocationRequest(LocationRequestUpdateData data) {
+        if (data.opCode == LocationRequestUpdateData.REQUEST_UPDATES) {
+            requestLocationUpdates(new LocationRequestHelper(context, hasFineLocationPermission(), hasCoarseLocationPermission(), null, data));
+        } else if (data.opCode == LocationRequestUpdateData.REMOVE_UPDATES) {
+            for (int i = 0; i < currentRequests.size(); i++) {
+                if (currentRequests.get(i).respondsTo(data.listener)
+                        || currentRequests.get(i).respondsTo(data.pendingIntent)
+                        || currentRequests.get(i).respondsTo(data.callback)) {
+                    removeLocationUpdates(currentRequests.get(i));
+                    i--;
+                }
+            }
+        }
+    }
+
     public void setMockMode(boolean mockMode) {
         if (!hasMockLocationPermission())
             return;
@@ -157,8 +170,7 @@ public class GoogleLocationManager implements LocationChangeListener {
     public void onLocationChanged() {
         for (int i = 0; i < currentRequests.size(); i++) {
             LocationRequestHelper request = currentRequests.get(i);
-            if (!request
-                    .report(getLocation(request.hasFinePermission, request.hasCoarsePermission))) {
+            if (!request.report(getLocation(request.hasFinePermission, request.hasCoarsePermission))) {
                 removeLocationUpdates(request);
                 i--;
             }

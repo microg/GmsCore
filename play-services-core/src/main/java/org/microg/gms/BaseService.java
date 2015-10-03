@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ public abstract class BaseService extends Service {
         broker = new AbstractGmsServiceBroker(supportedServiceId, supportedServiceIds) {
             @Override
             public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+                request.extras.keySet(); // call to unparcel()
                 Log.d(TAG, "bound by: " + request);
                 BaseService.this.handleServiceRequest(callback, request);
             }

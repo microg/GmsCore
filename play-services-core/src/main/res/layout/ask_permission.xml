@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 µg Project Team
+  ~ Copyright 2013-2015 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@
             android:padding="10dp">
 
             <ImageView
-                android:src="@drawable/ic_microg_app"
+                android:src="@mipmap/ic_core_service_app"
                 android:id="@+id/app_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public class McsService extends IntentService implements Handler.Callback {
     private PowerManager powerManager;
     private static PowerManager.WakeLock wakeLock;
 
-    private static int delay = 0;
+    private static long currentDelay = 0;
 
     private Intent connectIntent;
 
@@ -131,6 +131,17 @@ public class McsService extends IntentService implements Handler.Callback {
         return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive();
     }
 
+    public synchronized static long getCurrentDelay() {
+        long delay = currentDelay == 0 ? 5000 : currentDelay;
+        if (currentDelay < 60000) currentDelay += 5000;
+        if (currentDelay >= 60000 && currentDelay < 60000) currentDelay += 60000;
+        return delay;
+    }
+
+    public synchronized static void resetCurrentDelay() {
+        currentDelay = 0;
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         synchronized (McsService.class) {
@@ -151,7 +162,6 @@ public class McsService extends IntentService implements Handler.Callback {
     }
 
     private synchronized void connect() {
-        if (delay < 60000) delay += 5000;
         try {
             Log.d(TAG, "Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
@@ -336,7 +346,7 @@ public class McsService extends IntentService implements Handler.Callback {
             } else {
                 Log.w(TAG, "Unknown message: " + message);
             }
-            delay = 0;
+            resetCurrentDelay();
         } catch (Exception e) {
             mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, e));
         }
@@ -352,10 +362,11 @@ public class McsService extends IntentService implements Handler.Callback {
             sslSocket.close();
         } catch (Exception ignored) {
         }
-        if (delay == 0) {
+        if (currentDelay == 0) {
             sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
         } else {
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + delay, PendingIntent.getBroadcast(this, 1, new Intent(this, TriggerReceiver.class), 0));
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + getCurrentDelay(),
+                    PendingIntent.getBroadcast(this, 1, new Intent("org.microg.gms.gcm.RECONNECT", null, this, TriggerReceiver.class), 0));
         }
         alarmManager.cancel(heartbeatIntent);
         if (wakeLock != null) {

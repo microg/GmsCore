@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 µg Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.Services;
 
 public class GoogleLocationManagerService extends BaseService {
-    private static final String TAG = "GmsLocManagerSvc";
-
     private GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this);
 
     public GoogleLocationManagerService() {

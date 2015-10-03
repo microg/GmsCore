@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 µg Project Team
+  ~ Copyright 2013-2015 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@
   -->
 
 <resources>
-    <string name="gms_app_name">µg Services</string>
+    <string name="gms_app_name">microG Services Core</string>
     <string name="just_a_sec">Just a sec…</string>
-    <string name="google_account_type">com.google</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">By continuing, you allow this app and Google to use your information in accordance with their respective terms of service and privacy policies.</string>
     <string name="ask_scope_permission_title">%s would like to:</string>
     <string name="ask_service_permission_title">%s would like to use:</string>
-    <string name="account_manager_title">µg Google Account Manager</string>
+    <string name="account_manager_title">Google Account Manager</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
 
@@ -36,7 +35,7 @@
 
     <string name="pref_checkin_enable">checkin_enable_service</string>
     <string name="pref_checkin_enable_title">Enable device checkin</string>
-    <string name="pref_checkin_enable_summary">Device checkin is a hidden process that is used to create an unique identifier for Google services. µg GmsCore strips identifying bits other than your Google account name from this data.</string>
+    <string name="pref_checkin_enable_summary">Device checkin is a hidden process that is used to create an unique identifier for Google services. microG Services strips identifying bits other than your Google account name from this data.</string>
     <string name="pref_gcm_enable_mcs">gcm_enable_mcs_service</string>
     <string name="pref_gcm_enable_mcs_title">Enable Google Cloud Messaging</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many applications. To use it you must enable device checkin.</string>
@@ -44,5 +43,7 @@
     <string name="prefcat_services">Background services</string>
     <string name="prefcat_components">Components</string>
 
-    <string name="gms_settings_name">µg Settings</string>
+    <string name="gms_settings_name">microG Settings</string>
+
+    <string name="google_account_type" translatable="false">com.google</string>
 </resources>
