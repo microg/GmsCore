@@ -28,7 +28,7 @@
             android:summary="@string/pref_gcm_enable_mcs_summary"
             android:title="@string/pref_gcm_enable_mcs_title" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefcat_components">
+    <PreferenceCategory android:title="@string/prefcat_location_service">
         <Preference android:title="@string/nlp_settings_label">
             <intent
                 android:targetClass="org.microg.nlp.ui.SettingsActivity"

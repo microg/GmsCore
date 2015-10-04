@@ -35,7 +35,7 @@ This can take a couple of minutes."</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
     <string name="auth_notification_title">Authentication required</string>
-    <string name="auth_notification_content">%s requires your authentication to access your Google-Account.</string>
+    <string name="auth_notification_content">%1$s requires your authorization to access your Google account.</string>
 
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
@@ -54,6 +54,7 @@ This can take a couple of minutes."</string>
 
     <string name="prefcat_services">Background services</string>
     <string name="prefcat_components">Components</string>
+    <string name="prefcat_location_service">Location service</string>
 
     <string name="gms_settings_name">microG Settings</string>
 
