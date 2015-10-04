@@ -34,6 +34,8 @@ Try again later."</string>
 This can take a couple of minutes."</string>
     <string name="allow">Allow</string>
     <string name="deny">Deny</string>
+    <string name="auth_notification_title">Authentication required</string>
+    <string name="auth_notification_content">%s requires your authentication to access your Google-Account.</string>
 
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>

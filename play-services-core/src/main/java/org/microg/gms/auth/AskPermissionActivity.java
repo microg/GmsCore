@@ -19,6 +19,8 @@ package org.microg.gms.auth;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -88,6 +90,10 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         } else {
             Log.d(TAG, "No Consent details attached");
         }
+
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.cancel(packageName.hashCode());
+
         if (getIntent().hasExtra(EXTRA_FROM_ACCOUNT_MANAGER)) fromAccountManager = true;
         int callerUid = getIntent().getIntExtra(KEY_CALLER_UID, 0);
         PackageUtils.checkPackageUid(this, packageName, callerUid);
@@ -181,6 +187,8 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
 
     @Override
     public void finish() {
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nm.cancel(packageName.hashCode());
         super.finish();
     }
 

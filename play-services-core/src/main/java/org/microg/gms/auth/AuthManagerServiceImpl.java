@@ -17,14 +17,19 @@
 package org.microg.gms.auth;
 
 import android.accounts.Account;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v7.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.auth.IAuthManagerService;
+import com.google.android.gms.R;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
 
@@ -101,6 +106,15 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 } catch (Exception e) {
                     Log.w(TAG, "Can't decode consent data: ", e);
                 }
+                if (notify) {
+                    NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
+                            .setContentIntent(PendingIntent.getActivity(context, 0, i, 0))
+                            .setContentTitle(context.getString(R.string.auth_notification_title))
+                            .setContentText(context.getString(R.string.auth_notification_content, getPackageLabel(packageName, context.getPackageManager())))
+                            .setSmallIcon(android.R.drawable.stat_notify_error)
+                            .build());
+                }
                 result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
                 return result;
             }
@@ -109,6 +123,14 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             Bundle result = new Bundle();
             result.putString(KEY_ERROR, "NetworkError");
             return result;
+        }
+    }
+
+    private static CharSequence getPackageLabel(String packageName, PackageManager pm) {
+        try {
+            return pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0));
+        } catch (PackageManager.NameNotFoundException e) {
+            return packageName;
         }
     }
 
