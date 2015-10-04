@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.internal.IPlacesCallbacks;
-import com.google.android.gms.location.internal.ISettingsCallback;
+import com.google.android.gms.location.internal.ISettingsCallbacks;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
 import com.google.android.gms.location.places.NearbyAlertRequest;
@@ -64,7 +64,7 @@ interface IGoogleLocationManagerService {
     LocationAvailability iglms34(String var1) = 33;
 
     IBinder iglms51() = 50;
-    void iglms63(in LocationSettingsRequest settingsRequest, ISettingsCallback callback, String packageName) = 62;
+    void requestLocationSettingsDialog(in LocationSettingsRequest settingsRequest, ISettingsCallbacks callback, String packageName) = 62;
 
     void iglms14(in LatLngBounds var1, int var2, in PlaceFilter var3, in PlacesParams var4, IPlacesCallbacks var5) = 13;
     void iglms15(String var1, in PlacesParams var2, IPlacesCallbacks var3) = 14;

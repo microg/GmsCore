@@ -16,27 +16,45 @@
 
 package com.google.android.gms.location;
 
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.Status;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-import java.util.List;
-
 @PublicApi
-public class LocationSettingsRequest extends AutoSafeParcelable {
-    @SafeParceled(1000)
-    private int versionCode = 2;
+public class LocationSettingsResult extends AutoSafeParcelable implements Result {
 
-    @SafeParceled(value = 1, subClass = LocationRequest.class)
-    @PublicApi(exclude = true)
-    public List<LocationRequest> requests;
+    @SafeParceled(1000)
+    private int versionCode = 1;
+
+    @SafeParceled(1)
+    private Status status;
 
     @SafeParceled(2)
-    @PublicApi(exclude = true)
-    public boolean alwaysShow;
+    private LocationSettingsStates settings;
+
+
+    public LocationSettingsStates getLocationSettingsStates() {
+        return settings;
+    }
+
+    @Override
+    public Status getStatus() {
+        return status;
+    }
 
     @PublicApi(exclude = true)
-    public boolean needBle;
+    public LocationSettingsResult(LocationSettingsStates settings, Status status) {
+        this.settings = settings;
+        this.status = status;
+    }
 
-    public static final Creator<LocationSettingsRequest> CREATOR = new AutoCreator<LocationSettingsRequest>(LocationSettingsRequest.class);
+    @PublicApi(exclude = true)
+    public LocationSettingsResult(Status status) {
+        this.status = status;
+    }
+
+    public static final Creator<LocationSettingsResult> CREATOR = new AutoCreator<LocationSettingsResult>(LocationSettingsResult.class);
 }
