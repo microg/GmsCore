@@ -16,9 +16,24 @@
 
 package org.microg.gms.gcm;
 
+import org.microg.gms.common.HttpFormClient.ResponseHeader;
+
 import static org.microg.gms.common.HttpFormClient.ResponseField;
 
 public class RegisterResponse {
     @ResponseField("token")
     public String token;
+    @ResponseHeader("Retry-After")
+    public String retryAfter;
+    @ResponseField("deleted")
+    public String deleted;
+
+    @Override
+    public String toString() {
+        return "RegisterResponse{" +
+                "token='" + token + '\'' +
+                ", retryAfter='" + retryAfter + '\'' +
+                ", deleted='" + deleted + '\'' +
+                '}';
+    }
 }

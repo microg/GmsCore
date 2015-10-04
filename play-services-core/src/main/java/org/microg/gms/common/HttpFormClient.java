@@ -28,6 +28,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 public class HttpFormClient {
     private static final String TAG = "GmsHttpFormClient";
@@ -84,7 +86,7 @@ public class HttpFormClient {
 
         String result = new String(Utils.readStreamToEnd(connection.getInputStream()));
         Log.d(TAG, "-- Response --\n" + result);
-        return parseResponse(tClass, result);
+        return parseResponse(tClass, connection.getHeaderFields(), result);
     }
 
     private static String valueFromBoolVal(String value, Boolean boolVal, boolean truePresent, boolean falsePresent) {
@@ -101,7 +103,7 @@ public class HttpFormClient {
         }
     }
 
-    private static <T> T parseResponse(Class<T> tClass, String result) {
+    private static <T> T parseResponse(Class<T> tClass, Map<String, List<String>> headerFields, String result) {
         T response;
         try {
             response = tClass.getConstructor().newInstance();
@@ -130,6 +132,26 @@ public class HttpFormClient {
                 }
             } catch (Exception e) {
                 Log.w(TAG, e);
+            }
+        }
+        for (Field field : tClass.getDeclaredFields()) {
+            if (field.isAnnotationPresent(ResponseHeader.class)) {
+                List<String> strings = headerFields.get(field.getAnnotation(ResponseHeader.class).value());
+                if (strings == null || strings.size() != 1) continue;
+                String value = strings.get(0);
+                try {
+                    if (field.getType().equals(String.class)) {
+                        field.set(response, value);
+                    } else if (field.getType().equals(boolean.class)) {
+                        field.setBoolean(response, value.equals("1"));
+                    } else if (field.getType().equals(long.class)) {
+                        field.setLong(response, Long.parseLong(value));
+                    } else if (field.getType().equals(int.class)) {
+                        field.setInt(response, Integer.parseInt(value));
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, e);
+                }
             }
         }
         return response;
@@ -187,6 +209,12 @@ public class HttpFormClient {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ResponseField {
+        public String value();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface ResponseHeader {
         public String value();
     }
 }

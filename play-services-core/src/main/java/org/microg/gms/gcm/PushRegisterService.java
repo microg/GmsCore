@@ -73,13 +73,13 @@ public class PushRegisterService extends IntentService {
         Log.d(TAG, "register[req]: " + extras);
         Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
         outIntent.setPackage(app);
-        String regId = register(this, app, sender, null);
+        String regId = register(this, app, sender, null, false).token;
         if (regId != null) {
             outIntent.putExtra("registration_id", regId);
         } else {
             outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
         }
-        Log.d(TAG, "register[res]: " + outIntent);
+        Log.d(TAG, "register[res]: " + outIntent + " extras=" + outIntent.getExtras());
         try {
             if (intent.hasExtra("google.messenger")) {
                 Messenger messenger = intent.getParcelableExtra("google.messenger");
@@ -94,24 +94,60 @@ public class PushRegisterService extends IntentService {
         sendOrderedBroadcast(outIntent, null);
     }
 
-    public static String register(Context context, String app, String sender, String info) {
+    public static RegisterResponse register(Context context, String app, String sender, String info, boolean delete) {
         try {
-            return new RegisterRequest()
+            RegisterResponse response = new RegisterRequest()
                     .build(Utils.getBuild(context))
                     .sender(sender)
                     .info(info)
                     .checkin(LastCheckinInfo.read(context))
                     .app(app, PackageUtils.firstSignatureDigest(context, app), PackageUtils.versionCode(context, app))
-                    .getResponse()
-                    .token;
+                    .delete(delete)
+                    .getResponse();
+            Log.d(TAG, "received response: " + response);
+            return response;
         } catch (IOException e) {
             Log.w(TAG, e);
         }
 
-        return null;
+        return new RegisterResponse();
     }
 
     private void unregister(Intent intent) {
+        PendingIntent pendingIntent = intent.getParcelableExtra("app");
+        String app = packageFromPendingIntent(pendingIntent);
 
+        Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
+        outIntent.setPackage(app);
+
+        RegisterResponse response = register(this, app, null, null, true);
+        if (!app.equals(response.deleted)) {
+            outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
+
+            long retry = 0;
+            if (response.retryAfter != null && !response.retryAfter.contains(":")) {
+                retry = Long.parseLong(response.retryAfter);
+            }
+
+            if (retry > 0) {
+                outIntent.putExtra("Retry-After", retry);
+            }
+        } else {
+            outIntent.putExtra("unregistered", app);
+        }
+
+        Log.d(TAG, "unregister[res]: " + outIntent.toString() + " extras=" + outIntent.getExtras());
+        try {
+            if (intent.hasExtra("google.messenger")) {
+                Messenger messenger = intent.getParcelableExtra("google.messenger");
+                Message message = Message.obtain();
+                message.obj = outIntent;
+                messenger.send(message);
+                return;
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+        sendOrderedBroadcast(outIntent, null);
     }
 }
