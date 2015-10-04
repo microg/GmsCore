@@ -33,9 +33,10 @@ import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
-import com.google.android.gms.location.internal.ISettingsCallback;
+import com.google.android.gms.location.internal.ISettingsCallbacks;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
 import com.google.android.gms.location.places.AutocompleteFilter;
@@ -291,20 +292,23 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     }
 
     @Override
-    public void iglms63(LocationSettingsRequest settingsRequest, ISettingsCallback callback, String packageName) throws RemoteException {
-        Log.d(TAG, "iglms63");
+    public void requestLocationSettingsDialog(LocationSettingsRequest settingsRequest, ISettingsCallbacks callback, String packageName) throws RemoteException {
+        Log.d(TAG, "requestLocationSettingsDialog: " + settingsRequest);
+        callback.onLocationSettingsResult(new LocationSettingsResult(Status.CANCELED));
     }
 
     @Override
     public void requestLocationUpdatesInternalWithListener(LocationRequestInternal request,
                                                            ILocationListener listener) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesInternalWithListener: " + request);
+        getLocationManager().requestLocationUpdates(request.request, listener, null);
     }
 
     @Override
     public void requestLocationUpdatesInternalWithIntent(LocationRequestInternal request,
                                                          PendingIntent callbackIntent) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesInternalWithIntent: " + request);
+        getLocationManager().requestLocationUpdates(request.request, callbackIntent, null);
     }
 
     @Override

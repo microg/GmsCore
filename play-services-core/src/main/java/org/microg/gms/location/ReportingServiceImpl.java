@@ -18,6 +18,7 @@ package org.microg.gms.location;
 
 import android.accounts.Account;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.location.places.PlaceReport;
 import com.google.android.gms.location.reporting.ReportingState;
@@ -26,28 +27,35 @@ import com.google.android.gms.location.reporting.UploadRequestResult;
 import com.google.android.gms.location.reporting.internal.IReportingService;
 
 public class ReportingServiceImpl extends IReportingService.Stub {
+    private static final String TAG = "GmsLocReportSvcImpl";
+
     @Override
     public ReportingState getReportingState(Account account) throws RemoteException {
+        Log.d(TAG, "getReportingState");
         return new ReportingState();
     }
 
     @Override
     public int tryOptIn(Account account) throws RemoteException {
+        Log.d(TAG, "tryOptIn");
         return 0;
     }
 
     @Override
     public UploadRequestResult requestUpload(UploadRequest request) throws RemoteException {
+        Log.d(TAG, "requestUpload");
         return new UploadRequestResult();
     }
 
     @Override
     public int cancelUploadRequest(long l) throws RemoteException {
+        Log.d(TAG, "cancelUploadRequest");
         return 0;
     }
 
     @Override
     public int reportDeviceAtPlace(Account account, PlaceReport report) throws RemoteException {
+        Log.d(TAG, "reportDeviceAtPlace");
         return 0;
     }
 }
