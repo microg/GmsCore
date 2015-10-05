@@ -161,14 +161,27 @@ public class LoginActivity extends AssistantActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             if (LastCheckinInfo.read(this).androidId == 0) {
-                try {
-                    CheckinManager.checkin(this, false);
-                } catch (IOException e) {
-                    Log.d(TAG, "Checkin failed", e);
-                    showError(R.string.auth_general_error_desc);
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Runnable next;
+                        next = checkin(false) ? new Runnable() {
+                            @Override
+                            public void run() {
+                                loadLoginPage();
+                            }
+                        } : new Runnable() {
+                            @Override
+                            public void run() {
+                                showError(R.string.auth_general_error_desc);
+                            }
+                        };
+                        LoginActivity.this.runOnUiThread(next);
+                    }
+                }).start();
+            } else {
+                loadLoginPage();
             }
-            loadLoginPage();
         } else {
             showError(R.string.no_network_error_desc);
         }
@@ -267,6 +280,7 @@ public class LoginActivity extends AssistantActivity {
                     public void onResponse(AuthResponse response) {
                         authManager.storeResponse(response);
                         PeopleManager.loadUserInfo(LoginActivity.this, account);
+                        checkin(true);
                         finish();
                     }
 
@@ -275,6 +289,16 @@ public class LoginActivity extends AssistantActivity {
                         Log.w(TAG, "onException: " + exception);
                     }
                 });
+    }
+
+    private boolean checkin(boolean force) {
+        try {
+            CheckinManager.checkin(LoginActivity.this, force);
+            return true;
+        } catch (IOException e) {
+            Log.w(TAG, "Checkin failed", e);
+        }
+        return false;
     }
 
     @Override
