@@ -76,6 +76,7 @@ public class LoginActivity extends AssistantActivity {
 
     private static final String TAG = "GmsAuthLoginBrowser";
     private static final String EMBEDDED_SETUP_URL = "https://accounts.google.com/EmbeddedSetup";
+    private static final String PROGRAMMATIC_AUTH_URL = "https://accounts.google.com/o/oauth2/programmatic_auth";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
 
@@ -99,7 +100,9 @@ public class LoginActivity extends AssistantActivity {
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "pageFinished: " + url);
                 if ("close".equals(Uri.parse(url).getFragment()))
-                    closeWeb();
+                    closeWeb(false);
+                if (url.startsWith(PROGRAMMATIC_AUTH_URL))
+                    closeWeb(true);
             }
         });
         if (getIntent().hasExtra(EXTRA_TOKEN)) {
@@ -202,7 +205,7 @@ public class LoginActivity extends AssistantActivity {
         webView.loadUrl(buildUrl(tmpl, Utils.getLocale(this)));
     }
 
-    private void closeWeb() {
+    private void closeWeb(boolean programmaticAuth) {
         setMessage(R.string.auth_finalize);
         runOnUiThread(new Runnable() {
             @Override
@@ -210,7 +213,7 @@ public class LoginActivity extends AssistantActivity {
                 webView.setVisibility(INVISIBLE);
             }
         });
-        String cookies = CookieManager.getInstance().getCookie(EMBEDDED_SETUP_URL);
+        String cookies = CookieManager.getInstance().getCookie(programmaticAuth ? PROGRAMMATIC_AUTH_URL : EMBEDDED_SETUP_URL);
         String[] temp = cookies.split(";");
         for (String ar1 : temp) {
             if (ar1.trim().startsWith(COOKIE_OAUTH_TOKEN + "=")) {
