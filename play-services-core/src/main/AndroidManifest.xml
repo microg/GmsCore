@@ -377,6 +377,15 @@
             </intent-filter>
         </service>
         <service
+            android:name="org.microg.gms.ads.AdvertisingIdService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.ads.identifier.service.START"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+
+        <service
             android:name="org.microg.gms.DummyService"
             android:exported="true">
             <intent-filter>
