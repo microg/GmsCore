@@ -34,6 +34,7 @@ import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 import com.google.android.gms.location.internal.ISettingsCallbacks;
@@ -294,7 +295,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     @Override
     public void requestLocationSettingsDialog(LocationSettingsRequest settingsRequest, ISettingsCallbacks callback, String packageName) throws RemoteException {
         Log.d(TAG, "requestLocationSettingsDialog: " + settingsRequest);
-        callback.onLocationSettingsResult(new LocationSettingsResult(Status.CANCELED));
+        callback.onLocationSettingsResult(new LocationSettingsResult(new LocationSettingsStates(true, true, false, true, true, false), Status.CANCELED));
     }
 
     @Override
