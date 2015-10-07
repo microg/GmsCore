@@ -85,8 +85,5 @@ public class LocationSettingsStates extends AutoSafeParcelable {
         this.blePresent = blePresent;
     }
 
-    @PublicApi(exclude = true)
-
-
     public static final Creator<LocationSettingsStates> CREATOR = new AutoCreator<LocationSettingsStates>(LocationSettingsStates.class);
 }
