@@ -15,15 +15,27 @@
   -->
 
 <resources>
-    <string name="gms_app_name">microG сервиси</string>
+    <string name="gms_app_name">микроГ сервиси</string>
     <string name="just_a_sec">Само тренутак…</string>
     <string name="google_account_label">Гугл</string>
     <string name="ask_permission_tos">Ако наставите дозволићете овој апликацији и Гуглу да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
     <string name="ask_scope_permission_title">%s жели да:</string>
     <string name="ask_service_permission_title">%s жели да користи:</string>
-    <string name="account_manager_title">менаџер Гугл налога</string>
+    <string name="account_manager_title">Менаџер Гугл налога</string>
+    <string name="sorry">Нажалост…</string>
+    <string name="no_network_error_desc">"Нисте повезани са мрежом.
+
+Ово је можда привремени проблем или ваш Андроид уређај није постављен за услуге преноса података. Покушајте поново када се повежете са мобилном мрежом, или се накачите на бежичну мрежу."</string>
+    <string name="auth_general_error_desc">"Десио се проблем приликом комуникације са Гугловим серверима.
+
+Покушајте поново касније."</string>
+    <string name="auth_finalize">"Ваш уређај контактира Гугл да би сачувао податке на ваш налог.
+
+Ово може да потраје неколико минута."</string>
     <string name="allow">Дозволи</string>
     <string name="deny">Одбиј</string>
+    <string name="auth_notification_title">Потребна је аутентификација</string>
+    <string name="auth_notification_content">%1$s захтева ваше овлашћење за приступ вашем Гугл налогу.</string>
 
     <string name="perm_status_broadcast_label">слуша унутрашња емитовања стања</string>
     <string name="perm_c2dm_receive_label">слуша C2DM поруке</string>
@@ -32,5 +44,14 @@
     <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
     <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
 
-    <string name="gms_settings_name">microG поставке</string>
+    <string name="pref_checkin_enable_title">Укључи пријаву уређаја</string>
+    <string name="pref_checkin_enable_summary">Пријава уређаја је скривени процес који служи за прављење јединственог идентификатора за Гуглове услуге. микроГ сервиси скидају идентификујуће бите са ових података, осим имена вашег Гугл налога.</string>
+    <string name="pref_gcm_enable_mcs_title">Омогући Гуглове облак поруке</string>
+    <string name="pref_gcm_enable_mcs_summary">Гуглове облак поруке (Google Cloud Messaging) је провајдер гурања обавештења (push) којег користе многе апликације. Да бисте га користили укључите пријаву уређаја.</string>
+
+    <string name="prefcat_services">Сервиси у позадини</string>
+    <string name="prefcat_components">Компоненте</string>
+    <string name="prefcat_location_service">Сервис локације</string>
+
+    <string name="gms_settings_name">микроГ поставке</string>
 </resources>
