@@ -35,7 +35,11 @@ public abstract class BaseService extends Service {
         broker = new AbstractGmsServiceBroker(supportedServiceId, supportedServiceIds) {
             @Override
             public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-                request.extras.keySet(); // call to unparcel()
+                try {
+                    request.extras.keySet(); // call to unparcel()
+                } catch (Exception e) {
+                    // Sometimes we need to define the correct ClassLoader before unparcel(). Ignore those.
+                }
                 Log.d(TAG, "bound by: " + request);
                 BaseService.this.handleServiceRequest(callback, request);
             }
