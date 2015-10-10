@@ -41,7 +41,6 @@ Dies kann einige Minuten dauern."</string>
     <string name="perm_c2dm_receive_label">Empfange C2DM Nachrichten</string>
     <string name="perm_c2dm_send_label">Sende C2DM Nachrichten zu anderen Apps</string>
 
-    <string name="pref_auth_trust_google">auth_manager_trust_google</string>
     <string name="pref_auth_trust_google_title">Vertraue Google bei App Rechten</string>
     <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt bevor eine App Autorisierungsanfrage an Google geschickt wird. Einige Apps werden das Google Konto nicht nutzen können, wenn deaktiviert.</string>
     
