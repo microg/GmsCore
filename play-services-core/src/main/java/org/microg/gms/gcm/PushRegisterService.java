@@ -20,8 +20,8 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
@@ -35,8 +35,16 @@ import java.io.IOException;
 public class PushRegisterService extends IntentService {
     private static final String TAG = "GmsGcmRegisterSvc";
 
+    private static final String REMOVED = "%%REMOVED%%";
+    private static final String ERROR = "%%ERROR%%";
+
     public PushRegisterService() {
         super(TAG);
+        setIntentRedelivery(false);
+    }
+
+    private SharedPreferences getSharedPreferences() {
+        return getSharedPreferences("gcm_registrations", MODE_PRIVATE);
     }
 
     @Override
@@ -68,17 +76,20 @@ public class PushRegisterService extends IntentService {
         PendingIntent pendingIntent = intent.getParcelableExtra("app");
         String sender = intent.getStringExtra("sender");
         String app = packageFromPendingIntent(pendingIntent);
-        Bundle extras = intent.getExtras();
-        extras.keySet();
-        Log.d(TAG, "register[req]: " + extras);
+        Log.d(TAG, "register[res]: " + intent.toString() + " extras=" + intent.getExtras());
+
         Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
-        outIntent.setPackage(app);
-        String regId = register(this, app, sender, null, false).token;
+        String appSignature = PackageUtils.firstSignatureDigest(this, app);
+
+        String regId = register(this, app, appSignature, sender, null, false).token;
         if (regId != null) {
             outIntent.putExtra("registration_id", regId);
+            getSharedPreferences().edit().putString(app + ":" + appSignature, regId).apply();
         } else {
             outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
+            getSharedPreferences().edit().putString(app + ":" + appSignature, "-").apply();
         }
+
         Log.d(TAG, "register[res]: " + outIntent + " extras=" + outIntent.getExtras());
         try {
             if (intent.hasExtra("google.messenger")) {
@@ -91,17 +102,19 @@ public class PushRegisterService extends IntentService {
         } catch (Exception e) {
             Log.w(TAG, e);
         }
+
+        outIntent.setPackage(app);
         sendOrderedBroadcast(outIntent, null);
     }
 
-    public static RegisterResponse register(Context context, String app, String sender, String info, boolean delete) {
+    public static RegisterResponse register(Context context, String app, String appSignature, String sender, String info, boolean delete) {
         try {
             RegisterResponse response = new RegisterRequest()
                     .build(Utils.getBuild(context))
                     .sender(sender)
                     .info(info)
                     .checkin(LastCheckinInfo.read(context))
-                    .app(app, PackageUtils.firstSignatureDigest(context, app), PackageUtils.versionCode(context, app))
+                    .app(app, appSignature, PackageUtils.versionCode(context, app))
                     .delete(delete)
                     .getResponse();
             Log.d(TAG, "received response: " + response);
@@ -116,24 +129,27 @@ public class PushRegisterService extends IntentService {
     private void unregister(Intent intent) {
         PendingIntent pendingIntent = intent.getParcelableExtra("app");
         String app = packageFromPendingIntent(pendingIntent);
+        Log.d(TAG, "unregister[res]: " + intent.toString() + " extras=" + intent.getExtras());
 
         Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
-        outIntent.setPackage(app);
+        String appSignature = PackageUtils.firstSignatureDigest(this, app);
 
-        RegisterResponse response = register(this, app, null, null, true);
-        if (!app.equals(response.deleted)) {
-            outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
-
-            long retry = 0;
-            if (response.retryAfter != null && !response.retryAfter.contains(":")) {
-                retry = Long.parseLong(response.retryAfter);
-            }
-
-            if (retry > 0) {
-                outIntent.putExtra("Retry-After", retry);
-            }
-        } else {
+        if (REMOVED.equals(getSharedPreferences().getString(app + ":" + appSignature, null))) {
             outIntent.putExtra("unregistered", app);
+        } else {
+            RegisterResponse response = register(this, app, appSignature, null, null, true);
+            if (!app.equals(response.deleted)) {
+                outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
+                getSharedPreferences().edit().putString(app + ":" + PackageUtils.firstSignatureDigest(this, app), ERROR).apply();
+
+                long retry = 0;
+                if (response.retryAfter != null && !response.retryAfter.contains(":")) {
+                    outIntent.putExtra("Retry-After", Long.parseLong(response.retryAfter));
+                }
+            } else {
+                outIntent.putExtra("unregistered", app);
+                getSharedPreferences().edit().putString(app + ":" + PackageUtils.firstSignatureDigest(this, app), REMOVED).apply();
+            }
         }
 
         Log.d(TAG, "unregister[res]: " + outIntent.toString() + " extras=" + outIntent.getExtras());
@@ -148,6 +164,8 @@ public class PushRegisterService extends IntentService {
         } catch (Exception e) {
             Log.w(TAG, e);
         }
+
+        outIntent.setPackage(app);
         sendOrderedBroadcast(outIntent, null);
     }
 }

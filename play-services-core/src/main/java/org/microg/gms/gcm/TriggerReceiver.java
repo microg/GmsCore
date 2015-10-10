@@ -26,6 +26,10 @@ import android.util.Log;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 
+import static org.microg.gms.gcm.Constants.ACTION_CONNECT;
+import static org.microg.gms.gcm.Constants.ACTION_HEARTBEAT;
+import static org.microg.gms.gcm.Constants.EXTRA_REASON;
+
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";
     private static final String PREF_ENABLE_GCM = "gcm_enable_mcs_service";
@@ -41,19 +45,23 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
             }
             if (LastCheckinInfo.read(context).androidId == 0) {
                 Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
+                return;
             }
 
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected() || force) {
                 if (!McsService.isConnected() || force) {
-                    startWakefulService(context, new Intent(McsService.ACTION_CONNECT, null, context, McsService.class));
+                    Log.d(TAG, "Not connected to GCM but should be, asking the service to start up");
+                    startWakefulService(context, new Intent(ACTION_CONNECT, null, context, McsService.class)
+                            .putExtra(EXTRA_REASON, intent));
                 } else {
                     if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
                         Log.d(TAG, "Ignoring " + intent + ": service is running. schedule reconnect instead.");
                         McsService.scheduleReconnect(context);
                     } else {
                         Log.d(TAG, "Ignoring " + intent + ": service is running. heartbeat instead.");
-                        startWakefulService(context, new Intent(McsService.ACTION_HEARTBEAT, null, context, McsService.class));
+                        startWakefulService(context, new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
+                                .putExtra(EXTRA_REASON, intent));
                     }
                 }
             } else {

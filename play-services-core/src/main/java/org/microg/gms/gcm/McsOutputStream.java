@@ -80,6 +80,7 @@ public class McsOutputStream extends Thread implements Handler.Callback {
             case MSG_OUTPUT:
                 try {
                     Message message = (Message) msg.obj;
+                    Log.d(TAG, "Outgoing message: " + message);
                     if (msg.obj instanceof DataMessageStanza) {
                         writeInternal(message, MCS_DATA_MESSAGE_STANZA_TAG);
                     } else if (msg.obj instanceof LoginRequest) {

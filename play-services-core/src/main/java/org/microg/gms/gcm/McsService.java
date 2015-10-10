@@ -17,12 +17,13 @@
 package org.microg.gms.gcm;
 
 import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -48,6 +49,10 @@ import java.util.Collections;
 import javax.net.ssl.SSLContext;
 
 import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.gcm.Constants.ACTION_CONNECT;
+import static org.microg.gms.gcm.Constants.ACTION_HEARTBEAT;
+import static org.microg.gms.gcm.Constants.ACTION_RECONNECT;
+import static org.microg.gms.gcm.Constants.EXTRA_REASON;
 import static org.microg.gms.gcm.Constants.MSG_CONNECT;
 import static org.microg.gms.gcm.Constants.MSG_HEARTBEAT;
 import static org.microg.gms.gcm.Constants.MSG_INPUT;
@@ -57,11 +62,8 @@ import static org.microg.gms.gcm.Constants.MSG_OUTPUT_ERROR;
 import static org.microg.gms.gcm.Constants.MSG_OUTPUT_READY;
 import static org.microg.gms.gcm.Constants.MSG_TEARDOWN;
 
-public class McsService extends IntentService implements Handler.Callback {
+public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
-
-    public static String ACTION_CONNECT = "org.microg.gms.gcm.mcs.CONNECT";
-    public static String ACTION_HEARTBEAT = "org.microg.gms.gcm.mcs.HEARTBEAT";
 
     public static final String PREFERENCES_NAME = "mcs";
     public static final String PREF_LAST_PERSISTENT_ID = "last_persistent_id";
@@ -81,8 +83,8 @@ public class McsService extends IntentService implements Handler.Callback {
 
     private PendingIntent heartbeatIntent;
 
-    private static MainThread mainThread;
-    private static Handler mainHandler;
+    private static HandlerThread handlerThread;
+    private static Handler rootHandler;
 
     private AlarmManager alarmManager;
     private PowerManager powerManager;
@@ -92,20 +94,16 @@ public class McsService extends IntentService implements Handler.Callback {
 
     private Intent connectIntent;
 
-    public McsService() {
-        super(TAG);
-    }
-
-    private class MainThread extends Thread {
+    private class HandlerThread extends Thread {
         @Override
         public void run() {
             Looper.prepare();
             wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "mcs");
             wakeLock.setReferenceCounted(false);
             synchronized (McsService.class) {
-                mainHandler = new Handler(Looper.myLooper(), McsService.this);
+                rootHandler = new Handler(Looper.myLooper(), McsService.this);
                 if (connectIntent != null) {
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT, connectIntent));
+                    rootHandler.sendMessage(rootHandler.obtainMessage(MSG_CONNECT, connectIntent));
                     WakefulBroadcastReceiver.completeWakefulIntent(connectIntent);
                 }
             }
@@ -120,11 +118,16 @@ public class McsService extends IntentService implements Handler.Callback {
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         synchronized (McsService.class) {
-            if (mainThread == null) {
-                mainThread = new MainThread();
-                mainThread.start();
+            if (handlerThread == null) {
+                handlerThread = new HandlerThread();
+                handlerThread.start();
             }
         }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     public synchronized static boolean isConnected() {
@@ -133,14 +136,16 @@ public class McsService extends IntentService implements Handler.Callback {
 
     public static void scheduleReconnect(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + getCurrentDelay(),
-                PendingIntent.getBroadcast(context, 1, new Intent("org.microg.gms.gcm.RECONNECT", null, context, TriggerReceiver.class), 0));
+        long delay = getCurrentDelay();
+        Log.d(TAG, "Scheduling reconnect in " + delay / 1000 + " seconds...");
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + delay,
+                PendingIntent.getBroadcast(context, 1, new Intent(ACTION_RECONNECT, null, context, TriggerReceiver.class), 0));
     }
 
     public synchronized static long getCurrentDelay() {
         long delay = currentDelay == 0 ? 5000 : currentDelay;
-        if (currentDelay < 60000) currentDelay += 5000;
-        if (currentDelay >= 60000 && currentDelay < 60000) currentDelay += 60000;
+        if (currentDelay < 60000) currentDelay += 10000;
+        if (currentDelay >= 60000 && currentDelay < 600000) currentDelay += 60000;
         return delay;
     }
 
@@ -148,15 +153,18 @@ public class McsService extends IntentService implements Handler.Callback {
         currentDelay = 0;
     }
 
+
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         synchronized (McsService.class) {
-            if (mainHandler != null) {
+            if (rootHandler != null) {
                 wakeLock.acquire();
+                Object reason = intent == null ? "I am so sticky!" :
+                        intent.hasExtra(EXTRA_REASON) ? intent.getExtras().get(EXTRA_REASON) : intent;
                 if (ACTION_CONNECT.equals(intent.getAction())) {
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_CONNECT, intent));
+                    rootHandler.sendMessage(rootHandler.obtainMessage(MSG_CONNECT, reason));
                 } else if (ACTION_HEARTBEAT.equals(intent.getAction())) {
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_HEARTBEAT, intent));
+                    rootHandler.sendMessage(rootHandler.obtainMessage(MSG_HEARTBEAT, reason));
                 }
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             } else if (connectIntent == null) {
@@ -165,6 +173,7 @@ public class McsService extends IntentService implements Handler.Callback {
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
         }
+        return START_STICKY;
     }
 
     private synchronized void connect() {
@@ -174,15 +183,15 @@ public class McsService extends IntentService implements Handler.Callback {
             Log.d(TAG, "Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
             sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, SERVICE_PORT, true);
             Log.d(TAG, "Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
-            inputStream = new McsInputStream(sslSocket.getInputStream(), mainHandler);
-            outputStream = new McsOutputStream(sslSocket.getOutputStream(), mainHandler);
+            inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
+            outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);
             inputStream.start();
             outputStream.start();
 
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), HEARTBEAT_MS, heartbeatIntent);
         } catch (Exception e) {
             Log.w(TAG, "Exception while connecting!", e);
-            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, e));
+            rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
         }
     }
 
@@ -278,7 +287,7 @@ public class McsService extends IntentService implements Handler.Callback {
     }
 
     private void send(Message message) {
-        mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT, message));
+        rootHandler.sendMessage(rootHandler.obtainMessage(MSG_OUTPUT, message));
     }
 
     private void sendOutputStream(int what, Object obj) {
@@ -286,7 +295,7 @@ public class McsService extends IntentService implements Handler.Callback {
         if (os != null) {
             Handler outputHandler = os.getHandler();
             if (outputHandler != null)
-                outputHandler.dispatchMessage(outputHandler.obtainMessage(what, obj));
+                outputHandler.sendMessage(outputHandler.obtainMessage(what, obj));
         }
     }
 
@@ -294,17 +303,15 @@ public class McsService extends IntentService implements Handler.Callback {
     public boolean handleMessage(android.os.Message msg) {
         switch (msg.what) {
             case MSG_INPUT:
-                Log.d(TAG, "Incoming message: " + msg.obj);
                 handleInput((Message) msg.obj);
                 return true;
             case MSG_OUTPUT:
-                Log.d(TAG, "Outgoing message: " + msg.obj);
                 sendOutputStream(MSG_OUTPUT, msg.obj);
                 return true;
             case MSG_INPUT_ERROR:
             case MSG_OUTPUT_ERROR:
                 Log.d(TAG, "I/O error: " + msg.obj);
-                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, msg.obj));
+                rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, msg.obj));
                 return true;
             case MSG_TEARDOWN:
                 Log.d(TAG, "Teardown initiated, reason: " + msg.obj);
@@ -326,6 +333,7 @@ public class McsService extends IntentService implements Handler.Callback {
                     send(ping.build());
                 } else {
                     Log.d(TAG, "Ignoring heartbeat, not connected!");
+                    scheduleReconnect(this);
                 }
                 return true;
             case MSG_OUTPUT_READY:
@@ -354,7 +362,7 @@ public class McsService extends IntentService implements Handler.Callback {
             }
             resetCurrentDelay();
         } catch (Exception e) {
-            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, e));
+            rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
         }
     }
 

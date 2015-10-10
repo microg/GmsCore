@@ -72,6 +72,7 @@ public class McsInputStream extends Thread {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 Message msg = read();
+                Log.d(TAG, "Incoming message: " + msg);
                 if (msg != null) {
                     mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT, msg));
                 } else {
@@ -109,7 +110,7 @@ public class McsInputStream extends Thread {
         if (!initialized) {
             try {
                 version = is.read();
-                Log.d(TAG, "Reading from MCS version=" + version);
+                Log.d(TAG, "Reading from MCS version: " + version);
                 initialized = true;
             } catch (IOException e) {
                 Log.w(TAG, e);
