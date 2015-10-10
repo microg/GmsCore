@@ -44,11 +44,9 @@ Dies kann einige Minuten dauern."</string>
     <string name="pref_auth_trust_google">auth_manager_trust_google</string>
     <string name="pref_auth_trust_google_title">Vertraue Google bei App Rechten</string>
     <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt bevor eine App Autorisierungsanfrage an Google geschickt wird. Einige Apps werden das Google Konto nicht nutzen können, wenn deaktiviert.</string>
-
-    <string name="pref_checkin_enable" translatable="false">checkin_enable_service</string>
+    
     <string name="pref_checkin_enable_title">Aktiviere Geräte Check-In</string>
     <string name="pref_checkin_enable_summary">Geräte Check-In ist ein versteckter Prozess, der genutzt wird um eine eindeutige Kennung für Google Dienste zu erzeugen. microG entfernt identifizierende Daten bis auf den Google Konto Namen.</string>
-    <string name="pref_gcm_enable_mcs" translatable="false">gcm_enable_mcs_service</string>
     <string name="pref_gcm_enable_mcs_title">Aktiviere Google Cloud Messaging</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten Dienst, der von vielen Apps genutzt wird. Zur Benutztung muss Geräte Check-In aktiviert werden.</string>
 
@@ -57,6 +55,4 @@ Dies kann einige Minuten dauern."</string>
     <string name="prefcat_location_service">Standortdienst</string>
 
     <string name="gms_settings_name">microG Einstellungen</string>
-
-    <string name="google_account_type" translatable="false">com.google</string>
 </resources>
