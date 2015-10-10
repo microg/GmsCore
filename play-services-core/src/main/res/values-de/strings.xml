@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2013-2015 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="gms_app_name">microG Services Core</string>
+    <string name="just_a_sec">Einen kurzen Moment…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Durch Fortsetzen erlaubst du dieser App und Google deine Informationen nach ihren entsprechenden AGB und Datenschutzrichtlinien zu nutzen.</string>
+    <string name="ask_scope_permission_title">%s versucht:</string>
+    <string name="ask_service_permission_title">%s versucht zu nutzen:</string>
+    <string name="account_manager_title">Google Konto Manager</string>
+    <string name="sorry">Entschuldigung…</string>
+    <string name="no_network_error_desc">"Du hast keine Netzwerkverbindung.
+
+Dies könnte ein temporäres Problem sein oder dein Android Gerät hat keine bestehende Datenverbindung. Versuche es nocheinmal wenn du mit einem Datennetz oder WLAN verbunden bist."</string>
+    <string name="auth_general_error_desc">"Es ist ein Problem bei der Kommunikation mit den Google Servern aufgetreten.
+
+Versuche es später nocheinmal."</string>
+    <string name="auth_finalize">"Dein Gerät verbindet sich zu Google um Informationen in deinem Konto zu speichern.
+
+Dies kann einige Minuten dauern."</string>
+    <string name="allow">Erlauben</string>
+    <string name="deny">Ablehnen</string>
+    <string name="auth_notification_title">Authentifizierung erforlderlich</string>
+    <string name="auth_notification_content">%1$s erfordert deine Autorisierung um auf dein Google Konto zuzugreifen.</string>
+
+    <string name="perm_status_broadcast_label">Empfange interne Statusmeldungen</string>
+    <string name="perm_c2dm_receive_label">Empfange C2DM Nachrichten</string>
+    <string name="perm_c2dm_send_label">Sende C2DM Nachrichten zu anderen Apps</string>
+
+    <string name="pref_auth_trust_google">auth_manager_trust_google</string>
+    <string name="pref_auth_trust_google_title">Vertraue Google bei App Rechten</string>
+    <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt bevor eine App Autorisierungsanfrage an Google geschickt wird. Einige Apps werden das Google Konto nicht nutzen können, wenn deaktiviert.</string>
+    
+    <string name="pref_checkin_enable_title">Aktiviere Geräte Check-In</string>
+    <string name="pref_checkin_enable_summary">Geräte Check-In ist ein versteckter Prozess, der genutzt wird um eine eindeutige Kennung für Google Dienste zu erzeugen. microG entfernt identifizierende Daten bis auf den Google Konto Namen.</string>
+    <string name="pref_gcm_enable_mcs_title">Aktiviere Google Cloud Messaging</string>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten Dienst, der von vielen Apps genutzt wird. Zur Benutztung muss Geräte Check-In aktiviert werden.</string>
+
+    <string name="prefcat_services">Hintergrunddienste</string>
+    <string name="prefcat_components">Komponenten</string>
+    <string name="prefcat_location_service">Standortdienst</string>
+
+    <string name="gms_settings_name">microG Einstellungen</string>
+</resources>
