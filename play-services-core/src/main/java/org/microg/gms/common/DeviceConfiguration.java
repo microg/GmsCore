@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.opengl.GLES10;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import java.util.ArrayList;
@@ -69,7 +68,9 @@ public class DeviceConfiguration {
         densityDpi = displayMetrics.densityDpi;
         glEsVersion = configurationInfo.reqGlEsVersion;
         PackageManager packageManager = context.getPackageManager();
-        sharedLibraries = new ArrayList<String>(Arrays.asList(packageManager.getSystemSharedLibraryNames()));
+        String[] systemSharedLibraryNames = packageManager.getSystemSharedLibraryNames();
+        sharedLibraries = new ArrayList<String>();
+        if (systemSharedLibraryNames != null) sharedLibraries.addAll(Arrays.asList(systemSharedLibraryNames));
         for (String s : new String[]{"com.google.android.maps", "com.google.android.media.effects", "com.google.widevine.software.drm"}) {
             if (!sharedLibraries.contains(s)) {
                 sharedLibraries.add(s);
@@ -77,8 +78,10 @@ public class DeviceConfiguration {
         }
         Collections.sort(sharedLibraries);
         availableFeatures = new ArrayList<String>();
-        for (FeatureInfo featureInfo : packageManager.getSystemAvailableFeatures()) {
-            if (featureInfo.name != null) availableFeatures.add(featureInfo.name);
+        if (packageManager.getSystemAvailableFeatures() != null) {
+            for (FeatureInfo featureInfo : packageManager.getSystemAvailableFeatures()) {
+                if (featureInfo != null && featureInfo.name != null) availableFeatures.add(featureInfo.name);
+            }
         }
         Collections.sort(availableFeatures);
         this.nativePlatforms = getNativePlatforms();
