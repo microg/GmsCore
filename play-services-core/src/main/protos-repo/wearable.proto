@@ -34,15 +34,15 @@ message ChannelControlRequest {
     optional int32 closeErrorCode = 7;
 }
 
+message ChannelDataAckRequest {
+    optional ChannelDataHeader header = 1;
+    optional bool finalMessage = 2;
+}
+
 message ChannelDataHeader {
     optional int64 channelId = 1;
     optional bool fromChannelOperator = 2;
     optional int64 unknown3 = 3;
-}
-
-message ChannelDataAckRequest {
-    optional ChannelDataHeader header = 1;
-    optional bool finalMessage = 2;
 }
 
 message ChannelDataRequest {
@@ -84,6 +84,14 @@ message FilePiece {
 
 message Heartbeat {
 
+}
+
+message MessagePiece {
+    optional bytes data = 1;
+    optional string digest = 2;
+    optional int32 thisPiece = 3;
+    optional int32 totalPieces = 4;
+    optional int32 queueId = 5;
 }
 
 message Request {
