@@ -259,6 +259,7 @@ public class McsService extends Service implements Handler.Callback {
         Intent intent = new Intent();
         intent.setAction("com.google.android.c2dm.intent.RECEIVE");
         intent.addCategory(msg.category);
+        intent.putExtra("from", msg.from);
         for (AppData appData : msg.app_data) {
             intent.putExtra(appData.key, appData.value);
         }
