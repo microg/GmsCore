@@ -37,7 +37,7 @@ public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocat
 
     @Override
     protected String getActionString() {
-        return Services.LOCATION_MANAGER.ACTION;
+        return Services.LOCATION_MANAGER.ACTION_LEGACY;
     }
 
     @Override
