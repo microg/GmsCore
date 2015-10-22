@@ -300,6 +300,26 @@
             android:name=".auth.TokenActivity"
             android:exported="true"/>
 
+        <!-- Games -->
+
+        <service
+            android:name="org.microg.gms.games.GamesStubService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.games.service.START"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.gms.games.UpgradeActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog">
+            <intent-filter>
+                <action android:name="com.google.android.gms.games.PLAY_GAMES_UPGRADE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- Other -->
 
         <service
@@ -416,7 +436,6 @@
             android:name="org.microg.gms.DummyService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.games.service.START"/>
                 <action android:name="com.google.android.gms.plus.service.START"/>
                 <action android:name="com.google.android.gms.plus.service.internal.START"/>
                 <action android:name="com.google.android.gms.panorama.service.START"/>
