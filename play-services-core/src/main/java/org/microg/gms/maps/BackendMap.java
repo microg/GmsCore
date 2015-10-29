@@ -38,6 +38,7 @@ import org.oscim.layers.marker.MarkerSymbol;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
+import org.oscim.layers.vector.geometries.Drawable;
 import org.oscim.map.Layers;
 import org.oscim.map.Map;
 import org.oscim.map.Viewport;
@@ -171,7 +172,10 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     private synchronized void updateDrawableLayer() {
         drawables.clear();
         for (DrawableMarkup markup : drawableMarkups) {
-            drawables.add(markup.getDrawable(mapView.map()));
+            Drawable drawable = markup.getDrawable(mapView.map());
+            if (drawable != null) {
+                drawables.add(drawable);
+            }
         }
     }
 

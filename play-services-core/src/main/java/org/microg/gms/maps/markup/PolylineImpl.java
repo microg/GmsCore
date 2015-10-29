@@ -148,6 +148,10 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     @Override
     public Drawable getDrawable(Map map) {
         if (!isVisible() || removed) return null;
+        if (options.getPoints().size() < 2) {
+            // You hardly draw a line with less than two points
+            return null;
+        }
         List<GeoPoint> points = new ArrayList<GeoPoint>();
         for (LatLng point : options.getPoints()) {
             points.add(GmsMapsTypeHelper.fromLatLng(point));
