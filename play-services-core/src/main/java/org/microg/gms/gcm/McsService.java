@@ -377,11 +377,9 @@ public class McsService extends Service implements Handler.Callback {
             sslSocket.close();
         } catch (Exception ignored) {
         }
-        if (currentDelay == 0) {
-            sendBroadcast(new Intent("org.microg.gms.gcm.RECONNECT"), "org.microg.gms.STATUS_BROADCAST");
-        } else {
-            scheduleReconnect(this);
-        }
+        
+        scheduleReconnect(this);
+        
         alarmManager.cancel(heartbeatIntent);
         if (wakeLock != null) {
             wakeLock.release();
