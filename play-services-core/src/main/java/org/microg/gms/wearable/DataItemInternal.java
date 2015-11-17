@@ -37,6 +37,12 @@ public class DataItemInternal {
         this.uri = new Uri.Builder().scheme("wear").authority(host).path(path).build();
     }
 
+    public DataItemInternal(Uri uri) {
+        this.uri = uri;
+        this.host = uri.getAuthority();
+        this.path = uri.getPath();
+    }
+
     public DataItemInternal addAsset(String key, Asset asset) {
         this.assets.put(key, asset);
         return this;

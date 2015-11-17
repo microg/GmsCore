@@ -28,28 +28,35 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
-import com.google.android.gms.wearable.internal.AddListenerRequest;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.internal.AddListenerRequest;
+import com.google.android.gms.wearable.internal.AmsEntityUpdateParcelable;
+import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
 import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.ChannelEventParcelable;
+import com.google.android.gms.wearable.internal.DataItemParcelable;
 import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
 import com.google.android.gms.wearable.internal.GetConfigResponse;
 import com.google.android.gms.wearable.internal.GetConfigsResponse;
 import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
 import com.google.android.gms.wearable.internal.GetDataItemResponse;
 import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
+import com.google.android.gms.wearable.internal.IWearableCallbacks;
 import com.google.android.gms.wearable.internal.IWearableListener;
+import com.google.android.gms.wearable.internal.IWearableService;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
+import com.google.android.gms.wearable.internal.NodeParcelable;
 import com.google.android.gms.wearable.internal.PutDataRequest;
 import com.google.android.gms.wearable.internal.PutDataResponse;
 import com.google.android.gms.wearable.internal.RemoveListenerRequest;
-import com.google.android.gms.wearable.internal.DataItemParcelable;
-import com.google.android.gms.wearable.internal.IWearableCallbacks;
-import com.google.android.gms.wearable.internal.IWearableService;
-import com.google.android.gms.wearable.internal.NodeParcelable;
 
 import org.microg.gms.common.PackageUtils;
+import org.microg.wearable.WearableConnection;
+import org.microg.wearable.proto.AssetEntry;
+import org.microg.wearable.proto.RootMessage;
+import org.microg.wearable.proto.SetDataItem;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,6 +70,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import okio.ByteString;
+
 public class WearableServiceImpl extends IWearableService.Stub implements IWearableListener {
     private static final String TAG = "GmsWearSvcImpl";
 
@@ -75,6 +84,10 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
     private final NodeDatabaseHelper nodeDatabase;
     private final ConfigurationDatabaseHelper configDatabase;
     private Set<IWearableListener> listeners = new HashSet<IWearableListener>();
+    private Set<Node> connectedNodes = new HashSet<Node>();
+    private ConnectionConfiguration[] configurations;
+    private boolean configurationsUpdated = false;
+    private NetworkConnectionThread nct;
 
     private long seqIdBlock;
     private long seqIdInBlock = -1;
@@ -125,7 +138,7 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         callbacks.onPutDataResponse(new PutDataResponse(0, parcelable));
     }
 
-    private DataItemRecord putDataItem(String packageName, String signatureDigest, String source, DataItemInternal dataItem) {
+    public DataItemRecord putDataItem(String packageName, String signatureDigest, String source, DataItemInternal dataItem) {
         DataItemRecord record = new DataItemRecord();
         record.packageName = packageName;
         record.signatureDigest = signatureDigest;
@@ -134,6 +147,10 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         record.dataItem = dataItem;
         record.v1SeqId = getNextSeqId();
         if (record.source.equals(getLocalNodeId())) record.seqId = record.v1SeqId;
+        return putDataItem(record);
+    }
+
+    public DataItemRecord putDataItem(DataItemRecord record) {
         nodeDatabase.putRecord(record);
         return record;
     }
@@ -231,8 +248,16 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
 
     @Override
     public void getConnectedNodes(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "getConnectedNodes[fak]");
-        callbacks.onGetConnectedNodesResponse(new GetConnectedNodesResponse(0, new ArrayList<NodeParcelable>()));
+        Log.d(TAG, "getConnectedNodes");
+        callbacks.onGetConnectedNodesResponse(new GetConnectedNodesResponse(0, getConnectedNodesParcelableList()));
+    }
+
+    private List<NodeParcelable> getConnectedNodesParcelableList() {
+        List<NodeParcelable> nodes = new ArrayList<NodeParcelable>();
+        for (Node connectedNode : connectedNodes) {
+            nodes.add(new NodeParcelable(connectedNode));
+        }
+        return nodes;
     }
 
     @Override
@@ -253,13 +278,14 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
     public void putConfig(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
         Log.d(TAG, "putConfig[nyp]: " + config);
         configDatabase.putConfiguration(config);
+        configurationsUpdated = true;
         callbacks.onStatus(Status.SUCCESS);
     }
 
     @Override
     public void getConfig(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getConfig");
-        ConnectionConfiguration[] configurations = configDatabase.getAllConfigurations();
+        ConnectionConfiguration[] configurations = getConfigurations();
         if (configurations == null || configurations.length == 0) {
             callbacks.onGetConfigResponse(new GetConfigResponse(1, new ConnectionConfiguration(null, null, 0, 0, false)));
         } else {
@@ -271,16 +297,59 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
     public void getConfigs(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getConfigs");
         try {
-            callbacks.onGetConfigsResponse(new GetConfigsResponse(0, configDatabase.getAllConfigurations()));
+            callbacks.onGetConfigsResponse(new GetConfigsResponse(0, getConfigurations()));
         } catch (Exception e) {
             callbacks.onGetConfigsResponse(new GetConfigsResponse(8, new ConnectionConfiguration[0]));
         }
     }
 
+    private synchronized ConnectionConfiguration[] getConfigurations() {
+        if (configurations == null) {
+            configurations = configDatabase.getAllConfigurations();
+        }
+        if (configurationsUpdated) {
+            configurationsUpdated = false;
+            ConnectionConfiguration[] newConfigurations = configDatabase.getAllConfigurations();
+            for (ConnectionConfiguration configuration : configurations) {
+                for (ConnectionConfiguration newConfiguration : newConfigurations) {
+                    if (newConfiguration.name.equals(configuration.name)) {
+                        newConfiguration.connected = configuration.connected;
+                        newConfiguration.peerNodeId = configuration.peerNodeId;
+                        break;
+                    }
+                }
+            }
+            configurations = newConfigurations;
+        }
+        return configurations;
+    }
+
+    @Override
+    public void enableConnection(IWearableCallbacks callbacks, String name) throws RemoteException {
+        Log.d(TAG, "enableConnection: " + name);
+        configDatabase.setEnabledState(name, true);
+        configurationsUpdated = true;
+        callbacks.onStatus(Status.SUCCESS);
+        if (name.equals("server")) {
+            // TODO: hackady hack
+            (nct = new NetworkConnectionThread(this, configDatabase.getConfiguration(name))).start();
+        }
+    }
+
     @Override
     public void disableConnection(IWearableCallbacks callbacks, String name) throws RemoteException {
+        Log.d(TAG, "disableConnection: " + name);
         configDatabase.setEnabledState(name, false);
+        configurationsUpdated = true;
         callbacks.onStatus(Status.SUCCESS);
+        if (name.equals("server")) {
+            // TODO: hacady hack
+            if (nct != null) {
+                nct.close();
+                nct.interrupt();
+                nct = null;
+            }
+        }
     }
 
     @Override
@@ -298,17 +367,45 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
     }
 
     @Override
-    public void onMessageReceived(MessageEventParcelable messageEvent) throws RemoteException {
-        for (IWearableListener listener : listeners) {
-            listener.onMessageReceived(messageEvent);
+    public void onMessageReceived(MessageEventParcelable messageEvent) {
+        Log.d(TAG, "onMessageReceived: " + messageEvent);
+        for (IWearableListener listener : new ArrayList<IWearableListener>(listeners)) {
+            try {
+                listener.onMessageReceived(messageEvent);
+            } catch (RemoteException e) {
+                listeners.remove(listener);
+            }
         }
     }
 
     @Override
-    public void onPeerConnected(NodeParcelable node) throws RemoteException {
-        for (IWearableListener listener : listeners) {
-            listener.onPeerConnected(node);
+    public void onPeerConnected(NodeParcelable node) {
+        Log.d(TAG, "onPeerConnected: " + node);
+        for (IWearableListener listener : new ArrayList<IWearableListener>(listeners)) {
+            try {
+                listener.onPeerConnected(node);
+            } catch (RemoteException e) {
+                listeners.remove(listener);
+            }
         }
+        addConnectedNode(node);
+    }
+
+    private void addConnectedNode(Node node) {
+        connectedNodes.add(node);
+        onConnectedNodes(getConnectedNodesParcelableList());
+    }
+
+    private void removeConnectedNode(String nodeId) {
+        Node toRemove = null;
+        for (Node node : connectedNodes) {
+            if (node.getId().equals(nodeId)) {
+                toRemove = node;
+                break;
+            }
+        }
+        connectedNodes.remove(toRemove);
+        onConnectedNodes(getConnectedNodesParcelableList());
     }
 
     @Override
@@ -319,9 +416,21 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
     }
 
     @Override
-    public void onConnectedNodes(List<NodeParcelable> nodes) throws RemoteException {
+    public void onConnectedNodes(List<NodeParcelable> nodes) {
+        Log.d(TAG, "onConnectedNodes: " + nodes);
         for (IWearableListener listener : listeners) {
-            listener.onConnectedNodes(nodes);
+            try {
+                listener.onConnectedNodes(nodes);
+            } catch (RemoteException e) {
+                listeners.remove(listener);
+            }
+        }
+    }
+
+    @Override
+    public void onNotificationReceived(AncsNotificationParcelable notification) throws RemoteException {
+        for (IWearableListener listener : listeners) {
+            listener.onNotificationReceived(notification);
         }
     }
 
@@ -337,5 +446,56 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         for (IWearableListener listener : listeners) {
             listener.onConnectedCapabilityChanged(capabilityInfo);
         }
+    }
+
+    @Override
+    public void onEntityUpdate(AmsEntityUpdateParcelable update) throws RemoteException {
+        for (IWearableListener listener : listeners) {
+            listener.onEntityUpdate(update);
+        }
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void syncToPeer(WearableConnection connection, String nodeId, long seqId) {
+        Cursor cursor = nodeDatabase.getModifiedDataItems(nodeId, seqId, true);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                DataItemRecord record = DataItemRecord.fromCursor(cursor);
+                SetDataItem.Builder builder = new SetDataItem.Builder()
+                        .packageName(record.packageName)
+                        .signatureDigest(record.signatureDigest)
+                        .uri(record.dataItem.uri.toString())
+                        .seqId(record.seqId)
+                        .deleted(record.deleted)
+                        .lastModified(record.lastModified);
+                if (record.source != null) builder.source(record.source);
+                if (record.dataItem.data != null) builder.data(ByteString.of(record.dataItem.data));
+                List<AssetEntry> protoAssets = new ArrayList<AssetEntry>();
+                Map<String, Asset> assets = record.dataItem.getAssets();
+                for (String key : assets.keySet()) {
+                    protoAssets.add(new AssetEntry.Builder()
+                            .key(key)
+                            .unknown3(4)
+                            .value(new org.microg.wearable.proto.Asset.Builder()
+                                    .digest(assets.get(key).getDigest())
+                                    .build()).build());
+                }
+                builder.assets(protoAssets);
+                try {
+                    connection.writeMessage(new RootMessage.Builder().setDataItem(builder.build()).build());
+                } catch (IOException e) {
+                    Log.w(TAG, e);
+                    break;
+                }
+            }
+            cursor.close();
+        }
+    }
+
+    public long getCurrentSeqId(String nodeId) {
+        return nodeDatabase.getCurrentSeqId(nodeId);
     }
 }

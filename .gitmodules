@@ -4,3 +4,6 @@
 [submodule "extern/GmsApi"]
 	path = extern/GmsApi
 	url = https://github.com/microg/android_external_GmsApi.git
+[submodule "extern/Wearable"]
+	path = extern/Wearable
+	url = https://github.com/microg/android_external_Wearable.git

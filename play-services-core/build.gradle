@@ -39,6 +39,7 @@ dependencies {
     compile 'com.squareup.wire:wire-runtime:1.6.1'
     compile project(':play-services-api')
     compile project(':unifiednlp-base')
+    compile project(':wearable-lib')
     // vtm from ./libs
     compile 'org.oscim:vtm-android:0.6.0-SNAPSHOT@aar'
     compile 'org.oscim:vtm-themes:0.6.0-SNAPSHOT'

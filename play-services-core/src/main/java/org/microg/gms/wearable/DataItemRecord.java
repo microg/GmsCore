@@ -18,10 +18,14 @@ package org.microg.gms.wearable;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.internal.DataItemAssetParcelable;
 import com.google.android.gms.wearable.internal.DataItemParcelable;
+
+import org.microg.wearable.proto.AssetEntry;
+import org.microg.wearable.proto.SetDataItem;
 
 import java.util.Map;
 
@@ -74,6 +78,25 @@ public class DataItemRecord {
         record.dataItem.data = cursor.getBlob(8);
         record.lastModified = cursor.getLong(9);
         record.assetsAreReady = cursor.getLong(10) > 0;
+        return record;
+    }
+
+    public static DataItemRecord fromSetDataItem(SetDataItem setDataItem) {
+        DataItemRecord record = new DataItemRecord();
+        record.dataItem = new DataItemInternal(Uri.parse(setDataItem.uri));
+        if (setDataItem.data != null) record.dataItem.data = setDataItem.data.toByteArray();
+        if (setDataItem.assets != null) {
+            for (AssetEntry asset : setDataItem.assets) {
+                // TODO record.dataItem.addAsset(asset.key, asset.value)
+            }
+        }
+        record.source = setDataItem.source;
+        record.seqId = setDataItem.seqId;
+        record.v1SeqId = -1;
+        record.lastModified = setDataItem.lastModified;
+        record.deleted = setDataItem.deleted == null ? false : setDataItem.deleted;
+        record.packageName = setDataItem.packageName;
+        record.signatureDigest = setDataItem.signatureDigest;
         return record;
     }
 }

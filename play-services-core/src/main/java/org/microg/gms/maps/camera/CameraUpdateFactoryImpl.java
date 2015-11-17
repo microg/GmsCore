@@ -18,12 +18,14 @@ package org.microg.gms.maps.camera;
 
 import android.os.RemoteException;
 import android.util.Log;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+
 import org.microg.gms.maps.GmsMapsTypeHelper;
 import org.oscim.core.MapPosition;
 import org.oscim.map.Map;
@@ -159,7 +161,7 @@ public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
     }
 
     @Override
-    public IObjectWrapper newLatLngBounds(final LatLngBounds bounds, int i) throws RemoteException {
+    public IObjectWrapper newLatLngBounds(final LatLngBounds bounds, int padding) throws RemoteException {
         Log.d(TAG, "newLatLngBounds");
         return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
             @Override
@@ -173,9 +175,17 @@ public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
     }
 
     @Override
-    public IObjectWrapper newLatLngBoundsWithSize(LatLngBounds bounds, int i1, int i2, int i3)
+    public IObjectWrapper newLatLngBoundsWithSize(final LatLngBounds bounds, final int width, final int height, int padding)
             throws RemoteException {
         Log.d(TAG, "newLatLngBoundsWithSize");
-        return new ObjectWrapper<CameraUpdate>(new NoCameraUpdate());
+        return new ObjectWrapper<CameraUpdate>(new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                MapPosition mapPosition = map.getMapPosition();
+                mapPosition.setByBoundingBox(GmsMapsTypeHelper.fromLatLngBounds(bounds),
+                        width, height);
+                return mapPosition;
+            }
+        });
     }
 }

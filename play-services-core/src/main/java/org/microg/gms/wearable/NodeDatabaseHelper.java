@@ -187,6 +187,11 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return db.query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, params, null, null, "packageName, signatureDigest, host, path");
     }
 
+    public Cursor getModifiedDataItems(final String nodeId, final long seqId, final boolean excludeDeleted) {
+        String selection = "sourceNode =? AND seqId >?" + (excludeDeleted ? "AND deleted =0" : "");
+        return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, new String[]{nodeId, Long.toString(seqId)}, null, null, "seqId", null);
+    }
+
     public synchronized int deleteDataItems(String packageName, String signatureDigest, String host, String path) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -203,5 +208,18 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
         return n;
+    }
+
+    public long getCurrentSeqId(String sourceNode) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("dataItemsAndAssets", new String[]{"seqId"}, "sourceNode=?", new String[]{sourceNode}, null, null, "seqId DESC", "1");
+        long res = 1;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                res = cursor.getLong(0);
+            }
+            cursor.close();;
+        }
+        return res;
     }
 }
