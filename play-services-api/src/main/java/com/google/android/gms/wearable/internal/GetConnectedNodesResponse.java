@@ -26,7 +26,7 @@ public class GetConnectedNodesResponse extends AutoSafeParcelable {
     private int versionCode = 1;
     @SafeParceled(2)
     public final int statusCode;
-    @SafeParceled(3)
+    @SafeParceled(value = 3, subClass = NodeParcelable.class)
     public final List<NodeParcelable> nodes;
 
     private GetConnectedNodesResponse() {

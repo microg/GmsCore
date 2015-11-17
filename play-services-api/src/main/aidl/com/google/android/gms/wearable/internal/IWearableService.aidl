@@ -18,6 +18,7 @@ interface IWearableService {
     void removeListener(IWearableCallbacks callbacks, in RemoveListenerRequest request) = 16;
     void putConfig(IWearableCallbacks callbacks, in ConnectionConfiguration config) = 19;
     void getConfigs(IWearableCallbacks callbacks) = 21;
+    void enableConnection(IWearableCallbacks callbacks, String name) = 22;
     void disableConnection(IWearableCallbacks callbacks, String name) = 23;
     void getDataItemsByUri(IWearableCallbacks callbacks, in Uri uri, int i) = 39;
     void deleteDataItems(IWearableCallbacks callbacks, in Uri uri) = 40;

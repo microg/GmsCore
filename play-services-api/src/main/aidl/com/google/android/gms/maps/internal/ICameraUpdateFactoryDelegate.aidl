@@ -15,6 +15,6 @@ interface ICameraUpdateFactoryDelegate {
     IObjectWrapper newCameraPosition(in CameraPosition cameraPosition);
     IObjectWrapper newLatLng(in LatLng latLng);
     IObjectWrapper newLatLngZoom(in LatLng latLng, float zoom);
-    IObjectWrapper newLatLngBounds(in LatLngBounds bounds, int i);
-    IObjectWrapper newLatLngBoundsWithSize(in LatLngBounds bounds, int i1, int i2, int i3);
+    IObjectWrapper newLatLngBounds(in LatLngBounds bounds, int padding);
+    IObjectWrapper newLatLngBoundsWithSize(in LatLngBounds bounds, int width, int height, int size);
 }

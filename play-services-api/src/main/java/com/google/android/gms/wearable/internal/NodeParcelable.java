@@ -41,6 +41,11 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
         this.displayName = displayName;
     }
 
+    public NodeParcelable(Node node) {
+        this.id = node.getId();
+        this.displayName = node.getDisplayName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

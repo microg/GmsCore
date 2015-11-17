@@ -16,8 +16,53 @@
 
 package com.google.android.gms.wearable.internal;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import com.google.android.gms.wearable.MessageEvent;
 
-public class MessageEventParcelable extends AutoSafeParcelable {
+import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
+
+public class MessageEventParcelable extends AutoSafeParcelable implements MessageEvent {
+
+    @SafeParceled(1)
+    private int versionCode = 1;
+    @SafeParceled(2)
+    public int requestId;
+    @SafeParceled(3)
+    public String path;
+    @SafeParceled(4)
+    public byte[] data;
+    @SafeParceled(5)
+    public String sourceNodeId;
+
+    @Override
+    public byte[] getData() {
+        return data;
+    }
+
+    @Override
+    public String getPath() {
+        return path;
+    }
+
+    @Override
+    public int getRequestId() {
+        return requestId;
+    }
+
+    @Override
+    public String getSourceNodeId() {
+        return sourceNodeId;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageEventParcelable{" +
+                "requestId=" + requestId +
+                ", path='" + path + '\'' +
+                ", dataSize=" + (data != null ? data.length : -1) +
+                ", sourceNodeId='" + sourceNodeId + '\'' +
+                '}';
+    }
+
     public static final Creator<MessageEventParcelable> CREATOR = new AutoCreator<MessageEventParcelable>(MessageEventParcelable.class);
 }

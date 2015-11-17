@@ -28,15 +28,19 @@ public class AddListenerRequest extends AutoSafeParcelable {
     public final IWearableListener listener;
     @SafeParceled(3)
     public final IntentFilter[] intentFilters;
+    @SafeParceled(4)
+    public final String channelTokenString;
 
     private AddListenerRequest() {
         listener = null;
         intentFilters = null;
+        channelTokenString = null;
     }
 
-    public AddListenerRequest(IWearableListener listener, IntentFilter[] intentFilters) {
+    public AddListenerRequest(IWearableListener listener, IntentFilter[] intentFilters, String channelTokenString) {
         this.listener = listener;
         this.intentFilters = intentFilters;
+        this.channelTokenString = channelTokenString;
     }
 
     public static final Creator<AddListenerRequest> CREATOR = new AutoCreator<AddListenerRequest>(AddListenerRequest.class);
