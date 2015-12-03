@@ -21,11 +21,12 @@ public class Constants {
      * This is the highest version that was looked at during development.
      * Does not necessarily mean anything.
      */
-    public static final int MAX_REFERENCE_VERSION = 8115000;
+    public static final int MAX_REFERENCE_VERSION = 8489000;
     public static final String KEY_MOCK_LOCATION = "mockLocation";
     public static final String DEFAULT_ACCOUNT = "<<default account>>";
     public static final String GMS_PACKAGE_NAME = "com.google.android.gms";
     public static final String GMS_PACKAGE_SIGNATURE_SHA1 = "38918a453d07199354f8b19af05ec6562ced5788";
+    public static final String SCOPE_GET_ACCOUNT_ID = "^^_account_id_^^";
 
     /**
      * No base map tiles.
