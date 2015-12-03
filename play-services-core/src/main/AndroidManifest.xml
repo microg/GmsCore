@@ -17,8 +17,8 @@
 <manifest
     package="com.google.android.gms"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="8115238"
-    android:versionName="8.1.15 (microG v0.01)">
+    android:versionCode="8489238"
+    android:versionName="8.4.89 (microG v0.02)">
 
     <uses-sdk
         android:minSdkVersion="14"

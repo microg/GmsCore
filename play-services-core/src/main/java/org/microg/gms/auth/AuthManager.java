@@ -25,6 +25,7 @@ import android.util.Log;
 
 import com.google.android.gms.R;
 
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
@@ -120,12 +121,13 @@ public class AuthManager {
     }
 
     public String peekAuthToken() {
+        Log.d(TAG, "peekAuthToken: " + buildTokenKey());
         return getAccountManager().peekAuthToken(getAccount(), buildTokenKey());
     }
 
     public String getAuthToken() {
         if (service.startsWith("weblogin:")) return null;
-        if (getExpiry() != -1 && getExpiry() < System.currentTimeMillis() / 1000L) {
+        if (getExpiry() < System.currentTimeMillis() / 1000L) {
             Log.d(TAG, "token present, but expired");
             return null;
         }
@@ -178,6 +180,11 @@ public class AuthManager {
     }
 
     public AuthResponse requestAuth(boolean legacy) throws IOException {
+        if (service.equals(Constants.SCOPE_GET_ACCOUNT_ID)) {
+            AuthResponse response = new AuthResponse();
+            response.accountId = response.auth = getAccountManager().getUserData(getAccount(), "GoogleUserId");
+            return response;
+        }
         if (isPermitted() || isTrustGooglePermitted(context)) {
             String token = getAuthToken();
             if (token != null) {

@@ -32,10 +32,14 @@ import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.R;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
+import com.google.android.gms.auth.TokenData;
+import com.google.android.gms.common.api.Scope;
 
 import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
@@ -83,16 +87,19 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         scope = scope.replace("https://www.googleapis.com/auth/identity.plus.page.impersonation ", "");
 
         AuthManager authManager = new AuthManager(context, accountName, packageName, scope);
+        Bundle result = new Bundle();
+        result.putString(KEY_ACCOUNT_NAME, accountName);
+        result.putString(KEY_ACCOUNT_TYPE, authManager.getAccountType());
         try {
             AuthResponse res = authManager.requestAuth(false);
             if (res.auth != null) {
-                Log.d(TAG, "getToken: " + res.auth);
-                Bundle result = new Bundle();
+                Log.d(TAG, "getToken: " + res);
                 result.putString(KEY_AUTHTOKEN, res.auth);
+                Bundle details = new Bundle();
+                details.putParcelable("TokenData", new TokenData(res.auth, res.expiry, scope.startsWith("oauth2:"), getScopes(scope)));
+                result.putBundle("tokenDetails", details);
                 result.putString(KEY_ERROR, "OK");
-                return result;
             } else {
-                Bundle result = new Bundle();
                 result.putString(KEY_ERROR, "NeedPermission");
                 Intent i = new Intent(context, AskPermissionActivity.class);
                 i.putExtras(extras);
@@ -116,14 +123,22 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                             .build());
                 }
                 result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
-                return result;
             }
         } catch (IOException e) {
             Log.w(TAG, e);
-            Bundle result = new Bundle();
             result.putString(KEY_ERROR, "NetworkError");
-            return result;
         }
+        return result;
+    }
+
+    private List<Scope> getScopes(String scope) {
+        if (!scope.startsWith("oauth2:")) return null;
+        String[] strings = scope.substring(7).split(" ");
+        List<Scope> res = new ArrayList<Scope>();
+        for (String string : strings) {
+            res.add(new Scope(string));
+        }
+        return res;
     }
 
     private static CharSequence getPackageLabel(String packageName, PackageManager pm) {
