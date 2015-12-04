@@ -36,13 +36,13 @@ public final class GoogleMapOptions extends AutoSafeParcelable {
     @SafeParceled(7)
     private boolean compassEnabled;
     @SafeParceled(8)
-    private boolean scrollGesturesEnabled;
+    private boolean scrollGesturesEnabled = true;
     @SafeParceled(9)
-    private boolean zoomGesturesEnabled;
+    private boolean zoomGesturesEnabled = true;
     @SafeParceled(10)
-    private boolean tiltGesturesEnabled;
+    private boolean tiltGesturesEnabled = true;
     @SafeParceled(11)
-    private boolean rotateGesturesEnabled;
+    private boolean rotateGesturesEnabled = true;
 
     public GoogleMapOptions() {
     }
