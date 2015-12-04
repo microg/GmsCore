@@ -18,8 +18,16 @@ package org.microg.gms.maps.markup;
 
 import android.content.Context;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.oscim.layers.marker.MarkerItem;
 
 public interface MarkerItemMarkup extends Markup {
     MarkerItem getMarkerItem(Context context);
+
+    boolean isDraggable();
+
+    LatLng getPosition();
+
+    void setPosition(LatLng latLng);
 }

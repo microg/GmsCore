@@ -22,9 +22,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.R;
+import com.google.android.gms.maps.model.CameraPosition;
 
-import org.microg.gms.maps.data.SharedTileCache;
 import org.microg.gms.maps.camera.CameraUpdate;
+import org.microg.gms.maps.data.SharedTileCache;
 import org.microg.gms.maps.markup.ClearableVectorLayer;
 import org.microg.gms.maps.markup.DrawableMarkup;
 import org.microg.gms.maps.markup.MarkerItemMarkup;
@@ -32,6 +33,9 @@ import org.microg.gms.maps.markup.Markup;
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidBitmap;
 import org.oscim.core.MapPosition;
+import org.oscim.core.Point;
+import org.oscim.event.Event;
+import org.oscim.event.MotionEvent;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
@@ -53,7 +57,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem> {
+public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem>, Map.InputListener {
     private final static String TAG = "GmsMapBackend";
 
     private final Context context;
@@ -67,8 +71,11 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     private java.util.Map<String, Markup> markupMap = new HashMap<String, Markup>();
     private List<DrawableMarkup> drawableMarkups = new ArrayList<DrawableMarkup>();
     private ClearableVectorLayer drawables;
+    private MarkerItemMarkup currentlyDraggedItem;
+    private float dragLastX = -1;
+    private float dragLastY = -1;
 
-    public BackendMap(Context context) {
+    public BackendMap(Context context, final CameraUpdateListener cameraUpdateListener) {
         this.context = context;
         mapView = new MapView(new ContextContainer(context));
         cache = new SharedTileCache(context);
@@ -84,10 +91,14 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
                 .decodeResource(ResourcesContainer.get(), R.drawable.nop)), 0.5F, 1)));
         items.setOnItemGestureListener(this);
         mapView.map().setTheme(VtmThemes.DEFAULT);
-    }
+        mapView.map().input.bind(this);
+        mapView.map().events.bind(new Map.UpdateListener() {
 
-    public void setInputListener(Map.InputListener listener) {
-        mapView.map().input.bind(listener);
+            @Override
+            public void onMapEvent(Event event, MapPosition mapPosition) {
+                cameraUpdateListener.onCameraUpdate(GmsMapsTypeHelper.toCameraPosition(mapPosition));
+            }
+        });
     }
 
     public Viewport getViewport() {
@@ -199,12 +210,12 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
         if (markup instanceof MarkerItemMarkup) {
             markupMap.remove(markup.getId());
             items.removeItem(items.getByUid(markup.getId()));
-            redraw();
         } else if (markup instanceof DrawableMarkup) {
             drawableMarkups.remove(markup);
             updateDrawableLayer();
-            redraw();
+            drawables.update();
         }
+        redraw();
     }
 
     public synchronized void update(Markup markup) {
@@ -214,6 +225,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
             items.addItem(((MarkerItemMarkup) markup).getMarkerItem(context));
         } else if (markup instanceof DrawableMarkup) {
             updateDrawableLayer();
+            drawables.update();
         }
         redraw();
     }
@@ -229,8 +241,58 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
 
     @Override
     public boolean onItemLongPress(int index, MarkerItem item) {
-        // TODO: start drag+drop
-        Log.d(TAG, "onItemLongPress: " + markupMap.get(item.getUid()));
-        return false;
+        Markup markup = markupMap.get(item.getUid());
+        if (((MarkerItemMarkup) markup).isDraggable()) {
+            currentlyDraggedItem = (MarkerItemMarkup) markup;
+            currentlyDraggedItem.onDragStart();
+            return false;
+        } else {
+            Log.d(TAG, "onItemLongPress: " + markup);
+            return false;
+        }
+    }
+
+    @Override
+    public void onInputEvent(Event event, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL || motionEvent.getAction() == MotionEvent.ACTION_UP && currentlyDraggedItem != null) {
+            currentlyDraggedItem.onDragStop();
+            currentlyDraggedItem = null;
+        }
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            dragLastX = motionEvent.getX();
+            dragLastY = motionEvent.getY();
+        }
+        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE && currentlyDraggedItem != null) {
+            Point out = new Point();
+            mapView.map().viewport().toScreenPoint(GmsMapsTypeHelper.fromLatLng(currentlyDraggedItem.getPosition()), out);
+            out.x += mapView.getWidth() / 2;
+            out.y += mapView.getHeight() / 2;
+            float mx = motionEvent.getX() - dragLastX;
+            float my = motionEvent.getY() - dragLastY;
+            currentlyDraggedItem.setPosition(GmsMapsTypeHelper.toLatLng(mapView.map().viewport().fromScreenPoint((float) out.getX() + mx, (float) out.getY() + my)));
+            currentlyDraggedItem.onDragProgress();
+            dragLastX += mx;
+            dragLastY += my;
+        }
+    }
+
+    public void setZoomGesturesEnabled(boolean enabled) {
+        mapView.map().getEventLayer().enableZoom(enabled);
+    }
+
+    public void setScrollGesturesEnabled(boolean enabled) {
+        mapView.map().getEventLayer().enableMove(enabled);
+    }
+
+    public void setRotateGesturesEnabled(boolean enabled) {
+        mapView.map().getEventLayer().enableRotation(enabled);
+    }
+
+    public void setTiltGesturesEnabled(boolean enabled) {
+        mapView.map().getEventLayer().enableTilt(enabled);
+    }
+
+    public interface CameraUpdateListener {
+        void onCameraUpdate(CameraPosition cameraPosition);
     }
 }

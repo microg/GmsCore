@@ -145,6 +145,21 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     }
 
     @Override
+    public void onDragStart() {
+        listener.onDragStart(this);
+    }
+
+    @Override
+    public void onDragStop() {
+        listener.onDragStop(this);
+    }
+
+    @Override
+    public void onDragProgress() {
+        listener.onDragProgress(this);
+    }
+
+    @Override
     public Drawable getDrawable(Map map) {
         if (!isVisible() || removed) return null;
         return new CircleDrawable(

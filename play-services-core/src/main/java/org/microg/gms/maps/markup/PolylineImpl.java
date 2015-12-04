@@ -67,6 +67,21 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     }
 
     @Override
+    public void onDragStart() {
+        listener.onDragStart(this);
+    }
+
+    @Override
+    public void onDragStop() {
+        listener.onDragStop(this);
+    }
+
+    @Override
+    public void onDragProgress() {
+        listener.onDragProgress(this);
+    }
+
+    @Override
     public void setPoints(List<LatLng> points) {
         options.getPoints().clear();
         options.getPoints().addAll(points);

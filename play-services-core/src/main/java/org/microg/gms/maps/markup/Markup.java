@@ -21,11 +21,21 @@ public interface Markup {
 
     boolean onClick();
 
+    void onDragStart();
+    void onDragStop();
+    void onDragProgress();
+
     interface MarkupListener {
         void update(Markup markup);
 
         void remove(Markup markup);
 
         boolean onClick(Markup markup);
+
+        void onDragStart(Markup markup);
+
+        void onDragStop(Markup markup);
+
+        void onDragProgress(Markup markup);
     }
 }

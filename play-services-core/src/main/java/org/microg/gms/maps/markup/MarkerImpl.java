@@ -146,6 +146,11 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     }
 
     @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
     public void setIcon(IObjectWrapper obj) {
         if (obj == null) {
             icon = new BitmapDescriptorImpl();
@@ -209,6 +214,21 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     @Override
     public boolean onClick() {
         return listener.onClick(this);
+    }
+
+    @Override
+    public void onDragStart() {
+        listener.onDragStart(this);
+    }
+
+    @Override
+    public void onDragStop() {
+        listener.onDragStop(this);
+    }
+
+    @Override
+    public void onDragProgress() {
+        listener.onDragProgress(this);
     }
 
     @Override

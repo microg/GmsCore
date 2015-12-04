@@ -54,7 +54,7 @@ public class CreatorImpl extends ICreator.Stub {
 
     @Override
     public ICameraUpdateFactoryDelegate newCameraUpdateFactoryDelegate() throws RemoteException {
-        return new CameraUpdateFactoryImpl();
+        return CameraUpdateFactoryImpl.get();
     }
 
     @Override

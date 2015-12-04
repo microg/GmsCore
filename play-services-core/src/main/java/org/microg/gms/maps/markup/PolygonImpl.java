@@ -63,6 +63,21 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
+    public void onDragStart() {
+        listener.onDragStart(this);
+    }
+
+    @Override
+    public void onDragStop() {
+        listener.onDragStop(this);
+    }
+
+    @Override
+    public void onDragProgress() {
+        listener.onDragProgress(this);
+    }
+
+    @Override
     public void setPoints(List<LatLng> points) throws RemoteException {
         options.getPoints().clear();
         options.getPoints().addAll(points);

@@ -23,10 +23,10 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     private boolean zoomControlsEnabled;
     private boolean compassEnabled;
     private boolean myLocationButtonEnabled;
-    private boolean scrollGesturesEnabled;
-    private boolean zoomGesturesEnabled;
-    private boolean tiltGesturesEnabled;
-    private boolean rotateGesturesEnabled;
+    private boolean scrollGesturesEnabled = true;
+    private boolean zoomGesturesEnabled = true;
+    private boolean tiltGesturesEnabled = true;
+    private boolean rotateGesturesEnabled = true;
     
     private UiSettingsListener listener;
 

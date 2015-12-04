@@ -58,6 +58,7 @@ import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 import com.google.android.gms.maps.model.internal.ITileOverlayDelegate;
 
 import org.microg.gms.maps.camera.CameraUpdate;
+import org.microg.gms.maps.camera.MapPositionCameraUpdate;
 import org.microg.gms.maps.markup.CircleImpl;
 import org.microg.gms.maps.markup.GroundOverlayImpl;
 import org.microg.gms.maps.markup.MarkerImpl;
@@ -65,12 +66,9 @@ import org.microg.gms.maps.markup.Markup;
 import org.microg.gms.maps.markup.PolygonImpl;
 import org.microg.gms.maps.markup.PolylineImpl;
 import org.microg.gms.maps.markup.TileOverlayImpl;
-import org.oscim.event.Event;
-import org.oscim.event.MotionEvent;
-import org.oscim.map.Map;
 
 public class GoogleMapImpl extends IGoogleMapDelegate.Stub
-        implements UiSettingsImpl.UiSettingsListener, Map.InputListener, Markup.MarkupListener {
+        implements UiSettingsImpl.UiSettingsListener, Markup.MarkupListener, BackendMap.CameraUpdateListener {
     private static final String TAG = "GoogleMapImpl";
 
     private final GoogleMapOptions options;
@@ -85,14 +83,32 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     private int polygonCounter = 0;
 
     private IOnMarkerClickListener onMarkerClickListener;
+    private IOnMarkerDragListener onMarkerDragListener;
+    private IOnCameraChangeListener onCameraChangeListener;
 
     public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
         context = inflater.getContext();
-        backendMap = new BackendMap(context);
-        backendMap.setInputListener(this);
+        backendMap = new BackendMap(context, this);
         uiSettings = new UiSettingsImpl(this);
         projection = new ProjectionImpl(backendMap.getViewport());
         this.options = options;
+        if (options != null) initFromOptions();
+    }
+
+    private void initFromOptions() {
+        try {
+            uiSettings.setCompassEnabled(options.isCompassEnabled());
+            uiSettings.setRotateGesturesEnabled(options.isRotateGesturesEnabled());
+            uiSettings.setTiltGesturesEnabled(options.isTiltGesturesEnabled());
+            uiSettings.setScrollGesturesEnabled(options.isScrollGesturesEnabled());
+            uiSettings.setZoomControlsEnabled(options.isZoomControlsEnabled());
+            uiSettings.setZoomGesturesEnabled(options.isZoomGesturesEnabled());
+            if (options.getCamera() != null) {
+                backendMap.applyCameraUpdate(MapPositionCameraUpdate.directMapPosition(GmsMapsTypeHelper.fromCameraPosition(options.getCamera())));
+            }
+        } catch (RemoteException e) {
+            // Never happens: not remote
+        }
     }
 
     public void onDestroy() {
@@ -138,12 +154,12 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public float getMaxZoomLevel() throws RemoteException {
-        return 0;
+        return (float) backendMap.getViewport().limitScale(Double.MIN_VALUE);
     }
 
     @Override
     public float getMinZoomLevel() throws RemoteException {
-        return 0;
+        return (float) backendMap.getViewport().limitScale(Double.MAX_VALUE);
     }
 
     @Override
@@ -181,6 +197,17 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     public void stopAnimation() throws RemoteException {
         backendMap.stopAnimation();
     }
+
+    @Override
+    public void onCameraUpdate(CameraPosition cameraPosition) {
+        if (onCameraChangeListener != null) {
+            try {
+                onCameraChangeListener.onCameraChange(cameraPosition);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
     /*
     Markers, polylines, polygons, overlays, etc
@@ -193,7 +220,6 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public IPolylineDelegate addPolyline(PolylineOptions options) throws RemoteException {
-        Log.d(TAG, "addPolyline");
         return backendMap.add(new PolylineImpl(getNextPolylineId(), options, this));
     }
 
@@ -258,6 +284,57 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
             // TODO: open InfoWindow
         }
         return false;
+    }
+
+    @Override
+    public void onDragStart(Markup markup) {
+        backendMap.setScrollGesturesEnabled(false);
+        backendMap.setRotateGesturesEnabled(false);
+        backendMap.setTiltGesturesEnabled(false);
+        backendMap.setZoomGesturesEnabled(false);
+        if (markup instanceof IMarkerDelegate) {
+            if (onMarkerDragListener != null) {
+                try {
+                    onMarkerDragListener.onMarkerDragStart((IMarkerDelegate) markup);
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDragStop(Markup markup) {
+        try {
+            backendMap.setScrollGesturesEnabled(uiSettings.isScrollGesturesEnabled());
+            backendMap.setRotateGesturesEnabled(uiSettings.isRotateGesturesEnabled());
+            backendMap.setTiltGesturesEnabled(uiSettings.isTiltGesturesEnabled());
+            backendMap.setZoomGesturesEnabled(uiSettings.isZoomGesturesEnabled());
+        } catch (RemoteException e) {
+            // Never happens, is local.
+        }
+        if (markup instanceof IMarkerDelegate) {
+            if (onMarkerDragListener != null) {
+                try {
+                    onMarkerDragListener.onMarkerDragEnd((IMarkerDelegate) markup);
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDragProgress(Markup markup) {
+        if (markup instanceof IMarkerDelegate) {
+            if (onMarkerDragListener != null) {
+                try {
+                    onMarkerDragListener.onMarkerDrag((IMarkerDelegate) markup);
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        }
     }
     
     /*
@@ -334,6 +411,10 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         if (settings.isZoomControlsEnabled()) {
             Log.w(TAG, "ZoomControls not yet supported");
         }
+        backendMap.setScrollGesturesEnabled(settings.isScrollGesturesEnabled());
+        backendMap.setRotateGesturesEnabled(settings.isRotateGesturesEnabled());
+        backendMap.setTiltGesturesEnabled(settings.isTiltGesturesEnabled());
+        backendMap.setZoomGesturesEnabled(settings.isZoomGesturesEnabled());
     }
     
     /*
@@ -342,7 +423,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public void setOnCameraChangeListener(IOnCameraChangeListener listener) throws RemoteException {
-
+        this.onCameraChangeListener = listener;
     }
 
     @Override
@@ -362,7 +443,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public void setOnMarkerDragListener(IOnMarkerDragListener listener) throws RemoteException {
-
+        this.onMarkerDragListener = listener;
     }
 
     @Override
@@ -416,11 +497,6 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void setLocationSource(ILocationSourceDelegate locationSource) throws RemoteException {
 
-    }
-
-    @Override
-    public void onInputEvent(Event event, MotionEvent motionEvent) {
-        Log.d(TAG, "onInputEvent(" + event + ", " + motionEvent + ")");
     }
 
     @Override

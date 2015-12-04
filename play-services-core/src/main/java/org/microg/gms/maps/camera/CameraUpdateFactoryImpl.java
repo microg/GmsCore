@@ -33,6 +33,18 @@ import org.oscim.map.Map;
 public class CameraUpdateFactoryImpl extends ICameraUpdateFactoryDelegate.Stub {
     private static final String TAG = "GmsMapCamUpdateFactory";
 
+    private CameraUpdateFactoryImpl() {
+
+    }
+
+    private static CameraUpdateFactoryImpl instance;
+    public static CameraUpdateFactoryImpl get() {
+        if (instance == null) {
+            instance = new CameraUpdateFactoryImpl();
+        }
+        return instance;
+    }
+
     @Override
     public IObjectWrapper zoomIn() throws RemoteException {
         Log.d(TAG, "zoomIn");

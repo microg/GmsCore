@@ -32,4 +32,13 @@ public abstract class MapPositionCameraUpdate implements CameraUpdate {
     public void applyAnimated(Map map, int duration) {
         map.animator().animateTo(duration, getMapPosition(map));
     }
+
+    public static CameraUpdate directMapPosition(final MapPosition position) {
+        return new MapPositionCameraUpdate() {
+            @Override
+            MapPosition getMapPosition(Map map) {
+                return position;
+            }
+        };
+    }
 }
