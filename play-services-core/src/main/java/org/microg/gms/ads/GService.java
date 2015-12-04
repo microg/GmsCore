@@ -25,7 +25,7 @@ import org.microg.gms.common.Services;
 public class GService extends BaseService {
 
     public GService() {
-        super("GmsAdsGSvc", Services.GSERVICES.SERVICE_ID);
+        super("GmsAdsGSvc", Services.GSERVICES.SERVICE_ID, Services.ADREQUEST.SERVICE_ID);
     }
 
     @Override
