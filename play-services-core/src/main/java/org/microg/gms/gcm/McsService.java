@@ -27,6 +27,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -75,7 +76,8 @@ public class McsService extends Service implements Handler.Callback {
     public static final String SERVICE_HOST = "mtalk.google.com";
     public static final int SERVICE_PORT = 5228;
 
-    public static final int HEARTBEAT_MS = 60000;
+    private static final String PREF_GCM_HEARTBEAT = "gcm_heartbeat_interval";
+    public int heartbeatMs = 60000;
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -114,6 +116,7 @@ public class McsService extends Service implements Handler.Callback {
     @Override
     public void onCreate() {
         super.onCreate();
+        updateHeartbeatMs();
         heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -123,6 +126,10 @@ public class McsService extends Service implements Handler.Callback {
                 handlerThread.start();
             }
         }
+    }
+
+    private void updateHeartbeatMs() {
+        heartbeatMs = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(PREF_GCM_HEARTBEAT, "60")) * 1000;
     }
 
     @Override
@@ -156,6 +163,7 @@ public class McsService extends Service implements Handler.Callback {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        updateHeartbeatMs();
         synchronized (McsService.class) {
             if (rootHandler != null) {
                 wakeLock.acquire(5000);
@@ -188,7 +196,7 @@ public class McsService extends Service implements Handler.Callback {
             inputStream.start();
             outputStream.start();
 
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), HEARTBEAT_MS, heartbeatIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), heartbeatMs, heartbeatIntent);
         } catch (Exception e) {
             Log.w(TAG, "Exception while connecting!", e);
             rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
@@ -377,9 +385,9 @@ public class McsService extends Service implements Handler.Callback {
             sslSocket.close();
         } catch (Exception ignored) {
         }
-        
+
         scheduleReconnect(this);
-        
+
         alarmManager.cancel(heartbeatIntent);
         if (wakeLock != null) {
             wakeLock.release();
