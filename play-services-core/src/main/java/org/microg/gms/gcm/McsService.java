@@ -158,7 +158,7 @@ public class McsService extends Service implements Handler.Callback {
     public int onStartCommand(Intent intent, int flags, int startId) {
         synchronized (McsService.class) {
             if (rootHandler != null) {
-                wakeLock.acquire();
+                wakeLock.acquire(5000);
                 Object reason = intent == null ? "I am so sticky!" :
                         intent.hasExtra(EXTRA_REASON) ? intent.getExtras().get(EXTRA_REASON) : intent;
                 if (ACTION_CONNECT.equals(intent.getAction())) {
