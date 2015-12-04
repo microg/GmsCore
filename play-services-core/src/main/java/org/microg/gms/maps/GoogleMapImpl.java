@@ -17,7 +17,12 @@
 package org.microg.gms.maps;
 
 import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
@@ -85,6 +90,34 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     private IOnMarkerClickListener onMarkerClickListener;
     private IOnMarkerDragListener onMarkerDragListener;
     private IOnCameraChangeListener onCameraChangeListener;
+    private IOnMyLocationChangeListener onMyLocationChangeListener;
+
+    private Criteria criteria;
+    private LocationListener listener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            // TODO: Actually do my location overlay
+            if (onMyLocationChangeListener != null && location != null) {
+                try {
+                    onMyLocationChangeListener.onMyLocationChanged(ObjectWrapper.wrap(location));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+        }
+    };
 
     public GoogleMapImpl(LayoutInflater inflater, GoogleMapOptions options) {
         context = inflater.getContext();
@@ -92,6 +125,11 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         uiSettings = new UiSettingsImpl(this);
         projection = new ProjectionImpl(backendMap.getViewport());
         this.options = options;
+
+        criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
+
         if (options != null) initFromOptions();
     }
 
@@ -379,6 +417,12 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void setMyLocationEnabled(boolean myLocation) throws RemoteException {
         Log.w(TAG, "MyLocation not yet supported");
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (myLocation) {
+            locationManager.requestLocationUpdates(5000, 10, criteria, listener, Looper.getMainLooper());
+        } else {
+            locationManager.removeUpdates(listener);
+        }
     }
 
     @Override
@@ -455,7 +499,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void setOnMyLocationChangeListener(IOnMyLocationChangeListener listener)
             throws RemoteException {
-
+        this.onMyLocationChangeListener = listener;
     }
 
     @Override
@@ -496,7 +540,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public void setLocationSource(ILocationSourceDelegate locationSource) throws RemoteException {
-
+        Log.d(TAG, "setLocationSource: " + locationSource);
     }
 
     @Override
