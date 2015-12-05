@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="gms_app_name">Језгро микроГ услуге</string>
+    <string name="gms_app_name">Језгро микроГ услуга</string>
     <string name="gms_settings_name">Поставке микроГ</string>
 
     <string name="just_a_sec">Само тренутак…</string>
@@ -46,7 +46,7 @@
     <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
     <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
 
-    <string name="prefcat_services">Сервиси у позадини</string>
+    <string name="prefcat_services">Услуге у позадини</string>
 
     <string name="pref_checkin_enable_title">Укључи пријаву уређаја</string>
     <string name="pref_checkin_enable_summary">Пријава уређаја је скривени процес који служи за прављење јединственог идентификатора за Гуглове услуге. микроГ сервиси скидају идентификујуће бите са ових података, осим имена вашег Гугл налога.</string>
@@ -58,7 +58,7 @@
     <string name="pref_gcm_heartbeat_summary">Интервал у секундама јављања система Гугловим серверима. Повећање овог броја смањује потрошњу батерије али може да узрокује застој у испоруци порука.</string>
 
     <string name="prefcat_components">Компоненте</string>
-    <string name="prefcat_location_service">Сервис локације</string>
+    <string name="prefcat_location_service">Услуга локације</string>
 
     <string name="games_title">Гугл Плеј игре</string>
     <string name="games_info_title">%1$s жели да користи Плеј игре</string>
