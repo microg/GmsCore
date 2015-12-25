@@ -31,6 +31,7 @@ import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.common.internal.ICancelToken;
 import com.google.android.gms.people.internal.IPeopleCallbacks;
 import com.google.android.gms.people.internal.IPeopleService;
+import com.google.android.gms.people.model.AccountMetadata;
 
 import org.microg.gms.common.NonCancelToken;
 
@@ -48,13 +49,15 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
     public void loadOwners(final IPeopleCallbacks callbacks, boolean var2, boolean var3, final String accountName, String var5, int sortOrder) {
         Log.d(TAG, "loadOwners: " + var2 + ", " + var3 + ", " + accountName + ", " + var5 + ", " + sortOrder);
         AccountManager accountManager = AccountManager.get(context);
-        Bundle extras = new Bundle();
+        Bundle accountMetadata = new Bundle();
         String accountType = context.getString(R.string.google_account_type);
         for (Account account : accountManager.getAccountsByType(accountType)) {
             if (accountName == null || account.name.equals(accountName)) {
-                extras.putParcelable(account.name, null);
+                accountMetadata.putParcelable(account.name, new AccountMetadata());
             }
         }
+        Bundle extras = new Bundle();
+        extras.putBundle("account_metadata", accountMetadata);
         try {
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             DataHolder dataHolder = DataHolder.fromCursor(databaseHelper.getOwners(), 0, extras);
