@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.people.model;
+package com.google.android.gms.people.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class AccountMetadata extends AutoSafeParcelable {
+public class ParcelableLoadImageOptions extends AutoSafeParcelable {
+    @SafeParceled(1000)
+    private int versionCode = 1;
 
     @SafeParceled(1)
-    private int versionCode = 2;
+    public int imageSize;
 
     @SafeParceled(2)
-    public boolean hasGooglePlus = true;
+    public int avatarOptions;
 
     @SafeParceled(3)
-    public boolean hasFeature2 = true;
+    public boolean useLargePictureForCp2Images;
 
-    @SafeParceled(4)
-    public boolean hasFeature3 = true;
-
-    @SafeParceled(5)
-    public boolean hasFeature4 = true;
-
-    public static Creator<AccountMetadata> CREATOR = new AutoCreator<AccountMetadata>(AccountMetadata.class);
+    public static final Creator<ParcelableLoadImageOptions> CREATOR = new AutoCreator<ParcelableLoadImageOptions>(ParcelableLoadImageOptions.class);
 }
