@@ -254,7 +254,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
 
     @Override
     public void onInputEvent(Event event, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_CANCEL || motionEvent.getAction() == MotionEvent.ACTION_UP && currentlyDraggedItem != null) {
+        if ((motionEvent.getAction() == MotionEvent.ACTION_CANCEL || motionEvent.getAction() == MotionEvent.ACTION_UP) && currentlyDraggedItem != null) {
             currentlyDraggedItem.onDragStop();
             currentlyDraggedItem = null;
         }
