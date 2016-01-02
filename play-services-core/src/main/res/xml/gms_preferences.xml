@@ -15,30 +15,39 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/prefcat_setup">
+        <Preference
+            android:summary="@string/self_check_desc"
+            android:title="@string/self_check_title">
+            <intent
+                android:targetClass="org.microg.gms.ui.SelfCheckActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </Preference>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_services">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/pref_checkin_enable"
             android:summary="@string/pref_checkin_enable_summary"
-            android:title="@string/pref_checkin_enable_title" />
+            android:title="@string/pref_checkin_enable_title"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:dependency="@string/pref_checkin_enable"
             android:key="@string/pref_gcm_enable_mcs"
             android:summary="@string/pref_gcm_enable_mcs_summary"
-            android:title="@string/pref_gcm_enable_mcs_title" />
+            android:title="@string/pref_gcm_enable_mcs_title"/>
         <EditTextPreference
             android:defaultValue="60"
             android:dependency="@string/pref_gcm_enable_mcs"
             android:key="@string/pref_gcm_heartbeat"
             android:summary="@string/pref_gcm_heartbeat_summary"
-            android:title="@string/pref_gcm_heartbeat_title" />
+            android:title="@string/pref_gcm_heartbeat_title"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_location_service">
         <Preference android:title="@string/nlp_settings_label">
             <intent
                 android:targetClass="org.microg.nlp.ui.SettingsActivity"
-                android:targetPackage="com.google.android.gms" />
+                android:targetPackage="com.google.android.gms"/>
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

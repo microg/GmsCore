@@ -327,6 +327,32 @@
             </intent-filter>
         </activity>
 
+        <!-- microG custom UI -->
+
+        <activity
+            android:name="org.microg.gms.ui.SettingsActivity"
+            android:icon="@mipmap/ic_microg_settings"
+            android:label="@string/gms_settings_name"
+            android:theme="@style/SettingsTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY"/>
+                <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS"/>
+                <action android:name="com.google.android.gms.location.settings.LOCATION_REPORTING_SETTINGS"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.microg.gms.ui.SelfCheckActivity"
+            android:label="@string/self_check_title"
+            android:theme="@style/SettingsTheme"/>
+
         <!-- Other -->
 
         <service
@@ -369,25 +395,6 @@
         <service
             android:name=".gcm.http.GoogleHttpService"
             android:exported="true"/>
-
-        <activity
-            android:name="org.microg.gms.ui.SettingsActivity"
-            android:icon="@mipmap/ic_microg_settings"
-            android:label="@string/gms_settings_name"
-            android:theme="@style/SettingsTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY"/>
-                <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS"/>
-                <action android:name="com.google.android.gms.location.settings.LOCATION_REPORTING_SETTINGS"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
 
         <service
             android:name="org.microg.gms.ads.GService"
