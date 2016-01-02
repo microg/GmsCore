@@ -16,6 +16,7 @@
 
 package org.microg.gms.maps;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
@@ -25,6 +26,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +74,10 @@ import org.microg.gms.maps.markup.Markup;
 import org.microg.gms.maps.markup.PolygonImpl;
 import org.microg.gms.maps.markup.PolylineImpl;
 import org.microg.gms.maps.markup.TileOverlayImpl;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         implements UiSettingsImpl.UiSettingsListener, Markup.MarkupListener, BackendMap.CameraUpdateListener {
@@ -417,6 +424,13 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void setMyLocationEnabled(boolean myLocation) throws RemoteException {
         Log.w(TAG, "MyLocation not yet supported");
+        boolean hasPermission = ContextCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
+        if (!hasPermission) {
+            if (context instanceof Activity)
+                ActivityCompat.requestPermissions((Activity) context, new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION}, -1);
+            return;
+        }
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (myLocation) {
             locationManager.requestLocationUpdates(5000, 10, criteria, listener, Looper.getMainLooper());
