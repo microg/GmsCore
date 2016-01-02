@@ -17,7 +17,15 @@
 package org.microg.gms.maps;
 
 import android.annotation.TargetApi;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -36,7 +44,14 @@ import android.os.UserHandle;
 import android.view.Display;
 import android.view.ViewDebug;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * A hacked Context that allows access to gms resources but feels like the remote context for everything else.
@@ -214,14 +229,14 @@ public class ContextContainer extends Context {
 
     @Override
     public SQLiteDatabase openOrCreateDatabase(String s, int i,
-            SQLiteDatabase.CursorFactory cursorFactory) {
+                                               SQLiteDatabase.CursorFactory cursorFactory) {
         return original.openOrCreateDatabase(s, i, cursorFactory);
     }
 
     @Override
     public SQLiteDatabase openOrCreateDatabase(String s, int i,
-            SQLiteDatabase.CursorFactory cursorFactory,
-            DatabaseErrorHandler databaseErrorHandler) {
+                                               SQLiteDatabase.CursorFactory cursorFactory,
+                                               DatabaseErrorHandler databaseErrorHandler) {
         return original.openOrCreateDatabase(s, i, cursorFactory, databaseErrorHandler);
     }
 
@@ -313,7 +328,7 @@ public class ContextContainer extends Context {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void startIntentSender(IntentSender intentSender, Intent intent, int i, int i1, int i2,
-            Bundle bundle) throws IntentSender.SendIntentException {
+                                  Bundle bundle) throws IntentSender.SendIntentException {
         original.startIntentSender(intentSender, intent, i, i1, i2, bundle);
     }
 
@@ -334,8 +349,8 @@ public class ContextContainer extends Context {
 
     @Override
     public void sendOrderedBroadcast(Intent intent, String s,
-            BroadcastReceiver broadcastReceiver, Handler handler, int i, String s1,
-            Bundle bundle) {
+                                     BroadcastReceiver broadcastReceiver, Handler handler, int i, String s1,
+                                     Bundle bundle) {
         original.sendOrderedBroadcast(intent, s, broadcastReceiver, handler, i, s1, bundle);
     }
 
@@ -354,8 +369,8 @@ public class ContextContainer extends Context {
     @Override
     @TargetApi(17)
     public void sendOrderedBroadcastAsUser(Intent intent, UserHandle userHandle, String s,
-            BroadcastReceiver broadcastReceiver, Handler handler, int i, String s1,
-            Bundle bundle) {
+                                           BroadcastReceiver broadcastReceiver, Handler handler, int i, String s1,
+                                           Bundle bundle) {
         original.sendOrderedBroadcastAsUser(intent, userHandle, s, broadcastReceiver, handler, i,
                 s1,
                 bundle);
@@ -370,8 +385,8 @@ public class ContextContainer extends Context {
     @Override
     @Deprecated
     public void sendStickyOrderedBroadcast(Intent intent,
-            BroadcastReceiver broadcastReceiver, Handler handler, int i, String s,
-            Bundle bundle) {
+                                           BroadcastReceiver broadcastReceiver, Handler handler, int i, String s,
+                                           Bundle bundle) {
         original.sendStickyOrderedBroadcast(intent, broadcastReceiver, handler, i, s, bundle);
     }
 
@@ -392,8 +407,8 @@ public class ContextContainer extends Context {
     @Deprecated
     @TargetApi(17)
     public void sendStickyOrderedBroadcastAsUser(Intent intent, UserHandle userHandle,
-            BroadcastReceiver broadcastReceiver, Handler handler, int i, String s,
-            Bundle bundle) {
+                                                 BroadcastReceiver broadcastReceiver, Handler handler, int i, String s,
+                                                 Bundle bundle) {
         original.sendStickyOrderedBroadcastAsUser(intent, userHandle, broadcastReceiver, handler, i,
                 s,
                 bundle);
@@ -408,13 +423,13 @@ public class ContextContainer extends Context {
 
     @Override
     public Intent registerReceiver(BroadcastReceiver broadcastReceiver,
-            IntentFilter intentFilter) {
+                                   IntentFilter intentFilter) {
         return original.registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public Intent registerReceiver(BroadcastReceiver broadcastReceiver,
-            IntentFilter intentFilter, String s, Handler handler) {
+                                   IntentFilter intentFilter, String s, Handler handler) {
         return original.registerReceiver(broadcastReceiver, intentFilter, s, handler);
     }
 
@@ -542,7 +557,7 @@ public class ContextContainer extends Context {
 
     @Override
     public void enforceUriPermission(Uri uri, String s, String s1, int i, int i1, int i2,
-            String s2) {
+                                     String s2) {
         original.enforceUriPermission(uri, s, s1, i, i1, i2, s2);
     }
 
@@ -562,5 +577,83 @@ public class ContextContainer extends Context {
     @Override
     public Context createDisplayContext(Display display) {
         return original.createDisplayContext(display);
+    }
+
+    /* HIDDEN */
+
+    public String getBasePackageName() {
+        return (String) safeInvoke("getBasePackageName");
+    }
+
+    public String getOpPackageName() {
+        return (String) safeInvoke("getOpPackageName");
+    }
+
+    public File getSharedPrefsFile(String name) {
+        return (File) safeInvoke("getBasePackageName", String.class, name);
+    }
+
+    public void startActivityAsUser(Intent intent, UserHandle user) {
+        safeInvoke("startActivityAsUser", Intent.class, UserHandle.class, intent, user);
+    }
+
+    public void startActivityAsUser(Intent intent, Bundle options, UserHandle userId) {
+        safeInvoke("startActivityAsUser", Intent.class, Bundle.class, UserHandle.class, intent, options, userId);
+    }
+
+    public void startActivityForResult(String who, Intent intent, int requestCode, Bundle options) {
+        safeInvoke("startActivityForResult", String.class, Intent.class, int.class, Bundle.class, who, intent, requestCode, options);
+    }
+
+    public boolean canStartActivityForResult() {
+        return (Boolean) safeInvoke("canStartActivityForResult");
+    }
+
+    public void startActivitiesAsUser(Intent[] intents, Bundle options, UserHandle userHandle) {
+        safeInvoke("startActivitiesAsUser", new Class[]{Intent[].class, Bundle.class, UserHandle.class}, intents, options, userHandle);
+    }
+
+    public void sendBroadcastMultiplePermissions(Intent intent, String[] receiverPermissions) {
+        safeInvoke("sendBroadcastMultiplePermissions", Intent.class, String[].class, intent, receiverPermissions);
+    }
+
+    public void sendBroadcast(Intent intent, String receiverPermission, int appOp) {
+        safeInvoke("sendBroadcast", Intent.class, String.class, int.class, intent, receiverPermission, appOp);
+    }
+
+
+    private Object safeInvoke(String name) {
+        return safeInvoke(name, new Class[0]);
+    }
+
+    private <T1> Object safeInvoke(String name, Class<T1> t1Class, T1 t1Value) {
+        return safeInvoke(name, new Class[]{t1Class}, t1Value);
+    }
+
+    private <T1, T2> Object safeInvoke(String name, Class<T1> t1Class, Class<T2> t2Class, T1 t1Value, T2 t2Value) {
+        return safeInvoke(name, new Class[]{t1Class, t2Class}, t1Value, t2Value);
+    }
+
+    private <T1, T2, T3> Object safeInvoke(String name, Class<T1> t1Class, Class<T2> t2Class, Class<T3> t3Class, T1 t1Value, T2 t2Value, T3 t3Value) {
+        return safeInvoke(name, new Class[]{t1Class, t2Class, t3Class}, t1Value, t2Value, t3Value);
+    }
+
+    private <T1, T2, T3, T4> Object safeInvoke(String name, Class<T1> t1Class, Class<T2> t2Class, Class<T3> t3Class, Class<T4> t4Class, T1 t1Value, T2 t2Value, T3 t3Value, T4 t4Value) {
+        return safeInvoke(name, new Class[]{t1Class, t2Class, t3Class, t4Class}, t1Value, t2Value, t3Value, t4Value);
+    }
+
+    private Object safeInvoke(String name, Class[] classes, Object... values) {
+        try {
+            Method method = Context.class.getDeclaredMethod(name, classes);
+            return method.invoke(original, values);
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof RuntimeException) {
+                throw (RuntimeException) e.getTargetException();
+            } else {
+                throw new RuntimeException(e.getTargetException());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
