@@ -26,6 +26,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -247,6 +248,8 @@ public class LoginActivity extends AssistantActivity {
                             accountManager.setUserData(account, "oauthAccessToken", "1");
                             accountManager.setUserData(account, "firstName", response.firstName);
                             accountManager.setUserData(account, "lastName", response.lastName);
+                            if (!TextUtils.isEmpty(response.accountId))
+                                accountManager.setUserData(account, "GoogleUserId", response.accountId);
 
                             retrieveGmsToken(account);
                             setResult(RESULT_OK);
@@ -282,7 +285,9 @@ public class LoginActivity extends AssistantActivity {
                     @Override
                     public void onResponse(AuthResponse response) {
                         authManager.storeResponse(response);
-                        PeopleManager.loadUserInfo(LoginActivity.this, account);
+                        String accountId = PeopleManager.loadUserInfo(LoginActivity.this, account);
+                        if (!TextUtils.isEmpty(accountId))
+                            accountManager.setUserData(account, "GoogleUserId", accountId);
                         checkin(true);
                         finish();
                     }

@@ -84,7 +84,7 @@ public class PeopleManager {
         return BitmapFactory.decodeFile(avaterFile.getPath());
     }
 
-    public static void loadUserInfo(Context context, Account account) {
+    public static String loadUserInfo(Context context, Account account) {
         try {
             URLConnection conn = new URL(USERINFO_URL).openConnection();
             conn.addRequestProperty("Authorization", "Bearer " + getUserInfoAuthKey(context, account));
@@ -104,8 +104,10 @@ public class PeopleManager {
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
             databaseHelper.putOwner(contentValues);
             databaseHelper.close();
+            return contentValues.getAsString("gaia_id");
         } catch (Exception e) {
             Log.w(TAG, e);
+            return null;
         }
     }
 
