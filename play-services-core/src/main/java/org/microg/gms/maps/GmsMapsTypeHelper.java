@@ -44,6 +44,8 @@ public class GmsMapsTypeHelper {
         double maxLon = MercatorProjection.toLongitude(box.xmax);
         double minLat = MercatorProjection.toLatitude(box.ymax);
         double maxLat = MercatorProjection.toLatitude(box.ymin);
+        if (Double.isNaN(minLon) || Double.isNaN(maxLon) || Double.isNaN(minLat) || Double.isNaN(maxLat))
+            minLon = maxLon = minLat = maxLat = 0;
         return new LatLngBounds(new LatLng(minLat, minLon), new LatLng(maxLat, maxLon));
     }
 

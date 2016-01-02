@@ -29,6 +29,7 @@ import org.oscim.map.Viewport;
 
 public class ProjectionImpl extends IProjectionDelegate.Stub {
     private Viewport viewport;
+    private float[] extents = new float[8];
 
     public ProjectionImpl(Viewport viewport) {
         this.viewport = viewport;
@@ -51,6 +52,8 @@ public class ProjectionImpl extends IProjectionDelegate.Stub {
 
     @Override
     public VisibleRegion getVisibleRegion() throws RemoteException {
+        viewport.getMapExtents(extents, 0);
+        // TODO: Support non-flat map extents
         return new VisibleRegion(GmsMapsTypeHelper.toLatLngBounds(viewport.getBBox(null, 0)));
     }
 }

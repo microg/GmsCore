@@ -152,6 +152,10 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
         for (LatLng point : options.getPoints()) {
             points.add(GmsMapsTypeHelper.fromLatLng(point));
         }
+        if (points.size() < 3 || (points.size() == 3 && points.get(2).equals(points.get(0)))) {
+            // Need at least 3 distinguished points to draw a polygon
+            return null;
+        }
         // TODO: holes
         return new PolygonDrawable(points, Style.builder()
                 .fillAlpha(1)
