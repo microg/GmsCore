@@ -116,6 +116,10 @@ public class ContextContainer extends Context {
         return original.getPackageName();
     }
 
+    public String getOpPackageName() {
+        return original.getPackageName();
+    }
+
     @Override
     public ApplicationInfo getApplicationInfo() {
         return original.getApplicationInfo();
