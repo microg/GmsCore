@@ -593,10 +593,12 @@ public class ContextContainer extends Context {
         return (File) safeInvoke("getBasePackageName", String.class, name);
     }
 
+    @TargetApi(17)
     public void startActivityAsUser(Intent intent, UserHandle user) {
         safeInvoke("startActivityAsUser", Intent.class, UserHandle.class, intent, user);
     }
 
+    @TargetApi(17)
     public void startActivityAsUser(Intent intent, Bundle options, UserHandle userId) {
         safeInvoke("startActivityAsUser", Intent.class, Bundle.class, UserHandle.class, intent, options, userId);
     }
@@ -609,6 +611,7 @@ public class ContextContainer extends Context {
         return (Boolean) safeInvoke("canStartActivityForResult");
     }
 
+    @TargetApi(17)
     public void startActivitiesAsUser(Intent[] intents, Bundle options, UserHandle userHandle) {
         safeInvoke("startActivitiesAsUser", new Class[]{Intent[].class, Bundle.class, UserHandle.class}, intents, options, userHandle);
     }
