@@ -105,6 +105,18 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name="org.microg.gms.ui.PlacePickerActivity"
+            android:exported="true"
+            android:label="@string/pick_place_title"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.places.ui.PICK_PLACE"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- Services Framework -->
 
         <provider

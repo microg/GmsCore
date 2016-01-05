@@ -84,4 +84,7 @@ This can take a couple of minutes."</string>
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title">%1$s would like to use Play Games</string>
     <string name="games_info_content">To use Play Games it is required to install the Google Play Games app. The application might continue without Play Games, but it is possible that it will behave unexpectedly.</string>
+
+    <string name="pick_place_title">Pick a place</string>
+    <string name="pick_place_desc">Place picker is not yet available.</string>
 </resources>

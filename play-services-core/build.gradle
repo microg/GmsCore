@@ -42,9 +42,9 @@ dependencies {
     compile project(':wearable-lib')
     // vtm from ./libs
     compile 'org.oscim:vtm-android:0.6.0-SNAPSHOT@aar'
-    compile 'org.oscim:vtm-themes:0.6.0-SNAPSHOT'
-    compile 'org.oscim:vtm-extras:0.6.0-SNAPSHOT'
-    compile 'org.oscim:vtm:0.6.0-SNAPSHOT'
+    compile 'org.oscim:vtm-themes:0.6.0-SNAPSHOT@jar'
+    compile 'org.oscim:vtm-extras:0.6.0-SNAPSHOT@jar'
+    compile 'org.oscim:vtm:0.6.0-SNAPSHOT@jar'
     // Dependencies for vtm
     compile 'com.fasterxml.jackson.core:jackson-core:2.3.0'
     compile 'com.vividsolutions:jts:1.13'
