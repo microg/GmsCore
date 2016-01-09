@@ -13,14 +13,14 @@ Instructions
 ------------
 Requirements and Installation instructions can be found on the [XDA Thread](http://forum.xda-developers.com/android/apps-games/app-microg-gmscore-floss-play-services-t3217616)
 
-Signature Faking
-----------------
-You need a ROM that supports signature faking. Some custom ROMs are patched to support signature faking out of the box, however most ROMs will require a patch or an Xposed module. Please ask your ROM developer if unsure.
+Signature Spoofing
+------------------
+You need a ROM that supports signature spoofing. Some custom ROMs are patched to support signature spoofing out of the box, however most ROMs will require a patch or a Xposed module. Please ask your ROM developer if unsure.
 
-The following ROMs have out-of-box support for signature faking. **Signature spoofing has to be enabled at the bottom of the developer settings first.**
+The following ROMs have out-of-box support for signature spoofing. **This feature has to be enabled at the bottom of the developer settings first.**
 * [OmniROM](http://omnirom.org/)
 
-If you have the **Xposed Framework** installed, the following module will enable signature faking: [FakeGApps by thermatk](http://repo.xposed.info/module/com.thermatk.android.xf.fakegapps)
+If you have the **Xposed Framework** installed, the following module will enable signature spoofing: [FakeGApps by thermatk](http://repo.xposed.info/module/com.thermatk.android.xf.fakegapps)
 
 If you have **Root**, but are not using Xposed, you can try patching your already-installed ROM using [Needle by moosd](https://github.com/moosd/Needle)
 
@@ -28,14 +28,14 @@ If you are a **ROM developer** or just do **custom builds** for whatever reason,
 
 Downloads
 ---------
-Standard Releases: [XDA Thread](http://forum.xda-developers.com/android/apps-games/app-microg-gmscore-floss-play-services-t3217616)
+Standard Releases: [XDA Thread](http://forum.xda-developers.com/android/apps-games/app-microg-gmscore-floss-play-services-t3217616) and [GitHub release page](https://github.com/microg/android_packages_apps_GmsCore/releases)
 
 Nightly Releases: [Latest](http://files.brnmod.rocks/apps/GmsCore/Latest/play-services-core-debug.apk) or [Other Builds](http://files.brnmod.rocks/apps/GmsCore/)
 
 Building
 --------
 This can be build using Gradle. 
-Prebuilt libraries of [vtm](https://github.com/opensciencemap/vtm) for are included within ./libs.
+Prebuilt libraries of [vtm](https://github.com/opensciencemap/vtm) are included within `./libs`.
 
 License
 -------
