@@ -78,7 +78,8 @@ public class McsService extends Service implements Handler.Callback {
     public static final int SERVICE_PORT = 5228;
 
     private static final String PREF_GCM_HEARTBEAT = "gcm_heartbeat_interval";
-    public int heartbeatMs = 60000;
+    public static int heartbeatMs = 60000;
+    private static long lastHeartbeatAckElapsedRealtime = -1;
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -139,7 +140,9 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     public synchronized static boolean isConnected() {
-        return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive();
+        return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive()
+                // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
+                && SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime < 2 * heartbeatMs;
     }
 
     public static void scheduleReconnect(Context context) {
@@ -212,6 +215,7 @@ public class McsService extends Service implements Handler.Callback {
             inputStream.start();
             outputStream.start();
 
+            lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
             scheduleHeartbeat(this);
         } catch (Exception e) {
             Log.w(TAG, "Exception while connecting!", e);
@@ -258,6 +262,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleHeartbeatAck(HeartbeatAck ack) {
+        lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
         wakeLock.release();
     }
 
