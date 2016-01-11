@@ -22,6 +22,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -145,8 +146,23 @@ public class McsService extends Service implements Handler.Callback {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         long delay = getCurrentDelay();
         Log.d(TAG, "Scheduling reconnect in " + delay / 1000 + " seconds...");
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + delay,
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delay,
                 PendingIntent.getBroadcast(context, 1, new Intent(ACTION_RECONNECT, null, context, TriggerReceiver.class), 0));
+    }
+
+    public void scheduleHeartbeat(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Log.d(TAG, "Scheduling heartbeat in " + heartbeatMs / 1000 + " seconds...");
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, heartbeatIntent);
+        } else {
+            // with KitKat, the alarms become inexact by default, but with the newly available setWindow we can get inexact alarms with guarantees.
+            // Schedule the alarm to fire within the interval [heartbeatMs/2, heartbeatMs]
+            alarmManager.setWindow(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs / 2, heartbeatMs / 2,
+                    heartbeatIntent);
+        }
+
     }
 
     public synchronized static long getCurrentDelay() {
@@ -181,7 +197,7 @@ public class McsService extends Service implements Handler.Callback {
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
         }
-        return START_STICKY;
+        return START_REDELIVER_INTENT;
     }
 
     private synchronized void connect() {
@@ -196,7 +212,7 @@ public class McsService extends Service implements Handler.Callback {
             inputStream.start();
             outputStream.start();
 
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), heartbeatMs, heartbeatIntent);
+            scheduleHeartbeat(this);
         } catch (Exception e) {
             Log.w(TAG, "Exception while connecting!", e);
             rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
@@ -340,6 +356,7 @@ public class McsService extends Service implements Handler.Callback {
                         ping.last_stream_id_received(inputStream.getStreamId());
                     }
                     send(ping.build());
+                    scheduleHeartbeat(this);
                 } else {
                     Log.d(TAG, "Ignoring heartbeat, not connected!");
                     scheduleReconnect(this);
