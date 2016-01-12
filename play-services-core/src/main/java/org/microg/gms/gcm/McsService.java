@@ -22,6 +22,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -77,7 +78,8 @@ public class McsService extends Service implements Handler.Callback {
     public static final int SERVICE_PORT = 5228;
 
     private static final String PREF_GCM_HEARTBEAT = "gcm_heartbeat_interval";
-    public int heartbeatMs = 60000;
+    public static int heartbeatMs = 60000;
+    private static long lastHeartbeatAckElapsedRealtime = -1;
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -138,15 +140,32 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     public synchronized static boolean isConnected() {
-        return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive();
+        return inputStream != null && inputStream.isAlive() && outputStream != null && outputStream.isAlive()
+                // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
+                && SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime < 2 * heartbeatMs;
     }
 
     public static void scheduleReconnect(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         long delay = getCurrentDelay();
         Log.d(TAG, "Scheduling reconnect in " + delay / 1000 + " seconds...");
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + delay,
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delay,
                 PendingIntent.getBroadcast(context, 1, new Intent(ACTION_RECONNECT, null, context, TriggerReceiver.class), 0));
+    }
+
+    public void scheduleHeartbeat(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Log.d(TAG, "Scheduling heartbeat in " + heartbeatMs / 1000 + " seconds...");
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, heartbeatIntent);
+        } else {
+            // with KitKat, the alarms become inexact by default, but with the newly available setWindow we can get inexact alarms with guarantees.
+            // Schedule the alarm to fire within the interval [heartbeatMs/2, heartbeatMs]
+            alarmManager.setWindow(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs / 2, heartbeatMs / 2,
+                    heartbeatIntent);
+        }
+
     }
 
     public synchronized static long getCurrentDelay() {
@@ -181,7 +200,7 @@ public class McsService extends Service implements Handler.Callback {
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
         }
-        return START_STICKY;
+        return START_REDELIVER_INTENT;
     }
 
     private synchronized void connect() {
@@ -196,7 +215,8 @@ public class McsService extends Service implements Handler.Callback {
             inputStream.start();
             outputStream.start();
 
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), heartbeatMs, heartbeatIntent);
+            lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
+            scheduleHeartbeat(this);
         } catch (Exception e) {
             Log.w(TAG, "Exception while connecting!", e);
             rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
@@ -242,6 +262,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleHeartbeatAck(HeartbeatAck ack) {
+        lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
         wakeLock.release();
     }
 
@@ -340,6 +361,7 @@ public class McsService extends Service implements Handler.Callback {
                         ping.last_stream_id_received(inputStream.getStreamId());
                     }
                     send(ping.build());
+                    scheduleHeartbeat(this);
                 } else {
                     Log.d(TAG, "Ignoring heartbeat, not connected!");
                     scheduleReconnect(this);
