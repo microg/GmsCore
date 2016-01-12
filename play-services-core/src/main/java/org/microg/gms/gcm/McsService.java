@@ -292,6 +292,7 @@ public class McsService extends Service implements Handler.Callback {
         for (AppData appData : msg.app_data) {
             intent.putExtra(appData.key, appData.value);
         }
+        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         sendOrderedBroadcast(intent, msg.category + ".permission.C2D_MESSAGE");
     }
 
