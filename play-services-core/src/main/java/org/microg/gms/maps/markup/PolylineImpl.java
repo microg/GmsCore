@@ -33,9 +33,6 @@ import org.oscim.map.Map;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO
- */
 public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMarkup {
     private static final String TAG = "GmsMapsPolylineImpl";
 

@@ -49,21 +49,6 @@ This can take a couple of minutes."</string>
     <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
     <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
 
-    <string name="prefcat_setup">Setup</string>
-
-    <string name="self_check_title">microG Self-Check</string>
-    <string name="self_check_desc">Check if the system is correctly set up to use microG.</string>
-    <string name="self_check_name_fake_sig_perm">System has signature spoofing support: </string>
-    <string name="self_check_resolution_fake_sig_perm">You ROM has no native support for signature spoofing. You can still use Xposed or other systems to spoof signature. Please check the documentation on which ROMs do support signature spoofing and how to use microG on ROMs that do not.</string>
-    <string name="self_check_name_perm_granted">System grants signature spoofing permission: </string>
-    <string name="self_check_resolution_perm_granted">This is a strong indicator that the ROM does support signature spoofing, but requires further action to activate it. Please check the documentation on which steps might be required.</string>
-    <string name="self_check_name_system_spoofs">System spoofs signature: </string>
-    <string name="self_check_resolution_system_spoofs">This is a strong indicator that the ROM does support signature spoofing, but requires further action to activate it. Please check the documentation on which steps might be required.</string>
-    <string name="self_check_name_app_installed">%1$s installed: </string>
-    <string name="self_check_resolution_app_installed">Install the application %1$s or a compatible one. Please check the documentation on which applications are compatible.</string>
-    <string name="self_check_name_correct_sig">%1$s has correct signature: </string>
-    <string name="self_check_resolution_correct_sig">Either the installed %1$s is not compatible, signature spoofing is not enabled for it or your ROM does not properly support signature spoofing. Please check the documentation on which applications and ROMs are compatible.</string>
-
     <string name="prefcat_services">Background services</string>
 
     <string name="pref_checkin_enable" translatable="false">checkin_enable_service</string>
@@ -87,4 +72,41 @@ This can take a couple of minutes."</string>
 
     <string name="pick_place_title">Pick a place</string>
     <string name="pick_place_desc">Place picker is not yet available.</string>
+
+    <string name="prefcat_about">About</string>
+    <string name="pref_about_title">About microG Services Core</string>
+    <string name="pref_about_summary">Version information and used libraries</string>
+
+    <string name="self_check_cat_fake_sig">Signature spoofing support</string>
+    <string name="self_check_name_fake_sig_perm">System has signature spoofing support: </string>
+    <string name="self_check_resolution_fake_sig_perm">Your ROM has no native support for signature spoofing. You can still use Xposed or other systems to spoof signature. Please check the documentation on which ROMs do support signature spoofing and how to use microG on ROMs that do not.</string>
+    <string name="self_check_name_perm_granted">System grants signature spoofing permission: </string>
+    <string name="self_check_resolution_perm_granted">This is a strong indicator that the ROM does support signature spoofing, but requires further action to activate it. Please check the documentation on which steps might be required.</string>
+    <string name="self_check_name_system_spoofs">System spoofs signature: </string>
+    <string name="self_check_resolution_system_spoofs">Please check the documentation on which steps might be required.</string>
+
+    <string name="self_check_cat_gms_packages">Installed packages</string>
+    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_name_app_installed">%1$s installed: </string>
+    <string name="self_check_resolution_app_installed">Install the application %1$s or a compatible one. Please check the documentation on which applications are compatible.</string>
+    <string name="self_check_name_correct_sig">%1$s has correct signature: </string>
+    <string name="self_check_resolution_correct_sig">Either the installed %1$s is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
+    <string name="perm_extended_access_label">Extended access to Google services</string>
+
+    <string name="self_check_cat_permissions">Permissions granted</string>
+    <string name="self_check_name_permission">Permission to %1$s:</string>
+    <string name="self_check_resolution_permission">Touch here to grant permission to %1$s. Not granting the permission can result in misbehaving applications.</string>
+    <string name="self_check_perm_location">location</string>
+    <string name="self_check_perm_storage">storage</string>
+    <string name="self_check_perm_contacts">contacts</string>
+    <string name="self_check_perm_phone">phone</string>
+
+    <string name="lacking_permission_toast">microG Services Core: Lacking permission %1$s</string>
+
+    <string name="place_picker_select_title">Select this location</string>
+    <string name="place_picker_nearby_places">Nearby places</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
 </resources>

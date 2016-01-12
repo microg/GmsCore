@@ -25,7 +25,6 @@ import android.util.Log;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
@@ -180,7 +179,7 @@ public class AuthManager {
     }
 
     public AuthResponse requestAuth(boolean legacy) throws IOException {
-        if (service.equals(Constants.SCOPE_GET_ACCOUNT_ID)) {
+        if (service.equals(AuthConstants.SCOPE_GET_ACCOUNT_ID)) {
             AuthResponse response = new AuthResponse();
             response.accountId = response.auth = getAccountManager().getUserData(getAccount(), "GoogleUserId");
             return response;

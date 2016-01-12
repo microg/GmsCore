@@ -16,16 +16,29 @@
 
 package org.microg.gms.auth;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.android.gms.R;
+
+import org.microg.gms.common.PackageUtils;
+
+import java.util.Arrays;
+
+import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_ACCOUNTS;
+import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_CLEAR_PASSWORD;
+import static org.microg.gms.auth.AuthConstants.PROVIDER_METHOD_CLEAR_PASSWORD;
+import static org.microg.gms.auth.AuthConstants.PROVIDER_METHOD_GET_ACCOUNTS;
 
 public class AccountContentProvider extends ContentProvider {
     private static final String TAG = "GmsAuthProvider";
@@ -38,13 +51,20 @@ public class AccountContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Bundle call(String method, String arg, Bundle extras) {
-        // FIXME: Restrict access!
-        if ("get_accounts".equals(method) && getContext().getString(R.string.google_account_type).equals(arg)) {
+        if (!PackageUtils.callerHasExtendedAccess(getContext())) {
+            String[] packagesForUid = getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid());
+            if (packagesForUid != null && packagesForUid.length != 0)
+                Log.w(TAG, "Not granting access to " + Arrays.toString(packagesForUid)
+                        + ", signature: " + PackageUtils.firstSignatureDigest(getContext(), packagesForUid[0]));
+            if (getContext().checkCallingPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
+                throw new SecurityException("Access denied, missing GET_ACCOUNTS or EXTENDED_ACCESS permission");
+        }
+        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method) && getContext().getString(R.string.google_account_type).equals(arg)) {
             Bundle result = new Bundle();
-            result.putParcelableArray("accounts", AccountManager.get(getContext()).getAccountsByType(arg));
+            result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, AccountManager.get(getContext()).getAccountsByType(arg));
             return result;
-        } else if ("clear_password".equals(method)) {
-            Account a = extras.getParcelable("clear_password");
+        } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method)) {
+            Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
             AccountManager.get(getContext()).clearPassword(a);
             return null;
         }

@@ -16,7 +16,12 @@
 
 package org.microg.gms.common;
 
+import android.Manifest;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
+
+import com.google.android.gms.R;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 
@@ -24,6 +29,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class Utils {
     public static String getAndroidIdHex(Context context) {
@@ -36,6 +43,14 @@ public class Utils {
 
     public static Build getBuild(Context context) {
         return new Build();
+    }
+
+    public static boolean hasSelfPermissionOrNotify(Context context, String permission) {
+        if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED) {
+            Toast.makeText(context, context.getString(R.string.lacking_permission_toast, permission), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     public static byte[] readStreamToEnd(final InputStream is) throws IOException {

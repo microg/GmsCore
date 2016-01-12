@@ -17,37 +17,52 @@
 package org.microg.gms.ui;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.R;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.internal.PlaceImpl;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
-public class PlacePickerActivity extends AppCompatActivity {
+import org.microg.gms.location.LocationConstants;
+import org.microg.gms.maps.BackendMapView;
+import org.microg.gms.maps.GmsMapsTypeHelper;
+import org.microg.safeparcel.SafeParcelUtil;
+import org.oscim.core.MapPosition;
+import org.oscim.event.Event;
+import org.oscim.map.Map;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class PlacePickerActivity extends AppCompatActivity implements Map.UpdateListener {
     private static final String TAG = "GmsPlacePicker";
 
-    private static final String EXTRA_PRIMARY_COLOR = "primary_color";
-    private static final String EXTRA_PRIMARY_COLOR_DARK = "primary_color_dark";
-    private static final String EXTRA_CLIENT_VERSION = "gmscore_client_jar_version";
-    private static final String EXTRA_BOUNDS = "latlng_bounds";
-
-    private static final String EXTRA_ATTRIBUTION = "third_party_attributions";
-    private static final String EXTRA_FINAL_BOUNDS = "final_latlng_bounds";
-    private static final String EXTRA_PLACE = "selected_place";
-    private static final String EXTRA_STATUS = "status";
-
-    private int resultCode;
+    private PlaceImpl place;
+    private BackendMapView mapView;
     private Intent resultIntent;
+    private AtomicBoolean geocoderInProgress = new AtomicBoolean(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        resultCode = RESULT_CANCELED;
         resultIntent = new Intent();
-        if (getIntent().hasExtra(EXTRA_BOUNDS))
-            resultIntent.putExtra(EXTRA_FINAL_BOUNDS, getIntent().getParcelableExtra(EXTRA_BOUNDS));
+        place = new PlaceImpl();
 
         setContentView(R.layout.pick_place);
 
@@ -55,9 +70,58 @@ public class PlacePickerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setBackgroundColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR, 0));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            getWindow().setStatusBarColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
+
+        if (getIntent().hasExtra(LocationConstants.EXTRA_PRIMARY_COLOR)) {
+            toolbar.setBackgroundColor(getIntent().getIntExtra(LocationConstants.EXTRA_PRIMARY_COLOR, 0));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                getWindow().setStatusBarColor(getIntent().getIntExtra(LocationConstants.EXTRA_PRIMARY_COLOR_DARK, 0));
+            ((TextView) findViewById(R.id.place_picker_title)).setTextColor(getIntent().getIntExtra(LocationConstants.EXTRA_PRIMARY_COLOR_DARK, 0));
+        }
+
+        mapView = (BackendMapView) findViewById(R.id.map);
+        mapView.map().getEventLayer().enableRotation(false);
+        mapView.map().getEventLayer().enableTilt(false);
+        mapView.map().events.bind(this);
+
+        LatLngBounds latLngBounds = getIntent().getParcelableExtra(LocationConstants.EXTRA_BOUNDS);
+        if (latLngBounds != null) {
+            place.viewport = latLngBounds;
+            mapView.map().getMapPosition().setByBoundingBox(GmsMapsTypeHelper.fromLatLngBounds(latLngBounds),
+                    mapView.map().getWidth(), mapView.map().getHeight());
+        }
+
+        findViewById(R.id.place_picker_select).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resultIntent.putExtra(LocationConstants.EXTRA_STATUS, SafeParcelUtil.asByteArray(new Status(CommonStatusCodes.SUCCESS)));
+                resultIntent.putExtra(LocationConstants.EXTRA_PLACE, SafeParcelUtil.asByteArray(place));
+                resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, SafeParcelUtil.asByteArray(place.viewport));
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.pick_place, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_action_search).getActionView();
+        // TODO: search
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        mapView.onPause();
+        super.onPause();
     }
 
     @Override
@@ -72,6 +136,57 @@ public class PlacePickerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        setResult(resultCode, resultIntent);
+    }
+
+    @Override
+    public void onMapEvent(Event event, MapPosition position) {
+        place.viewport = GmsMapsTypeHelper.toLatLngBounds(mapView.map().viewport().getBBox(null, 0));
+        resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, place.viewport);
+        place.latLng = GmsMapsTypeHelper.toLatLng(position.getGeoPoint());
+        place.name = getString(R.string.place_picker_location_lat_lng, place.latLng.latitude, place.latLng.longitude);
+        place.address = null;
+        updateInfoText();
+        if (geocoderInProgress.compareAndSet(false, true)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        LatLng ll = null;
+                        while (ll != place.latLng) {
+                            ll = place.latLng;
+                            Thread.sleep(1000);
+                        }
+                        Geocoder geocoder = new Geocoder(PlacePickerActivity.this);
+                        List<Address> addresses = geocoder.getFromLocation(place.latLng.latitude, place.latLng.longitude, 1);
+                        if (addresses != null && !addresses.isEmpty() && addresses.get(0).getMaxAddressLineIndex() > 0) {
+                            Address address = addresses.get(0);
+                            StringBuilder sb = new StringBuilder(address.getAddressLine(0));
+                            for (int i = 1; i < address.getMaxAddressLineIndex(); ++i) {
+                                sb.append(", ").append(address.getAddressLine(i));
+                            }
+                            if (place.latLng == ll) {
+                                place.address = sb.toString();
+                                place.name = address.getFeatureName();
+                                if (TextUtils.isEmpty(place.name)) place.name = place.address;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateInfoText();
+                                    }
+                                });
+                            }
+                        }
+                    } catch (Exception ignored) {
+                        Log.w(TAG, ignored);
+                    } finally {
+                        geocoderInProgress.lazySet(false);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    private void updateInfoText() {
+        ((TextView) findViewById(R.id.place_picker_info)).setText(place.name);
     }
 }

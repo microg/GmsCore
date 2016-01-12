@@ -23,20 +23,22 @@ import com.google.android.gms.R;
 
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
-import org.microg.tools.selfcheck.SelfCheckGroup;
+
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 
 public class InstalledPackagesChecks implements SelfCheckGroup {
 
     @Override
     public String getGroupName(Context context) {
-        return "Installed packages";
+        return context.getString(R.string.self_check_cat_gms_packages);
     }
 
     @Override
     public void doChecks(Context context, ResultCollector collector) {
-        addPackageInstalledAndSignedResult(context, collector, "Play Services (GmsCore)", Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
-        addPackageInstalledAndSignedResult(context, collector, "Play Store (Phonesky)", "com.android.vending", Constants.GMS_PACKAGE_SIGNATURE_SHA1);
-        addPackageInstalledResult(context, collector, "Services Framework (GSF)", "com.google.android.gsf");
+        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_gms), Constants.GMS_PACKAGE_NAME, Constants.GMS_PACKAGE_SIGNATURE_SHA1);
+        addPackageInstalledAndSignedResult(context, collector, context.getString(R.string.self_check_pkg_vending), "com.android.vending", Constants.GMS_PACKAGE_SIGNATURE_SHA1);
+        addPackageInstalledResult(context, collector, context.getString(R.string.self_check_pkg_gsf), Constants.GSF_PACKAGE_NAME);
     }
 
     private void addPackageInstalledAndSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
@@ -47,7 +49,7 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
 
     private boolean addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
         boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName));
-        collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName), hashMatches,
+        collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName), hashMatches ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_correct_sig, nicePackageName));
         return hashMatches;
     }
@@ -59,7 +61,7 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
         } catch (PackageManager.NameNotFoundException e) {
             packageExists = false;
         }
-        collector.addResult(context.getString(R.string.self_check_name_app_installed, nicePackageName), packageExists,
+        collector.addResult(context.getString(R.string.self_check_name_app_installed, nicePackageName), packageExists ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_app_installed, nicePackageName));
         return packageExists;
     }

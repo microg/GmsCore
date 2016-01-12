@@ -26,9 +26,9 @@ import android.util.Log;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 
-import static org.microg.gms.gcm.Constants.ACTION_CONNECT;
-import static org.microg.gms.gcm.Constants.ACTION_HEARTBEAT;
-import static org.microg.gms.gcm.Constants.EXTRA_REASON;
+import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
+import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
+import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";

@@ -14,11 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<manifest
-    package="com.google.android.gms"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="8489238"
-    android:versionName="8.4.89 (microG v0.02)">
+<manifest package="com.google.android.gms"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -57,6 +54,10 @@
         android:name="org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
         android:protectionLevel="normal"/>
+    <permission
+        android:name="org.microg.gms.EXTENDED_ACCESS"
+        android:label="@string/perm_extended_access_label"
+        android:protectionLevel="dangerous"/>
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE"/>
 
@@ -78,6 +79,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="com.google.android.c2dm.permission.SEND"/>
     <uses-permission android:name="org.microg.gms.STATUS_BROADCAST"/>
+    <uses-permission android:name="org.microg.gms.EXTENDED_ACCESS"/>
 
     <application
         android:allowBackup="false"
@@ -208,8 +210,7 @@
             android:name="org.microg.gms.maps.data.SharedTileProvider"
             android:authorities="org.microg.gms.map.tile"
             android:enabled="true"
-            android:exported="true">
-        </provider>
+            android:exported="true"/>
 
         <!-- DroidGuard -->
 
@@ -359,11 +360,6 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="org.microg.gms.ui.SelfCheckActivity"
-            android:label="@string/self_check_title"
-            android:theme="@style/SettingsTheme"/>
 
         <!-- Other -->
 

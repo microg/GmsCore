@@ -8,3 +8,5 @@ include ':unifiednlp-compat'
 
 include ':play-services-api'
 include ':play-services-core'
+
+include ':microg-ui-tools'

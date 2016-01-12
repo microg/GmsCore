@@ -22,6 +22,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -47,22 +49,34 @@ import org.microg.gms.gcm.mcs.Setting;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.gcm.Constants.ACTION_CONNECT;
-import static org.microg.gms.gcm.Constants.ACTION_HEARTBEAT;
-import static org.microg.gms.gcm.Constants.ACTION_RECONNECT;
-import static org.microg.gms.gcm.Constants.EXTRA_REASON;
-import static org.microg.gms.gcm.Constants.MSG_CONNECT;
-import static org.microg.gms.gcm.Constants.MSG_HEARTBEAT;
-import static org.microg.gms.gcm.Constants.MSG_INPUT;
-import static org.microg.gms.gcm.Constants.MSG_INPUT_ERROR;
-import static org.microg.gms.gcm.Constants.MSG_OUTPUT;
-import static org.microg.gms.gcm.Constants.MSG_OUTPUT_ERROR;
-import static org.microg.gms.gcm.Constants.MSG_OUTPUT_READY;
-import static org.microg.gms.gcm.Constants.MSG_TEARDOWN;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_TYPE;
+import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_GCM;
+import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
+import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
+import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
+import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
+import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_CONNECT;
+import static org.microg.gms.gcm.McsConstants.MSG_HEARTBEAT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
 public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
@@ -78,6 +92,8 @@ public class McsService extends Service implements Handler.Callback {
     public static final int SERVICE_PORT = 5228;
 
     private static final String PREF_GCM_HEARTBEAT = "gcm_heartbeat_interval";
+    private static final int WAKELOCK_TIMEOUT = 5000;
+
     public static int heartbeatMs = 60000;
     private static long lastHeartbeatAckElapsedRealtime = -1;
 
@@ -185,9 +201,9 @@ public class McsService extends Service implements Handler.Callback {
         updateHeartbeatMs();
         synchronized (McsService.class) {
             if (rootHandler != null) {
-                wakeLock.acquire(5000);
-                Object reason = intent == null ? "I am so sticky!" :
-                        intent.hasExtra(EXTRA_REASON) ? intent.getExtras().get(EXTRA_REASON) : intent;
+                if (intent == null) return START_REDELIVER_INTENT;
+                wakeLock.acquire(WAKELOCK_TIMEOUT);
+                Object reason = intent.hasExtra(EXTRA_REASON) ? intent.getExtras().get(EXTRA_REASON) : intent;
                 if (ACTION_CONNECT.equals(intent.getAction())) {
                     rootHandler.sendMessage(rootHandler.obtainMessage(MSG_CONNECT, reason));
                 } else if (ACTION_HEARTBEAT.equals(intent.getAction())) {
@@ -258,7 +274,7 @@ public class McsService extends Service implements Handler.Callback {
         if (inputStream.newStreamIdAvailable()) {
             ack.last_stream_id_received(inputStream.getStreamId());
         }
-        send(ack.build());
+        send(MCS_HEARTBEAT_ACK_TAG, ack.build());
     }
 
     private void handleHeartbeatAck(HeartbeatAck ack) {
@@ -286,13 +302,20 @@ public class McsService extends Service implements Handler.Callback {
 
     private void handleAppMessage(DataMessageStanza msg) {
         Intent intent = new Intent();
-        intent.setAction("com.google.android.c2dm.intent.RECEIVE");
+        intent.setAction(ACTION_C2DM_RECEIVE);
         intent.addCategory(msg.category);
-        intent.putExtra("from", msg.from);
+        intent.putExtra(EXTRA_MESSAGE_TYPE, MESSAGE_TYPE_GCM);
+        intent.putExtra(EXTRA_FROM, msg.from);
         for (AppData appData : msg.app_data) {
             intent.putExtra(appData.key, appData.value);
         }
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        // FIXME: #75
+        List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
+        for (ResolveInfo resolveInfo : infos)
+            Log.d(TAG, "Target: " + resolveInfo);
+        if (infos.isEmpty())
+            Log.d(TAG, "No target for message, wut?");
         sendOrderedBroadcast(intent, msg.category + ".permission.C2D_MESSAGE");
     }
 
@@ -308,7 +331,7 @@ public class McsService extends Service implements Handler.Callback {
                 if (inputStream.newStreamIdAvailable()) {
                     msgResponse.last_stream_id_received(inputStream.getStreamId());
                 }
-                send(msgResponse.build());
+                send(MCS_DATA_MESSAGE_STANZA_TAG, msgResponse.build());
             }
         }
     }
@@ -317,16 +340,16 @@ public class McsService extends Service implements Handler.Callback {
         return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
-    private void send(Message message) {
-        rootHandler.sendMessage(rootHandler.obtainMessage(MSG_OUTPUT, message));
+    private void send(int type, Message message) {
+        rootHandler.sendMessage(rootHandler.obtainMessage(MSG_OUTPUT, type, 0, message));
     }
 
-    private void sendOutputStream(int what, Object obj) {
+    private void sendOutputStream(int what, int arg, Object obj) {
         McsOutputStream os = outputStream;
         if (os != null) {
             Handler outputHandler = os.getHandler();
             if (outputHandler != null)
-                outputHandler.sendMessage(outputHandler.obtainMessage(what, obj));
+                outputHandler.sendMessage(outputHandler.obtainMessage(what, arg, 0, obj));
         }
     }
 
@@ -334,10 +357,10 @@ public class McsService extends Service implements Handler.Callback {
     public boolean handleMessage(android.os.Message msg) {
         switch (msg.what) {
             case MSG_INPUT:
-                handleInput((Message) msg.obj);
+                handleInput(msg.arg1, (Message) msg.obj);
                 return true;
             case MSG_OUTPUT:
-                sendOutputStream(MSG_OUTPUT, msg.obj);
+                sendOutputStream(MSG_OUTPUT, msg.arg1, msg.obj);
                 return true;
             case MSG_INPUT_ERROR:
             case MSG_OUTPUT_ERROR:
@@ -361,7 +384,7 @@ public class McsService extends Service implements Handler.Callback {
                     if (inputStream.newStreamIdAvailable()) {
                         ping.last_stream_id_received(inputStream.getStreamId());
                     }
-                    send(ping.build());
+                    send(MCS_HEARTBEAT_PING_TAG, ping.build());
                     scheduleHeartbeat(this);
                 } else {
                     Log.d(TAG, "Ignoring heartbeat, not connected!");
@@ -370,27 +393,45 @@ public class McsService extends Service implements Handler.Callback {
                 return true;
             case MSG_OUTPUT_READY:
                 Log.d(TAG, "Sending login request...");
-                send(buildLoginRequest());
+                send(MCS_LOGIN_REQUEST_TAG, buildLoginRequest());
+                return true;
+            case MSG_OUTPUT_DONE:
+                handleOutputDone(msg);
                 return true;
         }
         Log.w(TAG, "Unknown message: " + msg);
         return false;
     }
 
-    private void handleInput(Message message) {
+    private void handleOutputDone(android.os.Message msg) {
+        switch (msg.arg1) {
+            case MCS_HEARTBEAT_PING_TAG:
+                wakeLock.release();
+                break;
+            default:
+        }
+    }
+
+    private void handleInput(int type, Message message) {
         try {
-            if (message instanceof DataMessageStanza) {
-                handleCloudMessage((DataMessageStanza) message);
-            } else if (message instanceof HeartbeatPing) {
-                handleHearbeatPing((HeartbeatPing) message);
-            } else if (message instanceof Close) {
-                handleClose((Close) message);
-            } else if (message instanceof LoginResponse) {
-                handleLoginResponse((LoginResponse) message);
-            } else if (message instanceof HeartbeatAck) {
-                handleHeartbeatAck((HeartbeatAck) message);
-            } else {
-                Log.w(TAG, "Unknown message: " + message);
+            switch (type) {
+                case MCS_DATA_MESSAGE_STANZA_TAG:
+                    handleCloudMessage((DataMessageStanza) message);
+                    break;
+                case MCS_HEARTBEAT_PING_TAG:
+                    handleHearbeatPing((HeartbeatPing) message);
+                    break;
+                case MCS_HEARTBEAT_ACK_TAG:
+                    handleHeartbeatAck((HeartbeatAck) message);
+                    break;
+                case MCS_CLOSE_TAG:
+                    handleClose((Close) message);
+                    break;
+                case MCS_LOGIN_RESPONSE_TAG:
+                    handleLoginResponse((LoginResponse) message);
+                    break;
+                default:
+                    Log.w(TAG, "Unknown message: " + message);
             }
             resetCurrentDelay();
         } catch (Exception e) {
@@ -399,7 +440,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleTeardown(android.os.Message msg) {
-        sendOutputStream(MSG_TEARDOWN, msg.obj);
+        sendOutputStream(MSG_TEARDOWN, msg.arg1, msg.obj);
         if (inputStream != null) {
             inputStream.close();
             inputStream = null;
@@ -413,7 +454,10 @@ public class McsService extends Service implements Handler.Callback {
 
         alarmManager.cancel(heartbeatIntent);
         if (wakeLock != null) {
-            wakeLock.release();
+            try {
+                wakeLock.release();
+            } catch (Exception ignored) {
+            }
         }
     }
 }

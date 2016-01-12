@@ -30,15 +30,16 @@ import org.microg.gms.gcm.mcs.LoginRequest;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.microg.gms.gcm.Constants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.Constants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.Constants.MCS_VERSION_CODE;
-import static org.microg.gms.gcm.Constants.MSG_OUTPUT;
-import static org.microg.gms.gcm.Constants.MSG_OUTPUT_ERROR;
-import static org.microg.gms.gcm.Constants.MSG_OUTPUT_READY;
-import static org.microg.gms.gcm.Constants.MSG_TEARDOWN;
+import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_VERSION_CODE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
 public class McsOutputStream extends Thread implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsOutput";
@@ -79,19 +80,9 @@ public class McsOutputStream extends Thread implements Handler.Callback {
         switch (msg.what) {
             case MSG_OUTPUT:
                 try {
-                    Message message = (Message) msg.obj;
-                    Log.d(TAG, "Outgoing message: " + message);
-                    if (msg.obj instanceof DataMessageStanza) {
-                        writeInternal(message, MCS_DATA_MESSAGE_STANZA_TAG);
-                    } else if (msg.obj instanceof LoginRequest) {
-                        writeInternal(message, MCS_LOGIN_REQUEST_TAG);
-                    } else if (msg.obj instanceof HeartbeatAck) {
-                        writeInternal(message, MCS_HEARTBEAT_ACK_TAG);
-                    } else if (msg.obj instanceof HeartbeatPing) {
-                        writeInternal(message, MCS_HEARTBEAT_PING_TAG);
-                    } else {
-                        Log.w(TAG, "Unknown message: " + msg.obj);
-                    }
+                    Log.d(TAG, "Outgoing message: " + msg.obj);
+                    writeInternal((Message) msg.obj, msg.arg1);
+                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_DONE, msg.arg1, msg.arg2, msg.obj));
                 } catch (IOException e) {
                     mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_ERROR, e));
                 }

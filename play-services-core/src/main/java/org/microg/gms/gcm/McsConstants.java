@@ -16,7 +16,7 @@
 
 package org.microg.gms.gcm;
 
-public class Constants {
+public final class McsConstants {
     public static final int MCS_HEARTBEAT_PING_TAG = 0;
     public static final int MCS_HEARTBEAT_ACK_TAG = 1;
     public static final int MCS_LOGIN_REQUEST_TAG = 2;
@@ -32,6 +32,7 @@ public class Constants {
     public static final int MSG_OUTPUT = 20;
     public static final int MSG_OUTPUT_ERROR = 21;
     public static final int MSG_OUTPUT_READY = 22;
+    public static final int MSG_OUTPUT_DONE = 23;
     public static final int MSG_TEARDOWN = 30;
     public static final int MSG_CONNECT = 40;
     public static final int MSG_HEARTBEAT = 41;

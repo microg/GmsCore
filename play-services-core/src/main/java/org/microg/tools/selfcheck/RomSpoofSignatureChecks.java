@@ -18,12 +18,19 @@ package org.microg.tools.selfcheck;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.R;
 
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
-import org.microg.tools.selfcheck.SelfCheckGroup;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 
 public class RomSpoofSignatureChecks implements SelfCheckGroup {
 
@@ -31,16 +38,16 @@ public class RomSpoofSignatureChecks implements SelfCheckGroup {
 
     @Override
     public String getGroupName(Context context) {
-        return "ROM spoof signature support";
+        return context.getString(R.string.self_check_cat_fake_sig);
     }
 
     @Override
     public void doChecks(Context context, ResultCollector collector) {
-        if (addRomKnowsFakeSignaturePermission(context, collector)) {
-            if (addSystemGrantsFakeSignaturePermission(context, collector)) {
-                addSystemSpoofsSignature(context, collector);
-            }
+        boolean hasPermission = addRomKnowsFakeSignaturePermission(context, collector);
+        if (hasPermission) {
+            addSystemGrantsFakeSignaturePermission(context, collector);
         }
+        addSystemSpoofsSignature(context, collector);
     }
 
     private boolean addRomKnowsFakeSignaturePermission(Context context, ResultCollector collector) {
@@ -50,21 +57,26 @@ public class RomSpoofSignatureChecks implements SelfCheckGroup {
         } catch (PackageManager.NameNotFoundException e) {
             knowsPermission = false;
         }
-        collector.addResult(context.getString(R.string.self_check_name_fake_sig_perm), knowsPermission,
+        collector.addResult(context.getString(R.string.self_check_name_fake_sig_perm), knowsPermission ? Positive : Unknown,
                 context.getString(R.string.self_check_resolution_fake_sig_perm));
         return knowsPermission;
     }
 
     private boolean addSystemGrantsFakeSignaturePermission(Context context, ResultCollector collector) {
-        boolean grantsPermission = context.checkCallingOrSelfPermission(FAKE_SIGNATURE_PERMISSION) == PackageManager.PERMISSION_GRANTED;
-        collector.addResult(context.getString(R.string.self_check_name_perm_granted), grantsPermission,
-                context.getString(R.string.self_check_resolution_perm_granted));
+        boolean grantsPermission = ContextCompat.checkSelfPermission(context, FAKE_SIGNATURE_PERMISSION) == PERMISSION_GRANTED;
+        collector.addResult(context.getString(R.string.self_check_name_perm_granted), grantsPermission ? Positive : Negative,
+                context.getString(R.string.self_check_resolution_perm_granted), new CheckResolver() {
+                    @Override
+                    public void tryResolve(Fragment fragment) {
+                        fragment.requestPermissions(new String[]{FAKE_SIGNATURE_PERMISSION}, 0);
+                    }
+                });
         return grantsPermission;
     }
 
     private boolean addSystemSpoofsSignature(Context context, ResultCollector collector) {
-        boolean spoofsSignature = Constants.GMS_PACKAGE_SIGNATURE_SHA1.equals(PackageUtils.firstSignatureDigest(context, Constants.GMS_PACKAGE_NAME));
-        collector.addResult(context.getString(R.string.self_check_name_system_spoofs), spoofsSignature,
+        boolean spoofsSignature = GMS_PACKAGE_SIGNATURE_SHA1.equals(PackageUtils.firstSignatureDigest(context, Constants.GMS_PACKAGE_NAME));
+        collector.addResult(context.getString(R.string.self_check_name_system_spoofs), spoofsSignature ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_system_spoofs));
         return spoofsSignature;
     }

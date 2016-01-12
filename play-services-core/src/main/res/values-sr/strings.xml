@@ -46,10 +46,6 @@
     <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
     <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
 
-    <string name="prefcat_setup">Поставка</string>
-
-    <string name="self_check_title">микроГ самопровера</string>
-    <string name="self_check_desc">Провера исправности подешавања система за коришћење микроГ услуга.</string>
     <string name="self_check_name_fake_sig_perm">Систем има подршку заваравања потписа: </string>
     <string name="self_check_resolution_fake_sig_perm">Ваш РОМ нема уграђену подршку за заваравање потписа. Ипак можете да користите Xposed или друге начине заваравања потписа. Погледајте документацију да видите који РОМови подржавају заваравање потписа и како да користите микроГ на РОМовима који не подржавају.</string>
     <string name="self_check_name_perm_granted">Систем одобрава дозволу заваравања потписа: </string>

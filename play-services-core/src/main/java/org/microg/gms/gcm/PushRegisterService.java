@@ -32,11 +32,24 @@ import org.microg.gms.common.Utils;
 
 import java.io.IOException;
 
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_UNREGISTER;
+import static org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_RETRY_AFTER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
+
 public class PushRegisterService extends IntentService {
     private static final String TAG = "GmsGcmRegisterSvc";
 
     private static final String REMOVED = "%%REMOVED%%";
     private static final String ERROR = "%%ERROR%%";
+    private static final String GCM_REGISTRATION_PREF = "gcm_registrations";
 
     public PushRegisterService() {
         super(TAG);
@@ -44,19 +57,17 @@ public class PushRegisterService extends IntentService {
     }
 
     private SharedPreferences getSharedPreferences() {
-        return getSharedPreferences("gcm_registrations", MODE_PRIVATE);
+        return getSharedPreferences(GCM_REGISTRATION_PREF, MODE_PRIVATE);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: " + intent);
         try {
-            if (intent != null && intent.getAction() != null) {
-                if (intent.getAction().equalsIgnoreCase("com.google.android.c2dm.intent.REGISTER")) {
-                    register(intent);
-                } else if (intent.getAction().equalsIgnoreCase("com.google.android.c2dm.intent.UNREGISTER")) {
-                    unregister(intent);
-                }
+            if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
+                register(intent);
+            } else if (ACTION_C2DM_UNREGISTER.equals(intent.getAction())) {
+                unregister(intent);
             }
         } catch (Exception e) {
             Log.w(TAG, e);
@@ -73,27 +84,27 @@ public class PushRegisterService extends IntentService {
     }
 
     private void register(Intent intent) {
-        PendingIntent pendingIntent = intent.getParcelableExtra("app");
-        String sender = intent.getStringExtra("sender");
+        PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
+        String sender = intent.getStringExtra(EXTRA_SENDER);
         String app = packageFromPendingIntent(pendingIntent);
-        Log.d(TAG, "register[res]: " + intent.toString() + " extras=" + intent.getExtras());
+        Log.d(TAG, "register[req]: " + intent.toString() + " extras=" + intent.getExtras());
 
-        Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
+        Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
         String appSignature = PackageUtils.firstSignatureDigest(this, app);
 
         String regId = register(this, app, appSignature, sender, null, false).token;
         if (regId != null) {
-            outIntent.putExtra("registration_id", regId);
+            outIntent.putExtra(EXTRA_REGISTRATION_ID, regId);
             getSharedPreferences().edit().putString(app + ":" + appSignature, regId).apply();
         } else {
-            outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
+            outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
             getSharedPreferences().edit().putString(app + ":" + appSignature, "-").apply();
         }
 
         Log.d(TAG, "register[res]: " + outIntent + " extras=" + outIntent.getExtras());
         try {
-            if (intent.hasExtra("google.messenger")) {
-                Messenger messenger = intent.getParcelableExtra("google.messenger");
+            if (intent.hasExtra(EXTRA_MESSENGER)) {
+                Messenger messenger = intent.getParcelableExtra(EXTRA_MESSENGER);
                 Message message = Message.obtain();
                 message.obj = outIntent;
                 messenger.send(message);
@@ -127,35 +138,34 @@ public class PushRegisterService extends IntentService {
     }
 
     private void unregister(Intent intent) {
-        PendingIntent pendingIntent = intent.getParcelableExtra("app");
+        PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
         String app = packageFromPendingIntent(pendingIntent);
-        Log.d(TAG, "unregister[res]: " + intent.toString() + " extras=" + intent.getExtras());
+        Log.d(TAG, "unregister[req]: " + intent.toString() + " extras=" + intent.getExtras());
 
-        Intent outIntent = new Intent("com.google.android.c2dm.intent.REGISTRATION");
+        Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
         String appSignature = PackageUtils.firstSignatureDigest(this, app);
 
         if (REMOVED.equals(getSharedPreferences().getString(app + ":" + appSignature, null))) {
-            outIntent.putExtra("unregistered", app);
+            outIntent.putExtra(EXTRA_UNREGISTERED, app);
         } else {
             RegisterResponse response = register(this, app, appSignature, null, null, true);
             if (!app.equals(response.deleted)) {
-                outIntent.putExtra("error", "SERVICE_NOT_AVAILABLE");
+                outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
                 getSharedPreferences().edit().putString(app + ":" + PackageUtils.firstSignatureDigest(this, app), ERROR).apply();
 
-                long retry = 0;
                 if (response.retryAfter != null && !response.retryAfter.contains(":")) {
-                    outIntent.putExtra("Retry-After", Long.parseLong(response.retryAfter));
+                    outIntent.putExtra(EXTRA_RETRY_AFTER, Long.parseLong(response.retryAfter));
                 }
             } else {
-                outIntent.putExtra("unregistered", app);
+                outIntent.putExtra(EXTRA_UNREGISTERED, app);
                 getSharedPreferences().edit().putString(app + ":" + PackageUtils.firstSignatureDigest(this, app), REMOVED).apply();
             }
         }
 
         Log.d(TAG, "unregister[res]: " + outIntent.toString() + " extras=" + outIntent.getExtras());
         try {
-            if (intent.hasExtra("google.messenger")) {
-                Messenger messenger = intent.getParcelableExtra("google.messenger");
+            if (intent.hasExtra(EXTRA_MESSENGER)) {
+                Messenger messenger = intent.getParcelableExtra(EXTRA_MESSENGER);
                 Message message = Message.obtain();
                 message.obj = outIntent;
                 messenger.send(message);

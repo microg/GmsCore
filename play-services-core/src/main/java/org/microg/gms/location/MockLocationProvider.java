@@ -19,7 +19,7 @@ package org.microg.gms.location;
 import android.location.Location;
 import android.os.Bundle;
 
-import static org.microg.gms.common.Constants.KEY_MOCK_LOCATION;
+import static org.microg.gms.location.LocationConstants.KEY_MOCK_LOCATION;
 
 public class MockLocationProvider {
     private boolean mockEnabled = false;
@@ -44,5 +44,6 @@ public class MockLocationProvider {
         }
         mockLocation.getExtras().putBoolean(KEY_MOCK_LOCATION, false);
         this.mockLocation = mockLocation;
+        this.changeListener.onLocationChanged();
     }
 }

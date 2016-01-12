@@ -27,17 +27,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@SuppressWarnings("ResourceType")
 public class RealLocationProvider {
-
     public static final String TAG = "GmsLocProviderReal";
-    private Location lastLocation;
-    private LocationManager locationManager;
-    private String name;
+
+    private final LocationManager locationManager;
+    private final String name;
     private final AtomicBoolean connected = new AtomicBoolean(false);
+    private final LocationChangeListener changeListener;
+
     private long connectedMinTime;
     private float connectedMinDistance;
+    private Location lastLocation;
     private List<LocationRequestHelper> requests = new ArrayList<LocationRequestHelper>();
-    private final LocationChangeListener changeListener;
     private LocationListener listener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
@@ -62,7 +64,7 @@ public class RealLocationProvider {
     };
 
     public RealLocationProvider(LocationManager locationManager, String name,
-            LocationChangeListener changeListener) {
+                                LocationChangeListener changeListener) {
         this.locationManager = locationManager;
         this.name = name;
         this.changeListener = changeListener;
@@ -70,12 +72,16 @@ public class RealLocationProvider {
     }
 
     private void updateLastLocation() {
-        lastLocation = locationManager.getLastKnownLocation(name);
+        Location newLocation = locationManager.getLastKnownLocation(name);
+        if (newLocation != null) lastLocation = newLocation;
     }
 
     public Location getLastLocation() {
         if (!connected.get()) {
             updateLastLocation();
+        }
+        if (lastLocation == null) {
+            Log.d(TAG, "uh-ok: last location for " + name + " is null!");
         }
         return lastLocation;
     }
@@ -102,8 +108,7 @@ public class RealLocationProvider {
             float minDistance = Float.MAX_VALUE;
             for (LocationRequestHelper request : requests) {
                 minTime = Math.min(request.locationRequest.getInterval(), minTime);
-                minDistance = Math
-                        .min(request.locationRequest.getSmallestDesplacement(), minDistance);
+                minDistance = Math.min(request.locationRequest.getSmallestDesplacement(), minDistance);
             }
             if (connected.get()) {
                 if (connectedMinTime != minTime || connectedMinDistance != minDistance) {
@@ -112,12 +117,9 @@ public class RealLocationProvider {
                             Looper.getMainLooper());
                 }
             } else {
-                locationManager.requestLocationUpdates(name, minTime, minDistance, listener,
-                        Looper.getMainLooper());
+                locationManager.requestLocationUpdates(name, minTime, minDistance, listener, Looper.getMainLooper());
             }
-            Log.d(TAG,
-                    name + ": requesting location updates. minTime=" + minTime + " minDistance=" +
-                            minDistance);
+            Log.d(TAG, name + ": requesting location updates. minTime=" + minTime + " minDistance=" + minDistance);
             connected.set(true);
             connectedMinTime = minTime;
             connectedMinDistance = minDistance;

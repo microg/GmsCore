@@ -22,11 +22,112 @@
 
     <include layout="@layout/toolbar"/>
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/pick_place_desc"/>
+        android:layout_height="0dip"
+        android:layout_weight="1">
+
+        <org.microg.gms.maps.BackendMapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingBottom="41dip"
+            android:src="@drawable/maps_default_marker"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/place_picker_select"
+        android:layout_width="fill_parent"
+        android:layout_height="72dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/place_picker_icon"
+            android:layout_width="32.0dip"
+            android:layout_height="72dp"
+            android:layout_gravity="top"
+            android:layout_marginEnd="16.0dip"
+            android:layout_marginLeft="16.0dip"
+            android:layout_marginRight="16.0dip"
+            android:layout_marginStart="16.0dip"
+            android:src="@drawable/ic_map_marker"/>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/place_picker_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginTop="12.0dip"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="@string/place_picker_select_title"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="?attr/colorAccent"/>
+
+            <TextView
+                android:id="@+id/place_picker_info"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginTop="36.0dip"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="(0.0000000, 0.0000000)"
+                android:textAppearance="?android:textAppearanceSmall"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#7f7f7f7f"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff1f1f1"
+        android:focusable="false"
+        android:orientation="vertical"
+        android:paddingLeft="8.0dip"
+        android:paddingRight="8.0dip">
+
+        <TextView
+            android:id="@id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="40.0dip"
+            android:gravity="center_vertical"
+            android:paddingLeft="8.0dip"
+            android:text="@string/place_picker_nearby_places"
+            android:textAllCaps="true"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="#ff7f7f7f"
+            android:textStyle="bold"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16.0dip"
+                android:text="Can't load nearby places."
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="#ff7f7f7f"/>
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -20,12 +20,35 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Binder;
+
+import com.google.android.gms.Manifest;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+
 public class PackageUtils {
+
+    private static final String[] KNOWN_GOOGLE_SIGNATURES = {GMS_PACKAGE_SIGNATURE_SHA1};
+
+    public static boolean isGoogleSignedPackages(Context context, String packageName) {
+        return Arrays.asList(KNOWN_GOOGLE_SIGNATURES).contains(firstSignatureDigest(context, packageName));
+    }
+
+    public static void assertExtendedAccess(Context context) {
+        if (!callerHasExtendedAccess(context))
+            throw new SecurityException("Access denied, missing EXTENDED_ACCESS permission");
+    }
+
+    public static boolean callerHasExtendedAccess(Context context) {
+        String[] packagesForUid = context.getPackageManager().getPackagesForUid(Binder.getCallingUid());
+        return (packagesForUid != null && packagesForUid.length != 0 && isGoogleSignedPackages(context, packagesForUid[0])) ||
+                context.checkCallingPermission(Manifest.permission.EXTENDED_ACCESS) == PackageManager.PERMISSION_GRANTED;
+    }
+
     public static void checkPackageUid(Context context, String packageName, int callingUid) {
         String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
         if (packagesForUid != null && !Arrays.asList(packagesForUid).contains(packageName)) {

@@ -17,88 +17,50 @@
 package org.microg.gms.maps;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
 
-import com.google.android.gms.R;
 import com.google.android.gms.maps.model.CameraPosition;
 
 import org.microg.gms.maps.camera.CameraUpdate;
-import org.microg.gms.maps.data.SharedTileCache;
-import org.microg.gms.maps.markup.ClearableVectorLayer;
 import org.microg.gms.maps.markup.DrawableMarkup;
 import org.microg.gms.maps.markup.MarkerItemMarkup;
 import org.microg.gms.maps.markup.Markup;
-import org.oscim.android.MapView;
-import org.oscim.android.canvas.AndroidBitmap;
 import org.oscim.core.MapPosition;
 import org.oscim.core.Point;
 import org.oscim.event.Event;
 import org.oscim.event.MotionEvent;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
-import org.oscim.layers.marker.MarkerSymbol;
-import org.oscim.layers.tile.buildings.BuildingLayer;
-import org.oscim.layers.tile.vector.VectorTileLayer;
-import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.layers.vector.geometries.Drawable;
-import org.oscim.map.Layers;
-import org.oscim.map.Map;
 import org.oscim.map.Viewport;
-import org.oscim.theme.VtmThemes;
-import org.oscim.tiling.ITileCache;
-import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem>, Map.InputListener {
+public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem>, org.oscim.map.Map.InputListener, org.oscim.map.Map.UpdateListener {
     private final static String TAG = "GmsMapBackend";
 
     private final Context context;
-    private final MapView mapView;
-    private final LabelLayer labels;
-    private final BuildingLayer buildings;
-    private final VectorTileLayer baseLayer;
-    private final OSciMap4TileSource tileSource;
-    private final ITileCache cache;
-    private final ItemizedLayer<MarkerItem> items;
-    private java.util.Map<String, Markup> markupMap = new HashMap<String, Markup>();
-    private List<DrawableMarkup> drawableMarkups = new ArrayList<DrawableMarkup>();
-    private ClearableVectorLayer drawables;
+    private final BackendMapView mapView;
+    private final CameraUpdateListener cameraUpdateListener;
+    private final Map<String, Markup> markupMap = new HashMap<String, Markup>();
+    private final List<DrawableMarkup> drawableMarkups = new ArrayList<DrawableMarkup>();
     private MarkerItemMarkup currentlyDraggedItem;
     private float dragLastX = -1;
     private float dragLastY = -1;
 
     public BackendMap(Context context, final CameraUpdateListener cameraUpdateListener) {
         this.context = context;
-        mapView = new MapView(new ContextContainer(context));
-        cache = new SharedTileCache(context);
-        cache.setCacheSize(512 * (1 << 10));
-        tileSource = new OSciMap4TileSource();
-        tileSource.setCache(cache);
-        baseLayer = mapView.map().setBaseMap(tileSource);
-        Layers layers = mapView.map().layers();
-        layers.add(labels = new LabelLayer(mapView.map(), baseLayer));
-        layers.add(drawables = new ClearableVectorLayer(mapView.map()));
-        layers.add(buildings = new BuildingLayer(mapView.map(), baseLayer));
-        layers.add(items = new ItemizedLayer<MarkerItem>(mapView.map(), new MarkerSymbol(new AndroidBitmap(BitmapFactory
-                .decodeResource(ResourcesContainer.get(), R.drawable.nop)), 0.5F, 1)));
-        items.setOnItemGestureListener(this);
-        mapView.map().setTheme(VtmThemes.DEFAULT);
+        this.cameraUpdateListener = cameraUpdateListener;
+        mapView = new BackendMapView(new ContextContainer(context));
+        mapView.items().setOnItemGestureListener(this);
         mapView.map().input.bind(this);
-        mapView.map().events.bind(new Map.UpdateListener() {
-
-            @Override
-            public void onMapEvent(Event event, MapPosition mapPosition) {
-                cameraUpdateListener.onCameraUpdate(GmsMapsTypeHelper.toCameraPosition(mapPosition));
-            }
-        });
+        mapView.map().events.bind(this);
     }
 
     public Viewport getViewport() {
@@ -110,23 +72,11 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     }
 
     public void onResume() {
-        try {
-            Method onResume = MapView.class.getDeclaredMethod("onResume");
-            onResume.setAccessible(true);
-            onResume.invoke(mapView);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mapView.onResume();
     }
 
     public void onPause() {
-        try {
-            Method onPause = MapView.class.getDeclaredMethod("onPause");
-            onPause.setAccessible(true);
-            onPause.invoke(mapView);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mapView.onPause();
     }
 
     public MapPosition getMapPosition() {
@@ -138,14 +88,14 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     }
 
     public boolean hasBuilding() {
-        return mapView.map().layers().contains(buildings);
+        return mapView.map().layers().contains(mapView.buildings());
     }
 
     public void setBuildings(boolean buildingsEnabled) {
         if (!hasBuilding() && buildingsEnabled) {
-            mapView.map().layers().add(buildings);
+            mapView.map().layers().add(mapView.buildings());
         } else if (hasBuilding() && !buildingsEnabled) {
-            mapView.map().layers().remove(buildings);
+            mapView.map().layers().remove(mapView.buildings());
         }
         redraw();
     }
@@ -181,11 +131,11 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     }
 
     private synchronized void updateDrawableLayer() {
-        drawables.clear();
+        mapView.drawables().clear();
         for (DrawableMarkup markup : drawableMarkups) {
             Drawable drawable = markup.getDrawable(mapView.map());
             if (drawable != null) {
-                drawables.add(drawable);
+                mapView.drawables().add(drawable);
             }
         }
     }
@@ -193,27 +143,27 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     public synchronized <T extends MarkerItemMarkup> T add(T markup) {
         if (markup == null) return null;
         markupMap.put(markup.getId(), markup);
-        items.addItem(markup.getMarkerItem(context));
+        mapView.items().addItem(markup.getMarkerItem(context));
         redraw();
         return markup;
     }
 
     public synchronized void clear() {
         markupMap.clear();
-        items.removeAllItems();
+        mapView.items().removeAllItems();
         drawableMarkups.clear();
-        drawables.clear();
+        mapView.drawables().clear();
         redraw();
     }
 
     public synchronized void remove(Markup markup) {
         if (markup instanceof MarkerItemMarkup) {
             markupMap.remove(markup.getId());
-            items.removeItem(items.getByUid(markup.getId()));
+            mapView.items().removeItem(mapView.items().getByUid(markup.getId()));
         } else if (markup instanceof DrawableMarkup) {
             drawableMarkups.remove(markup);
             updateDrawableLayer();
-            drawables.update();
+            mapView.drawables().update();
         }
         redraw();
     }
@@ -221,11 +171,11 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     public synchronized void update(Markup markup) {
         if (markup == null) return;
         if (markup instanceof MarkerItemMarkup) {
-            items.removeItem(items.getByUid(markup.getId()));
-            items.addItem(((MarkerItemMarkup) markup).getMarkerItem(context));
+            mapView.items().removeItem(mapView.items().getByUid(markup.getId()));
+            mapView.items().addItem(((MarkerItemMarkup) markup).getMarkerItem(context));
         } else if (markup instanceof DrawableMarkup) {
             updateDrawableLayer();
-            drawables.update();
+            mapView.drawables().update();
         }
         redraw();
     }
@@ -290,6 +240,11 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
 
     public void setTiltGesturesEnabled(boolean enabled) {
         mapView.map().getEventLayer().enableTilt(enabled);
+    }
+
+    @Override
+    public void onMapEvent(Event event, MapPosition mapPosition) {
+        cameraUpdateListener.onCameraUpdate(GmsMapsTypeHelper.toCameraPosition(mapPosition));
     }
 
     public interface CameraUpdateListener {

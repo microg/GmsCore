@@ -17,11 +17,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/prefcat_setup">
         <Preference
+            android:key="@string/self_check_title"
             android:summary="@string/self_check_desc"
             android:title="@string/self_check_title">
-            <intent
-                android:targetClass="org.microg.gms.ui.SelfCheckActivity"
-                android:targetPackage="com.google.android.gms"/>
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_services">
@@ -49,5 +47,11 @@
                 android:targetClass="org.microg.nlp.ui.SettingsActivity"
                 android:targetPackage="com.google.android.gms"/>
         </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefcat_about">
+        <Preference
+            android:key="@string/pref_about_title"
+            android:summary="@string/pref_about_summary"
+            android:title="@string/pref_about_title"/>
     </PreferenceCategory>
 </PreferenceScreen>

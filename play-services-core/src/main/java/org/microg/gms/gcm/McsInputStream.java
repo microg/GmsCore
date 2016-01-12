@@ -33,16 +33,16 @@ import org.microg.gms.gcm.mcs.LoginResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.microg.gms.gcm.Constants.MCS_CLOSE_TAG;
-import static org.microg.gms.gcm.Constants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.Constants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.Constants.MCS_IQ_STANZA_TAG;
-import static org.microg.gms.gcm.Constants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.Constants.MCS_LOGIN_RESPONSE_TAG;
-import static org.microg.gms.gcm.Constants.MSG_INPUT;
-import static org.microg.gms.gcm.Constants.MSG_INPUT_ERROR;
-import static org.microg.gms.gcm.Constants.MSG_TEARDOWN;
+import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
 public class McsInputStream extends Thread {
     private static final String TAG = "GmsGcmMcsInput";
@@ -71,10 +71,9 @@ public class McsInputStream extends Thread {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                Message msg = read();
-                Log.d(TAG, "Incoming message: " + msg);
+                android.os.Message msg = read();
                 if (msg != null) {
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT, msg));
+                    mainHandler.dispatchMessage(msg);
                 } else {
                     mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, "null message"));
                 }
@@ -118,7 +117,7 @@ public class McsInputStream extends Thread {
         }
     }
 
-    public synchronized Message read() throws IOException {
+    public synchronized android.os.Message read() throws IOException {
         ensureVersionRead();
         int mcsTag = is.read();
         int mcsSize = readVarint();
@@ -132,8 +131,10 @@ public class McsInputStream extends Thread {
             len += (read = is.read(bytes, len, mcsSize - len)) < 0 ? 0 : read;
         }
         Message message = read(mcsTag, bytes, len);
+        if (message == null) return null;
+        Log.d(TAG, "Incoming message: " + message);
         streamId++;
-        return message;
+        return mainHandler.obtainMessage(MSG_INPUT, mcsTag, streamId, message);
     }
 
     private static Message read(int mcsTag, byte[] bytes, int len) throws IOException {
