@@ -323,7 +323,7 @@ public class McsService extends Service implements Handler.Callback {
 
     private void sendOutputStream(int what, Object obj) {
         McsOutputStream os = outputStream;
-        if (os != null) {
+        if (os != null && os.isAlive()) {
             Handler outputHandler = os.getHandler();
             if (outputHandler != null)
                 outputHandler.sendMessage(outputHandler.obtainMessage(what, obj));
