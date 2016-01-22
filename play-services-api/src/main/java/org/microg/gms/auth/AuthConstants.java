@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,9 @@
  * limitations under the License.
  */
 
-package org.microg.gms.common;
+package org.microg.gms.auth;
 
-public class Constants {
-    /**
-     * This is the highest version that was looked at during development.
-     * Does not necessarily mean anything.
-     */
-    public static final int MAX_REFERENCE_VERSION = 8489000;
-    public static final String GMS_PACKAGE_NAME = "com.google.android.gms";
-    public static final String GSF_PACKAGE_NAME = "com.google.android.gsf";
-    public static final String GMS_PACKAGE_SIGNATURE_SHA1 = "38918a453d07199354f8b19af05ec6562ced5788";
-
+public class AuthConstants {
+    public static final String DEFAULT_ACCOUNT = "<<default account>>";
+    public static final String SCOPE_GET_ACCOUNT_ID = "^^_account_id_^^";
 }

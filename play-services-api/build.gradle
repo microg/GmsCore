@@ -19,7 +19,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.0'
+        classpath 'com.android.tools.build:gradle:1.5.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
     }
 }
@@ -27,12 +27,26 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
+String getMyVersionName() {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags', '--always', '--dirty'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
 group = 'org.microg'
-version = '1.0-SNAPSHOT'
+version = getMyVersionName().substring(1)
 
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        versionName getMyVersionName()
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
     }
