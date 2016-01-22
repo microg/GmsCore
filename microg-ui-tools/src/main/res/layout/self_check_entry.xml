@@ -16,31 +16,38 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp">
+                android:gravity="center_vertical"
+                android:paddingBottom="5dp"
+                android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+                android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+                android:paddingRight="?attr/listPreferredItemPaddingRight"
+                android:paddingStart="?android:attr/listPreferredItemPaddingStart">
 
     <TextView
+        android:paddingTop="5dp"
         android:id="@+id/self_check_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is the title of a check: "
-        android:textStyle="bold"/>
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="?android:textColorPrimary"/>
 
-    <ImageView
+    <CheckBox
         android:id="@+id/self_check_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/self_check_name"
         android:layout_alignParentRight="true"
-        android:layout_alignRight="@id/self_check_name"
-        android:src="@android:drawable/presence_busy"/>
+        android:layout_centerVertical="true"
+        android:focusable="false"/>
 
     <TextView
         android:id="@+id/self_check_resolution"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/self_check_name"
         android:layout_below="@id/self_check_name"
         android:layout_toLeftOf="@id/self_check_result"
-        android:text="This is a way to solve the issue that check above failed. It can consist of multiple lines."/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="?android:textColorSecondary"/>
 </RelativeLayout>

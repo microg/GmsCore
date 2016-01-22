@@ -27,7 +27,7 @@ apply plugin: 'com.android.library'
 String getMyVersionName() {
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'describe', '--tags', '--always'
+        commandLine 'git', 'describe', '--tags', '--always', '--dirty'
         standardOutput = stdout
     }
     return stdout.toString().trim()
