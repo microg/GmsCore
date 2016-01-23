@@ -2,11 +2,9 @@
 =======
 [![Build Status](https://travis-ci.org/microg/android_packages_apps_GmsCore.svg?branch=master)](https://travis-ci.org/microg/android_packages_apps_GmsCore)
 
-microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available. If you use your phone without GAPPS this might become a useful tool for you.
-**This is currently alpha-grade Software. Don't use it if you're not aware of possible consequences. Possible consequences include that your very private data leaks to Fort Meade.**
+microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
-
-### Please refer to the [wiki](https://github.com/ibleedbinari/android_packages_apps_GmsCore/wiki) for downloads and instructions
+### Please refer to the [wiki](https://github.com/microg/android_packages_apps_GmsCore/wiki) for downloads and instructions
 
 
 License
