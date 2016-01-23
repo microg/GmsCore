@@ -5,37 +5,9 @@
 microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available. If you use your phone without GAPPS this might become a useful tool for you.
 **This is currently alpha-grade Software. Don't use it if you're not aware of possible consequences. Possible consequences include that your very private data leaks to Fort Meade.**
 
-Project Status
---------------
-See "Current Implementation progress" on the [XDA Thread](http://forum.xda-developers.com/android/apps-games/app-microg-gmscore-floss-play-services-t3217616)
 
-Instructions
-------------
-Requirements and Installation instructions can be found on the [XDA Thread](http://forum.xda-developers.com/android/apps-games/app-microg-gmscore-floss-play-services-t3217616)
+### Please refer to the [wiki](https://github.com/ibleedbinari/android_packages_apps_GmsCore/wiki) for downloads and instructions
 
-Signature Spoofing
-------------------
-You need a ROM that supports signature spoofing. Some custom ROMs are patched to support signature spoofing out of the box, however most ROMs will require a patch or a Xposed module. Please ask your ROM developer if unsure.
-
-The following ROMs have out-of-box support for signature spoofing. **This feature has to be enabled at the bottom of the developer settings first.**
-* [OmniROM](http://omnirom.org/)
-
-If you have the **Xposed Framework** installed, the following module will enable signature spoofing: [FakeGApps by thermatk](http://repo.xposed.info/module/com.thermatk.android.xf.fakegapps)
-
-If you have **Root**, but are not using Xposed, you can try patching your already-installed ROM using [Needle by moosd](https://github.com/moosd/Needle)
-
-If you are a **ROM developer** or just do **custom builds** for whatever reason, you can download and include the patch from [here](https://gerrit.omnirom.org/#/c/14898/) and [here](https://gerrit.omnirom.org/#/c/14899).
-
-Downloads
----------
-Standard Releases: [XDA Thread](http://forum.xda-developers.com/android/apps-games/app-microg-gmscore-floss-play-services-t3217616) and [GitHub release page](https://github.com/microg/android_packages_apps_GmsCore/releases)
-
-Nightly Releases: [Latest](http://files.brnmod.rocks/apps/GmsCore/Latest/play-services-core-debug.apk) or [Other Builds](http://files.brnmod.rocks/apps/GmsCore/)
-
-Building
---------
-This can be build using Gradle. 
-Prebuilt libraries of [vtm](https://github.com/opensciencemap/vtm) are included within `./libs`.
 
 License
 -------
