@@ -18,4 +18,16 @@ package org.microg.gms.location;
 
 public class LocationConstants {
     public static final String KEY_MOCK_LOCATION = "mockLocation";
+
+    // Place picker client->service
+    public static final String EXTRA_PRIMARY_COLOR = "primary_color";
+    public static final String EXTRA_PRIMARY_COLOR_DARK = "primary_color_dark";
+    public static final String EXTRA_CLIENT_VERSION = "gmscore_client_jar_version";
+    public static final String EXTRA_BOUNDS = "latlng_bounds";
+
+    // Place picker service->client
+    public static final String EXTRA_ATTRIBUTION = "third_party_attributions";
+    public static final String EXTRA_FINAL_BOUNDS = "final_latlng_bounds";
+    public static final String EXTRA_PLACE = "selected_place";
+    public static final String EXTRA_STATUS = "status";
 }
