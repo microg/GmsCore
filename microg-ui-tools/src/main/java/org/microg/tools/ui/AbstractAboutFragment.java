@@ -21,7 +21,6 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.*;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -57,7 +56,7 @@ public abstract class AbstractAboutFragment extends Fragment {
             PackageManager pm = getContext().getPackageManager();
             CharSequence label = pm.getPackageInfo(getContext().getPackageName(), 0).applicationInfo.loadLabel(pm);
             if (TextUtils.isEmpty(label)) return getContext().getPackageName();
-            return label.toString();
+            return label.toString().trim();
         } catch (PackageManager.NameNotFoundException e) {
             // Never happens, self package always exists!
             throw new RuntimeException(e);
@@ -68,7 +67,7 @@ public abstract class AbstractAboutFragment extends Fragment {
         try {
             String versionName = (String) Class.forName(packageName + ".BuildConfig").getField("VERSION_NAME").get(null);
             if (TextUtils.isEmpty(versionName)) return "";
-            return versionName;
+            return versionName.trim();
         } catch (Exception e) {
             return "";
         }
@@ -80,10 +79,10 @@ public abstract class AbstractAboutFragment extends Fragment {
         View aboutRoot = inflater.inflate(R.layout.about_root, container, false);
         ((ImageView) aboutRoot.findViewById(android.R.id.icon)).setImageDrawable(getIcon());
         ((TextView) aboutRoot.findViewById(android.R.id.title)).setText(getAppName());
-        ((TextView) aboutRoot.findViewById(R.id.about_version)).setText("Version " + getLibVersion(getContext().getPackageName()));
+        ((TextView) aboutRoot.findViewById(R.id.about_version)).setText(getString(R.string.about_version_str, getLibVersion(getContext().getPackageName())));
 
         List<Library> libraries = new ArrayList<Library>();
-        libraries.add(new Library("org.microg.tools.ui", "microG UI Tools", "Apache License 2.0, Copyright (c) microG Team"));
+        libraries.add(new Library(BuildConfig.APPLICATION_ID, getString(R.string.lib_name), getString(R.string.lib_license)));
         collectLibraries(libraries);
         Collections.sort(libraries);
         ((ListView) aboutRoot.findViewById(android.R.id.list)).setAdapter(new LibraryAdapter(getContext(), libraries.toArray(new Library[libraries.size()])));
@@ -100,8 +99,8 @@ public abstract class AbstractAboutFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = super.getView(position, convertView, parent);
-            ((TextView) v.findViewById(android.R.id.text1)).setText(getItem(position).name + " " + getLibVersion(getItem(position).packageName));
-            ((TextView) v.findViewById(android.R.id.text2)).setText(getItem(position).copyright);
+            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, getItem(position).name, getLibVersion(getItem(position).packageName)));
+            ((TextView) v.findViewById(android.R.id.text2)).setText(getItem(position).copyright != null ? getItem(position).copyright : getString(R.string.about_default_license));
             return v;
         }
     }

@@ -19,6 +19,7 @@ package org.microg.tools.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,10 +34,12 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
+import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 
 public abstract class AbstractSelfCheckFragment extends Fragment {
+    private static final String TAG = "SelfCheck";
 
     protected abstract void prepareSelfCheckList(List<SelfCheckGroup> checks);
 
@@ -52,7 +55,13 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
             View groupView = inflater.inflate(R.layout.self_check_group, root, false);
             ((TextView) groupView.findViewById(android.R.id.title)).setText(group.getGroupName(getContext()));
             final ViewGroup viewGroup = (ViewGroup) groupView.findViewById(R.id.group_content);
-            group.doChecks(getContext(), new GroupResultCollector(viewGroup));
+            final SelfCheckGroup.ResultCollector collector = new GroupResultCollector(viewGroup);
+            try {
+                group.doChecks(getContext(), collector);
+            } catch (Exception e) {
+                Log.w(TAG, "Failed during check " + group.getGroupName(getContext()), e);
+                collector.addResult("Self-check failed:", Negative, "An exception occurred during self-check. Please report this issue.");
+            }
             root.addView(groupView);
         }
         return scrollRoot;
