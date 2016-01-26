@@ -17,6 +17,7 @@
 package org.microg.tools.selfcheck;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
 public interface SelfCheckGroup {
     String getGroupName(Context context);
@@ -25,6 +26,12 @@ public interface SelfCheckGroup {
 
     interface ResultCollector {
         void addResult(String name, Result value, String resolution);
+
+        void addResult(String name, Result value, String resolution, CheckResolver resolver);
+    }
+
+    interface CheckResolver {
+        void tryResolve(Fragment fragment);
     }
 
     enum Result {

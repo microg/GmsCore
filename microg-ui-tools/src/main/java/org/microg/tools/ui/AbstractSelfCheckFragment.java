@@ -41,16 +41,24 @@ import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 public abstract class AbstractSelfCheckFragment extends Fragment {
     private static final String TAG = "SelfCheck";
 
-    protected abstract void prepareSelfCheckList(List<SelfCheckGroup> checks);
+    private ViewGroup root;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View scrollRoot = inflater.inflate(R.layout.self_check, container, false);
+        root = (ViewGroup) scrollRoot.findViewById(R.id.self_check_root);
+        reset(inflater);
+        return scrollRoot;
+    }
+
+    protected abstract void prepareSelfCheckList(List<SelfCheckGroup> checks);
+
+    protected void reset(LayoutInflater inflater) {
         List<SelfCheckGroup> selfCheckGroupList = new ArrayList<SelfCheckGroup>();
         prepareSelfCheckList(selfCheckGroupList);
 
-        ViewGroup root = (ViewGroup) scrollRoot.findViewById(R.id.self_check_root);
+        root.removeAllViews();
         for (SelfCheckGroup group : selfCheckGroupList) {
             View groupView = inflater.inflate(R.layout.self_check_group, root, false);
             ((TextView) groupView.findViewById(android.R.id.title)).setText(group.getGroupName(getContext()));
@@ -64,7 +72,6 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
             }
             root.addView(groupView);
         }
-        return scrollRoot;
     }
 
     private class GroupResultCollector implements SelfCheckGroup.ResultCollector {
@@ -76,6 +83,12 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
 
         @Override
         public void addResult(final String name, final SelfCheckGroup.Result result, final String resolution) {
+            addResult(name, result, resolution, null);
+        }
+
+        @Override
+        public void addResult(final String name, final SelfCheckGroup.Result result, final String resolution,
+                              final SelfCheckGroup.CheckResolver resolver) {
             if (result == null || getActivity() == null) return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -96,11 +109,19 @@ public abstract class AbstractSelfCheckFragment extends Fragment {
                         if (result == Unknown) {
                             resultEntry.findViewById(R.id.self_check_result).setVisibility(INVISIBLE);
                         }
+                        if (resolver != null) {
+                            resultEntry.setClickable(true);
+                            resultEntry.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    resolver.tryResolve(AbstractSelfCheckFragment.this);
+                                }
+                            });
+                        }
                     }
                     viewGroup.addView(resultEntry);
                 }
             });
-
         }
     }
 }

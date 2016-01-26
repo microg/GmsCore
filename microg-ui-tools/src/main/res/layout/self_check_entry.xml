@@ -15,39 +15,44 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingBottom="5dp"
-                android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-                android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-                android:paddingRight="?attr/listPreferredItemPaddingRight"
-                android:paddingStart="?android:attr/listPreferredItemPaddingStart">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?attr/selectableItemBackground"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:paddingBottom="5dp"
+              android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+              android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+              android:paddingRight="?attr/listPreferredItemPaddingRight"
+              android:paddingStart="?android:attr/listPreferredItemPaddingStart">
 
-    <TextView
-        android:paddingTop="5dp"
-        android:id="@+id/self_check_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="?android:textColorPrimary"/>
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/self_check_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="?android:textColorPrimary"/>
+
+        <TextView
+            android:id="@+id/self_check_resolution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="?android:textColorSecondary"/>
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/self_check_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:focusable="false"/>
-
-    <TextView
-        android:id="@+id/self_check_resolution"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/self_check_name"
-        android:layout_below="@id/self_check_name"
-        android:layout_toLeftOf="@id/self_check_result"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="?android:textColorSecondary"/>
-</RelativeLayout>
+        android:focusable="false"
+        android:gravity="right|center_vertical"
+        android:paddingTop="5dp"/>
+</LinearLayout>
