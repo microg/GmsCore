@@ -22,6 +22,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,9 +43,7 @@ public abstract class AbstractAboutFragment extends Fragment {
     protected Drawable getIcon() {
         try {
             PackageManager pm = getContext().getPackageManager();
-            Drawable icon = pm.getPackageInfo(getContext().getPackageName(), 0).applicationInfo.loadIcon(pm);
-            if (icon == null) return getContext().getDrawable(android.R.drawable.ic_dialog_alert);
-            return icon;
+            return pm.getPackageInfo(getContext().getPackageName(), 0).applicationInfo.loadIcon(pm);
         } catch (PackageManager.NameNotFoundException e) {
             // Never happens, self package always exists!
             throw new RuntimeException(e);
@@ -73,13 +72,26 @@ public abstract class AbstractAboutFragment extends Fragment {
         }
     }
 
+    protected String getSelfVersion() {
+        return getLibVersion(getContext().getPackageName());
+    }
+
+    protected String getSummary() {
+        return null;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View aboutRoot = inflater.inflate(R.layout.about_root, container, false);
         ((ImageView) aboutRoot.findViewById(android.R.id.icon)).setImageDrawable(getIcon());
         ((TextView) aboutRoot.findViewById(android.R.id.title)).setText(getAppName());
-        ((TextView) aboutRoot.findViewById(R.id.about_version)).setText(getString(R.string.about_version_str, getLibVersion(getContext().getPackageName())));
+        ((TextView) aboutRoot.findViewById(R.id.about_version)).setText(getString(R.string.about_version_str, getSelfVersion()));
+        String summary = getSummary();
+        if (summary != null) {
+            ((TextView) aboutRoot.findViewById(android.R.id.summary)).setText(summary);
+            aboutRoot.findViewById(android.R.id.summary).setVisibility(View.VISIBLE);
+        }
 
         List<Library> libraries = new ArrayList<Library>();
         libraries.add(new Library(BuildConfig.APPLICATION_ID, getString(R.string.lib_name), getString(R.string.lib_license)));
