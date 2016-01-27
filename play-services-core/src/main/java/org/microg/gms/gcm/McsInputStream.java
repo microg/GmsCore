@@ -76,6 +76,7 @@ public class McsInputStream extends Thread {
                     mainHandler.dispatchMessage(msg);
                 } else {
                     mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_TEARDOWN, "null message"));
+                    break; // if input is empty, do not continue looping
                 }
             }
         } catch (IOException e) {
