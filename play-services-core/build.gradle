@@ -77,7 +77,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        versionName("8.4.89 (microG " + getMyVersionName() + ")")
+        versionName getMyVersionName()
         // Update commit id to current when increasing gms version code
         versionCode(8489238 + getMyVersionCode('249c935f'))
     }
