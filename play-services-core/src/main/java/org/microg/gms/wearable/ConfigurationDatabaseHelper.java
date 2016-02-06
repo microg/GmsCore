@@ -26,10 +26,13 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
 
     public static final String NULL_STRING = "NULL_STRING";
+    public static final String TABLE_NAME = "connectionConfigurations";
+    public static final String BY_NAME = "name=?";
 
     public ConfigurationDatabaseHelper(Context context) {
         super(context, "connectionconfig.db", null, 2);
@@ -58,7 +61,7 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ConnectionConfiguration getConfiguration(String name) {
-        Cursor cursor = getReadableDatabase().query("connectionConfigurations", null, "name=?", new String[]{name}, null, null, null);
+        Cursor cursor = getReadableDatabase().query(TABLE_NAME, null, BY_NAME, new String[]{name}, null, null, null);
         ConnectionConfiguration config = null;
         if (cursor != null) {
             if (cursor.moveToNext())
@@ -86,11 +89,11 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("role", config.role);
         contentValues.put("connectionEnabled", true);
         contentValues.put("nodeId", config.nodeId);
-        getWritableDatabase().insert("connectionConfigurations", null, contentValues);
+        getWritableDatabase().insert(TABLE_NAME, null, contentValues);
     }
 
     public ConnectionConfiguration[] getAllConfigurations() {
-        Cursor cursor = getReadableDatabase().query("connectionConfigurations", null, null, null, null, null, null);
+        Cursor cursor = getReadableDatabase().query(TABLE_NAME, null, null, null, null, null, null);
         if (cursor != null) {
             List<ConnectionConfiguration> configurations = new ArrayList<ConnectionConfiguration>();
             while (cursor.moveToNext()) {
@@ -105,5 +108,9 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
 
     public void setEnabledState(String name, boolean enabled) {
         getWritableDatabase().execSQL("UPDATE connectionConfigurations SET connectionEnabled=? WHERE name=?", new String[]{enabled ? "1" : "0", name});
+    }
+
+    public int deleteConfiguration(String name) {
+        return getWritableDatabase().delete(TABLE_NAME, BY_NAME, new String[]{name});
     }
 }

@@ -104,11 +104,16 @@ public class MessageHandler extends ServerMessageListener {
         if (syncStart.version < 2) {
             Log.d(TAG, "Sync uses version " + syncStart.version + " which is not supported (yet)");
         }
+        boolean hasLocalNode = false;
         if (syncStart.syncTable != null) {
             for (SyncTableEntry entry : syncStart.syncTable) {
                 service.syncToPeer(getConnection(), entry.key, entry.value);
+                if (service.getLocalNodeId().equals(entry.key)) hasLocalNode = true;
             }
+        } else {
+            Log.d(TAG, "No sync table given.");
         }
+        if (!hasLocalNode) service.syncToPeer(getConnection(), service.getLocalNodeId(), 0);
     }
 
     @Override
@@ -137,8 +142,8 @@ public class MessageHandler extends ServerMessageListener {
     }
 
     @Override
-    public void onHearbeat(Heartbeat heartbeat) {
-        Log.d(TAG, "onHearbeat: " + heartbeat);
+    public void onHeartbeat(Heartbeat heartbeat) {
+        Log.d(TAG, "onHeartbeat: " + heartbeat);
     }
 
     @Override

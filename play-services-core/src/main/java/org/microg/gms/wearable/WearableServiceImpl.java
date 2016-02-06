@@ -99,7 +99,7 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         this.packageName = packageName;
     }
 
-    private String getLocalNodeId() {
+    public String getLocalNodeId() {
         SharedPreferences preferences = context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
         String nodeId = preferences.getString(CLOCKWORK_NODE_PREFERENCE_NODE_ID, null);
         if (nodeId == null) {
@@ -276,8 +276,16 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
 
     @Override
     public void putConfig(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
+        if (config.nodeId == null) config.nodeId = getLocalNodeId();
         Log.d(TAG, "putConfig[nyp]: " + config);
         configDatabase.putConfiguration(config);
+        configurationsUpdated = true;
+        callbacks.onStatus(Status.SUCCESS);
+    }
+
+    @Override
+    public void deleteConfig(IWearableCallbacks callbacks, String name) throws RemoteException {
+        configDatabase.deleteConfiguration(name);
         configurationsUpdated = true;
         callbacks.onStatus(Status.SUCCESS);
     }
@@ -460,10 +468,12 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
     }
 
     public void syncToPeer(WearableConnection connection, String nodeId, long seqId) {
+        Log.d(TAG, "-- Start syncing over " + connection + ", nodeId " + nodeId + " starting with seqId " + seqId);
         Cursor cursor = nodeDatabase.getModifiedDataItems(nodeId, seqId, true);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 DataItemRecord record = DataItemRecord.fromCursor(cursor);
+                Log.d(TAG, "Sync over " + connection + ": " + record);
                 SetDataItem.Builder builder = new SetDataItem.Builder()
                         .packageName(record.packageName)
                         .signatureDigest(record.signatureDigest)
@@ -493,6 +503,7 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
             }
             cursor.close();
         }
+        Log.d(TAG, "-- Done syncing over " + connection + ", nodeId " + nodeId + " starting with seqId " + seqId);
     }
 
     public long getCurrentSeqId(String nodeId) {

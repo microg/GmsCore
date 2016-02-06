@@ -21,6 +21,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.wearable.Asset;
@@ -188,7 +189,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getModifiedDataItems(final String nodeId, final long seqId, final boolean excludeDeleted) {
-        String selection = "sourceNode =? AND seqId >?" + (excludeDeleted ? "AND deleted =0" : "");
+        String selection = "sourceNode =? AND seqId >?" + (excludeDeleted ? " AND deleted =0" : "");
         return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, new String[]{nodeId, Long.toString(seqId)}, null, null, "seqId", null);
     }
 
@@ -211,6 +212,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public long getCurrentSeqId(String sourceNode) {
+        if (TextUtils.isEmpty(sourceNode)) return 1;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query("dataItemsAndAssets", new String[]{"seqId"}, "sourceNode=?", new String[]{sourceNode}, null, null, "seqId DESC", "1");
         long res = 1;
