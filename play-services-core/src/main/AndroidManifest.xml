@@ -29,7 +29,7 @@
     <permission
         android:name="com.google.android.c2dm.permission.SEND"
         android:label="@string/perm_c2dm_send_label"
-        android:protectionLevel="dangerous"/>
+        android:protectionLevel="signature"/>
 
     <permission-tree
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH"
