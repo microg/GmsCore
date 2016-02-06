@@ -16,6 +16,13 @@
   -->
 
 <resources>
+    <string name="lib_name">microG UI Tools</string>
+    <string name="lib_license">Apache License 2.0, Copyright © microG Team</string>
+
+    <string name="about_version_str">Version %1$s</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">All rights reserved.</string>
+
   <string name="prefcat_setup">Поставка</string>
 
   <string name="self_check_title">микроГ самопровера</string>
