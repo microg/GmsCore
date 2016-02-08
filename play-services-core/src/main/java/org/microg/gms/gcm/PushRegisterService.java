@@ -64,10 +64,11 @@ public class PushRegisterService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: " + intent);
         try {
-            if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
-                register(intent);
-            } else if (ACTION_C2DM_UNREGISTER.equals(intent.getAction())) {
+            if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
+                    (ACTION_C2DM_REGISTER.equals(intent.getAction()) && "1".equals(intent.getStringExtra("delete")))) {
                 unregister(intent);
+            } else if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
+                register(intent);
             }
         } catch (Exception e) {
             Log.w(TAG, e);

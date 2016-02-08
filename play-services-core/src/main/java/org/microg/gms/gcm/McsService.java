@@ -19,6 +19,7 @@ package org.microg.gms.gcm;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -303,7 +304,7 @@ public class McsService extends Service implements Handler.Callback {
     private void handleAppMessage(DataMessageStanza msg) {
         Intent intent = new Intent();
         intent.setAction(ACTION_C2DM_RECEIVE);
-        intent.addCategory(msg.category);
+        intent.setPackage(msg.category);
         intent.putExtra(EXTRA_MESSAGE_TYPE, MESSAGE_TYPE_GCM);
         intent.putExtra(EXTRA_FROM, msg.from);
         for (AppData appData : msg.app_data) {
@@ -312,11 +313,14 @@ public class McsService extends Service implements Handler.Callback {
         intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         // FIXME: #75
         List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
-        for (ResolveInfo resolveInfo : infos)
+        for (ResolveInfo resolveInfo : infos) {
             Log.d(TAG, "Target: " + resolveInfo);
+            Intent targetIntent = new Intent(intent);
+            targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
+            sendOrderedBroadcast(targetIntent, msg.category + ".permission.C2D_MESSAGE");
+        }
         if (infos.isEmpty())
             Log.d(TAG, "No target for message, wut?");
-        sendOrderedBroadcast(intent, msg.category + ".permission.C2D_MESSAGE");
     }
 
     private void handleSelfMessage(DataMessageStanza msg) {

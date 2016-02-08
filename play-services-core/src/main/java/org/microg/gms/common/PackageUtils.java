@@ -32,7 +32,7 @@ import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 
 public class PackageUtils {
 
-    private static final String[] KNOWN_GOOGLE_SIGNATURES = {GMS_PACKAGE_SIGNATURE_SHA1};
+    private static final String[] KNOWN_GOOGLE_SIGNATURES = {GMS_PACKAGE_SIGNATURE_SHA1, "58e1c4133f7441ec3d2c270270a14802da47ba0e", "24bb24c05e47e0aefa68a58a766179d9b613a600"};
 
     public static boolean isGoogleSignedPackages(Context context, String packageName) {
         return Arrays.asList(KNOWN_GOOGLE_SIGNATURES).contains(firstSignatureDigest(context, packageName));

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SuppressWarnings("ResourceType")
+@SuppressWarnings("MissingPermission")
 public class RealLocationProvider {
     public static final String TAG = "GmsLocProviderReal";
 
@@ -39,7 +39,7 @@ public class RealLocationProvider {
     private long connectedMinTime;
     private float connectedMinDistance;
     private Location lastLocation;
-    private List<LocationRequestHelper> requests = new ArrayList<LocationRequestHelper>();
+    private final List<LocationRequestHelper> requests = new ArrayList<LocationRequestHelper>();
     private LocationListener listener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
