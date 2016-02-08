@@ -46,17 +46,6 @@
     <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
     <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
 
-    <string name="self_check_name_fake_sig_perm">Систем има подршку заваравања потписа: </string>
-    <string name="self_check_resolution_fake_sig_perm">Ваш РОМ нема уграђену подршку за заваравање потписа. Ипак можете да користите Xposed или друге начине заваравања потписа. Погледајте документацију да видите који РОМови подржавају заваравање потписа и како да користите микроГ на РОМовима који не подржавају.</string>
-    <string name="self_check_name_perm_granted">Систем одобрава дозволу заваравања потписа: </string>
-    <string name="self_check_resolution_perm_granted">Ово је озбиљан индикатор да РОМ подржава заваравање потписа, али да захтева додатне радње за активацију. Погледајте документацију да сазнате о потребним додатним корацима.</string>
-    <string name="self_check_name_system_spoofs">Систем заварава потпис: </string>
-    <string name="self_check_resolution_system_spoofs">Ово је озбиљан индикатор да РОМ подржава заваравање потписа, али да захтева додатне радње за активацију. Погледајте документацију да сазнате о потребним додатним корацима.</string>
-    <string name="self_check_name_app_installed">%1$s инсталиран: </string>
-    <string name="self_check_resolution_app_installed">Инсталирајте апликацију %1$s или другу одговарајућу. Погледајте документацију да сазнате које су апликације одговарајуће.</string>
-    <string name="self_check_name_correct_sig">%1$s има тачан потпис: </string>
-    <string name="self_check_resolution_correct_sig">Или инсталирана %1$s није одговарајућа, заваравање потписа није укључено за њу или ваш РОМ прописно не подржава заваравање потписа. Погледајте документацију да сазнате које су апликације и РОМови одговарајући.</string>
-
     <string name="prefcat_services">Услуге у позадини</string>
 
     <string name="pref_checkin_enable_title">Укључи пријаву уређаја</string>
@@ -74,4 +63,44 @@
     <string name="games_title">Гугл Плеј игре</string>
     <string name="games_info_title">%1$s жели да користи Плеј игре</string>
     <string name="games_info_content">Да бисте користили Плеј игре потребно је да инсталирате Гугл Плеј игре. Апликација би могла да настави без Плеј игара, али ће можда да се понаша неочекивано.</string>
+
+    <string name="pick_place_title">Бирач места</string>
+    <string name="pick_place_desc">Бирач места још није подржан.</string>
+
+    <string name="prefcat_about">О програму</string>
+    <string name="pref_about_title">О језгру микроГ услуга</string>
+    <string name="pref_about_summary">Подаци о издању и коришћеним библиотекама</string>
+
+    <string name="self_check_cat_fake_sig">Подршка за заваравање потписа</string>
+    <string name="self_check_name_fake_sig_perm">Систем има подршку заваравања потписа: </string>
+    <string name="self_check_resolution_fake_sig_perm">Ваш РОМ нема уграђену подршку за заваравање потписа. Ипак можете да користите Xposed или друге начине заваравања потписа. Погледајте документацију да видите који РОМови подржавају заваравање потписа и како да користите микроГ на РОМовима који не подржавају.</string>
+    <string name="self_check_name_perm_granted">Систем одобрава дозволу заваравања потписа: </string>
+    <string name="self_check_resolution_perm_granted">Ово је озбиљан индикатор да РОМ подржава заваравање потписа, али да захтева додатне радње за активацију. Погледајте документацију да сазнате о потребним додатним корацима.</string>
+    <string name="self_check_name_system_spoofs">Систем заварава потпис: </string>
+    <string name="self_check_resolution_system_spoofs">Погледајте документацију да сазнате о потребним додатним корацима.</string>
+
+    <string name="self_check_cat_gms_packages">Инсталирани пакети</string>
+    <string name="self_check_pkg_gms">Плеј сервиси (GmsCore)</string>
+    <string name="self_check_pkg_vending">Плеј продавница (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Радни оквири сервиса (GSF)</string>
+    <string name="self_check_name_app_installed">%1$s инсталиран: </string>
+    <string name="self_check_resolution_app_installed">Инсталирајте апликацију %1$s или одговарајућу. Погледајте документацију да сазнате које су апликације одговарајуће.</string>
+    <string name="self_check_name_correct_sig">%1$s има тачан потпис: </string>
+    <string name="self_check_resolution_correct_sig">Или инсталирана %1$s није одговарајућа или заваравање потписа није укључено за њу. Погледајте документацију да сазнате које су апликације и РОМови одговарајући.</string>
+    <string name="perm_extended_access_label">Проширени приступ Гугловим услугама</string>
+
+    <string name="self_check_cat_permissions">Дозволе одобрене</string>
+    <string name="self_check_name_permission">Дозволе за %1$s:</string>
+    <string name="self_check_resolution_permission">Тапните овде да одобрите дозволе за %1$s. Не одобравање дозвола може да резултира чудним понашањем апликација.</string>
+    <string name="self_check_perm_location">локација</string>
+    <string name="self_check_perm_storage">складиште</string>
+    <string name="self_check_perm_contacts">контакти</string>
+    <string name="self_check_perm_phone">телефон</string>
+
+    <string name="lacking_permission_toast">Језгро микроГ услуга: Немам дозволу за %1$s</string>
+
+    <string name="place_picker_select_title">Изаберите ову локацију</string>
+    <string name="place_picker_nearby_places">Оближња места</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
 </resources>
