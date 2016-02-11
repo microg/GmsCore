@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="microG UI Demo"
+        android:text="@+id/about_root_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="?attr/colorAccent"/>
 
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:visibility="gone"
-        android:text="Summary"
+        android:text="@+id/about_root_summary"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="?attr/colorAccent"/>
 
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Version v0.1.0"
+        android:text="@+id/about_root_version"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
     <TextView
@@ -65,7 +65,7 @@
         android:paddingRight="?attr/listPreferredItemPaddingRight"
         android:paddingTop="16dip"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:text="Included libraries"
+        android:text="@+id/about_root_libraries"
         android:textColor="?attr/colorAccent"/>
 
     <ListView
