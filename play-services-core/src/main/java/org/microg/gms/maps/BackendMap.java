@@ -143,7 +143,8 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     public synchronized <T extends MarkerItemMarkup> T add(T markup) {
         if (markup == null) return null;
         markupMap.put(markup.getId(), markup);
-        mapView.items().addItem(markup.getMarkerItem(context));
+        MarkerItem item = markup.getMarkerItem(context);
+        mapView.items().addItem(item);
         redraw();
         return markup;
     }
@@ -171,8 +172,14 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     public synchronized void update(Markup markup) {
         if (markup == null) return;
         if (markup instanceof MarkerItemMarkup) {
-            mapView.items().removeItem(mapView.items().getByUid(markup.getId()));
-            mapView.items().addItem(((MarkerItemMarkup) markup).getMarkerItem(context));
+            MarkerItem item = mapView.items().getByUid(markup.getId());
+            if (item != null) {
+                mapView.items().removeItem(item);
+            }
+            item = ((MarkerItemMarkup) markup).getMarkerItem(context);
+            if (item != null) {
+                mapView.items().addItem(item);
+            }
         } else if (markup instanceof DrawableMarkup) {
             updateDrawableLayer();
             mapView.drawables().update();
