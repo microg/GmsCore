@@ -35,8 +35,9 @@ public class PackageUtils {
     private static final String[] KNOWN_GOOGLE_SIGNATURES = {
             GMS_PACKAGE_SIGNATURE_SHA1 /* Google platform key */,
             "58e1c4133f7441ec3d2c270270a14802da47ba0e" /* Android Wear */,
+            "46f6c8987311e131f4f558d8e0ae145bebab6da3" /* Google Classroom */,
             "24bb24c05e47e0aefa68a58a766179d9b613a600" /* Google Fit/Glass */,
-            "46f6c8987311e131f4f558d8e0ae145bebab6da3" /* Google Classroom */};
+            "aa87ce1260c008d801197bb4ecea4ab8929da246" /* Google Inbox */};
 
     public static boolean isGoogleSignedPackages(Context context, String packageName) {
         return Arrays.asList(KNOWN_GOOGLE_SIGNATURES).contains(firstSignatureDigest(context, packageName));
