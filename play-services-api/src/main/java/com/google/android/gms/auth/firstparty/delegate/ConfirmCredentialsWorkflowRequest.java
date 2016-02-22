@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,30 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.auth.firstparty.dataservice;
+package com.google.android.gms.auth.firstparty.delegate;
 
 import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
 import android.os.Bundle;
+
+import com.google.android.gms.auth.firstparty.shared.AppDescription;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-// TODO
-public class TokenRequest extends AutoSafeParcelable{
-
+public class ConfirmCredentialsWorkflowRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 4;
-    @SafeParceled(3)
+    private int versionCode = 3;
+    @SafeParceled(2)
     public String accountName;
+    @SafeParceled(3)
+    public AppDescription appDescription;
     @SafeParceled(4)
     public Bundle extras;
-    @SafeParceled(9)
-    public String consent;
-    @SafeParceled(15)
-    public String accountType;
+    @SafeParceled(5)
+    public Account account;
+    @SafeParceled(6)
+    public AccountAuthenticatorResponse accountAuthenticatorResponse;
 
-    public Account getAccount() {
-        return new Account(accountName, accountType);
-    }
-
-    public static final Creator<TokenRequest> CREATOR = new AutoCreator<TokenRequest>(TokenRequest.class);
+    public static final Creator<ConfirmCredentialsWorkflowRequest> CREATOR = new AutoCreator<ConfirmCredentialsWorkflowRequest>(ConfirmCredentialsWorkflowRequest.class);
 }

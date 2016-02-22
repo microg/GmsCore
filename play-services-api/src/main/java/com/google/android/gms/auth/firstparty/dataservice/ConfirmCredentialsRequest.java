@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,19 @@
 
 package com.google.android.gms.auth.firstparty.dataservice;
 
-import android.accounts.Account;
-import android.os.Bundle;
+import com.google.android.gms.auth.firstparty.shared.AccountCredentials;
+import com.google.android.gms.auth.firstparty.shared.CaptchaSolution;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-// TODO
-public class TokenRequest extends AutoSafeParcelable{
-
+public class ConfirmCredentialsRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 4;
+    private int versionCode = 1;
+    @SafeParceled(2)
+    public AccountCredentials accountCredentials;
     @SafeParceled(3)
-    public String accountName;
-    @SafeParceled(4)
-    public Bundle extras;
-    @SafeParceled(9)
-    public String consent;
-    @SafeParceled(15)
-    public String accountType;
+    public CaptchaSolution captchaSolution;
 
-    public Account getAccount() {
-        return new Account(accountName, accountType);
-    }
-
-    public static final Creator<TokenRequest> CREATOR = new AutoCreator<TokenRequest>(TokenRequest.class);
+    public static final Creator<ConfirmCredentialsRequest> CREATOR = new AutoCreator<ConfirmCredentialsRequest>(ConfirmCredentialsRequest.class);
 }
