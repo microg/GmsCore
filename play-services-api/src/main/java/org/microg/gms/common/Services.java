@@ -330,6 +330,7 @@ public final class Services {
 
     public interface GEODATA {
         int SERVICE_ID = 65;
+        String ACTION = "com.google.android.gms.location.places.GeoDataApi";
     }
 
     public interface SEARCH_IME {
@@ -338,6 +339,7 @@ public final class Services {
 
     public interface PLACE_DETECTION {
         int SERVICE_ID = 67;
+        String ACTION = "com.google.android.gms.location.places.PlaceDetectionApi";
     }
 
     public interface CREDENTIALS {
