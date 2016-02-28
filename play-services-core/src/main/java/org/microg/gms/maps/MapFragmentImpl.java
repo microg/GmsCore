@@ -42,9 +42,8 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
     private GoogleMapImpl myMap() {
         if (map == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            map = new GoogleMapImpl(inflater, options);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            map = new GoogleMapImpl(inflater.getContext(), options);
         }
         return map;
     }
@@ -71,7 +70,7 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
             Bundle savedInstanceState) throws RemoteException {
         if (map == null) {
             LayoutInflater inflater = (LayoutInflater) ObjectWrapper.unwrap(layoutInflater);
-            map = new GoogleMapImpl(inflater, options);
+            map = new GoogleMapImpl(inflater.getContext(), options);
             //map.onCreate(savedInstanceState);
         } else {
             View view = map.getView();

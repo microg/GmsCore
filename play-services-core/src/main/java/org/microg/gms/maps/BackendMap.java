@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     public BackendMap(Context context, final CameraUpdateListener cameraUpdateListener) {
         this.context = context;
         this.cameraUpdateListener = cameraUpdateListener;
-        mapView = new BackendMapView(new ContextContainer(context));
+        mapView = new BackendMapView(context);
         mapView.items().setOnItemGestureListener(this);
         mapView.map().input.bind(this);
         mapView.map().events.bind(this);

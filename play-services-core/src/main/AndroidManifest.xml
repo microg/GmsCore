@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2016 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -91,9 +91,7 @@
 
         <!-- Location -->
 
-        <service
-            android:name="org.microg.gms.location.GoogleLocationManagerService"
-            android:exported="true">
+        <service android:name="org.microg.gms.location.GoogleLocationManagerService">
             <intent-filter>
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START"/>
             </intent-filter>
@@ -118,6 +116,19 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <service android:name="org.microg.gms.places.GeoDataService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.places.GeoDataApi"/>
+                <action android:name="com.google.android.gms.location.places.PlacesApi"/>
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.places.PlaceDetectionService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.location.places.PlaceDetectionApi"/>
+            </intent-filter>
+        </service>
 
         <!-- Services Framework -->
 
@@ -169,7 +180,6 @@
         <!-- Cloud Messaging -->
         <service
             android:name="org.microg.gms.gcm.PushRegisterService"
-            android:exported="true"
             android:permission="com.google.android.c2dm.permission.RECEIVE">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTER"/>
@@ -189,12 +199,9 @@
         <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="org.microg.gms.gcm.RECONNECT"/>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.PACKAGE_RESTARTED"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE"/>
@@ -214,9 +221,7 @@
 
         <!-- DroidGuard -->
 
-        <service
-            android:name="org.microg.gms.droidguard.DroidGuardService"
-            android:exported="true">
+        <service android:name="org.microg.gms.droidguard.DroidGuardService">
             <intent-filter>
                 <action android:name="com.google.android.gms.droidguard.service.START"/>
 
@@ -226,9 +231,7 @@
 
         <!-- Car -->
 
-        <service
-            android:name="org.microg.gms.car.CarService"
-            android:exported="true">
+        <service android:name="org.microg.gms.car.CarService">
             <intent-filter>
                 <action android:name="com.google.android.gms.car.service.START"/>
 
@@ -238,9 +241,7 @@
 
         <!-- People -->
 
-        <service
-            android:name="org.microg.gms.people.PeopleService"
-            android:exported="true">
+        <service android:name="org.microg.gms.people.PeopleService">
             <intent-filter>
                 <action android:name="com.google.android.gms.people.service.START"/>
 
@@ -250,9 +251,7 @@
 
         <!-- Wearable -->
 
-        <service
-            android:name="org.microg.gms.wearable.WearableService"
-            android:exported="true">
+        <service android:name="org.microg.gms.wearable.WearableService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND"/>
             </intent-filter>
@@ -260,9 +259,7 @@
 
         <!-- Auth -->
 
-        <service
-            android:name="org.microg.gms.auth.loginservice.GoogleLoginService"
-            android:exported="true">
+        <service android:name="org.microg.gms.auth.loginservice.GoogleLoginService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -322,9 +319,7 @@
 
         <!-- Games -->
 
-        <service
-            android:name="org.microg.gms.games.GamesStubService"
-            android:exported="true">
+        <service android:name="org.microg.gms.games.GamesStubService">
             <intent-filter>
                 <action android:name="com.google.android.gms.games.service.START"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -363,25 +358,19 @@
 
         <!-- Other -->
 
-        <service
-            android:name="org.microg.gms.mdm.NetworkQualityService"
-            android:exported="true">
+        <service android:name="org.microg.gms.mdm.NetworkQualityService">
             <intent-filter>
                 <action android:name="com.google.android.gms.mdm.services.START"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.icing.LightweightIndexService"
-            android:exported="true">
+        <service android:name="org.microg.gms.icing.LightweightIndexService">
             <intent-filter>
                 <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.icing.IndexService"
-            android:exported="true">
+        <service android:name="org.microg.gms.icing.IndexService">
             <intent-filter>
                 <action android:name="com.google.android.gms.icing.INDEX_SERVICE"/>
             </intent-filter>
@@ -393,9 +382,7 @@
                 <action android:name="com.google.android.gms.analytics.service.START"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.playlog.PlayLogService"
-            android:exported="true">
+        <service android:name="org.microg.gms.playlog.PlayLogService">
             <intent-filter>
                 <action android:name="com.google.android.gms.playlog.service.START"/>
             </intent-filter>
@@ -404,39 +391,29 @@
             android:name=".gcm.http.GoogleHttpService"
             android:exported="true"/>
 
-        <service
-            android:name="org.microg.gms.ads.GService"
-            android:exported="true">
+        <service android:name="org.microg.gms.ads.GService">
             <intent-filter>
                 <action android:name="com.google.android.gms.ads.gservice.START"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.feedback.FeedbackService"
-            android:exported="true">
+        <service android:name="org.microg.gms.feedback.FeedbackService">
             <intent-filter>
                 <action android:name="com.google.android.gms.feedback.internal.IFeedbackService"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.ads.AdvertisingIdService"
-            android:exported="true">
+        <service android:name="org.microg.gms.ads.AdvertisingIdService">
             <intent-filter>
                 <action android:name="com.google.android.gms.ads.identifier.service.START"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.clearcut.ClearcutLoggerService"
-            android:exported="true">
+        <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.drive.api.DriveApiService"
-            android:exported="true">
+        <service android:name="org.microg.gms.drive.api.DriveApiService">
             <intent-filter>
                 <action android:name="com.google.android.gms.drive.ApiService.START"/>
                 <action android:name="com.google.android.gms.drive.ApiService.STOP"/>
@@ -445,18 +422,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.auth.SignInService"
-            android:exported="true">
+        <service android:name="org.microg.gms.auth.SignInService">
             <intent-filter>
                 <action android:name="com.google.android.gms.signin.service.START"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
 
-        <service
-            android:name="org.microg.gms.DummyService"
-            android:exported="true">
+        <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.plus.service.START"/>
                 <action android:name="com.google.android.gms.plus.service.internal.START"/>

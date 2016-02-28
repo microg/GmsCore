@@ -38,7 +38,6 @@ import org.oscim.tiling.ITileCache;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
 public class BackendMapView extends MapView {
-    private static final String TAG = BackendMapView.class.getSimpleName();
     private LabelLayer labels;
     private BuildingLayer buildings;
     private ItemizedLayer<MarkerItem> items;
