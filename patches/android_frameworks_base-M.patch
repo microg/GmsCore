@@ -1,0 +1,76 @@
+diff --git a/core/java/android/content/pm/PackageParser.java b/core/java/android/content/pm/PackageParser.java
+index 99bd390..2ea7722 100644
+--- a/core/java/android/content/pm/PackageParser.java
++++ b/core/java/android/content/pm/PackageParser.java
+@@ -578,10 +578,22 @@ public class PackageParser {
+             }
+         }
+         if ((flags&PackageManager.GET_SIGNATURES) != 0) {
+-           int N = (p.mSignatures != null) ? p.mSignatures.length : 0;
+-           if (N > 0) {
+-                pi.signatures = new Signature[N];
+-                System.arraycopy(p.mSignatures, 0, pi.signatures, 0, N);
++               boolean handledFakeSignature = false;
++               try {
++                       if (p.requestedPermissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE") && p.mAppMetaData != null && 
+p.mAppMetaData.get("fake-signature") instanceof String) {
++                       pi.signatures = new Signature[] {new Signature(p.mAppMetaData.getString("fake-signature"))};
++                       handledFakeSignature = true;
++                       }
++               } catch (Throwable t) {
++                       //We should never die because of any failures, this is system code!
++                       Log.w("PackageParser.FAKE_PACKAGE_SIGNATURE", t);
++               }
++               if (!handledFakeSignature) {
++                       int N = (p.mSignatures != null) ? p.mSignatures.length : 0;
++                       if (N > 0) {
++                               pi.signatures = new Signature[N];
++                               System.arraycopy(p.mSignatures, 0, pi.signatures, 0, N);
++                       }
+             }
+         }
+         return pi;
+diff --git a/core/res/AndroidManifest.xml b/core/res/AndroidManifest.xml
+index 08bccc1..93afc86 100644
+--- a/core/res/AndroidManifest.xml
++++ b/core/res/AndroidManifest.xml
+@@ -1623,6 +1623,12 @@
+         android:description="@string/permdesc_getPackageSize"
+         android:protectionLevel="normal" />
+ 
++    <permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE"
++       android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
++       android:protectionLevel="dangerous"
++       android:label="@string/permlab_fakePackageSignature"
++       android:description="@string/permdesc_fakePackageSignature" />
++
+     <!-- @deprecated No longer useful, see
+          {@link android.content.pm.PackageManager#addPackageToPreferred}
+          for details. -->
+diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
+index 6c96f84..c391f30 100644
+--- a/core/res/res/values/config.xml
++++ b/core/res/res/values/config.xml
+@@ -1176,6 +1176,8 @@
+     <string-array name="config_locationProviderPackageNames" translatable="false">
+         <!-- The standard AOSP fused location provider -->
+         <item>com.android.location.fused</item>
++        <!-- The (faked) microg fused location provider -->
++        <item>com.google.android.gms</item>
+     </string-array>
+ 
+     <!-- This string array can be overriden to enable test location providers initially. -->
+diff --git a/core/res/res/values/strings.xml b/core/res/res/values/strings.xml
+index 8a9b9cf..d4ad231 100644
+--- a/core/res/res/values/strings.xml
++++ b/core/res/res/values/strings.xml
+@@ -763,6 +763,9 @@
+     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+     <string name="permdesc_getPackageSize">Allows the app to retrieve its code, data, and cache sizes</string>
+ 
++    <string name="permlab_fakePackageSignature">mimic package signature</string>
++    <string name="permdesc_fakePackageSignature">Allows the app to use mimic another app\'s package signature.</string>
++
+     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+     <string name="permlab_writeSettings">modify system settings</string>
+     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
