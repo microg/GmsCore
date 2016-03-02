@@ -144,7 +144,7 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
         resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, place.viewport);
         place.latLng = GmsMapsTypeHelper.toLatLng(position.getGeoPoint());
         place.name = getString(R.string.place_picker_location_lat_lng, place.latLng.latitude, place.latLng.longitude);
-        place.address = null;
+        place.address = "";
         updateInfoText();
         if (geocoderInProgress.compareAndSet(false, true)) {
             new Thread(new Runnable() {
