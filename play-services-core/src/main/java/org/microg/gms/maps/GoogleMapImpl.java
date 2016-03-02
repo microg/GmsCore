@@ -18,7 +18,6 @@ package org.microg.gms.maps;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -75,15 +74,6 @@ import org.microg.gms.maps.markup.PolygonImpl;
 import org.microg.gms.maps.markup.PolylineImpl;
 import org.microg.gms.maps.markup.TileOverlayImpl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -91,7 +81,6 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         implements UiSettingsImpl.UiSettingsListener, Markup.MarkupListener, BackendMap.CameraUpdateListener {
     private static final String TAG = "GoogleMapImpl";
-    private static boolean nativeLibLoaded = false;
 
     private final GoogleMapOptions options;
     private final Context context;
@@ -141,7 +130,6 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         Context appContext = context;
         if (appContext.getApplicationContext() != null) appContext = appContext.getApplicationContext();
         Context wrappedContext = RemoteContextWrapper.fromApplicationContext(appContext);
-        loadNativeLib(wrappedContext);
         backendMap = new BackendMap(wrappedContext, this);
         uiSettings = new UiSettingsImpl(this);
         projection = new ProjectionImpl(backendMap.getViewport());
@@ -152,53 +140,6 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
 
         if (options != null) initFromOptions();
-    }
-
-    private static final void copyInputStream(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int len;
-
-        while ((len = in.read(buffer)) >= 0)
-            out.write(buffer, 0, len);
-
-        in.close();
-        out.close();
-    }
-
-    private static synchronized void loadNativeLib(Context context) {
-        try {
-            if (nativeLibLoaded) return;
-            ApplicationInfo otherAppInfo = context.getPackageManager().getApplicationInfo(context.getApplicationContext().getPackageName(), 0);
-
-            String primaryCpuAbi = (String) ApplicationInfo.class.getField("primaryCpuAbi").get(otherAppInfo);
-            if (primaryCpuAbi != null) {
-                String path = "lib/" + primaryCpuAbi + "/libvtm-jni.so";
-                File cacheFile = new File(context.getApplicationContext().getCacheDir().getAbsolutePath() + "/.gmscore/" + path);
-                cacheFile.getParentFile().mkdirs();
-                File apkFile = new File(context.getPackageCodePath());
-                if (!cacheFile.exists() || cacheFile.lastModified() < apkFile.lastModified()) {
-                    ZipFile zipFile = new ZipFile(apkFile);
-                    ZipEntry entry = zipFile.getEntry(path);
-                    if (entry != null) {
-                        copyInputStream(zipFile.getInputStream(entry), new FileOutputStream(cacheFile));
-                    } else {
-                        Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
-                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                        while (entries.hasMoreElements()) {
-                            Log.d(TAG, "but: " + entries.nextElement());
-                        }
-                    }
-                }
-                Log.d(TAG, "Loading vtm-jni from " + cacheFile.getPath());
-                System.load(cacheFile.getAbsolutePath());
-            } else {
-                Log.d(TAG, "Loading native vtm-jni");
-                System.loadLibrary("vtm-jni");
-            }
-            nativeLibLoaded = true;
-        } catch (Exception e) {
-            Log.w(TAG, e);
-        }
     }
 
     private void initFromOptions() {

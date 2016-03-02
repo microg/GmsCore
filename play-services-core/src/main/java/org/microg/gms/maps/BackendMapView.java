@@ -17,8 +17,10 @@
 package org.microg.gms.maps;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.google.android.gms.R;
 
@@ -37,11 +39,71 @@ import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.ITileCache;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 public class BackendMapView extends MapView {
+    private static final String TAG = "GmsMapView";
+
+    private static boolean nativeLibLoaded = false;
     private LabelLayer labels;
     private BuildingLayer buildings;
     private ItemizedLayer<MarkerItem> items;
     private ClearableVectorLayer drawables;
+
+    static synchronized Context loadNativeLib(Context context) {
+        try {
+            if (nativeLibLoaded) return context;
+            ApplicationInfo otherAppInfo = context.getPackageManager().getApplicationInfo(context.getApplicationContext().getPackageName(), 0);
+
+            String primaryCpuAbi = (String) ApplicationInfo.class.getField("primaryCpuAbi").get(otherAppInfo);
+            if (primaryCpuAbi != null) {
+                String path = "lib/" + primaryCpuAbi + "/libvtm-jni.so";
+                File cacheFile = new File(context.getApplicationContext().getCacheDir().getAbsolutePath() + "/.gmscore/" + path);
+                cacheFile.getParentFile().mkdirs();
+                File apkFile = new File(context.getPackageCodePath());
+                if (!cacheFile.exists() || cacheFile.lastModified() < apkFile.lastModified()) {
+                    ZipFile zipFile = new ZipFile(apkFile);
+                    ZipEntry entry = zipFile.getEntry(path);
+                    if (entry != null) {
+                        copyInputStream(zipFile.getInputStream(entry), new FileOutputStream(cacheFile));
+                    } else {
+                        Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
+                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                        while (entries.hasMoreElements()) {
+                            Log.d(TAG, "but: " + entries.nextElement());
+                        }
+                    }
+                }
+                Log.d(TAG, "Loading vtm-jni from " + cacheFile.getPath());
+                System.load(cacheFile.getAbsolutePath());
+            } else {
+                Log.d(TAG, "Loading native vtm-jni");
+                System.loadLibrary("vtm-jni");
+            }
+            nativeLibLoaded = true;
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+        return context;
+    }
+
+    private static final void copyInputStream(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int len;
+
+        while ((len = in.read(buffer)) >= 0)
+            out.write(buffer, 0, len);
+
+        in.close();
+        out.close();
+    }
 
     @Override
     public void onResume() {
@@ -54,12 +116,12 @@ public class BackendMapView extends MapView {
     }
 
     public BackendMapView(Context context) {
-        super(context);
+        super(loadNativeLib(context));
         initialize();
     }
 
     public BackendMapView(Context context, AttributeSet attributeSet) {
-        super(context, attributeSet);
+        super(loadNativeLib(context), attributeSet);
         initialize();
     }
 
