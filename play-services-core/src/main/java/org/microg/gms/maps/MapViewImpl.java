@@ -18,6 +18,7 @@ package org.microg.gms.maps;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     private GoogleMapOptions options;
     private Context context;
     private IOnMapReadyCallback readyCallback;
+    private boolean isReady = false;
 
     public MapViewImpl(Context context, GoogleMapOptions options) {
         this.context = context;
@@ -59,13 +61,17 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     @Override
     public void onCreate(Bundle savedInstanceState) throws RemoteException {
         //myMap().onCreate(savedInstanceState);
-        Log.d("MapViewImpl", "onCreate");
+        Log.d(TAG, "onCreate");
     }
 
     @Override
     public void onResume() throws RemoteException {
-        myMap().onResume();
+        Log.d(TAG, "onResume");
+        synchronized (this) {
+            isReady = true;
+        }
 
+        myMap().onResume();
         if (readyCallback != null) {
             try {
                 readyCallback.onMapReady(map);
@@ -74,12 +80,14 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
                 Log.w(TAG, e);
             }
         }
-
     }
 
     @Override
     public void onPause() throws RemoteException {
         myMap().onPause();
+        synchronized (this) {
+            isReady = false;
+        }
     }
 
     @Override
@@ -103,8 +111,21 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     }
 
     @Override
-    public void addOnMapReadyCallback(IOnMapReadyCallback callback) throws RemoteException {
-        this.readyCallback = callback;
+    public synchronized void addOnMapReadyCallback(final IOnMapReadyCallback callback) throws RemoteException {
+        if (!isReady) {
+            this.readyCallback = callback;
+        } else {
+            new Handler(context.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        callback.onMapReady(map);
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
+                }
+            });
+        }
     }
 
     @Override

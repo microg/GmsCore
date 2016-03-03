@@ -27,6 +27,7 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     private boolean zoomGesturesEnabled = true;
     private boolean tiltGesturesEnabled = true;
     private boolean rotateGesturesEnabled = true;
+    private boolean allGesturesEnabled = true;
     
     private UiSettingsListener listener;
 

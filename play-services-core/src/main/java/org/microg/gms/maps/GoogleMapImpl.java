@@ -18,11 +18,13 @@ package org.microg.gms.maps;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
@@ -80,7 +82,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         implements UiSettingsImpl.UiSettingsListener, Markup.MarkupListener, BackendMap.CameraUpdateListener {
-    private static final String TAG = "GoogleMapImpl";
+    private static final String TAG = "GmsMapImpl";
 
     private final GoogleMapOptions options;
     private final Context context;
@@ -525,8 +527,18 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     }
 
     @Override
-    public void setOnMapLoadedCallback(IOnMapLoadedCallback callback) throws RemoteException {
+    public void setOnMapLoadedCallback(final IOnMapLoadedCallback callback) throws RemoteException {
         Log.d(TAG, "not yet usable: setOnMapLoadedCallback");
+        new Handler(context.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    callback.onMapLoaded();
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        }, 5000);
     }
     
     /*
@@ -541,7 +553,9 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void snapshot(ISnapshotReadyCallback callback, IObjectWrapper bitmap)
             throws RemoteException {
-
+        Bitmap b = (Bitmap) ObjectWrapper.unwrap(bitmap);
+        Log.d(TAG, "snapshot!: " + b);
+        backendMap.snapshot(b, callback);
     }
 
     @Override

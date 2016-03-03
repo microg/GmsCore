@@ -17,15 +17,22 @@
 package org.microg.gms.maps;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.maps.internal.ISnapshotReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 
 import org.microg.gms.maps.camera.CameraUpdate;
 import org.microg.gms.maps.markup.DrawableMarkup;
 import org.microg.gms.maps.markup.MarkerItemMarkup;
 import org.microg.gms.maps.markup.Markup;
+import org.oscim.backend.GL;
+import org.oscim.backend.GLAdapter;
 import org.oscim.core.MapPosition;
 import org.oscim.core.Point;
 import org.oscim.event.Event;
@@ -35,12 +42,15 @@ import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.vector.geometries.Drawable;
 import org.oscim.map.Viewport;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerItem>, org.oscim.map.Map.InputListener, org.oscim.map.Map.UpdateListener {
     private final static String TAG = "GmsMapBackend";
@@ -231,6 +241,62 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
             dragLastX += mx;
             dragLastY += my;
         }
+    }
+
+    public void snapshot(final Bitmap bitmap, final ISnapshotReadyCallback callback) {
+        mapView.queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                Bitmap surface = createBitmapFromGLSurface(0, 0, mapView.getWidth(), mapView.getHeight(), GLAdapter.gl);
+                final Bitmap result;
+                if (bitmap != null) {
+                    Canvas c = new Canvas(bitmap);
+                    c.drawBitmap(surface, 0, 0, new Paint());
+                    result = bitmap;
+                } else {
+                    result = surface;
+                }
+                mapView.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "snapshot result: " + result);
+                        try {
+                            callback.onBitmapReady(result);
+                        } catch (RemoteException e) {
+                            Log.w(TAG, e);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private Bitmap createBitmapFromGLSurface(int x, int y, int w, int h, GL gl) {
+        int bitmapBuffer[] = new int[w * h];
+        int bitmapSource[] = new int[w * h];
+        IntBuffer intBuffer = IntBuffer.wrap(bitmapBuffer);
+        intBuffer.position(0);
+
+        try {
+            gl.readPixels(x, y, w, h, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, intBuffer);
+            int offset1, offset2;
+            for (int i = 0; i < h; i++) {
+                offset1 = i * w;
+                offset2 = (h - i - 1) * w;
+                for (int j = 0; j < w; j++) {
+                    int texturePixel = bitmapBuffer[offset1 + j];
+                    int blue = (texturePixel >> 16) & 0xff;
+                    int red = (texturePixel << 16) & 0x00ff0000;
+                    int pixel = (texturePixel & 0xff00ff00) | red | blue;
+                    bitmapSource[offset2 + j] = pixel;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "createBitmapFromGLSurface: " + e.getMessage(), e);
+            return null;
+        }
+
+        return Bitmap.createBitmap(bitmapSource, w, h, Bitmap.Config.ARGB_8888);
     }
 
     public void setZoomGesturesEnabled(boolean enabled) {
