@@ -83,13 +83,15 @@ public class BackendMapView extends MapView {
                 }
                 Log.d(TAG, "Loading vtm-jni from " + cacheFile.getPath());
                 System.load(cacheFile.getAbsolutePath());
-            } else {
-                Log.d(TAG, "Loading native vtm-jni");
-                System.loadLibrary("vtm-jni");
+                nativeLibLoaded = true;
             }
-            nativeLibLoaded = true;
         } catch (Exception e) {
             Log.w(TAG, e);
+        }
+        if (!nativeLibLoaded) {
+            Log.d(TAG, "Loading native vtm-jni");
+            System.loadLibrary("vtm-jni");
+            nativeLibLoaded = true;
         }
         return context;
     }
