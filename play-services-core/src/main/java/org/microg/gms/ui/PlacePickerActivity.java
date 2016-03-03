@@ -19,8 +19,12 @@ package org.microg.gms.ui;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +54,13 @@ import org.oscim.map.Map;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR;
+import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR_DARK;
+import static org.microg.gms.maps.GmsMapsTypeHelper.fromLatLngBounds;
+
 public class PlacePickerActivity extends AppCompatActivity implements Map.UpdateListener {
     private static final String TAG = "GmsPlacePicker";
 
@@ -71,11 +82,11 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (getIntent().hasExtra(LocationConstants.EXTRA_PRIMARY_COLOR)) {
-            toolbar.setBackgroundColor(getIntent().getIntExtra(LocationConstants.EXTRA_PRIMARY_COLOR, 0));
+        if (getIntent().hasExtra(EXTRA_PRIMARY_COLOR)) {
+            toolbar.setBackgroundColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR, 0));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                getWindow().setStatusBarColor(getIntent().getIntExtra(LocationConstants.EXTRA_PRIMARY_COLOR_DARK, 0));
-            ((TextView) findViewById(R.id.place_picker_title)).setTextColor(getIntent().getIntExtra(LocationConstants.EXTRA_PRIMARY_COLOR_DARK, 0));
+                getWindow().setStatusBarColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
+            ((TextView) findViewById(R.id.place_picker_title)).setTextColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
         }
 
         mapView = (BackendMapView) findViewById(R.id.map);
@@ -86,8 +97,15 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
         LatLngBounds latLngBounds = getIntent().getParcelableExtra(LocationConstants.EXTRA_BOUNDS);
         if (latLngBounds != null) {
             place.viewport = latLngBounds;
-            mapView.map().getMapPosition().setByBoundingBox(GmsMapsTypeHelper.fromLatLngBounds(latLngBounds),
-                    mapView.map().getWidth(), mapView.map().getHeight());
+            MapPosition mp = new MapPosition();
+            mp.setByBoundingBox(fromLatLngBounds(latLngBounds), mapView.map().getWidth(), mapView.map().getHeight());
+            mapView.map().getMapPosition(mp);
+        } else {
+            if (ActivityCompat.checkSelfPermission(PlacePickerActivity.this, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(PlacePickerActivity.this, new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION}, 0);
+            } else {
+                updateMapFromLocationManager();
+            }
         }
 
         findViewById(R.id.place_picker_select).setOnClickListener(new View.OnClickListener() {
@@ -100,6 +118,34 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
                 finish();
             }
         });
+    }
+
+    @SuppressWarnings("MissingPermission")
+    private void updateMapFromLocationManager() {
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Location last = null;
+        for (String provider : lm.getAllProviders()) {
+            if (lm.isProviderEnabled(provider)) {
+                Location t = lm.getLastKnownLocation(provider);
+                if (t != null && (last == null || t.getTime() > last.getTime())) {
+                    last = t;
+                }
+            }
+        }
+        Log.d(TAG, "Set location to " + last);
+        if (last != null) {
+            mapView.map().setMapPosition(new MapPosition(last.getLatitude(), last.getLongitude(), 4096));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 0) {
+            for (int grantResult : grantResults) {
+                if (grantResult != PERMISSION_GRANTED) return;
+            }
+            updateMapFromLocationManager();
+        }
     }
 
     @Override
