@@ -65,7 +65,7 @@
         android:paddingRight="?attr/listPreferredItemPaddingRight"
         android:paddingTop="16dip"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:text="@+id/about_root_libraries"
+        android:text="@string/about_root_libraries"
         android:textColor="?attr/colorAccent"/>
 
     <ListView
