@@ -37,6 +37,7 @@ import java.util.Map;
 @PublicApi
 public class PutDataRequest extends AutoSafeParcelable {
     public static final String WEAR_URI_SCHEME = "wear";
+    private static final int DEFAULT_SYNC_DEADLINE = 30 * 60 * 1000;
 
     @SafeParceled(1)
     private int versionCode = 1;
@@ -46,6 +47,8 @@ public class PutDataRequest extends AutoSafeParcelable {
     private final Bundle assets;
     @SafeParceled(5)
     byte[] data;
+    @SafeParceled(6)
+    long syncDeadline = DEFAULT_SYNC_DEADLINE;
 
     private PutDataRequest() {
         uri = null;
@@ -130,10 +133,19 @@ public class PutDataRequest extends AutoSafeParcelable {
     }
 
     public String toString(boolean verbose) {
-        return "PutDataRequest[uri=" + uri +
-                ", data=" + (data == null ? "null" : Base64.encodeToString(data, Base64.NO_WRAP)) +
-                ", numAssets=" + getAssets().size() + "]";
-        // TODO: Verbose: dump all assets
+        StringBuilder sb = new StringBuilder();
+        sb.append("PutDataRequest[uri=").append(uri)
+                .append(", data=").append(data == null ? "null" : Base64.encodeToString(data, Base64.NO_WRAP))
+                .append(", numAssets=").append(getAssets().size());
+        if (verbose) {
+            sb.append(",assets=[");
+            for (String key : getAssets().keySet()) {
+                sb.append(key).append('=').append(getAsset(key)).append(", ");
+            }
+            sb.delete(sb.length() - 2, sb.length()).append(']');
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     public static final Creator<PutDataRequest> CREATOR = new AutoCreator<PutDataRequest>(PutDataRequest.class);
