@@ -122,7 +122,7 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
 
     @Override
     public void putData(IWearableCallbacks callbacks, PutDataRequest request) throws RemoteException {
-        Log.d(TAG, "putData: " + request);
+        Log.d(TAG, "putData: " + request.toString(true));
         String host = request.getUri().getHost();
         if (TextUtils.isEmpty(host)) host = getLocalNodeId();
         DataItemInternal dataItem = new DataItemInternal(host, request.getUri().getPath());
@@ -169,15 +169,21 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
                     stream.close();
                     success = tmpFile.renameTo(assetFile);
                 } catch (IOException e) {
+                    Log.w(TAG, e);
                 }
             }
-            return Asset.createFromRef(digest);
+            if (success) {
+                Log.d(TAG, "Successfully created asset file " + assetFile);
+                return Asset.createFromRef(digest);
+            } else {
+                Log.w(TAG, "Failed creating asset file " + assetFile);
+            }
         }
         return null;
     }
 
     private File createAssetFile(String digest) {
-        File dir = new File(new File(context.getFilesDir(), "assets"), digest.substring(digest.length() - 2, digest.length()));
+        File dir = new File(new File(context.getFilesDir(), "assets"), digest.substring(digest.length() - 2));
         dir.mkdirs();
         return new File(dir, digest + ".asset");
     }
@@ -198,6 +204,7 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
             if (cursor.moveToNext()) {
                 DataItemParcelable dataItem = new DataItemParcelable(new Uri.Builder().scheme("wear").authority(cursor.getString(0)).path(cursor.getString(1)).build());
                 dataItem.data = cursor.getBlob(2);
+                Log.d(TAG, "getDataItem.asset " + cursor.getString(5));
                 // TODO: assets
                 callbacks.onGetDataItemResponse(new GetDataItemResponse(0, dataItem));
             }

@@ -143,7 +143,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
-        Log.d(TAG, "updateRecord: " + record);
+        Log.d(TAG, "updateRecord not implemented: " + record);
     }
 
     private String insertRecord(SQLiteDatabase db, DataItemRecord record) {
