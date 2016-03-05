@@ -1,10 +1,35 @@
+# We use ProGuard for optimizations, obfuscation is for those who have sth to hide
+-dontobfuscate
+-optimizations !code/allocation/variable
+
+# We're referencing stuff that is unknown to the system
+-libraryjar ../unifiednlp-compat/build/classes/main
+-dontwarn java.awt.**
+-dontwarn javax.annotation.**
+
+# OkIO, OkHttp
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
+-dontwarn org.oscim.tiling.source.OkHttpEngine
+-dontwarn org.oscim.tiling.source.OkHttpEngine$OkHttpFactory
+
 # Disable ProGuard Notes, they won't help here
 -dontnote
 
 # Keep dynamically loaded GMS classes
 -keep public class com.google.android.gms.maps.internal.CreatorImpl
 -keep public class com.google.android.gms.common.security.ProviderInstallerImpl
+-keep public class com.google.android.gms.plus.plusone.PlusOneButtonCreatorImpl
 
 -keepclassmembers class com.google.android.gms.common.security.ProviderInstallerImpl {
 	public *;
 }
+
+# Keep library info
+-keep class **.BuildConfig
+-keepclassmembers class **.BuildConfig { *; }
+
+# Keep protobuf class builders
+-keep public class * extends com.squareup.wire.Message
+-keep public class * extends com.squareup.wire.Message$Builder
+-keepclassmembers class * extends com.squareup.wire.Message$Builder { public <init>(...); }

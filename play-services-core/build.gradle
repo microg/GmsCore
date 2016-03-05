@@ -98,6 +98,12 @@ android {
         // TODO: Remove MissingTranslation once we have stable strings and proper translations.
         disable 'MissingTranslation', 'InvalidPackage'
     }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 }
 
 if (file('user.gradle').exists()) {
