@@ -100,6 +100,13 @@ public class LoginActivity extends AssistantActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "pageFinished: " + url);
+                if ("identifier".equals(Uri.parse(url).getFragment()))
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.setVisibility(VISIBLE);
+                        }
+                    });
                 if ("close".equals(Uri.parse(url).getFragment()))
                     closeWeb(false);
                 if (url.startsWith(PROGRAMMATIC_AUTH_URL))

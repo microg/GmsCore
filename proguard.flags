@@ -22,7 +22,13 @@
 -keep public class com.google.android.gms.plus.plusone.PlusOneButtonCreatorImpl
 
 -keepclassmembers class com.google.android.gms.common.security.ProviderInstallerImpl {
-	public *;
+    public *;
+}
+
+# Keep AutoSafeParcelables
+-keep public class * extends org.microg.safeparcel.AutoSafeParcelable
+-keepclassmembers public class * extends org.microg.safeparcel.AutoSafeParcelable {
+    @org.microg.safeparcel.SafeParceled *;
 }
 
 # Keep library info
