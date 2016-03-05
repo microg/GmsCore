@@ -95,14 +95,6 @@ This can take a couple of minutes."</string>
     <string name="self_check_resolution_correct_sig">Either the installed %1$s is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
     <string name="perm_extended_access_label">Extended access to Google services</string>
 
-    <string name="self_check_cat_permissions">Permissions granted</string>
-    <string name="self_check_name_permission">Permission to %1$s:</string>
-    <string name="self_check_resolution_permission">Touch here to grant permission to %1$s. Not granting the permission can result in misbehaving applications.</string>
-    <string name="self_check_perm_location">location</string>
-    <string name="self_check_perm_storage">storage</string>
-    <string name="self_check_perm_contacts">contacts</string>
-    <string name="self_check_perm_phone">phone</string>
-
     <string name="lacking_permission_toast">microG Services Core: Lacking permission %1$s</string>
 
     <string name="place_picker_select_title">Select this location</string>

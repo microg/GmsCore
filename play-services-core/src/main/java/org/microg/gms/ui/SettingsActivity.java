@@ -30,7 +30,7 @@ import com.google.android.gms.R;
 import org.microg.tools.selfcheck.InstalledPackagesChecks;
 import org.microg.tools.selfcheck.NlpOsCompatChecks;
 import org.microg.tools.selfcheck.NlpStatusChecks;
-import org.microg.tools.selfcheck.PermissionChecks;
+import org.microg.tools.selfcheck.PermissionCheckGroup;
 import org.microg.tools.selfcheck.RomSpoofSignatureChecks;
 import org.microg.tools.selfcheck.SelfCheckGroup;
 import org.microg.tools.ui.AbstractAboutFragment;
@@ -38,6 +38,10 @@ import org.microg.tools.ui.AbstractSelfCheckFragment;
 
 import java.util.List;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.GET_ACCOUNTS;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.LOLLIPOP_MR1;
 
@@ -93,7 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
             checks.add(new RomSpoofSignatureChecks());
             checks.add(new InstalledPackagesChecks());
             if (SDK_INT > LOLLIPOP_MR1) {
-                checks.add(new PermissionChecks());
+                checks.add(new PermissionCheckGroup(ACCESS_COARSE_LOCATION, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE));
             }
             checks.add(new NlpOsCompatChecks());
             checks.add(new NlpStatusChecks());
