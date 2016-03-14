@@ -43,6 +43,12 @@ public final class GoogleMapOptions extends AutoSafeParcelable {
     private boolean tiltGesturesEnabled = true;
     @SafeParceled(11)
     private boolean rotateGesturesEnabled = true;
+    @SafeParceled(12)
+    private boolean liteMode = false;
+    @SafeParceled(14)
+    private boolean mapToobarEnabled = false;
+    @SafeParceled(15)
+    private boolean ambientEnabled = false;
 
     public GoogleMapOptions() {
     }

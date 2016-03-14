@@ -3,6 +3,7 @@ package com.google.android.gms.maps.internal;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
+import com.google.android.gms.maps.internal.IOnMapReadyCallback;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.dynamic.IObjectWrapper;
 
@@ -18,4 +19,5 @@ interface IMapFragmentDelegate {
     void onLowMemory();
     void onSaveInstanceState(inout Bundle outState);
     boolean isReady();
+    void getMapAsync(IOnMapReadyCallback callback);
 }

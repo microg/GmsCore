@@ -15,5 +15,5 @@ interface IMapViewDelegate {
     void onLowMemory();
     void onSaveInstanceState(inout Bundle outState);
     IObjectWrapper getView();
-    void addOnMapReadyCallback(IOnMapReadyCallback callback);
+    void getMapAsync(IOnMapReadyCallback callback);
 }
