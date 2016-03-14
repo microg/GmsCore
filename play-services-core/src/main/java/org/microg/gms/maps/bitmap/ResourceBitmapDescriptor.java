@@ -18,7 +18,10 @@ package org.microg.gms.maps.bitmap;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
     private int resourceId;
@@ -29,6 +32,23 @@ public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
 
     @Override
     public Bitmap generateBitmap(Context context) {
-        return BitmapFactory.decodeResource(context.getResources(), resourceId);
+        return drawableToBitmap(context, ContextCompat.getDrawable(context.getApplicationContext(), resourceId));
+    }
+
+    public static Bitmap drawableToBitmap(Context context, Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            return DefaultBitmapDescriptor.DEFAULT_DESCRIPTOR.loadBitmap(context);
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }

@@ -253,7 +253,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
             try {
                 onCameraChangeListener.onCameraChange(cameraPosition);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                Log.w(TAG, e);
             }
         }
     }
@@ -485,53 +485,58 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public void setOnCameraChangeListener(IOnCameraChangeListener listener) throws RemoteException {
+        Log.d(TAG, "setOnCameraChangeListener");
         this.onCameraChangeListener = listener;
     }
 
     @Override
     public void setOnMapClickListener(IOnMapClickListener listener) throws RemoteException {
-
+        Log.d(TAG, "setOnMapClickListener: not supported");
     }
 
     @Override
     public void setOnMapLongClickListener(IOnMapLongClickListener listener) throws RemoteException {
-
+        Log.d(TAG, "setOnMapLongClickListener: not supported");
     }
 
     @Override
     public void setOnMarkerClickListener(IOnMarkerClickListener listener) throws RemoteException {
+        Log.d(TAG, "setOnMarkerClickListener");
         this.onMarkerClickListener = listener;
     }
 
     @Override
     public void setOnMarkerDragListener(IOnMarkerDragListener listener) throws RemoteException {
+        Log.d(TAG, "setOnMarkerDragListener");
         this.onMarkerDragListener = listener;
     }
 
     @Override
     public void setOnInfoWindowClickListener(IOnInfoWindowClickListener listener)
             throws RemoteException {
-
+        Log.d(TAG, "setOnInfoWindowClickListener: not supported");
     }
 
     @Override
     public void setOnMyLocationChangeListener(IOnMyLocationChangeListener listener)
             throws RemoteException {
+        Log.d(TAG, "setOnMyLocationChangeListener");
         this.onMyLocationChangeListener = listener;
     }
 
     @Override
     public void setOnMyLocationButtonClickListener(IOnMyLocationButtonClickListener listener)
             throws RemoteException {
-
+        Log.d(TAG, "setOnMyLocationButtonClickListener: not supported");
     }
 
     @Override
     public void setOnMapLoadedCallback(final IOnMapLoadedCallback callback) throws RemoteException {
-        Log.d(TAG, "not yet usable: setOnMapLoadedCallback");
+        Log.d(TAG, "setOnMapLoadedCallback");
         new Handler(context.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, "Announce map loaded");
                 try {
                     callback.onMapLoaded();
                 } catch (RemoteException e) {

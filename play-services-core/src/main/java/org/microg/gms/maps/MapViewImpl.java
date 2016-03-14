@@ -38,7 +38,6 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     private GoogleMapOptions options;
     private Context context;
     private IOnMapReadyCallback readyCallback;
-    private boolean isReady = false;
 
     public MapViewImpl(Context context, GoogleMapOptions options) {
         this.context = context;
@@ -47,6 +46,7 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
 
     private GoogleMapImpl myMap() {
         if (map == null) {
+            Log.d(TAG, "GoogleMap instance created");
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             map = new GoogleMapImpl(inflater.getContext(), options);
         }
@@ -55,6 +55,7 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
 
     @Override
     public IGoogleMapDelegate getMap() throws RemoteException {
+        Log.d(TAG, "getMap");
         return myMap();
     }
 
@@ -67,9 +68,6 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     @Override
     public void onResume() throws RemoteException {
         Log.d(TAG, "onResume");
-        synchronized (this) {
-            isReady = true;
-        }
 
         myMap().onResume();
         if (readyCallback != null) {
@@ -84,25 +82,24 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
 
     @Override
     public void onPause() throws RemoteException {
+        Log.d(TAG, "onPause");
         myMap().onPause();
-        synchronized (this) {
-            isReady = false;
-        }
     }
 
     @Override
     public void onDestroy() throws RemoteException {
+        Log.d(TAG, "onDestroy");
         myMap().onDestroy();
     }
 
     @Override
     public void onLowMemory() throws RemoteException {
-
+        Log.d(TAG, "onLowMemory");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) throws RemoteException {
-
+        Log.d(TAG, "onSaveInstanceState: " + outState);
     }
 
     @Override
@@ -111,21 +108,18 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     }
 
     @Override
-    public synchronized void addOnMapReadyCallback(final IOnMapReadyCallback callback) throws RemoteException {
-        if (!isReady) {
-            this.readyCallback = callback;
-        } else {
-            new Handler(context.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        callback.onMapReady(map);
-                    } catch (RemoteException e) {
-                        Log.w(TAG, e);
-                    }
+    public void getMapAsync(final IOnMapReadyCallback callback) throws RemoteException {
+        Log.d(TAG, "getMapAsync");
+        new Handler(context.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    callback.onMapReady(myMap());
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override

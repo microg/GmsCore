@@ -19,18 +19,23 @@ package org.microg.gms.maps;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
 import com.google.android.gms.maps.internal.IMapFragmentDelegate;
+import com.google.android.gms.maps.internal.IOnMapReadyCallback;
 
 public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
+    private static final String TAG = "GmsMapFragImpl";
 
     private GoogleMapImpl map;
     private GoogleMapOptions options;
@@ -42,6 +47,7 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
     private GoogleMapImpl myMap() {
         if (map == null) {
+            Log.d(TAG, "GoogleMap instance created");
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             map = new GoogleMapImpl(inflater.getContext(), options);
         }
@@ -50,24 +56,34 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
     @Override
     public IGoogleMapDelegate getMap() throws RemoteException {
+        Log.d(TAG, "getMap");
         return myMap();
     }
 
     @Override
     public void onInflate(IObjectWrapper activity, GoogleMapOptions options,
-            Bundle savedInstanceState) throws RemoteException {
-        Log.d("MapFragmentImpl", "onInflate");
+                          Bundle savedInstanceState) throws RemoteException {
+        if (options != null) this.options = options;
+        Log.d(TAG, "onInflate");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) throws RemoteException {
+        Log.d(TAG, "onCreate");
         //myMap().onCreate(savedInstanceState);
-        Log.d("MapFragmentImpl", "onCreate");
+        // TOOD: Certainly does not belong here and this way
+        Bundle mapState = savedInstanceState.getBundle("map_state");
+        if (mapState != null) {
+            mapState.setClassLoader(GoogleMapOptions.class.getClassLoader());
+            GoogleMapOptions options = mapState.getParcelable("MapOptions");
+            if (options != null) this.options = options;
+        }
     }
 
     @Override
     public IObjectWrapper onCreateView(IObjectWrapper layoutInflater, IObjectWrapper container,
-            Bundle savedInstanceState) throws RemoteException {
+                                       Bundle savedInstanceState) throws RemoteException {
+        Log.d(TAG, "onCreateView");
         if (map == null) {
             LayoutInflater inflater = (LayoutInflater) ObjectWrapper.unwrap(layoutInflater);
             map = new GoogleMapImpl(inflater.getContext(), options);
@@ -83,37 +99,62 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
     @Override
     public void onResume() throws RemoteException {
+        Log.d(TAG, "onResume");
         myMap().onResume();
     }
 
     @Override
     public void onPause() throws RemoteException {
+        Log.d(TAG, "onPause");
         myMap().onPause();
     }
 
     @Override
     public void onDestroyView() throws RemoteException {
-
+        Log.d(TAG, "onDestroyView");
     }
 
     @Override
     public void onDestroy() throws RemoteException {
+        Log.d(TAG, "onDestroy");
         myMap().onDestroy();
     }
 
     @Override
     public void onLowMemory() throws RemoteException {
-
+        Log.d(TAG, "onLowMemory");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) throws RemoteException {
+        Log.d(TAG, "onSaveInstanceState: " + outState);
         //myMap().onSaveInstanceState(outState);
     }
 
     @Override
     public boolean isReady() throws RemoteException {
-        Log.d("MapFragmentImpl", "isReady");
+        Log.d(TAG, "isReady");
+        return map != null;
+    }
+
+    @Override
+    public void getMapAsync(final IOnMapReadyCallback callback) throws RemoteException {
+        new Handler(context.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    callback.onMapReady(myMap());
+                } catch (RemoteException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
         return false;
     }
 }
