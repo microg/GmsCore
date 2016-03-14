@@ -78,8 +78,13 @@ android {
 
     defaultConfig {
         versionName getMyVersionName()
+        def x = getMyVersionCode('249c935f')
+        // We are not allowed to freely choose the hundreds column as it defines the device type
+        def y = x % 100;
+        x -= y * 100;
+        x += y * 1000;
         // Update commit id to current when increasing gms version code
-        versionCode(8489238 + getMyVersionCode('249c935f'))
+        versionCode(8490200 + x)
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86"
