@@ -19,6 +19,7 @@ package org.microg.gms.wearable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
@@ -86,6 +87,13 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onSetAsset(SetAsset setAsset) {
         Log.d(TAG, "onSetAsset: " + setAsset);
+        Asset asset;
+        if (setAsset.data != null) {
+            asset = Asset.createFromBytes(setAsset.data.toByteArray());
+        } else {
+            asset = Asset.createFromRef(setAsset.digest);
+        }
+        service.addAssetToDatabase(asset, setAsset.appkeys.appKeys);
     }
 
     @Override
@@ -149,6 +157,7 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onFilePiece(FilePiece filePiece) {
         Log.d(TAG, "onFilePiece: " + filePiece);
+        service.handleFilePiece(getConnection(), filePiece.fileName, filePiece.piece.toByteArray(), filePiece.finalPiece ? filePiece.digest : null);
     }
 
     @Override

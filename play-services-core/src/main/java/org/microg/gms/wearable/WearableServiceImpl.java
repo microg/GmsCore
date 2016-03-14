@@ -53,17 +53,23 @@ import com.google.android.gms.wearable.internal.PutDataResponse;
 import com.google.android.gms.wearable.internal.RemoveListenerRequest;
 
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.common.Utils;
 import org.microg.wearable.WearableConnection;
-import org.microg.wearable.proto.AssetEntry;
+import org.microg.wearable.proto.AckAsset;
+import org.microg.wearable.proto.AppKey;
+import org.microg.wearable.proto.AppKeys;
+import org.microg.wearable.proto.FilePiece;
 import org.microg.wearable.proto.RootMessage;
-import org.microg.wearable.proto.SetDataItem;
+import org.microg.wearable.proto.SetAsset;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -129,12 +135,13 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         for (Map.Entry<String, Asset> assetEntry : request.getAssets().entrySet()) {
             Asset asset = prepareAsset(packageName, assetEntry.getValue());
             if (asset != null) {
+                nodeDatabase.putAsset(asset, true);
                 dataItem.addAsset(assetEntry.getKey(), asset);
             }
         }
         dataItem.data = request.getData();
-        DataItemParcelable parcelable = putDataItem(packageName,
-                PackageUtils.firstSignatureDigest(context, packageName), getLocalNodeId(), dataItem).toParcelable();
+        DataItemParcelable parcelable = putDataItem(packageName, PackageUtils.firstSignatureDigest(context, packageName),
+                getLocalNodeId(), dataItem).toParcelable();
         callbacks.onPutDataResponse(new PutDataResponse(0, parcelable));
     }
 
@@ -156,6 +163,13 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
     }
 
     private Asset prepareAsset(String packageName, Asset asset) {
+        if (asset.getFd() != null && asset.data == null) {
+            try {
+                asset.data = Utils.readStreamToEnd(new FileInputStream(asset.getFd().getFileDescriptor()));
+            } catch (IOException e) {
+                Log.w(TAG, e);
+            }
+        }
         if (asset.data != null) {
             String digest = calculateDigest(asset.data);
             File assetFile = createAssetFile(digest);
@@ -186,6 +200,12 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         File dir = new File(new File(context.getFilesDir(), "assets"), digest.substring(digest.length() - 2));
         dir.mkdirs();
         return new File(dir, digest + ".asset");
+    }
+
+    private File createAssetReceiveTempFile(String name) {
+        File dir = new File(context.getFilesDir(), "piece");
+        dir.mkdirs();
+        return new File(dir, name);
     }
 
     private String calculateDigest(byte[] data) {
@@ -480,29 +500,13 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 DataItemRecord record = DataItemRecord.fromCursor(cursor);
-                Log.d(TAG, "Sync over " + connection + ": " + record);
-                SetDataItem.Builder builder = new SetDataItem.Builder()
-                        .packageName(record.packageName)
-                        .signatureDigest(record.signatureDigest)
-                        .uri(record.dataItem.uri.toString())
-                        .seqId(record.seqId)
-                        .deleted(record.deleted)
-                        .lastModified(record.lastModified);
-                if (record.source != null) builder.source(record.source);
-                if (record.dataItem.data != null) builder.data(ByteString.of(record.dataItem.data));
-                List<AssetEntry> protoAssets = new ArrayList<AssetEntry>();
-                Map<String, Asset> assets = record.dataItem.getAssets();
-                for (String key : assets.keySet()) {
-                    protoAssets.add(new AssetEntry.Builder()
-                            .key(key)
-                            .unknown3(4)
-                            .value(new org.microg.wearable.proto.Asset.Builder()
-                                    .digest(assets.get(key).getDigest())
-                                    .build()).build());
+                for (Asset asset : record.dataItem.getAssets().values()) {
+                    syncAssetToPeer(connection, record, asset);
                 }
-                builder.assets(protoAssets);
+                Log.d(TAG, "Sync over " + connection + ": " + record);
+
                 try {
-                    connection.writeMessage(new RootMessage.Builder().setDataItem(builder.build()).build());
+                    connection.writeMessage(new RootMessage.Builder().setDataItem(record.toSetDataItem()).build());
                 } catch (IOException e) {
                     Log.w(TAG, e);
                     break;
@@ -513,7 +517,71 @@ public class WearableServiceImpl extends IWearableService.Stub implements IWeara
         Log.d(TAG, "-- Done syncing over " + connection + ", nodeId " + nodeId + " starting with seqId " + seqId);
     }
 
+    private void syncAssetToPeer(WearableConnection connection, DataItemRecord record, Asset asset) {
+        try {
+            Log.d(TAG, "Sync over " + connection + ": " + asset);
+            connection.writeMessage(new RootMessage.Builder().setAsset(
+                    new SetAsset.Builder()
+                            .digest(asset.getDigest())
+                            .appkeys(new AppKeys(Collections.singletonList(new AppKey(record.packageName, record.signatureDigest))))
+                            .build()).unknown13(true).build());
+            File assetFile = createAssetFile(asset.getDigest());
+            String fileName = calculateDigest(assetFile.toString().getBytes());
+            FileInputStream fis = new FileInputStream(assetFile);
+            byte[] arr = new byte[12215];
+            ByteString lastPiece = null;
+            int c = 0;
+            while ((c = fis.read(arr)) > 0) {
+                if (lastPiece != null) {
+                    Log.d(TAG, "Sync over " + connection + ": Asset piece for fileName " + fileName + ": " + lastPiece);
+                    connection.writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, false, lastPiece, null)).build());
+                }
+                lastPiece = ByteString.of(arr, 0, c);
+            }
+            Log.d(TAG, "Sync over " + connection + ": Last asset piece for fileName " + fileName + ": " + lastPiece);
+            connection.writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, true, lastPiece, asset.getDigest())).build());
+        } catch (IOException e) {
+            Log.w(TAG, e);
+        }
+    }
+
+    public void addAssetToDatabase(Asset asset, List<AppKey> appKeys) {
+        nodeDatabase.putAsset(asset, false);
+        for (AppKey appKey : appKeys) {
+            nodeDatabase.allowAssetAccess(asset.getDigest(), appKey.packageName, appKey.signatureDigest);
+        }
+    }
+
     public long getCurrentSeqId(String nodeId) {
         return nodeDatabase.getCurrentSeqId(nodeId);
+    }
+
+    public void handleFilePiece(WearableConnection connection, String fileName, byte[] bytes, String finalPieceDigest) {
+        File file = createAssetReceiveTempFile(fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file, true);
+            fos.write(bytes);
+            fos.close();
+        } catch (IOException e) {
+            Log.w(TAG, e);
+        }
+        if (finalPieceDigest != null) {
+            // This is a final piece. If digest matches we're so happy!
+            try {
+                String digest = calculateDigest(Utils.readStreamToEnd(new FileInputStream(file)));
+                if (digest.equals(finalPieceDigest)) {
+                    if (file.renameTo(createAssetFile(digest))) {
+                        // TODO: Mark as stored in db
+                        connection.writeMessage(new RootMessage.Builder().ackAsset(new AckAsset(digest)).build());
+                    } else {
+                        Log.w(TAG, "Could not rename to target file name. delete=" + file.delete());
+                    }
+                } else {
+                    Log.w(TAG, "Received digest does not match. delete=" + file.delete());
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Failed working with temp file. delete=" + file.delete(), e);
+            }
+        }
     }
 }

@@ -143,7 +143,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
-        Log.d(TAG, "updateRecord not implemented: " + record);
+        Log.d(TAG, "updateRecord no: " + record);
     }
 
     private String insertRecord(SQLiteDatabase db, DataItemRecord record) {
@@ -220,8 +220,24 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 res = cursor.getLong(0);
             }
-            cursor.close();;
+            cursor.close();
         }
         return res;
+    }
+
+    public void putAsset(Asset asset, boolean dataPresent) {
+        ContentValues cv = new ContentValues();
+        cv.put("digest", asset.getDigest());
+        cv.put("dataPresent", dataPresent ? 1 : 0);
+        cv.put("timestampMs", System.currentTimeMillis());
+        getWritableDatabase().insert("assets", null, cv);
+    }
+
+    public void allowAssetAccess(String digest, String packageName, String signatureDigest) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("assets_digest", digest);
+        cv.put("appkeys_it", getAppKey(db, packageName, signatureDigest));
+        db.insert("assetsacls", null, cv);
     }
 }

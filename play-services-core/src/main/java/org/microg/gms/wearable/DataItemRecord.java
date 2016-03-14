@@ -27,7 +27,11 @@ import com.google.android.gms.wearable.internal.DataItemParcelable;
 import org.microg.wearable.proto.AssetEntry;
 import org.microg.wearable.proto.SetDataItem;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import okio.ByteString;
 
 public class DataItemRecord {
     public DataItemInternal dataItem;
@@ -67,6 +71,30 @@ public class DataItemRecord {
         return parcelable;
     }
 
+    public SetDataItem toSetDataItem() {
+        SetDataItem.Builder builder = new SetDataItem.Builder()
+                .packageName(packageName)
+                .signatureDigest(signatureDigest)
+                .uri(dataItem.uri.toString())
+                .seqId(seqId)
+                .deleted(deleted)
+                .lastModified(lastModified);
+        if (source != null) builder.source(source);
+        if (dataItem.data != null) builder.data(ByteString.of(dataItem.data));
+        List<AssetEntry> protoAssets = new ArrayList<AssetEntry>();
+        Map<String, Asset> assets = dataItem.getAssets();
+        for (String key : assets.keySet()) {
+            protoAssets.add(new AssetEntry.Builder()
+                    .key(key)
+                    .unknown3(4)
+                    .value(new org.microg.wearable.proto.Asset.Builder()
+                            .digest(assets.get(key).getDigest())
+                            .build()).build());
+        }
+        builder.assets(protoAssets);
+        return builder.build();
+    }
+
     public static DataItemRecord fromCursor(Cursor cursor) {
         DataItemRecord record = new DataItemRecord();
         record.packageName = cursor.getString(1);
@@ -78,6 +106,15 @@ public class DataItemRecord {
         record.dataItem.data = cursor.getBlob(8);
         record.lastModified = cursor.getLong(9);
         record.assetsAreReady = cursor.getLong(10) > 0;
+        if (cursor.getString(11) != null) {
+            record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+            while (cursor.moveToNext()) {
+                if (cursor.getLong(5) == record.seqId) {
+                    record.dataItem.addAsset(cursor.getString(11), Asset.createFromRef(cursor.getString(12)));
+                }
+            }
+            cursor.moveToPrevious();
+        }
         return record;
     }
 
@@ -87,7 +124,7 @@ public class DataItemRecord {
         if (setDataItem.data != null) record.dataItem.data = setDataItem.data.toByteArray();
         if (setDataItem.assets != null) {
             for (AssetEntry asset : setDataItem.assets) {
-                // TODO record.dataItem.addAsset(asset.key, asset.value)
+                record.dataItem.addAsset(asset.key, Asset.createFromRef(asset.value.digest));
             }
         }
         record.source = setDataItem.source;
