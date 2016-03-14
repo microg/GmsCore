@@ -137,8 +137,8 @@ public class PutDataRequest extends AutoSafeParcelable {
         sb.append("PutDataRequest[uri=").append(uri)
                 .append(", data=").append(data == null ? "null" : Base64.encodeToString(data, Base64.NO_WRAP))
                 .append(", numAssets=").append(getAssets().size());
-        if (verbose) {
-            sb.append(",assets=[");
+        if (verbose && !getAssets().isEmpty()) {
+            sb.append(", assets=[");
             for (String key : getAssets().keySet()) {
                 sb.append(key).append('=').append(getAsset(key)).append(", ");
             }

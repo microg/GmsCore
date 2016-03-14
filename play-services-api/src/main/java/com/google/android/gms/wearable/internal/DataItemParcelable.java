@@ -19,13 +19,16 @@ package com.google.android.gms.wearable.internal;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataItemAsset;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataItemParcelable extends AutoSafeParcelable {
+public class DataItemParcelable extends AutoSafeParcelable implements DataItem {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
@@ -50,8 +53,8 @@ public class DataItemParcelable extends AutoSafeParcelable {
         data = null;
     }
 
-    public Map<String, DataItemAssetParcelable> getAssets() {
-        Map<String, DataItemAssetParcelable> assets = new HashMap<String, DataItemAssetParcelable>();
+    public Map<String, DataItemAsset> getAssets() {
+        Map<String, DataItemAsset> assets = new HashMap<String, DataItemAsset>();
         this.assets.setClassLoader(DataItemAssetParcelable.class.getClassLoader());
         for (String key : this.assets.keySet()) {
             assets.put(key, (DataItemAssetParcelable) this.assets.getParcelable(key));
@@ -59,8 +62,30 @@ public class DataItemParcelable extends AutoSafeParcelable {
         return assets;
     }
 
+    @Override
+    public byte[] getData() {
+        return data;
+    }
+
+    @Override
     public Uri getUri() {
         return uri;
+    }
+
+    @Override
+    public DataItem setData(byte[] data) {
+        this.data = data;
+        return this;
+    }
+
+    @Override
+    public DataItem freeze() {
+        return this;
+    }
+
+    @Override
+    public boolean isDataValid() {
+        return true;
     }
 
     public static final Creator<DataItemParcelable> CREATOR = new AutoCreator<DataItemParcelable>(DataItemParcelable.class);
