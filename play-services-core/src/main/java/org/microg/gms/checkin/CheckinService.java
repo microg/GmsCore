@@ -34,6 +34,8 @@ import org.microg.gms.people.PeopleManager;
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
     public static final String BIND_ACTION = "com.google.android.gms.checkin.BIND_TO_SERVICE";
+    public static final String EXTRA_FORCE_CHECKIN = "force";
+    public static final String EXTRA_CALLBACK_INTENT = "callback";
 
     private ICheckinService iface = new ICheckinService.Stub() {
         @Override
@@ -49,7 +51,7 @@ public class CheckinService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra("force", false));
+            LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
             if (info != null) {
                 Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
                 String accountType = getString(R.string.google_account_type);
@@ -57,6 +59,9 @@ public class CheckinService extends IntentService {
                     PeopleManager.loadUserInfo(this, account);
                 }
                 McsService.scheduleReconnect(this);
+                if (intent.hasExtra(EXTRA_CALLBACK_INTENT)) {
+                    startService((Intent) intent.getParcelableExtra(EXTRA_CALLBACK_INTENT));
+                }
             }
         } catch (Exception e) {
             Log.w(TAG, e);

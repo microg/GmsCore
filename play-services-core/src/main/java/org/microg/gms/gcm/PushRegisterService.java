@@ -26,6 +26,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 
+import org.microg.gms.checkin.CheckinService;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.Utils;
@@ -37,6 +38,7 @@ import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_UNREGISTER;
 import static org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_DELETE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
@@ -51,6 +53,8 @@ public class PushRegisterService extends IntentService {
     private static final String ERROR = "%%ERROR%%";
     private static final String GCM_REGISTRATION_PREF = "gcm_registrations";
 
+    private static final String EXTRA_SKIP_TRY_CHECKIN = "skip_checkin";
+
     public PushRegisterService() {
         super(TAG);
         setIntentRedelivery(false);
@@ -63,15 +67,24 @@ public class PushRegisterService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: " + intent);
-        try {
-            if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
-                    (ACTION_C2DM_REGISTER.equals(intent.getAction()) && "1".equals(intent.getStringExtra("delete")))) {
-                unregister(intent);
-            } else if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
-                register(intent);
+        if (LastCheckinInfo.read(this).lastCheckin > 0) {
+            try {
+                if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
+                        (ACTION_C2DM_REGISTER.equals(intent.getAction()) && "1".equals(intent.getStringExtra(EXTRA_DELETE)))) {
+                    unregister(intent);
+                } else if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
+                    register(intent);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, e);
             }
-        } catch (Exception e) {
-            Log.w(TAG, e);
+        } else if (!intent.getBooleanExtra(EXTRA_SKIP_TRY_CHECKIN, false)) {
+            Log.d(TAG, "No checkin yet, trying to checkin");
+            intent.putExtra(EXTRA_SKIP_TRY_CHECKIN, true);
+            Intent subIntent = new Intent(this, CheckinService.class);
+            subIntent.putExtra(CheckinService.EXTRA_FORCE_CHECKIN, true);
+            subIntent.putExtra(CheckinService.EXTRA_CALLBACK_INTENT, intent);
+            startService(subIntent);
         }
     }
 

@@ -43,7 +43,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected() || force) {
                 Intent subIntent = new Intent(context, CheckinService.class);
-                subIntent.putExtra("force", force);
+                subIntent.putExtra(CheckinService.EXTRA_FORCE_CHECKIN, force);
                 startWakefulService(context, subIntent);
             }
         } else {
