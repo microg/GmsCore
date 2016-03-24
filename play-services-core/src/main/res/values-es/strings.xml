@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2013-2015 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="gms_app_name">Servicios de microG Core</string>
+    <string name="gms_settings_name">Ajustes de microG</string>
+    <string name="just_a_sec">Un momento…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Al continuar, permitirás a esta aplicación y a Google usar tu información de acuerdo con sus respectivos términos de servicio y política de privacidad.</string>
+    <string name="ask_scope_permission_title">%1$s quiere:</string>
+    <string name="ask_service_permission_title">%1$s quiere usar:</string>
+    <string name="account_manager_title">Administrador de cuentas de Google</string>
+    <string name="sorry">Lo sentimos…</string>
+    <string name="no_network_error_desc">"No tienes una conexión a Internet.
+
+Esto podría ser un problema temporal o tu dispositivo Android no esta configurado para los servicios de datos. Prueba otra vez cuando estés conectado a una red móvil o Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Hubo un problema comunicándose con los servidores de Google.
+
+Inténtalo otra vez mas tarde."</string>
+    <string name="auth_finalize">"Tu dispositivo esta contactando Google para guardar información en tu cuenta.
+
+Esto podría tardar algunos minutos."</string>
+    <string name="allow">Permitir</string>
+    <string name="deny">Denegar</string>
+    <string name="auth_notification_title">Autenticación necesaria.</string>
+    <string name="auth_notification_content">%1$s requiere tu permiso para acceder a tu cuenta de Google.</string>
+
+    <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
+    <string name="perm_c2dm_receive_label">recibir mensajes C2DM</string>
+    <string name="perm_c2dm_send_label">enviar mensajes C2DM a otras aplicaciones</string>
+
+    <string name="pref_auth_trust_google_title">Confiar en Google para los permisos de las aplicaciones</string>
+    <string name="pref_auth_trust_google_summary">Cuando este desactivado, se preguntara al usuario antes de que una aplicación envíe una solicitud de autorización a Google. Algunas aplicaciones fallaran al usar la cuenta de Google si esta desactivado.</string>
+
+    <string name="prefcat_services">Servicios de segundo plano</string>
+
+    <string name="pref_checkin_enable_title">Habilitar registro del dispositivo</string>
+    <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
+
+    <string name="pref_gcm_enable_mcs_title">Habilitar Google Cloud Messaging</string>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging es un proveedor de notificaciones push usado por muchas aplicaciones. Para usarlo debes habilitar el registro del dispositivo.</string>
+
+    <string name="pref_gcm_heartbeat_title">Intervalo del Cloud Messaging heartbeat</string>
+    <string name="pref_gcm_heartbeat_summary">El intervalo en segundos para el heartbeat a los servidores de Google. Aumentar este número reducirá el gasto de la batería, pero podría causar retrasos en mensajes push.</string>
+
+    <string name="prefcat_components">Componentes</string>
+    <string name="prefcat_location_service">Servicio de localización</string>
+
+    <string name="games_title">Google Play Juegos</string>
+    <string name="games_info_title">%1$s quiere usar Play Juegos</string>
+    <string name="games_info_content">Para usar Play Juegos es necesario instalar la aplicación Google Play Juegos. La aplicación puede continuar sin Play Juegos, pero es posible que funcione inesperadamente.</string>
+
+    <string name="pick_place_title">Selecciona un lugar</string>
+    <string name="pick_place_desc">El selector de lugares no esta disponible aun.</string>
+
+    <string name="prefcat_about">Acerca</string>
+    <string name="pref_about_title">Acerca de los Servicios de microG Core</string>
+    <string name="pref_about_summary">Información de la versión y librerías usadas</string>
+
+    <string name="self_check_cat_fake_sig">Soporte para spoofing de firmas</string>
+    <string name="self_check_name_fake_sig_perm">Soporte de spoofing: </string>
+    <string name="self_check_resolution_fake_sig_perm">Tu ROM no tiene soporte nativo para spoofing de firmas. Todavía puedes usar Xposed o otros sistemas para conseguirlo. Por favor, compruebe la documentación en que ROMs soportan spoofing de firmas y como usar microG en las que no.</string>
+    <string name="self_check_name_perm_granted">Se concede el permiso de spoofing de firmas: </string>
+    <string name="self_check_resolution_perm_granted">Este es un fuerte indicador de que la ROM si soporta spoofing de firmas, pero requiere otra acción para activarlo. Por favor, compruebe la documentación en que pasos se deben seguir.</string>
+    <string name="self_check_name_system_spoofs">Spoofing de firmas: </string>
+    <string name="self_check_resolution_system_spoofs">Por favor compruebe la documentación en que pasos se deben seguir.</string>
+
+    <string name="self_check_cat_gms_packages">Aplicaciones instaladas</string>
+    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_name_app_installed">%1$s instalado: </string>
+    <string name="self_check_resolution_app_installed">Instala la aplicación %1$s o una compatible. Por favor comprueba la documentación en que aplicaciones son compatibles.</string>
+    <string name="self_check_name_correct_sig">%1$s tiene una firma correcta: </string>
+    <string name="self_check_resolution_correct_sig">Puede que el %1$s instalado no sea compatible o el spoofing de firmas no este activo. Por favor compruebe la documentación en que aplicaciones y ROMs son compatibles.</string>
+    <string name="perm_extended_access_label">Acceso extendido a los servicios de Google</string>
+
+    <string name="lacking_permission_toast">Servicios de microG Core: Permiso de %1$s requerido</string>
+
+    <string name="place_picker_select_title">Selecciona esta posición</string>
+    <string name="place_picker_nearby_places">Lugares cercanos</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
+</resources>
