@@ -34,6 +34,7 @@ import com.google.android.gms.location.LocationRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("MissingPermission")
 public class NativeLocationClientImpl {
     private final static String TAG = "GmsToNativeLocClient";
     private final static Criteria DEFAULT_CRITERIA = new Criteria();
@@ -72,8 +73,7 @@ public class NativeLocationClientImpl {
 
     public Location getLastLocation() {
         Log.d(TAG, "getLastLocation()");
-        return locationManager.getLastKnownLocation(
-                locationManager.getBestProvider(DEFAULT_CRITERIA, true));
+        return locationManager.getLastKnownLocation(locationManager.getBestProvider(DEFAULT_CRITERIA, true));
     }
 
     public void requestLocationUpdates(LocationRequest request, LocationListener listener) {
@@ -88,9 +88,8 @@ public class NativeLocationClientImpl {
         i.putExtras(bundle);
         pendingCount.put(pendingIntent, request.getNumUpdates());
         nativePendingMap.put(pendingIntent, PendingIntent.getActivity(context, 0, i, 0));
-        locationManager.requestLocationUpdates(request.getInterval(),
-                request.getSmallestDesplacement(), makeNativeCriteria(request),
-                nativePendingMap.get(pendingIntent));
+        locationManager.requestLocationUpdates(request.getInterval(), request.getSmallestDesplacement(),
+                makeNativeCriteria(request), nativePendingMap.get(pendingIntent));
     }
 
     public void requestLocationUpdates(LocationRequest request, LocationListener listener, Looper
@@ -133,8 +132,7 @@ public class NativeLocationClientImpl {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra(LocationManager.KEY_LOCATION_CHANGED)) {
-                PendingIntent pendingIntent = intent.getExtras().getParcelable
-                        (EXTRA_PENDING_INTENT);
+                PendingIntent pendingIntent = intent.getExtras().getParcelable(EXTRA_PENDING_INTENT);
                 try {
                     intent.putExtra(FusedLocationProviderApi.KEY_LOCATION_CHANGED,
                             intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED));

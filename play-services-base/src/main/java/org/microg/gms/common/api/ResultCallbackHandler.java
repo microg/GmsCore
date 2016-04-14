@@ -25,7 +25,7 @@ import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 
 class ResultCallbackHandler<R extends Result> extends Handler {
-    private static final String TAG = "GmsResultCallbackHandler";
+    private static final String TAG = "GmsResultCbackHandler";
     public static final int CALLBACK_ON_COMPLETE = 1;
     public static final int CALLBACK_ON_TIMEOUT = 2;
 
