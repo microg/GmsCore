@@ -20,6 +20,7 @@ include ':play-services-api'
 
 include ':play-services-base'
 include ':play-services-cast'
+include ':play-services-gcm'
 include ':play-services-location'
 include ':play-services-wearable'
 

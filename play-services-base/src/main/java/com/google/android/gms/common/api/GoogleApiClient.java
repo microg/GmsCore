@@ -26,7 +26,7 @@ import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 
-import org.microg.gms.common.Constants;
+import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
@@ -422,7 +422,7 @@ public interface GoogleApiClient {
          * Specify that the default account should be used when connecting to services.
          */
         public Builder useDefaultAccount() {
-            this.accountName = Constants.DEFAULT_ACCOUNT;
+            this.accountName = AuthConstants.DEFAULT_ACCOUNT;
             return this;
         }
     }

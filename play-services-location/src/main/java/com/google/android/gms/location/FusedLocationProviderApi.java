@@ -23,11 +23,11 @@ import android.os.Looper;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 
-import org.microg.gms.common.Constants;
+import org.microg.gms.location.LocationConstants;
 
 public interface FusedLocationProviderApi {
     String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
-    String KEY_MOCK_LOCATION = Constants.KEY_MOCK_LOCATION;
+    String KEY_MOCK_LOCATION = LocationConstants.KEY_MOCK_LOCATION;
 
     Location getLastLocation(GoogleApiClient client);
 
