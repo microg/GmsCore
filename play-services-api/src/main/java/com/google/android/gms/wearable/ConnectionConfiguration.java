@@ -65,5 +65,21 @@ public class ConnectionConfiguration extends AutoSafeParcelable {
         this.nodeId = nodeId;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ConnectionConfiguration{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", address='").append(address).append('\'');
+        sb.append(", type=").append(type);
+        sb.append(", role=").append(role);
+        sb.append(", enabled=").append(enabled);
+        sb.append(", connected=").append(connected);
+        sb.append(", peerNodeId='").append(peerNodeId).append('\'');
+        sb.append(", btlePriority=").append(btlePriority);
+        sb.append(", nodeId='").append(nodeId).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
     public static final Creator<ConnectionConfiguration> CREATOR = new AutoCreator<ConnectionConfiguration>(ConnectionConfiguration.class);
 }

@@ -23,7 +23,7 @@ import android.os.IBinder;
 import com.google.android.gms.common.api.Scope;
 
 import org.microg.gms.common.Constants;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -67,7 +67,7 @@ public class GetServiceRequest extends AutoSafeParcelable {
     @Override
     public String toString() {
         return "GetServiceRequest{" +
-                "serviceId=" + Services.nameFromServiceId(serviceId) +
+                "serviceId=" + GmsService.nameFromServiceId(serviceId) +
                 ", gmsVersion=" + gmsVersion +
                 ", packageName='" + packageName + '\'' +
                 (scopes == null || scopes.length == 0 ? "" : (", scopes=" + Arrays.toString(scopes))) +
