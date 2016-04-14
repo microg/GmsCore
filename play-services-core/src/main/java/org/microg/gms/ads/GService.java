@@ -20,16 +20,16 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class GService extends BaseService {
 
     public GService() {
-        super("GmsAdsGSvc", Services.GSERVICES.SERVICE_ID, Services.ADREQUEST.SERVICE_ID);
+        super("GmsAdsGSvc", GmsService.GSERVICES, GmsService.ADREQUEST);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) {
         // TODO
     }
 }

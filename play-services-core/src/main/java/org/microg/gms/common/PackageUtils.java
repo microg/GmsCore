@@ -28,6 +28,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 
 public class PackageUtils {
@@ -37,7 +38,8 @@ public class PackageUtils {
             "58e1c4133f7441ec3d2c270270a14802da47ba0e" /* Android Wear */,
             "46f6c8987311e131f4f558d8e0ae145bebab6da3" /* Google Classroom */,
             "24bb24c05e47e0aefa68a58a766179d9b613a600" /* Google Fit/Glass */,
-            "aa87ce1260c008d801197bb4ecea4ab8929da246" /* Google Inbox */};
+            "aa87ce1260c008d801197bb4ecea4ab8929da246" /* Google Inbox */,
+            "35b438fe1bc69d975dc8702dc16ab69ebf65f26f" /* Waze */};
 
     public static boolean isGoogleSignedPackages(Context context, String packageName) {
         return Arrays.asList(KNOWN_GOOGLE_SIGNATURES).contains(firstSignatureDigest(context, packageName));
@@ -50,8 +52,13 @@ public class PackageUtils {
 
     public static boolean callerHasExtendedAccess(Context context) {
         String[] packagesForUid = context.getPackageManager().getPackagesForUid(Binder.getCallingUid());
-        return (packagesForUid != null && packagesForUid.length != 0 && isGoogleSignedPackages(context, packagesForUid[0])) ||
-                context.checkCallingPermission(Manifest.permission.EXTENDED_ACCESS) == PackageManager.PERMISSION_GRANTED;
+        if (packagesForUid != null && packagesForUid.length != 0) {
+            for (String packageName : packagesForUid) {
+                if (isGoogleSignedPackages(context, packageName) || GMS_PACKAGE_NAME.equals(packageName))
+                    return true;
+            }
+        }
+        return context.checkCallingPermission(Manifest.permission.EXTENDED_ACCESS) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void checkPackageUid(Context context, String packageName, int callingUid) {

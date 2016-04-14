@@ -113,14 +113,14 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         protected void collectLibraries(List<Library> libraries) {
-            libraries.add(new Library("org.microg.gms.api", "microG GmsApi", "Apache License 2.0, Copyright © microG Team"));
-            libraries.add(new Library("org.microg.safeparcel", "microG SafeParcel", "Apache License 2.0, Copyright © microG Team"));
-            libraries.add(new Library("org.microg.nlp", "microG UnifiedNlp", "Apache License 2.0, Copyright © microG Team"));
-            libraries.add(new Library("org.microg.nlp.api", "microG UnifiedNlp Api", "Apache License 2.0, Copyright © microG Team"));
-            libraries.add(new Library("org.microg.wearable", "microG Wearable", "Apache License 2.0, Copyright © microG Team"));
-            libraries.add(new Library("de.hdodenhof.circleimageview", "CircleImageView", "Apache License 2.0, Copyright © Henning Dodenhof"));
-            libraries.add(new Library("org.oscim.android", "<vector<tile>>map", "GNU LGPLv3, Copyright © Hannes Janetzek"));
-            libraries.add(new Library("com.squareup.wire", "Wire Protocol Buffers", "Apache License 2.0, Copyright © Square Inc."));
+            libraries.add(new Library("org.microg.gms.api", "microG GmsApi", "Apache License 2.0 by microG Team"));
+            libraries.add(new Library("org.microg.safeparcel", "microG SafeParcel", "Apache License 2.0 by microG Team"));
+            libraries.add(new Library("org.microg.nlp", "microG UnifiedNlp", "Apache License 2.0 by microG Team"));
+            libraries.add(new Library("org.microg.nlp.api", "microG UnifiedNlp Api", "Apache License 2.0, by microG Team"));
+            libraries.add(new Library("org.microg.wearable", "microG Wearable", "Apache License 2.0 by microG Team"));
+            libraries.add(new Library("de.hdodenhof.circleimageview", "CircleImageView", "Apache License 2.0 by Henning Dodenhof"));
+            libraries.add(new Library("org.oscim.android", "<vector<tile>>map", "GNU LGPLv3 by Hannes Janetzek"));
+            libraries.add(new Library("com.squareup.wire", "Wire Protocol Buffers", "Apache License 2.0 by Square Inc."));
         }
     }
 }

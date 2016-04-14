@@ -22,17 +22,17 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class LightweightIndexService extends BaseService {
     private LightweightAppDataSearchImpl appDataSearch = new LightweightAppDataSearchImpl();
 
     public LightweightIndexService() {
-        super("GmsIcingLightIndexSvc", Services.LIGHTWEIGHT_INDEX.SERVICE_ID);
+        super("GmsIcingLightIndexSvc", GmsService.LIGHTWEIGHT_INDEX);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
     }
 }

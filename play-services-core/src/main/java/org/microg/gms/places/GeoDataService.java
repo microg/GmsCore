@@ -23,15 +23,15 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class GeoDataService extends BaseService {
     public GeoDataService() {
-        super("GmsPlcGeoSvc", Services.GEODATA.SERVICE_ID);
+        super("GmsPlcGeoSvc", GmsService.GEODATA);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         Log.d(TAG, "unimplemented Method: handleServiceRequest");
     }
 }

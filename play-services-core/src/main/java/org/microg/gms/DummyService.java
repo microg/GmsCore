@@ -22,13 +22,15 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
+import org.microg.gms.common.GmsService;
+
 public class DummyService extends BaseService {
     public DummyService() {
-        super("GmsDummySvc", AbstractGmsServiceBroker.ID_ACCEPT_ALL);
+        super("GmsDummySvc", GmsService.ANY);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         callback.onPostInitComplete(CommonStatusCodes.ERROR, null, null);
     }
 }

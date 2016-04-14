@@ -95,7 +95,7 @@ public class McsService extends Service implements Handler.Callback {
     private static final String PREF_GCM_HEARTBEAT = "gcm_heartbeat_interval";
     private static final int WAKELOCK_TIMEOUT = 5000;
 
-    public static int heartbeatMs = 60000;
+    public static int heartbeatMs = 120000;
     private static long lastHeartbeatAckElapsedRealtime = -1;
 
     private static Socket sslSocket;

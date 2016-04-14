@@ -136,4 +136,20 @@ public class DataItemRecord {
         record.signatureDigest = setDataItem.signatureDigest;
         return record;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("DataItemRecord{");
+        sb.append("dataItem=").append(dataItem);
+        sb.append(", source='").append(source).append('\'');
+        sb.append(", seqId=").append(seqId);
+        sb.append(", v1SeqId=").append(v1SeqId);
+        sb.append(", lastModified=").append(lastModified);
+        sb.append(", deleted=").append(deleted);
+        sb.append(", assetsAreReady=").append(assetsAreReady);
+        sb.append(", packageName='").append(packageName).append('\'');
+        sb.append(", signatureDigest='").append(signatureDigest).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

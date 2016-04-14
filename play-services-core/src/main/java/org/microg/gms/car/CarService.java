@@ -20,15 +20,15 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class CarService extends BaseService {
     public CarService() {
-        super("GmsCarSvc", Services.CAR.SERVICE_ID);
+        super("GmsCarSvc", GmsService.CAR);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) {
         // TODO
     }
 }

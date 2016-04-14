@@ -22,17 +22,17 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class ReportingAndroidService extends BaseService {
     private ReportingServiceImpl reportingService = new ReportingServiceImpl();
 
     public ReportingAndroidService() {
-        super("GmsLocReportingSvc", Services.LOCATION_REPORTING.SERVICE_ID);
+        super("GmsLocReportingSvc", GmsService.LOCATION_REPORTING);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         callback.onPostInitComplete(0, reportingService.asBinder(), null);
     }
 }

@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.content.Context;
 import android.os.Binder;
 import android.os.RemoteException;
 
@@ -23,28 +24,29 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
+import org.microg.gms.common.GmsService;
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.common.Services;
 
 public class WearableService extends BaseService {
 
-    private ConfigurationDatabaseHelper configurationDatabaseHelper;
-    private NodeDatabaseHelper nodeDatabaseHelper;
+    private static WearableImpl wearable;
 
     public WearableService() {
-        super("GmsWearSvc", Services.WEARABLE.SERVICE_ID);
+        super("GmsWearSvc", GmsService.WEARABLE);
+    }
+
+    private synchronized static WearableImpl getWearable(Context appCtx) {
+        if (wearable == null) {
+            ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(appCtx);
+            NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(appCtx);
+            wearable = new WearableImpl(appCtx, nodeDatabaseHelper, configurationDatabaseHelper);
+        }
+        return wearable;
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        configurationDatabaseHelper = new ConfigurationDatabaseHelper(this);
-        nodeDatabaseHelper = new NodeDatabaseHelper(this);
-    }
-
-    @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         PackageUtils.checkPackageUid(this, request.packageName, Binder.getCallingUid());
-        callback.onPostInitComplete(0, new WearableServiceImpl(this, nodeDatabaseHelper, configurationDatabaseHelper, request.packageName), null);
+        callback.onPostInitComplete(0, new WearableServiceImpl(this, getWearable(getApplicationContext()), request.packageName), null);
     }
 }

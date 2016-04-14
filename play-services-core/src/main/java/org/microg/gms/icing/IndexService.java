@@ -17,13 +17,14 @@
 package org.microg.gms.icing;
 
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class IndexService extends BaseService {
     private AppDataSearchImpl appDataSearch = new AppDataSearchImpl();
@@ -33,30 +34,31 @@ public class IndexService extends BaseService {
 
     public IndexService() {
         super("GmsIcingIndexSvc",
-                Services.INDEX.SERVICE_ID, Services.SEARCH_ADMINISTRATION.SERVICE_ID,
-                Services.SEARCH_CORPORA.SERVICE_ID, Services.SEARCH_GLOBAL.SERVICE_ID,
-                Services.SEARCH_IME.SERVICE_ID, Services.SEARCH_QUERIES.SERVICE_ID);
+                GmsService.INDEX, GmsService.SEARCH_ADMINISTRATION, GmsService.SEARCH_CORPORA,
+                GmsService.SEARCH_GLOBAL, GmsService.SEARCH_IME, GmsService.SEARCH_QUERIES);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-        switch (request.serviceId) {
-            case Services.INDEX.SERVICE_ID:
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
+        switch (service) {
+            case INDEX:
                 callback.onPostInitComplete(0, appDataSearch.asBinder(), null);
                 break;
-            case Services.SEARCH_ADMINISTRATION.SERVICE_ID:
+            case SEARCH_ADMINISTRATION:
+                Log.w(TAG, "Service not yet implemented: " + service);
                 callback.onPostInitComplete(CommonStatusCodes.ERROR, null, null);
                 break;
-            case Services.SEARCH_QUERIES.SERVICE_ID:
+            case SEARCH_QUERIES:
                 callback.onPostInitComplete(0, searchQueries.asBinder(), null);
                 break;
-            case Services.SEARCH_GLOBAL.SERVICE_ID:
+            case SEARCH_GLOBAL:
                 callback.onPostInitComplete(0, globalSearchAdmin.asBinder(), null);
                 break;
-            case Services.SEARCH_CORPORA.SERVICE_ID:
+            case SEARCH_CORPORA:
                 callback.onPostInitComplete(0, searchCorpora.asBinder(), null);
                 break;
-            case Services.SEARCH_IME.SERVICE_ID:
+            case SEARCH_IME:
+                Log.w(TAG, "Service not yet implemented: " + service);
                 callback.onPostInitComplete(CommonStatusCodes.ERROR, null, null);
                 break;
         }

@@ -22,18 +22,17 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class GoogleLocationManagerService extends BaseService {
     private GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this);
 
     public GoogleLocationManagerService() {
-        super("GmsLocManagerSvc", Services.LOCATION_MANAGER.SERVICE_ID,
-                Services.GEODATA.SERVICE_ID, Services.PLACE_DETECTION.SERVICE_ID);
+        super("GmsLocManagerSvc", GmsService.LOCATION_MANAGER, GmsService.GEODATA, GmsService.PLACE_DETECTION);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         callback.onPostInitComplete(0, impl.asBinder(), null);
     }
 }

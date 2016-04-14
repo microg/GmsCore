@@ -29,30 +29,16 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
 import com.google.android.gms.common.internal.ValidateAccountRequest;
 
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.EnumSet;
 
 public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
-    public static final int ID_ACCEPT_ALL = -1;
-
     private static final String TAG = "GmsServiceBroker";
-    private final Set<Integer> supportedServiceIds;
+    private final EnumSet<GmsService> supportedServices;
 
-    public AbstractGmsServiceBroker(Integer supportedServiceId, Integer... supportedServiceIds) {
-        this(combine(supportedServiceId, supportedServiceIds));
-    }
-
-    private static Set<Integer> combine(Integer i, Integer... is) {
-        Set<Integer> integers = new HashSet<Integer>(Arrays.asList(is));
-        integers.add(i);
-        return integers;
-    }
-
-    public AbstractGmsServiceBroker(Set<Integer> supportedServiceIds) {
-        this.supportedServiceIds = supportedServiceIds;
+    public AbstractGmsServiceBroker(EnumSet<GmsService> supportedServices) {
+        this.supportedServices = supportedServices;
     }
 
     @Deprecated
@@ -62,21 +48,21 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
             throws RemoteException {
         Bundle extras = params == null ? new Bundle() : params;
         extras.putString("auth_package", authPackage);
-        callGetService(Services.PLUS.SERVICE_ID, callback, versionCode, packageName, extras, accountName, scopes);
+        callGetService(GmsService.PLUS, callback, versionCode, packageName, extras, accountName, scopes);
     }
 
     @Deprecated
     @Override
     public void getPanoramaService(IGmsCallbacks callback, int versionCode, String packageName,
                                    Bundle params) throws RemoteException {
-        callGetService(Services.PANORAMA.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.PANORAMA, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getAppDataSearchService(IGmsCallbacks callback, int versionCode, String packageName)
             throws RemoteException {
-        callGetService(Services.INDEX.SERVICE_ID, callback, versionCode, packageName);
+        callGetService(GmsService.INDEX, callback, versionCode, packageName);
     }
 
     @Deprecated
@@ -89,28 +75,28 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getPeopleService(IGmsCallbacks callback, int versionCode, String packageName,
                                  Bundle params) throws RemoteException {
-        callGetService(Services.PEOPLE.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.PEOPLE, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getReportingService(IGmsCallbacks callback, int versionCode, String packageName,
                                     Bundle params) throws RemoteException {
-        callGetService(Services.LOCATION_REPORTING.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.LOCATION_REPORTING, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getLocationService(IGmsCallbacks callback, int versionCode, String packageName,
                                    Bundle params) throws RemoteException {
-        callGetService(Services.LOCATION.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.LOCATION, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getGoogleLocationManagerService(IGmsCallbacks callback, int versionCode,
                                                 String packageName, Bundle params) throws RemoteException {
-        callGetService(Services.LOCATION_MANAGER.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.LOCATION_MANAGER, callback, versionCode, packageName, params);
     }
 
     @Deprecated
@@ -123,70 +109,70 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
         extras.putString("com.google.android.gms.games.key.gamePackageName", gamePackageName);
         extras.putString("com.google.android.gms.games.key.desiredLocale", desiredLocale);
         //extras.putParcelable("com.google.android.gms.games.key.popupWindowToken", popupWindowToken);
-        callGetService(Services.GAMES.SERVICE_ID, callback, versionCode, packageName, extras, accountName, scopes);
+        callGetService(GmsService.GAMES, callback, versionCode, packageName, extras, accountName, scopes);
     }
 
     @Deprecated
     @Override
     public void getAppStateService(IGmsCallbacks callback, int versionCode, String packageName,
                                    String accountName, String[] scopes) throws RemoteException {
-        callGetService(Services.APPSTATE.SERVICE_ID, callback, versionCode, packageName, null, accountName, scopes);
+        callGetService(GmsService.APPSTATE, callback, versionCode, packageName, null, accountName, scopes);
     }
 
     @Deprecated
     @Override
     public void getPlayLogService(IGmsCallbacks callback, int versionCode, String packageName,
                                   Bundle params) throws RemoteException {
-        callGetService(Services.PLAY_LOG.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.PLAY_LOG, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getAdMobService(IGmsCallbacks callback, int versionCode, String packageName,
                                 Bundle params) throws RemoteException {
-        callGetService(Services.ADREQUEST.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.ADREQUEST, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getDroidGuardService(IGmsCallbacks callback, int versionCode, String packageName,
                                      Bundle params) throws RemoteException {
-        callGetService(Services.DROIDGUARD.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.DROIDGUARD, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getLockboxService(IGmsCallbacks callback, int versionCode, String packageName,
                                   Bundle params) throws RemoteException {
-        callGetService(Services.LOCKBOX.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.LOCKBOX, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getCastMirroringService(IGmsCallbacks callback, int versionCode, String packageName,
                                         Bundle params) throws RemoteException {
-        callGetService(Services.CAST_MIRRORING.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.CAST_MIRRORING, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getNetworkQualityService(IGmsCallbacks callback, int versionCode,
                                          String packageName, Bundle params) throws RemoteException {
-        callGetService(Services.NETWORK_QUALITY.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.NETWORK_QUALITY, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getGoogleIdentityService(IGmsCallbacks callback, int versionCode,
                                          String packageName, Bundle params) throws RemoteException {
-        callGetService(Services.ACCOUNT.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.ACCOUNT, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getGoogleFeedbackService(IGmsCallbacks callback, int versionCode,
                                          String packageName, Bundle params) throws RemoteException {
-        callGetService(Services.FEEDBACK.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.FEEDBACK, callback, versionCode, packageName, params);
     }
 
     @Deprecated
@@ -200,55 +186,55 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getDriveService(IGmsCallbacks callback, int versionCode, String packageName,
                                 String[] scopes, String accountName, Bundle params) throws RemoteException {
-        callGetService(Services.DRIVE.SERVICE_ID, callback, versionCode, packageName, params, accountName, scopes);
+        callGetService(GmsService.DRIVE, callback, versionCode, packageName, params, accountName, scopes);
     }
 
     @Deprecated
     @Override
     public void getLightweightAppDataSearchService(IGmsCallbacks callback, int versionCode,
                                                    String packageName) throws RemoteException {
-        callGetService(Services.LIGHTWEIGHT_INDEX.SERVICE_ID, callback, versionCode, packageName);
+        callGetService(GmsService.LIGHTWEIGHT_INDEX, callback, versionCode, packageName);
     }
 
     @Deprecated
     @Override
     public void getSearchAdministrationService(IGmsCallbacks callback, int versionCode,
                                                String packageName) throws RemoteException {
-        callGetService(Services.SEARCH_ADMINISTRATION.SERVICE_ID, callback, versionCode, packageName);
+        callGetService(GmsService.SEARCH_ADMINISTRATION, callback, versionCode, packageName);
     }
 
     @Deprecated
     @Override
     public void getAutoBackupService(IGmsCallbacks callback, int versionCode, String packageName,
                                      Bundle params) throws RemoteException {
-        callGetService(Services.PHOTO_AUTO_BACKUP.SERVICE_ID, callback, versionCode, packageName, params);
+        callGetService(GmsService.PHOTO_AUTO_BACKUP, callback, versionCode, packageName, params);
     }
 
     @Deprecated
     @Override
     public void getAddressService(IGmsCallbacks callback, int versionCode, String packageName)
             throws RemoteException {
-        callGetService(Services.ADDRESS.SERVICE_ID, callback, versionCode, packageName);
+        callGetService(GmsService.ADDRESS, callback, versionCode, packageName);
     }
 
     @Deprecated
     @Override
     public void getWalletServiceWithPackageName(IGmsCallbacks callback, int versionCode, String packageName) throws RemoteException {
-        callGetService(Services.WALLET.SERVICE_ID, callback, versionCode, packageName);
+        callGetService(GmsService.WALLET, callback, versionCode, packageName);
     }
 
-    private void callGetService(int serviceId, IGmsCallbacks callback, int gmsVersion,
+    private void callGetService(GmsService service, IGmsCallbacks callback, int gmsVersion,
                                 String packageName) throws RemoteException {
-        callGetService(serviceId, callback, gmsVersion, packageName, null);
+        callGetService(service, callback, gmsVersion, packageName, null);
     }
 
-    private void callGetService(int serviceId, IGmsCallbacks callback, int gmsVersion,
+    private void callGetService(GmsService service, IGmsCallbacks callback, int gmsVersion,
                                 String packageName, Bundle extras) throws RemoteException {
-        callGetService(serviceId, callback, gmsVersion, packageName, extras, null, null);
+        callGetService(service, callback, gmsVersion, packageName, extras, null, null);
     }
 
-    private void callGetService(int serviceId, IGmsCallbacks callback, int gmsVersion, String packageName, Bundle extras, String accountName, String[] scopes) throws RemoteException {
-        GetServiceRequest request = new GetServiceRequest(serviceId);
+    private void callGetService(GmsService service, IGmsCallbacks callback, int gmsVersion, String packageName, Bundle extras, String accountName, String[] scopes) throws RemoteException {
+        GetServiceRequest request = new GetServiceRequest(service.SERVICE_ID);
         request.gmsVersion = gmsVersion;
         request.packageName = packageName;
         request.extras = extras;
@@ -267,15 +253,16 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 
     @Override
     public void getService(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
-        if (supportedServiceIds.contains(request.serviceId) || supportedServiceIds.contains(ID_ACCEPT_ALL)) {
-            handleServiceRequest(callback, request);
+        GmsService gmsService = GmsService.byServiceId(request.serviceId);
+        if ((supportedServices.contains(gmsService)) || supportedServices.contains(GmsService.ANY)) {
+            handleServiceRequest(callback, request, gmsService);
         } else {
             Log.d(TAG, "Service not supported: " + request);
             throw new IllegalArgumentException("Service not supported: " + request.serviceId);
         }
     }
 
-    public abstract void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException;
+    public abstract void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException;
 
     @Override
     public void validateAccount(IGmsCallbacks callback, ValidateAccountRequest request) throws RemoteException {

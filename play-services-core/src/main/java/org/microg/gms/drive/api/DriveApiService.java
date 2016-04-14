@@ -22,17 +22,17 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class DriveApiService extends BaseService {
     private DriveServiceImpl impl = new DriveServiceImpl();
 
     public DriveApiService() {
-        super("GmsDriveApiSvc", Services.DRIVE.SERVICE_ID);
+        super("GmsDriveApiSvc", GmsService.DRIVE);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         callback.onPostInitComplete(0, impl.asBinder(), null);
     }
 }

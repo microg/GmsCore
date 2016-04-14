@@ -20,15 +20,15 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services;
+import org.microg.gms.common.GmsService;
 
 public class FeedbackService extends BaseService {
     public FeedbackService() {
-        super("GmsFeedbackSvc", Services.FEEDBACK.SERVICE_ID);
+        super("GmsFeedbackSvc", GmsService.FEEDBACK);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) {
         // TODO
     }
 }

@@ -17,25 +17,25 @@
 -dontnote
 
 # Keep dynamically loaded GMS classes
--keep public class com.google.android.gms.maps.internal.CreatorImpl
--keep public class com.google.android.gms.common.security.ProviderInstallerImpl
--keep public class com.google.android.gms.plus.plusone.PlusOneButtonCreatorImpl
-
--keepclassmembers class com.google.android.gms.common.security.ProviderInstallerImpl {
-    public *;
-}
+-keep public class com.google.android.gms.maps.internal.CreatorImpl { public *; }
+-keep public class com.google.android.gms.common.security.ProviderInstallerImpl { public *; }
+-keep public class com.google.android.gms.plus.plusone.PlusOneButtonCreatorImpl { public *; }
 
 # Keep AutoSafeParcelables
--keep public class * extends org.microg.safeparcel.AutoSafeParcelable
--keepclassmembers public class * extends org.microg.safeparcel.AutoSafeParcelable {
+-keep public class * extends org.microg.safeparcel.AutoSafeParcelable {
     @org.microg.safeparcel.SafeParceled *;
 }
 
+# Keep asInterface method cause it's accessed from SafeParcel
+-keepattributes InnerClasses
+-keepclassmembers interface * extends android.os.IInterface {
+    public static class *;
+}
+-keep public class * extends android.os.Binder { public static *; }
+
 # Keep library info
--keep class **.BuildConfig
--keepclassmembers class **.BuildConfig { *; }
+-keep class **.BuildConfig { *; }
 
 # Keep protobuf class builders
 -keep public class * extends com.squareup.wire.Message
--keep public class * extends com.squareup.wire.Message$Builder
--keepclassmembers class * extends com.squareup.wire.Message$Builder { public <init>(...); }
+-keep public class * extends com.squareup.wire.Message$Builder { public <init>(...); }

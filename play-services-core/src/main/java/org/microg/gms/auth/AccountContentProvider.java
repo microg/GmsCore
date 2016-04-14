@@ -54,7 +54,7 @@ public class AccountContentProvider extends ContentProvider {
         if (!PackageUtils.callerHasExtendedAccess(getContext())) {
             String[] packagesForUid = getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid());
             if (packagesForUid != null && packagesForUid.length != 0)
-                Log.w(TAG, "Not granting access to " + Arrays.toString(packagesForUid)
+                Log.w(TAG, "Not granting extended access to " + Arrays.toString(packagesForUid)
                         + ", signature: " + PackageUtils.firstSignatureDigest(getContext(), packagesForUid[0]));
             if (getContext().checkCallingPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
                 throw new SecurityException("Access denied, missing GET_ACCOUNTS or EXTENDED_ACCESS permission");

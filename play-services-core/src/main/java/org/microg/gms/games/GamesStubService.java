@@ -26,7 +26,7 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
-import org.microg.gms.common.Services.GAMES;
+import org.microg.gms.common.GmsService;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
@@ -38,11 +38,11 @@ public class GamesStubService extends BaseService {
     public static final String PARAM_GAME_PACKAGE_NAME = "com.google.android.gms.games.key.gamePackageName";
 
     public GamesStubService() {
-        super("GmsGamesSvc", GAMES.SERVICE_ID);
+        super("GmsGamesSvc", GmsService.GAMES);
     }
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         String packageName = null;
         if (request.extras != null) {
             packageName = request.extras.getString(PARAM_GAME_PACKAGE_NAME);

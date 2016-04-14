@@ -21,6 +21,7 @@ import android.util.Log;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 
 import org.microg.wearable.SocketWearableConnection;
+import org.microg.wearable.WearableConnection;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -33,10 +34,11 @@ class NetworkConnectionThread extends Thread {
     private ConnectionConfiguration config;
     private ServerSocket socket;
     private MessageHandler handler;
+    private WearableConnection wearableConnection;
 
-    public NetworkConnectionThread(WearableServiceImpl service, ConnectionConfiguration config) {
+    public NetworkConnectionThread(WearableImpl wearable, ConnectionConfiguration config) {
         this.config = config;
-        this.handler  = new MessageHandler(service, config);
+        this.handler  = new MessageHandler(wearable, config);
     }
 
     public void close() {
@@ -47,13 +49,17 @@ class NetworkConnectionThread extends Thread {
         }
     }
 
+    public WearableConnection getWearableConnection() {
+        return wearableConnection;
+    }
+
     @Override
     public void run() {
         try {
             socket = new ServerSocket(WEAR_TCP_PORT);
             Log.d(TAG, "Listening for connections on TCP :" + WEAR_TCP_PORT);
             Socket accepted = socket.accept();
-            new SocketWearableConnection(accepted, handler).run();
+            (wearableConnection = new SocketWearableConnection(accepted, handler)).run();
             Log.d(TAG, "Connection terminated, me too");
         } catch (IOException e) {
             Log.w(TAG, e);

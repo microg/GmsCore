@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.android.gms.wearable.Asset;
 
@@ -99,7 +98,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private synchronized long getAppKey(SQLiteDatabase db, String packageName, String signatureDigest) {
+    private static synchronized long getAppKey(SQLiteDatabase db, String packageName, String signatureDigest) {
         Cursor cursor = db.rawQuery("SELECT _id FROM appkeys WHERE packageName=? AND signatureDigest=?", new String[]{packageName, signatureDigest});
         if (cursor != null) {
             try {
@@ -143,22 +142,28 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
-        Log.d(TAG, "updateRecord no: " + record);
+        ContentValues cv = record.getContentValues();
+        db.update("dataitems", cv, "_id=?", new String[]{key});
+        finishRecord(db, key, record);
     }
 
-    private String insertRecord(SQLiteDatabase db, DataItemRecord record) {
+    private static String insertRecord(SQLiteDatabase db, DataItemRecord record) {
         ContentValues contentValues = record.getContentValues();
         contentValues.put("appkeys_id", getAppKey(db, record.packageName, record.signatureDigest));
         contentValues.put("host", record.dataItem.host);
         contentValues.put("path", record.dataItem.path);
-        String key = Long.toString(db.insert("dataitems", "host", contentValues));
+        String key = Long.toString(db.insertWithOnConflict("dataitems", "host", contentValues, SQLiteDatabase.CONFLICT_REPLACE));
+        return finishRecord(db, key, record);
+    }
+
+    private static String finishRecord(SQLiteDatabase db, String key, DataItemRecord record) {
         if (!record.deleted) {
             for (Map.Entry<String, Asset> asset : record.dataItem.getAssets().entrySet()) {
                 ContentValues assetValues = new ContentValues();
                 assetValues.put("assets_digest", asset.getValue().getDigest());
                 assetValues.put("dataitems_id", key);
                 assetValues.put("assetname", asset.getKey());
-                db.insert("assetrefs", "assetname", assetValues);
+                db.insertWithOnConflict("assetrefs", "assetname", assetValues, SQLiteDatabase.CONFLICT_IGNORE);
             }
             Cursor status = db.query("assetsReadyStatus", new String[]{"nowReady"}, "dataitems_id=?", new String[]{key}, null, null, null);
             if (status.moveToNext()) {
@@ -230,14 +235,14 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         cv.put("digest", asset.getDigest());
         cv.put("dataPresent", dataPresent ? 1 : 0);
         cv.put("timestampMs", System.currentTimeMillis());
-        getWritableDatabase().insert("assets", null, cv);
+        getWritableDatabase().insertWithOnConflict("assets", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public void allowAssetAccess(String digest, String packageName, String signatureDigest) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("assets_digest", digest);
-        cv.put("appkeys_it", getAppKey(db, packageName, signatureDigest));
+        cv.put("appkeys_id", getAppKey(db, packageName, signatureDigest));
         db.insert("assetsacls", null, cv);
     }
 }

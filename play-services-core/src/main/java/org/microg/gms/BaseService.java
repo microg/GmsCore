@@ -26,22 +26,29 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
 
+import org.microg.gms.common.GmsService;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+
 public abstract class BaseService extends Service {
     private final IGmsServiceBroker broker;
     protected final String TAG;
 
-    public BaseService(String tag, Integer supportedServiceId, Integer... supportedServiceIds) {
+    public BaseService(String tag, GmsService supportedService, GmsService... supportedServices) {
         this.TAG = tag;
-        broker = new AbstractGmsServiceBroker(supportedServiceId, supportedServiceIds) {
+        EnumSet<GmsService> services = EnumSet.of(supportedService);
+        services.addAll(Arrays.asList(supportedServices));
+        broker = new AbstractGmsServiceBroker(services) {
             @Override
-            public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException {
+            public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
                 try {
                     request.extras.keySet(); // call to unparcel()
                 } catch (Exception e) {
                     // Sometimes we need to define the correct ClassLoader before unparcel(). Ignore those.
                 }
                 Log.d(TAG, "bound by: " + request);
-                BaseService.this.handleServiceRequest(callback, request);
+                BaseService.this.handleServiceRequest(callback, request, service);
             }
         };
     }
@@ -52,5 +59,5 @@ public abstract class BaseService extends Service {
         return broker.asBinder();
     }
 
-    public abstract void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request) throws RemoteException;
+    public abstract void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException;
 }
