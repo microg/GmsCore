@@ -56,6 +56,7 @@ import javax.net.ssl.SSLContext;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_TYPE;
 import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_GCM;
@@ -307,6 +308,7 @@ public class McsService extends Service implements Handler.Callback {
         intent.setPackage(msg.category);
         intent.putExtra(EXTRA_MESSAGE_TYPE, MESSAGE_TYPE_GCM);
         intent.putExtra(EXTRA_FROM, msg.from);
+        if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
         for (AppData appData : msg.app_data) {
             intent.putExtra(appData.key, appData.value);
         }
