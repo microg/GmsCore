@@ -31,6 +31,7 @@ public final class GcmConstants {
 
     public static final String EXTRA_APP = "app";
     public static final String EXTRA_COMPONENT = "component";
+    public static final String EXTRA_COLLAPSE_KEY = "collapse_key";
     public static final String EXTRA_DELAY = "google.delay";
     public static final String EXTRA_DELETE = "delete";
     public static final String EXTRA_ERROR = "error";
