@@ -37,17 +37,22 @@ public final class GcmConstants {
     public static final String EXTRA_ERROR = "error";
     public static final String EXTRA_FROM = "from";
     public static final String EXTRA_GSF_INTENT = "GSF";
-    public static final String EXTRA_PENDING_INTENT = "com.google.android.gms.gcm.PENDING_INTENT";
     public static final String EXTRA_MESSENGER = "google.messenger";
     public static final String EXTRA_MESSAGE_TYPE = "message_type";
     public static final String EXTRA_MESSAGE_ID = "google.message_id";
+    public static final String EXTRA_PENDING_INTENT = "com.google.android.gms.gcm.PENDING_INTENT";
+    public static final String EXTRA_RAWDATA = "rawData";
+    public static final String EXTRA_RAWDATA_BASE64 = "gcm.rawData64";
     public static final String EXTRA_REGISTRATION_ID = "registration_id";
     public static final String EXTRA_RETRY_AFTER = "Retry-After";
     public static final String EXTRA_SCHEDULER_ACTION = "scheduler_action";
+    public static final String EXTRA_SCOPE = "scope";
     public static final String EXTRA_SENDER = "sender";
     public static final String EXTRA_SENDER_LEGACY = "legacy.sender";
     public static final String EXTRA_SEND_TO = "google.to";
     public static final String EXTRA_SEND_FROM = "google.from";
+    public static final String EXTRA_SUBSCIPTION = "subscription";
+    public static final String EXTRA_SUBTYPE = "subtype";
     public static final String EXTRA_TAG = "tag";
     public static final String EXTRA_TOPIC = "gcm.topic";
     public static final String EXTRA_TTL = "google.ttl";
@@ -70,4 +75,7 @@ public final class GcmConstants {
     public static final String ERROR_SERVICE_NOT_AVAILABLE = "SERVICE_NOT_AVAILABLE";
 
     public static final String INSTANCE_ID_SCOPE_GCM = "GCM";
+
+    public static final String GCMID_INSTANCE_ID = "google.com/iid";
+    public static final String GCMID_REFRESH = "gcm.googleapis.com/refresh";
 }
