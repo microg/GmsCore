@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private static final String DB_NAME = "pluscontacts.db";
     private static final String CREATE_OWNERS = "CREATE TABLE owners (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -46,7 +46,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "etag TEXT," +
             "sync_circles_to_contacts INTEGER NOT NULL DEFAULT 0," + // 0
             "sync_evergreen_to_contacts INTEGER NOT NULL DEFAULT 0," + // 0
-            "last_full_people_sync_time INTEGER NOT NULL DEFAULT 0);"; // timestamp
+            "last_full_people_sync_time INTEGER NOT NULL DEFAULT 0," + // timestamp
+            "is_active_plus_account INTEGER NOT NULL DEFAULT 0," + // 0
+            "sync_me_to_contacts INTEGER NOT NULL DEFAULT 0);"; // 0
     private static final String CREATE_CIRCLES = "CREATE TABLE circles (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "owner_id INTEGER NOT NULL," +
@@ -60,6 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "sync_to_contacts INTEGER NOT NULL DEFAULT 0," +
             "UNIQUE (owner_id,circle_id)," +
             "FOREIGN KEY (owner_id) REFERENCES owners(_id) ON DELETE CASCADE);";
+    private static final String ALTER_OWNERS_3_1 = "ALTER TABLE owners ADD COLUMN is_active_plus_account INTEGER NOT NULL DEFAULT 0;";
+    private static final String ALTER_OWNERS_3_2 = "ALTER TABLE owners ADD COLUMN sync_me_to_contacts INTEGER NOT NULL DEFAULT 0;";
     public static final String OWNERS_TABLE = "owners";
     public static final String CIRCLES_TABLE = "circles";
 
@@ -77,6 +81,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion < 2) db.execSQL(CREATE_CIRCLES);
+        if (oldVersion < 3) {
+            db.execSQL(ALTER_OWNERS_3_1);
+            db.execSQL(ALTER_OWNERS_3_2);
+        }
     }
 
     @Override
