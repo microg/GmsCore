@@ -63,10 +63,10 @@ String getMyVersionName() {
     return stdout.toString().trim().substring(1)
 }
 
-int getMyVersionCode(String ref) {
+int getMyVersionCode() {
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'rev-list', '--count', "$ref..HEAD"
+        commandLine 'git', 'rev-list', '--count', "HEAD"
         standardOutput = stdout
     }
     return Integer.parseInt(stdout.toString().trim())
@@ -78,7 +78,7 @@ android {
 
     defaultConfig {
         versionName getMyVersionName()
-        def x = getMyVersionCode('249c935f')
+        def x = getMyVersionCode()
         // We are not allowed to freely choose the hundreds column as it defines the device type
         // Update commit id to current when increasing gms version code
         versionCode(8490200 + x % 100 + ((int) (x / 100)) * 1000)
