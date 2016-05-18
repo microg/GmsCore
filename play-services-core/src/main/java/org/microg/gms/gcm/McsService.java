@@ -45,6 +45,7 @@ import org.microg.gms.gcm.mcs.LoginRequest;
 import org.microg.gms.gcm.mcs.LoginResponse;
 import org.microg.gms.gcm.mcs.Setting;
 
+import java.io.Closeable;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.List;
@@ -56,8 +57,6 @@ import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_TYPE;
-import static org.microg.gms.gcm.GcmConstants.MESSAGE_TYPE_GCM;
 import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
 import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
@@ -110,6 +109,11 @@ public class McsService extends Service implements Handler.Callback {
     private Intent connectIntent;
 
     private class HandlerThread extends Thread {
+
+        public HandlerThread() {
+            setName("McsHandler");
+        }
+
         @Override
         public void run() {
             Looper.prepare();
@@ -155,8 +159,8 @@ public class McsService extends Service implements Handler.Callback {
             return false;
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
-        if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime < 2 * GcmPrefs.get(null).getHeartbeatMs()) {
-            logd("No heartbeat for " + 2 * GcmPrefs.get(null).getHeartbeatMs() / 1000 + " seconds, connection seems to be dead.");
+        if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * GcmPrefs.get(null).getHeartbeatMs()) {
+            logd("No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * GcmPrefs.get(null).getHeartbeatMs() / 1000 + " seconds");
             return false;
         }
         return true;
@@ -222,6 +226,8 @@ public class McsService extends Service implements Handler.Callback {
 
     private synchronized void connect() {
         try {
+            tryClose(inputStream);
+            tryClose(outputStream);
             logd("Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
             logd("Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
@@ -434,12 +440,18 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
-    private void handleTeardown(android.os.Message msg) {
-        sendOutputStream(MSG_TEARDOWN, msg.arg1, msg.obj);
-        if (inputStream != null) {
-            inputStream.close();
-            inputStream = null;
+    private void tryClose(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (Exception ignored) {
+            }
         }
+    }
+
+    private void handleTeardown(android.os.Message msg) {
+        tryClose(inputStream);
+        tryClose(outputStream);
         try {
             sslSocket.close();
         } catch (Exception ignored) {

@@ -22,18 +22,10 @@ import android.util.Log;
 
 import com.squareup.wire.Message;
 
-import org.microg.gms.gcm.mcs.DataMessageStanza;
-import org.microg.gms.gcm.mcs.HeartbeatAck;
-import org.microg.gms.gcm.mcs.HeartbeatPing;
-import org.microg.gms.gcm.mcs.LoginRequest;
-
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_VERSION_CODE;
 import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
 import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
@@ -41,7 +33,7 @@ import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
 import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
 import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
-public class McsOutputStream extends Thread implements Handler.Callback {
+public class McsOutputStream extends Thread implements Handler.Callback, Closeable {
     private static final String TAG = "GmsGcmMcsOutput";
 
     private final OutputStream os;
@@ -51,6 +43,8 @@ public class McsOutputStream extends Thread implements Handler.Callback {
 
     private Handler mainHandler;
     private Handler myHandler;
+
+    private boolean closed = false;
 
     public McsOutputStream(OutputStream os, Handler mainHandler) {
         this(os, mainHandler, false);
@@ -99,6 +93,15 @@ public class McsOutputStream extends Thread implements Handler.Callback {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void close() {
+        if (!closed) {
+            closed = true;
+            myHandler.getLooper().quit();
+            interrupt();
+        }
     }
 
     private synchronized void writeInternal(Message message, int tag) throws IOException {

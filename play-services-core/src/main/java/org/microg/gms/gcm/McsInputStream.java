@@ -30,6 +30,7 @@ import org.microg.gms.gcm.mcs.IqStanza;
 import org.microg.gms.gcm.mcs.LoginRequest;
 import org.microg.gms.gcm.mcs.LoginResponse;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -44,7 +45,7 @@ import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
 import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
 import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
-public class McsInputStream extends Thread {
+public class McsInputStream extends Thread implements Closeable {
     private static final String TAG = "GmsGcmMcsInput";
 
     private final InputStream is;
@@ -55,6 +56,8 @@ public class McsInputStream extends Thread {
     private int lastStreamIdReported = -1;
     private int streamId = 0;
     private long lastMsgTime = 0;
+
+    private boolean closed = false;
 
     public McsInputStream(InputStream is, Handler mainHandler) {
         this(is, mainHandler, false);
@@ -70,7 +73,7 @@ public class McsInputStream extends Thread {
     @Override
     public void run() {
         try {
-            while (!Thread.currentThread().isInterrupted()) {
+            while (!Thread.currentThread().isInterrupted() && !closed) {
                 android.os.Message msg = read();
                 if (msg != null) {
                     mainHandler.dispatchMessage(msg);
@@ -88,8 +91,12 @@ public class McsInputStream extends Thread {
         }
     }
 
+    @Override
     public void close() {
-        interrupt();
+        if (!closed) {
+            closed = true;
+            interrupt();
+        }
     }
 
     public int getStreamId() {
