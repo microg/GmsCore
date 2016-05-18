@@ -58,7 +58,7 @@ public class MessageHandler extends ServerMessageListener {
                 .networkId(networkId)
                 .peerAndroidId(androidId)
                 .unknown4(3)
-                .unknown5(1)
+                .peerVersion(1)
                 .build());
         this.wearable = wearable;
         this.thisNodeId = config.nodeId;
@@ -81,6 +81,12 @@ public class MessageHandler extends ServerMessageListener {
         } catch (IOException e) {
             Log.w(TAG, e);
         }
+    }
+
+    @Override
+    public void onDisconnected() {
+        wearable.onDisconnectReceived(getConnection(), thisNodeId, getRemoteConnect());
+        super.onDisconnected();
     }
 
     @Override
@@ -132,8 +138,7 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onRpcRequest(Request rpcRequest) {
         Log.d(TAG, "onRpcRequest: " + rpcRequest);
-        if (TextUtils.isEmpty(rpcRequest.targetNodeId)) {
-            // TODO: That's probably not how it should go!
+        if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(thisNodeId)) {
             MessageEventParcelable messageEvent = new MessageEventParcelable();
             messageEvent.data = rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null;
             messageEvent.path = rpcRequest.path;

@@ -25,6 +25,8 @@ import android.text.TextUtils;
 
 import com.google.android.gms.wearable.Asset;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class NodeDatabaseHelper extends SQLiteOpenHelper {
@@ -34,8 +36,11 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     private static final String[] GDIBHAP_FIELDS = new String[]{"dataitems_id", "packageName", "signatureDigest", "host", "path", "seqId", "deleted", "sourceNode", "data", "timestampMs", "assetsPresent", "assetname", "assets_digest", "v1SourceNode", "v1SeqId"};
     private static final int VERSION = 9;
 
+    private ClockworkNodePreferences clockworkNodePreferences;
+
     public NodeDatabaseHelper(Context context) {
         super(context, DB_NAME, null, VERSION);
+        clockworkNodePreferences = new ClockworkNodePreferences(context);
     }
 
     @Override
@@ -198,27 +203,32 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, selection, new String[]{nodeId, Long.toString(seqId)}, null, null, "seqId", null);
     }
 
-    public synchronized int deleteDataItems(String packageName, String signatureDigest, String host, String path) {
+    public synchronized List<DataItemRecord> deleteDataItems(String packageName, String signatureDigest, String host, String path) {
+        List<DataItemRecord> updated = new ArrayList<DataItemRecord>();
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         Cursor cursor = getDataItemsByHostAndPath(db, packageName, signatureDigest, host, path);
-        int n = 0;
         while (cursor.moveToNext()) {
             DataItemRecord record = DataItemRecord.fromCursor(cursor);
             record.deleted = true;
             record.assetsAreReady = true;
             record.dataItem.data = null;
+            record.seqId = clockworkNodePreferences.getNextSeqId();
+            record.v1SeqId = record.seqId;
             updateRecord(db, cursor.getString(0), record);
-            n++;
+            updated.add(record);
         }
         db.setTransactionSuccessful();
         db.endTransaction();
-        return n;
+        return updated;
     }
 
     public long getCurrentSeqId(String sourceNode) {
         if (TextUtils.isEmpty(sourceNode)) return 1;
-        SQLiteDatabase db = getReadableDatabase();
+        return getCurrentSeqId(getReadableDatabase(), sourceNode);
+    }
+
+    private long getCurrentSeqId(SQLiteDatabase db, String sourceNode) {
         Cursor cursor = db.query("dataItemsAndAssets", new String[]{"seqId"}, "sourceNode=?", new String[]{sourceNode}, null, null, "seqId DESC", "1");
         long res = 1;
         if (cursor != null) {

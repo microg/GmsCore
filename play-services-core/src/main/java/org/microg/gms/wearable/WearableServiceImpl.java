@@ -20,6 +20,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
@@ -113,7 +114,7 @@ public class WearableServiceImpl extends IWearableService.Stub {
     public void addListener(IWearableCallbacks callbacks, AddListenerRequest request) throws RemoteException {
         Log.d(TAG, "addListener[nyp]: " + request);
         if (request.listener != null) {
-            wearable.addListener(request.listener);
+            wearable.addListener(packageName, request.listener);
         }
         callbacks.onStatus(Status.SUCCESS);
     }

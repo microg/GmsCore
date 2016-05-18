@@ -17,10 +17,10 @@
 package org.microg.gms.wearable;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -37,6 +37,7 @@ import com.google.android.gms.wearable.internal.PutDataRequest;
 import org.microg.gms.common.MultiListenerProxy;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.Utils;
+import org.microg.wearable.SocketConnectionThread;
 import org.microg.wearable.WearableConnection;
 import org.microg.wearable.proto.AckAsset;
 import org.microg.wearable.proto.AppKey;
@@ -54,12 +55,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import okio.ByteString;
 
@@ -67,48 +70,28 @@ public class WearableImpl {
 
     private static final String TAG = "GmsWear";
 
-    private static final String CLOCKWORK_NODE_PREFERENCES = "cw_node";
-    private static final String CLOCKWORK_NODE_PREFERENCE_NODE_ID = "node_id";
-    private static final String CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK = "nextSeqIdBlock";
+    private static final int WEAR_TCP_PORT = 5601;
 
     private final Context context;
     private final NodeDatabaseHelper nodeDatabase;
     private final ConfigurationDatabaseHelper configDatabase;
-    private final Set<IWearableListener> listeners = new HashSet<IWearableListener>();
+    private final Map<String, List<IWearableListener>> listeners = new HashMap<String, List<IWearableListener>>();
     private final Set<Node> connectedNodes = new HashSet<Node>();
     private final Set<WearableConnection> activeConnections = new HashSet<WearableConnection>();
-    private NetworkConnectionThread nct;
+    private SocketConnectionThread sct;
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
-
-    private long seqIdBlock;
-    private long seqIdInBlock = -1;
+    private ClockworkNodePreferences clockworkNodePreferences;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
         this.nodeDatabase = nodeDatabase;
         this.configDatabase = configDatabase;
+        this.clockworkNodePreferences = new ClockworkNodePreferences(context);
     }
 
     public String getLocalNodeId() {
-        SharedPreferences preferences = context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
-        String nodeId = preferences.getString(CLOCKWORK_NODE_PREFERENCE_NODE_ID, null);
-        if (nodeId == null) {
-            nodeId = UUID.randomUUID().toString();
-            preferences.edit().putString(CLOCKWORK_NODE_PREFERENCE_NODE_ID, nodeId).apply();
-        }
-        return nodeId;
-    }
-
-    private synchronized long getNextSeqId() {
-        SharedPreferences preferences = context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
-        if (seqIdInBlock < 0) seqIdInBlock = 1000;
-        if (seqIdInBlock >= 1000) {
-            seqIdBlock = preferences.getLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, 100);
-            preferences.edit().putLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, seqIdBlock + seqIdInBlock).apply();
-            seqIdInBlock = 0;
-        }
-        return seqIdBlock + seqIdInBlock++;
+        return clockworkNodePreferences.getLocalNodeId();
     }
 
     public DataItemRecord putDataItem(String packageName, String signatureDigest, String source, DataItemInternal dataItem) {
@@ -118,7 +101,7 @@ public class WearableImpl {
         record.deleted = false;
         record.source = source;
         record.dataItem = dataItem;
-        record.v1SeqId = getNextSeqId();
+        record.v1SeqId = clockworkNodePreferences.getNextSeqId();
         if (record.source.equals(getLocalNodeId())) record.seqId = record.v1SeqId;
         nodeDatabase.putRecord(record);
         return record;
@@ -127,7 +110,11 @@ public class WearableImpl {
     public DataItemRecord putDataItem(DataItemRecord record) {
         nodeDatabase.putRecord(record);
         try {
-            getAllListeners().onDataChanged(getDataItemsByUri(record.dataItem.uri, record.packageName));
+            if (listeners.containsKey(record.packageName)) {
+                MultiListenerProxy.get(IWearableListener.class, listeners.get(record.packageName)).onDataChanged(getDataItemForRecord(record));
+            } else {
+
+            }
         } catch (RemoteException e) {
             Log.w(TAG, e);
         }
@@ -272,7 +259,7 @@ public class WearableImpl {
             RootMessage announceMessage = new RootMessage.Builder().setAsset(new SetAsset.Builder()
                     .digest(asset.getDigest())
                     .appkeys(new AppKeys(Collections.singletonList(new AppKey(record.packageName, record.signatureDigest))))
-                    .build()).unknown13(true).build();
+                    .build()).hasAsset(true).build();
             connection.writeMessage(announceMessage);
             File assetFile = createAssetFile(asset.getDigest());
             String fileName = calculateDigest(announceMessage.toByteArray());
@@ -346,6 +333,16 @@ public class WearableImpl {
         onPeerConnected(new NodeParcelable(connect.id, connect.name));
     }
 
+    public void onDisconnectReceived(WearableConnection connection, String nodeId, Connect connect) {
+        for (ConnectionConfiguration config : getConfigurations()) {
+            if (config.nodeId.equals(nodeId)) {
+                config.connected = false;
+            }
+        }
+        Log.d(TAG, "Removing connection from list of open connections: " + connection);
+        activeConnections.remove(connection);
+        onPeerDisconnected(new NodeParcelable(connect.id, connect.name));
+    }
 
     public List<NodeParcelable> getConnectedNodesParcelableList() {
         List<NodeParcelable> nodes = new ArrayList<NodeParcelable>();
@@ -356,7 +353,7 @@ public class WearableImpl {
     }
 
     public IWearableListener getAllListeners() {
-        return MultiListenerProxy.get(IWearableListener.class, listeners);
+        return MultiListenerProxy.get(IWearableListener.class, new MultiListenerProxy.MultiCollectionListenerPool<IWearableListener>(listeners.values()));
     }
 
     public void onPeerConnected(NodeParcelable node) {
@@ -367,6 +364,16 @@ public class WearableImpl {
             Log.w(TAG, e);
         }
         addConnectedNode(node);
+    }
+
+    public void onPeerDisconnected(NodeParcelable node) {
+        Log.d(TAG, "onPeerDisconnected: " + node);
+        try {
+            getAllListeners().onPeerDisconnected(node);
+        } catch (RemoteException e) {
+            Log.w(TAG, e);
+        }
+        removeConnectedNode(node.getId());
     }
 
     public void onConnectedNodes(List<NodeParcelable> nodes) {
@@ -406,7 +413,13 @@ public class WearableImpl {
     }
 
     public DataHolder getDataItemsByUri(Uri uri, String packageName) {
-        Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(packageName, PackageUtils.firstSignatureDigest(context, packageName), uri.getHost(), uri.getPath());
+        String firstSignature;
+        try {
+            firstSignature = PackageUtils.firstSignatureDigest(context, packageName);
+        } catch (Exception e) {
+            return null;
+        }
+        Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(packageName, firstSignature, uri.getHost(), uri.getPath());
         while (dataHolderItems.moveToNext()) {
             Log.d(TAG, "getDataItems[]: path=" + Uri.parse(dataHolderItems.getString(1)).getPath());
         }
@@ -415,30 +428,45 @@ public class WearableImpl {
         return DataHolder.fromCursor(dataHolderItems, 0, null);
     }
 
-    public void addListener(IWearableListener listener) {
-        listeners.add(listener);
+    public DataHolder getDataItemForRecord(DataItemRecord record) {
+        Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(record.packageName, record.signatureDigest, record.dataItem.uri.getHost(), record.dataItem.uri.getPath());
+        while (dataHolderItems.moveToNext()) {
+            Log.d(TAG, "getDataItems[]: path=" + Uri.parse(dataHolderItems.getString(1)).getPath());
+        }
+        dataHolderItems.moveToFirst();
+        dataHolderItems.moveToPrevious();
+        return DataHolder.fromCursor(dataHolderItems, 0, null);
+    }
+
+    public synchronized void addListener(String packageName, IWearableListener listener) {
+        if (!listeners.containsKey(packageName)) {
+            listeners.put(packageName, new ArrayList<IWearableListener>());
+        }
+        listeners.get(packageName).add(listener);
     }
 
     public void removeListener(IWearableListener listener) {
-        listeners.add(listener);
+        for (List<IWearableListener> list : listeners.values()) {
+            list.remove(listener);
+        }
     }
 
     public void enableConnection(String name) {
         configDatabase.setEnabledState(name, true);
         configurationsUpdated = true;
-        if (name.equals("server") && nct == null) {
-            (nct = new NetworkConnectionThread(this, configDatabase.getConfiguration(name))).start();
+        if (name.equals("server") && sct == null) {
+            (sct = SocketConnectionThread.serverListen(WEAR_TCP_PORT, new MessageHandler(this, configDatabase.getConfiguration(name)))).start();
         }
     }
 
     public void disableConnection(String name) {
         configDatabase.setEnabledState(name, false);
         configurationsUpdated = true;
-        if (name.equals("server") && nct != null) {
-            activeConnections.remove(nct.getWearableConnection());
-            nct.close();
-            nct.interrupt();
-            nct = null;
+        if (name.equals("server") && sct != null) {
+            activeConnections.remove(sct.getWearableConnection());
+            sct.close();
+            sct.interrupt();
+            sct = null;
         }
     }
 
@@ -455,7 +483,11 @@ public class WearableImpl {
     }
 
     public int deleteDataItems(Uri uri, String packageName) {
-        return nodeDatabase.deleteDataItems(packageName, PackageUtils.firstSignatureDigest(context, packageName), uri.getHost(), uri.getPath());
+        List<DataItemRecord> records = nodeDatabase.deleteDataItems(packageName, PackageUtils.firstSignatureDigest(context, packageName), uri.getHost(), uri.getPath());
+        for (DataItemRecord record : records) {
+            syncRecordToAll(record);
+        }
+        return records.size();
     }
 
     public void sendMessageReceived(MessageEventParcelable messageEvent) {

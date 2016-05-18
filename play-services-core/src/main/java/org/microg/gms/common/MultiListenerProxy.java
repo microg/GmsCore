@@ -17,6 +17,7 @@
 package org.microg.gms.common;
 
 import android.os.IInterface;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.lang.reflect.InvocationHandler;
@@ -25,17 +26,22 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class MultiListenerProxy<T extends IInterface> implements InvocationHandler {
     private static final String TAG = "GmsMultiListener";
 
     public static <T extends IInterface> T get(Class<T> tClass, final Collection<T> listeners) {
-        return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new MultiListenerProxy<T>(listeners));
+        return get(tClass, new CollectionListenerPool<T>(listeners));
     }
 
-    private final Collection<T> listeners;
+    public static <T extends IInterface> T get(Class<T> tClass, final ListenerPool<T> listenerPool) {
+        return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new MultiListenerProxy<T>(listenerPool));
+    }
 
-    private MultiListenerProxy(Collection<T> listeners) {
+    private final ListenerPool<T> listeners;
+
+    private MultiListenerProxy(ListenerPool<T> listeners) {
         this.listeners = listeners;
     }
 
@@ -44,14 +50,175 @@ public class MultiListenerProxy<T extends IInterface> implements InvocationHandl
         for (T listener : new HashSet<T>(listeners)) {
             try {
                 method.invoke(listener, args);
-            } catch (IllegalAccessException e) {
+            } catch (Exception e) {
                 Log.w(TAG, e);
-                listeners.remove(listener);
-            } catch (InvocationTargetException e) {
-                Log.w(TAG, e.getTargetException());
                 listeners.remove(listener);
             }
         }
         return null;
+    }
+
+    public static abstract class ListenerPool<T> implements Collection<T> {
+        @Override
+        public boolean addAll(Collection<? extends T> collection) {
+            return false;
+        }
+
+        @Override
+        public boolean add(T object) {
+            return false;
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> collection) {
+            for (Object o : collection) {
+                if (!contains(o)) return false;
+            }
+            return true;
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> collection) {
+            boolean x = true;
+            for (Object o : collection) {
+                if (!remove(o)) x = false;
+            }
+            return x;
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> collection) {
+            return false;
+        }
+
+        @NonNull
+        @Override
+        public Object[] toArray() {
+            throw new IllegalArgumentException();
+        }
+
+        @NonNull
+        @Override
+        public <T1> T1[] toArray(T1[] array) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private static class CollectionListenerPool<T> extends ListenerPool<T> {
+
+        private Collection<T> listeners;
+
+        public CollectionListenerPool(Collection<T> listeners) {
+            this.listeners = listeners;
+        }
+
+        @Override
+        public void clear() {
+            listeners.clear();
+        }
+
+        @Override
+        public boolean contains(Object object) {
+            return listeners.contains(object);
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return listeners.isEmpty();
+        }
+
+        @NonNull
+        @Override
+        public Iterator<T> iterator() {
+            return listeners.iterator();
+        }
+
+        @Override
+        public boolean remove(Object object) {
+            return listeners.remove(object);
+        }
+
+        @Override
+        public int size() {
+            return listeners.size();
+        }
+    }
+
+    public static class MultiCollectionListenerPool<T> extends ListenerPool<T> {
+        private Collection<? extends Collection<T>> multiCol;
+
+        public MultiCollectionListenerPool(Collection<? extends Collection<T>> multiCol) {
+            this.multiCol = multiCol;
+        }
+
+        @Override
+        public void clear() {
+            for (Collection<T> ts : multiCol) {
+                ts.clear();
+            }
+        }
+
+        @Override
+        public boolean contains(Object object) {
+            for (Collection<T> ts : multiCol) {
+                if (ts.contains(object)) return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            for (Collection<T> ts : multiCol) {
+                if (!ts.isEmpty()) return false;
+            }
+            return true;
+        }
+
+        @NonNull
+        @Override
+        public Iterator<T> iterator() {
+            final Iterator<? extends Collection<T>> interMed = multiCol.iterator();
+            return new Iterator<T>() {
+                private Iterator<T> med;
+
+                @Override
+                public boolean hasNext() {
+                    while ((med == null || !med.hasNext()) && interMed.hasNext()) {
+                        med = interMed.next().iterator();
+                    }
+                    return med != null && med.hasNext();
+                }
+
+                @Override
+                public T next() {
+                    while (med == null || !med.hasNext()) {
+                        med = interMed.next().iterator();
+                    }
+                    return med.next();
+                }
+
+                @Override
+                public void remove() {
+                    med.remove();
+                }
+            };
+        }
+
+        @Override
+        public boolean remove(Object object) {
+            for (Collection<T> ts : multiCol) {
+                if (ts.remove(object)) return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int size() {
+            int sum = 0;
+            for (Collection<T> ts : multiCol) {
+                sum += ts.size();
+            }
+            return sum;
+        }
     }
 }
