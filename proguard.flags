@@ -20,6 +20,7 @@
 -keep public class com.google.android.gms.maps.internal.CreatorImpl { public *; }
 -keep public class com.google.android.gms.common.security.ProviderInstallerImpl { public *; }
 -keep public class com.google.android.gms.plus.plusone.PlusOneButtonCreatorImpl { public *; }
+-keep public class com.google.android.gms.dynamic.IObjectWrapper { public *; }
 
 # Keep AutoSafeParcelables
 -keep public class * extends org.microg.safeparcel.AutoSafeParcelable {
@@ -37,5 +38,6 @@
 -keep class **.BuildConfig { *; }
 
 # Keep protobuf class builders
+-keep public class com.squareup.wire.Message
 -keep public class * extends com.squareup.wire.Message
 -keep public class * extends com.squareup.wire.Message$Builder { public <init>(...); }

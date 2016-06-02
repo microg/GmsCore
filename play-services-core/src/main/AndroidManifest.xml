@@ -427,6 +427,12 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
+        <service android:name="org.microg.gms.reminders.RemindersService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.reminders.service.START"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
 
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
@@ -442,7 +448,6 @@
                 <action android:name="com.google.android.gms.wearable.BIND"/>
                 <action android:name="com.google.android.gms.auth.service.START"/>
                 <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START"/>
-                <action android:name="com.google.android.gms.reminders.service.START"/>
                 <action android:name="com.google.android.gms.deviceconnection.service.START"/>
                 <action android:name="com.google.android.gms.droidguard.service.START"/>
                 <action android:name="com.google.android.gms.lockbox.service.START"/>
