@@ -4,6 +4,7 @@
 
 # We're referencing stuff that is unknown to the system
 -libraryjar ../unifiednlp-compat/build/classes/main
+-libraryjar ../wearable-lib/build/classes/main
 -dontwarn java.awt.**
 -dontwarn javax.annotation.**
 
