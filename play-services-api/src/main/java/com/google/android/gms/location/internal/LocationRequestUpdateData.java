@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 
 import com.google.android.gms.location.ILocationCallback;
 import com.google.android.gms.location.ILocationListener;
+import com.google.android.gms.location.internal.IFusedLocationProviderCallback;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
@@ -47,6 +48,9 @@ public class LocationRequestUpdateData extends AutoSafeParcelable {
     @SafeParceled(5)
     public ILocationCallback callback;
 
+    @SafeParceled(6)
+    public IFusedLocationProviderCallback fusedLocationProviderCallback;
+
     @Override
     public String toString() {
         return "LocationRequestUpdateData{" +
@@ -55,6 +59,7 @@ public class LocationRequestUpdateData extends AutoSafeParcelable {
                 ", listener=" + listener +
                 ", pendingIntent=" + pendingIntent +
                 ", callback=" + callback +
+                ", fusedLocationProviderCallback=" + fusedLocationProviderCallback +
                 '}';
     }
 
