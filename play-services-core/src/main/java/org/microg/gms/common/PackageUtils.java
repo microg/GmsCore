@@ -39,6 +39,7 @@ public class PackageUtils {
             "46f6c8987311e131f4f558d8e0ae145bebab6da3" /* Google Classroom */,
             "24bb24c05e47e0aefa68a58a766179d9b613a600" /* Google Fit/Glass */,
             "aa87ce1260c008d801197bb4ecea4ab8929da246" /* Google Inbox */,
+            "01b844184e360686aa98b48eb16e05c76d4a72ad" /* Project Fi */,
             "35b438fe1bc69d975dc8702dc16ab69ebf65f26f" /* Waze */};
 
     public static boolean isGoogleSignedPackages(Context context, String packageName) {

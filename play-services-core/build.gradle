@@ -19,7 +19,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
     }
 }
 
@@ -74,14 +74,14 @@ int getMyVersionCode() {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         versionName getMyVersionName()
         def x = getMyVersionCode()
         // We are not allowed to freely choose the hundreds column as it defines the device type
         // Update commit id to current when increasing gms version code
-        versionCode(9083200 + x % 100 + ((int) (x / 100)) * 1000)
+        versionCode(9256200 + x % 100 + ((int) (x / 100)) * 1000)
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86"
