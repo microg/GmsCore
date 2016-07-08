@@ -91,16 +91,18 @@ public class LocationRequestHelper {
                 return true;
             }
         }
+        lastReport = new Location(location);
+        lastReport.setProvider("fused");
         Log.d(TAG, "sending Location: " + location);
         if (listener != null) {
             try {
-                listener.onLocationChanged(location);
+                listener.onLocationChanged(lastReport);
             } catch (RemoteException e) {
                 return false;
             }
         } else if (pendingIntent != null) {
             Intent intent = new Intent();
-            intent.putExtra("com.google.android.location.LOCATION", location);
+            intent.putExtra("com.google.android.location.LOCATION", lastReport);
             try {
                 pendingIntent.send(context, 0, intent);
             } catch (PendingIntent.CanceledException e) {
@@ -108,12 +110,11 @@ public class LocationRequestHelper {
             }
         } else if (callback != null) {
             try {
-                callback.onLocationResult(LocationResult.create(Arrays.asList(location)));
+                callback.onLocationResult(LocationResult.create(Arrays.asList(lastReport)));
             } catch (RemoteException e) {
                 return false;
             }
         }
-        lastReport = location;
         numReports++;
         return numReports < locationRequest.getNumUpdates();
     }
