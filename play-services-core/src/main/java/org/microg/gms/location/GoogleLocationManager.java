@@ -21,12 +21,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.RemoteException;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.R;
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.internal.FusedLocationProviderResult;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
 
 import org.microg.gms.common.Utils;
@@ -155,6 +158,12 @@ public class GoogleLocationManager implements LocationChangeListener {
     public void updateLocationRequest(LocationRequestUpdateData data) {
         if (data.opCode == LocationRequestUpdateData.REQUEST_UPDATES) {
             requestLocationUpdates(new LocationRequestHelper(context, hasFineLocationPermission(), hasCoarseLocationPermission(), null, data));
+            if (data.fusedLocationProviderCallback != null) {
+                try {
+                    data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS);
+                } catch (RemoteException ignored) {
+                }
+            }
         } else if (data.opCode == LocationRequestUpdateData.REMOVE_UPDATES) {
             for (int i = 0; i < currentRequests.size(); i++) {
                 if (currentRequests.get(i).respondsTo(data.listener)

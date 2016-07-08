@@ -27,7 +27,11 @@ import com.google.android.gms.location.ILocationCallback;
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.internal.IFusedLocationProviderCallback;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
+import com.google.android.gms.location.internal.FusedLocationProviderResult;
+
+import com.google.android.gms.common.api.Status;
 
 import java.util.Arrays;
 import java.util.Collections;
