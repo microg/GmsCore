@@ -51,7 +51,6 @@ dependencies:
     - pwd ; ls -al
 
     - echo sdk.dir $ANDROID_HOME > local.properties
-
     - git submodule update --init --recursive
 
     - ./gradlew assembleDebug --stacktrace --info --no-daemon
