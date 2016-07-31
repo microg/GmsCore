@@ -12,6 +12,7 @@ interface IWearableService {
     void putData(IWearableCallbacks callbacks, in PutDataRequest request) = 5;
     void getDataItem(IWearableCallbacks callbacks, in Uri uri) = 6;
     void getDataItems(IWearableCallbacks callbacks) = 7;
+    void sendMessage(IWearableCallbacks callbacks, String targetNodeId, String path, in byte[] data) = 11;
     void getLocalNode(IWearableCallbacks callbacks) = 13;
     void getConnectedNodes(IWearableCallbacks callbacks) = 14;
     void addListener(IWearableCallbacks callbacks, in AddListenerRequest request) = 15;
