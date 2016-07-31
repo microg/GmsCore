@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
+import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.internal.DataItemAssetParcelable;
 import com.google.android.gms.wearable.internal.DataItemParcelable;
@@ -28,12 +29,15 @@ import org.microg.wearable.proto.AssetEntry;
 import org.microg.wearable.proto.SetDataItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import okio.ByteString;
 
 public class DataItemRecord {
+    private static String[] EVENT_DATA_HOLDER_FIELDS = new String[] { "event_type", "path", "data", "tags", "asset_key", "asset_id" };
+
     public DataItemInternal dataItem;
     public String source;
     public long seqId;
@@ -44,7 +48,7 @@ public class DataItemRecord {
     public String packageName;
     public String signatureDigest;
 
-    public ContentValues getContentValues() {
+    public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
         contentValues.put("sourceNode", source);
         contentValues.put("seqId", seqId);
@@ -60,6 +64,33 @@ public class DataItemRecord {
         }
         contentValues.put("assetsPresent", assetsAreReady ? 1 : 0);
         return contentValues;
+    }
+
+    public DataHolder toEventDataHolder() {
+        DataHolder.Builder builder = DataHolder.builder(EVENT_DATA_HOLDER_FIELDS);
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("path", dataItem.uri.toString());
+        if (deleted) {
+            data.put("event_type", 2);
+            builder.withRow(data);
+        } else {
+            data.put("event_type", 1);
+            data.put("data", dataItem.data);
+            data.put("tags", "");
+            boolean added = false;
+            for (Map.Entry<String, Asset> entry : dataItem.getAssets().entrySet()) {
+                added = true;
+                data.put("asset_id", entry.getValue().getDigest());
+                data.put("asset_key", entry.getKey());
+                builder.withRow(data);
+                data = new HashMap<String, Object>();
+                data.put("path", dataItem.uri.toString());
+            }
+            if (!added) {
+                builder.withRow(data);
+            }
+        }
+        return builder.build(0);
     }
 
     public DataItemParcelable toParcelable() {

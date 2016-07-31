@@ -145,7 +145,7 @@ public class MessageHandler extends ServerMessageListener {
             messageEvent.requestId = rpcRequest.requestId + 31 * (rpcRequest.generation + 527);
             messageEvent.sourceNodeId = TextUtils.isEmpty(rpcRequest.sourceNodeId) ? peerNodeId : rpcRequest.sourceNodeId;
 
-            wearable.sendMessageReceived(messageEvent);
+            wearable.sendMessageReceived(rpcRequest.packageName, messageEvent);
         } else if (rpcRequest.targetNodeId.equals(peerNodeId)) {
             // Drop it, loop detection (yes we really need this in this protocol o.O)
         } else {

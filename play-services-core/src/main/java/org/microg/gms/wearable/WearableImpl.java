@@ -17,10 +17,10 @@
 package org.microg.gms.wearable;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -36,6 +36,7 @@ import com.google.android.gms.wearable.internal.PutDataRequest;
 
 import org.microg.gms.common.MultiListenerProxy;
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
 import org.microg.wearable.SocketConnectionThread;
 import org.microg.wearable.WearableConnection;
@@ -55,11 +56,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -110,11 +109,8 @@ public class WearableImpl {
     public DataItemRecord putDataItem(DataItemRecord record) {
         nodeDatabase.putRecord(record);
         try {
-            if (listeners.containsKey(record.packageName)) {
-                MultiListenerProxy.get(IWearableListener.class, listeners.get(record.packageName)).onDataChanged(getDataItemForRecord(record));
-            } else {
-
-            }
+            getListener(record.packageName, "com.google.android.gms.wearable.DATA_CHANGED", record.dataItem.uri)
+                    .onDataChanged(record.toEventDataHolder());
         } catch (RemoteException e) {
             Log.w(TAG, e);
         }
@@ -402,7 +398,7 @@ public class WearableImpl {
         return record;
     }
 
-    public DataHolder getDataItems(String packageName) {
+    public DataHolder getDataItemsAsHolder(String packageName) {
         Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolder(packageName, PackageUtils.firstSignatureDigest(context, packageName));
         while (dataHolderItems.moveToNext()) {
             Log.d(TAG, "getDataItems[]: path=" + Uri.parse(dataHolderItems.getString(1)).getPath());
@@ -412,7 +408,7 @@ public class WearableImpl {
         return DataHolder.fromCursor(dataHolderItems, 0, null);
     }
 
-    public DataHolder getDataItemsByUri(Uri uri, String packageName) {
+    public DataHolder getDataItemsByUriAsHolder(Uri uri, String packageName) {
         String firstSignature;
         try {
             firstSignature = PackageUtils.firstSignatureDigest(context, packageName);
@@ -428,7 +424,7 @@ public class WearableImpl {
         return DataHolder.fromCursor(dataHolderItems, 0, null);
     }
 
-    public DataHolder getDataItemForRecord(DataItemRecord record) {
+    public DataHolder getDataItemForRecordAsHolder(DataItemRecord record) {
         Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(record.packageName, record.signatureDigest, record.dataItem.uri.getHost(), record.dataItem.uri.getPath());
         while (dataHolderItems.moveToNext()) {
             Log.d(TAG, "getDataItems[]: path=" + Uri.parse(dataHolderItems.getString(1)).getPath());
@@ -490,10 +486,11 @@ public class WearableImpl {
         return records.size();
     }
 
-    public void sendMessageReceived(MessageEventParcelable messageEvent) {
+    public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
         Log.d(TAG, "onMessageReceived: " + messageEvent);
         try {
-            getAllListeners().onMessageReceived(messageEvent);
+            getListener(packageName, "com.google.android.gms.wearable.MESSAGE_RECEIVED", Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()))
+                    .onMessageReceived(messageEvent);
         } catch (RemoteException e) {
             Log.w(TAG, e);
         }
@@ -509,5 +506,23 @@ public class WearableImpl {
             cursor.close();
         }
         return record;
+    }
+
+    private IWearableListener getListener(String packageName, String action, Uri uri) {
+        synchronized (this) {
+            List<IWearableListener> l = new ArrayList<IWearableListener>(listeners.containsKey(packageName) ? listeners.get(packageName) : Collections.<IWearableListener>emptyList());
+
+            Intent intent = new Intent(action);
+            intent.setPackage(packageName);
+            intent.setData(uri);
+
+            l.add(RemoteListenerProxy.get(context, intent, IWearableListener.class, "com.google.android.gms.wearable.BIND_LISTENER"));
+
+            return MultiListenerProxy.get(IWearableListener.class, l);
+        }
+    }
+
+    public void sendMessage(String targetNodeId, String path, byte[] data) {
+        Log.d(TAG, "sendMessage not yet implemented!");
     }
 }

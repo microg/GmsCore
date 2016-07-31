@@ -20,7 +20,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
@@ -75,13 +74,19 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void getDataItems(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getDataItems: " + callbacks);
-        callbacks.onDataHolder(wearable.getDataItems(packageName));
+        callbacks.onDataHolder(wearable.getDataItemsAsHolder(packageName));
+    }
+
+    @Override
+    public void sendMessage(IWearableCallbacks callbacks, String targetNodeId, String path, byte[] data) throws RemoteException {
+        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path);
+        wearable.sendMessage(targetNodeId, path, data);
     }
 
     @Override
     public void getDataItemsByUri(IWearableCallbacks callbacks, Uri uri, int i) throws RemoteException {
         Log.d(TAG, "getDataItemsByUri: " + uri);
-        callbacks.onDataHolder(wearable.getDataItemsByUri(uri, packageName));
+        callbacks.onDataHolder(wearable.getDataItemsByUriAsHolder(uri, packageName));
     }
 
     @Override

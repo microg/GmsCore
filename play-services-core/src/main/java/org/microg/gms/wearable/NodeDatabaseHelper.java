@@ -147,13 +147,13 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static void updateRecord(SQLiteDatabase db, String key, DataItemRecord record) {
-        ContentValues cv = record.getContentValues();
+        ContentValues cv = record.toContentValues();
         db.update("dataitems", cv, "_id=?", new String[]{key});
         finishRecord(db, key, record);
     }
 
     private static String insertRecord(SQLiteDatabase db, DataItemRecord record) {
-        ContentValues contentValues = record.getContentValues();
+        ContentValues contentValues = record.toContentValues();
         contentValues.put("appkeys_id", getAppKey(db, record.packageName, record.signatureDigest));
         contentValues.put("host", record.dataItem.host);
         contentValues.put("path", record.dataItem.path);
