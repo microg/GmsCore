@@ -61,7 +61,7 @@ interface IGoogleLocationManagerService {
 
     Location getLastLocationWithPackage(String packageName) = 20;
     void iglms26(in Location var1, int var2) = 25;
-    LocationAvailability iglms34(String var1) = 33;
+    LocationAvailability getLocationAvailabilityWithPackage(String packageName) = 33;
 
     IBinder iglms51() = 50;
     void requestLocationSettingsDialog(in LocationSettingsRequest settingsRequest, ISettingsCallbacks callback, String packageName) = 62;

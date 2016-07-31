@@ -17,8 +17,35 @@
 package com.google.android.gms.location;
 
 import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
 
 public class LocationAvailability extends AutoSafeParcelable {
+
+    @SafeParceled(1000)
+    private int versionCode = 1;
+
+    @SafeParceled(1)
+    private int cellStatus;
+
+    @SafeParceled(2)
+    private int wifiStatus;
+
+    @SafeParceled(3)
+    private long elapsedRealtimeNs;
+
+    @SafeParceled(4)
+    private int locationStatus;
+
+    private LocationAvailability(int cellStatus, int wifiStatus, int elapsedRealtimeNs, int locationStatus) {
+        this.cellStatus = cellStatus;
+        this.wifiStatus = wifiStatus;
+        this.elapsedRealtimeNs = elapsedRealtimeNs;
+        this.locationStatus = this.locationStatus;
+    }
+
+    public static LocationAvailability create() { // TODO
+        return new LocationAvailability(0, 0, 0, 0);
+    }
 
     public static final Creator<LocationAvailability> CREATOR = new AutoCreator<LocationAvailability>(LocationAvailability.class);
 }
