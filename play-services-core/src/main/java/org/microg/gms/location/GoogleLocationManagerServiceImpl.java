@@ -246,9 +246,9 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     }
 
     @Override
-    public LocationAvailability iglms34(String var1) throws RemoteException {
-        Log.d(TAG, "iglms34: " + var1);
-        return null;
+    public LocationAvailability getLocationAvailabilityWithPackage(String packageName) throws RemoteException {
+        Log.d(TAG, "getLocationAvailabilityWithPackage: " + packageName);
+        return new LocationAvailability();
     }
 
     @Override
