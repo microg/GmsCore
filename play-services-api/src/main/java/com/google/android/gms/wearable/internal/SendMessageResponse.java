@@ -17,7 +17,18 @@
 package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
 
 public class SendMessageResponse extends AutoSafeParcelable {
+
+    @SafeParceled(1)
+    private int versionCode = 1;
+
+    @SafeParceled(2)
+    public int statusCode;
+
+    @SafeParceled(3)
+    public int resultId = -1;
+
     public static final Creator<SendMessageResponse> CREATOR = new AutoCreator<SendMessageResponse>(SendMessageResponse.class);
 }

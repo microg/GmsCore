@@ -33,4 +33,9 @@ public interface Node {
      * Returns an opaque string that represents a node in the Android Wear network.
      */
     String getId();
+
+    /**
+     * Indicates that this node can be considered geographically nearby the local node.
+     */
+    boolean isNearby();
 }

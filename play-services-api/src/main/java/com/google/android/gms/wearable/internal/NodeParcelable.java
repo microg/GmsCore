@@ -28,22 +28,33 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    private final String id;
+    private final String nodeId;
     @SafeParceled(3)
     private final String displayName;
+    @SafeParceled(4)
+    private final int hops;
+    @SafeParceled(5)
+    private final boolean isNearby;
 
     private NodeParcelable() {
-        id = displayName = null;
+        nodeId = displayName = null;
+        hops = 0;
+        isNearby = false;
     }
 
-    public NodeParcelable(String id, String displayName) {
-        this.id = id;
+    public NodeParcelable(String nodeId, String displayName, int hops, boolean isNearby) {
+        this.nodeId = nodeId;
         this.displayName = displayName;
+        this.hops = hops;
+        this.isNearby = isNearby;
+    }
+
+    public NodeParcelable(String nodeId, String displayName) {
+        this(nodeId, displayName, 0, false);
     }
 
     public NodeParcelable(Node node) {
-        this.id = node.getId();
-        this.displayName = node.getDisplayName();
+        this(node.getId(), node.getDisplayName(), 0, node.isNearby());
     }
 
     @Override
@@ -53,7 +64,7 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
 
         NodeParcelable that = (NodeParcelable) o;
 
-        if (!id.equals(that.id)) return false;
+        if (!nodeId.equals(that.nodeId)) return false;
         if (!displayName.equals(that.displayName)) return false;
 
         return true;
@@ -66,18 +77,22 @@ public class NodeParcelable extends AutoSafeParcelable implements Node {
 
     @Override
     public String getId() {
-        return id;
+        return nodeId;
+    }
+
+    @Override
+    public boolean isNearby() {
+        return isNearby;
     }
 
     @Override
     public int hashCode() {
-        int result = 37 * 17 + id.hashCode();
-        return 37 * result + displayName.hashCode();
+        return nodeId.hashCode();
     }
 
     @Override
     public String toString() {
-        return "NodeParcelable{" + id + "," + displayName + "}";
+        return "NodeParcelable{" + displayName + ", id=" + displayName + ", hops=" + hops + ", isNearby=" + isNearby + "}";
     }
 
     public static final Creator<NodeParcelable> CREATOR = new AutoCreator<NodeParcelable>(NodeParcelable.class);
