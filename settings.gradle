@@ -1,2 +1,6 @@
 include ':play-services-api'
+include ':play-services-cast-api'
+include ':play-services-common-api'
+include ':play-services-location-api'
+include ':play-services-wearable-api'
 include ':safe-parcel'
