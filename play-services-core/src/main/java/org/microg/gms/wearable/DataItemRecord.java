@@ -19,6 +19,7 @@ package org.microg.gms.wearable;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;

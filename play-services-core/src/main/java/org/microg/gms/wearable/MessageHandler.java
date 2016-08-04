@@ -44,7 +44,7 @@ import java.util.Arrays;
 public class MessageHandler extends ServerMessageListener {
     private static final String TAG = "GmsWearMsgHandler";
     private final WearableImpl wearable;
-    private final String thisNodeId;
+    private final String oldConfigNodeId;
     private String peerNodeId;
 
     public MessageHandler(WearableImpl wearable, ConnectionConfiguration config) {
@@ -54,28 +54,28 @@ public class MessageHandler extends ServerMessageListener {
     private MessageHandler(WearableImpl wearable, ConnectionConfiguration config, String name, String networkId, long androidId) {
         super(new Connect.Builder()
                 .name(name)
-                .id(config.nodeId)
+                .id(wearable.getLocalNodeId())
                 .networkId(networkId)
                 .peerAndroidId(androidId)
                 .unknown4(3)
                 .peerVersion(1)
                 .build());
         this.wearable = wearable;
-        this.thisNodeId = config.nodeId;
+        this.oldConfigNodeId = config.nodeId;
     }
 
     @Override
     public void onConnect(Connect connect) {
         super.onConnect(connect);
         peerNodeId = connect.id;
-        wearable.onConnectReceived(getConnection(), thisNodeId, connect);
+        wearable.onConnectReceived(getConnection(), oldConfigNodeId, connect);
         try {
             getConnection().writeMessage(new RootMessage.Builder().syncStart(new SyncStart.Builder()
                     .receivedSeqId(-1L)
                     .version(2)
                     .syncTable(Arrays.asList(
                             new SyncTableEntry.Builder().key("cloud").value(1L).build(),
-                            new SyncTableEntry.Builder().key(thisNodeId).value(wearable.getCurrentSeqId(thisNodeId)).build(), // TODO
+                            new SyncTableEntry.Builder().key(wearable.getLocalNodeId()).value(wearable.getCurrentSeqId(wearable.getLocalNodeId())).build(), // TODO
                             new SyncTableEntry.Builder().key(peerNodeId).value(wearable.getCurrentSeqId(peerNodeId)).build() // TODO
                     )).build()).build());
         } catch (IOException e) {
@@ -85,7 +85,10 @@ public class MessageHandler extends ServerMessageListener {
 
     @Override
     public void onDisconnected() {
-        wearable.onDisconnectReceived(getConnection(), thisNodeId, getRemoteConnect());
+        Connect connect = getRemoteConnect();
+        if (connect == null)
+            connect = new Connect.Builder().id(oldConfigNodeId).name("Wear device").build();
+        wearable.onDisconnectReceived(getConnection(), connect);
         super.onDisconnected();
     }
 
@@ -120,13 +123,13 @@ public class MessageHandler extends ServerMessageListener {
         boolean hasLocalNode = false;
         if (syncStart.syncTable != null) {
             for (SyncTableEntry entry : syncStart.syncTable) {
-                wearable.syncToPeer(getConnection(), entry.key, entry.value);
+                wearable.syncToPeer(peerNodeId, entry.key, entry.value);
                 if (wearable.getLocalNodeId().equals(entry.key)) hasLocalNode = true;
             }
         } else {
             Log.d(TAG, "No sync table given.");
         }
-        if (!hasLocalNode) wearable.syncToPeer(getConnection(), wearable.getLocalNodeId(), 0);
+        if (!hasLocalNode) wearable.syncToPeer(peerNodeId, wearable.getLocalNodeId(), 0);
     }
 
     @Override
@@ -138,7 +141,7 @@ public class MessageHandler extends ServerMessageListener {
     @Override
     public void onRpcRequest(Request rpcRequest) {
         Log.d(TAG, "onRpcRequest: " + rpcRequest);
-        if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(thisNodeId)) {
+        if (TextUtils.isEmpty(rpcRequest.targetNodeId) || rpcRequest.targetNodeId.equals(wearable.getLocalNodeId())) {
             MessageEventParcelable messageEvent = new MessageEventParcelable();
             messageEvent.data = rpcRequest.rawData != null ? rpcRequest.rawData.toByteArray() : null;
             messageEvent.path = rpcRequest.path;

@@ -72,6 +72,10 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void putConfiguration(ConnectionConfiguration config) {
+        putConfiguration(config, null);
+    }
+
+    public void putConfiguration(ConnectionConfiguration config, String oldNodeId) {
         ContentValues contentValues = new ContentValues();
         if (config.name != null) {
             contentValues.put("name", config.name);
@@ -89,7 +93,11 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("role", config.role);
         contentValues.put("connectionEnabled", true);
         contentValues.put("nodeId", config.nodeId);
-        getWritableDatabase().insert(TABLE_NAME, null, contentValues);
+        if (oldNodeId == null) {
+            getWritableDatabase().insert(TABLE_NAME, null, contentValues);
+        } else {
+            getWritableDatabase().update(TABLE_NAME, contentValues, "nodeId=?", new String[]{oldNodeId});
+        }
     }
 
     public ConnectionConfiguration[] getAllConfigurations() {

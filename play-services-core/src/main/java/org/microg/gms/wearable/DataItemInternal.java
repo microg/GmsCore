@@ -51,4 +51,12 @@ public class DataItemInternal {
     public Map<String, Asset> getAssets() {
         return Collections.unmodifiableMap(new HashMap<String, Asset>(assets));
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("DataItemInternal{");
+        sb.append("uri=").append(uri);
+        sb.append('}');
+        return sb.toString();
+    }
 }

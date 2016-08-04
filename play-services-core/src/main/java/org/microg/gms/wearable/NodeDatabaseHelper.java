@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.wearable.Asset;
 
@@ -73,16 +74,23 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         String selection;
         if (path == null) {
             params = new String[]{packageName, signatureDigest};
-            selection = "packageName =? AND signatureDigest =?";
+            selection = "packageName = ? AND signatureDigest = ?";
         } else if (host == null) {
+            if (path.endsWith("/")) path = path + "%";
             params = new String[]{packageName, signatureDigest, path};
-            selection = "packageName =? AND signatureDigest =? AND path =?";
+            selection = "packageName = ? AND signatureDigest = ? AND path LIKE ?";
         } else {
+            if (path.endsWith("/")) path = path + "%";
             params = new String[]{packageName, signatureDigest, host, path};
-            selection = "packageName =? AND signatureDigest =? AND host =? AND path =?";
+            selection = "packageName = ? AND signatureDigest = ? AND host = ? AND path LIKE ?";
         }
         selection += " AND deleted=0 AND assetsPresent !=0";
         return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
+    }
+
+    public synchronized Cursor getDataItemsByHostAndPath(String packageName, String signatureDigest, String host, String path) {
+        Log.d(TAG, "getDataItemsByHostAndPath: " + packageName + ", " + signatureDigest + ", " + host + ", " + path);
+        return getDataItemsByHostAndPath(getReadableDatabase(), packageName, signatureDigest, host, path);
     }
 
     @Override
@@ -240,7 +248,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    public void putAsset(Asset asset, boolean dataPresent) {
+    public synchronized void putAsset(Asset asset, boolean dataPresent) {
         ContentValues cv = new ContentValues();
         cv.put("digest", asset.getDigest());
         cv.put("dataPresent", dataPresent ? 1 : 0);
@@ -248,11 +256,39 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         getWritableDatabase().insertWithOnConflict("assets", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
-    public void allowAssetAccess(String digest, String packageName, String signatureDigest) {
+    public synchronized void allowAssetAccess(String digest, String packageName, String signatureDigest) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("assets_digest", digest);
         cv.put("appkeys_id", getAppKey(db, packageName, signatureDigest));
-        db.insert("assetsacls", null, cv);
+        db.insertWithOnConflict("assetsacls", null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public Cursor listMissingAssets() {
+        return getReadableDatabase().query("dataItemsAndAssets", GDIBHAP_FIELDS, "assetsPresent = 0 AND assets_digest NOT NULL", null, null, null, "packageName, signatureDigest, host, path");
+    }
+
+    public boolean hasAsset(Asset asset) {
+        Cursor cursor = getReadableDatabase().query("assets", new String[]{"dataPresent"}, "digest=?", new String[]{asset.getDigest()}, null, null, null);
+        if (cursor == null) return false;
+        try {
+            return (cursor.moveToNext() && cursor.getInt(0) == 1);
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public synchronized void markAssetAsPresent(String digest) {
+        ContentValues cv = new ContentValues();
+        cv.put("dataPresent", 1);
+        SQLiteDatabase db = getWritableDatabase();
+        db.update("assets", cv, "digest=?", new String[]{digest});
+        Cursor status = db.query("assetsReadyStatus", null, "nowReady != markedReady", null, null, null, null);
+        while (status.moveToNext()) {
+            cv = new ContentValues();
+            cv.put("assetsPresent", status.getInt(status.getColumnIndex("nowReady")));
+            db.update("dataitems", cv, "_id=?", new String[]{Integer.toString(status.getInt(status.getColumnIndex("dataitems_id")))});
+        }
+        status.close();
     }
 }

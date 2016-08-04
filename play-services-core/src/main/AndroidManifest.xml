@@ -129,6 +129,14 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="org.microg.gms.wearable.WearableLocationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+            </intent-filter>
+        </service>
+
         <!-- Services Framework -->
 
         <provider
