@@ -42,7 +42,7 @@ interface IWearableService {
     void addListener(IWearableCallbacks callbacks, in AddListenerRequest request) = 15;
     void removeListener(IWearableCallbacks callbacks, in RemoveListenerRequest request) = 16;
 
-    void getStrorageInformation(IWearableCallbacks callbacks) = 17;
+    void getStorageInformation(IWearableCallbacks callbacks) = 17;
     void clearStorage(IWearableCallbacks callbacks) = 18;
 
     void endCall(IWearableCallbacks callbacks) = 24;
