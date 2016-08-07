@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,20 @@
  * limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package com.google.android.gms.tasks;
 
-subprojects {
-    group = 'org.microg'
+import org.microg.gms.common.PublicApi;
+
+import java.util.concurrent.ExecutionException;
+
+/**
+ * Runtime version of {@link ExecutionException}.
+ *
+ * @see Task#getResult(Class)
+ */
+@PublicApi
+public class RuntimeExecutionException extends RuntimeException {
+    public RuntimeExecutionException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -20,8 +20,11 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.text.TextUtils;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.Arrays;
 
 /**
  * Contains all possible error codes for when a client fails to connect to Google Play services.
@@ -128,8 +131,18 @@ public class ConnectionResult {
     @Deprecated
     public static final int DRIVE_EXTERNAL_STORAGE_REQUIRED = 1500;
 
-    private final PendingIntent pendingIntent;
     private final int statusCode;
+    private final PendingIntent pendingIntent;
+    private final String message;
+
+    /**
+     * Creates a connection result.
+     *
+     * @param statusCode The status code.
+     */
+    public ConnectionResult(int statusCode) {
+        this(statusCode, null);
+    }
 
     /**
      * Creates a connection result.
@@ -138,8 +151,89 @@ public class ConnectionResult {
      * @param pendingIntent A pending intent that will resolve the issue when started, or null.
      */
     public ConnectionResult(int statusCode, PendingIntent pendingIntent) {
+        this(statusCode, pendingIntent, getStatusString(statusCode));
+    }
+
+    /**
+     * Creates a connection result.
+     *
+     * @param statusCode    The status code.
+     * @param pendingIntent A pending intent that will resolve the issue when started, or null.
+     * @param message       An additional error message for the connection result, or null.
+     */
+    public ConnectionResult(int statusCode, PendingIntent pendingIntent, String message) {
         this.statusCode = statusCode;
         this.pendingIntent = pendingIntent;
+        this.message = message;
+    }
+
+    static String getStatusString(int statusCode) {
+        switch (statusCode) {
+            case -1:
+                return "UNKNOWN";
+            case 0:
+                return "SUCCESS";
+            case 1:
+                return "SERVICE_MISSING";
+            case 2:
+                return "SERVICE_VERSION_UPDATE_REQUIRED";
+            case 3:
+                return "SERVICE_DISABLED";
+            case 4:
+                return "SIGN_IN_REQUIRED";
+            case 5:
+                return "INVALID_ACCOUNT";
+            case 6:
+                return "RESOLUTION_REQUIRED";
+            case 7:
+                return "NETWORK_ERROR";
+            case 8:
+                return "INTERNAL_ERROR";
+            case 9:
+                return "SERVICE_INVALID";
+            case 10:
+                return "DEVELOPER_ERROR";
+            case 11:
+                return "LICENSE_CHECK_FAILED";
+            case 13:
+                return "CANCELED";
+            case 14:
+                return "TIMEOUT";
+            case 15:
+                return "INTERRUPTED";
+            case 16:
+                return "API_UNAVAILABLE";
+            case 17:
+                return "SIGN_IN_FAILED";
+            case 18:
+                return "SERVICE_UPDATING";
+            case 19:
+                return "SERVICE_MISSING_PERMISSION";
+            case 20:
+                return "RESTRICTED_PROFILE";
+            case 21:
+                return "API_VERSION_UPDATE_REQUIRED";
+            case 42:
+                return "UPDATE_ANDROID_WEAR";
+            case 99:
+                return "UNFINISHED";
+            case 1500:
+                return "DRIVE_EXTERNAL_STORAGE_REQUIRED";
+            default:
+                return "UNKNOWN_ERROR_CODE(" + statusCode + ")";
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (!(o instanceof ConnectionResult)) {
+            return false;
+        } else {
+            ConnectionResult r = (ConnectionResult)o;
+            return statusCode == r.statusCode && pendingIntent == null ? r.pendingIntent == null : pendingIntent.equals(r.pendingIntent) && TextUtils.equals(message, r.message);
+        }
     }
 
     /**
@@ -152,6 +246,15 @@ public class ConnectionResult {
     }
 
     /**
+     * Returns an error message for connection result.
+     *
+     * @return the message
+     */
+    public String getErrorMessage() {
+        return message;
+    }
+
+    /**
      * A pending intent to resolve the connection failure. This intent can be started with
      * {@link Activity#startIntentSenderForResult(IntentSender, int, Intent, int, int, int)} to
      * present UI to solve the issue.
@@ -160,6 +263,11 @@ public class ConnectionResult {
      */
     public PendingIntent getResolution() {
         return pendingIntent;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new Object[]{statusCode, pendingIntent, message});
     }
 
     /**
@@ -196,8 +304,7 @@ public class ConnectionResult {
     public void startResolutionForResult(Activity activity, int requestCode) throws
             IntentSender.SendIntentException {
         if (hasResolution()) {
-            activity.startIntentSenderForResult(pendingIntent.getIntentSender(), requestCode, null,
-                    0, 0, 0);
+            activity.startIntentSenderForResult(pendingIntent.getIntentSender(), requestCode, null, 0, 0, 0);
         }
     }
 }

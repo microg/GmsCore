@@ -90,8 +90,9 @@ public class GcmPubSub {
         if (TextUtils.isEmpty(registrationToken))
             throw new IllegalArgumentException("No registration token!");
         if (TextUtils.isEmpty(topic) || !topicPattern.matcher(topic).matches())
-            throw new IllegalArgumentException("Invalid topic!");
+            throw new IllegalArgumentException("Invalid topic: " + topic);
 
+        if (extras == null) extras = new Bundle();
         extras.putString(EXTRA_TOPIC, topic);
         instanceId.getToken(registrationToken, topic, extras);
     }
@@ -110,7 +111,7 @@ public class GcmPubSub {
      */
     public void unsubscribe(String registrationToken, String topic) throws IOException {
         if (TextUtils.isEmpty(topic) || !topicPattern.matcher(topic).matches())
-            throw new IllegalArgumentException("Invalid topic!");
+            throw new IllegalArgumentException("Invalid topic: " + topic);
 
         Bundle extras = new Bundle();
         extras.putString(EXTRA_TOPIC, topic);

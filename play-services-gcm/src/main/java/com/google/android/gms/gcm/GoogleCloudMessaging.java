@@ -16,7 +16,6 @@
 
 package com.google.android.gms.gcm;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,21 +25,23 @@ import android.text.TextUtils;
 import com.google.android.gms.iid.InstanceID;
 
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.gcm.CloudMessagingRpc;
 import org.microg.gms.gcm.GcmConstants;
 
 import java.io.IOException;
 
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
-import static org.microg.gms.gcm.GcmConstants.ACTION_GCM_SEND;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_DELAY;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_TYPE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER_LEGACY;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
-import static org.microg.gms.gcm.GcmConstants.PERMISSION_GTALK;
 
 /**
  * GoogleCloudMessaging (GCM) enables apps to communicate with their app servers
@@ -123,43 +124,33 @@ public class GoogleCloudMessaging {
     @Deprecated
     public static final String MESSAGE_TYPE_SEND_EVENT = GcmConstants.MESSAGE_TYPE_SEND_EVENT;
 
-    private static GoogleCloudMessaging INSTANCE;
-    /**
-     * Due to it's nature of being a monitored reference, Intents can be used to authenticate a package source.
-     */
-    private PendingIntent selfAuthIntent;
+    private static GoogleCloudMessaging instance;
+
+    private CloudMessagingRpc rpc;
     private Context context;
 
     public GoogleCloudMessaging() {
-        throw new UnsupportedOperationException();
     }
 
     /**
      * Must be called when your application is done using GCM, to release
      * internal resources.
      */
-    public void close() {
-        throw new UnsupportedOperationException();
-    }
-
-    private PendingIntent getSelfAuthIntent() {
-        if (selfAuthIntent == null) {
-            Intent intent = new Intent();
-            intent.setPackage("com.google.example.invalidpackage");
-            selfAuthIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        }
-        return selfAuthIntent;
+    public synchronized void close() {
+        instance = null;
+        rpc.close();
     }
 
     /**
      * Return the singleton instance of GCM.
      */
     public static GoogleCloudMessaging getInstance(Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new GoogleCloudMessaging();
-            INSTANCE.context = context.getApplicationContext();
+        if (instance == null) {
+            instance = new GoogleCloudMessaging();
+            instance.context = context.getApplicationContext();
+            instance.rpc = new CloudMessagingRpc(instance.context);
         }
-        return INSTANCE;
+        return instance;
     }
 
     /**
@@ -204,16 +195,23 @@ public class GoogleCloudMessaging {
     @Deprecated
     public String register(String... senderIds) throws IOException {
         if (Looper.getMainLooper() == Looper.myLooper()) throw new IOException(ERROR_MAIN_THREAD);
+
         if (senderIds == null || senderIds.length == 0) throw new IllegalArgumentException("No sender ids");
         StringBuilder sb = new StringBuilder(senderIds[0]);
         for (int i = 1; i < senderIds.length; i++) {
             sb.append(',').append(senderIds[i]);
         }
-        // This seems to be a legacy variant
-        // TODO: Implement latest version
-        Bundle extras = new Bundle();
-        extras.putString(EXTRA_SENDER_LEGACY, sb.toString());
-        return InstanceID.getInstance(context).getToken(sb.toString(), INSTANCE_ID_SCOPE, extras);
+        String sender = sb.toString();
+
+        if (isLegacyFallback()) {
+            Bundle extras = new Bundle();
+            extras.putString(EXTRA_SENDER_LEGACY, sender);
+            return InstanceID.getInstance(context).getToken(sb.toString(), INSTANCE_ID_SCOPE, extras);
+        } else {
+            Bundle extras = new Bundle();
+            extras.putString(EXTRA_SENDER, sender);
+            return rpc.handleRegisterMessageResult(rpc.sendRegisterMessageBlocking(extras));
+        }
     }
 
     /**
@@ -242,16 +240,27 @@ public class GoogleCloudMessaging {
      */
     public void send(String to, String msgId, long timeToLive, Bundle data) throws IOException {
         if (TextUtils.isEmpty(to)) throw new IllegalArgumentException("Invalid 'to'");
-        Intent intent = new Intent(ACTION_GCM_SEND);
-        intent.setPackage(GMS_PACKAGE_NAME);
-        if (data != null) intent.putExtras(data);
-        intent.putExtra(EXTRA_APP, getSelfAuthIntent());
-        intent.putExtra(EXTRA_SEND_TO, to);
-        intent.putExtra(EXTRA_MESSAGE_ID, msgId);
-        intent.putExtra(EXTRA_TTL, timeToLive);
-        intent.putExtra(EXTRA_DELAY, -1);
-        //intent.putExtra(EXTRA_SEND_FROM, TODO)
-        context.sendOrderedBroadcast(intent, PERMISSION_GTALK);
+
+        if (isLegacyFallback()) {
+            Bundle extras = new Bundle();
+            for (String key : data.keySet()) {
+                Object o = extras.get(key);
+                if (o instanceof String) {
+                    extras.putString("gcm." + key, (String) o);
+                }
+            }
+            extras.putString(EXTRA_SEND_TO, to);
+            extras.putString(EXTRA_MESSAGE_ID, msgId);
+            InstanceID.getInstance(context).requestToken("GCM", "upstream", extras);
+        } else {
+            Bundle extras = data != null ? new Bundle(data) : new Bundle();
+            extras.putString(EXTRA_SEND_TO, to);
+            extras.putString(EXTRA_SEND_FROM, getFrom(to));
+            extras.putString(EXTRA_MESSAGE_ID, msgId);
+            extras.putLong(EXTRA_TTL, timeToLive);
+            extras.putInt(EXTRA_DELAY, -1);
+            rpc.sendGcmMessage(extras);
+        }
     }
 
     /**
@@ -298,4 +307,16 @@ public class GoogleCloudMessaging {
         InstanceID.getInstance(context).deleteInstanceID();
     }
 
+    private boolean isLegacyFallback() {
+        String gcmPackageName = CloudMessagingRpc.getGcmPackageName(context);
+        return gcmPackageName != null && gcmPackageName.endsWith(".gsf");
+    }
+
+    private String getFrom(String to) {
+        int i = to.indexOf('@');
+        if (i > 0) {
+            to = to.substring(0, i);
+        }
+        return InstanceID.getInstance(context).getStore().get("", to, INSTANCE_ID_SCOPE);
+    }
 }

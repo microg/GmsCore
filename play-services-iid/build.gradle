@@ -19,7 +19,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
     }
 }
 
@@ -36,7 +36,7 @@ String getMyVersionName() {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         versionName getMyVersionName()
@@ -49,8 +49,5 @@ android {
 
 dependencies {
     compile project(':play-services-base')
-    compile project(':play-services-cast')
-    compile project(':play-services-gcm')
-    compile project(':play-services-location')
-    compile project(':play-services-wearable')
+    compile project(':play-services-iid-api')
 }

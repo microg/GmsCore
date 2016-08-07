@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2013-2016 microG Project Team
+  ~ Copyright 2013-2015 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,16 +16,9 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.microg.gms.gcm">
+    package="org.microg.gms.tasks">
 
     <uses-sdk android:minSdkVersion="9" />
-
-    <!-- Permissions required for GCM -->
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Move to play-services-measurement -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application />
 </manifest>

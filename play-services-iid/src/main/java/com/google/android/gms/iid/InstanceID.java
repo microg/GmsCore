@@ -19,23 +19,46 @@ package com.google.android.gms.iid;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.gcm.GcmConstants;
+import org.microg.gms.iid.InstanceIdRpc;
+import org.microg.gms.iid.InstanceIdStore;
 
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.microg.gms.gcm.GcmConstants.EXTRA_DELETE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SCOPE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SUBSCIPTION;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SUBTYPE;
 
 /**
  * Instance ID provides a unique identifier for each app instance and a mechanism
  * to authenticate and authorize actions (for example, sending a GCM message).
  * <p/>
  * Instance ID is stable but may become invalid, if:
- * [...]
+ * <ul>
+ * <li>App deletes Instance ID</li>
+ * <li>Device is factory reset</li>
+ * <li>User uninstalls the app</li>
+ * <li>User clears app data</li>
+ * </ul>
  * If Instance ID has become invalid, the app can call {@link com.google.android.gms.iid.InstanceID#getId()}
  * to request a new Instance ID.
  * To prove ownership of Instance ID and to allow servers to access data or
  * services associated with the app, call {@link com.google.android.gms.iid.InstanceID#getToken(java.lang.String, java.lang.String)}.
  */
+@PublicApi
 public class InstanceID {
     /**
      * Error returned when failed requests are retried too often.  Use
@@ -65,13 +88,31 @@ public class InstanceID {
      */
     public static final String ERROR_TIMEOUT = "TIMEOUT";
 
+    private static final int RSA_KEY_SIZE = 2048;
+    private static final String TAG = "InstanceID";
+
+    private static InstanceIdStore storeInstance;
+    private static InstanceIdRpc rpc;
+    private static Map<String, InstanceID> instances = new HashMap<String, InstanceID>();
+
+    private final String subtype;
+    private KeyPair keyPair;
+    private long creationTime;
+
+    private InstanceID(String subtype) {
+        this.subtype = subtype == null ? "" : subtype;
+    }
+
     /**
      * Resets Instance ID and revokes all tokens.
      *
      * @throws IOException
      */
     public void deleteInstanceID() throws IOException {
-        throw new UnsupportedOperationException();
+        deleteToken("*", "*");
+        creationTime = 0;
+        storeInstance.delete(subtype + "|");
+        keyPair = null;
     }
 
     /**
@@ -85,12 +126,25 @@ public class InstanceID {
      * @throws IOException if the request fails.
      */
     public void deleteToken(String authorizedEntity, String scope) throws IOException {
-        deleteToken(authorizedEntity, scope, new Bundle());
+        deleteToken(authorizedEntity, scope, null);
     }
 
     @PublicApi(exclude = true)
     public void deleteToken(String authorizedEntity, String scope, Bundle extras) throws IOException {
-        throw new UnsupportedOperationException();
+        if (Looper.getMainLooper() == Looper.myLooper()) throw new IOException(ERROR_MAIN_THREAD);
+
+        storeInstance.delete(subtype, authorizedEntity, scope);
+
+        if (extras == null) extras = new Bundle();
+        extras.putString(EXTRA_SENDER, authorizedEntity);
+        extras.putString(EXTRA_SUBSCIPTION, authorizedEntity);
+        extras.putString(EXTRA_DELETE, "1");
+        extras.putString("X-" + EXTRA_DELETE, "1");
+        extras.putString(EXTRA_SUBTYPE, TextUtils.isEmpty(subtype) ? authorizedEntity : subtype);
+        extras.putString("X-" + EXTRA_SUBTYPE, TextUtils.isEmpty(subtype) ? authorizedEntity : subtype);
+        if (scope != null) extras.putString(EXTRA_SCOPE, scope);
+
+        rpc.handleRegisterMessageResult(rpc.sendRegisterMessageBlocking(extras, getKeyPair()));
     }
 
     /**
@@ -99,7 +153,13 @@ public class InstanceID {
      * @return Time when instance ID was created (milliseconds since Epoch).
      */
     public long getCreationTime() {
-        throw new UnsupportedOperationException();
+        if (creationTime == 0) {
+            String s = storeInstance.get(subtype, "cre");
+            if (s != null) {
+                creationTime = Long.parseLong(s);
+            }
+        }
+        return creationTime;
     }
 
     /**
@@ -108,7 +168,7 @@ public class InstanceID {
      * @return The identifier for the application instance.
      */
     public String getId() {
-        throw new UnsupportedOperationException();
+        return sha1KeyPair(getKeyPair());
     }
 
     /**
@@ -117,7 +177,17 @@ public class InstanceID {
      * @return InstanceID instance.
      */
     public static InstanceID getInstance(Context context) {
-        throw new UnsupportedOperationException();
+        String subtype = "";
+        if (storeInstance == null) {
+            storeInstance = new InstanceIdStore(context.getApplicationContext());
+            rpc = new InstanceIdRpc(context.getApplicationContext());
+        }
+        InstanceID instance = instances.get(subtype);
+        if (instance == null) {
+            instance = new InstanceID(subtype);
+            instances.put(subtype, instance);
+        }
+        return instance;
     }
 
     /**
@@ -163,4 +233,43 @@ public class InstanceID {
         return getToken(authorizedEntity, scope, null);
     }
 
+    @PublicApi(exclude = true)
+    public InstanceIdStore getStore() {
+        return storeInstance;
+    }
+
+    @PublicApi(exclude = true)
+    public String requestToken(String authorizedEntity, String scope, Bundle extras) {
+        throw new UnsupportedOperationException();
+    }
+
+    private synchronized KeyPair getKeyPair() {
+        if (keyPair == null) {
+            keyPair = storeInstance.getKeyPair(subtype);
+            if (keyPair == null) {
+                try {
+                    KeyPairGenerator rsaGenerator = KeyPairGenerator.getInstance("RSA");
+                    rsaGenerator.initialize(RSA_KEY_SIZE);
+                    keyPair = rsaGenerator.generateKeyPair();
+                    creationTime = System.currentTimeMillis();
+                    storeInstance.put(subtype, keyPair, creationTime);
+                } catch (NoSuchAlgorithmException e) {
+                    Log.w(TAG, e);
+                }
+            }
+        }
+        return keyPair;
+    }
+
+    @PublicApi(exclude = true)
+    public static String sha1KeyPair(KeyPair keyPair) {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA1").digest(keyPair.getPublic().getEncoded());
+            digest[0] = (byte) (112 + (0xF & digest[0]) & 0xFF);
+            return Base64.encodeToString(digest, 0, 8, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
+        } catch (NoSuchAlgorithmException e) {
+            Log.w(TAG, e);
+            return null;
+        }
+    }
 }

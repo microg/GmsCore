@@ -30,7 +30,7 @@ public class DataItemBuffer extends DataBuffer<DataItem> implements Result {
     @PublicApi(exclude = true)
     public DataItemBuffer(DataHolder dataHolder) {
         super(dataHolder);
-        status = new Status(dataHolder.statusCode);
+        status = new Status(dataHolder.getStatusCode());
     }
 
     @Override

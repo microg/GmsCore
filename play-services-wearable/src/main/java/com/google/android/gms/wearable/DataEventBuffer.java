@@ -33,7 +33,7 @@ public class DataEventBuffer extends DataBuffer<DataEvent> implements Result {
     @PublicApi(exclude = true)
     public DataEventBuffer(DataHolder dataHolder) {
         super(dataHolder);
-        status = new Status(dataHolder.statusCode);
+        status = new Status(dataHolder.getStatusCode());
     }
 
     @Override
