@@ -30,6 +30,10 @@ public final class GcmConstants {
     public static final String ACTION_INSTANCE_ID = "com.google.android.gms.iid.InstanceID";
 
     public static final String EXTRA_APP = "app";
+    public static final String EXTRA_APP_ID = "appid";
+    public static final String EXTRA_APP_VERSION_CODE = "app_ver";
+    public static final String EXTRA_APP_VERSION_NAME = "app_ver_name";
+    public static final String EXTRA_CLIENT_VERSION = "cliv";
     public static final String EXTRA_COMPONENT = "component";
     public static final String EXTRA_COLLAPSE_KEY = "collapse_key";
     public static final String EXTRA_DELAY = "google.delay";
@@ -37,10 +41,15 @@ public final class GcmConstants {
     public static final String EXTRA_ERROR = "error";
     public static final String EXTRA_FROM = "from";
     public static final String EXTRA_GSF_INTENT = "GSF";
+    public static final String EXTRA_GMS_VERSION = "gmsv";
+    public static final String EXTRA_IS_MESSENGER2 = "messenger2";
+    public static final String EXTRA_KID = "kid";
     public static final String EXTRA_MESSENGER = "google.messenger";
     public static final String EXTRA_MESSAGE_TYPE = "message_type";
     public static final String EXTRA_MESSAGE_ID = "google.message_id";
+    public static final String EXTRA_OS_VERSION = "osv";
     public static final String EXTRA_PENDING_INTENT = "com.google.android.gms.gcm.PENDING_INTENT";
+    public static final String EXTRA_PUBLIC_KEY = "pub2";
     public static final String EXTRA_RAWDATA = "rawData";
     public static final String EXTRA_RAWDATA_BASE64 = "gcm.rawData64";
     public static final String EXTRA_REGISTRATION_ID = "registration_id";
@@ -51,8 +60,10 @@ public final class GcmConstants {
     public static final String EXTRA_SENDER_LEGACY = "legacy.sender";
     public static final String EXTRA_SEND_TO = "google.to";
     public static final String EXTRA_SEND_FROM = "google.from";
+    public static final String EXTRA_SIGNATURE = "sig";
     public static final String EXTRA_SUBSCIPTION = "subscription";
     public static final String EXTRA_SUBTYPE = "subtype";
+    public static final String EXTRA_USE_GSF = "useGsf";
     public static final String EXTRA_TAG = "tag";
     public static final String EXTRA_TOPIC = "gcm.topic";
     public static final String EXTRA_TTL = "google.ttl";
