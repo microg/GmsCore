@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable.internal;
+package org.microg.gms.common.api;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+public interface ApiConnection {
+    void connect();
 
-public class AncsNotificationParcelable extends AutoSafeParcelable implements AncsNotification {
-    public static final Creator<AncsNotificationParcelable> CREATOR = new AutoCreator<AncsNotificationParcelable>(AncsNotificationParcelable.class);
+    void disconnect();
+
+    boolean isConnected();
+
+    boolean isConnecting();
 }

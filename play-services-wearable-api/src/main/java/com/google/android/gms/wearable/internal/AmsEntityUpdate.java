@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,5 @@
 
 package com.google.android.gms.wearable.internal;
 
-import org.microg.safeparcel.AutoSafeParcelable;
-
-public class AncsNotificationParcelable extends AutoSafeParcelable implements AncsNotification {
-    public static final Creator<AncsNotificationParcelable> CREATOR = new AutoCreator<AncsNotificationParcelable>(AncsNotificationParcelable.class);
+public interface AmsEntityUpdate {
 }

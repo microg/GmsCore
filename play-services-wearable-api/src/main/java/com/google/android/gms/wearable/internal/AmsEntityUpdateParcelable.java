@@ -18,6 +18,6 @@ package com.google.android.gms.wearable.internal;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 
-public class AmsEntityUpdateParcelable extends AutoSafeParcelable {
+public class AmsEntityUpdateParcelable extends AutoSafeParcelable implements AmsEntityUpdate {
     public static final Creator<AmsEntityUpdateParcelable> CREATOR = new AutoCreator<AmsEntityUpdateParcelable>(AmsEntityUpdateParcelable.class);
 }

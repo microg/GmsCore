@@ -16,8 +16,23 @@
 
 package com.google.android.gms.wearable.internal;
 
+import com.google.android.gms.wearable.Channel;
+
 import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
 
 public class ChannelEventParcelable extends AutoSafeParcelable {
+
+    @SafeParceled(1)
+    private int versionCode;
+    @SafeParceled(2)
+    public Channel channel; // TODO: ChannelImpl needed!
+    @SafeParceled(3)
+    public int eventType;
+    @SafeParceled(4)
+    public int closeReason;
+    @SafeParceled(5)
+    public int appSpecificErrorCode;
+
     public static final Creator<ChannelEventParcelable> CREATOR = new AutoCreator<ChannelEventParcelable>(ChannelEventParcelable.class);
 }

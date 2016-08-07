@@ -51,5 +51,5 @@ android {
 }
 
 dependencies {
-    compile project(':play-services-common-api')
+    compile project(':play-services-basement')
 }

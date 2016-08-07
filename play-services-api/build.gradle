@@ -51,8 +51,8 @@ android {
 }
 
 dependencies {
+    compile project(':play-services-basement')
     compile project(':play-services-cast-api')
-    compile project(':play-services-common-api')
     compile project(':play-services-iid-api')
     compile project(':play-services-location-api')
     compile project(':play-services-wearable-api')
