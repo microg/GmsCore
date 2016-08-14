@@ -41,13 +41,13 @@ public interface GooglePlayServicesClient {
     void unregisterConnectionFailedListener(OnConnectionFailedListener listener);
 
     @Deprecated
-    public interface OnConnectionFailedListener {
+    interface OnConnectionFailedListener {
 
         void onConnectionFailed(ConnectionResult result);
     }
 
     @Deprecated
-    public interface ConnectionCallbacks {
+    interface ConnectionCallbacks {
 
         void onConnected(Bundle connectionHint);
 

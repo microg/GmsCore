@@ -24,21 +24,21 @@ import com.google.android.gms.wearable.NodeApi;
 public class NodeApiImpl implements NodeApi {
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, NodeListener listener) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<GetConnectedNodesResult> getConnectedNodes(GoogleApiClient client) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<GetLocalNodeResult> getLocalNode(GoogleApiClient client) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, NodeListener listener) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

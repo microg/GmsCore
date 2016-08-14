@@ -16,8 +16,8 @@
 
 include ':safe-parcel'
 
+include ':play-services-basement'
 include ':play-services-cast-api'
-include ':play-services-common-api'
 include ':play-services-iid-api'
 include ':play-services-location-api'
 include ':play-services-wearable-api'

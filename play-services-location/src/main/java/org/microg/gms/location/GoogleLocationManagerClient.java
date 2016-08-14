@@ -32,12 +32,7 @@ import org.microg.gms.common.GmsService;
 public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocationManagerService> {
     public GoogleLocationManagerClient(Context context, GoogleApiClient.ConnectionCallbacks
             callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener);
-    }
-
-    @Override
-    protected String getActionString() {
-        return GmsService.LOCATION_MANAGER.ACTION;
+        super(context, callbacks, connectionFailedListener, GmsService.LOCATION_MANAGER.ACTION);
     }
 
     @Override

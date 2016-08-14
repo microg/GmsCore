@@ -19,11 +19,28 @@ package com.google.android.gms.wearable;
 import android.os.Bundle;
 
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.wearable.databundle.DataBundleUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static org.microg.gms.wearable.databundle.DataBundleUtil.ASSET_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.BOOLEAN_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.BYTE_ARRAY_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.BYTE_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.DATAMAP_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.DOUBLE_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.FLOAT_ARRAY_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.FLOAT_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.INTEGER_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.LIST_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.LONG_ARRAY_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.LONG_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.STRING_ARRAY_TYPE_CODE;
+import static org.microg.gms.wearable.databundle.DataBundleUtil.STRING_TYPE_CODE;
 
 /**
  * A map of data supported by {@link PutDataMapRequest} and {@link DataMapItem}s. DataMap may
@@ -74,6 +91,40 @@ public class DataMap {
         return o instanceof DataMap && data.equals(((DataMap) o).data);
     }
 
+    public StoredType getType(String key) {
+        return types.get(key);
+    }
+
+    @PublicApi(exclude = true)
+    public enum StoredType {
+        Asset(ASSET_TYPE_CODE), Boolean(BOOLEAN_TYPE_CODE), Byte(BYTE_TYPE_CODE),
+        ByteArray(BYTE_ARRAY_TYPE_CODE), DataMap(DATAMAP_TYPE_CODE), DataMapArrayList(DataMap),
+        Double(DOUBLE_TYPE_CODE), Float(FLOAT_TYPE_CODE), FloatArray(FLOAT_ARRAY_TYPE_CODE),
+        Integer(INTEGER_TYPE_CODE), IntegerArrayList(Integer), Long(LONG_TYPE_CODE),
+        LongArray(LONG_ARRAY_TYPE_CODE), String(STRING_TYPE_CODE),
+        StringArray(STRING_ARRAY_TYPE_CODE), StringArrayList(String);
+
+        private int typeCode;
+        private StoredType listType;
+
+        StoredType(int typeCode) {
+            this.typeCode = typeCode;
+        }
+
+        StoredType(StoredType listType) {
+            this.typeCode = LIST_TYPE_CODE;
+            this.listType = listType;
+        }
+
+        public int getTypeCode() {
+            return typeCode;
+        }
+
+        public StoredType getListType() {
+            return listType;
+        }
+    }
+
     /**
      * @return a DataMap from a Bundle. The input Bundle is expected to contain only elements
      * supported by DataMap. Any elements in the Bundle not supported by DataMap will be dropped.
@@ -82,7 +133,46 @@ public class DataMap {
         DataMap res = new DataMap();
         if (bundle != null) {
             for (String key : bundle.keySet()) {
-                res.data.put(key, bundle.get(key));
+                Object val = bundle.get(key);
+                if (val instanceof Asset) {
+                    res.putAsset(key, (Asset) val);
+                } else if (val instanceof Boolean) {
+                    res.putBoolean(key, (Boolean) val);
+                } else if (val instanceof Byte) {
+                    res.putByte(key, (Byte) val);
+                } else if (val instanceof byte[]) {
+                    res.putByteArray(key, (byte[]) val);
+                } else if (val instanceof Bundle) {
+                    res.putDataMap(key, DataMap.fromBundle((Bundle) val));
+                } else if (val instanceof Double) {
+                    res.putDouble(key, (Double) val);
+                } else if (val instanceof Float) {
+                    res.putFloat(key, (Float) val);
+                } else if (val instanceof float[]) {
+                    res.putFloatArray(key, (float[]) val);
+                } else if (val instanceof Integer) {
+                    res.putInt(key, (Integer) val);
+                } else if (val instanceof Long) {
+                    res.putLong(key, (Long) val);
+                } else if (val instanceof long[]) {
+                    res.putLongArray(key, (long[]) val);
+                } else if (val instanceof String) {
+                    res.putString(key, (String) val);
+                } else if (val instanceof String[]) {
+                    res.putStringArray(key, (String[]) val);
+                } else if (val instanceof ArrayList) {
+                    if (((ArrayList) val).isEmpty() || ((ArrayList) val).get(0) instanceof String) {
+                        res.putStringArrayList(key, (ArrayList<String>) val);
+                    } else if (((ArrayList) val).get(0) instanceof Bundle) {
+                        ArrayList<DataMap> dataMaps = new ArrayList<DataMap>();
+                        for (Bundle b : ((ArrayList<Bundle>) val)) {
+                            dataMaps.add(DataMap.fromBundle(b));
+                        }
+                        res.putDataMapArrayList(key, dataMaps);
+                    } else if (((ArrayList) val).get(0) instanceof Integer) {
+                        res.putIntegerArrayList(key, (ArrayList<Integer>) val);
+                    }
+                }
             }
         }
         return res;
@@ -92,7 +182,7 @@ public class DataMap {
      * @return a DataMap from a byte[].
      */
     public static DataMap fromByteArray(byte[] bytes) {
-        return null; // TODO
+        return DataBundleUtil.readDataMap(bytes, Collections.<Asset>emptyList());
     }
 
     /**
@@ -213,6 +303,11 @@ public class DataMap {
         }
     }
 
+    public void putAsset(String key, Asset value) {
+        data.put(key, value);
+        types.put(key, StoredType.Asset);
+    }
+
     public void putBoolean(String key, boolean value) {
         data.put(key, value);
         types.put(key, StoredType.Boolean);
@@ -302,7 +397,7 @@ public class DataMap {
         for (String key : data.keySet()) {
             switch (types.get(key)) {
                 case Asset:
-                    bundle.putParcelable(key, (Asset)data.get(key));
+                    bundle.putParcelable(key, (Asset) data.get(key));
                     break;
                 case Boolean:
                     bundle.putBoolean(key, (Boolean) data.get(key));
@@ -317,7 +412,11 @@ public class DataMap {
                     bundle.putBundle(key, ((DataMap) data.get(key)).toBundle());
                     break;
                 case DataMapArrayList:
-                    // TODO
+                    ArrayList<Bundle> bundles = new ArrayList<Bundle>();
+                    for (DataMap dataMap : ((ArrayList<DataMap>) data.get(key))) {
+                        bundles.add(dataMap.toBundle());
+                    }
+                    bundle.putParcelableArrayList(key, bundles);
                     break;
                 case Double:
                     bundle.putDouble(key, (Double) data.get(key));
@@ -355,15 +454,10 @@ public class DataMap {
     }
 
     public byte[] toByteArray() {
-        return null; // TODO
+        return DataBundleUtil.createBytes(this);
     }
 
     public String toString() {
         return "DataMap{size=" + size() + "}";
-    }
-
-    private enum StoredType {
-        Asset, Boolean, Byte, ByteArray, DataMap, DataMapArrayList, Double, Float, FloatArray,
-        Integer, IntegerArrayList, Long, LongArray, String, StringArray, StringArrayList
     }
 }

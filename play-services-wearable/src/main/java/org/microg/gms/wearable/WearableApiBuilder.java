@@ -18,7 +18,6 @@ package org.microg.gms.wearable;
 
 import android.content.Context;
 import android.os.Looper;
-import android.util.Log;
 
 import com.google.android.gms.common.api.AccountInfo;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,7 +33,6 @@ public class WearableApiBuilder implements ApiBuilder<Wearable.WearableOptions> 
     public ApiConnection build(Context context, Looper looper, Wearable.WearableOptions options,
             AccountInfo accountInfo, GoogleApiClient.ConnectionCallbacks callbacks,
             GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
-        Log.d(TAG, "Wearables not supported");
-        return null;
+        return new WearableClientImpl(context, options, callbacks, connectionFailedListener);
     }
 }

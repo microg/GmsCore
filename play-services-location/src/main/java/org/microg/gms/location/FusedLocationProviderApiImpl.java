@@ -22,7 +22,6 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
@@ -33,6 +32,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import org.microg.gms.common.GmsConnector;
+import org.microg.gms.common.api.ApiConnection;
 
 public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     private static final String TAG = "GmsFusedApiImpl";
@@ -50,7 +50,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult requestLocationUpdates(GoogleApiClient client,
-            final LocationRequest request, final LocationListener listener) {
+                                                final LocationRequest request, final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -61,8 +61,8 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult requestLocationUpdates(GoogleApiClient client,
-            final LocationRequest request, final LocationListener listener,
-            final Looper looper) {
+                                                final LocationRequest request, final LocationListener listener,
+                                                final Looper looper) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -73,7 +73,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult requestLocationUpdates(GoogleApiClient client,
-            final LocationRequest request, final PendingIntent callbackIntent) {
+                                                final LocationRequest request, final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -84,7 +84,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult removeLocationUpdates(GoogleApiClient client,
-            final LocationListener listener) {
+                                               final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -95,7 +95,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
 
     @Override
     public PendingResult removeLocationUpdates(GoogleApiClient client,
-            final PendingIntent callbackIntent) {
+                                               final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -125,15 +125,13 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     private PendingResult callVoid(GoogleApiClient client, final Runnable runnable) {
-        return new GmsConnector<LocationClientImpl, Result, Api.ApiOptions.NoOptions>(client, LocationServices.API,
-                new GmsConnector.Callback<LocationClientImpl, Result>() {
-                    @Override
-                    public Result onClientAvailable(LocationClientImpl client) throws
-                            RemoteException {
-                            runnable.run(client);
-                            return Status.SUCCESS;
-                    }
-                }).connect();
+        return GmsConnector.call(client, LocationServices.API, new GmsConnector.Callback<LocationClientImpl, Result>() {
+            @Override
+            public void onClientAvailable(LocationClientImpl client, ResultProvider<Result> resultProvider) throws RemoteException {
+                runnable.run(client);
+                resultProvider.onResultAvailable(Status.SUCCESS);
+            }
+        });
     }
 
     private interface Runnable {

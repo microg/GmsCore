@@ -42,6 +42,12 @@ android {
         versionName getMyVersionName()
     }
 
+    sourceSets {
+        main {
+            java.srcDirs += 'src/main/protos-java'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
     }
@@ -50,4 +56,5 @@ android {
 dependencies {
     compile project(':play-services-base')
     compile project(':play-services-wearable-api')
+    compile 'com.squareup.wire:wire-runtime:1.6.1'
 }

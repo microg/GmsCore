@@ -19,6 +19,7 @@ package com.google.android.gms.wearable;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.microg.gms.common.PublicApi;
 import org.microg.gms.wearable.DataApiImpl;
 import org.microg.gms.wearable.MessageApiImpl;
 import org.microg.gms.wearable.NodeApiImpl;
@@ -27,6 +28,7 @@ import org.microg.gms.wearable.WearableApiBuilder;
 /**
  * An API for the Android Wear platform.
  */
+@PublicApi
 public class Wearable {
     /**
      * Token to pass to {@link GoogleApiClient.Builder#addApi(Api)} to enable the Wearable features.
@@ -38,6 +40,12 @@ public class Wearable {
     public static final NodeApi NodeApi = new NodeApiImpl();
 
     public static class WearableOptions implements Api.ApiOptions.Optional {
+        /**
+         * Special option for microG to allow implementation of a FOSS first party Android Wear app
+         */
+        @PublicApi(exclude = true)
+        public boolean firstPartyMode = false;
+
         public static class Builder {
             public WearableOptions build() {
                 return new WearableOptions();

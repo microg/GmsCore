@@ -16,24 +16,42 @@
 
 package org.microg.gms.wearable;
 
+import android.os.RemoteException;
+import android.util.Log;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.internal.SendMessageResponse;
+
+import org.microg.gms.common.GmsConnector;
+import org.microg.gms.common.api.ApiConnection;
 
 public class MessageApiImpl implements MessageApi {
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, MessageListener listener) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, MessageListener listener) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public PendingResult<SendMessageResult> sendMessage(GoogleApiClient client, String nodeId, String path, byte[] data) {
-        return null;
+    public PendingResult<SendMessageResult> sendMessage(GoogleApiClient client, final String nodeId, final String path, final byte[] data) {
+        return GmsConnector.call(client, Wearable.API, new GmsConnector.Callback<WearableClientImpl, SendMessageResult>() {
+            @Override
+            public void onClientAvailable(WearableClientImpl client, final ResultProvider<SendMessageResult> resultProvider) throws RemoteException {
+                client.getServiceInterface().sendMessage(new BaseWearableCallbacks() {
+                    @Override
+                    public void onSendMessageResponse(SendMessageResponse response) throws RemoteException {
+                        resultProvider.onResultAvailable(response);
+                    }
+                }, nodeId, path, data);
+            }
+        });
     }
 }

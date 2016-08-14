@@ -48,7 +48,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:23.4.0'
-    compile project(':play-services-common-api')
+    compile project(':play-services-basement')
     compile project(':play-services-tasks')
 }

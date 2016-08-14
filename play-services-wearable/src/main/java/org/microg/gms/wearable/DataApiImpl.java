@@ -30,46 +30,46 @@ import com.google.android.gms.wearable.internal.PutDataRequest;
 public class DataApiImpl implements DataApi {
     @Override
     public PendingResult<Status> addListener(GoogleApiClient client, DataListener listener) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<DeleteDataItemsResult> deleteDataItems(GoogleApiClient client, Uri uri) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<DataItemResult> getDataItem(GoogleApiClient client, Uri uri) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<DataItemBuffer> getDataItems(GoogleApiClient client, Uri uri) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, DataItemAsset asset) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<GetFdForAssetResult> getFdForAsset(GoogleApiClient client, Asset asset) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<DataItemResult> putDataItem(GoogleApiClient client, PutDataRequest request) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PendingResult<Status> removeListener(GoogleApiClient client, DataListener listener) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

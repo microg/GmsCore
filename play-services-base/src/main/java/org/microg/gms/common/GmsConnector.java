@@ -23,25 +23,29 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 
 import org.microg.gms.common.api.AbstractPendingResult;
 import org.microg.gms.common.api.ApiConnection;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
-public class GmsConnector<C extends ApiConnection, R extends Result, O extends Api.ApiOptions> {
+public class GmsConnector<C extends ApiConnection, R extends Result> {
     private static final String TAG = "GmsConnector";
 
     private final GoogleApiClientImpl apiClient;
-    private final Api<O> api;
+    private final Api api;
     private final Callback<C, R> callback;
 
-    public GmsConnector(GoogleApiClient apiClient, Api<O> api, Callback<C, R> callback) {
+    public GmsConnector(GoogleApiClient apiClient, Api api, Callback<C, R> callback) {
         this.apiClient = (GoogleApiClientImpl) apiClient;
         this.api = api;
         this.callback = callback;
     }
 
+    public static <C extends ApiConnection, R extends Result> PendingResult<R> call(GoogleApiClient client, Api api, GmsConnector.Callback<C, R> callback) {
+        return new GmsConnector<C, R>(client, api, callback).connect();
+    }
 
     public AbstractPendingResult<R> connect() {
         Log.d(TAG, "connect()");
@@ -54,8 +58,12 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
         return result;
     }
 
-    public static interface Callback<C, R> {
-        public R onClientAvailable(C client) throws RemoteException;
+    public interface Callback<C, R> {
+        void onClientAvailable(C client, ResultProvider<R> resultProvider) throws RemoteException;
+
+        interface ResultProvider<R> {
+            void onResultAvailable(R result);
+        }
     }
 
     private class Handler extends android.os.Handler {
@@ -66,10 +74,15 @@ public class GmsConnector<C extends ApiConnection, R extends Result, O extends A
         @Override
         public void handleMessage(Message msg) {
             Log.d(TAG, "Handler : handleMessage");
-            AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
+            final AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
             try {
-                C connection = (C)apiClient.getApiConnection(api);
-                result.deliverResult(callback.onClientAvailable(connection));
+                C connection = (C) apiClient.getApiConnection(api);
+                callback.onClientAvailable(connection, new GmsConnector.Callback.ResultProvider<R>() {
+                    @Override
+                    public void onResultAvailable(R realResult) {
+                        result.deliverResult(realResult);
+                    }
+                });
             } catch (RemoteException ignored) {
 
             }
