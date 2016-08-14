@@ -21,6 +21,8 @@
 -keep public class com.google.android.gms.common.security.ProviderInstallerImpl { public *; }
 -keep public class com.google.android.gms.plus.plusone.PlusOneButtonCreatorImpl { public *; }
 -keep public class com.google.android.gms.dynamic.IObjectWrapper { public *; }
+-keep public class com.google.android.gms.chimera.container.DynamiteLoaderImpl { public *; }
+-keep public class com.google.android.gms.dynamite.descriptors.** { public *; }
 
 # Keep AutoSafeParcelables
 -keep public class * extends org.microg.safeparcel.AutoSafeParcelable {
