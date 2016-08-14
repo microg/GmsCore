@@ -51,6 +51,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
     }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {
