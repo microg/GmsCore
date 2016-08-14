@@ -7,3 +7,6 @@
 [submodule "extern/Wearable"]
 	path = extern/Wearable
 	url = https://github.com/microg/android_external_Wearable.git
+[submodule "extern/GmsLib"]
+	path = extern/GmsLib
+	url = https://github.com/microg/android_external_GmsLib.git

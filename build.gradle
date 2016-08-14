@@ -1,0 +1,7 @@
+subprojects {
+    group = 'org.microg'
+    repositories {
+        jcenter()
+    }
+}
+

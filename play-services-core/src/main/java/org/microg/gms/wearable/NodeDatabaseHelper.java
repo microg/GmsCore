@@ -75,17 +75,20 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         if (path == null) {
             params = new String[]{packageName, signatureDigest};
             selection = "packageName = ? AND signatureDigest = ?";
-        } else if (host == null) {
+        } else if (TextUtils.isEmpty(host)) {
             if (path.endsWith("/")) path = path + "%";
+            path = path.replace("*", "%");
             params = new String[]{packageName, signatureDigest, path};
             selection = "packageName = ? AND signatureDigest = ? AND path LIKE ?";
         } else {
             if (path.endsWith("/")) path = path + "%";
+            path = path.replace("*", "%");
+            host = host.replace("*", "%");
             params = new String[]{packageName, signatureDigest, host, path};
             selection = "packageName = ? AND signatureDigest = ? AND host = ? AND path LIKE ?";
         }
         selection += " AND deleted=0 AND assetsPresent !=0";
-        return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
+        return getReadableDatabase().rawQuery("SELECT null AS host,printf(\"wear://%s%s\",host,path) AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
     }
 
     public synchronized Cursor getDataItemsByHostAndPath(String packageName, String signatureDigest, String host, String path) {

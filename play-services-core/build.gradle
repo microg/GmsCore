@@ -38,6 +38,7 @@ dependencies {
 
     compile project(":microg-ui-tools")
     compile project(':play-services-api')
+    compile project(':play-services-wearable')
     compile project(':unifiednlp-base')
     compile project(':wearable-lib')
 
@@ -80,8 +81,7 @@ android {
         versionName getMyVersionName()
         def x = getMyVersionCode()
         // We are not allowed to freely choose the hundreds column as it defines the device type
-        // Update commit id to current when increasing gms version code
-        versionCode(9256200 + x % 100 + ((int) (x / 100)) * 1000)
+        versionCode(9450200 + x % 100 + ((int) (x / 100)) * 1000)
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86"

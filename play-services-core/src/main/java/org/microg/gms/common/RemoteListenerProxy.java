@@ -66,6 +66,7 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
                         if (!connecting) Log.d(TAG, "Could not connect to: " + intent);
                         return connecting;
                     }
+                    Log.d(TAG, "Unable to resolve: " + searchIntent);
                     return false;
                 } catch (Exception e) {
                     Log.w(TAG, e);
@@ -95,6 +96,8 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
                 }
                 waiting.clear();
                 context.unbindService(RemoteListenerProxy.this);
+                connecting = false;
+                remote = null;
             }
         }
     }

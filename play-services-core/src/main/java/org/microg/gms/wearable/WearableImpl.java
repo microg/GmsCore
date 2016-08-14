@@ -417,9 +417,7 @@ public class WearableImpl {
     }
 
     public DataItemRecord putData(PutDataRequest request, String packageName) {
-        String host = request.getUri().getHost();
-        if (TextUtils.isEmpty(host)) host = getLocalNodeId();
-        DataItemInternal dataItem = new DataItemInternal(host, request.getUri().getPath());
+        DataItemInternal dataItem = new DataItemInternal(fixHost(request.getUri().getHost(), true), request.getUri().getPath());
         for (Map.Entry<String, Asset> assetEntry : request.getAssets().entrySet()) {
             Asset asset = prepareAsset(packageName, assetEntry.getValue());
             if (asset != null) {
@@ -443,6 +441,13 @@ public class WearableImpl {
         return DataHolder.fromCursor(dataHolderItems, 0, null);
     }
 
+    private String fixHost(String host, boolean nothingToLocal) {
+        if (TextUtils.isEmpty(host) && nothingToLocal) return getLocalNodeId();
+        if (TextUtils.isEmpty(host)) return null;
+        if (host.equals("local")) return getLocalNodeId();
+        return host;
+    }
+
     public DataHolder getDataItemsByUriAsHolder(Uri uri, String packageName) {
         String firstSignature;
         try {
@@ -450,23 +455,22 @@ public class WearableImpl {
         } catch (Exception e) {
             return null;
         }
-        Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(packageName, firstSignature, uri.getHost(), uri.getPath());
+        Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(packageName, firstSignature, fixHost(uri.getHost(), false), uri.getPath());
+        int j = 0;
         while (dataHolderItems.moveToNext()) {
-            Log.d(TAG, "getDataItems[]: path=" + Uri.parse(dataHolderItems.getString(1)).getPath());
+            for (int i = 0; i < dataHolderItems.getColumnCount(); i++) {
+                if (dataHolderItems.getType(i) == Cursor.FIELD_TYPE_STRING) {
+                    Log.d(TAG, "getDataItems[" + j + "]: " + dataHolderItems.getColumnName(i) + "=" + dataHolderItems.getString(i));
+                }
+                if (dataHolderItems.getType(i) == Cursor.FIELD_TYPE_INTEGER)
+                    Log.d(TAG, "getDataItems[" + j + "]: " + dataHolderItems.getColumnName(i) + "=" + dataHolderItems.getLong(i));
+            }
         }
         dataHolderItems.moveToFirst();
         dataHolderItems.moveToPrevious();
-        return new DataHolder(dataHolderItems, 0, null);
-    }
-
-    public DataHolder getDataItemForRecordAsHolder(DataItemRecord record) {
-        Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(record.packageName, record.signatureDigest, record.dataItem.uri.getHost(), record.dataItem.uri.getPath());
-        while (dataHolderItems.moveToNext()) {
-            Log.d(TAG, "getDataItems[]: path=" + Uri.parse(dataHolderItems.getString(1)).getPath());
-        }
-        dataHolderItems.moveToFirst();
-        dataHolderItems.moveToPrevious();
-        return new DataHolder(dataHolderItems, 0, null);
+        DataHolder dataHolder = new DataHolder(dataHolderItems, 0, null);
+        Log.d(TAG, "Returning data holder of size " + dataHolder.getCount() + " for query " + uri);
+        return dataHolder;
     }
 
     public synchronized void addListener(String packageName, IWearableListener listener) {
@@ -515,7 +519,7 @@ public class WearableImpl {
     }
 
     public int deleteDataItems(Uri uri, String packageName) {
-        List<DataItemRecord> records = nodeDatabase.deleteDataItems(packageName, PackageUtils.firstSignatureDigest(context, packageName), uri.getHost(), uri.getPath());
+        List<DataItemRecord> records = nodeDatabase.deleteDataItems(packageName, PackageUtils.firstSignatureDigest(context, packageName), fixHost(uri.getHost(), false), uri.getPath());
         for (DataItemRecord record : records) {
             syncRecordToAll(record);
         }
@@ -533,7 +537,7 @@ public class WearableImpl {
     }
 
     public DataItemRecord getDataItemByUri(Uri uri, String packageName) {
-        Cursor cursor = nodeDatabase.getDataItemsByHostAndPath(packageName, PackageUtils.firstSignatureDigest(context, packageName), uri.getHost(), uri.getPath());
+        Cursor cursor = nodeDatabase.getDataItemsByHostAndPath(packageName, PackageUtils.firstSignatureDigest(context, packageName), fixHost(uri.getHost(), true), uri.getPath());
         DataItemRecord record = null;
         if (cursor != null) {
             if (cursor.moveToNext()) {

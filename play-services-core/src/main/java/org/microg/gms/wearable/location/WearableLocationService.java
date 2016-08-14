@@ -14,86 +14,83 @@
  * limitations under the License.
  */
 
-package org.microg.gms.wearable;
+package org.microg.gms.wearable.location;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.common.data.DataHolder;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.internal.ClientIdentity;
 import com.google.android.gms.location.internal.LocationRequestInternal;
-import com.google.android.gms.wearable.internal.AmsEntityUpdateParcelable;
-import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
-import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
-import com.google.android.gms.wearable.internal.ChannelEventParcelable;
-import com.google.android.gms.wearable.internal.IWearableListener;
-import com.google.android.gms.wearable.internal.MessageEventParcelable;
-import com.google.android.gms.wearable.internal.NodeParcelable;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class WearableLocationListener extends IWearableListener.Stub {
-    public static final String LOCATION_REQUESTS = "com/google/android/location/fused/wearable/LOCATION_REQUESTS";
-    public static final String CAPABILITY_QUERY = "com/google/android/location/fused/wearable/CAPABILITY_QUERY";
+public class WearableLocationService extends WearableListenerService {
+    private static final String TAG = "GmsWearLocSvc";
 
-    private static final String TAG = "GmsWearLocListener";
+    public static final String PATH_LOCATION_REQUESTS = "com/google/android/location/fused/wearable/LOCATION_REQUESTS";
+    public static final String PATH_CAPABILITY_QUERY = "com/google/android/location/fused/wearable/CAPABILITY_QUERY";
+    public static final String PATH_CAPABILITY = "com/google/android/location/fused/wearable/CAPABILITY";
 
-    private WearableLocationService locationService;
-
-    public WearableLocationListener(WearableLocationService locationService) {
-        this.locationService = locationService;
-    }
-
-    @Override
-    public void onDataChanged(DataHolder data) throws RemoteException {
-    }
+    private GoogleApiClient apiClient;
+    private Map<String, Collection<LocationRequestInternal>> requestMap = new HashMap<String, Collection<LocationRequestInternal>>();
 
     @Override
-    public void onMessageReceived(MessageEventParcelable messageEvent) throws RemoteException {
-        if (messageEvent.getPath().equals(LOCATION_REQUESTS)) {
-            //DataMap dataMap = DataMap.fromByteArray(messageEvent.getData());
-            //locationService.onLocationRequests(messageEvent.getSourceNodeId(), parseLocationRequestList(dataMap, locationService), dataMap.getBoolean("TRIGGER_UPDATE", false));
-        } else if (messageEvent.getPath().equals(CAPABILITY_QUERY)) {
-            locationService.onCapabilityQuery(messageEvent.getSourceNodeId());
+    public void onMessageReceived(MessageEvent messageEvent) {
+        if (messageEvent.getPath().equals(PATH_LOCATION_REQUESTS)) {
+            DataMap dataMap = DataMap.fromByteArray(messageEvent.getData());
+            onLocationRequests(messageEvent.getSourceNodeId(), readLocationRequestList(dataMap, this), dataMap.getBoolean("TRIGGER_UPDATE", false));
+        } else if (messageEvent.getPath().equals(PATH_CAPABILITY_QUERY)) {
+            onCapabilityQuery(messageEvent.getSourceNodeId());
         }
     }
 
     @Override
-    public void onPeerConnected(NodeParcelable node) throws RemoteException {
+    public void onPeerDisconnected(Node peer) {
+        onLocationRequests(peer.getId(), null, false);
     }
 
-    @Override
-    public void onPeerDisconnected(NodeParcelable node) throws RemoteException {
-        locationService.onLocationRequests(node.getId(), Collections.<LocationRequestInternal>emptyList(), false);
+    public void onLocationRequests(String nodeId, Collection<LocationRequestInternal> requests, boolean triggerUpdate) {
+        if (requests == null || requests.isEmpty()) {
+            requestMap.remove(nodeId);
+        } else {
+            requestMap.put(nodeId, requests);
+        }
+        Log.d(TAG, "Requests: "+requestMap.entrySet());
+        // TODO actually request
     }
 
-    @Override
-    public void onConnectedNodes(List<NodeParcelable> nodes) throws RemoteException {
+    public void onCapabilityQuery(String nodeId) {
+        Wearable.MessageApi.sendMessage(getApiClient(), nodeId, PATH_CAPABILITY, writeLocationCapability(new DataMap(), true).toByteArray());
     }
 
-    @Override
-    public void onNotificationReceived(AncsNotificationParcelable notification) throws RemoteException {
+    private GoogleApiClient getApiClient() {
+        if (apiClient == null) {
+            apiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API).build();
+        }
+        if (!apiClient.isConnected()) {
+            apiClient.connect();
+        }
+        return apiClient;
     }
 
-    @Override
-    public void onChannelEvent(ChannelEventParcelable channelEvent) throws RemoteException {
+    public static DataMap writeLocationCapability(DataMap dataMap, boolean locationCapable) {
+        dataMap.putBoolean("CAPABILITY_LOCATION", locationCapable);
+        return dataMap;
     }
 
-    @Override
-    public void onConnectedCapabilityChanged(CapabilityInfoParcelable capabilityInfo) throws RemoteException {
-    }
-
-    @Override
-    public void onEntityUpdate(AmsEntityUpdateParcelable update) throws RemoteException {
-    }
-
-    /*public static Collection<LocationRequestInternal> parseLocationRequestList(DataMap dataMap, Context context) {
+    public static Collection<LocationRequestInternal> readLocationRequestList(DataMap dataMap, Context context) {
         if (!dataMap.containsKey("REQUEST_LIST")) {
             Log.w(TAG, "malformed DataMap: missing key REQUEST_LIST");
             return Collections.emptyList();
@@ -101,12 +98,12 @@ public class WearableLocationListener extends IWearableListener.Stub {
         List<DataMap> requestMapList = dataMap.getDataMapArrayList("REQUEST_LIST");
         List<LocationRequestInternal> locationRequests = new ArrayList<LocationRequestInternal>();
         for (DataMap map : requestMapList) {
-            locationRequests.add(parseLocationRequest(map, context));
+            locationRequests.add(readLocationRequest(map, context));
         }
         return locationRequests;
     }
 
-    private static LocationRequestInternal parseLocationRequest(DataMap dataMap, Context context) {
+    private static LocationRequestInternal readLocationRequest(DataMap dataMap, Context context) {
         LocationRequestInternal request = new LocationRequestInternal();
         request.triggerUpdate = true;
         request.request = new LocationRequest();
@@ -142,11 +139,11 @@ public class WearableLocationListener extends IWearableListener.Stub {
 
     private static ClientIdentity generateClientIdentity(String packageName, Context context) {
         return null;
-        try {
+        /*try {
             return new ClientIdentity(context.getPackageManager().getApplicationInfo(packageName, 0).uid, packageName);
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, "Unknown client identity: " + packageName, e);
             return new ClientIdentity(context.getApplicationInfo().uid, context.getPackageName());
-        }
-    }*/
+        }*/
+    }
 }

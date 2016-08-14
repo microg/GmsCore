@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
@@ -154,11 +155,11 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void sendMessage(IWearableCallbacks callbacks, String targetNodeId, String path, byte[] data) throws RemoteException {
-        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path);
+        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
         SendMessageResponse sendMessageResponse = new SendMessageResponse();
         try {
-            sendMessageResponse.resultId = wearable.sendMessage(packageName, targetNodeId, path, data);
-            if (sendMessageResponse.resultId == -1) {
+            sendMessageResponse.requestId = wearable.sendMessage(packageName, targetNodeId, path, data);
+            if (sendMessageResponse.requestId == -1) {
                 sendMessageResponse.statusCode = 4000;
             }
         } catch (Exception e) {
@@ -262,8 +263,8 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void getStrorageInformation(IWearableCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getStrorageInformation");
+    public void getStorageInformation(IWearableCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: getStorageInformation");
     }
 
     @Override
