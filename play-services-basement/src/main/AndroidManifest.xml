@@ -16,7 +16,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.microg.gms.common.api">
+    package="org.microg.gms.basement">
 
     <uses-sdk android:minSdkVersion="9" />
 
