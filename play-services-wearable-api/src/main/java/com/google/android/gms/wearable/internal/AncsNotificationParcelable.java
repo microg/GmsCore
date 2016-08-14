@@ -16,6 +16,8 @@
 
 package com.google.android.gms.wearable.internal;
 
+import com.google.android.gms.wearable.AncsNotification;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class AncsNotificationParcelable extends AutoSafeParcelable implements AncsNotification {

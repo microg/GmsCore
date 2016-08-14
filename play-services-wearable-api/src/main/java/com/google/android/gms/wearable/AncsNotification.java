@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable.internal;
+package com.google.android.gms.wearable;
 
-public interface AmsEntityUpdate {
+public interface AncsNotification {
 }

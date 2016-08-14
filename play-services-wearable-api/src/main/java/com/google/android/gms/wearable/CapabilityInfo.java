@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.wearable.internal;
+package com.google.android.gms.wearable;
 
-import com.google.android.gms.wearable.AmsEntityUpdate;
+import java.util.Set;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+/**
+ * Information about a Capability on the network and where it is available.
+ */
+public interface CapabilityInfo {
+    /**
+     * Returns the name of the capability.
+     */
+    String getName();
 
-public class AmsEntityUpdateParcelable extends AutoSafeParcelable implements AmsEntityUpdate {
-    public static final Creator<AmsEntityUpdateParcelable> CREATOR = new AutoCreator<AmsEntityUpdateParcelable>(AmsEntityUpdateParcelable.class);
+    /**
+     * Returns the set of nodes for the capability. Disconnected nodes may or may not be included in the set.
+     */
+    Set<Node> getNodes();
 }
