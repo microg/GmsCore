@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
-    }
-}
 apply plugin: 'com.android.library'
 
 String getMyVersionName() {
@@ -34,8 +26,8 @@ String getMyVersionName() {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion androidCompileSdk()
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
         versionName getMyVersionName()
