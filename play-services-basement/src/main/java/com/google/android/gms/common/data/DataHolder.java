@@ -61,7 +61,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
     private final Bundle metadata;
 
     private boolean closed = false;
-    private Map<String, Integer> columnIndizes;
+    private Map<String, Integer> columnIndices;
 
     protected static final int FIELD_TYPE_NULL = 0;
     protected static final int FIELD_TYPE_INTEGER = 1;
@@ -300,12 +300,6 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
         return windows.toArray(new CursorWindow[windows.size()]);
     }
 
-    @PublicApi(exclude = true)
-    @Deprecated
-    public static DataHolder fromCursor(Cursor cursor, int statusCode, Bundle metadata) {
-        return new DataHolder(cursor, statusCode, metadata);
-    }
-
     /**
      * Retrieves the boolean value for a given column at the provided position.
      * This will throw an {@link IllegalArgumentException} if the column does not exist, the
@@ -317,7 +311,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
      * @return The boolean value in that column.
      */
     public boolean getBoolean(String column, int row, int windowIndex) {
-        return windows[windowIndex].getLong(row, columnIndizes.get(column)) == 1;
+        return windows[windowIndex].getLong(row, columnIndices.get(column)) == 1;
     }
 
     /**
@@ -331,7 +325,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
      * @return The byte array value in that column.
      */
     public byte[] getByteArray(String column, int row, int windowIndex) {
-        return windows[windowIndex].getBlob(row, columnIndizes.get(column));
+        return windows[windowIndex].getBlob(row, columnIndices.get(column));
     }
 
     /**
@@ -360,7 +354,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
      * @return The integer value in that column.
      */
     public int getInteger(String column, int row, int windowIndex) {
-        return windows[windowIndex].getInt(row, columnIndizes.get(column));
+        return windows[windowIndex].getInt(row, columnIndices.get(column));
     }
 
     /**
@@ -374,7 +368,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
      * @return The long value in that column.
      */
     public long getLong(String column, int row, int windowIndex) {
-        return windows[windowIndex].getLong(row, columnIndizes.get(column));
+        return windows[windowIndex].getLong(row, columnIndices.get(column));
     }
 
     public int getStatusCode() {
@@ -392,7 +386,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
      * @return The string value in that column.
      */
     public String getString(String column, int row, int windowIndex) {
-        return windows[windowIndex].getString(row, columnIndizes.get(column));
+        return windows[windowIndex].getString(row, columnIndices.get(column));
     }
 
     /**
@@ -406,7 +400,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
      * @return Whether the column value is null at this position.
      */
     public boolean isNull(String column, int row, int windowIndex) {
-        return windows[windowIndex].isNull(row, columnIndizes.get(column));
+        return windows[windowIndex].isNull(row, columnIndices.get(column));
     }
 
     public boolean isClosed() {
@@ -442,9 +436,9 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
     }
 
     public void validateContents() {
-        columnIndizes = new HashMap<String, Integer>();
+        columnIndices = new HashMap<String, Integer>();
         for (int i = 0; i < columns.length; i++) {
-            columnIndizes.put(columns[i], i);
+            columnIndices.put(columns[i], i);
         }
     }
 
