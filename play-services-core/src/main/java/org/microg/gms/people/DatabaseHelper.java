@@ -25,7 +25,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Set;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 5;
     private static final String DB_NAME = "pluscontacts.db";
     private static final String CREATE_OWNERS = "CREATE TABLE owners (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -50,7 +50,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "sync_evergreen_to_contacts INTEGER NOT NULL DEFAULT 0," + // 0
             "last_full_people_sync_time INTEGER NOT NULL DEFAULT 0," + // timestamp
             "is_active_plus_account INTEGER NOT NULL DEFAULT 0," + // 0
-            "sync_me_to_contacts INTEGER NOT NULL DEFAULT 0);"; // 0
+            "sync_me_to_contacts INTEGER NOT NULL DEFAULT 0," +
+            "given_name TEXT," +
+            "family_name TEXT," +
+            "contacts_backup_and_sync INTEGER NOT NULL DEFAULT 0);"; // 0
     private static final String CREATE_CIRCLES = "CREATE TABLE circles (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "owner_id INTEGER NOT NULL," +
@@ -66,6 +69,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY (owner_id) REFERENCES owners(_id) ON DELETE CASCADE);";
     private static final String ALTER_OWNERS_3_1 = "ALTER TABLE owners ADD COLUMN is_active_plus_account INTEGER NOT NULL DEFAULT 0;";
     private static final String ALTER_OWNERS_3_2 = "ALTER TABLE owners ADD COLUMN sync_me_to_contacts INTEGER NOT NULL DEFAULT 0;";
+    private static final String ALTER_OWNERS_4_1 = "ALTER TABLE owners ADD COLUMN given_name TEXT;";
+    private static final String ALTER_OWNERS_4_2 = "ALTER TABLE owners ADD COLUMN family_name TEXT;";
+    private static final String ALTER_OWNERS_5_1 = "ALTER TABLE owners ADD COLUMN contacts_backup_and_sync INTEGER NOT NULL DEFAULT 0;";
     public static final String OWNERS_TABLE = "owners";
     public static final String CIRCLES_TABLE = "circles";
 
@@ -86,6 +92,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             db.execSQL(ALTER_OWNERS_3_1);
             db.execSQL(ALTER_OWNERS_3_2);
+        }
+        if (oldVersion < 4) {
+            db.execSQL(ALTER_OWNERS_4_1);
+            db.execSQL(ALTER_OWNERS_4_2);
+        }
+        if (oldVersion < 5) {
+            db.execSQL(ALTER_OWNERS_5_1);
         }
     }
 

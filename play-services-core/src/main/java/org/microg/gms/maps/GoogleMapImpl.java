@@ -127,11 +127,12 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         }
     };
 
-    public GoogleMapImpl(Context context, GoogleMapOptions options) {
+    private GoogleMapImpl(Context context, GoogleMapOptions options) {
         this.context = context;
         Context appContext = context;
-        if (appContext.getApplicationContext() != null) appContext = appContext.getApplicationContext();
-        Context wrappedContext = RemoteContextWrapper.fromApplicationContext(appContext);
+        if (appContext.getApplicationContext() != null)
+            appContext = appContext.getApplicationContext();
+        Context wrappedContext = ApplicationContextWrapper.gmsContextWithAttachedApplicationContext(appContext);
         backendMap = new BackendMap(wrappedContext, this);
         uiSettings = new UiSettingsImpl(this);
         projection = new ProjectionImpl(backendMap.getViewport());
@@ -142,6 +143,10 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
 
         if (options != null) initFromOptions();
+    }
+
+    public synchronized static GoogleMapImpl create(Context context, GoogleMapOptions options) {
+        return new GoogleMapImpl(context, options);
     }
 
     private void initFromOptions() {

@@ -14,23 +14,7 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
-    }
-}
-
 apply plugin: 'com.android.application'
-
-repositories {
-    jcenter()
-    flatDir {
-        dirs '../libs'
-    }
-}
 
 dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.1'
@@ -42,23 +26,18 @@ dependencies {
     compile project(':unifiednlp-base')
     compile project(':wearable-lib')
 
-    // vtm from ./libs
-    compile 'org.oscim:vtm-android:0.6.0-SNAPSHOT@aar'
-    compile 'org.oscim:vtm-themes:0.6.0-SNAPSHOT@jar'
-    compile 'org.oscim:vtm-extras:0.6.0-SNAPSHOT@jar'
-    compile 'org.oscim:vtm:0.6.0-SNAPSHOT@jar'
-    // Dependencies for vtm
-    compile 'com.fasterxml.jackson.core:jackson-core:2.3.0'
-    compile 'com.vividsolutions:jts:1.13'
-    compile 'com.google.protobuf:protobuf-java:2.4.1'
-    compile 'org.openstreetmap.osmosis:osmosis-osm-binary:0.43.1'
-    compile 'org.slf4j:slf4j-android:1.7.6'
+    compile project(':vtm-android')
+    compile project(':vtm-extras')
+    compile project(':vtm-jts')
+    compile project(':vtm-themes')
 }
 
 String getMyVersionName() {
     def stdout = new ByteArrayOutputStream()
     if (rootProject.file("gradlew").exists())
-        exec { commandLine 'git', 'describe', '--tags', '--always', '--dirty'; standardOutput = stdout }
+        exec {
+            commandLine 'git', 'describe', '--tags', '--always', '--dirty'; standardOutput = stdout
+        }
     else // automatic build system, don't tag dirty
         exec { commandLine 'git', 'describe', '--tags', '--always'; standardOutput = stdout }
     return stdout.toString().trim().substring(1)
@@ -74,8 +53,8 @@ int getMyVersionCode() {
 }
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion androidCompileSdk()
+    buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
         versionName getMyVersionName()
@@ -91,15 +70,17 @@ android {
     sourceSets {
         main {
             java.srcDirs += 'src/main/protos-java'
+            file("${rootDir}/vtm-android/natives").eachDir() { dir ->
+                jniLibs.srcDirs += "${dir.path}/lib"
+            }
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-    }
+
     lintOptions {
         // TODO: Remove MissingTranslation once we have stable strings and proper translations.
         disable 'MissingTranslation', 'InvalidPackage'
     }
+
     buildTypes {
         release {
             minifyEnabled true

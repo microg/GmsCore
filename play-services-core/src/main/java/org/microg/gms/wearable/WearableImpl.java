@@ -438,7 +438,7 @@ public class WearableImpl {
         }
         dataHolderItems.moveToFirst();
         dataHolderItems.moveToPrevious();
-        return DataHolder.fromCursor(dataHolderItems, 0, null);
+        return new DataHolder(dataHolderItems, 0, null);
     }
 
     private String fixHost(String host, boolean nothingToLocal) {

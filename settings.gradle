@@ -21,3 +21,9 @@ include ':play-services-wearable'
 include ':play-services-core'
 
 include ':microg-ui-tools'
+
+include ':vtm'
+include ':vtm-android'
+include ':vtm-extras'
+include ':vtm-jts'
+include ':vtm-themes'

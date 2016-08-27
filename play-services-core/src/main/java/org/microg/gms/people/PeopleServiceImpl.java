@@ -62,7 +62,7 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
         extras.putBundle("account_metadata", accountMetadata);
         try {
             DatabaseHelper databaseHelper = new DatabaseHelper(context);
-            DataHolder dataHolder = DataHolder.fromCursor(databaseHelper.getOwners(), 0, extras);
+            DataHolder dataHolder = new DataHolder(databaseHelper.getOwners(), 0, extras);
             Log.d(TAG, "loadOwners[result]: " + dataHolder);
             callbacks.onDataHolder(0, extras, dataHolder);
             databaseHelper.close();
@@ -97,7 +97,7 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
             }
             owner.close();
             Bundle extras = new Bundle();
-            DataHolder dataHolder = DataHolder.fromCursor(databaseHelper.getCircles(ownerId, circleId, type), 0, extras);
+            DataHolder dataHolder = new DataHolder(databaseHelper.getCircles(ownerId, circleId, type), 0, extras);
             callbacks.onDataHolder(0, new Bundle(), dataHolder);
             databaseHelper.close();
         } catch (Exception e) {

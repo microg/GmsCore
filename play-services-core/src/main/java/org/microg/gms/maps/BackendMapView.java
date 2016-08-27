@@ -17,6 +17,7 @@
 package org.microg.gms.maps;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
@@ -26,8 +27,10 @@ import com.google.android.gms.R;
 
 import org.microg.gms.maps.data.SharedTileCache;
 import org.microg.gms.maps.markup.ClearableVectorLayer;
+import org.oscim.android.AndroidAssets;
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidBitmap;
+import org.oscim.backend.AssetAdapter;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
@@ -119,6 +122,9 @@ public class BackendMapView extends MapView {
 
     public BackendMapView(Context context) {
         super(loadNativeLib(context));
+        if (context instanceof ContextWrapper) {
+            AndroidAssets.init(ApplicationContextWrapper.matchingApplicationContext(((ContextWrapper) context).getBaseContext()));
+        }
         initialize();
     }
 

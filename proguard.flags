@@ -7,11 +7,13 @@
 -dontwarn java.awt.**
 -dontwarn javax.annotation.**
 
-# OkIO, OkHttp
+# External libs
 -dontwarn okio.**
 -dontwarn com.squareup.okhttp.**
 -dontwarn org.oscim.tiling.source.OkHttpEngine
 -dontwarn org.oscim.tiling.source.OkHttpEngine$OkHttpFactory
+-dontwarn com.caverock.androidsvg.**
+-dontwarn org.slf4j.**
 
 # Disable ProGuard Notes, they won't help here
 -dontnote

@@ -48,7 +48,7 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
         if (map == null) {
             Log.d(TAG, "GoogleMap instance created");
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            map = new GoogleMapImpl(inflater.getContext(), options);
+            map = GoogleMapImpl.create(inflater.getContext(), options);
         }
         return map;
     }

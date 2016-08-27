@@ -49,7 +49,7 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
         if (map == null) {
             Log.d(TAG, "GoogleMap instance created");
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            map = new GoogleMapImpl(inflater.getContext(), options);
+            map = GoogleMapImpl.create(inflater.getContext(), options);
         }
         return map;
     }
@@ -86,7 +86,7 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
         Log.d(TAG, "onCreateView");
         if (map == null) {
             LayoutInflater inflater = (LayoutInflater) ObjectWrapper.unwrap(layoutInflater);
-            map = new GoogleMapImpl(inflater.getContext(), options);
+            map = GoogleMapImpl.create(inflater.getContext(), options);
             //map.onCreate(savedInstanceState);
         } else {
             View view = map.getView();

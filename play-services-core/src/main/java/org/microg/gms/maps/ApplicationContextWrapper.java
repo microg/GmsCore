@@ -18,31 +18,29 @@ package org.microg.gms.maps;
 
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import org.microg.gms.common.Constants;
 
-import dalvik.system.PathClassLoader;
-
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-
-public class RemoteContextWrapper extends ContextWrapper {
+public class ApplicationContextWrapper extends ContextWrapper {
     private Context applicationContext;
 
-    public RemoteContextWrapper(Context base, Context applicationContext) {
+    public ApplicationContextWrapper(Context base, Context applicationContext) {
         super(base);
         this.applicationContext = applicationContext;
     }
 
-    public static RemoteContextWrapper fromApplicationContext(Context applicationContext) {
+    public static ApplicationContextWrapper gmsContextWithAttachedApplicationContext(Context applicationContext) {
         try {
             Context context = applicationContext.createPackageContext(Constants.GMS_PACKAGE_NAME, CONTEXT_INCLUDE_CODE & CONTEXT_IGNORE_SECURITY);
-            return new RemoteContextWrapper(context, applicationContext);
+            return new ApplicationContextWrapper(context, applicationContext);
         } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static ApplicationContextWrapper matchingApplicationContext(Context context) {
+        return new ApplicationContextWrapper(context, context);
     }
 
     @Override
