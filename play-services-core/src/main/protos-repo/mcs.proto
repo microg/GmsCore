@@ -94,11 +94,11 @@ message LoginRequest {
   optional int64 last_rmq_id = 7;
 
   repeated Setting setting = 8;
-  //optional int32 compress = 9;
+  optional int32 compress = 9;
   repeated string received_persistent_id = 10;
 
   // Replaced by "rmq2v" setting
-  // optional bool include_stream_ids = 11;
+  optional bool include_stream_ids = 11;
 
   optional bool adaptive_heartbeat = 12;
   optional HeartbeatStat heartbeat_stat = 13;
@@ -189,7 +189,7 @@ message AppData {
  */
 message DataMessageStanza {
   // Not used.
-  // optional int64 rmq_id = 1;
+  optional int64 rmq_id = 1;
 
   // This is the message ID, set by client, DMP.9 (message_id)
   optional string id = 2;
@@ -222,15 +222,15 @@ message DataMessageStanza {
   optional int32 last_stream_id_received = 11;
 
   // Not used.
-  // optional string permission = 12;
+  optional string permission = 12;
 
   // Sent by the device shortly after registration.
   optional string reg_id = 13;
 
   // Not used.
-  // optional string pkg_signature = 14;
+  optional string pkg_signature = 14;
   // Not used.
-  // optional string client_id = 15;
+  optional string client_id = 15;
 
   // serial number of the target user, DMP.8
   // It is the 'serial number' according to user manager.

@@ -29,7 +29,9 @@ public final class LoginRequest extends Message {
   public static final String DEFAULT_DEVICE_ID = "";
   public static final Long DEFAULT_LAST_RMQ_ID = 0L;
   public static final List<Setting> DEFAULT_SETTING = Collections.emptyList();
+  public static final Integer DEFAULT_COMPRESS = 0;
   public static final List<String> DEFAULT_RECEIVED_PERSISTENT_ID = Collections.emptyList();
+  public static final Boolean DEFAULT_INCLUDE_STREAM_IDS = false;
   public static final Boolean DEFAULT_ADAPTIVE_HEARTBEAT = false;
   public static final Boolean DEFAULT_USE_RMQ2 = false;
   public static final Long DEFAULT_ACCOUNT_ID = 0L;
@@ -79,16 +81,18 @@ public final class LoginRequest extends Message {
   @ProtoField(tag = 8, label = REPEATED, messageType = Setting.class)
   public final List<Setting> setting;
 
-  /**
-   * optional int32 compress = 9;
-   */
+  @ProtoField(tag = 9, type = INT32)
+  public final Integer compress;
+
   @ProtoField(tag = 10, type = STRING, label = REPEATED)
   public final List<String> received_persistent_id;
 
   /**
    * Replaced by "rmq2v" setting
-   * optional bool include_stream_ids = 11;
    */
+  @ProtoField(tag = 11, type = BOOL)
+  public final Boolean include_stream_ids;
+
   @ProtoField(tag = 12, type = BOOL)
   public final Boolean adaptive_heartbeat;
 
@@ -116,7 +120,7 @@ public final class LoginRequest extends Message {
   @ProtoField(tag = 18, type = INT64)
   public final Long status;
 
-  public LoginRequest(String id, String domain, String user, String resource, String auth_token, String device_id, Long last_rmq_id, List<Setting> setting, List<String> received_persistent_id, Boolean adaptive_heartbeat, HeartbeatStat heartbeat_stat, Boolean use_rmq2, Long account_id, AuthService auth_service, Integer network_type, Long status) {
+  public LoginRequest(String id, String domain, String user, String resource, String auth_token, String device_id, Long last_rmq_id, List<Setting> setting, Integer compress, List<String> received_persistent_id, Boolean include_stream_ids, Boolean adaptive_heartbeat, HeartbeatStat heartbeat_stat, Boolean use_rmq2, Long account_id, AuthService auth_service, Integer network_type, Long status) {
     this.id = id;
     this.domain = domain;
     this.user = user;
@@ -125,7 +129,9 @@ public final class LoginRequest extends Message {
     this.device_id = device_id;
     this.last_rmq_id = last_rmq_id;
     this.setting = immutableCopyOf(setting);
+    this.compress = compress;
     this.received_persistent_id = immutableCopyOf(received_persistent_id);
+    this.include_stream_ids = include_stream_ids;
     this.adaptive_heartbeat = adaptive_heartbeat;
     this.heartbeat_stat = heartbeat_stat;
     this.use_rmq2 = use_rmq2;
@@ -136,7 +142,7 @@ public final class LoginRequest extends Message {
   }
 
   private LoginRequest(Builder builder) {
-    this(builder.id, builder.domain, builder.user, builder.resource, builder.auth_token, builder.device_id, builder.last_rmq_id, builder.setting, builder.received_persistent_id, builder.adaptive_heartbeat, builder.heartbeat_stat, builder.use_rmq2, builder.account_id, builder.auth_service, builder.network_type, builder.status);
+    this(builder.id, builder.domain, builder.user, builder.resource, builder.auth_token, builder.device_id, builder.last_rmq_id, builder.setting, builder.compress, builder.received_persistent_id, builder.include_stream_ids, builder.adaptive_heartbeat, builder.heartbeat_stat, builder.use_rmq2, builder.account_id, builder.auth_service, builder.network_type, builder.status);
     setBuilder(builder);
   }
 
@@ -153,7 +159,9 @@ public final class LoginRequest extends Message {
         && equals(device_id, o.device_id)
         && equals(last_rmq_id, o.last_rmq_id)
         && equals(setting, o.setting)
+        && equals(compress, o.compress)
         && equals(received_persistent_id, o.received_persistent_id)
+        && equals(include_stream_ids, o.include_stream_ids)
         && equals(adaptive_heartbeat, o.adaptive_heartbeat)
         && equals(heartbeat_stat, o.heartbeat_stat)
         && equals(use_rmq2, o.use_rmq2)
@@ -175,7 +183,9 @@ public final class LoginRequest extends Message {
       result = result * 37 + (device_id != null ? device_id.hashCode() : 0);
       result = result * 37 + (last_rmq_id != null ? last_rmq_id.hashCode() : 0);
       result = result * 37 + (setting != null ? setting.hashCode() : 1);
+      result = result * 37 + (compress != null ? compress.hashCode() : 0);
       result = result * 37 + (received_persistent_id != null ? received_persistent_id.hashCode() : 1);
+      result = result * 37 + (include_stream_ids != null ? include_stream_ids.hashCode() : 0);
       result = result * 37 + (adaptive_heartbeat != null ? adaptive_heartbeat.hashCode() : 0);
       result = result * 37 + (heartbeat_stat != null ? heartbeat_stat.hashCode() : 0);
       result = result * 37 + (use_rmq2 != null ? use_rmq2.hashCode() : 0);
@@ -198,7 +208,9 @@ public final class LoginRequest extends Message {
     public String device_id;
     public Long last_rmq_id;
     public List<Setting> setting;
+    public Integer compress;
     public List<String> received_persistent_id;
+    public Boolean include_stream_ids;
     public Boolean adaptive_heartbeat;
     public HeartbeatStat heartbeat_stat;
     public Boolean use_rmq2;
@@ -221,7 +233,9 @@ public final class LoginRequest extends Message {
       this.device_id = message.device_id;
       this.last_rmq_id = message.last_rmq_id;
       this.setting = copyOf(message.setting);
+      this.compress = message.compress;
       this.received_persistent_id = copyOf(message.received_persistent_id);
+      this.include_stream_ids = message.include_stream_ids;
       this.adaptive_heartbeat = message.adaptive_heartbeat;
       this.heartbeat_stat = message.heartbeat_stat;
       this.use_rmq2 = message.use_rmq2;
@@ -289,9 +303,11 @@ public final class LoginRequest extends Message {
       return this;
     }
 
-    /**
-     * optional int32 compress = 9;
-     */
+    public Builder compress(Integer compress) {
+      this.compress = compress;
+      return this;
+    }
+
     public Builder received_persistent_id(List<String> received_persistent_id) {
       this.received_persistent_id = checkForNulls(received_persistent_id);
       return this;
@@ -299,8 +315,12 @@ public final class LoginRequest extends Message {
 
     /**
      * Replaced by "rmq2v" setting
-     * optional bool include_stream_ids = 11;
      */
+    public Builder include_stream_ids(Boolean include_stream_ids) {
+      this.include_stream_ids = include_stream_ids;
+      return this;
+    }
+
     public Builder adaptive_heartbeat(Boolean adaptive_heartbeat) {
       this.adaptive_heartbeat = adaptive_heartbeat;
       return this;
