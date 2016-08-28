@@ -100,6 +100,8 @@ public class McsService extends Service implements Handler.Callback {
     private static HandlerThread handlerThread;
     private static Handler rootHandler;
 
+    private GcmData gcmStorage = new GcmData(this);
+
     private AlarmManager alarmManager;
     private PowerManager powerManager;
     private static PowerManager.WakeLock wakeLock;
@@ -322,6 +324,8 @@ public class McsService extends Service implements Handler.Callback {
         }
         if (infos.isEmpty())
             logd("No target for message, wut?");
+
+        gcmStorage.incrementAppMessageCount(msg.category, 1);
     }
 
     private void handleSelfMessage(DataMessageStanza msg) {

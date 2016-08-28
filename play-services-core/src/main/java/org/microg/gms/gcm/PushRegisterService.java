@@ -20,7 +20,6 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Message;
 import android.os.Messenger;
@@ -48,20 +47,34 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
 
 public class PushRegisterService extends IntentService {
     private static final String TAG = "GmsGcmRegisterSvc";
-
-    private static final String REMOVED = "%%REMOVED%%";
-    private static final String ERROR = "%%ERROR%%";
-    private static final String GCM_REGISTRATION_PREF = "gcm_registrations";
-
     private static final String EXTRA_SKIP_TRY_CHECKIN = "skip_checkin";
+
+    private GcmData gcmStorage = new GcmData(this);
 
     public PushRegisterService() {
         super(TAG);
         setIntentRedelivery(false);
     }
 
-    private SharedPreferences getSharedPreferences() {
-        return getSharedPreferences(GCM_REGISTRATION_PREF, MODE_PRIVATE);
+    public static RegisterResponse register(Context context, String app, String appSignature, String sender, String info) {
+        RegisterResponse response = register(context, app, appSignature, sender, info, false);
+        String regId = response.token;
+        if (regId != null) {
+            (new GcmData(context)).app_registered(app, appSignature, regId);
+        } else {
+            (new GcmData(context)).app_registration_error(app, appSignature);
+        }
+        return response;
+    }
+
+    public static RegisterResponse unregister(Context context, String app, String appSignature, String sender, String info) {
+        RegisterResponse response = register(context, app, appSignature, sender, info, true);
+        if (!app.equals(response.deleted)) {
+            (new GcmData(context)).app_unregistration_error(app, appSignature);
+        } else {
+            (new GcmData(context)).app_unregistered(app, appSignature);
+        }
+        return response;
     }
 
     @Override
@@ -106,13 +119,11 @@ public class PushRegisterService extends IntentService {
         Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
         String appSignature = PackageUtils.firstSignatureDigest(this, app);
 
-        String regId = register(this, app, appSignature, sender, null, false).token;
+        String regId = register(this, app, appSignature, sender, null).token;
         if (regId != null) {
             outIntent.putExtra(EXTRA_REGISTRATION_ID, regId);
-            getSharedPreferences().edit().putString(app + ":" + appSignature, regId).apply();
         } else {
             outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
-            getSharedPreferences().edit().putString(app + ":" + appSignature, "-").apply();
         }
 
         Log.d(TAG, "register[res]: " + outIntent + " extras=" + outIntent.getExtras());
@@ -159,20 +170,18 @@ public class PushRegisterService extends IntentService {
         Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
         String appSignature = PackageUtils.firstSignatureDigest(this, app);
 
-        if (REMOVED.equals(getSharedPreferences().getString(app + ":" + appSignature, null))) {
+        if (!gcmStorage.getAppInfo(app, appSignature).isRemoved()) {
             outIntent.putExtra(EXTRA_UNREGISTERED, app);
         } else {
-            RegisterResponse response = register(this, app, appSignature, null, null, true);
+            RegisterResponse response = unregister(this, app, appSignature, null, null);
             if (!app.equals(response.deleted)) {
                 outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
-                getSharedPreferences().edit().putString(app + ":" + PackageUtils.firstSignatureDigest(this, app), ERROR).apply();
 
                 if (response.retryAfter != null && !response.retryAfter.contains(":")) {
                     outIntent.putExtra(EXTRA_RETRY_AFTER, Long.parseLong(response.retryAfter));
                 }
             } else {
                 outIntent.putExtra(EXTRA_UNREGISTERED, app);
-                getSharedPreferences().edit().putString(app + ":" + PackageUtils.firstSignatureDigest(this, app), REMOVED).apply();
             }
         }
 

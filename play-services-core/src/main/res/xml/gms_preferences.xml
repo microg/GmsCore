@@ -40,6 +40,12 @@
             android:key="@string/pref_gcm_heartbeat"
             android:summary="@string/pref_gcm_heartbeat_summary"
             android:title="@string/pref_gcm_heartbeat_title"/>
+        <Preference
+            android:dependency="@string/pref_gcm_enable_mcs"
+            android:key="@string/pref_gcm_apps"
+            android:summary="@string/pref_gcm_apps_summary"
+            android:title="@string/pref_gcm_apps_title">
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_location_service">
         <Preference android:title="@string/nlp_settings_label">
