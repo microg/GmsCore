@@ -63,6 +63,10 @@ This can take a couple of minutes."</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
     <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.</string>
 
+    <string name="pref_gcm_apps">gcm_apps</string>
+    <string name="pref_gcm_apps_title">Apps using Google Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">List of apps currently registered for Google Cloud Messaging.</string>
+
     <string name="prefcat_components">Components</string>
     <string name="prefcat_location_service">Location service</string>
 
@@ -100,5 +104,10 @@ This can take a couple of minutes."</string>
     <string name="place_picker_select_title">Select this location</string>
     <string name="place_picker_nearby_places">Nearby places</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
+    <string name="gcm_app_error_unregistering">Error unregistering</string>
+    <string name="gcm_app_not_installed_anymore">No longer installed</string>
+    <string name="gcm_messages_received_no">%1$s messages received</string>
+    <string name="gcm_unregister_app">Unregister</string>
 
 </resources>
