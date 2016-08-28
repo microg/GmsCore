@@ -87,6 +87,18 @@ public class SettingsActivity extends AppCompatActivity {
                             return true;
                         }
                     });
+            findPreference(getString(R.string.pref_gcm_apps))
+                    .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            getFragmentManager().beginTransaction()
+                                    .addToBackStack("root")
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                                    .replace(R.id.content_wrapper, new GcmRegisteredAppsFragment())
+                                    .commit();
+                            return true;
+                        }
+                    });
         }
     }
 
