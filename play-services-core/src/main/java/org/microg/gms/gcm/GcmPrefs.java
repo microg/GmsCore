@@ -38,7 +38,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         return INSTANCE;
     }
 
-    private int heartbeatMs = 60000;
+    private int heartbeatMs = 300000;
     private boolean gcmLogEnabled = true;
     private String lastPersistedId = "";
 
@@ -53,7 +53,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public void update() {
-        heartbeatMs = Integer.parseInt(defaultPreferences.getString(PREF_GCM_HEARTBEAT, "60")) * 1000;
+        heartbeatMs = Integer.parseInt(defaultPreferences.getString(PREF_GCM_HEARTBEAT, "300")) * 1000;
         gcmLogEnabled = defaultPreferences.getBoolean(PREF_GCM_LOG, true);
         lastPersistedId = defaultPreferences.getString(PREF_LAST_PERSISTENT_ID, "");
     }

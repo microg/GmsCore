@@ -35,7 +35,7 @@
             android:summary="@string/pref_gcm_enable_mcs_summary"
             android:title="@string/pref_gcm_enable_mcs_title"/>
         <EditTextPreference
-            android:defaultValue="60"
+            android:defaultValue="300"
             android:dependency="@string/pref_gcm_enable_mcs"
             android:key="@string/pref_gcm_heartbeat"
             android:summary="@string/pref_gcm_heartbeat_summary"
