@@ -27,6 +27,9 @@ public class PlayLoggerContext extends AutoSafeParcelable {
     @SafeParceled(2)
     public final String packageName;
 
+    @SafeParceled(3)
+    public final int packageVersionCode;
+
     @SafeParceled(4)
     public final int logSource;
 
@@ -42,31 +45,56 @@ public class PlayLoggerContext extends AutoSafeParcelable {
     @SafeParceled(8)
     public final String logSourceName;
 
+    @SafeParceled(9)
+    public final boolean isAnonymous;
+
+    @SafeParceled(10)
+    public final int qosTier;
+
     private PlayLoggerContext() {
         packageName = uploadAccount = logSourceName = null;
-        logSource = loggingId = -1;
-        logAndroidId = false;
+        qosTier = packageVersionCode = logSource = loggingId = -1;
+        isAnonymous = logAndroidId = false;
     }
 
-    public PlayLoggerContext(String packageName, int logSource, String uploadAccount, int loggingId, String logSourceName) {
+    public PlayLoggerContext(String packageName, int packageVersionCode, int logSource, String uploadAccount, int loggingId, boolean logAndroidId) {
         this.packageName = packageName;
+        this.packageVersionCode = packageVersionCode;
         this.logSource = logSource;
+        this.logSourceName = null;
         this.uploadAccount = uploadAccount;
         this.loggingId = loggingId;
+        this.logAndroidId = logAndroidId;
+        this.isAnonymous = false;
+        this.qosTier = 0;
+    }
+
+    public PlayLoggerContext(String packageName, int packageVersionCode, int logSource, String logSourceName, String uploadAccount, int loggingId, boolean isAnonymous, int qosTier) {
+        this.packageName = packageName;
+        this.packageVersionCode = packageVersionCode;
+        this.logSource = logSource;
         this.logSourceName = logSourceName;
-        this.logAndroidId = true;
+        this.uploadAccount = uploadAccount;
+        this.loggingId = loggingId;
+        this.logAndroidId = !isAnonymous;
+        this.isAnonymous = isAnonymous;
+        this.qosTier = qosTier;
     }
 
     @Override
     public String toString() {
-        return "PlayLoggerContext{" +
-                "packageName='" + packageName + '\'' +
-                ", logSource=" + logSource +
-                ", uploadAccount='" + uploadAccount + '\'' +
-                ", loggingId=" + loggingId +
-                ", logAndroidId=" + logAndroidId +
-                ", logSourceName='" + logSourceName + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("PlayLoggerContext[").append(versionCode);
+        sb.append(", package=").append(packageName);
+        sb.append(", packageVersionCode=").append(packageVersionCode);
+        sb.append(", logSource=").append(logSource);
+        sb.append(", uploadAccount=").append(uploadAccount);
+        sb.append(", loggingId=").append(loggingId);
+        sb.append(", logAndroidId=").append(logAndroidId);
+        sb.append(", logSourceName=").append(logSourceName);
+        sb.append(", isAnonymous=").append(isAnonymous);
+        sb.append(", qosTier=").append(qosTier);
+        sb.append(']');
+        return sb.toString();
     }
 
     public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<PlayLoggerContext>(PlayLoggerContext.class);
