@@ -28,9 +28,11 @@ import org.microg.safeparcel.AutoSafeParcelable;
  */
 @PublicApi
 public final class Status extends AutoSafeParcelable implements Result {
+    private static final int STATUS_CODE_INTERNAL_ERROR = 8;
     private static final int STATUS_CODE_INTERRUPTED = 14;
     private static final int STATUS_CODE_CANCELED = 16;
 
+    public static final Status INTERNAL_ERROR = new Status(STATUS_CODE_INTERNAL_ERROR);
     public static final Status INTERRUPTED = new Status(STATUS_CODE_INTERRUPTED);
     public static final Status CANCELED = new Status(STATUS_CODE_CANCELED);
     public static final Status SUCCESS = new Status(0);
