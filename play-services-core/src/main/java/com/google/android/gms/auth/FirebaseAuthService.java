@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import org.microg.gms.auth.AuthManagerServiceImpl;
+import org.microg.gms.auth.firebase.FirebaseAuthServiceImpl;
 
-public class GetToken extends Service {
-    @Override
+public class FirebaseAuthService extends Service {
     public IBinder onBind(Intent intent) {
-        return new AuthManagerServiceImpl(this);
+        return new FirebaseAuthServiceImpl(this);
     }
 }
