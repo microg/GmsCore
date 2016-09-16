@@ -133,7 +133,10 @@
             android:name="org.microg.gms.wearable.location.WearableLocationService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
-                <data android:scheme="wear" android:host="*" android:pathPrefix="/com/google/android/location/fused/wearable" />
+                <data
+                    android:host="*"
+                    android:pathPrefix="/com/google/android/location/fused/wearable"
+                    android:scheme="wear"/>
             </intent-filter>
         </service>
 
@@ -280,6 +283,12 @@
             <meta-data
                 android:name="android.accounts.AccountAuthenticator.customTokens"
                 android:value="1"/>
+        </service>
+
+        <service android:name=".auth.FirebaseAuthService">
+            <intent-filter>
+                <action android:name="com.google.firebase.auth.api.gms.service.START"/>
+            </intent-filter>
         </service>
 
         <activity
@@ -442,6 +451,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.snet.SafetyNetClientService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.safetynet.service.START"/>
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.plus.service.START"/>
@@ -468,7 +483,6 @@
                 <action android:name="com.google.android.gms.usagereporting.service.START"/>
                 <action android:name="com.google.android.gms.kids.service.START"/>
                 <action android:name="com.google.android.gms.common.download.START"/>
-                <action android:name="com.google.android.gms.safetynet.service.START"/>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START"/>
                 <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START"/>
                 <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START"/>
