@@ -55,14 +55,15 @@ public class GcmRegisteredAppsFragment extends Fragment {
         View view = inflater.inflate(R.layout.gcm_apps_list, container, false);
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         registerForContextMenu(listView);
-        listView.setAdapter(updateListView());
+        updateListView();
+        listView.setAdapter(appsAdapter);
         return listView;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ((ListView) getView().findViewById(R.id.list_view)).setAdapter(updateListView());
+        updateListView();
     }
 
     @Override
@@ -94,27 +95,31 @@ public class GcmRegisteredAppsFragment extends Fragment {
             }
 
             protected void onPostExecute(Void result) {
-                ((ListView) getView().findViewById(R.id.list_view)).setAdapter(updateListView());
+                updateListView();
             }
         }.execute();
         return true;
     }
 
-    synchronized public AppsAdapter updateListView() {
+    public synchronized void updateListView() {
         ArrayList<GcmData.AppInfo> registeredApps = new ArrayList<GcmData.AppInfo>();
         for (GcmData.AppInfo appInfo : gcmStorage.getAppsInfo()) {
             if (appInfo.isRegistered()) {
                 registeredApps.add(appInfo);
             }
         }
-        appsAdapter = new AppsAdapter(getContext(), registeredApps.toArray(new GcmData.AppInfo[registeredApps.size()]));
-        return appsAdapter;
+        if (appsAdapter != null) {
+            appsAdapter.update(registeredApps.toArray(new GcmData.AppInfo[registeredApps.size()]));
+        } else {
+            appsAdapter = new AppsAdapter(getContext(), registeredApps.toArray(new GcmData.AppInfo[registeredApps.size()]));
+        }
     }
 
     private class AppsAdapter extends ArrayAdapter<GcmData.AppInfo> {
 
         public AppsAdapter(Context context, GcmData.AppInfo[] libraries) {
-            super(context, R.layout.gcm_app, R.id.title, libraries);
+            super(context, R.layout.gcm_app, R.id.title);
+            addAll(libraries);
         }
 
         @Override
@@ -134,15 +139,25 @@ public class GcmRegisteredAppsFragment extends Fragment {
                 if (appInfo.hasUnregistrationError()) {
                     warning.setVisibility(View.VISIBLE);
                     warning.setText(getString(R.string.gcm_app_error_unregistering));
+                } else {
+                    warning.setVisibility(View.GONE);
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 title.setText(appInfo.app);
+                image.setImageDrawable(null);
                 warning.setVisibility(View.VISIBLE);
                 warning.setText(getString(R.string.gcm_app_not_installed_anymore));
             }
             sub.setText(getString(R.string.gcm_messages_received_no, gcmStorage.getAppMessageCount(appInfo.app)));
 
             return v;
+        }
+
+        public void update(GcmData.AppInfo[] appInfos) {
+            setNotifyOnChange(false);
+            clear();
+            addAll(appInfos);
+            notifyDataSetChanged();
         }
     }
 }

@@ -119,7 +119,7 @@ public class PackageUtils {
         try {
             return context.getPackageManager().getPackageInfo(packageName, 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException(e);
+            return -1;
         }
     }
 }

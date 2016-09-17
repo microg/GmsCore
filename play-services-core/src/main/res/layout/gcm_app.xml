@@ -14,56 +14,62 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?attr/listPreferredItemHeight"
-    android:paddingRight="?attr/listPreferredItemPaddingRight"
-    android:paddingLeft="?attr/listPreferredItemPaddingLeft" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="?attr/listPreferredItemHeight"
+              android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+              android:paddingRight="?attr/listPreferredItemPaddingRight">
 
-    <ImageView android:id="@+id/image"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:minHeight="40dp"
-        android:maxHeight="40dp"
-        android:minWidth="40dp"
-        android:maxWidth="40dp"
         android:adjustViewBounds="true"
+        android:maxHeight="40dp"
+        android:maxWidth="40dp"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
         android:scaleType="fitCenter"/>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginLeft="10dp"
-        android:gravity="center"
-        android:minHeight="?attr/listPreferredItemHeight"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_marginLeft="10dp"
+        android:minHeight="?attr/listPreferredItemHeight"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceListItem"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView android:id="@+id/title"
-                android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/sub"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:textAppearance="?android:attr/textAppearanceListItem" />
+                android:ellipsize="end"
+                android:lines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@android:color/darker_gray"/>
 
-            <TextView android:id="@+id/warning"
-                android:visibility="gone"
-                android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/warning"
                 android:layout_width="wrap_content"
-                android:textColor="@android:color/holo_red_dark"
-                android:textAppearance="?android:attr/textAppearanceListItemSecondary"
-                tools:targetApi="lollipop" />
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@color/material_error"
+                android:visibility="gone"/>
         </LinearLayout>
-
-        <TextView android:id="@+id/sub"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:textColor="@android:color/darker_gray"
-            android:textAppearance="?android:attr/textAppearanceListItemSecondary"
-            tools:targetApi="lollipop" />
     </LinearLayout>
 </LinearLayout>

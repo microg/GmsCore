@@ -60,9 +60,9 @@ public class PushRegisterService extends IntentService {
         RegisterResponse response = register(context, app, appSignature, sender, info, false);
         String regId = response.token;
         if (regId != null) {
-            (new GcmData(context)).app_registered(app, appSignature, regId);
+            (new GcmData(context)).noteAppRegistered(app, appSignature, regId);
         } else {
-            (new GcmData(context)).app_registration_error(app, appSignature);
+            (new GcmData(context)).noteAppRegistrationError(app, appSignature);
         }
         return response;
     }
@@ -70,9 +70,9 @@ public class PushRegisterService extends IntentService {
     public static RegisterResponse unregister(Context context, String app, String appSignature, String sender, String info) {
         RegisterResponse response = register(context, app, appSignature, sender, info, true);
         if (!app.equals(response.deleted)) {
-            (new GcmData(context)).app_unregistration_error(app, appSignature);
+            (new GcmData(context)).noteAppUnregistrationError(app, appSignature);
         } else {
-            (new GcmData(context)).app_unregistered(app, appSignature);
+            (new GcmData(context)).noteAppUnregistered(app, appSignature);
         }
         return response;
     }

@@ -78,19 +78,19 @@ public class GcmData {
         }
     }
 
-    public void app_registered(String app, String signature, String regId) {
+    public void noteAppRegistered(String app, String signature, String regId) {
         getInfoSharedPreferences().edit().putString(app + ":" + signature, regId).apply();
     }
 
-    public void app_registration_error(String app, String signature) {
+    public void noteAppRegistrationError(String app, String signature) {
         getInfoSharedPreferences().edit().putString(app + ":" + signature, "-").apply();
     }
 
-    public void app_unregistered(String app, String signature) {
+    public void noteAppUnregistered(String app, String signature) {
         getInfoSharedPreferences().edit().putString(app + ":" + signature, REMOVED).apply();
     }
 
-    public void app_unregistration_error(String app, String signature) {
+    public void noteAppUnregistrationError(String app, String signature) {
         getInfoSharedPreferences().edit().putString(app + ":" + signature, ERROR).apply();
     }
 
@@ -104,7 +104,7 @@ public class GcmData {
     }
 
     public AppInfo getAppInfo(String app, String signature) {
-        return getAppInfo(app + signature);
+        return getAppInfo(app + ":" + signature);
     }
 
     public List<AppInfo> getAppsInfo() {
