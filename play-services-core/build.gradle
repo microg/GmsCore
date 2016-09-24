@@ -31,7 +31,7 @@ dependencies {
     compile project(':vtm-android')
     compile project(':vtm-extras')
     compile project(':vtm-jts')
-    compile project(':vtm-themes')
+    compile project(':vtm-microg-theme')
 }
 
 String getMyVersionName() {

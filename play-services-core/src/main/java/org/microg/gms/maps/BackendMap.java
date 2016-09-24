@@ -170,7 +170,8 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     public synchronized void remove(Markup markup) {
         if (markup instanceof MarkerItemMarkup) {
             markupMap.remove(markup.getId());
-            mapView.items().removeItem(mapView.items().getByUid(markup.getId()));
+            MarkerItem toRemove = getByUid(markup.getId());
+            if (toRemove != null) mapView.items().removeItem(toRemove);
         } else if (markup instanceof DrawableMarkup) {
             drawableMarkups.remove(markup);
             updateDrawableLayer();
@@ -179,10 +180,19 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
         redraw();
     }
 
+    private MarkerItem getByUid(String uid) {
+        for (MarkerItem markerItem : mapView.items().getItemList()) {
+            if (markerItem.getUid().equals(uid)) {
+                return markerItem;
+            }
+        }
+        return null;
+    }
+
     public synchronized void update(Markup markup) {
         if (markup == null) return;
         if (markup instanceof MarkerItemMarkup) {
-            MarkerItem item = mapView.items().getByUid(markup.getId());
+            MarkerItem item = getByUid(markup.getId());
             if (item != null) {
                 mapView.items().removeItem(item);
             }

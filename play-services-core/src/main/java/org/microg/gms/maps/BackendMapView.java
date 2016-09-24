@@ -38,7 +38,7 @@ import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Layers;
-import org.oscim.theme.VtmThemes;
+import org.oscim.theme.MicrogThemes;
 import org.oscim.tiling.ITileCache;
 import org.oscim.tiling.source.oscimap4.OSciMap4TileSource;
 
@@ -157,6 +157,6 @@ public class BackendMapView extends MapView {
         layers.add(buildings = new BuildingLayer(map(), baseLayer));
         layers.add(items = new ItemizedLayer<MarkerItem>(map(), new MarkerSymbol(
                 new AndroidBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nop)), 0.5F, 1)));
-        map().setTheme(VtmThemes.DEFAULT);
+        map().setTheme(MicrogThemes.DEFAULT);
     }
 }
