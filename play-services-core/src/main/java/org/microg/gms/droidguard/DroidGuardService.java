@@ -16,6 +16,8 @@
 
 package org.microg.gms.droidguard;
 
+import android.util.Log;
+
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
@@ -31,5 +33,6 @@ public class DroidGuardService extends BaseService {
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) {
         // TODO
+        Log.d(TAG, "handleServiceRequest");
     }
 }

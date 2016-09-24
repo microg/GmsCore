@@ -13,3 +13,6 @@
 [submodule "extern/vtm"]
 	path = extern/vtm
 	url = https://github.com/microg/android_external_vtm.git
+[submodule "extern/RemoteDroidGuard"]
+	path = extern/RemoteDroidGuard
+	url = https://github.com/microg/android_packages_apps_RemoteDroidGuard.git

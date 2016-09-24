@@ -23,12 +23,9 @@ import android.content.Context;
 
 import com.google.android.gms.R;
 
-import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
-import org.microg.gms.common.DeviceIdentifier;
-import org.microg.gms.common.PhoneInfo;
 import org.microg.gms.common.Utils;
 import org.microg.gms.gservices.GServices;
 
@@ -57,8 +54,8 @@ public class CheckinManager {
             }
         }
         CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context),
-                new DeviceConfiguration(context), new DeviceIdentifier(), new PhoneInfo(), info,
-                Utils.getLocale(context), accounts); // TODO
+                new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
+                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts);
         return handleResponse(context, CheckinClient.request(request));
     }
 

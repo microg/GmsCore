@@ -20,11 +20,13 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.squareup.wire:wire-runtime:1.6.1'
 
-    compile project(":microg-ui-tools")
+    compile project(':microg-ui-tools')
     compile project(':play-services-api')
     compile project(':play-services-wearable')
     compile project(':unifiednlp-base')
     compile project(':wearable-lib')
+
+    compile project(':remote-droid-guard-lib')
 
     compile project(':vtm-android')
     compile project(':vtm-extras')

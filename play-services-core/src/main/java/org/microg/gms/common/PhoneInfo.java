@@ -16,8 +16,20 @@
 
 package org.microg.gms.common;
 
+import java.util.Random;
+
 public class PhoneInfo {
     public String cellOperator = "26207";
     public String roaming = "mobile-notroaming";
     public String simOperator = "26207";
+    public String imsi = randomImsi();
+
+    private String randomImsi() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(simOperator);
+        while (sb.length() < 15) {
+            sb.append(random.nextInt(10));
+        }
+        return sb.toString();
+    }
 }

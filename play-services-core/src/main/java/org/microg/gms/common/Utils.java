@@ -16,7 +16,6 @@
 
 package org.microg.gms.common;
 
-import android.Manifest;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
@@ -43,6 +42,14 @@ public class Utils {
 
     public static Build getBuild(Context context) {
         return new Build();
+    }
+
+    public static DeviceIdentifier getDeviceIdentifier(Context context) {
+        return new DeviceIdentifier();
+    }
+
+    public static PhoneInfo getPhoneInfo(Context context) {
+        return new PhoneInfo();
     }
 
     public static boolean hasSelfPermissionOrNotify(Context context, String permission) {

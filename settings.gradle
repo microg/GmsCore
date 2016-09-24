@@ -27,3 +27,5 @@ include ':vtm-android'
 include ':vtm-extras'
 include ':vtm-jts'
 include ':vtm-themes'
+
+include ':remote-droid-guard-lib'
