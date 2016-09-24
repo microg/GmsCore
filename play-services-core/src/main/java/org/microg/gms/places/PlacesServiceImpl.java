@@ -16,21 +16,19 @@
 
 package org.microg.gms.places;
 
+import android.os.Parcel;
 import android.os.RemoteException;
+import android.util.Log;
 
-import com.google.android.gms.common.internal.GetServiceRequest;
-import com.google.android.gms.common.internal.IGmsCallbacks;
+import com.google.android.gms.location.places.internal.IGooglePlacesService;
 
-import org.microg.gms.BaseService;
-import org.microg.gms.common.GmsService;
-
-public class GeoDataService extends BaseService {
-    public GeoDataService() {
-        super("GmsPlcGeoSvc", GmsService.GEODATA);
-    }
+public class PlacesServiceImpl extends IGooglePlacesService.Stub {
+    private static final String TAG = "GmsPlcSvcImpl";
 
     @Override
-    public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, new PlacesServiceImpl().asBinder(), null);
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
     }
 }

@@ -32,6 +32,6 @@ public class PlaceDetectionService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: handleServiceRequest");
+        callback.onPostInitComplete(0, new PlaceDetectionServiceImpl().asBinder(), null);
     }
 }
