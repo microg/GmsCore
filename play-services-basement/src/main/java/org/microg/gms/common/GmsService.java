@@ -66,7 +66,7 @@ public enum GmsService {
     CONTEXT_MANAGER(47, "com.google.android.contextmanager.service.ContextManagerService.START"),
     AUDIO_MODEM(48, "com.google.android.gms.audiomodem.service.AudioModemService.START"),
     NEARBY_SHARING(49, "com.google.android.gms.nearby.sharing.service.NearbySharingService.START"),
-    LIGHTWEIGHT_NETWORK_QUALITY(51, "com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START"),
+    LIGHTWEIGHT_NETWORK_QUALITY(50, "com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START"),
     PHENOTYPE(51, "com.google.android.gms.phenotype.service.START"),
     VOICE_UNLOCK(52, "com.google.android.gms.speech.service.START"),
     NEARBY_CONNECTIONS(54, "com.google.android.gms.nearby.connection.service.START"),

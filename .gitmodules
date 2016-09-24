@@ -1,3 +1,0 @@
-[submodule "SafeParcel"]
-	path = extern/SafeParcel
-	url = https://github.com/microg/android_external_SafeParcel.git
