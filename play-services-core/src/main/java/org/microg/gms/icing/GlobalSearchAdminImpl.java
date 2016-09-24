@@ -17,13 +17,56 @@
 package org.microg.gms.icing;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.search.global.GetCurrentExperimentIdsRequest;
+import com.google.android.gms.search.global.GetCurrentExperimentIdsResponse;
+import com.google.android.gms.search.global.GetGlobalSearchSourcesRequest;
+import com.google.android.gms.search.global.GetGlobalSearchSourcesResponse;
+import com.google.android.gms.search.global.GetPendingExperimentIdsRequest;
+import com.google.android.gms.search.global.GetPendingExperimentIdsResponse;
+import com.google.android.gms.search.global.SetExperimentIdsRequest;
+import com.google.android.gms.search.global.SetExperimentIdsResponse;
+import com.google.android.gms.search.global.SetIncludeInGlobalSearchRequest;
+import com.google.android.gms.search.global.SetIncludeInGlobalSearchResponse;
+import com.google.android.gms.search.global.internal.IGlobalSearchAdminCallbacks;
 import com.google.android.gms.search.global.internal.IGlobalSearchAdminService;
 
 public class GlobalSearchAdminImpl extends IGlobalSearchAdminService.Stub {
     private static final String TAG = "GmsIcingGlobalImpl";
+
+    @Override
+    public void getGlobalSearchSources(GetGlobalSearchSourcesRequest request, IGlobalSearchAdminCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "getGlobalSearchSources: " + request);
+        callbacks.onGetGlobalSearchSourcesResponse(new GetGlobalSearchSourcesResponse(Status.SUCCESS, new Parcelable[0]));
+    }
+
+    @Override
+    public void setExperimentIds(SetExperimentIdsRequest request, IGlobalSearchAdminCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "setExperimentIds: " + request);
+        callbacks.onSetExperimentIdsResponse(new SetExperimentIdsResponse(Status.SUCCESS));
+    }
+
+    @Override
+    public void getCurrentExperimentIds(GetCurrentExperimentIdsRequest request, IGlobalSearchAdminCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "getCurrentExperimentIds: " + request);
+        callbacks.onGetCurrentExperimentIdsResponse(new GetCurrentExperimentIdsResponse(Status.SUCCESS, new int[0]));
+    }
+
+    @Override
+    public void getPendingExperimentIds(GetPendingExperimentIdsRequest request, IGlobalSearchAdminCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "getPendingExperimentIds: " + request);
+        callbacks.onGetPendingExperimentIdsResponse(new GetPendingExperimentIdsResponse(Status.SUCCESS, new int[0]));
+    }
+
+    @Override
+    public void setIncludeInGlobalSearch(SetIncludeInGlobalSearchRequest request, IGlobalSearchAdminCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "setIncludeInGlobalSearch: " + request);
+        callbacks.onSetIncludeInGlobalSearchResponse(new SetIncludeInGlobalSearchResponse(Status.SUCCESS));
+    }
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
