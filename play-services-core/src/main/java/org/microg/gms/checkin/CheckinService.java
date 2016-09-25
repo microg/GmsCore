@@ -48,6 +48,7 @@ public class CheckinService extends IntentService {
         super(TAG);
     }
 
+    @SuppressWarnings("MissingPermission")
     @Override
     protected void onHandleIntent(Intent intent) {
         try {

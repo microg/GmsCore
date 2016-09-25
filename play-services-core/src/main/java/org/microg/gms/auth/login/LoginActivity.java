@@ -338,6 +338,7 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private class JsBridge {
+        @SuppressWarnings("MissingPermission")
         @JavascriptInterface
         public final String getAccounts() {
             Account[] accountsByType = accountManager.getAccountsByType(accountType);
