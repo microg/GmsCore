@@ -17,11 +17,7 @@
 package org.microg.gms.common;
 
 public class Constants {
-    /**
-     * This is the highest version that was looked at during development.
-     * Does not necessarily mean anything.
-     */
-    public static final int MAX_REFERENCE_VERSION = 9452000;
+    public static final int MAX_REFERENCE_VERSION = 9683000;
     public static final String GMS_PACKAGE_NAME = "com.google.android.gms";
     public static final String GSF_PACKAGE_NAME = "com.google.android.gsf";
     public static final String GMS_PACKAGE_SIGNATURE_SHA1 = "38918a453d07199354f8b19af05ec6562ced5788";
