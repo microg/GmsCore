@@ -83,6 +83,7 @@ public class LocationRequestHelper {
      * @return whether to continue sending reports to this {@link LocationRequestHelper}
      */
     public boolean report(Location location) {
+        if (location == null) return true;
         if (lastReport != null) {
             if (location.getTime() - lastReport.getTime() < locationRequest.getFastestInterval()) {
                 return true;
