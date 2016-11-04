@@ -99,6 +99,10 @@ This can take a couple of minutes."</string>
     <string name="self_check_resolution_correct_sig">Either the installed %1$s is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
     <string name="perm_extended_access_label">Extended access to Google services</string>
 
+    <string name="self_check_cat_system">System</string>
+    <string name="self_check_name_battery_optimizations">Battery optimizations ignored:</string>
+    <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications</string>
+
     <string name="lacking_permission_toast">microG Services Core: Lacking permission %1$s</string>
 
     <string name="place_picker_select_title">Select this location</string>

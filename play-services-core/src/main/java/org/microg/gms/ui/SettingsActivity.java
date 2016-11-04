@@ -16,6 +16,8 @@
 
 package org.microg.gms.ui;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.support.annotation.NonNull;
@@ -33,6 +35,7 @@ import org.microg.tools.selfcheck.NlpStatusChecks;
 import org.microg.tools.selfcheck.PermissionCheckGroup;
 import org.microg.tools.selfcheck.RomSpoofSignatureChecks;
 import org.microg.tools.selfcheck.SelfCheckGroup;
+import org.microg.tools.selfcheck.SystemChecks;
 import org.microg.tools.ui.AbstractAboutFragment;
 import org.microg.tools.ui.AbstractSelfCheckFragment;
 
@@ -111,6 +114,9 @@ public class SettingsActivity extends AppCompatActivity {
             if (SDK_INT > LOLLIPOP_MR1) {
                 checks.add(new PermissionCheckGroup(ACCESS_COARSE_LOCATION, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE));
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                checks.add(new SystemChecks());
+            }
             checks.add(new NlpOsCompatChecks());
             checks.add(new NlpStatusChecks());
         }
@@ -118,6 +124,14 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
             reset(LayoutInflater.from(getContext()));
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == SystemChecks.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                reset(LayoutInflater.from(getContext()));
+            else
+                super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

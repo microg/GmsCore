@@ -80,7 +80,7 @@ android {
 
     lintOptions {
         // TODO: Remove MissingTranslation once we have stable strings and proper translations.
-        disable 'MissingTranslation', 'InvalidPackage'
+        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife'
     }
 
     buildTypes {
