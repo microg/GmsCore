@@ -14,26 +14,17 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-    }
-}
+package org.microg.gms.common.api;
 
-allprojects {
-    apply plugin: 'idea'
-    ext.androidBuildVersionTools = "24.0.2"
-}
+import android.content.Context;
+import android.os.Looper;
 
-def androidCompileSdk() { return 24 }
+import com.google.android.gms.common.api.AccountInfo;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.GoogleApiClient;
 
-subprojects {
-    group = 'org.microg'
-    repositories {
-        jcenter()
-    }
+public interface ApiBuilder<O extends Api.ApiOptions> {
+    ApiConnection build(Context context, Looper looper, O options, AccountInfo accountInfo,
+                        GoogleApiClient.ConnectionCallbacks callbacks,
+                        GoogleApiClient.OnConnectionFailedListener connectionFailedListener);
 }

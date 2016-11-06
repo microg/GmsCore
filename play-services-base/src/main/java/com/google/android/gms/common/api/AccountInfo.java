@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 microG Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,10 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-    }
-}
+package com.google.android.gms.common.api;
 
-allprojects {
-    apply plugin: 'idea'
-    ext.androidBuildVersionTools = "24.0.2"
-}
+import org.microg.safeparcel.AutoSafeParcelable;
 
-def androidCompileSdk() { return 24 }
-
-subprojects {
-    group = 'org.microg'
-    repositories {
-        jcenter()
-    }
+public class AccountInfo extends AutoSafeParcelable {
+    public static final Creator<AccountInfo> CREATOR = new AutoCreator<AccountInfo>(AccountInfo.class);
 }

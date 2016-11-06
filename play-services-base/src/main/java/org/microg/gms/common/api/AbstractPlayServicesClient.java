@@ -25,7 +25,7 @@ import org.microg.gms.common.ForwardConnectionCallbacks;
 import org.microg.gms.common.ForwardConnectionFailedListener;
 
 public class AbstractPlayServicesClient implements GooglePlayServicesClient {
-    private static final String TAG = "GmsPlatServicesClient";
+    private static final String TAG = "GmsPlayServicesClient";
 
     protected final GoogleApiClient googleApiClient;
 
@@ -46,7 +46,7 @@ public class AbstractPlayServicesClient implements GooglePlayServicesClient {
     @Override
     public void disconnect() {
         Log.d(TAG, "disconnect()");
-        googleApiClient.disconnect();
+        //TODO googleApiClient.disconnect();
     }
 
     @Override

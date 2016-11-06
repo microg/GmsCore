@@ -49,6 +49,7 @@ public class GmsConnector<C extends ApiConnection, R extends Result> {
 
     public AbstractPendingResult<R> connect() {
         Log.d(TAG, "connect()");
+        apiClient.incrementUsageCounter();
         apiClient.getApiConnection(api);
         Looper looper = apiClient.getLooper();
         final AbstractPendingResult<R> result = new AbstractPendingResult<R>(looper);
@@ -81,6 +82,7 @@ public class GmsConnector<C extends ApiConnection, R extends Result> {
                     @Override
                     public void onResultAvailable(R realResult) {
                         result.deliverResult(realResult);
+                        apiClient.decrementUsageCounter();
                     }
                 });
             } catch (RemoteException ignored) {

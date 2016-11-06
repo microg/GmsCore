@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 microG Project Team
+ * Copyright 2013-2015 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-    }
-}
+package org.microg.gms.common.api;
 
-allprojects {
-    apply plugin: 'idea'
-    ext.androidBuildVersionTools = "24.0.2"
-}
+public interface ApiConnection {
+    void connect();
 
-def androidCompileSdk() { return 24 }
+    void disconnect();
 
-subprojects {
-    group = 'org.microg'
-    repositories {
-        jcenter()
-    }
+    boolean isConnected();
+
+    boolean isConnecting();
 }

@@ -17,7 +17,6 @@
 package org.microg.gms.wearable;
 
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -27,7 +26,6 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 
 import org.microg.gms.common.GmsConnector;
-import org.microg.gms.common.api.ApiConnection;
 
 public class MessageApiImpl implements MessageApi {
     @Override
@@ -48,10 +46,28 @@ public class MessageApiImpl implements MessageApi {
                 client.getServiceInterface().sendMessage(new BaseWearableCallbacks() {
                     @Override
                     public void onSendMessageResponse(SendMessageResponse response) throws RemoteException {
-                        resultProvider.onResultAvailable(response);
+                        resultProvider.onResultAvailable(new SendMessageResultImpl(response));
                     }
                 }, nodeId, path, data);
             }
         });
+    }
+
+    public static class SendMessageResultImpl implements SendMessageResult {
+        private SendMessageResponse response;
+
+        public SendMessageResultImpl(SendMessageResponse response) {
+            this.response = response;
+        }
+
+        @Override
+        public int getRequestId() {
+            return response.requestId;
+        }
+
+        @Override
+        public Status getStatus() {
+            return new Status(response.statusCode);
+        }
     }
 }

@@ -139,7 +139,7 @@ public class DataBundleUtil {
 
         @Override
         void store(DataMap dataMap, String key, String value) {
-            dataMap.putString(key, value);
+            if (value != null) dataMap.putString(key, value);
         }
 
         @Override
@@ -174,7 +174,7 @@ public class DataBundleUtil {
 
         @Override
         void store(DataMap dataMap, String key, Double value) {
-            dataMap.putDouble(key, value);
+            if (value != null) dataMap.putDouble(key, value);
         }
 
         @Override
@@ -197,7 +197,7 @@ public class DataBundleUtil {
 
         @Override
         void store(DataMap dataMap, String key, Float value) {
-            dataMap.putFloat(key, value);
+            if (value != null) dataMap.putFloat(key, value);
         }
 
         @Override
@@ -220,7 +220,7 @@ public class DataBundleUtil {
 
         @Override
         void store(DataMap dataMap, String key, Long value) {
-            dataMap.putLong(key, value);
+            if (value != null) dataMap.putLong(key, value);
         }
 
         @Override
@@ -243,7 +243,7 @@ public class DataBundleUtil {
 
         @Override
         void store(DataMap dataMap, String key, Integer value) {
-            dataMap.putInt(key, value);
+            if (value != null) dataMap.putInt(key, value);
         }
 
         @Override
@@ -278,7 +278,7 @@ public class DataBundleUtil {
 
         @Override
         void store(DataMap dataMap, String key, Byte value) {
-            dataMap.putByte(key, value);
+            if (value != null) dataMap.putByte(key, value);
         }
 
         @Override
@@ -301,7 +301,7 @@ public class DataBundleUtil {
 
         @Override
         void store(DataMap dataMap, String key, Boolean value) {
-            dataMap.putBoolean(key, value);
+            if (value != null) dataMap.putBoolean(key, value);
         }
 
         @Override

@@ -36,6 +36,7 @@ import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
 
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.wearable.ChannelImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -241,16 +242,16 @@ public abstract class WearableListenerService extends Service implements Capabil
                 public void run() {
                     switch (channelEvent.eventType) {
                         case 1:
-                            WearableListenerService.this.onChannelOpened(channelEvent.channel);
+                            WearableListenerService.this.onChannelOpened(new ChannelImpl(channelEvent.channel));
                             break;
                         case 2:
-                            WearableListenerService.this.onChannelClosed(channelEvent.channel, channelEvent.closeReason, channelEvent.appSpecificErrorCode);
+                            WearableListenerService.this.onChannelClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
                             break;
                         case 3:
-                            WearableListenerService.this.onInputClosed(channelEvent.channel, channelEvent.closeReason, channelEvent.appSpecificErrorCode);
+                            WearableListenerService.this.onInputClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
                             break;
                         case 4:
-                            WearableListenerService.this.onOutputClosed(channelEvent.channel, channelEvent.closeReason, channelEvent.appSpecificErrorCode);
+                            WearableListenerService.this.onOutputClosed(new ChannelImpl(channelEvent.channel), channelEvent.closeReason, channelEvent.appSpecificErrorCode);
                             break;
                         default:
                             Log.w(TAG, "Unknown ChannelEvent.eventType");
