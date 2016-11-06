@@ -22,8 +22,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.text.TextUtils;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.Arrays;
 
 /**

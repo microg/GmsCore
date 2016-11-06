@@ -16,13 +16,10 @@
 
 package com.google.android.gms.wearable.internal;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.wearable.MessageApi;
-
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class SendMessageResponse extends AutoSafeParcelable implements MessageApi.SendMessageResult {
+public class SendMessageResponse extends AutoSafeParcelable {
 
     @SafeParceled(1)
     private int versionCode = 1;
@@ -32,16 +29,6 @@ public class SendMessageResponse extends AutoSafeParcelable implements MessageAp
 
     @SafeParceled(3)
     public int requestId = -1;
-
-    @Override
-    public int getRequestId() {
-        return requestId;
-    }
-
-    @Override
-    public Status getStatus() {
-        return new Status(statusCode);
-    }
 
     public static final Creator<SendMessageResponse> CREATOR = new AutoCreator<SendMessageResponse>(SendMessageResponse.class);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,24 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class ChannelEventParcelable extends AutoSafeParcelable {
-
+public class ChannelParcelable extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    public ChannelParcelable channel;
+    public String token;
     @SafeParceled(3)
-    public int eventType;
+    public String nodeId;
     @SafeParceled(4)
-    public int closeReason;
-    @SafeParceled(5)
-    public int appSpecificErrorCode;
+    public String path;
 
-    public static final Creator<ChannelEventParcelable> CREATOR = new AutoCreator<ChannelEventParcelable>(ChannelEventParcelable.class);
+    private ChannelParcelable() {
+    }
+
+    public ChannelParcelable(String token, String nodeId, String path) {
+        this.token = token;
+        this.nodeId = nodeId;
+        this.path = path;
+    }
+
+    public static final Creator<ChannelParcelable> CREATOR = new AutoCreator<ChannelParcelable>(ChannelParcelable.class);
 }
