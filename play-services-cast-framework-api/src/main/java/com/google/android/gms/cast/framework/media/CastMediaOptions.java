@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.microg.gms.common;
+package com.google.android.gms.cast.framework.media;
 
-public class Constants {
-    public static final int MAX_REFERENCE_VERSION = 10084000;
-    public static final String GMS_PACKAGE_NAME = "com.google.android.gms";
-    public static final String GSF_PACKAGE_NAME = "com.google.android.gsf";
-    public static final String GMS_PACKAGE_SIGNATURE_SHA1 = "38918a453d07199354f8b19af05ec6562ced5788";
+import org.microg.safeparcel.AutoSafeParcelable;
+
+public class CastMediaOptions extends AutoSafeParcelable {
+    
+
+    public static Creator<CastMediaOptions> CREATOR = new AutoCreator<CastMediaOptions>(CastMediaOptions.class);
 }
