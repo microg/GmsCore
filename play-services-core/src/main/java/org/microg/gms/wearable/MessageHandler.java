@@ -150,9 +150,14 @@ public class MessageHandler extends ServerMessageListener {
 
             wearable.sendMessageReceived(rpcRequest.packageName, messageEvent);
         } else if (rpcRequest.targetNodeId.equals(peerNodeId)) {
-            // Drop it, loop detection (yes we really need this in this protocol o.O)
+            // Drop it
         } else {
-            // TODO: find next hop (yes, wtf hops in a network usually consisting of two devices)
+            // TODO: find next hop
+        }
+        try {
+            getConnection().writeMessage(new RootMessage.Builder().heartbeat(new Heartbeat()).build());
+        } catch (IOException e) {
+            onDisconnected();
         }
     }
 

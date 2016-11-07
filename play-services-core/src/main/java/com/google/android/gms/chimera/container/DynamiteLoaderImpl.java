@@ -59,6 +59,10 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
             Log.d(TAG, "returning temp fix module version for " + moduleId + ". Firebase Database will not be functional!");
             return com.google.android.gms.dynamite.descriptors.com.google.android.gms.firebase_database.ModuleDescriptor.MODULE_VERSION;
         }
+        if (moduleId.equals("com.google.android.gms.cast.framework.dynamite")) {
+            Log.d(TAG, "returning temp fix module version for " + moduleId + ". Cast API wil not be functional!");
+            return 1;
+        }
         Log.d(TAG, "unimplemented Method: getModuleVersion for " + moduleId);
         return 0;
     }

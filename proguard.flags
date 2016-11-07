@@ -25,6 +25,7 @@
 -keep public class com.google.android.gms.dynamic.IObjectWrapper { public *; }
 -keep public class com.google.android.gms.chimera.container.DynamiteLoaderImpl { public *; }
 -keep public class com.google.android.gms.dynamite.descriptors.** { public *; }
+-keep public class com.google.android.gms.cast.framework.internal.CastDynamiteModuleImpl { public *; }
 
 # Keep AutoSafeParcelables
 -keep public class * extends org.microg.safeparcel.AutoSafeParcelable {

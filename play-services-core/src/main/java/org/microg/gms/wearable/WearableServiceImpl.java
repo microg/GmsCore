@@ -18,6 +18,7 @@ package org.microg.gms.wearable;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -54,11 +55,13 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final Context context;
     private final String packageName;
     private final WearableImpl wearable;
+    private final Handler handler;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
         this.wearable = wearable;
         this.packageName = packageName;
+        this.handler = new Handler(context.getMainLooper());
     }
 
     /*
@@ -66,40 +69,65 @@ public class WearableServiceImpl extends IWearableService.Stub {
      */
 
     @Override
-    public void putConfig(IWearableCallbacks callbacks, ConnectionConfiguration config) throws RemoteException {
-        wearable.createConnection(config);
-        callbacks.onStatus(Status.SUCCESS);
+    public void putConfig(IWearableCallbacks callbacks, final ConnectionConfiguration config) throws RemoteException {
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                wearable.createConnection(config);
+                callbacks.onStatus(Status.SUCCESS);
+            }
+        });
     }
 
     @Override
-    public void deleteConfig(IWearableCallbacks callbacks, String name) throws RemoteException {
-        wearable.deleteConnection(name);
-        callbacks.onStatus(Status.SUCCESS);
+    public void deleteConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                wearable.deleteConnection(name);
+                callbacks.onStatus(Status.SUCCESS);
+            }
+        });
     }
 
     @Override
     public void getConfigs(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getConfigs");
-        try {
-            callbacks.onGetConfigsResponse(new GetConfigsResponse(0, wearable.getConfigurations()));
-        } catch (Exception e) {
-            callbacks.onGetConfigsResponse(new GetConfigsResponse(8, new ConnectionConfiguration[0]));
-        }
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                try {
+                    callbacks.onGetConfigsResponse(new GetConfigsResponse(0, wearable.getConfigurations()));
+                } catch (Exception e) {
+                    callbacks.onGetConfigsResponse(new GetConfigsResponse(8, new ConnectionConfiguration[0]));
+                }
+            }
+        });
     }
 
 
     @Override
-    public void enableConfig(IWearableCallbacks callbacks, String name) throws RemoteException {
+    public void enableConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
         Log.d(TAG, "enableConfig: " + name);
-        wearable.enableConnection(name);
-        callbacks.onStatus(Status.SUCCESS);
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                wearable.enableConnection(name);
+                callbacks.onStatus(Status.SUCCESS);
+            }
+        });
     }
 
     @Override
-    public void disableConfig(IWearableCallbacks callbacks, String name) throws RemoteException {
+    public void disableConfig(IWearableCallbacks callbacks, final String name) throws RemoteException {
         Log.d(TAG, "disableConfig: " + name);
-        wearable.disableConnection(name);
-        callbacks.onStatus(Status.SUCCESS);
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                wearable.disableConnection(name);
+                callbacks.onStatus(Status.SUCCESS);
+            }
+        });
     }
 
     /*
@@ -107,28 +135,42 @@ public class WearableServiceImpl extends IWearableService.Stub {
      */
 
     @Override
-    public void putData(IWearableCallbacks callbacks, PutDataRequest request) throws RemoteException {
+    public void putData(IWearableCallbacks callbacks, final PutDataRequest request) throws RemoteException {
         Log.d(TAG, "putData: " + request.toString(true));
-        DataItemRecord record = wearable.putData(request, packageName);
-        callbacks.onPutDataResponse(new PutDataResponse(0, record.toParcelable()));
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                DataItemRecord record = wearable.putData(request, packageName);
+                callbacks.onPutDataResponse(new PutDataResponse(0, record.toParcelable()));
+            }
+        });
     }
 
     @Override
-    public void getDataItem(IWearableCallbacks callbacks, Uri uri) throws RemoteException {
+    public void getDataItem(IWearableCallbacks callbacks, final Uri uri) throws RemoteException {
         Log.d(TAG, "getDataItem: " + uri);
-
-        DataItemRecord record = wearable.getDataItemByUri(uri, packageName);
-        if (record != null) {
-            callbacks.onGetDataItemResponse(new GetDataItemResponse(0, record.toParcelable()));
-        } else {
-            // TODO: negative
-        }
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                DataItemRecord record = wearable.getDataItemByUri(uri, packageName);
+                if (record != null) {
+                    callbacks.onGetDataItemResponse(new GetDataItemResponse(0, record.toParcelable()));
+                } else {
+                    callbacks.onGetDataItemResponse(new GetDataItemResponse(0, null));
+                }
+            }
+        });
     }
 
     @Override
-    public void getDataItems(IWearableCallbacks callbacks) throws RemoteException {
+    public void getDataItems(final IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getDataItems: " + callbacks);
-        callbacks.onDataItemChanged(wearable.getDataItemsAsHolder(packageName));
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                callbacks.onDataItemChanged(wearable.getDataItemsAsHolder(packageName));
+            }
+        });
     }
 
     @Override
@@ -137,9 +179,14 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void getDataItemsByUriWithFilter(IWearableCallbacks callbacks, Uri uri, int typeFilter) throws RemoteException {
+    public void getDataItemsByUriWithFilter(IWearableCallbacks callbacks, final Uri uri, int typeFilter) throws RemoteException {
         Log.d(TAG, "getDataItemsByUri: " + uri);
-        callbacks.onDataItemChanged(wearable.getDataItemsByUriAsHolder(uri, packageName));
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                callbacks.onDataItemChanged(wearable.getDataItemsByUriAsHolder(uri, packageName));
+            }
+        });
     }
 
     @Override
@@ -148,35 +195,50 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void deleteDataItemsWithFilter(IWearableCallbacks callbacks, Uri uri, int typeFilter) throws RemoteException {
+    public void deleteDataItemsWithFilter(IWearableCallbacks callbacks, final Uri uri, int typeFilter) throws RemoteException {
         Log.d(TAG, "deleteDataItems: " + uri);
-        callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, wearable.deleteDataItems(uri, packageName)));
-    }
-
-    @Override
-    public void sendMessage(IWearableCallbacks callbacks, String targetNodeId, String path, byte[] data) throws RemoteException {
-        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
-        SendMessageResponse sendMessageResponse = new SendMessageResponse();
-        try {
-            sendMessageResponse.requestId = wearable.sendMessage(packageName, targetNodeId, path, data);
-            if (sendMessageResponse.requestId == -1) {
-                sendMessageResponse.statusCode = 4000;
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, wearable.deleteDataItems(uri, packageName)));
             }
-        } catch (Exception e) {
-            sendMessageResponse.statusCode = 8;
-        }
-        callbacks.onSendMessageResponse(sendMessageResponse);
+        });
     }
 
     @Override
-    public void getFdForAsset(IWearableCallbacks callbacks, Asset asset) throws RemoteException {
+    public void sendMessage(IWearableCallbacks callbacks, final String targetNodeId, final String path, final byte[] data) throws RemoteException {
+        Log.d(TAG, "sendMessage: " + targetNodeId + " / " + path + ": " + (data == null ? null : Base64.encodeToString(data, Base64.NO_WRAP)));
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                SendMessageResponse sendMessageResponse = new SendMessageResponse();
+                try {
+                    sendMessageResponse.requestId = wearable.sendMessage(packageName, targetNodeId, path, data);
+                    if (sendMessageResponse.requestId == -1) {
+                        sendMessageResponse.statusCode = 4000;
+                    }
+                } catch (Exception e) {
+                    sendMessageResponse.statusCode = 8;
+                }
+                callbacks.onSendMessageResponse(sendMessageResponse);
+            }
+        });
+    }
+
+    @Override
+    public void getFdForAsset(IWearableCallbacks callbacks, final Asset asset) throws RemoteException {
         Log.d(TAG, "getFdForAsset " + asset);
-        // TODO: Access control
-        try {
-            callbacks.onGetFdForAssetResponse(new GetFdForAssetResponse(0, ParcelFileDescriptor.open(wearable.createAssetFile(asset.getDigest()), ParcelFileDescriptor.MODE_READ_ONLY)));
-        } catch (FileNotFoundException e) {
-            callbacks.onGetFdForAssetResponse(new GetFdForAssetResponse(8, null));
-        }
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                // TODO: Access control
+                try {
+                    callbacks.onGetFdForAssetResponse(new GetFdForAssetResponse(0, ParcelFileDescriptor.open(wearable.createAssetFile(asset.getDigest()), ParcelFileDescriptor.MODE_READ_ONLY)));
+                } catch (FileNotFoundException e) {
+                    callbacks.onGetFdForAssetResponse(new GetFdForAssetResponse(8, null));
+                }
+            }
+        });
     }
 
     @Override
@@ -212,16 +274,26 @@ public class WearableServiceImpl extends IWearableService.Stub {
 
     @Override
     public void getLocalNode(IWearableCallbacks callbacks) throws RemoteException {
-        try {
-            callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(0, new NodeParcelable(wearable.getLocalNodeId(), wearable.getLocalNodeId())));
-        } catch (Exception e) {
-            callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(8, null));
-        }
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                try {
+                    callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(0, new NodeParcelable(wearable.getLocalNodeId(), wearable.getLocalNodeId())));
+                } catch (Exception e) {
+                    callbacks.onGetLocalNodeResponse(new GetLocalNodeResponse(8, null));
+                }
+            }
+        });
     }
 
     @Override
     public void getConnectedNodes(IWearableCallbacks callbacks) throws RemoteException {
-        callbacks.onGetConnectedNodesResponse(new GetConnectedNodesResponse(0, wearable.getConnectedNodesParcelableList()));
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                callbacks.onGetConnectedNodesResponse(new GetConnectedNodesResponse(0, wearable.getConnectedNodesParcelableList()));
+            }
+        });
     }
 
     /*
@@ -365,30 +437,45 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Deprecated
     public void getConnection(IWearableCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "getConfig");
-        ConnectionConfiguration[] configurations = wearable.getConfigurations();
-        if (configurations == null || configurations.length == 0) {
-            callbacks.onGetConfigResponse(new GetConfigResponse(1, new ConnectionConfiguration(null, null, 0, 0, false)));
-        } else {
-            callbacks.onGetConfigResponse(new GetConfigResponse(0, configurations[0]));
-        }
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                ConnectionConfiguration[] configurations = wearable.getConfigurations();
+                if (configurations == null || configurations.length == 0) {
+                    callbacks.onGetConfigResponse(new GetConfigResponse(1, new ConnectionConfiguration(null, null, 0, 0, false)));
+                } else {
+                    callbacks.onGetConfigResponse(new GetConfigResponse(0, configurations[0]));
+                }
+            }
+        });
     }
 
     @Override
     @Deprecated
     public void enableConnection(IWearableCallbacks callbacks) throws RemoteException {
-        ConnectionConfiguration[] configurations = wearable.getConfigurations();
-        if (configurations.length > 0) {
-            enableConfig(callbacks, configurations[0].name);
-        }
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                ConnectionConfiguration[] configurations = wearable.getConfigurations();
+                if (configurations.length > 0) {
+                    enableConfig(callbacks, configurations[0].name);
+                }
+            }
+        });
     }
 
     @Override
     @Deprecated
     public void disableConnection(IWearableCallbacks callbacks) throws RemoteException {
-        ConnectionConfiguration[] configurations = wearable.getConfigurations();
-        if (configurations.length > 0) {
-            disableConfig(callbacks, configurations[0].name);
-        }
+        handler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                ConnectionConfiguration[] configurations = wearable.getConfigurations();
+                if (configurations.length > 0) {
+                    disableConfig(callbacks, configurations[0].name);
+                }
+            }
+        });
     }
 
     @Override
@@ -396,5 +483,28 @@ public class WearableServiceImpl extends IWearableService.Stub {
         if (super.onTransact(code, data, reply, flags)) return true;
         Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
         return false;
+    }
+
+    public abstract class CallbackRunnable implements Runnable {
+        private IWearableCallbacks callbacks;
+
+        public CallbackRunnable(IWearableCallbacks callbacks) {
+            this.callbacks = callbacks;
+        }
+
+        @Override
+        public void run() {
+            try {
+                run(callbacks);
+            } catch (RemoteException e) {
+                try {
+                    callbacks.onStatus(Status.CANCELED);
+                } catch (RemoteException e1) {
+                    Log.w(TAG, e);
+                }
+            }
+        }
+
+        public abstract void run(IWearableCallbacks callbacks) throws RemoteException;
     }
 }

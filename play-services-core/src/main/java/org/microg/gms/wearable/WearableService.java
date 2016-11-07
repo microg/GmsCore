@@ -18,6 +18,8 @@ package org.microg.gms.wearable;
 
 import android.content.Context;
 import android.os.Binder;
+import android.os.Handler;
+import android.os.Messenger;
 import android.os.RemoteException;
 
 import com.google.android.gms.common.internal.GetServiceRequest;

@@ -56,6 +56,7 @@ public class DataItemInternal {
     public String toString() {
         final StringBuilder sb = new StringBuilder("DataItemInternal{");
         sb.append("uri=").append(uri);
+        sb.append(", assets=").append(assets.size());
         sb.append('}');
         return sb.toString();
     }

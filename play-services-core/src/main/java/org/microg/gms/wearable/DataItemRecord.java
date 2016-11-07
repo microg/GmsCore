@@ -95,11 +95,12 @@ public class DataItemRecord {
     }
 
     public DataItemParcelable toParcelable() {
-        DataItemParcelable parcelable = new DataItemParcelable(dataItem.uri);
-        parcelable.data = dataItem.data;
+        Map<String, DataItemAssetParcelable> assets = new HashMap<>();
         for (Map.Entry<String, Asset> entry : dataItem.getAssets().entrySet()) {
-            parcelable.getAssets().put(entry.getKey(), new DataItemAssetParcelable(entry.getValue().getDigest(), entry.getKey()));
+            assets.put(entry.getKey(), new DataItemAssetParcelable(entry.getValue().getDigest(), entry.getKey()));
         }
+        DataItemParcelable parcelable = new DataItemParcelable(dataItem.uri, assets);
+        parcelable.data = dataItem.data;
         return parcelable;
     }
 

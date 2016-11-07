@@ -606,6 +606,7 @@ public class WearableImpl {
             }
             return (state.generation + 527) * 31 + state.lastRequestId;
         }
+        Log.d(TAG, targetNodeId + " seems not reachable");
         return -1;
     }
 }
