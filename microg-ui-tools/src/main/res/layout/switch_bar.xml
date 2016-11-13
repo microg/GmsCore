@@ -23,14 +23,13 @@
         android:id="@+id/switch_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="start|center_vertical"
         android:layout_marginLeft="72dp"
         android:layout_marginStart="72dp"
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="@string/v7_preference_on"
-        android:textAlignment="viewStart"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:theme="@style/TextAppearance.AppCompat.Title.Inverse"/>
 

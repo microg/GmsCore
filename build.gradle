@@ -31,6 +31,10 @@ allprojects {
 
 def androidCompileSdk() { return 24 }
 
+def androidTargetSdk() { return 24 }
+
+def androidMinSdk() { return 7 }
+
 subprojects {
     repositories {
         jcenter()

@@ -262,9 +262,4 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
 
         requestLayout();
     }
-
-    @Override
-    public CharSequence getAccessibilityClassName() {
-        return Switch.class.getName();
-    }
 }

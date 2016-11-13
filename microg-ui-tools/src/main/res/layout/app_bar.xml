@@ -41,6 +41,7 @@
         android:layout_marginLeft="72dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="72dp"
+        android:gravity="start"
         android:textAlignment="viewStart"
         android:textColor="?android:attr/textColorPrimaryInverse"
         android:theme="@style/TextAppearance.AppCompat.Title.Inverse"/>
