@@ -9,8 +9,8 @@ script:
   - ./gradlew build
 android:
   components:
-    - platform-tools
     - tools
+    - platform-tools
     - build-tools-24.0.2
     - android-24
     - extra-android-m2repository
