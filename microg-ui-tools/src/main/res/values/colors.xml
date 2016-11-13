@@ -18,4 +18,7 @@
     <color name="settings_theme_primary">#ff263238</color>
     <color name="settings_theme_primary_dark">#ff21272b</color>
     <color name="settings_theme_accent">#ff009688</color>
+
+    <color name="switchbar_background_color">#ff37474f</color>
+    <color name="switch_accent_color">#ff7fcac3</color>
 </resources>

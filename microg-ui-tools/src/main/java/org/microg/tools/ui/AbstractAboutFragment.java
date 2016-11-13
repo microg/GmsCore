@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 microG Project Team
+ * Copyright (C) 2013-2016 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,21 +39,21 @@ public abstract class AbstractAboutFragment extends Fragment {
 
     protected abstract void collectLibraries(List<Library> libraries);
 
-    protected Drawable getIcon() {
+    public static Drawable getIcon(Context context) {
         try {
-            PackageManager pm = getContext().getPackageManager();
-            return pm.getPackageInfo(getContext().getPackageName(), 0).applicationInfo.loadIcon(pm);
+            PackageManager pm = context.getPackageManager();
+            return pm.getPackageInfo(context.getPackageName(), 0).applicationInfo.loadIcon(pm);
         } catch (PackageManager.NameNotFoundException e) {
             // Never happens, self package always exists!
             throw new RuntimeException(e);
         }
     }
 
-    protected String getAppName() {
+    public static String getAppName(Context context) {
         try {
-            PackageManager pm = getContext().getPackageManager();
-            CharSequence label = pm.getPackageInfo(getContext().getPackageName(), 0).applicationInfo.loadLabel(pm);
-            if (TextUtils.isEmpty(label)) return getContext().getPackageName();
+            PackageManager pm = context.getPackageManager();
+            CharSequence label = pm.getPackageInfo(context.getPackageName(), 0).applicationInfo.loadLabel(pm);
+            if (TextUtils.isEmpty(label)) return context.getPackageName();
             return label.toString().trim();
         } catch (PackageManager.NameNotFoundException e) {
             // Never happens, self package always exists!
@@ -62,7 +61,11 @@ public abstract class AbstractAboutFragment extends Fragment {
         }
     }
 
-    protected String getLibVersion(String packageName) {
+    protected String getAppName() {
+        return getAppName(getContext());
+    }
+
+    public static String getLibVersion(String packageName) {
         try {
             String versionName = (String) Class.forName(packageName + ".BuildConfig").getField("VERSION_NAME").get(null);
             if (TextUtils.isEmpty(versionName)) return "";
@@ -72,8 +75,12 @@ public abstract class AbstractAboutFragment extends Fragment {
         }
     }
 
+    public static String getSelfVersion(Context context) {
+        return getLibVersion(context.getPackageName());
+    }
+
     protected String getSelfVersion() {
-        return getLibVersion(getContext().getPackageName());
+        return getSelfVersion(getContext());
     }
 
     protected String getSummary() {
@@ -84,7 +91,7 @@ public abstract class AbstractAboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View aboutRoot = inflater.inflate(R.layout.about_root, container, false);
-        ((ImageView) aboutRoot.findViewById(android.R.id.icon)).setImageDrawable(getIcon());
+        ((ImageView) aboutRoot.findViewById(android.R.id.icon)).setImageDrawable(getIcon(getContext()));
         ((TextView) aboutRoot.findViewById(android.R.id.title)).setText(getAppName());
         ((TextView) aboutRoot.findViewById(R.id.about_version)).setText(getString(R.string.about_version_str, getSelfVersion()));
         String summary = getSummary();
@@ -97,6 +104,7 @@ public abstract class AbstractAboutFragment extends Fragment {
         libraries.add(new Library(BuildConfig.APPLICATION_ID, getString(R.string.lib_name), getString(R.string.lib_license)));
         libraries.add(new Library("android.support.v4", getString(R.string.about_android_support_v4), getString(R.string.about_android_support_license)));
         libraries.add(new Library("android.support.v7.appcompat", getString(R.string.about_android_support_v7_appcompat), getString(R.string.about_android_support_license)));
+        libraries.add(new Library("android.support.v7.preference#hide_version", getString(R.string.about_android_support_v7_preference), getString(R.string.about_android_support_license)));
         collectLibraries(libraries);
         Collections.sort(libraries);
         ((ListView) aboutRoot.findViewById(android.R.id.list)).setAdapter(new LibraryAdapter(getContext(), libraries.toArray(new Library[libraries.size()])));

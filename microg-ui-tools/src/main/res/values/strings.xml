@@ -17,7 +17,7 @@
 
 <resources>
     <string name="lib_name">microG UI Tools</string>
-    <string name="lib_license">Apache License 2.0 by microG Team</string>
+    <string name="lib_license">Apache License 2.0, microG Team</string>
 
     <string name="about_version_str">Version %1$s</string>
     <string name="about_name_version_str">%1$s %2$s</string>
@@ -39,5 +39,6 @@
 
     <string name="about_android_support_v4">v4 Support Library</string>
     <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>
-    <string name="about_android_support_license">Apache License 2.0 by The Android Open Source Project</string>
+    <string name="about_android_support_v7_preference">v7 preference Support Library</string>
+    <string name="about_android_support_license">Apache License 2.0, The Android Open Source Project</string>
 </resources>

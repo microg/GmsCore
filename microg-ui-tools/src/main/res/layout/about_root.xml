@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@+id/about_root_title"
+        android:text="@string/about_root_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="?attr/colorAccent"/>
 
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:visibility="gone"
-        android:text="@+id/about_root_summary"
+        android:text="@string/about_root_summary"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         android:textColor="?attr/colorAccent"/>
 
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@+id/about_root_version"
+        android:text="@string/about_root_version"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
     <TextView
