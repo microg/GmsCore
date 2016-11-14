@@ -15,14 +15,10 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.microg.gms.iid">
-
-    <uses-sdk android:minSdkVersion="9" />
+<manifest package="org.microg.gms.iid"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Permissions required for IID -->
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <application />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

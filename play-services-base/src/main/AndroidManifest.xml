@@ -18,8 +18,6 @@
 <manifest package="org.microg.gms.base"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-sdk android:minSdkVersion="9"/>
-
     <meta-data
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version"/>
