@@ -26,10 +26,14 @@ buildscript {
 
 allprojects {
     apply plugin: 'idea'
-    ext.androidBuildVersionTools = "24.0.2"
+    ext.androidBuildVersionTools = "24.0.3"
 }
 
 def androidCompileSdk() { return 24 }
+
+def androidTargetSdk() { return 24 }
+
+def androidMinSdk() { return 9 }
 
 subprojects {
     repositories {

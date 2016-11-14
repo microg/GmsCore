@@ -15,10 +15,4 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.microg.gms.cast.framework.api">
-
-    <uses-sdk android:minSdkVersion="9" />
-
-    <application />
-</manifest>
+<manifest package="org.microg.gms.cast.framework.api"/>
