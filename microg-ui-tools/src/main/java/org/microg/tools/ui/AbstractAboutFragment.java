@@ -34,6 +34,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class AbstractAboutFragment extends Fragment {
 
@@ -145,7 +146,7 @@ public abstract class AbstractAboutFragment extends Fragment {
 
         @Override
         public int compareTo(Library another) {
-            return name.toLowerCase().compareTo(another.name.toLowerCase());
+            return name.toLowerCase(Locale.US).compareTo(another.name.toLowerCase(Locale.US));
         }
     }
 }

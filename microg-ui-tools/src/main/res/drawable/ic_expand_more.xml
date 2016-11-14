@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2013-2016 microG Project Team
+  ~ Copyright (C) 2015 The Android Open Source Project
+  ~ Copyright (C) 2015-2016 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,10 +19,12 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="24dp"
         android:height="24dp"
-        android:viewportWidth="24"
-        android:viewportHeight="24">
+        android:tint="?attr/colorControlNormal"
+        android:viewportHeight="24"
+        android:viewportWidth="24">
 
     <path
-        android:fillColor="#000000"
-        android:pathData="M14,10H2V12H14V10M14,6H2V8H14V6M2,16H10V14H2V16M21.5,11.5L23,13L16,20L11.5,15.5L13,14L16,17L21.5,11.5Z" />
+        android:fillColor="@android:color/white"
+        android:pathData="M16.59,8.59L12.0,13.17 7.41,8.59 6.0,10.0l6.0,6.0 6.0,-6.0z"/>
+
 </vector>

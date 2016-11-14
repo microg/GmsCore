@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
-public class AbstractSettingsActivity extends AppCompatActivity {
+public abstract class AbstractSettingsActivity extends AppCompatActivity {
     protected boolean showHomeAsUp = false;
     protected int preferencesResource = 0;
     private ViewGroup customBarContainer;

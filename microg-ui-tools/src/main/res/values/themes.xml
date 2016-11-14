@@ -16,11 +16,19 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="SettingsTheme" parent="@style/PreferenceFixTheme.Light.NoActionBar">
+    <style name="Theme.AppCompat.Settings" parent="@style/PreferenceFixTheme.Light.NoActionBar">
         <item name="colorPrimary">@color/settings_theme_primary</item>
         <item name="colorPrimaryDark">@color/settings_theme_primary_dark</item>
+        <item name="colorAccent">@color/settings_theme_accent</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/settings_theme_primary</item>
         <item name="android:colorPrimaryDark" tools:targetApi="21">@color/settings_theme_primary_dark</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/settings_theme_accent</item>
     </style>
+
+    <style name="Widget.AppCompat.Settings.SwitchBar.Switch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorAccent">@color/switch_accent_color</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/switch_accent_color</item>
+    </style>
+
+    <style name="Theme.AppCompat.Settings.Dashboard"/>
 </resources>

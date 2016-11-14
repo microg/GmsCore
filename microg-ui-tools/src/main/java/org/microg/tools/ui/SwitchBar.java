@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -208,8 +207,8 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
          */
         private SavedState(Parcel in) {
             super(in);
-            checked = (Boolean) in.readValue(null);
-            visible = (Boolean) in.readValue(null);
+            checked = (Boolean) in.readValue(Boolean.class.getClassLoader());
+            visible = (Boolean) in.readValue(Boolean.class.getClassLoader());
         }
 
         @Override
