@@ -32,14 +32,13 @@ import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";
-    private static final String PREF_ENABLE_GCM = "gcm_enable_mcs_service";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_GCM, false) || force) {
+        if (GcmPrefs.get(context).isGcmEnabled() || force) {
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
                 McsService.resetCurrentDelay();
             }

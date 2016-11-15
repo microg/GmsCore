@@ -30,6 +30,7 @@ import android.util.Log;
 import com.google.android.gms.R;
 
 import org.microg.gms.auth.AskPermissionActivity;
+import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthResponse;
 import org.microg.gms.auth.login.LoginActivity;
@@ -55,7 +56,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
     public AccountAuthenticator(Context context) {
         super(context);
         this.context = context;
-        this.accountType = context.getString(R.string.google_account_type);
+        this.accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
     }
 
     @Override

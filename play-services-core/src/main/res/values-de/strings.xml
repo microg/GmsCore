@@ -25,10 +25,10 @@
     <string name="sorry">Entschuldigung…</string>
     <string name="no_network_error_desc">"Du hast keine Netzwerkverbindung.
 
-Dies könnte ein temporäres Problem sein oder dein Android Gerät hat keine bestehende Datenverbindung. Versuche es nocheinmal wenn du mit einem Datennetz oder WLAN verbunden bist."</string>
+Dies könnte ein temporäres Problem sein oder dein Android Gerät hat keine bestehende Datenverbindung. Versuche es noch einmal wenn du mit einem Datennetz oder WLAN verbunden bist."</string>
     <string name="auth_general_error_desc">"Es ist ein Problem bei der Kommunikation mit den Google Servern aufgetreten.
 
-Versuche es später nocheinmal."</string>
+Versuche es später noch einmal."</string>
     <string name="auth_finalize">"Dein Gerät verbindet sich zu Google um Informationen in deinem Konto zu speichern.
 
 Dies kann einige Minuten dauern."</string>
@@ -43,10 +43,8 @@ Dies kann einige Minuten dauern."</string>
 
     <string name="pref_auth_trust_google_title">Vertraue Google bei App Rechten</string>
     <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt bevor eine App Autorisierungsanfrage an Google geschickt wird. Einige Apps werden das Google Konto nicht nutzen können, wenn deaktiviert.</string>
-    
-    <string name="pref_checkin_enable_title">Aktiviere Geräte Check-In</string>
+
     <string name="pref_checkin_enable_summary">Geräte Check-In ist ein versteckter Prozess, der genutzt wird um eine eindeutige Kennung für Google Dienste zu erzeugen. microG entfernt identifizierende Daten bis auf den Google Konto Namen.</string>
-    <string name="pref_gcm_enable_mcs_title">Aktiviere Google Cloud Messaging</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten Dienst, der von vielen Apps genutzt wird. Zur Benutztung muss Geräte Check-In aktiviert werden.</string>
 
     <string name="prefcat_services">Hintergrunddienste</string>

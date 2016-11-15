@@ -70,7 +70,7 @@
                 android:layout_gravity="top"
                 android:layout_marginTop="12.0dip"
                 android:ellipsize="end"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:text="@string/place_picker_select_title"
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="?attr/colorAccent"/>

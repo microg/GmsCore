@@ -16,137 +16,51 @@
 
 package org.microg.gms.ui;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.preference.PreferenceFragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceManager;
 
 import com.google.android.gms.R;
 
-import org.microg.tools.selfcheck.InstalledPackagesChecks;
-import org.microg.tools.selfcheck.NlpOsCompatChecks;
-import org.microg.tools.selfcheck.NlpStatusChecks;
-import org.microg.tools.selfcheck.PermissionCheckGroup;
-import org.microg.tools.selfcheck.RomSpoofSignatureChecks;
-import org.microg.tools.selfcheck.SelfCheckGroup;
-import org.microg.tools.selfcheck.SystemChecks;
-import org.microg.tools.ui.AbstractAboutFragment;
-import org.microg.tools.ui.AbstractSelfCheckFragment;
+import org.microg.gms.gcm.GcmDatabase;
+import org.microg.gms.gcm.GcmPrefs;
+import org.microg.tools.ui.AbstractDashboardActivity;
+import org.microg.tools.ui.ResourceSettingsFragment;
 
-import java.util.List;
+public class SettingsActivity extends AbstractDashboardActivity {
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.GET_ACCOUNTS;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP_MR1;
+    public SettingsActivity() {
+        preferencesResource = R.xml.preferences_start;
+        addCondition(Conditions.GCM_BATTERY_OPTIMIZATIONS);
+        addCondition(Conditions.PERMISSIONS);
+    }
 
-public class SettingsActivity extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_wrapper, new MyPreferenceFragment())
-                .commit();
+    protected Fragment getFragment() {
+        return new FragmentImpl();
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+    public static class FragmentImpl extends ResourceSettingsFragment {
 
-            addPreferencesFromResource(R.xml.gms_preferences);
+        public static final String PREF_ABOUT = "pref_about";
+        public static final String PREF_GCM = "pref_gcm";
 
-            findPreference(getString(R.string.self_check_title))
-                    .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(Preference preference) {
-                            getFragmentManager().beginTransaction()
-                                    .addToBackStack("root")
-                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                    .replace(R.id.content_wrapper, new MySelfCheckFragment())
-                                    .commit();
-                            return true;
-                        }
-                    });
-            findPreference(getString(R.string.pref_about_title))
-                    .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(Preference preference) {
-                            getFragmentManager().beginTransaction()
-                                    .addToBackStack("root")
-                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                    .replace(R.id.content_wrapper, new MyAboutFragment())
-                                    .commit();
-                            return true;
-                        }
-                    });
-            findPreference(getString(R.string.pref_gcm_apps))
-                    .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(Preference preference) {
-                            getFragmentManager().beginTransaction()
-                                    .addToBackStack("root")
-                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                                    .replace(R.id.content_wrapper, new GcmRegisteredAppsFragment())
-                                    .commit();
-                            return true;
-                        }
-                    });
+        public FragmentImpl() {
+            preferencesResource = R.xml.preferences_start;
         }
-    }
-
-    public static class MySelfCheckFragment extends AbstractSelfCheckFragment {
 
         @Override
-        protected void prepareSelfCheckList(List<SelfCheckGroup> checks) {
-            checks.add(new RomSpoofSignatureChecks());
-            checks.add(new InstalledPackagesChecks());
-            if (SDK_INT > LOLLIPOP_MR1) {
-                checks.add(new PermissionCheckGroup(ACCESS_COARSE_LOCATION, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE));
+        public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+            super.onCreatePreferencesFix(savedInstanceState, rootKey);
+            PreferenceManager prefs = getPreferenceManager();
+            prefs.findPreference(PREF_ABOUT).setSummary(getString(R.string.about_version_str, AboutFragment.getSelfVersion(getContext())));
+            if (GcmPrefs.get(getContext()).isGcmEnabled()) {
+                int regCount = new GcmDatabase(getContext()).getRegistrationList().size();
+                prefs.findPreference(PREF_GCM).setSummary(getString(R.string.v7_preference_on) + " / " + getContext().getString(R.string.gcm_registered_apps_counter, regCount));
+            } else {
+                prefs.findPreference(PREF_GCM).setSummary(R.string.v7_preference_off);
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                checks.add(new SystemChecks());
-            }
-            checks.add(new NlpOsCompatChecks());
-            checks.add(new NlpStatusChecks());
-        }
-
-        @Override
-        public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-            reset(LayoutInflater.from(getContext()));
-        }
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == SystemChecks.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-                reset(LayoutInflater.from(getContext()));
-            else
-                super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    public static class MyAboutFragment extends AbstractAboutFragment {
-
-        @Override
-        protected void collectLibraries(List<Library> libraries) {
-            libraries.add(new Library("org.microg.gms.api", "microG GmsApi", "Apache License 2.0 by microG Team"));
-            libraries.add(new Library("org.microg.safeparcel", "microG SafeParcel", "Apache License 2.0 by microG Team"));
-            libraries.add(new Library("org.microg.nlp", "microG UnifiedNlp", "Apache License 2.0 by microG Team"));
-            libraries.add(new Library("org.microg.nlp.api", "microG UnifiedNlp Api", "Apache License 2.0, by microG Team"));
-            libraries.add(new Library("org.microg.wearable", "microG Wearable", "Apache License 2.0 by microG Team"));
-            libraries.add(new Library("de.hdodenhof.circleimageview", "CircleImageView", "Apache License 2.0 by Henning Dodenhof"));
-            libraries.add(new Library("org.oscim.android", "<vector<tile>>map", "GNU LGPLv3 by Hannes Janetzek"));
-            libraries.add(new Library("com.squareup.wire", "Wire Protocol Buffers", "Apache License 2.0 by Square Inc."));
         }
     }
 }

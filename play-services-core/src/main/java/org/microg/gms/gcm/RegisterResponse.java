@@ -17,6 +17,7 @@
 package org.microg.gms.gcm;
 
 import org.microg.gms.common.HttpFormClient.ResponseHeader;
+import org.microg.gms.common.HttpFormClient.ResponseStatusText;
 
 import static org.microg.gms.common.HttpFormClient.ResponseField;
 
@@ -27,6 +28,8 @@ public class RegisterResponse {
     public String retryAfter;
     @ResponseField("deleted")
     public String deleted;
+    @ResponseStatusText
+    public String responseText;
 
     @Override
     public String toString() {

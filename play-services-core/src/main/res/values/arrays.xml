@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 microG Project Team
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2016 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +15,18 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/delete"
-        android:title="@string/gcm_unregister_app" />
-</menu>
+<resources>
+    <string-array name="network_types" translatable="false">
+        <item>mobile</item>
+        <item>wifi</item>
+        <item>roaming</item>
+        <item>other</item>
+    </string-array>
+
+    <string-array name="network_types_names">
+        <item>@string/network_type_mobile</item>
+        <item>@string/network_type_wifi</item>
+        <item>@string/network_type_roaming</item>
+        <item>@string/network_type_other</item>
+    </string-array>
+</resources>

@@ -16,6 +16,7 @@
 
 package org.microg.gms.wearable;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -66,6 +67,8 @@ import java.util.Map;
 import java.util.Set;
 
 import okio.ByteString;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 public class WearableImpl {
 
@@ -456,21 +459,28 @@ public class WearableImpl {
             return null;
         }
         Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(packageName, firstSignature, fixHost(uri.getHost(), false), uri.getPath());
-        int j = 0;
-        while (dataHolderItems.moveToNext()) {
-            for (int i = 0; i < dataHolderItems.getColumnCount(); i++) {
-                if (dataHolderItems.getType(i) == Cursor.FIELD_TYPE_STRING) {
-                    Log.d(TAG, "getDataItems[" + j + "]: " + dataHolderItems.getColumnName(i) + "=" + dataHolderItems.getString(i));
-                }
-                if (dataHolderItems.getType(i) == Cursor.FIELD_TYPE_INTEGER)
-                    Log.d(TAG, "getDataItems[" + j + "]: " + dataHolderItems.getColumnName(i) + "=" + dataHolderItems.getLong(i));
-            }
-        }
+        maybeDebugCursor("getDataItems",dataHolderItems);
         dataHolderItems.moveToFirst();
         dataHolderItems.moveToPrevious();
         DataHolder dataHolder = new DataHolder(dataHolderItems, 0, null);
         Log.d(TAG, "Returning data holder of size " + dataHolder.getCount() + " for query " + uri);
         return dataHolder;
+    }
+
+    @TargetApi(11)
+    private void maybeDebugCursor(String what, Cursor cursor) {
+        if (SDK_INT >= 11) {
+            int j = 0;
+            while (cursor.moveToNext()) {
+                for (int i = 0; i < cursor.getColumnCount(); i++) {
+                    if (cursor.getType(i) == Cursor.FIELD_TYPE_STRING) {
+                        Log.d(TAG, what+"[" + j + "]: " + cursor.getColumnName(i) + "=" + cursor.getString(i));
+                    }
+                    if (cursor.getType(i) == Cursor.FIELD_TYPE_INTEGER)
+                        Log.d(TAG, what+"[" + j + "]: " + cursor.getColumnName(i) + "=" + cursor.getLong(i));
+                }
+            }
+        }
     }
 
     public synchronized void addListener(String packageName, IWearableListener listener) {

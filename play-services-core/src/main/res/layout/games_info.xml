@@ -99,7 +99,7 @@
 
         <Button
             android:id="@android:id/button1"
-            style="?android:attr/buttonBarButtonStyle"
+            style="?attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@android:string/ok"/>

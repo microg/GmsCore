@@ -23,6 +23,7 @@ import android.content.Context;
 
 import com.google.android.gms.R;
 
+import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.DeviceConfiguration;
@@ -43,7 +44,7 @@ public class CheckinManager {
             return null;
         List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
         AccountManager accountManager = AccountManager.get(context);
-        String accountType = context.getString(R.string.google_account_type);
+        String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         for (Account account : accountManager.getAccountsByType(accountType)) {
             String token = new AuthRequest()
                     .email(account.name).token(accountManager.getPassword(account))

@@ -56,7 +56,7 @@ public class AuthManager {
 
     public String getAccountType() {
         if (accountType == null)
-            accountType = context.getString(R.string.google_account_type);
+            accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         return accountType;
     }
 

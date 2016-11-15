@@ -12,10 +12,9 @@ script:
   - ./gradlew assemble
 android:
   components:
-  - platform-tools
   - tools
-  - build-tools-24.0.2
-  - android-23
+  - platform-tools
+  - build-tools-24.0.3
   - android-24
   - extra-android-m2repository
 before_cache:

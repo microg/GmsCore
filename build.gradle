@@ -19,14 +19,14 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.2.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
     }
 }
 
 allprojects {
     apply plugin: 'idea'
-    ext.androidBuildVersionTools = "24.0.2"
+    ext.androidBuildVersionTools = "24.0.3"
     ext.isReleaseVersion = false
 }
 
@@ -34,7 +34,7 @@ def androidCompileSdk() { return 24 }
 
 def androidTargetSdk() { return 24 }
 
-def androidMinSdk() { return 10 }
+def androidMinSdk() { return 9 }
 
 def versionCode() {
     def stdout = new ByteArrayOutputStream()

@@ -90,6 +90,7 @@ public class McsService extends Service implements Handler.Callback {
     private static final int WAKELOCK_TIMEOUT = 5000;
 
     private static long lastHeartbeatAckElapsedRealtime = -1;
+    private static long startTimestamp = 0;
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -100,7 +101,7 @@ public class McsService extends Service implements Handler.Callback {
     private static HandlerThread handlerThread;
     private static Handler rootHandler;
 
-    private GcmData gcmStorage = new GcmData(this);
+    private GcmDatabase database;
 
     private AlarmManager alarmManager;
     private PowerManager powerManager;
@@ -139,6 +140,7 @@ public class McsService extends Service implements Handler.Callback {
     @Override
     public void onCreate() {
         super.onCreate();
+        database = new GcmDatabase(this);
         heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -166,6 +168,10 @@ public class McsService extends Service implements Handler.Callback {
             return false;
         }
         return true;
+    }
+
+    public static long getStartTimestamp() {
+        return startTimestamp;
     }
 
     public static void scheduleReconnect(Context context) {
@@ -240,6 +246,7 @@ public class McsService extends Service implements Handler.Callback {
             inputStream.start();
             outputStream.start();
 
+            startTimestamp = System.currentTimeMillis();
             lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
             scheduleHeartbeat(this);
         } catch (Exception e) {
@@ -305,27 +312,30 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleAppMessage(DataMessageStanza msg) {
+        database.noteAppMessage(msg.category, msg.getSerializedSize());
+        GcmDatabase.App app = database.getApp(msg.category);
+
         Intent intent = new Intent();
         intent.setAction(ACTION_C2DM_RECEIVE);
         intent.setPackage(msg.category);
         intent.putExtra(EXTRA_FROM, msg.from);
+        if (app.wakeForDelivery) intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
         for (AppData appData : msg.app_data) {
             intent.putExtra(appData.key, appData.value);
         }
-        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        // FIXME: #75
-        List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
-        for (ResolveInfo resolveInfo : infos) {
-            logd("Target: " + resolveInfo);
-            Intent targetIntent = new Intent(intent);
-            targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
-            sendOrderedBroadcast(targetIntent, msg.category + ".permission.C2D_MESSAGE");
-        }
-        if (infos.isEmpty())
-            logd("No target for message, wut?");
 
-        gcmStorage.incrementAppMessageCount(msg.category, 1);
+        List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
+        if (infos == null || infos.isEmpty()) {
+            logd("No target for message, wut?");
+        } else {
+            for (ResolveInfo resolveInfo : infos) {
+                logd("Target: " + resolveInfo);
+                Intent targetIntent = new Intent(intent);
+                targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
+                sendOrderedBroadcast(targetIntent, msg.category + ".permission.C2D_MESSAGE");
+            }
+        }
     }
 
     private void handleSelfMessage(DataMessageStanza msg) {

@@ -28,6 +28,7 @@ import android.util.Log;
 import com.google.android.gms.R;
 import com.google.android.gms.checkin.internal.ICheckinService;
 
+import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
@@ -55,7 +56,7 @@ public class CheckinService extends IntentService {
             LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
             if (info != null) {
                 Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
-                String accountType = getString(R.string.google_account_type);
+                String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
                 for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
                     PeopleManager.loadUserInfo(this, account);
                 }

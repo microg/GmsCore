@@ -33,6 +33,7 @@ import com.google.android.gms.people.internal.IPeopleCallbacks;
 import com.google.android.gms.people.internal.IPeopleService;
 import com.google.android.gms.people.model.AccountMetadata;
 
+import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.NonCancelToken;
 import org.microg.gms.common.PackageUtils;
 
@@ -53,7 +54,7 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
         PackageUtils.assertExtendedAccess(context);
         AccountManager accountManager = AccountManager.get(context);
         Bundle accountMetadata = new Bundle();
-        String accountType = context.getString(R.string.google_account_type);
+        String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         for (Account account : accountManager.getAccountsByType(accountType)) {
             if (accountName == null || account.name.equals(accountName)) {
                 accountMetadata.putParcelable(account.name, new AccountMetadata());

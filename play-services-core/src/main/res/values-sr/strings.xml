@@ -48,10 +48,8 @@
 
     <string name="prefcat_services">Услуге у позадини</string>
 
-    <string name="pref_checkin_enable_title">Укључи пријаву уређаја</string>
     <string name="pref_checkin_enable_summary">Пријава уређаја је скривени процес који служи за прављење јединственог идентификатора за Гуглове услуге. микроГ сервиси скидају идентификујуће бите са ових података, осим имена вашег Гугл налога.</string>
 
-    <string name="pref_gcm_enable_mcs_title">Омогући Гуглове облак поруке</string>
     <string name="pref_gcm_enable_mcs_summary">Гуглове облак поруке (Google Cloud Messaging) је провајдер гурања обавештења (push) којег користе многе апликације. Да бисте га користили укључите пријаву уређаја.</string>
 
     <string name="pref_gcm_heartbeat_title">Интервал откуцаја облак порука</string>

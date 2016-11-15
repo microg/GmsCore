@@ -118,14 +118,14 @@
 
         <Button
             android:id="@android:id/button2"
-            style="?android:attr/buttonBarButtonStyle"
+            style="?attr/buttonBarButtonStyle"
             android:text="@string/deny"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@android:id/button1"
-            style="?android:attr/buttonBarButtonStyle"
+            style="?attr/buttonBarButtonStyle"
             android:text="@string/allow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

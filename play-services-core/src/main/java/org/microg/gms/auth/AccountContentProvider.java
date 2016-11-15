@@ -59,7 +59,7 @@ public class AccountContentProvider extends ContentProvider {
             if (getContext().checkCallingPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
                 throw new SecurityException("Access denied, missing GET_ACCOUNTS or EXTENDED_ACCESS permission");
         }
-        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method) && getContext().getString(R.string.google_account_type).equals(arg)) {
+        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method) && AuthConstants.DEFAULT_ACCOUNT_TYPE.equals(arg)) {
             Bundle result = new Bundle();
             result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, AccountManager.get(getContext()).getAccountsByType(arg));
             return result;

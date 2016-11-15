@@ -44,6 +44,7 @@ import android.widget.TextView;
 import com.google.android.gms.R;
 
 import org.json.JSONArray;
+import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
@@ -90,7 +91,7 @@ public class LoginActivity extends AssistantActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        accountType = getString(R.string.google_account_type);
+        accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         accountManager = AccountManager.get(LoginActivity.this);
         inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         webView = createWebView(this);

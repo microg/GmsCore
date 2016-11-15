@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 microG Project Team
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2016 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,11 +16,16 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <PreferenceCategory android:title="@string/account_manager_title">
-        <CheckBoxPreference
-            android:key="@string/pref_auth_trust_google"
+        <SwitchPreference
             android:defaultValue="true"
-            android:title="@string/pref_auth_trust_google_title"
-            android:summary="@string/pref_auth_trust_google_summary" />
+            android:key="auth_manager_trust_google"
+            android:summary="@string/pref_auth_trust_google_summary"
+            android:title="@string/pref_auth_trust_google_title"/>
     </PreferenceCategory>
+
+    <Preference
+        android:selectable="false"
+        android:summary="Google account settings not yet implemented."/>
 </PreferenceScreen>

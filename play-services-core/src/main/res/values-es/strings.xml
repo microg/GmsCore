@@ -47,10 +47,8 @@ Esto podría tardar algunos minutos."</string>
 
     <string name="prefcat_services">Servicios de segundo plano</string>
 
-    <string name="pref_checkin_enable_title">Habilitar registro del dispositivo</string>
     <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
 
-    <string name="pref_gcm_enable_mcs_title">Habilitar Google Cloud Messaging</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging es un proveedor de notificaciones push usado por muchas aplicaciones. Para usarlo debes habilitar el registro del dispositivo.</string>
 
     <string name="pref_gcm_heartbeat_title">Intervalo del Cloud Messaging heartbeat</string>

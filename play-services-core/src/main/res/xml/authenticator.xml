@@ -15,8 +15,8 @@
   -->
 
 <account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountPreferences="@xml/account_preferences"
-    android:accountType="@string/google_account_type"
+    android:accountPreferences="@xml/preferences_auth"
+    android:accountType="com.google"
     android:customTokens="true"
     android:icon="@drawable/proprietary_auth_gls_ic_google_selected"
     android:smallIcon="@drawable/proprietary_auth_gls_ic_google_minitab_selected"

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2016 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="300"
+        android:key="gcm_heartbeat_interval"
+        android:summary="@string/pref_gcm_heartbeat_summary"
+        android:title="@string/pref_gcm_heartbeat_title"/>
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="gcm_confirm_new_apps"
+        android:summary="Ask before registering a new app to receive push notifications"
+        android:title="Confirm new apps"/>
+
+    <MultiSelectListPreference
+        android:enabled="false"
+        android:entries="@array/network_types_names"
+        android:entryValues="@array/network_types"
+        android:key="gcm_network_types"
+        android:summary="Connect to Google servers while connected to one of these networks.\nNot yet supported"
+        android:title="Networks"/>
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:enabled="false"
+        android:key="gcm_use_tor"
+        android:summary="Requires Orbot to be installed\nNot yet supported"
+        android:title="Connect via Tor network"/>
+
+    <PreferenceCategory
+        android:enabled="false"
+        android:title="Connection configuration\nNot yet supported">
+
+        <ListPreference
+            android:defaultValue="auto"
+            android:key="gcm_ping_mobile"
+            android:summary="Automatic: 13 min"
+            android:title="Mobile network heartbeat interval"/>
+
+        <ListPreference
+            android:defaultValue="auto"
+            android:key="gcm_ping_wifi"
+            android:summary="Automatic: 30 min"
+            android:title="Wi-Fi heartbeat interval"/>
+
+        <ListPreference
+            android:defaultValue="auto"
+            android:key="gcm_ping_other"
+            android:summary="Automatic: 30 min"
+            android:title="Other network heartbeat interval"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

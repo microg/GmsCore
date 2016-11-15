@@ -25,9 +25,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String PREF_GCM_HEARTBEAT = "gcm_heartbeat_interval";
-    private static final String PREF_GCM_LOG = "gcm_full_log";
-    private static final String PREF_LAST_PERSISTENT_ID = "gcm_last_persistent_id";
+    public static final String PREF_HEARTBEAT = "gcm_heartbeat_interval";
+    public static final String PREF_FULL_LOG = "gcm_full_log";
+    public static final String PREF_LAST_PERSISTENT_ID = "gcm_last_persistent_id";
+    public static final String PREF_CONFIRM_NEW_APPS = "gcm_confirm_new_apps";
+    public static final String PREF_ENABLE_GCM = "gcm_enable_mcs_service";
+
     private static GcmPrefs INSTANCE;
 
     public static GcmPrefs get(Context context) {
@@ -41,6 +44,8 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     private int heartbeatMs = 300000;
     private boolean gcmLogEnabled = true;
     private String lastPersistedId = "";
+    private boolean confirmNewApps = false;
+    private boolean gcmEnabled = false;
 
     private SharedPreferences defaultPreferences;
 
@@ -53,9 +58,11 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public void update() {
-        heartbeatMs = Integer.parseInt(defaultPreferences.getString(PREF_GCM_HEARTBEAT, "300")) * 1000;
-        gcmLogEnabled = defaultPreferences.getBoolean(PREF_GCM_LOG, true);
+        heartbeatMs = Integer.parseInt(defaultPreferences.getString(PREF_HEARTBEAT, "300")) * 1000;
+        gcmLogEnabled = defaultPreferences.getBoolean(PREF_FULL_LOG, true);
         lastPersistedId = defaultPreferences.getString(PREF_LAST_PERSISTENT_ID, "");
+        confirmNewApps = defaultPreferences.getBoolean(PREF_CONFIRM_NEW_APPS, false);
+        gcmEnabled = defaultPreferences.getBoolean(PREF_ENABLE_GCM, false);
     }
 
     public int getHeartbeatMs() {
@@ -67,8 +74,16 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         update();
     }
 
+    public boolean isGcmEnabled() {
+        return gcmEnabled;
+    }
+
     public boolean isGcmLogEnabled() {
         return gcmLogEnabled;
+    }
+
+    public boolean isConfirmNewApps() {
+        return confirmNewApps;
     }
 
     public List<String> getLastPersistedIds() {

@@ -44,9 +44,7 @@ To zajmie kilka minut."</string>
     <string name="pref_auth_trust_google_title">Zaufaj uprawnieniom aplikacji Google</string>
     <string name="pref_auth_trust_google_summary">Po wyłączeniu, do użytkownika kierowane jest pytanie przed wysyłaniem prośby o autoryzację do Google. Niektóre aplikacje nie będą mogły skorzystać z konta Google po wyłączeniu tej opcji.</string>
 
-    <string name="pref_checkin_enable_title">Uruchom zgłaszanie urządzenia</string>
     <string name="pref_checkin_enable_summary">Zgłaszanie urządzenia to ukryty proces, służący do wygenerowania unikalnego identyfikatora dla usług Google.Usługi microG wyciągają inne dane identyfikacyjne niż nazwa Twojego konta z tego identyfikatora.</string>
-    <string name="pref_gcm_enable_mcs_title">Uruchom Google Cloud Messaging</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Żeby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
 
     <string name="prefcat_services">Usługi w tle</string>

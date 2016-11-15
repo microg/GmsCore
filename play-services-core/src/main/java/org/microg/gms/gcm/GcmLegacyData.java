@@ -23,20 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class GcmData {
+@Deprecated
+public class GcmLegacyData {
     private static final String GCM_REGISTRATION_PREF = "gcm_registrations";
     private static final String GCM_MESSAGES_PREF = "gcm_messages";
 
-    private static final String REMOVED = "%%REMOVED%%";
-    private static final String ERROR = "%%ERROR%%";
+    static final String REMOVED = "%%REMOVED%%";
+    static final String ERROR = "%%ERROR%%";
 
     private Context context;
 
-    public GcmData(Context context) {
+    public GcmLegacyData(Context context) {
         this.context = context;
     }
 
-    public static class AppInfo implements Comparable<AppInfo> {
+    @Deprecated
+    public static class LegacyAppInfo implements Comparable<LegacyAppInfo> {
         public String app = null;
         public String appSignature = null;
         public String registerID = null;
@@ -46,7 +48,7 @@ public class GcmData {
         private final int STATE_REGISTERED = 3;
         private int state;
 
-        public AppInfo(String key, String value) {
+        public LegacyAppInfo(String key, String value) {
             if (ERROR.equals(value)) {
                 state = STATE_ERROR;
             } else if (REMOVED.equals(value)) {
@@ -73,42 +75,19 @@ public class GcmData {
         }
 
         @Override
-        public int compareTo(AppInfo another) {
+        public int compareTo(LegacyAppInfo another) {
             return app.compareTo(another.app);
         }
     }
 
-    public void noteAppRegistered(String app, String signature, String regId) {
-        getInfoSharedPreferences().edit().putString(app + ":" + signature, regId).apply();
-    }
-
-    public void noteAppRegistrationError(String app, String signature) {
-        getInfoSharedPreferences().edit().putString(app + ":" + signature, "-").apply();
-    }
-
-    public void noteAppUnregistered(String app, String signature) {
-        getInfoSharedPreferences().edit().putString(app + ":" + signature, REMOVED).apply();
-    }
-
-    public void noteAppUnregistrationError(String app, String signature) {
-        getInfoSharedPreferences().edit().putString(app + ":" + signature, ERROR).apply();
-    }
-
-    public void incrementAppMessageCount(String app, int i) {
-        int messageCount = getStatsSharedPreferences().getInt(app, 0);
-        getStatsSharedPreferences().edit().putInt(app, messageCount + i).apply();
-    }
-
+    @Deprecated
     public int getAppMessageCount(String app) {
         return getStatsSharedPreferences().getInt(app, 0);
     }
 
-    public AppInfo getAppInfo(String app, String signature) {
-        return getAppInfo(app + ":" + signature);
-    }
-
-    public List<AppInfo> getAppsInfo() {
-        ArrayList<AppInfo> ret = new ArrayList<>();
+    @Deprecated
+    public List<LegacyAppInfo> getAppsInfo() {
+        ArrayList<LegacyAppInfo> ret = new ArrayList<>();
         Set<String> keys = getInfoSharedPreferences().getAll().keySet();
         for (String key : keys) {
             ret.add(getAppInfo(key));
@@ -116,8 +95,9 @@ public class GcmData {
         return ret;
     }
 
-    private AppInfo getAppInfo(String key) {
-        return new AppInfo(key, getInfoSharedPreferences().getString(key, ""));
+    @Deprecated
+    private LegacyAppInfo getAppInfo(String key) {
+        return new LegacyAppInfo(key, getInfoSharedPreferences().getString(key, ""));
     }
 
     private SharedPreferences getInfoSharedPreferences() {

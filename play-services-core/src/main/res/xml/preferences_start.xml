@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2013-2015 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/prefcat_setup">
+        <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/self_check"
+            android:summary="@string/self_check_desc"
+            android:title="@string/self_check_title">
+            <intent
+                android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefcat_services">
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/device_login"
+            android:key="checkin_enable_service"
+            android:summary="@string/pref_checkin_enable_summary"
+            android:title="@string/service_name_checkin"/>
+        <org.microg.tools.ui.TintIconPreference
+            android:dependency="checkin_enable_service"
+            android:icon="@drawable/gcm_bell"
+            android:key="pref_gcm"
+            android:title="@string/service_name_mcs">
+            <intent
+                android:targetClass="org.microg.gms.ui.GcmFragment$AsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+        <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/location_marker"
+            android:title="@string/nlp_settings_label">
+            <intent
+                android:targetClass="org.microg.nlp.ui.SettingsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefcat_about">
+        <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/info"
+            android:key="pref_about"
+            android:title="@string/pref_about_title">
+            <intent
+                android:targetClass="org.microg.gms.ui.AboutFragment$AsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+    </PreferenceCategory>
+</PreferenceScreen>
