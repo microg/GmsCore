@@ -106,10 +106,10 @@ This can take a couple of minutes."</string>
     <string name="place_picker_nearby_places">Nearby places</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$i</xliff:g> registered Apps</string>
+    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> registered Apps</string>
     <string name="gcm_app_error_unregistering">Error unregistering</string>
     <string name="gcm_app_not_installed_anymore">No longer installed</string>
-    <string name="gcm_messages_received_no"><xliff:g example="123">%1$i</xliff:g> messages received</string>
+    <string name="gcm_messages_received_no"><xliff:g example="123">%1$d</xliff:g> messages received</string>
     <string name="gcm_unregister_app">Unregister</string>
     <string name="gcm_not_registered">Not registered</string>
     <string name="gcm_no_message_yet">No messages received so far</string>
@@ -118,7 +118,7 @@ This can take a couple of minutes."</string>
     <string name="gcm_registered_since">Registered since: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Unregister <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
     <string name="gcm_unregister_confirm_message">Some apps do not automatically re-register and/or do not provide an option to do so manually. These apps might not work correctly after unregistering.\nContinue?</string>
-    <string name="gcm_messages_counter">Messages: <xliff:g example="123">%1$i</xliff:g> (<xliff:g example="12345">%2$i</xliff:g> bytes)</string>
+    <string name="gcm_messages_counter">Messages: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_state_disconnected">Current State: Disconnected</string>
     <string name="gcm_state_connected">Current State: Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
