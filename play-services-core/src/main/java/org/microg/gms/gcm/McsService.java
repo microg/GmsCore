@@ -25,9 +25,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.Messenger;
+import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -36,6 +39,7 @@ import android.util.Log;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.PackageUtils;
 import org.microg.gms.gcm.mcs.AppData;
 import org.microg.gms.gcm.mcs.Close;
 import org.microg.gms.gcm.mcs.DataMessageStanza;
@@ -47,19 +51,30 @@ import org.microg.gms.gcm.mcs.Setting;
 
 import java.io.Closeable;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
 
+import okio.ByteString;
+
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
 import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
 import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
+import static org.microg.gms.gcm.McsConstants.ACTION_SEND;
 import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
@@ -111,6 +126,8 @@ public class McsService extends Service implements Handler.Callback {
 
     private Intent connectIntent;
 
+    private static int maxTtl = 24 * 60 * 60;
+
     private class HandlerThread extends Thread {
 
         public HandlerThread() {
@@ -140,6 +157,7 @@ public class McsService extends Service implements Handler.Callback {
     @Override
     public void onCreate() {
         super.onCreate();
+        TriggerReceiver.register(this);
         database = new GcmDatabase(this);
         heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -150,6 +168,12 @@ public class McsService extends Service implements Handler.Callback {
                 handlerThread.start();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        database.close();
+        super.onDestroy();
     }
 
     @Override
@@ -221,6 +245,8 @@ public class McsService extends Service implements Handler.Callback {
                     rootHandler.sendMessage(rootHandler.obtainMessage(MSG_CONNECT, reason));
                 } else if (ACTION_HEARTBEAT.equals(intent.getAction())) {
                     rootHandler.sendMessage(rootHandler.obtainMessage(MSG_HEARTBEAT, reason));
+                } else if (ACTION_SEND.equals(intent.getAction())) {
+                    handleSendMessage(intent);
                 }
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             } else if (connectIntent == null) {
@@ -230,6 +256,94 @@ public class McsService extends Service implements Handler.Callback {
             }
         }
         return START_REDELIVER_INTENT;
+    }
+
+    private void handleSendMessage(Intent intent) {
+        String messageId = intent.getStringExtra(EXTRA_MESSAGE_ID);
+        String collapseKey = intent.getStringExtra(EXTRA_COLLAPSE_KEY);
+
+        Messenger messenger = intent.getParcelableExtra(EXTRA_MESSENGER);
+        intent.removeExtra(EXTRA_MESSENGER);
+
+        Parcelable app = intent.getParcelableExtra(EXTRA_APP);
+        String packageName = null;
+        if (app instanceof PendingIntent) {
+            packageName = PackageUtils.packageFromPendingIntent((PendingIntent) app);
+        }
+        if (packageName == null) {
+            Log.w(TAG, "Failed to send message, missing package name");
+            return;
+        }
+        intent.removeExtra(EXTRA_APP);
+
+        int ttl;
+        try {
+            ttl = Integer.parseInt(intent.getStringExtra(EXTRA_TTL));
+            if (ttl < 0 || ttl > maxTtl) {
+                ttl = maxTtl;
+            }
+        } catch (NumberFormatException e) {
+            // TODO: error TtlUnsupported
+            Log.w(TAG, e);
+            return;
+        }
+
+        String to = intent.getStringExtra(EXTRA_SEND_TO);
+        if (to == null) {
+            // TODO: error missing_to
+            Log.w(TAG, "missing to");
+            return;
+        }
+
+        String from = intent.getStringExtra(EXTRA_SEND_FROM);
+        if (from != null) {
+            intent.removeExtra(EXTRA_SEND_FROM);
+        } else {
+            from = intent.getStringExtra(EXTRA_FROM);
+        }
+        if (from == null) {
+            GcmDatabase.Registration reg = database.getRegistration(packageName, PackageUtils.firstSignatureDigest(this, packageName));
+            if (reg != null) from = reg.registerId;
+        }
+        if (from == null) {
+            Log.e(TAG, "Can't send message, missing from!");
+            return;
+        }
+
+        String registrationId = intent.getStringExtra(EXTRA_REGISTRATION_ID);
+        intent.removeExtra(EXTRA_REGISTRATION_ID);
+
+        List<AppData> appData = new ArrayList<>();
+        Bundle extras = intent.getExtras();
+        for (String key : extras.keySet()) {
+            if (!key.startsWith("google.")) {
+                Object val = extras.get(key);
+                if (val instanceof String) {
+                    appData.add(new AppData(key, (String) val));
+                }
+            }
+        }
+
+        byte[] rawDataArray = intent.getByteArrayExtra("rawData");
+        ByteString rawData = rawDataArray != null ? ByteString.of(rawDataArray) : null;
+
+        try {
+            DataMessageStanza msg = new DataMessageStanza.Builder()
+                    .sent(System.currentTimeMillis() / 1000L)
+                    .id(messageId)
+                    .token(collapseKey)
+                    .from(from)
+                    .reg_id(registrationId)
+                    .to(to)
+                    .category(packageName)
+                    .raw_data(rawData)
+                    .app_data(appData).build();
+
+            send(MCS_DATA_MESSAGE_STANZA_TAG, msg);
+            database.noteAppMessage(packageName, msg.getSerializedSize());
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
     }
 
     private synchronized void connect() {
@@ -319,7 +433,11 @@ public class McsService extends Service implements Handler.Callback {
         intent.setAction(ACTION_C2DM_RECEIVE);
         intent.setPackage(msg.category);
         intent.putExtra(EXTRA_FROM, msg.from);
-        if (app.wakeForDelivery) intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        if (app.wakeForDelivery) {
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        } else {
+            intent.addFlags(Intent.FLAG_EXCLUDE_STOPPED_PACKAGES);
+        }
         if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
         for (AppData appData : msg.app_data) {
             intent.putExtra(appData.key, appData.value);

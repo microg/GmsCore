@@ -18,20 +18,35 @@ package org.microg.gms.gcm;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
 import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
 import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";
+    private static boolean registered = false;
+
+    /**
+     * "Project Svelte" is just there to f**k things up...
+     */
+    public synchronized static void register(Context context) {
+        if (SDK_INT >= N && !registered) {
+            IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+            context.registerReceiver(new TriggerReceiver(), intentFilter);
+            registered = true;
+        }
+    }
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -48,9 +63,9 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
             }
 
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnected() || force) {
+            if (networkInfo != null && networkInfo.isConnected() || force || "android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
                 if (!McsService.isConnected() || force) {
-                    Log.d(TAG, "Not connected to GCM but should be, asking the service to start up");
+                    Log.d(TAG, "Not connected to GCM but should be, asking the service to start up. Triggered by: " + intent);
                     startWakefulService(context, new Intent(ACTION_CONNECT, null, context, McsService.class)
                             .putExtra(EXTRA_REASON, intent));
                 } else {

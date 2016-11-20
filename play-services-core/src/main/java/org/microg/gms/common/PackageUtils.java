@@ -16,6 +16,7 @@
 
 package org.microg.gms.common;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -28,6 +29,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 
@@ -93,6 +95,15 @@ public class PackageUtils {
             }
         }
         return null;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static String packageFromPendingIntent(PendingIntent pi) {
+        if (SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return pi.getTargetPackage();
+        } else {
+            return pi.getCreatorPackage();
+        }
     }
 
     public static String sha1sum(byte[] bytes) {

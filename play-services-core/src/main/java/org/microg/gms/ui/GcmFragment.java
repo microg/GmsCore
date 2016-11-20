@@ -115,6 +115,7 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
             listenerSetup = false;
         }
         super.onPause();
+        database.close();
     }
 
     @Override
@@ -225,6 +226,7 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
             } else {
                 setSummary(R.string.gcm_no_message_yet);
             }
+            database.close();
         }
 
         @Override

@@ -40,5 +40,6 @@ public final class McsConstants {
     public static String ACTION_CONNECT = "org.microg.gms.gcm.mcs.CONNECT";
     public static String ACTION_RECONNECT = "org.microg.gms.gcm.mcs.RECONNECT";
     public static String ACTION_HEARTBEAT = "org.microg.gms.gcm.mcs.HEARTBEAT";
+    public static String ACTION_SEND = "org.microg.gms.gcm.mcs.SEND";
     public static String EXTRA_REASON = "org.microg.gms.gcm.mcs.REASON";
 }

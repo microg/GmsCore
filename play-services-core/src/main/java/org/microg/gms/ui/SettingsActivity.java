@@ -56,7 +56,9 @@ public class SettingsActivity extends AbstractDashboardActivity {
             PreferenceManager prefs = getPreferenceManager();
             prefs.findPreference(PREF_ABOUT).setSummary(getString(R.string.about_version_str, AboutFragment.getSelfVersion(getContext())));
             if (GcmPrefs.get(getContext()).isGcmEnabled()) {
-                int regCount = new GcmDatabase(getContext()).getRegistrationList().size();
+                GcmDatabase database = new GcmDatabase(getContext());
+                int regCount = database.getRegistrationList().size();
+                database.close();
                 prefs.findPreference(PREF_GCM).setSummary(getString(R.string.v7_preference_on) + " / " + getContext().getString(R.string.gcm_registered_apps_counter, regCount));
             } else {
                 prefs.findPreference(PREF_GCM).setSummary(R.string.v7_preference_off);

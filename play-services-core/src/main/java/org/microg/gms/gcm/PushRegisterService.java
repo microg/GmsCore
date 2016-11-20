@@ -16,18 +16,14 @@
 
 package org.microg.gms.gcm;
 
-import android.app.AlertDialog;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Message;
 import android.os.Messenger;
-import android.text.Html;
 import android.util.Log;
 
 import org.microg.gms.checkin.CheckinService;
@@ -38,10 +34,6 @@ import org.microg.gms.ui.AskPushPermission;
 
 import java.io.IOException;
 
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN;
-import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_UNREGISTER;
@@ -74,6 +66,12 @@ public class PushRegisterService extends IntentService {
         database = new GcmDatabase(this);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        database.close();
+    }
+
     public static RegisterResponse register(Context context, String packageName, String pkgSignature, String sender, String info) {
         GcmDatabase database = new GcmDatabase(context);
         RegisterResponse response = register(context, packageName, pkgSignature, sender, info, false);
@@ -83,6 +81,7 @@ public class PushRegisterService extends IntentService {
         } else {
             database.noteAppRegistrationError(packageName, response.responseText);
         }
+        database.close();
         return response;
     }
 
@@ -94,12 +93,14 @@ public class PushRegisterService extends IntentService {
         } else {
             database.noteAppUnregistered(packageName, pkgSignature);
         }
+        database.close();
         return response;
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: " + intent);
+        Log.d(TAG, "onHandleIntent: " + intent.getExtras());
         if (LastCheckinInfo.read(this).lastCheckin > 0) {
             try {
                 if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
@@ -121,18 +122,9 @@ public class PushRegisterService extends IntentService {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private String packageFromPendingIntent(PendingIntent pi) {
-        if (SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return pi.getTargetPackage();
-        } else {
-            return pi.getCreatorPackage();
-        }
-    }
-
     private void register(final Intent intent) {
         PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
-        final String packageName = packageFromPendingIntent(pendingIntent);
+        final String packageName = PackageUtils.packageFromPendingIntent(pendingIntent);
         Log.d(TAG, "register[req]: " + intent.toString() + " extras=" + intent.getExtras());
 
         GcmDatabase.App app = database.getApp(packageName);
@@ -214,7 +206,7 @@ public class PushRegisterService extends IntentService {
 
     private void unregister(Intent intent) {
         PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
-        String packageName = packageFromPendingIntent(pendingIntent);
+        String packageName = PackageUtils.packageFromPendingIntent(pendingIntent);
         Log.d(TAG, "unregister[req]: " + intent.toString() + " extras=" + intent.getExtras());
 
         Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);

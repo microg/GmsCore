@@ -83,6 +83,12 @@ public class GcmAppFragment extends ResourceSettingsFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        database.close();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (database != null) {
@@ -113,6 +119,39 @@ public class GcmAppFragment extends ResourceSettingsFragment {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (newValue instanceof Boolean) {
+                    if (!(boolean) newValue) {
+                        final List<GcmDatabase.Registration> registrations = database.getRegistrationsByApp(packageName);
+                        if (!registrations.isEmpty()) {
+                            new AlertDialog.Builder(getContext())
+                                    .setTitle(String.format(getString(R.string.gcm_unregister_confirm_title), appName))
+                                    .setMessage(R.string.gcm_unregister_after_deny_message)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    for (GcmDatabase.Registration registration : registrations) {
+                                                        PushRegisterService.unregister(getContext(), registration.packageName, registration.signature, null, null);
+                                                    }
+                                                    getActivity().runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            updateAppDetails();
+                                                        }
+                                                    });
+                                                }
+                                            }).start();
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Do nothing
+                                        }
+                                    }).show();
+                        }
+                    }
                     database.setAppAllowRegister(packageName, (Boolean) newValue);
                     return true;
                 }
@@ -169,7 +208,7 @@ public class GcmAppFragment extends ResourceSettingsFragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Do nothing
                                 }
-                            }).create().show();
+                            }).show();
                     return true;
                 }
             });

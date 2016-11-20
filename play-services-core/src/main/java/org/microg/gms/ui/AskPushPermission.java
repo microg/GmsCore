@@ -84,5 +84,6 @@ public class AskPushPermission extends FragmentActivity {
             PushRegisterService.replyNotAvailable(AskPushPermission.this, intent, packageName);
             answered = true;
         }
+        database.close();
     }
 }

@@ -247,6 +247,10 @@ message DataMessageStanza {
   optional int32 queued = 19;
 
   optional int64 status = 20;
+
+  optional bytes raw_data = 21;
+
+  optional int32 delay = 22;
 }
 
 /**

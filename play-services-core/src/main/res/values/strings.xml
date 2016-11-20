@@ -42,6 +42,7 @@ This can take a couple of minutes."</string>
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
     <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
+    <string name="perm_gtalk_svc_label">exchange messages and receive sync notifications from Google servers</string>
 
     <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
     <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
@@ -118,6 +119,7 @@ This can take a couple of minutes."</string>
     <string name="gcm_registered_since">Registered since: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Unregister <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
     <string name="gcm_unregister_confirm_message">Some apps do not automatically re-register and/or do not provide an option to do so manually. These apps might not work correctly after unregistering.\nContinue?</string>
+    <string name="gcm_unregister_after_deny_message">You denied an app to register for push notifications that is already registered.\nDo you want to unregister it now so it does not receive push messages in the future?</string>
     <string name="gcm_messages_counter">Messages: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_state_disconnected">Current State: Disconnected</string>
     <string name="gcm_state_connected">Current State: Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
@@ -136,6 +138,4 @@ This can take a couple of minutes."</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
     <string name="network_type_other">Other networks</string>
-
-
 </resources>

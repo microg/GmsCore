@@ -26,6 +26,10 @@
         android:name="com.google.android.c2dm.permission.SEND"
         android:label="@string/perm_c2dm_send_label"
         android:protectionLevel="signature"/>
+    <permission
+        android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE"
+        android:label="@string/perm_gtalk_svc_label"
+        android:protectionLevel="signature"/>
 
     <permission-tree
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH"
@@ -74,9 +78,12 @@
 
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="com.google.android.c2dm.permission.SEND"/>
+    <uses-permission android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE"/>
+
     <uses-permission android:name="org.microg.gms.STATUS_BROADCAST"/>
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="false"
@@ -167,8 +174,6 @@
         <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
             <intent-filter>
                 <action android:name="android.server.checkin.CHECKIN"/>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
             <intent-filter>
@@ -200,14 +205,26 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service
-            android:name="org.microg.gms.gcm.McsService"
-            android:exported="true"/>
+
+        <service android:name="org.microg.gms.gcm.McsService"/>
+
+        <receiver
+            android:name="org.microg.gms.gcm.SendReceiver"
+            android:permission="com.google.android.c2dm.permission.RECEIVE">
+            <intent-filter>
+                <action android:name="com.google.android.gcm.intent.SEND"/>
+            </intent-filter>
+        </receiver>
 
         <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
             <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.AIRPLANE_MODE"/>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.BACKGROUND_DATA_SETTING_CHANGED"/>
+
                 <action android:name="org.microg.gms.gcm.RECONNECT"/>
+
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
                 <action android:name="android.intent.action.PACKAGE_RESTARTED"/>
             </intent-filter>
@@ -222,7 +239,10 @@
 
         <receiver android:name="org.microg.gms.gcm.UnregisterReceiver">
             <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
 

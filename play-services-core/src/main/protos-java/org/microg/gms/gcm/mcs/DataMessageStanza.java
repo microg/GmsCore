@@ -6,8 +6,10 @@ import com.squareup.wire.Message;
 import com.squareup.wire.ProtoField;
 import java.util.Collections;
 import java.util.List;
+import okio.ByteString;
 
 import static com.squareup.wire.Message.Datatype.BOOL;
+import static com.squareup.wire.Message.Datatype.BYTES;
 import static com.squareup.wire.Message.Datatype.INT32;
 import static com.squareup.wire.Message.Datatype.INT64;
 import static com.squareup.wire.Message.Datatype.STRING;
@@ -39,6 +41,8 @@ public final class DataMessageStanza extends Message {
   public static final Long DEFAULT_SENT = 0L;
   public static final Integer DEFAULT_QUEUED = 0;
   public static final Long DEFAULT_STATUS = 0L;
+  public static final ByteString DEFAULT_RAW_DATA = ByteString.EMPTY;
+  public static final Integer DEFAULT_DELAY = 0;
 
   /**
    * Not used.
@@ -159,7 +163,13 @@ public final class DataMessageStanza extends Message {
   @ProtoField(tag = 20, type = INT64)
   public final Long status;
 
-  public DataMessageStanza(Long rmq_id, String id, String from, String to, String category, String token, List<AppData> app_data, Boolean from_trusted_server, String persistent_id, Integer stream_id, Integer last_stream_id_received, String permission, String reg_id, String pkg_signature, String client_id, Long device_user_id, Integer ttl, Long sent, Integer queued, Long status) {
+  @ProtoField(tag = 21, type = BYTES)
+  public final ByteString raw_data;
+
+  @ProtoField(tag = 22, type = INT32)
+  public final Integer delay;
+
+  public DataMessageStanza(Long rmq_id, String id, String from, String to, String category, String token, List<AppData> app_data, Boolean from_trusted_server, String persistent_id, Integer stream_id, Integer last_stream_id_received, String permission, String reg_id, String pkg_signature, String client_id, Long device_user_id, Integer ttl, Long sent, Integer queued, Long status, ByteString raw_data, Integer delay) {
     this.rmq_id = rmq_id;
     this.id = id;
     this.from = from;
@@ -180,10 +190,12 @@ public final class DataMessageStanza extends Message {
     this.sent = sent;
     this.queued = queued;
     this.status = status;
+    this.raw_data = raw_data;
+    this.delay = delay;
   }
 
   private DataMessageStanza(Builder builder) {
-    this(builder.rmq_id, builder.id, builder.from, builder.to, builder.category, builder.token, builder.app_data, builder.from_trusted_server, builder.persistent_id, builder.stream_id, builder.last_stream_id_received, builder.permission, builder.reg_id, builder.pkg_signature, builder.client_id, builder.device_user_id, builder.ttl, builder.sent, builder.queued, builder.status);
+    this(builder.rmq_id, builder.id, builder.from, builder.to, builder.category, builder.token, builder.app_data, builder.from_trusted_server, builder.persistent_id, builder.stream_id, builder.last_stream_id_received, builder.permission, builder.reg_id, builder.pkg_signature, builder.client_id, builder.device_user_id, builder.ttl, builder.sent, builder.queued, builder.status, builder.raw_data, builder.delay);
     setBuilder(builder);
   }
 
@@ -211,7 +223,9 @@ public final class DataMessageStanza extends Message {
         && equals(ttl, o.ttl)
         && equals(sent, o.sent)
         && equals(queued, o.queued)
-        && equals(status, o.status);
+        && equals(status, o.status)
+        && equals(raw_data, o.raw_data)
+        && equals(delay, o.delay);
   }
 
   @Override
@@ -238,6 +252,8 @@ public final class DataMessageStanza extends Message {
       result = result * 37 + (sent != null ? sent.hashCode() : 0);
       result = result * 37 + (queued != null ? queued.hashCode() : 0);
       result = result * 37 + (status != null ? status.hashCode() : 0);
+      result = result * 37 + (raw_data != null ? raw_data.hashCode() : 0);
+      result = result * 37 + (delay != null ? delay.hashCode() : 0);
       hashCode = result;
     }
     return result;
@@ -265,6 +281,8 @@ public final class DataMessageStanza extends Message {
     public Long sent;
     public Integer queued;
     public Long status;
+    public ByteString raw_data;
+    public Integer delay;
 
     public Builder() {
     }
@@ -292,6 +310,8 @@ public final class DataMessageStanza extends Message {
       this.sent = message.sent;
       this.queued = message.queued;
       this.status = message.status;
+      this.raw_data = message.raw_data;
+      this.delay = message.delay;
     }
 
     /**
@@ -450,6 +470,16 @@ public final class DataMessageStanza extends Message {
 
     public Builder status(Long status) {
       this.status = status;
+      return this;
+    }
+
+    public Builder raw_data(ByteString raw_data) {
+      this.raw_data = raw_data;
+      return this;
+    }
+
+    public Builder delay(Integer delay) {
+      this.delay = delay;
       return this;
     }
 
