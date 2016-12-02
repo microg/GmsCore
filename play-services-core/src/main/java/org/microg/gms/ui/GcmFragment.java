@@ -213,6 +213,7 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
                 setIcon(packageManager.getApplicationIcon(applicationInfo));
             } catch (PackageManager.NameNotFoundException e) {
                 setTitle(app.packageName);
+                setIcon(android.R.drawable.sym_def_app_icon);
             }
             setOnPreferenceClickListener(this);
             updateViewDetails();

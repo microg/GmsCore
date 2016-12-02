@@ -22,6 +22,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -53,16 +54,18 @@ public class CheckinService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
-            if (info != null) {
-                Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
-                String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
-                for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
-                    PeopleManager.loadUserInfo(this, account);
-                }
-                McsService.scheduleReconnect(this);
-                if (intent.hasExtra(EXTRA_CALLBACK_INTENT)) {
-                    startService((Intent) intent.getParcelableExtra(EXTRA_CALLBACK_INTENT));
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(TriggerReceiver.PREF_ENABLE_CHECKIN, false)) {
+                LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
+                if (info != null) {
+                    Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
+                    String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
+                    for (Account account : AccountManager.get(this).getAccountsByType(accountType)) {
+                        PeopleManager.loadUserInfo(this, account);
+                    }
+                    McsService.scheduleReconnect(this);
+                    if (intent.hasExtra(EXTRA_CALLBACK_INTENT)) {
+                        startService((Intent) intent.getParcelableExtra(EXTRA_CALLBACK_INTENT));
+                    }
                 }
             }
         } catch (Exception e) {

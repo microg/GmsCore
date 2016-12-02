@@ -99,6 +99,7 @@ public class PackageUtils {
 
     @SuppressWarnings("deprecation")
     public static String packageFromPendingIntent(PendingIntent pi) {
+        if (pi == null) return null;
         if (SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
             return pi.getTargetPackage();
         } else {

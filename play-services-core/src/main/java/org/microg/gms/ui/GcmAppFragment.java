@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.StringRes;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -123,34 +124,7 @@ public class GcmAppFragment extends ResourceSettingsFragment {
                     if (!(boolean) newValue) {
                         final List<GcmDatabase.Registration> registrations = database.getRegistrationsByApp(packageName);
                         if (!registrations.isEmpty()) {
-                            new AlertDialog.Builder(getContext())
-                                    .setTitle(String.format(getString(R.string.gcm_unregister_confirm_title), appName))
-                                    .setMessage(R.string.gcm_unregister_after_deny_message)
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            new Thread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    for (GcmDatabase.Registration registration : registrations) {
-                                                        PushRegisterService.unregister(getContext(), registration.packageName, registration.signature, null, null);
-                                                    }
-                                                    getActivity().runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            updateAppDetails();
-                                                        }
-                                                    });
-                                                }
-                                            }).start();
-                                        }
-                                    })
-                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // Do nothing
-                                        }
-                                    }).show();
+                            showUnregisterConfirm(registrations, getString(R.string.gcm_unregister_after_deny_message));
                         }
                     }
                     database.setAppAllowRegister(packageName, (Boolean) newValue);
@@ -182,34 +156,7 @@ public class GcmAppFragment extends ResourceSettingsFragment {
             registerDetails.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(String.format(getString(R.string.gcm_unregister_confirm_title), appName))
-                            .setMessage(R.string.gcm_unregister_confirm_message)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            for (GcmDatabase.Registration registration : registrations) {
-                                                PushRegisterService.unregister(getContext(), registration.packageName, registration.signature, null, null);
-                                            }
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    updateAppDetails();
-                                                }
-                                            });
-                                        }
-                                    }).start();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Do nothing
-                                }
-                            }).show();
+                    showUnregisterConfirm(registrations, getString(R.string.gcm_unregister_confirm_message));
                     return true;
                 }
             });
@@ -225,6 +172,37 @@ public class GcmAppFragment extends ResourceSettingsFragment {
             }
             messageDetails.setSummary(s);
         }
+    }
+
+    private void showUnregisterConfirm(final List<GcmDatabase.Registration> registrations, String unregisterConfirmDesc) {
+        new AlertDialog.Builder(getContext())
+                .setTitle(getString(R.string.gcm_unregister_confirm_title, appName))
+                .setMessage(unregisterConfirmDesc)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (GcmDatabase.Registration registration : registrations) {
+                                    PushRegisterService.unregister(getContext(), registration.packageName, registration.signature, null, null);
+                                }
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        updateAppDetails();
+                                    }
+                                });
+                            }
+                        }).start();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing
+                    }
+                }).show();
     }
 
     public static class AsActivity extends AbstractSettingsActivity {

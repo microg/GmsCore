@@ -101,24 +101,29 @@ public class PushRegisterService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: " + intent);
         Log.d(TAG, "onHandleIntent: " + intent.getExtras());
-        if (LastCheckinInfo.read(this).lastCheckin > 0) {
-            try {
-                if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
-                        (ACTION_C2DM_REGISTER.equals(intent.getAction()) && "1".equals(intent.getStringExtra(EXTRA_DELETE)))) {
-                    unregister(intent);
-                } else if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
-                    register(intent);
+        if (GcmPrefs.get(this).isGcmEnabled()) {
+            if (LastCheckinInfo.read(this).lastCheckin > 0) {
+                try {
+                    if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
+                            (ACTION_C2DM_REGISTER.equals(intent.getAction()) && "1".equals(intent.getStringExtra(EXTRA_DELETE)))) {
+                        unregister(intent);
+                    } else if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
+                        register(intent);
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, e);
                 }
-            } catch (Exception e) {
-                Log.w(TAG, e);
+            } else if (!intent.getBooleanExtra(EXTRA_SKIP_TRY_CHECKIN, false)) {
+                Log.d(TAG, "No checkin yet, trying to checkin");
+                intent.putExtra(EXTRA_SKIP_TRY_CHECKIN, true);
+                Intent subIntent = new Intent(this, CheckinService.class);
+                subIntent.putExtra(CheckinService.EXTRA_FORCE_CHECKIN, true);
+                subIntent.putExtra(CheckinService.EXTRA_CALLBACK_INTENT, intent);
+                startService(subIntent);
             }
-        } else if (!intent.getBooleanExtra(EXTRA_SKIP_TRY_CHECKIN, false)) {
-            Log.d(TAG, "No checkin yet, trying to checkin");
-            intent.putExtra(EXTRA_SKIP_TRY_CHECKIN, true);
-            Intent subIntent = new Intent(this, CheckinService.class);
-            subIntent.putExtra(CheckinService.EXTRA_FORCE_CHECKIN, true);
-            subIntent.putExtra(CheckinService.EXTRA_CALLBACK_INTENT, intent);
-            startService(subIntent);
+        } else {
+            // GCM is disabled, deny registration
+            replyNotAvailable(this, intent);
         }
     }
 
@@ -146,7 +151,19 @@ public class PushRegisterService extends IntentService {
         }
     }
 
+    public static void replyNotAvailable(Context context, Intent intent) {
+        replyNotAvailable(context, intent, null);
+    }
+
     public static void replyNotAvailable(Context context, Intent intent, String packageName) {
+        if (packageName == null) {
+            PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
+            packageName = PackageUtils.packageFromPendingIntent(pendingIntent);
+        }
+        if (packageName == null) {
+            // skip reply
+            return;
+        }
         Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
         outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
         Log.d(TAG, "registration not allowed");

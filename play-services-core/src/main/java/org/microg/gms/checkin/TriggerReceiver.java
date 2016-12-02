@@ -26,7 +26,7 @@ import android.util.Log;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";
-    private static final String PREF_ENABLE_CHECKIN = "checkin_enable_service";
+    public static final String PREF_ENABLE_CHECKIN = "checkin_enable_service";
     private static final long REGULAR_CHECKIN_INTERVAL = 12 * 60 * 60 * 1000; // 12 hours
 
     @Override
