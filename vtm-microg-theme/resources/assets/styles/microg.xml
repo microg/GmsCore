@@ -18,13 +18,12 @@
                 stroke-width="5.0"/>
 
     <style-text style="bold" caption="true" fill="#000000" id="park" k="name" priority="0"
-                size="17" stroke="#eeeeee" stroke-width="2.0"/>
+                size="17" stroke="#eeeeee" stroke-width="5.0"/>
 
     <style-text caption="true" dy="-14" fill="#00afff" id="transit" k="name" priority="5" size="16"
                 stroke="#eeeeee" stroke-width="5.0"/>
     <style-text caption="true" dy="-10" fill="#00afff" id="transit-small" k="name" priority="5"
-                size="16"
-                stroke="#eeeeee" stroke-width="5.0"/>
+                size="16" stroke="#eeeeee" stroke-width="5.0"/>
 
     <style-area fill="#33AA0000" id="debug" stroke="#FF0000" stroke-width="1"/>
     <style-line id="debug" stroke="#00FF00"/>
@@ -481,48 +480,48 @@
         <m k="place">
             <m v="suburb" zoom-max="16" zoom-min="9">
                 <caption fill="#8B7F5F" k="name" priority="4" size="17"
-                         stroke="#ffffff" stroke-width="2.0"/>
+                         stroke="#EAEAEA" stroke-width="5.0"/>
             </m>
             <m v="village" zoom-max="15" zoom-min="9">
-                <caption fill="#8B7F5F" k="name" priority="3" size="17" stroke="#ffffff"
-                         stroke-width="2.0"/>
+                <caption fill="#8B7F5F" k="name" priority="3" size="17" stroke="#EAEAEA"
+                         stroke-width="5.0"/>
             </m>
             <m v="island" zoom-min="10">
                 <caption style="bold" fill="#000000" k="name" priority="1" size="20"
-                         stroke="#ffffff" stroke-width="2.0"/>
+                         stroke="#EAEAEA" stroke-width="5.0"/>
             </m>
             <m v="town">
                 <m zoom-max="15" zoom-min="13">
-                    <caption fill="#8B7F5F" k="name" priority="1" size="23" stroke="#ffffff"
-                             stroke-width="2.0"/>
+                    <caption fill="#8B7F5F" k="name" priority="1" size="23" stroke="#EAEAEA"
+                             stroke-width="5.0"/>
                 </m>
                 <m zoom-max="13" zoom-min="9">
                     <caption fill="#615942" k="name" priority="1" size="19"
-                             stroke="#ffffff" stroke-width="2.0"/>
+                             stroke="#EAEAEA" stroke-width="5.0"/>
                 </m>
                 <m zoom-max="9">
                     <caption fill="#000000" k="name" priority="1" size="16"
-                             stroke="#ffffff" stroke-width="2.0"/>
+                             stroke="#EAEAEA" stroke-width="5.0"/>
                 </m>
             </m>
             <m v="city">
                 <m zoom-max="15" zoom-min="13">
-                    <caption fill="#615942" k="name" priority="1" size="24" stroke="#ffffff"
-                             stroke-width="2.0"/>
+                    <caption fill="#615942" k="name" priority="1" size="24" stroke="#EAEAEA"
+                             stroke-width="5.0"/>
                 </m>
                 <m zoom-max="13" zoom-min="9">
                     <caption fill="#000000" k="name" priority="1" size="24"
-                             stroke="#ffffff" stroke-width="2.0"/>
+                             stroke="#EAEAEA" stroke-width="5.0"/>
                 </m>
                 <m zoom-max="9">
                     <caption dy="14" fill="#000000" k="name" priority="1" size="19"
-                             stroke="#ffffff" stroke-width="2.0"
+                             stroke="#EAEAEA" stroke-width="5.0"
                              symbol="assets:symbols/dot_white.svg"/>
                 </m>
             </m>
             <m v="country" zoom-max="9">
                 <caption style="bold" fill="#000000" k="name" priority="0" size="20"
-                         stroke="#ffffff" stroke-width="2.0"/>
+                         stroke="#EAEAEA" stroke-width="5.0"/>
             </m>
         </m>
         <m k="railway">
@@ -539,7 +538,7 @@
         </m>
 
         <m k="addr:housenumber" zoom-min="18">
-            <caption style="bold" fill="#606060" k="addr:housenumber" size="10" stroke="#ffffff"
+            <caption style="bold" fill="#606060" k="addr:housenumber" size="10" stroke="#EAEAEA"
                      stroke-width="2.0"/>
         </m>
     </m>

@@ -527,13 +527,17 @@
                 <action android:name="com.google.android.gms.safetynet.service.START"/>
             </intent-filter>
         </service>
+        <service android:name="org.microg.gms.wallet.PaymentService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wallet.service.BIND"/>
+            </intent-filter>
+        </service>
 
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.plus.service.START"/>
                 <action android:name="com.google.android.gms.plus.service.internal.START"/>
                 <action android:name="com.google.android.gms.panorama.service.START"/>
-                <action android:name="com.google.android.gms.wallet.service.BIND"/>
                 <action android:name="com.google.android.gms.appstate.service.START"/>
                 <action android:name="com.google.android.gms.ads.service.START"/>
                 <action android:name="com.google.android.gms.accounts.ACCOUNT_SERVICE"/>

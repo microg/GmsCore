@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
@@ -39,16 +40,16 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
     private GoogleMapImpl map;
     private GoogleMapOptions options;
-    private Context context;
+    private Activity activity;
 
     public MapFragmentImpl(Activity activity) {
-        context = activity;
+        this.activity = activity;
     }
 
     private GoogleMapImpl myMap() {
         if (map == null) {
             Log.d(TAG, "GoogleMap instance created");
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             map = GoogleMapImpl.create(inflater.getContext(), options);
         }
         return map;
@@ -139,7 +140,7 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
 
     @Override
     public void getMapAsync(final IOnMapReadyCallback callback) throws RemoteException {
-        new Handler(context.getMainLooper()).post(new Runnable() {
+        new Handler(activity.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 try {

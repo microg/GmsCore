@@ -74,6 +74,7 @@ public class GcmAppFragment extends ResourceSettingsFragment {
                 });
                 view.setClickable(true);
             } catch (Exception e) {
+                appName = packageName;
                 ((TextView) activity.findViewById(R.id.app_name)).setText(packageName);
             }
         }

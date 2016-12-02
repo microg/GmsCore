@@ -152,8 +152,8 @@ public class BackendMapView extends MapView {
         tileSource.setCache(cache);
         VectorTileLayer baseLayer = map().setBaseMap(tileSource);
         Layers layers = map().layers();
-        layers.add(labels = new LabelLayer(map(), baseLayer));
         layers.add(drawables = new ClearableVectorLayer(map()));
+        layers.add(labels = new LabelLayer(map(), baseLayer));
         layers.add(buildings = new BuildingLayer(map(), baseLayer));
         layers.add(items = new ItemizedLayer<MarkerItem>(map(), new MarkerSymbol(
                 new AndroidBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nop)), 0.5F, 1)));

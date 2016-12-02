@@ -41,6 +41,10 @@ import com.google.android.gms.maps.internal.IGoogleMapDelegate;
 import com.google.android.gms.maps.internal.IInfoWindowAdapter;
 import com.google.android.gms.maps.internal.ILocationSourceDelegate;
 import com.google.android.gms.maps.internal.IOnCameraChangeListener;
+import com.google.android.gms.maps.internal.IOnCameraIdleListener;
+import com.google.android.gms.maps.internal.IOnCameraMoveCanceledListener;
+import com.google.android.gms.maps.internal.IOnCameraMoveListener;
+import com.google.android.gms.maps.internal.IOnCameraMoveStartedListener;
 import com.google.android.gms.maps.internal.IOnInfoWindowClickListener;
 import com.google.android.gms.maps.internal.IOnMapClickListener;
 import com.google.android.gms.maps.internal.IOnMapLoadedCallback;
@@ -101,10 +105,12 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     private IOnMyLocationChangeListener onMyLocationChangeListener;
 
     private Criteria criteria;
+    private Location myLocation;
     private LocationListener listener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             // TODO: Actually do my location overlay
+            myLocation = location;
             if (onMyLocationChangeListener != null && location != null) {
                 try {
                     onMyLocationChangeListener.onMyLocationChanged(ObjectWrapper.wrap(location));
@@ -464,6 +470,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public IUiSettingsDelegate getUiSettings() throws RemoteException {
+        Log.d(TAG, "getUiSettings: "+uiSettings);
         return uiSettings;
     }
 
@@ -550,6 +557,30 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
             }
         }, 5000);
     }
+
+    @Override
+    public void setCameraMoveStartedListener(IOnCameraMoveStartedListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setCameraMoveStartedListener");
+
+    }
+
+    @Override
+    public void setCameraMoveListener(IOnCameraMoveListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setCameraMoveListener");
+
+    }
+
+    @Override
+    public void setCameraMoveCanceledListener(IOnCameraMoveCanceledListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setCameraMoveCanceledListener");
+
+    }
+
+    @Override
+    public void setCameraIdleListener(IOnCameraIdleListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setCameraIdleListener");
+
+    }
     
     /*
     Misc
@@ -575,7 +606,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public Location getMyLocation() throws RemoteException {
-        return null;
+        return myLocation;
     }
 
     @Override

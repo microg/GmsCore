@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.internal.ISnapshotReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -57,6 +58,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
 
     private final Context context;
     private final BackendMapView mapView;
+    private final ContainerLayout container;
     private final CameraUpdateListener cameraUpdateListener;
     private final Map<String, Markup> markupMap = new HashMap<String, Markup>();
     private final List<DrawableMarkup> drawableMarkups = new ArrayList<DrawableMarkup>();
@@ -71,6 +73,8 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
         mapView.items().setOnItemGestureListener(this);
         mapView.map().input.bind(this);
         mapView.map().events.bind(this);
+        container = new ContainerLayout(context);
+        container.addView(mapView);
     }
 
     public Viewport getViewport() {
@@ -94,7 +98,7 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
     }
 
     public View getView() {
-        return mapView;
+        return container;
     }
 
     public boolean hasBuilding() {
