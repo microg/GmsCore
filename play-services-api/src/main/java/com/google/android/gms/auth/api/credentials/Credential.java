@@ -25,6 +25,7 @@ import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @PublicApi
 public class Credential extends AutoSafeParcelable {
@@ -127,11 +128,11 @@ public class Credential extends AutoSafeParcelable {
     @PublicApi(exclude = true)
     public String getAsString() {
         if (TextUtils.isEmpty(accountType)) {
-            return id.toLowerCase() + "|";
+            return id.toLowerCase(Locale.US) + "|";
         } else {
             Uri uri = Uri.parse(accountType);
-            return id.toLowerCase() + "|" + (TextUtils.isEmpty(uri.getScheme()) ? "" : uri.getScheme().toLowerCase()) + "://" +
-                    (TextUtils.isEmpty(uri.getHost()) ? "unknown" : uri.getHost().toLowerCase()) + ":" + uri.getPort();
+            return id.toLowerCase(Locale.US) + "|" + (TextUtils.isEmpty(uri.getScheme()) ? "" : uri.getScheme().toLowerCase(Locale.US)) + "://" +
+                    (TextUtils.isEmpty(uri.getHost()) ? "unknown" : uri.getHost().toLowerCase(Locale.US)) + ":" + uri.getPort();
         }
     }
 
