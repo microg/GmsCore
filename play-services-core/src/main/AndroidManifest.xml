@@ -36,6 +36,11 @@
         android:icon="@drawable/proprietary_auth_ic_scope_icon_default"/>
 
     <permission
+        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.cp"
+        android:description="@string/permission_service_cp_description"
+        android:label="@string/permission_service_cp_label"
+        android:protectionLevel="dangerous"/>
+    <permission
         android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.local"
         android:description="@string/permission_service_local_description"
         android:label="@string/permission_service_local_label"

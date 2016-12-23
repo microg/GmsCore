@@ -348,8 +348,7 @@ public class McsService extends Service implements Handler.Callback {
 
     private synchronized void connect() {
         try {
-            tryClose(inputStream);
-            tryClose(outputStream);
+            closeAll();
             logd("Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
             logd("Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
@@ -581,13 +580,19 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
-    private void handleTeardown(android.os.Message msg) {
+    private void closeAll() {
         tryClose(inputStream);
         tryClose(outputStream);
-        try {
-            sslSocket.close();
-        } catch (Exception ignored) {
+        if (sslSocket != null) {
+            try {
+                sslSocket.close();
+            } catch (Exception ignored) {
+            }
         }
+    }
+
+    private void handleTeardown(android.os.Message msg) {
+        closeAll();
 
         scheduleReconnect(this);
 

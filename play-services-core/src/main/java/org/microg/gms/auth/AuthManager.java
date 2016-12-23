@@ -23,8 +23,6 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.android.gms.R;
-
 import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
@@ -37,6 +35,7 @@ public class AuthManager {
     private static final String TAG = "GmsAuthManager";
     public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
     private static final String PREF_AUTH_TRUST_GOOGLE = "auth_manager_trust_google";
+    public static final int ONE_HOUR_IN_SECONDS = 60 * 60;
 
     private final Context context;
     private final String accountName;
@@ -159,10 +158,14 @@ public class AuthManager {
             setAuthToken("SID", response.Sid);
         if (response.LSid != null)
             setAuthToken("LSID", response.LSid);
-        if (response.expiry > 0)
-            setExpiry(response.expiry);
-        if (response.auth != null && (response.expiry != 0 || response.storeConsentRemotely))
+        if (response.auth != null && (response.expiry != 0 || response.storeConsentRemotely)) {
             setAuthToken(response.auth);
+            if (response.expiry > 0) {
+                setExpiry(response.expiry);
+            } else {
+                setExpiry(System.currentTimeMillis() / 1000 + ONE_HOUR_IN_SECONDS); // make valid for one hour by default
+            }
+        }
     }
 
     public static boolean isTrustGooglePermitted(Context context) {
