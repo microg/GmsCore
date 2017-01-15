@@ -88,7 +88,7 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
             selection = "packageName = ? AND signatureDigest = ? AND host = ? AND path LIKE ?";
         }
         selection += " AND deleted=0 AND assetsPresent !=0";
-        return getReadableDatabase().rawQuery("SELECT null AS host,printf(\"wear://%s%s\",host,path) AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
+        return getReadableDatabase().rawQuery("SELECT host AS host,path AS path,data AS data,\'\' AS tags,assetname AS asset_key,assets_digest AS asset_id FROM dataItemsAndAssets WHERE " + selection, params);
     }
 
     public synchronized Cursor getDataItemsByHostAndPath(String packageName, String signatureDigest, String host, String path) {
