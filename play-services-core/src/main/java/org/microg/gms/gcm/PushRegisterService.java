@@ -140,6 +140,7 @@ public class PushRegisterService extends IntentService {
                 Intent i = new Intent(this, AskPushPermission.class);
                 i.putExtra(EXTRA_PENDING_INTENT, intent);
                 i.putExtra(EXTRA_APP, packageName);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             } catch (PackageManager.NameNotFoundException e) {
                 replyNotAvailable(this, intent, packageName);
