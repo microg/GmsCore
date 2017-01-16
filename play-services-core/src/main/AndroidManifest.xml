@@ -92,6 +92,7 @@
 
     <application
         android:allowBackup="false"
+        android:extractNativeLibs="false"
         android:icon="@mipmap/ic_core_service_app"
         android:label="@string/gms_app_name">
         <meta-data
