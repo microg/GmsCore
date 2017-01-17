@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2013-2015 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_settings_name">Configurações microG</string>
+
+    <string name="just_a_sec">Aguarde um momento…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Ao continuar, você permite que este aplicativo e o Google usem suas informações de acordo com seus respectivos termos de serviço e políticas de privacidade.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar:</string>
+    <string name="account_manager_title">Gerente de Contas do Google</string>
+    <string name="sorry">Sorry…</string>
+    <string name="no_network_error_desc">"Você não tem uma conexão de rede.
+
+Este pode ser um problema temporário ou seu dispositivo Android não pode ser provisionado para serviços de dados. Tente novamente quando estiver conectado a uma rede móvel ou conecte-se a uma rede Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Ocorreu um problema ao se comunicar com os servidores do Google.
+
+Tente mais tarde."</string>
+    <string name="auth_finalize">"Seu dispositivo está contatando o Google para salvar informações em sua conta.
+
+Isso pode demorar alguns minutos."</string>
+    <string name="allow">Permitir</string>
+    <string name="deny">Negar</string>
+    <string name="auth_notification_title">Autentificação requerida</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g>requer sua autorização para acessar sua Conta do Google.</string>
+
+    <string name="perm_status_broadcast_label">ouvir transmissões de status internos</string>
+    <string name="perm_c2dm_receive_label">ouvir C2DM mensagens</string>
+    <string name="perm_c2dm_send_label">enviar mensagens C2DM para outros aplicativos</string>
+    <string name="perm_gtalk_svc_label">trocar mensagens e receber notificações de sincronização dos servidores do Google</string>
+
+    <string name="pref_auth_trust_google_title">Confie no Google para permissões de aplicativo</string>
+    <string name="pref_auth_trust_google_summary">Quando desabilitado, o usuário é solicitado antes que uma solicitação de autorização de apps seja enviada ao Google. Algumas aplicações deixarão de utilizar a Conta Google se esta estiver desativada.</string>
+
+    <string name="prefs_account">Preferências da conta</string>
+    <string name="prefs_account_privacy">Informação pessoal &amp; privacidade</string>
+    <string name="prefs_account_security">Login &amp; segurança</string>
+
+    <string name="prefcat_services">Serviços</string>
+
+    <string name="service_name_checkin">Registro de dispositivo do Google</string>
+    <string name="service_name_mcs">Google Cloud Messaging</string>
+
+    <string name="pref_checkin_enable_summary">Registre seu dispositivo nos serviços do Google e crie um identificador de dispositivo exclusivo. MicroG que identifica outros bits que o nome da sua conta do Google a partir de dados de registro.</string>
+    <string name="pref_gcm_enable_mcs_summary">O Google Cloud Messaging é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
+
+    <string name="pref_gcm_heartbeat_title">Intervalo de pulsação da Messagem na nuvem</string>
+    <string name="pref_gcm_heartbeat_summary">O intervalo em segundos para o sistema a pulsar os servidores do Google. Aumentar esse número reduzirá o consumo da bateria, mas poderá causar atrasos nas mensagens push.\nDesativado, será substituído em versão futura.</string>
+
+    <string name="pref_gcm_apps_title">Aplicativos que usam o Google Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados no Google Cloud Messaging.</string>
+
+    <string name="prefcat_components">Componentes</string>
+    <string name="prefcat_location_service">Servico de localização</string>
+
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar Play Games</string>
+    <string name="games_info_content">Para usar o Play Games, é necessário instalar o aplicativo Google Play Games. O aplicativo pode continuar sem Play Games, mas é possível que ele se comporte inesperadamente.</string>
+
+    <string name="pick_place_title">Escolha um lugar</string>
+    <string name="pick_place_desc">O selecionador de locais ainda não está disponível.</string>
+
+    <string name="prefcat_about">Sobre</string>
+    <string name="pref_about_title">Sobre microG Services Core</string>
+    <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
+
+    <string name="self_check_cat_fake_sig">Suporte de spoofing de assinatura</string>
+    <string name="self_check_name_fake_sig_perm">O sistema possui suporte a spoofing de assinatura: </string>
+    <string name="self_check_resolution_fake_sig_perm">Sua ROM não tem suporte nativo para falsificação de assinaturas. Você ainda pode usar Xposed ou outros sistemas para spoof assinatura. Verifique a documentação sobre quais ROMs suportam spoofing de assinaturas e como usar microG em ROMs que não tem esse suporte.</string>
+    <string name="self_check_name_perm_granted">O sistema concede permissão de spoofing de assinatura: </string>
+    <string name="self_check_resolution_perm_granted">Este é um forte indicador de que a ROM suporta spoofing de assinaturas, mas requer mais ação para ativá-la. Verifique a documentação sobre quais etapas podem ser necessárias.</string>
+    <string name="self_check_name_system_spoofs">Assinatura de spoofs do sistema: </string>
+    <string name="self_check_resolution_system_spoofs">Verifique a documentação sobre quais etapas podem ser necessárias.</string>
+
+    <string name="self_check_cat_gms_packages">Pacotes instalados</string>
+    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalou: </string>
+    <string name="self_check_resolution_app_installed">Instalar a aplicação <xliff:g example="F-Droid">%1$s</xliff:g> ou compatível. Verifique a documentação sobre quais aplicativos são compatíveis.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> tem assinatura correta: </string>
+    <string name="self_check_resolution_correct_sig">Ou o instalado <xliff:g example="F-Droid">%1$s</xliff:g> não é compatível ou o spoofing de assinatura não está ativo para ele. Verifique a documentação sobre quais aplicativos e ROMs são compatíveis.</string>
+    <string name="perm_extended_access_label">Acesso extendido aos serviços Google</string>
+
+    <string name="self_check_cat_system">Sistema</string>
+    <string name="self_check_name_battery_optimizations">Otimização de bateria ignorada:</string>
+    <string name="self_check_resolution_battery_optimizations">Toque aqui para desativar as otimização da bateria. Não fazer isso pode resultar em aplicativos com má execução.</string>
+
+    <string name="lacking_permission_toast">microG Services Core: Sem permissão para <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+
+    <string name="place_picker_select_title">Selecione esta localização</string>
+    <string name="place_picker_nearby_places">Locais próximos</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
+    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> registered Apps</string>
+    <string name="gcm_app_error_unregistering">Erro ao cancelar o registro</string>
+    <string name="gcm_app_not_installed_anymore">Não está mais instalado</string>
+    <string name="gcm_messages_received_no"><xliff:g example="123">%1$d</xliff:g> mensagens recebidas</string>
+    <string name="gcm_unregister_app">Cancelar registro</string>
+    <string name="gcm_not_registered">Não registrado</string>
+    <string name="gcm_no_message_yet">Nenhuma mensagem recebida até agora</string>
+    <string name="gcm_last_message_at">Última mensagem: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registrado</string>
+    <string name="gcm_registered_since">Registrado desde: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Cancelar registro <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Algumas aplicações não registam automaticamente e/ou não fornecem uma opção para fazê-lo manualmente. Esses aplicativos podem não funcionar corretamente após o cancelamento do registro.\nContinuar?</string>
+    <string name="gcm_unregister_after_deny_message">Você negou um app para se registrar para notificações push que já está registrado.\nDeseja cancelar o registo agora para que não receba mensagens de envio no futuro?</string>
+    <string name="gcm_messages_counter">Mensagens: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_state_disconnected">Estado atual: desconectado</string>
+    <string name="gcm_state_connected">Estado atual: Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+
+    <string name="menu_advanced">Avançado</string>
+    <string name="list_no_item_none">Nenhum</string>
+
+    <string name="cond_gcm_bat_title">Otimização de bateria ativada</string>
+    <string name="cond_gcm_bat_summary">Você ativou o Google Cloud Messaging, mas possui otimizações de bateria ativas para o MicroG Services Core. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
+    <string name="cond_gcm_bat_action">Ignorar otimização</string>
+    <string name="cond_perm_title">Permissão ausente</string>
+    <string name="cond_perm_summary">Falta uma ou mais permissões para a funcionalidade adequada do MicroG Service Core.</string>
+    <string name="cond_perm_action">Solicitar permissões em falta</string>
+
+    <string name="network_type_mobile">Rede móvel</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Outras redes</string>
+</resources>
