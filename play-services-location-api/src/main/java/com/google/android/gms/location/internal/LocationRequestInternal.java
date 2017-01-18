@@ -49,6 +49,9 @@ public class LocationRequestInternal extends AutoSafeParcelable {
     @SafeParceled(7)
     public boolean hideFromAppOps;
 
+    @SafeParceled(8)
+    public boolean forceCoarseLocation;
+
     @Override
     public String toString() {
         return "LocationRequestInternal{" +
@@ -59,6 +62,7 @@ public class LocationRequestInternal extends AutoSafeParcelable {
                 ", clients=" + clients +
                 ", tag='" + tag + '\'' +
                 ", hideFromAppOps=" + hideFromAppOps +
+                ", forceCoarseLocation=" + forceCoarseLocation +
                 '}';
     }
 
