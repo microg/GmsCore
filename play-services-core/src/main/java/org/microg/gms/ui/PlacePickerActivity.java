@@ -29,6 +29,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -190,7 +191,7 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
         place.viewport = GmsMapsTypeHelper.toLatLngBounds(mapView.map().viewport().getBBox(null, 0));
         resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, place.viewport);
         place.latLng = GmsMapsTypeHelper.toLatLng(position.getGeoPoint());
-        place.name = getString(R.string.place_picker_location_lat_lng, place.latLng.latitude, place.latLng.longitude);
+        place.name = "";
         place.address = "";
         updateInfoText();
         if (geocoderInProgress.compareAndSet(false, true)) {
@@ -209,12 +210,15 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
                             Address address = addresses.get(0);
                             StringBuilder sb = new StringBuilder(address.getAddressLine(0));
                             for (int i = 1; i < address.getMaxAddressLineIndex(); ++i) {
+                                if (i == 1 && sb.toString().equals(address.getFeatureName())) {
+                                    sb = new StringBuilder(address.getAddressLine(i));
+                                    continue;
+                                }
                                 sb.append(", ").append(address.getAddressLine(i));
                             }
                             if (place.latLng == ll) {
                                 place.address = sb.toString();
                                 place.name = address.getFeatureName();
-                                if (TextUtils.isEmpty(place.name)) place.name = place.address;
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -234,6 +238,12 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
     }
 
     private void updateInfoText() {
-        ((TextView) findViewById(R.id.place_picker_info)).setText(place.name);
+        if (TextUtils.isEmpty(place.address)) {
+            ((TextView) findViewById(R.id.place_picker_info)).setText(getString(R.string.place_picker_location_lat_lng, place.latLng.latitude, place.latLng.longitude));
+        } else if (TextUtils.isEmpty(place.name)) {
+            ((TextView) findViewById(R.id.place_picker_info)).setText(place.address);
+        } else {
+            ((TextView) findViewById(R.id.place_picker_info)).setText(Html.fromHtml("<b>" + place.name + "</b>, " + place.address));
+        }
     }
 }
