@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2017 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,8 +63,7 @@ public class RealLocationProvider {
         }
     };
 
-    public RealLocationProvider(LocationManager locationManager, String name,
-                                LocationChangeListener changeListener) {
+    public RealLocationProvider(LocationManager locationManager, String name, LocationChangeListener changeListener) {
         this.locationManager = locationManager;
         this.name = name;
         this.changeListener = changeListener;
@@ -110,6 +109,7 @@ public class RealLocationProvider {
                 minTime = Math.min(request.locationRequest.getInterval(), minTime);
                 minDistance = Math.min(request.locationRequest.getSmallestDesplacement(), minDistance);
             }
+            Log.d(TAG, name + ": requesting location updates. minTime=" + minTime + " minDistance=" + minDistance);
             if (connected.get()) {
                 if (connectedMinTime != minTime || connectedMinDistance != minDistance) {
                     locationManager.removeUpdates(listener);
@@ -119,7 +119,6 @@ public class RealLocationProvider {
             } else {
                 locationManager.requestLocationUpdates(name, minTime, minDistance, listener, Looper.getMainLooper());
             }
-            Log.d(TAG, name + ": requesting location updates. minTime=" + minTime + " minDistance=" + minDistance);
             connected.set(true);
             connectedMinTime = minTime;
             connectedMinDistance = minDistance;

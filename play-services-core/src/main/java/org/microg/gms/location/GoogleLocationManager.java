@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright 2013-2017 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.RemoteException;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.R;
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.internal.FusedLocationProviderResult;
@@ -65,7 +61,12 @@ public class GoogleLocationManager implements LocationChangeListener {
             this.gpsProvider = null;
         }
         if (Utils.hasSelfPermissionOrNotify(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            this.networkProvider = new RealLocationProvider(locationManager, NETWORK_PROVIDER, this);
+            if (locationManager.getAllProviders().contains(NETWORK_PROVIDER)) {
+                this.networkProvider = new RealLocationProvider(locationManager, NETWORK_PROVIDER, this);
+            } else {
+                // TODO: Add ability to directly contact UnifiedNlp without the system location provider
+                this.networkProvider = null;
+            }
         } else {
             this.networkProvider = null;
         }
@@ -119,14 +120,12 @@ public class GoogleLocationManager implements LocationChangeListener {
             networkProvider.addRequest(request);
     }
 
-    public void requestLocationUpdates(LocationRequest request, ILocationListener listener,
-                                       String packageName) {
+    public void requestLocationUpdates(LocationRequest request, ILocationListener listener, String packageName) {
         requestLocationUpdates(new LocationRequestHelper(context, request, hasFineLocationPermission(),
                 hasCoarseLocationPermission(), packageName, listener));
     }
 
-    public void requestLocationUpdates(LocationRequest request, PendingIntent intent,
-                                       String packageName) {
+    public void requestLocationUpdates(LocationRequest request, PendingIntent intent, String packageName) {
         requestLocationUpdates(new LocationRequestHelper(context, request, hasFineLocationPermission(),
                 hasCoarseLocationPermission(), packageName, intent));
     }
