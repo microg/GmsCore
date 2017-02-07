@@ -29,7 +29,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="@string/v7_preference_on"
-        android:textColor="?android:attr/textColorPrimaryInverse"
         android:theme="@style/TextAppearance.AppCompat.Title.Inverse"/>
 
     <org.microg.tools.ui.ToggleSwitch
