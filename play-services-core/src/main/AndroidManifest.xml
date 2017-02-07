@@ -381,6 +381,12 @@
             </intent-filter>
         </activity>
 
+        <!-- Chimera spoof -->
+        <provider
+            android:authorities="com.google.android.gms.chimera"
+            android:name="org.microg.gms.ChimeraSpoofProvider"
+            android:exported="true"/>
+
         <!-- microG custom UI -->
 
         <activity
