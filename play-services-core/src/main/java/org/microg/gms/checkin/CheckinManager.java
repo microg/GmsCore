@@ -20,8 +20,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
-
-import com.google.android.gms.R;
+import android.preference.PreferenceManager;
 
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthRequest;
@@ -34,6 +33,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.microg.gms.checkin.TriggerReceiver.PREF_ENABLE_CHECKIN;
+
 public class CheckinManager {
     private static final long MIN_CHECKIN_INTERVAL = 3 * 60 * 60 * 1000; // 3 hours
 
@@ -41,6 +42,8 @@ public class CheckinManager {
     public static synchronized LastCheckinInfo checkin(Context context, boolean force) throws IOException {
         LastCheckinInfo info = LastCheckinInfo.read(context);
         if (!force && info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
+            return null;
+        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, false))
             return null;
         List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
         AccountManager accountManager = AccountManager.get(context);

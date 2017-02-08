@@ -26,12 +26,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
-import com.google.android.gms.R;
 import com.google.android.gms.checkin.internal.ICheckinService;
 
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
+
+import static org.microg.gms.checkin.TriggerReceiver.PREF_ENABLE_CHECKIN;
 
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
@@ -54,7 +55,7 @@ public class CheckinService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(TriggerReceiver.PREF_ENABLE_CHECKIN, false)) {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_ENABLE_CHECKIN, false)) {
                 LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
                 if (info != null) {
                     Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));
