@@ -49,7 +49,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     private SharedPreferences defaultPreferences;
 
-    public GcmPrefs(Context context) {
+    private GcmPrefs(Context context) {
         if (context != null) {
             defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             defaultPreferences.registerOnSharedPreferenceChangeListener(this);

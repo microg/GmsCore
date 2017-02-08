@@ -170,8 +170,15 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
+    public static void stop(Context context) {
+        context.stopService(new Intent(context, McsService.class));
+        closeAll();
+    }
+
     @Override
     public void onDestroy() {
+        alarmManager.cancel(heartbeatIntent);
+        closeAll();
         database.close();
         super.onDestroy();
     }
@@ -571,7 +578,7 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
-    private void tryClose(Closeable closeable) {
+    private static void tryClose(Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
@@ -580,7 +587,7 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
-    private void closeAll() {
+    private static void closeAll() {
         tryClose(inputStream);
         tryClose(outputStream);
         if (sslSocket != null) {

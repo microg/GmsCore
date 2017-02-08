@@ -38,6 +38,7 @@ import com.google.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
+import org.microg.gms.gcm.McsConstants;
 import org.microg.gms.gcm.McsService;
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.DimmableIconPreference;
@@ -140,6 +141,12 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
     public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
         if (switchView == switchCompat) {
             getPreferenceManager().getSharedPreferences().edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, isChecked).apply();
+            if (!isChecked) {
+                McsService.stop(getContext());
+            } else {
+                getContext().startService(new Intent(McsConstants.ACTION_CONNECT, null, getContext(), McsService.class));
+            }
+            updateContent();
         }
     }
 
