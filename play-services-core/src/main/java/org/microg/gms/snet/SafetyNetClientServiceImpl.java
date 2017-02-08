@@ -56,6 +56,12 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
             return;
         }
 
+        if (!SafetyNetPrefs.get(context).isEnabled()) {
+            Log.d(TAG, "ignoring SafetyNet request, it's disabled");
+            callbacks.onAttestationData(Status.CANCELED, null);
+            return;
+        }
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -65,10 +71,11 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
                         RemoteDroidGuardConnector conn = new RemoteDroidGuardConnector(context);
                         Bundle bundle = new Bundle();
                         bundle.putString("contentBinding", attestation.getPayloadHashBase64());
-                        RemoteDroidGuardConnector.Result dg = conn.guard("attest", Long.toString(LastCheckinInfo.read(context).androidId),
-                                bundle, Utils.getDeviceIdentifier(context).meid, Utils.getPhoneInfo(context).imsi);
-                        if (dg != null && dg.getStatusCode() == 0 && dg.getResult() != null) {
-                            attestation.setDroidGaurdResult(Base64.encodeToString(dg.getResult(), Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE));
+                        RemoteDroidGuardConnector.Result dg = conn.guard("attest", Long.toString(LastCheckinInfo.read(context).androidId), bundle);
+                        if (!SafetyNetPrefs.get(context).isOfficial() || dg != null && dg.getStatusCode() == 0 && dg.getResult() != null) {
+                            if (dg != null && dg.getStatusCode() == 0 && dg.getResult() != null) {
+                                attestation.setDroidGaurdResult(Base64.encodeToString(dg.getResult(), Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE));
+                            }
                             AttestationData data = new AttestationData(attestation.attest());
                             callbacks.onAttestationData(Status.SUCCESS, data);
                         } else {

@@ -383,8 +383,8 @@
 
         <!-- Chimera spoof -->
         <provider
-            android:authorities="com.google.android.gms.chimera"
             android:name="org.microg.gms.ChimeraSpoofProvider"
+            android:authorities="com.google.android.gms.chimera"
             android:exported="true"/>
 
         <!-- microG custom UI -->
@@ -424,6 +424,11 @@
         <activity
             android:name="org.microg.gms.ui.GcmAppFragment$AsActivity"
             android:label="@string/service_name_mcs"
+            android:theme="@style/Theme.AppCompat.Settings"/>
+
+        <activity
+            android:name="org.microg.gms.ui.SafetyNetFragment$AsActivity"
+            android:label="@string/service_name_snet"
             android:theme="@style/Theme.AppCompat.Settings"/>
 
         <activity

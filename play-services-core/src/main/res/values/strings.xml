@@ -55,6 +55,10 @@ This can take a couple of minutes."</string>
 
     <string name="service_name_checkin">Google device registration</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+
+    <string name="service_status_disabled">Disabled</string>
+    <string name="service_status_enabled">Enabled</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
@@ -138,4 +142,20 @@ This can take a couple of minutes."</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
     <string name="network_type_other">Other networks</string>
+
+    <string name="snet_intro">Google SafetyNet is a device certification system, ensuring that the device is properly secured and compatible with Android CTS. Some applications use SafetyNet for security reasons or as a prerequisite for tamper-protection.\n\nmicroG GmsCore contains a free implementation of SafetyNet, but the official server requires SafetyNet requests to be signed using the proprietary DroidGuard system. A sandboxed version of DroidGuard is available as a separate “DroidGuard Helper” app.</string>
+
+    <string name="prefcat_configuration">Configuration</string>
+
+    <string name="pref_snet_status_disabled_title">Disabled</string>
+    <string name="pref_snet_status_disabled_summary">Completely disable SafetyNet</string>
+    <string name="pref_snet_status_official_title">Use official server</string>
+    <string name="pref_snet_status_official_summary">Requires an unrooted system, device registration enabled and microG DroidGuard Helper installed</string>
+    <string name="pref_snet_status_third_party_title">Use third-party server</string>
+    <string name="pref_snet_status_third_party_summary">Third-party servers might be able to reply to SafetyNet requests without DroidGuard signature</string>
+    <string name="pref_snet_custom_url_title">Custom server URL</string>
+    <string name="pref_snet_custom_url_summary">Full URL of the third-party server answering SafetyNet attestation requests</string>
+
+    <string name="prefcat_test">Test</string>
+    <string name="pref_snet_testdrive_title">Try SafetyNet attestation</string>
 </resources>

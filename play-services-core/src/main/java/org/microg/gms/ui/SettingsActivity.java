@@ -19,12 +19,12 @@ package org.microg.gms.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.preference.PreferenceManager;
 
 import com.google.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
+import org.microg.gms.snet.SafetyNetPrefs;
 import org.microg.tools.ui.AbstractDashboardActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
 
@@ -45,6 +45,7 @@ public class SettingsActivity extends AbstractDashboardActivity {
 
         public static final String PREF_ABOUT = "pref_about";
         public static final String PREF_GCM = "pref_gcm";
+        public static final String PREF_SNET = "pref_snet";
 
         public FragmentImpl() {
             preferencesResource = R.xml.preferences_start;
@@ -53,16 +54,26 @@ public class SettingsActivity extends AbstractDashboardActivity {
         @Override
         public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
             super.onCreatePreferencesFix(savedInstanceState, rootKey);
-            PreferenceManager prefs = getPreferenceManager();
-            prefs.findPreference(PREF_ABOUT).setSummary(getString(R.string.about_version_str, AboutFragment.getSelfVersion(getContext())));
+            updateDetails();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            updateDetails();
+        }
+
+        private void updateDetails() {
+            findPreference(PREF_ABOUT).setSummary(getString(R.string.about_version_str, AboutFragment.getSelfVersion(getContext())));
             if (GcmPrefs.get(getContext()).isGcmEnabled()) {
                 GcmDatabase database = new GcmDatabase(getContext());
                 int regCount = database.getRegistrationList().size();
                 database.close();
-                prefs.findPreference(PREF_GCM).setSummary(getString(R.string.v7_preference_on) + " / " + getContext().getString(R.string.gcm_registered_apps_counter, regCount));
+                findPreference(PREF_GCM).setSummary(getString(R.string.v7_preference_on) + " / " + getContext().getString(R.string.gcm_registered_apps_counter, regCount));
             } else {
-                prefs.findPreference(PREF_GCM).setSummary(R.string.v7_preference_off);
+                findPreference(PREF_GCM).setSummary(R.string.v7_preference_off);
             }
+            findPreference(PREF_SNET).setSummary(SafetyNetPrefs.get(getContext()).isEnabled() ? R.string.service_status_enabled : R.string.service_status_disabled);
         }
     }
 }

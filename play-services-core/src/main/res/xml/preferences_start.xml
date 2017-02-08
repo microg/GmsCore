@@ -42,6 +42,14 @@
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/certificate"
+            android:key="pref_snet"
+            android:title="@string/service_name_snet">
+            <intent
+                android:targetClass="org.microg.gms.ui.SafetyNetFragment$AsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+        <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/location_marker"
             android:title="@string/nlp_settings_label">
             <intent

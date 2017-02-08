@@ -53,7 +53,6 @@ import okio.ByteString;
 
 public class Attestation {
     private static final String TAG = "GmsSafetyNetAttest";
-    private static final String ATTEST_URL = "https://www.googleapis.com/androidcheck/v1/attestations/attest?alt=PROTO&key=AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA";
 
     private Context context;
     private String packageName;
@@ -144,14 +143,11 @@ public class Attestation {
         if (payload == null) {
             throw new IllegalStateException("missing payload");
         }
-        if (droidGaurdResult == null || droidGaurdResult.isEmpty()) {
-            throw new IllegalStateException("missing droidGuard");
-        }
         return attest(new AttestRequest(ByteString.of(payload), droidGaurdResult)).result;
     }
 
     private AttestResponse attest(AttestRequest request) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(ATTEST_URL).openConnection();
+        HttpURLConnection connection = (HttpURLConnection) new URL(SafetyNetPrefs.get(context).getServiceUrl()).openConnection();
         connection.setRequestMethod("POST");
         connection.setDoInput(true);
         connection.setDoOutput(true);
@@ -180,9 +176,13 @@ public class Attestation {
         }
 
         InputStream is = connection.getInputStream();
-        AttestResponse response = new Wire().parseFrom(new GZIPInputStream(is), AttestResponse.class);
-        is.close();
-        return response;
+        byte[] bytes = Utils.readStreamToEnd(new GZIPInputStream(is));
+        try {
+            return new Wire().parseFrom(bytes, AttestResponse.class);
+        } catch (IOException e) {
+            Log.d(TAG, Base64.encodeToString(bytes, 0));
+            throw e;
+        }
     }
 
 
