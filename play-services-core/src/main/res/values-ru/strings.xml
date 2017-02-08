@@ -126,7 +126,7 @@
     <string name="gcm_unregister_after_deny_message">Вы запретили push-уведомления для приложения, которое уже привязано.\nВы хотите отвязать его сейчас чтобы больше не получать от него push-уведомлений?</string>
     <string name="gcm_messages_counter">Уведомлений: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_state_disconnected">Текущий статус: Отключен</string>
-    <string name="gcm_state_connected">Текущий статус: Подключен с  <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_state_connected">Текущий статус: Подключен <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="menu_advanced">Дополнительно</string>
 	<string name="list_no_item_none">Пусто</string>
@@ -150,7 +150,7 @@
 	<string name="pref_snet_status_disabled_title">Отключить</string>
 	<string name="pref_snet_status_disabled_summary">Полное отключение SafetyNet</string>
 	<string name="pref_snet_status_official_title">Использовать официальный сервер</string>
-	<string name="pref_snet_status_official_summary">Требуется система без root, включенная регистрация устройства и установленный microG DroidGuard Helper</string>
+	<string name="pref_snet_status_official_summary">Требуется система без root и установленный microG DroidGuard Helper</string>
 	<string name="pref_snet_status_third_party_title">Использовать сторонний сервер</string>
 	<string name="pref_snet_status_third_party_summary">Сторонние сервера могут быть в состоянии ответить на запросы SafetyNet без подписи DroidGuard</string>
 	<string name="pref_snet_custom_url_title">URL стороннего сервера</string>
