@@ -49,19 +49,22 @@
 
     <string name="prefs_account">Настройки аккаунта</string>
     <string name="prefs_account_privacy">Персональная информация и приватность</string>
-    <string name="prefs_account_security">Вход в &amp; и безопасность</string>
+    <string name="prefs_account_security">Авторизация и безопасность</string>
 
     <string name="prefcat_services">Сервисы</string>
 
     <string name="service_name_checkin">Регистрация устройства в Google</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
+	<string name="service_name_snet">Google SafetyNet</string>
+	
+	<string name="service_status_disabled">Выключен</string>
+	<string name="service_status_enabled">Включен</string>
 
     <string name="pref_checkin_enable_summary">Регистрирует ваше устройство в сервисах Google и создает уникальный идентификатор. MicroG удаляет все идентифицирующие биты, кроме имени вашего аккаунта Google.</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
 
     <string name="pref_gcm_heartbeat_title">Интервал соединения Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.
-Устарело, будет изменено в следующем релизе."</string>
+    <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
 
     <string name="pref_gcm_apps_title">Приложения, использующие Google Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Список приложений, которые привязаны к Google Cloud Messaging.</string>
@@ -119,8 +122,7 @@
     <string name="gcm_registered">Привязано</string>
     <string name="gcm_registered_since">Привязано с: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Отвязать <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
-    <string name="gcm_unregister_confirm_message">"Некоторые приложение автоматически не перепривязываются и/или не предоставляют возможности сделать это вручную. Такие приложения могут работать некорректно после отвязки.
-Продолжить?"</string>
+    <string name="gcm_unregister_confirm_message">"Некоторые приложение автоматически не перепривязываются и/или не предоставляют возможности сделать это вручную. Такие приложения могут работать некорректно после отвязки.\nПродолжить?"</string>
     <string name="gcm_unregister_after_deny_message">Вы запретили push-уведомления для приложения, которое уже привязано.\nВы хотите отвязать его сейчас чтобы больше не получать от него push-уведомлений?</string>
     <string name="gcm_messages_counter">Уведомлений: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_state_disconnected">Текущий статус: Отключен</string>
@@ -140,4 +142,20 @@
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Роуминг</string>
     <string name="network_type_other">Прочие сети</string>
+	
+	<string name="snet_intro">Google SafetyNet это система сертификации устройства, гарантирующая, что устройство корректно защищено и совместимо с Android CTS. Некоторые приложения используют SafetyNet из соображений безопасности или в качестве предварительной системы защиты от взлома. \ П \ nmicroG GmsCore содержит свободную реализацию SafetyNet, но официальный сервер требует, чтобы запросы были подписаны с помощью проприетарной системы DroidGuard. Изолированная версия DroidGuard доступна как отдельное приложение "DroidGuard Helper".</string>
+	
+	<string name="prefcat_configuration">Конфигурация</string>
+	
+	<string name="pref_snet_status_disabled_title">Отключить</string>
+	<string name="pref_snet_status_disabled_summary">Полное отключение SafetyNet</string>
+	<string name="pref_snet_status_official_title">Использовать официальный сервер</string>
+	<string name="pref_snet_status_official_summary">Требуется система без root, включенная регистрация устройства и установленный microG DroidGuard Helper</string>
+	<string name="pref_snet_status_third_party_title">Использовать сторонний сервер</string>
+	<string name="pref_snet_status_third_party_summary">Сторонние сервера могут быть в состоянии ответить на запросы SafetyNet без подписи DroidGuard</string>
+	<string name="pref_snet_custom_url_title">URL стороннего сервера</string>
+	<string name="pref_snet_custom_url_summary">Полный URL стороннего сервера, который отвечает на проверочные запросы SafetyNet</string>
+	
+	<string name="prefcat_test">Тест</string>
+	<string name="pref_snet_testdrive_title">Протестировать SafetyNet проверку</string>
 </resources>
