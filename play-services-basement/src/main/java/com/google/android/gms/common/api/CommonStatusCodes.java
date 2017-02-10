@@ -16,14 +16,19 @@
 
 package com.google.android.gms.common.api;
 
+import android.support.annotation.NonNull;
+
 import org.microg.gms.common.PublicApi;
 
 @PublicApi
 public class CommonStatusCodes {
     public static final int SUCCESS_CACHE = -1;
     public static final int SUCCESS = 0;
+    @Deprecated
     public static final int SERVICE_MISSING = 1;
+    @Deprecated
     public static final int SERVICE_VERSION_UPDATE_REQUIRED = 2;
+    @Deprecated
     public static final int SERVICE_DISABLED = 3;
     public static final int SIGN_IN_REQUIRED = 4;
     public static final int INVALID_ACCOUNT = 5;
@@ -37,4 +42,50 @@ public class CommonStatusCodes {
     public static final int INTERRUPTED = 14;
     public static final int TIMEOUT = 15;
     public static final int CANCELED = 16;
+    public static final int API_NOT_CONNECTED = 17;
+    public static final int DEAD_CLIENT = 18;
+
+    @NonNull
+    public static String getStatusCodeString(int statusCode) {
+        switch (statusCode) {
+            case SUCCESS_CACHE:
+                return "SUCCESS_CACHE";
+            case SUCCESS:
+                return "SUCCESS";
+            case SERVICE_VERSION_UPDATE_REQUIRED:
+                return "SERVICE_VERSION_UPDATE_REQUIRED";
+            case SERVICE_DISABLED:
+                return "SERVICE_DISABLED";
+            case SIGN_IN_REQUIRED:
+                return "SIGN_IN_REQUIRED";
+            case INVALID_ACCOUNT:
+                return "INVALID_ACCOUNT";
+            case RESOLUTION_REQUIRED:
+                return "RESOLUTION_REQUIRED";
+            case NETWORK_ERROR:
+                return "NETWORK_ERROR";
+            case INTERNAL_ERROR:
+                return "INTERNAL_ERROR";
+            case SERVICE_INVALID:
+                return "SERVICE_INVALID";
+            case DEVELOPER_ERROR:
+                return "DEVELOPER_ERROR";
+            case LICENSE_CHECK_FAILED:
+                return "LICENSE_CHECK_FAILED";
+            case ERROR:
+                return "ERROR";
+            case INTERRUPTED:
+                return "INTERRUPTED";
+            case TIMEOUT:
+                return "TIMEOUT";
+            case CANCELED:
+                return "CANCELED";
+            case API_NOT_CONNECTED:
+                return "API_NOT_CONNECTED";
+            case DEAD_CLIENT:
+                return "DEAD_CLIENT";
+            default:
+                return "unknown status code: " + statusCode;
+        }
+    }
 }
