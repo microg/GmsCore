@@ -49,7 +49,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult requestLocationUpdates(GoogleApiClient client,
+    public PendingResult<Status> requestLocationUpdates(GoogleApiClient client,
                                                 final LocationRequest request, final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
@@ -60,7 +60,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult requestLocationUpdates(GoogleApiClient client,
+    public PendingResult<Status> requestLocationUpdates(GoogleApiClient client,
                                                 final LocationRequest request, final LocationListener listener,
                                                 final Looper looper) {
         return callVoid(client, new Runnable() {
@@ -72,7 +72,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult requestLocationUpdates(GoogleApiClient client,
+    public PendingResult<Status> requestLocationUpdates(GoogleApiClient client,
                                                 final LocationRequest request, final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
@@ -83,7 +83,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult removeLocationUpdates(GoogleApiClient client,
+    public PendingResult<Status> removeLocationUpdates(GoogleApiClient client,
                                                final LocationListener listener) {
         return callVoid(client, new Runnable() {
             @Override
@@ -94,7 +94,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult removeLocationUpdates(GoogleApiClient client,
+    public PendingResult<Status> removeLocationUpdates(GoogleApiClient client,
                                                final PendingIntent callbackIntent) {
         return callVoid(client, new Runnable() {
             @Override
@@ -105,7 +105,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult setMockMode(GoogleApiClient client, final boolean isMockMode) {
+    public PendingResult<Status> setMockMode(GoogleApiClient client, final boolean isMockMode) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -115,7 +115,7 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
     }
 
     @Override
-    public PendingResult setMockLocation(GoogleApiClient client, final Location mockLocation) {
+    public PendingResult<Status> setMockLocation(GoogleApiClient client, final Location mockLocation) {
         return callVoid(client, new Runnable() {
             @Override
             public void run(LocationClientImpl client) throws RemoteException {
@@ -124,10 +124,10 @@ public class FusedLocationProviderApiImpl implements FusedLocationProviderApi {
         });
     }
 
-    private PendingResult callVoid(GoogleApiClient client, final Runnable runnable) {
-        return GmsConnector.call(client, LocationServices.API, new GmsConnector.Callback<LocationClientImpl, Result>() {
+    private PendingResult<Status> callVoid(GoogleApiClient client, final Runnable runnable) {
+        return GmsConnector.call(client, LocationServices.API, new GmsConnector.Callback<LocationClientImpl, Status>() {
             @Override
-            public void onClientAvailable(LocationClientImpl client, ResultProvider<Result> resultProvider) throws RemoteException {
+            public void onClientAvailable(LocationClientImpl client, ResultProvider<Status> resultProvider) throws RemoteException {
                 runnable.run(client);
                 resultProvider.onResultAvailable(Status.SUCCESS);
             }

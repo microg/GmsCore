@@ -22,30 +22,32 @@ import android.os.Looper;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 
 import org.microg.gms.location.LocationConstants;
 
 public interface FusedLocationProviderApi {
+    @Deprecated
     String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
     String KEY_MOCK_LOCATION = LocationConstants.KEY_MOCK_LOCATION;
 
     Location getLastLocation(GoogleApiClient client);
 
-    PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
-                                         LocationListener listener);
+    PendingResult<Status> requestLocationUpdates(GoogleApiClient client, LocationRequest request,
+                                                 LocationListener listener);
 
-    PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
+    PendingResult<Status> requestLocationUpdates(GoogleApiClient client, LocationRequest request,
                                          LocationListener listener, Looper looper);
 
-    PendingResult requestLocationUpdates(GoogleApiClient client, LocationRequest request,
+    PendingResult<Status> requestLocationUpdates(GoogleApiClient client, LocationRequest request,
                                          PendingIntent callbackIntent);
 
-    PendingResult removeLocationUpdates(GoogleApiClient client, LocationListener listener);
+    PendingResult<Status> removeLocationUpdates(GoogleApiClient client, LocationListener listener);
 
-    PendingResult removeLocationUpdates(GoogleApiClient client,
+    PendingResult<Status> removeLocationUpdates(GoogleApiClient client,
                                         PendingIntent callbackIntent);
 
-    PendingResult setMockMode(GoogleApiClient client, boolean isMockMode);
+    PendingResult<Status> setMockMode(GoogleApiClient client, boolean isMockMode);
 
-    PendingResult setMockLocation(GoogleApiClient client, Location mockLocation);
+    PendingResult<Status> setMockLocation(GoogleApiClient client, Location mockLocation);
 }
