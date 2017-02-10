@@ -27,9 +27,9 @@ import java.util.Arrays;
 /**
  * Status on the availability of location data.
  * <p/>
- * Delivered from {@link LocationCallback} registered via {@link FusedLocationProviderApi#requestLocationUpdates(com.google.android.gms.common.api.GoogleApiClient, LocationRequest, LocationCallback, android.os.Looper)
- * or from a PendingIntent registered via {@link FusedLocationProviderApi#requestLocationUpdates(com.google.android.gms.common.api.GoogleApiClient, LocationRequest, android.app.PendingIntent)}.
- * It is also available on demand via {@link FusedLocationProviderApi#getLocationAvailability(com.google.android.gms.common.api.GoogleApiClient)}.
+ * Delivered from LocationCallback registered via FusedLocationProviderApi#requestLocationUpdates(GoogleApiClient, LocationRequest, LocationCallback, Looper)
+ * or from a PendingIntent registered via FusedLocationProviderApi#requestLocationUpdates(GoogleApiClient, LocationRequest, PendingIntent).
+ * It is also available on demand via FusedLocationProviderApi#getLocationAvailability(GoogleApiClient).
  */
 @PublicApi
 public class LocationAvailability extends AutoSafeParcelable {

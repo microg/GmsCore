@@ -10,6 +10,7 @@ import com.google.android.gms.location.places.internal.IPlacesCallbacks;
 import com.google.android.gms.location.internal.ISettingsCallbacks;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
+import com.google.android.gms.location.internal.ParcelableGeofence;
 import com.google.android.gms.location.places.NearbyAlertRequest;
 import com.google.android.gms.location.places.PlaceFilter;
 import com.google.android.gms.location.places.PlaceRequest;
@@ -18,7 +19,6 @@ import com.google.android.gms.location.places.internal.PlacesParams;
 import com.google.android.gms.location.places.UserAddedPlace;
 import com.google.android.gms.location.places.UserDataType;
 import com.google.android.gms.location.ActivityRecognitionResult;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.GestureRequest;
 import com.google.android.gms.location.LocationAvailability;
@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 interface IGoogleLocationManagerService {
-    void addGeofencesList(in List<Geofence> geofences, in PendingIntent pendingIntent, IGeofencerCallbacks callbacks, String packageName) = 0;
+    void addGeofencesList(in List<ParcelableGeofence> geofences, in PendingIntent pendingIntent, IGeofencerCallbacks callbacks, String packageName) = 0;
     void addGeofences(in GeofencingRequest geofencingRequest, in PendingIntent pendingIntent, IGeofencerCallbacks callbacks) = 56;
     void removeGeofencesByIntent(in PendingIntent pendingIntent, IGeofencerCallbacks callbacks, String packageName) = 1;
     void removeGeofencesById(in String[] geofenceRequestIds, IGeofencerCallbacks callbacks, String packageName) = 2;

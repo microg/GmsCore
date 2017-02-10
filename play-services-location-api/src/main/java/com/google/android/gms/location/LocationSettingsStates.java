@@ -20,6 +20,9 @@ import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+/**
+ * Stores the current states of all location-related settings.
+ */
 @PublicApi
 public class LocationSettingsStates extends AutoSafeParcelable {
 

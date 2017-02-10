@@ -23,6 +23,15 @@ import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+/**
+ * Result of checking settings via checkLocationSettings(GoogleApiClient, LocationSettingsRequest),
+ * indicates whether a dialog should be shown to ask the user's consent to change their settings.
+ * The method getStatus() can be be used to confirm if the request was successful. If the current
+ * location settings don't satisfy the app's requirements and the user has permission to change the
+ * settings, the app could use startResolutionForResult(Activity, int) to start an intent to show a
+ * dialog, asking for user's consent to change the settings. The current location settings states
+ * can be accessed via getLocationSettingsStates(). See LocationSettingsResult for more details.
+ */
 @PublicApi
 public class LocationSettingsResult extends AutoSafeParcelable implements Result {
 
@@ -36,6 +45,9 @@ public class LocationSettingsResult extends AutoSafeParcelable implements Result
     private LocationSettingsStates settings;
 
 
+    /**
+     * Retrieves the location settings states.
+     */
     public LocationSettingsStates getLocationSettingsStates() {
         return settings;
     }
