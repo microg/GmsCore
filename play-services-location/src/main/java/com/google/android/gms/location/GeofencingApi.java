@@ -16,5 +16,33 @@
 
 package com.google.android.gms.location;
 
+import android.app.PendingIntent;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+
+import java.util.List;
+
+/**
+ * The main entry point for interacting with the geofencing APIs.
+ * <p>
+ * The methods must be used in conjunction with a GoogleApiClient. E.g.
+ * <pre>
+ *  new GoogleApiClient.Builder(context)
+ *          .addApi(LocationServices.API)
+ *          .addConnectionCallbacks(this)
+ *          .addOnConnectionFailedListener(this)
+ *          .build()
+ * </pre>
+ */
 public interface GeofencingApi {
+    PendingResult<Status> addGeofences(GoogleApiClient client, GeofencingRequest geofencingRequest, PendingIntent pendingIntent);
+
+    @Deprecated
+    PendingResult<Status> addGeofences(GoogleApiClient client, List<Geofence> geofences, PendingIntent pendingIntent);
+
+    PendingResult<Status> removeGeofences(GoogleApiClient client, List<String> geofenceRequestIds);
+
+    PendingResult<Status> removeGeofences(GoogleApiClient client, PendingIntent pendingIntent);
 }

@@ -25,14 +25,18 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.internal.IGeofencerCallbacks;
+import com.google.android.gms.location.internal.ParcelableGeofence;
 
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LocationClientImpl extends GoogleLocationManagerClient {
@@ -42,7 +46,7 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
 
 
     public LocationClientImpl(Context context, GoogleApiClient.ConnectionCallbacks callbacks,
-            GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+                              GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener);
         Log.d(TAG, "<init>");
     }
@@ -53,6 +57,38 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
                     .getApiConnection(LocationServices.API);
         }
         return null;
+    }
+
+    public void addGeofences(GeofencingRequest request, PendingIntent pendingIntent, IGeofencerCallbacks callbacks) throws RemoteException {
+        if (nativeLocation != null) {
+            nativeLocation.addGeofences(request, pendingIntent, callbacks);
+        } else {
+            getServiceInterface().addGeofences(request, pendingIntent, callbacks);
+        }
+    }
+
+    public void addGeofences(List<ParcelableGeofence> request, PendingIntent pendingIntent, IGeofencerCallbacks callbacks) throws RemoteException {
+        if (nativeLocation != null) {
+            nativeLocation.addGeofences(request, pendingIntent, callbacks);
+        } else {
+            getServiceInterface().addGeofencesList(request, pendingIntent, callbacks, getContext().getPackageName());
+        }
+    }
+
+    public void removeGeofences(List<String> geofenceRequestIds, IGeofencerCallbacks callbacks) throws RemoteException {
+        if (nativeLocation != null) {
+            nativeLocation.removeGeofences(geofenceRequestIds, callbacks);
+        } else {
+            getServiceInterface().removeGeofencesById(geofenceRequestIds.toArray(new String[geofenceRequestIds.size()]), callbacks, getContext().getPackageName());
+        }
+    }
+
+    public void removeGeofences(PendingIntent pendingIntent, IGeofencerCallbacks callbacks) throws RemoteException {
+        if (nativeLocation != null) {
+            nativeLocation.removeGeofences(pendingIntent, callbacks);
+        } else {
+            getServiceInterface().removeGeofencesByIntent(pendingIntent, callbacks, getContext().getPackageName());
+        }
     }
 
     public Location getLastLocation() throws RemoteException {
@@ -92,7 +128,7 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
     }
 
     public void requestLocationUpdates(LocationRequest request, LocationListener listener,
-            Looper looper) throws RemoteException {
+                                       Looper looper) throws RemoteException {
         if (nativeLocation != null) {
             nativeLocation.requestLocationUpdates(request, listener, looper);
         }
