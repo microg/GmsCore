@@ -92,6 +92,13 @@ public class DetectedActivity extends AutoSafeParcelable {
         this.confidence = confidence;
     }
 
+    @PublicApi(exclude = true)
+    public DetectedActivity(int versionCode, int type, int confidence) {
+        this.versionCode = versionCode;
+        this.type = type;
+        this.confidence = confidence;
+    }
+
     /**
      * Returns a value from 0 to 100 indicating the likelihood that the user is performing this
      * activity.
@@ -118,6 +125,11 @@ public class DetectedActivity extends AutoSafeParcelable {
      */
     public int getType() {
         return type;
+    }
+
+    @PublicApi(exclude = true)
+    public int getVersionCode() {
+        return versionCode;
     }
 
     @Override
