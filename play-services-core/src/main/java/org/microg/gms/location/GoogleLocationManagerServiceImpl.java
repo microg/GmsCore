@@ -26,7 +26,6 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognitionResult;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.GestureRequest;
 import com.google.android.gms.location.ILocationListener;
@@ -40,6 +39,7 @@ import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 import com.google.android.gms.location.internal.ISettingsCallbacks;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
+import com.google.android.gms.location.internal.ParcelableGeofence;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.NearbyAlertRequest;
 import com.google.android.gms.location.places.PlaceFilter;
@@ -72,7 +72,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     }
 
     @Override
-    public void addGeofencesList(List<Geofence> geofences, PendingIntent pendingIntent,
+    public void addGeofencesList(List<ParcelableGeofence> geofences, PendingIntent pendingIntent,
                                  IGeofencerCallbacks callbacks, String packageName) throws RemoteException {
         Log.d(TAG, "addGeofencesList: " + geofences);
     }

@@ -18,10 +18,12 @@ package org.microg.gms.snet;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Base64;
 import android.util.Log;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.safetynet.AttestationData;
 import com.google.android.gms.safetynet.HarmfulAppsData;
@@ -30,7 +32,6 @@ import com.google.android.gms.safetynet.internal.ISafetyNetService;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.common.Utils;
 import org.microg.gms.droidguard.RemoteDroidGuardConnector;
 
 import java.io.IOException;
@@ -50,9 +51,14 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
     }
 
     @Override
-    public void attest(final ISafetyNetCallbacks callbacks, final byte[] nonce) throws RemoteException {
+    public void attest(ISafetyNetCallbacks callbacks, byte[] nonce) throws RemoteException {
+        attestWithApiKey(callbacks, nonce, null);
+    }
+
+    @Override
+    public void attestWithApiKey(final ISafetyNetCallbacks callbacks, final byte[] nonce, String apiKey) throws RemoteException {
         if (nonce == null) {
-            callbacks.onAttestationData(new Status(10), null);
+            callbacks.onAttestationData(new Status(CommonStatusCodes.DEVELOPER_ERROR), null);
             return;
         }
 
@@ -115,8 +121,15 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
     }
 
     @Override
-    public void unknown4(ISafetyNetCallbacks callbacks) throws RemoteException {
+    public void getHarmfulAppsList(ISafetyNetCallbacks callbacks) throws RemoteException {
         Log.d(TAG, "dummy Method: unknown4");
         callbacks.onHarmfulAppsData(Status.SUCCESS, new ArrayList<HarmfulAppsData>());
+    }
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) return true;
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
     }
 }
