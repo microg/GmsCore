@@ -116,7 +116,7 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
 
     @Override
     public void getHarmfulAppsList(ISafetyNetCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "dummy Method: unknown4");
+        Log.d(TAG, "dummy Method: getHarmfulAppsList");
         callbacks.onHarmfulAppsData(Status.SUCCESS, new ArrayList<HarmfulAppsData>());
     }
 }
