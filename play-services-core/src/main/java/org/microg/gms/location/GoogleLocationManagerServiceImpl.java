@@ -72,7 +72,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     }
 
     @Override
-    public void addGeofencesList(List<Geofence> geofences, PendingIntent pendingIntent,
+    public void addGeofencesList(List<ParcelableGeofence> geofences, PendingIntent pendingIntent,
                                  IGeofencerCallbacks callbacks, String packageName) throws RemoteException {
         Log.d(TAG, "addGeofencesList: " + geofences);
     }
