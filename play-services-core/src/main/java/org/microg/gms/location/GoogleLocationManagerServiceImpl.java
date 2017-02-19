@@ -40,6 +40,7 @@ import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 import com.google.android.gms.location.internal.ISettingsCallbacks;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
+import com.google.android.gms.location.internal.ParcelableGeofence;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.NearbyAlertRequest;
 import com.google.android.gms.location.places.PlaceFilter;
