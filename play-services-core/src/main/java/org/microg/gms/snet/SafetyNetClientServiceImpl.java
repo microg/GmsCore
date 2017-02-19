@@ -93,7 +93,7 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
     }
     
     @Override
-    public attestWithApiKey(ISafetyNetCallbacks callbacks, final byte[] nonce, String apiKey) throws RemoteException {
+    public void attestWithApiKey(ISafetyNetCallbacks callbacks, final byte[] nonce, String apiKey) throws RemoteException {
         Log.d(TAG, "dummy Method: attestWithApiKey");
     }
     
