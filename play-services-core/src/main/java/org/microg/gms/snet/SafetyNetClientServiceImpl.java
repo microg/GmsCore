@@ -91,7 +91,12 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
             }
         }).start();
     }
-
+    
+    @Override
+    public attestWithApiKey(ISafetyNetCallbacks callbacks, final byte[] nonce, String apiKey) throws RemoteException {
+        Log.d(TAG, "dummy Method: attestWithApiKey");
+    }
+    
     @Override
     public void getSharedUuid(ISafetyNetCallbacks callbacks) throws RemoteException {
         PackageUtils.checkPackageUid(context, packageName, getCallingUid());
