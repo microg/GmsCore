@@ -91,7 +91,12 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
             }
         }).start();
     }
-
+    
+    @Override
+    public void attestWithApiKey(ISafetyNetCallbacks callbacks, final byte[] nonce, String apiKey) throws RemoteException {
+        Log.d(TAG, "dummy Method: attestWithApiKey");
+    }
+    
     @Override
     public void getSharedUuid(ISafetyNetCallbacks callbacks) throws RemoteException {
         PackageUtils.checkPackageUid(context, packageName, getCallingUid());
@@ -115,8 +120,8 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
     }
 
     @Override
-    public void unknown4(ISafetyNetCallbacks callbacks) throws RemoteException {
-        Log.d(TAG, "dummy Method: unknown4");
+    public void getHarmfulAppsList(ISafetyNetCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "dummy Method: getHarmfulAppsList");
         callbacks.onHarmfulAppsData(Status.SUCCESS, new ArrayList<HarmfulAppsData>());
     }
 }
