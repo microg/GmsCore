@@ -17,6 +17,7 @@
 package org.microg.gms.ui;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
@@ -25,8 +26,11 @@ import com.google.android.gms.R;
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.gms.snet.SafetyNetPrefs;
+import org.microg.nlp.Preferences;
 import org.microg.tools.ui.AbstractDashboardActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
+
+import static org.microg.gms.checkin.TriggerReceiver.PREF_ENABLE_CHECKIN;
 
 public class SettingsActivity extends AbstractDashboardActivity {
 
@@ -46,6 +50,8 @@ public class SettingsActivity extends AbstractDashboardActivity {
         public static final String PREF_ABOUT = "pref_about";
         public static final String PREF_GCM = "pref_gcm";
         public static final String PREF_SNET = "pref_snet";
+        public static final String PREF_UNIFIEDNLP = "pref_unifiednlp";
+        public static final String PREF_CHECKIN = "pref_checkin";
 
         public FragmentImpl() {
             preferencesResource = R.xml.preferences_start;
@@ -69,11 +75,19 @@ public class SettingsActivity extends AbstractDashboardActivity {
                 GcmDatabase database = new GcmDatabase(getContext());
                 int regCount = database.getRegistrationList().size();
                 database.close();
-                findPreference(PREF_GCM).setSummary(getString(R.string.v7_preference_on) + " / " + getContext().getString(R.string.gcm_registered_apps_counter, regCount));
+                findPreference(PREF_GCM).setSummary(getString(R.string.v7_preference_on) + " / " + getResources().getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount));
             } else {
                 findPreference(PREF_GCM).setSummary(R.string.v7_preference_off);
             }
             findPreference(PREF_SNET).setSummary(SafetyNetPrefs.get(getContext()).isEnabled() ? R.string.service_status_enabled : R.string.service_status_disabled);
+
+            Preferences unifiedNlPrefs = new Preferences(getContext());
+            int backendCount = Preferences.splitBackendString(unifiedNlPrefs.getLocationBackends()).length;
+            backendCount += Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
+            findPreference(PREF_UNIFIEDNLP).setSummary(getResources().getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount));
+
+            boolean checkinEnabled = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, false);
+            findPreference(PREF_CHECKIN).setSummary(checkinEnabled ? R.string.service_status_enabled : R.string.service_status_disabled);
         }
     }
 }

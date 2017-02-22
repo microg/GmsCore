@@ -28,7 +28,6 @@ import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceGroup;
 import android.support.v7.preference.PreferenceScreen;
 import android.support.v7.preference.PreferenceViewHolder;
-import android.support.v7.widget.SwitchCompat;
 import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,8 +41,7 @@ import org.microg.gms.gcm.McsConstants;
 import org.microg.gms.gcm.McsService;
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.DimmableIconPreference;
-import org.microg.tools.ui.ResourceSettingsFragment;
-import org.microg.tools.ui.SwitchBar;
+import org.microg.tools.ui.SwitchBarResourceSettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,16 +52,12 @@ import static android.text.format.DateUtils.FORMAT_SHOW_TIME;
 import static android.text.format.DateUtils.MINUTE_IN_MILLIS;
 import static android.text.format.DateUtils.WEEK_IN_MILLIS;
 
-public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.OnSwitchChangeListener {
+public class GcmFragment extends SwitchBarResourceSettingsFragment {
 
     public static final String PREF_GCM_STATUS = "pref_gcm_status";
     public static final String PREF_GCM_APPS = "gcm_apps";
 
     private GcmDatabase database;
-
-    private SwitchBar switchBar;
-    private SwitchCompat switchCompat;
-    private boolean listenerSetup = false;
 
     private final int MENU_ADVANCED = Menu.FIRST;
 
@@ -75,12 +69,7 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        AbstractSettingsActivity activity = (AbstractSettingsActivity) getActivity();
-
         setHasOptionsMenu(true);
-        switchBar = activity.getSwitchBar();
-        switchBar.show();
-        switchCompat = switchBar.getSwitch();
         switchBar.setChecked(GcmPrefs.get(getContext()).isGcmEnabled());
     }
 
@@ -94,27 +83,13 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        switchBar.hide();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        if (!listenerSetup) {
-            switchBar.addOnSwitchChangeListener(this);
-            listenerSetup = true;
-        }
         updateContent();
     }
 
     @Override
     public void onPause() {
-        if (listenerSetup) {
-            switchBar.removeOnSwitchChangeListener(this);
-            listenerSetup = false;
-        }
         super.onPause();
         database.close();
     }
@@ -129,7 +104,7 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ADVANCED:
-                Intent intent = new Intent(getContext(), AdvancedAsActivity.class);
+                Intent intent = new Intent(getContext(), GcmAdvancedFragment.AsActivity .class);
                 startActivity(intent);
                 return true;
             default:
@@ -138,16 +113,14 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
     }
 
     @Override
-    public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
-        if (switchView == switchCompat) {
-            getPreferenceManager().getSharedPreferences().edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, isChecked).apply();
-            if (!isChecked) {
-                McsService.stop(getContext());
-            } else {
-                getContext().startService(new Intent(McsConstants.ACTION_CONNECT, null, getContext(), McsService.class));
-            }
-            updateContent();
+    public void onSwitchBarChanged(boolean isChecked) {
+        getPreferenceManager().getSharedPreferences().edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, isChecked).apply();
+        if (!isChecked) {
+            McsService.stop(getContext());
+        } else {
+            getContext().startService(new Intent(McsConstants.ACTION_CONNECT, null, getContext(), McsService.class));
         }
+        updateContent();
     }
 
     private static void addPreferencesSorted(List<Preference> prefs, PreferenceGroup container) {
@@ -155,7 +128,7 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
         Collections.sort(prefs, new Comparator<Preference>() {
             @Override
             public int compare(Preference lhs, Preference rhs) {
-                return lhs.getTitle().toString().compareTo(rhs.getTitle().toString());
+                return lhs.getTitle().toString().toLowerCase().compareTo(rhs.getTitle().toString().toLowerCase());
             }
         });
         for (Preference entry : prefs) {
@@ -260,13 +233,6 @@ public class GcmFragment extends ResourceSettingsFragment implements SwitchBar.O
         @Override
         protected Fragment getFragment() {
             return new GcmFragment();
-        }
-    }
-
-    public static class AdvancedAsActivity extends AbstractSettingsActivity {
-        public AdvancedAsActivity() {
-            showHomeAsUp = true;
-            preferencesResource = R.xml.preferences_gcm_advanced;
         }
     }
 }

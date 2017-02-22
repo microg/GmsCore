@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">Servicios de microG Core</string>
     <string name="gms_settings_name">Ajustes de microG</string>
+
     <string name="just_a_sec">Un momento…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Al continuar, permitirás a esta aplicación y a Google usar tu información de acuerdo con sus respectivos términos de servicio y política de privacidad.</string>
@@ -41,21 +42,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
     <string name="perm_c2dm_receive_label">recibir mensajes C2DM</string>
     <string name="perm_c2dm_send_label">enviar mensajes C2DM a otras aplicaciones</string>
-
-    <string name="pref_auth_trust_google_title">Confiar en Google para los permisos de las aplicaciones</string>
-    <string name="pref_auth_trust_google_summary">Cuando este desactivado, se preguntara al usuario antes de que una aplicación envíe una solicitud de autorización a Google. Algunas aplicaciones fallaran al usar la cuenta de Google si esta desactivado.</string>
-
-    <string name="prefcat_services">Servicios de segundo plano</string>
-
-    <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
-
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging es un proveedor de notificaciones push usado por muchas aplicaciones. Para usarlo debes habilitar el registro del dispositivo.</string>
-
-    <string name="pref_gcm_heartbeat_title">Intervalo del Cloud Messaging heartbeat</string>
-    <string name="pref_gcm_heartbeat_summary">El intervalo en segundos para el heartbeat a los servidores de Google. Aumentar este número reducirá el gasto de la batería, pero podría causar retrasos en mensajes push.</string>
-
-    <string name="prefcat_components">Componentes</string>
-    <string name="prefcat_location_service">Servicio de localización</string>
+    <string name="perm_extended_access_label">Acceso extendido a los servicios de Google</string>
 
     <string name="games_title">Google Play Juegos</string>
     <string name="games_info_title">%1$s quiere usar Play Juegos</string>
@@ -63,12 +50,16 @@ Esto podría tardar algunos minutos."</string>
 
     <string name="pick_place_title">Selecciona un lugar</string>
     <string name="pick_place_desc">El selector de lugares no esta disponible aun.</string>
+    <string name="place_picker_select_title">Selecciona esta posición</string>
+    <string name="place_picker_nearby_places">Lugares cercanos</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="prefcat_about">Acerca</string>
-    <string name="pref_about_title">Acerca de los Servicios de microG Core</string>
-    <string name="pref_about_summary">Información de la versión y librerías usadas</string>
+    <string name="lacking_permission_toast">Servicios de microG Core: Permiso de %1$s requerido</string>
+
+    <!-- Self check -->
 
     <string name="self_check_cat_fake_sig">Soporte para spoofing de firmas</string>
+    <string name="self_check_cat_gms_packages">Aplicaciones instaladas</string>
     <string name="self_check_name_fake_sig_perm">Soporte de spoofing: </string>
     <string name="self_check_resolution_fake_sig_perm">Tu ROM no tiene soporte nativo para spoofing de firmas. Todavía puedes usar Xposed o otros sistemas para conseguirlo. Por favor, compruebe la documentación en que ROMs soportan spoofing de firmas y como usar microG en las que no.</string>
     <string name="self_check_name_perm_granted">Se concede el permiso de spoofing de firmas: </string>
@@ -76,7 +67,6 @@ Esto podría tardar algunos minutos."</string>
     <string name="self_check_name_system_spoofs">Spoofing de firmas: </string>
     <string name="self_check_resolution_system_spoofs">Por favor compruebe la documentación en que pasos se deben seguir.</string>
 
-    <string name="self_check_cat_gms_packages">Aplicaciones instaladas</string>
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
     <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
@@ -84,12 +74,22 @@ Esto podría tardar algunos minutos."</string>
     <string name="self_check_resolution_app_installed">Instala la aplicación %1$s o una compatible. Por favor comprueba la documentación en que aplicaciones son compatibles.</string>
     <string name="self_check_name_correct_sig">%1$s tiene una firma correcta: </string>
     <string name="self_check_resolution_correct_sig">Puede que el %1$s instalado no sea compatible o el spoofing de firmas no este activo. Por favor compruebe la documentación en que aplicaciones y ROMs son compatibles.</string>
-    <string name="perm_extended_access_label">Acceso extendido a los servicios de Google</string>
 
-    <string name="lacking_permission_toast">Servicios de microG Core: Permiso de %1$s requerido</string>
+    <!-- Settings strings -->
 
-    <string name="place_picker_select_title">Selecciona esta posición</string>
-    <string name="place_picker_nearby_places">Lugares cercanos</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="prefcat_about">Acerca</string>
+    <string name="prefcat_components">Componentes</string>
+    <string name="prefcat_location_service">Servicio de localización</string>
+    <string name="prefcat_services">Servicios de segundo plano</string>
+    <string name="pref_auth_trust_google_title">Confiar en Google para los permisos de las aplicaciones</string>
+    <string name="pref_auth_trust_google_summary">Cuando este desactivado, se preguntara al usuario antes de que una aplicación envíe una solicitud de autorización a Google. Algunas aplicaciones fallaran al usar la cuenta de Google si esta desactivado.</string>
 
-</resources>
+    <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
+
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging es un proveedor de notificaciones push usado por muchas aplicaciones. Para usarlo debes habilitar el registro del dispositivo.</string>
+    <string name="pref_gcm_heartbeat_title">Intervalo del Cloud Messaging heartbeat</string>
+    <string name="pref_gcm_heartbeat_summary">El intervalo en segundos para el heartbeat a los servidores de Google. Aumentar este número reducirá el gasto de la batería, pero podría causar retrasos en mensajes push.</string>
+    <string name="pref_about_title">Acerca de los Servicios de microG Core</string>
+    <string name="pref_about_summary">Información de la versión y librerías usadas</string>
+
+    </resources>

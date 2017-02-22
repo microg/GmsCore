@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,8 +14,10 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_settings_name">Setări microG</string>
+
     <string name="just_a_sec">Doar o secundă…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Continuând, permiteți aceastei aplicații și Google să utilizeze informațiile dvs. în conformitate cu condiţiile de utilizare şi politicile de confidențialitate ale lor.</string>
@@ -36,15 +38,17 @@ Acest lucru poate dura câteva minute."</string>
     <string name="deny">Refuzaţi</string>
     <string name="auth_notification_title">Autentificarea este necesară</string>
     <string name="auth_notification_content">%1$s necesită o autorizare pentru a accesa contul dvs. Google.</string>
+
     <string name="perm_status_broadcast_label">ascultă emisiunile de stare interne</string>
     <string name="perm_c2dm_receive_label">ascultă mesajele C2DM</string>
     <string name="perm_c2dm_send_label">trimite mesaje C2DM altor aplicaţii</string>
-    <string name="pref_auth_trust_google_title">Credeţi Google pentru permisiunile aplicaţiei</string>
-    <string name="pref_auth_trust_google_summary">Dacă este dezactivat, utilizatorul este întrebat înainte de trimiterea către Google a unei solicitări de autorizare a aplicaţiei. Unele aplicații nu vor reuși să utilizeze contul Google, dacă această opţiune este dezactivată.</string>
-    <string name="pref_checkin_enable_summary">\"Înregistrarea dispozitivului\" este un proces ascuns care este utilizat pentru a crea un identificator unic pentru serviciile Google. Serviciile microG înlătură alte date de identificare cu excepţia numelui contului dvs. Google.</string>
-    <string name="pref_gcm_enable_mcs_summary">Mesageria Google Cloud este un furnizor de notificări de ti push utilizat de multe aplicații. Pentru a utiliza trebuie să activați \"Înregistrarea dispozitivului\".</string>
-    <string name="prefcat_services">Servicii de fundal</string>
     <string name="prefcat_components">Componente</string>
     <string name="prefcat_location_service">Servicii de localizare</string>
-    <string name="gms_settings_name">Setări microG</string>
-</resources>
+    <string name="prefcat_services">Servicii de fundal</string>
+    <string name="pref_auth_trust_google_title">Credeţi Google pentru permisiunile aplicaţiei</string>
+    <string name="pref_auth_trust_google_summary">Dacă este dezactivat, utilizatorul este întrebat înainte de trimiterea către Google a unei solicitări de autorizare a aplicaţiei. Unele aplicații nu vor reuși să utilizeze contul Google, dacă această opţiune este dezactivată.</string>
+
+    <string name="pref_checkin_enable_summary">\"Înregistrarea dispozitivului\" este un proces ascuns care este utilizat pentru a crea un identificator unic pentru serviciile Google. Serviciile microG înlătură alte date de identificare cu excepţia numelui contului dvs. Google.</string>
+
+    <string name="pref_gcm_enable_mcs_summary">Mesageria Google Cloud este un furnizor de notificări de ti push utilizat de multe aplicații. Pentru a utiliza trebuie să activați \"Înregistrarea dispozitivului\".</string>
+    </resources>

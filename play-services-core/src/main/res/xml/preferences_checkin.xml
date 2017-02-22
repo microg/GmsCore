@@ -15,17 +15,8 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <org.microg.tools.ui.LongTextPreference
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
         android:selectable="false"
-        android:key="pref_snet_summary"
-        android:summary="@string/snet_intro"/>
-    <PreferenceCategory android:title="@string/prefcat_test">
-        <Preference
-            android:enabled="false"
-            android:key="pref_snet_run_attest"
-            android:summary="Not yet available"
-            android:title="@string/pref_snet_testdrive_title"/>
-    </PreferenceCategory>
+        android:summary="@string/pref_checkin_enable_summary"/>
 </PreferenceScreen>

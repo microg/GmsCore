@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,8 +14,10 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">Usługi microG</string>
+    <string name="gms_settings_name">Ustawienia microG</string>
+
     <string name="just_a_sec">Chwileczkę…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Kontynuując, zgadzasz się na wykorzystywanie swoich danych przez Google oraz tę aplikację zgodnie z warunkami korzystania z usług oraz polityką prywatności Google.</string>
@@ -40,16 +42,13 @@ To zajmie kilka minut."</string>
     <string name="perm_status_broadcast_label">nasłuchuj wewnętrzych powiadomień stanu</string>
     <string name="perm_c2dm_receive_label">nasłuchuj wiadomości C2DM</string>
     <string name="perm_c2dm_send_label">wysyłaj wiadomości C2DM do innych aplikacji</string>
-
+    <string name="prefcat_components">Komponenty</string>
+    <string name="prefcat_location_service">Usługa lokalizacyjna</string>
+    <string name="prefcat_services">Usługi w tle</string>
     <string name="pref_auth_trust_google_title">Zaufaj uprawnieniom aplikacji Google</string>
     <string name="pref_auth_trust_google_summary">Po wyłączeniu, do użytkownika kierowane jest pytanie przed wysyłaniem prośby o autoryzację do Google. Niektóre aplikacje nie będą mogły skorzystać z konta Google po wyłączeniu tej opcji.</string>
 
     <string name="pref_checkin_enable_summary">Zgłaszanie urządzenia to ukryty proces, służący do wygenerowania unikalnego identyfikatora dla usług Google.Usługi microG wyciągają inne dane identyfikacyjne niż nazwa Twojego konta z tego identyfikatora.</string>
+
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Żeby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
-
-    <string name="prefcat_services">Usługi w tle</string>
-    <string name="prefcat_components">Komponenty</string>
-    <string name="prefcat_location_service">Usługa lokalizacyjna</string>
-
-    <string name="gms_settings_name">Ustawienia microG</string>
-</resources>
+    </resources>

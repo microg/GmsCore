@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
   ~ limitations under the License.
   -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_settings_name">microG Einstellungen</string>
+
     <string name="just_a_sec">Einen kurzen Moment…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Durch Fortsetzen erlaubst du dieser App und Google deine Informationen nach ihren entsprechenden AGB und Datenschutzrichtlinien zu nutzen.</string>
-    <string name="ask_scope_permission_title">%s versucht:</string>
-    <string name="ask_service_permission_title">%s versucht zu nutzen:</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> versucht zu nutzen:</string>
     <string name="account_manager_title">Google Konto Manager</string>
     <string name="sorry">Entschuldigung…</string>
     <string name="no_network_error_desc">"Du hast keine Netzwerkverbindung.
@@ -35,21 +37,87 @@ Dies kann einige Minuten dauern."</string>
     <string name="allow">Erlauben</string>
     <string name="deny">Ablehnen</string>
     <string name="auth_notification_title">Authentifizierung erforlderlich</string>
-    <string name="auth_notification_content">%1$s erfordert deine Autorisierung um auf dein Google Konto zuzugreifen.</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> erfordert deine Autorisierung um auf dein Google Konto zuzugreifen.</string>
 
     <string name="perm_status_broadcast_label">Empfange interne Statusmeldungen</string>
     <string name="perm_c2dm_receive_label">Empfange C2DM Nachrichten</string>
-    <string name="perm_c2dm_send_label">Sende C2DM Nachrichten zu anderen Apps</string>
+    <string name="perm_c2dm_send_label">Sende C2DM Nachrichten an andere Apps</string>
+    <string name="service_status_automatic">Automatisch</string>
+    <string name="service_status_manual">Manuell</string>
+
+    <string name="menu_advanced">Erweitert</string>
+    <string name="list_no_item_none">Keine</string>
+
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> möchte Play Games benutzen</string>
+    <string name="pick_place_title">Ort auswählen</string>
+    <string name="place_picker_select_title">Diesen Ort auswählen</string>
+    <string name="lacking_permission_toast">microG Services Core: Berechtigung für "<xliff:g example="Auf alle Netzwerke zugreifen">%1$s</xliff:g>" fehlt</string>
+
+    <string name="network_type_mobile">Mobiles Internet</string>
+    <string name="network_type_wifi">WLAN</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Sonstige Netwerke</string>
+
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installiert:</string>
+    <string name="self_check_resolution_app_installed">Installiere die App <xliff:g example="F-Droid">%1$s</xliff:g> oder eine kompatible. Bitte schaue in der Dokumentation nach um herauszufinden welche Apps kompatibel sind.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> hat die richtige Signatur:</string>
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">Über</string>
+    <string name="prefcat_components">Komponenten</string>
+    <string name="prefcat_configuration">Einstellungen</string>
+    <string name="prefcat_google_services">Google-Dienste</string>
+    <string name="prefcat_location_service">Standortdienst</string>
+    <string name="prefcat_operation_mode">Modus</string>
+    <string name="prefcat_services">Dienste</string>
+    <string name="prefcat_test">Test</string>
+
+    <string name="cond_perm_title">Berechtigung fehlt</string>
+    <string name="cond_perm_summary">Eine oder mehrere Berechtigungen, die für die ordnungsgemäße Funktionalität von microG Services Core benötigt werden, sind nicht zugeteilt.</string>
+    <string name="cond_perm_action">Fehlende Berechtigungen anfragen</string>
+
+    <string name="prefs_account">Kontoeinstellungen</string>
+    <string name="prefs_account_privacy">Persönliche Daten &amp; Privatsphäre</string>
+    <string name="prefs_account_security">Anmeldung &amp; Sicherheit</string>
 
     <string name="pref_auth_trust_google_title">Vertraue Google bei App Rechten</string>
     <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt bevor eine App Autorisierungsanfrage an Google geschickt wird. Einige Apps werden das Google Konto nicht nutzen können, wenn deaktiviert.</string>
 
-    <string name="pref_checkin_enable_summary">Geräte Check-In ist ein versteckter Prozess, der genutzt wird um eine eindeutige Kennung für Google Dienste zu erzeugen. microG entfernt identifizierende Daten bis auf den Google Konto Namen.</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten Dienst, der von vielen Apps genutzt wird. Zur Benutztung muss Geräte Check-In aktiviert werden.</string>
+    <string name="pref_checkin_enable_summary">Registriert den Gerät zur Nutzung von Google-Diensten und erzeugt eine eindeutige Kennung. microG entfernt identifizierende Daten außer dem Namen  des Google-Kontos.</string>
 
-    <string name="prefcat_services">Hintergrunddienste</string>
-    <string name="prefcat_components">Komponenten</string>
-    <string name="prefcat_location_service">Standortdienst</string>
+    <string name="pref_more_settings">Mehr</string>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend eingestellt</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends eingestellt</item>
+    </plurals>
 
-    <string name="gms_settings_name">microG Einstellungen</string>
-</resources>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten-Dienst, der von vielen Apps genutzt wird. Zur Benutzung muss Geräte Check-In aktiviert werden.</string>
+    <string name="pref_gcm_apps_title">Apps die Cloud Messaging benutzen</string>
+    <string name="pref_gcm_confirm_new_apps_title">Neue Apps bestätigen</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Frage nach bevor neue Apps sich für Push-Nachrichten registrieren</string>
+    <string name="pref_about_title">Über microG Services Core</string>
+    <string name="pref_about_summary">Versionsinformation und genutzte Bibliotheken</string>
+
+    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> registrierte Apps</string>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrierte App</item>
+        <item quantity="other">@string/gcm_registered_apps_counter</item>
+    </plurals>
+    <string name="gcm_app_error_unregistering">Fehler bei der Abmeldung</string>
+    <string name="gcm_app_not_installed_anymore">Nicht mehr installiert</string>
+    <string name="gcm_unregister_app">Abmelden</string>
+    <string name="gcm_not_registered">Nicht registriert</string>
+    <string name="gcm_no_message_yet">Bisher keine Nachrichten erhalten</string>
+    <string name="gcm_last_message_at">Letzte Nachricht: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registriert</string>
+    <string name="gcm_registered_since">Registriert seit: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> abmelden?</string>
+    <string name="gcm_messages_counter">Nachrichten: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_state_disconnected">Aktueller Zustand: Nicht verbunden</string>
+    <string name="gcm_state_connected">Aktueller Zustand: Verbunden seit <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+
+    <string name="pref_snet_status_official_title">Offizielle Server nutzen</string>
+    <string name="pref_snet_status_third_party_title">Alternativen Server nutzen</string>
+    <string name="pref_snet_custom_url_title">Alternative Server URL</string>
+    <string name="pref_snet_self_signed_title">Selbst signieren</string>
+    </resources>

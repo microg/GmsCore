@@ -412,12 +412,17 @@
             android:theme="@style/Theme.AppCompat.Settings"/>
 
         <activity
+            android:name="org.microg.gms.ui.CheckinFragment$AsActivity"
+            android:label="@string/service_name_checkin"
+            android:theme="@style/Theme.AppCompat.Settings"/>
+
+        <activity
             android:name="org.microg.gms.ui.GcmFragment$AsActivity"
             android:label="@string/service_name_mcs"
             android:theme="@style/Theme.AppCompat.Settings"/>
 
         <activity
-            android:name="org.microg.gms.ui.GcmFragment$AdvancedAsActivity"
+            android:name="org.microg.gms.ui.GcmAdvancedFragment$AsActivity"
             android:label="@string/service_name_mcs"
             android:theme="@style/Theme.AppCompat.Settings"/>
 
@@ -427,7 +432,17 @@
             android:theme="@style/Theme.AppCompat.Settings"/>
 
         <activity
+            android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
+            android:label="@string/gms_settings_name"
+            android:theme="@style/Theme.AppCompat.Settings"/>
+
+        <activity
             android:name="org.microg.gms.ui.SafetyNetFragment$AsActivity"
+            android:label="@string/service_name_snet"
+            android:theme="@style/Theme.AppCompat.Settings"/>
+
+        <activity
+            android:name="org.microg.gms.ui.SafetyNetAdvancedFragment$AsActivity"
             android:label="@string/service_name_snet"
             android:theme="@style/Theme.AppCompat.Settings"/>
 

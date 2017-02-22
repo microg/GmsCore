@@ -16,59 +16,56 @@
 
 package org.microg.gms.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.preference.Preference;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.android.gms.R;
 
+import org.microg.gms.snet.SafetyNetPrefs;
 import org.microg.tools.ui.AbstractSettingsActivity;
-import org.microg.tools.ui.RadioButtonPreference;
-import org.microg.tools.ui.ResourceSettingsFragment;
+import org.microg.tools.ui.SwitchBarResourceSettingsFragment;
 
-import static org.microg.gms.snet.SafetyNetPrefs.PREF_SNET_DISABLED;
-import static org.microg.gms.snet.SafetyNetPrefs.PREF_SNET_OFFICIAL;
-import static org.microg.gms.snet.SafetyNetPrefs.PREF_SNET_THIRD_PARTY;
-
-public class SafetyNetFragment extends ResourceSettingsFragment {
+public class SafetyNetFragment extends SwitchBarResourceSettingsFragment {
+    private final int MENU_ADVANCED = Menu.FIRST;
 
     public SafetyNetFragment() {
         preferencesResource = R.xml.preferences_snet;
     }
 
-    private RadioButtonPreference radioDisabled;
-    private RadioButtonPreference radioOfficial;
-    private RadioButtonPreference radioThirdParty;
-
     @Override
-    public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-        super.onCreatePreferencesFix(savedInstanceState, rootKey);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        radioDisabled = (RadioButtonPreference) findPreference(PREF_SNET_DISABLED);
-        radioOfficial = (RadioButtonPreference) findPreference(PREF_SNET_OFFICIAL);
-        radioThirdParty = (RadioButtonPreference) findPreference(PREF_SNET_THIRD_PARTY);
+        setHasOptionsMenu(true);
+        switchBar.setChecked(SafetyNetPrefs.get(getContext()).isEnabled());
     }
 
     @Override
-    public boolean onPreferenceTreeClick(Preference preference) {
-        if (preference == radioDisabled) {
-            radioDisabled.setChecked(true);
-            radioOfficial.setChecked(false);
-            radioThirdParty.setChecked(false);
-            return true;
-        } else if (preference == radioOfficial) {
-            radioDisabled.setChecked(false);
-            radioOfficial.setChecked(true);
-            radioThirdParty.setChecked(false);
-            return true;
-        } else if (preference == radioThirdParty) {
-            radioDisabled.setChecked(false);
-            radioOfficial.setChecked(false);
-            radioThirdParty.setChecked(true);
-            return true;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(0, MENU_ADVANCED, 0, R.string.menu_advanced);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case MENU_ADVANCED:
+                Intent intent = new Intent(getContext(), SafetyNetAdvancedFragment.AsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onPreferenceTreeClick(preference);
+    }
+
+    @Override
+    public void onSwitchBarChanged(boolean isChecked) {
+        SafetyNetPrefs.get(getContext()).setEnabled(isChecked);
     }
 
     public static class AsActivity extends AbstractSettingsActivity {

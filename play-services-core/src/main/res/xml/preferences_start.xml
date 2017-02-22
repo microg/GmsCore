@@ -25,15 +25,16 @@
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefcat_services">
-        <SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:icon="@drawable/device_login"
-            android:key="checkin_enable_service"
-            android:summary="@string/pref_checkin_enable_summary"
-            android:title="@string/service_name_checkin"/>
+    <PreferenceCategory android:title="@string/prefcat_google_services">
         <org.microg.tools.ui.TintIconPreference
-            android:dependency="checkin_enable_service"
+            android:icon="@drawable/device_login"
+            android:key="pref_checkin"
+            android:title="@string/service_name_checkin">
+            <intent
+                android:targetClass="org.microg.gms.ui.CheckinFragment$AsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+        <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/gcm_bell"
             android:key="pref_gcm"
             android:title="@string/service_name_mcs">
@@ -50,7 +51,18 @@
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/dots_horizontal"
+            android:key="pref_google_more"
+            android:title="@string/pref_more_settings">
+            <intent
+                android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefcat_configuration">
+        <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/location_marker"
+            android:key="pref_unifiednlp"
             android:title="@string/nlp_settings_label">
             <intent
                 android:targetClass="org.microg.nlp.ui.SettingsActivity"

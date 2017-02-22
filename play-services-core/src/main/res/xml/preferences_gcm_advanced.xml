@@ -26,45 +26,45 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="gcm_confirm_new_apps"
-        android:summary="Ask before registering a new app to receive push notifications"
-        android:title="Confirm new apps"/>
-
-    <MultiSelectListPreference
-        android:enabled="false"
-        android:entries="@array/network_types_names"
-        android:entryValues="@array/network_types"
-        android:key="gcm_network_types"
-        android:summary="Connect to Google servers while connected to one of these networks.\nNot yet supported"
-        android:title="Networks"/>
-
-    <SwitchPreference
-        android:defaultValue="false"
-        android:enabled="false"
-        android:key="gcm_use_tor"
-        android:summary="Requires Orbot to be installed\nNot yet supported"
-        android:title="Connect via Tor network"/>
+        android:summary="@string/pref_gcm_confirm_new_apps_summary"
+        android:title="@string/pref_gcm_confirm_new_apps_title"/>
 
     <PreferenceCategory
         android:enabled="false"
-        android:title="Connection configuration\nNot yet supported">
+        android:key="prefcat_networks"
+        android:title="Networks to use for Cloud Messaging">
 
         <ListPreference
-            android:defaultValue="auto"
-            android:key="gcm_ping_mobile"
-            android:summary="Automatic: 13 min"
-            android:title="Mobile network heartbeat interval"/>
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_mobile"
+            android:summary="ON / Automatic: 13 min"
+            android:title="@string/network_type_mobile"/>
 
         <ListPreference
-            android:defaultValue="auto"
-            android:key="gcm_ping_wifi"
-            android:summary="Automatic: 30 min"
-            android:title="Wi-Fi heartbeat interval"/>
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_wifi"
+            android:summary="ON / Manual: 30 min"
+            android:title="@string/network_type_wifi"/>
 
         <ListPreference
-            android:defaultValue="auto"
-            android:key="gcm_ping_other"
-            android:summary="Automatic: 30 min"
-            android:title="Other network heartbeat interval"/>
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_roaming"
+            android:summary="OFF"
+            android:title="@string/network_type_roaming"/>
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/gcm_network_config_names"
+            android:entryValues="@array/gcm_network_config_values"
+            android:key="gcm_network_other"
+            android:summary="ON / Automatic: 30 min"
+            android:title="@string/network_type_other"/>
 
     </PreferenceCategory>
 </PreferenceScreen>

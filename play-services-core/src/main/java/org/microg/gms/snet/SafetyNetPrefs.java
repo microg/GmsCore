@@ -27,6 +27,7 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
     public static final String PREF_SNET_OFFICIAL = "snet_official";
     public static final String PREF_SNET_THIRD_PARTY = "snet_third_party";
     public static final String PREF_SNET_CUSTOM_URL = "snet_custom_url";
+    public static final String PREF_SNET_SELF_SIGNED = "snet_self_signed";
 
     private static SafetyNetPrefs INSTANCE;
 
@@ -40,6 +41,7 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
 
     private boolean disabled;
     private boolean official;
+    private boolean selfSigned;
     private boolean thirdParty;
     private String customUrl;
 
@@ -55,7 +57,8 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
 
     public void update() {
         disabled = defaultPreferences.getBoolean(PREF_SNET_DISABLED, true);
-        official = defaultPreferences.getBoolean(PREF_SNET_OFFICIAL, false);
+        official = defaultPreferences.getBoolean(PREF_SNET_OFFICIAL, true);
+        selfSigned = defaultPreferences.getBoolean(PREF_SNET_SELF_SIGNED, false);
         thirdParty = defaultPreferences.getBoolean(PREF_SNET_THIRD_PARTY, false);
         customUrl = defaultPreferences.getString(PREF_SNET_CUSTOM_URL, null);
     }
@@ -66,7 +69,19 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
     }
 
     public boolean isEnabled() {
-        return !disabled && (official || thirdParty);
+        return !disabled && (official || selfSigned || thirdParty);
+    }
+
+    public void setEnabled(boolean enabled) {
+        defaultPreferences.edit().putBoolean(PREF_SNET_DISABLED, !enabled).apply();
+        if (enabled && !isEnabled()) {
+            official = true;
+            defaultPreferences.edit().putBoolean(PREF_SNET_OFFICIAL, true).apply();
+        }
+    }
+
+    public boolean isSelfSigned() {
+        return selfSigned;
     }
 
     public boolean isOfficial() {

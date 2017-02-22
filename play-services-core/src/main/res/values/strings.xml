@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -43,15 +43,7 @@ This can take a couple of minutes."</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
     <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
     <string name="perm_gtalk_svc_label">exchange messages and receive sync notifications from Google servers</string>
-
-    <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
-    <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
-
-    <string name="prefs_account">Account preferences</string>
-    <string name="prefs_account_privacy">Personal info &amp; privacy</string>
-    <string name="prefs_account_security">Sign-in &amp; security</string>
-
-    <string name="prefcat_services">Services</string>
+    <string name="perm_extended_access_label">Extended access to Google services</string>
 
     <string name="service_name_checkin">Google device registration</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
@@ -59,18 +51,11 @@ This can take a couple of minutes."</string>
 
     <string name="service_status_disabled">Disabled</string>
     <string name="service_status_enabled">Enabled</string>
+    <string name="service_status_automatic">Automatic</string>
+    <string name="service_status_manual">Manual</string>
 
-    <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
-
-    <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
-    <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.\nDeprecated, will be replaced in future release.</string>
-
-    <string name="pref_gcm_apps_title">Apps using Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">List of apps currently registered for Google Cloud Messaging.</string>
-
-    <string name="prefcat_components">Components</string>
-    <string name="prefcat_location_service">Location service</string>
+    <string name="menu_advanced">Advanced</string>
+    <string name="list_no_item_none">None</string>
 
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
@@ -78,12 +63,23 @@ This can take a couple of minutes."</string>
 
     <string name="pick_place_title">Pick a place</string>
     <string name="pick_place_desc">Place picker is not yet available.</string>
+    <string name="place_picker_select_title">Select this location</string>
+    <string name="place_picker_nearby_places">Nearby places</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="prefcat_about">About</string>
-    <string name="pref_about_title">About microG Services Core</string>
-    <string name="pref_about_summary">Version information and used libraries</string>
+    <string name="lacking_permission_toast">microG Services Core: Lacking permission to <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+
+    <string name="network_type_mobile">Mobile network</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Other networks</string>
+
+    <!-- Self check -->
 
     <string name="self_check_cat_fake_sig">Signature spoofing support</string>
+    <string name="self_check_cat_gms_packages">Installed packages</string>
+    <string name="self_check_cat_system">System</string>
+
     <string name="self_check_name_fake_sig_perm">System has signature spoofing support: </string>
     <string name="self_check_resolution_fake_sig_perm">Your ROM has no native support for signature spoofing. You can still use Xposed or other systems to spoof signature. Please check the documentation on which ROMs do support signature spoofing and how to use microG on ROMs that do not.</string>
     <string name="self_check_name_perm_granted">System grants signature spoofing permission: </string>
@@ -91,7 +87,6 @@ This can take a couple of minutes."</string>
     <string name="self_check_name_system_spoofs">System spoofs signature: </string>
     <string name="self_check_resolution_system_spoofs">Please check the documentation on which steps might be required.</string>
 
-    <string name="self_check_cat_gms_packages">Installed packages</string>
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
     <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
@@ -99,22 +94,62 @@ This can take a couple of minutes."</string>
     <string name="self_check_resolution_app_installed">Install the application <xliff:g example="F-Droid">%1$s</xliff:g> or a compatible one. Please check the documentation on which applications are compatible.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> has correct signature: </string>
     <string name="self_check_resolution_correct_sig">Either the installed <xliff:g example="F-Droid">%1$s</xliff:g> is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
-    <string name="perm_extended_access_label">Extended access to Google services</string>
 
-    <string name="self_check_cat_system">System</string>
     <string name="self_check_name_battery_optimizations">Battery optimizations ignored:</string>
     <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications.</string>
 
-    <string name="lacking_permission_toast">microG Services Core: Lacking permission to <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <!-- Settings strings -->
 
-    <string name="place_picker_select_title">Select this location</string>
-    <string name="place_picker_nearby_places">Nearby places</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="prefcat_about">About</string>
+    <string name="prefcat_components">Components</string>
+    <string name="prefcat_configuration">Configuration</string>
+    <string name="prefcat_google_services">Google Services</string>
+    <string name="prefcat_location_service">Location service</string>
+    <string name="prefcat_operation_mode">Operation mode</string>
+    <string name="prefcat_services">Services</string>
+    <string name="prefcat_test">Test</string>
+
+    <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
+    <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
+    <string name="cond_gcm_bat_action">Ignore optimizations</string>
+    <string name="cond_perm_title">Permission missing</string>
+    <string name="cond_perm_summary">One or more permissions required for proper functionality of microG Service Core is missing.</string>
+    <string name="cond_perm_action">Request missing permissions</string>
+
+    <string name="prefs_account">Account preferences</string>
+    <string name="prefs_account_privacy">Personal info &amp; privacy</string>
+    <string name="prefs_account_security">Sign-in &amp; security</string>
+
+    <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
+    <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
+
+    <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
+
+    <string name="pref_more_settings">More</string>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configured</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configured</item>
+    </plurals>
+
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
+    <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
+    <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.\nDeprecated, will be replaced in future release.</string>
+    <string name="pref_gcm_apps_title">Apps using Google Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">List of apps currently registered for Google Cloud Messaging.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
+    <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+
+    <string name="pref_about_title">About microG Services Core</string>
+    <string name="pref_about_summary">Version information and used libraries</string>
 
     <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> registered Apps</string>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registered App</item>
+        <item quantity="other">@string/gcm_registered_apps_counter</item>
+    </plurals>
     <string name="gcm_app_error_unregistering">Error unregistering</string>
     <string name="gcm_app_not_installed_anymore">No longer installed</string>
-    <string name="gcm_messages_received_no"><xliff:g example="123">%1$d</xliff:g> messages received</string>
     <string name="gcm_unregister_app">Unregister</string>
     <string name="gcm_not_registered">Not registered</string>
     <string name="gcm_no_message_yet">No messages received so far</string>
@@ -128,34 +163,17 @@ This can take a couple of minutes."</string>
     <string name="gcm_state_disconnected">Current State: Disconnected</string>
     <string name="gcm_state_connected">Current State: Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="menu_advanced">Advanced</string>
-    <string name="list_no_item_none">None</string>
-
-    <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
-    <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
-    <string name="cond_gcm_bat_action">Ignore optimizations</string>
-    <string name="cond_perm_title">Permission missing</string>
-    <string name="cond_perm_summary">One or more permissions required for proper functionality of microG Service Core is missing.</string>
-    <string name="cond_perm_action">Request missing permissions</string>
-
-    <string name="network_type_mobile">Mobile network</string>
-    <string name="network_type_wifi">Wi-Fi</string>
-    <string name="network_type_roaming">Roaming</string>
-    <string name="network_type_other">Other networks</string>
-
     <string name="snet_intro">Google SafetyNet is a device certification system, ensuring that the device is properly secured and compatible with Android CTS. Some applications use SafetyNet for security reasons or as a prerequisite for tamper-protection.\n\nmicroG GmsCore contains a free implementation of SafetyNet, but the official server requires SafetyNet requests to be signed using the proprietary DroidGuard system. A sandboxed version of DroidGuard is available as a separate “DroidGuard Helper” app.</string>
 
-    <string name="prefcat_configuration">Configuration</string>
+    <string name="pref_snet_testdrive_title">Try SafetyNet attestation</string>
 
-    <string name="pref_snet_status_disabled_title">Disabled</string>
-    <string name="pref_snet_status_disabled_summary">Completely disable SafetyNet</string>
     <string name="pref_snet_status_official_title">Use official server</string>
     <string name="pref_snet_status_official_summary">Requires an unrooted system and microG DroidGuard Helper installed</string>
     <string name="pref_snet_status_third_party_title">Use third-party server</string>
     <string name="pref_snet_status_third_party_summary">Third-party servers might be able to reply to SafetyNet requests without DroidGuard signature</string>
     <string name="pref_snet_custom_url_title">Custom server URL</string>
     <string name="pref_snet_custom_url_summary">Full URL of the third-party server answering SafetyNet attestation requests</string>
+    <string name="pref_snet_self_signed_title">Use self-signed certificate</string>
+    <string name="pref_snet_self_signed_summary">Instead of requesting a server, sign SafetyNet responses locally using a self-signed certificate. Most apps will refuse to use self-signed responses.</string>
 
-    <string name="prefcat_test">Test</string>
-    <string name="pref_snet_testdrive_title">Try SafetyNet attestation</string>
 </resources>

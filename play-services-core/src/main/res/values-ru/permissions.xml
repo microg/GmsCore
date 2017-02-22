@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2013-2017 microG Project Team
+  ~ Copyright 2013-2015 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@
     <string name="permission_service_cp_label">Контакты</string>
     <string name="permission_service_cp_description">Дает приложению доступ к Котактам через любую связанную учетную запись Google.</string>
     <string name="permission_service_dodgeball_label">Dodgeball</string>
-    <string name="permission_service_dodgeball_description">Дает приложению доступ к Dodgeball через любую связанную учетную запись Google.</string>>
+    <string name="permission_service_dodgeball_description">Дает приложению доступ к Dodgeball через любую связанную учетную запись Google.</string>
     <string name="permission_service_finance_label">Google Finance</string>
     <string name="permission_service_finance_description">Дает приложению доступ к Google Finance через любую связанную учетную запись Google.</string>
     <string name="permission_service_gbase_label">Google Base</string>
@@ -94,7 +94,7 @@
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Управление своей учетной записью покупателя Ad Exchange</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Просмотр ваших Ad Exchange данных</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Просмотр и управление вашими Ad Exchange данными</string>
-<string name="permission_scope_www.googleapis.com_auth_adsensehost">Просмотр и управление вашими AdSense данными хостингов и связанными аккаунтами</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsensehost">Просмотр и управление вашими AdSense данными хостингов и связанными аккаунтами</string>
     <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">Просмотр ваших AdSense данных</string>
     <string name="permission_scope_www.googleapis.com_auth_adsense">Просмотр и управление вашими AdSense данными</string>
     <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Просмотр ваших Google Analytics данных</string>
