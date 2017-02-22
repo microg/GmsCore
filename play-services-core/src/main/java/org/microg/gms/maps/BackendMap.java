@@ -23,7 +23,6 @@ import android.graphics.Paint;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.internal.ISnapshotReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -331,7 +330,8 @@ public class BackendMap implements ItemizedLayer.OnItemGestureListener<MarkerIte
 
     @Override
     public void onMapEvent(Event event, MapPosition mapPosition) {
-        cameraUpdateListener.onCameraUpdate(GmsMapsTypeHelper.toCameraPosition(mapPosition));
+        if (event == org.oscim.map.Map.ANIM_END || event == org.oscim.map.Map.POSITION_EVENT || event == org.oscim.map.Map.MOVE_EVENT)
+            cameraUpdateListener.onCameraUpdate(GmsMapsTypeHelper.toCameraPosition(mapPosition));
     }
 
     public interface CameraUpdateListener {
