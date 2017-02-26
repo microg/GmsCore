@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 
 import com.google.android.gms.R;
 
@@ -82,8 +83,10 @@ public class SettingsActivity extends AbstractDashboardActivity {
             findPreference(PREF_SNET).setSummary(SafetyNetPrefs.get(getContext()).isEnabled() ? R.string.service_status_enabled : R.string.service_status_disabled);
 
             Preferences unifiedNlPrefs = new Preferences(getContext());
-            int backendCount = Preferences.splitBackendString(unifiedNlPrefs.getLocationBackends()).length;
-            backendCount += Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
+            int backendCount = TextUtils.isEmpty(unifiedNlPrefs.getLocationBackends()) ? 0 :
+                    Preferences.splitBackendString(unifiedNlPrefs.getLocationBackends()).length;
+            backendCount += TextUtils.isEmpty(unifiedNlPrefs.getGeocoderBackends()) ? 0 :
+                    Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
             findPreference(PREF_UNIFIEDNLP).setSummary(getResources().getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount));
 
             boolean checkinEnabled = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, false);

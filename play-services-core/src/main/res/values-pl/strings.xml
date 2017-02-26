@@ -110,7 +110,7 @@ To zajmie kilka minut.</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Optymalizacja baterii włączona</string>
-    <string name="cond_gcm_bat_summary">Aktywowałeś Google Cloud Messaging ale optymalizacja baterii jest aktywna dla usługi microG. Aby powiadomienia \'push\' działały, powinieneś wyłączyć optymalizację baterii.</string>
+    <string name="cond_gcm_bat_summary">Aktywowałeś Google Cloud Messaging ale optymalizacja baterii jest aktywna dla usługi microG. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii.</string>
     <string name="cond_gcm_bat_action">Ignoruj optymalizacje</string>
     <string name="cond_perm_title">Brakuje uprawnień</string>
 
@@ -127,11 +127,11 @@ To zajmie kilka minut.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Żeby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
     <string name="pref_gcm_heartbeat_title">Częstotliwość nasłuchu Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">Częstotliwość w sekundach do odpytywania serwerów Google. Zwiększenie tej wartości zmniejszy zużycie baterii, ale może spowodować opóźnienia w dostarczaniu powiadomień \'push\'.\nPrzestarzałe, zostanie usunięte w nowszej wersji.</string>
+    <string name="pref_gcm_heartbeat_summary">Częstotliwość w sekundach do odpytywania serwerów Google. Zwiększenie tej wartości zmniejszy zużycie baterii, ale może spowodować opóźnienia w dostarczaniu powiadomień ‘push’.\nPrzestarzałe, zostanie usunięte w nowszej wersji.</string>
     <string name="pref_gcm_apps_title">Aplikacje korzystające z Google Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych do Google Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji do korzystania z powiadomień \'push\'</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji do korzystania z powiadomień ‘push’</string>
     <string name="pref_gcm_ping_interval">Częstotliwość odpytywania: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">O usłudze microG</string>
@@ -147,12 +147,12 @@ To zajmie kilka minut.</string>
     <string name="gcm_registered_since">Zarejestrowany od: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Czy wyrejestrować <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
     <string name="gcm_unregister_confirm_message">Niektóre aplikacje automatycznie nie rejestrują się ponownie lub nie posiadają opcji do przeprowadzenia tego ręcznie. Te aplikacje mogą nie działać prawidłowo po wyrejestrowaniu.\nCzy kontynuować?</string>
-    <string name="gcm_unregister_after_deny_message">Zabroniłeś już zarejestrowanej aplikacji zarejestrować się do odczytu powiadomień \'push\'.\nCzy chcesz wyrejestrować ją, aby nie otrzymywała powiadomień \'push\' w przyszłości?</string>
+    <string name="gcm_unregister_after_deny_message">Zabroniłeś już zarejestrowanej aplikacji zarejestrować się do odczytu powiadomień ‘push’.\nCzy chcesz wyrejestrować ją, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
     <string name="gcm_state_disconnected">Obecny stan: rozłączony</string>
-    <string name="gcm_state_connected">Obecny stan: połączony od <xliff:g example=\"2 hours ago\">%1$s</xliff:g></string>
+    <string name="gcm_state_connected">Obecny stan: połączony od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga, aby SafetyNet był podpisany przez własnościowy system DroidGuard. Izolowana wersja DroidGuard-a jest dostępna do pobrania jako oddzielna aplikacja \"DroidGuard Helper\".</string>
+    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga, aby SafetyNet był podpisany przez własnościowy system DroidGuard. Izolowana wersja DroidGuard-a jest dostępna do pobrania jako oddzielna aplikacja “DroidGuard Helper”.</string>
 
     <string name="pref_snet_testdrive_title">Wypróbuj poświadczenie SafetyNet</string>
 

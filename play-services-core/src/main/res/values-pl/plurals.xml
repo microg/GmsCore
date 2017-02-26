@@ -17,16 +17,16 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example=\"1\">%1$d</xliff:g> usługa skonfigurowana</item>
-        <item quantity="few"><xliff:g example=\"3\">%1$d</xliff:g> usługi skonfigurowane</item>
-        <item quantity="many"><xliff:g example=\"3\">%1$d</xliff:g> usług skonfigurowanych</item>
-        <item quantity="other"><xliff:g example=\"3\">%1$d</xliff:g> usług skonfigurowanych</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> usługa skonfigurowana</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> usługi skonfigurowane</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> usług skonfigurowanych</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> usług skonfigurowanych</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example=\"1\">%1$d</xliff:g> zarejestrowana aplikacja</item>
-        <item quantity="few"><xliff:g example=\"123\">%1$d</xliff:g> zarejestrowane aplikacje</item>
-        <item quantity="many"><xliff:g example=\"123\">%1$d</xliff:g> zarejestrowanych aplikacji</item>
-        <item quantity="other"><xliff:g example=\"123\">%1$d</xliff:g> zarejestrowanych aplikacji</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> zarejestrowana aplikacja</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> zarejestrowane aplikacje</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> zarejestrowanych aplikacji</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> zarejestrowanych aplikacji</item>
     </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Nie udzielono uprawnienia niezbędnego do poprawnego funkcjonowania usługi microG.</item>
