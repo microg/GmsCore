@@ -75,9 +75,9 @@ public class SettingsActivity extends AbstractDashboardActivity {
                 GcmDatabase database = new GcmDatabase(getContext());
                 int regCount = database.getRegistrationList().size();
                 database.close();
-                findPreference(PREF_GCM).setSummary(getString(R.string.v7_preference_on) + " / " + getResources().getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount));
+                findPreference(PREF_GCM).setSummary(getString(R.string.abc_capital_on) + " / " + getResources().getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount));
             } else {
-                findPreference(PREF_GCM).setSummary(R.string.v7_preference_off);
+                findPreference(PREF_GCM).setSummary(R.string.abc_capital_off);
             }
             findPreference(PREF_SNET).setSummary(SafetyNetPrefs.get(getContext()).isEnabled() ? R.string.service_status_enabled : R.string.service_status_disabled);
 

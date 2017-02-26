@@ -121,7 +121,9 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_about_title">Sobre microG Services Core</string>
     <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
 
-    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> registered Apps</string>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
+    </plurals>
     <string name="gcm_app_error_unregistering">Erro ao cancelar o registro</string>
     <string name="gcm_app_not_installed_anymore">Não está mais instalado</string>
     <string name="gcm_unregister_app">Cancelar registro</string>

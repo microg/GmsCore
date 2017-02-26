@@ -125,7 +125,9 @@
     <string name="pref_about_title">關於microG Services Core</string>
     <string name="pref_about_summary">版本資訊和使用的程式庫</string>
 
-    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> 個已註冊的程式</string>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> 個已註冊的程式</item>
+    </plurals>
     <string name="gcm_app_error_unregistering">註冊錯誤</string>
     <string name="gcm_app_not_installed_anymore">已移除</string>
     <string name="gcm_unregister_app">取消註冊</string>

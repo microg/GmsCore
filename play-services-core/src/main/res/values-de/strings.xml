@@ -98,10 +98,9 @@ Dies kann einige Minuten dauern."</string>
     <string name="pref_about_title">Über microG Services Core</string>
     <string name="pref_about_summary">Versionsinformation und genutzte Bibliotheken</string>
 
-    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> registrierte Apps</string>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrierte App</item>
-        <item quantity="other">@string/gcm_registered_apps_counter</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registrierte Apps</item>
     </plurals>
     <string name="gcm_app_error_unregistering">Fehler bei der Abmeldung</string>
     <string name="gcm_app_not_installed_anymore">Nicht mehr installiert</string>

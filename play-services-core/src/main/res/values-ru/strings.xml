@@ -100,6 +100,7 @@
     <string name="prefcat_about">О программе</string>
     <string name="prefcat_components">Компоненты</string>
     <string name="prefcat_configuration">Конфигурация</string>
+    <string name="prefcat_google_services">Google сервисы</string>
     <string name="prefcat_location_service">Служба определения местоположения</string>
     <string name="prefcat_services">Сервисы</string>
     <string name="prefcat_test">Тест</string>
@@ -120,6 +121,7 @@
 
     <string name="pref_checkin_enable_summary">Регистрирует ваше устройство в сервисах Google и создает уникальный идентификатор. MicroG удаляет все идентифицирующие биты, кроме имени вашего аккаунта Google.</string>
 
+    <string name="pref_more_settings">Ещё</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
     <string name="pref_gcm_heartbeat_title">Интервал соединения Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
@@ -128,7 +130,9 @@
     <string name="pref_about_title">О сервисах microG</string>
     <string name="pref_about_summary">Информация о версии и используемые библиотеки</string>
 
-    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> привязаных приложений</string>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> привязаных приложений</item>
+    </plurals>
     <string name="gcm_app_error_unregistering">Не удалось отвязать</string>
     <string name="gcm_app_not_installed_anymore">Приложение больше не установлено</string>
     <string name="gcm_unregister_app">Отвязать</string>

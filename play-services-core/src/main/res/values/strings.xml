@@ -143,10 +143,9 @@ This can take a couple of minutes."</string>
     <string name="pref_about_title">About microG Services Core</string>
     <string name="pref_about_summary">Version information and used libraries</string>
 
-    <string name="gcm_registered_apps_counter"><xliff:g example="123">%1$d</xliff:g> registered Apps</string>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registered App</item>
-        <item quantity="other">@string/gcm_registered_apps_counter</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
     </plurals>
     <string name="gcm_app_error_unregistering">Error unregistering</string>
     <string name="gcm_app_not_installed_anymore">No longer installed</string>
