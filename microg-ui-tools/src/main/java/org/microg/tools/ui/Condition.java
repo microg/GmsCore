@@ -19,6 +19,7 @@ package org.microg.tools.ui;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.PluralsRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
@@ -35,19 +36,27 @@ public class Condition {
 
     @StringRes
     private final int titleRes;
+    @PluralsRes
+    private final int titlePluralsRes;
     private final CharSequence title;
 
     @StringRes
     private final int summaryRes;
+    @PluralsRes
+    private final int summaryPluralsRes;
     private final CharSequence summary;
 
     @StringRes
     private final int firstActionTextRes;
+    @PluralsRes
+    private final int firstActionPluralsRes;
     private final CharSequence firstActionText;
     private final View.OnClickListener firstActionListener;
 
     @StringRes
     private final int secondActionTextRes;
+    @PluralsRes
+    private final int secondActionPluralsRes;
     private final CharSequence secondActionText;
     private final View.OnClickListener secondActionListener;
 
@@ -55,6 +64,7 @@ public class Condition {
 
     private boolean evaluated = false;
     private boolean evaluating = false;
+    private int evaluatedPlurals = -1;
     private boolean active;
 
     Condition(Builder builder) {
@@ -71,6 +81,10 @@ public class Condition {
         secondActionTextRes = builder.secondActionTextRes;
         titleRes = builder.titleRes;
         evaluation = builder.evaluation;
+        titlePluralsRes = builder.titlePluralsRes;
+        summaryPluralsRes = builder.summaryPluralsRes;
+        firstActionPluralsRes = builder.firstActionPluralsRes;
+        secondActionPluralsRes = builder.secondActionPluralsRes;
     }
 
     View createView(final Context context, ViewGroup container) {
@@ -122,12 +136,18 @@ public class Condition {
         if (titleRes != 0) {
             return context.getString(titleRes);
         }
+        if (titlePluralsRes != 0) {
+            return context.getResources().getQuantityString(titlePluralsRes, evaluatedPlurals);
+        }
         return title;
     }
 
     public CharSequence getSummary(Context context) {
         if (summaryRes != 0) {
             return context.getString(summaryRes);
+        }
+        if (summaryPluralsRes != 0) {
+            return context.getResources().getQuantityString(summaryPluralsRes, evaluatedPlurals);
         }
         return summary;
     }
@@ -140,6 +160,9 @@ public class Condition {
         if (firstActionTextRes != 0) {
             return context.getString(firstActionTextRes);
         }
+        if (firstActionPluralsRes != 0) {
+            return context.getResources().getQuantityString(firstActionPluralsRes, evaluatedPlurals);
+        }
         return firstActionText;
     }
 
@@ -150,6 +173,9 @@ public class Condition {
     public CharSequence getSecondActionText(Context context) {
         if (secondActionTextRes != 0) {
             return context.getString(secondActionTextRes);
+        }
+        if (secondActionPluralsRes != 0) {
+            return context.getResources().getQuantityString(secondActionPluralsRes, evaluatedPlurals);
         }
         return secondActionText;
     }
@@ -168,6 +194,7 @@ public class Condition {
 
     public synchronized void evaluate(Context context) {
         active = evaluation == null || evaluation.isActive(context);
+        evaluatedPlurals = evaluation.getPluralsCount();
         evaluated = true;
         evaluating = false;
     }
@@ -181,8 +208,12 @@ public class Condition {
         this.evaluated = false;
     }
 
-    public interface Evaluation {
-        boolean isActive(Context context);
+    public static abstract class Evaluation {
+        public abstract boolean isActive(Context context);
+
+        public int getPluralsCount() {
+            return 1;
+        }
     }
 
     public static class Builder {
@@ -192,16 +223,24 @@ public class Condition {
         private Drawable icon;
         @StringRes
         private int titleRes;
+        @PluralsRes
+        private int titlePluralsRes;
         private CharSequence title;
         @StringRes
         private int summaryRes;
+        @PluralsRes
+        private int summaryPluralsRes;
         private CharSequence summary;
         @StringRes
         private int firstActionTextRes;
+        @PluralsRes
+        private int firstActionPluralsRes;
         private CharSequence firstActionText;
         private View.OnClickListener firstActionListener;
         @StringRes
         private int secondActionTextRes;
+        @PluralsRes
+        private int secondActionPluralsRes;
         private CharSequence secondActionText;
         private View.OnClickListener secondActionListener;
         private Evaluation evaluation;
@@ -230,6 +269,11 @@ public class Condition {
             return this;
         }
 
+        public Builder titlePlurals(@PluralsRes int val) {
+            titlePluralsRes = val;
+            return this;
+        }
+
         public Builder summary(CharSequence val) {
             summary = val;
             return this;
@@ -237,6 +281,11 @@ public class Condition {
 
         public Builder summary(@StringRes int val) {
             summaryRes = val;
+            return this;
+        }
+
+        public Builder summaryPlurals(@PluralsRes int val) {
+            summaryPluralsRes = val;
             return this;
         }
 
@@ -252,6 +301,12 @@ public class Condition {
             return this;
         }
 
+        public Builder firstActionPlurals(@PluralsRes int val, View.OnClickListener listener) {
+            firstActionPluralsRes = val;
+            firstActionListener = listener;
+            return this;
+        }
+
         public Builder secondAction(CharSequence text, View.OnClickListener listener) {
             secondActionText = text;
             secondActionListener = listener;
@@ -260,6 +315,12 @@ public class Condition {
 
         public Builder secondAction(@StringRes int val, View.OnClickListener listener) {
             secondActionTextRes = val;
+            secondActionListener = listener;
+            return this;
+        }
+
+        public Builder secondActionPlurals(@PluralsRes int val, View.OnClickListener listener) {
+            secondActionPluralsRes = val;
             secondActionListener = listener;
             return this;
         }
