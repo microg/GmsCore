@@ -101,8 +101,6 @@
     <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за Језгро микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
     <string name="cond_gcm_bat_action">Игнориши оптимизацију</string>
     <string name="cond_perm_title">Недостају дозволе</string>
-    <string name="cond_perm_summary">Једна или више дозвола потребних за исправно функционисање Језгра микроГ услуга недостају.</string>
-    <string name="cond_perm_action">Захтевај недостајуће дозволе</string>
 
     <string name="prefs_account">Поставке налога</string>
     <string name="prefs_account_privacy">Лични подаци и приватност</string>
@@ -121,9 +119,6 @@
     <string name="pref_about_title">О језгру микроГ услуга</string>
     <string name="pref_about_summary">Подаци о издању и коришћеним библиотекама</string>
 
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="other">%1$d пријављених апликација</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">Грешка одјављивања</string>
     <string name="gcm_app_not_installed_anymore">Није више инсталирана</string>
     <string name="gcm_unregister_app">Одјави</string>

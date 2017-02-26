@@ -104,8 +104,6 @@
     <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在microG Services Core上。 為了能收到推送通知您應該取消電池優化。</string>
     <string name="cond_gcm_bat_action">取消優化</string>
     <string name="cond_perm_title">遺失權限</string>
-    <string name="cond_perm_summary">microG Service Core遺失了一個或多個權限以至於不能正常運作。</string>
-    <string name="cond_perm_action">請求遺失的權限</string>
 
     <string name="prefs_account">帳號設定</string>
     <string name="prefs_account_privacy">個人資訊 &amp; 隱私</string>
@@ -125,9 +123,6 @@
     <string name="pref_about_title">關於microG Services Core</string>
     <string name="pref_about_summary">版本資訊和使用的程式庫</string>
 
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> 個已註冊的程式</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">註冊錯誤</string>
     <string name="gcm_app_not_installed_anymore">已移除</string>
     <string name="gcm_unregister_app">取消註冊</string>

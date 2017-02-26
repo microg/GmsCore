@@ -73,8 +73,6 @@ Dies kann einige Minuten dauern."</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_perm_title">Berechtigung fehlt</string>
-    <string name="cond_perm_summary">Eine oder mehrere Berechtigungen, die für die ordnungsgemäße Funktionalität von microG Services Core benötigt werden, sind nicht zugeteilt.</string>
-    <string name="cond_perm_action">Fehlende Berechtigungen anfragen</string>
 
     <string name="prefs_account">Kontoeinstellungen</string>
     <string name="prefs_account_privacy">Persönliche Daten &amp; Privatsphäre</string>
@@ -86,10 +84,6 @@ Dies kann einige Minuten dauern."</string>
     <string name="pref_checkin_enable_summary">Registriert den Gerät zur Nutzung von Google-Diensten und erzeugt eine eindeutige Kennung. microG entfernt identifizierende Daten außer dem Namen  des Google-Kontos.</string>
 
     <string name="pref_more_settings">Mehr</string>
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend eingestellt</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends eingestellt</item>
-    </plurals>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten-Dienst, der von vielen Apps genutzt wird. Zur Benutzung muss Geräte Check-In aktiviert werden.</string>
     <string name="pref_gcm_apps_title">Apps die Cloud Messaging benutzen</string>
@@ -98,10 +92,6 @@ Dies kann einige Minuten dauern."</string>
     <string name="pref_about_title">Über microG Services Core</string>
     <string name="pref_about_summary">Versionsinformation und genutzte Bibliotheken</string>
 
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrierte App</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registrierte Apps</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">Fehler bei der Abmeldung</string>
     <string name="gcm_app_not_installed_anymore">Nicht mehr installiert</string>
     <string name="gcm_unregister_app">Abmelden</string>

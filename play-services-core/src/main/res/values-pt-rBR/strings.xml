@@ -101,8 +101,6 @@ Isso pode demorar alguns minutos."</string>
     <string name="cond_gcm_bat_summary">Você ativou o Google Cloud Messaging, mas possui otimizações de bateria ativas para o MicroG Services Core. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
     <string name="cond_gcm_bat_action">Ignorar otimização</string>
     <string name="cond_perm_title">Permissão ausente</string>
-    <string name="cond_perm_summary">Falta uma ou mais permissões para a funcionalidade adequada do MicroG Service Core.</string>
-    <string name="cond_perm_action">Solicitar permissões em falta</string>
 
     <string name="prefs_account">Preferências da conta</string>
     <string name="prefs_account_privacy">Informação pessoal &amp; privacidade</string>
@@ -121,9 +119,6 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_about_title">Sobre microG Services Core</string>
     <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
 
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">Erro ao cancelar o registro</string>
     <string name="gcm_app_not_installed_anymore">Não está mais instalado</string>
     <string name="gcm_unregister_app">Cancelar registro</string>

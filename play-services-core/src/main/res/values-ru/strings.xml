@@ -109,8 +109,6 @@
     <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но у вас активна оптимизация энергопотребления для microG Services Core. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
     <string name="cond_gcm_bat_action">Разрешить работу в фоне</string>
     <string name="cond_perm_title">Отсутствуют разрешения</string>
-    <string name="cond_perm_summary">Отсутствуют один или несколько разрешений, которые требуются для корректной работы microG Service Core.</string>
-    <string name="cond_perm_action">Запросить отсутствующие разрешения</string>
 
     <string name="prefs_account">Настройки аккаунта</string>
     <string name="prefs_account_privacy">Персональная информация и приватность</string>
@@ -122,6 +120,7 @@
     <string name="pref_checkin_enable_summary">Регистрирует ваше устройство в сервисах Google и создает уникальный идентификатор. MicroG удаляет все идентифицирующие биты, кроме имени вашего аккаунта Google.</string>
 
     <string name="pref_more_settings">Ещё</string>
+
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
     <string name="pref_gcm_heartbeat_title">Интервал соединения Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
@@ -130,9 +129,6 @@
     <string name="pref_about_title">О сервисах microG</string>
     <string name="pref_about_summary">Информация о версии и используемые библиотеки</string>
 
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> привязаных приложений</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">Не удалось отвязать</string>
     <string name="gcm_app_not_installed_anymore">Приложение больше не установлено</string>
     <string name="gcm_unregister_app">Отвязать</string>

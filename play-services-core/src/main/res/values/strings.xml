@@ -113,8 +113,6 @@ This can take a couple of minutes."</string>
     <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
     <string name="cond_gcm_bat_action">Ignore optimizations</string>
     <string name="cond_perm_title">Permission missing</string>
-    <string name="cond_perm_summary">One or more permissions required for proper functionality of microG Service Core is missing.</string>
-    <string name="cond_perm_action">Request missing permissions</string>
 
     <string name="prefs_account">Account preferences</string>
     <string name="prefs_account_privacy">Personal info &amp; privacy</string>
@@ -126,10 +124,6 @@ This can take a couple of minutes."</string>
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
 
     <string name="pref_more_settings">More</string>
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configured</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configured</item>
-    </plurals>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
@@ -143,10 +137,6 @@ This can take a couple of minutes."</string>
     <string name="pref_about_title">About microG Services Core</string>
     <string name="pref_about_summary">Version information and used libraries</string>
 
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registered App</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">Error unregistering</string>
     <string name="gcm_app_not_installed_anymore">No longer installed</string>
     <string name="gcm_unregister_app">Unregister</string>

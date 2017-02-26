@@ -113,8 +113,6 @@ To zajmie kilka minut.</string>
     <string name="cond_gcm_bat_summary">Aktywowałeś Google Cloud Messaging ale optymalizacja baterii jest aktywna dla usługi microG. Aby powiadomienia \'push\' działały, powinieneś wyłączyć optymalizację baterii.</string>
     <string name="cond_gcm_bat_action">Ignoruj optymalizacje</string>
     <string name="cond_perm_title">Brakuje uprawnień</string>
-    <string name="cond_perm_summary">Brakuje jednego lub kilku uprawnień niezbędnych do poprawnego działania usługi microG.</string>
-    <string name="cond_perm_action">Poproś o brakujące uprawnienia</string>
 
     <string name="prefs_account">Ustawienia konta</string>
     <string name="prefs_account_privacy">Ustawienia osobiste i prywatność</string>
@@ -126,12 +124,6 @@ To zajmie kilka minut.</string>
     <string name="pref_checkin_enable_summary">Zgłaszanie urządzenia to ukryty proces, służący do wygenerowania unikalnego identyfikatora dla usług Google. Usługi microG usuwają inne dane identyfikacyjne niż nazwa Twojego konta z tego identyfikatora.</string>
 
     <string name="pref_more_settings">Więcej</string>
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> usługa skonfigurowana</item>
-        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> usługi skonfigurowane</item>
-        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> usług skonfigurowanych</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> usług skonfigurowanych</item>
-    </plurals>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Żeby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
     <string name="pref_gcm_heartbeat_title">Częstotliwość nasłuchu Cloud Messaging</string>
@@ -145,9 +137,6 @@ To zajmie kilka minut.</string>
     <string name="pref_about_title">O usłudze microG</string>
     <string name="pref_about_summary">Informacje o wersji i użyte biblioteki</string>
 
-    <plurals name="gcm_registered_apps_counter">
-	<item quantity="other"><xliff:g example="123">%1$d</xliff:g> zarejestrowanych aplikacji</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">Błąd wyrejestrowywania</string>
     <string name="gcm_app_not_installed_anymore">Już odinstalowany</string>
     <string name="gcm_unregister_app">Wyrejestruj</string>
@@ -160,4 +149,20 @@ To zajmie kilka minut.</string>
     <string name="gcm_unregister_confirm_message">Niektóre aplikacje automatycznie nie rejestrują się ponownie lub nie posiadają opcji do przeprowadzenia tego ręcznie. Te aplikacje mogą nie działać prawidłowo po wyrejestrowaniu.\nCzy kontynuować?</string>
     <string name="gcm_unregister_after_deny_message">Zabroniłeś już zarejestrowanej aplikacji zarejestrować się do odczytu powiadomień \'push\'.\nCzy chcesz wyrejestrować ją, aby nie otrzymywała powiadomień \'push\' w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
-    </resources>
+    <string name="gcm_state_disconnected">Obecny stan: rozłączony</string>
+    <string name="gcm_state_connected">Obecny stan: połączony od <xliff:g example=\"2 hours ago\">%1$s</xliff:g></string>
+
+    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga, aby SafetyNet był podpisany przez własnościowy system DroidGuard. Izolowana wersja DroidGuard-a jest dostępna do pobrania jako oddzielna aplikacja \"DroidGuard Helper\".</string>
+
+    <string name="pref_snet_testdrive_title">Wypróbuj poświadczenie SafetyNet</string>
+
+    <string name="pref_snet_status_official_title">Użyj oficjalnego serwera</string>
+    <string name="pref_snet_status_official_summary">Wymaga niezrootowanego systemu i zainstalowanego microG DroidGuard Helper</string>
+    <string name="pref_snet_status_third_party_title">Użyj serwera strony trzeciej</string>
+    <string name="pref_snet_status_third_party_summary">Serwery stron trzecich mogą być w stanie odpowiedzieć na zapytania SafetyNet bez sygnatury DroidGuard</string>
+    <string name="pref_snet_custom_url_title">URL własnego serwera</string>
+    <string name="pref_snet_custom_url_summary">Pełny URL serwera strony trzeciej odpowiadającego na zapytania poświadczeń SafetyNet</string>
+    <string name="pref_snet_self_signed_title">Użyj samo-podpisanego certyfikatu</string>
+    <string name="pref_snet_self_signed_summary">Zamiast odpytywać serwera, podpisuj odpowiedzi SafetyNet lokalnie używając samo-podpisanego certyfikatu. Większość aplikacji odmówi użycia samo-podpisanych odpowiedzi.</string>
+
+</resources>

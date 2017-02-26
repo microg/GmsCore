@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2013-2015 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="permission_service_all_label">Wszystkie usługi Google</string>
+    <string name="permission_service_all_description">Zezwala aplikacji na dostęp do wszystkich usług Google przez dowolne powiązane konto Google.</string>
+
+    <string name="permission_service_android_label">Usługi Android</string>
+    <string name="permission_service_android_description">Zezwala aplikacji na dostęp do usług Androida przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Zezwala aplikacji na dostęp do AdSense przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">Zezwala aplikacji na dostęp do AdWords przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_ah_description">Zezwala aplikacji na dostęp do Google App Engine przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Zezwala aplikacji na dostęp do Bloggera przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_cl_label">Kalendarz Google</string>
+    <string name="permission_service_cl_description">Zezwala aplikacji na dostęp do Kalendarza Google przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_cp_label">Kontakty</string>
+    <string name="permission_service_cp_description">Zezwala aplikacji na dostęp do Kontaktów przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">Zezwala aplikacji na dostęp do Dodgeballa przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_finance_label">Finanse Google</string>
+    <string name="permission_service_finance_description">Zezwala aplikacji na dostęp do Finansów Google przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_gbase_description">Zezwala aplikacji na dostęp do Google Base przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_grandcentral_description">Zezwala aplikacji na dostęp do Google Voice przez dowolne powiązane konto Google.</string>
+    <string name="permission_service_groups2_label">Grupy dyskusyjne Google</string>
+    <string name="permission_service_groups2_description">Zezwala aplikacji na dostęp do Grup dyskusyjnych Google przez dowolne powiązane konto Google.</string>
+    </resources>

@@ -21,8 +21,8 @@
     <string name="just_a_sec">Juste une seconde…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">En poursuivant, vous autorisez cette application et Google à utiliser vos informations en accord avec leurs termes de service et politiques de vie privée respectifs.</string>
-    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> voudrait:</string>
-    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> voudrait utiliser:</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> voudrait :</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> voudrait utiliser :</string>
     <string name="account_manager_title">Gestionnaire du compte Google</string>
     <string name="sorry">Désolé…</string>
     <string name="no_network_error_desc">"Vous n’avez pas de connexion réseau.
@@ -113,8 +113,6 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services Core. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
     <string name="cond_gcm_bat_action">Désactiver les optimisations de la batterie</string>
     <string name="cond_perm_title">Autorisations manquantes</string>
-    <string name="cond_perm_summary">Une ou plusieurs autorisations requises pour le fonctionnement correct de microG Service Core sont manquantes.</string>
-    <string name="cond_perm_action">Demander les autorisations manquantes</string>
 
     <string name="prefs_account">Préférences du compte</string>
     <string name="prefs_account_privacy">Informations personnelles &amp; vie privée</string>
@@ -126,10 +124,6 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_checkin_enable_summary">Enregistre votre terminal auprès des services Google et crée un identifiant unique. microG retire les identifiants autres que le nom de votre compte Google des informations d’enregistrement.</string>
 
     <string name="pref_more_settings">Plus</string>
-    <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="3">%1$d</xliff:g> fournisseur configuré</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> fournisseurs configurés</item>
-    </plurals>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging est un fournisseur de notifications push utilisés par beaucoup d’applications tierces. Pour l’utiliser vous devez activez l’enregistrement du terminal.</string>
     <string name="pref_gcm_heartbeat_title">Intervalle des signaux de présence Cloud Messaging</string>
@@ -143,9 +137,6 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_about_title">À propos de microG Services Core</string>
     <string name="pref_about_summary">Informations de version et librairies utilisées</string>
 
-    <plurals name="gcm_registered_apps_counter">
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> applications enregistrées</item>
-    </plurals>
     <string name="gcm_app_error_unregistering">Erreur lors du désenregistrement</string>
     <string name="gcm_app_not_installed_anymore">Cette application n’est plus installée</string>
     <string name="gcm_unregister_app">Désenregistrer</string>

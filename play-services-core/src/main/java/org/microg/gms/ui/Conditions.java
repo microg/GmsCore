@@ -64,18 +64,25 @@ public class Conditions {
     private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
     public static final Condition PERMISSIONS = new Condition.Builder()
             .title(R.string.cond_perm_title)
-            .summary(R.string.cond_perm_summary)
+            .summaryPlurals(R.plurals.cond_perm_summary)
             .evaluation(new Condition.Evaluation() {
+                int count = 0;
                 @Override
                 public boolean isActive(Context context) {
+                    count = 0;
                     for (String permission : REQUIRED_PERMISSIONS) {
                         if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED)
-                            return true;
+                            count++;
                     }
-                    return false;
+                    return count > 0;
+                }
+
+                @Override
+                public int getPluralsCount() {
+                    return count;
                 }
             })
-            .firstAction(R.string.cond_perm_action, new View.OnClickListener() {
+            .firstActionPlurals(R.plurals.cond_perm_action, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (v.getContext() instanceof Activity) {
