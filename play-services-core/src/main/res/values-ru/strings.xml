@@ -51,6 +51,9 @@
 
     <string name="service_status_disabled">Выключен</string>
     <string name="service_status_enabled">Включен</string>
+	<string name="service_status_automatic">Автоматически</string>
+    <string name="service_status_manual">Руководство</string>
+	
     <string name="menu_advanced">Дополнительно</string>
     <string name="list_no_item_none">Пусто</string>
 
@@ -102,6 +105,7 @@
     <string name="prefcat_configuration">Конфигурация</string>
     <string name="prefcat_google_services">Google сервисы</string>
     <string name="prefcat_location_service">Служба определения местоположения</string>
+	<string name="prefcat_operation_mode">Режим работы</string>
     <string name="prefcat_services">Сервисы</string>
     <string name="prefcat_test">Тест</string>
 
@@ -126,6 +130,10 @@
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
     <string name="pref_gcm_apps_title">Приложения, использующие Google Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Список приложений, которые привязаны к Google Cloud Messaging.</string>
+	<string name="pref_gcm_confirm_new_apps_title">Подтверждать новые приложения</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение перед привязкой новых приложений для получения push-уведомлений</string>
+	<string name="pref_gcm_ping_interval">Интервал проверки: <xliff:g example="10 минут">%1$s</xliff:g></string>
+	
     <string name="pref_about_title">О сервисах microG</string>
     <string name="pref_about_summary">Информация о версии и используемые библиотеки</string>
 
@@ -146,7 +154,7 @@
 
     <string name="snet_intro">Google SafetyNet это система сертификации устройства, гарантирующая, что устройство корректно защищено и совместимо с Android CTS. Некоторые приложения используют SafetyNet из соображений безопасности или в качестве предварительной системы защиты от взлома. \ П \ nmicroG GmsCore содержит свободную реализацию SafetyNet, но официальный сервер требует, чтобы запросы были подписаны с помощью проприетарной системы DroidGuard. Изолированная версия DroidGuard доступна как отдельное приложение "DroidGuard Helper".</string>
 
-    <string name="pref_snet_testdrive_title">Протестировать SafetyNet проверку</string>
+    <string name="pref_snet_testdrive_title">Тест верификации SafetyNet</string>
 
     <string name="pref_snet_status_official_title">Использовать официальный сервер</string>
     <string name="pref_snet_status_official_summary">Требуется система без root и установленный microG DroidGuard Helper</string>
@@ -154,4 +162,7 @@
     <string name="pref_snet_status_third_party_summary">Сторонние сервера могут быть в состоянии ответить на запросы SafetyNet без подписи DroidGuard</string>
     <string name="pref_snet_custom_url_title">URL стороннего сервера</string>
     <string name="pref_snet_custom_url_summary">Полный URL стороннего сервера, который отвечает на проверочные запросы SafetyNet</string>
+	<string name="pref_snet_self_signed_title">Создавать сертификат самому</string>
+    <string name="pref_snet_self_signed_summary">Вместо запросов на сервер подписывать SafetyNet локально, используя самостоятельно созданный сертификат. Большинство приложений будут отказываться использовать самоподписанные ответы.</string>
+	
     </resources>
