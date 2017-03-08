@@ -30,6 +30,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.ServiceManager;
+import android.os.IDeviceIdleController
 import android.os.Looper;
 import android.os.Messenger;
 import android.os.Parcelable;
@@ -124,6 +126,7 @@ public class McsService extends Service implements Handler.Callback {
 
     private AlarmManager alarmManager;
     private PowerManager powerManager;
+    private IDeviceIdleController mDeviceIdleController;
     private static PowerManager.WakeLock wakeLock;
 
     private static long currentDelay = 0;
@@ -166,6 +169,7 @@ public class McsService extends Service implements Handler.Callback {
         heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        mDeviceIdleController = IDeviceIdleController.Stub.asInterface(ServiceManager.getService(Context.DEVICE_IDLE_CONTROLLER));
         synchronized (McsService.class) {
             if (handlerThread == null) {
                 handlerThread = new HandlerThread();
@@ -485,6 +489,8 @@ public class McsService extends Service implements Handler.Callback {
             for (ResolveInfo resolveInfo : infos) {
                 logd("Target: " + resolveInfo);
                 Intent targetIntent = new Intent(intent);
+                //TODO: Find out userID
+                mDeviceIdleController.addPowerSaveTempWhitelistApp(resolveInfo.activityInfo.packageName, 10000, 0, "GCM Push");
                 targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
                 sendOrderedBroadcast(targetIntent, receiverPermission);
             }
