@@ -42,15 +42,30 @@ Dies kann einige Minuten dauern."</string>
     <string name="perm_status_broadcast_label">Empfange interne Statusmeldungen</string>
     <string name="perm_c2dm_receive_label">Empfange C2DM Nachrichten</string>
     <string name="perm_c2dm_send_label">Sende C2DM Nachrichten an andere Apps</string>
+    <string name="perm_gtalk_svc_label">sende Nachrichten und empfange Benachrichtigungen von Google Servern</string>
+    <string name="perm_extended_access_label">Erweiterter Zugriff zu Google-Diensten</string>
+
+    <string name="service_name_checkin">Google Geräte-Registrierung</string>
+    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+
+    <string name="service_status_disabled">Deaktiviert</string>
+    <string name="service_status_enabled">Aktiviert</string>
     <string name="service_status_automatic">Automatisch</string>
     <string name="service_status_manual">Manuell</string>
 
     <string name="menu_advanced">Erweitert</string>
     <string name="list_no_item_none">Keine</string>
 
+    <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> möchte Play Games benutzen</string>
+    <string name="games_info_content">Um Play Games zu nutzen ist die Installation der Google Play Games App erforderlich. Diese App funktioniert eventuell auch ohne Play Games, verhält sich dabei unter Umständen aber ungewöhnlich.</string>
+
     <string name="pick_place_title">Ort auswählen</string>
     <string name="place_picker_select_title">Diesen Ort auswählen</string>
+    <string name="place_picker_nearby_places">Orte in der Nähe</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
     <string name="lacking_permission_toast">microG Services Core: Berechtigung für "<xliff:g example="Auf alle Netzwerke zugreifen">%1$s</xliff:g>" fehlt</string>
 
     <string name="network_type_mobile">Mobiles Internet</string>
@@ -58,12 +73,33 @@ Dies kann einige Minuten dauern."</string>
     <string name="network_type_roaming">Roaming</string>
     <string name="network_type_other">Sonstige Netwerke</string>
 
+    <!-- Self check -->
+
+    <string name="self_check_cat_fake_sig">Signaturtäuschungs-Unterstützung</string>
+    <string name="self_check_cat_gms_packages">Installierte Pakete</string>
+    <string name="self_check_cat_system">System</string>
+
+    <string name="self_check_name_fake_sig_perm">System unterstützt Signaturtäuschung:</string>
+    <string name="self_check_resolution_fake_sig_perm">Dein ROM hat keine integrierte Unterstützung für Signaturtäuschung. Du kannst aber auch externe System zur Signaturtäuschung nutzen. Bitte schaue in die Dokumentation für Informationen zur Signaturtäuschung und wie die microG auf ROMs nutzt die sie nicht unterstützen.</string>
+    <string name="self_check_name_perm_granted">Berechtigung zur Signaturtäuschung erteilt.</string>
+    <string name="self_check_resolution_perm_granted">Dies ist ein guter Hinweis darauf, dass dein ROM Signaturtäuschung unterstützt, jedoch zunächst eine Aktion notwendig ist, um es zu aktivieren. Bitte lese die Dokumentation um herauszufinden welche Aktion dies ist.</string>
+    <string name="self_check_name_system_spoofs">System täuscht Signatur:</string>
+    <string name="self_check_resolution_system_spoofs">Bitte lese die Dokumentation für weitere Anweisungen.</string>
+
+    <string name="self_check_pkg_gms">Play-Dienste (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Dienste-Framework (GSF)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installiert:</string>
     <string name="self_check_resolution_app_installed">Installiere die App <xliff:g example="F-Droid">%1$s</xliff:g> oder eine kompatible. Bitte schaue in der Dokumentation nach um herauszufinden welche Apps kompatibel sind.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> hat die richtige Signatur:</string>
+    <string name="self_check_resolution_correct_sig">Entweder ist das installierte <xliff:g example="F-Droid">%1$s</xliff:g> nicht mit microG kompatibel oder Signaturtäuschung wurde dafür nicht aktiviert. Mehr Infos in der Dokumentation.</string>
+
+    <string name="self_check_name_battery_optimizations">Batterieoptimierung dekativiert:</string>
+    <string name="self_check_resolution_battery_optimizations">Hier drücken um Batterieoptimierungen für microG zu deaktivieren. Wenn das nicht geschieht funktionieren einige Apps nicht ordnungsgemäß.</string>
+
     <!-- Settings strings -->
 
-    <string name="prefcat_about">Über</string>
+    <string name="prefcat_about">Infos</string>
     <string name="prefcat_components">Komponenten</string>
     <string name="prefcat_configuration">Einstellungen</string>
     <string name="prefcat_google_services">Google-Dienste</string>
@@ -72,6 +108,9 @@ Dies kann einige Minuten dauern."</string>
     <string name="prefcat_services">Dienste</string>
     <string name="prefcat_test">Test</string>
 
+    <string name="cond_gcm_bat_title">Batterieoptimierung aktiv</string>
+    <string name="cond_gcm_bat_summary">Google Cloud Messaging ist aktiv aber Batterieoptimierungen wurden für microG nicht deaktiviert. Damit Push-Nachrichten zugestellt werden können, muss Batterieoptimierung deaktiviert werden.</string>
+    <string name="cond_gcm_bat_action">Batterieoptimierung deaktivieren</string>
     <string name="cond_perm_title">Berechtigung fehlt</string>
 
     <string name="prefs_account">Kontoeinstellungen</string>
@@ -101,12 +140,23 @@ Dies kann einige Minuten dauern."</string>
     <string name="gcm_registered">Registriert</string>
     <string name="gcm_registered_since">Registriert seit: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> abmelden?</string>
+    <string name="gcm_unregister_confirm_message">Einige Apps registrieren sich nicht automatisch erneut und haben keine Möglichkeit dies manuell anzustoßen. Diese Apps funktionieren eventuell nach dem abmelden nicht mehr richtig.\nFortsetzen?</string>
+    <string name="gcm_unregister_after_deny_message">Du hast einer App die Erlaubnis der Registrierung entzogen, die bereits registriert ist.\nWillst du diese App jetzt auch abmelden damit sie zukünftig keine Push-Nachrichten erhält?</string>
     <string name="gcm_messages_counter">Nachrichten: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_state_disconnected">Aktueller Zustand: Nicht verbunden</string>
     <string name="gcm_state_connected">Aktueller Zustand: Verbunden seit <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
+    <string name="snet_intro">Google SafetyNet ist ein System um Geräte zu zertifizieren und so sicherzustellen, dass sie ausreichend geschützt und kompatibel mit Android sind. Einige Anwendungen benutzen SafetyNet aus Sicherheitsgründen oder um einen Kopierschutz zu erzwingen.\n\nmicroG GmsCore enthält eine freie Implementierung von SafetyNet, jedoch verlangen die Google-Server, dass die Anfragen durch das proprietäre DroidGuard signiert sind. Eine unschädliche gemachte Version von DroidGuard ist als separate "DroidGuard Helper" app verfügbar.</string>
+
+    <string name="pref_snet_testdrive_title">SafetyNet-Zertifizierung testen</string>
+
     <string name="pref_snet_status_official_title">Offizielle Server nutzen</string>
+    <string name="pref_snet_status_official_summary">Erfordert eine ungerootetes ROM und den microG DroidGuard Helper</string>
     <string name="pref_snet_status_third_party_title">Alternativen Server nutzen</string>
+    <string name="pref_snet_status_third_party_summary">Alternative Server können auch SafetyNet-Anfragen beantworten, die nicht durch DroidGuard signiert wurden</string>
     <string name="pref_snet_custom_url_title">Alternative Server URL</string>
+    <string name="pref_snet_custom_url_summary">Vollständige URL des alternativen Servers der SafetyNet-Anfragen beantwortet</string>
     <string name="pref_snet_self_signed_title">Selbst signieren</string>
-    </resources>
+    <string name="pref_snet_self_signed_summary">Statt einen Server zu nutzen, die SafetyNet signature lokal mit einem eigens erstellten Zertifikat signieren. Die meisten Apps werden diese Signaturen nicht akzeptieren.</string>
+
+</resources>
