@@ -152,4 +152,6 @@
     <string name="pref_snet_status_third_party_summary">第三方伺服器可能不需要DroidGuard簽名便能回應SafetyNet請求</string>
     <string name="pref_snet_custom_url_title">自訂伺服器網址</string>
     <string name="pref_snet_custom_url_summary">回應SafetyNet驗證請求之第三方伺服器的完整網址</string>
-    </resources>
+    <string name="pref_snet_self_signed_title">使用自行簽名認證</string>
+    <string name="pref_snet_self_signed_summary">不向伺服器請求簽名，而是用本地的認證文件自行簽名SafetyNet。大部分的程式都會拒絕自行簽名認證。</string>
+</resources>
