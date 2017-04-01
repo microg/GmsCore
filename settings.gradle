@@ -1,5 +1,3 @@
-include ':safe-parcel'
-
 include ':wearable-lib'
 
 include ':unifiednlp-api'
