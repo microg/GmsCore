@@ -16,6 +16,7 @@
 
 package org.microg.tools.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.preference.CheckBoxPreference;
@@ -32,6 +33,7 @@ public class RadioButtonPreference extends CheckBoxPreference {
         setWidgetLayoutResource(R.layout.preference_widget_radiobutton);
     }
 
+    @SuppressLint("RestrictedApi")
     public RadioButtonPreference(Context context, AttributeSet attrs) {
         this(context, attrs, TypedArrayUtils.getAttr(context, R.attr.checkBoxPreferenceStyle,
                 android.R.attr.checkBoxPreferenceStyle));

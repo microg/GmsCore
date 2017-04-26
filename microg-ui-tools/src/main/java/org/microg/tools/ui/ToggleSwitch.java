@@ -17,10 +17,12 @@
 
 package org.microg.tools.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
 
+@SuppressLint("NewApi")
 public class ToggleSwitch extends SwitchCompat {
 
     private ToggleSwitch.OnBeforeCheckedChangeListener mOnBeforeListener;

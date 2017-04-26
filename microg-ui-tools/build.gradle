@@ -45,8 +45,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.takisoft.fix:preference-v7:25.1.0.2'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.takisoft.fix:preference-v7:25.3.1.0'
 }
 
