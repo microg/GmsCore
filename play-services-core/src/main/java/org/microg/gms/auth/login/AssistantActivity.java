@@ -19,7 +19,11 @@ package org.microg.gms.auth.login;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.R;
 
@@ -32,6 +36,18 @@ public abstract class AssistantActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_assistant);
         formatTitle();
+        findViewById(R.id.next_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onNextButtonClicked();
+            }
+        });
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackButtonClicked();
+            }
+        });
     }
 
     private void formatTitle() {
@@ -44,10 +60,50 @@ public abstract class AssistantActivity extends Activity {
         }
     }
 
+    public void setNextButtonText(@StringRes int res) {
+        setNextButtonText(getText(res));
+    }
+
+    public void setNextButtonText(CharSequence text) {
+        if (text == null) {
+            findViewById(R.id.next_button).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.next_button).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.next_button)).setText(text);
+        }
+    }
+
+    public void setBackButtonText(@StringRes int res) {
+        setBackButtonText(getText(res));
+    }
+
+    public void setBackButtonText(CharSequence text) {
+        if (text == null) {
+            findViewById(R.id.back_button).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.back_button).setVisibility(View.VISIBLE);
+            ((Button) findViewById(R.id.back_button)).setText(text);
+        }
+    }
+
+    protected void onNextButtonClicked() {
+
+    }
+
+    protected void onBackButtonClicked() {
+
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         formatTitle();
+    }
+
+    @Override
+    protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+        ((TextView) findViewById(R.id.title)).setText(title);
     }
 
     public int dpToPx(int dp) {

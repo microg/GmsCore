@@ -25,7 +25,14 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Sorry…</string>
-    <string name="no_network_error_desc">"You don't have a network connection.
+    <string name="auth_before_connect">"An app on your device is trying to sign in to a Google account.
+
+If this was intentional, use the <b>Sign in</b> button to connect to Google’s sign-in page, if not, press <b>Cancel</b> to go back to the application that caused this dialog to show up."</string>
+    <string name="auth_sign_in">Sign in</string>
+    <string name="auth_connecting">"Your device is establishing an connection to Google’s servers to sign you in.
+
+This can take a few seconds."</string>
+    <string name="no_network_error_desc">"You don’t have a network connection.
 
 This could be a temporary problem or your Android device may not be provisioned for data services. Try again when connected to a mobile network, or connect to a Wi-Fi network."</string>
     <string name="auth_general_error_desc">"There was a problem communicating with Google servers.

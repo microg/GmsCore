@@ -21,14 +21,19 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.StringRes;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -86,6 +91,8 @@ public class LoginActivity extends AssistantActivity {
     private String accountType;
     private AccountManager accountManager;
     private InputMethodManager inputMethodManager;
+    private ViewGroup authContent;
+    private int state = 0;
 
     @SuppressLint("AddJavascriptInterface")
     @Override
@@ -96,6 +103,7 @@ public class LoginActivity extends AssistantActivity {
         inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         webView = createWebView(this);
         webView.addJavascriptInterface(new JsBridge(), "mm");
+        authContent = (ViewGroup) findViewById(R.id.auth_content);
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -124,19 +132,50 @@ public class LoginActivity extends AssistantActivity {
                 retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
             }
         } else {
-            CookieManager.getInstance().setAcceptCookie(true);
-            if (SDK_INT >= LOLLIPOP) {
-                CookieManager.getInstance().removeAllCookies(new ValueCallback<Boolean>() {
-                    @Override
-                    public void onReceiveValue(Boolean value) {
-                        start();
-                    }
-                });
-            } else {
-                //noinspection deprecation
-                CookieManager.getInstance().removeAllCookie();
-                start();
-            }
+            setMessage(R.string.auth_before_connect);
+            setBackButtonText(android.R.string.cancel);
+            setNextButtonText(R.string.auth_sign_in);
+        }
+    }
+
+    @Override
+    protected void onNextButtonClicked() {
+        super.onNextButtonClicked();
+        state++;
+        if (state == 1) {
+            init();
+        }
+    }
+
+    @Override
+    protected void onBackButtonClicked() {
+        super.onBackButtonClicked();
+        state--;
+        if (state == -1) {
+            finish();
+        }
+    }
+
+    private void init() {
+        setTitle(R.string.just_a_sec);
+        setBackButtonText(null);
+        setNextButtonText(null);
+        View loading = getLayoutInflater().inflate(R.layout.login_assistant_loading, authContent, false);
+        authContent.removeAllViews();
+        authContent.addView(loading);
+        setMessage(R.string.auth_connecting);
+        CookieManager.getInstance().setAcceptCookie(true);
+        if (SDK_INT >= LOLLIPOP) {
+            CookieManager.getInstance().removeAllCookies(new ValueCallback<Boolean>() {
+                @Override
+                public void onReceiveValue(Boolean value) {
+                    start();
+                }
+            });
+        } else {
+            //noinspection deprecation
+            CookieManager.getInstance().removeAllCookie();
+            start();
         }
     }
 
@@ -200,13 +239,17 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private void showError(int errorRes) {
-        ((TextView) findViewById(R.id.title)).setText(R.string.sorry);
+        setTitle(R.string.sorry);
         findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
         setMessage(errorRes);
     }
 
-    private void setMessage(int res) {
-        ((TextView) findViewById(R.id.description_text)).setText(res);
+    private void setMessage(@StringRes  int res) {
+        setMessage(getText(res));
+    }
+
+    private void setMessage(CharSequence text) {
+        ((TextView) findViewById(R.id.description_text)).setText(text);
     }
 
     private void loadLoginPage() {
