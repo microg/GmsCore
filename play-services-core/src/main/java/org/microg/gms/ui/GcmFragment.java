@@ -39,6 +39,7 @@ import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.gms.gcm.McsConstants;
 import org.microg.gms.gcm.McsService;
+import org.microg.gms.gcm.TriggerReceiver;
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.DimmableIconPreference;
 import org.microg.tools.ui.SwitchBarResourceSettingsFragment;
@@ -70,7 +71,7 @@ public class GcmFragment extends SwitchBarResourceSettingsFragment {
         super.onActivityCreated(savedInstanceState);
 
         setHasOptionsMenu(true);
-        switchBar.setChecked(GcmPrefs.get(getContext()).isGcmEnabled());
+        switchBar.setChecked(GcmPrefs.get(getContext()).isEnabled());
     }
 
     @Override
@@ -104,7 +105,7 @@ public class GcmFragment extends SwitchBarResourceSettingsFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case MENU_ADVANCED:
-                Intent intent = new Intent(getContext(), GcmAdvancedFragment.AsActivity .class);
+                Intent intent = new Intent(getContext(), GcmAdvancedFragment.AsActivity.class);
                 startActivity(intent);
                 return true;
             default:
@@ -118,7 +119,7 @@ public class GcmFragment extends SwitchBarResourceSettingsFragment {
         if (!isChecked) {
             McsService.stop(getContext());
         } else {
-            getContext().startService(new Intent(McsConstants.ACTION_CONNECT, null, getContext(), McsService.class));
+            getContext().sendBroadcast(new Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, getContext(), TriggerReceiver.class));
         }
         updateContent();
     }

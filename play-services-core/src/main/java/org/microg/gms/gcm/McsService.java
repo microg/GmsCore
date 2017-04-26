@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -105,7 +106,9 @@ public class McsService extends Service implements Handler.Callback {
     private static final int WAKELOCK_TIMEOUT = 5000;
 
     private static long lastHeartbeatAckElapsedRealtime = -1;
+    private static long lastIncomingNetworkRealtime = 0;
     private static long startTimestamp = 0;
+    public static String activeNetworkPref = null;
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -194,8 +197,12 @@ public class McsService extends Service implements Handler.Callback {
             return false;
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
-        if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * GcmPrefs.get(null).getHeartbeatMs()) {
-            logd("No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * GcmPrefs.get(null).getHeartbeatMs() / 1000 + " seconds");
+        int heartbeatMs = GcmPrefs.get(null).getHeartbeatMsFor(activeNetworkPref, false);
+        if (heartbeatMs < 0) {
+            closeAll();
+        } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
+            logd("No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
+            GcmPrefs.get(null).learnTimeout(activeNetworkPref);
             return false;
         }
         return true;
@@ -215,15 +222,18 @@ public class McsService extends Service implements Handler.Callback {
 
     public void scheduleHeartbeat(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        logd("Scheduling heartbeat in " + GcmPrefs.get(this).getHeartbeatMs() / 1000 + " seconds...");
 
-        int heartbeatMs = GcmPrefs.get(this).getHeartbeatMs();
+        int heartbeatMs = GcmPrefs.get(this).getHeartbeatMsFor(activeNetworkPref, false);
+        if (heartbeatMs < 0) {
+            closeAll();
+        }
+        logd("Scheduling heartbeat in " + heartbeatMs / 1000 + " seconds...");
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             alarmManager.set(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, heartbeatIntent);
         } else {
             // with KitKat, the alarms become inexact by default, but with the newly available setWindow we can get inexact alarms with guarantees.
-            // Schedule the alarm to fire within the interval [heartbeatMs/2, heartbeatMs]
-            alarmManager.setWindow(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs / 2, heartbeatMs / 2,
+            // Schedule the alarm to fire within the interval [heartbeatMs/3*4, heartbeatMs]
+            alarmManager.setWindow(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs / 4 * 3, heartbeatMs / 4,
                     heartbeatIntent);
         }
 
@@ -356,6 +366,13 @@ public class McsService extends Service implements Handler.Callback {
     private synchronized void connect() {
         try {
             closeAll();
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(cm.getActiveNetworkInfo());
+            if (!GcmPrefs.get(this).isEnabledFor(cm.getActiveNetworkInfo())) {
+                scheduleReconnect(this);
+                return;
+            }
+
             logd("Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
             logd("Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
@@ -368,6 +385,7 @@ public class McsService extends Service implements Handler.Callback {
 
             startTimestamp = System.currentTimeMillis();
             lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
+            lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
             scheduleHeartbeat(this);
         } catch (Exception e) {
             Log.w(TAG, "Exception while connecting!", e);
@@ -409,6 +427,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleHeartbeatAck(HeartbeatAck ack) {
+        GcmPrefs.get(this).learnReached(activeNetworkPref, SystemClock.elapsedRealtime() - lastIncomingNetworkRealtime);
         lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
         wakeLock.release();
     }
@@ -573,6 +592,7 @@ public class McsService extends Service implements Handler.Callback {
                     Log.w(TAG, "Unknown message: " + message);
             }
             resetCurrentDelay();
+            lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
         } catch (Exception e) {
             rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
         }

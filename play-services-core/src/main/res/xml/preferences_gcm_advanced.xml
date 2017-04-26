@@ -17,12 +17,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:defaultValue="300"
-        android:key="gcm_heartbeat_interval"
-        android:summary="@string/pref_gcm_heartbeat_summary"
-        android:title="@string/pref_gcm_heartbeat_title"/>
-
     <SwitchPreference
         android:defaultValue="false"
         android:key="gcm_confirm_new_apps"
@@ -30,7 +24,6 @@
         android:title="@string/pref_gcm_confirm_new_apps_title"/>
 
     <PreferenceCategory
-        android:enabled="false"
         android:key="prefcat_networks"
         android:title="Networks to use for Cloud Messaging">
 

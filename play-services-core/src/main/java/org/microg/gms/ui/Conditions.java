@@ -46,7 +46,7 @@ public class Conditions {
                 @Override
                 public boolean isActive(Context context) {
                     if (SDK_INT < 23) return false;
-                    if (!GcmPrefs.get(context).isGcmEnabled()) return false;
+                    if (!GcmPrefs.get(context).isEnabled()) return false;
                     PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                     return !pm.isIgnoringBatteryOptimizations(context.getPackageName());
                 }

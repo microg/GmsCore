@@ -72,7 +72,7 @@ public class SettingsActivity extends AbstractDashboardActivity {
 
         private void updateDetails() {
             findPreference(PREF_ABOUT).setSummary(getString(R.string.about_version_str, AboutFragment.getSelfVersion(getContext())));
-            if (GcmPrefs.get(getContext()).isGcmEnabled()) {
+            if (GcmPrefs.get(getContext()).isEnabled()) {
                 GcmDatabase database = new GcmDatabase(getContext());
                 int regCount = database.getRegistrationList().size();
                 database.close();

@@ -101,7 +101,7 @@ public class PushRegisterService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: " + intent);
         Log.d(TAG, "onHandleIntent: " + intent.getExtras());
-        if (GcmPrefs.get(this).isGcmEnabled()) {
+        if (GcmPrefs.get(this).isEnabled()) {
             if (LastCheckinInfo.read(this).lastCheckin > 0) {
                 try {
                     if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
