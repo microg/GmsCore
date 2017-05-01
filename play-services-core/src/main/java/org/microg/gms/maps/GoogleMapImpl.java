@@ -16,7 +16,6 @@
 
 package org.microg.gms.maps;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Criteria;
@@ -28,7 +27,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -442,9 +440,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
         boolean hasPermission = ContextCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
         if (!hasPermission) {
-            if (context instanceof Activity)
-                ActivityCompat.requestPermissions((Activity) context, new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION}, -1);
-            return;
+            throw new SecurityException("Neither " + ACCESS_COARSE_LOCATION + " nor " + ACCESS_FINE_LOCATION + " granted.");
         }
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (myLocation) {
@@ -470,7 +466,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     @Override
     public IUiSettingsDelegate getUiSettings() throws RemoteException {
-        Log.d(TAG, "getUiSettings: "+uiSettings);
+        Log.d(TAG, "getUiSettings: " + uiSettings);
         return uiSettings;
     }
 
