@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -148,8 +148,8 @@
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Zarządzanie Twoją przybliżoną (miasto) lokalizacją i historią lokalizacji</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Zarządzanie Twoją szczegółową lokalizacją</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">Zarządzanie Twoją przybliżoną (miasto) lokalizacją</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine">dostarcza dostęp do odczytu i zapisu danych użytkownika Maps Engine z Twojej aplikacji.</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">dozwala dostęp tylko do odczytu danych użytkownika Maps Engine z aplikacji</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">Podgląd i zarządzanie Twoimi danymi Google Maps Engine</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">Podgląd Twoich danych Google Maps Engine</string>
     <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Podgląd i zarządzanie Twoimi Mapami Google na telefonie</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut">Zarządzaj Twoją aktywnością Orkut</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut.readonly">Podgląd Twoich danych Orkut</string>

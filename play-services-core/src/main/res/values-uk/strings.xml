@@ -163,4 +163,6 @@
     <string name="pref_snet_custom_url_title">Посилання стороннього серверу</string>
     <string name="pref_snet_custom_url_summary">Повне посилання стороннього серверу, який відповідає на запити SafetyNet</string>
     <string name="pref_snet_self_signed_title">Використовувати самостійно підписаний сертифікат</string>
-    </resources>
+    <string name="pref_snet_self_signed_summary">Підписувати SafetyNet локально, замість запитів на сервер, використовуючи само-підписний сертифікат. Більшість додатків будуть відхиляти само-підписні відповіді.</string>
+
+</resources>

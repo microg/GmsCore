@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -148,8 +148,8 @@
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Manage your city-level location and location history</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Manage your best-available location</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">Manage your city-level location</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine">provides read and write access to the user\'s Maps Engine data from your application.</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">provides read-only access to the user\'s Maps Engine data from your</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">View and manage your Google Maps Engine data</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">View your Google Maps Engine data</string>
     <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">View and manage your Google Maps for mobile experience</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut">Manage your Orkut activity</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut.readonly">View your Orkut data</string>

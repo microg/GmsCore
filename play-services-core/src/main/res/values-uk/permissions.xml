@@ -140,6 +140,7 @@
     <string name="permission_scope_www.googleapis.com_auth_gan">Керування своїми GAN даними</string>
     <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Перегляд своїх GAN даних</string>
     <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">CloudMessaging для chrome</string>
+    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Glass timeline scope</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Створювати, читати, оновлювати та видаляти чернетки. Відправляти повідомлення та чернетки.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Всі операції читання/запису виконуються одразу ж, окрім видалення тем та повідомлень повз кошик.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Читання всіх ресурсів та метаданих, які не потребують операцій запису.</string>
@@ -157,6 +158,7 @@
     <string name="permission_scope_www.googleapis.com_auth_prediction">Керування своїми даними в Google Prediction API</string>
     <string name="permission_scope_www.googleapis.com_auth_shoppingapi">Перегляд даних продукту</string>
     <string name="permission_scope_www.googleapis.com_auth_siteverification">Керування своїм переліком сайтів та доменів</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Керування верифікацією ваших нових сайтів в Google</string>
     <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Доступ на запис та читання до Shopping Content API.</string>
     <string name="permission_scope_www.googleapis.com_auth_taskqueue.consumer">Виконання завдань із вашого планувальника завдань</string>
     <string name="permission_scope_www.googleapis.com_auth_taskqueue">Керування своїми задачами</string>
