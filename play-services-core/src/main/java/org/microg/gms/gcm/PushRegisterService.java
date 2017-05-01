@@ -41,6 +41,7 @@ import static org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_DELETE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_KID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_PENDING_INTENT;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
@@ -100,15 +101,23 @@ public class PushRegisterService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent: " + intent);
-        Log.d(TAG, "onHandleIntent: " + intent.getExtras());
+
+        String requestId = null;
+        if (intent.hasExtra(EXTRA_KID) && intent.getStringExtra(EXTRA_KID).startsWith("|")) {
+            String[] kid = intent.getStringExtra(EXTRA_KID).split("\\|");
+            if (kid.length >= 3 && "ID".equals(kid[1])) {
+                requestId = kid[2];
+            }
+        }
+
         if (GcmPrefs.get(this).isEnabled()) {
             if (LastCheckinInfo.read(this).lastCheckin > 0) {
                 try {
                     if (ACTION_C2DM_UNREGISTER.equals(intent.getAction()) ||
                             (ACTION_C2DM_REGISTER.equals(intent.getAction()) && "1".equals(intent.getStringExtra(EXTRA_DELETE)))) {
-                        unregister(intent);
+                        unregister(intent, requestId);
                     } else if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
-                        register(intent);
+                        register(intent, requestId);
                     }
                 } catch (Exception e) {
                     Log.w(TAG, e);
@@ -123,11 +132,11 @@ public class PushRegisterService extends IntentService {
             }
         } else {
             // GCM is disabled, deny registration
-            replyNotAvailable(this, intent);
+            replyNotAvailable(this, intent, null, requestId);
         }
     }
 
-    private void register(final Intent intent) {
+    private void register(final Intent intent, String requestId) {
         PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
         final String packageName = PackageUtils.packageFromPendingIntent(pendingIntent);
         Log.d(TAG, "register[req]: " + intent.toString() + " extras=" + intent.getExtras());
@@ -143,20 +152,16 @@ public class PushRegisterService extends IntentService {
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
             } catch (PackageManager.NameNotFoundException e) {
-                replyNotAvailable(this, intent, packageName);
+                replyNotAvailable(this, intent, packageName, requestId);
             }
         } else if (app != null && !app.allowRegister) {
-            replyNotAvailable(this, intent, packageName);
+            replyNotAvailable(this, intent, packageName, requestId);
         } else {
-            registerAndReply(this, intent, packageName);
+            registerAndReply(this, intent, packageName, requestId);
         }
     }
 
-    public static void replyNotAvailable(Context context, Intent intent) {
-        replyNotAvailable(context, intent, null);
-    }
-
-    public static void replyNotAvailable(Context context, Intent intent, String packageName) {
+    public static void replyNotAvailable(Context context, Intent intent, String packageName, String requestId) {
         if (packageName == null) {
             PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
             packageName = PackageUtils.packageFromPendingIntent(pendingIntent);
@@ -166,20 +171,20 @@ public class PushRegisterService extends IntentService {
             return;
         }
         Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
-        outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
+        outIntent.putExtra(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
         Log.d(TAG, "registration not allowed");
         sendReply(context, intent, packageName, outIntent);
     }
 
-    public static void registerAndReply(Context context, Intent intent, String packageName) {
+    public static void registerAndReply(Context context, Intent intent, String packageName, String requestId) {
         Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
         String sender = intent.getStringExtra(EXTRA_SENDER);
         String appSignature = PackageUtils.firstSignatureDigest(context, packageName);
         String regId = register(context, packageName, appSignature, sender, null).token;
         if (regId != null) {
-            outIntent.putExtra(EXTRA_REGISTRATION_ID, regId);
+            outIntent.putExtra(EXTRA_REGISTRATION_ID, attachRequestId(regId, requestId));
         } else {
-            outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
+            outIntent.putExtra(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
         }
 
         Log.d(TAG, "register[res]: " + outIntent + " extras=" + outIntent.getExtras());
@@ -187,6 +192,7 @@ public class PushRegisterService extends IntentService {
     }
 
     private static void sendReply(Context context, Intent intent, String packageName, Intent outIntent) {
+
         try {
             if (intent.hasExtra(EXTRA_MESSENGER)) {
                 Messenger messenger = intent.getParcelableExtra(EXTRA_MESSENGER);
@@ -222,7 +228,7 @@ public class PushRegisterService extends IntentService {
         return new RegisterResponse();
     }
 
-    private void unregister(Intent intent) {
+    private void unregister(Intent intent, String requestId) {
         PendingIntent pendingIntent = intent.getParcelableExtra(EXTRA_APP);
         String packageName = PackageUtils.packageFromPendingIntent(pendingIntent);
         Log.d(TAG, "unregister[req]: " + intent.toString() + " extras=" + intent.getExtras());
@@ -231,21 +237,26 @@ public class PushRegisterService extends IntentService {
         String appSignature = PackageUtils.firstSignatureDigest(this, packageName);
 
         if (database.getRegistration(packageName, appSignature) == null) {
-            outIntent.putExtra(EXTRA_UNREGISTERED, packageName);
+            outIntent.putExtra(EXTRA_UNREGISTERED, attachRequestId(packageName, requestId));
         } else {
             RegisterResponse response = unregister(this, packageName, appSignature, null, null);
             if (!packageName.equals(response.deleted)) {
-                outIntent.putExtra(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
+                outIntent.putExtra(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
 
                 if (response.retryAfter != null && !response.retryAfter.contains(":")) {
                     outIntent.putExtra(EXTRA_RETRY_AFTER, Long.parseLong(response.retryAfter));
                 }
             } else {
-                outIntent.putExtra(EXTRA_UNREGISTERED, packageName);
+                outIntent.putExtra(EXTRA_UNREGISTERED, attachRequestId(packageName, requestId));
             }
         }
 
         Log.d(TAG, "unregister[res]: " + outIntent.toString() + " extras=" + outIntent.getExtras());
         sendReply(this, intent, packageName, outIntent);
+    }
+
+    private static String attachRequestId(String msg, String requestId) {
+        if (requestId == null) return msg;
+        return "|ID|" + requestId + "|" + msg;
     }
 }
