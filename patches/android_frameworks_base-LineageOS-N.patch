@@ -1,0 +1,77 @@
+diff -ruN /core/res/AndroidManifest.xml /core/res/AndroidManifest.xml
+--- a/core/res/AndroidManifest.xml	2017-05-02 13:52:47.193205000 +0200
++++ b/core/res/AndroidManifest.xml	2017-05-02 14:16:35.333172865 +0200
+@@ -1942,6 +1942,13 @@
+         android:description="@string/permdesc_getPackageSize"
+         android:protectionLevel="normal" />
+ 
++    <!-- @hide Allows an application to change the package signature as
++         seen by applications -->
++    <permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE"
++        android:protectionLevel="dangerous"
++        android:label="@string/permlab_fakePackageSignature"
++        android:description="@string/permdesc_fakePackageSignature" />
++
+     <!-- @deprecated No longer useful, see
+          {@link android.content.pm.PackageManager#addPackageToPreferred}
+          for details. -->
+diff -ruN /core/res/res/values/config.xml /core/res/res/values/config.xml
+--- a/core/res/res/values/config.xml	2017-04-19 12:26:00.089347000 +0200
++++ b/core/res/res/values/config.xml	2017-05-02 14:18:27.683170337 +0200
+@@ -1474,6 +1474,8 @@
+     <string-array name="config_locationProviderPackageNames" translatable="false">
+         <!-- The standard AOSP fused location provider -->
+         <item>com.android.location.fused</item>
++        <!-- The (faked) microg fused location provider -->
++        <item>com.google.android.gms</item>
+     </string-array>
+ 
+     <!-- This string array can be overriden to enable test location providers initially. -->
+diff -ruN /core/res/res/values/strings.xml /core/res/res/values/strings.xml
+--- a/core/res/res/values/strings.xml	2017-04-14 20:12:55.217850000 +0200
++++ b/core/res/res/values/strings.xml	2017-05-02 14:18:51.313169805 +0200
+@@ -679,6 +679,11 @@
+     <!--  Permissions -->
+ 
+     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permlab_fakePackageSignature">Spoof package signature</string>
++    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Grant this permission with caution only!</string>
++
++    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+     <string name="permlab_statusBar">disable or modify status bar</string>
+     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+     <string name="permdesc_statusBar">Allows the app to disable the status bar or add and remove system icons.</string>
+diff -ruN /services/core/java/com/android/server/pm/PackageManagerService.java /services/core/java/com/android/server/pm/PackageManagerService.java
+--- a/services/core/java/com/android/server/pm/PackageManagerService.java	2017-05-02 13:52:47.263205000 +0200
++++ b/services/core/java/com/android/server/pm/PackageManagerService.java	2017-05-02 14:19:44.563168607 +0200
+@@ -3178,8 +3178,27 @@
+                 ? Collections.<String>emptySet() : permissionsState.getPermissions(userId);
+         final PackageUserState state = ps.readUserState(userId);
+ 
+-        return PackageParser.generatePackageInfo(p, gids, flags,
+-                ps.firstInstallTime, ps.lastUpdateTime, permissions, state, userId);
++        return mayFakeSignature(p, PackageParser.generatePackageInfo(p, gids, flags,
++                ps.firstInstallTime, ps.lastUpdateTime, permissions, state, userId),
++                permissions);
++    }
++
++    private PackageInfo mayFakeSignature(PackageParser.Package p, PackageInfo pi,
++            Set<String> permissions) {
++        try {
++            if (permissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")
++                    && p.applicationInfo.targetSdkVersion > Build.VERSION_CODES.LOLLIPOP_MR1
++                    && p.mAppMetaData != null) {
++                String sig = p.mAppMetaData.getString("fake-signature");
++                if (sig != null) {
++                    pi.signatures = new Signature[] {new Signature(sig)};
++                }
++            }
++        } catch (Throwable t) {
++            // We should never die because of any failures, this is system code!
++            Log.w("PackageManagerService.FAKE_PACKAGE_SIGNATURE", t);
++        }
++        return pi;
+     }
+ 
+     @Override
