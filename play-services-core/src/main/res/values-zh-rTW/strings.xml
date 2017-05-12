@@ -16,7 +16,7 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
-    <string name="gms_settings_name">設定microG</string>
+    <string name="gms_settings_name">microG設定</string>
 
     <string name="just_a_sec">請稍等...</string>
     <string name="google_account_label">Google</string>
