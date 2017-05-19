@@ -20,27 +20,27 @@
 
     <string name="just_a_sec">Chwileczkę…</string>
     <string name="google_account_label">Google</string>
-    <string name="ask_permission_tos">Kontynuując, zgadzasz się na wykorzystywanie swoich danych przez Google oraz tę aplikację zgodnie z warunkami korzystania z usług oraz polityką prywatności Google.</string>
+    <string name="ask_permission_tos">Kontynuując, zgadzasz się na wykorzystywanie swoich danych przez Google oraz usługi microG zgodnie z warunkami korzystania oraz polityką prywatności Google.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce wykorzystać:</string>
     <string name="account_manager_title">Zarządzanie kontem Google</string>
     <string name="sorry">Przepraszamy…</string>
     <string name="no_network_error_desc">Nie masz połączenia z siecią.
 
-To może być chwilowy problem lub Twoje urządzenie nie posiada aktualnych usług wykorzystywania danych. Spróbuj ponownie po połączeniu się z siecią mobilną lub Wi-Fi.</string>
-    <string name="auth_general_error_desc">"Wystąpił problem z połączeniem z serwerami Google.
+To może być chwilowy problem lub Twoje urządzenie nie posiada aktualnych usług wykorzystywania danych. Połącz się z Wi-Fi lub siecią mobilną i spróbuj ponownie.</string>
+    <string name="auth_general_error_desc">"Wystąpił błąd podczas łączenia z serwerami Google.
 
 Spróbuj ponownie później."</string>
-    <string name="auth_finalize">Twoje urządzenie kontaktuje się z Google, aby zapisać informacje o koncie.
+    <string name="auth_finalize">Twoje urządzenie łączy się z Google, aby zapisać informacje o koncie.
 
 To zajmie kilka minut.</string>
     <string name="allow">Zezwól</string>
     <string name="deny">Zabroń</string>
     <string name="auth_notification_title">Wymagana autoryzacja</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> wymaga Twojej autoryzacji aby skorzystać z konta Google.</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> wymaga Twojej autoryzacji, aby skorzystać z konta Google.</string>
 
-    <string name="perm_status_broadcast_label">nasłuchuj wewnętrznych powiadomień stanu</string>
-    <string name="perm_c2dm_receive_label">nasłuchuj wiadomości C2DM</string>
+    <string name="perm_status_broadcast_label">sprawdzaj wewnętrzne powiadomienia stanu</string>
+    <string name="perm_c2dm_receive_label">sprawdzaj wiadomości C2DM</string>
     <string name="perm_c2dm_send_label">wysyłaj wiadomości C2DM do innych aplikacji</string>
     <string name="perm_gtalk_svc_label">wymieniaj wiadomości i odbieraj powiadomienia synchronizacji z serwerów Google</string>
     <string name="perm_extended_access_label">Rozszerzony dostęp do usług Google</string>
@@ -58,11 +58,11 @@ To zajmie kilka minut.</string>
     <string name="list_no_item_none">Brak</string>
 
     <string name="games_title">Gry Google Play</string>
-    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce wykorzystać Gry Google</string>
-    <string name="games_info_content">Aby korzystać z Gier Play wymagana jest instalacja aplikacji Gry Google Play. Aplikacja może dalej działać bez Gier Play, ale jest możliwe, że nie będzie działać prawidłowo.</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce wykorzystać Gry Google Play</string>
+    <string name="games_info_content">Aby korzystać z gier Google Play wymagana jest instalacja aplikacji Gry Google Play . Aplikacja może dalej działać bez Gry Google Play, ale możliwe, że nie będzie działać prawidłowo.</string>
 
     <string name="pick_place_title">Wybierz miejsce</string>
-    <string name="pick_place_desc">Wybierak miejsca nie jest jeszcze dostępny.</string>
+    <string name="pick_place_desc">Opcja wyboru miejsca nie jest jeszcze dostępna.</string>
     <string name="place_picker_select_title">Wybierz tę lokalizację</string>
     <string name="place_picker_nearby_places">Pobliskie miejsca</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
@@ -81,22 +81,22 @@ To zajmie kilka minut.</string>
     <string name="self_check_cat_system">System</string>
 
     <string name="self_check_name_fake_sig_perm">System wspiera imitowanie sygnatur:</string>
-    <string name="self_check_resolution_fake_sig_perm">Twój ROM sam z siebie nie wspiera imitowania sygnatur. W dalszy ciągu możesz użyć modułu Xposed lub innych systemów aby imitować sygnatury. Przejrzyj dokumentację na temat ROM-ów wspierających imitowanie sygnatur i jak korzystać z usług microG na ROM-ach tego nie wspierających.</string>
-    <string name="self_check_name_perm_granted">System udziela pozwolenia na imitowanie sygnatur:</string>
-    <string name="self_check_resolution_perm_granted">To jest mocna przesłanka na to, że ROM wspiera imitowanie sygnatur, ale wymaga dalszych akcji, aby to to aktywować. Przejrzyj dokumentację w poszukiwaniu dalszych instrukcji.</string>
+    <string name="self_check_resolution_fake_sig_perm">Twój ROM nie posiada wbudowanego wsparcia dla imitacji sygnatur. Możesz jednak nadal spróbować użyć modułu Xposed (FakeGApps) lub innych systemów aby imitować sygnatury. Przejrzyj dokumentację dot. ROM-ów wspierających imitowanie sygnatur i sprawdź jak korzystać z usług microG na systemach tego nie wspierających.</string>
+    <string name="self_check_name_perm_granted">System udziela pozwolenia na imitację sygnatur:</string>
+    <string name="self_check_resolution_perm_granted">Możliwe, że Twój ROM wspiera imitowanie sygnatur, ale wymagane są dalsze działania, aby to włączyć. Przejrzyj dokumentacje, aby sprawdzić dalsze instrukcje.</string>
     <string name="self_check_name_system_spoofs">System imituje sygnatury:</string>
-    <string name="self_check_resolution_system_spoofs">Przejrzyj dokumentację w poszukiwaniu dalszych instrukcji.</string>
+    <string name="self_check_resolution_system_spoofs">Przejrzyj dokumentację i sprawdź dalsze instrukcje.</string>
 
-    <string name="self_check_pkg_gms">Usługi Play (GmsCore)</string>
-    <string name="self_check_pkg_vending">Sklep Play (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gms">Usługi Google Play (GmsCore)</string>
+    <string name="self_check_pkg_vending">Sklep Google Play (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Google Services Framework (GSF)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> zainstalowany:</string>
-    <string name="self_check_resolution_app_installed">Zainstaluj aplikację <xliff:g example="F-Droid">%1$s</xliff:g> lub kompatybilną. Przejrzyj dokumentację w poszukiwaniu które aplikacje są kompatybilne.</string>
+    <string name="self_check_resolution_app_installed">Zainstaluj aplikację <xliff:g example="F-Droid">%1$s</xliff:g> lub kompatybilną. Przejrzyj dokumentację i sprawdź, które aplikacje są kompatybilne.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> posiada prawidłową sygnaturę:</string>
-    <string name="self_check_resolution_correct_sig">Albo zainstalowany <xliff:g example="F-Droid">%1$s</xliff:g> nie jest kompatybilny albo imitowanie sygnatur nie jest aktywne dla niego. Przyjrzyj dokumentację w poszukiwaniu które aplikacje i ROM-y są kompatybilne.</string>
+    <string name="self_check_resolution_correct_sig">Albo zainstalowany <xliff:g example="F-Droid">%1$s</xliff:g> nie jest kompatybilny, albo imitacja sygnatur nie jest dla niego aktywna. Przejrzyj dokumentacje, aby sprawdzić, które aplikacje i ROM-y są kompatybilne.</string>
 
-    <string name="self_check_name_battery_optimizations">Pomijanie optymalizacji baterii:</string>
-    <string name="self_check_resolution_battery_optimizations">Stuknij aby wyłączyć optymalizację baterii. W przeciwnym razie, aplikacje mogą nie funkcjonować prawidłowo.</string>
+    <string name="self_check_name_battery_optimizations">Ignorowanie optymalizacji baterii:</string>
+    <string name="self_check_resolution_battery_optimizations">Dotknji, aby wyłączyć optymalizację baterii. W przeciwnym razie aplikacje mogą nie działać prawidłowo.</string>
 
     <!-- Settings strings -->
 
@@ -104,13 +104,13 @@ To zajmie kilka minut.</string>
     <string name="prefcat_components">Komponenty</string>
     <string name="prefcat_configuration">Konfiguracja</string>
     <string name="prefcat_google_services">Usługi Google</string>
-    <string name="prefcat_location_service">Usługa lokalizacyjna</string>
+    <string name="prefcat_location_service">Usługa lokalizacji</string>
     <string name="prefcat_operation_mode">Tryb działania</string>
     <string name="prefcat_services">Usługi w tle</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Optymalizacja baterii włączona</string>
-    <string name="cond_gcm_bat_summary">Aktywowałeś Google Cloud Messaging ale optymalizacja baterii jest aktywna dla usługi microG. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii.</string>
+    <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
     <string name="cond_gcm_bat_action">Ignoruj optymalizacje</string>
     <string name="cond_perm_title">Brakuje uprawnień</string>
 
@@ -125,19 +125,19 @@ To zajmie kilka minut.</string>
 
     <string name="pref_more_settings">Więcej</string>
 
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Żeby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
-    <string name="pref_gcm_heartbeat_title">Częstotliwość nasłuchu Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">Częstotliwość w sekundach do odpytywania serwerów Google. Zwiększenie tej wartości zmniejszy zużycie baterii, ale może spowodować opóźnienia w dostarczaniu powiadomień ‘push’.\nPrzestarzałe, zostanie usunięte w nowszej wersji.</string>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Aby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
+    <string name="pref_gcm_heartbeat_title">Częstotliwość sprawdzania Cloud Messaging</string>
+    <string name="pref_gcm_heartbeat_summary">Częstotliwość (w sekundach) do sprawdzania serwerów Google. Zwiększenie tej wartości zmniejszy zużycie baterii, ale może spowodować opóźnienia w dostarczaniu powiadomień ‘push’.\nPrzestarzałe, zostanie to usunięte w nowszej wersji.</string>
     <string name="pref_gcm_apps_title">Aplikacje korzystające z Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych do Google Cloud Messaging.</string>
+    <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych w usłudze Google Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji do korzystania z powiadomień ‘push’</string>
-    <string name="pref_gcm_ping_interval">Częstotliwość odpytywania: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji w usłudze powiadomień ‘push’</string>
+    <string name="pref_gcm_ping_interval">Częstotliwość sprawdzania: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">O usłudze microG</string>
-    <string name="pref_about_summary">Informacje o wersji i użyte biblioteki</string>
+    <string name="pref_about_summary">Informacje o wersji, użyte licencje i biblioteki</string>
 
-    <string name="gcm_app_error_unregistering">Błąd wyrejestrowywania</string>
+    <string name="gcm_app_error_unregistering">Błąd wyrejestrowania</string>
     <string name="gcm_app_not_installed_anymore">Już odinstalowany</string>
     <string name="gcm_unregister_app">Wyrejestruj</string>
     <string name="gcm_not_registered">Niezarejestrowany</string>
@@ -146,23 +146,23 @@ To zajmie kilka minut.</string>
     <string name="gcm_registered">Zarejestrowany</string>
     <string name="gcm_registered_since">Zarejestrowany od: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Czy wyrejestrować <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
-    <string name="gcm_unregister_confirm_message">Niektóre aplikacje automatycznie nie rejestrują się ponownie lub nie posiadają opcji do przeprowadzenia tego ręcznie. Te aplikacje mogą nie działać prawidłowo po wyrejestrowaniu.\nCzy kontynuować?</string>
-    <string name="gcm_unregister_after_deny_message">Zabroniłeś już zarejestrowanej aplikacji zarejestrować się do odczytu powiadomień ‘push’.\nCzy chcesz wyrejestrować ją, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
+    <string name="gcm_unregister_confirm_message">Niektóre aplikacje nie rejestrują się automatycznie ponownie lub nie posiadają opcji do zrobienia tego ręcznie. Takie aplikacje po wyrejestrowaniu mogą nie działać prawidłowo.\nCzy chcesz kontynuować?</string>
+    <string name="gcm_unregister_after_deny_message">Odmówiłeś już zarejestrowanej aplikacji zarejestrować się w usłudze powiadomień ‘push’.\nCzy chcesz ją wyrejestrować, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
     <string name="gcm_state_disconnected">Obecny stan: rozłączony</string>
     <string name="gcm_state_connected">Obecny stan: połączony od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga, aby SafetyNet był podpisany przez własnościowy system DroidGuard. Izolowana wersja DroidGuard-a jest dostępna do pobrania jako oddzielna aplikacja “DroidGuard Helper”.</string>
+    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga by SafetyNet był podpisany przez własnościowy system DroidGuard. Specjalna wersja DroidGuard-a jest dostępna do pobrania jako oddzielna aplikacja “DroidGuard Helper” w repozytorium miroG w F-Droid.</string>
 
-    <string name="pref_snet_testdrive_title">Wypróbuj poświadczenie SafetyNet</string>
+    <string name="pref_snet_testdrive_title">Wypróbuj działanie SafetyNet</string>
 
     <string name="pref_snet_status_official_title">Użyj oficjalnego serwera</string>
-    <string name="pref_snet_status_official_summary">Wymaga niezrootowanego systemu i zainstalowanego microG DroidGuard Helper</string>
+    <string name="pref_snet_status_official_summary">Wymaga niezrootowanego ROM-u i zainstalowanego microG DroidGuard Helper</string>
     <string name="pref_snet_status_third_party_title">Użyj serwera strony trzeciej</string>
     <string name="pref_snet_status_third_party_summary">Serwery stron trzecich mogą być w stanie odpowiedzieć na zapytania SafetyNet bez sygnatury DroidGuard</string>
     <string name="pref_snet_custom_url_title">URL własnego serwera</string>
-    <string name="pref_snet_custom_url_summary">Pełny URL serwera strony trzeciej odpowiadającego na zapytania poświadczeń SafetyNet</string>
+    <string name="pref_snet_custom_url_summary">Pełny adres URL serwera strony trzeciej odpowiadającego na zapytania SafetyNet</string>
     <string name="pref_snet_self_signed_title">Użyj samo-podpisanego certyfikatu</string>
-    <string name="pref_snet_self_signed_summary">Zamiast odpytywać serwera, podpisuj odpowiedzi SafetyNet lokalnie używając samo-podpisanego certyfikatu. Większość aplikacji odmówi użycia samo-podpisanych odpowiedzi.</string>
+    <string name="pref_snet_self_signed_summary">Zamiast sprawdzać serwer, podpisuj odpowiedzi SafetyNet lokalnie używając samo-podpisanego certyfikatu. Większość aplikacji odmówi użycia samo-podpisanych odpowiedzi.</string>
 
 </resources>
