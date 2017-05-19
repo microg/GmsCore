@@ -25,9 +25,16 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би використовувати:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Вибачте...</string>
-    <string name="no_network_error_desc">Ви не маєте підключення до мережі.
+    <string name="auth_before_connect">Додаток на Вашому пристрої намагається увійти до облікового запису Google.
 
-Це може бути тимчасовою проблемою, або ж Ваш пристрій не може використовувати передачу даних. Спробуйте ще раз, коли з\'явиться мобільна мережа чи з\'єднання із Wi-Fi мережею.</string>
+Якщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для підключення до сторінки авторизації Google, інакше натисніть  <b>Скасувати</b>, аби перейти назад до додатку, що викликало це вікно.</string>
+    <string name="auth_sign_in">Увійти</string>
+    <string name="auth_connecting">Ваш пристрій встановлює зв\'язок із серверами Google для авторизації.
+
+Це може зайняти кілька секунд.</string>
+    <string name="no_network_error_desc">Відсутнє з\'єднання із мережею.
+
+Це може бути як тимчасова проблема, так і проблемою із послугою передачі даних на Вашому пристрої Anddroid. Спробуйте ще раз, коли з\'єднаєтесь із мобільної мережею, або до мережі Wi-Fi.</string>
     <string name="auth_general_error_desc">Не вдалося з\'єднатися із сервісами Google.
 
 Спробуйте пізніше.</string>
@@ -152,7 +159,7 @@
     <string name="gcm_state_disconnected">Поточний стан: Відключено</string>
     <string name="gcm_state_connected">Поточний стан: Під\'єднано від <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="snet_intro">Google SafetyNet це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі додатки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.\n\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard. Ізольована версія DroidGuard доступна для встановлення як окремий додаток "DroidGuard Helper".</string>
+    <string name="snet_intro">Google SafetyNet це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі додатки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.\n\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard. Ізольована версія DroidGuard доступна для встановлення як окремий додаток \"DroidGuard Helper\".</string>
 
     <string name="pref_snet_testdrive_title">Протестувати SafetyNet перевірку</string>
 

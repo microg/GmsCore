@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2013-2015 microG Project Team
+  ~ Copyright 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -148,8 +148,8 @@
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Керування своїм місцем перебуванням в межах міста та його історією</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Керування своїм точним місцем перебуванням</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">Керування своїм місцем перебуванням в межах міста</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine">надає доступ на читання та запис Maps Engine даних користувача зі свого додатку.</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">надає доступ лише на читання Maps Engine даних користувача зі свого додатку.</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">Перегляд та керування Вашими Google Maps Engine даними</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">Перегляд Ваших Google Maps Engine даних</string>
     <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Перегляд та керування своїми Google картами для мобільного пристрою</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut">Керування Вашою Orkut активністю</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut.readonly">Перегляд Ваших Orkut даних</string>
