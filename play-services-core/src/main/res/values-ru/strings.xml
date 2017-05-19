@@ -25,6 +25,13 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы использовать:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Извините…</string>
+	<string name="auth_before_connect">"Приложение на вашем устройстве пытается войти в учетную запись Google.
+
+Если это было намеренно, нажмите кнопку <b>Войти</b>, чтобы подключиться к странице входа в Google, если нет, нажмите <b>Отмена</b>, чтобы вернуться к приложению, которое вызвало это диалоговое окно."</string>
+    <string name="auth_sign_in">Войти</string>
+    <string name="auth_connecting">"Ваше устройство устанавливает соединение с серверами Google для входа в систему.
+
+Это может занять несколько секунд."</string>
     <string name="no_network_error_desc">"У вас нет подключения к сети.
 
 Это может быть временной проблемой, или ваше Android устройство не может использовать передачу данных. Попробуйте еще раз, когда появится соединение с мобильной сетью или присоединитесь к сети Wi-Fi."</string>
