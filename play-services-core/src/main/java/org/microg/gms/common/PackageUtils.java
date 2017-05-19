@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 microG Project Team
+ * Copyright (C) 2013-2017 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Binder;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.Manifest;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
@@ -35,19 +38,31 @@ import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 
 public class PackageUtils {
 
-    private static final String[] KNOWN_GOOGLE_SIGNATURES = {
-            GMS_PACKAGE_SIGNATURE_SHA1 /* Google platform key */,
-            "58e1c4133f7441ec3d2c270270a14802da47ba0e" /* Android Wear */,
-            "46f6c8987311e131f4f558d8e0ae145bebab6da3" /* Google Classroom */,
-            "24bb24c05e47e0aefa68a58a766179d9b613a600" /* Google Fit/Glass */,
-            "aa87ce1260c008d801197bb4ecea4ab8929da246" /* Google Inbox */,
-            "01b844184e360686aa98b48eb16e05c76d4a72ad" /* Project Fi */,
-            "35b438fe1bc69d975dc8702dc16ab69ebf65f26f" /* Waze */,
-            "0cbe08032217d45e61c0bc72f294395ee9ecb5d5" /* Google Trips */,
-            "188c5ca3863fa121216157a5baa80755ceda70ab" /* Google Cardboard Camera */};
+    private static final String GOOGLE_PLATFORM_KEY = GMS_PACKAGE_SIGNATURE_SHA1;
+    private static final String GOOGLE_APP_KEY = "24bb24c05e47e0aefa68a58a766179d9b613a600";
+    private static final String GOOGLE_LEGACY_KEY = "58e1c4133f7441ec3d2c270270a14802da47ba0e"; // Seems to be no longer used.
+    private static final String[] GOOGLE_PRIMARY_KEYS = {GOOGLE_PLATFORM_KEY, GOOGLE_APP_KEY};
 
-    public static boolean isGoogleSignedPackages(Context context, String packageName) {
-        return Arrays.asList(KNOWN_GOOGLE_SIGNATURES).contains(firstSignatureDigest(context, packageName));
+    private static final Map<String, String> KNOWN_GOOGLE_PACKAGES;
+
+    static {
+        KNOWN_GOOGLE_PACKAGES = new HashMap<>();
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.classroom", "46f6c8987311e131f4f558d8e0ae145bebab6da3");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.inbox", "aa87ce1260c008d801197bb4ecea4ab8929da246");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.playconsole", "d6c35e55b481aefddd74152ca7254332739a81d6");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.travel.onthego", "0cbe08032217d45e61c0bc72f294395ee9ecb5d5");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.tycho", "01b844184e360686aa98b48eb16e05c76d4a72ad");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.wearable.app", "a197f9212f2fed64f0ff9c2a4edf24b9c8801c8c");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.vr.cyclops", "188c5ca3863fa121216157a5baa80755ceda70ab");
+        KNOWN_GOOGLE_PACKAGES.put("com.waze", "35b438fe1bc69d975dc8702dc16ab69ebf65f26f");
+    }
+
+    public static boolean isGooglePackage(Context context, String packageName) {
+        String signatureDigest = firstSignatureDigest(context, packageName);
+        if (signatureDigest == null) return false;
+        if (Arrays.asList(GOOGLE_PRIMARY_KEYS).contains(signatureDigest)) return true;
+        if (!KNOWN_GOOGLE_PACKAGES.containsKey(packageName)) return false;
+        return KNOWN_GOOGLE_PACKAGES.get(packageName).equals(signatureDigest);
     }
 
     public static void assertExtendedAccess(Context context) {
@@ -59,7 +74,7 @@ public class PackageUtils {
         String[] packagesForUid = context.getPackageManager().getPackagesForUid(Binder.getCallingUid());
         if (packagesForUid != null && packagesForUid.length != 0) {
             for (String packageName : packagesForUid) {
-                if (isGoogleSignedPackages(context, packageName) || GMS_PACKAGE_NAME.equals(packageName))
+                if (isGooglePackage(context, packageName) || GMS_PACKAGE_NAME.equals(packageName))
                     return true;
             }
         }
@@ -80,13 +95,14 @@ public class PackageUtils {
         checkPackageUid(context, packageName, callingUid);
     }
 
+    @Nullable
     public static String firstSignatureDigest(Context context, String packageName) {
         PackageManager packageManager = context.getPackageManager();
         final PackageInfo info;
         try {
             info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
         } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException(e);
+            return null;
         }
         if (info != null && info.signatures != null && info.signatures.length > 0) {
             for (Signature sig : info.signatures) {
