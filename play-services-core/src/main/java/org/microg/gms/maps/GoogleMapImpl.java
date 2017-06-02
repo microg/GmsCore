@@ -545,10 +545,12 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
             @Override
             public void run() {
                 Log.d(TAG, "Announce map loaded");
-                try {
-                    callback.onMapLoaded();
-                } catch (RemoteException e) {
-                    Log.w(TAG, e);
+                if (callback != null) {
+                    try {
+                        callback.onMapLoaded();
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
                 }
             }
         }, 5000);
