@@ -43,7 +43,8 @@ public class PackageUtils {
             "aa87ce1260c008d801197bb4ecea4ab8929da246" /* Google Inbox */,
             "01b844184e360686aa98b48eb16e05c76d4a72ad" /* Project Fi */,
             "35b438fe1bc69d975dc8702dc16ab69ebf65f26f" /* Waze */,
-            "0cbe08032217d45e61c0bc72f294395ee9ecb5d5" /* Google Trip */};
+            "0cbe08032217d45e61c0bc72f294395ee9ecb5d5" /* Google Trips */,
+            "188c5ca3863fa121216157a5baa80755ceda70ab" /* Google Cardboard Camera */};
 
     public static boolean isGoogleSignedPackages(Context context, String packageName) {
         return Arrays.asList(KNOWN_GOOGLE_SIGNATURES).contains(firstSignatureDigest(context, packageName));
