@@ -17,19 +17,19 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configured</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configured</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend dikonfigurasi</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends dikonfigurasi</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registered App</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> Aplikasi terdaftar</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> Aplikasi terdaftar</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">A permission required for proper functionality of microG Service Core is not granted.</item>
-        <item quantity="other">Permissions required for proper functionality of microG Service Core are not granted.</item>
+        <item quantity="one">Izin yang dibutuhkan untuk fungsi yang tepat dari Core Layanan MicroG tidak diberikan.</item>
+        <item quantity="other">Izin yang dibutuhkan untuk fungsionalitas yang tepat dari Core Layanan MicroG tidak diberikan.</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">Request missing permission</item>
-        <item quantity="other">Request missing permissions</item>
+        <item quantity="one">Meminta izin yang hilang</item>
+        <item quantity="other">Meminta izin-izin yang hilang</item>
     </plurals>
 </resources>
