@@ -60,9 +60,9 @@ android {
 
     defaultConfig {
         versionName getMyVersionName()
-        def x = getMyVersionCode()
+        def x = getMyVersionCode() - 350
         // We are not allowed to freely choose the hundreds column as it defines the device type
-        versionCode(11672400 + x % 100 + ((int) (x / 100)) * 1000)
+        versionCode(11951400 + x % 100 + ((int) (x / 100)) * 1000)
 
         minSdkVersion androidMinSdk()
         targetSdkVersion androidTargetSdk()
