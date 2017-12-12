@@ -289,6 +289,17 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="org.microg.gms.people.ContactSyncService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/contact_syncadapter"/>
+        </service>
+
         <!-- Wearable -->
 
         <service android:name="org.microg.gms.wearable.WearableService">
