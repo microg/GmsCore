@@ -36,8 +36,10 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
+
     lintOptions {
         // TODO: Remove MissingTranslation once we have stable strings and proper translations.
         disable 'MissingTranslation'
@@ -45,8 +47,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.takisoft.fix:preference-v7:25.3.1.0'
+    api 'com.android.support:support-v4:25.3.1'
+    api 'com.android.support:appcompat-v7:25.3.1'
+    api 'com.takisoft.fix:preference-v7:25.3.1.0'
 }
 
