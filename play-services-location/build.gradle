@@ -36,11 +36,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    compile project(':play-services-base')
-    compile project(':play-services-location-api')
+    api project(':play-services-base')
+    api project(':play-services-location-api')
 }

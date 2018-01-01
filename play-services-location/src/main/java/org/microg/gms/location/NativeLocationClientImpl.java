@@ -190,7 +190,7 @@ public class NativeLocationClientImpl {
                 PendingIntent pendingIntent = intent.getExtras().getParcelable(EXTRA_PENDING_INTENT);
                 try {
                     intent.putExtra(FusedLocationProviderApi.KEY_LOCATION_CHANGED,
-                            intent.getParcelableExtra(KEY_LOCATION_CHANGED));
+                            intent.<Location>getParcelableExtra(KEY_LOCATION_CHANGED));
                     pendingIntent.send(context, 0, intent);
                     pendingCount.put(pendingIntent, pendingCount.get(pendingIntent) - 1);
                     if (pendingCount.get(pendingIntent) == 0) {
