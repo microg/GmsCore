@@ -44,11 +44,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'org.microg:safe-parcel:1.4.0'
+    api 'com.android.support:support-v4:25.3.1'
+    api 'org.microg:safe-parcel:1.4.0'
 }
