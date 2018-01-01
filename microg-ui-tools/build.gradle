@@ -47,8 +47,8 @@ android {
 }
 
 dependencies {
-    api 'com.android.support:support-v4:25.3.1'
-    api 'com.android.support:appcompat-v7:25.3.1'
-    api 'com.takisoft.fix:preference-v7:25.3.1.0'
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.takisoft.fix:preference-v7:$supportLibraryVersion.0"
 }
 

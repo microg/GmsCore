@@ -28,6 +28,7 @@ buildscript {
 allprojects {
     apply plugin: 'idea'
     ext.androidBuildVersionTools = "27.0.3"
+    ext.supportLibraryVersion = "27.0.2"
 }
 
 def androidCompileSdk() { return 27 }
@@ -39,5 +40,6 @@ def androidMinSdk() { return 7 }
 subprojects {
     repositories {
         jcenter()
+        maven { url "https://maven.google.com" }
     }
 }
