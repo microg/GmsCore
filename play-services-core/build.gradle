@@ -17,21 +17,24 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile 'de.hdodenhof:circleimageview:1.2.1'
-    compile 'com.squareup.wire:wire-runtime:1.6.1'
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.takisoft.fix:preference-v7:$supportLibraryVersion.0"
+    implementation "de.hdodenhof:circleimageview:1.3.0"
+    implementation "com.squareup.wire:wire-runtime:1.6.1"
 
-    compile project(':microg-ui-tools')
-    compile project(':play-services-api')
-    compile project(':play-services-wearable')
-    compile project(':unifiednlp-base')
-    compile project(':wearable-lib')
+    implementation project(':microg-ui-tools')
+    implementation project(':play-services-api')
+    implementation project(':play-services-wearable')
+    implementation project(':unifiednlp-base')
+    implementation project(':wearable-lib')
 
-    compile project(':remote-droid-guard-lib')
+    implementation project(':remote-droid-guard-lib')
 
-    compile project(':vtm-android')
-    compile project(':vtm-extras')
-    compile project(':vtm-jts')
-    compile project(':vtm-microg-theme')
+    implementation project(':vtm-android')
+    implementation project(':vtm-extras')
+    implementation project(':vtm-jts')
+    implementation project(':vtm-microg-theme')
 }
 
 String getMyVersionName() {
@@ -90,6 +93,11 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

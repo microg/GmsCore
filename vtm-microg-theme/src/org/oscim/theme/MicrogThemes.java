@@ -29,4 +29,13 @@ public enum MicrogThemes implements ThemeFile {
     public InputStream getRenderThemeAsStream() {
         return AssetAdapter.readFileAsStream(mPath);
     }
+
+    @Override
+    public void setMenuCallback(XmlRenderThemeMenuCallback menuCallback) {
+    }
+
+    @Override
+    public boolean isMapsforgeTheme() {
+        return false;
+    }
 }
