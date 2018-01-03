@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">Core Layanan microG</string>
+    <string name="gms_settings_name">Pengaturan microG</string>
+
+    <string name="just_a_sec">Tunggu sebentar…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Dengan melanjutkan, Anda mengizinkan aplikasi ini dan Google untuk menggunakan informasi Anda sesuai dengan persyaratan layanan dan kebijakan privasi masing-masing.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin menggunakan:</string>
+    <string name="account_manager_title">Pengelola Akun Google</string>
+    <string name="sorry">Maaf…</string>
+    <string name="auth_before_connect">"Aplikasi pada perangkat Anda mencoba masuk ke akun Google.
+
+Jika ini disengaja, gunakan tombol <b>Masuk</b> untuk terhubung ke laman masuk Google, jika tidak, tekan <b>Batal</b> untuk kembali ke aplikasi yang menyebabkan dialog ini ditampilkan."</string>
+    <string name="auth_sign_in">Masuk</string>
+    <string name="auth_connecting">"Perangkat Anda sedang membuat sambungan ke server Google untuk masuk.
+
+Ini memerlukan waktu beberapa detik."</string>
+    <string name="no_network_error_desc">"Anda tidak memiliki koneksi jaringan.
+
+Ini bisa menjadi masalah sementara atau perangkat Android Anda mungkin tidak tersedia untuk layanan data. Coba lagi saat terhubung ke jaringan seluler, atau sambungkan ke jaringan Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Terjadi masalah saat berkomunikasi dengan server Google.
+
+Coba lagi nanti."</string>
+    <string name="auth_finalize">"Perangkat Anda menghubungi Google untuk menyimpan informasi ke akun Anda.
+
+Ini memerlukan waktu beberapa menit."</string>
+    <string name="allow">Izinkan</string>
+    <string name="deny">Tolak</string>
+    <string name="auth_notification_title">Otentikasi diperlukan</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> memerlukan otorisasi Anda untuk mengakses akun Google Anda.</string>
+
+    <string name="perm_status_broadcast_label">dengarkan siaran status internal</string>
+    <string name="perm_c2dm_receive_label">dengarkan pesan C2DM</string>
+    <string name="perm_c2dm_send_label">kirim pesan C2DM ke aplikasi lain</string>
+    <string name="perm_gtalk_svc_label">bertukar pesan dan menerima pemberitahuan sinkronisasi dari server Google</string>
+    <string name="perm_extended_access_label">Akses yang diperluas ke layanan Google</string>
+
+    <string name="service_name_checkin">Pendaftaran perangkat Google</string>
+    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+
+    <string name="service_status_disabled">Non-aktifkan</string>
+    <string name="service_status_enabled">Diaktifkan</string>
+    <string name="service_status_automatic">Otomatis</string>
+    <string name="service_status_manual">Manual</string>
+
+    <string name="menu_advanced">Lanjutan</string>
+    <string name="list_no_item_none">Tidak ada</string>
+
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin menggunakan Play Games</string>
+    <string name="games_info_content">Untuk menggunakan Play Games, Anda harus memasang aplikasi Google Play Games. Aplikasi mungkin berlanjut tanpa Play Games, namun ada kemungkinan hal itu akan terjadi tanpa diduga.</string>
+
+    <string name="pick_place_title">Pilih tempat</string>
+    <string name="pick_place_desc">Tempat pemilih belum tersedia.</string>
+    <string name="place_picker_select_title">Pilih lokasi ini</string>
+    <string name="place_picker_nearby_places">Tempat terdekat</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
+    <string name="lacking_permission_toast">Core Layanan microG: Tidak memiliki izin untuk <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+
+    <string name="network_type_mobile">Jaringan seluler</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Jelajah</string>
+    <string name="network_type_other">Jaringan lainnya</string>
+
+    <!-- Self check -->
+
+    <string name="self_check_cat_fake_sig">Dukungan menipu tanda tangan</string>
+    <string name="self_check_cat_gms_packages">Paket terinstal</string>
+    <string name="self_check_cat_system">Sistem</string>
+
+    <string name="self_check_name_fake_sig_perm">Sistem memiliki dukungan menipu tanda tangan: </string>
+    <string name="self_check_resolution_fake_sig_perm">ROM Anda tidak memiliki dukungan asli untuk menipu tanda tangan. Anda masih bisa menggunakan Xposed atau sistem lain untuk menipu tanda tangan. Silakan periksa dokumentasi dimana ROM mendukung menipu tanda tangan dan cara menggunakan microG pada ROM yang tidak bisa.</string>
+    <string name="self_check_name_perm_granted">Sistem memberikan izin menipu tanda tangan: </string>
+    <string name="self_check_resolution_perm_granted">Ini adalah indikator kuat bahwa ROM memang mendukung menipu tanda tangan, namun memerlukan tindakan lebih lanjut untuk mengaktifkannya. Silakan periksa dokumentasi langkah-langkah yang mungkin diperlukan.</string>
+    <string name="self_check_name_system_spoofs">Sistem menipu tanda tangan: </string>
+    <string name="self_check_resolution_system_spoofs">Silakan periksa dokumentasi langkah-langkah yang mungkin diperlukan.</string>
+
+    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> terinstal: </string>
+    <string name="self_check_resolution_app_installed">Pasang aplikasi <xliff:g example="F-Droid">%1$s</xliff:g> atau yang kompatibel. Silakan periksa dokumentasi di mana aplikasi kompatibel.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> memiliki tanda tangan yang benar: </string>
+    <string name="self_check_resolution_correct_sig">Entah yang terpasang <xliff:g example="F-Droid">%1$s</xliff:g> tidak kompatibel atau menipu tanda tangan tidak aktif untuk itu. Silakan periksa dokumentasi aplikasi dan ROM yang kompatibel.</string>
+
+    <string name="self_check_name_battery_optimizations">Optimalisasi baterai diabaikan:</string>
+    <string name="self_check_resolution_battery_optimizations">Sentuh sini untuk menonaktifkan pengoptimalan baterai. Tidak melakukan hal ini dapat mengakibatkan aplikasi yang tidak sesuai.</string>
+
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">Tentang</string>
+    <string name="prefcat_components">Komponen</string>
+    <string name="prefcat_configuration">Konfigurasi</string>
+    <string name="prefcat_google_services">Layanan Google</string>
+    <string name="prefcat_location_service">Layanan lokasi</string>
+    <string name="prefcat_operation_mode">Mode operasi</string>
+    <string name="prefcat_services">Layanan-layanan</string>
+    <string name="prefcat_test">Uji</string>
+
+    <string name="cond_gcm_bat_title">Optimalisasi baterai diaktifkan</string>
+    <string name="cond_gcm_bat_summary">Anda mengaktifkan Google Cloud Messaging namun memiliki pengoptimalan baterai yang aktif untuk Core Layanan microG. Agar notifikasi push sampai tiba, Anda harus mengabaikan pengoptimalan baterai.</string>
+    <string name="cond_gcm_bat_action">Abaikan pengoptimalan</string>
+    <string name="cond_perm_title">Izin hilang</string>
+
+    <string name="prefs_account">Preferensi akun</string>
+    <string name="prefs_account_privacy">Informasi pribadi &amp; pribadi</string>
+    <string name="prefs_account_security">Masuk &amp; keamanan</string>
+
+    <string name="pref_auth_trust_google_title">Percaya Google untuk mengizinkan aplikasi</string>
+    <string name="pref_auth_trust_google_summary">Saat dinonaktifkan, pengguna ditanya sebelum permintaan otorisasi aplikasi dikirimkan ke Google. Beberapa aplikasi akan gagal menggunakan akun Google jika dinonaktifkan.</string>
+
+    <string name="pref_checkin_enable_summary">Mendaftarkan perangkat Anda ke layanan Google dan membuat pengenal perangkat unik. Strip microG mengidentifikasi bit selain nama akun Google Anda dari data registrasi.</string>
+
+    <string name="pref_more_settings">Lainnya</string>
+
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging adalah penyedia notifikasi push yang digunakan oleh banyak aplikasi pihak ketiga. Untuk menggunakannya Anda harus mengaktifkan registrasi perangkat.</string>
+    <string name="pref_gcm_heartbeat_title">Interval waktu detil Cloud Messaging</string>
+    <string name="pref_gcm_heartbeat_summary">Selang waktu dalam hitungan detik bagi sistem untuk detak jantung server Google. Peningkatan jumlah ini akan mengurangi konsumsi baterai, namun bisa menyebabkan penundaan pesan push. \nBelum lagi, akan diganti di rilis mendatang.</string>
+    <string name="pref_gcm_apps_title">Aplikasi menggunakan Google Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Daftar aplikasi yang saat ini terdaftar untuk Google Cloud Messaging.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Konfirmasikan aplikasi baru</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Tanyakan sebelum mendaftarkan aplikasi baru untuk menerima notifikasi push</string>
+    <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+
+    <string name="pref_about_title">Tentang Core Layanan microG</string>
+    <string name="pref_about_summary">informasi versi dan perpustakaan yang digunakan</string>
+
+    <string name="gcm_app_error_unregistering">Kesalahan belum mendaftar</string>
+    <string name="gcm_app_not_installed_anymore">Tidak lagi terpasang</string>
+    <string name="gcm_unregister_app">Belum terdaftar</string>
+    <string name="gcm_not_registered">Tidak terdaftar</string>
+    <string name="gcm_no_message_yet">Tidak ada pesan yang diterima sejauh ini</string>
+    <string name="gcm_last_message_at">Pesan Terakhir: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Terdaftar</string>
+    <string name="gcm_registered_since">Terdaftar sejak: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Unregister <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Beberapa aplikasi tidak secara otomatis mendaftar ulang dan / atau tidak memberikan pilihan untuk melakukannya secara manual. Aplikasi ini mungkin tidak bekerja dengan benar setelah tidak terdaftar. \nTerus?</string>
+    <string name="gcm_unregister_after_deny_message">Anda menolak aplikasi untuk mendaftar notifikasi push yang sudah terdaftar. \nApakah Anda ingin membatalkan pendaftaran sekarang sehingga tidak menerima pesan push di masa mendatang?</string>
+    <string name="gcm_messages_counter">Pesan: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> byte)</string>
+    <string name="gcm_state_disconnected">Status Saat Ini: Terputus</string>
+    <string name="gcm_state_connected">Status Terkini: Tersambung sejak <xliff:g example="2 jam lalu">%1$s</xliff:g></string>
+
+    <string name="snet_intro">Google SafetyNet adalah sistem sertifikasi perangkat, memastikan perangkat benar-benar aman dan kompatibel dengan Android CTS. Beberapa aplikasi menggunakan SafetyNet untuk alasan keamanan atau sebagai prasyarat untuk mengutak-atik. \n\nmicroG GmsCore berisi implementasi gratis SafetyNet, namun server resmi memerlukan permintaan SafetyNet untuk ditandatangani menggunakan hak milik sistem DroidGuard. Versi sandboxed dari DroidGuard tersedia terpisah sebagai aplikasi "DroidGuard Helper".</string>
+
+    <string name="pref_snet_testdrive_title">Cobalah pengesahan SafetyNet</string>
+
+    <string name="pref_snet_status_official_title">Gunakan server resmi</string>
+    <string name="pref_snet_status_official_summary">Membutuhkan sistem unrooted dan terpasang microG DroidGuard Helper</string>
+    <string name="pref_snet_status_third_party_title">Gunakan server pihak ketiga</string>
+    <string name="pref_snet_status_third_party_summary">Server pihak ketiga mungkin bisa membalas permintaan SafetyNet tanpa tanda tangan DroidGuard</string>
+    <string name="pref_snet_custom_url_title">URL server khusus</string>
+    <string name="pref_snet_custom_url_summary">URL lengkap dari server pihak ketiga yang menjawab permintaan pengesahan SafetyNet</string>
+    <string name="pref_snet_self_signed_title">Gunakan sertifikat yang ditandatangani sendiri</string>
+    <string name="pref_snet_self_signed_summary">Alih-alih meminta server, tandatangani tanggapan SafetyNet secara lokal dengan menggunakan sertifikat yang ditandatangani sendiri. Sebagian besar aplikasi akan menolak untuk menggunakan tanggapan yang ditandatangani sendiri.</string>
+
+</resources>
