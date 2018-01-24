@@ -1,9 +1,5 @@
 language: android
 sudo: false
-git:
-  submodules: false
-before_install:
-  - git submodule update --init --recursive
 script:
   - jdk_switcher use oraclejdk8
   - echo sdk.dir $ANDROID_HOME > local.properties
@@ -14,12 +10,8 @@ android:
   components:
   - tools
   - platform-tools
-  - build-tools-25.0.2
-  - android-25
+  - build-tools-27.0.3
+  - android-27
   - extra-android-m2repository
-before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
+before_install:
+ - yes | sdkmanager "platforms;android-27"
