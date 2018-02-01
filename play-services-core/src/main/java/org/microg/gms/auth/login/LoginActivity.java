@@ -144,6 +144,9 @@ public class LoginActivity extends AssistantActivity {
         state++;
         if (state == 1) {
             init();
+        } else if (state == -1) {
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
@@ -305,11 +308,15 @@ public class LoginActivity extends AssistantActivity {
                             retrieveGmsToken(account);
                             setResult(RESULT_OK);
                         } else {
-                            showError(R.string.auth_general_error_desc);
                             Log.w(TAG, "Account NOT created!");
-                            setResult(RESULT_CANCELED);
-                            // TODO: Give the user a chance to read the message :)
-                            finish();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showError(R.string.auth_general_error_desc);
+                                    setNextButtonText(android.R.string.ok);
+                                }
+                            });
+                            state = -2;
                         }
                     }
 
