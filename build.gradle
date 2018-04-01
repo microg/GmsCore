@@ -20,15 +20,15 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
     }
 }
 
 allprojects {
     apply plugin: 'idea'
     ext.androidBuildVersionTools = "27.0.3"
-    ext.supportLibraryVersion = "27.0.2"
+    ext.supportLibraryVersion = "27.1.0"
     ext.isReleaseVersion = false
     ext.slf4jVersion = "1.7.25"
 }
@@ -58,7 +58,7 @@ subprojects {
     group = 'org.microg'
     repositories {
         jcenter()
-        maven { url "https://maven.google.com" }
+        google()
     }
 }
 
