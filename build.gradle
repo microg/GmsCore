@@ -20,7 +20,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
     }
 }
@@ -39,5 +39,6 @@ def androidMinSdk() { return 9 }
 subprojects {
     repositories {
         jcenter()
+        google()
     }
 }
