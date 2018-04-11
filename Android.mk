@@ -23,7 +23,7 @@ gmscore_root  := $(LOCAL_PATH)
 gmscore_dir   := play-services-core
 gmscore_out   := $(TARGET_COMMON_OUT_ROOT)/obj/APPS/$(LOCAL_MODULE)_intermediates
 gmscore_build := $(gmscore_root)/$(gmscore_dir)/build
-gmscore_apk   := build/outputs/apk/play-services-core-release-unsigned.apk
+gmscore_apk   := build/outputs/apk/release/play-services-core-release-unsigned.apk
 
 $(gmscore_root)/$(gmscore_dir)/$(gmscore_apk):
 	rm -Rf $(gmscore_build)
