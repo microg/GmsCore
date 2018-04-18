@@ -16,8 +16,47 @@
 
 package com.google.android.gms.common.images;
 
+import android.net.Uri;
+
 import org.microg.safeparcel.AutoSafeParcelable;
+import org.microg.safeparcel.SafeParceled;
 
 public class WebImage extends AutoSafeParcelable {
     public static final Creator<WebImage> CREATOR = new AutoCreator<WebImage>(WebImage.class);
+
+    public WebImage (Uri uri) {
+        this.uri = uri;
+    }
+
+    @SafeParceled(1)
+    private int versionCode = 1;
+
+    @SafeParceled(2)
+    private final Uri uri;
+
+    @SafeParceled(3)
+    private final int width = 0;
+
+    @SafeParceled(4)
+    private final int height = 0;
+
+    public Uri getUrl()
+    {
+        return uri;
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
+    }
+
+    public String toString()
+    {
+        return String.format("Image %dx%d %s", new Object[] { Integer.valueOf(width), Integer.valueOf(height), uri.toString() });
+    }
 }

@@ -33,6 +33,10 @@ import java.util.List;
 public class CastDevice extends AutoSafeParcelable {
     private static final String EXTRA_CAST_DEVICE = "com.google.android.gms.cast.EXTRA_CAST_DEVICE";
 
+    public CastDevice (String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     /**
      * Video-output device capability.
      */
@@ -78,11 +82,14 @@ public class CastDevice extends AutoSafeParcelable {
     @SafeParceled(value = 8, subClass = WebImage.class)
     private ArrayList<WebImage> icons;
 
-    @SafeParceled(8)
+    @SafeParceled(9)
     private int capabilities;
 
-    @SafeParceled(9)
+    @SafeParceled(10)
     private int status;
+
+    @SafeParceled(11)
+    private String unknown; // TODO: Need to figure this one out
 
     public String getDeviceId() {
         return deviceId;
@@ -125,7 +132,12 @@ public class CastDevice extends AutoSafeParcelable {
     }
 
     public boolean hasCapabilities(int[] capabilities) {
-        return false;
+        for (int capability : capabilities) {
+            if (!this.hasCapability(capability)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean hasCapability(int capability) {
