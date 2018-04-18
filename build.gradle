@@ -37,7 +37,7 @@ def androidCompileSdk() { return 27 }
 
 def androidTargetSdk() { return 27 }
 
-def androidMinSdk() { return 9 }
+def androidMinSdk() { return 14 }
 
 def versionCode() {
     def stdout = new ByteArrayOutputStream()

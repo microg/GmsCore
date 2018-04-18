@@ -395,6 +395,14 @@
             </intent-filter>
         </activity>
 
+        <!-- Cast -->
+
+        <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
+            <intent-filter>
+                <action android:name="android.media.MediaRouteProviderService" />
+            </intent-filter>
+        </service>
+
         <!-- Chimera spoof -->
         <provider
             android:name="org.microg.gms.ChimeraSpoofProvider"
