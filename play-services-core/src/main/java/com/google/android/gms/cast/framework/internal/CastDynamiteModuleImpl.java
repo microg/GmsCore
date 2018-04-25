@@ -18,6 +18,7 @@ package com.google.android.gms.cast.framework.internal;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
@@ -45,34 +46,18 @@ public class CastDynamiteModuleImpl extends ICastDynamiteModule.Stub {
     private static final String TAG = CastDynamiteModuleImpl.class.getSimpleName();
 
     @Override
-    public ICastContext newCastContextImpl(IObjectWrapper context, CastOptions options, IMediaRouter router, Map map) throws RemoteException {
-        CastContextImpl castContextImpl = new CastContextImpl(context, options, router, map);
-
-        // TODO: Find a home for this once the rest of the implementation
-        // becomes more clear. Uncomment this to enable discovery of devices.
-        // Note that the scan currently isn't ever disabled as part of the
-        // lifecycle, so we don't want to ship with this.
-        /*
-        Bundle selectorBundle = castContextImpl.getMergedSelector().asBundle();
-
-        router.clearCallbacks();
-        router.registerMediaRouterCallbackImpl(selectorBundle, new MediaRouterCallbackImpl());
-        router.addCallback(selectorBundle, MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN);
-        */
-
-        return castContextImpl;
+    public ICastContext newCastContextImpl(IObjectWrapper context, CastOptions options, IMediaRouter router, Map sessionProviders) throws RemoteException {
+        return new CastContextImpl(context, options, router, sessionProviders);
     }
 
     @Override
-    public ISession newSessionImpl(String s1, String s2, ISessionProxy proxy) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newSessionImpl");
-        return new SessionImpl();
+    public ISession newSessionImpl(String category, String sessionId, ISessionProxy proxy) throws RemoteException {
+        return new SessionImpl(category, sessionId, proxy);
     }
 
     @Override
     public ICastSession newCastSessionImpl(CastOptions options, IObjectWrapper session, ICastConnectionController controller) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newCastSessionImpl");
-        return new CastSessionImpl();
+        return new CastSessionImpl(options, session, controller);
     }
 
     @Override

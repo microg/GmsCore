@@ -16,11 +16,26 @@
 
 package com.google.android.gms.cast.framework.internal;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
+
+import com.google.android.gms.cast.CastDevice;
+import com.google.android.gms.cast.framework.ISession;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.ObjectWrapper;
+
+import android.support.v7.media.MediaControlIntent;
 
 public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
     private static final String TAG = MediaRouterCallbackImpl.class.getSimpleName();
+
+    private CastContextImpl castContext;
+
+    public MediaRouterCallbackImpl(CastContextImpl castContext) {
+        this.castContext = castContext;
+    }
 
     @Override
     public void onRouteAdded(String routeId, Bundle extras) {
@@ -35,8 +50,14 @@ public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
         Log.d(TAG, "unimplemented Method: onRouteRemoved");
     }
     @Override
-    public void onRouteSelected(String routeId, Bundle extras) {
-        Log.d(TAG, "unimplemented Method: onRouteSelected");
+    public void onRouteSelected(String routeId, Bundle extras) throws RemoteException {
+        CastDevice castDevice = CastDevice.getFromBundle(extras);
+
+        SessionImpl session = (SessionImpl) ObjectWrapper.unwrap(this.castContext.defaultSessionProvider.getSession(null));
+        Bundle routeInfoExtras = this.castContext.getRouter().getRouteInfoExtrasById(routeId);
+        if (routeInfoExtras != null) {
+            session.start(this.castContext, castDevice, routeId, routeInfoExtras);
+        }
     }
     @Override
     public void unknown(String routeId, Bundle extras) {

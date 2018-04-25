@@ -1,4 +1,4 @@
-include ':wearable-lib'
+include ':wearable-lib', ':safe-parcel'
 
 include ':unifiednlp-api'
 include ':unifiednlp-base'

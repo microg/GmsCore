@@ -36,7 +36,6 @@ public class DiscoveryManagerImpl extends IDiscoveryManager.Stub {
     private Set discoveryManagerListeners = new HashSet();
 
     public DiscoveryManagerImpl(CastContextImpl castContextImpl) {
-        Log.d(TAG, "Creating new discovery manager");
         this.castContextImpl = castContextImpl;
     }
 

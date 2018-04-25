@@ -595,6 +595,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.cast.CastDeviceControllerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE"/>
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.plus.service.START"/>
@@ -603,7 +609,6 @@
                 <action android:name="com.google.android.gms.appstate.service.START"/>
                 <action android:name="com.google.android.gms.ads.service.START"/>
                 <action android:name="com.google.android.gms.accounts.ACCOUNT_SERVICE"/>
-                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE"/>
                 <action android:name="com.google.android.gms.identity.service.BIND"/>
                 <action android:name="com.google.android.gms.wearable.BIND"/>
                 <action android:name="com.google.android.gms.auth.service.START"/>

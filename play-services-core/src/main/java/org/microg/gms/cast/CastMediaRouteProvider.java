@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.media.MediaControlIntent;
 import android.support.v7.media.MediaRouteDescriptor;
 import android.support.v7.media.MediaRouteDiscoveryRequest;
@@ -31,19 +33,68 @@ import android.util.Log;
 import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.cast.CastDevice;
 
-import java.util.ArrayList;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Inet4Address;
+import java.net.UnknownHostException;
+import java.io.IOException;
+import java.lang.Thread;
+import java.lang.Runnable;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
+import su.litvak.chromecast.api.v2.ChromeCast;
+import su.litvak.chromecast.api.v2.ChromeCasts;
+import su.litvak.chromecast.api.v2.Status;
+import su.litvak.chromecast.api.v2.ChromeCastsListener;
 
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
 
+    private Map<String, ChromeCast> chromecasts = new HashMap<String, ChromeCast>();
+
     public CastMediaRouteProvider(Context context) {
         super(context);
-        Log.d(TAG, "unimplemented Method: CastMediaRouteProvider");
 
-        // Uncomment this to create the mock device
-        // publishRoutes();
+        // TODO: Uncomment this to manually discover a chromecast on the local
+        // network. Discovery not yet implemented.
+        /*
+        InetAddress addr = null;
+        try {
+            addr = InetAddress.getByName("192.168.1.11");
+        } catch (UnknownHostException e) {
+            Log.d(TAG, "Chromecast status exception getting host: " + e.getMessage());
+            return;
+        }
+        onChromeCastDiscovered(addr);
+        */
+    }
+
+    private void onChromeCastDiscovered(InetAddress address) {
+        ChromeCast chromecast = new ChromeCast(address.getHostAddress());
+
+        new Thread(new Runnable() {
+            public void run() {
+                Status status = null;
+                try {
+                    status = chromecast.getStatus();
+                } catch (IOException e) {
+                    Log.e(TAG, "Exception getting chromecast status: " + e.getMessage());
+                    return;
+                }
+
+                Handler mainHandler = new Handler(CastMediaRouteProvider.this.getContext().getMainLooper());
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String routeId = address.getHostAddress();
+                        CastMediaRouteProvider.this.chromecasts.put(routeId, chromecast);
+                        publishRoutes();
+                    }
+                });
+            }
+        }).start();
     }
 
     /**
@@ -67,37 +118,37 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     @Override
     public RouteController onCreateRouteController(String routeId) {
-        Log.d(TAG, "unimplemented Method: onCreateRouteController");
-        return null;
+        ChromeCast chromecast = this.chromecasts.get(routeId);
+        return new CastMediaRouteController(this, routeId, chromecast);
     }
 
-    /**
-     * TODO: Currently this method simply publishes a single cast route for
-     * testing.
-     */
     private void publishRoutes() {
-        Log.d(TAG, "unimplemented Method: publishRoutes");
-        Bundle extras = new Bundle();
-        CastDevice castDevice = new CastDevice("abc123");
-        castDevice.putInBundle(extras);
-        MediaRouteDescriptor routeDescriptor1 = new MediaRouteDescriptor.Builder(
-            "abc123",
-            "Rotue Friendly Name")
-            .setDescription("Chromecast")
-            .addControlFilters(CONTROL_FILTERS)
-            .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
-            .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
-            .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
-            .setVolumeMax(20)
-            .setVolume(0)
-            .setEnabled(true)
-            .setExtras(extras)
-            .setConnectionState(MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
-            .build();
-        MediaRouteProviderDescriptor providerDescriptor =
-            new MediaRouteProviderDescriptor.Builder()
-            .addRoute(routeDescriptor1)
-            .build();
-        this.setDescriptor(providerDescriptor);
+        MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
+        for(Map.Entry<String, ChromeCast> entry : this.chromecasts.entrySet()) {
+            String routeId = entry.getKey();
+            ChromeCast chromecast = entry.getValue();
+            Bundle extras = new Bundle();
+            CastDevice castDevice = new CastDevice(
+                routeId,
+                chromecast.getAddress()
+            );
+            castDevice.putInBundle(extras);
+            builder.addRoute(new MediaRouteDescriptor.Builder(
+                routeId,
+                routeId)
+                .setDescription("Chromecast")
+                .addControlFilters(CONTROL_FILTERS)
+                .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
+                .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
+                .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
+                .setVolumeMax(20)
+                .setVolume(0)
+                .setEnabled(true)
+                .setExtras(extras)
+                .setConnectionState(MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
+                .build());
+        }
+
+        this.setDescriptor(builder.build());
     }
 }
