@@ -15,8 +15,8 @@ import com.google.android.gms.cast.framework.media.internal.IFetchBitmapTaskProg
 import com.google.android.gms.dynamic.IObjectWrapper;
 
 interface ICastDynamiteModule {
-    ICastContext newCastContextImpl(in IObjectWrapper context, in CastOptions options, IMediaRouter router, in Map map) = 0;
-    ISession newSessionImpl(String s1, String s2, ISessionProxy proxy) = 1;
+    ICastContext newCastContextImpl(in IObjectWrapper context, in CastOptions options, IMediaRouter router, in Map sessionProviders) = 0;
+    ISession newSessionImpl(String category, String sessionId, ISessionProxy proxy) = 1;
     ICastSession newCastSessionImpl(in CastOptions options, in IObjectWrapper session, ICastConnectionController controller) = 2;
     IMediaNotificationService newMediaNotificationServiceImpl(in IObjectWrapper service, in IObjectWrapper castContext, in IObjectWrapper resources, in CastMediaOptions options) = 3;
     IReconnectionService newReconnectionServiceImpl(in IObjectWrapper service, in IObjectWrapper sessionManager, in IObjectWrapper discoveryManager) = 4;

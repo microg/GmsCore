@@ -1,5 +1,7 @@
 package com.google.android.gms.cast.framework;
 
+import android.os.Bundle;
+
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.cast.framework.ISessionManagerListener;
 import com.google.android.gms.cast.framework.ICastStateListener;
@@ -13,5 +15,5 @@ interface ISessionManager {
     void endCurrentSession(boolean b, boolean stopCasting) = 5;
     IObjectWrapper getWrappedThis() = 6;
     int getCastState() = 7;
-    void startSession(in Bundle bundle) = 8;
+    void startSession(in Bundle options) = 8;
 }

@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 public class GetServiceRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 2;
+    private int versionCode = 3;
 
     @SafeParceled(2)
     public final int serviceId;
@@ -53,6 +53,9 @@ public class GetServiceRequest extends AutoSafeParcelable {
 
     @SafeParceled(8)
     public Account account;
+
+    @SafeParceled(9)
+    public long long1;
 
     private GetServiceRequest() {
         serviceId = -1;

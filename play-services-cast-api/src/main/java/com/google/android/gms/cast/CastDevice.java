@@ -33,8 +33,12 @@ import java.util.List;
 public class CastDevice extends AutoSafeParcelable {
     private static final String EXTRA_CAST_DEVICE = "com.google.android.gms.cast.EXTRA_CAST_DEVICE";
 
-    public CastDevice (String deviceId) {
+    public CastDevice () {
+    }
+
+    public CastDevice (String deviceId, String address) {
         this.deviceId = deviceId;
+        this.address = address;
     }
 
     /**
@@ -64,8 +68,7 @@ public class CastDevice extends AutoSafeParcelable {
     private String deviceId;
 
     @SafeParceled(3)
-    private String addrString;
-    private Inet4Address addr;
+    private String address;
 
     @SafeParceled(4)
     private String friendlyName;
@@ -119,8 +122,8 @@ public class CastDevice extends AutoSafeParcelable {
         return icons;
     }
 
-    public Inet4Address getIpAddress() {
-        return addr;
+    public String getAddress() {
+        return address;
     }
 
     public String getModelName() {
@@ -158,6 +161,21 @@ public class CastDevice extends AutoSafeParcelable {
 
     public void putInBundle(Bundle bundle) {
         bundle.putParcelable(EXTRA_CAST_DEVICE, this);
+    }
+
+    @Override
+    public String toString() {
+        return "CastDevice{" +
+                "deviceId=" + this.deviceId +
+                ", address=" + address +
+                ", friendlyName=" + friendlyName +
+                ", modelName=" + modelName +
+                ", deviceVersion=" + deviceVersion +
+                ", servicePort=" + servicePort +
+                (icons == null ? "" : (", icons=" + icons.toString())) +
+                ", capabilities=" + capabilities +
+                ", status=" + status +
+                "}";
     }
 
     public static Creator<CastDevice> CREATOR = new AutoCreator<CastDevice>(CastDevice.class);

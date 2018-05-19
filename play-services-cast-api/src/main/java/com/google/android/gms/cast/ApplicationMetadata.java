@@ -32,17 +32,17 @@ public class ApplicationMetadata extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    private String applicationId;
+    public String applicationId;
     @SafeParceled(3)
-    private String name;
+    public String name;
     @SafeParceled(value = 4, subClass = WebImage.class)
-    private List<WebImage> images;
+    public List<WebImage> images;
     @SafeParceled(value = 5, subClass = String.class)
-    private List<String> namespaces;
+    public List<String> namespaces;
     @SafeParceled(6)
-    private String senderAppIdentifier;
+    public String senderAppIdentifier;
     @SafeParceled(7)
-    private Uri senderAppLaunchUri;
+    public Uri senderAppLaunchUri;
 
     public String getApplicationId() {
         return applicationId;
@@ -62,6 +62,23 @@ public class ApplicationMetadata extends AutoSafeParcelable {
 
     public boolean isNamespaceSupported(String namespace) {
         return namespaces.contains(namespace);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ApplicationMetadata{");
+        sb.append("applicationId='").append(applicationId).append("'");
+        sb.append(", name='").append(name).append("'");
+        sb.append(", images=").append(images.toString());
+        if (namespaces != null) {
+            sb.append(", namespaces=").append(namespaces.toString());
+        }
+        sb.append(", senderAppIdentifier='").append(senderAppIdentifier).append("'");
+        if (senderAppLaunchUri != null) {
+            sb.append(", senderAppLaunchUri='").append(senderAppLaunchUri.toString()).append("'");
+        }
+        sb.append('}');
+        return sb.toString();
     }
 
     public static final Creator<ApplicationMetadata> CREATOR = new AutoCreator<ApplicationMetadata>(ApplicationMetadata.class);

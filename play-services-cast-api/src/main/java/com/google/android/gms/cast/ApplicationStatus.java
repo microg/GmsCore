@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.cast.framework.media;
+package com.google.android.gms.cast;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
-public class CastMediaOptions extends AutoSafeParcelable {
+public class ApplicationStatus extends AutoSafeParcelable {
 
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
-    public String mediaIntentReceiverClassName;
-    @SafeParceled(3)
-    public String expandedControllerActivityClassName;
-    @SafeParceled(4)
-    public IImagePicker imagePicker;
-    @SafeParceled(5)
-    public NotificationOptions notificationOptions;
+    private String applicationStatus;
 
-    public static Creator<CastMediaOptions> CREATOR = new AutoCreator<CastMediaOptions>(CastMediaOptions.class);
+    public static final Creator<ApplicationStatus> CREATOR = new AutoCreator<ApplicationStatus>(ApplicationStatus.class);
 }
