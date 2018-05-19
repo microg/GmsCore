@@ -91,7 +91,15 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <uses-sdk tools:overrideLibrary="com.takisoft.fix.support.v7.preference,android.support.graphics.drawable.animated,android.arch.lifecycle,android.arch.lifecycle.livedata.core,android.arch.lifecycle.viewmodel,android.arch.core"/>
+    <uses-sdk tools:overrideLibrary="
+        com.takisoft.fix.support.v7.preference,
+        android.support.graphics.drawable.animated,
+        android.arch.lifecycle,
+        android.arch.lifecycle.livedata.core,
+        android.arch.lifecycle.viewmodel,
+        android.arch.core,
+        android.support.v7.mediarouter,
+        android.support.v7.palette" />
 
     <application
         android:allowBackup="false"
