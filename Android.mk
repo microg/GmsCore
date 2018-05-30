@@ -32,6 +32,7 @@ $(gmscore_root)/$(gmscore_dir)/$(gmscore_apk):
 	echo "sdk.dir=$(ANDROID_HOME)" > $(gmscore_root)/local.properties
 	cd $(gmscore_root) && git submodule update --recursive --init
 	cd $(gmscore_root)/$(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ../gradlew assembleRelease
+	ln -sf release/$(notdir $(gmscore_apk)) $(gmscore_root)/$(gmscore_dir)/$(dir $(gmscore_apk))
 
 LOCAL_CERTIFICATE := platform
 LOCAL_SRC_FILES := $(gmscore_dir)/$(gmscore_apk)
