@@ -5,7 +5,7 @@ script:
   - echo sdk.dir $ANDROID_HOME > local.properties
   - export TERM=dumb
   - export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx2048m"
-  - ./gradlew assemble
+  - ./gradlew --stacktrace assemble
 android:
   components:
   - tools
