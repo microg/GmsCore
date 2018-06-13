@@ -13,6 +13,7 @@ interface IMediaRouter {
     void selectDefaultRoute() = 5;
     boolean isDefaultRouteSelected() = 6; // Maybe?
     Bundle getRouteInfoExtrasById(String routeId) = 7;
-    String hashKey() = 8; // Maybe?
+    String getSelectedRouteId() = 8; // Maybe?
+    int getSupportedVersion() = 9;
     void clearCallbacks() = 10;
 }

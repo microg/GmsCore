@@ -13,4 +13,5 @@ interface ISessionManagerListener {
     void onSessionResuming(IObjectWrapper session, String sessionId) = 7;
     void onSessionResumeFailed(IObjectWrapper session, int error) = 8;
     void onSessionSuspended(IObjectWrapper session, int reason) = 9;
+    int getSupportedVersion() = 10;
 }

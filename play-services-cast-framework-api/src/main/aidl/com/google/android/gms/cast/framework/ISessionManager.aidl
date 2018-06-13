@@ -12,4 +12,6 @@ interface ISessionManager {
     void removeCastStateListener(ICastStateListener listener) = 4;
     void endCurrentSession(boolean b, boolean stopCasting) = 5;
     IObjectWrapper getWrappedThis() = 6;
+    int getCastState() = 7;
+    void startSession(in Bundle bundle) = 8;
 }

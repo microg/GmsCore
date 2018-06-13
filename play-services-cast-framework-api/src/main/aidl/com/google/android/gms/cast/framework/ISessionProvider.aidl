@@ -6,4 +6,5 @@ interface ISessionProvider {
     IObjectWrapper getWrappedSession(String id) = 0;
     boolean isSessionRecoverable() = 1;
     String getCategory() = 2;
+    int getSupportedVersion() = 3;
 }
