@@ -83,7 +83,21 @@ public enum GmsService {
     GEODATA(65, "com.google.android.gms.location.places.GeoDataApi"),
     SEARCH_IME(66),
     PLACE_DETECTION(67, "com.google.android.gms.location.places.PlaceDetectionApi"),
-    CREDENTIALS(68, "com.google.android.gms.auth.api.credentials.service.START");
+    CREDENTIALS(68, "com.google.android.gms.auth.api.credentials.service.START"),
+    NEARBY_BOOTSTRAP(69, "com.google.android.gms.nearby.bootstrap.service.NearbyBootstrapService.START"),
+    PLUS_INTERNAL(70),
+    SOURCE_DEVICE(75, "com.google.android.gms.smartdevice.d2d.SourceDeviceService.START"),
+    TARGET_DEVICE(76, "com.google.android.gms.smartdevice.d2d.TargetDeviceService.START"),
+    ACCOUNTS(81, "com.google.android.gms.smartdevice.setup.accounts.AccountsService.START"),
+    TRUST_AGENT(85, "com.google.android.gms.trustagent.StateApi.START"),
+    MEASUREMENT(93, "com.google.android.gms.measurement.START"),
+    FREIGHTER(98, "com.google.android.gms.freighter.service.START"),
+    BLE(111, "com.google.android.gms.beacon.internal.IBleService.START"),
+    APP_INDEXING(113),
+    GASS(116, "com.google.android.gms.gass.START"),
+    WORK_ACCOUNT(120),
+    AD_CACHE(123, "com.google.android.gms.ads.service.CACHE"),
+    ;
 
     public int SERVICE_ID;
     public String ACTION;
