@@ -367,7 +367,7 @@ public class McsService extends Service implements Handler.Callback {
         try {
             closeAll();
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            android.net.NetworkInfo networkInfo = cm.getActiveNetworkInfo();
             if(networkInfo == null) {
                 scheduleReconnect(this);
                 return;
