@@ -367,8 +367,14 @@ public class McsService extends Service implements Handler.Callback {
         try {
             closeAll();
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(cm.getActiveNetworkInfo());
-            if (!GcmPrefs.get(this).isEnabledFor(cm.getActiveNetworkInfo())) {
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            if(networkInfo == null) {
+                scheduleReconnect(this);
+                return;
+            }
+
+            activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(networkInfo);
+            if (!GcmPrefs.get(this).isEnabledFor(networkInfo)) {
                 scheduleReconnect(this);
                 return;
             }
