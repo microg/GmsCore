@@ -43,8 +43,14 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import su.litvak.chromecast.api.v2.Application;
 import su.litvak.chromecast.api.v2.ChromeCast;
 import su.litvak.chromecast.api.v2.Namespace;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
+import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
 
-public class CastDeviceControllerImpl extends ICastDeviceController.Stub {
+public class CastDeviceControllerImpl extends ICastDeviceController.Stub
+    implements ChromeCastSpontaneousEventListener, ChromeCastRawMessageListener
+{
     private static final String TAG = "GmsCastDeviceControllerImpl";
 
     private Context context;
@@ -70,6 +76,45 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub {
         this.listener = ICastDeviceControllerListener.Stub.asInterface(listenerWrapper.binder);
 
         this.chromecast = new ChromeCast(this.castDevice.getAddress());
+        this.chromecast.registerListener(this);
+        this.chromecast.registerRawMessageListener(this);
+    }
+
+    @Override
+    public void spontaneousEventReceived(ChromeCastSpontaneousEvent event) {
+        switch (event.getType()) {
+            case MEDIA_STATUS:
+                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: MEDIA_STATUS");
+                break;
+            case STATUS:
+                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: STATUS");
+                break;
+            case APPEVENT:
+                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: APPEVENT");
+                break;
+            case CLOSE:
+                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: CLOSE");
+                break;
+            default:
+                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: UNKNOWN");
+                break;
+        }
+    }
+
+    @Override
+    public void rawMessageReceived(ChromeCastRawMessage message) {
+        switch (message.getPayloadType()) {
+            case STRING:
+                try {
+                    this.listener.onTextMessageReceived(message.getNamespace(), message.getPayloadUtf8());
+                } catch (RemoteException ex) {
+                    Log.e(TAG, "Error calling onTextMessageReceived: " + ex.getMessage());
+                }
+                break;
+            case BINARY:
+                Log.d(TAG, "unimplemented Method: rawMessageReceived: BINARY");
+                break;
+        }
     }
 
     @Override
@@ -97,6 +142,14 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub {
     @Override
     public void stopApplication(String sessionId) {
         Log.d(TAG, "unimplemented Method: stopApplication");
+        try {
+            // TODO: Expose more control of chromecast-java-api-v2 so we can
+            // make use of our sessionID parameter.
+            this.chromecast.stopApp();
+        } catch (IOException e) {
+            Log.w(TAG, "Error sending cast message: " + e.getMessage());
+            return;
+        }
         this.sessionId = null;
     }
 
