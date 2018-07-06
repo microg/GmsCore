@@ -56,19 +56,123 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
-    /**
-     * TODO: Mock control filters for chromecast; Will likely need to be
-     * adjusted.
-     */
-    private static final ArrayList<IntentFilter> CONTROL_FILTERS;
-    static {
-        IntentFilter f2 = new IntentFilter();
-        f2.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
-        f2.addCategory(CastMediaControlIntent.CATEGORY_CAST);
-        f2.addAction(MediaControlIntent.ACTION_PLAY);
+    private enum State {
+        NOT_DISCOVERING,
+        DISCOVERY_REQUESTED,
+        DISCOVERING,
+        DISCOVERY_STOP_REQUESTED,
+    }
+    private State state = State.NOT_DISCOVERING;
 
-        CONTROL_FILTERS = new ArrayList<IntentFilter>();
-        CONTROL_FILTERS.add(f2);
+    private static final ArrayList<IntentFilter> CONTROL_FILTERS = new ArrayList<IntentFilter>();
+    static {
+        IntentFilter filter;
+
+        filter = new IntentFilter();
+        filter.addCategory(CastMediaControlIntent.CATEGORY_CAST);
+        CONTROL_FILTERS.add(filter);
+
+        // TODO: Need to get the application ID here:
+        /*
+        filter = new IntentFilter();
+        filter.addCategory(CastMediaControlIntent.categoryForCast(applicationId));
+        CONTROL_FILTERS.add(filter);
+        */
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_PLAY);
+        filter.addDataScheme("http");
+        filter.addDataScheme("https");
+        String[] types = {
+            "image/jpeg",
+            "image/pjpeg",
+            "image/jpg",
+            "image/webp",
+            "image/png",
+            "image/gif",
+            "image/bmp",
+            "image/vnd.microsoft.icon",
+            "image/x-icon",
+            "image/x-xbitmap",
+            "audio/wav",
+            "audio/x-wav",
+            "audio/mp3",
+            "audio/x-mp3",
+            "audio/x-m4a",
+            "audio/mpeg",
+            "audio/webm",
+            "audio/ogg",
+            "audio/x-matroska",
+            "video/mp4",
+            "video/x-m4v",
+            "video/mp2t",
+            "video/webm",
+            "video/ogg",
+            "video/x-matroska",
+            "application/x-mpegurl",
+            "<item>application/vnd.apple.mpegurl",
+            "application/dash+xml",
+            "application/vnd.ms-sstr+xml",
+        };
+        for (String type : types) {
+            try {
+                filter.addDataType(type);
+            } catch (IntentFilter.MalformedMimeTypeException ex) {
+                Log.e(TAG, "Error adding filter type " + type);
+            }
+        }
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_PAUSE);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_RESUME);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_STOP);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_SEEK);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_GET_STATUS);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_START_SESSION);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_GET_SESSION_STATUS);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        filter.addAction(MediaControlIntent.ACTION_END_SESSION);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(CastMediaControlIntent.CATEGORY_CAST_REMOTE_PLAYBACK);
+        filter.addAction(CastMediaControlIntent.ACTION_SYNC_STATUS);
+        CONTROL_FILTERS.add(filter);
+
+        filter = new IntentFilter();
+        filter.addCategory(CastMediaControlIntent.CATEGORY_CAST_REMOTE_PLAYBACK);
+        filter.addAction(CastMediaControlIntent.ACTION_SYNC_STATUS);
+        CONTROL_FILTERS.add(filter);
     }
 
     public CastMediaRouteProvider(Context context) {
@@ -81,6 +185,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             @Override
             public void onDiscoveryStarted(String regType) {
                 Log.d(TAG, "DiscoveryListener unimplemented Method: onDiscoveryStarted");
+                CastMediaRouteProvider.this.state = State.DISCOVERING;
             }
 
             @Override
@@ -116,21 +221,25 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             @Override
             public void onServiceLost(NsdServiceInfo service) {
                 Log.d(TAG, "DiscoveryListener unimplemented Method: onServiceLost" + service);
+                // TODO: Remove chromecast route.
             }
 
             @Override
             public void onDiscoveryStopped(String serviceType) {
                 Log.i(TAG, "DiscoveryListener unimplemented Method: onDiscoveryStopped " + serviceType);
+                CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
             }
 
             @Override
             public void onStartDiscoveryFailed(String serviceType, int errorCode) {
                 Log.e(TAG, "DiscoveryListener unimplemented Method: onStartDiscoveryFailed: Error code:" + errorCode);
+                CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
             }
 
             @Override
             public void onStopDiscoveryFailed(String serviceType, int errorCode) {
                 Log.e(TAG, "DiscoveryListener unimplemented Method: onStopDiscoveryFailed: Error code:" + errorCode);
+                CastMediaRouteProvider.this.state = State.DISCOVERING;
             }
         };
     }
@@ -174,9 +283,15 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     @Override
     public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
         if (request.isValid() && request.isActiveScan()) {
-            mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+            if (this.state == State.NOT_DISCOVERING) {
+                mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+                this.state = State.DISCOVERY_REQUESTED;
+            }
         } else {
-            mNsdManager.stopServiceDiscovery(mDiscoveryListener);
+            if (this.state == State.DISCOVERING) {
+                mNsdManager.stopServiceDiscovery(mDiscoveryListener);
+                this.state = State.DISCOVERY_STOP_REQUESTED;
+            }
         }
     }
 
