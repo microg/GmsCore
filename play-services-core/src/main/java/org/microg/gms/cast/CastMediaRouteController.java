@@ -57,12 +57,12 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
     private String routeId;
     private ChromeCast chromecast;
 
-    public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, ChromeCast chromecast) {
+    public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, String address) {
         super();
 
         this.provider = provider;
         this.routeId = routeId;
-        this.chromecast = chromecast;
+        this.chromecast = new ChromeCast(address);
     }
 
     public boolean onControlRequest(Intent intent, MediaRouter.ControlRequestCallback callback) {

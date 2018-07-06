@@ -19,6 +19,8 @@ package org.microg.gms.cast;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -32,70 +34,27 @@ import android.util.Log;
 
 import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.cast.CastDevice;
+import com.google.android.gms.cast.CastMediaControlIntent;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.Thread;
 import java.lang.Runnable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
-
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
 
-    private Map<String, ChromeCast> chromecasts = new HashMap<String, ChromeCast>();
+    private Map<String, MediaRouteDescriptor> routes = new HashMap<String, MediaRouteDescriptor>();
 
-    public CastMediaRouteProvider(Context context) {
-        super(context);
-
-        // TODO: Uncomment this to manually discover a chromecast on the local
-        // network. Discovery not yet implemented.
-        /*
-        InetAddress addr = null;
-        try {
-            addr = InetAddress.getByName("192.168.1.11");
-        } catch (UnknownHostException e) {
-            Log.d(TAG, "Chromecast status exception getting host: " + e.getMessage());
-            return;
-        }
-        onChromeCastDiscovered(addr);
-        */
-    }
-
-    private void onChromeCastDiscovered(InetAddress address) {
-        ChromeCast chromecast = new ChromeCast(address.getHostAddress());
-
-        new Thread(new Runnable() {
-            public void run() {
-                Status status = null;
-                try {
-                    status = chromecast.getStatus();
-                } catch (IOException e) {
-                    Log.e(TAG, "Exception getting chromecast status: " + e.getMessage());
-                    return;
-                }
-
-                Handler mainHandler = new Handler(CastMediaRouteProvider.this.getContext().getMainLooper());
-                mainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String routeId = address.getHostAddress();
-                        CastMediaRouteProvider.this.chromecasts.put(routeId, chromecast);
-                        publishRoutes();
-                    }
-                });
-            }
-        }).start();
-    }
+    private NsdManager mNsdManager;
+    private NsdManager.DiscoveryListener mDiscoveryListener;
 
     /**
      * TODO: Mock control filters for chromecast; Will likely need to be
@@ -105,38 +64,92 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     static {
         IntentFilter f2 = new IntentFilter();
         f2.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
+        f2.addCategory(CastMediaControlIntent.CATEGORY_CAST);
         f2.addAction(MediaControlIntent.ACTION_PLAY);
 
         CONTROL_FILTERS = new ArrayList<IntentFilter>();
         CONTROL_FILTERS.add(f2);
     }
 
-    @Override
-    public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
-        Log.d(TAG, "unimplemented Method: onDiscoveryRequestChanged");
+    public CastMediaRouteProvider(Context context) {
+        super(context);
+
+        mNsdManager = (NsdManager)context.getSystemService(Context.NSD_SERVICE);
+
+        mDiscoveryListener = new NsdManager.DiscoveryListener() {
+
+            @Override
+            public void onDiscoveryStarted(String regType) {
+                Log.d(TAG, "DiscoveryListener unimplemented Method: onDiscoveryStarted");
+            }
+
+            @Override
+            public void onServiceFound(NsdServiceInfo service) {
+                mNsdManager.resolveService(service, new NsdManager.ResolveListener() {
+                    @Override
+                    public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
+                        Log.e(TAG, "DiscoveryListener unimplemented Method: Resolve failed" + errorCode);
+                    }
+
+                    @Override
+                    public void onServiceResolved(NsdServiceInfo serviceInfo) {
+                        String name = serviceInfo.getServiceName();
+                        InetAddress host = serviceInfo.getHost();
+                        int port = serviceInfo.getPort();
+                        try {
+                            String id = new String(serviceInfo.getAttributes().get("id"), "UTF-8");
+                            String deviceVersion = new String(serviceInfo.getAttributes().get("ve"), "UTF-8");
+                            String friendlyName = new String(serviceInfo.getAttributes().get("fn"), "UTF-8");
+                            String modelName = new String(serviceInfo.getAttributes().get("md"), "UTF-8");
+                            String iconPath = new String(serviceInfo.getAttributes().get("ic"), "UTF-8");
+                            int status = Integer.parseInt(new String(serviceInfo.getAttributes().get("st"), "UTF-8"));
+
+                            onChromeCastDiscovered(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status);
+                        } catch (UnsupportedEncodingException ex) {
+                            Log.e(TAG, "Error getting cast details from DNS-SD response", ex);
+                            return;
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onServiceLost(NsdServiceInfo service) {
+                Log.d(TAG, "DiscoveryListener unimplemented Method: onServiceLost" + service);
+            }
+
+            @Override
+            public void onDiscoveryStopped(String serviceType) {
+                Log.i(TAG, "DiscoveryListener unimplemented Method: onDiscoveryStopped " + serviceType);
+            }
+
+            @Override
+            public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+                Log.e(TAG, "DiscoveryListener unimplemented Method: onStartDiscoveryFailed: Error code:" + errorCode);
+            }
+
+            @Override
+            public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+                Log.e(TAG, "DiscoveryListener unimplemented Method: onStopDiscoveryFailed: Error code:" + errorCode);
+            }
+        };
     }
 
-    @Override
-    public RouteController onCreateRouteController(String routeId) {
-        ChromeCast chromecast = this.chromecasts.get(routeId);
-        return new CastMediaRouteController(this, routeId, chromecast);
-    }
+    private void onChromeCastDiscovered(
+            String id, String name, InetAddress host, int port, String
+            deviceVersion, String friendlyName, String modelName, String
+            iconPath, int status) {
+        if (!this.routes.containsKey(id)) {
+            // TODO: Capabilities
+            int capabilities = CastDevice.CAPABILITY_VIDEO_OUT | CastDevice.CAPABILITY_AUDIO_OUT;
 
-    private void publishRoutes() {
-        MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
-        for(Map.Entry<String, ChromeCast> entry : this.chromecasts.entrySet()) {
-            String routeId = entry.getKey();
-            ChromeCast chromecast = entry.getValue();
             Bundle extras = new Bundle();
-            CastDevice castDevice = new CastDevice(
-                routeId,
-                chromecast.getAddress()
-            );
+            CastDevice castDevice = new CastDevice(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status, capabilities);
             castDevice.putInBundle(extras);
-            builder.addRoute(new MediaRouteDescriptor.Builder(
-                routeId,
-                routeId)
-                .setDescription("Chromecast")
+            this.routes.put(id, new MediaRouteDescriptor.Builder(
+                id,
+                friendlyName)
+                .setDescription(modelName)
                 .addControlFilters(CONTROL_FILTERS)
                 .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
                 .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
@@ -149,6 +162,36 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                 .build());
         }
 
+        Handler mainHandler = new Handler(this.getContext().getMainLooper());
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                publishRoutes();
+            }
+        });
+    }
+
+    @Override
+    public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
+        if (request.isValid() && request.isActiveScan()) {
+            mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+        } else {
+            mNsdManager.stopServiceDiscovery(mDiscoveryListener);
+        }
+    }
+
+    @Override
+    public RouteController onCreateRouteController(String routeId) {
+        MediaRouteDescriptor descriptor = this.routes.get(routeId);
+        CastDevice castDevice = CastDevice.getFromBundle(descriptor.getExtras());
+        return new CastMediaRouteController(this, routeId, castDevice.getAddress());
+    }
+
+    private void publishRoutes() {
+        MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
+        for(MediaRouteDescriptor route : this.routes.values()) {
+            builder.addRoute(route);
+        }
         this.setDescriptor(builder.build());
     }
 }
