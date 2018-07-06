@@ -74,7 +74,7 @@ public final class CastMediaControlIntent {
      */
     public static final String EXTRA_ERROR_CODE = "com.google.android.gms.cast.EXTRA_ERROR_CODE";
 
-    private static final String CATEGORY_CAST_REMOTE_PLAYBACK = "com.google.android.gms.cast.CATEGORY_CAST_REMOTE_PLAYBACK";
+    public static final String CATEGORY_CAST_REMOTE_PLAYBACK = "com.google.android.gms.cast.CATEGORY_CAST_REMOTE_PLAYBACK";
 
     private CastMediaControlIntent() {
     }
