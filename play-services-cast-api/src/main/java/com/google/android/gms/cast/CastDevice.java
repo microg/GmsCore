@@ -17,6 +17,7 @@
 package com.google.android.gms.cast;
 
 import android.os.Bundle;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.google.android.gms.common.images.WebImage;
@@ -25,6 +26,7 @@ import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.net.InetAddress;
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +38,19 @@ public class CastDevice extends AutoSafeParcelable {
     public CastDevice () {
     }
 
-    public CastDevice (String deviceId, String address) {
-        this.deviceId = deviceId;
-        this.address = address;
+    public CastDevice (
+            String id, String name, InetAddress host, int port, String
+            deviceVersion, String friendlyName, String modelName, String
+            iconPath, int status, int capabilities) {
+        this.deviceId = id;
+        this.address = host.getHostAddress();
+        this.servicePort = port;
+        this.deviceVersion = deviceVersion;
+        this.friendlyName = friendlyName;
+        this.icons = new ArrayList<WebImage>();
+        this.icons.add(new WebImage(Uri.parse(String.format("http://%s:8008%s", this.address, iconPath))));
+        this.modelName = modelName;
+        this.capabilities = capabilities;
     }
 
     /**
