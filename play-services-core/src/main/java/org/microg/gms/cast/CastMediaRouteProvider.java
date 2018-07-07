@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.Thread;
 import java.lang.Runnable;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -51,10 +52,12 @@ import java.util.HashMap;
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
 
-    private Map<String, MediaRouteDescriptor> routes = new HashMap<String, MediaRouteDescriptor>();
+    private Map<String, CastDevice> castDevices = new HashMap<String, CastDevice>();
 
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
+
+    private List<String> customCategories = new ArrayList<String>();
 
     private enum State {
         NOT_DISCOVERING,
@@ -64,20 +67,13 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     }
     private State state = State.NOT_DISCOVERING;
 
-    private static final ArrayList<IntentFilter> CONTROL_FILTERS = new ArrayList<IntentFilter>();
+    private static final ArrayList<IntentFilter> BASE_CONTROL_FILTERS = new ArrayList<IntentFilter>();
     static {
         IntentFilter filter;
 
         filter = new IntentFilter();
         filter.addCategory(CastMediaControlIntent.CATEGORY_CAST);
-        CONTROL_FILTERS.add(filter);
-
-        // TODO: Need to get the application ID here:
-        /*
-        filter = new IntentFilter();
-        filter.addCategory(CastMediaControlIntent.categoryForCast(applicationId));
-        CONTROL_FILTERS.add(filter);
-        */
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
@@ -122,57 +118,57 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                 Log.e(TAG, "Error adding filter type " + type);
             }
         }
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_PAUSE);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_RESUME);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_STOP);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_SEEK);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_GET_STATUS);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_START_SESSION);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_GET_SESSION_STATUS);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK);
         filter.addAction(MediaControlIntent.ACTION_END_SESSION);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(CastMediaControlIntent.CATEGORY_CAST_REMOTE_PLAYBACK);
         filter.addAction(CastMediaControlIntent.ACTION_SYNC_STATUS);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
 
         filter = new IntentFilter();
         filter.addCategory(CastMediaControlIntent.CATEGORY_CAST_REMOTE_PLAYBACK);
         filter.addAction(CastMediaControlIntent.ACTION_SYNC_STATUS);
-        CONTROL_FILTERS.add(filter);
+        BASE_CONTROL_FILTERS.add(filter);
     }
 
     public CastMediaRouteProvider(Context context) {
@@ -248,27 +244,12 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             String id, String name, InetAddress host, int port, String
             deviceVersion, String friendlyName, String modelName, String
             iconPath, int status) {
-        if (!this.routes.containsKey(id)) {
+        if (!this.castDevices.containsKey(id)) {
             // TODO: Capabilities
             int capabilities = CastDevice.CAPABILITY_VIDEO_OUT | CastDevice.CAPABILITY_AUDIO_OUT;
 
-            Bundle extras = new Bundle();
             CastDevice castDevice = new CastDevice(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status, capabilities);
-            castDevice.putInBundle(extras);
-            this.routes.put(id, new MediaRouteDescriptor.Builder(
-                id,
-                friendlyName)
-                .setDescription(modelName)
-                .addControlFilters(CONTROL_FILTERS)
-                .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
-                .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
-                .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
-                .setVolumeMax(20)
-                .setVolume(0)
-                .setEnabled(true)
-                .setExtras(extras)
-                .setConnectionState(MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
-                .build());
+            this.castDevices.put(id, castDevice);
         }
 
         Handler mainHandler = new Handler(this.getContext().getMainLooper());
@@ -282,7 +263,14 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     @Override
     public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
-        if (request.isValid() && request.isActiveScan()) {
+        if (request != null && request.isValid() && request.isActiveScan()) {
+            if (request.getSelector() != null) {
+                for (String category : request.getSelector().getControlCategories()) {
+                    if (CastMediaControlIntent.isCategoryForCast(category)) {
+                        this.customCategories.add(category);
+                    }
+                }
+            }
             if (this.state == State.NOT_DISCOVERING) {
                 mNsdManager.discoverServices("_googlecast._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
                 this.state = State.DISCOVERY_REQUESTED;
@@ -297,14 +285,38 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     @Override
     public RouteController onCreateRouteController(String routeId) {
-        MediaRouteDescriptor descriptor = this.routes.get(routeId);
-        CastDevice castDevice = CastDevice.getFromBundle(descriptor.getExtras());
+        CastDevice castDevice = this.castDevices.get(routeId);
         return new CastMediaRouteController(this, routeId, castDevice.getAddress());
     }
 
     private void publishRoutes() {
         MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
-        for(MediaRouteDescriptor route : this.routes.values()) {
+        for (CastDevice castDevice : this.castDevices.values()) {
+            ArrayList<IntentFilter> controlFilters = new ArrayList<IntentFilter>(BASE_CONTROL_FILTERS);
+            // Include any app-specific control filters that have been requested.
+            // TODO: Do we need to check with the device?
+            for (String category : this.customCategories) {
+                IntentFilter filter = new IntentFilter();
+                filter.addCategory(category);
+                controlFilters.add(filter);
+            }
+
+            Bundle extras = new Bundle();
+            castDevice.putInBundle(extras);
+            MediaRouteDescriptor route = new MediaRouteDescriptor.Builder(
+                castDevice.getDeviceId(),
+                castDevice.getFriendlyName())
+                .setDescription(castDevice.getModelName())
+                .addControlFilters(controlFilters)
+                .setDeviceType(MediaRouter.RouteInfo.DEVICE_TYPE_TV)
+                .setPlaybackType(MediaRouter.RouteInfo.PLAYBACK_TYPE_REMOTE)
+                .setVolumeHandling(MediaRouter.RouteInfo.PLAYBACK_VOLUME_FIXED)
+                .setVolumeMax(20)
+                .setVolume(0)
+                .setEnabled(true)
+                .setExtras(extras)
+                .setConnectionState(MediaRouter.RouteInfo.CONNECTION_STATE_DISCONNECTED)
+                .build();
             builder.addRoute(route);
         }
         this.setDescriptor(builder.build());
