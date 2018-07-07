@@ -89,6 +89,18 @@ public final class CastMediaControlIntent {
     }
 
     /**
+     * Returns true if the given category is a custom control category for cast devices, specific to an application ID.
+     *
+     * @param applicationId The application ID of the receiver application.
+     */
+    public static boolean isCategoryForCast(String category) {
+        if (category == null) {
+            return false;
+        }
+        return category.startsWith(CATEGORY_CAST + "/");
+    }
+
+    /**
      * Returns a custom control category for discovering Cast devices meeting both application ID and namespace
      * restrictions. See {@link #categoryForCast(Collection)} and {@link #categoryForCast(String)} for more details.
      */
