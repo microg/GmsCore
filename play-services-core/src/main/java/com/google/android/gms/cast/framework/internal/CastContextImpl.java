@@ -36,6 +36,7 @@ import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
 import java.util.Map;
+import java.util.HashMap;
 
 public class CastContextImpl extends ICastContext.Stub {
     private static final String TAG = CastContextImpl.class.getSimpleName();
@@ -46,7 +47,7 @@ public class CastContextImpl extends ICastContext.Stub {
     private Context context;
     private CastOptions options;
     private IMediaRouter router;
-    private Map<String, IBinder> sessionProviders;
+    private Map<String, ISessionProvider> sessionProviders = new HashMap<String, ISessionProvider>();
     public ISessionProvider defaultSessionProvider;
 
     private MediaRouteSelector mergedSelector;
@@ -55,17 +56,20 @@ public class CastContextImpl extends ICastContext.Stub {
         this.context = (Context) ObjectWrapper.unwrap(context);
         this.options = options;
         this.router = router;
-        this.sessionProviders = sessionProviders;
+        for (Map.Entry<String, IBinder> entry : sessionProviders.entrySet()) {
+            this.sessionProviders.put(entry.getKey(), ISessionProvider.Stub.asInterface(entry.getValue()));
+        }
 
         String receiverApplicationId = options.getReceiverApplicationId();
         String defaultCategory = CastMediaControlIntent.categoryForCast(receiverApplicationId);
 
-        this.defaultSessionProvider = ISessionProvider.Stub.asInterface(this.sessionProviders.get(defaultCategory));
+        this.defaultSessionProvider = this.sessionProviders.get(defaultCategory);
 
         // TODO: This should incorporate passed options
         this.mergedSelector = new MediaRouteSelector.Builder()
             .addControlCategory(MediaControlIntent.CATEGORY_LIVE_VIDEO)
             .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
+            .addControlCategory(defaultCategory)
             .build();
 
         // TODO: Find a home for this once the rest of the implementation
