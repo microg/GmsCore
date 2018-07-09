@@ -476,7 +476,7 @@ public class McsService extends Service implements Handler.Callback {
                 logd("Target: " + resolveInfo);
                 Intent targetIntent = new Intent(intent);
                 targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
-                sendOrderedBroadcast(targetIntent, msg.category + ".permission.C2D_MESSAGE");
+                sendOrderedBroadcast(targetIntent, null);
             }
         }
     }
