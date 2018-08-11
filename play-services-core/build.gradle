@@ -65,7 +65,7 @@ android {
         versionName getMyVersionName()
         def x = getMyVersionCode() - 367
         // We are not allowed to freely choose the hundreds column as it defines the device type
-        versionCode(12221400 + x % 100 + ((int) (x / 100)) * 1000)
+        versionCode(12451000 + x % 100 + ((int) (x / 100)) * 1000)
 
         minSdkVersion androidMinSdk()
         targetSdkVersion androidTargetSdk()
