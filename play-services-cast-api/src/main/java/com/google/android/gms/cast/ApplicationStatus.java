@@ -21,6 +21,12 @@ import org.microg.safeparcel.SafeParceled;
 
 public class ApplicationStatus extends AutoSafeParcelable {
 
+    public ApplicationStatus() {}
+
+    public ApplicationStatus(String applicationStatus) {
+        this.applicationStatus = applicationStatus;
+    }
+
     @SafeParceled(1)
     private int versionCode = 1;
     @SafeParceled(2)
