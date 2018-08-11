@@ -29,7 +29,9 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.android.gms.cast.ApplicationMetadata;
+import com.google.android.gms.cast.ApplicationStatus;
 import com.google.android.gms.cast.CastDevice;
+import com.google.android.gms.cast.CastDeviceStatus;
 import com.google.android.gms.cast.JoinOptions;
 import com.google.android.gms.cast.LaunchOptions;
 import com.google.android.gms.cast.internal.ICastDeviceController;
@@ -47,9 +49,10 @@ import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
 import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
+import su.litvak.chromecast.api.v2.AppEvent;
 
 public class CastDeviceControllerImpl extends ICastDeviceController.Stub
-    implements ChromeCastSpontaneousEventListener, ChromeCastRawMessageListener
+    implements ChromeCastSpontaneousEventListener, ChromeCastRawMessageListener, ICastDeviceControllerListener
 {
     private static final String TAG = "GmsCastDeviceControllerImpl";
 
@@ -73,7 +76,9 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
         this.notificationEnabled = extras.getBoolean("com.google.android.gms.cast.EXTRA_CAST_FRAMEWORK_NOTIFICATION_ENABLED");
         this.castFlags = extras.getLong("com.google.android.gms.cast.EXTRA_CAST_FLAGS");
         BinderWrapper listenerWrapper = (BinderWrapper)extras.get("listener");
-        this.listener = ICastDeviceControllerListener.Stub.asInterface(listenerWrapper.binder);
+        if (listenerWrapper != null) {
+            this.listener = ICastDeviceControllerListener.Stub.asInterface(listenerWrapper.binder);
+        }
 
         this.chromecast = new ChromeCast(this.castDevice.getAddress());
         this.chromecast.registerListener(this);
@@ -88,9 +93,13 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
                 break;
             case STATUS:
                 Log.d(TAG, "unimplemented Method: spontaneousEventReceived: STATUS");
+                Application app = ((su.litvak.chromecast.api.v2.Status)event.getData()).getRunningApp();
+                if (app != null) {
+                    this.onApplicationStatusChanged(new ApplicationStatus(app.statusText));
+                }
                 break;
             case APPEVENT:
-                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: APPEVENT");
+                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: APPEVENT" + ((AppEvent)event.getData()).message);
                 break;
             case CLOSE:
                 Log.d(TAG, "unimplemented Method: spontaneousEventReceived: CLOSE");
@@ -102,13 +111,14 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     @Override
-    public void rawMessageReceived(ChromeCastRawMessage message) {
+    public void rawMessageReceived(ChromeCastRawMessage message, Long requestId) {
         switch (message.getPayloadType()) {
             case STRING:
-                try {
-                    this.listener.onTextMessageReceived(message.getNamespace(), message.getPayloadUtf8());
-                } catch (RemoteException ex) {
-                    Log.e(TAG, "Error calling onTextMessageReceived: " + ex.getMessage());
+                String response = message.getPayloadUtf8();
+                if (requestId == null) {
+                    this.onTextMessageReceived(message.getNamespace(), response);
+                } else {
+                    this.onSendMessageSuccess(response, requestId);
                 }
                 break;
             case BINARY:
@@ -125,17 +135,12 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
 
     @Override
     public void sendMessage(String namespace, String message, long requestId) {
-        String response = null;
+        Log.d(TAG, "unimplemented Method: sendMessage" + message);
         try {
-            response = this.chromecast.sendRawRequest(namespace, message, requestId);
+            this.chromecast.sendRawRequest(namespace, message, requestId);
         } catch (IOException e) {
             Log.w(TAG, "Error sending cast message: " + e.getMessage());
             return;
-        }
-        try {
-            this.listener.onSendMessageSuccess(response, requestId);
-        } catch (RemoteException ex) {
-            Log.e(TAG, "Error calling onSendMessageSuccess: " + ex.getMessage());
         }
     }
 
@@ -170,11 +175,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
             app = this.chromecast.launchApp(applicationId);
         } catch (IOException e) {
             Log.w(TAG, "Error launching cast application: " + e.getMessage());
-            try {
-                this.listener.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
-            } catch (RemoteException ex) {
-                Log.e(TAG, "Error calling onApplicationConnectionFailure: " + ex.getMessage());
-            }
+            this.onApplicationConnectionFailure(CommonStatusCodes.NETWORK_ERROR);
             return;
         }
         this.sessionId = app.sessionId;
@@ -190,15 +191,122 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
             metadata.namespaces.add(namespace.name);
         }
         metadata.senderAppIdentifier = this.context.getPackageName();
-        try {
-            this.listener.onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Error calling onApplicationConnectionSuccess: " + e.getMessage());
-        }
+        this.onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
     }
 
     @Override
     public void joinApplication(String applicationId, String sessionId, JoinOptions joinOptions) {
         Log.d(TAG, "unimplemented Method: joinApplication");
+        this.launchApplication(applicationId, new LaunchOptions());
+    }
+
+    public void onDisconnected(int reason) {
+        Log.d(TAG, "unimplemented Method: onDisconnected");
+        if (this.listener != null) {
+            try {
+                this.listener.onDisconnected(reason);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onDisconnected: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
+        Log.d(TAG, "unimplemented Method: onApplicationConnectionSuccess");
+        if (this.listener != null) {
+            try {
+                this.listener.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onApplicationConnectionSuccess: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onApplicationConnectionFailure(int statusCode) {
+        Log.d(TAG, "unimplemented Method: onApplicationConnectionFailure");
+        if (this.listener != null) {
+            try {
+                this.listener.onApplicationConnectionFailure(statusCode);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onApplicationConnectionFailure: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onTextMessageReceived(String namespace, String message) {
+        Log.d(TAG, "unimplemented Method: onTextMessageReceived: " + message);
+        if (this.listener != null) {
+            try {
+                this.listener.onTextMessageReceived(namespace, message);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onTextMessageReceived: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onBinaryMessageReceived(String namespace, byte[] data) {
+        Log.d(TAG, "unimplemented Method: onBinaryMessageReceived");
+        if (this.listener != null) {
+            try {
+                this.listener.onBinaryMessageReceived(namespace, data);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onBinaryMessageReceived: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onApplicationDisconnected(int paramInt) {
+        Log.d(TAG, "unimplemented Method: onApplicationDisconnected");
+        if (this.listener != null) {
+            try {
+                this.listener.onApplicationDisconnected(paramInt);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onApplicationDisconnected: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onSendMessageFailure(String response, long requestId, int statusCode) {
+        Log.d(TAG, "unimplemented Method: onSendMessageFailure");
+        if (this.listener != null) {
+            try {
+                this.listener.onSendMessageFailure(response, requestId, statusCode);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onSendMessageFailure: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onSendMessageSuccess(String response, long requestId) {
+        Log.d(TAG, "unimplemented Method: onSendMessageSuccess: " + response);
+        if (this.listener != null) {
+            try {
+                this.listener.onSendMessageSuccess(response, requestId);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onSendMessageSuccess: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onApplicationStatusChanged(ApplicationStatus applicationStatus) {
+        Log.d(TAG, "unimplemented Method: onApplicationStatusChanged");
+        if (this.listener != null) {
+            try {
+                this.listener.onApplicationStatusChanged(applicationStatus);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onApplicationStatusChanged: " + ex.getMessage());
+            }
+        }
+    }
+
+    public void onDeviceStatusChanged(CastDeviceStatus deviceStatus) {
+        Log.d(TAG, "unimplemented Method: onDeviceStatusChanged");
+        if (this.listener != null) {
+            try {
+                this.listener.onDeviceStatusChanged(deviceStatus);
+            } catch (RemoteException ex) {
+                Log.e(TAG, "Error calling onDeviceStatusChanged: " + ex.getMessage());
+            }
+        }
     }
 }
