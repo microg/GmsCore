@@ -71,18 +71,6 @@ public class CastContextImpl extends ICastContext.Stub {
             .addControlCategory(MediaControlIntent.CATEGORY_REMOTE_PLAYBACK)
             .addControlCategory(defaultCategory)
             .build();
-
-        // TODO: Find a home for this once the rest of the implementation
-        // becomes more clear. Uncomment this to enable discovery of devices.
-        // Note that the scan currently isn't ever disabled as part of the
-        // lifecycle, so we don't want to ship with this.
-        /*
-        Bundle selectorBundle = this.mergedSelector.asBundle();
-
-        router.clearCallbacks();
-        router.registerMediaRouterCallbackImpl(selectorBundle, new MediaRouterCallbackImpl(this));
-        router.addCallback(selectorBundle, MediaRouter.CALLBACK_FLAG_PERFORM_ACTIVE_SCAN);
-        */
     }
 
     @Override

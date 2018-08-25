@@ -27,7 +27,7 @@ dependencies {
     implementation "com.takisoft.fix:preference-v7:$supportLibraryVersion.0"
     implementation "de.hdodenhof:circleimageview:1.3.0"
     implementation "com.squareup.wire:wire-runtime:1.6.1"
-    implementation "su.litvak.chromecast:api-v2:0.10.3-SNAPSHOT"
+    implementation "su.litvak.chromecast:api-v2:0.10.4-SNAPSHOT"
 
     // Specified manually due to
     // https://github.com/vitalidze/chromecast-java-api-v2/issues/91

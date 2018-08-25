@@ -53,6 +53,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
 
     private Map<String, CastDevice> castDevices = new HashMap<String, CastDevice>();
+    private Map<String, String> serviceCastIds = new HashMap<String, String>();
 
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
@@ -180,7 +181,6 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
             @Override
             public void onDiscoveryStarted(String regType) {
-                Log.d(TAG, "DiscoveryListener unimplemented Method: onDiscoveryStarted");
                 CastMediaRouteProvider.this.state = State.DISCOVERING;
             }
 
@@ -189,7 +189,10 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                 mNsdManager.resolveService(service, new NsdManager.ResolveListener() {
                     @Override
                     public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-                        Log.e(TAG, "DiscoveryListener unimplemented Method: Resolve failed" + errorCode);
+                        if (errorCode == NsdManager.FAILURE_ALREADY_ACTIVE) {
+                            return;
+                        }
+                        Log.e(TAG, "DiscoveryListener Resolve failed. Error code " + errorCode);
                     }
 
                     @Override
@@ -197,16 +200,21 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                         String name = serviceInfo.getServiceName();
                         InetAddress host = serviceInfo.getHost();
                         int port = serviceInfo.getPort();
+                        Map<String, byte[]> attributes = serviceInfo.getAttributes();
+                        if (attributes == null) {
+                            Log.e(TAG, "Error getting service attributes from DNS-SD response");
+                            return;
+                        }
                         try {
-                            String id = new String(serviceInfo.getAttributes().get("id"), "UTF-8");
-                            String deviceVersion = new String(serviceInfo.getAttributes().get("ve"), "UTF-8");
-                            String friendlyName = new String(serviceInfo.getAttributes().get("fn"), "UTF-8");
-                            String modelName = new String(serviceInfo.getAttributes().get("md"), "UTF-8");
-                            String iconPath = new String(serviceInfo.getAttributes().get("ic"), "UTF-8");
-                            int status = Integer.parseInt(new String(serviceInfo.getAttributes().get("st"), "UTF-8"));
+                            String id = new String(attributes.get("id"), "UTF-8");
+                            String deviceVersion = new String(attributes.get("ve"), "UTF-8");
+                            String friendlyName = new String(attributes.get("fn"), "UTF-8");
+                            String modelName = new String(attributes.get("md"), "UTF-8");
+                            String iconPath = new String(attributes.get("ic"), "UTF-8");
+                            int status = Integer.parseInt(new String(attributes.get("st"), "UTF-8"));
 
                             onChromeCastDiscovered(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status);
-                        } catch (UnsupportedEncodingException ex) {
+                        } catch (UnsupportedEncodingException | NullPointerException ex) {
                             Log.e(TAG, "Error getting cast details from DNS-SD response", ex);
                             return;
                         }
@@ -215,26 +223,23 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             }
 
             @Override
-            public void onServiceLost(NsdServiceInfo service) {
-                Log.d(TAG, "DiscoveryListener unimplemented Method: onServiceLost" + service);
-                // TODO: Remove chromecast route.
+            public void onServiceLost(NsdServiceInfo serviceInfo) {
+                String name = serviceInfo.getServiceName();
+                onChromeCastLost(name);
             }
 
             @Override
             public void onDiscoveryStopped(String serviceType) {
-                Log.i(TAG, "DiscoveryListener unimplemented Method: onDiscoveryStopped " + serviceType);
                 CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
             }
 
             @Override
             public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-                Log.e(TAG, "DiscoveryListener unimplemented Method: onStartDiscoveryFailed: Error code:" + errorCode);
                 CastMediaRouteProvider.this.state = State.NOT_DISCOVERING;
             }
 
             @Override
             public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-                Log.e(TAG, "DiscoveryListener unimplemented Method: onStopDiscoveryFailed: Error code:" + errorCode);
                 CastMediaRouteProvider.this.state = State.DISCOVERING;
             }
         };
@@ -250,15 +255,19 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
             CastDevice castDevice = new CastDevice(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status, capabilities);
             this.castDevices.put(id, castDevice);
+            this.serviceCastIds.put(name, id);
         }
 
-        Handler mainHandler = new Handler(this.getContext().getMainLooper());
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                publishRoutes();
-            }
-        });
+        publishRoutesInMainThread();
+    }
+
+    private void onChromeCastLost(String name) {
+        String id = this.serviceCastIds.remove(name);
+        if (id != null) {
+            this.castDevices.remove(id);
+        }
+
+        publishRoutesInMainThread();
     }
 
     @Override
@@ -287,6 +296,16 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     public RouteController onCreateRouteController(String routeId) {
         CastDevice castDevice = this.castDevices.get(routeId);
         return new CastMediaRouteController(this, routeId, castDevice.getAddress());
+    }
+
+    private void publishRoutesInMainThread() {
+        Handler mainHandler = new Handler(this.getContext().getMainLooper());
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                publishRoutes();
+            }
+        });
     }
 
     private void publishRoutes() {
