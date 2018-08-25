@@ -45,14 +45,19 @@ import com.google.android.gms.common.internal.GetServiceRequest;
 import su.litvak.chromecast.api.v2.Application;
 import su.litvak.chromecast.api.v2.ChromeCast;
 import su.litvak.chromecast.api.v2.Namespace;
+import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
 import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
+import su.litvak.chromecast.api.v2.ChromeCastConnectionEvent;
 import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
 import su.litvak.chromecast.api.v2.AppEvent;
 
-public class CastDeviceControllerImpl extends ICastDeviceController.Stub
-    implements ChromeCastSpontaneousEventListener, ChromeCastRawMessageListener, ICastDeviceControllerListener
+public class CastDeviceControllerImpl extends ICastDeviceController.Stub implements
+    ChromeCastConnectionEventListener,
+    ChromeCastSpontaneousEventListener,
+    ChromeCastRawMessageListener,
+    ICastDeviceControllerListener
 {
     private static final String TAG = "GmsCastDeviceControllerImpl";
 
@@ -83,29 +88,56 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
         this.chromecast = new ChromeCast(this.castDevice.getAddress());
         this.chromecast.registerListener(this);
         this.chromecast.registerRawMessageListener(this);
+        this.chromecast.registerConnectionListener(this);
+    }
+
+    @Override
+    public void connectionEventReceived(ChromeCastConnectionEvent event) {
+        if (!event.isConnected()) {
+            this.onDisconnected(CommonStatusCodes.SUCCESS);
+        }
+    }
+
+    protected ApplicationMetadata createMetadataFromApplication(Application app) {
+        if (app == null) {
+            return null;
+        }
+        ApplicationMetadata metadata = new ApplicationMetadata();
+        metadata.applicationId = app.id;
+        metadata.name = app.name;
+        Log.d(TAG, "unimplemented: ApplicationMetadata.images");
+        Log.d(TAG, "unimplemented: ApplicationMetadata.senderAppLaunchUri");
+        metadata.images = new ArrayList<WebImage>();
+        metadata.namespaces = new ArrayList<String>();
+        for(Namespace namespace : app.namespaces) {
+            metadata.namespaces.add(namespace.name);
+        }
+        metadata.senderAppIdentifier = this.context.getPackageName();
+        return metadata;
     }
 
     @Override
     public void spontaneousEventReceived(ChromeCastSpontaneousEvent event) {
         switch (event.getType()) {
             case MEDIA_STATUS:
-                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: MEDIA_STATUS");
                 break;
             case STATUS:
-                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: STATUS");
-                Application app = ((su.litvak.chromecast.api.v2.Status)event.getData()).getRunningApp();
+                su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status)event.getData();
+                Application app = status.getRunningApp();
+                ApplicationMetadata metadata = this.createMetadataFromApplication(app);
                 if (app != null) {
                     this.onApplicationStatusChanged(new ApplicationStatus(app.statusText));
                 }
+                int activeInputState = status.activeInput ? 1 : 0;
+                int standbyState = status.standBy ? 1 : 0;
+                this.onDeviceStatusChanged(new CastDeviceStatus(status.volume.level, status.volume.muted, activeInputState, metadata, standbyState));
                 break;
             case APPEVENT:
-                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: APPEVENT" + ((AppEvent)event.getData()).message);
                 break;
             case CLOSE:
-                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: CLOSE");
+                this.onApplicationDisconnected(CommonStatusCodes.SUCCESS);
                 break;
             default:
-                Log.d(TAG, "unimplemented Method: spontaneousEventReceived: UNKNOWN");
                 break;
         }
     }
@@ -119,38 +151,41 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
                     this.onTextMessageReceived(message.getNamespace(), response);
                 } else {
                     this.onSendMessageSuccess(response, requestId);
+                    this.onTextMessageReceived(message.getNamespace(), response);
                 }
                 break;
             case BINARY:
-                Log.d(TAG, "unimplemented Method: rawMessageReceived: BINARY");
+                byte[] payload = message.getPayloadBinary();
+                this.onBinaryMessageReceived(message.getNamespace(), payload);
                 break;
         }
     }
 
     @Override
     public void disconnect() {
-        Log.d(TAG, "unimplemented Method: disconnect");
-        this.sessionId = null;
+        try {
+            this.chromecast.disconnect();
+        } catch (IOException e) {
+            Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
+            return;
+        }
     }
 
     @Override
     public void sendMessage(String namespace, String message, long requestId) {
-        Log.d(TAG, "unimplemented Method: sendMessage" + message);
         try {
             this.chromecast.sendRawRequest(namespace, message, requestId);
         } catch (IOException e) {
             Log.w(TAG, "Error sending cast message: " + e.getMessage());
+            this.onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
             return;
         }
     }
 
     @Override
     public void stopApplication(String sessionId) {
-        Log.d(TAG, "unimplemented Method: stopApplication");
         try {
-            // TODO: Expose more control of chromecast-java-api-v2 so we can
-            // make use of our sessionID parameter.
-            this.chromecast.stopApp();
+            this.chromecast.stopSession(sessionId);
         } catch (IOException e) {
             Log.w(TAG, "Error sending cast message: " + e.getMessage());
             return;
@@ -180,17 +215,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
         }
         this.sessionId = app.sessionId;
 
-        ApplicationMetadata metadata = new ApplicationMetadata();
-        metadata.applicationId = applicationId;
-        metadata.name = app.name;
-        Log.d(TAG, "unimplemented: ApplicationMetadata.images");
-        metadata.images = new ArrayList<WebImage>();
-        metadata.namespaces = new ArrayList<String>();
-        Log.d(TAG, "unimplemented: ApplicationMetadata.senderAppLaunchUri");
-        for(Namespace namespace : app.namespaces) {
-            metadata.namespaces.add(namespace.name);
-        }
-        metadata.senderAppIdentifier = this.context.getPackageName();
+        ApplicationMetadata metadata = this.createMetadataFromApplication(app);
         this.onApplicationConnectionSuccess(metadata, app.statusText, app.sessionId, true);
     }
 
@@ -201,7 +226,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onDisconnected(int reason) {
-        Log.d(TAG, "unimplemented Method: onDisconnected");
         if (this.listener != null) {
             try {
                 this.listener.onDisconnected(reason);
@@ -212,7 +236,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onApplicationConnectionSuccess(ApplicationMetadata applicationMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-        Log.d(TAG, "unimplemented Method: onApplicationConnectionSuccess");
         if (this.listener != null) {
             try {
                 this.listener.onApplicationConnectionSuccess(applicationMetadata, applicationStatus, sessionId, wasLaunched);
@@ -223,7 +246,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onApplicationConnectionFailure(int statusCode) {
-        Log.d(TAG, "unimplemented Method: onApplicationConnectionFailure");
         if (this.listener != null) {
             try {
                 this.listener.onApplicationConnectionFailure(statusCode);
@@ -234,7 +256,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onTextMessageReceived(String namespace, String message) {
-        Log.d(TAG, "unimplemented Method: onTextMessageReceived: " + message);
         if (this.listener != null) {
             try {
                 this.listener.onTextMessageReceived(namespace, message);
@@ -245,7 +266,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onBinaryMessageReceived(String namespace, byte[] data) {
-        Log.d(TAG, "unimplemented Method: onBinaryMessageReceived");
         if (this.listener != null) {
             try {
                 this.listener.onBinaryMessageReceived(namespace, data);
@@ -267,7 +287,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onSendMessageFailure(String response, long requestId, int statusCode) {
-        Log.d(TAG, "unimplemented Method: onSendMessageFailure");
         if (this.listener != null) {
             try {
                 this.listener.onSendMessageFailure(response, requestId, statusCode);
@@ -278,7 +297,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onSendMessageSuccess(String response, long requestId) {
-        Log.d(TAG, "unimplemented Method: onSendMessageSuccess: " + response);
         if (this.listener != null) {
             try {
                 this.listener.onSendMessageSuccess(response, requestId);
@@ -289,7 +307,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onApplicationStatusChanged(ApplicationStatus applicationStatus) {
-        Log.d(TAG, "unimplemented Method: onApplicationStatusChanged");
         if (this.listener != null) {
             try {
                 this.listener.onApplicationStatusChanged(applicationStatus);
@@ -300,7 +317,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub
     }
 
     public void onDeviceStatusChanged(CastDeviceStatus deviceStatus) {
-        Log.d(TAG, "unimplemented Method: onDeviceStatusChanged");
         if (this.listener != null) {
             try {
                 this.listener.onDeviceStatusChanged(deviceStatus);

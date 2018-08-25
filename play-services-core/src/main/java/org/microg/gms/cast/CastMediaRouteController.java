@@ -71,16 +71,7 @@ public class CastMediaRouteController extends MediaRouteProvider.RouteController
     }
 
     public void onRelease() {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    CastMediaRouteController.this.chromecast.stopApp();
-                } catch (IOException e) {
-                    Log.w(TAG, "Error stopping cast application: " + e.getMessage());
-                    return;
-                }
-            }
-        }).start();
+        Log.d(TAG, "unimplemented Method: onRelease: " + this.routeId);
     }
 
     public void onSelect() {
