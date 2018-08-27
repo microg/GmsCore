@@ -51,5 +51,5 @@ android {
 
 dependencies {
     api 'com.android.support:support-v4:25.3.1'
-    api 'org.microg:safe-parcel:1.4.0'
+    api 'org.microg:safe-parcel:1.5.0'
 }
