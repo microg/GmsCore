@@ -100,6 +100,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public String getNetworkPrefForInfo(NetworkInfo info) {
+        if (info == null) return PREF_NETWORK_OTHER;
         if (info.isRoaming()) return PREF_NETWORK_ROAMING;
         switch (info.getType()) {
             case ConnectivityManager.TYPE_MOBILE:
@@ -190,7 +191,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public boolean isEnabledFor(NetworkInfo info) {
-        return isEnabled() && getHeartbeatMsFor(info) >= 0;
+        return isEnabled() && info != null && getHeartbeatMsFor(info) >= 0;
     }
 
     public boolean isGcmLogEnabled() {
