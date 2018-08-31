@@ -28,7 +28,7 @@ public class UnregisterReceiver extends BroadcastReceiver {
                         List<GcmDatabase.Registration> registrations = database.getRegistrationsByApp(packageName);
                         boolean deletedAll = true;
                         for (GcmDatabase.Registration registration : registrations) {
-                            deletedAll &= PushRegisterService.unregister(context, registration.packageName, registration.signature, null, null).deleted != null;
+                            deletedAll &= PushRegisterManager.unregister(context, registration.packageName, registration.signature, null, null).deleted != null;
                         }
                         if (deletedAll) {
                             database.removeApp(packageName);

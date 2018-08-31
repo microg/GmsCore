@@ -18,6 +18,7 @@ package org.microg.gms.gcm;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.Build;
+import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 
 import java.io.IOException;
@@ -41,9 +42,11 @@ public class RegisterRequest extends HttpFormClient.Request {
     public String appSignature;
     @RequestContent("app_ver")
     public int appVersion;
+    @RequestContent("app_ver_name")
+    public String appVersionName;
     @RequestContent("info")
     public String info;
-    @RequestContent("sender")
+    @RequestContent({"sender", "subtype"})
     public String sender;
     @RequestContent({"X-GOOG.USER_AID", "device"})
     public long androidId;
@@ -52,11 +55,22 @@ public class RegisterRequest extends HttpFormClient.Request {
     public long securityToken;
     public String deviceName;
     public String buildVersion;
+    @RequestContent("osv")
+    public int sdkVersion;
+    @RequestContent("gmsv")
+    public int gmsVersion;
+    @RequestContent("scope")
+    public String scope = "*";
+    @RequestContent("appid")
+    public String appId;
+    @RequestContent("gmp_app_id")
+    public String gmpAppId;
 
     @Override
     public void prepare() {
         userAgent = String.format(USER_AGENT, deviceName, buildVersion);
         auth = "AidLogin " + androidId + ":" + securityToken;
+        gmsVersion = Constants.MAX_REFERENCE_VERSION;
     }
 
     public RegisterRequest checkin(LastCheckinInfo lastCheckinInfo) {
@@ -65,10 +79,28 @@ public class RegisterRequest extends HttpFormClient.Request {
         return this;
     }
 
-    public RegisterRequest app(String app, String appSignature, int appVersion) {
+    public RegisterRequest app(String app) {
+        this.app = app;
+        return this;
+    }
+
+    public RegisterRequest app(String app, String appSignature) {
+        this.app = app;
+        this.appSignature = appSignature;
+        return this;
+    }
+
+    public RegisterRequest app(String app, String appSignature, int appVersion, String appVersionName) {
         this.app = app;
         this.appSignature = appSignature;
         this.appVersion = appVersion;
+        this.appVersionName = appVersionName;
+        return this;
+    }
+
+    public RegisterRequest appid(String appid, String gmpAppId) {
+        this.appId = appid;
+        this.gmpAppId = gmpAppId;
         return this;
     }
 
@@ -85,6 +117,7 @@ public class RegisterRequest extends HttpFormClient.Request {
     public RegisterRequest build(Build build) {
         deviceName = build.device;
         buildVersion = build.id;
+        sdkVersion = build.sdk;
         return this;
     }
 

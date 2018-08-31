@@ -66,7 +66,7 @@ public class AskPushPermission extends FragmentActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            PushRegisterService.registerAndReply(AskPushPermission.this, intent, packageName, requestId);
+                            PushRegisterService.registerAndReply(AskPushPermission.this, database, intent, packageName, requestId);
                         }
                     }).start();
                     finish();

@@ -155,4 +155,12 @@ public class PackageUtils {
             return -1;
         }
     }
+
+    public static String versionName(Context context, String packageName) {
+        try {
+            return context.getPackageManager().getPackageInfo(packageName, 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+    }
 }

@@ -205,15 +205,17 @@
             android:permission="com.google.android.c2dm.permission.RECEIVE">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTER"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.UNREGISTER"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
+
+        <receiver android:name="org.microg.gms.gcm.PushRegisterReceiver">
+            <intent-filter>
+                <action android:name="com.google.iid.TOKEN_REQUEST"/>
+            </intent-filter>
+        </receiver>
 
         <service android:name="org.microg.gms.gcm.McsService"/>
 

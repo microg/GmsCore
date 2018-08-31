@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.StringRes;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
-import org.microg.gms.gcm.PushRegisterService;
+import org.microg.gms.gcm.PushRegisterManager;
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
 
@@ -185,7 +184,7 @@ public class GcmAppFragment extends ResourceSettingsFragment {
                             @Override
                             public void run() {
                                 for (GcmDatabase.Registration registration : registrations) {
-                                    PushRegisterService.unregister(getContext(), registration.packageName, registration.signature, null, null);
+                                    PushRegisterManager.unregister(getContext(), registration.packageName, registration.signature, null, null);
                                 }
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override

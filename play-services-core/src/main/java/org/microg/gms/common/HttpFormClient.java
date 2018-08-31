@@ -81,7 +81,13 @@ public class HttpFormClient {
         os.close();
 
         if (connection.getResponseCode() != 200) {
-            throw new IOException(connection.getResponseMessage());
+            String error = connection.getResponseMessage();
+            try {
+                error = new String(Utils.readStreamToEnd(connection.getErrorStream()));
+            } catch (IOException e) {
+                // Ignore
+            }
+            throw new IOException(error);
         }
 
         String result = new String(Utils.readStreamToEnd(connection.getInputStream()));
