@@ -49,35 +49,33 @@ dependencies {
     implementation project(':vtm-microg-theme')
 }
 
-String getMyVersionName() {
-    def stdout = new ByteArrayOutputStream()
-    if (rootProject.file("gradlew").exists())
-        exec {
-            commandLine 'git', 'describe', '--tags', '--always', '--dirty'; standardOutput = stdout
-        }
-    else // automatic build system, don't tag dirty
-        exec { commandLine 'git', 'describe', '--tags', '--always'; standardOutput = stdout }
-    return stdout.toString().trim().substring(1)
-}
-
-int getMyVersionCode() {
+def execResult(...args) {
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'rev-list', '--count', "HEAD"
+        commandLine args
         standardOutput = stdout
     }
-    return Integer.parseInt(stdout.toString().trim())
+    return stdout.toString().trim()
 }
+
+def gmsVersion = "12.8.79"
+def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
+def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0').substring(1)
+def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))
+def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').split(' ')[0]
+def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
+def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
+def ourVersionCode = gmsVersionCode * 1000 + gitCommitCount + (gitDirty ? 1 : 0)
+def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 ? "-$gitCommitCount-$gitCommitId" : "") + (gitDirty ? "-dirty" : "")
+logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
 
 android {
     compileSdkVersion androidCompileSdk()
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName getMyVersionName()
-        def x = getMyVersionCode() - 367
-        // We are not allowed to freely choose the hundreds column as it defines the device type
-        versionCode(12221400 + x % 100 + ((int) (x / 100)) * 1000)
+        versionName ourVersionName
+        versionCode ourVersionCode
 
         minSdkVersion androidMinSdk()
         targetSdkVersion androidTargetSdk()

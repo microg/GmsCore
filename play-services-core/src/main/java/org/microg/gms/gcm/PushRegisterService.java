@@ -22,8 +22,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.os.Binder;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.microg.gms.checkin.CheckinService;
@@ -177,24 +184,28 @@ public class PushRegisterService extends IntentService {
     }
 
     public static void registerAndReply(Context context, Intent intent, String packageName, String requestId) {
-        Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
         String sender = intent.getStringExtra(EXTRA_SENDER);
         String appSignature = PackageUtils.firstSignatureDigest(context, packageName);
         String regId = register(context, packageName, appSignature, sender, null).token;
-        if (regId != null) {
-            outIntent.putExtra(EXTRA_REGISTRATION_ID, attachRequestId(regId, requestId));
-        } else {
-            outIntent.putExtra(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
-        }
+        Intent outIntent = createRegistrationReply(regId, requestId);
 
         Log.d(TAG, "register[res]: " + outIntent + " extras=" + outIntent.getExtras());
         sendReply(context, intent, packageName, outIntent);
     }
 
-    private static void sendReply(Context context, Intent intent, String packageName, Intent outIntent) {
+    private static Intent createRegistrationReply(String regId, String requestId) {
+        Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
+        if (regId != null) {
+            outIntent.putExtra(EXTRA_REGISTRATION_ID, attachRequestId(regId, requestId));
+        } else {
+            outIntent.putExtra(EXTRA_ERROR, attachRequestId(ERROR_SERVICE_NOT_AVAILABLE, requestId));
+        }
+        return outIntent;
+    }
 
+    private static void sendReply(Context context, Intent intent, String packageName, Intent outIntent) {
         try {
-            if (intent.hasExtra(EXTRA_MESSENGER)) {
+            if (intent != null && intent.hasExtra(EXTRA_MESSENGER)) {
                 Messenger messenger = intent.getParcelableExtra(EXTRA_MESSENGER);
                 Message message = Message.obtain();
                 message.obj = outIntent;
@@ -258,5 +269,134 @@ public class PushRegisterService extends IntentService {
     private static String attachRequestId(String msg, String requestId) {
         if (requestId == null) return msg;
         return "|ID|" + requestId + "|" + msg;
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        Log.d(TAG, "onBind: " + intent.toString());
+        if (ACTION_C2DM_REGISTER.equals(intent.getAction())) {
+            Messenger messenger = new Messenger(new FcmHandler(this));
+            return messenger.getBinder();
+        }
+        return super.onBind(intent);
+    }
+
+    private static class FcmRegisterTask extends AsyncTask<Void, Void, RegisterResponse> {
+        private Context context;
+        private String packageName;
+        private String sender;
+        private Callback callback;
+
+        public FcmRegisterTask(Context context, String packageName, String sender, Callback callback) {
+            this.context = context;
+            this.packageName = packageName;
+            this.sender = sender;
+            this.callback = callback;
+        }
+
+        public interface Callback {
+            void onResult(RegisterResponse registerResponse);
+        }
+
+        @Override
+        protected RegisterResponse doInBackground(Void... voids) {
+            return register(context, packageName, PackageUtils.firstSignatureDigest(context, packageName), sender, null, false);
+        }
+
+        @Override
+        protected void onPostExecute(RegisterResponse registerResponse) {
+            callback.onResult(registerResponse);
+        }
+    }
+
+    private static class FcmHandler extends Handler {
+        private Context context;
+        private int callingUid;
+
+        public FcmHandler(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
+            this.callingUid = Binder.getCallingUid();
+            return super.sendMessageAtTime(msg, uptimeMillis);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0) {
+                if (msg.obj instanceof Intent) {
+                    Message nuMsg = Message.obtain();
+                    nuMsg.what = msg.what;
+                    nuMsg.arg1 = 0;
+                    nuMsg.replyTo = null;
+                    PendingIntent pendingIntent = ((Intent) msg.obj).getParcelableExtra(EXTRA_APP);
+                    String packageName = PackageUtils.packageFromPendingIntent(pendingIntent);
+                    Bundle data = new Bundle();
+                    data.putBoolean("oneWay", false);
+                    data.putString("pkg", packageName);
+                    data.putBundle("data", msg.getData());
+                    nuMsg.setData(data);
+                    msg = nuMsg;
+                } else {
+                    return;
+                }
+            }
+            int what = msg.what;
+            int id = msg.arg1;
+            Messenger replyTo = msg.replyTo;
+            if (replyTo == null) {
+                Log.w(TAG, "replyTo is null");
+                return;
+            }
+            Bundle data = msg.getData();
+            if (data.getBoolean("oneWay", false)) {
+                Log.w(TAG, "oneWay requested");
+                return;
+            }
+            String packageName = data.getString("pkg");
+            Bundle subdata = data.getBundle("data");
+            String sender = subdata.getString("sender");
+            try {
+                PackageUtils.checkPackageUid(context, packageName, callingUid);
+            } catch (SecurityException e) {
+                Log.w(TAG, e);
+                return;
+            }
+            new FcmRegisterTask(context, packageName, sender, registerResponse -> {
+                Bundle data1 = new Bundle();
+                if (registerResponse != null) {
+                    data1.putString(EXTRA_REGISTRATION_ID, registerResponse.token);
+                } else {
+                    data1.putString(EXTRA_ERROR, ERROR_SERVICE_NOT_AVAILABLE);
+                }
+
+                if (what == 0) {
+                    Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
+                    outIntent.putExtras(data1);
+                    Message message = Message.obtain();
+                    message.obj = outIntent;
+                    try {
+                        replyTo.send(message);
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
+                } else {
+                    Bundle messageData = new Bundle();
+                    messageData.putBundle("data", data1);
+                    Message response = Message.obtain();
+                    response.what = what;
+                    response.arg1 = id;
+                    response.setData(messageData);
+                    try {
+                        replyTo.send(response);
+                    } catch (RemoteException e) {
+                        Log.w(TAG, e);
+                    }
+                }
+            }).execute();
+        }
     }
 }

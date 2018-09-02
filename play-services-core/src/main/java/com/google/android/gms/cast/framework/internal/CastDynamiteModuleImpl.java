@@ -17,8 +17,6 @@
 package com.google.android.gms.cast.framework.internal;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.media.MediaRouter;
 import android.util.Log;
@@ -63,21 +61,18 @@ public class CastDynamiteModuleImpl extends ICastDynamiteModule.Stub {
     @Override
     public IMediaNotificationService newMediaNotificationServiceImpl(IObjectWrapper service, IObjectWrapper castContext, IObjectWrapper resources, CastMediaOptions options) throws RemoteException {
         Log.d(TAG, "unimplemented Method: newMediaNotificationServiceImpl");
-        return new IMediaNotificationService.Stub() {
-        };
+        return null;
     }
 
     @Override
     public IReconnectionService newReconnectionServiceImpl(IObjectWrapper service, IObjectWrapper sessionManager, IObjectWrapper discoveryManager) throws RemoteException {
         Log.d(TAG, "unimplemented Method: newReconnectionServiceImpl");
-        return new IReconnectionService.Stub() {
-        };
+        return null;
     }
 
     @Override
     public IFetchBitmapTask newFetchBitmapTaskImpl(IObjectWrapper asyncTask, IFetchBitmapTaskProgressPublisher progressPublisher, int i1, int i2, boolean b1, long l1, int i3, int i4, int i5) throws RemoteException {
         Log.d(TAG, "unimplemented Method: newFetchBitmapTaskImpl");
-        return new IFetchBitmapTask.Stub() {
-        };
+        return null;
     }
 }
