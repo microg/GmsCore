@@ -59,7 +59,7 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     ChromeCastRawMessageListener,
     ICastDeviceControllerListener
 {
-    private static final String TAG = "GmsCastDeviceControllerImpl";
+    private static final String TAG = "GmsCastDeviceController";
 
     private Context context;
     private String packageName;

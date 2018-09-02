@@ -16,11 +16,13 @@
 
 package org.microg.gms.cast;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -172,8 +174,14 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         BASE_CONTROL_FILTERS.add(filter);
     }
 
+    @SuppressLint("NewApi")
     public CastMediaRouteProvider(Context context) {
         super(context);
+
+        if (android.os.Build.VERSION.SDK_INT < 16) {
+            Log.i(TAG, "Cast discovery disabled. Android SDK version 16 or higher required.");
+            return;
+        }
 
         mNsdManager = (NsdManager)context.getSystemService(Context.NSD_SERVICE);
 
@@ -270,8 +278,13 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
         publishRoutesInMainThread();
     }
 
+    @SuppressLint("NewApi")
     @Override
     public void onDiscoveryRequestChanged(MediaRouteDiscoveryRequest request) {
+        if (android.os.Build.VERSION.SDK_INT < 16) {
+            return;
+        }
+
         if (request != null && request.isValid() && request.isActiveScan()) {
             if (request.getSelector() != null) {
                 for (String category : request.getSelector().getControlCategories()) {
@@ -295,6 +308,9 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     @Override
     public RouteController onCreateRouteController(String routeId) {
         CastDevice castDevice = this.castDevices.get(routeId);
+        if (castDevice == null) {
+            return null;
+        }
         return new CastMediaRouteController(this, routeId, castDevice.getAddress());
     }
 
