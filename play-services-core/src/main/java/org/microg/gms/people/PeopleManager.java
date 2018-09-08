@@ -56,13 +56,12 @@ public class PeopleManager {
         cursor.close();
         databaseHelper.close();
         if (url == null) return null;
-        String urlLastPart = url.substring(3);
+        String urlLastPart = url.replaceFirst(REGEX_SEARCH_USER_PHOTO, "");
         File file = new File(context.getCacheDir(), urlLastPart);
         if (!file.getParentFile().mkdirs() && file.exists()) {
             return file;
         }
         if (!network) return null;
-        url = "https://lh" + url.toCharArray()[1] + ".googleusercontent.com/" + urlLastPart;
         try {
             URLConnection conn = new URL(url).openConnection();
             conn.setDoInput(true);
@@ -94,8 +93,7 @@ public class PeopleManager {
             ContentValues contentValues = new ContentValues();
             contentValues.put("account_name", account.name);
             if (info.has("id")) contentValues.put("gaia_id", info.getString("id"));
-            if (info.has("picture"))
-                contentValues.put("avatar", info.getString("picture").replaceFirst(REGEX_SEARCH_USER_PHOTO, "~$1/"));
+            if (info.has("picture")) contentValues.put("avatar", info.getString("picture"));
             if (info.has("name")) contentValues.put("display_name", info.getString("name"));
             if (info.has("given_name")) contentValues.put("given_name", info.getString("given_name"));
             if (info.has("family_name")) contentValues.put("family_name", info.getString("family_name"));
