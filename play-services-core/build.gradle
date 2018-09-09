@@ -46,15 +46,16 @@ def execResult(...args) {
     return stdout.toString().trim()
 }
 
-def gmsVersion = "12.8.79"
+def gmsVersion = "13.2.80"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0').substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))
 def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').split(' ')[0]
 def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
-def ourVersionCode = gmsVersionCode * 1000 + gitCommitCount + (gitDirty ? 1 : 0)
-def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 ? "-$gitCommitCount-$gitCommitId" : "") + (gitDirty ? "-dirty" : "")
+def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
+def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
+def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
 logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
 
 android {
