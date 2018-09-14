@@ -22,6 +22,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.internal.IMarkerDelegate;
@@ -42,6 +43,7 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
     private BitmapDescriptorImpl icon;
     private AndroidBitmap oldBitmap;
     private boolean removed = false;
+    private IObjectWrapper tag = null;
 
     public MarkerImpl(String id, MarkerOptions options, MarkupListener listener) {
         this.id = id;
@@ -263,5 +265,25 @@ public class MarkerImpl extends IMarkerDelegate.Stub implements MarkerItemMarkup
 
     private void prepareMarkerIcon(MarkerItem item) {
         item.setMarker(new MarkerSymbol(oldBitmap, options.getAnchorU(), options.getAnchorV(), !options.isFlat()));
+    }
+
+    @Override
+    public void setZIndex(float zIndex) {
+        options.zIndex(zIndex);
+    }
+
+    @Override
+    public float getZIndex() {
+        return options.getZIndex();
+    }
+
+    @Override
+    public void setTag(IObjectWrapper obj) {
+        this.tag = obj;
+    }
+
+    @Override
+    public IObjectWrapper getTag() {
+        return this.tag == null ? ObjectWrapper.wrap(null) : this.tag;
     }
 }
