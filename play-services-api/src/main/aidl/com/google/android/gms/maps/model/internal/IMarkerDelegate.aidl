@@ -30,4 +30,8 @@ interface IMarkerDelegate {
 	void setInfoWindowAnchor(float x, float y);
 	void setAlpha(float alpha);
 	float getAlpha();
+	void setZIndex(float zIndex);
+	float getZIndex();
+	void setTag(IObjectWrapper obj);
+	IObjectWrapper getTag();
 }

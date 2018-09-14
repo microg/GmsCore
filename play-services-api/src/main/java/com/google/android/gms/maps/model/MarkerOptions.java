@@ -58,6 +58,8 @@ public class MarkerOptions extends AutoSafeParcelable {
     private float infoWindowAnchorV = 1F;
     @SafeParceled(14)
     private float alpha = 1F;
+    @SafeParceled(15)
+    private float zIndex = 0F;
 
     /**
      * Creates a new set of marker options.
@@ -324,6 +326,15 @@ public class MarkerOptions extends AutoSafeParcelable {
     public MarkerOptions visible(boolean visible) {
         this.visible = visible;
         return this;
+    }
+
+    public MarkerOptions zIndex(float zIndex) {
+        this.zIndex = zIndex;
+        return this;
+    }
+
+    public float getZIndex() {
+        return this.zIndex;
     }
 
     public static Creator<MarkerOptions> CREATOR = new AutoCreator<MarkerOptions>(MarkerOptions.class);
