@@ -147,7 +147,8 @@ public class Attestation {
     }
 
     private AttestResponse attest(AttestRequest request, String apiKey) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(SafetyNetPrefs.get(context).getServiceUrl(apiKey)).openConnection();
+        String requestUrl = SafetyNetPrefs.get(context).getServiceUrl() + "?alt=PROTO&key=" + apiKey;
+        HttpURLConnection connection = (HttpURLConnection) new URL(requestUrl).openConnection();
         connection.setRequestMethod("POST");
         connection.setDoInput(true);
         connection.setDoOutput(true);

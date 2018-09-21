@@ -39,6 +39,7 @@ import java.util.ArrayList;
 
 public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
     private static final String TAG = "GmsSafetyNetClientImpl";
+    private static final String DEFAULT_API_KEY = "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA";
 
     private Context context;
     private String packageName;
@@ -52,7 +53,7 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
 
     @Override
     public void attest(ISafetyNetCallbacks callbacks, byte[] nonce) throws RemoteException {
-        attestWithApiKey(callbacks, nonce, "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA");
+        attestWithApiKey(callbacks, nonce, DEFAULT_API_KEY);
     }
 
     @Override
