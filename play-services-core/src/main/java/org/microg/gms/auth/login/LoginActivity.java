@@ -85,6 +85,7 @@ public class LoginActivity extends AssistantActivity {
     private static final String TAG = "GmsAuthLoginBrowser";
     private static final String EMBEDDED_SETUP_URL = "https://accounts.google.com/EmbeddedSetup";
     private static final String PROGRAMMATIC_AUTH_URL = "https://accounts.google.com/o/oauth2/programmatic_auth";
+    private static final String GOOGLE_SUITE_URL = "https://accounts.google.com/signin/continue";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
 
@@ -110,15 +111,27 @@ public class LoginActivity extends AssistantActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "pageFinished: " + url);
-                if ("identifier".equals(Uri.parse(url).getFragment()))
+                Uri uri = Uri.parse(url);
+
+                // Begin login.
+                // UNUSED: uri=...#identifier never happens. if commented out, webView still appears!
+                if ("identifier".equals(uri.getFragment()))
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             webView.setVisibility(VISIBLE);
                         }
                     });
-                if ("close".equals(Uri.parse(url).getFragment()))
+
+                // Normal login.
+                if ("close".equals(uri.getFragment()))
                     closeWeb(false);
+
+                // Google Suite login.
+                if (url.startsWith(GOOGLE_SUITE_URL))
+                    closeWeb(false);
+
+                // IDK when this is called.
                 if (url.startsWith(PROGRAMMATIC_AUTH_URL))
                     closeWeb(true);
             }
