@@ -54,8 +54,8 @@ def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').
 def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
 def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
-def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
-def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
+def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2 + (gitCommitCount > 0 || gitDirty ? gitCommitCount : 0)
+def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "-$gitCommitCount")
 logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
 
 android {
