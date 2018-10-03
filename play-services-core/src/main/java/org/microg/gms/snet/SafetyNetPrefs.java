@@ -88,6 +88,10 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
         return official;
     }
 
+    public boolean isThirdParty() {
+        return thirdParty;
+    }
+
     public String getServiceUrl() {
         if (official) return OFFICIAL_ATTEST_BASE_URL;
         return customUrl;

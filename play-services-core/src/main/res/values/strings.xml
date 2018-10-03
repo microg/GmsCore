@@ -165,11 +165,14 @@ This can take a couple of minutes."</string>
 
     <string name="pref_snet_status_official_title">Use official server</string>
     <string name="pref_snet_status_official_summary">Requires an unrooted system and microG DroidGuard Helper installed</string>
+    <string name="pref_snet_status_official_info">(official server)</string>
     <string name="pref_snet_status_third_party_title">Use third-party server</string>
     <string name="pref_snet_status_third_party_summary">Third-party servers might be able to reply to SafetyNet requests without DroidGuard signature</string>
+    <string name="pref_snet_status_third_party_info">(third-party server)</string>
     <string name="pref_snet_custom_url_title">Custom server URL</string>
     <string name="pref_snet_custom_url_summary">Full URL of the third-party server answering SafetyNet attestation requests</string>
     <string name="pref_snet_self_signed_title">Use self-signed certificate</string>
     <string name="pref_snet_self_signed_summary">Instead of requesting a server, sign SafetyNet responses locally using a self-signed certificate. Most apps will refuse to use self-signed responses.</string>
+    <string name="pref_snet_status_self_signed_info">(self-signed certificate)</string>
 
 </resources>
