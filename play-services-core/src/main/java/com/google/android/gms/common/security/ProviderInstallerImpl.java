@@ -18,9 +18,11 @@ package com.google.android.gms.common.security;
 
 import android.content.Context;
 import android.util.Log;
+import org.conscrypt.OpenSSLProvider;
+import java.security.Security;
 
 public class ProviderInstallerImpl {
     public static void insertProvider(Context context) {
-        Log.d("ProviderInstallerImpl", "yep, i should do something with Security here...");
+        Security.insertProviderAt(new OpenSSLProvider(), 1);
     }
 }
