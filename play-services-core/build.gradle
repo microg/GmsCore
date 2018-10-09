@@ -35,6 +35,8 @@ dependencies {
     implementation project(':vtm-extras')
     implementation project(':vtm-jts')
     implementation project(':vtm-microg-theme')
+
+    compile 'org.conscrypt:conscrypt-android:2.0.0'
 }
 
 def execResult(...args) {
