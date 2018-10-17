@@ -7,6 +7,9 @@ microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow a
 ### Please refer to the [wiki](https://github.com/microg/android_packages_apps_GmsCore/wiki) for downloads and instructions
 
 
+## Developer startup: see CONTRIBUTING.md
+
+
 License
 -------
     Copyright 2014-2016 microG Project Team
