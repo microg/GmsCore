@@ -171,7 +171,5 @@
     <string name="pref_snet_custom_url_summary">Полный URL стороннего сервера, который отвечает на проверочные запросы SafetyNet</string>
     <string name="pref_snet_self_signed_title">Создавать сертификат самому</string>
     <string name="pref_snet_self_signed_summary">Вместо запросов на сервер подписывать SafetyNet локально, используя самостоятельно созданный сертификат. Большинство приложений будут отказываться использовать самоподписанные ответы.</string>
-    <string name="permdesc_fakePackageSignature">Приложение сможет обходить систему безопасности, выдавая себя за другое приложение.</string>
-    <string name="permlab_fakePackageSignature">Подмена подписи приложения</string>
     
 </resources>
