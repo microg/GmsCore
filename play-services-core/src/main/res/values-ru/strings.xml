@@ -89,7 +89,7 @@
 
     <string name="self_check_name_fake_sig_perm">Система поддерживает подмену подписи:</string>
     <string name="self_check_resolution_fake_sig_perm">Ваша прошивка не имеет нативной поддержки подмены подписи. Вы можете использовать Xposed или другие методы, чтобы активировать подмену подписи. Пожалуйста, ознакомьтесь с документацией, какая прошивка поддерживает подмену подписи и как использовать microG в прошивке, которая не поддерживает.</string>
-    <string name="self_check_name_perm_granted">Система разрешает подменять подпись:</string>
+    <string name="self_check_name_perm_granted">Система разрешает подмену подписи:</string>
     <string name="self_check_resolution_perm_granted">Ваша прошивка поддерживает подмену подписи, но требует дополнительных действий для ее активации. Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
     <string name="self_check_name_system_spoofs">Система подменяет подписи:</string>
     <string name="self_check_resolution_system_spoofs">Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
