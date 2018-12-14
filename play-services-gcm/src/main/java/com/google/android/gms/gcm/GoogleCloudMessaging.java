@@ -167,7 +167,7 @@ public class GoogleCloudMessaging {
      *
      * @return The message type or null if the intent is not a GCM intent
      */
-    public String getMessageType(Intent intent) throws IOException {
+    public String getMessageType(Intent intent) {
         if (intent == null || !ACTION_C2DM_RECEIVE.equals(intent.getAction())) return null;
         if (!intent.hasExtra(EXTRA_MESSAGE_TYPE)) return MESSAGE_TYPE_MESSAGE;
         return intent.getStringExtra(EXTRA_MESSAGE_TYPE);
