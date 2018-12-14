@@ -115,6 +115,11 @@ public class ConnectionResult {
      * Using the API on the device should be avoided.
      */
     public static final int API_UNAVAILABLE = 16;
+    
+    /**
+     * Service doesn't have one or more required permissions.
+     */
+    public static final int SERVICE_MISSING_PERMISSION = 19;
 
     /**
      * The Drive API requires external storage (such as an SD card), but no external storage is
