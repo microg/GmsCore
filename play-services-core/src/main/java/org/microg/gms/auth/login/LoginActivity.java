@@ -73,6 +73,7 @@ import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.MAX_REFERENCE_VERSION;
+import android.os.Build;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -131,6 +132,8 @@ public class LoginActivity extends AssistantActivity {
             } else {
                 retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
             }
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            init();
         } else {
             setMessage(R.string.auth_before_connect);
             setBackButtonText(android.R.string.cancel);
