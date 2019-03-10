@@ -139,15 +139,16 @@ public class Attestation {
         }
     }
 
-    public String attest() throws IOException {
+    public String attest(String apiKey) throws IOException {
         if (payload == null) {
             throw new IllegalStateException("missing payload");
         }
-        return attest(new AttestRequest(ByteString.of(payload), droidGaurdResult)).result;
+        return attest(new AttestRequest(ByteString.of(payload), droidGaurdResult), apiKey).result;
     }
 
-    private AttestResponse attest(AttestRequest request) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(SafetyNetPrefs.get(context).getServiceUrl()).openConnection();
+    private AttestResponse attest(AttestRequest request, String apiKey) throws IOException {
+        String requestUrl = SafetyNetPrefs.get(context).getServiceUrl() + "?alt=PROTO&key=" + apiKey;
+        HttpURLConnection connection = (HttpURLConnection) new URL(requestUrl).openConnection();
         connection.setRequestMethod("POST");
         connection.setDoInput(true);
         connection.setDoOutput(true);

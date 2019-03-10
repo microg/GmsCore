@@ -91,7 +91,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
     <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installé : </string>
-    <string name="self_check_resolution_app_installed">Installez l’applications <xliff:g example="F-Droid">%1$s</xliff:g> ou tout autre compatible. Merci de consulter la documentation pour obtenir la liste des applications compatibles.</string>
+    <string name="self_check_resolution_app_installed">Installez l’application <xliff:g example="F-Droid">%1$s</xliff:g> ou tout autre compatible. Merci de consulter la documentation pour obtenir la liste des applications compatibles.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> dispose de la bonne signature : </string>
     <string name="self_check_resolution_correct_sig">Soit l’application <xliff:g example="F-Droid">%1$s</xliff:g> installée n’est pas compatible, soit l’usurpation de signature n’est pas activée pour celle-ci. Merci de consulter la documentation sur les applications et ROMs compatibles.</string>
 
@@ -125,7 +125,7 @@ Ceci peut prendre plusieurs minutes."</string>
 
     <string name="pref_more_settings">Plus</string>
 
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging est un fournisseur de notifications push utilisés par beaucoup d’applications tierces. Pour l’utiliser vous devez activez l’enregistrement du terminal.</string>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging est un fournisseur de notifications push utilisé par beaucoup d’applications tierces. Pour l’utiliser vous devez activer l’enregistrement du terminal.</string>
     <string name="pref_gcm_heartbeat_title">Intervalle des signaux de présence Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">L’intervalle en secondes auquel le système signale sa présence aux serveurs de Google. Augmenter ce nombre réduira la consommation de batterie mais peu induire un délai dans la réception des messages push.\nDéprécié, sera remplacé dans une prochaine version.</string>
     <string name="pref_gcm_apps_title">Applications utilisant Google Cloud Messaging</string>
@@ -152,7 +152,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="gcm_state_disconnected">Status actuel : Déconnecté</string>
     <string name="gcm_state_connected">Status actuel : Connecté depuis <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="snet_intro">Google SafetyNet est un système de certification du terminal, assurant que celui-ci est correctement sécurisé et compatible avec Android CTS. Certaines applications utilisent SafetyNet pour des raisons de sécurité ou comme prérequis anti-altérations.\n\nmicroG GmsCore contient une implémentation libre de SafetyNet, mais les serveurs officiels requièrent que les requêtes SafetyNet soient signées par le système propriétaire DroidGuard. Une version mise en « bac-à-sable » de DroidGuard est disponible dans une application séparée « DroidGuard Helper ».
+    <string name="snet_intro">Google SafetyNet est un système de certification du terminal, assurant que celui-ci est correctement sécurisé et compatible avec Android CTS. Certaines applications utilisent SafetyNet pour des raisons de sécurité ou comme prérequis anti-altérations.\n\nmicroG GmsCore contient une implantation libre de SafetyNet, mais les serveurs officiels requièrent que les requêtes SafetyNet soient signées par le système propriétaire DroidGuard. Une version mise en « bac-à-sable » de DroidGuard est disponible dans une application séparée « DroidGuard Helper ».
 </string>
 
     <string name="pref_snet_testdrive_title">Tester la certification SafetyNet</string>

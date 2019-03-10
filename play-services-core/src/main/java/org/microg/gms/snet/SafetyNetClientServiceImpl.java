@@ -39,6 +39,7 @@ import java.util.ArrayList;
 
 public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
     private static final String TAG = "GmsSafetyNetClientImpl";
+    private static final String DEFAULT_API_KEY = "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA";
 
     private Context context;
     private String packageName;
@@ -52,7 +53,7 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
 
     @Override
     public void attest(ISafetyNetCallbacks callbacks, byte[] nonce) throws RemoteException {
-        attestWithApiKey(callbacks, nonce, null);
+        attestWithApiKey(callbacks, nonce, DEFAULT_API_KEY);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
                             if (dg != null && dg.getStatusCode() == 0 && dg.getResult() != null) {
                                 attestation.setDroidGaurdResult(Base64.encodeToString(dg.getResult(), Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE));
                             }
-                            AttestationData data = new AttestationData(attestation.attest());
+                            AttestationData data = new AttestationData(attestation.attest(apiKey));
                             callbacks.onAttestationData(Status.SUCCESS, data);
                         } else {
                             callbacks.onAttestationData(dg == null ? Status.INTERNAL_ERROR : new Status(dg.getStatusCode()), null);

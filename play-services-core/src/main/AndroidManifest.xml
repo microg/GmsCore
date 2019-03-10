@@ -213,15 +213,17 @@
             android:permission="com.google.android.c2dm.permission.RECEIVE">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTER"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-            <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.UNREGISTER"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
+
+        <receiver android:name="org.microg.gms.gcm.PushRegisterReceiver">
+            <intent-filter>
+                <action android:name="com.google.iid.TOKEN_REQUEST"/>
+            </intent-filter>
+        </receiver>
 
         <service android:name="org.microg.gms.gcm.McsService"/>
 
@@ -419,9 +421,11 @@
 
         <!-- microG custom UI -->
 
+        <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_microg_settings"
+            android:roundIcon="@mipmap/ic_microg_settings"
             android:label="@string/gms_settings_name"
             android:theme="@style/Theme.AppCompat.Settings.Dashboard">
             <intent-filter>
@@ -429,7 +433,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
+
+        <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
+        <activity-alias
+            android:name="org.microg.gms.ui.SettingsActivityLink"
+            android:targetActivity="org.microg.gms.ui.SettingsActivity"
+            android:icon="@drawable/microg_light_color_24"
+            android:label="@string/gms_settings_name"
+            android:theme="@style/Theme.AppCompat.Settings.Dashboard">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS"/>
+            </intent-filter>
+            <meta-data android:name="com.android.settings.category" android:value="com.android.settings.category.device"/>
+            <meta-data android:name="com.android.settings.icon" android:resource="@drawable/microg_light_color_24"/>
+            <meta-data android:name="com.android.settings.summary" android:resource="@string/gms_settings_summary"/>
+        </activity-alias>
 
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
