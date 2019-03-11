@@ -51,6 +51,14 @@
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/add_account"
+            android:summary="@string/settings_account_key"
+            android:title="@string/settings_account">
+            <intent
+                android:targetClass="org.microg.gms.auth.login.LoginActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+        <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
             android:title="@string/pref_more_settings">
