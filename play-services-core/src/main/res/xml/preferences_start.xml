@@ -77,6 +77,16 @@
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_picker">
+        <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/picker_test"
+            android:summary="@string/settings_picker_key"
+            android:title="@string/nlp_settings_label">
+            <intent
+                android:targetClass="org.microg.gms.ui.PlacePickerActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_about">
         <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/info"
