@@ -172,5 +172,10 @@
     <string name="pref_snet_custom_url_summary">Полный URL стороннего сервера, который отвечает на проверочные запросы SafetyNet</string>
     <string name="pref_snet_self_signed_title">Создавать сертификат самому</string>
     <string name="pref_snet_self_signed_summary">Вместо запросов на сервер подписывать SafetyNet локально, используя самостоятельно созданный сертификат. Большинство приложений будут отказываться использовать самоподписанные ответы.</string>
-    
+	
+    <string name="settings_account">Аккаунт</string>
+    <string name="settings_account_key">Добавить аккаунт google</string>
+
+    <string name="settings_picker_key">Протестировать Backend-программы поиска адреса и определения местоположения</string>
+    <string name="settings_picker">Местоположение</string>
 </resources>
