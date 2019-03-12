@@ -177,8 +177,8 @@ This can take a couple of minutes."</string>
     <string name="pref_snet_status_self_signed_info">self-signed certificate</string>
 
     <string name="settings_account">Account</string>
-    <string name="mod_settings_account_key">Add google account</string>
-  
+    <string name="mod_settings_account_key">Add Google account</string>
+
     <string name="settings_picker">Location</string>
     <string name="settings_picker_key">Test address lookup and location backends</string>
 
