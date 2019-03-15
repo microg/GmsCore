@@ -507,10 +507,20 @@ public class McsService extends Service implements Handler.Callback {
             for (ResolveInfo resolveInfo : infos) {
                 logd("Target: " + resolveInfo);
                 Intent targetIntent = new Intent(intent);
-                // ToDO: Find out userID
-                if(mDeviceIdleController != null) {
+                if(mDeviceIdleController != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     try {
-                        mDeviceIdleController.addPowerSaveTempWhitelistApp(resolveInfo.activityInfo.packageName, 10000, 0, "GCM Push");
+                        java.lang.reflect.Method method = android.os.UserHandle.class.getMethod("getUserId", int.class);
+                        int userId = (int) method.invoke(null, getPackageManager().getApplicationInfo(msg.category, 0).uid);
+                        logd("Adding app " + msg.category + " for userId " + userId + " to the temp whitelist");
+                        mDeviceIdleController.addPowerSaveTempWhitelistApp(resolveInfo.activityInfo.packageName, 10000, userId, "GCM Push");
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        e.printStackTrace();
                     } catch (android.os.RemoteException e) {
                         e.printStackTrace();
                     }
