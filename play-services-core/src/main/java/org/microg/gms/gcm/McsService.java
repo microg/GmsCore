@@ -171,9 +171,12 @@ public class McsService extends Service implements Handler.Callback {
         if(mDeviceIdleController == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 java.lang.reflect.Method method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
-                IBinder binder = (IBinder) method.invoke(null, "Context.DEVICE_IDLE_CONTROLLER");
+                java.lang.reflect.Field field = Context.class.getField("DEVICE_IDLE_CONTROLLER");
+                IBinder binder = (IBinder) method.invoke(null, field.get(null));
                 if(binder != null)
                     mDeviceIdleController = IDeviceIdleController.Stub.asInterface(binder);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
