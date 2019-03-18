@@ -34,6 +34,7 @@ $(gmscore_root)/$(gmscore_dir)/$(gmscore_apk):
 	cd $(gmscore_root)/$(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ../gradlew assembleRelease
 
 LOCAL_CERTIFICATE := platform
+LOCAL_PRIVILEGED_MODULE := true
 LOCAL_SRC_FILES := $(gmscore_dir)/$(gmscore_apk)
 LOCAL_MODULE_CLASS := APPS
 LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
