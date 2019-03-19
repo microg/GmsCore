@@ -426,9 +426,10 @@
             android:label="@string/gms_settings_name"
             android:theme="@style/Theme.AppCompat.Settings.Dashboard">
             <intent-filter>
-                <action android:name="com.android.settings.action.EXTRA_SETTINGS"/>
+                <action android:name="com.android.settings.action.IA_SETTINGS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-            <meta-data android:name="com.android.settings.category" android:value="com.android.settings.category.device"/>
+            <meta-data android:name="com.android.settings.category" android:value="com.android.settings.category.ia.homepage"/>
             <meta-data android:name="com.android.settings.icon" android:resource="@drawable/microg_light_color_24"/>
             <meta-data android:name="com.android.settings.summary" android:resource="@string/gms_settings_summary"/>
         </activity-alias>
