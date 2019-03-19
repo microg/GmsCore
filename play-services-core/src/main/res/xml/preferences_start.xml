@@ -27,6 +27,14 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services">
         <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/add_account"
+            android:summary="@string/pref_add_account_summary"
+            android:title="@string/pref_add_account_title">
+            <intent
+                android:targetClass="org.microg.gms.auth.login.LoginActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+        <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/device_login"
             android:key="pref_checkin"
             android:title="@string/service_name_checkin">
@@ -51,14 +59,6 @@
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/add_account"
-            android:summary="@string/settings_account_key"
-            android:title="@string/settings_account">
-            <intent
-                android:targetClass="org.microg.gms.auth.login.LoginActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-        <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
             android:title="@string/pref_more_settings">
@@ -76,12 +76,10 @@
                 android:targetClass="org.microg.nlp.ui.SettingsActivity"
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/settings_picker">
         <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/picker_test"
-            android:summary="@string/settings_picker_key"
-            android:title="@string/nlp_settings_label">
+            android:summary="@string/pref_test_location_summary"
+            android:title="@string/pref_test_location_title">
             <intent
                 android:targetClass="org.microg.gms.ui.PlacePickerActivity"
                 android:targetPackage="com.google.android.gms"/>
