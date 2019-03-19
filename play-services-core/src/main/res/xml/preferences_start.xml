@@ -77,7 +77,7 @@
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/picker_test"
+            android:icon="@drawable/location"
             android:summary="@string/pref_test_location_summary"
             android:title="@string/pref_test_location_title">
             <intent
