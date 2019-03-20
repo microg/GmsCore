@@ -175,7 +175,7 @@
     <string name="pref_snet_self_signed_title">Создавать сертификат самому</string>
     <string name="pref_snet_self_signed_summary">Вместо запросов на сервер подписывать SafetyNet локально, используя самостоятельно созданный сертификат. Большинство приложений будут отказываться использовать самоподписанные ответы.</string>
 
-    <string name="pref_test_location_title">Протестировать Backend-программы поиска адреса и определения местоположения</string>
-    <string name="pref_test_location_summary">Местоположение</string>
+    <string name="pref_test_location_title">Местоположение</string>
+    <string name="pref_test_location_summary">Протестировать Backend-программы поиска адреса и определения местоположения</string>
 
 </resources>
