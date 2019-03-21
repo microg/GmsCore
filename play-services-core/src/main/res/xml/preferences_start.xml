@@ -27,6 +27,14 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services">
         <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/add_account"
+            android:summary="@string/pref_add_account_summary"
+            android:title="@string/pref_add_account_title">
+            <intent
+                android:targetClass="org.microg.gms.auth.login.LoginActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+        <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/device_login"
             android:key="pref_checkin"
             android:title="@string/service_name_checkin">
@@ -66,6 +74,14 @@
             android:title="@string/nlp_settings_label">
             <intent
                 android:targetClass="org.microg.nlp.ui.SettingsActivity"
+                android:targetPackage="com.google.android.gms"/>
+        </org.microg.tools.ui.TintIconPreference>
+        <org.microg.tools.ui.TintIconPreference
+            android:icon="@drawable/location"
+            android:summary="@string/pref_test_location_summary"
+            android:title="@string/pref_test_location_title">
+            <intent
+                android:targetClass="org.microg.gms.ui.PlacePickerActivity"
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
     </PreferenceCategory>
