@@ -135,6 +135,8 @@ This can take a couple of minutes."</string>
 
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Add Google account</string>
+    <string name="pref_manage_accounts">Manage accounts</string>
+    <string name="pref_manage_accounts_summary">Add accounts and manage settings</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
     <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.\nDeprecated, will be replaced in future release.</string>

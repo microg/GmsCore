@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright (C) 2013-2017 microG Project Team
+  ~ Copyright (C) 2013-2019 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@
     <PreferenceCategory android:title="@string/prefcat_google_services">
         <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/add_account"
-            android:summary="@string/pref_add_account_summary"
-            android:title="@string/pref_add_account_title">
+            android:summary="@string/pref_manage_accounts_summary"
+            android:title="@string/pref_manage_accounts">
             <intent
-                android:targetClass="org.microg.gms.auth.login.LoginActivity"
+                android:targetClass="org.microg.gms.ui.AddAccountFragment$AsActivity"
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference

@@ -135,6 +135,8 @@
 
     <string name="pref_add_account_title">Аккаунт</string>
     <string name="pref_add_account_summary">Добавить аккаунт Google</string>
+    <string name="pref_manage_accounts">Управление аккаунтами</string>
+    <string name="pref_manage_accounts_summary">Добавить и настроить аккаунты</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
     <string name="pref_gcm_heartbeat_title">Интервал соединения Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
