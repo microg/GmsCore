@@ -125,6 +125,8 @@ Dies kann einige Minuten dauern."</string>
 
     <string name="pref_more_settings">Mehr</string>
 
+    <string name="pref_add_account_title">Konto</string>
+    <string name="pref_add_account_summary">Google Konto hinzufügen</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten-Dienst, der von vielen Apps genutzt wird. Zur Benutzung muss Geräte Check-In aktiviert werden.</string>
     <string name="pref_gcm_apps_title">Apps die Cloud Messaging benutzen</string>
     <string name="pref_gcm_confirm_new_apps_title">Neue Apps bestätigen</string>
