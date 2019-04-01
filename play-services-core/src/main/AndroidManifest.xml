@@ -420,7 +420,25 @@
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
             android:enabled="true"
+            android:exported="true"
             android:name="org.microg.gms.ui.SettingsActivityLink"
+            android:targetActivity="org.microg.gms.ui.SettingsActivity"
+            android:icon="@drawable/microg_light_color_24"
+            android:label="@string/gms_settings_name"
+            android:theme="@style/Theme.AppCompat.Settings.Dashboard">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <meta-data android:name="com.android.settings.category" android:value="com.android.settings.category.personal"/>
+            <meta-data android:name="com.android.settings.icon" android:resource="@drawable/microg_light_color_24"/>
+        </activity-alias>
+
+        <!-- microG Settings embedded in System Settings on SDK 26 and newer -->
+        <activity-alias
+            android:enabled="true"
+            android:exported="true"
+            android:name="org.microg.gms.ui.SettingsActivityIALink"
             android:targetActivity="org.microg.gms.ui.SettingsActivity"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
