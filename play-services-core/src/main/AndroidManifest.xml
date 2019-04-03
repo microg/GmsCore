@@ -250,7 +250,8 @@
 
         <receiver android:name="org.microg.gms.gcm.UnregisterReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_DATA_CLEARED"/>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
                 <data android:scheme="package"/>
