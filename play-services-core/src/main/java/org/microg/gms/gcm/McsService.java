@@ -502,16 +502,8 @@ public class McsService extends Service implements Handler.Callback {
                                     .getMethod("addPowerSaveTempWhitelistApp", String.class, long.class, int.class, String.class)
                                     .invoke(deviceIdleController, resolveInfo.activityInfo.packageName, 10000, userId, "GCM Push");
                         }
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (java.lang.reflect.InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (android.os.RemoteException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        Log.w(TAG, e);
                     }
                 }
                 targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
