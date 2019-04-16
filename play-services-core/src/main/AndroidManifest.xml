@@ -406,7 +406,7 @@
 
         <!-- microG custom UI -->
 
-        <!-- microG Settings shown in Launcher -->
+        <!-- microG Settings activity -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
             android:exported="true"
@@ -452,7 +452,7 @@
             <meta-data android:name="com.android.settings.summary" android:resource="@string/gms_settings_summary"/>
         </activity-alias>
 
-        <!-- Separate launcher icon from main activity so it can be disabled manualy -->
+        <!-- microG Settings activity-alias shown in Launcher -->
         <activity-alias
             android:enabled="true"
             android:name="org.microg.gms.ui.SettingsActivityLauncher"
