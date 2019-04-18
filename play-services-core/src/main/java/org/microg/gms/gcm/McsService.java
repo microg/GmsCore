@@ -459,6 +459,7 @@ public class McsService extends Service implements Handler.Callback {
         intent.setAction(ACTION_C2DM_RECEIVE);
         intent.setPackage(msg.category);
         intent.putExtra(EXTRA_FROM, msg.from);
+        intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
         if (app.wakeForDelivery) {
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         } else {
