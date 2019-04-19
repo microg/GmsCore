@@ -2,14 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Messaging">
+        android:title="@string/pref_gcm_apps_messaging">
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="gcm_app_wake_for_delivery"
             android:persistent="false"
-            android:summary="Start the app in background to receive the incoming push messages. Disabling this might delay message delivery up to the moment the app is started or cause complete message loss."
-            android:title="Start app on push message"/>
+            android:summary="@string/pref_gcm_apps_messaging_summary"
+            android:title="@string/pref_gcm_apps_messaging_title"/>
 
         <Preference
             android:selectable="false"
@@ -18,17 +18,17 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Registration">
+        android:title="@string/pref_gcm_apps_registration">
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="gcm_app_allow_register"
             android:persistent="false"
-            android:summary="Allow the app to register for push notifications."
-            android:title="Allow registration"/>
+            android:summary="@string/pref_gcm_apps_registration_summary"
+            android:title="@string/pref_gcm_apps_registration_title"/>
 
         <Preference
-            android:title="Unregister"
+            android:title="@string/gcm_unregister_app"
             android:key="gcm_app_register_details"
             android:summary="Registered since: 3 month ago"/>
     </PreferenceCategory>

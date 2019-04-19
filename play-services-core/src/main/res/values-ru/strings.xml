@@ -142,9 +142,15 @@
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
     <string name="pref_gcm_apps_title">Приложения, использующие Google Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Список приложений, которые привязаны к Google Cloud Messaging.</string>
-	<string name="pref_gcm_confirm_new_apps_title">Подтверждать новые приложения</string>
+    <string name="pref_gcm_confirm_new_apps_title">Подтверждать новые приложения</string>
     <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение перед привязкой новых приложений для получения push-уведомлений</string>
-	<string name="pref_gcm_ping_interval">Интервал проверки: <xliff:g example="10 минут">%1$s</xliff:g></string>
+    <string name="pref_gcm_ping_interval">Интервал проверки: <xliff:g example="10 минут">%1$s</xliff:g></string>
+    <string name="pref_gcm_apps_messaging">Приём сообщений</string>
+    <string name="pref_gcm_apps_messaging_title">Запуск приложения при получении сообщения</string>
+    <string name="pref_gcm_apps_messaging_summary">Запускать приложение в фоновом режиме для получения входящих push-сообщений. Отключение этого параметра может привести к задержке получения сообщений до момента запуска приложения или к полной потере сообщения.</string>
+    <string name="pref_gcm_apps_registration">Регистрация</string>
+    <string name="pref_gcm_apps_registration_title">Разрешить регистрацию</string>
+    <string name="pref_gcm_apps_registration_summary">Разрешить приложению регистрироваться для получения push-уведомлений.</string>
 	
     <string name="pref_about_title">О сервисах microG</string>
     <string name="pref_about_summary">Информация о версии и используемые библиотеки</string>

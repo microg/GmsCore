@@ -145,6 +145,12 @@ This can take a couple of minutes."</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_gcm_apps_messaging">Messaging</string>
+    <string name="pref_gcm_apps_messaging_title">Start app on push message</string>
+    <string name="pref_gcm_apps_messaging_summary">Start the app in background to receive the incoming push messages. Disabling this might delay message delivery up to the moment the app is started or cause complete message loss.</string>
+    <string name="pref_gcm_apps_registration">Registration</string>
+    <string name="pref_gcm_apps_registration_title">Allow registration</string>
+    <string name="pref_gcm_apps_registration_summary">Allow the app to register for push notifications.</string>
 
     <string name="pref_about_title">About microG Services Core</string>
     <string name="pref_about_summary">Version information and used libraries</string>
