@@ -18,7 +18,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
-        android:title="@string/pref_add_account"
+        android:title="@string/pref_add_account_title"
         android:summary="@string/pref_add_account_summary">
         <intent
             android:targetClass="org.microg.gms.auth.login.LoginActivity"
