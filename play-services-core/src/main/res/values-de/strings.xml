@@ -127,10 +127,19 @@ Dies kann einige Minuten dauern."</string>
 
     <string name="pref_add_account_title">Konto</string>
     <string name="pref_add_account_summary">Google Konto hinzufügen</string>
+    <string name="pref_manage_accounts">Konten verwalten</string>
+    <string name="pref_manage_accounts_summary">Konten und Einstellungen verwalten</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten-Dienst, der von vielen Apps genutzt wird. Zur Benutzung muss Geräte Check-In aktiviert werden.</string>
     <string name="pref_gcm_apps_title">Apps die Cloud Messaging benutzen</string>
     <string name="pref_gcm_confirm_new_apps_title">Neue Apps bestätigen</string>
     <string name="pref_gcm_confirm_new_apps_summary">Frage nach bevor neue Apps sich für Push-Nachrichten registrieren</string>
+    <string name="pref_gcm_ping_interval">Ping-Intervall: <xliff:g example="10 Minuten">%1$s</xliff:g></string>
+    <string name="pref_gcm_apps_messaging">Benachrichtigungen</string>
+    <string name="pref_gcm_apps_messaging_title">App bei eingehender Benachrichtigungen starten</string>
+    <string name="pref_gcm_apps_messaging_summary">App im Hintergrund starten, um eingehende Benachrichtigungen zu erhalten. Deaktivierung kann Verzögerungen bei der Zustellung oder Verlust von Benachrichtigungen zur Folge haben.</string>
+    <string name="pref_gcm_apps_registration">Registrierung</string>
+    <string name="pref_gcm_apps_registration_title">Registrierung erlauben</string>
+    <string name="pref_gcm_apps_registration_summary">Der App erlauben sich für Benachrichtigungen zu registrieren.</string>
     <string name="pref_about_title">Über microG Services Core</string>
     <string name="pref_about_summary">Versionsinformation und genutzte Bibliotheken</string>
 
