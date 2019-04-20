@@ -131,6 +131,11 @@
     <string name="pref_checkin_enable_summary">Реєструє Ваш пристрій в сервісах Google та створює унікальний ідентифікатор. MicroG видаляє всі біти ідентифікації, окрім імені Вашого облікового запису Google.</string>
 
     <string name="pref_more_settings">Додатково</string>
+  
+    <string name="pref_add_account_title">Аккаунт</string>
+    <string name="pref_add_account_summary">Додати аккаунт Google</string>
+    <string name="pref_manage_accounts">Керування аккаунтами</string>
+    <string name="pref_manage_accounts_summary">Додати і налаштувати аккаунти</string>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging надає push-сповіщення, які використовуються в багатьох сторонніх додатках. Аби використовувати їх, ви повинні увімкнути реєстрацію пристрою.</string>
     <string name="pref_gcm_heartbeat_title">Інтервал з\'єднання Cloud Messaging</string>
@@ -140,6 +145,12 @@
     <string name="pref_gcm_confirm_new_apps_title">Підтверджувати нові додатки</string>
     <string name="pref_gcm_confirm_new_apps_summary">Запитувати перед реєстрацією нового додатку для отримання push-повідомлень</string>
     <string name="pref_gcm_ping_interval">Інтервал опитування: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_gcm_apps_messaging">Отримання повідомлень</string>
+    <string name="pref_gcm_apps_messaging_title">Запуск додатка при отриманні повідомлень</string>
+    <string name="pref_gcm_apps_messaging_summary">Запускати додаток у фоновому режимі для отримання вхідних push-повідомлень. Відключення цього параметра може призвести до затримки отримання повідомлень до моменту запуску програми або до повної втрати повідомлення.</string>
+    <string name="pref_gcm_apps_registration">Реєстрація</string>
+    <string name="pref_gcm_apps_registration_title">Дозволити реєстрацію</string>
+    <string name="pref_gcm_apps_registration_summary">Дозволити додатку реєструватися для отримання push-повідомлень.</string>
 
     <string name="pref_about_title">Про microG Services Core</string>
     <string name="pref_about_summary">Версія та використані бібліотеки</string>
