@@ -18,18 +18,20 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend-программа сконфигурирована</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-программ(ы) сконфигурировано</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> backend-программы сконфигурировано</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-программ сконфигурировано</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> привязанное приложение</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> привязанных приложения</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> привязанных приложений</item>
     </plurals>
     <plurals name="cond_perm_summary">
-		<item quantity="one">Не предоставлено разрешение, которое требуется для правильного функционирования microG Service Core.</item>
-        <item quantity="other">Не предоставлены разрешения, которые требуются для правильного функционирования microG Service Core.</item>
+        <item quantity="one">Не предоставлено разрешение, которое требуется для правильного функционирования microG Service Core</item>
+        <item quantity="other">Не предоставлены разрешения, которые требуются для правильного функционирования microG Service Core</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">Запросить отсутствующее разрешение</item>	
+        <item quantity="one">Запросить отсутствующее разрешение</item>
         <item quantity="other">Запросить отсутствующие разрешения</item>
     </plurals>
 </resources>
