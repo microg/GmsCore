@@ -497,10 +497,11 @@ public class McsService extends Service implements Handler.Callback {
                                     .getMethod("asInterface", IBinder.class).invoke(null, binder);
                             int userId = (int) UserHandle.class.getMethod("getUserId", int.class)
                                     .invoke(null, getPackageManager().getApplicationInfo(msg.category, 0).uid);
-                            logd("Adding app " + msg.category + " for userId " + userId + " to the temp whitelist");
+                            String packageName = msg.category;
+                            logd("Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
                             deviceIdleController.getClass()
                                     .getMethod("addPowerSaveTempWhitelistApp", String.class, long.class, int.class, String.class)
-                                    .invoke(deviceIdleController, resolveInfo.activityInfo.packageName, 10000, userId, "GCM Push");
+                                    .invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
                         }
                     } catch (Exception e) {
                         Log.w(TAG, e);
