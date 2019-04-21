@@ -454,12 +454,13 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleAppMessage(DataMessageStanza msg) {
-        database.noteAppMessage(msg.category, msg.getSerializedSize());
-        GcmDatabase.App app = database.getApp(msg.category);
+        String packageName = msg.category;
+        database.noteAppMessage(packageName, msg.getSerializedSize());
+        GcmDatabase.App app = database.getApp(packageName);
 
         Intent intent = new Intent();
         intent.setAction(ACTION_C2DM_RECEIVE);
-        intent.setPackage(msg.category);
+        intent.setPackage(packageName);
         intent.putExtra(EXTRA_FROM, msg.from);
         if (app.wakeForDelivery) {
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -473,7 +474,7 @@ public class McsService extends Service implements Handler.Callback {
 
         String receiverPermission;
         try {
-            String name = msg.category + ".permission.C2D_MESSAGE";
+            String name = packageName + ".permission.C2D_MESSAGE";
             getPackageManager().getPermissionInfo(name, 0);
             receiverPermission = name;
         } catch (PackageManager.NameNotFoundException e) {
@@ -496,8 +497,7 @@ public class McsService extends Service implements Handler.Callback {
                             Object deviceIdleController = Class.forName("android.os.IDeviceIdleController$Stub")
                                     .getMethod("asInterface", IBinder.class).invoke(null, binder);
                             int userId = (int) UserHandle.class.getMethod("getUserId", int.class)
-                                    .invoke(null, getPackageManager().getApplicationInfo(msg.category, 0).uid);
-                            String packageName = msg.category;
+                                    .invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
                             logd("Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
                             deviceIdleController.getClass()
                                     .getMethod("addPowerSaveTempWhitelistApp", String.class, long.class, int.class, String.class)
