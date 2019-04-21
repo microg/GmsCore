@@ -90,6 +90,7 @@
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST" tools:ignore="ProtectedPermissions"/>
 
     <uses-sdk tools:overrideLibrary="com.takisoft.fix.support.v7.preference,android.support.graphics.drawable.animated,android.arch.lifecycle,android.arch.lifecycle.livedata.core,android.arch.lifecycle.viewmodel,android.arch.core"/>
 
