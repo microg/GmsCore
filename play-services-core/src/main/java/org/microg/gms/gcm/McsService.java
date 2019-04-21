@@ -488,7 +488,7 @@ public class McsService extends Service implements Handler.Callback {
             for (ResolveInfo resolveInfo : infos) {
                 logd("Target: " + resolveInfo);
                 Intent targetIntent = new Intent(intent);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && app.wakeForDelivery) {
                     try {
                         Field field = Context.class.getField("DEVICE_IDLE_CONTROLLER");
                         IBinder binder = (IBinder) Class.forName("android.os.ServiceManager")
