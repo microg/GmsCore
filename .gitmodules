@@ -16,3 +16,6 @@
 [submodule "extern/RemoteDroidGuard"]
 	path = extern/RemoteDroidGuard
 	url = https://github.com/microg/android_packages_apps_RemoteDroidGuard.git
+[submodule "patches/Phonesky"]
+	path = patches/Phonesky
+	url = https://gitlab.com/Nanolx/microg-phonesky-iap-support.git
