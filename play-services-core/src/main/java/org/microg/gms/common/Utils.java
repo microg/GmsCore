@@ -18,6 +18,7 @@ package org.microg.gms.common;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.R;
@@ -53,8 +54,12 @@ public class Utils {
     }
 
     public static boolean hasSelfPermissionOrNotify(Context context, String permission) {
-        if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED) {
-            Toast.makeText(context, context.getString(R.string.lacking_permission_toast, permission), Toast.LENGTH_SHORT).show();
+        if (context.checkCallingOrSelfPermission(permission) != PERMISSION_GRANTED) {
+            try {
+                Toast.makeText(context, context.getString(R.string.lacking_permission_toast, permission), Toast.LENGTH_SHORT).show();
+            } catch (RuntimeException e) {
+                Log.w("GmsUtils", "Lacking permission to " + permission + " for pid:" + android.os.Process.myPid() + " uid:" + android.os.Process.myUid());
+            }
             return false;
         }
         return true;

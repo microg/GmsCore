@@ -19,6 +19,7 @@ package org.microg.gms.location;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.location.Location;
+import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
@@ -52,6 +53,8 @@ import com.google.android.gms.location.places.internal.PlacesParams;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import org.microg.gms.common.PackageUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,23 +78,27 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void addGeofencesList(List<ParcelableGeofence> geofences, PendingIntent pendingIntent,
                                  IGeofencerCallbacks callbacks, String packageName) throws RemoteException {
         Log.d(TAG, "addGeofencesList: " + geofences);
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
     }
 
     @Override
     public void removeGeofencesByIntent(PendingIntent pendingIntent, IGeofencerCallbacks callbacks,
                                         String packageName) throws RemoteException {
         Log.d(TAG, "removeGeofencesByIntent: " + pendingIntent);
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
     }
 
     @Override
     public void removeGeofencesById(String[] geofenceRequestIds, IGeofencerCallbacks callbacks,
                                     String packageName) throws RemoteException {
         Log.d(TAG, "removeGeofencesById: " + Arrays.toString(geofenceRequestIds));
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
     }
 
     @Override
     public void removeAllGeofences(IGeofencerCallbacks callbacks, String packageName) throws RemoteException {
         Log.d(TAG, "removeAllGeofences");
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
     }
 
     @Override
@@ -108,6 +115,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     @Override
     public ActivityRecognitionResult getLastActivity(String packageName) throws RemoteException {
         Log.d(TAG, "getLastActivity");
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
         return null;
     }
 
@@ -138,35 +146,35 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     @Override
     public Location getLastLocation() throws RemoteException {
         Log.d(TAG, "getLastLocation");
-        return getLocationManager().getLastLocation(null);
+        return getLocationManager().getLastLocation(PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
     }
 
     @Override
     public void requestLocationUpdatesWithListener(LocationRequest request,
                                                    final ILocationListener listener) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesWithListener: " + request);
-        getLocationManager().requestLocationUpdates(request, listener, null);
+        getLocationManager().requestLocationUpdates(request, listener, PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
     }
 
     @Override
     public void requestLocationUpdatesWithIntent(LocationRequest request,
                                                  PendingIntent callbackIntent) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesWithIntent: " + request);
-        getLocationManager().requestLocationUpdates(request, callbackIntent, null);
+        getLocationManager().requestLocationUpdates(request, callbackIntent, PackageUtils.packageFromPendingIntent(callbackIntent));
     }
 
     @Override
     public void removeLocationUpdatesWithListener(ILocationListener listener)
             throws RemoteException {
         Log.d(TAG, "removeLocationUpdatesWithListener: " + listener);
-        getLocationManager().removeLocationUpdates(listener, null);
+        getLocationManager().removeLocationUpdates(listener, PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
     }
 
     @Override
     public void removeLocationUpdatesWithIntent(PendingIntent callbackIntent)
             throws RemoteException {
         Log.d(TAG, "removeLocationUpdatesWithIntent: " + callbackIntent);
-        getLocationManager().removeLocationUpdates(callbackIntent, null);
+        getLocationManager().removeLocationUpdates(callbackIntent, PackageUtils.packageFromPendingIntent(callbackIntent));
     }
 
     @Override
@@ -226,12 +234,14 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void requestLocationUpdatesWithPackage(LocationRequest request, ILocationListener listener,
                                                   String packageName) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesWithPackage: " + request);
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
         getLocationManager().requestLocationUpdates(request, listener, packageName);
     }
 
     @Override
     public Location getLastLocationWithPackage(String packageName) throws RemoteException {
         Log.d(TAG, "getLastLocationWithPackage: " + packageName);
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
         return getLocationManager().getLastLocation(packageName);
     }
 
@@ -248,6 +258,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     @Override
     public LocationAvailability getLocationAvailabilityWithPackage(String packageName) throws RemoteException {
         Log.d(TAG, "getLocationAvailabilityWithPackage: " + packageName);
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
         return new LocationAvailability();
     }
 
@@ -295,6 +306,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     @Override
     public void requestLocationSettingsDialog(LocationSettingsRequest settingsRequest, ISettingsCallbacks callback, String packageName) throws RemoteException {
         Log.d(TAG, "requestLocationSettingsDialog: " + settingsRequest);
+        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
         callback.onLocationSettingsResult(new LocationSettingsResult(new LocationSettingsStates(true, true, false, true, true, false), Status.CANCELED));
     }
 
@@ -302,14 +314,14 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void requestLocationUpdatesInternalWithListener(LocationRequestInternal request,
                                                            ILocationListener listener) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesInternalWithListener: " + request);
-        getLocationManager().requestLocationUpdates(request.request, listener, null);
+        getLocationManager().requestLocationUpdates(request.request, listener, PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
     }
 
     @Override
     public void requestLocationUpdatesInternalWithIntent(LocationRequestInternal request,
                                                          PendingIntent callbackIntent) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesInternalWithIntent: " + request);
-        getLocationManager().requestLocationUpdates(request.request, callbackIntent, null);
+        getLocationManager().requestLocationUpdates(request.request, callbackIntent, PackageUtils.packageFromPendingIntent(callbackIntent));
     }
 
     @Override
