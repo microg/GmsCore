@@ -16,7 +16,8 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
-    <string name="gms_settings_name">MicroG</string>
+    <string name="gms_settings_name">Настройки MicroG</string>
+    <string name="gms_settings_summary">Конфигурирование сервисов microG.</string>
 
     <string name="just_a_sec">Пожалуйста, подождите...</string>
     <string name="google_account_label">Google</string>
@@ -83,15 +84,15 @@
 
     <!-- Self check -->
 
-    <string name="self_check_cat_fake_sig">Поддержка подделки подписи</string>
+    <string name="self_check_cat_fake_sig">Поддержка подмены подписи</string>
     <string name="self_check_cat_gms_packages">Установленные пакеты</string>
     <string name="self_check_cat_system">Система</string>
 
-    <string name="self_check_name_fake_sig_perm">Система поддерживает подделку подписи:</string>
-    <string name="self_check_resolution_fake_sig_perm">Ваша прошивка не имеет нативной поддержки подделки подписи. Вы можете использовать Xposed или другие методы, чтобы активировать подделку подписи. Пожалуйста, ознакомьтесь с документацией, какая прошивка поддерживает подделку подписи и как использовать microG в прошивке, которая не поддерживает.</string>
-    <string name="self_check_name_perm_granted">Система предоставляет разрешение подделки подписи:</string>
-    <string name="self_check_resolution_perm_granted">Ваша прошивка поддерживает подделку подписи, но требует дополнительных действий для ее активации. Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
-    <string name="self_check_name_system_spoofs">Система подделывает подписи:</string>
+    <string name="self_check_name_fake_sig_perm">Система поддерживает подмену подписи:</string>
+    <string name="self_check_resolution_fake_sig_perm">Ваша прошивка не имеет нативной поддержки подмены подписи. Вы можете использовать Xposed или другие методы, чтобы активировать подмену подписи. Пожалуйста, ознакомьтесь с документацией, какая прошивка поддерживает подмену подписи и как использовать microG в прошивке, которая не поддерживает.</string>
+    <string name="self_check_name_perm_granted">Система разрешает подмену подписи:</string>
+    <string name="self_check_resolution_perm_granted">Ваша прошивка поддерживает подмену подписи, но требует дополнительных действий для ее активации. Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
+    <string name="self_check_name_system_spoofs">Система подменяет подписи:</string>
     <string name="self_check_resolution_system_spoofs">Пожалуйста, ознакомьтесь с документацией, где описано что нужно сделать.</string>
 
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
@@ -100,7 +101,7 @@
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> установлен: </string>
     <string name="self_check_resolution_app_installed">Установите приложение <xliff:g example="F-Droid">%1$s</xliff:g> или совместимое. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения совместимы.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> имеет правильную подпись: </string>
-    <string name="self_check_resolution_correct_sig">Либо установленный <xliff:g example="F-Droid">%1$s</xliff:g> не совместим, либо подделка подписи не активна для него. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения или прошивки совместимы.</string>
+    <string name="self_check_resolution_correct_sig">Либо установленный <xliff:g example="F-Droid">%1$s</xliff:g> не совместим, либо подмена подписи не активна для него. Пожалуйста, ознакомьтесь с документацией, где описано какие приложения или прошивки совместимы.</string>
 	
     <string name="self_check_name_battery_optimizations">Оптимизация энергопотребления отключена:</string>
     <string name="self_check_resolution_battery_optimizations">Нажмите здесь, чтобы разрешить приложению работать в фоне. Без этого некоторые приложения могут работать со сбоями</string>
@@ -132,6 +133,8 @@
 
     <string name="pref_more_settings">Ещё</string>
 
+    <string name="pref_add_account_title">Аккаунт</string>
+    <string name="pref_add_account_summary">Добавить аккаунт Google</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
     <string name="pref_gcm_heartbeat_title">Интервал соединения Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
@@ -169,7 +172,7 @@
     <string name="pref_snet_status_third_party_summary">Сторонние сервера могут быть в состоянии ответить на запросы SafetyNet без подписи DroidGuard</string>
     <string name="pref_snet_custom_url_title">URL стороннего сервера</string>
     <string name="pref_snet_custom_url_summary">Полный URL стороннего сервера, который отвечает на проверочные запросы SafetyNet</string>
-	<string name="pref_snet_self_signed_title">Создавать сертификат самому</string>
+    <string name="pref_snet_self_signed_title">Создавать сертификат самому</string>
     <string name="pref_snet_self_signed_summary">Вместо запросов на сервер подписывать SafetyNet локально, используя самостоятельно созданный сертификат. Большинство приложений будут отказываться использовать самоподписанные ответы.</string>
-	
-    </resources>
+    
+</resources>

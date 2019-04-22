@@ -17,6 +17,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
     <string name="gms_settings_name">microG Einstellungen</string>
+    <string name="gms_settings_summary">microG services Core einrichten.</string>
 
     <string name="just_a_sec">Einen kurzen Moment…</string>
     <string name="google_account_label">Google</string>
@@ -124,6 +125,8 @@ Dies kann einige Minuten dauern."</string>
 
     <string name="pref_more_settings">Mehr</string>
 
+    <string name="pref_add_account_title">Konto</string>
+    <string name="pref_add_account_summary">Google Konto hinzufügen</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten-Dienst, der von vielen Apps genutzt wird. Zur Benutzung muss Geräte Check-In aktiviert werden.</string>
     <string name="pref_gcm_apps_title">Apps die Cloud Messaging benutzen</string>
     <string name="pref_gcm_confirm_new_apps_title">Neue Apps bestätigen</string>
@@ -152,11 +155,14 @@ Dies kann einige Minuten dauern."</string>
 
     <string name="pref_snet_status_official_title">Offizielle Server nutzen</string>
     <string name="pref_snet_status_official_summary">Erfordert eine ungerootetes ROM und den microG DroidGuard Helper</string>
+    <string name="pref_snet_status_official_info">offizieller Server</string>
     <string name="pref_snet_status_third_party_title">Alternativen Server nutzen</string>
     <string name="pref_snet_status_third_party_summary">Alternative Server können auch SafetyNet-Anfragen beantworten, die nicht durch DroidGuard signiert wurden</string>
+    <string name="pref_snet_status_third_party_info">Dritt-Server</string>
     <string name="pref_snet_custom_url_title">Alternative Server URL</string>
     <string name="pref_snet_custom_url_summary">Vollständige URL des alternativen Servers der SafetyNet-Anfragen beantwortet</string>
     <string name="pref_snet_self_signed_title">Selbst signieren</string>
     <string name="pref_snet_self_signed_summary">Statt einen Server zu nutzen, die SafetyNet signature lokal mit einem eigens erstellten Zertifikat signieren. Die meisten Apps werden diese Signaturen nicht akzeptieren.</string>
+    <string name="pref_snet_status_self_signed_info">selbst-signiertes Zertifikat</string>
 
 </resources>
