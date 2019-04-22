@@ -17,6 +17,7 @@ include ':play-services-base'
 include ':play-services-tasks'
 include ':play-services-wearable'
 
+include ':play-services-maps-core-mapbox'
 include ':play-services-maps-core-vtm'
 include ':play-services-core'
 

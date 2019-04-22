@@ -16,6 +16,12 @@
 
 apply plugin: 'com.android.application'
 
+def useMapbox() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("mapbox.enabled", "false") == "true"
+}
+
 dependencies {
     implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
@@ -39,7 +45,11 @@ dependencies {
     implementation project(':wearable-lib')
 
     implementation project(':remote-droid-guard-lib')
-    implementation project(':play-services-maps-core-vtm')
+    if (useMapbox()) {
+        implementation project(':play-services-maps-core-mapbox')
+    } else {
+        implementation project(':play-services-maps-core-vtm')
+    }
 }
 
 def execResult(...args) {
@@ -60,7 +70,7 @@ def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
 def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
 def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
-def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
+def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (useMapbox() ? "-mapbox" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
 logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
 
 android {
