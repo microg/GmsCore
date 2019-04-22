@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2019 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +46,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.microg.gms.location.LocationConstants;
-import org.microg.gms.maps.BackendMapView;
-import org.microg.gms.maps.GmsMapsTypeHelper;
+import org.microg.gms.maps.vtm.BackendMapView;
+import org.microg.gms.maps.vtm.GmsMapsTypeHelper;
 import org.microg.safeparcel.SafeParcelUtil;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
@@ -61,7 +61,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR_DARK;
-import static org.microg.gms.maps.GmsMapsTypeHelper.fromLatLngBounds;
+import static org.microg.gms.maps.vtm.GmsMapsTypeHelper.fromLatLngBounds;
 
 public class PlacePickerActivity extends AppCompatActivity implements Map.UpdateListener {
     private static final String TAG = "GmsPlacePicker";

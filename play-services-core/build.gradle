@@ -19,9 +19,18 @@ apply plugin: 'com.android.application'
 dependencies {
     implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.squareup.wire:wire-runtime:1.6.1"
     implementation "com.takisoft.fix:preference-v7:$supportLibraryVersion.0"
     implementation "de.hdodenhof:circleimageview:1.3.0"
-    implementation "com.squareup.wire:wire-runtime:1.6.1"
+    implementation "org.conscrypt:conscrypt-android:2.0.0"
+    implementation "org.microg:vtm-android:0.9.1-mod"
+    implementation 'org.microg:vtm-android:0.9.1-mod:natives-armeabi'
+    implementation 'org.microg:vtm-android:0.9.1-mod:natives-armeabi-v7a'
+    implementation 'org.microg:vtm-android:0.9.1-mod:natives-arm64-v8a'
+    implementation 'org.microg:vtm-android:0.9.1-mod:natives-x86'
+    implementation 'org.microg:vtm-android:0.9.1-mod:natives-x86_64'
+    implementation "org.microg:vtm-extras:0.9.1-mod"
+    implementation "org.microg:vtm-jts:0.9.1-mod"
 
     implementation project(':microg-ui-tools')
     implementation project(':play-services-api')
@@ -30,13 +39,7 @@ dependencies {
     implementation project(':wearable-lib')
 
     implementation project(':remote-droid-guard-lib')
-
-    implementation project(':vtm-android')
-    implementation project(':vtm-extras')
-    implementation project(':vtm-jts')
-    implementation project(':vtm-microg-theme')
-
-    compile 'org.conscrypt:conscrypt-android:2.0.0'
+    implementation project(':play-services-maps-core-vtm')
 }
 
 def execResult(...args) {
@@ -79,14 +82,11 @@ android {
     sourceSets {
         main {
             java.srcDirs += 'src/main/protos-java'
-            file("${rootDir}/vtm-android/natives").eachDir() { dir ->
-                jniLibs.srcDirs += "${dir.path}/lib"
-            }
         }
     }
 
     lintOptions {
-        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity'
+        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag'
     }
 
     buildTypes {

@@ -27,7 +27,7 @@
         android:layout_height="0dip"
         android:layout_weight="1">
 
-        <org.microg.gms.maps.BackendMapView
+        <org.microg.gms.maps.vtm.BackendMapView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

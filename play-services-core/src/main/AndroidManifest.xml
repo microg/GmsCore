@@ -259,13 +259,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- Map -->
-        <provider
-            android:name="org.microg.gms.maps.data.SharedTileProvider"
-            android:authorities="org.microg.gms.map.tile"
-            android:enabled="true"
-            android:exported="true"/>
-
         <!-- DroidGuard -->
 
         <service android:name="org.microg.gms.droidguard.DroidGuardService">
