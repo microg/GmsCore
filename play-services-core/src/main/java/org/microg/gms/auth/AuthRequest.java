@@ -30,8 +30,8 @@ import static org.microg.gms.common.HttpFormClient.RequestContent;
 import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
 public class AuthRequest extends HttpFormClient.Request {
-    private static final String SERVICE_URL = "https://android.clients.google.com/auth";
-    private static final String USER_AGENT = "GoogleAuth/1.4 (%s %s)";
+    private static final String SERVICE_URL = "https://android.googleapis.com/auth";
+    private static final String USER_AGENT = "GoogleAuth/1.4 (%s %s); gzip";
 
     @RequestHeader("User-Agent")
     private String userAgent;
@@ -59,13 +59,13 @@ public class AuthRequest extends HttpFormClient.Request {
     @RequestContent("google_play_services_version")
     public int gmsVersion = Constants.MAX_REFERENCE_VERSION;
     @RequestContent("accountType")
-    public String accountType = "HOSTED_OR_GOOGLE";
+    public String accountType;
     @RequestContent("Email")
     public String email;
     @RequestContent("service")
     public String service;
     @RequestContent("source")
-    public String source = "android";
+    public String source;
     @RequestContent({"is_called_from_account_manager", "_opt_is_called_from_account_manager"})
     public boolean isCalledFromAccountManager;
     @RequestContent("Token")
@@ -97,10 +97,15 @@ public class AuthRequest extends HttpFormClient.Request {
         return this;
     }
 
+    public AuthRequest source(String source) {
+        this.source = source;
+        return this;
+    }
+
     public AuthRequest locale(Locale locale) {
         this.locale = locale.toString();
-        this.countryCode = locale.getCountry();
-        this.operatorCountryCode = locale.getCountry();
+        this.countryCode = locale.getCountry().toLowerCase();
+        this.operatorCountryCode = locale.getCountry().toLowerCase();
         return this;
     }
 

@@ -197,6 +197,7 @@ public class AuthManager {
             }
         }
         AuthRequest request = new AuthRequest().fromContext(context)
+                .source("android")
                 .app(packageName, getPackageSignature())
                 .email(accountName)
                 .token(getAccountManager().getPassword(account))
