@@ -46,8 +46,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.microg.gms.location.LocationConstants;
-import org.microg.gms.maps.vtm.BackendMapView;
-import org.microg.gms.maps.vtm.GmsMapsTypeHelper;
+//import org.microg.gms.maps.vtm.BackendMapView;
+//import org.microg.gms.maps.vtm.GmsMapsTypeHelper;
 import org.microg.safeparcel.SafeParcelUtil;
 import org.oscim.core.MapPosition;
 import org.oscim.event.Event;
@@ -61,13 +61,13 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR_DARK;
-import static org.microg.gms.maps.vtm.GmsMapsTypeHelper.fromLatLngBounds;
+//import static org.microg.gms.maps.vtm.GmsMapsTypeHelper.fromLatLngBounds;
 
 public class PlacePickerActivity extends AppCompatActivity implements Map.UpdateListener {
     private static final String TAG = "GmsPlacePicker";
 
     private PlaceImpl place;
-    private BackendMapView mapView;
+//    private BackendMapView mapView;
     private Intent resultIntent;
     private AtomicBoolean geocoderInProgress = new AtomicBoolean(false);
 
@@ -91,17 +91,17 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
             ((TextView) findViewById(R.id.place_picker_title)).setTextColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
         }
 
-        mapView = (BackendMapView) findViewById(R.id.map);
-        mapView.map().getEventLayer().enableRotation(false);
-        mapView.map().getEventLayer().enableTilt(false);
-        mapView.map().events.bind(this);
+//        mapView = (BackendMapView) findViewById(R.id.map);
+//        mapView.map().getEventLayer().enableRotation(false);
+//        mapView.map().getEventLayer().enableTilt(false);
+//        mapView.map().events.bind(this);
 
         LatLngBounds latLngBounds = getIntent().getParcelableExtra(LocationConstants.EXTRA_BOUNDS);
         if (latLngBounds != null) {
             place.viewport = latLngBounds;
-            MapPosition mp = new MapPosition();
-            mp.setByBoundingBox(fromLatLngBounds(latLngBounds), mapView.map().getWidth(), mapView.map().getHeight());
-            mapView.map().getMapPosition(mp);
+//            MapPosition mp = new MapPosition();
+//            mp.setByBoundingBox(fromLatLngBounds(latLngBounds), mapView.map().getWidth(), mapView.map().getHeight());
+//            mapView.map().getMapPosition(mp);
         } else {
             if (ActivityCompat.checkSelfPermission(PlacePickerActivity.this, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(PlacePickerActivity.this, new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION}, 0);
@@ -136,7 +136,7 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
         }
         Log.d(TAG, "Set location to " + last);
         if (last != null) {
-            mapView.map().setMapPosition(new MapPosition(last.getLatitude(), last.getLongitude(), 4096));
+//            mapView.map().setMapPosition(new MapPosition(last.getLatitude(), last.getLongitude(), 4096));
         }
     }
 
@@ -163,12 +163,12 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
     @Override
     protected void onResume() {
         super.onResume();
-        mapView.onResume();
+//        mapView.onResume();
     }
 
     @Override
     protected void onPause() {
-        mapView.onPause();
+//        mapView.onPause();
         super.onPause();
     }
 
@@ -188,9 +188,9 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
 
     @Override
     public void onMapEvent(Event event, MapPosition position) {
-        place.viewport = GmsMapsTypeHelper.toLatLngBounds(mapView.map().viewport().getBBox(null, 0));
-        resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, place.viewport);
-        place.latLng = GmsMapsTypeHelper.toLatLng(position.getGeoPoint());
+//        place.viewport = GmsMapsTypeHelper.toLatLngBounds(mapView.map().viewport().getBBox(null, 0));
+//        resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, place.viewport);
+//        place.latLng = GmsMapsTypeHelper.toLatLng(position.getGeoPoint());
         place.name = "";
         place.address = "";
         updateInfoText();
