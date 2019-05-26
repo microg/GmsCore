@@ -15,6 +15,8 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 String getMyVersionName() {
     def stdout = new ByteArrayOutputStream()
@@ -43,6 +45,10 @@ android {
         targetSdkVersion androidTargetSdk()
     }
 
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -52,4 +58,5 @@ android {
 dependencies {
     api 'com.android.support:support-v4:25.3.1'
     api 'org.microg:safe-parcel:1.5.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

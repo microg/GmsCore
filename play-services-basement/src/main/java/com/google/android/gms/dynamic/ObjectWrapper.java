@@ -17,6 +17,7 @@
 package com.google.android.gms.dynamic;
 
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 
 import java.lang.reflect.Field;
 
@@ -27,6 +28,7 @@ public class ObjectWrapper<T> extends IObjectWrapper.Stub {
         this.t = t;
     }
 
+    @Nullable
     public static Object unwrap(IObjectWrapper obj) {
         if (obj == null) {
             return null;
@@ -43,8 +45,7 @@ public class ObjectWrapper<T> extends IObjectWrapper.Stub {
         if (!field.isAccessible()) {
             field.setAccessible(true);
             try {
-                Object wrapped = field.get(binder);
-                return wrapped;
+                return field.get(binder);
             } catch (NullPointerException localNullPointerException) {
                 throw new IllegalArgumentException("Binder object is null.",
                         localNullPointerException);
@@ -57,6 +58,15 @@ public class ObjectWrapper<T> extends IObjectWrapper.Stub {
             }
         } else {
             throw new IllegalArgumentException();
+        }
+    }
+
+    @Nullable
+    public static <T> T unwrapTyped(IObjectWrapper obj, Class<T> clazz) {
+        try {
+            return clazz.cast(unwrap(obj));
+        } catch (ClassCastException e) {
+            return null;
         }
     }
 
