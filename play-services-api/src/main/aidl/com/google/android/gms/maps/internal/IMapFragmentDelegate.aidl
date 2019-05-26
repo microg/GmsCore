@@ -11,7 +11,7 @@ interface IMapFragmentDelegate {
     IGoogleMapDelegate getMap();
     void onInflate(IObjectWrapper activity, in GoogleMapOptions options, in Bundle savedInstanceState);
     void onCreate(in Bundle savedInstanceState);
-    IObjectWrapper onCreateView(IObjectWrapper layoutInflate, IObjectWrapper container, in Bundle savedInstanceState);
+    IObjectWrapper onCreateView(IObjectWrapper layoutInflater, IObjectWrapper container, in Bundle savedInstanceState);
     void onResume();
     void onPause();
     void onDestroyView();
