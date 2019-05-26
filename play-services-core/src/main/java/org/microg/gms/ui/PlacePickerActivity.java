@@ -49,9 +49,9 @@ import org.microg.gms.location.LocationConstants;
 //import org.microg.gms.maps.vtm.BackendMapView;
 //import org.microg.gms.maps.vtm.GmsMapsTypeHelper;
 import org.microg.safeparcel.SafeParcelUtil;
-import org.oscim.core.MapPosition;
-import org.oscim.event.Event;
-import org.oscim.map.Map;
+//import org.oscim.core.MapPosition;
+//import org.oscim.event.Event;
+//import org.oscim.map.Map;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -63,7 +63,10 @@ import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR_DARK;
 //import static org.microg.gms.maps.vtm.GmsMapsTypeHelper.fromLatLngBounds;
 
-public class PlacePickerActivity extends AppCompatActivity implements Map.UpdateListener {
+public class
+
+
+PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ {
     private static final String TAG = "GmsPlacePicker";
 
     private PlaceImpl place;
@@ -186,6 +189,7 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
         super.onDestroy();
     }
 
+    /*
     @Override
     public void onMapEvent(Event event, MapPosition position) {
 //        place.viewport = GmsMapsTypeHelper.toLatLngBounds(mapView.map().viewport().getBBox(null, 0));
@@ -235,7 +239,7 @@ public class PlacePickerActivity extends AppCompatActivity implements Map.Update
                 }
             }).start();
         }
-    }
+    }*/
 
     private void updateInfoText() {
         if (TextUtils.isEmpty(place.address)) {

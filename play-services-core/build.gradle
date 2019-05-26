@@ -29,14 +29,6 @@ dependencies {
     implementation "com.takisoft.fix:preference-v7:$supportLibraryVersion.0"
     implementation "de.hdodenhof:circleimageview:1.3.0"
     implementation "org.conscrypt:conscrypt-android:2.0.0"
-    implementation "org.microg:vtm-android:0.9.1-mod"
-    implementation 'org.microg:vtm-android:0.9.1-mod:natives-armeabi'
-    implementation 'org.microg:vtm-android:0.9.1-mod:natives-armeabi-v7a'
-    implementation 'org.microg:vtm-android:0.9.1-mod:natives-arm64-v8a'
-    implementation 'org.microg:vtm-android:0.9.1-mod:natives-x86'
-    implementation 'org.microg:vtm-android:0.9.1-mod:natives-x86_64'
-    implementation "org.microg:vtm-extras:0.9.1-mod"
-    implementation "org.microg:vtm-jts:0.9.1-mod"
 
     implementation project(':microg-ui-tools')
     implementation project(':play-services-api')

@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
 
 dependencies {
-    implementation project(':microg-ui-tools')
-    implementation project(':play-services-api')
+    implementation project(":microg-ui-tools")
+    implementation project(":play-services-api")
 
-    api "org.microg:vtm-android:0.9.1-mod"
-    api "org.microg:vtm-extras:0.9.1-mod"
-    api "org.microg:vtm-jts:0.9.1-mod"
-    implementation project(':vtm-microg-theme')
+    implementation "org.microg:vtm-android:0.9.1-mod"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-armeabi"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-armeabi-v7a"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-arm64-v8a"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-x86"
+    implementation "org.microg:vtm-android:0.9.1-mod:natives-x86_64"
+    implementation "org.microg:vtm-extras:0.9.1-mod"
+    implementation "org.microg:vtm-jts:0.9.1-mod"
+    implementation project(":vtm-microg-theme")
 }
 
 def execResult(...args) {
@@ -52,13 +57,13 @@ android {
     }
 
     lintOptions {
-        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity'
+        disable "MissingTranslation", "InvalidPackage", "BatteryLife", "ImpliedQuantity", "MissingQuantity"
     }
 
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 
@@ -68,6 +73,6 @@ android {
     }
 }
 
-if (file('user.gradle').exists()) {
-    apply from: 'user.gradle'
+if (file("user.gradle").exists()) {
+    apply from: "user.gradle"
 }
