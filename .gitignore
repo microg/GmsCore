@@ -3,6 +3,7 @@ gen/
 bin/
 build/
 .gradle/
+.idea/
 user.gradle
 local.properties
 .directory
