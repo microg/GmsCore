@@ -23,6 +23,7 @@ def useMapbox() {
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
     implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support:mediarouter-v7:$supportLibraryVersion"
@@ -86,6 +87,8 @@ android {
 
         minSdkVersion androidMinSdk()
         targetSdkVersion androidTargetSdk()
+
+        multiDexEnabled true
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"

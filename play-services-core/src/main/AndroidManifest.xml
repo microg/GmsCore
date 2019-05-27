@@ -106,7 +106,8 @@
         android:allowBackup="false"
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_core_service_app"
-        android:label="@string/gms_app_name">
+        android:label="@string/gms_app_name"
+        android:name="android.support.multidex.MultiDexApplication">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature"/>
