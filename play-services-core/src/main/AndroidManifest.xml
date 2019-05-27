@@ -90,6 +90,7 @@
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST" tools:ignore="ProtectedPermissions"/>
 
     <uses-sdk tools:overrideLibrary="
         com.takisoft.fix.support.v7.preference,
@@ -258,19 +259,13 @@
 
         <receiver android:name="org.microg.gms.gcm.UnregisterReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_DATA_CLEARED"/>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
-
-        <!-- Map -->
-        <provider
-            android:name="org.microg.gms.maps.data.SharedTileProvider"
-            android:authorities="org.microg.gms.map.tile"
-            android:enabled="true"
-            android:exported="true"/>
 
         <!-- DroidGuard -->
 

@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 dependencies {
-    compile project(':vtm')
+    compile "org.microg:vtm:0.9.1-mod"
 }
 
 sourceSets {

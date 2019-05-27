@@ -16,6 +16,7 @@
 
 package org.microg.gms.common;
 
+import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -115,6 +116,16 @@ public class PackageUtils {
                     return digest;
                 }
             }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String packageFromProcessId(Context context, int pid) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager == null) return null;
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == pid) return processInfo.processName;
         }
         return null;
     }
