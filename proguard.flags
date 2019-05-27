@@ -1,3 +1,5 @@
+-dontwarn java.lang.invoke.StringConcatFactory
+
 # We use ProGuard for optimizations, obfuscation is for those who have sth to hide
 -dontobfuscate
 -optimizations !code/allocation/variable
