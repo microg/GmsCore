@@ -110,7 +110,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             "video/ogg",
             "video/x-matroska",
             "application/x-mpegurl",
-            "<item>application/vnd.apple.mpegurl",
+            "application/vnd.apple.mpegurl",
             "application/dash+xml",
             "application/vnd.ms-sstr+xml",
         };
