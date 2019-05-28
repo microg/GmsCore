@@ -60,6 +60,8 @@ import org.microg.gms.people.PeopleManager;
 import java.io.IOException;
 import java.util.Locale;
 
+import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
@@ -130,9 +132,12 @@ public class LoginActivity extends AssistantActivity {
         });
         if (getIntent().hasExtra(EXTRA_TOKEN)) {
             if (getIntent().hasExtra(EXTRA_EMAIL)) {
-                AccountManager accountManager = AccountManager.get(LoginActivity.this);
+                AccountManager accountManager = AccountManager.get(this);
                 Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), accountType);
                 accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
+                if (AuthManager.isAuthVisible(this) && SDK_INT >= Build.VERSION_CODES.O) {
+                    accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
+                }
                 retrieveGmsToken(account);
             } else {
                 retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));

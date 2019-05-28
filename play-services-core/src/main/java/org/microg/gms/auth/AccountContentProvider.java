@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -51,6 +52,7 @@ public class AccountContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Bundle call(String method, String arg, Bundle extras) {
+        String packageName = PackageUtils.packageFromProcessId(getContext(), Binder.getCallingPid());
         if (!PackageUtils.callerHasExtendedAccess(getContext())) {
             String[] packagesForUid = getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid());
             if (packagesForUid != null && packagesForUid.length != 0)
@@ -61,7 +63,8 @@ public class AccountContentProvider extends ContentProvider {
         }
         if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method) && AuthConstants.DEFAULT_ACCOUNT_TYPE.equals(arg)) {
             Bundle result = new Bundle();
-            result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, AccountManager.get(getContext()).getAccountsByType(arg));
+            AccountManager am = AccountManager.get(getContext());
+            result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? am.getAccountsByTypeForPackage(arg, packageName) : am.getAccountsByType(arg));
             return result;
         } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method)) {
             Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);

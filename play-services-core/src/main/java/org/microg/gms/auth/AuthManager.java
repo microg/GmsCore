@@ -20,6 +20,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -35,6 +36,7 @@ public class AuthManager {
     private static final String TAG = "GmsAuthManager";
     public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
     private static final String PREF_AUTH_TRUST_GOOGLE = "auth_manager_trust_google";
+    public static final String PREF_AUTH_VISIBLE = "auth_manager_visible";
     public static final int ONE_HOUR_IN_SECONDS = 60 * 60;
 
     private final Context context;
@@ -91,6 +93,10 @@ public class AuthManager {
 
     public void setPermitted(boolean value) {
         setUserData(buildPermKey(), value ? "1" : "0");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && value && packageName != null) {
+            // Make account persistently visible as we already granted access
+            accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
+        }
     }
 
     public boolean isPermitted() {
@@ -148,6 +154,10 @@ public class AuthManager {
 
     public void setAuthToken(String service, String auth) {
         getAccountManager().setAuthToken(getAccount(), buildTokenKey(service), auth);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && packageName != null && auth != null) {
+            // Make account persistently visible as we already granted access
+            accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
+        }
     }
 
     public void storeResponse(AuthResponse response) {
@@ -170,6 +180,10 @@ public class AuthManager {
 
     public static boolean isTrustGooglePermitted(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_AUTH_TRUST_GOOGLE, true);
+    }
+
+    public static boolean isAuthVisible(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_AUTH_VISIBLE, false);
     }
 
     private boolean isSystemApp() {

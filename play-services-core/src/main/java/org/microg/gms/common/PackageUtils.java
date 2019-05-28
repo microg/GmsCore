@@ -87,17 +87,7 @@ public class PackageUtils {
     }
 
     public static void checkPackageUid(Context context, String packageName, int callingUid) {
-        String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
-        if (packagesForUid != null && !Arrays.asList(packagesForUid).contains(packageName)) {
-            throw new SecurityException("callingUid [" + callingUid + "] is not related to packageName [" + packageName + "]");
-        }
-    }
-
-    public static void checkPackageUid(Context context, String packageName, int callerUid, int callingUid) {
-        if (callerUid != 0 && callerUid != callingUid) {
-            throw new SecurityException("callerUid [" + callerUid + "] and real calling uid [" + callingUid + "] mismatch!");
-        }
-        checkPackageUid(context, packageName, callingUid);
+        getAndCheckPackage(context, packageName, callingUid, 0);
     }
 
     @Nullable
@@ -121,9 +111,61 @@ public class PackageUtils {
     }
 
     @Nullable
+    public static String getAndCheckCallingPackage(Context context, String suggestedPackageName) {
+        return getAndCheckCallingPackage(context, suggestedPackageName, 0);
+    }
+
+    @Nullable
+    public static String getAndCheckCallingPackage(Context context, int suggestedCallerUid) {
+        return getAndCheckCallingPackage(context, null, suggestedCallerUid);
+    }
+
+    @Nullable
+    public static String getAndCheckCallingPackage(Context context, String suggestedPackageName, int suggestedCallerUid) {
+        return getAndCheckCallingPackage(context, suggestedPackageName, suggestedCallerUid, 0);
+    }
+
+    @Nullable
+    public static String getAndCheckCallingPackage(Context context, String suggestedPackageName, int suggestedCallerUid, int suggestedCallerPid) {
+        int callingUid = Binder.getCallingUid(), callingPid = Binder.getCallingPid();
+        if (suggestedCallerUid > 0 && suggestedCallerUid != callingUid) {
+            throw new SecurityException("suggested UID [" + suggestedCallerUid + "] and real calling UID [" + callingUid + "] mismatch!");
+        }
+        if (suggestedCallerPid > 0 && suggestedCallerPid != callingPid) {
+            throw new SecurityException("suggested PID [" + suggestedCallerPid + "] and real calling PID [" + callingPid + "] mismatch!");
+        }
+        return getAndCheckPackage(context, suggestedPackageName, callingUid, Binder.getCallingPid());
+    }
+
+    @Nullable
+    public static String getAndCheckPackage(Context context, String suggestedPackageName, int callingUid) {
+        return getAndCheckPackage(context, suggestedPackageName, callingUid, 0);
+    }
+
+    @Nullable
+    public static String getAndCheckPackage(Context context, String suggestedPackageName, int callingUid, int callingPid) {
+        String packageName = packageFromProcessId(context, callingPid);
+        if (packageName == null) {
+            String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
+            if (packagesForUid != null && packagesForUid.length != 0) {
+                if (packagesForUid.length == 1) {
+                    packageName = packagesForUid[0];
+                } else if (Arrays.asList(packagesForUid).contains(suggestedPackageName)) {
+                    packageName = suggestedPackageName;
+                }
+            }
+        }
+        if (packageName != null && !packageName.equals(suggestedPackageName)) {
+            throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + packageName + "]");
+        }
+        return packageName;
+    }
+
+    @Nullable
     public static String packageFromProcessId(Context context, int pid) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager == null) return null;
+        if (pid <= 0) return null;
         for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
             if (processInfo.pid == pid) return processInfo.processName;
         }

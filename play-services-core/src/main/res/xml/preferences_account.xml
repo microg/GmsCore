@@ -23,6 +23,11 @@
             android:key="auth_manager_trust_google"
             android:summary="@string/pref_auth_trust_google_summary"
             android:title="@string/pref_auth_trust_google_title"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="auth_manager_visible"
+            android:summary="@string/pref_auth_visible_summary"
+            android:title="@string/pref_auth_visible_title"/>
     </PreferenceCategory>
 
     <Preference
