@@ -27,8 +27,8 @@ gmscore_apk   := build/outputs/apk/release/play-services-core-release-unsigned.a
 
 $(gmscore_root)/$(gmscore_dir)/$(gmscore_apk):
 	rm -Rf $(gmscore_build)
-	mkdir -p $(ANDROID_BUILD_TOP)/$(gmscore_out)
-	ln -s $(ANDROID_BUILD_TOP)/$(gmscore_out) $(ANDROID_BUILD_TOP)/$(gmscore_build)
+	mkdir -p $(gmscore_out)
+	ln -s $(gmscore_out) $(gmscore_build)
 	echo "sdk.dir=$(ANDROID_HOME)" > $(gmscore_root)/local.properties
 	cd $(gmscore_root) && git submodule update --recursive --init
 	cd $(gmscore_root)/$(gmscore_dir) && JAVA_TOOL_OPTIONS="$(JAVA_TOOL_OPTIONS) -Dfile.encoding=UTF8" ../gradlew assembleRelease
