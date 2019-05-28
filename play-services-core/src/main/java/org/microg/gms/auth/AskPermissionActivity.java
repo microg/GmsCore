@@ -25,6 +25,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -49,6 +50,7 @@ import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.accounts.AccountManager.KEY_CALLER_PID;
 import static android.accounts.AccountManager.KEY_CALLER_UID;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -96,7 +98,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
 
         if (getIntent().hasExtra(EXTRA_FROM_ACCOUNT_MANAGER)) fromAccountManager = true;
         int callerUid = getIntent().getIntExtra(KEY_CALLER_UID, 0);
-        PackageUtils.checkPackageUid(this, packageName, callerUid);
+        packageName = PackageUtils.getAndCheckPackage(this, packageName, getIntent().getIntExtra(KEY_CALLER_UID, 0), getIntent().getIntExtra(KEY_CALLER_PID, 0));
         authManager = new AuthManager(this, account.name, packageName, service);
 
         // receive package info

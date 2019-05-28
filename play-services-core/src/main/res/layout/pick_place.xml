@@ -27,7 +27,7 @@
         android:layout_height="0dip"
         android:layout_weight="1">
 
-        <org.microg.gms.maps.BackendMapView
+<!--        <org.microg.gms.maps.vtm.BackendMapView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:paddingBottom="41dip"
-            android:src="@drawable/maps_default_marker"/>
+            android:src="@drawable/maps_default_marker"/>-->
     </RelativeLayout>
 
     <LinearLayout

@@ -35,6 +35,7 @@ import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -52,6 +53,8 @@ import org.microg.gms.gcm.mcs.LoginResponse;
 import org.microg.gms.gcm.mcs.Setting;
 
 import java.io.Closeable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -132,6 +135,10 @@ public class McsService extends Service implements Handler.Callback {
 
     private static int maxTtl = 24 * 60 * 60;
 
+    private Object deviceIdleController;
+    private Method getUserIdMethod;
+    private Method addPowerSaveTempWhitelistAppMethod;
+
     private class HandlerThread extends Thread {
 
         public HandlerThread() {
@@ -166,6 +173,22 @@ public class McsService extends Service implements Handler.Callback {
         heartbeatIntent = PendingIntent.getService(this, 0, new Intent(ACTION_HEARTBEAT, null, this, McsService.class), 0);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                Field field = Context.class.getField("DEVICE_IDLE_CONTROLLER");
+                IBinder binder = (IBinder) Class.forName("android.os.ServiceManager")
+                        .getMethod("getService", String.class).invoke(null, field.get(null));
+                if (binder != null) {
+                    deviceIdleController = Class.forName("android.os.IDeviceIdleController$Stub")
+                            .getMethod("asInterface", IBinder.class).invoke(null, binder);
+                    getUserIdMethod = UserHandle.class.getMethod("getUserId", int.class);
+                    addPowerSaveTempWhitelistAppMethod = deviceIdleController.getClass()
+                            .getMethod("addPowerSaveTempWhitelistApp", String.class, long.class, int.class, String.class);
+                }
+            } catch (Exception e) {
+                Log.w(TAG, e);
+            }
+        }
         synchronized (McsService.class) {
             if (handlerThread == null) {
                 handlerThread = new HandlerThread();
@@ -452,13 +475,15 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleAppMessage(DataMessageStanza msg) {
-        database.noteAppMessage(msg.category, msg.getSerializedSize());
-        GcmDatabase.App app = database.getApp(msg.category);
+        String packageName = msg.category;
+        database.noteAppMessage(packageName, msg.getSerializedSize());
+        GcmDatabase.App app = database.getApp(packageName);
 
         Intent intent = new Intent();
         intent.setAction(ACTION_C2DM_RECEIVE);
-        intent.setPackage(msg.category);
+        intent.setPackage(packageName);
         intent.putExtra(EXTRA_FROM, msg.from);
+        intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
         if (app.wakeForDelivery) {
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         } else {
@@ -471,7 +496,7 @@ public class McsService extends Service implements Handler.Callback {
 
         String receiverPermission;
         try {
-            String name = msg.category + ".permission.C2D_MESSAGE";
+            String name = packageName + ".permission.C2D_MESSAGE";
             getPackageManager().getPermissionInfo(name, 0);
             receiverPermission = name;
         } catch (PackageManager.NameNotFoundException e) {
@@ -485,6 +510,17 @@ public class McsService extends Service implements Handler.Callback {
             for (ResolveInfo resolveInfo : infos) {
                 logd("Target: " + resolveInfo);
                 Intent targetIntent = new Intent(intent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && app.wakeForDelivery) {
+                    try {
+                        if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
+                            int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
+                            logd("Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
+                            addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
+                        }
+                    } catch (Exception e) {
+                        Log.w(TAG, e);
+                    }
+                }
                 targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
                 sendOrderedBroadcast(targetIntent, receiverPermission);
             }

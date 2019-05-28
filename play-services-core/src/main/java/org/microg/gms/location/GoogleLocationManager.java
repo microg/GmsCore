@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.internal.FusedLocationProviderResult;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
 
+import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.Utils;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCU
 import static com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER;
 
 public class GoogleLocationManager implements LocationChangeListener {
+    private static final String TAG = "GmsLocManager";
     private static final String MOCK_PROVIDER = "mock";
     private static final long SWITCH_ON_FRESHNESS_CLIFF_MS = 30000; // 30 seconds
     private static final String ACCESS_MOCK_LOCATION = "android.permission.ACCESS_MOCK_LOCATION";
@@ -155,8 +157,11 @@ public class GoogleLocationManager implements LocationChangeListener {
     }
 
     public void updateLocationRequest(LocationRequestUpdateData data) {
+        String packageName = null;
+        if (data.pendingIntent != null)
+            packageName = PackageUtils.packageFromPendingIntent(data.pendingIntent);
         if (data.opCode == LocationRequestUpdateData.REQUEST_UPDATES) {
-            requestLocationUpdates(new LocationRequestHelper(context, hasFineLocationPermission(), hasCoarseLocationPermission(), null, data));
+            requestLocationUpdates(new LocationRequestHelper(context, hasFineLocationPermission(), hasCoarseLocationPermission(), packageName, data));
             if (data.fusedLocationProviderCallback != null) {
                 try {
                     data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS);

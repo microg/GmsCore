@@ -16,7 +16,9 @@
 
 package com.google.android.gms.cast.framework.internal;
 
+import android.content.Context;
 import android.os.RemoteException;
+import android.support.v7.media.MediaRouter;
 import android.util.Log;
 
 import com.google.android.gms.cast.framework.CastOptions;
@@ -27,6 +29,10 @@ import com.google.android.gms.cast.framework.IReconnectionService;
 import com.google.android.gms.cast.framework.ISession;
 import com.google.android.gms.cast.framework.ISessionProxy;
 import com.google.android.gms.cast.framework.media.CastMediaOptions;
+import com.google.android.gms.cast.framework.internal.CastContextImpl;
+import com.google.android.gms.cast.framework.internal.CastSessionImpl;
+import com.google.android.gms.cast.framework.internal.MediaRouterCallbackImpl;
+import com.google.android.gms.cast.framework.internal.SessionImpl;
 import com.google.android.gms.cast.framework.media.IMediaNotificationService;
 import com.google.android.gms.cast.framework.media.internal.IFetchBitmapTask;
 import com.google.android.gms.cast.framework.media.internal.IFetchBitmapTaskProgressPublisher;
@@ -38,21 +44,18 @@ public class CastDynamiteModuleImpl extends ICastDynamiteModule.Stub {
     private static final String TAG = CastDynamiteModuleImpl.class.getSimpleName();
 
     @Override
-    public ICastContext newCastContextImpl(IObjectWrapper context, CastOptions options, IMediaRouter router, Map map) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newCastContextImpl");
-        return null;
+    public ICastContext newCastContextImpl(IObjectWrapper context, CastOptions options, IMediaRouter router, Map sessionProviders) throws RemoteException {
+        return new CastContextImpl(context, options, router, sessionProviders);
     }
 
     @Override
-    public ISession newSessionImpl(String s1, String s2, ISessionProxy proxy) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newSessionImpl");
-        return null;
+    public ISession newSessionImpl(String category, String sessionId, ISessionProxy proxy) throws RemoteException {
+        return new SessionImpl(category, sessionId, proxy);
     }
 
     @Override
     public ICastSession newCastSessionImpl(CastOptions options, IObjectWrapper session, ICastConnectionController controller) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: newCastSessionImpl");
-        return null;
+        return new CastSessionImpl(options, session, controller);
     }
 
     @Override

@@ -45,6 +45,7 @@ import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_ANDROID_PACKAGE_NAME;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
+import static android.accounts.AccountManager.KEY_CALLER_PID;
 import static android.accounts.AccountManager.KEY_CALLER_UID;
 import static android.accounts.AccountManager.KEY_INTENT;
 
@@ -90,7 +91,7 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         options.keySet();
         Log.d(TAG, "getAuthToken: " + account + ", " + authTokenType + ", " + options);
         String app = options.getString(KEY_ANDROID_PACKAGE_NAME);
-        PackageUtils.checkPackageUid(context, app, options.getInt(KEY_CALLER_UID), options.getInt(KEY_CALLER_UID));
+        app = PackageUtils.getAndCheckPackage(context, app, options.getInt(KEY_CALLER_UID), options.getInt(KEY_CALLER_PID));
         AuthManager authManager = new AuthManager(context, account.name, app, authTokenType);
         try {
             AuthResponse res = authManager.requestAuth(true);

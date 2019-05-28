@@ -179,7 +179,7 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
     @Override
     public void getCastService(IGmsCallbacks callback, int versionCode, String packageName,
                                IBinder binder, Bundle params) throws RemoteException {
-        throw new IllegalArgumentException("Cast service not supported");
+        callGetService(GmsService.CAST, callback, versionCode, packageName, params);
     }
 
     @Deprecated
