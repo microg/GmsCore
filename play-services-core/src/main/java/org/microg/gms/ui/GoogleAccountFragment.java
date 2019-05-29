@@ -16,15 +16,61 @@
 
 package org.microg.gms.ui;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.preference.Preference;
+
 import com.google.android.gms.R;
 
+import org.microg.gms.auth.AuthConstants;
+import org.microg.gms.auth.AuthManager;
+import org.microg.tools.ui.ResourceSettingsFragment;
 import org.microg.tools.ui.AbstractSettingsActivity;
 
-public class GoogleAccountFragment {
-    public static class AsActivity extends AbstractSettingsActivity {
+import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
+import static org.microg.gms.auth.AuthManager.PREF_AUTH_VISIBLE;
+
+public class GoogleAccountFragment extends ResourceSettingsFragment {
+
+        public GoogleAccountFragment() {
+            preferencesResource = R.xml.preferences_google_account;
+        }
+
+        @Override
+        public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+            super.onCreatePreferencesFix(savedInstanceState, rootKey);
+            Preference pref = findPreference(PREF_AUTH_VISIBLE);
+            if (pref != null) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    pref.setVisible(false);
+                } else {
+                    pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                        if (newValue instanceof Boolean) {
+                            AccountManager am = AccountManager.get(getContext());
+                            for (Account account : am.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
+                                am.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, (Boolean) newValue ? VISIBILITY_USER_MANAGED_VISIBLE : VISIBILITY_USER_MANAGED_NOT_VISIBLE);
+                            }
+                        }
+                        return true;
+                    });
+                }
+            }
+        }
+
+        public static class AsActivity extends AbstractSettingsActivity {
         public AsActivity() {
             showHomeAsUp = true;
-            preferencesResource = R.xml.preferences_google_account;
+        }
+
+        @Override
+        protected Fragment getFragment() {
+            return new GoogleAccountFragment();
         }
     }
 }
