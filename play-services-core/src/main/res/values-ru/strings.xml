@@ -128,7 +128,9 @@
 
     <string name="pref_auth_trust_google_title">Доверять разрешениям Google в приложениях</string>
     <string name="pref_auth_trust_google_summary">Если параметр отключен, то у пользователя запрашивается разрешение для авторизации Google. Некоторые приложения не смогут использовать аккаунт Google, если эта возможность отключена.</string>
-
+    <string name="pref_auth_visible_title">Позволить приложениям находить аккаунты</string>
+    <string name="pref_auth_visible_summary">Если опция включена, то все приложения на этом устройстве смогут видеть адреса электронной почты ваших учетных записей Google не запрашивая разрешения.</string>
+	
     <string name="pref_checkin_enable_summary">Регистрирует ваше устройство в сервисах Google и создает уникальный идентификатор. MicroG удаляет все идентифицирующие биты, кроме имени вашего аккаунта Google.</string>
 
     <string name="pref_more_settings">Ещё</string>
