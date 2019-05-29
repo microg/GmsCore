@@ -20,11 +20,11 @@ import com.google.android.gms.R;
 
 import org.microg.tools.ui.AbstractSettingsActivity;
 
-public class AddAccountFragment {
+public class GoogleAccountFragment {
     public static class AsActivity extends AbstractSettingsActivity {
         public AsActivity() {
             showHomeAsUp = true;
-            preferencesResource = R.xml.preferences_add_account;
+            preferencesResource = R.xml.preferences_google_account;
         }
     }
 }

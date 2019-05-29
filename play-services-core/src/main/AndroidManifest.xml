@@ -529,7 +529,7 @@
             android:theme="@style/Theme.AppCompat.Settings"/>
 
         <activity
-            android:name="org.microg.gms.ui.AddAccountFragment$AsActivity"
+            android:name="org.microg.gms.ui.GoogleAccountFragment$AsActivity"
             android:label="@string/pref_manage_accounts"
             android:theme="@style/Theme.AppCompat.Settings"/>
 

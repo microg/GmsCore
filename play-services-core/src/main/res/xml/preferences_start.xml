@@ -31,7 +31,7 @@
             android:summary="@string/pref_manage_accounts_summary"
             android:title="@string/pref_manage_accounts">
             <intent
-                android:targetClass="org.microg.gms.ui.AddAccountFragment$AsActivity"
+                android:targetClass="org.microg.gms.ui.GoogleAccountFragment$AsActivity"
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
