@@ -121,6 +121,9 @@ Dies kann einige Minuten dauern."</string>
     <string name="pref_auth_trust_google_title">Vertraue Google bei App Rechten</string>
     <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt bevor eine App Autorisierungsanfrage an Google geschickt wird. Einige Apps werden das Google Konto nicht nutzen können, wenn deaktiviert.</string>
 
+    <string name="pref_auth_visible_title">Apps erlauben Accounts zu finden</string>
+    <string name="pref_auth_visible_summary">Wenn aktiviert, können alle Applikationen auf diesem Gerät die E-Mail-Adresse des Google-Accounts sehen, ohne vorher um Erlaubnis zu fragen.</string>
+
     <string name="pref_checkin_enable_summary">Registriert den Gerät zur Nutzung von Google-Diensten und erzeugt eine eindeutige Kennung. microG entfernt identifizierende Daten außer dem Namen  des Google-Kontos.</string>
 
     <string name="pref_more_settings">Mehr</string>
