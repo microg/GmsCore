@@ -111,6 +111,16 @@ public class PackageUtils {
     }
 
     @Nullable
+    public static String getCallingPackage(Context context) {
+        int callingUid = Binder.getCallingUid(), callingPid = Binder.getCallingPid();
+        String packageName = packageFromProcessId(context, callingPid);
+        if (packageName == null) {
+            packageName = firstPackageFromUserId(context, callingUid);
+        }
+        return packageName;
+    }
+
+    @Nullable
     public static String getAndCheckCallingPackage(Context context, String suggestedPackageName) {
         return getAndCheckCallingPackage(context, suggestedPackageName, 0);
     }
@@ -152,10 +162,12 @@ public class PackageUtils {
                     packageName = packagesForUid[0];
                 } else if (Arrays.asList(packagesForUid).contains(suggestedPackageName)) {
                     packageName = suggestedPackageName;
+                } else if (suggestedPackageName == null) {
+                    packageName = packagesForUid[0];
                 }
             }
         }
-        if (packageName != null && !packageName.equals(suggestedPackageName)) {
+        if (packageName != null && suggestedPackageName != null && !packageName.equals(suggestedPackageName)) {
             throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + packageName + "]");
         }
         return packageName;
@@ -168,6 +180,15 @@ public class PackageUtils {
         if (pid <= 0) return null;
         for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
             if (processInfo.pid == pid) return processInfo.processName;
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String firstPackageFromUserId(Context context, int uid) {
+        String[] packagesForUid = context.getPackageManager().getPackagesForUid(uid);
+        if (packagesForUid != null && packagesForUid.length != 0) {
+            return packagesForUid[0];
         }
         return null;
     }
