@@ -27,13 +27,18 @@ public class AboutFragment extends AbstractAboutFragment {
 
     @Override
     protected void collectLibraries(List<AbstractAboutFragment.Library> libraries) {
-        libraries.add(new AbstractAboutFragment.Library("org.microg.gms.api", "microG GmsApi", "Apache License 2.0, microG Team"));
-        libraries.add(new AbstractAboutFragment.Library("org.microg.safeparcel", "microG SafeParcel", "Apache License 2.0, microG Team"));
-        libraries.add(new AbstractAboutFragment.Library("org.microg.nlp", "microG UnifiedNlp", "Apache License 2.0, microG Team"));
-        libraries.add(new AbstractAboutFragment.Library("org.microg.nlp.api", "microG UnifiedNlp Api", "Apache License 2.0, microG Team"));
-        libraries.add(new AbstractAboutFragment.Library("org.microg.wearable", "microG Wearable", "Apache License 2.0, microG Team"));
         libraries.add(new AbstractAboutFragment.Library("de.hdodenhof.circleimageview", "CircleImageView", "Apache License 2.0, Henning Dodenhof"));
+        libraries.add(new AbstractAboutFragment.Library("su.litvak.chromecast.api.v2", "ChromeCast Java API v2", "Apache License 2.0, Vitaly Litvak"));
+        libraries.add(new AbstractAboutFragment.Library("org.conscrypt", "Conscrypt", "Apache License 2.0, The Android Open Source Project"));
+        libraries.add(new AbstractAboutFragment.Library("org.microg.gms.api", "GmsApi", "Apache License 2.0, microG Team"));
+        libraries.add(new AbstractAboutFragment.Library("org.microg.gms", "GmsLib", "Apache License 2.0, microG Team"));
+        libraries.add(new AbstractAboutFragment.Library("com.mapbox.mapboxsdk", "Mapbox Maps SDK for Android", "Three-Clause BSD, Mapbox"));
+        libraries.add(new AbstractAboutFragment.Library("org.microg.safeparcel", "SafeParcel", "Apache License 2.0, microG Team"));
+        libraries.add(new AbstractAboutFragment.Library("org.slf4j", "SLF4J", "MIT License, QOS.ch"));
+        libraries.add(new AbstractAboutFragment.Library("org.microg.nlp", "UnifiedNlp", "Apache License 2.0, microG Team"));
+        libraries.add(new AbstractAboutFragment.Library("org.microg.nlp.api", "UnifiedNlp Api", "Apache License 2.0, microG Team"));
         libraries.add(new AbstractAboutFragment.Library("org.oscim.android", "V™", "GNU LGPLv3, Hannes Janetzek and devemux86"));
+        libraries.add(new AbstractAboutFragment.Library("org.microg.wearable", "Wearable", "Apache License 2.0, microG Team"));
         libraries.add(new AbstractAboutFragment.Library("com.squareup.wire", "Wire Protocol Buffers", "Apache License 2.0, Square Inc."));
     }
 
