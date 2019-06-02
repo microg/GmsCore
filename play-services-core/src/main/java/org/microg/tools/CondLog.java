@@ -18,6 +18,8 @@ package org.microg.tools;
 
 import android.util.Log;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 public class CondLog
 {
 
@@ -32,8 +34,10 @@ public class CondLog
 		// documentation for Log.isLoggable(), or add appropriate filtering code here.
 
 		// Log.isLoggable() will throw an exception if the length of the tag is greater than
-		// 23 characters, so trim it if necessary to avoid the exception.
-		if (tag.length() > 23)
+		// 23 characters, on API Level 23 or prior, see:
+		// https://developer.android.com/reference/android/util/Log.html#isLoggable(java.lang.String,%20int)
+		// so trim it if necessary to avoid the exception.
+		if (tag.length() > 23 && SDK_INT < 24)
 		{
 			tag = tag.substring(0, 22);
 		}
