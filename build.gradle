@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2017 microG Project Team
+ * Copyright 2013-2019 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,31 @@
  */
 
 buildscript {
+    ext.kotlin_version = '1.3.21'
     repositories {
         jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'com.android.tools.build:gradle:3.3.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 allprojects {
     apply plugin: 'idea'
-    ext.androidBuildVersionTools = "27.0.3"
-    ext.supportLibraryVersion = "27.1.0"
+    ext.androidBuildVersionTools = "28.0.3"
+    ext.supportLibraryVersion = "28.0.0"
     ext.isReleaseVersion = false
     ext.slf4jVersion = "1.7.25"
 }
 
-def androidCompileSdk() { return 27 }
+def androidCompileSdk() { return 28 }
 
-def androidTargetSdk() { return 27 }
+def androidTargetSdk() { return 28 }
 
-def androidMinSdk() { return 9 }
+def androidMinSdk() { return 14 }
 
 def versionCode() {
     def stdout = new ByteArrayOutputStream()

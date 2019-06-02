@@ -21,19 +21,17 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
-import android.support.v4.view.LayoutInflaterCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -62,6 +60,8 @@ import org.microg.gms.people.PeopleManager;
 import java.io.IOException;
 import java.util.Locale;
 
+import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
 import static android.os.Build.VERSION_CODES.HONEYCOMB;
@@ -73,7 +73,6 @@ import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.MAX_REFERENCE_VERSION;
-import android.os.Build;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -110,18 +109,13 @@ public class LoginActivity extends AssistantActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.d(TAG, "pageFinished: " + url);
-                Uri uri = Uri.parse(url);
+                Log.d(TAG, "pageFinished: " + view.getUrl());
+                Uri uri = Uri.parse(view.getUrl());
 
                 // Begin login.
-                // UNUSED: uri=...#identifier never happens. if commented out, webView still appears!
-                if ("identifier".equals(uri.getFragment()))
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            webView.setVisibility(VISIBLE);
-                        }
-                    });
+                // Only required if client code does not invoke showView() via JSBridge
+                if ("identifier".equals(uri.getFragment()) || uri.getPath().endsWith("/identifier"))
+                    runOnUiThread(() -> webView.setVisibility(VISIBLE));
 
                 // Normal login.
                 if ("close".equals(uri.getFragment()))
@@ -138,9 +132,12 @@ public class LoginActivity extends AssistantActivity {
         });
         if (getIntent().hasExtra(EXTRA_TOKEN)) {
             if (getIntent().hasExtra(EXTRA_EMAIL)) {
-                AccountManager accountManager = AccountManager.get(LoginActivity.this);
+                AccountManager accountManager = AccountManager.get(this);
                 Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), accountType);
                 accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
+                if (AuthManager.isAuthVisible(this) && SDK_INT >= Build.VERSION_CODES.O) {
+                    accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
+                }
                 retrieveGmsToken(account);
             } else {
                 retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
@@ -185,12 +182,7 @@ public class LoginActivity extends AssistantActivity {
         setMessage(R.string.auth_connecting);
         CookieManager.getInstance().setAcceptCookie(true);
         if (SDK_INT >= LOLLIPOP) {
-            CookieManager.getInstance().removeAllCookies(new ValueCallback<Boolean>() {
-                @Override
-                public void onReceiveValue(Boolean value) {
-                    start();
-                }
-            });
+            CookieManager.getInstance().removeAllCookies(value -> start());
         } else {
             //noinspection deprecation
             CookieManager.getInstance().removeAllCookie();
@@ -231,23 +223,10 @@ public class LoginActivity extends AssistantActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             if (LastCheckinInfo.read(this).androidId == 0) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Runnable next;
-                        next = checkin(false) ? new Runnable() {
-                            @Override
-                            public void run() {
-                                loadLoginPage();
-                            }
-                        } : new Runnable() {
-                            @Override
-                            public void run() {
-                                showError(R.string.auth_general_error_desc);
-                            }
-                        };
-                        LoginActivity.this.runOnUiThread(next);
-                    }
+                new Thread(() -> {
+                    Runnable next;
+                    next = checkin(false) ? this::loadLoginPage : () -> showError(R.string.auth_general_error_desc);
+                    LoginActivity.this.runOnUiThread(next);
                 }).start();
             } else {
                 loadLoginPage();
@@ -263,7 +242,7 @@ public class LoginActivity extends AssistantActivity {
         setMessage(errorRes);
     }
 
-    private void setMessage(@StringRes  int res) {
+    private void setMessage(@StringRes int res) {
         setMessage(getText(res));
     }
 
@@ -278,12 +257,7 @@ public class LoginActivity extends AssistantActivity {
 
     private void closeWeb(boolean programmaticAuth) {
         setMessage(R.string.auth_finalize);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                webView.setVisibility(INVISIBLE);
-            }
-        });
+        runOnUiThread(() -> webView.setVisibility(INVISIBLE));
         String cookies = CookieManager.getInstance().getCookie(programmaticAuth ? PROGRAMMATIC_AUTH_URL : EMBEDDED_SETUP_URL);
         String[] temp = cookies.split(";");
         for (String ar1 : temp) {
@@ -299,12 +273,11 @@ public class LoginActivity extends AssistantActivity {
     private void retrieveRtToken(String oAuthToken) {
         new AuthRequest().fromContext(this)
                 .appIsGms()
+                .callerIsGms()
                 .service("ac2dm")
                 .token(oAuthToken).isAccessToken()
                 .addAccount()
                 .getAccountId()
-                .systemPartition()
-                .hasPermission()
                 .droidguardResults(null /*TODO*/)
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {
                     @Override
@@ -325,12 +298,9 @@ public class LoginActivity extends AssistantActivity {
                             setResult(RESULT_OK);
                         } else {
                             Log.w(TAG, "Account NOT created!");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showError(R.string.auth_general_error_desc);
-                                    setNextButtonText(android.R.string.ok);
-                                }
+                            runOnUiThread(() -> {
+                                showError(R.string.auth_general_error_desc);
+                                setNextButtonText(android.R.string.ok);
                             });
                             state = -2;
                         }
@@ -348,6 +318,7 @@ public class LoginActivity extends AssistantActivity {
         authManager.setPermitted(true);
         new AuthRequest().fromContext(this)
                 .appIsGms()
+                .callerIsGms()
                 .service(authManager.getService())
                 .email(account.name)
                 .token(AccountManager.get(this).getPassword(account))
@@ -405,9 +376,28 @@ public class LoginActivity extends AssistantActivity {
     }
 
     private class JsBridge {
+
+        @JavascriptInterface
+        public final void addAccount(String json) {
+            Log.d(TAG, "JSBridge: addAccount " + json);
+        }
+
+        @JavascriptInterface
+        public final void closeView() {
+            Log.d(TAG, "JSBridge: closeView");
+            closeWeb(false);
+        }
+
+        @JavascriptInterface
+        public final String fetchVerifiedPhoneNumber() {
+            Log.d(TAG, "JSBridge: fetchVerifiedPhoneNumber");
+            return null;
+        }
+
         @SuppressWarnings("MissingPermission")
         @JavascriptInterface
         public final String getAccounts() {
+            Log.d(TAG, "JSBridge: getAccounts");
             Account[] accountsByType = accountManager.getAccountsByType(accountType);
             JSONArray json = new JSONArray();
             for (Account account : accountsByType) {
@@ -418,14 +408,21 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final String getAllowedDomains() {
+            Log.d(TAG, "JSBridge: getAllowedDomains");
             return new JSONArray().toString();
         }
 
         @JavascriptInterface
         public final String getAndroidId() {
             long androidId = LastCheckinInfo.read(LoginActivity.this).androidId;
+            Log.d(TAG, "JSBridge: getAndroidId " + androidId);
             if (androidId == 0 || androidId == -1) return null;
             return Long.toHexString(androidId);
+        }
+
+        @JavascriptInterface
+        public final int getAuthModuleVersionCode() {
+            return 1;
         }
 
         @JavascriptInterface
@@ -436,6 +433,11 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final void getDroidGuardResult(String s) {
             Log.d(TAG, "JSBridge: getDroidGuardResult: " + s);
+        }
+
+        @JavascriptInterface
+        public final int getDeviceDataVersionInfo() {
+            return 1;
         }
 
         @JavascriptInterface
@@ -485,13 +487,28 @@ public class LoginActivity extends AssistantActivity {
         }
 
         @JavascriptInterface
+        public final boolean isUserOwner() {
+            return true;
+        }
+
+        @JavascriptInterface
         public final void launchEmergencyDialer() {
             Log.d(TAG, "JSBridge: launchEmergencyDialer");
         }
 
         @JavascriptInterface
+        public final void log(String s) {
+            Log.d(TAG, "JSBridge: log " + s);
+        }
+
+        @JavascriptInterface
         public final void notifyOnTermsOfServiceAccepted() {
-            Log.d(TAG, "Terms of service accepted. (who cares?)");
+            Log.d(TAG, "JSBridge: notifyOnTermsOfServiceAccepted");
+        }
+
+        @JavascriptInterface
+        public final void setAccountIdentifier(String accountIdentifier) {
+            Log.d(TAG, "JSBridge: setAccountIdentifier " + accountIdentifier);
         }
 
         @TargetApi(HONEYCOMB)
@@ -510,7 +527,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void setNewAccountCreated() {
-            Log.d(TAG, "New account created. (who cares?)");
+            Log.d(TAG, "JSBridge: setNewAccountCreated");
         }
 
         @JavascriptInterface
@@ -522,12 +539,7 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final void showView() {
             Log.d(TAG, "JSBridge: showView");
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    webView.setVisibility(VISIBLE);
-                }
-            });
+            runOnUiThread(() -> webView.setVisibility(VISIBLE));
         }
 
         @JavascriptInterface

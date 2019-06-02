@@ -1,0 +1,83 @@
+/*
+ * Copyright 2013-2019 microG Project Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    implementation project(':play-services-api')
+    implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.0"
+    implementation "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v7:0.6.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+def execResult(...args) {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine args
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+def mapboxKey() {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    return properties.getProperty("mapbox.key", "invalid")
+}
+
+android {
+    compileSdkVersion androidCompileSdk()
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName "temp"
+        versionCode 1
+
+        minSdkVersion androidMinSdk()
+        targetSdkVersion androidTargetSdk()
+        buildConfigField "String", "MAPBOX_KEY", "\"${mapboxKey()}\""
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    lintOptions {
+        disable 'GradleCompatible'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+if (file('user.gradle').exists()) {
+    apply from: 'user.gradle'
+}

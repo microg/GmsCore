@@ -128,6 +128,8 @@ This can take a couple of minutes."</string>
 
     <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
     <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
+    <string name="pref_auth_visible_title">Allow apps to find accounts</string>
+    <string name="pref_auth_visible_summary">When enabled, all applications on this device will be able to see email address of your Google Accounts without prior authorization.</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
 

@@ -17,12 +17,41 @@
 package com.google.android.gms.common.security;
 
 import android.content.Context;
+import android.os.Process;
 import android.util.Log;
+
 import org.conscrypt.OpenSSLProvider;
+import org.microg.gms.common.PackageUtils;
+
 import java.security.Security;
+import java.util.Collections;
+import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 
 public class ProviderInstallerImpl {
+    private static final String TAG = "GmsProviderInstaller";
+    private static final List<String> DISABLED = Collections.singletonList("com.discord");
+
     public static void insertProvider(Context context) {
-        Security.insertProviderAt(new OpenSSLProvider(), 1);
+        try {
+            String packageName = PackageUtils.packageFromProcessId(context, Process.myPid());
+            Log.d(TAG, "Provider installer invoked for " + packageName);
+            if (DISABLED.contains(packageName)) {
+                Log.d(TAG, "Package is excluded from usage of provider installer");
+            } else if (Security.insertProviderAt(new OpenSSLProvider("GmsCore_OpenSSL"), 1) == 1) {
+                Security.setProperty("ssl.SocketFactory.provider", "org.conscrypt.OpenSSLSocketFactoryImpl");
+                Security.setProperty("ssl.ServerSocketFactory.provider", "org.conscrypt.OpenSSLServerSocketFactoryImpl");
+
+                SSLContext.setDefault(SSLContext.getInstance("Default"));
+                HttpsURLConnection.setDefaultSSLSocketFactory(SSLContext.getDefault().getSocketFactory());
+                Log.d(TAG, "SSL provider installed");
+            } else {
+                Log.w(TAG, "Did not insert the new SSL provider");
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
     }
 }

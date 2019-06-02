@@ -25,11 +25,10 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.google.android.gms.R;
 
 import org.microg.gms.common.PackageUtils;
 
@@ -51,6 +50,12 @@ public class AccountContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Bundle call(String method, String arg, Bundle extras) {
+        String suggestedPackageName = null;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            suggestedPackageName = getCallingPackage();
+        }
+        String packageName = PackageUtils.getAndCheckCallingPackage(getContext(), suggestedPackageName);
+        Log.d(TAG, "Call from " + packageName);
         if (!PackageUtils.callerHasExtendedAccess(getContext())) {
             String[] packagesForUid = getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid());
             if (packagesForUid != null && packagesForUid.length != 0)
@@ -61,7 +66,15 @@ public class AccountContentProvider extends ContentProvider {
         }
         if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method) && AuthConstants.DEFAULT_ACCOUNT_TYPE.equals(arg)) {
             Bundle result = new Bundle();
-            result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, AccountManager.get(getContext()).getAccountsByType(arg));
+            AccountManager am = AccountManager.get(getContext());
+            Account[] accounts = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                accounts = am.getAccountsByTypeForPackage(arg, packageName);
+            }
+            if (accounts == null || accounts.length == 0) {
+                accounts = am.getAccountsByType(arg);
+            }
+            result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
             return result;
         } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method)) {
             Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
