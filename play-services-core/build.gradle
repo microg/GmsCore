@@ -77,10 +77,12 @@ def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').
 def gitBeta = (gitCommitCount > 0 ? "-beta" : "")
 def gitDirty = (gitCommitCount > 0 && execResult('git', 'status', '--porcelain').size() > 0 ? "-dirty" : "")
 
+def buildMapsCore = (useMapbox() ? "-mapbox" : "-vtm")
+
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
 def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') - 1).replaceAll('\\.',''))
 def ourVersionCode = Integer.parseInt("$gmsVersionCode" + "$ourVersionMinor" + (gitCommitCount > 9 ? "$gitCommitCount" : "0$gitCommitCount"))
-def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 ? "$gitBeta" + "-$gitCommitCount$gitCommitSuffix" : "") + " ($gitCommitId$gitDirty)"
+def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 ? "$gitBeta" + "-$gitCommitCount$gitCommitSuffix" : "") + " ($gitCommitId$buildMapsCore$gitDirty)"
 
 logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
 
