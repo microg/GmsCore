@@ -37,6 +37,7 @@ import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
 import org.microg.gms.common.PackageUtils;
+import org.microg.tools.CondLog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
-        Log.d(TAG, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
+        CondLog.print(TAG, Log.DEBUG, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
 
         /*
          * TODO: This scope seems to be invalid (according to https://developers.google.com/oauthplayground/),
