@@ -30,7 +30,7 @@ public class CondLog
 
 	// special log level only for use with auth tokens
 	// and other privacy-sensitive information
-	public static final int DEBUG_SAFE = 42;
+	public static final int DEBUG_SENSITIVE = 42;
 
 	public static boolean isLoggable(String tag, final int level)
 	{
@@ -47,7 +47,7 @@ public class CondLog
 			tag = tag.substring(0, 22);
 		}
 
-		if (! BuildConfig.DEBUG && level == DEBUG_SAFE) {
+		if (! BuildConfig.DEBUG && level == DEBUG_SENSITIVE) {
 			return false;
 		} else {
 			return Log.isLoggable(tag, level);
@@ -89,7 +89,7 @@ public class CondLog
 				case Log.ASSERT:
 					Log.wtf(tag, msg, tr);
 					break;
-				case DEBUG_SAFE:
+				case DEBUG_SENSITIVE:
 					Log.d(tag, msg, tr);
 					break;
 			}
@@ -130,7 +130,7 @@ public class CondLog
 				case Log.ASSERT:
 					Log.wtf(tag, msg);
 					break;
-				case DEBUG_SAFE:
+				case DEBUG_SENSITIVE:
 					Log.d(tag, msg);
 					break;
 			}

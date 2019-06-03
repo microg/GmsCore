@@ -80,7 +80,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
-        CondLog.print(TAG, CondLog.DEBUG_SAFE, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
+        CondLog.print(TAG, CondLog.DEBUG_SENSITIVE, "getToken: account:" + accountName + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
 
         /*
          * TODO: This scope seems to be invalid (according to https://developers.google.com/oauthplayground/),
