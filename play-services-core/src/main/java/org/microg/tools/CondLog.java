@@ -17,6 +17,7 @@
 package org.microg.tools;
 
 import android.util.Log;
+import com.google.android.gms.BuildConfig;
 
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -26,6 +27,10 @@ public class CondLog
 	private CondLog()
 	{
 	}
+
+	// special log level only for use with auth tokens
+	// and other privacy-sensitive information
+	public static final int DEBUG_SAFE = 42;
 
 	public static boolean isLoggable(String tag, final int level)
 	{
@@ -42,7 +47,11 @@ public class CondLog
 			tag = tag.substring(0, 22);
 		}
 
-		return Log.isLoggable(tag, level);
+		if (! BuildConfig.DEBUG && level == DEBUG_SAFE) {
+			return false;
+		} else {
+			return Log.isLoggable(tag, level);
+		}
 	}
 
 	/**
@@ -62,9 +71,6 @@ public class CondLog
 		if (isLoggable(tag, level))
 		{
 			switch (level) {
-				case Log.ASSERT:
-					Log.wtf(tag, msg, tr);
-					break;
 				case Log.VERBOSE:
 					Log.v(tag, msg, tr);
 					break;
@@ -79,6 +85,12 @@ public class CondLog
 					break;
 				case Log.ERROR:
 					Log.e(tag, msg, tr);
+					break;
+				case Log.ASSERT:
+					Log.wtf(tag, msg, tr);
+					break;
+				case DEBUG_SAFE:
+					Log.d(tag, msg, tr);
 					break;
 			}
 		}
@@ -100,9 +112,6 @@ public class CondLog
 		if (isLoggable(tag, level))
 		{
 			switch (level) {
-				case Log.ASSERT:
-					Log.wtf(tag, msg);
-					break;
 				case Log.VERBOSE:
 					Log.v(tag, msg);
 					break;
@@ -117,6 +126,12 @@ public class CondLog
 					break;
 				case Log.ERROR:
 					Log.e(tag, msg);
+					break;
+				case Log.ASSERT:
+					Log.wtf(tag, msg);
+					break;
+				case DEBUG_SAFE:
+					Log.d(tag, msg);
 					break;
 			}
 		}
