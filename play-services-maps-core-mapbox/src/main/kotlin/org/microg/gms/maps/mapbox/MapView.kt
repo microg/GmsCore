@@ -35,7 +35,7 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
         this.options = options ?: GoogleMapOptions()
     }
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         map = GoogleMapImpl(context, options)
         map?.onCreate(savedInstanceState)
     }

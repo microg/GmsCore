@@ -46,14 +46,14 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         }
     }
 
-    override fun onCreateView(layoutInflater: IObjectWrapper, container: IObjectWrapper, savedInstanceState: Bundle): IObjectWrapper {
+    override fun onCreateView(layoutInflater: IObjectWrapper, container: IObjectWrapper, savedInstanceState: Bundle?): IObjectWrapper {
         if (map == null) {
             map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
             map!!.onCreate(savedInstanceState)
             return ObjectWrapper.wrap(map!!.view)
         } else {
             val view = map!!.view
-            val parent = view?.parent as ViewGroup
+            val parent = view.parent as ViewGroup
             parent.removeView(view)
             return ObjectWrapper.wrap(view)
         }

@@ -360,8 +360,8 @@ class GoogleMapImpl(private val context: Context, private val options: GoogleMap
         cameraIdleListener = listener
     }
 
-    fun onCreate(savedInstanceState: Bundle) {
-        mapView?.onCreate(savedInstanceState.toMapbox())
+    fun onCreate(savedInstanceState: Bundle?) {
+        mapView?.onCreate(savedInstanceState?.toMapbox())
         mapView?.getMapAsync(this::initMap)
     }
 
