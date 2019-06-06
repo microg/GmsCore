@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <permissions>
+        <privapp-permissions package="com.google.android.gms">
+            <permission name="android.permission.FAKE_PACKAGE_SIGNATURE"/>
+            <permission name="android.permission.INSTALL_LOCATION_PROVIDER"/>
+            <permission name="android.permission.LOCATION_HARDWARE"/>
+            <permission name="android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST"/>
+        </privapp-permissions>
+    </permissions>
