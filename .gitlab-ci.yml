@@ -1,0 +1,49 @@
+image: openjdk:8-jdk
+
+variables:
+  ANDROID_COMPILE_SDK: "27"
+  ANDROID_BUILD_TOOLS: "28.0.3"
+  ANDROID_SDK_TOOLS:   "4333796"
+
+before_script:
+  - git submodule update --recursive --init
+  - apt-get --quiet update --yes
+  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 screenfetch
+  - screenfetch
+  - export ANDROID_HOME=$PWD/android-sdk-linux
+  - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+  - echo "sdk.dir=$ANDROID_HOME" > local.properties
+  - echo "sdk-location=$ANDROID_HOME" >> local.properties
+  - chmod +x ./gradlew
+
+stages:
+  - build
+  - sign
+
+assembleRelease:
+  stage: build
+  script:
+    - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip
+    - unzip -d android-sdk-linux android-sdk.zip
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" > /dev/null
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" > /dev/null
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" > /dev/null
+    - set +o pipefail
+    - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+    - set -o pipefail
+    - ./gradlew build
+  artifacts:
+      untracked: true
+      
+signRelease:
+    stage: sign
+    dependencies:
+     - assembleRelease
+    script:
+     - mkdir outputs
+     - echo "${KEYSTORE}" | base64 -d - > microg.jks
+     - jarsigner -keystore microg.jks ./play-services-core/build/outputs/apk/release/play-services-core-release-unsigned.apk -storepass "${KEYSTORE_PASSWORD}" -keypass "${KEY_PASSWORD}" "${KEYSTORE_ALIAS}" --signedjar org.microg.gms.apk 
+     - ${ANDROID_HOME}/build-tools/${ANDROID_BUILD_TOOLS}/zipalign -v 4 org.microg.gms.apk outputs/microg_gmscore.apk
+    artifacts:
+       paths:
+          - outputs
