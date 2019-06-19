@@ -2,7 +2,7 @@ diff --git a/core/res/AndroidManifest.xml b/core/res/AndroidManifest.xml
 index 66c497e9977..c1b2e703109 100644
 --- a/core/res/AndroidManifest.xml
 +++ b/core/res/AndroidManifest.xml
-@@ -2341,6 +2341,13 @@
+@@ -2344,6 +2344,13 @@
          android:description="@string/permdesc_getPackageSize"
          android:protectionLevel="normal" />
  
@@ -20,7 +20,7 @@ diff --git a/core/res/res/values/config.xml b/core/res/res/values/config.xml
 index 0b5dd7e70e8..bbdba64f2ba 100644
 --- a/core/res/res/values/config.xml
 +++ b/core/res/res/values/config.xml
-@@ -1650,6 +1650,8 @@
+@@ -1714,6 +1714,8 @@
      <string-array name="config_locationProviderPackageNames" translatable="false">
          <!-- The standard AOSP fused location provider -->
          <item>com.android.location.fused</item>
