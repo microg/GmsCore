@@ -64,6 +64,14 @@ public class PackageUtils {
 
     public static boolean isGooglePackage(Context context, String packageName) {
         String signatureDigest = firstSignatureDigest(context, packageName);
+        return isGooglePackage(packageName, signatureDigest);
+    }
+
+    public static boolean isGooglePackage(String packageName, byte[] bytes) {
+        return isGooglePackage(packageName, sha1sum(bytes));
+    }
+
+    public static boolean isGooglePackage(String packageName, String signatureDigest) {
         if (signatureDigest == null) return false;
         if (Arrays.asList(GOOGLE_PRIMARY_KEYS).contains(signatureDigest)) return true;
         if (!KNOWN_GOOGLE_PACKAGES.containsKey(packageName)) return false;
@@ -162,13 +170,13 @@ public class PackageUtils {
                     packageName = packagesForUid[0];
                 } else if (Arrays.asList(packagesForUid).contains(suggestedPackageName)) {
                     packageName = suggestedPackageName;
-                } else if (suggestedPackageName == null) {
+                } else {
                     packageName = packagesForUid[0];
                 }
             }
         }
         if (packageName != null && suggestedPackageName != null && !packageName.equals(suggestedPackageName)) {
-            throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + packageName + "]");
+            throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + suggestedPackageName + "] (seems to be " + packageName + ")");
         }
         return packageName;
     }

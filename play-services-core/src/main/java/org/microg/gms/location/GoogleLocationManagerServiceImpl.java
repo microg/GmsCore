@@ -306,7 +306,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     @Override
     public void requestLocationSettingsDialog(LocationSettingsRequest settingsRequest, ISettingsCallbacks callback, String packageName) throws RemoteException {
         Log.d(TAG, "requestLocationSettingsDialog: " + settingsRequest);
-        PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
+        PackageUtils.getAndCheckCallingPackage(context, packageName);
         callback.onLocationSettingsResult(new LocationSettingsResult(new LocationSettingsStates(true, true, false, true, true, false), Status.CANCELED));
     }
 
