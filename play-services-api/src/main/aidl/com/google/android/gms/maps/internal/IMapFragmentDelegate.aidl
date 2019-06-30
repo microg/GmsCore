@@ -20,4 +20,8 @@ interface IMapFragmentDelegate {
     void onSaveInstanceState(inout Bundle outState);
     boolean isReady();
     void getMapAsync(IOnMapReadyCallback callback);
+    void onEnterAmbient(in Bundle bundle);
+    void onExitAmbient();
+    void onStart();
+    void onStop();
 }

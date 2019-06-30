@@ -16,4 +16,8 @@ interface IMapViewDelegate {
     void onSaveInstanceState(inout Bundle outState);
     IObjectWrapper getView();
     void getMapAsync(IOnMapReadyCallback callback);
+    void onEnterAmbient(in Bundle bundle);
+    void onExitAmbient();
+    void onStart();
+    void onStop();
 }

@@ -16,4 +16,10 @@ interface IUiSettingsDelegate {
     boolean isZoomGesturesEnabled();
     boolean isTiltGesturesEnabled();
     boolean isRotateGesturesEnabled();
+    void setIndoorLevelPickerEnabled(boolean indoorLevelPicker);
+    boolean isIndoorLevelPickerEnabled();
+    void setMapToolbarEnabled(boolean mapToolbar);
+    boolean isMapToolbarEnabled();
+    void setScrollGesturesEnabledDuringRotateOrZoom(boolean scrollDuringZoom);
+    boolean isScrollGesturesEnabledDuringRotateOrZoom();
 }

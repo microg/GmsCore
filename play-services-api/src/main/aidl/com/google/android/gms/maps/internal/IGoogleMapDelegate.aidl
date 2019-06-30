@@ -25,6 +25,7 @@ import com.google.android.gms.maps.internal.IOnMyLocationButtonClickListener;
 import com.google.android.gms.maps.internal.ISnapshotReadyCallback;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -53,7 +54,6 @@ interface IGoogleMapDelegate {
     IMarkerDelegate addMarker(in MarkerOptions options) = 10;
     IGroundOverlayDelegate addGroundOverlay(in GroundOverlayOptions options) = 11;
     ITileOverlayDelegate addTileOverlay(in TileOverlayOptions options) = 12;
-    ICircleDelegate addCircle(in CircleOptions options) = 34;
 
     void clear() = 13;
 
@@ -82,6 +82,8 @@ interface IGoogleMapDelegate {
 
     IObjectWrapper getTestingHelper() = 33;
 
+    ICircleDelegate addCircle(in CircleOptions options) = 34;
+
     void setOnMyLocationChangeListener(IOnMyLocationChangeListener listener) = 35;
     void setOnMyLocationButtonClickListener(IOnMyLocationButtonClickListener listener) = 36;
 
@@ -94,17 +96,29 @@ interface IGoogleMapDelegate {
 
     void setOnMapLoadedCallback(IOnMapLoadedCallback callback) = 41;
 
-    //IIndoorBuildingDelegate getIndoorBuilding() = 43;
+    //IIndoorBuildingDelegate getFocusedBuilding() = 43;
     //void setIndoorStateChangeListener(IOnIndoorStateChangeListener listener) = 44;
 
-    //void a(boolean a) = 50;
+    void setWatermarkEnabled(boolean watermark) = 50;
 
-    //void setOnMapReadyCallback(IOnMapReadyCallback callback) = 52;
+    //void getMapAsync(IOnMapReadyCallback callback) = 52;
+    void onCreate(in Bundle savedInstanceState) = 53;
+    void onResume() = 54;
+    void onPause() = 55;
+    void onDestroy() = 56;
+    void onLowMemory() = 57;
+    boolean useViewLifecycleWhenInFragment() = 58;
+    void onSaveInstanceState(out Bundle outState) = 59;
 
-    //void setSnapshotReadyCallback(ISnapshotReadyCallback callback) = 70;
+    void setContentDescription(String desc) = 60;
+
+    //void snapshotForTest(ISnapshotReadyCallback callback) = 70;
 
     //void setPoiClickListener(IOnPoiClickListener listener) = 79;
+    void onEnterAmbient(in Bundle bundle) = 80;
+    void onExitAmbient() = 81;
 
+    //void setOnGroundOverlayClickListener(IOnGroundOverlayClickListener listener) = 82;
     //void setInfoWindowLongClickListener(IOnInfoWindowLongClickListener listener) = 83;
     //void setPolygonClickListener(IOnPolygonClickListener listener) = 84;
     //void setInfoWindowCloseListener(IOnInfoWindowCloseListener listener) = 85;
@@ -112,11 +126,18 @@ interface IGoogleMapDelegate {
     //void setCircleClickListener(IOnCircleClickListener listener) = 88;
 
     //boolean setMapStyle(in MapStyleOptions options) = 90;
-
-    //void setBounds(in LatLngBounds bounds) = 94;
+    void setMinZoomPreference(float minZoom) = 91;
+    void setMaxZoomPreference(float maxZoom) = 92;
+    void resetMinMaxZoomPreference() = 93;
+    void setLatLngBoundsForCameraTarget(in LatLngBounds bounds) = 94;
 
     void setCameraMoveStartedListener(IOnCameraMoveStartedListener listener) = 95;
     void setCameraMoveListener(IOnCameraMoveListener listener) = 96;
     void setCameraMoveCanceledListener(IOnCameraMoveCanceledListener listener) = 97;
     void setCameraIdleListener(IOnCameraIdleListener listener) = 98;
+
+    void onStart() = 100;
+    void onStop() = 101;
+
+    //void setOnMyLocationClickListener(IOnMyLocationClickListener listener) = 106;
 }
