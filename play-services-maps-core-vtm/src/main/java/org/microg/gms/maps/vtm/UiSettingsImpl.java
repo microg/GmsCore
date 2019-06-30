@@ -28,6 +28,9 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     private boolean tiltGesturesEnabled = true;
     private boolean rotateGesturesEnabled = true;
     private boolean allGesturesEnabled = true;
+    private boolean indoorLevelPickerEnabled = false;
+    private boolean mapToolbarEnabled = false;
+    private boolean scrollGesturesEnabledDuringRotateOrZoom = true;
     
     private UiSettingsListener listener;
 
@@ -127,7 +130,40 @@ public class UiSettingsImpl extends IUiSettingsDelegate.Stub {
     public boolean isRotateGesturesEnabled() throws RemoteException {
         return rotateGesturesEnabled;
     }
-    
+
+    @Override
+    public void setIndoorLevelPickerEnabled(boolean indoorLevelPicker) throws RemoteException {
+        this.indoorLevelPickerEnabled = indoorLevelPicker;
+        listener.onUiSettingsChanged(this);
+    }
+
+    @Override
+    public boolean isIndoorLevelPickerEnabled() throws RemoteException {
+        return indoorLevelPickerEnabled;
+    }
+
+    @Override
+    public void setMapToolbarEnabled(boolean mapToolbar) throws RemoteException {
+        this.mapToolbarEnabled = mapToolbar;
+        listener.onUiSettingsChanged(this);
+    }
+
+    @Override
+    public boolean isMapToolbarEnabled() throws RemoteException {
+        return mapToolbarEnabled;
+    }
+
+    @Override
+    public void setScrollGesturesEnabledDuringRotateOrZoom(boolean scrollDuringZoom) throws RemoteException {
+        this.scrollGesturesEnabledDuringRotateOrZoom = scrollDuringZoom;
+        listener.onUiSettingsChanged(this);
+    }
+
+    @Override
+    public boolean isScrollGesturesEnabledDuringRotateOrZoom() throws RemoteException {
+        return scrollGesturesEnabledDuringRotateOrZoom;
+    }
+
     public static interface UiSettingsListener {
         void onUiSettingsChanged(UiSettingsImpl settings) throws RemoteException;
     }

@@ -30,16 +30,21 @@ import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 
 class ProjectionImpl(private val projection: Projection) : IProjectionDelegate.Stub() {
+    private val visibleRegion = projection.visibleRegion
+    private val farLeft = projection.toScreenLocation(visibleRegion.farLeft)
+    private val farRight = projection.toScreenLocation(visibleRegion.farRight)
+    private val nearLeft = projection.toScreenLocation(visibleRegion.nearLeft)
+    private val nearRight = projection.toScreenLocation(visibleRegion.nearRight)
+
     override fun fromScreenLocation(obj: IObjectWrapper?): LatLng? =
             obj.unwrap<Point>()?.let { projection.fromScreenLocation(PointF(it)) }?.toGms()
 
-    override fun toScreenLocation(latLng: LatLng?): IObjectWrapper =
-            ObjectWrapper.wrap(latLng?.toMapbox()?.let { projection.toScreenLocation(it) }?.let { Point(it.x.toInt(), it.y.toInt()) })
-
-    override fun getVisibleRegion(): VisibleRegion = try {
-        projection.visibleRegion.toGms()
+    override fun toScreenLocation(latLng: LatLng?): IObjectWrapper = try {
+        ObjectWrapper.wrap(latLng?.toMapbox()?.let { projection.toScreenLocation(it) }?.let { Point(it.x.toInt(), it.y.toInt()) })
     } catch (e: Exception) {
-        VisibleRegion(LatLngBounds(LatLng(0.0, 0.0), LatLng(0.0, 0.0)))
+        ObjectWrapper.wrap(Point(0, 0))
     }
+
+    override fun getVisibleRegion(): VisibleRegion = visibleRegion.toGms()
 
 }

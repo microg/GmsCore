@@ -37,10 +37,13 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
     }
 
     fun registerMap(map: MapboxMap) {
+        Log.d(TAG, "registerMap")
         map.getStyle {
-            it.addImages(bitmaps)
-            maps.add(map)
+            synchronized(bitmaps) {
+                it.addImages(bitmaps)
+            }
         }
+        maps.add(map)
     }
 
     fun unregisterMap(map: MapboxMap?) {
@@ -53,9 +56,12 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
                     ?: floatArrayOf(0f, 0f)
 
     private fun registerBitmap(id: String, bitmapCreator: () -> Bitmap?) {
-        if (bitmaps.contains(id)) return
-        val bitmap = bitmapCreator() ?: return
-        bitmaps[id] = bitmap
+        val bitmap = synchronized(bitmaps) {
+            if (bitmaps.contains(id)) return
+            val bitmap = bitmapCreator() ?: return
+            bitmaps[id] = bitmap
+            bitmap
+        }
         for (map in maps) {
             map.getStyle { it.addImage(id, bitmap) }
         }

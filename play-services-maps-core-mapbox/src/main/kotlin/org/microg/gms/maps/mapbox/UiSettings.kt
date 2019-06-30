@@ -78,6 +78,33 @@ class UiSettingsImpl(private val uiSettings: UiSettings) : IUiSettingsDelegate.S
 
     override fun isRotateGesturesEnabled(): Boolean = uiSettings.isRotateGesturesEnabled
 
+    override fun setIndoorLevelPickerEnabled(indoorLevelPicker: Boolean) {
+        Log.d(TAG, "unimplemented Method: setIndoorLevelPickerEnabled")
+    }
+
+    override fun isIndoorLevelPickerEnabled(): Boolean {
+        Log.d(TAG, "unimplemented Method: isIndoorLevelPickerEnabled")
+        return false
+    }
+
+    override fun setMapToolbarEnabled(mapToolbar: Boolean) {
+        Log.d(TAG, "unimplemented Method: setMapToolbarEnabled")
+    }
+
+    override fun isMapToolbarEnabled(): Boolean {
+        Log.d(TAG, "unimplemented Method: isMapToolbarEnabled")
+        return false
+    }
+
+    override fun setScrollGesturesEnabledDuringRotateOrZoom(scrollDuringZoom: Boolean) {
+        Log.d(TAG, "unimplemented Method: setScrollGesturesEnabledDuringRotateOrZoom")
+    }
+
+    override fun isScrollGesturesEnabledDuringRotateOrZoom(): Boolean {
+        Log.d(TAG, "unimplemented Method: isScrollGesturesEnabledDuringRotateOrZoom")
+        return true
+    }
+
     override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
                 true

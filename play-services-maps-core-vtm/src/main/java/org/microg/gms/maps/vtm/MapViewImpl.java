@@ -123,6 +123,26 @@ public class MapViewImpl extends IMapViewDelegate.Stub {
     }
 
     @Override
+    public void onEnterAmbient(Bundle bundle) throws RemoteException {
+        map.onEnterAmbient(bundle);
+    }
+
+    @Override
+    public void onExitAmbient() throws RemoteException {
+        map.onExitAmbient();
+    }
+
+    @Override
+    public void onStart() throws RemoteException {
+        map.onStart();
+    }
+
+    @Override
+    public void onStop() throws RemoteException {
+        map.onStop();
+    }
+
+    @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
         if (super.onTransact(code, data, reply, flags)) return true;
         Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);

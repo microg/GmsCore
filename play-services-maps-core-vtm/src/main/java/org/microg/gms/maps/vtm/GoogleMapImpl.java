@@ -57,6 +57,7 @@ import com.google.android.gms.maps.internal.IUiSettingsDelegate;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -155,7 +156,7 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     private void initFromOptions() {
         try {
-            uiSettings.setCompassEnabled(options.isCompassEnabled());
+            uiSettings.setCompassEnabled(options.getCompassEnabled());
             uiSettings.setRotateGesturesEnabled(options.isRotateGesturesEnabled());
             uiSettings.setTiltGesturesEnabled(options.isTiltGesturesEnabled());
             uiSettings.setScrollGesturesEnabled(options.isScrollGesturesEnabled());
@@ -171,6 +172,66 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
 
     public void onDestroy() {
         backendMap.destroy();
+    }
+
+    @Override
+    public void onLowMemory() throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onLowMemory");
+
+    }
+
+    @Override
+    public boolean useViewLifecycleWhenInFragment() throws RemoteException {
+        Log.d(TAG, "unimplemented Method: useViewLifecycleWhenInFragment");
+        return false;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onSaveInstanceState");
+
+    }
+
+    @Override
+    public void setContentDescription(String desc) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setContentDescription");
+
+    }
+
+    @Override
+    public void onEnterAmbient(Bundle bundle) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onEnterAmbient");
+
+    }
+
+    @Override
+    public void onExitAmbient() throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onExitAmbient");
+
+    }
+
+    @Override
+    public void setMinZoomPreference(float minZoom) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setMinZoomPreference");
+
+    }
+
+    @Override
+    public void setMaxZoomPreference(float maxZoom) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setMaxZoomPreference");
+
+    }
+
+    @Override
+    public void resetMinMaxZoomPreference() throws RemoteException {
+        Log.d(TAG, "unimplemented Method: resetMinMaxZoomPreference");
+
+    }
+
+    @Override
+    public void setLatLngBoundsForCameraTarget(LatLngBounds bounds) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setLatLngBoundsForCameraTarget");
+
     }
 
     public void onResume() {
@@ -557,6 +618,18 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     }
 
     @Override
+    public void setWatermarkEnabled(boolean watermark) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setWatermarkEnabled");
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onCreate");
+
+    }
+
+    @Override
     public void setCameraMoveStartedListener(IOnCameraMoveStartedListener listener) throws RemoteException {
         Log.d(TAG, "unimplemented Method: setCameraMoveStartedListener");
 
@@ -577,6 +650,18 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     @Override
     public void setCameraIdleListener(IOnCameraIdleListener listener) throws RemoteException {
         Log.d(TAG, "unimplemented Method: setCameraIdleListener");
+
+    }
+
+    @Override
+    public void onStart() throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onStart");
+
+    }
+
+    @Override
+    public void onStop() throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onStop");
 
     }
     

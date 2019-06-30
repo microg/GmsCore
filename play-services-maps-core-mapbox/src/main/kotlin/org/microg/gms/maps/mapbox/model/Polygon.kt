@@ -19,39 +19,57 @@ package org.microg.gms.maps.mapbox.model
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.internal.IPolylineDelegate
-import com.mapbox.mapboxsdk.plugins.annotation.Line
+import com.google.android.gms.maps.model.internal.IPolygonDelegate
+import com.mapbox.mapboxsdk.plugins.annotation.Fill
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 
-class PolylineImpl(private val map: GoogleMapImpl, private val line: Line) : IPolylineDelegate.Stub() {
+class PolygonImpl(private val map: GoogleMapImpl, private val fill: Fill) : IPolygonDelegate.Stub() {
     override fun remove() {
-        map.lineManager?.delete(line)
+        map.fillManager?.delete(fill)
     }
 
-    override fun getId(): String = "l" + line.id.toString()
+    override fun getId(): String = "p" + fill.id.toString()
 
     override fun setPoints(points: List<LatLng>) {
-        line.latLngs = points.map { it.toMapbox() }
-        map.lineManager?.update(line)
+        fill.latLngs = listOf(points.map { it.toMapbox() })
+        map.fillManager?.update(fill)
     }
 
-    override fun getPoints(): List<LatLng> = line.latLngs.map { it.toGms() }
+    override fun getPoints(): List<LatLng> = fill.latLngs[0]?.map { it.toGms() } ?: emptyList()
 
-    override fun setWidth(width: Float) {
-        line.lineWidth = width / map.dpiFactor
-        map.lineManager?.update(line)
+    override fun setHoles(holes: List<Any?>?) {
+        Log.d(TAG, "unimplemented Method: setHoles")
     }
 
-    override fun getWidth(): Float = line.lineWidth * map.dpiFactor
-
-    override fun setColor(color: Int) {
-        line.setLineColor(color)
-        map.lineManager?.update(line)
+    override fun getHoles(): List<Any?> {
+        Log.d(TAG, "unimplemented Method: getHoles")
+        return emptyList()
     }
 
-    override fun getColor(): Int = line.lineColorAsInt
+    override fun setStrokeWidth(width: Float) {
+        Log.d(TAG, "unimplemented Method: setStrokeWidth")
+    }
+
+    override fun getStrokeWidth(): Float {
+        Log.d(TAG, "unimplemented Method: getStrokeWidth")
+        return 0f
+    }
+
+    override fun setStrokeColor(color: Int) {
+        fill.setFillOutlineColor(color)
+        map.fillManager?.update(fill)
+    }
+
+    override fun getStrokeColor(): Int = fill.fillOutlineColorAsInt
+
+    override fun setFillColor(color: Int) {
+        fill.setFillColor(color)
+        map.fillManager?.update(fill)
+    }
+
+    override fun getFillColor(): Int = fill.fillColorAsInt
 
     override fun setZIndex(zIndex: Float) {
         Log.d(TAG, "unimplemented Method: setZIndex")
@@ -63,11 +81,11 @@ class PolylineImpl(private val map: GoogleMapImpl, private val line: Line) : IPo
     }
 
     override fun setVisible(visible: Boolean) {
-        line.lineOpacity = if (visible) 1f else 0f
-        map.lineManager?.update(line)
+        fill.fillOpacity = if (visible) 1f else 0f
+        map.fillManager?.update(fill)
     }
 
-    override fun isVisible(): Boolean = line.lineOpacity != 0f
+    override fun isVisible(): Boolean = fill.fillOpacity != 0f
 
     override fun setGeodesic(geod: Boolean) {
         Log.d(TAG, "unimplemented Method: setGeodesic")
@@ -78,13 +96,13 @@ class PolylineImpl(private val map: GoogleMapImpl, private val line: Line) : IPo
         return false
     }
 
-    override fun equalsRemote(other: IPolylineDelegate?): Boolean = equals(other)
+    override fun equalsRemote(other: IPolygonDelegate?): Boolean = equals(other)
 
     override fun hashCodeRemote(): Int = hashCode()
 
     override fun equals(other: Any?): Boolean {
-        if (other is PolylineImpl) {
-            return other.line == line
+        if (other is PolygonImpl) {
+            return other.fill == fill
         }
         return false
     }
@@ -97,6 +115,6 @@ class PolylineImpl(private val map: GoogleMapImpl, private val line: Line) : IPo
             }
 
     companion object {
-        private val TAG = "GmsMapPolyline"
+        private val TAG = "GmsMapPolygon"
     }
 }

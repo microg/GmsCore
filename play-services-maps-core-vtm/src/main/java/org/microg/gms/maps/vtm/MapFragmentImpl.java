@@ -126,6 +126,26 @@ public class MapFragmentImpl extends IMapFragmentDelegate.Stub {
     }
 
     @Override
+    public void onEnterAmbient(Bundle bundle) throws RemoteException {
+        map.onEnterAmbient(bundle);
+    }
+
+    @Override
+    public void onExitAmbient() throws RemoteException {
+        map.onExitAmbient();
+    }
+
+    @Override
+    public void onStart() throws RemoteException {
+        map.onStart();
+    }
+
+    @Override
+    public void onStop() throws RemoteException {
+        map.onStop();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) throws RemoteException {
         Log.d(TAG, "onSaveInstanceState: " + outState);
         //myMap().onSaveInstanceState(outState);

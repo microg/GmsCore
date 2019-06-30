@@ -19,7 +19,9 @@ package org.microg.gms.maps.mapbox
 import android.app.Activity
 import android.os.Bundle
 import android.os.Parcel
+import android.util.Base64
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
@@ -34,32 +36,42 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
     private var options: GoogleMapOptions? = null
 
     override fun onInflate(activity: IObjectWrapper, options: GoogleMapOptions, savedInstanceState: Bundle) {
+        Log.d(TAG, "onInflate: ${options.camera.target}")
         this.options = options
+        map?.options = options
     }
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         if (options == null) {
-            options = savedInstanceState.getParcelable("MapOptions")
+            options = savedInstanceState?.getParcelable("MapOptions")
         }
         if (options == null) {
             options = GoogleMapOptions()
         }
+        Log.d(TAG, "onCreate: ${options?.camera?.target}")
+        map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
     }
 
     override fun onCreateView(layoutInflater: IObjectWrapper, container: IObjectWrapper, savedInstanceState: Bundle?): IObjectWrapper {
+        if (options == null) {
+            options = savedInstanceState?.getParcelable("MapOptions")
+        }
+        Log.d(TAG, "onCreateView: ${options?.camera?.target}")
         if (map == null) {
             map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
-            map!!.onCreate(savedInstanceState)
-            return ObjectWrapper.wrap(map!!.view)
-        } else {
-            val view = map!!.view
-            val parent = view.parent as ViewGroup
-            parent.removeView(view)
-            return ObjectWrapper.wrap(view)
         }
+        map!!.onCreate(savedInstanceState)
+        val view = map!!.view
+        val parent = view.parent as ViewGroup?
+        parent?.removeView(view)
+        return ObjectWrapper.wrap(view)
     }
 
     override fun getMap(): IGoogleMapDelegate? = map
+    override fun onEnterAmbient(bundle: Bundle?) = map?.onEnterAmbient(bundle) ?: Unit
+    override fun onExitAmbient() = map?.onExitAmbient() ?: Unit
+    override fun onStart() = map?.onStart() ?: Unit
+    override fun onStop() = map?.onStop() ?: Unit
     override fun onResume() = map?.onResume() ?: Unit
     override fun onPause() = map?.onPause() ?: Unit
     override fun onLowMemory() = map?.onLowMemory() ?: Unit
@@ -84,12 +96,14 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         map?.onSaveInstanceState(outState)
     }
 
-    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
-            if (super.onTransact(code, data, reply, flags)) {
-                true
-            } else {
-                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-            }
+    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean {
+        if (super.onTransact(code, data, reply, flags)) {
+            return true
+        } else {
+            Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
+            return false
+        }
+    }
 
     companion object {
         private val TAG = "GmsMapFragment"

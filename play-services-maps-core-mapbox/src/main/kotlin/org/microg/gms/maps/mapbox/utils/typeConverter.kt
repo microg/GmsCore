@@ -17,6 +17,7 @@
 package org.microg.gms.maps.mapbox.utils
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.gms.maps.internal.ICancelableCallback
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.MarkerOptions

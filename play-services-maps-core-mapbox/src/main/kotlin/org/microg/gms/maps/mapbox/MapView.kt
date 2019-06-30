@@ -28,25 +28,28 @@ import com.google.android.gms.maps.internal.IMapViewDelegate
 import com.google.android.gms.maps.internal.IOnMapReadyCallback
 
 class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IMapViewDelegate.Stub() {
-    private val options: GoogleMapOptions
+
+    private val options: GoogleMapOptions = options ?: GoogleMapOptions()
     private var map: GoogleMapImpl? = null
 
-    init {
-        this.options = options ?: GoogleMapOptions()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate: ${options?.camera?.target}")
         map = GoogleMapImpl(context, options)
-        map?.onCreate(savedInstanceState)
+        map!!.onCreate(savedInstanceState)
     }
 
     override fun getMap(): IGoogleMapDelegate? = map
+    override fun onEnterAmbient(bundle: Bundle?) = map?.onEnterAmbient(bundle) ?: Unit
+    override fun onExitAmbient() = map?.onExitAmbient() ?: Unit
+    override fun onStart() = map?.onStart() ?: Unit
+    override fun onStop() = map?.onStop() ?: Unit
     override fun onResume() = map?.onResume() ?: Unit
     override fun onPause() = map?.onPause() ?: Unit
     override fun onDestroy() {
         map?.onDestroy()
         map = null
     }
+
     override fun onLowMemory() = map?.onLowMemory() ?: Unit
     override fun onSaveInstanceState(outState: Bundle) = map?.onSaveInstanceState(outState) ?: Unit
     override fun getView(): IObjectWrapper = ObjectWrapper.wrap(map?.view)
