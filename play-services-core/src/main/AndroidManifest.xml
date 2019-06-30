@@ -664,6 +664,7 @@
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START"/>
                 <action android:name="com.google.android.gms.phenotype.service.START"/>
                 <action android:name="com.google.android.gms.auth.api.credentials.service.START"/>
+                <action android:name="com.google.android.gms.gass.START"/>
             </intent-filter>
         </service>
     </application>

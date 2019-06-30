@@ -16,15 +16,28 @@
 
 package org.microg.gms.people;
 
+import android.accounts.Account;
 import android.app.Service;
+import android.content.AbstractThreadedSyncAdapter;
+import android.content.ContentProviderClient;
 import android.content.Intent;
+import android.content.SyncResult;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 public class ContactSyncService extends Service {
+    private static final String TAG = "GmsContactSync";
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return (new AbstractThreadedSyncAdapter(this, true) {
+            @Override
+            public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+                Log.d(TAG, "unimplemented Method: onPerformSync");
+            }
+        }).getSyncAdapterBinder();
     }
 }

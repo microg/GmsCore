@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -32,7 +33,9 @@ import org.microg.gms.gcm.GcmPrefs;
 import org.microg.tools.ui.Condition;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.GET_ACCOUNTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -61,7 +64,7 @@ public class Conditions {
                 }
             }).build();
 
-    private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
+    private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
     public static final Condition PERMISSIONS = new Condition.Builder()
             .title(R.string.cond_perm_title)
             .summaryPlurals(R.plurals.cond_perm_summary)
@@ -70,9 +73,11 @@ public class Conditions {
                 @Override
                 public boolean isActive(Context context) {
                     count = 0;
-                    for (String permission : REQUIRED_PERMISSIONS) {
-                        if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED)
-                            count++;
+                    if (SDK_INT >= Build.VERSION_CODES.M) {
+                        for (String permission : REQUIRED_PERMISSIONS) {
+                            if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED)
+                                count++;
+                        }
                     }
                     return count > 0;
                 }
