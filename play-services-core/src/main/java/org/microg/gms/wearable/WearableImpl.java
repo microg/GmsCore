@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -87,6 +89,7 @@ public class WearableImpl {
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
+    public Handler networkHandler;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
         this.context = context;
@@ -94,6 +97,11 @@ public class WearableImpl {
         this.configDatabase = configDatabase;
         this.clockworkNodePreferences = new ClockworkNodePreferences(context);
         this.rpcHelper = new RpcHelper(context);
+        new Thread(() -> {
+            Looper.prepare();
+            networkHandler = new Handler(Looper.myLooper());
+            Looper.loop();
+        }).start();
     }
 
     public String getLocalNodeId() {
@@ -618,5 +626,9 @@ public class WearableImpl {
         }
         Log.d(TAG, targetNodeId + " seems not reachable");
         return -1;
+    }
+
+    public void stop() {
+        this.networkHandler.getLooper().quit();
     }
 }

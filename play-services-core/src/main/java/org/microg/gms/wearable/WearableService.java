@@ -16,10 +16,6 @@
 
 package org.microg.gms.wearable;
 
-import android.content.Context;
-import android.os.Binder;
-import android.os.Handler;
-import android.os.Messenger;
 import android.os.RemoteException;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
@@ -31,24 +27,29 @@ import org.microg.gms.common.PackageUtils;
 
 public class WearableService extends BaseService {
 
-    private static WearableImpl wearable;
+    private WearableImpl wearable;
 
     public WearableService() {
         super("GmsWearSvc", GmsService.WEARABLE);
     }
 
-    private synchronized static WearableImpl getWearable(Context appCtx) {
-        if (wearable == null) {
-            ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(appCtx);
-            NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(appCtx);
-            wearable = new WearableImpl(appCtx, nodeDatabaseHelper, configurationDatabaseHelper);
-        }
-        return wearable;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ConfigurationDatabaseHelper configurationDatabaseHelper = new ConfigurationDatabaseHelper(getApplicationContext());
+        NodeDatabaseHelper nodeDatabaseHelper = new NodeDatabaseHelper(getApplicationContext());
+        wearable = new WearableImpl(getApplicationContext(), nodeDatabaseHelper, configurationDatabaseHelper);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        wearable.stop();
     }
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        PackageUtils.checkPackageUid(this, request.packageName, Binder.getCallingUid());
-        callback.onPostInitComplete(0, new WearableServiceImpl(this, getWearable(getApplicationContext()), request.packageName), null);
+        PackageUtils.getAndCheckCallingPackage(this, request.packageName);
+        callback.onPostInitComplete(0, new WearableServiceImpl(this, wearable, request.packageName), null);
     }
 }
