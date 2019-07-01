@@ -76,10 +76,6 @@ public class BackendMapView extends MapView {
                         copyInputStream(zipFile.getInputStream(entry), new FileOutputStream(cacheFile));
                     } else {
                         Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
-                        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                        while (entries.hasMoreElements()) {
-                            Log.d(TAG, "but: " + entries.nextElement());
-                        }
                     }
                 }
                 Log.d(TAG, "Loading vtm-jni from " + cacheFile.getPath());

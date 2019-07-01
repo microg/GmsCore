@@ -42,10 +42,6 @@ class MultiArchLoader(private val mapContext: Context, private val appContext: C
                         copyInputStream(zipFile.getInputStream(entry), FileOutputStream(cacheFile))
                     } else {
                         Log.d(TAG, "Can't load native library: $path does not exist in $apkFile")
-                        val entries = zipFile.entries()
-                        while (entries.hasMoreElements()) {
-                            Log.d(TAG, "but: ${entries.nextElement()}")
-                        }
                     }
                 }
                 Log.d(TAG, "Loading $name from ${cacheFile.getPath()}")
