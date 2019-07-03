@@ -69,6 +69,11 @@ public class PackageUtils {
         return isGooglePackage(packageName, signatureDigest);
     }
 
+    public static boolean isGooglePackage(PackageManager packageManager, String packageName) {
+        String signatureDigest = firstSignatureDigest(packageManager, packageName);
+        return isGooglePackage(packageName, signatureDigest);
+    }
+
     public static boolean isGooglePackage(String packageName, byte[] bytes) {
         return isGooglePackage(packageName, sha1sum(bytes));
     }
@@ -102,7 +107,11 @@ public class PackageUtils {
 
     @Nullable
     public static String firstSignatureDigest(Context context, String packageName) {
-        PackageManager packageManager = context.getPackageManager();
+        return firstSignatureDigest(context.getPackageManager(), packageName);
+    }
+
+    @Nullable
+    public static String firstSignatureDigest(PackageManager packageManager, String packageName) {
         final PackageInfo info;
         try {
             info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);

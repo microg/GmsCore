@@ -16,6 +16,7 @@
 
 package com.google.android.gms.common;
 
+import android.content.pm.PackageManager;
 import android.os.RemoteException;
 import android.support.annotation.Keep;
 import android.util.Log;
@@ -55,6 +56,14 @@ public class GoogleCertificatesImpl extends IGoogleCertificatesApi.Stub  {
 
     @Override
     public boolean isGoogleOrPlatformSigned(GoogleCertificatesQuery query, IObjectWrapper packageManager) throws RemoteException {
-        return PackageUtils.isGooglePackage(query.getPackageName(), query.getCertData().getBytes());
+        PackageManager pm = ObjectWrapper.unwrapTyped(packageManager, PackageManager.class);
+        if (query == null || query.getPackageName() == null) {
+            return false;
+        } else if (query.getCertData() == null) {
+            if (pm == null) return false;
+            return PackageUtils.isGooglePackage(pm, query.getPackageName());
+        } else {
+            return PackageUtils.isGooglePackage(query.getPackageName(), query.getCertData().getBytes());
+        }
     }
 }
