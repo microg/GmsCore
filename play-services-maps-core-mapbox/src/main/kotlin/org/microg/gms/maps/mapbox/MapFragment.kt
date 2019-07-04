@@ -35,8 +35,7 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
     private var map: GoogleMapImpl? = null
     private var options: GoogleMapOptions? = null
 
-    override fun onInflate(activity: IObjectWrapper, options: GoogleMapOptions, savedInstanceState: Bundle) {
-        Log.d(TAG, "onInflate: ${options.camera.target}")
+    override fun onInflate(activity: IObjectWrapper, options: GoogleMapOptions, savedInstanceState: Bundle?) {
         this.options = options
         map?.options = options
     }
@@ -48,7 +47,6 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         if (options == null) {
             options = GoogleMapOptions()
         }
-        Log.d(TAG, "onCreate: ${options?.camera?.target}")
         map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
     }
 

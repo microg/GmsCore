@@ -29,7 +29,10 @@ class MultiArchLoader(private val mapContext: Context, private val appContext: C
     override fun load(name: String) {
         try {
             val otherAppInfo = mapContext.packageManager.getApplicationInfo(appContext.packageName, 0)
-            val primaryCpuAbi = ApplicationInfo::class.java.getField("primaryCpuAbi").get(otherAppInfo) as String?
+            var primaryCpuAbi = ApplicationInfo::class.java.getField("primaryCpuAbi").get(otherAppInfo) as String?
+            if (primaryCpuAbi == "armeabi") {
+                primaryCpuAbi = "armeabi-v7a"
+            }
             if (primaryCpuAbi != null) {
                 val path = "lib/$primaryCpuAbi/lib$name.so"
                 val cacheFile = File("${appContext.cacheDir.absolutePath}/.gmscore/$path")
