@@ -34,6 +34,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +46,7 @@ import javax.net.ssl.SSLContext;
 
 public class ProviderInstallerImpl {
     private static final String TAG = "GmsProviderInstaller";
-    private static final List<String> DISABLED = Collections.singletonList("com.discord");
+    private static final List<String> DISABLED = Collections.unmodifiableList(Arrays.asList("com.discord", "com.bankid.bus"));
 
     public static void insertProvider(Context context) {
         String packageName = PackageUtils.packageFromProcessId(context, Process.myPid());
