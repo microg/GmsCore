@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_settings_name">microG 设置</string>
+    <string name="gms_settings_summary">配置 microG services Core。</string>
+
+    <string name="just_a_sec">请稍后...</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">若继续操作，则代表您同意本应用和 Google 在遵循其服务条款和隐私政策的情况下使用您的个人信息。</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> 将会：</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> 将会使用：</string>
+    <string name="account_manager_title">Google 账号管理器</string>
+    <string name="sorry">抱歉...</string>
+    <string name="auth_before_connect">“一个应用正尝试在您的设备上登录 Google 账号。
+
+如果这是您主动操作，请点击<b>登录</b>按钮以连接到 Google 的登录页面；否则请点击<b>取消</b>以返回调用此对话框的应用。”</string>
+    <string name="auth_sign_in">登录</string>
+    <string name="auth_connecting">“您的设备正在与 Google 的服务器连接以登录账号。
+
+这可能需要一些时间。”</string>
+    <string name="no_network_error_desc">“未连接到互联网。
+
+这可能是个暂时性的问题，或者您的设备无法建立与数据服务的连接。请在连接到移动网络或 Wi-Fi 后重试。”</string>
+    <string name="auth_general_error_desc">“与 Google 的服务器连接时出现问题。
+
+请稍后重试。”</string>
+    <string name="auth_finalize">“您的设备正在与 Google 连接以存储您的账号信息。
+
+这可能需要一些时间。”</string>
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
+    <string name="auth_notification_title">需要授权</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> 需要授权以访问您的 Google 账号。</string>
+
+    <string name="perm_status_broadcast_label">接收内部状态广播</string>
+    <string name="perm_c2dm_receive_label">接收 C2DM 消息</string>
+    <string name="perm_c2dm_send_label">发送 C2DM 消息到其他应用</string>
+    <string name="perm_gtalk_svc_label">从 Google 的服务器交换信息并接收同步通知</string>
+    <string name="perm_extended_access_label">对 Google 服务的额外访问</string>
+
+    <string name="service_name_checkin">Google 设备注册</string>
+    <string name="service_name_mcs">Google 云消息</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+
+    <string name="service_status_disabled">已禁用</string>
+    <string name="service_status_enabled">已启用</string>
+    <string name="service_status_automatic">自动</string>
+    <string name="service_status_manual">手动</string>
+
+    <string name="menu_advanced">高级</string>
+    <string name="list_no_item_none">无</string>
+
+    <string name="games_title">Google Play 游戏</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> 将会使用 Play 游戏</string>
+    <string name="games_info_content">若使用 Play 游戏需要安装 Google Play 游戏应用。该应用也许会在未安装 Play 游戏的情况下运行，但可能会出现异常。</string>
+
+    <string name="pick_place_title">选择一处地点</string>
+    <string name="pick_place_desc">地点选择器尚不可用。</string>
+    <string name="place_picker_select_title">选择这个位置</string>
+    <string name="place_picker_nearby_places">附近的地点</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
+    <string name="lacking_permission_toast">microG Services Core：缺少 <xliff:g example="have full network acccess">%1$s</xliff:g> 的权限</string>
+
+    <string name="network_type_mobile">移动网络</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">漫游</string>
+    <string name="network_type_other">其他网络</string>
+
+    <!-- Self check -->
+
+    <string name="self_check_cat_fake_sig">支持签名模拟</string>
+    <string name="self_check_cat_gms_packages">已安装的应用</string>
+    <string name="self_check_cat_system">系统</string>
+
+    <string name="self_check_name_fake_sig_perm">系统支持签名模拟：</string>
+    <string name="self_check_resolution_fake_sig_perm">您的 ROM 不支持原生的签名模拟功能，但您仍然可以使用 Xposed 或换用其他 ROM 以获取支持。请查阅哪些 ROM 支持签名模拟以及如何在不支持的 ROM 上使用 microG 的说明文档。</string>
+    <string name="self_check_name_perm_granted">系统已授予签名模拟权限：</string>
+    <string name="self_check_resolution_perm_granted">这意味着当前 ROM 显然支持签名模拟，但需要进一步操作已激活此功能。请查阅完成必要步骤的说明文档。</string>
+    <string name="self_check_name_system_spoofs">系统已模拟签名</string>
+    <string name="self_check_resolution_system_spoofs">请查阅完成必要步骤的说明文档。</string>
+
+    <string name="self_check_pkg_gms">Play 服务（GmsCore）</string>
+    <string name="self_check_pkg_vending">Play 商店（Phonesky）</string>
+    <string name="self_check_pkg_gsf">服务框架（GSF）</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> 已安装：</string>
+    <string name="self_check_resolution_app_installed">安装 <xliff:g example="F-Droid">%1$s</xliff:g> 或其他兼容的应用。请查阅有关应用兼容性的说明文档。</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 有正确的签名：</string>
+    <string name="self_check_resolution_correct_sig">可能是已安装的 <xliff:g example="F-Droid">%1$s</xliff:g> 不兼容，或是签名模拟尚未激活。请查阅有关应用和 ROM 兼容性的说明文档。</string>
+
+    <string name="self_check_name_battery_optimizations">已禁用电池优化：</string>
+    <string name="self_check_resolution_battery_optimizations">点击此处以禁用电池优化，不执行该操作可能导致应用出现异常。</string>
+
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">关于</string>
+    <string name="prefcat_components">组件</string>
+    <string name="prefcat_configuration">配置</string>
+    <string name="prefcat_google_services">Google 服务</string>
+    <string name="prefcat_location_service">位置服务</string>
+    <string name="prefcat_operation_mode">操作模式</string>
+    <string name="prefcat_services">服务</string>
+    <string name="prefcat_test">测试</string>
+
+    <string name="cond_gcm_bat_title">已启用电池优化</string>
+    <string name="cond_gcm_bat_summary">您已启用 Google 云消息，但也为 microG Services Core 启用了电池优化。您应该取消电池优化以便收取推送通知。</string>
+    <string name="cond_gcm_bat_action">禁用电池优化</string>
+    <string name="cond_perm_title">缺少权限</string>
+
+    <string name="prefs_account">账号设置</string>
+    <string name="prefs_account_privacy">个人信息 &amp; 隐私</string>
+    <string name="prefs_account_security">登录 &amp; 安全</string>
+
+    <string name="pref_auth_trust_google_title">允许 Google 提供应用权限</string>
+    <string name="pref_auth_trust_google_summary">此功能禁用时，应用向 Google 发送验证请求前将询问用户。部分应用将因此无法使用 Google 账号。</string>
+    <string name="pref_auth_visible_title">允许应用查找账号</string>
+    <string name="pref_auth_visible_summary">此功能启用时，设备上的所有应用可在无需授权的情况下查看您 Google 账号的邮件地址。</string>
+
+    <string name="pref_checkin_enable_summary">将您的设备向 Google 服务注册并生成唯一的设备标识符。此外，microG 还会使用您注册信息中的 Google 用户名</string>
+
+    <string name="pref_more_settings">更多</string>
+
+    <string name="pref_add_account_title">账号</string>
+    <string name="pref_add_account_summary">添加 Google 账号</string>
+    <string name="pref_gcm_enable_mcs_summary">Google 云消息（GCM/FCM）是许多第三方应用使用的推送通知提供商，必须先启用设备注册才能正常使用。</string>
+    <string name="pref_gcm_heartbeat_title">Google 云消息心跳周期</string>
+    <string name="pref_gcm_heartbeat_summary">系统向 Google 服务器发送心跳包的周期（秒）。延长此周期可以减少电量消耗，但可能导致通知推送延迟。\n已弃用，将在未来发布的版本被替代。</string>
+    <string name="pref_gcm_apps_title">使用 Google 云消息的应用</string>
+    <string name="pref_gcm_apps_summary">当前已注册 Google 云消息的应用列表。</string>
+    <string name="pref_gcm_confirm_new_apps_title">确认新应用</string>
+    <string name="pref_gcm_confirm_new_apps_summary">在为新应用注册推送通知前进行询问</string>
+    <string name="pref_gcm_ping_interval">Ping 周期：<xliff:g example="10 minutes">%1$s</xliff:g></string>
+
+    <string name="pref_about_title">关于 microG Services Core</string>
+    <string name="pref_about_summary">版本信息和使用的开源库</string>
+
+    <string name="gcm_app_error_unregistering">取消注册失败</string>
+    <string name="gcm_app_not_installed_anymore">未安装</string>
+    <string name="gcm_unregister_app">取消注册</string>
+    <string name="gcm_not_registered">尚未注册</string>
+    <string name="gcm_no_message_yet">尚未收到消息</string>
+    <string name="gcm_last_message_at">最后收到消息：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">已注册</string>
+    <string name="gcm_registered_since">在 <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g> 注册</string>
+    <string name="gcm_unregister_confirm_title">取消注册 <xliff:g example="F-Droid">%1$s</xliff:g>？</string>
+    <string name="gcm_unregister_confirm_message">部分应用不会自动重新注册，或者不提供手动注册的选项。这些应用可能无法在取消注册后正常工作。\n仍然继续？</string>
+    <string name="gcm_unregister_after_deny_message">您拒绝了一个已注册推送通知的应用的注册请求。\n您是否希望取消注册，以不再接收其未来的推送通知？</string>
+    <string name="gcm_messages_counter">已收到消息：<xliff:g example="123">%1$d</xliff:g>（<xliff:g example="12345">%2$d</xliff:g> bytes）</string>
+    <string name="gcm_state_disconnected">当前状态：已断开连接</string>
+    <string name="gcm_state_connected">当前状态：在 <xliff:g example="2 hours ago">%1$s</xliff:g> 已连接</string>
+
+    <string name="snet_intro">Google SafetyNet 是一个确保设备安全性，以及 Android CTS 兼容性的设备验证系统。一些应用出于安全因素或是为了防止篡改使用了 SafetyNet。\n\nmicroG GmsCore 包含了一个 SafetyNet 的开源实现，但官方服务器要求 SafetyNet 请求通过闭源的 DroidGuard 系统进行签署。现有可用的沙盒版本 DroidGuard：独立的“DroidGuard Helper”应用。</string>
+
+    <string name="pref_snet_testdrive_title">尝试 SafetyNet 验证</string>
+
+    <string name="pref_snet_status_official_title">使用官方服务器</string>
+    <string name="pref_snet_status_official_summary">需要未 Root 的系统并安装 microG DroidGuard Helper</string>
+    <string name="pref_snet_status_official_info">官方服务器</string>
+    <string name="pref_snet_status_third_party_title">使用第三方服务器</string>
+    <string name="pref_snet_status_third_party_summary">第三方服务器可能允许在没有 DroidGuard 签名的情况下通过验证</string>
+    <string name="pref_snet_status_third_party_info">第三方服务器</string>
+    <string name="pref_snet_custom_url_title">自定义服务器地址</string>
+    <string name="pref_snet_custom_url_summary">第三方服务器返回 SafetyNet 验证请求的完整地址</string>
+    <string name="pref_snet_self_signed_title">使用自行签署的证书</string>
+    <string name="pref_snet_self_signed_summary">通过自签证书在本地签署 SafetyNet 请求，而不是将请求发送给服务器。大多数应用将拒绝自行签署的验证结果。</string>
+    <string name="pref_snet_status_self_signed_info">自签证书</string>
+
+</resources>
