@@ -50,4 +50,16 @@ public class WearableStatusCodes extends CommonStatusCodes {
      * Indicates that the requested asset is unavailable.
      */
     public static final int ASSET_UNAVAILABLE = 4005;
+    /**
+     * Indicates that the specified capability already exists.
+     */
+    public static final int DUPLICATE_CAPABILITY = 4006;
+    /**
+     * Indicates that the specified capability is not recognized.
+     */
+    public static final int UNKNOWN_CAPABILITY = 4007;
+    /**
+     * Indicates that the WiFi credential sync no credential fetched.
+     */
+    public static final int WIFI_CREDENTIAL_SYNC_NO_CREDENTIAL_FETCHED = 4008;
 }

@@ -34,10 +34,10 @@ interface IWearableService {
     void getConnectedNodes(IWearableCallbacks callbacks) = 14;
 
     // Capabilties
-    void getConnectedCapability(IWearableCallbacks callbacks, String s1, int i) = 41;
-    void getConnectedCapaibilties(IWearableCallbacks callbacks, int i) = 42;
-    void addLocalCapability(IWearableCallbacks callbacks, String cap) = 45;
-    void removeLocalCapability(IWearableCallbacks callbacks, String cap) = 46;
+    void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) = 41;
+    void getConnectedCapaibilties(IWearableCallbacks callbacks, int nodeFilter) = 42;
+    void addLocalCapability(IWearableCallbacks callbacks, String capability) = 45;
+    void removeLocalCapability(IWearableCallbacks callbacks, String capability) = 46;
 
     void addListener(IWearableCallbacks callbacks, in AddListenerRequest request) = 15;
     void removeListener(IWearableCallbacks callbacks, in RemoveListenerRequest request) = 16;
