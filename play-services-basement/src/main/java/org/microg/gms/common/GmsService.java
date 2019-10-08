@@ -88,6 +88,7 @@ public enum GmsService {
     PLUS_INTERNAL(70),
     SOURCE_DEVICE(75, "com.google.android.gms.smartdevice.d2d.SourceDeviceService.START"),
     TARGET_DEVICE(76, "com.google.android.gms.smartdevice.d2d.TargetDeviceService.START"),
+    TAP_AND_PAY(79, "com.google.android.gms.tapandpay.service.BIND"),
     ACCOUNTS(81, "com.google.android.gms.smartdevice.setup.accounts.AccountsService.START"),
     TRUST_AGENT(85, "com.google.android.gms.trustagent.StateApi.START"),
     MEASUREMENT(93, "com.google.android.gms.measurement.START"),
