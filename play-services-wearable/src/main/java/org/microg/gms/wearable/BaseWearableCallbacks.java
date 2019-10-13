@@ -21,7 +21,17 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.data.DataHolder;
+import com.google.android.gms.wearable.internal.AddLocalCapabilityResponse;
+import com.google.android.gms.wearable.internal.ChannelReceiveFileResponse;
+import com.google.android.gms.wearable.internal.ChannelSendFileResponse;
+import com.google.android.gms.wearable.internal.CloseChannelResponse;
 import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
+import com.google.android.gms.wearable.internal.GetAllCapabilitiesResponse;
+import com.google.android.gms.wearable.internal.GetCapabilityResponse;
+import com.google.android.gms.wearable.internal.GetChannelInputStreamResponse;
+import com.google.android.gms.wearable.internal.GetChannelOutputStreamResponse;
+import com.google.android.gms.wearable.internal.GetCloudSyncOptInOutDoneResponse;
+import com.google.android.gms.wearable.internal.GetCloudSyncOptInStatusResponse;
 import com.google.android.gms.wearable.internal.GetCloudSyncSettingResponse;
 import com.google.android.gms.wearable.internal.GetConfigResponse;
 import com.google.android.gms.wearable.internal.GetConfigsResponse;
@@ -30,7 +40,9 @@ import com.google.android.gms.wearable.internal.GetDataItemResponse;
 import com.google.android.gms.wearable.internal.GetFdForAssetResponse;
 import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
 import com.google.android.gms.wearable.internal.IWearableCallbacks;
+import com.google.android.gms.wearable.internal.OpenChannelResponse;
 import com.google.android.gms.wearable.internal.PutDataResponse;
+import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 import com.google.android.gms.wearable.internal.StorageInfoResponse;
 
@@ -92,6 +104,42 @@ public class BaseWearableCallbacks extends IWearableCallbacks.Stub {
     }
 
     @Override
+    public void onOpenChannelResponse(OpenChannelResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onOpenChannelResponse");
+
+    }
+
+    @Override
+    public void onCloseChannelResponse(CloseChannelResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onCloseChannelResponse");
+
+    }
+
+    @Override
+    public void onGetChannelInputStreamResponse(GetChannelInputStreamResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetChannelInputStreamResponse");
+
+    }
+
+    @Override
+    public void onGetChannelOutputStreamResponse(GetChannelOutputStreamResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetChannelOutputStreamResponse");
+
+    }
+
+    @Override
+    public void onChannelReceiveFileResponse(ChannelReceiveFileResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onChannelReceiveFileResponse");
+
+    }
+
+    @Override
+    public void onChannelSendFileResponse(ChannelSendFileResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onChannelSendFileResponse");
+
+    }
+
+    @Override
     public void onStatus(Status status) throws RemoteException {
         Log.d(TAG, "unimplemented Method: onStatus");
 
@@ -104,14 +152,50 @@ public class BaseWearableCallbacks extends IWearableCallbacks.Stub {
     }
 
     @Override
+    public void onGetCapabilityResponse(GetCapabilityResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetCapabilityResponse");
+
+    }
+
+    @Override
+    public void onGetAllCapabilitiesResponse(GetAllCapabilitiesResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetAllCapabilitiesResponse");
+
+    }
+
+    @Override
+    public void onAddLocalCapabilityResponse(AddLocalCapabilityResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onAddLocalCapabilityResponse");
+
+    }
+
+    @Override
+    public void onRemoveLocalCapabilityResponse(RemoveLocalCapabilityResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onRemoveLocalCapabilityResponse");
+
+    }
+
+    @Override
     public void onGetConfigsResponse(GetConfigsResponse response) throws RemoteException {
         Log.d(TAG, "unimplemented Method: onGetConfigsResponse");
 
     }
 
     @Override
+    public void onGetCloudSyncOptInOutDoneResponse(GetCloudSyncOptInOutDoneResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetCloudSyncOptInOutDoneResponse");
+
+    }
+
+    @Override
     public void onGetCloudSyncSettingResponse(GetCloudSyncSettingResponse response) throws RemoteException {
         Log.d(TAG, "unimplemented Method: onGetCloudSyncSettingResponse");
+
+    }
+
+    @Override
+    public void onGetCloudSyncOptInStatusResponse(GetCloudSyncOptInStatusResponse response) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: onGetCloudSyncOptInStatusResponse");
 
     }
 }
