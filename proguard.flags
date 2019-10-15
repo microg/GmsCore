@@ -3,7 +3,7 @@
 -optimizations !code/allocation/variable
 
 # We're referencing stuff that is unknown to the system
--libraryjar ../unifiednlp-compat/build/classes/java/main
+#-libraryjar ../unifiednlp-compat/build/classes/java/main
 -dontwarn java.awt.**
 -dontwarn javax.annotation.**
 
