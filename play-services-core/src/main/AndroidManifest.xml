@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2013-2017 microG Project Team
+  ~ Copyright (C) 2013-2019 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -90,7 +90,9 @@
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST" tools:ignore="ProtectedPermissions"/>
+    <uses-permission
+        android:name="android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST"
+        tools:ignore="ProtectedPermissions"/>
 
     <uses-sdk tools:overrideLibrary="
         com.takisoft.fix.support.v7.preference,
@@ -100,14 +102,14 @@
         android.arch.lifecycle.viewmodel,
         android.arch.core,
         android.support.v7.mediarouter,
-        android.support.v7.palette" />
+        android.support.v7.palette"/>
 
     <application
+        android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="false"
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_core_service_app"
-        android:label="@string/gms_app_name"
-        android:name="android.support.multidex.MultiDexApplication">
+        android:label="@string/gms_app_name">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature"/>
@@ -405,7 +407,7 @@
 
         <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
             <intent-filter>
-                <action android:name="android.media.MediaRouteProviderService" />
+                <action android:name="android.media.MediaRouteProviderService"/>
             </intent-filter>
         </service>
 
@@ -421,8 +423,8 @@
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_microg_settings"
-            android:roundIcon="@mipmap/ic_microg_settings"
             android:label="@string/gms_settings_name"
+            android:roundIcon="@mipmap/ic_microg_settings"
             android:theme="@style/Theme.AppCompat.Settings.Dashboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -438,16 +440,23 @@
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
-            android:targetActivity="org.microg.gms.ui.SettingsActivity"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
+            android:targetActivity="org.microg.gms.ui.SettingsActivity"
             android:theme="@style/Theme.AppCompat.Settings.Dashboard">
             <intent-filter>
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS"/>
             </intent-filter>
-            <meta-data android:name="com.android.settings.category" android:value="com.android.settings.category.device"/>
-            <meta-data android:name="com.android.settings.icon" android:resource="@drawable/microg_light_color_24"/>
-            <meta-data android:name="com.android.settings.summary" android:resource="@string/gms_settings_summary"/>
+
+            <meta-data
+                android:name="com.android.settings.category"
+                android:value="com.android.settings.category.device"/>
+            <meta-data
+                android:name="com.android.settings.icon"
+                android:resource="@drawable/microg_light_color_24"/>
+            <meta-data
+                android:name="com.android.settings.summary"
+                android:resource="@string/gms_settings_summary"/>
         </activity-alias>
 
         <activity
@@ -625,6 +634,11 @@
         <service android:name="org.microg.gms.wallet.PaymentService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wallet.service.BIND"/>
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.tapandpay.TapAndPayService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.tapandpay.service.BIND"/>
             </intent-filter>
         </service>
 
