@@ -33,6 +33,11 @@
     @org.microg.safeparcel.SafeParceled *;
 }
 
+# Keep form data
+-keepclassmembers class * {
+    @org.microg.gms.common.HttpFormClient$* *;
+}
+
 # Keep asInterface method cause it's accessed from SafeParcel
 -keepattributes InnerClasses
 -keepclassmembers interface * extends android.os.IInterface {

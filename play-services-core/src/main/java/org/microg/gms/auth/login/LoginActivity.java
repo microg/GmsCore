@@ -308,7 +308,12 @@ public class LoginActivity extends AssistantActivity {
 
                     @Override
                     public void onException(Exception exception) {
-                        Log.w(TAG, "onException: " + exception);
+                        Log.w(TAG, "onException", exception);
+                        runOnUiThread(() -> {
+                            showError(R.string.auth_general_error_desc);
+                            setNextButtonText(android.R.string.ok);
+                        });
+                        state = -2;
                     }
                 });
     }
@@ -339,7 +344,12 @@ public class LoginActivity extends AssistantActivity {
 
                     @Override
                     public void onException(Exception exception) {
-                        Log.w(TAG, "onException: " + exception);
+                        Log.w(TAG, "onException", exception);
+                        runOnUiThread(() -> {
+                            showError(R.string.auth_general_error_desc);
+                            setNextButtonText(android.R.string.ok);
+                        });
+                        state = -2;
                     }
                 });
     }
