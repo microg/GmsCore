@@ -9,8 +9,6 @@ android:
   components:
   - tools
   - platform-tools
-  - build-tools-25.0.2
-  - android-25
+  - build-tools-29.0.2
+  - android-29
   - extra-android-m2repository
-before_install:
- - yes | sdkmanager "platforms;android-27"

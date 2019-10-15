@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.os.AsyncTaskCompat;
 import android.util.Log;
 
 import org.microg.gms.common.PublicApi;
@@ -126,13 +125,13 @@ public abstract class GcmListenerService extends Service {
                 finishCounter();
                 GcmReceiver.completeWakefulIntent(intent);
             } else if (ACTION_C2DM_RECEIVE.equals(intent.getAction())) {
-                AsyncTaskCompat.executeParallel(new AsyncTask<Void, Void, Void>() {
+                new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
                         handleC2dmMessage(intent);
                         return null;
                     }
-                });
+                }.execute();
             } else {
                 Log.w(TAG, "Unknown intent action: " + intent.getAction());
 
