@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2019 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package com.google.android.gms.common.images;
+
+import java.util.Locale;
 
 import android.net.Uri;
 
@@ -57,6 +59,6 @@ public class WebImage extends AutoSafeParcelable {
     }
 
     public String toString() {
-        return String.format("Image %dx%d %s", new Object[]{Integer.valueOf(width), Integer.valueOf(height), uri.toString()});
+        return String.format(Locale.getDefault(), "Image %dx%d %s", new Object[]{Integer.valueOf(width), Integer.valueOf(height), uri.toString()});
     }
 }

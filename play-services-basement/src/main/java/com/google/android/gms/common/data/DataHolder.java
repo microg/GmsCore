@@ -153,7 +153,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
     }
 
     @SuppressWarnings("deprecation")
-    @SuppressLint("NewApi")
+    @SuppressLint({"NewApi", "ObsoleteSdkInt"})
     static int getCursorType(Cursor cursor, int i) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             return cursor.getType(i);
