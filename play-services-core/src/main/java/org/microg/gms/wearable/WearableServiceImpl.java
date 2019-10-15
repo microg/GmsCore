@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2019 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,11 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.AddListenerRequest;
+import com.google.android.gms.wearable.internal.AddLocalCapabilityResponse;
 import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
+import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
 import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
+import com.google.android.gms.wearable.internal.GetCapabilityResponse;
 import com.google.android.gms.wearable.internal.GetCloudSyncSettingResponse;
 import com.google.android.gms.wearable.internal.GetConfigResponse;
 import com.google.android.gms.wearable.internal.GetConfigsResponse;
@@ -45,9 +48,13 @@ import com.google.android.gms.wearable.internal.NodeParcelable;
 import com.google.android.gms.wearable.internal.PutDataRequest;
 import com.google.android.gms.wearable.internal.PutDataResponse;
 import com.google.android.gms.wearable.internal.RemoveListenerRequest;
+import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
 import com.google.android.gms.wearable.internal.SendMessageResponse;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class WearableServiceImpl extends IWearableService.Stub {
     private static final String TAG = "GmsWearSvcImpl";
@@ -56,11 +63,13 @@ public class WearableServiceImpl extends IWearableService.Stub {
     private final String packageName;
     private final WearableImpl wearable;
     private final Handler mainHandler;
+    private final CapabilityManager capabilities;
 
     public WearableServiceImpl(Context context, WearableImpl wearable, String packageName) {
         this.context = context;
         this.wearable = wearable;
         this.packageName = packageName;
+        this.capabilities = new CapabilityManager(context, wearable, packageName);
         this.mainHandler = new Handler(context.getMainLooper());
     }
 
@@ -191,8 +200,11 @@ public class WearableServiceImpl extends IWearableService.Stub {
     @Override
     public void deleteDataItemsWithFilter(IWearableCallbacks callbacks, final Uri uri, int typeFilter) throws RemoteException {
         Log.d(TAG, "deleteDataItems: " + uri);
-        postMain(callbacks, () -> {
-            callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, wearable.deleteDataItems(uri, packageName)));
+        this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                callbacks.onDeleteDataItemsResponse(new DeleteDataItemsResponse(0, wearable.deleteDataItems(uri, packageName)));
+            }
         });
     }
 
@@ -289,29 +301,49 @@ public class WearableServiceImpl extends IWearableService.Stub {
      */
 
     @Override
-    public void getConnectedCapability(IWearableCallbacks callbacks, String s1, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapability " + s1 + ", " + i);
+    public void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: getConnectedCapability " + capability + ", " + nodeFilter);
+        postMain(callbacks, () -> {
+            List<NodeParcelable> nodes = new ArrayList<>();
+            for (String host : capabilities.getNodesForCapability(capability)) {
+                nodes.add(new NodeParcelable(host, host));
+            }
+            CapabilityInfoParcelable capabilityInfo = new CapabilityInfoParcelable(capability, nodes);
+            callbacks.onGetCapabilityResponse(new GetCapabilityResponse(0, capabilityInfo));
+        });
     }
 
     @Override
-    public void getConnectedCapaibilties(IWearableCallbacks callbacks, int i) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + i);
+    public void getConnectedCapaibilties(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
     }
 
     @Override
-    public void addLocalCapability(IWearableCallbacks callbacks, String cap) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: addLocalCapability: " + cap);
+    public void addLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: addLocalCapability: " + capability);
+        this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                callbacks.onAddLocalCapabilityResponse(new AddLocalCapabilityResponse(capabilities.add(capability)));
+            }
+        });
     }
 
     @Override
-    public void removeLocalCapability(IWearableCallbacks callbacks, String cap) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + cap);
+    public void removeLocalCapability(IWearableCallbacks callbacks, String capability) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: removeLocalCapability: " + capability);
+        this.wearable.networkHandler.post(new CallbackRunnable(callbacks) {
+            @Override
+            public void run(IWearableCallbacks callbacks) throws RemoteException {
+                callbacks.onRemoveLocalCapabilityResponse(new RemoveLocalCapabilityResponse(capabilities.remove(capability)));
+            }
+        });
     }
 
     @Override
     public void addListener(IWearableCallbacks callbacks, AddListenerRequest request) throws RemoteException {
         if (request.listener != null) {
-            wearable.addListener(packageName, request.listener);
+            wearable.addListener(packageName, request.listener, request.intentFilters);
         }
         callbacks.onStatus(Status.SUCCESS);
     }

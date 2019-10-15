@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2019 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,6 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
                         if (!connecting) Log.d(TAG, "Could not connect to: " + intent);
                         return connecting;
                     }
-                    Log.d(TAG, "Unable to resolve: " + searchIntent);
                     return false;
                 } catch (Exception e) {
                     Log.w(TAG, e);
@@ -91,11 +90,17 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
         synchronized (this) {
             remote = service;
             if (!waiting.isEmpty()) {
-                for (Runnable runnable : waiting) {
-                    runnable.run();
+                try {
+                    for (Runnable runnable : waiting) {
+                        runnable.run();
+                    }
+                } catch (Exception e) {
                 }
                 waiting.clear();
-                context.unbindService(RemoteListenerProxy.this);
+                try {
+                    context.unbindService(RemoteListenerProxy.this);
+                } catch (Exception e) {
+                }
                 connecting = false;
                 remote = null;
             }

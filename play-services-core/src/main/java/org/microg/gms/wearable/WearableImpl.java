@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
+ * Copyright (C) 2013-2019 microG Project Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 
 package org.microg.gms.wearable;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -37,7 +38,6 @@ import com.google.android.gms.wearable.internal.MessageEventParcelable;
 import com.google.android.gms.wearable.internal.NodeParcelable;
 import com.google.android.gms.wearable.internal.PutDataRequest;
 
-import org.microg.gms.common.MultiListenerProxy;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.RemoteListenerProxy;
 import org.microg.gms.common.Utils;
@@ -52,6 +52,7 @@ import org.microg.wearable.proto.FilePiece;
 import org.microg.wearable.proto.Request;
 import org.microg.wearable.proto.RootMessage;
 import org.microg.wearable.proto.SetAsset;
+import org.microg.wearable.proto.SetDataItem;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,8 +71,6 @@ import java.util.Set;
 
 import okio.ByteString;
 
-import static android.os.Build.VERSION.SDK_INT;
-
 public class WearableImpl {
 
     private static final String TAG = "GmsWear";
@@ -81,7 +80,7 @@ public class WearableImpl {
     private final Context context;
     private final NodeDatabaseHelper nodeDatabase;
     private final ConfigurationDatabaseHelper configDatabase;
-    private final Map<String, List<IWearableListener>> listeners = new HashMap<String, List<IWearableListener>>();
+    private final Map<String, List<ListenerInfo>> listeners = new HashMap<String, List<ListenerInfo>>();
     private final Set<Node> connectedNodes = new HashSet<Node>();
     private final Map<String, WearableConnection> activeConnections = new HashMap<String, WearableConnection>();
     private RpcHelper rpcHelper;
@@ -130,12 +129,10 @@ public class WearableImpl {
                 }
             }
         }
-        try {
-            getListener(record.packageName, "com.google.android.gms.wearable.DATA_CHANGED", record.dataItem.uri)
-                    .onDataChanged(record.toEventDataHolder());
-        } catch (RemoteException e) {
-            Log.w(TAG, e);
-        }
+        Intent intent = new Intent("com.google.android.gms.wearable.DATA_CHANGED");
+        intent.setPackage(record.packageName);
+        intent.setData(record.dataItem.uri);
+        invokeListeners(intent, listener -> listener.onDataChanged(record.toEventDataHolder()));
         return record;
     }
 
@@ -247,8 +244,7 @@ public class WearableImpl {
     }
 
 
-    private void syncRecordToAll(DataItemRecord record) {
-        Log.d(TAG, "Syncing record " + record + " over " + activeConnections.size() + " connections.");
+    void syncRecordToAll(DataItemRecord record) {
         for (String nodeId : new ArrayList<String>(activeConnections.keySet())) {
             syncRecordToPeer(nodeId, record);
         }
@@ -256,47 +252,45 @@ public class WearableImpl {
 
     private boolean syncRecordToPeer(String nodeId, DataItemRecord record) {
         for (Asset asset : record.dataItem.getAssets().values()) {
-            syncAssetToPeer(nodeId, record, asset);
+            try {
+                syncAssetToPeer(nodeId, record, asset);
+            } catch (Exception e) {
+                Log.w(TAG, "Could not sync asset " + asset + " for " + nodeId + " and " + record, e);
+                closeConnection(nodeId);
+                return false;
+            }
         }
-        Log.d(TAG, "Sync over to " + nodeId + ": " + record);
 
         try {
-            activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().setDataItem(record.toSetDataItem()).build());
-        } catch (IOException e) {
-            closeConnection(nodeId);
+            SetDataItem item = record.toSetDataItem();
+            activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().setDataItem(item).build());
+        } catch (Exception e) {
             Log.w(TAG, e);
+            closeConnection(nodeId);
             return false;
         }
         return true;
     }
 
-    private void syncAssetToPeer(String nodeId, DataItemRecord record, Asset asset) {
-        try {
-            Log.d(TAG, "Sync over to " + nodeId + ": " + asset);
-            RootMessage announceMessage = new RootMessage.Builder().setAsset(new SetAsset.Builder()
-                    .digest(asset.getDigest())
-                    .appkeys(new AppKeys(Collections.singletonList(new AppKey(record.packageName, record.signatureDigest))))
-                    .build()).hasAsset(true).build();
-            activeConnections.get(nodeId).writeMessage(announceMessage);
-            File assetFile = createAssetFile(asset.getDigest());
-            String fileName = calculateDigest(announceMessage.toByteArray());
-            FileInputStream fis = new FileInputStream(assetFile);
-            byte[] arr = new byte[12215];
-            ByteString lastPiece = null;
-            int c = 0;
-            while ((c = fis.read(arr)) > 0) {
-                if (lastPiece != null) {
-                    Log.d(TAG, "Sync over to " + nodeId + ": Asset piece for fileName " + fileName + ": " + lastPiece);
-                    activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, false, lastPiece, null)).build());
-                }
-                lastPiece = ByteString.of(arr, 0, c);
+    private void syncAssetToPeer(String nodeId, DataItemRecord record, Asset asset) throws IOException {
+        RootMessage announceMessage = new RootMessage.Builder().setAsset(new SetAsset.Builder()
+                .digest(asset.getDigest())
+                .appkeys(new AppKeys(Collections.singletonList(new AppKey(record.packageName, record.signatureDigest))))
+                .build()).hasAsset(true).build();
+        activeConnections.get(nodeId).writeMessage(announceMessage);
+        File assetFile = createAssetFile(asset.getDigest());
+        String fileName = calculateDigest(announceMessage.toByteArray());
+        FileInputStream fis = new FileInputStream(assetFile);
+        byte[] arr = new byte[12215];
+        ByteString lastPiece = null;
+        int c = 0;
+        while ((c = fis.read(arr)) > 0) {
+            if (lastPiece != null) {
+                activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, false, lastPiece, null)).build());
             }
-            Log.d(TAG, "Sync over to " + nodeId + ": Last asset piece for fileName " + fileName + ": " + lastPiece);
-            activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, true, lastPiece, asset.getDigest())).build());
-        } catch (IOException e) {
-            Log.w(TAG, e);
-            closeConnection(nodeId);
+            lastPiece = ByteString.of(arr, 0, c);
         }
+        activeConnections.get(nodeId).writeMessage(new RootMessage.Builder().filePiece(new FilePiece(fileName, true, lastPiece, asset.getDigest())).build());
     }
 
     public void addAssetToDatabase(Asset asset, List<AppKey> appKeys) {
@@ -394,37 +388,59 @@ public class WearableImpl {
         return nodes;
     }
 
-    public IWearableListener getAllListeners() {
-        return MultiListenerProxy.get(IWearableListener.class, new MultiListenerProxy.MultiCollectionListenerPool<IWearableListener>(listeners.values()));
+    interface ListenerInvoker {
+        void invoke(IWearableListener listener) throws RemoteException;
+    }
+
+    private void invokeListeners(@Nullable Intent intent, ListenerInvoker invoker) {
+        for (String packageName : new ArrayList<>(listeners.keySet())) {
+            List<ListenerInfo> listeners = this.listeners.get(packageName);
+            if (listeners == null) continue;
+            for (int i = 0; i < listeners.size(); i++) {
+                boolean filterMatched = false;
+                if (intent != null) {
+                    for (IntentFilter filter : listeners.get(i).filters) {
+                        filterMatched |= filter.match(context.getContentResolver(), intent, false, TAG) > 0;
+                    }
+                }
+                if (filterMatched || listeners.get(i).filters.length == 0) {
+                    try {
+                        invoker.invoke(listeners.get(i).listener);
+                    } catch (RemoteException e) {
+                        Log.w(TAG, "Registered listener at package " + packageName + " failed, removing.");
+                        listeners.remove(i);
+                        i--;
+                    }
+                }
+            }
+            if (listeners.isEmpty()) {
+                this.listeners.remove(packageName);
+            }
+        }
+        if (intent != null) {
+            try {
+                invoker.invoke(RemoteListenerProxy.get(context, intent, IWearableListener.class, "com.google.android.gms.wearable.BIND_LISTENER"));
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed to deliver message received to " + intent, e);
+            }
+        }
     }
 
     public void onPeerConnected(NodeParcelable node) {
         Log.d(TAG, "onPeerConnected: " + node);
-        try {
-            getAllListeners().onPeerConnected(node);
-        } catch (RemoteException e) {
-            Log.w(TAG, e);
-        }
+        invokeListeners(null, listener -> listener.onPeerConnected(node));
         addConnectedNode(node);
     }
 
     public void onPeerDisconnected(NodeParcelable node) {
         Log.d(TAG, "onPeerDisconnected: " + node);
-        try {
-            getAllListeners().onPeerDisconnected(node);
-        } catch (RemoteException e) {
-            Log.w(TAG, e);
-        }
+        invokeListeners(null, listener -> listener.onPeerDisconnected(node));
         removeConnectedNode(node.getId());
     }
 
     public void onConnectedNodes(List<NodeParcelable> nodes) {
         Log.d(TAG, "onConnectedNodes: " + nodes);
-        try {
-            getAllListeners().onConnectedNodes(nodes);
-        } catch (RemoteException e) {
-            Log.w(TAG, e);
-        }
+        invokeListeners(null, listener -> listener.onConnectedNodes(nodes));
     }
 
     public DataItemRecord putData(PutDataRequest request, String packageName) {
@@ -444,11 +460,6 @@ public class WearableImpl {
 
     public DataHolder getDataItemsAsHolder(String packageName) {
         Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolder(packageName, PackageUtils.firstSignatureDigest(context, packageName));
-        while (dataHolderItems.moveToNext()) {
-            Log.d(TAG, "getDataItems[]: path=" + Uri.parse(dataHolderItems.getString(1)).getPath());
-        }
-        dataHolderItems.moveToFirst();
-        dataHolderItems.moveToPrevious();
         return new DataHolder(dataHolderItems, 0, null);
     }
 
@@ -467,40 +478,26 @@ public class WearableImpl {
             return null;
         }
         Cursor dataHolderItems = nodeDatabase.getDataItemsForDataHolderByHostAndPath(packageName, firstSignature, fixHost(uri.getHost(), false), uri.getPath());
-        maybeDebugCursor("getDataItems",dataHolderItems);
-        dataHolderItems.moveToFirst();
-        dataHolderItems.moveToPrevious();
         DataHolder dataHolder = new DataHolder(dataHolderItems, 0, null);
         Log.d(TAG, "Returning data holder of size " + dataHolder.getCount() + " for query " + uri);
         return dataHolder;
     }
 
-    @TargetApi(11)
-    private void maybeDebugCursor(String what, Cursor cursor) {
-        if (SDK_INT >= 11) {
-            int j = 0;
-            while (cursor.moveToNext()) {
-                for (int i = 0; i < cursor.getColumnCount(); i++) {
-                    if (cursor.getType(i) == Cursor.FIELD_TYPE_STRING) {
-                        Log.d(TAG, what+"[" + j + "]: " + cursor.getColumnName(i) + "=" + cursor.getString(i));
-                    }
-                    if (cursor.getType(i) == Cursor.FIELD_TYPE_INTEGER)
-                        Log.d(TAG, what+"[" + j + "]: " + cursor.getColumnName(i) + "=" + cursor.getLong(i));
-                }
-            }
-        }
-    }
-
-    public synchronized void addListener(String packageName, IWearableListener listener) {
+    public synchronized void addListener(String packageName, IWearableListener listener, IntentFilter[] filters) {
         if (!listeners.containsKey(packageName)) {
-            listeners.put(packageName, new ArrayList<IWearableListener>());
+            listeners.put(packageName, new ArrayList<ListenerInfo>());
         }
-        listeners.get(packageName).add(listener);
+        listeners.get(packageName).add(new ListenerInfo(listener, filters));
     }
 
     public void removeListener(IWearableListener listener) {
-        for (List<IWearableListener> list : listeners.values()) {
-            list.remove(listener);
+        for (List<ListenerInfo> list : listeners.values()) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).listener.equals(listener)) {
+                    list.remove(i);
+                    i--;
+                }
+            }
         }
     }
 
@@ -546,12 +543,10 @@ public class WearableImpl {
 
     public void sendMessageReceived(String packageName, MessageEventParcelable messageEvent) {
         Log.d(TAG, "onMessageReceived: " + messageEvent);
-        try {
-            getListener(packageName, "com.google.android.gms.wearable.MESSAGE_RECEIVED", Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()))
-                    .onMessageReceived(messageEvent);
-        } catch (RemoteException e) {
-            Log.w(TAG, e);
-        }
+        Intent intent = new Intent("com.google.android.gms.wearable.MESSAGE_RECEIVED");
+        intent.setPackage(packageName);
+        intent.setData(Uri.parse("wear://" + getLocalNodeId() + "/" + messageEvent.getPath()));
+        invokeListeners(intent, listener -> listener.onMessageReceived(messageEvent));
     }
 
     public DataItemRecord getDataItemByUri(Uri uri, String packageName) {
@@ -568,17 +563,11 @@ public class WearableImpl {
     }
 
     private IWearableListener getListener(String packageName, String action, Uri uri) {
-        synchronized (this) {
-            List<IWearableListener> l = new ArrayList<IWearableListener>(listeners.containsKey(packageName) ? listeners.get(packageName) : Collections.<IWearableListener>emptyList());
+        Intent intent = new Intent(action);
+        intent.setPackage(packageName);
+        intent.setData(uri);
 
-            Intent intent = new Intent(action);
-            intent.setPackage(packageName);
-            intent.setData(uri);
-
-            l.add(RemoteListenerProxy.get(context, intent, IWearableListener.class, "com.google.android.gms.wearable.BIND_LISTENER"));
-
-            return MultiListenerProxy.get(IWearableListener.class, l);
-        }
+        return RemoteListenerProxy.get(context, intent, IWearableListener.class, "com.google.android.gms.wearable.BIND_LISTENER");
     }
 
     private void closeConnection(String nodeId) {
@@ -594,7 +583,7 @@ public class WearableImpl {
         }
         activeConnections.remove(nodeId);
         for (ConnectionConfiguration config : getConfigurations()) {
-            if (config.nodeId.equals(nodeId) || config.peerNodeId.equals(nodeId)) {
+            if (nodeId.equals(config.nodeId) || nodeId.equals(config.peerNodeId)) {
                 config.connected = false;
             }
         }
@@ -630,5 +619,15 @@ public class WearableImpl {
 
     public void stop() {
         this.networkHandler.getLooper().quit();
+    }
+
+    private class ListenerInfo {
+        private IWearableListener listener;
+        private IntentFilter[] filters;
+
+        private ListenerInfo(IWearableListener listener, IntentFilter[] filters) {
+            this.listener = listener;
+            this.filters = filters;
+        }
     }
 }
