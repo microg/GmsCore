@@ -19,57 +19,93 @@ package org.microg.gms.maps.mapbox.model
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.internal.IPolygonDelegate
+import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Fill
+import com.mapbox.mapboxsdk.plugins.annotation.FillOptions
+import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
-import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 
-class PolygonImpl(private val map: GoogleMapImpl, private val fill: Fill) : IPolygonDelegate.Stub() {
+class PolygonImpl(private val map: GoogleMapImpl, private val id: String, options: PolygonOptions) : IPolygonDelegate.Stub(), Markup<Fill, FillOptions> {
+    private var points = ArrayList(options.points)
+    private var holes: List<List<LatLng>> = ArrayList(options.holes.map { ArrayList(it) })
+    private var fillColor = options.fillColor
+    private var strokeColor = options.strokeColor
+    private var strokeWidth = options.strokeWidth
+    private var visible: Boolean = options.isVisible
+
+    private var strokes = (listOf(PolylineImpl(map, "$id-stroke-main", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(points)))
+            + holes.mapIndexed { idx, it -> PolylineImpl(map, "$id-stroke-hole-$idx", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)) }).toMutableList()
+
+    override var annotation: Fill? = null
+    override var removed: Boolean = false
+    override val annotationOptions: FillOptions
+        get() = FillOptions()
+                .withLatLngs(mutableListOf(points.map { it.toMapbox() }).plus(holes.map { it.map { it.toMapbox() } }))
+                .withFillColor(ColorUtils.colorToRgbaString(fillColor))
+                .withFillOpacity(if (visible) 1f else 0f)
+
     override fun remove() {
-        map.fillManager?.delete(fill)
+        removed = true
+        map.fillManager?.let { update(it) }
+        strokes.forEach { it.remove() }
     }
 
-    override fun getId(): String = "p" + fill.id.toString()
+    override fun update(manager: AnnotationManager<*, Fill, FillOptions, *, *, *>) {
+        super.update(manager)
+        map.lineManager?.let { lineManager -> strokes.forEach { it.update(lineManager) } }
+    }
+
+    override fun getId(): String = id
 
     override fun setPoints(points: List<LatLng>) {
-        fill.latLngs = listOf(points.map { it.toMapbox() })
-        map.fillManager?.update(fill)
+        this.points = ArrayList(points)
+        annotation?.latLngs = mutableListOf(points.map { it.toMapbox() }).plus(holes.map { it.map { it.toMapbox() } })
+        map.fillManager?.let { update(it) }
+        strokes[0].points = points
     }
 
-    override fun getPoints(): List<LatLng> = fill.latLngs[0]?.map { it.toGms() } ?: emptyList()
+    override fun getPoints(): List<LatLng> = points
 
     override fun setHoles(holes: List<Any?>?) {
-        Log.d(TAG, "unimplemented Method: setHoles")
+        this.holes = if (holes == null) emptyList() else ArrayList(holes.mapNotNull { if (it is List<*>) it.mapNotNull { if (it is LatLng) it else null }.let { if (it.isNotEmpty()) it else null } else null })
+        annotation?.latLngs = mutableListOf(points.map { it.toMapbox() }).plus(this.holes.map { it.map { it.toMapbox() } })
+        while (this.holes.size < strokes.size) {
+            val last = strokes.last()
+            last.remove()
+            strokes.remove(last)
+        }
+        strokes.forEachIndexed { idx, it -> it.points = this.holes[idx] }
+        strokes.addAll(this.holes.subList(strokes.size, this.holes.lastIndex).mapIndexed { idx, it -> PolylineImpl(map, "$id-stroke-hole-${strokes.size + idx}", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)) })
+        map.fillManager?.let { update(it) }
     }
 
-    override fun getHoles(): List<Any?> {
-        Log.d(TAG, "unimplemented Method: getHoles")
-        return emptyList()
-    }
+    override fun getHoles(): List<Any?> = holes
 
     override fun setStrokeWidth(width: Float) {
-        Log.d(TAG, "unimplemented Method: setStrokeWidth")
+        this.strokeWidth = width
+        strokes.forEach { it.width = width }
     }
 
-    override fun getStrokeWidth(): Float {
-        Log.d(TAG, "unimplemented Method: getStrokeWidth")
-        return 0f
-    }
+    override fun getStrokeWidth(): Float = strokeWidth
 
     override fun setStrokeColor(color: Int) {
-        fill.setFillOutlineColor(color)
-        map.fillManager?.update(fill)
+        this.strokeColor = color
+        strokes.forEach { it.color = color }
     }
 
-    override fun getStrokeColor(): Int = fill.fillOutlineColorAsInt
+    override fun getStrokeColor(): Int = strokeColor
 
     override fun setFillColor(color: Int) {
-        fill.setFillColor(color)
-        map.fillManager?.update(fill)
+        this.fillColor = color
+        annotation?.setFillColor(color)
+        map.fillManager?.let { update(it) }
     }
 
-    override fun getFillColor(): Int = fill.fillColorAsInt
+    override fun getFillColor(): Int = fillColor
 
     override fun setZIndex(zIndex: Float) {
         Log.d(TAG, "unimplemented Method: setZIndex")
@@ -81,11 +117,12 @@ class PolygonImpl(private val map: GoogleMapImpl, private val fill: Fill) : IPol
     }
 
     override fun setVisible(visible: Boolean) {
-        fill.fillOpacity = if (visible) 1f else 0f
-        map.fillManager?.update(fill)
+        this.visible = visible
+        annotation?.fillOpacity = if (visible) 1f else 0f
+        map.fillManager?.let { update(it) }
     }
 
-    override fun isVisible(): Boolean = fill.fillOpacity != 0f
+    override fun isVisible(): Boolean = visible
 
     override fun setGeodesic(geod: Boolean) {
         Log.d(TAG, "unimplemented Method: setGeodesic")
@@ -100,9 +137,17 @@ class PolygonImpl(private val map: GoogleMapImpl, private val fill: Fill) : IPol
 
     override fun hashCodeRemote(): Int = hashCode()
 
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return id
+    }
+
     override fun equals(other: Any?): Boolean {
         if (other is PolygonImpl) {
-            return other.fill == fill
+            return other.id == id
         }
         return false
     }

@@ -78,7 +78,6 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
 
     override fun onDestroyView() {
         map?.onDestroy()
-        map = null
     }
 
     override fun onDestroy() {

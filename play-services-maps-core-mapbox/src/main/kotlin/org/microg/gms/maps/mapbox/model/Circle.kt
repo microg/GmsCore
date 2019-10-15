@@ -116,6 +116,14 @@ class CircleImpl(private val map: GoogleMapImpl, private val id: String, options
 
     override fun hashCodeRemote(): Int = hashCode()
 
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return id
+    }
+
     override fun equals(other: Any?): Boolean {
         if (other is CircleImpl) {
             return other.id == id

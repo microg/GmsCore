@@ -16,6 +16,7 @@
 
 package org.microg.gms.maps.mapbox
 
+import android.util.Log
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdate
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
@@ -28,12 +29,13 @@ internal class CameraBoundsWithSizeUpdate(val bounds: LatLngBounds, val width: I
 
     override fun getCameraPosition(map: MapboxMap): CameraPosition? {
         val padding = this.padding.clone()
-        val widthPad = (map.padding[0] + map.padding[2])/2
-        val heightPad = (map.padding[1] + map.padding[3])/2
+        val widthPad = ((map.width + map.padding[0] + map.padding[2] - width) / 2).toInt()
+        val heightPad = ((map.height + map.padding[1] + map.padding[3] - height) / 2).toInt()
         padding[0] += widthPad
         padding[1] += heightPad
         padding[2] += widthPad
         padding[3] += heightPad
+        Log.d(TAG, "map ${map.width} ${map.height}, set $width $height -> ${padding.map { it.toString() }.reduce { a, b -> "$a,$b"}}")
         return map.getCameraForLatLngBounds(bounds, padding)
     }
 
@@ -78,6 +80,6 @@ internal class CameraBoundsWithSizeUpdate(val bounds: LatLngBounds, val width: I
     }
 
     companion object {
-        val TAG = "GmsCameraBounds"
+        const val TAG = "GmsMapCameraBounds"
     }
 }

@@ -21,37 +21,57 @@ import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.internal.IPolylineDelegate
 import com.mapbox.mapboxsdk.plugins.annotation.Line
+import com.mapbox.mapboxsdk.plugins.annotation.LineOptions
+import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
-import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
+import com.google.android.gms.maps.model.PolylineOptions as GmsLineOptions
 
-class PolylineImpl(private val map: GoogleMapImpl, private val line: Line) : IPolylineDelegate.Stub() {
+class PolylineImpl(private val map: GoogleMapImpl, private val id: String, options: GmsLineOptions) : IPolylineDelegate.Stub(), Markup<Line, LineOptions> {
+    private var points = ArrayList(options.points)
+    private var width = options.width
+    private var color = options.color
+    private var visible: Boolean = options.isVisible
+
+    override var annotation: Line? = null
+    override var removed: Boolean = false
+    override val annotationOptions: LineOptions
+        get() = LineOptions()
+                .withLatLngs(points.map { it.toMapbox() })
+                .withLineWidth(width / map.dpiFactor)
+                .withLineColor(ColorUtils.colorToRgbaString(color))
+                .withLineOpacity(if (visible) 1f else 0f)
+
     override fun remove() {
-        map.lineManager?.delete(line)
+        removed = true
+        map.lineManager?.let { update(it) }
     }
 
-    override fun getId(): String = "l" + line.id.toString()
+    override fun getId(): String = id
 
     override fun setPoints(points: List<LatLng>) {
-        line.latLngs = points.map { it.toMapbox() }
-        map.lineManager?.update(line)
+        this.points = ArrayList(points)
+        annotation?.latLngs = points.map { it.toMapbox() }
+        map.lineManager?.let { update(it) }
     }
 
-    override fun getPoints(): List<LatLng> = line.latLngs.map { it.toGms() }
+    override fun getPoints(): List<LatLng> = points
 
     override fun setWidth(width: Float) {
-        line.lineWidth = width / map.dpiFactor
-        map.lineManager?.update(line)
+        this.width = width
+        annotation?.lineWidth = width / map.dpiFactor
+        map.lineManager?.let { update(it) }
     }
 
-    override fun getWidth(): Float = line.lineWidth * map.dpiFactor
+    override fun getWidth(): Float = width
 
     override fun setColor(color: Int) {
-        line.setLineColor(color)
-        map.lineManager?.update(line)
+        this.color = color
+        annotation?.setLineColor(color)
+        map.lineManager?.let { update(it) }
     }
 
-    override fun getColor(): Int = line.lineColorAsInt
+    override fun getColor(): Int = color
 
     override fun setZIndex(zIndex: Float) {
         Log.d(TAG, "unimplemented Method: setZIndex")
@@ -63,11 +83,12 @@ class PolylineImpl(private val map: GoogleMapImpl, private val line: Line) : IPo
     }
 
     override fun setVisible(visible: Boolean) {
-        line.lineOpacity = if (visible) 1f else 0f
-        map.lineManager?.update(line)
+        this.visible = visible
+        annotation?.lineOpacity = if (visible) 1f else 0f
+        map.lineManager?.let { update(it) }
     }
 
-    override fun isVisible(): Boolean = line.lineOpacity != 0f
+    override fun isVisible(): Boolean = visible
 
     override fun setGeodesic(geod: Boolean) {
         Log.d(TAG, "unimplemented Method: setGeodesic")
@@ -82,9 +103,17 @@ class PolylineImpl(private val map: GoogleMapImpl, private val line: Line) : IPo
 
     override fun hashCodeRemote(): Int = hashCode()
 
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun toString(): String {
+        return id
+    }
+
     override fun equals(other: Any?): Boolean {
         if (other is PolylineImpl) {
-            return other.line == line
+            return other.id == id
         }
         return false
     }
