@@ -29,7 +29,7 @@ public class ClockworkNodePreferences {
 
     private static final Object lock = new Object();
     private static long seqIdBlock;
-    private static long seqIdInBlock = -1;
+    private static long seqIdInBlock = 1000;
 
     private Context context;
 
@@ -50,8 +50,7 @@ public class ClockworkNodePreferences {
     public long getNextSeqId() {
         synchronized (lock) {
             SharedPreferences preferences = context.getSharedPreferences(CLOCKWORK_NODE_PREFERENCES, Context.MODE_PRIVATE);
-            if (seqIdInBlock < 0) seqIdInBlock = 1000;
-            if (seqIdInBlock >= 1000) {
+            if (seqIdInBlock == 1000) {
                 seqIdBlock = preferences.getLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, 100);
                 preferences.edit().putLong(CLOCKWORK_NODE_PREFERENCE_NEXT_SEQ_ID_BLOCK, seqIdBlock + seqIdInBlock).apply();
                 seqIdInBlock = 0;
