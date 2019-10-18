@@ -33,6 +33,8 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
     public static final String NULL_STRING = "NULL_STRING";
     public static final String TABLE_NAME = "connectionConfigurations";
     public static final String BY_NAME = "name=?";
+    public static final String BY_NODE_ANDROID_ID = "androidId=?";
+
 
     public ConfigurationDatabaseHelper(Context context) {
         super(context, "connectionconfig.db", null, 2);
@@ -96,7 +98,7 @@ public class ConfigurationDatabaseHelper extends SQLiteOpenHelper {
         if (oldNodeId == null) {
             getWritableDatabase().insert(TABLE_NAME, null, contentValues);
         } else {
-            getWritableDatabase().update(TABLE_NAME, contentValues, "nodeId=?", new String[]{oldNodeId});
+            getWritableDatabase().update(TABLE_NAME, contentValues, BY_NODE_ANDROID_ID, new String[]{oldNodeId});
         }
     }
 
