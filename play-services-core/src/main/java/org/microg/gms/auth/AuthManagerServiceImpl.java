@@ -17,6 +17,7 @@
 package org.microg.gms.auth;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -167,6 +168,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
 
         Log.d(TAG, "clearToken: token:" + token + " extras:" + extras);
+        AccountManager.get(context).invalidateAuthToken(AuthConstants.DEFAULT_ACCOUNT_TYPE, token);
         return null;
     }
 
