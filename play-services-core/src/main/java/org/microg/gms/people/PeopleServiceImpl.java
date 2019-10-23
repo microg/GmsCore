@@ -16,9 +16,11 @@
 
 package org.microg.gms.people;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -26,7 +28,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.google.android.gms.R;
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.common.internal.ICancelToken;
 import com.google.android.gms.people.internal.IPeopleCallbacks;
@@ -51,7 +52,9 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
     @Override
     public void loadOwners(final IPeopleCallbacks callbacks, boolean var2, boolean var3, final String accountName, String var5, int sortOrder) {
         Log.d(TAG, "loadOwners: " + var2 + ", " + var3 + ", " + accountName + ", " + var5 + ", " + sortOrder);
-        PackageUtils.assertExtendedAccess(context);
+        if (context.checkCallingPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            PackageUtils.assertExtendedAccess(context);
+        }
         AccountManager accountManager = AccountManager.get(context);
         Bundle accountMetadata = new Bundle();
         String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
