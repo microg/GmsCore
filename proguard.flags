@@ -1,7 +1,3 @@
-# We use ProGuard for optimizations, obfuscation is for those who have sth to hide
--dontobfuscate
--optimizations !code/allocation/variable
-
 # We're referencing stuff that is unknown to the system
 #-libraryjar ../unifiednlp-compat/build/classes/java/main
 -dontwarn java.awt.**
@@ -15,6 +11,7 @@
 -dontwarn com.caverock.androidsvg.**
 -dontwarn org.slf4j.**
 -dontwarn org.codehaus.jackson.**
+-dontwarn com.android.location.provider.**
 
 # Disable ProGuard Notes, they won't help here
 -dontnote
@@ -37,6 +34,10 @@
 -keepclassmembers class * {
     @org.microg.gms.common.HttpFormClient$* *;
 }
+
+# Keep our stuff
+-keep class org.microg.** { *; }
+-keep class com.google.android.gms.** { *; }
 
 # Keep asInterface method cause it's accessed from SafeParcel
 -keepattributes InnerClasses
