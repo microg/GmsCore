@@ -31,6 +31,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -198,8 +199,11 @@ public class PackageUtils {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager == null) return null;
         if (pid <= 0) return null;
-        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
-            if (processInfo.pid == pid) return processInfo.processName;
+        List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = manager.getRunningAppProcesses();
+        if (runningAppProcesses != null) {
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcesses) {
+                if (processInfo.pid == pid) return processInfo.processName;
+            }
         }
         return null;
     }

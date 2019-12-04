@@ -24,6 +24,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import org.microg.gms.common.ForegroundServiceContext;
+
+import static org.microg.gms.checkin.CheckinService.EXTRA_FORCE_CHECKIN;
+
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";
     public static final String PREF_ENABLE_CHECKIN = "checkin_enable_service";
@@ -31,23 +35,27 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, false) || force) {
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()) &&
-                    LastCheckinInfo.read(context).lastCheckin > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL) {
-                return;
-            }
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, false) || force) {
+                if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()) &&
+                        LastCheckinInfo.read(context).lastCheckin > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL) {
+                    return;
+                }
 
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnected() || force) {
-                Intent subIntent = new Intent(context, CheckinService.class);
-                subIntent.putExtra(CheckinService.EXTRA_FORCE_CHECKIN, force);
-                startWakefulService(context, subIntent);
+                NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected() || force) {
+                    Intent subIntent = new Intent(context, CheckinService.class);
+                    subIntent.putExtra(EXTRA_FORCE_CHECKIN, force);
+                    startWakefulService(new ForegroundServiceContext(context), subIntent);
+                }
+            } else {
+                Log.d(TAG, "Ignoring " + intent + ": checkin is disabled");
             }
-        } else {
-            Log.d(TAG, "Ignoring " + intent + ": checkin is disabled");
+        } catch (Exception e) {
+            Log.w(TAG, e);
         }
     }
 }

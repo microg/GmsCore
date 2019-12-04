@@ -28,7 +28,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListener {
-    public static final String PREF_HEARTBEAT = "gcm_heartbeat_interval";
     public static final String PREF_FULL_LOG = "gcm_full_log";
     public static final String PREF_LAST_PERSISTENT_ID = "gcm_last_persistent_id";
     public static final String PREF_CONFIRM_NEW_APPS = "gcm_confirm_new_apps";
@@ -43,6 +42,9 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     public static final String PREF_LEARNT_WIFI = "gcm_learnt_wifi";
     public static final String PREF_LEARNT_OTHER = "gcm_learnt_other";
 
+    private static final int MIN_INTERVAL = 5 * 60 * 1000; // 5 minutes
+    private static final int MAX_INTERVAL = 30 * 60 * 1000; // 30 minutes
+
     private static GcmPrefs INSTANCE;
 
     public static GcmPrefs get(Context context) {
@@ -53,7 +55,6 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         return INSTANCE;
     }
 
-    private int heartbeatMs = 300000;
     private boolean gcmLogEnabled = true;
     private String lastPersistedId = "";
     private boolean confirmNewApps = false;
@@ -79,7 +80,6 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public void update() {
-        heartbeatMs = Integer.parseInt(defaultPreferences.getString(PREF_HEARTBEAT, "300")) * 1000;
         gcmLogEnabled = defaultPreferences.getBoolean(PREF_FULL_LOG, true);
         lastPersistedId = defaultPreferences.getString(PREF_LAST_PERSISTENT_ID, "");
         confirmNewApps = defaultPreferences.getBoolean(PREF_CONFIRM_NEW_APPS, false);
@@ -93,10 +93,6 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         learntMobile = defaultPreferences.getInt(PREF_LEARNT_MOBILE, 300000);
         learntWifi = defaultPreferences.getInt(PREF_LEARNT_WIFI, 300000);
         learntOther = defaultPreferences.getInt(PREF_LEARNT_OTHER, 300000);
-    }
-
-    public int getHeartbeatMs() {
-        return heartbeatMs;
     }
 
     public String getNetworkPrefForInfo(NetworkInfo info) {
@@ -158,7 +154,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
                 learntOther *= 0.95;
                 break;
         }
-        defaultPreferences.edit().putInt(PREF_LEARNT_MOBILE, learntMobile).putInt(PREF_LEARNT_WIFI, learntWifi).putInt(PREF_LEARNT_OTHER, learntOther).apply();
+        updateLearntValues();
     }
 
     public void learnReached(String pref, long time) {
@@ -178,6 +174,13 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
                     learntOther *= 1.02;
                 break;
         }
+        updateLearntValues();
+    }
+
+    private void updateLearntValues() {
+        learntMobile = Math.max(MIN_INTERVAL, Math.min(learntMobile, MAX_INTERVAL));
+        learntWifi = Math.max(MIN_INTERVAL, Math.min(learntWifi, MAX_INTERVAL));
+        learntOther = Math.max(MIN_INTERVAL, Math.min(learntOther, MAX_INTERVAL));
         defaultPreferences.edit().putInt(PREF_LEARNT_MOBILE, learntMobile).putInt(PREF_LEARNT_WIFI, learntWifi).putInt(PREF_LEARNT_OTHER, learntOther).apply();
     }
 

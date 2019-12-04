@@ -29,6 +29,7 @@ import android.util.Log;
 import com.google.android.gms.checkin.internal.ICheckinService;
 
 import org.microg.gms.auth.AuthConstants;
+import org.microg.gms.common.ForegroundServiceContext;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
@@ -55,6 +56,7 @@ public class CheckinService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
+            ForegroundServiceContext.completeForegroundService(this, intent, TAG);
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_ENABLE_CHECKIN, false)) {
                 LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
                 if (info != null) {

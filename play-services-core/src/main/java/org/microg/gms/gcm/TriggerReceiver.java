@@ -25,6 +25,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.ForegroundServiceContext;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.N;
@@ -51,51 +52,55 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction()) || FORCE_TRY_RECONNECT.equals(intent.getAction());
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction()) || FORCE_TRY_RECONNECT.equals(intent.getAction());
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if (!GcmPrefs.get(context).isEnabled() && !force) {
-            Log.d(TAG, "Ignoring " + intent + ": gcm is disabled");
-            return;
-        }
-
-        if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-            McsService.resetCurrentDelay();
-        }
-
-        if (LastCheckinInfo.read(context).androidId == 0) {
-            Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
-            return;
-        }
-
-        force |= "android.intent.action.BOOT_COMPLETED".equals(intent.getAction());
-
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-
-        if (!force) {
-            if (networkInfo == null || !networkInfo.isConnected()) {
-                Log.d(TAG, "Ignoring " + intent + ": network is offline, scheduling new attempt.");
-                McsService.scheduleReconnect(context);
-                return;
-            } else if (!GcmPrefs.get(context).isEnabledFor(networkInfo)) {
-                Log.d(TAG, "Ignoring " + intent + ": gcm is disabled for " + networkInfo.getTypeName());
+            if (!GcmPrefs.get(context).isEnabled() && !force) {
+                Log.d(TAG, "Ignoring " + intent + ": gcm is disabled");
                 return;
             }
-        }
 
-        if (!McsService.isConnected() || force) {
-            Log.d(TAG, "Not connected to GCM but should be, asking the service to start up. Triggered by: " + intent);
-            startWakefulService(context, new Intent(ACTION_CONNECT, null, context, McsService.class)
-                    .putExtra(EXTRA_REASON, intent));
-        } else {
             if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                Log.d(TAG, "Ignoring " + intent + ": service is running. schedule reconnect instead.");
-                McsService.scheduleReconnect(context);
-            } else {
-                Log.d(TAG, "Ignoring " + intent + ": service is running. heartbeat instead.");
-                startWakefulService(context, new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
-                        .putExtra(EXTRA_REASON, intent));
+                McsService.resetCurrentDelay();
             }
+
+            if (LastCheckinInfo.read(context).androidId == 0) {
+                Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
+                return;
+            }
+
+            force |= "android.intent.action.BOOT_COMPLETED".equals(intent.getAction());
+
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+            if (!force) {
+                if (networkInfo == null || !networkInfo.isConnected()) {
+                    Log.d(TAG, "Ignoring " + intent + ": network is offline, scheduling new attempt.");
+                    McsService.scheduleReconnect(context);
+                    return;
+                } else if (!GcmPrefs.get(context).isEnabledFor(networkInfo)) {
+                    Log.d(TAG, "Ignoring " + intent + ": gcm is disabled for " + networkInfo.getTypeName());
+                    return;
+                }
+            }
+
+            if (!McsService.isConnected() || force) {
+                Log.d(TAG, "Not connected to GCM but should be, asking the service to start up. Triggered by: " + intent);
+                startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_CONNECT, null, context, McsService.class)
+                        .putExtra(EXTRA_REASON, intent));
+            } else {
+                if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                    Log.d(TAG, "Ignoring " + intent + ": service is running. schedule reconnect instead.");
+                    McsService.scheduleReconnect(context);
+                } else {
+                    Log.d(TAG, "Ignoring " + intent + ": service is running. heartbeat instead.");
+                    startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
+                            .putExtra(EXTRA_REASON, intent));
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
         }
     }
 
