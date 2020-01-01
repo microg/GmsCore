@@ -622,6 +622,18 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.appinvite.AppInviteService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.appinvite.service.START"/>
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.firebase.dynamiclinks.DynamicLinksService">
+            <intent-filter>
+                <action android:name="com.google.firebase.dynamiclinks.service.START"/>
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.plus.service.START" />
