@@ -4,6 +4,7 @@ include ':play-services-basement'
 
 include ':play-services-tasks'
 
+include ':play-services-appinvite-api'
 include ':play-services-base-api'
 include ':play-services-cast-api'
 include ':play-services-cast-framework-api'
@@ -13,6 +14,8 @@ include ':play-services-location-api'
 include ':play-services-wearable-api'
 
 include ':play-services-api'
+
+include ':firebase-dynamic-links-api'
 
 include ':play-services-base-core'
 include ':play-services-location-core'
