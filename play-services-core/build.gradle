@@ -45,8 +45,10 @@ dependencies {
     implementation project(':play-services-api')
     implementation project(':play-services-cast-api')
     implementation project(':play-services-wearable')
+    implementation project(':play-services-appinvite')
     implementation project(':unifiednlp-base')
     implementation project(':wearable-lib')
+    implementation project(':firebase-dynamic-links')
 
     implementation project(':remote-droid-guard-lib')
     if (useMapbox()) {
