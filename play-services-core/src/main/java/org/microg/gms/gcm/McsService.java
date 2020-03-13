@@ -61,6 +61,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -529,6 +530,9 @@ public class McsService extends Service implements Handler.Callback {
         try {
             String name = packageName + ".permission.C2D_MESSAGE";
             getPackageManager().getPermissionInfo(name, 0);
+            if(!Arrays.asList(getPackageManager().getPackageInfo(packageName, PackageManager.GET_PERMISSIONS).requestedPermissions).contains(name)){
+                throw new PackageManager.NameNotFoundException(name);
+            }
             receiverPermission = name;
         } catch (PackageManager.NameNotFoundException e) {
             receiverPermission = null;
