@@ -1,6 +1,0 @@
-build/
-.gradle/
-local.properties
-*.iml
-.idea/
-BuildConfig.java
