@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AppCompat.Settings.Dashboard">
+        <item name="preferenceTheme">@style/SettingsDashboardThemeOverlay</item>
+    </style>
+
+    <style name="SettingsDashboardFragment" parent="@style/PreferenceFragment">
+        <item name="android:divider">@drawable/empty</item>
+        <item name="divider">@drawable/empty</item>
+        <item name="android:dividerHeight">0dip</item>
+    </style>
+
+    <style name="SettingsDashboardThemeOverlay" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceCategoryStyle">@style/SettingsDashboardCategory</item>
+        <item name="preferenceFragmentStyle">@style/SettingsDashboardFragment</item>
+        <item name="preferenceFragmentCompatStyle">@style/SettingsDashboardFragment</item>
+        <item name="colorAccent">#666666</item>
+    </style>
+
+    <style name="SettingsDashboardCategory">
+        <item name="android:layout">@layout/preference_category_dashboard</item>
+    </style>
+</resources>
