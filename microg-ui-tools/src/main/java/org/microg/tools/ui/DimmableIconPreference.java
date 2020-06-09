@@ -18,13 +18,14 @@ package org.microg.tools.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceViewHolder;
 
 /**
  * A preference item that can dim the icon when it's disabled, either directly or because its parent

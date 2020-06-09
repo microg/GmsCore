@@ -100,7 +100,7 @@
                 android:layout_height="0.25dp"
                 android:background="@android:color/white"/>
 
-            <android.support.v7.widget.ButtonBarLayout
+            <androidx.appcompat.widget.ButtonBarLayout
                 android:id="@+id/buttonBar"
                 style="?attr/buttonBarStyle"
                 android:layout_width="match_parent"
@@ -130,7 +130,7 @@
                     android:visibility="gone"
                     android:textColor="?android:attr/textColorPrimaryInverse"/>
 
-            </android.support.v7.widget.ButtonBarLayout>
+            </androidx.appcompat.widget.ButtonBarLayout>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

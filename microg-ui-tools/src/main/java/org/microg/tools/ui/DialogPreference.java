@@ -19,17 +19,18 @@ package org.microg.tools.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceDialogFragmentCompat;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class DialogPreference extends android.support.v7.preference.DialogPreference implements PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceViewHolder;
+
+public class DialogPreference extends androidx.preference.DialogPreference implements PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
 
     private static final String DIALOG_FRAGMENT_TAG =
             "android.support.v7.preference.PreferenceFragment.DIALOG";

@@ -20,8 +20,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +28,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,9 +104,6 @@ public abstract class AbstractAboutFragment extends Fragment {
 
         List<Library> libraries = new ArrayList<Library>();
         libraries.add(new Library(BuildConfig.APPLICATION_ID, getString(R.string.lib_name), getString(R.string.lib_license)));
-        libraries.add(new Library("android.support.v4", getString(R.string.about_android_support_v4), getString(R.string.about_android_support_license)));
-        libraries.add(new Library("android.support.v7.appcompat", getString(R.string.about_android_support_v7_appcompat), getString(R.string.about_android_support_license)));
-        libraries.add(new Library("android.support.v7.preference#hide_version", getString(R.string.about_android_support_v7_preference), getString(R.string.about_android_support_license)));
         collectLibraries(libraries);
         Collections.sort(libraries);
         ((ListView) aboutRoot.findViewById(android.R.id.list)).setAdapter(new LibraryAdapter(getContext(), libraries.toArray(new Library[libraries.size()])));

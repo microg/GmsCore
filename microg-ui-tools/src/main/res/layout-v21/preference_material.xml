@@ -40,7 +40,7 @@
         android:paddingEnd="12dp"
         android:paddingTop="4dp">
 
-        <android.support.v7.internal.widget.PreferenceImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@android:id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

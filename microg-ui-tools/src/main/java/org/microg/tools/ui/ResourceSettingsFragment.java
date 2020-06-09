@@ -17,7 +17,8 @@
 package org.microg.tools.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 public class ResourceSettingsFragment extends AbstractSettingsFragment {
 
@@ -26,7 +27,7 @@ public class ResourceSettingsFragment extends AbstractSettingsFragment {
     protected int preferencesResource;
 
     @Override
-    public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         Bundle b = getArguments();
         if (b != null) {
             preferencesResource = b.getInt(EXTRA_PREFERENCE_RESOURCE, preferencesResource);

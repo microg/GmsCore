@@ -16,16 +16,14 @@
 
 package org.microg.tools.ui;
 
-import android.support.v4.app.DialogFragment;
-import android.support.v7.preference.Preference;
-
-import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 public abstract class AbstractSettingsFragment extends PreferenceFragmentCompat {
     private static final String TAG = AbstractSettingsFragment.class.getSimpleName();
 
-    private static final String DIALOG_FRAGMENT_TAG =
-            "android.support.v7.preference.PreferenceFragment.DIALOG";
+    private static final String DIALOG_FRAGMENT_TAG = "androidx.preference.PreferenceFragment.DIALOG";
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {

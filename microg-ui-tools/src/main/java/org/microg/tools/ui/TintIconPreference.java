@@ -2,10 +2,11 @@ package org.microg.tools.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.preference.PreferenceViewHolder;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;

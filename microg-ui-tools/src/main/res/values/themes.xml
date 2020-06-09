@@ -16,7 +16,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.AppCompat.Settings" parent="@style/PreferenceFixTheme.Light.NoActionBar">
+    <style name="Theme.AppCompat.Settings" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/settings_theme_primary</item>
         <item name="colorPrimaryDark">@color/settings_theme_primary_dark</item>
         <item name="colorAccent">@color/settings_theme_accent</item>

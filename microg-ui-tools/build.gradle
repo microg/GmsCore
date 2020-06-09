@@ -26,13 +26,13 @@ String getMyVersionName() {
 }
 
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName getMyVersionName()
-        minSdkVersion androidMinSdk()
-        targetSdkVersion androidTargetSdk()
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
@@ -47,8 +47,7 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-v4:$supportLibraryVersion"
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-    implementation "com.takisoft.fix:preference-v7:$supportLibraryVersion.0"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.preference:preference:$preferenceVersion"
 }
 

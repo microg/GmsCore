@@ -18,9 +18,10 @@ package org.microg.tools.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v4.content.res.TypedArrayUtils;
-import android.support.v7.preference.CheckBoxPreference;
 import android.util.AttributeSet;
+
+import androidx.core.content.res.TypedArrayUtils;
+import androidx.preference.CheckBoxPreference;
 
 public class RadioButtonPreference extends CheckBoxPreference {
 

@@ -21,7 +21,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v7.widget.SwitchCompat;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
@@ -31,6 +30,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
 
@@ -73,7 +74,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
             mTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         }
         mLabel = getResources().getString(R.string.abc_capital_off);
-        mSummarySpan = new TextAppearanceSpan(context, android.support.v7.appcompat.R.style.TextAppearance_AppCompat_Widget_Switch);
+        mSummarySpan = new TextAppearanceSpan(context, androidx.appcompat.R.style.TextAppearance_AppCompat_Widget_Switch);
         updateText();
 
         mSwitch = (ToggleSwitch) findViewById(R.id.switch_widget);

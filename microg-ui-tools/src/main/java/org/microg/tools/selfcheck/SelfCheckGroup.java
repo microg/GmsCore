@@ -17,7 +17,8 @@
 package org.microg.tools.selfcheck;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.Fragment;
 
 public interface SelfCheckGroup {
     String getGroupName(Context context);

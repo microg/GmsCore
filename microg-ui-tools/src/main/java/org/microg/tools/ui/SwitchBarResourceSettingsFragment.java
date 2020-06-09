@@ -17,7 +17,8 @@
 package org.microg.tools.ui;
 
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 public abstract class SwitchBarResourceSettingsFragment extends ResourceSettingsFragment implements SwitchBar.OnSwitchChangeListener {
     protected SwitchBar switchBar;

@@ -18,16 +18,17 @@ package org.microg.tools.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.PluralsRes;
-import android.support.annotation.StringRes;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.PluralsRes;
+import androidx.annotation.StringRes;
+import androidx.core.content.res.ResourcesCompat;
 
 public class Condition {
     @DrawableRes
