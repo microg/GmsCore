@@ -264,4 +264,12 @@ public class PackageUtils {
             return null;
         }
     }
+
+    public static int targetSdkVersion(Context context, String packageName) {
+        try {
+            return context.getPackageManager().getApplicationInfo(packageName, 0).targetSdkVersion;
+        } catch (PackageManager.NameNotFoundException e) {
+            return -1;
+        }
+    }
 }
