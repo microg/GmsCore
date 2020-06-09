@@ -46,6 +46,13 @@ public class HttpFormClient {
             try {
                 field.setAccessible(true);
                 Object objVal = field.get(request);
+                if (field.isAnnotationPresent(RequestContentDynamic.class)) {
+                    Map<String, String> contentParams = (Map<String, String>) objVal;
+                    for (Map.Entry<String, String> param : contentParams.entrySet()) {
+                        appendParam(content, param.getKey(), param.getValue());
+                    }
+                    continue;
+                }
                 String value = objVal != null ? String.valueOf(objVal) : null;
                 Boolean boolVal = null;
                 if (field.getType().equals(boolean.class)) {
@@ -65,9 +72,7 @@ public class HttpFormClient {
                     value = valueFromBoolVal(value, boolVal, annotation.truePresent(), annotation.falsePresent());
                     if (value != null || annotation.nullPresent()) {
                         for (String key : annotation.value()) {
-                            if (content.length() > 0)
-                                content.append("&");
-                            content.append(Uri.encode(key)).append("=").append(Uri.encode(String.valueOf(value)));
+                            appendParam(content, key, value);
                         }
                     }
                 }
@@ -107,6 +112,12 @@ public class HttpFormClient {
         } else {
             return value;
         }
+    }
+
+    private static void appendParam(StringBuilder content, String key, String value) {
+        if (content.length() > 0)
+            content.append("&");
+        content.append(Uri.encode(key)).append("=").append(Uri.encode(String.valueOf(value)));
     }
 
     private static <T> T parseResponse(Class<T> tClass, HttpURLConnection connection, String result) throws IOException {
@@ -225,6 +236,11 @@ public class HttpFormClient {
         public boolean falsePresent() default false;
 
         public boolean nullPresent() default false;
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface RequestContentDynamic {
     }
 
     @Retention(RetentionPolicy.RUNTIME)

@@ -20,7 +20,6 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.Message;
@@ -139,7 +138,8 @@ public class PushRegisterService extends IntentService {
                         .build(Utils.getBuild(context))
                         .sender(intent.getStringExtra(EXTRA_SENDER))
                         .checkin(LastCheckinInfo.read(context))
-                        .app(packageName),
+                        .app(packageName)
+                        .extraParams(intent.getExtras()),
                 bundle -> {
                     Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
                     outIntent.putExtras(bundle);
@@ -175,7 +175,8 @@ public class PushRegisterService extends IntentService {
                         .build(Utils.getBuild(this))
                         .sender(intent.getStringExtra(EXTRA_SENDER))
                         .checkin(LastCheckinInfo.read(this))
-                        .app(packageName),
+                        .app(packageName)
+                        .extraParams(intent.getExtras()),
                 bundle -> {
                     Intent outIntent = new Intent(ACTION_C2DM_REGISTRATION);
                     outIntent.putExtras(bundle);

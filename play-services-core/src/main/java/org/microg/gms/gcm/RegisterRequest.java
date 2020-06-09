@@ -16,19 +16,24 @@
 
 package org.microg.gms.gcm;
 
+import android.os.Bundle;
+import android.text.TextUtils;
+
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.Build;
-import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.microg.gms.common.HttpFormClient.RequestContent;
+import static org.microg.gms.common.HttpFormClient.RequestContentDynamic;
 import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
 public class RegisterRequest extends HttpFormClient.Request {
     private static final String SERVICE_URL = "https://android.clients.google.com/c2dm/register3";
-    private static final String USER_AGENT = "Android-GCM/1.3 (%s %s)";
+    private static final String USER_AGENT = "Android-GCM/1.5 (%s %s)";
 
     @RequestHeader("Authorization")
     private String auth;
@@ -42,35 +47,26 @@ public class RegisterRequest extends HttpFormClient.Request {
     public String appSignature;
     @RequestContent("app_ver")
     public int appVersion;
-    @RequestContent("app_ver_name")
-    public String appVersionName;
     @RequestContent("info")
     public String info;
-    @RequestContent({"sender", "subtype"})
+    @RequestContent("sender")
     public String sender;
-    @RequestContent({"X-GOOG.USER_AID", "device"})
+    @RequestContent("device")
     public long androidId;
     @RequestContent("delete")
     public boolean delete;
     public long securityToken;
     public String deviceName;
     public String buildVersion;
-    @RequestContent("osv")
-    public int sdkVersion;
-    @RequestContent("gmsv")
-    public int gmsVersion;
-    @RequestContent("scope")
-    public String scope = "*";
-    @RequestContent("appid")
-    public String appId;
-    @RequestContent("gmp_app_id")
-    public String gmpAppId;
+    @RequestContent("target_ver")
+    public Integer sdkVersion;
+    @RequestContentDynamic
+    private Map<String, String> extraParams = new LinkedHashMap<>();
 
     @Override
     public void prepare() {
         userAgent = String.format(USER_AGENT, deviceName, buildVersion);
         auth = "AidLogin " + androidId + ":" + securityToken;
-        gmsVersion = Constants.MAX_REFERENCE_VERSION;
     }
 
     public RegisterRequest checkin(LastCheckinInfo lastCheckinInfo) {
@@ -90,17 +86,10 @@ public class RegisterRequest extends HttpFormClient.Request {
         return this;
     }
 
-    public RegisterRequest app(String app, String appSignature, int appVersion, String appVersionName) {
+    public RegisterRequest app(String app, String appSignature, int appVersion) {
         this.app = app;
         this.appSignature = appSignature;
         this.appVersion = appVersion;
-        this.appVersionName = appVersionName;
-        return this;
-    }
-
-    public RegisterRequest appid(String appid, String gmpAppId) {
-        this.appId = appid;
-        this.gmpAppId = gmpAppId;
         return this;
     }
 
@@ -117,7 +106,6 @@ public class RegisterRequest extends HttpFormClient.Request {
     public RegisterRequest build(Build build) {
         deviceName = build.device;
         buildVersion = build.id;
-        sdkVersion = build.sdk;
         return this;
     }
 
@@ -128,6 +116,31 @@ public class RegisterRequest extends HttpFormClient.Request {
     public RegisterRequest delete(boolean delete) {
         this.delete = delete;
         return this;
+    }
+
+    public RegisterRequest extraParams(Bundle extraBundle) {
+        for (String key : extraBundle.keySet()) {
+            if (!key.equals(GcmConstants.EXTRA_SENDER) && !key.equals(GcmConstants.EXTRA_DELETE)) {
+                extraParam(key, extraBundle.getString(key));
+            }
+        }
+        return this;
+    }
+
+    public RegisterRequest extraParam(String key, String value) {
+        // Ignore empty registration extras
+        if (!TextUtils.isEmpty(value)) {
+            extraParams.put(extraParamKey(key), value);
+        }
+        return this;
+    }
+
+    public boolean hasExtraParam(String key) {
+        return extraParams.containsKey(extraParamKey(key));
+    }
+
+    private static String extraParamKey(String key) {
+        return "X-" + key;
     }
 
     public RegisterResponse getResponse() throws IOException {
