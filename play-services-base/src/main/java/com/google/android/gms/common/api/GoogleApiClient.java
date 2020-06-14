@@ -21,8 +21,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
 

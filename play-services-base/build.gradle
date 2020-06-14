@@ -44,4 +44,6 @@ android {
 dependencies {
     api project(':play-services-basement')
     api project(':play-services-tasks')
+
+    implementation "androidx.fragment:fragment:$fragmentVersion"
 }

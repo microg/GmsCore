@@ -22,7 +22,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;

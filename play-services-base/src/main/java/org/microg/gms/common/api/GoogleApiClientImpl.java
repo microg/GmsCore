@@ -20,7 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
