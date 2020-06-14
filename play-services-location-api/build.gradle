@@ -45,5 +45,6 @@ android {
 }
 
 dependencies {
-    api project(':play-services-basement')
+    implementation project(':play-services-basement')
+    implementation "org.microg:safe-parcel:$safeParcelVersion"
 }

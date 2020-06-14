@@ -16,7 +16,7 @@
 
 package com.google.android.gms.common.api;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.microg.gms.common.PublicApi;
 

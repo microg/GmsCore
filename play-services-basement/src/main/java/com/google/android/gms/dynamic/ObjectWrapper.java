@@ -17,7 +17,8 @@
 package com.google.android.gms.dynamic;
 
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import java.lang.reflect.Field;
 

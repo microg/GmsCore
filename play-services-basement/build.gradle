@@ -15,8 +15,15 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+dependencies {
+    api "org.microg:safe-parcel:$safeParcelVersion"
+
+    implementation "androidx.annotation:annotation:$annotationVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+}
 
 String getMyVersionName() {
     def stdout = new ByteArrayOutputStream()
@@ -57,10 +64,4 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-}
-
-dependencies {
-    api "com.android.support:support-v4:$supportLibraryVersion"
-    api 'org.microg:safe-parcel:1.5.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -55,6 +55,7 @@ interface IGoogleLocationManagerService {
     void removeLocationUpdatesWithListener(ILocationListener listener) = 9;
     void removeLocationUpdatesWithIntent(in PendingIntent callbackIntent) = 10;
     void updateLocationRequest(in LocationRequestUpdateData locationRequestUpdateData) = 58;
+    //void flushLocations(IFusedLocationProviderCallback callback = 66;
 
     void setMockMode(boolean mockMode) = 11;
     void setMockLocation(in Location mockLocation) = 12;
@@ -82,4 +83,6 @@ interface IGoogleLocationManagerService {
     IBinder iglms54() = 53;
     void iglms55(String var1, in LatLngBounds var2, in AutocompleteFilter var3, in PlacesParams var4, IPlacesCallbacks var5) = 54;
     void iglms58(in List var1, in PlacesParams var2, IPlacesCallbacks var3) = 57;
+
+    //void updateDeviceOrientationRequest(in DeviceOrientationRequestUpdateData request) = 74;
 }
