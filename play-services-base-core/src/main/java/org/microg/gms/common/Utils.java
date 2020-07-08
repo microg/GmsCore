@@ -17,13 +17,8 @@
 package org.microg.gms.common;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.google.android.gms.R;
-
-import org.microg.gms.checkin.LastCheckinInfo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,9 +28,6 @@ import java.util.Locale;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class Utils {
-    public static String getAndroidIdHex(Context context) {
-        return Long.toHexString(LastCheckinInfo.read(context).androidId);
-    }
 
     public static Locale getLocale(Context context) {
         return Locale.getDefault(); // TODO
@@ -55,10 +47,10 @@ public class Utils {
 
     public static boolean hasSelfPermissionOrNotify(Context context, String permission) {
         if (context.checkCallingOrSelfPermission(permission) != PERMISSION_GRANTED) {
+            Log.w("GmsUtils", "Lacking permission to " + permission + " for pid:" + android.os.Process.myPid() + " uid:" + android.os.Process.myUid());
             try {
-                Toast.makeText(context, context.getString(R.string.lacking_permission_toast, permission), Toast.LENGTH_SHORT).show();
+                //TODO: Toast.makeText(context, context.getString(R.string.lacking_permission_toast, permission), Toast.LENGTH_SHORT).show();
             } catch (RuntimeException e) {
-                Log.w("GmsUtils", "Lacking permission to " + permission + " for pid:" + android.os.Process.myPid() + " uid:" + android.os.Process.myUid());
             }
             return false;
         }

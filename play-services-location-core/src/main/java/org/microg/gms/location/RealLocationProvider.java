@@ -105,11 +105,14 @@ public class RealLocationProvider {
         } else if (!requests.isEmpty()) {
             long minTime = Long.MAX_VALUE;
             float minDistance = Float.MAX_VALUE;
+            StringBuilder sb = new StringBuilder();
             for (LocationRequestHelper request : requests) {
                 minTime = Math.min(request.locationRequest.getInterval(), minTime);
                 minDistance = Math.min(request.locationRequest.getSmallestDesplacement(), minDistance);
+                if (sb.length() == 0) sb.append(", ");
+                sb.append(request.packageName).append(":").append(request.locationRequest.getInterval()).append("ms");
             }
-            Log.d(TAG, name + ": requesting location updates. minTime=" + minTime + " minDistance=" + minDistance);
+            Log.d(TAG, name + ": requesting location updates with interval " + minTime + "ms (" + sb + "), minDistance=" + minDistance);
             if (connected.get()) {
                 if (connectedMinTime != minTime || connectedMinDistance != minDistance) {
                     locationManager.removeUpdates(listener);

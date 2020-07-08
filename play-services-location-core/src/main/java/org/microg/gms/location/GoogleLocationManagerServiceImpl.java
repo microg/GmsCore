@@ -146,14 +146,14 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     @Override
     public Location getLastLocation() throws RemoteException {
         Log.d(TAG, "getLastLocation");
-        return getLocationManager().getLastLocation(PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
+        return getLocationManager().getLastLocation(PackageUtils.getCallingPackage(context));
     }
 
     @Override
     public void requestLocationUpdatesWithListener(LocationRequest request,
                                                    final ILocationListener listener) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesWithListener: " + request);
-        getLocationManager().requestLocationUpdates(request, listener, PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
+        getLocationManager().requestLocationUpdates(request, listener, PackageUtils.getCallingPackage(context));
     }
 
     @Override
@@ -167,7 +167,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void removeLocationUpdatesWithListener(ILocationListener listener)
             throws RemoteException {
         Log.d(TAG, "removeLocationUpdatesWithListener: " + listener);
-        getLocationManager().removeLocationUpdates(listener, PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
+        getLocationManager().removeLocationUpdates(listener, PackageUtils.getCallingPackage(context));
     }
 
     @Override
@@ -314,7 +314,7 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void requestLocationUpdatesInternalWithListener(LocationRequestInternal request,
                                                            ILocationListener listener) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesInternalWithListener: " + request);
-        getLocationManager().requestLocationUpdates(request.request, listener, PackageUtils.packageFromProcessId(context, Binder.getCallingPid()));
+        getLocationManager().requestLocationUpdates(request.request, listener, PackageUtils.getCallingPackage(context));
     }
 
     @Override

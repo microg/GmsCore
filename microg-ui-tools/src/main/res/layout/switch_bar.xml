@@ -38,7 +38,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="@null"
-        android:theme="@style/Widget.AppCompat.Settings.SwitchBar.Switch"/>
+        android:background="@null"/>
 
 </merge>

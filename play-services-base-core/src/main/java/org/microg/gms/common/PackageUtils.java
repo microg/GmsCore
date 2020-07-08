@@ -23,9 +23,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Binder;
-import android.support.annotation.Nullable;
 
-import com.google.android.gms.Manifest;
+import androidx.annotation.Nullable;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -100,7 +99,7 @@ public class PackageUtils {
                     return true;
             }
         }
-        return context.checkCallingPermission(Manifest.permission.EXTENDED_ACCESS) == PackageManager.PERMISSION_GRANTED;
+        return context.checkCallingPermission("org.microg.gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void checkPackageUid(Context context, String packageName, int callingUid) {
@@ -195,6 +194,7 @@ public class PackageUtils {
     }
 
     @Nullable
+    @Deprecated
     public static String packageFromProcessId(Context context, int pid) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager == null) return null;
@@ -202,7 +202,9 @@ public class PackageUtils {
         List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = manager.getRunningAppProcesses();
         if (runningAppProcesses != null) {
             for (ActivityManager.RunningAppProcessInfo processInfo : runningAppProcesses) {
-                if (processInfo.pid == pid) return processInfo.processName;
+                if (processInfo.pid == pid && processInfo.pkgList.length == 1) {
+                    return processInfo.pkgList[0];
+                }
             }
         }
         return null;

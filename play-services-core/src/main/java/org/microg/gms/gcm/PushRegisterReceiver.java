@@ -18,7 +18,8 @@ package org.microg.gms.gcm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.WakefulBroadcastReceiver;
+
+import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_UNREGISTER;

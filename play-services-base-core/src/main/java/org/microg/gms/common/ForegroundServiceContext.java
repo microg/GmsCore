@@ -11,10 +11,9 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
-import com.google.android.gms.R;
+import androidx.annotation.RequiresApi;
 
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
                 .setContentTitle("Running in background")
-                .setSmallIcon(R.drawable.gcm_bell)
+                //.setSmallIcon(R.drawable.gcm_bell)
                 .build();
     }
 }

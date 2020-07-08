@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.RemoteException;
 
 import com.google.android.gms.location.ILocationListener;
@@ -50,7 +51,7 @@ public class GoogleLocationManager implements LocationChangeListener {
 
     private final Context context;
     private final RealLocationProvider gpsProvider;
-    private final RealLocationProvider networkProvider;
+    private final UnifiedLocationProvider networkProvider;
     private final MockLocationProvider mockProvider;
     private final List<LocationRequestHelper> currentRequests = new ArrayList<LocationRequestHelper>();
 
@@ -64,7 +65,7 @@ public class GoogleLocationManager implements LocationChangeListener {
         }
         if (Utils.hasSelfPermissionOrNotify(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             if (locationManager.getAllProviders().contains(NETWORK_PROVIDER)) {
-                this.networkProvider = new RealLocationProvider(locationManager, NETWORK_PROVIDER, this);
+                this.networkProvider = new UnifiedLocationProvider(context, this);
             } else {
                 // TODO: Add ability to directly contact UnifiedNlp without the system location provider
                 this.networkProvider = null;
@@ -116,20 +117,19 @@ public class GoogleLocationManager implements LocationChangeListener {
 
     private void requestLocationUpdates(LocationRequestHelper request) {
         currentRequests.add(request);
-        if (gpsProvider != null && request.hasFinePermission && request.locationRequest.getPriority() == PRIORITY_HIGH_ACCURACY)
+        if (gpsProvider != null && request.hasFinePermission() && request.locationRequest.getPriority() == PRIORITY_HIGH_ACCURACY) {
             gpsProvider.addRequest(request);
-        if (networkProvider != null && request.hasCoarsePermission && request.locationRequest.getPriority() != PRIORITY_NO_POWER)
+        }
+        if (networkProvider != null && request.hasCoarsePermission() && request.locationRequest.getPriority() != PRIORITY_NO_POWER)
             networkProvider.addRequest(request);
     }
 
     public void requestLocationUpdates(LocationRequest request, ILocationListener listener, String packageName) {
-        requestLocationUpdates(new LocationRequestHelper(context, request, hasFineLocationPermission(),
-                hasCoarseLocationPermission(), packageName, listener));
+        requestLocationUpdates(new LocationRequestHelper(context, request, packageName, Binder.getCallingUid(), listener));
     }
 
     public void requestLocationUpdates(LocationRequest request, PendingIntent intent, String packageName) {
-        requestLocationUpdates(new LocationRequestHelper(context, request, hasFineLocationPermission(),
-                hasCoarseLocationPermission(), packageName, intent));
+        requestLocationUpdates(new LocationRequestHelper(context, request, packageName, Binder.getCallingUid(), intent));
     }
 
     private void removeLocationUpdates(LocationRequestHelper request) {
@@ -157,11 +157,11 @@ public class GoogleLocationManager implements LocationChangeListener {
     }
 
     public void updateLocationRequest(LocationRequestUpdateData data) {
-        String packageName = null;
+        String packageName = PackageUtils.getCallingPackage(context);
         if (data.pendingIntent != null)
             packageName = PackageUtils.packageFromPendingIntent(data.pendingIntent);
         if (data.opCode == LocationRequestUpdateData.REQUEST_UPDATES) {
-            requestLocationUpdates(new LocationRequestHelper(context, hasFineLocationPermission(), hasCoarseLocationPermission(), packageName, data));
+            requestLocationUpdates(new LocationRequestHelper(context, packageName, Binder.getCallingUid(), data));
             if (data.fusedLocationProviderCallback != null) {
                 try {
                     data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS);
@@ -196,7 +196,7 @@ public class GoogleLocationManager implements LocationChangeListener {
     public void onLocationChanged() {
         for (int i = 0; i < currentRequests.size(); i++) {
             LocationRequestHelper request = currentRequests.get(i);
-            if (!request.report(getLocation(request.hasFinePermission, request.hasCoarsePermission))) {
+            if (!request.report(getLocation(request.initialHasFinePermission, request.initialHasCoarsePermission))) {
                 removeLocationUpdates(request);
                 i--;
             }

@@ -26,9 +26,10 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.support.v4.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.R;

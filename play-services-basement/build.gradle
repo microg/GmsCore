@@ -25,22 +25,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
-String getMyVersionName() {
-    def stdout = new ByteArrayOutputStream()
-    if (rootProject.file("gradlew").exists())
-        exec {
-            commandLine 'git', 'describe', '--tags', '--always', '--dirty'; standardOutput = stdout
-        }
-    else // automatic build system, don't tag dirty
-        exec { commandLine 'git', 'describe', '--tags', '--always'; standardOutput = stdout }
-    return stdout.toString().trim().substring(1)
-}
-
-group = 'org.microg'
-version = getMyVersionName()
-
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     aidlPackageWhiteList "com/google/android/gms/common/api/Status.aidl"
@@ -51,9 +37,9 @@ android {
     aidlPackageWhiteList "com/google/android/gms/dynamic/IObjectWrapper.aidl"
 
     defaultConfig {
-        versionName getMyVersionName()
-        minSdkVersion androidMinSdk()
-        targetSdkVersion androidTargetSdk()
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
     }
 
     sourceSets {
@@ -61,7 +47,7 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }

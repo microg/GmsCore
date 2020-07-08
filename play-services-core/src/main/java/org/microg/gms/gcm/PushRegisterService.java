@@ -25,9 +25,10 @@ import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
-import android.support.annotation.Nullable;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import org.microg.gms.checkin.CheckinService;
 import org.microg.gms.checkin.LastCheckinInfo;

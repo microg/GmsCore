@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -21,8 +20,6 @@ public abstract class AbstractDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard_activity);
         conditionContainer = (ViewGroup) findViewById(R.id.condition_container);
-
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_wrapper, getFragment())
