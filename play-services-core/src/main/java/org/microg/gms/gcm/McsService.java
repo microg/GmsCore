@@ -555,7 +555,7 @@ public class McsService extends Service implements Handler.Callback {
                 }
                 targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
                 if (resolveInfo.activityInfo.packageName.equals(packageName)) {
-                    sendOrderedBroadcast(targetIntent, receiverPermission);
+                    sendOrderedBroadcast(targetIntent, null);
                 } else if (receiverPermission != null) {
                     sendOrderedBroadcast(targetIntent, receiverPermission);
                 } else {
