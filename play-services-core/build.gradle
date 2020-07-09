@@ -16,17 +16,12 @@
 
 apply plugin: 'com.android.application'
 
-def useMapbox() {
-    Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    return properties.getProperty("mapbox.enabled", "false") == "true"
+configurations {
+    mapboxImplementation
+    vtmImplementation
 }
 
 dependencies {
-    implementation "androidx.multidex:multidex:$multidexVersion"
-    implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
-    implementation "androidx.preference:preference:$preferenceVersion"
     implementation "com.squareup.wire:wire-runtime:1.6.1"
     implementation "de.hdodenhof:circleimageview:1.3.0"
     implementation "org.conscrypt:conscrypt-android:2.1.0"
@@ -42,18 +37,21 @@ dependencies {
 
     implementation project(':play-services-base-core')
     implementation project(':play-services-location-core')
-    implementation project(':microg-ui-tools')
+    implementation project(':play-services-core:microg-ui-tools') // deprecated
     implementation project(':play-services-api')
     implementation project(':play-services-cast-api')
     implementation project(':play-services-wearable')
     implementation "org.microg:wearable:$wearableVersion"
     implementation "org.microg.gms:remote-droid-guard:$remoteDroidGuardVersion"
 
-    if (useMapbox()) {
-        implementation project(':play-services-maps-core-mapbox')
-    } else {
-        implementation project(':play-services-maps-core-vtm')
-    }
+    mapboxImplementation project(':play-services-maps-core-mapbox')
+    vtmImplementation project(':play-services-maps-core-vtm')
+
+    // AndroidX UI
+    implementation "androidx.multidex:multidex:$multidexVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
+    implementation "androidx.preference:preference:$preferenceVersion"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment:$navigationVersion"
@@ -67,13 +65,13 @@ android {
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName version + (useMapbox() ? "" : "-vtm")
+        versionName version
         versionCode appVersionCode
 
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
 
-        buildConfigField "boolean", "USE_MAPBOX", "${useMapbox()}"
+//        buildConfigField "boolean", "USE_MAPBOX", "${useMapbox()}"
 
         multiDexEnabled true
 
@@ -100,6 +98,17 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions 'maps'
+    productFlavors {
+        mapbox {
+            dimension 'maps'
+        }
+        vtm {
+            dimension 'maps'
+            versionNameSuffix '-vtm'
         }
     }
 

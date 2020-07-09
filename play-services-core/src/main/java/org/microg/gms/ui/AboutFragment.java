@@ -29,7 +29,7 @@ public class AboutFragment extends AbstractAboutFragment {
 
     @Override
     protected void collectLibraries(List<AbstractAboutFragment.Library> libraries) {
-        if (BuildConfig.USE_MAPBOX) {
+        if (BuildConfig.FLAVOR.contains("mapbox")) {
             libraries.add(new AbstractAboutFragment.Library("com.mapbox.mapboxsdk", "Mapbox Maps SDK for Android", "Three-Clause BSD, Mapbox"));
         } else {
             libraries.add(new AbstractAboutFragment.Library("org.oscim.android", "V™", "GNU LGPLv3, Hannes Janetzek and devemux86"));

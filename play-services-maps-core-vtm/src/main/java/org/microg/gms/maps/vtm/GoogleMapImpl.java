@@ -27,9 +27,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
