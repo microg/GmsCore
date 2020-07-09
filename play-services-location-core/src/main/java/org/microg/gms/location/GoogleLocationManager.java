@@ -116,12 +116,27 @@ public class GoogleLocationManager implements LocationChangeListener {
     }
 
     private void requestLocationUpdates(LocationRequestHelper request) {
+        LocationRequestHelper old = null;
+        for (LocationRequestHelper req : currentRequests) {
+            if (req.respondsTo(request.pendingIntent) || req.respondsTo(request.listener) || req.respondsTo(request.callback)) {
+                old = req;
+                break;
+            }
+        }
+        if (old != null) {
+            currentRequests.remove(old);
+        }
         currentRequests.add(request);
         if (gpsProvider != null && request.hasFinePermission() && request.locationRequest.getPriority() == PRIORITY_HIGH_ACCURACY) {
             gpsProvider.addRequest(request);
+        } else if (gpsProvider != null && old != null) {
+            gpsProvider.removeRequest(old);
         }
-        if (networkProvider != null && request.hasCoarsePermission() && request.locationRequest.getPriority() != PRIORITY_NO_POWER)
+        if (networkProvider != null && request.hasCoarsePermission() && request.locationRequest.getPriority() != PRIORITY_NO_POWER) {
             networkProvider.addRequest(request);
+        } else if (networkProvider != null && old != null) {
+            networkProvider.removeRequest(old);
+        }
     }
 
     public void requestLocationUpdates(LocationRequest request, ILocationListener listener, String packageName) {
@@ -162,12 +177,6 @@ public class GoogleLocationManager implements LocationChangeListener {
             packageName = PackageUtils.packageFromPendingIntent(data.pendingIntent);
         if (data.opCode == LocationRequestUpdateData.REQUEST_UPDATES) {
             requestLocationUpdates(new LocationRequestHelper(context, packageName, Binder.getCallingUid(), data));
-            if (data.fusedLocationProviderCallback != null) {
-                try {
-                    data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS);
-                } catch (RemoteException ignored) {
-                }
-            }
         } else if (data.opCode == LocationRequestUpdateData.REMOVE_UPDATES) {
             for (int i = 0; i < currentRequests.size(); i++) {
                 if (currentRequests.get(i).respondsTo(data.listener)
@@ -176,6 +185,12 @@ public class GoogleLocationManager implements LocationChangeListener {
                     removeLocationUpdates(currentRequests.get(i));
                     i--;
                 }
+            }
+        }
+        if (data.fusedLocationProviderCallback != null) {
+            try {
+                data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS);
+            } catch (RemoteException ignored) {
             }
         }
     }

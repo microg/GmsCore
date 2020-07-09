@@ -53,9 +53,9 @@ public class LocationRequestHelper {
     public final String packageName;
     public final int uid;
     private final boolean selfHasAppOpsRights;
-    private ILocationListener listener;
-    private PendingIntent pendingIntent;
-    private ILocationCallback callback;
+    public ILocationListener listener;
+    public PendingIntent pendingIntent;
+    public ILocationCallback callback;
 
     private Location lastReport;
     private int numReports = 0;
@@ -105,7 +105,7 @@ public class LocationRequestHelper {
         }
         lastReport = new Location(location);
         lastReport.setProvider("fused");
-        Log.d(TAG, "sending Location: " + location);
+        Log.d(TAG, "sending Location: " + location + " to " + packageName);
         if (listener != null) {
             try {
                 listener.onLocationChanged(lastReport);

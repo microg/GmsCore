@@ -87,6 +87,13 @@ public class RealLocationProvider {
 
     public void addRequest(LocationRequestHelper request) {
         Log.d(TAG, name + ": addRequest " + request);
+        for (int i = 0; i < requests.size(); i++) {
+            LocationRequestHelper req = requests.get(i);
+            if (req.respondsTo(request.pendingIntent) || req.respondsTo(request.listener) || req.respondsTo(request.callback)) {
+                requests.remove(i);
+                i--;
+            }
+        }
         requests.add(request);
         updateConnection();
     }
@@ -109,7 +116,7 @@ public class RealLocationProvider {
             for (LocationRequestHelper request : requests) {
                 minTime = Math.min(request.locationRequest.getInterval(), minTime);
                 minDistance = Math.min(request.locationRequest.getSmallestDesplacement(), minDistance);
-                if (sb.length() == 0) sb.append(", ");
+                if (sb.length() != 0) sb.append(", ");
                 sb.append(request.packageName).append(":").append(request.locationRequest.getInterval()).append("ms");
             }
             Log.d(TAG, name + ": requesting location updates with interval " + minTime + "ms (" + sb + "), minDistance=" + minDistance);

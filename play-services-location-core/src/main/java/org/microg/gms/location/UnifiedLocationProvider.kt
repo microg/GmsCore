@@ -31,6 +31,13 @@ class UnifiedLocationProvider(context: Context?, changeListener: LocationChangeL
 
     fun addRequest(request: LocationRequestHelper) {
         Log.d(TAG, "unified network: addRequest $request")
+        for (i in 0..requests.size) {
+            if (i >= requests.size) break
+            val req = requests[i]
+            if (req.respondsTo(request.pendingIntent) || req.respondsTo(request.listener) || req.respondsTo(request.callback)) {
+                requests.removeAt(i)
+            }
+        }
         requests.add(request)
         updateConnection()
     }

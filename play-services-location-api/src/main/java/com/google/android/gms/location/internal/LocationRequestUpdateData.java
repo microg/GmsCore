@@ -56,10 +56,10 @@ public class LocationRequestUpdateData extends AutoSafeParcelable {
         return "LocationRequestUpdateData{" +
                 "opCode=" + opCode +
                 ", request=" + request +
-                ", listener=" + listener +
+                ", listener=" + (listener != null ? listener.asBinder() : null) +
                 ", pendingIntent=" + pendingIntent +
-                ", callback=" + callback +
-                ", fusedLocationProviderCallback=" + fusedLocationProviderCallback +
+                ", callback=" + (callback != null ? callback.asBinder() : null) +
+                ", fusedLocationProviderCallback=" + (fusedLocationProviderCallback != null ? fusedLocationProviderCallback.asBinder() : null) +
                 '}';
     }
 
