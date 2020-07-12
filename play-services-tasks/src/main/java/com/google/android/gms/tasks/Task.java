@@ -1,17 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2016, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0 AND CC-BY-4.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.tasks;
@@ -29,6 +21,42 @@ import java.util.concurrent.Executor;
 public abstract class Task<TResult> {
 
     public Task() {
+    }
+
+    /**
+     * Adds a listener that is called if the Task is canceled.
+     * <p>
+     * The listener will be called on main application thread. If the Task has already been canceled, a call to the listener will be immediately scheduled. If multiple listeners are added, they will be called in the order in which they were added.
+     *
+     * @return this Task
+     */
+    public Task<TResult> addOnCanceledListener(OnCanceledListener listener) {
+        throw new UnsupportedOperationException("addOnCanceledListener is not implemented");
+    }
+
+    /**
+     * Adds a listener that is called if the Task is canceled.
+     * <p>
+     * If the Task has already been canceled, a call to the listener will be immediately scheduled. If multiple listeners are added, they will be called in the order in which they were added.
+     *
+     * @param executor the executor to use to call the listener
+     * @return this Task
+     */
+    public Task<TResult> addOnCanceledListener(Executor executor, OnCanceledListener listener) {
+        throw new UnsupportedOperationException("addOnCanceledListener is not implemented");
+    }
+
+    /**
+     * Adds an Activity-scoped listener that is called if the Task is canceled.
+     * <p>
+     * The listener will be called on main application thread. If the Task has already been canceled, a call to the listener will be immediately scheduled. If multiple listeners are added, they will be called in the order in which they were added.
+     * <p>
+     * The listener will be automatically removed during {@link Activity#onStop()}.
+     *
+     * @return this Task
+     */
+    public Task<TResult> addOnCanceledListener(Activity activity, OnCanceledListener listener) {
+        throw new UnsupportedOperationException("addOnCanceledListener is not implemented");
     }
 
     /**
@@ -184,7 +212,7 @@ public abstract class Task<TResult> {
      * @param executor the executor to use to call the Continuation
      * @see Continuation#then(Task)
      */
-    public <TContinuationResult> Task<TContinuationResult> continueWithTask(Executor executor, Continuation<TResult, Task<TContinuationResult>> var2) {
+    public <TContinuationResult> Task<TContinuationResult> continueWithTask(Executor executor, Continuation<TResult, Task<TContinuationResult>> continuation) {
         throw new UnsupportedOperationException("continueWithTask is not implemented");
     }
 
@@ -212,6 +240,11 @@ public abstract class Task<TResult> {
     public abstract <X extends Throwable> TResult getResult(Class<X> exceptionType) throws X;
 
     /**
+     * Returns {@code true} if the Task is canceled; {@code false} otherwise.
+     */
+    public abstract boolean isCanceled();
+
+    /**
      * Returns {@code true} if the Task is complete; {@code false} otherwise.
      */
     public abstract boolean isComplete();
@@ -220,5 +253,30 @@ public abstract class Task<TResult> {
      * Returns {@code true} if the Task has completed successfully; {@code false} otherwise.
      */
     public abstract boolean isSuccessful();
+
+    /**
+     * Returns a new Task that will be completed with the result of applying the specified SuccessContinuation to this Task when this Task completes successfully. If the previous Task fails, the onSuccessTask completion will be skipped and failure listeners will be invoked.
+     * <p>
+     * The SuccessContinuation will be called on the main application thread.
+     * <p>
+     * If the previous Task is canceled, the returned Task will also be canceled and the SuccessContinuation would not execute.
+     *
+     * @see SuccessContinuation#then
+     */
+    public <TContinuationResult> Task<TContinuationResult> onSuccessTask(SuccessContinuation<TResult, TContinuationResult> successContinuation) {
+        throw new UnsupportedOperationException("onSuccessTask is not implemented");
+    }
+
+    /**
+     * Returns a new Task that will be completed with the result of applying the specified SuccessContinuation to this Task when this Task completes successfully. If the previous Task fails, the onSuccessTask completion will be skipped and failure listeners will be invoked.
+     * <p>
+     * If the previous Task is canceled, the returned Task will also be canceled and the SuccessContinuation would not execute.
+     *
+     * @param executor the executor to use to call the SuccessContinuation
+     * @see SuccessContinuation#then
+     */
+    public <TContinuationResult> Task<TContinuationResult> onSuccessTask(Executor executor, SuccessContinuation<TResult, TContinuationResult> successContinuation) {
+        throw new UnsupportedOperationException("onSuccessTask is not implemented");
+    }
 
 }
