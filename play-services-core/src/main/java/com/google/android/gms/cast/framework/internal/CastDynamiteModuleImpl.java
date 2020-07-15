@@ -18,7 +18,6 @@ package com.google.android.gms.cast.framework.internal;
 
 import android.content.Context;
 import android.os.RemoteException;
-import android.support.v7.media.MediaRouter;
 import android.util.Log;
 
 import com.google.android.gms.cast.framework.CastOptions;

@@ -105,7 +105,7 @@ class UiSettingsImpl(private val uiSettings: UiSettings) : IUiSettingsDelegate.S
         return true
     }
 
-    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
                 true
             } else {

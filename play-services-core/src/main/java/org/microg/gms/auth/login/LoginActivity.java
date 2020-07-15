@@ -28,7 +28,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -44,7 +43,9 @@ import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.R;
+import androidx.annotation.StringRes;
+
+import com.mgoogle.android.gms.R;
 
 import org.json.JSONArray;
 import org.microg.gms.auth.AuthConstants;

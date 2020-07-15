@@ -18,6 +18,7 @@ package org.microg.gms.auth;
 
 import android.content.Context;
 
+import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.Build;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
@@ -112,7 +113,7 @@ public class AuthRequest extends HttpFormClient.Request {
     public AuthRequest fromContext(Context context) {
         build(Utils.getBuild(context));
         locale(Utils.getLocale(context));
-        androidIdHex = Utils.getAndroidIdHex(context);
+        androidIdHex = Long.toHexString(LastCheckinInfo.read(context).androidId);
         return this;
     }
 

@@ -26,13 +26,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.support.v7.media.MediaControlIntent;
-import android.support.v7.media.MediaRouteDescriptor;
-import android.support.v7.media.MediaRouteDiscoveryRequest;
-import android.support.v7.media.MediaRouteProvider;
-import android.support.v7.media.MediaRouteProviderDescriptor;
-import android.support.v7.media.MediaRouter;
 import android.util.Log;
+
+import androidx.mediarouter.media.MediaControlIntent;
+import androidx.mediarouter.media.MediaRouteDescriptor;
+import androidx.mediarouter.media.MediaRouteDiscoveryRequest;
+import androidx.mediarouter.media.MediaRouteProvider;
+import androidx.mediarouter.media.MediaRouteProviderDescriptor;
+import androidx.mediarouter.media.MediaRouter;
 
 import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.cast.CastDevice;

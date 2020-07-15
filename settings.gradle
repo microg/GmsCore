@@ -1,9 +1,5 @@
 include ':wearable-lib'
 
-include ':unifiednlp-api'
-include ':unifiednlp-base'
-include ':unifiednlp-compat'
-
 include ':play-services-basement'
 
 include ':play-services-api'
@@ -17,12 +13,13 @@ include ':play-services-base'
 include ':play-services-tasks'
 include ':play-services-wearable'
 
+include ':play-services-base-core'
+include ':play-services-location-core'
 include ':play-services-maps-core-mapbox'
 include ':play-services-maps-core-vtm'
+include ':play-services-maps-core-vtm:vtm-microg-theme'
+
 include ':play-services-core'
+include ':play-services-core:microg-ui-tools'
 
-include ':microg-ui-tools'
 
-include ':vtm-microg-theme'
-
-include ':remote-droid-guard-lib'

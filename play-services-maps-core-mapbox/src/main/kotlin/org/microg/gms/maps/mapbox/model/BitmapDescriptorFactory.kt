@@ -18,6 +18,8 @@ package org.microg.gms.maps.mapbox.model
 
 import android.content.res.Resources
 import android.graphics.*
+import android.os.Handler
+import android.os.Looper
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
@@ -25,6 +27,7 @@ import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import org.microg.gms.maps.mapbox.R
+import org.microg.gms.maps.mapbox.runOnMainLooper
 
 
 object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
@@ -70,7 +73,11 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
             bitmap
         }
         for (map in maps) {
-            map.getStyle { it.addImage(id, bitmap) }
+            map.getStyle {
+                runOnMainLooper {
+                    it.addImage(id, bitmap)
+                }
+            }
         }
     }
 
@@ -156,7 +163,7 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
         return ObjectWrapper.wrap(BitmapDescriptorImpl(id, bitmapSize(id)))
     }
 
-    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
                 true
             } else {

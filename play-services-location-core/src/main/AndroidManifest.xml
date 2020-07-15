@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest package="org.microg.gms.location.core" xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <application>
+
+        <service android:name="org.microg.gms.location.GoogleLocationManagerService">
+            <intent-filter>
+                <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START"/>
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.location.ReportingAndroidService">
+            <intent-filter>
+                <action android:name="com.google.android.location.reporting.service.START"/>
+                <action android:name="com.google.android.gms.location.reporting.service.START"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

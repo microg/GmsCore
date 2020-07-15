@@ -18,9 +18,10 @@ package org.microg.gms.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 
-import com.google.android.gms.R;
+import androidx.fragment.app.Fragment;
+
+import com.mgoogle.android.gms.R;
 
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.SwitchBarResourceSettingsFragment;
@@ -37,7 +38,7 @@ public class CheckinFragment extends SwitchBarResourceSettingsFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        switchBar.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, false));
+        switchBar.setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, true));
     }
 
     @Override

@@ -50,7 +50,7 @@ class MapContext(private val context: Context) : ContextWrapper(context.createPa
     }
 
     override fun getClassLoader(): ClassLoader {
-        return MapContext::class.java.classLoader
+        return MapContext::class.java.classLoader!!
     }
 
     override fun getSharedPreferences(name: String?, mode: Int): SharedPreferences {

@@ -55,7 +55,7 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
     override fun getView(): IObjectWrapper = ObjectWrapper.wrap(map?.view)
     override fun getMapAsync(callback: IOnMapReadyCallback) = map?.getMapAsync(callback) ?: Unit
 
-    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
                 true
             } else {
