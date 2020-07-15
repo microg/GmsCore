@@ -18,13 +18,14 @@ package org.microg.gms.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.android.gms.R;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.mgoogle.android.gms.R;
 
 import org.microg.gms.snet.SafetyNetPrefs;
 import org.microg.tools.ui.AbstractSettingsActivity;

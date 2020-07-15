@@ -17,11 +17,12 @@
 package org.microg.gms.ui;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.preference.Preference;
 
-import com.google.android.gms.R;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
+
+import com.mgoogle.android.gms.R;
 
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.RadioButtonPreference;
@@ -42,8 +43,8 @@ public class SafetyNetAdvancedFragment extends ResourceSettingsFragment {
     private RadioButtonPreference radioThirdParty;
 
     @Override
-    public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-        super.onCreatePreferencesFix(savedInstanceState, rootKey);
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
 
         radioOfficial = (RadioButtonPreference) findPreference(PREF_SNET_OFFICIAL);
         radioSelfSigned = (RadioButtonPreference) findPreference(PREF_SNET_SELF_SIGNED);

@@ -21,8 +21,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+
+import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;

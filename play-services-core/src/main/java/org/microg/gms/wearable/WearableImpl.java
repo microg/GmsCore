@@ -24,10 +24,11 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.data.DataHolder;
 import com.google.android.gms.wearable.Asset;

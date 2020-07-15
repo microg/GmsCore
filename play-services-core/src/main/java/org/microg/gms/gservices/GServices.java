@@ -22,9 +22,9 @@ import android.database.Cursor;
 import android.net.Uri;
 
 public class GServices {
-    public static final Uri CONTENT_URI = Uri.parse("content://com.google.android.gsf.gservices");
-    public static final Uri MAIN_URI = Uri.parse("content://com.google.android.gsf.gservices/main");
-    public static final Uri OVERRIDE_URI = Uri.parse("content://com.google.android.gsf.gservices/override");
+    public static final Uri CONTENT_URI = Uri.parse("content://com.mgoogle.android.gsf.gservices");
+    public static final Uri MAIN_URI = Uri.parse("content://com.mgoogle.android.gsf.gservices/main");
+    public static final Uri OVERRIDE_URI = Uri.parse("content://com.mgoogle.android.gsf.gservices/override");
 
     public static int setString(ContentResolver resolver, String key, String value) {
         ContentValues values = new ContentValues();

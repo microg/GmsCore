@@ -38,7 +38,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 import com.squareup.wire.Wire;
 
 import org.microg.gms.common.PackageUtils;

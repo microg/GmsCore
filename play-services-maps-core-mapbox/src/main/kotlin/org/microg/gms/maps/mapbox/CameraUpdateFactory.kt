@@ -64,7 +64,7 @@ class CameraUpdateFactoryImpl : ICameraUpdateFactoryDelegate.Stub() {
     override fun newLatLngBoundsWithSize(bounds: LatLngBounds, width: Int, height: Int, padding: Int): IObjectWrapper =
         ObjectWrapper.wrap(CameraBoundsWithSizeUpdate(bounds.toMapbox(), width, height, padding))
 
-    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
                 true
             } else {

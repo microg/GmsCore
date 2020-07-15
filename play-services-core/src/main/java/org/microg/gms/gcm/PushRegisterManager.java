@@ -70,12 +70,16 @@ public class PushRegisterManager {
 
     public static void completeRegisterRequest(Context context, GcmDatabase database, String requestId, RegisterRequest request, BundleCallback callback) {
         if (request.app != null) {
-            if (request.appSignature == null)
-                request.appSignature = PackageUtils.firstSignatureDigest(context, request.app);
             if (request.appVersion <= 0)
                 request.appVersion = PackageUtils.versionCode(context, request.app);
-            if (request.appVersionName == null)
-                request.appVersionName = PackageUtils.versionName(context, request.app);
+            if (!request.delete) {
+                if (request.appSignature == null) {
+                    request.appSignature = PackageUtils.firstSignatureDigest(context, request.app);
+                }
+                request.sdkVersion = PackageUtils.targetSdkVersion(context, request.app);
+                if (!request.hasExtraParam(GcmConstants.EXTRA_APP_VERSION_NAME))
+                    request.extraParam(GcmConstants.EXTRA_APP_VERSION_NAME, PackageUtils.versionName(context, request.app));
+            }
         }
 
         GcmDatabase.App app = database.getApp(request.app);

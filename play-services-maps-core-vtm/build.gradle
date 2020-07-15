@@ -17,7 +17,6 @@
 apply plugin: "com.android.library"
 
 dependencies {
-    implementation project(":microg-ui-tools")
     implementation project(":play-services-api")
 
     implementation "org.microg:vtm-android:0.9.1-mod"
@@ -28,7 +27,9 @@ dependencies {
     implementation "org.microg:vtm-android:0.9.1-mod:natives-x86_64"
     implementation "org.microg:vtm-extras:0.9.1-mod"
     implementation "org.microg:vtm-jts:0.9.1-mod"
-    implementation project(":vtm-microg-theme")
+    implementation project(":play-services-maps-core-vtm:vtm-microg-theme")
+
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
 }
 
 def execResult(...args) {

@@ -21,8 +21,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.support.annotation.Keep;
 import android.util.Log;
+
+import androidx.annotation.Keep;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;

@@ -43,7 +43,7 @@ public class CheckinManager {
         LastCheckinInfo info = LastCheckinInfo.read(context);
         if (!force && info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
             return null;
-        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, false))
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, true))
             return null;
         List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
         AccountManager accountManager = AccountManager.get(context);
