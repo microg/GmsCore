@@ -18,16 +18,16 @@ package org.microg.gms.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
-import com.google.android.gms.R;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.mgoogle.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
-import org.microg.gms.snet.SafetyNetPrefs;
-import org.microg.nlp.Preferences;
+//import org.microg.nlp.Preferences;
 import org.microg.tools.ui.AbstractDashboardActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
 
@@ -51,7 +51,7 @@ public class SettingsActivity extends AbstractDashboardActivity {
         public static final String PREF_ABOUT = "pref_about";
         public static final String PREF_GCM = "pref_gcm";
         public static final String PREF_SNET = "pref_snet";
-        public static final String PREF_UNIFIEDNLP = "pref_unifiednlp";
+//        public static final String PREF_UNIFIEDNLP = "pref_unifiednlp";
         public static final String PREF_CHECKIN = "pref_checkin";
 
         public FragmentImpl() {
@@ -59,8 +59,8 @@ public class SettingsActivity extends AbstractDashboardActivity {
         }
 
         @Override
-        public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferencesFix(savedInstanceState, rootKey);
+        public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
+            super.onCreatePreferences(savedInstanceState, rootKey);
             updateDetails();
         }
 
@@ -81,30 +81,16 @@ public class SettingsActivity extends AbstractDashboardActivity {
                 findPreference(PREF_GCM).setSummary(R.string.abc_capital_off);
             }
 
-            if (SafetyNetPrefs.get(getContext()).isEnabled()) {
-                String snet_info = "";
-
-                if (SafetyNetPrefs.get(getContext()).isOfficial()) {
-                    snet_info = getString(R.string.pref_snet_status_official_info);
-                } else if (SafetyNetPrefs.get(getContext()).isSelfSigned()) {
-                    snet_info = getString(R.string.pref_snet_status_self_signed_info);
-                } else if (SafetyNetPrefs.get(getContext()).isThirdParty()) {
-                    snet_info = getString(R.string.pref_snet_status_third_party_info);
-                }
-
-                findPreference(PREF_SNET).setSummary(getString(R.string.service_status_enabled) + " / " + snet_info);
-            } else {
                 findPreference(PREF_SNET).setSummary(R.string.service_status_disabled);
-            }
 
-            Preferences unifiedNlPrefs = new Preferences(getContext());
-            int backendCount = TextUtils.isEmpty(unifiedNlPrefs.getLocationBackends()) ? 0 :
-                    Preferences.splitBackendString(unifiedNlPrefs.getLocationBackends()).length;
-            backendCount += TextUtils.isEmpty(unifiedNlPrefs.getGeocoderBackends()) ? 0 :
-                    Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
-            findPreference(PREF_UNIFIEDNLP).setSummary(getResources().getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount));
+//            Preferences unifiedNlPrefs = new Preferences(getContext());
+//            int backendCount = TextUtils.isEmpty(unifiedNlPrefs.getLocationBackends()) ? 0 :
+//                    Preferences.splitBackendString(unifiedNlPrefs.getLocationBackends()).length;
+//            backendCount += TextUtils.isEmpty(unifiedNlPrefs.getGeocoderBackends()) ? 0 :
+//                    Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
+//            findPreference(PREF_UNIFIEDNLP).setSummary(getResources().getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount));
 
-            boolean checkinEnabled = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, false);
+            boolean checkinEnabled = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, true);
             findPreference(PREF_CHECKIN).setSummary(checkinEnabled ? R.string.service_status_enabled : R.string.service_status_disabled);
         }
     }

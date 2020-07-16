@@ -18,13 +18,14 @@ package org.microg.gms.ui;
 
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import org.microg.tools.selfcheck.InstalledPackagesChecks;
-import org.microg.tools.selfcheck.NlpOsCompatChecks;
-import org.microg.tools.selfcheck.NlpStatusChecks;
+//import org.microg.tools.selfcheck.NlpOsCompatChecks;
+//import org.microg.tools.selfcheck.NlpStatusChecks;
 import org.microg.tools.selfcheck.PermissionCheckGroup;
 import org.microg.tools.selfcheck.RomSpoofSignatureChecks;
 import org.microg.tools.selfcheck.SelfCheckGroup;
@@ -48,13 +49,13 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
         checks.add(new RomSpoofSignatureChecks());
         checks.add(new InstalledPackagesChecks());
         if (SDK_INT > LOLLIPOP_MR1) {
-            checks.add(new PermissionCheckGroup(ACCESS_COARSE_LOCATION, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE));
+            checks.add(new PermissionCheckGroup(ACCESS_COARSE_LOCATION, "android.permission.ACCESS_BACKGROUND_LOCATION", WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE));
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checks.add(new SystemChecks());
         }
-        checks.add(new NlpOsCompatChecks());
-        checks.add(new NlpStatusChecks());
+//        checks.add(new NlpOsCompatChecks());
+//        checks.add(new NlpStatusChecks());
     }
 
     @Override

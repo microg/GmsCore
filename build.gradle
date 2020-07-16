@@ -1,63 +1,110 @@
 /*
- * Copyright 2013-2019 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2013, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 buildscript {
-    ext.kotlin_version = '1.3.21'
+    ext.nlpVersion = '2.0-alpha1'
+    ext.remoteDroidGuardVersion = '0.1.1'
+    ext.safeParcelVersion = '1.6.0'
+    ext.wearableVersion = '0.1.1'
+
+    ext.kotlinVersion = '1.3.72'
+    ext.coroutineVersion = '1.3.7'
+
+    ext.annotationVersion = '1.1.0'
+    ext.appcompatVersion = '1.1.0'
+    ext.fragmentVersion = '1.2.5'
+    ext.lifecycleVersion = '2.2.0'
+    ext.mediarouterVersion = '1.1.0'
+    ext.multidexVersion = '2.0.1'
+    ext.navigationVersion = '2.3.0'
+    ext.preferenceVersion = '1.1.1'
+    ext.recyclerviewVersion = '1.1.0'
+
+    ext.supportLibraryVersion = "28.0.0"
+    ext.slf4jVersion = "1.7.25"
+
+    ext.androidBuildGradleVersion = "3.6.3"
+
+    ext.androidBuildVersionTools = "29.0.3"
+
+    ext.androidMinSdk = 14
+    ext.androidTargetSdk = 29
+    ext.androidCompileSdk = 29
+
     repositories {
         jcenter()
         google()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.android.tools.build:gradle:$androidBuildGradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
+def execResult(...args) {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine args
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+def gmsVersion = "19.4.20"
+def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
+def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').substring(1)
+def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))
+def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').split(' ')[0]
+def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
+def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
+def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
+def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
+def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
+logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
+
+@Deprecated
+String getMyVersionName() {
+    return ourVersionName
+}
+
+@Deprecated
+int getMyVersionCode() {
+    return ourVersionCode
+}
+
+
 allprojects {
     apply plugin: 'idea'
-    ext.androidBuildVersionTools = "29.0.2"
-    ext.supportLibraryVersion = "28.0.0"
+
+    group = 'org.microg.gms'
+    version = ourVersionName
+    ext.appVersionCode = ourVersionCode
     ext.isReleaseVersion = false
-    ext.slf4jVersion = "1.7.25"
 }
 
-def androidCompileSdk() { return 28 }
+@Deprecated
+def androidCompileSdk() { return androidCompileSdk }
 
-def androidTargetSdk() { return 29 }
+@Deprecated
+def androidTargetSdk() { return androidTargetSdk }
 
-def androidMinSdk() { return 14 }
+@Deprecated
+def androidMinSdk() { return androidMinSdk }
 
+@Deprecated
 def versionCode() {
-    def stdout = new ByteArrayOutputStream()
-    exec { commandLine 'git', 'rev-list', '--count', "HEAD"; standardOutput = stdout }
-    return Integer.parseInt(stdout.toString().trim())
+    return ourVersionCode
 }
 
+@Deprecated
 def versionName() {
-    def stdout = new ByteArrayOutputStream()
-    if (rootProject.file("gradlew").exists())
-        exec { commandLine 'git', 'describe', '--tags', '--always', '--dirty'; standardOutput = stdout }
-    else // automatic build system, don't tag dirty
-        exec { commandLine 'git', 'describe', '--tags', '--always'; standardOutput = stdout }
-    return stdout.toString().trim().substring(1)
+    return ourVersionName
 }
 
 subprojects {
-    group = 'org.microg'
     repositories {
         jcenter()
         google()

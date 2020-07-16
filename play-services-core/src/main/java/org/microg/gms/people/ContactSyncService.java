@@ -24,8 +24,9 @@ import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 public class ContactSyncService extends Service {
     private static final String TAG = "GmsContactSync";

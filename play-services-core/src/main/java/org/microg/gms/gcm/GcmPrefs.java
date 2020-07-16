@@ -83,7 +83,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         gcmLogEnabled = defaultPreferences.getBoolean(PREF_FULL_LOG, true);
         lastPersistedId = defaultPreferences.getString(PREF_LAST_PERSISTENT_ID, "");
         confirmNewApps = defaultPreferences.getBoolean(PREF_CONFIRM_NEW_APPS, false);
-        gcmEnabled = defaultPreferences.getBoolean(PREF_ENABLE_GCM, false);
+        gcmEnabled = defaultPreferences.getBoolean(PREF_ENABLE_GCM, true);
 
         networkMobile = Integer.parseInt(defaultPreferences.getString(PREF_NETWORK_MOBILE, "0"));
         networkWifi = Integer.parseInt(defaultPreferences.getString(PREF_NETWORK_WIFI, "0"));
