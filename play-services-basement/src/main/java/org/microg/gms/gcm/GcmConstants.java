@@ -17,10 +17,10 @@
 package org.microg.gms.gcm;
 
 public final class GcmConstants {
-    public static final String ACTION_C2DM_RECEIVE = "com.google.android.c2dm.intent.RECEIVE";
-    public static final String ACTION_C2DM_REGISTER = "com.google.android.c2dm.intent.REGISTER";
-    public static final String ACTION_C2DM_REGISTRATION = "com.google.android.c2dm.intent.REGISTRATION";
-    public static final String ACTION_C2DM_UNREGISTER = "com.google.android.c2dm.intent.UNREGISTER";
+    public static final String ACTION_C2DM_RECEIVE = "com.mgoogle.android.c2dm.intent.RECEIVE";
+    public static final String ACTION_C2DM_REGISTER = "com.mgoogle.android.c2dm.intent.REGISTER";
+    public static final String ACTION_C2DM_REGISTRATION = "com.mgoogle.android.c2dm.intent.REGISTRATION";
+    public static final String ACTION_C2DM_UNREGISTER = "com.mgoogle.android.c2dm.intent.UNREGISTER";
     public static final String ACTION_GCM_SEND = "com.google.android.gcm.intent.SEND";
     public static final String ACTION_NOTIFICATION_OPEN = "com.google.android.gms.gcm.NOTIFICATION_OPEN";
     public static final String ACTION_NOTIFICATION_DISMISS = "com.google.android.gms.gcm.NOTIFICATION_DISMISS";

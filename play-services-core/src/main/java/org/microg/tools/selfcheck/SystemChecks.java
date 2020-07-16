@@ -25,7 +25,7 @@ import android.provider.Settings;
 
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;

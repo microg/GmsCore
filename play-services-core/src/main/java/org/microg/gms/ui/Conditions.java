@@ -28,7 +28,7 @@ import android.view.View;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.tools.ui.Condition;

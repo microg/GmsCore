@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.gms.gcm.McsService;
