@@ -23,9 +23,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-
-import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.google.android.gms.checkin.internal.ICheckinService;
 
@@ -58,7 +57,7 @@ public class CheckinService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             ForegroundServiceContext.completeForegroundService(this, intent, TAG);
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_ENABLE_CHECKIN, true)) {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_ENABLE_CHECKIN, false)) {
                 LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
                 if (info != null) {
                     Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));

@@ -22,10 +22,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
 
-import androidx.fragment.app.Fragment;
-
-import com.mgoogle.android.gms.R;
+import com.google.android.gms.R;
 
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Negative;
 import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Positive;

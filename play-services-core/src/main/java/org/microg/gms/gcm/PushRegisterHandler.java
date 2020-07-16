@@ -145,7 +145,7 @@ class PushRegisterHandler extends Handler {
                         .checkin(LastCheckinInfo.read(context))
                         .app(packageName)
                         .delete(delete)
-                        .extraParams(subdata),
+                        .appid(subdata.getString("appid"), subdata.getString("gmp_app_id")),
                 bundle -> sendReply(what, id, replyTo, bundle));
     }
 }

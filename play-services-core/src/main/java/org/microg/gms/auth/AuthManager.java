@@ -51,17 +51,6 @@ public class AuthManager {
     public AuthManager(Context context, String accountName, String packageName, String service) {
         this.context = context;
         this.accountName = accountName;
-        if (packageName.contains("youtube.music")) {
-            packageName = "com.google.android.apps.youtube.music";
-        } else if (packageName.contains("youtube.unplugged")) {
-            packageName = "com.google.android.apps.youtube.unplugged";
-        } else if (packageName.contains("youtube.tv")) {
-            packageName = "com.google.android.youtube.tv";
-        } else if (packageName.contains("youtube")) {
-            packageName = "com.google.android.youtube";
-        } else if (packageName.contains("apps.photos")) {
-            packageName = "com.google.android.apps.photos";
-        }
         this.packageName = packageName;
         this.service = service;
     }

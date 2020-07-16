@@ -23,12 +23,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.mgoogle.android.gms.R;
+import com.google.android.gms.R;
 
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.tools.ui.Condition;

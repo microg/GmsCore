@@ -17,19 +17,20 @@
 package org.microg.gms.maps.mapbox
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.location.Location
-import android.os.*
-import androidx.annotation.IdRes
-import androidx.annotation.Keep
+import android.os.Bundle
+import android.os.IBinder
+import android.os.Parcel
+import android.support.annotation.IdRes
+import android.support.annotation.Keep
+import android.support.v4.util.LongSparseArray
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
-import androidx.collection.LongSparseArray
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.internal.*
@@ -48,7 +49,6 @@ import com.mapbox.mapboxsdk.plugins.annotation.*
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
 import com.mapbox.mapboxsdk.utils.ColorUtils
-import com.mapbox.mapboxsdk.utils.ThreadUtils
 import org.microg.gms.kotlin.unwrap
 import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.model.*
@@ -58,16 +58,6 @@ import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 
 private fun <T : Any> LongSparseArray<T>.values() = (0..size()).map { valueAt(it) }.mapNotNull { it }
-
-fun runOnMainLooper(method: () -> Unit) {
-    if (Looper.myLooper() == Looper.getMainLooper()) {
-        method()
-    } else {
-        Handler(Looper.getMainLooper()).post {
-            method()
-        }
-    }
-}
 
 class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions) : IGoogleMapDelegate.Stub() {
 
@@ -84,7 +74,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private val mapLock = Object()
 
     private val initializedCallbackList = mutableListOf<IOnMapReadyCallback>()
-    private var loadedCallback: IOnMapLoadedCallback? = null
+    private var loadedCallback : IOnMapLoadedCallback? = null
     private var cameraChangeListener: IOnCameraChangeListener? = null
     private var cameraMoveListener: IOnCameraMoveListener? = null
     private var cameraMoveCanceledListener: IOnCameraMoveCanceledListener? = null
@@ -119,10 +109,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         val mapContext = MapContext(context)
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
-        runOnMainLooper {
-            Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY)
-        }
-
+        Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY)
 
         val fakeWatermark = View(mapContext)
         fakeWatermark.layoutParams = object : RelativeLayout.LayoutParams(0, 0) {
@@ -402,14 +389,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun getUiSettings(): IUiSettingsDelegate? = map?.uiSettings?.let { UiSettingsImpl(it) }
 
-    override fun getProjection(): IProjectionDelegate? = map?.projection?.let {
-        val experiment = try {
-            map?.cameraPosition?.tilt == 0.0 && map?.cameraPosition?.bearing == 0.0
-        } catch (e: Exception) {
-            Log.w(TAG, e); false
-        }
-        ProjectionImpl(it, experiment)
-    }
+    override fun getProjection(): IProjectionDelegate? = map?.projection?.let { ProjectionImpl(it) }
 
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) {
         cameraChangeListener = listener
@@ -463,16 +443,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         Log.d(TAG, "setPadding: $left $top $right $bottom")
-        map?.let { map ->
-            map.setPadding(left, top, right, bottom)
-            val fourDp = mapView?.context?.resources?.getDimension(R.dimen.mapbox_four_dp)?.toInt()
-                    ?: 0
-            val ninetyTwoDp = mapView?.context?.resources?.getDimension(R.dimen.mapbox_ninety_two_dp)?.toInt()
-                    ?: 0
-            map.uiSettings.setLogoMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
-            map.uiSettings.setCompassMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
-            map.uiSettings.setAttributionMargins(left + ninetyTwoDp, top + fourDp, right + fourDp, bottom + fourDp)
-        }
+        map?.setPadding(left, top, right, bottom)
+        val fourDp = mapView?.context?.resources?.getDimension(R.dimen.mapbox_four_dp)?.toInt() ?: 0
+        val ninetyTwoDp = mapView?.context?.resources?.getDimension(R.dimen.mapbox_ninety_two_dp)?.toInt()
+                ?: 0
+        map?.uiSettings?.setLogoMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
+        map?.uiSettings?.setCompassMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
+        map?.uiSettings?.setAttributionMargins(left + ninetyTwoDp, top + fourDp, right + fourDp, bottom + fourDp)
     }
 
     override fun isBuildingsEnabled(): Boolean {
@@ -535,7 +512,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     private fun hasSymbolAt(latlng: com.mapbox.mapboxsdk.geometry.LatLng): Boolean {
         val point = map?.projection?.toScreenLocation(latlng) ?: return false
-        val features = map?.queryRenderedFeatures(point, symbolManager?.layerId)
+        val features = map?.queryRenderedFeatures(point, SymbolManager.ID_GEOJSON_LAYER)
                 ?: return false
         return features.isNotEmpty()
     }
@@ -762,7 +739,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
                 true
             } else {

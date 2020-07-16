@@ -45,7 +45,7 @@ public class SharedTileProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        return "vnd.android.cursor.item/org.mgoogle.gms.map.tile";
+        return "vnd.android.cursor.item/org.microg.gms.map.tile";
     }
 
     @Override

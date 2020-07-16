@@ -45,10 +45,13 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
     override var removed: Boolean = false
     override val annotationOptions: SymbolOptions
         get() {
+            var intBits = java.lang.Float.floatToIntBits(zIndex)
+            if (intBits < 0) intBits = intBits xor 0x7fffffff
+
             val symbolOptions = SymbolOptions()
                     .withIconOpacity(if (visible) alpha else 0f)
                     .withIconRotate(rotation)
-                    .withSymbolSortKey(zIndex)
+                    .withZIndex(intBits)
                     .withDraggable(draggable)
 
             position.let { symbolOptions.withLatLng(it.toMapbox()) }
@@ -189,7 +192,9 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
 
     override fun setZIndex(zIndex: Float) {
         this.zIndex = zIndex
-        annotation?.symbolSortKey = zIndex
+        var intBits = java.lang.Float.floatToIntBits(zIndex)
+        if (intBits < 0) intBits = intBits xor 0x7fffffff
+        annotation?.zIndex = intBits
         map.symbolManager?.let { update(it) }
     }
 
