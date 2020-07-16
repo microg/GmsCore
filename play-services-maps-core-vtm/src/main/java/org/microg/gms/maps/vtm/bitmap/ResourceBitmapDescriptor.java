@@ -21,8 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
-import androidx.core.content.ContextCompat;
+import android.support.v4.content.ContextCompat;
 
 public class ResourceBitmapDescriptor extends AbstractBitmapDescriptor {
     private int resourceId;

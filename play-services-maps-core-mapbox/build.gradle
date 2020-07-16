@@ -15,18 +15,14 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 dependencies {
     implementation project(':play-services-api')
-    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1") {
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-accounts'
-    }
-    implementation("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0") {
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-accounts'
-    }
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    implementation "com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.0"
+    implementation "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v7:0.6.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 def execResult(...args) {
@@ -45,13 +41,15 @@ def mapboxKey() {
 }
 
 android {
-    compileSdkVersion androidCompileSdk
+    compileSdkVersion androidCompileSdk()
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName version
-        minSdkVersion androidMinSdk
-        targetSdkVersion androidTargetSdk
+        versionName "temp"
+        versionCode 1
+
+        minSdkVersion androidMinSdk()
+        targetSdkVersion androidTargetSdk()
         buildConfigField "String", "MAPBOX_KEY", "\"${mapboxKey()}\""
 
         ndk {

@@ -38,10 +38,9 @@ import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
-import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.squareup.wire.Message;
 
@@ -106,7 +105,7 @@ import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
 
-    public static final String SELF_CATEGORY = "com.mgoogle.android.gsf.gtalkservice";
+    public static final String SELF_CATEGORY = "com.google.android.gsf.gtalkservice";
     public static final String IDLE_NOTIFICATION = "IdleNotification";
     public static final String FROM_FIELD = "gcm@android.com";
 
@@ -554,13 +553,7 @@ public class McsService extends Service implements Handler.Callback {
                     }
                 }
                 targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
-                if (resolveInfo.activityInfo.packageName.equals(packageName)) {
-                    sendOrderedBroadcast(targetIntent, null);
-                } else if (receiverPermission != null) {
-                    sendOrderedBroadcast(targetIntent, receiverPermission);
-                } else {
-                    Log.w(TAG, resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name + " matches for C2D message to " + packageName + " but corresponding permission was not declared");
-                }
+                sendOrderedBroadcast(targetIntent, receiverPermission);
             }
         }
     }
