@@ -323,7 +323,7 @@
                 android:value="1" />
         </service>
 
-        <service android:name=".auth.FirebaseAuthService">
+        <service android:name="com.google.android.gms.auth.FirebaseAuthService">
             <intent-filter>
                 <action android:name="com.google.firebase.auth.api.gms.service.START" />
             </intent-filter>
@@ -359,11 +359,11 @@
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
 
         <service
-            android:name=".auth.GetToken"
+            android:name="com.google.android.gms.auth.GetToken"
             android:exported="true" />
 
         <activity
-            android:name=".auth.TokenActivity"
+            android:name="com.google.android.gms.auth.TokenActivity"
             android:exported="true" />
 
         <provider
@@ -548,7 +548,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".analytics.service.AnalyticsService"
+            android:name="com.google.android.gms.analytics.service.AnalyticsService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.analytics.service.START" />
@@ -560,7 +560,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".gcm.http.GoogleHttpService"
+            android:name="com.google.android.gms.gcm.http.GoogleHttpService"
             android:exported="true" />
 
         <service android:name="org.microg.gms.ads.GService">
