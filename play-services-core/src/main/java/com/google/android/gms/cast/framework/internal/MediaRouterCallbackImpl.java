@@ -26,8 +26,6 @@ import com.google.android.gms.cast.framework.ISession;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import android.support.v7.media.MediaControlIntent;
-
 public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
     private static final String TAG = MediaRouterCallbackImpl.class.getSimpleName();
 

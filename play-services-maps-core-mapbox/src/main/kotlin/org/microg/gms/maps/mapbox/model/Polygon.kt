@@ -73,13 +73,15 @@ class PolygonImpl(private val map: GoogleMapImpl, private val id: String, option
     override fun setHoles(holes: List<Any?>?) {
         this.holes = if (holes == null) emptyList() else ArrayList(holes.mapNotNull { if (it is List<*>) it.mapNotNull { if (it is LatLng) it else null }.let { if (it.isNotEmpty()) it else null } else null })
         annotation?.latLngs = mutableListOf(points.map { it.toMapbox() }).plus(this.holes.map { it.map { it.toMapbox() } })
-        while (this.holes.size < strokes.size) {
+        while (strokes.size > this.holes.size + 1) {
             val last = strokes.last()
             last.remove()
             strokes.remove(last)
         }
-        strokes.forEachIndexed { idx, it -> it.points = this.holes[idx] }
-        strokes.addAll(this.holes.subList(strokes.size, this.holes.lastIndex).mapIndexed { idx, it -> PolylineImpl(map, "$id-stroke-hole-${strokes.size + idx}", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)) })
+        strokes.forEachIndexed { idx, it -> if (idx > 0) it.points = this.holes[idx - 1] }
+        if (this.holes.size + 1 > strokes.size) {
+            strokes.addAll(this.holes.subList(strokes.size, this.holes.size - 1).mapIndexed { idx, it -> PolylineImpl(map, "$id-stroke-hole-${strokes.size + idx}", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)) })
+        }
         map.fillManager?.let { update(it) }
     }
 
@@ -152,7 +154,7 @@ class PolygonImpl(private val map: GoogleMapImpl, private val id: String, option
         return false
     }
 
-    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean =
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {
                 true
             } else {

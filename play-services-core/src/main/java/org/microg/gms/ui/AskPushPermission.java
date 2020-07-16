@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.R;
 
@@ -88,8 +89,8 @@ public class AskPushPermission extends FragmentActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if (!answered) {
             PushRegisterService.replyNotAvailable(AskPushPermission.this, intent, packageName, requestId);
             answered = true;

@@ -38,9 +38,10 @@ import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.squareup.wire.Message;
 
@@ -553,7 +554,13 @@ public class McsService extends Service implements Handler.Callback {
                     }
                 }
                 targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
-                sendOrderedBroadcast(targetIntent, receiverPermission);
+                if (resolveInfo.activityInfo.packageName.equals(packageName)) {
+                    sendOrderedBroadcast(targetIntent, null);
+                } else if (receiverPermission != null) {
+                    sendOrderedBroadcast(targetIntent, receiverPermission);
+                } else {
+                    Log.w(TAG, resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name + " matches for C2D message to " + packageName + " but corresponding permission was not declared");
+                }
             }
         }
     }

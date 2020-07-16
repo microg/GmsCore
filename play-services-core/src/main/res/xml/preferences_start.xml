@@ -69,17 +69,15 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_configuration">
         <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/location_marker"
             android:key="pref_unifiednlp"
-            android:title="@string/nlp_settings_label">
+            android:title="UnifiedNlp">
             <intent
-                android:targetClass="org.microg.nlp.ui.SettingsActivity"
+                android:targetClass="org.microg.nlp.ui.BackendSettingsActivity"
                 android:targetPackage="com.google.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_about">
         <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/info"
             android:key="pref_about"
             android:title="@string/pref_about_title">
             <intent

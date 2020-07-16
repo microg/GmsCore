@@ -93,7 +93,7 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         map?.onSaveInstanceState(outState)
     }
 
-    override fun onTransact(code: Int, data: Parcel?, reply: Parcel?, flags: Int): Boolean {
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
         if (super.onTransact(code, data, reply, flags)) {
             return true
         } else {

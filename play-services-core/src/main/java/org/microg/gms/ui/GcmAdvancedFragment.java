@@ -18,9 +18,10 @@ package org.microg.gms.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.preference.Preference;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
 
 import com.google.android.gms.R;
 
@@ -41,8 +42,8 @@ public class GcmAdvancedFragment extends ResourceSettingsFragment {
     }
 
     @Override
-    public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-        super.onCreatePreferencesFix(savedInstanceState, rootKey);
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
+        super.onCreatePreferences(savedInstanceState, rootKey);
         for (String pref : HEARTBEAT_PREFS) {
             findPreference(pref).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
