@@ -34,7 +34,7 @@ import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
-    public static final String PERMISSION_TREE_BASE = "com.google.android.googleapps.permission.GOOGLE_AUTH.";
+    public static final String PERMISSION_TREE_BASE = "com.mgoogle.android.googleapps.permission.GOOGLE_AUTH.";
     private static final String PREF_AUTH_TRUST_GOOGLE = "auth_manager_trust_google";
     public static final String PREF_AUTH_VISIBLE = "auth_manager_visible";
     public static final int ONE_HOUR_IN_SECONDS = 60 * 60;

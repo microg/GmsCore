@@ -106,7 +106,7 @@
         android:allowBackup="false"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_core_service_app"
-        android:label="@string/gms_app_name">
+        android:label="Vanced MicroG">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
@@ -412,11 +412,6 @@
             android:label="@string/gms_settings_name"
             android:roundIcon="@mipmap/ic_microg_settings"
             android:theme="@style/Theme.AppCompat.DayNight">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <category android:name="android.intent.category.DEFAULT" />
