@@ -45,7 +45,6 @@
         android:label="@string/perm_extended_access_label"
         android:protectionLevel="dangerous" />
 
-    <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -58,9 +57,6 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="com.mgoogle.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.mgoogle.android.c2dm.permission.SEND" />
