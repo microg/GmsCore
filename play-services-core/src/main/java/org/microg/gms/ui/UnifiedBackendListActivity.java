@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import org.microg.nlp.ui.BackendListFragment;
 import org.microg.tools.ui.AbstractSettingsActivity;
 
 public class UnifiedBackendListActivity extends AppCompatActivity {
@@ -21,7 +20,7 @@ public class UnifiedBackendListActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.w("GmsCoreSettingUi", e);
         }
-        getSupportFragmentManager().beginTransaction().add(new BackendListFragment(), null).commit();
+        getSupportFragmentManager().beginTransaction().add(null, null).commit();
     }
 
     @Override

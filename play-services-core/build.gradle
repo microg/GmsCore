@@ -36,28 +36,15 @@ dependencies {
     api "uk.uuid.slf4j:slf4j-android:1.7.25-1"
 
     implementation project(':play-services-base-core')
-    implementation project(':play-services-location-core')
     implementation project(':play-services-core:microg-ui-tools') // deprecated
     implementation project(':play-services-api')
     implementation project(':play-services-cast-api')
-    implementation project(':play-services-wearable')
-    implementation "org.microg:wearable:$wearableVersion"
-    implementation "org.microg.gms:remote-droid-guard:$remoteDroidGuardVersion"
-
-    mapboxImplementation project(':play-services-maps-core-mapbox')
-    vtmImplementation project(':play-services-maps-core-vtm')
 
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
     implementation "androidx.preference:preference:$preferenceVersion"
-
-    // Navigation
-    implementation "androidx.navigation:navigation-fragment:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui:$navigationVersion"
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 }
 
 android {
