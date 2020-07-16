@@ -27,7 +27,6 @@ import com.mgoogle.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
-import org.microg.gms.snet.SafetyNetPrefs;
 //import org.microg.nlp.Preferences;
 import org.microg.tools.ui.AbstractDashboardActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
@@ -82,21 +81,7 @@ public class SettingsActivity extends AbstractDashboardActivity {
                 findPreference(PREF_GCM).setSummary(R.string.abc_capital_off);
             }
 
-            if (SafetyNetPrefs.get(getContext()).isEnabled()) {
-                String snet_info = "";
-
-                if (SafetyNetPrefs.get(getContext()).isOfficial()) {
-                    snet_info = getString(R.string.pref_snet_status_official_info);
-                } else if (SafetyNetPrefs.get(getContext()).isSelfSigned()) {
-                    snet_info = getString(R.string.pref_snet_status_self_signed_info);
-                } else if (SafetyNetPrefs.get(getContext()).isThirdParty()) {
-                    snet_info = getString(R.string.pref_snet_status_third_party_info);
-                }
-
-                findPreference(PREF_SNET).setSummary(getString(R.string.service_status_enabled) + " / " + snet_info);
-            } else {
                 findPreference(PREF_SNET).setSummary(R.string.service_status_disabled);
-            }
 
 //            Preferences unifiedNlPrefs = new Preferences(getContext());
 //            int backendCount = TextUtils.isEmpty(unifiedNlPrefs.getLocationBackends()) ? 0 :

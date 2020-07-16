@@ -44,6 +44,5 @@ android {
 
 dependencies {
     api project(':play-services-base')
-    api project(':play-services-wearable-api')
     implementation 'com.squareup.wire:wire-runtime:1.6.1'
 }

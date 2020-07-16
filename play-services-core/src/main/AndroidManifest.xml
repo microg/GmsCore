@@ -37,26 +37,6 @@
         android:icon="@drawable/proprietary_auth_ic_scope_icon_default" />
 
     <permission
-        android:name="com.mgoogle.android.googleapps.permission.GOOGLE_AUTH.cp"
-        android:description="@string/permission_service_cp_description"
-        android:label="@string/permission_service_cp_label"
-        android:protectionLevel="dangerous" />
-    <permission
-        android:name="com.mgoogle.android.googleapps.permission.GOOGLE_AUTH.local"
-        android:description="@string/permission_service_local_description"
-        android:label="@string/permission_service_local_label"
-        android:protectionLevel="dangerous" />
-    <permission
-        android:name="com.mgoogle.android.googleapps.permission.GOOGLE_AUTH.mail"
-        android:description="@string/permission_service_mail_description"
-        android:label="@string/permission_service_mail_label"
-        android:protectionLevel="dangerous" />
-    <permission
-        android:name="com.mgoogle.android.googleapps.permission.GOOGLE_AUTH.writely"
-        android:description="@string/permission_service_writely_description"
-        android:label="@string/permission_service_writely_label"
-        android:protectionLevel="dangerous" />
-    <permission
         android:name="org.mgoogle.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
         android:protectionLevel="normal" />
@@ -67,12 +47,7 @@
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -110,47 +85,6 @@
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
-
-        <!-- Location -->
-
-        <activity android:name="org.microg.nlp.ui.BackendSettingsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
-            android:name="org.microg.gms.ui.PlacePickerActivity"
-            android:exported="true"
-            android:label="@string/pick_place_title"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-            <intent-filter>
-                <action android:name="com.google.android.gms.location.places.ui.PICK_PLACE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <service android:name="org.microg.gms.places.GeoDataService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.location.places.GeoDataApi" />
-                <action android:name="com.google.android.gms.location.places.PlacesApi" />
-            </intent-filter>
-        </service>
-
-        <service android:name="org.microg.gms.places.PlaceDetectionService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.location.places.PlaceDetectionApi" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name="org.microg.gms.wearable.location.WearableLocationService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-                <data
-                    android:host="*"
-                    android:pathPrefix="/com/google/android/location/fused/wearable"
-                    android:scheme="wear" />
-            </intent-filter>
-        </service>
 
         <!-- Services Framework -->
 
@@ -297,13 +231,6 @@
                 android:resource="@xml/contact_syncadapter" />
         </service>
 
-        <!-- Wearable -->
-
-        <service android:name="org.microg.gms.wearable.WearableService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND" />
-            </intent-filter>
-        </service>
 
         <!-- Auth -->
 
@@ -476,16 +403,6 @@
             android:theme="@style/Theme.AppCompat.DayNight" />
 
         <activity
-            android:name="org.microg.gms.ui.SafetyNetFragment$AsActivity"
-            android:label="@string/service_name_snet"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
-            android:name="org.microg.gms.ui.SafetyNetAdvancedFragment$AsActivity"
-            android:label="@string/service_name_snet"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
             android:name="org.microg.gms.ui.SelfCheckFragment$AsActivity"
             android:label="@string/self_check_title"
             android:theme="@style/Theme.AppCompat.DayNight" />
@@ -607,11 +524,6 @@
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.snet.SafetyNetClientService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.safetynet.service.START" />
-            </intent-filter>
-        </service>
         <service android:name="org.microg.gms.wallet.PaymentService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wallet.service.BIND" />
