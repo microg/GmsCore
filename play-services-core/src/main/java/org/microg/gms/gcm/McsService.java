@@ -106,7 +106,7 @@ import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
 
-    public static final String SELF_CATEGORY = "com.google.android.gsf.gtalkservice";
+    public static final String SELF_CATEGORY = "com.mgoogle.android.gsf.gtalkservice";
     public static final String IDLE_NOTIFICATION = "IdleNotification";
     public static final String FROM_FIELD = "gcm@android.com";
 

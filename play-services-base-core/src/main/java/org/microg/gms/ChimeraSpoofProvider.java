@@ -46,7 +46,7 @@ public class ChimeraSpoofProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return "vnd.android.cursor.item/com.google.android.gms.chimera";
+        return "vnd.android.cursor.item/com.mgoogle.android.gms.chimera";
     }
 
     @Nullable

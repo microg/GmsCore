@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import androidx.annotation.StringRes;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 
 public abstract class AssistantActivity extends Activity {
     private static final int TITLE_MIN_HEIGHT = 64;

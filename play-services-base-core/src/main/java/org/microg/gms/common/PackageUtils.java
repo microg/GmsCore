@@ -40,9 +40,8 @@ import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 public class PackageUtils {
 
     private static final String GOOGLE_PLATFORM_KEY = GMS_PACKAGE_SIGNATURE_SHA1;
-    private static final String GOOGLE_APP_KEY = "24bb24c05e47e0aefa68a58a766179d9b613a600";
     private static final String GOOGLE_LEGACY_KEY = "58e1c4133f7441ec3d2c270270a14802da47ba0e"; // Seems to be no longer used.
-    private static final String[] GOOGLE_PRIMARY_KEYS = {GOOGLE_PLATFORM_KEY, GOOGLE_APP_KEY};
+    private static final String[] GOOGLE_PRIMARY_KEYS = {GOOGLE_PLATFORM_KEY, "24bb24c05e47e0aefa68a58a766179d9b613a600", "afb0fed5eeaebdd86f56a97742f4b6b33ef59875", "61226bdb57cc32c8a2a9ef71f7bc9548e95dcc0b", "3a82b5ee26bc46bf68113d920e610cd090198d4a"};
 
     private static final Map<String, String> KNOWN_GOOGLE_PACKAGES;
 
@@ -99,7 +98,7 @@ public class PackageUtils {
                     return true;
             }
         }
-        return context.checkCallingPermission("org.microg.gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
+        return context.checkCallingPermission("org.mgoogle.gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void checkPackageUid(Context context, String packageName, int callingUid) {
@@ -113,6 +112,18 @@ public class PackageUtils {
 
     @Nullable
     public static String firstSignatureDigest(PackageManager packageManager, String packageName) {
+        if (packageName.equals("com.google.android.apps.youtube.music") || packageName.contains("youtube.music")) {
+            return "afb0fed5eeaebdd86f56a97742f4b6b33ef59875";
+        }
+        if (packageName.equals("com.google.android.apps.youtube.unplugged") || packageName.contains("youtube.unplugged")) {
+            return "3a82b5ee26bc46bf68113d920e610cd090198d4a";
+        }
+        if (packageName.equals("com.google.android.youtube.tv") || packageName.contains("youtube.tv")) {
+            return "61226bdb57cc32c8a2a9ef71f7bc9548e95dcc0b";
+        }
+        if (packageName.equals("com.google.android.apps.photos") || packageName.contains("apps.photos") || packageName.equals("com.google.android.youtube") || packageName.contains("youtube")) {
+            return "24bb24c05e47e0aefa68a58a766179d9b613a600";
+        }
         final PackageInfo info;
         try {
             info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);

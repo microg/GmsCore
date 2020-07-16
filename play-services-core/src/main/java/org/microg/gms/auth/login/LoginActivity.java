@@ -45,7 +45,7 @@ import android.widget.TextView;
 
 import androidx.annotation.StringRes;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 
 import org.json.JSONArray;
 import org.microg.gms.auth.AuthConstants;

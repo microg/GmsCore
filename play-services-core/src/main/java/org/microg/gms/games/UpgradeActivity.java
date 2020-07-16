@@ -27,7 +27,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 
 public class UpgradeActivity extends Activity {
     public static final String ACTION_PLAY_GAMES_UPGRADE = "com.google.android.gms.games.PLAY_GAMES_UPGRADE";

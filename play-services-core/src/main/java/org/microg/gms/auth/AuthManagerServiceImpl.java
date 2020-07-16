@@ -32,7 +32,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.auth.IAuthManagerService;
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
 import com.google.android.gms.auth.TokenData;

@@ -23,5 +23,5 @@ public class AuthConstants {
     public static final String PROVIDER_METHOD_CLEAR_PASSWORD = "clear_password";
     public static final String PROVIDER_EXTRA_CLEAR_PASSWORD = "clear_password";
     public static final String PROVIDER_EXTRA_ACCOUNTS = "accounts";
-    public static final String DEFAULT_ACCOUNT_TYPE = "com.google";
+    public static final String DEFAULT_ACCOUNT_TYPE = "com.mgoogle";
 }

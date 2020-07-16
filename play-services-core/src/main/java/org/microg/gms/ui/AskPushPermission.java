@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.PushRegisterService;

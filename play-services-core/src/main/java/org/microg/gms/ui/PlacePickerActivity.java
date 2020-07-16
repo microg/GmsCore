@@ -39,7 +39,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.MenuItemCompat;
 
-import com.google.android.gms.R;
+import com.mgoogle.android.gms.R;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.internal.PlaceImpl;
