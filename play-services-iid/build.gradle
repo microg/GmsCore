@@ -16,25 +16,32 @@
 
 apply plugin: 'com.android.library'
 
+String getMyVersionName() {
+    def stdout = new ByteArrayOutputStream()
+    if (rootProject.file("gradlew").exists())
+        exec { commandLine 'git', 'describe', '--tags', '--always', '--dirty'; standardOutput = stdout }
+    else // automatic build system, don't tag dirty
+        exec { commandLine 'git', 'describe', '--tags', '--always'; standardOutput = stdout }
+    return stdout.toString().trim().substring(1)
+}
+
 android {
-    compileSdkVersion androidCompileSdk
+    compileSdkVersion androidCompileSdk()
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName version
-        minSdkVersion androidMinSdk
-        targetSdkVersion androidTargetSdk
+        versionName getMyVersionName()
+        minSdkVersion androidMinSdk()
+        targetSdkVersion androidTargetSdk()
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    api project(':play-services-basement')
-    api project(':play-services-cast-api')
-    api project(':play-services-cast-framework-api')
+    api project(':play-services-base')
     api project(':play-services-iid-api')
 }
