@@ -197,38 +197,6 @@
             </intent-filter>
         </service>
 
-        <!-- Car -->
-
-        <service android:name="org.microg.gms.car.CarService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.car.service.START" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-
-        <!-- People -->
-
-        <service android:name="org.microg.gms.people.PeopleService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.people.service.START" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name="org.microg.gms.people.ContactSyncService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/contact_syncadapter" />
-        </service>
-
-
         <!-- Auth -->
 
         <service android:name="org.microg.gms.auth.loginservice.GoogleLoginService">
@@ -295,24 +263,6 @@
             android:authorities="com.mgoogle.android.gms.auth.accounts"
             android:exported="true" />
 
-        <!-- Games -->
-
-        <service android:name="org.microg.gms.games.GamesStubService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.games.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-
-        <activity
-            android:name="org.microg.gms.games.UpgradeActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
-            <intent-filter>
-                <action android:name="com.google.android.gms.games.PLAY_GAMES_UPGRADE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
         <!-- Cast -->
 
         <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
@@ -320,12 +270,6 @@
                 <action android:name="android.media.MediaRouteProviderService" />
             </intent-filter>
         </service>
-
-        <!-- Chimera spoof -->
-        <provider
-            android:name="org.microg.gms.ChimeraSpoofProvider"
-            android:authorities="com.mgoogle.android.gms.chimera"
-            android:exported="true" />
 
         <!-- microG custom UI -->
 
@@ -477,34 +421,9 @@
             android:name="com.google.android.gms.gcm.http.GoogleHttpService"
             android:exported="true" />
 
-        <service android:name="org.microg.gms.ads.GService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.ads.gservice.START" />
-            </intent-filter>
-        </service>
-        <service android:name="org.microg.gms.feedback.FeedbackService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
-            </intent-filter>
-        </service>
-        <service android:name="org.microg.gms.ads.AdvertisingIdService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.ads.identifier.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-        <service android:name="org.microg.gms.drive.api.DriveApiService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.drive.ApiService.START" />
-                <action android:name="com.google.android.gms.drive.ApiService.STOP" />
-                <action android:name="com.google.android.gms.drive.ApiService.RESET_AFTER_BOOT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -512,23 +431,6 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.signin.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-        <service android:name="org.microg.gms.reminders.RemindersService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.reminders.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-
-        <service android:name="org.microg.gms.wallet.PaymentService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.wallet.service.BIND" />
-            </intent-filter>
-        </service>
-        <service android:name="org.microg.gms.tapandpay.TapAndPayService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.tapandpay.service.BIND" />
             </intent-filter>
         </service>
 
