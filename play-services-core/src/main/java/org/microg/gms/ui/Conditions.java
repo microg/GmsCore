@@ -65,27 +65,19 @@ public class Conditions {
                 }
             }).build();
 
-    private static final String[] REQUIRED_PERMISSIONS = new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE};
+    private static final String[] REQUIRED_PERMISSIONS = new String[]{};
     public static final Condition PERMISSIONS = new Condition.Builder()
             .title(R.string.cond_perm_title)
             .summaryPlurals(R.plurals.cond_perm_summary)
             .evaluation(new Condition.Evaluation() {
-                int count = 0;
                 @Override
                 public boolean isActive(Context context) {
-                    count = 0;
-                    if (SDK_INT >= Build.VERSION_CODES.M) {
-                        for (String permission : REQUIRED_PERMISSIONS) {
-                            if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED)
-                                count++;
-                        }
-                    }
-                    return count > 0;
+                    return false;
                 }
 
                 @Override
                 public int getPluralsCount() {
-                    return count;
+                    return 0;
                 }
             })
             .firstActionPlurals(R.plurals.cond_perm_action, new View.OnClickListener() {
