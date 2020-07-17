@@ -15,16 +15,6 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/prefcat_setup">
-        <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/self_check"
-            android:summary="@string/self_check_desc"
-            android:title="@string/self_check_title">
-            <intent
-                android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-                android:targetPackage="com.mgoogle.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services">
         <org.microg.tools.ui.TintIconPreference
             android:icon="@drawable/add_account"
@@ -48,31 +38,6 @@
             android:title="@string/service_name_mcs">
             <intent
                 android:targetClass="org.microg.gms.ui.GcmFragment$AsActivity"
-                android:targetPackage="com.mgoogle.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-        <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/certificate"
-            android:key="pref_snet"
-            android:title="@string/service_name_snet">
-            <intent
-                android:targetClass="org.microg.gms.ui.SafetyNetFragment$AsActivity"
-                android:targetPackage="com.mgoogle.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-        <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/dots_horizontal"
-            android:key="pref_google_more"
-            android:title="@string/pref_more_settings">
-            <intent
-                android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
-                android:targetPackage="com.mgoogle.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefcat_configuration">
-        <org.microg.tools.ui.TintIconPreference
-            android:key="pref_unifiednlp"
-            android:title="UnifiedNlp">
-            <intent
-                android:targetClass="org.microg.nlp.ui.BackendSettingsActivity"
                 android:targetPackage="com.mgoogle.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
     </PreferenceCategory>

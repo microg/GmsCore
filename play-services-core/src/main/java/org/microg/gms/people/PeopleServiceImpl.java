@@ -52,9 +52,7 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
     @Override
     public void loadOwners(final IPeopleCallbacks callbacks, boolean var2, boolean var3, final String accountName, String var5, int sortOrder) {
         Log.d(TAG, "loadOwners: " + var2 + ", " + var3 + ", " + accountName + ", " + var5 + ", " + sortOrder);
-        if (context.checkCallingPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            PackageUtils.assertExtendedAccess(context);
-        }
+
         AccountManager accountManager = AccountManager.get(context);
         Bundle accountMetadata = new Bundle();
         String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;

@@ -23,11 +23,9 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import org.microg.tools.selfcheck.InstalledPackagesChecks;
 //import org.microg.tools.selfcheck.NlpOsCompatChecks;
 //import org.microg.tools.selfcheck.NlpStatusChecks;
 import org.microg.tools.selfcheck.PermissionCheckGroup;
-import org.microg.tools.selfcheck.RomSpoofSignatureChecks;
 import org.microg.tools.selfcheck.SelfCheckGroup;
 import org.microg.tools.selfcheck.SystemChecks;
 import org.microg.tools.ui.AbstractSelfCheckFragment;
@@ -46,8 +44,6 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
 
     @Override
     protected void prepareSelfCheckList(List<SelfCheckGroup> checks) {
-        checks.add(new RomSpoofSignatureChecks());
-        checks.add(new InstalledPackagesChecks());
         if (SDK_INT > LOLLIPOP_MR1) {
             checks.add(new PermissionCheckGroup(ACCESS_COARSE_LOCATION, "android.permission.ACCESS_BACKGROUND_LOCATION", WRITE_EXTERNAL_STORAGE, GET_ACCOUNTS, READ_PHONE_STATE));
         }
