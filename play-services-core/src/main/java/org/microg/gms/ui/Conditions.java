@@ -64,28 +64,4 @@ public class Conditions {
                     v.getContext().startActivity(intent);
                 }
             }).build();
-
-    private static final String[] REQUIRED_PERMISSIONS = new String[]{};
-    public static final Condition PERMISSIONS = new Condition.Builder()
-            .title(R.string.cond_perm_title)
-            .summaryPlurals(R.plurals.cond_perm_summary)
-            .evaluation(new Condition.Evaluation() {
-                @Override
-                public boolean isActive(Context context) {
-                    return false;
-                }
-
-                @Override
-                public int getPluralsCount() {
-                    return 0;
-                }
-            })
-            .firstActionPlurals(R.plurals.cond_perm_action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (v.getContext() instanceof Activity) {
-                        ActivityCompat.requestPermissions((Activity) v.getContext(), REQUIRED_PERMISSIONS, 0);
-                    }
-                }
-            }).build();
 }
