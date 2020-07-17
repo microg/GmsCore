@@ -38,7 +38,6 @@ public class SettingsActivity extends AbstractDashboardActivity {
     public SettingsActivity() {
         preferencesResource = R.xml.preferences_start;
         addCondition(Conditions.GCM_BATTERY_OPTIMIZATIONS);
-        addCondition(Conditions.PERMISSIONS);
     }
 
     @Override
@@ -81,7 +80,6 @@ public class SettingsActivity extends AbstractDashboardActivity {
                 findPreference(PREF_GCM).setSummary(R.string.abc_capital_off);
             }
 
-                findPreference(PREF_SNET).setSummary(R.string.service_status_disabled);
 
 //            Preferences unifiedNlPrefs = new Preferences(getContext());
 //            int backendCount = TextUtils.isEmpty(unifiedNlPrefs.getLocationBackends()) ? 0 :
