@@ -1,6 +1,6 @@
 # Vanced MicroG
 
-[![Build Status](https://travis-ci.org/YTVanced/VancedMicroG.svg?branch=master)](https://travis-ci.com/github/YTVanced/VancedMicroG)
+[![Build Status](https://api.travis-ci.com/YTVanced/VancedMicroG.svg?branch=master)](https://travis-ci.com/github/YTVanced/VancedMicroG)
 
 microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
