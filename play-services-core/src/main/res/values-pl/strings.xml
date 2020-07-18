@@ -15,7 +15,6 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">Usługi microG</string>
     <string name="gms_settings_name">Ustawienia microG</string>
 
     <string name="just_a_sec">Chwileczkę…</string>
@@ -47,27 +46,13 @@ To zajmie kilka minut.</string>
 
     <string name="service_name_checkin">Rejestracja urządzenia Google</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Nieaktywny</string>
     <string name="service_status_enabled">Aktywny</string>
     <string name="service_status_automatic">Automatyczny</string>
-    <string name="service_status_manual">Ręczny</string>
 
     <string name="menu_advanced">Zaawansowane</string>
     <string name="list_no_item_none">Brak</string>
-
-    <string name="games_title">Gry Google Play</string>
-    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce wykorzystać Gry Google Play</string>
-    <string name="games_info_content">Aby korzystać z gier Google Play wymagana jest instalacja aplikacji Gry Google Play . Aplikacja może dalej działać bez Gry Google Play, ale możliwe, że nie będzie działać prawidłowo.</string>
-
-    <string name="pick_place_title">Wybierz miejsce</string>
-    <string name="pick_place_desc">Opcja wyboru miejsca nie jest jeszcze dostępna.</string>
-    <string name="place_picker_select_title">Wybierz tę lokalizację</string>
-    <string name="place_picker_nearby_places">Pobliskie miejsca</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-
-    <string name="lacking_permission_toast">rdzeń usług microG: brakuje pozwolenia na <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Sieć komórkowa</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -76,24 +61,7 @@ To zajmie kilka minut.</string>
 
     <!-- Self check -->
 
-    <string name="self_check_cat_fake_sig">Wsparcie dla imitacji sygnatur</string>
-    <string name="self_check_cat_gms_packages">Zainstalowane paczki</string>
     <string name="self_check_cat_system">System</string>
-
-    <string name="self_check_name_fake_sig_perm">System wspiera imitowanie sygnatur:</string>
-    <string name="self_check_resolution_fake_sig_perm">Twój ROM nie posiada wbudowanego wsparcia dla imitacji sygnatur. Możesz jednak nadal spróbować użyć modułu Xposed (FakeGApps) lub innych systemów aby imitować sygnatury. Przejrzyj dokumentację dot. ROM-ów wspierających imitowanie sygnatur i sprawdź jak korzystać z usług microG na systemach tego nie wspierających.</string>
-    <string name="self_check_name_perm_granted">System udziela pozwolenia na imitację sygnatur:</string>
-    <string name="self_check_resolution_perm_granted">Możliwe, że Twój ROM wspiera imitowanie sygnatur, ale wymagane są dalsze działania, aby to włączyć. Przejrzyj dokumentacje, aby sprawdzić dalsze instrukcje.</string>
-    <string name="self_check_name_system_spoofs">System imituje sygnatury:</string>
-    <string name="self_check_resolution_system_spoofs">Przejrzyj dokumentację i sprawdź dalsze instrukcje.</string>
-
-    <string name="self_check_pkg_gms">Usługi Google Play (GmsCore)</string>
-    <string name="self_check_pkg_vending">Sklep Google Play (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Google Services Framework (GSF)</string>
-    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> zainstalowany:</string>
-    <string name="self_check_resolution_app_installed">Zainstaluj aplikację <xliff:g example="F-Droid">%1$s</xliff:g> lub kompatybilną. Przejrzyj dokumentację i sprawdź, które aplikacje są kompatybilne.</string>
-    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> posiada prawidłową sygnaturę:</string>
-    <string name="self_check_resolution_correct_sig">Albo zainstalowany <xliff:g example="F-Droid">%1$s</xliff:g> nie jest kompatybilny, albo imitacja sygnatur nie jest dla niego aktywna. Przejrzyj dokumentacje, aby sprawdzić, które aplikacje i ROM-y są kompatybilne.</string>
 
     <string name="self_check_name_battery_optimizations">Ignorowanie optymalizacji baterii:</string>
     <string name="self_check_resolution_battery_optimizations">Dotknji, aby wyłączyć optymalizację baterii. W przeciwnym razie aplikacje mogą nie działać prawidłowo.</string>
@@ -101,18 +69,11 @@ To zajmie kilka minut.</string>
     <!-- Settings strings -->
 
     <string name="prefcat_about">O programie</string>
-    <string name="prefcat_components">Komponenty</string>
-    <string name="prefcat_configuration">Konfiguracja</string>
     <string name="prefcat_google_services">Usługi Google</string>
-    <string name="prefcat_location_service">Usługa lokalizacji</string>
-    <string name="prefcat_operation_mode">Tryb działania</string>
-    <string name="prefcat_services">Usługi w tle</string>
-    <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Optymalizacja baterii włączona</string>
     <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
     <string name="cond_gcm_bat_action">Ignoruj optymalizacje</string>
-    <string name="cond_perm_title">Brakuje uprawnień</string>
 
     <string name="prefs_account">Ustawienia konta</string>
     <string name="prefs_account_privacy">Ustawienia osobiste i prywatność</string>
@@ -123,22 +84,13 @@ To zajmie kilka minut.</string>
 
     <string name="pref_checkin_enable_summary">Zgłaszanie urządzenia to ukryty proces, służący do wygenerowania unikalnego identyfikatora dla usług Google. Usługi microG usuwają inne dane identyfikacyjne niż nazwa Twojego konta z tego identyfikatora.</string>
 
-    <string name="pref_more_settings">Więcej</string>
-
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Aby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
-    <string name="pref_gcm_heartbeat_title">Częstotliwość sprawdzania Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">Częstotliwość (w sekundach) do sprawdzania serwerów Google. Zwiększenie tej wartości zmniejszy zużycie baterii, ale może spowodować opóźnienia w dostarczaniu powiadomień ‘push’.\nPrzestarzałe, zostanie to usunięte w nowszej wersji.</string>
     <string name="pref_gcm_apps_title">Aplikacje korzystające z Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych w usłudze Google Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
     <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji w usłudze powiadomień ‘push’</string>
-    <string name="pref_gcm_ping_interval">Częstotliwość sprawdzania: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">O usłudze microG</string>
-    <string name="pref_about_summary">Informacje o wersji, użyte licencje i biblioteki</string>
 
-    <string name="gcm_app_error_unregistering">Błąd wyrejestrowania</string>
-    <string name="gcm_app_not_installed_anymore">Już odinstalowany</string>
     <string name="gcm_unregister_app">Wyrejestruj</string>
     <string name="gcm_not_registered">Niezarejestrowany</string>
     <string name="gcm_no_message_yet">Jak dotąd nie otrzymano wiadomości</string>
@@ -151,18 +103,5 @@ To zajmie kilka minut.</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
     <string name="gcm_state_disconnected">Obecny stan: rozłączony</string>
     <string name="gcm_state_connected">Obecny stan: połączony od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
-
-    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga by SafetyNet był podpisany przez własnościowy system DroidGuard. Specjalna wersja DroidGuard-a jest dostępna do pobrania jako oddzielna aplikacja “DroidGuard Helper” w repozytorium miroG w F-Droid.</string>
-
-    <string name="pref_snet_testdrive_title">Wypróbuj działanie SafetyNet</string>
-
-    <string name="pref_snet_status_official_title">Użyj oficjalnego serwera</string>
-    <string name="pref_snet_status_official_summary">Wymaga niezrootowanego ROM-u i zainstalowanego microG DroidGuard Helper</string>
-    <string name="pref_snet_status_third_party_title">Użyj serwera strony trzeciej</string>
-    <string name="pref_snet_status_third_party_summary">Serwery stron trzecich mogą być w stanie odpowiedzieć na zapytania SafetyNet bez sygnatury DroidGuard</string>
-    <string name="pref_snet_custom_url_title">URL własnego serwera</string>
-    <string name="pref_snet_custom_url_summary">Pełny adres URL serwera strony trzeciej odpowiadającego na zapytania SafetyNet</string>
-    <string name="pref_snet_self_signed_title">Użyj samo-podpisanego certyfikatu</string>
-    <string name="pref_snet_self_signed_summary">Zamiast sprawdzać serwer, podpisuj odpowiedzi SafetyNet lokalnie używając samo-podpisanego certyfikatu. Większość aplikacji odmówi użycia samo-podpisanych odpowiedzi.</string>
 
 </resources>

@@ -34,7 +34,7 @@
 
     <permission-tree
         android:name="com.mgoogle.android.googleapps.permission.GOOGLE_AUTH"
-        android:icon="@drawable/proprietary_auth_ic_scope_icon_default" />
+        android:icon="@drawable/ic_microg" />
 
     <permission
         android:name="org.mgoogle.gms.STATUS_BROADCAST"
@@ -380,7 +380,7 @@
             android:exported="true" />
 
         <service
-            android:name="org.microg.gms.measurement.MeasurementBrokerService"
+            android:name="org.microg.gms.measurement.MeasuremenstatBrokerService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.measurement.START" />

@@ -15,7 +15,6 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
     <string name="gms_settings_name">microG Settings</string>
     <string name="gms_settings_summary">Setup microG services Core.</string>
 
@@ -55,27 +54,13 @@ This can take a couple of minutes."</string>
 
     <string name="service_name_checkin">Google device registration</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
-    <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Disabled</string>
     <string name="service_status_enabled">Enabled</string>
     <string name="service_status_automatic">Automatic</string>
-    <string name="service_status_manual">Manual</string>
 
     <string name="menu_advanced">Advanced</string>
     <string name="list_no_item_none">None</string>
-
-    <string name="games_title">Google Play Games</string>
-    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
-    <string name="games_info_content">To use Play Games it is required to install the Google Play Games app. The application might continue without Play Games, but it is possible that it will behave unexpectedly.</string>
-
-    <string name="pick_place_title">Pick a place</string>
-    <string name="pick_place_desc">Place picker is not yet available.</string>
-    <string name="place_picker_select_title">Select this location</string>
-    <string name="place_picker_nearby_places">Nearby places</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-
-    <string name="lacking_permission_toast">microG Services Core: Lacking permission to <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Mobile network</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -84,24 +69,7 @@ This can take a couple of minutes."</string>
 
     <!-- Self check -->
 
-    <string name="self_check_cat_fake_sig">Signature spoofing support</string>
-    <string name="self_check_cat_gms_packages">Installed packages</string>
     <string name="self_check_cat_system">System</string>
-
-    <string name="self_check_name_fake_sig_perm">System has signature spoofing support: </string>
-    <string name="self_check_resolution_fake_sig_perm">Your ROM has no native support for signature spoofing. You can still use Xposed or other systems to spoof signature. Please check the documentation on which ROMs do support signature spoofing and how to use microG on ROMs that do not.</string>
-    <string name="self_check_name_perm_granted">System grants signature spoofing permission: </string>
-    <string name="self_check_resolution_perm_granted">This is a strong indicator that the ROM does support signature spoofing, but requires further action to activate it. Please check the documentation on which steps might be required.</string>
-    <string name="self_check_name_system_spoofs">System spoofs signature: </string>
-    <string name="self_check_resolution_system_spoofs">Please check the documentation on which steps might be required.</string>
-
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
-    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installed: </string>
-    <string name="self_check_resolution_app_installed">Install the application <xliff:g example="F-Droid">%1$s</xliff:g> or a compatible one. Please check the documentation on which applications are compatible.</string>
-    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> has correct signature: </string>
-    <string name="self_check_resolution_correct_sig">Either the installed <xliff:g example="F-Droid">%1$s</xliff:g> is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
 
     <string name="self_check_name_battery_optimizations">Battery optimizations ignored:</string>
     <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications.</string>
@@ -109,18 +77,11 @@ This can take a couple of minutes."</string>
     <!-- Settings strings -->
 
     <string name="prefcat_about">About</string>
-    <string name="prefcat_components">Components</string>
-    <string name="prefcat_configuration">Configuration</string>
     <string name="prefcat_google_services">Google Services</string>
-    <string name="prefcat_location_service">Location service</string>
-    <string name="prefcat_operation_mode">Operation mode</string>
-    <string name="prefcat_services">Services</string>
-    <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
     <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
     <string name="cond_gcm_bat_action">Ignore optimizations</string>
-    <string name="cond_perm_title">Permission missing</string>
 
     <string name="prefs_account">Account preferences</string>
     <string name="prefs_account_privacy">Personal info &amp; privacy</string>
@@ -133,24 +94,15 @@ This can take a couple of minutes."</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
 
-    <string name="pref_more_settings">More</string>
-
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Add Google account</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
-    <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
-    <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.\nDeprecated, will be replaced in future release.</string>
     <string name="pref_gcm_apps_title">Apps using Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">List of apps currently registered for Google Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
-    <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">About microG Services Core</string>
-    <string name="pref_about_summary">Version information and used libraries</string>
 
-    <string name="gcm_app_error_unregistering">Error unregistering</string>
-    <string name="gcm_app_not_installed_anymore">No longer installed</string>
     <string name="gcm_unregister_app">Unregister</string>
     <string name="gcm_not_registered">Not registered</string>
     <string name="gcm_no_message_yet">No messages received so far</string>
@@ -163,21 +115,5 @@ This can take a couple of minutes."</string>
     <string name="gcm_messages_counter">Messages: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_state_disconnected">Current State: Disconnected</string>
     <string name="gcm_state_connected">Current State: Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
-
-    <string name="snet_intro">Google SafetyNet is a device certification system, ensuring that the device is properly secured and compatible with Android CTS. Some applications use SafetyNet for security reasons or as a prerequisite for tamper-protection.\n\nmicroG GmsCore contains a free implementation of SafetyNet, but the official server requires SafetyNet requests to be signed using the proprietary DroidGuard system. A sandboxed version of DroidGuard is available as a separate “DroidGuard Helper” app.</string>
-
-    <string name="pref_snet_testdrive_title">Try SafetyNet attestation</string>
-
-    <string name="pref_snet_status_official_title">Use official server</string>
-    <string name="pref_snet_status_official_summary">Requires an unrooted system and microG DroidGuard Helper installed</string>
-    <string name="pref_snet_status_official_info">official server</string>
-    <string name="pref_snet_status_third_party_title">Use third-party server</string>
-    <string name="pref_snet_status_third_party_summary">Third-party servers might be able to reply to SafetyNet requests without DroidGuard signature</string>
-    <string name="pref_snet_status_third_party_info">third-party server</string>
-    <string name="pref_snet_custom_url_title">Custom server URL</string>
-    <string name="pref_snet_custom_url_summary">Full URL of the third-party server answering SafetyNet attestation requests</string>
-    <string name="pref_snet_self_signed_title">Use self-signed certificate</string>
-    <string name="pref_snet_self_signed_summary">Instead of requesting a server, sign SafetyNet responses locally using a self-signed certificate. Most apps will refuse to use self-signed responses.</string>
-    <string name="pref_snet_status_self_signed_info">self-signed certificate</string>
 
 </resources>

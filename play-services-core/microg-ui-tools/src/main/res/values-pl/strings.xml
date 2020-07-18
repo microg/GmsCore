@@ -16,17 +16,12 @@
   -->
 
 <resources>
-    <string name="lib_name">Narzędzia UI microG</string>
-    <string name="lib_license">Licencja Apache 2.0, Zespół microG</string>
 
     <string name="about_version_str">Wersja %1$s</string>
     <string name="about_name_version_str">%1$s %2$s</string>
     <string name="about_default_license">Wszelkie prawa zastrzeżone.</string>
 
-    <string name="prefcat_setup">Ustawienia</string>
-
     <string name="self_check_title">Samo-sprawdzenie</string>
-    <string name="self_check_desc">Sprawdza, czy system jest poprawnie skonfigurowany do korzystania z microG.</string>
 
     <string name="self_check_cat_permissions">Udzielono uprawnień</string>
     <string name="self_check_name_permission">Uprawnienie do %1$s:</string>
@@ -37,5 +32,4 @@
     <string name="about_root_version">Wersja v0.1.0</string>
     <string name="about_root_libraries">Użyte biblioteki</string>
 
-    <string name="about_android_support_license">Licencja Apache 2.0, The Android Open Source Project</string>
 </resources>

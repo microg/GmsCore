@@ -15,7 +15,6 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
     <string name="gms_settings_name">Setări microG</string>
 
     <string name="just_a_sec">Doar o secundă…</string>
@@ -42,9 +41,6 @@ Acest lucru poate dura câteva minute."</string>
     <string name="perm_status_broadcast_label">ascultă emisiunile de stare interne</string>
     <string name="perm_c2dm_receive_label">ascultă mesajele C2DM</string>
     <string name="perm_c2dm_send_label">trimite mesaje C2DM altor aplicaţii</string>
-    <string name="prefcat_components">Componente</string>
-    <string name="prefcat_location_service">Servicii de localizare</string>
-    <string name="prefcat_services">Servicii de fundal</string>
     <string name="pref_auth_trust_google_title">Credeţi Google pentru permisiunile aplicaţiei</string>
     <string name="pref_auth_trust_google_summary">Dacă este dezactivat, utilizatorul este întrebat înainte de trimiterea către Google a unei solicitări de autorizare a aplicaţiei. Unele aplicații nu vor reuși să utilizeze contul Google, dacă această opţiune este dezactivată.</string>
 

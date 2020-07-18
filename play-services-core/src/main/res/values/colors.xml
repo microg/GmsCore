@@ -20,5 +20,4 @@
     <color name="login_blue_theme_accent">#ffFFAB40</color>
 
     <color name="dialog_border_color">#88CCCCCC</color>
-    <color name="material_error">#fff44336</color>
 </resources>
