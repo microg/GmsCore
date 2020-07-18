@@ -15,15 +15,15 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">microG設定</string>
+    <string name="gms_settings_name">Vanced microG設定</string>
 
-    <string name="just_a_sec">請稍等...</string>
+    <string name="just_a_sec">請稍等…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">當您繼續下一步時，代表您同意Google和本程式在遵守服務條款和隱私權政策下使用您的個人資訊。</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g>將會：</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g>將會使用：</string>
     <string name="account_manager_title">Google帳號管理員</string>
-    <string name="sorry">抱歉...</string>
+    <string name="sorry">抱歉…</string>
     <string name="no_network_error_desc">"沒有網路連線。
 
 這可能是暫時的問題，或是您的手機沒有連線能力。 請在連接到行動數據或是Wi-Fi網路後重試。"</string>
@@ -80,7 +80,7 @@
 
     <string name="pref_gcm_enable_mcs_summary">GCM是一個廣為第三方應用程式所採用的推播訊息供應者。 必須先註冊為Google設備才能使用。</string>
     <string name="pref_gcm_apps_title">使用GCM的程式</string>
-    <string name="pref_about_title">關於microG Services Core</string>
+    <string name="pref_about_title">關於VAnced microG Services</string>
 
     <string name="gcm_unregister_app">取消註冊</string>
     <string name="gcm_not_registered">未註冊</string>

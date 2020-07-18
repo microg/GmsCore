@@ -321,7 +321,7 @@ public class McsService extends Service implements Handler.Callback {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Notification buildForegroundNotification() {
-        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_MIN);
         channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
         channel.setShowBadge(false);
         getSystemService(NotificationManager.class).createNotificationChannel(channel);

@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Ustawienia microG</string>
+    <string name="gms_settings_name">Ustawienia Vanced microG</string>
 
     <string name="just_a_sec">Chwileczkę…</string>
     <string name="google_account_label">Google</string>
@@ -72,7 +72,7 @@ To zajmie kilka minut.</string>
     <string name="prefcat_google_services">Usługi Google</string>
 
     <string name="cond_gcm_bat_title">Optymalizacja baterii włączona</string>
-    <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
+    <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi Vanced microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
     <string name="cond_gcm_bat_action">Ignoruj optymalizacje</string>
 
     <string name="prefs_account">Ustawienia konta</string>

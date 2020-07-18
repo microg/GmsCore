@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Setări microG</string>
+    <string name="gms_settings_name">Setări Vanced microG</string>
 
     <string name="just_a_sec">Doar o secundă…</string>
     <string name="google_account_label">Google</string>

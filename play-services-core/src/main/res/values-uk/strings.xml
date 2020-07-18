@@ -15,15 +15,15 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Налаштування microG</string>
+    <string name="gms_settings_name">Налаштування VAnced microG</string>
 
-    <string name="just_a_sec">Зачекайте трохи...</string>
+    <string name="just_a_sec">Зачекайте трохи…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Продовжуючи, ви дозволяєте даному додатку та Google використовувати ваші дані згідно з їх відповідними умовами надання послуг та політикою конфіденційності.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би використовувати:</string>
     <string name="account_manager_title">Google Account Manager</string>
-    <string name="sorry">Вибачте...</string>
+    <string name="sorry">Вибачте…</string>
     <string name="auth_before_connect">Додаток на Вашому пристрої намагається увійти до облікового запису Google.
 
 Якщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для підключення до сторінки авторизації Google, інакше натисніть  <b>Скасувати</b>, аби перейти назад до додатку, що викликало це вікно.</string>
@@ -79,7 +79,7 @@
     <string name="prefcat_google_services">Сервіси Google</string>
 
     <string name="cond_gcm_bat_title">Увімкнута оптимізація енергоспоживання</string>
-    <string name="cond_gcm_bat_summary">Ви увімкнули Google Cloud Messaging але лиши оптимізацію енергоспоживання активним для microG Services Core. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
+    <string name="cond_gcm_bat_summary">Ви увімкнули Google Cloud Messaging але лиши оптимізацію енергоспоживання активним для Vanced microG Services. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
     <string name="cond_gcm_bat_action">Ігнорувати оптимізацію</string>
 
     <string name="prefs_account">Налаштування облікового запису</string>

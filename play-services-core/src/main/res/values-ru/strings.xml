@@ -15,10 +15,10 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Настройки MicroG</string>
-    <string name="gms_settings_summary">Конфигурирование сервисов microG.</string>
+    <string name="gms_settings_name">Настройки Vanced MicroG</string>
+    <string name="gms_settings_summary">Конфигурирование Vanced microG.</string>
 
-    <string name="just_a_sec">Пожалуйста, подождите...</string>
+    <string name="just_a_sec">Пожалуйста, подождите…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Продолжая, вы позволяете этому приложению и Google использовать свою информацию в соответствии с их соответствующими условиями предоставления услуг и политиками конфиденциальности.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы:</string>
@@ -80,7 +80,7 @@
     <string name="prefcat_google_services">Google сервисы</string>
 
     <string name="cond_gcm_bat_title">Активна оптимизация энергопотребления</string>
-    <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но у вас активна оптимизация энергопотребления для microG Services Core. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
+    <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но у вас активна оптимизация энергопотребления для Vanced microG Services. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
     <string name="cond_gcm_bat_action">Разрешить работу в фоне</string>
 
     <string name="prefs_account">Настройки аккаунта</string>

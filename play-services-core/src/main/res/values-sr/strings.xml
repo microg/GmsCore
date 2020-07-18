@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Поставке микроГ</string>
+    <string name="gms_settings_name">Поставке Vanced микроГ</string>
 
     <string name="just_a_sec">Само тренутак…</string>
     <string name="google_account_label">Гугл</string>
@@ -65,7 +65,7 @@
 
     <string name="prefcat_about">О програму</string>
     <string name="cond_gcm_bat_title">Оптимизација батерије укључена</string>
-    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за Језгро микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
+    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за Језгро Vanced микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
     <string name="cond_gcm_bat_action">Игнориши оптимизацију</string>
 
     <string name="prefs_account">Поставке налога</string>
