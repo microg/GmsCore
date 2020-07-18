@@ -43,6 +43,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import com.mgoogle.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
@@ -327,7 +328,7 @@ public class McsService extends Service implements Handler.Callback {
         return new Notification.Builder(this, channel.getId())
                 .setOngoing(true)
                 .setContentTitle("Running in background")
-                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .setSmallIcon(R.drawable.ic_microg)
                 .build();
     }
 
