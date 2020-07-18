@@ -16,7 +16,7 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_settings_name">Vanced microG Einstellungen</string>
-    <string name="gms_settings_summary">Vanced microG einrichten.</string>
+    <string name="gms_settings_summary">Vanced microG services einrichten.</string>
 
     <string name="just_a_sec">Einen kurzen Moment…</string>
     <string name="google_account_label">Google</string>

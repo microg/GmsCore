@@ -79,7 +79,7 @@ Isso pode demorar alguns minutos."</string>
 
     <string name="pref_gcm_enable_mcs_summary">O Google Cloud Messaging é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
     <string name="pref_gcm_apps_title">Aplicativos que usam o Google Cloud Messaging</string>
-    <string name="pref_about_title">Sobre microG Services Core</string>
+    <string name="pref_about_title">Sobre Vanced microG</string>
 
     <string name="gcm_unregister_app">Cancelar registro</string>
     <string name="gcm_not_registered">Não registrado</string>
