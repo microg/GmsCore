@@ -51,7 +51,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="pref_auth_trust_google_title">Confiar en Google para los permisos de las aplicaciones</string>
     <string name="pref_auth_trust_google_summary">Cuando este desactivado, se preguntara al usuario antes de que una aplicación envíe una solicitud de autorización a Google. Algunas aplicaciones fallaran al usar la cuenta de Google si esta desactivado.</string>
 
-    <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
+    <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. Vanced microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging es un proveedor de notificaciones push usado por muchas aplicaciones. Para usarlo debes habilitar el registro del dispositivo.</string>
     <string name="pref_about_title">Acerca de los Servicios de microG Core</string>

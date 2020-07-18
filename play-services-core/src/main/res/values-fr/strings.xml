@@ -72,7 +72,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="prefcat_google_services">Services Google</string>
 
     <string name="cond_gcm_bat_title">Optimisations de la batterie activées</string>
-    <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour Vanced microG Services. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
+    <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour Vanced microG. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
     <string name="cond_gcm_bat_action">Désactiver les optimisations de la batterie</string>
 
     <string name="prefs_account">Préférences du compte</string>

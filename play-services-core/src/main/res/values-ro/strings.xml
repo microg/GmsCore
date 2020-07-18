@@ -44,7 +44,7 @@ Acest lucru poate dura câteva minute."</string>
     <string name="pref_auth_trust_google_title">Credeţi Google pentru permisiunile aplicaţiei</string>
     <string name="pref_auth_trust_google_summary">Dacă este dezactivat, utilizatorul este întrebat înainte de trimiterea către Google a unei solicitări de autorizare a aplicaţiei. Unele aplicații nu vor reuși să utilizeze contul Google, dacă această opţiune este dezactivată.</string>
 
-    <string name="pref_checkin_enable_summary">\"Înregistrarea dispozitivului\" este un proces ascuns care este utilizat pentru a crea un identificator unic pentru serviciile Google. Serviciile microG înlătură alte date de identificare cu excepţia numelui contului dvs. Google.</string>
+    <string name="pref_checkin_enable_summary">\"Înregistrarea dispozitivului\" este un proces ascuns care este utilizat pentru a crea un identificator unic pentru serviciile Google. Serviciile Vanced microG înlătură alte date de identificare cu excepţia numelui contului dvs. Google.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Mesageria Google Cloud este un furnizor de notificări de ti push utilizat de multe aplicații. Pentru a utiliza trebuie să activați \"Înregistrarea dispozitivului\".</string>
     </resources>

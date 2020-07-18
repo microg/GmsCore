@@ -66,7 +66,7 @@
     <string name="prefcat_about">關於</string>
 
     <string name="cond_gcm_bat_title">已開啟電池優化</string>
-    <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在microG Services Core上。 為了能收到推送通知您應該取消電池優化。</string>
+    <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在Vanced microG上。 為了能收到推送通知您應該取消電池優化。</string>
     <string name="cond_gcm_bat_action">取消優化</string>
 
     <string name="prefs_account">帳號設定</string>
@@ -80,7 +80,7 @@
 
     <string name="pref_gcm_enable_mcs_summary">GCM是一個廣為第三方應用程式所採用的推播訊息供應者。 必須先註冊為Google設備才能使用。</string>
     <string name="pref_gcm_apps_title">使用GCM的程式</string>
-    <string name="pref_about_title">關於VAnced microG Services</string>
+    <string name="pref_about_title">關於Vanced microG Services</string>
 
     <string name="gcm_unregister_app">取消註冊</string>
     <string name="gcm_not_registered">未註冊</string>

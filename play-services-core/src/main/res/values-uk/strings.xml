@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Налаштування VAnced microG</string>
+    <string name="gms_settings_name">Налаштування Vanced microG</string>
 
     <string name="just_a_sec">Зачекайте трохи…</string>
     <string name="google_account_label">Google</string>
@@ -79,7 +79,7 @@
     <string name="prefcat_google_services">Сервіси Google</string>
 
     <string name="cond_gcm_bat_title">Увімкнута оптимізація енергоспоживання</string>
-    <string name="cond_gcm_bat_summary">Ви увімкнули Google Cloud Messaging але лиши оптимізацію енергоспоживання активним для Vanced microG Services. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
+    <string name="cond_gcm_bat_summary">Ви увімкнули Google Cloud Messaging але лиши оптимізацію енергоспоживання активним для Vanced microG. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
     <string name="cond_gcm_bat_action">Ігнорувати оптимізацію</string>
 
     <string name="prefs_account">Налаштування облікового запису</string>

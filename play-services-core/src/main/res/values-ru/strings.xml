@@ -80,7 +80,7 @@
     <string name="prefcat_google_services">Google сервисы</string>
 
     <string name="cond_gcm_bat_title">Активна оптимизация энергопотребления</string>
-    <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но у вас активна оптимизация энергопотребления для Vanced microG Services. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
+    <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но у вас активна оптимизация энергопотребления для Vanced microG. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
     <string name="cond_gcm_bat_action">Разрешить работу в фоне</string>
 
     <string name="prefs_account">Настройки аккаунта</string>
