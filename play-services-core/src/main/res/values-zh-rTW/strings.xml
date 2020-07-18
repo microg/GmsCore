@@ -15,7 +15,6 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
     <string name="gms_settings_name">microG設定</string>
 
     <string name="just_a_sec">請稍等...</string>
@@ -50,18 +49,6 @@
     <string name="menu_advanced">進階</string>
     <string name="list_no_item_none">無</string>
 
-    <string name="games_title">Google Play遊戲</string>
-    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g>將要使用Play遊戲</string>
-    <string name="games_info_content">要使用Play遊戲必須安裝Google Play遊戲這個程式。 也許程式將可以在沒有Play遊戲的狀態執行，但可能無法正常運作。</string>
-
-    <string name="pick_place_title">挑選一個地方</string>
-    <string name="pick_place_desc">現在無法選擇地點。</string>
-    <string name="place_picker_select_title">選擇這個地點</string>
-    <string name="place_picker_nearby_places">附近的地點</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-
-    <string name="lacking_permission_toast">microG Services Core: 缺少<xliff:g example="have full network acccess">%1$s</xliff:g>的權限</string>
-
     <string name="network_type_mobile">行動數據</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">漫遊</string>
@@ -69,24 +56,7 @@
 
     <!-- Self check -->
 
-    <string name="self_check_cat_fake_sig">支援簽名破解</string>
-    <string name="self_check_cat_gms_packages">已安裝的程式</string>
     <string name="self_check_cat_system">系統</string>
-
-    <string name="self_check_name_fake_sig_perm">系統支援簽名破解： </string>
-    <string name="self_check_resolution_fake_sig_perm">您的原生韌體並不支援簽名破解，但您依舊能用Xposed或是改用其他系統來破解。 請參閱哪些韌體支援簽名破解以及如何在不支援的韌體使用microG的說明文件。</string>
-    <string name="self_check_name_perm_granted">系統允許簽名破解的權限： </string>
-    <string name="self_check_resolution_perm_granted">這是韌體支援簽名破解的強力指標，但是仍需要後續動作來啟動破解。 請參閱必須完成步驟的說明文件。</string>
-    <string name="self_check_name_system_spoofs">系統破解簽名： </string>
-    <string name="self_check_resolution_system_spoofs">請參閱必須完成步驟的說明文件。</string>
-
-    <string name="self_check_pkg_gms">Play服務(GmsCore)</string>
-    <string name="self_check_pkg_vending">Play商店(Phonesky)</string>
-    <string name="self_check_pkg_gsf">服務框架(GSF)</string>
-    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g>已安裝：</string>
-    <string name="self_check_resolution_app_installed">安裝<xliff:g example="F-Droid">%1$s</xliff:g>或是相容的程式。 請參閱哪些程式相容的說明文件。</string>
-    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 有正確簽名： </string>
-    <string name="self_check_resolution_correct_sig">不是已安裝的 <xliff:g example="F-Droid">%1$s</xliff:g>不相容就是簽名破解沒啟動。 請參閱哪些程式和韌體相容的說明文件。</string>
 
     <string name="self_check_name_battery_optimizations">停用電池優化：</string>
     <string name="self_check_resolution_battery_optimizations">點擊這裡來停用電池優化。 不這麼做可能導致程式運作不正常。</string>
@@ -94,16 +64,10 @@
     <!-- Settings strings -->
 
     <string name="prefcat_about">關於</string>
-    <string name="prefcat_components">成分</string>
-    <string name="prefcat_configuration">設定</string>
-    <string name="prefcat_location_service">定位服務</string>
-    <string name="prefcat_services">服務</string>
-    <string name="prefcat_test">測試</string>
 
     <string name="cond_gcm_bat_title">已開啟電池優化</string>
     <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在microG Services Core上。 為了能收到推送通知您應該取消電池優化。</string>
     <string name="cond_gcm_bat_action">取消優化</string>
-    <string name="cond_perm_title">遺失權限</string>
 
     <string name="prefs_account">帳號設定</string>
     <string name="prefs_account_privacy">個人資訊&amp;隱私</string>
@@ -115,16 +79,9 @@
     <string name="pref_checkin_enable_summary">將手機註冊到Google服務並創建一個唯一的設備識別碼。 除了識別碼，microG還會使用您註冊的Google帳號名。</string>
 
     <string name="pref_gcm_enable_mcs_summary">GCM是一個廣為第三方應用程式所採用的推播訊息供應者。 必須先註冊為Google設備才能使用。</string>
-    <string name="pref_gcm_heartbeat_title">GCM同步週期</string>
-    <string name="pref_gcm_heartbeat_summary">系統向Google伺服器同步的週期(秒)。 延長週期將會減少耗電，但可能會造成推送訊息的延遲。
-已不重要，將會在未來的版本中被取代。</string>
     <string name="pref_gcm_apps_title">使用GCM的程式</string>
-    <string name="pref_gcm_apps_summary">表所列為現在註冊使用GCM的程式。</string>
     <string name="pref_about_title">關於microG Services Core</string>
-    <string name="pref_about_summary">版本資訊和使用的程式庫</string>
 
-    <string name="gcm_app_error_unregistering">註冊錯誤</string>
-    <string name="gcm_app_not_installed_anymore">已移除</string>
     <string name="gcm_unregister_app">取消註冊</string>
     <string name="gcm_not_registered">未註冊</string>
     <string name="gcm_no_message_yet">尚未收到任何訊息</string>
@@ -140,18 +97,4 @@
     <string name="gcm_state_disconnected">現在狀態：未連接</string>
     <string name="gcm_state_connected">現在狀態：自<xliff:g example="2 hours ago">%1$s</xliff:g>連接至今</string>
 
-    <string name="snet_intro">Google SafetyNet是一個確認手機被確實保護和相容於Android CTS的驗證系統。一些程式基於安全因素使用SafetyNet，一些則是以必須通過的形式來防止篡改。
-    	
-    	microG GmsCore包含了SafetyNet的自由執行，但官方伺服器需要SafetyNet請求經非自由軟體性質的DroidGuard系統簽名。有一個可用的沙盒測試版本DroidGuard：獨立程式“DroidGuard Helper”。</string>
-
-    <string name="pref_snet_testdrive_title">測試SafetyNet驗證</string>
-
-    <string name="pref_snet_status_official_title">使用官方伺服器</string>
-    <string name="pref_snet_status_official_summary">需要未root的系統及安裝microG DroidGuard Helper</string>
-    <string name="pref_snet_status_third_party_title">使用第三方伺服器</string>
-    <string name="pref_snet_status_third_party_summary">第三方伺服器可能不需要DroidGuard簽名便能回應SafetyNet請求</string>
-    <string name="pref_snet_custom_url_title">自訂伺服器網址</string>
-    <string name="pref_snet_custom_url_summary">回應SafetyNet驗證請求之第三方伺服器的完整網址</string>
-    <string name="pref_snet_self_signed_title">使用自行簽名認證</string>
-    <string name="pref_snet_self_signed_summary">不向伺服器請求簽名，而是用本地的認證文件自行簽名SafetyNet。大部分的程式都會拒絕自行簽名認證。</string>
 </resources>

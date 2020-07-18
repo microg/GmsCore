@@ -19,10 +19,4 @@
     <plurals name="gcm_registered_apps_counter">
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
     </plurals>
-    <plurals name="cond_perm_summary">
-        <item quantity="other">Falta uma ou mais permissões para a funcionalidade adequada do MicroG Service Core.</item>
-    </plurals>
-    <plurals name="cond_perm_action">
-        <item quantity="other">Solicitar permissões em falta</item>
-    </plurals>
 </resources>

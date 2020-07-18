@@ -15,6 +15,4 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <bool name="is_gmscore">true</bool>
-</resources>
+<resources></resources>
