@@ -380,7 +380,7 @@
             android:exported="true" />
 
         <service
-            android:name="org.microg.gms.measurement.MeasuremenstatBrokerService"
+            android:name="org.microg.gms.measurement.MeasurementBrokerService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.measurement.START" />
