@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Paramètres de microG</string>
+    <string name="gms_settings_name">Paramètres de Vanced microG</string>
 
     <string name="just_a_sec">Juste une seconde…</string>
     <string name="google_account_label">Google</string>
@@ -72,7 +72,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="prefcat_google_services">Services Google</string>
 
     <string name="cond_gcm_bat_title">Optimisations de la batterie activées</string>
-    <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services Core. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
+    <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour Vanced microG. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
     <string name="cond_gcm_bat_action">Désactiver les optimisations de la batterie</string>
 
     <string name="prefs_account">Préférences du compte</string>
@@ -82,14 +82,14 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_auth_trust_google_title">Faire confiance à Google pour les autorisations des applications</string>
     <string name="pref_auth_trust_google_summary">Si désactivé, l’utilisateur est interrogé avant que la demande d’autorisation d’une application soit envoyée à Google. Certaines applications échoueront à utiliser le compte Google si ceci est désactivé.</string>
 
-    <string name="pref_checkin_enable_summary">Enregistre votre terminal auprès des services Google et crée un identifiant unique. microG retire les identifiants autres que le nom de votre compte Google des informations d’enregistrement.</string>
+    <string name="pref_checkin_enable_summary">Enregistre votre terminal auprès des services Google et crée un identifiant unique. Vanced microG retire les identifiants autres que le nom de votre compte Google des informations d’enregistrement.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging est un fournisseur de notifications push utilisé par beaucoup d’applications tierces. Pour l’utiliser vous devez activer l’enregistrement du terminal.</string>
     <string name="pref_gcm_apps_title">Applications utilisant Google Cloud Messaging</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirmation pour les nouvelles applications</string>
     <string name="pref_gcm_confirm_new_apps_summary">Demander avant d’enregistrer une nouvelle application auprès de Google Cloud Messaging</string>
 
-    <string name="pref_about_title">À propos de microG Services Core</string>
+    <string name="pref_about_title">À propos de Vanced microG</string>
 
     <string name="gcm_unregister_app">Désenregistrer</string>
     <string name="gcm_not_registered">Non enregistrée</string>

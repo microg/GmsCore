@@ -15,8 +15,8 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">microG Einstellungen</string>
-    <string name="gms_settings_summary">microG services Core einrichten.</string>
+    <string name="gms_settings_name">Vanced microG Einstellungen</string>
+    <string name="gms_settings_summary">Vanced microG services einrichten.</string>
 
     <string name="just_a_sec">Einen kurzen Moment…</string>
     <string name="google_account_label">Google</string>
@@ -65,7 +65,7 @@ Dies kann einige Minuten dauern."</string>
     <string name="self_check_cat_system">System</string>
 
     <string name="self_check_name_battery_optimizations">Batterieoptimierung deaktiviert:</string>
-    <string name="self_check_resolution_battery_optimizations">Hier drücken um Batterieoptimierungen für microG zu deaktivieren. Wenn das nicht geschieht funktionieren einige Apps nicht ordnungsgemäß.</string>
+    <string name="self_check_resolution_battery_optimizations">Hier drücken um Batterieoptimierungen für Vanced microG zu deaktivieren. Wenn das nicht geschieht funktionieren einige Apps nicht ordnungsgemäß.</string>
 
     <!-- Settings strings -->
 

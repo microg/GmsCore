@@ -20,4 +20,4 @@
     android:customTokens="true"
     android:icon="@drawable/ic_microg"
     android:smallIcon="@drawable/ic_microg"
-    android:label="@string/google_account_label" />
+    android:label="Vanced microG" />
