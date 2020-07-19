@@ -34,7 +34,7 @@
 
     <permission-tree
         android:name="com.mgoogle.android.googleapps.permission.GOOGLE_AUTH"
-        android:icon="@drawable/ic_microg" />
+        android:icon="@mipmap/ic_launcher" />
 
     <permission
         android:name="org.mgoogle.gms.STATUS_BROADCAST"
@@ -77,7 +77,7 @@
     <application
         android:allowBackup="false"
         android:extractNativeLibs="true"
-        android:icon="@mipmap/ic_core_service_app"
+        android:icon="@mipmap/ic_launcher"
         android:label="Vanced MicroG">
         <meta-data
             android:name="fake-signature"

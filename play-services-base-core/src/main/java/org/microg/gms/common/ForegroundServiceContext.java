@@ -15,6 +15,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import org.microg.gms.base.core.R;
+
 import java.util.List;
 
 public class ForegroundServiceContext extends ContextWrapper {
@@ -66,14 +68,16 @@ public class ForegroundServiceContext extends ContextWrapper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private static Notification buildForegroundNotification(Context context) {
         NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_NONE);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
         channel.setShowBadge(false);
+        channel.setLockscreenVisibility(0);
         channel.setVibrationPattern(new long[0]);
         context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
                 .setContentTitle("Running in background")
-                //.setSmallIcon(R.drawable.gcm_bell)
+                .setContentText("This notification ensures, that microG does not get killed.")
+                .setSmallIcon(R.drawable.ic_foreground_notification)
+                .setColor(0xFFFFFF)
                 .build();
     }
 }
