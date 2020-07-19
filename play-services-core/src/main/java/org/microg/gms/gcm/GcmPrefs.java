@@ -115,7 +115,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public int getHeartbeatMsFor(String pref, boolean rawRoaming) {
         if (PREF_NETWORK_ROAMING.equals(pref) && (rawRoaming || networkRoaming != 0)) {
-            return networkRoaming * 6000;
+            return networkRoaming * 60000;
         } else if (PREF_NETWORK_MOBILE.equals(pref)) {
             if (networkMobile != 0) return networkMobile * 60000;
             else return learntMobile;
