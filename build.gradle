@@ -65,17 +65,6 @@ def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCo
 def ourVersionName = "$ourVersionBase.$gmsVersionCode" + "-vanced"
 logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
 
-@Deprecated
-String getMyVersionName() {
-    return ourVersionName
-}
-
-@Deprecated
-int getMyVersionCode() {
-    return ourVersionCode
-}
-
-
 allprojects {
     apply plugin: 'idea'
 
@@ -83,25 +72,6 @@ allprojects {
     version = ourVersionName
     ext.appVersionCode = ourVersionCode
     ext.isReleaseVersion = false
-}
-
-@Deprecated
-def androidCompileSdk() { return androidCompileSdk }
-
-@Deprecated
-def androidTargetSdk() { return androidTargetSdk }
-
-@Deprecated
-def androidMinSdk() { return androidMinSdk }
-
-@Deprecated
-def versionCode() {
-    return ourVersionCode
-}
-
-@Deprecated
-def versionName() {
-    return ourVersionName
 }
 
 subprojects {

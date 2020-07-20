@@ -279,7 +279,7 @@
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/gms_settings_name"
-            android:roundIcon="@mipmap/ic_microg_settings"
+            android:roundIcon="@mipmap/ic_launcher"
             android:theme="@style/Theme.AppCompat.DayNight">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
