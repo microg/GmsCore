@@ -79,7 +79,7 @@
         android:allowBackup="false"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Vanced microG">
+        android:label="@string/app_name">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />

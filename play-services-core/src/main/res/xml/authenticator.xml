@@ -21,4 +21,4 @@
     android:customTokens="true"
     android:icon="@mipmap/ic_launcher"
     android:smallIcon="@mipmap/ic_launcher"
-    android:label="Vanced microG" />
+    android:label="@string/app_name" />
