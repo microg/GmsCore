@@ -14,10 +14,11 @@
   ~ limitations under the License.
   -->
 
-<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+<account-authenticator
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:accountPreferences="@xml/preferences_auth"
     android:accountType="com.mgoogle"
     android:customTokens="true"
-    android:icon="@drawable/ic_microg"
-    android:smallIcon="@drawable/ic_microg"
+    android:icon="@mipmap/ic_launcher"
+    android:smallIcon="@mipmap/ic_launcher"
     android:label="Vanced microG" />

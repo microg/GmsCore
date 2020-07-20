@@ -67,7 +67,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private static Notification buildForegroundNotification(Context context) {
-        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_NONE);
+        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_MIN);
         channel.setShowBadge(false);
         channel.setLockscreenVisibility(0);
         channel.setVibrationPattern(new long[0]);
@@ -77,7 +77,6 @@ public class ForegroundServiceContext extends ContextWrapper {
                 .setContentTitle("Running in background")
                 .setContentText("This notification ensures that microG does not get killed.")
                 .setSmallIcon(R.drawable.ic_foreground_notification)
-                .setColor(0xFFFFFF)
                 .build();
     }
 }

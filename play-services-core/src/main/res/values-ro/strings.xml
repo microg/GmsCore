@@ -18,7 +18,6 @@
     <string name="gms_settings_name">Setări Vanced microG</string>
 
     <string name="just_a_sec">Doar o secundă…</string>
-    <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Continuând, permiteți aceastei aplicații și Google să utilizeze informațiile dvs. în conformitate cu condiţiile de utilizare şi politicile de confidențialitate ale lor.</string>
     <string name="ask_scope_permission_title">%s ar dori să:</string>
     <string name="ask_service_permission_title">%s ar dori să utilizeze:</string>

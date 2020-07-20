@@ -34,7 +34,8 @@
 
     <permission-tree
         android:name="com.mgoogle.android.googleapps.permission.GOOGLE_AUTH"
-        android:icon="@mipmap/ic_launcher" />
+        android:icon="@mipmap/ic_launcher"
+        android:label="Vanced microG"/>
 
     <permission
         android:name="org.mgoogle.gms.STATUS_BROADCAST"
@@ -78,7 +79,7 @@
         android:allowBackup="false"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Vanced MicroG">
+        android:label="Vanced microG">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
@@ -276,7 +277,7 @@
         <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
-            android:icon="@mipmap/ic_microg_settings"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/gms_settings_name"
             android:roundIcon="@mipmap/ic_microg_settings"
             android:theme="@style/Theme.AppCompat.DayNight">

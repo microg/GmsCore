@@ -18,7 +18,6 @@
     <string name="gms_settings_name">Configurações Vanced microG</string>
 
     <string name="just_a_sec">Aguarde um momento…</string>
-    <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Ao continuar, você permite que este aplicativo e o Google usem suas informações de acordo com seus respectivos termos de serviço e políticas de privacidade.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar:</string>
