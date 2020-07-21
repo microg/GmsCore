@@ -44,32 +44,12 @@ buildscript {
     }
 }
 
-def execResult(...args) {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine args
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
-
-def gmsVersion = "69.4.20"
-def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
-def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').substring(1)
-def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))
-def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
-def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
-def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
-def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
-def ourVersionName = "$ourVersionBase.$gmsVersionCode" + "-vanced"
-logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
-
 allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = ourVersionName
-    ext.appVersionCode = ourVersionCode
+    version = "0.2.10.19430-vanced"
+    ext.appVersionCode = 194301000
     ext.isReleaseVersion = false
 }
 
