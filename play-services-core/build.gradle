@@ -43,7 +43,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion 29
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
