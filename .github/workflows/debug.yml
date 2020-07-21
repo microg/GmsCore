@@ -18,6 +18,9 @@ jobs:
         with:
           java-version: 1.8
 
+      - name: Install NDK
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
+
       - name: Grant rights
         run: chmod +x ./gradlew
 
