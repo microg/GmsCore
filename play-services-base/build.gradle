@@ -37,4 +37,5 @@ dependencies {
     api project(':play-services-tasks')
 
     implementation "androidx.fragment:fragment:$fragmentVersion"
+    implementation "com.google.android.gms:play-services-base:17.3.0"
 }
