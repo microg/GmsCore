@@ -25,11 +25,11 @@ buildscript {
     ext.supportLibraryVersion = "28.0.0"
     ext.slf4jVersion = "1.7.25"
 
-    ext.androidBuildGradleVersion = "3.6.3"
+    ext.androidBuildGradleVersion = "4.0.1"
 
     ext.androidBuildVersionTools = "29.0.3"
 
-    ext.androidMinSdk = 14
+    ext.androidMinSdk = 21
     ext.androidTargetSdk = 29
     ext.androidCompileSdk = 29
 
@@ -53,28 +53,16 @@ def execResult(...args) {
     return stdout.toString().trim()
 }
 
-def gmsVersion = "19.4.20"
+def gmsVersion = "69.4.20"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))
-def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').split(' ')[0]
 def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
 def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
 def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
 def ourVersionName = "$ourVersionBase.$gmsVersionCode" + "-vanced"
 logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
-
-@Deprecated
-String getMyVersionName() {
-    return ourVersionName
-}
-
-@Deprecated
-int getMyVersionCode() {
-    return ourVersionCode
-}
-
 
 allprojects {
     apply plugin: 'idea'
@@ -83,25 +71,6 @@ allprojects {
     version = ourVersionName
     ext.appVersionCode = ourVersionCode
     ext.isReleaseVersion = false
-}
-
-@Deprecated
-def androidCompileSdk() { return androidCompileSdk }
-
-@Deprecated
-def androidTargetSdk() { return androidTargetSdk }
-
-@Deprecated
-def androidMinSdk() { return androidMinSdk }
-
-@Deprecated
-def versionCode() {
-    return ourVersionCode
-}
-
-@Deprecated
-def versionName() {
-    return ourVersionName
 }
 
 subprojects {

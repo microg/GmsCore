@@ -43,7 +43,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
@@ -53,17 +53,16 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
 
-//        buildConfigField "boolean", "USE_MAPBOX", "${useMapbox()}"
-
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
+
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
     sourceSets {
@@ -78,7 +77,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
