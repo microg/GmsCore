@@ -118,7 +118,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="prefcat_test">Prova</string>
 
     <string name="cond_gcm_bat_title">Ottimizzazioni della batteria abilitate</string>
-    <string name="cond_gcm_bat_summary">Hai abilitato la messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti slezionare l'opzione per ignorare le ottimizzazioni della batteria.</string>
+    <string name="cond_gcm_bat_summary">Hai abilitato la messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti slezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
     <string name="cond_gcm_bat_action">Ignora ottimizzazioni</string>
     <string name="cond_perm_title">Permesso mancante</string>
 
