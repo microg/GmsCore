@@ -53,9 +53,9 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="perm_gtalk_svc_label">Scambia messaggi e riceve notifiche di sincronizzazione dai server Google</string>
     <string name="perm_extended_access_label">Accesso esteso ai servizi Google</string>
 
-    <string name="service_name_checkin">Registrazione del dispositivo Google</string>
-    <string name="service_name_mcs">Messaggistica cloud di Google</string>
-    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_checkin">Registrazione del dispositivo</string>
+    <string name="service_name_mcs">Messaggistica cloud</string>
+    <string name="service_name_snet">SafetyNet</string>
 
     <string name="service_status_disabled">Disabilitato</string>
     <string name="service_status_enabled">Abilitato</string>
@@ -115,10 +115,10 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="prefcat_location_service">Servizi di Localizzazione</string>
     <string name="prefcat_operation_mode">Modalità operativa</string>
     <string name="prefcat_services">Servizi</string>
-    <string name="prefcat_test">Prova</string>
+    <string name="prefcat_test">Sperimentale</string>
 
     <string name="cond_gcm_bat_title">Ottimizzazioni della batteria abilitate</string>
-    <string name="cond_gcm_bat_summary">Hai abilitato la messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti slezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
+    <string name="cond_gcm_bat_summary">Hai abilitato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti slezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
     <string name="cond_gcm_bat_action">Ignora ottimizzazioni</string>
     <string name="cond_perm_title">Permesso mancante</string>
 
@@ -141,7 +141,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_gcm_heartbeat_title">Intervallo di aggiornamento del servizio di messaggistica cloud di Google</string>
     <string name="pref_gcm_heartbeat_summary">L\'intervallo temporale, espresso in secondi, utilizzato dal sistema per contattare i serve di Google. Aumentare questo intervallo ridurrà il consumo di batteria, tuttavia potrebbe causare ritardi nella ricezione delle notifiche push.\nDeprecato, verrà rimpiazzato in versioni future.</string>
     <string name="pref_gcm_apps_title">Applicazioni che utilizzano il servizio di messaggistica cloud di Google</string>
-    <string name="pref_gcm_apps_summary">Lista delle applicazioni attualmente registrate al servizio di messaggistica cloud di Google.</string>
+    <string name="pref_gcm_apps_summary">Lista delle applicazioni attualmente registrate al servizio di messaggistica cloud di Google:</string>
     <string name="pref_gcm_confirm_new_apps_title">Conferma le nuove applicazioni</string>
     <string name="pref_gcm_confirm_new_apps_summary">Interroga l\'utente prima di registrare una nuova applicazione per le notifiche push.</string>
     <string name="pref_gcm_ping_interval">Intervallo di ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
@@ -153,7 +153,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="gcm_app_not_installed_anymore">Non più installata</string>
     <string name="gcm_unregister_app">De-registrazione</string>
     <string name="gcm_not_registered">Non registrata</string>
-    <string name="gcm_no_message_yet">Nessun messaggio ricevuto finora</string>
+    <string name="gcm_no_message_yet">Nessun messaggio ricevuto fino ad ora</string>
     <string name="gcm_last_message_at">Ultimo messaggio: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrata</string>
     <string name="gcm_registered_since">Registrata da: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
@@ -169,7 +169,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_snet_testdrive_title">Provare l\'attestazione SafetyNet</string>
 
     <string name="pref_snet_status_official_title">Usa i server ufficiali</string>
-    <string name="pref_snet_status_official_summary">Richiede un sistema senza privilegi di root e microG DroidGuard Helper installato</string>
+    <string name="pref_snet_status_official_summary">Richiede un sistema senza privilegi di superutente e microG DroidGuard Helper installato</string>
     <string name="pref_snet_status_official_info">Server ufficiale</string>
     <string name="pref_snet_status_third_party_title">Usa i server di terzi parti</string>
     <string name="pref_snet_status_third_party_summary">I server di terze parti potrebbero essere in grado di rispondere alle richieste di SafetyNet senza la firma di DroidGuard</string>
