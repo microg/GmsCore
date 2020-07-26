@@ -106,15 +106,15 @@
         android:allowBackup="false"
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_core_service_app"
-        android:label="@string/gms_app_name">
+        android:label="@string/gms_app_name"
+        android:theme="@style/Theme.AppCompat.DayNight">
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
 
         <!-- Location -->
 
-        <activity android:name="org.microg.nlp.ui.BackendSettingsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+        <activity android:name="org.microg.nlp.ui.BackendSettingsActivity" />
 
         <activity
             android:name="org.microg.gms.ui.PlacePickerActivity"
@@ -261,6 +261,7 @@
         <service android:name="org.microg.gms.droidguard.DroidGuardService">
             <intent-filter>
                 <action android:name="com.google.android.gms.droidguard.service.START" />
+                <action android:name="com.google.android.gms.droidguard.service.PING" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -410,8 +411,7 @@
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_microg_settings"
             android:label="@string/gms_settings_name"
-            android:roundIcon="@mipmap/ic_microg_settings"
-            android:theme="@style/Theme.AppCompat.DayNight">
+            android:roundIcon="@mipmap/ic_microg_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -423,13 +423,18 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="org.microg.gms.ui.SettingsDashboardActivity"
+            android:icon="@mipmap/ic_microg_settings"
+            android:label="Legacy microG Settings"
+            android:roundIcon="@mipmap/ic_microg_settings" />
+
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
-            android:targetActivity="org.microg.gms.ui.SettingsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight">
+            android:targetActivity="org.microg.gms.ui.SettingsActivity">
             <intent-filter>
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
             </intent-filter>
@@ -452,52 +457,25 @@
 
         <activity
             android:name="org.microg.gms.ui.AboutFragment$AsActivity"
-            android:label="@string/pref_about_title"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
-            android:name="org.microg.gms.ui.CheckinFragment$AsActivity"
-            android:label="@string/service_name_checkin"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
-            android:name="org.microg.gms.ui.GcmFragment$AsActivity"
-            android:label="@string/service_name_mcs"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
-            android:name="org.microg.gms.ui.GcmAdvancedFragment$AsActivity"
-            android:label="@string/service_name_mcs"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
-            android:name="org.microg.gms.ui.GcmAppFragment$AsActivity"
-            android:label="@string/service_name_mcs"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:label="@string/pref_about_title" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
-            android:label="@string/gms_settings_name"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:label="@string/gms_settings_name" />
 
         <activity
             android:name="org.microg.gms.ui.SafetyNetFragment$AsActivity"
-            android:label="@string/service_name_snet"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:label="@string/service_name_snet" />
 
         <activity
             android:name="org.microg.gms.ui.SafetyNetAdvancedFragment$AsActivity"
-            android:label="@string/service_name_snet"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:label="@string/service_name_snet" />
 
         <activity
             android:name="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-            android:label="@string/self_check_title"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:label="@string/self_check_title" />
 
-        <activity
-            android:name="org.microg.gms.ui.AccountSettingsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight">
+        <activity android:name="org.microg.gms.ui.AccountSettingsActivity">
             <intent-filter>
                 <action android:name="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS" />
                 <action android:name="com.google.android.gms.accountsettings.PRIVACY_SETTINGS" />
@@ -507,9 +485,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="org.microg.gms.ui.LocationSettingsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight">
+        <activity android:name="org.microg.gms.ui.LocationSettingsActivity">
             <intent-filter>
                 <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY" />
                 <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS" />

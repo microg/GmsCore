@@ -29,24 +29,22 @@ public abstract class SwitchBarResourceSettingsFragment extends ResourceSettings
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        AbstractSettingsActivity activity = (AbstractSettingsActivity) getActivity();
-
-        switchBar = activity.getSwitchBar();
-        switchBar.show();
-        switchCompat = switchBar.getSwitch();
+//        switchBar = activity.getSwitchBar();
+//        switchBar.show();
+//        switchCompat = switchBar.getSwitch();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        switchBar.hide();
+//        switchBar.hide();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (!listenerSetup) {
-            switchBar.addOnSwitchChangeListener(this);
+//            switchBar.addOnSwitchChangeListener(this);
             listenerSetup = true;
         }
     }
@@ -54,7 +52,7 @@ public abstract class SwitchBarResourceSettingsFragment extends ResourceSettings
     @Override
     public void onPause() {
         if (listenerSetup) {
-            switchBar.removeOnSwitchChangeListener(this);
+//            switchBar.removeOnSwitchChangeListener(this);
             listenerSetup = false;
         }
         super.onPause();

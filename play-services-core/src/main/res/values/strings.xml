@@ -61,6 +61,8 @@ This can take a couple of minutes."</string>
     <string name="service_status_enabled">Enabled</string>
     <string name="service_status_automatic">Automatic</string>
     <string name="service_status_manual">Manual</string>
+    <string name="service_status_enabled_short">On</string>
+    <string name="service_status_disabled_short">Off</string>
 
     <string name="menu_advanced">Advanced</string>
     <string name="list_no_item_none">None</string>

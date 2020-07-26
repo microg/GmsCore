@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="checked"
+            type="boolean" />
+
+        <variable
+            name="enabled"
+            type="boolean" />
+
+        <variable
+            name="description"
+            type="String" />
+
+        <variable
+            name="callback"
+            type="org.microg.gms.ui.PreferenceSwitchBarCallback" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:clickable="@{enabled}"
+        android:focusable="@{enabled}"
+        android:gravity="center"
+        android:onClick="@{(v) -> callback.onChecked(!Boolean.valueOf(checked))}"
+        android:orientation="horizontal"
+        android:paddingStart="?attr/listPreferredItemPaddingStart"
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+        android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+        android:paddingRight="?attr/listPreferredItemPaddingRight"
+        app:backgroundColorAttr="@{checked ? androidx.appcompat.R.attr.colorControlActivated : (enabled ? androidx.appcompat.R.attr.colorButtonNormal : androidx.appcompat.R.attr.colorControlHighlight)}"
+        tools:background="?attr/colorControlActivated">
+
+        <TextView
+            android:id="@android:id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:paddingStart="56dp"
+            android:paddingLeft="56dp"
+            android:text="@{description}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="?android:attr/textColorPrimaryInverse"
+            tools:text="Enabled" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:checked="@{checked}"
+            android:enabled="@{enabled}"
+            app:onCheckedChangeListener="@{(v, newStatus) -> callback.onChecked(newStatus)}"
+            app:thumbTint="?android:attr/textColorPrimaryInverse"
+            app:trackTint="?android:attr/textColorSecondaryInverse"
+            tools:checked="true" />
+    </LinearLayout>
+</layout>

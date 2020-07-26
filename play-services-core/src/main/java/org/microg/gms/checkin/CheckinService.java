@@ -34,8 +34,6 @@ import org.microg.gms.common.ForegroundServiceContext;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
-import static org.microg.gms.checkin.TriggerReceiver.PREF_ENABLE_CHECKIN;
-
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
     public static final String BIND_ACTION = "com.google.android.gms.checkin.BIND_TO_SERVICE";
@@ -58,7 +56,7 @@ public class CheckinService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             ForegroundServiceContext.completeForegroundService(this, intent, TAG);
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PREF_ENABLE_CHECKIN, false)) {
+            if (CheckinPrefs.get(this).isEnabled()) {
                 LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
                 if (info != null) {
                     Log.d(TAG, "Checked in as " + Long.toHexString(info.androidId));

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <PreferenceCategory
+        android:key="prefcat_device_registration_status"
+        android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:key="pref_device_registration_status"
+            android:selectable="false"
+            android:title="Status"
+            tools:summary="Last registration: 13 hours ago" />
+    </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:icon="@drawable/ic_info_outline"
+            android:selectable="false"
+            android:summary="@string/pref_checkin_enable_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>

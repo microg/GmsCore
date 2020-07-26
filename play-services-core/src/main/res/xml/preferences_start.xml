@@ -14,75 +14,59 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/prefcat_setup">
-        <org.microg.tools.ui.TintIconPreference
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
             android:icon="@drawable/self_check"
             android:summary="@string/self_check_desc"
             android:title="@string/self_check_title">
             <intent
                 android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
+                android:targetPackage="com.google.android.gms" />
+        </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services">
-        <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/add_account"
+        <Preference
+            android:icon="@drawable/ic_add_account"
             android:summary="@string/pref_add_account_summary"
             android:title="@string/pref_add_account_title">
             <intent
                 android:targetClass="org.microg.gms.auth.login.LoginActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-        <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/device_login"
+                android:targetPackage="com.google.android.gms" />
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_device_login"
             android:key="pref_checkin"
-            android:title="@string/service_name_checkin">
-            <intent
-                android:targetClass="org.microg.gms.ui.CheckinFragment$AsActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-        <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/gcm_bell"
+            android:title="@string/service_name_checkin" />
+        <Preference
+            android:icon="@drawable/ic_cloud_bell"
             android:key="pref_gcm"
-            android:title="@string/service_name_mcs">
-            <intent
-                android:targetClass="org.microg.gms.ui.GcmFragment$AsActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-        <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/certificate"
+            android:title="@string/service_name_mcs" />
+        <Preference
+            android:icon="@drawable/ic_certificate"
             android:key="pref_snet"
-            android:title="@string/service_name_snet">
-            <intent
-                android:targetClass="org.microg.gms.ui.SafetyNetFragment$AsActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
-        <org.microg.tools.ui.TintIconPreference
+            android:title="@string/service_name_snet" />
+        <Preference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
-            android:title="@string/pref_more_settings">
+            android:title="@string/pref_more_settings"
+            app:isPreferenceVisible="false">
             <intent
                 android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
+                android:targetPackage="com.google.android.gms" />
+        </Preference>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefcat_configuration">
-        <org.microg.tools.ui.TintIconPreference
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:icon="@drawable/ic_map_marker"
             android:key="pref_unifiednlp"
-            android:title="UnifiedNlp">
-            <intent
-                android:targetClass="org.microg.nlp.ui.BackendSettingsActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
+            android:title="@string/nlp_backends_title" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefcat_about">
-        <org.microg.tools.ui.TintIconPreference
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:icon="@drawable/ic_info_outline"
             android:key="pref_about"
-            android:title="@string/pref_about_title">
-            <intent
-                android:targetClass="org.microg.gms.ui.AboutFragment$AsActivity"
-                android:targetPackage="com.google.android.gms"/>
-        </org.microg.tools.ui.TintIconPreference>
+            android:title="@string/pref_about_title" />
     </PreferenceCategory>
 </PreferenceScreen>

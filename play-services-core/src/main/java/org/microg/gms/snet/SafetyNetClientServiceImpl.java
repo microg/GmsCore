@@ -80,6 +80,7 @@ public class SafetyNetClientServiceImpl extends ISafetyNetService.Stub {
                         bundle.putString("contentBinding", attestation.getPayloadHashBase64());
                         RemoteDroidGuardConnector.Result dg = conn.guard("attest", Long.toString(LastCheckinInfo.read(context).androidId), bundle);
                         if (!SafetyNetPrefs.get(context).isOfficial() || dg != null && dg.getStatusCode() == 0 && dg.getResult() != null) {
+                            Log.d(TAG, dg == null ? "No dg result" : ("Status: " + dg.getStatusCode() + ", error:" + dg.getErrorMsg()));
                             if (dg != null && dg.getStatusCode() == 0 && dg.getResult() != null) {
                                 attestation.setDroidGaurdResult(Base64.encodeToString(dg.getResult(), Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE));
                             }

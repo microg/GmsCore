@@ -73,7 +73,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
                 .setContentTitle("Running in background")
-                //.setSmallIcon(R.drawable.gcm_bell)
+                //.setSmallIcon(R.drawable.ic_cloud_bell)
                 .build();
     }
 }
