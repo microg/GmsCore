@@ -161,8 +161,8 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="gcm_unregister_confirm_message">Alcune applicazioni non rinnovano automaticamente la registrazione e/o non forniscono un\'opzione per farlo manualmente. Queste applicazioni potrebbero non funzionare correttamente a seguito della de-registrazione.\nContinuare?</string>
     <string name="gcm_unregister_after_deny_message">Hai negato ad una applicazione già registrata di registrarsi alle notifiche push.\nDesideri de-registrarla così che non riceva più notifiche push in futuro?</string>
     <string name="gcm_messages_counter">Messaggi: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
-    <string name="gcm_state_disconnected">Stato corrente: Disconnesso</string>
-    <string name="gcm_state_connected">Stato corrente: Connesso da <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_network_state_disconnected">Disconnesso</string>
+    <string name="gcm_network_state_connected">Connesso da <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="snet_intro">SafetyNet di Google è un sistema di certificazione dispositivo che ne garantisce la sicurezza e la compatibilità con Android CTS. Alcune applicazioni utlizzano SafetyNet per ragioni di sicurezza o come prerequisito per la protezione da manomissione.\n\nmicroG contiene una implementazione libera di SafetyNet, tuttavia i server ufficiali richiedono che le richieste SafetyNet siano firmate utilizzando il sistema proprietario DroidGuard. Una versione contenitore di DroidGuard è disponibile come applicazione “DroidGuard Helper”.</string>
 
