@@ -26,10 +26,7 @@ class DeviceRegistrationFragment : Fragment(R.layout.device_registration_fragmen
         binding = DeviceRegistrationFragmentBinding.inflate(inflater, container, false)
         binding.switchBarCallback = object : PreferenceSwitchBarCallback {
             override fun onChecked(newStatus: Boolean) {
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(PREF_ENABLE_CHECKIN, newStatus).commit()
-                if (newStatus) {
-                    requireContext().sendOrderedBroadcast(Intent(requireContext(), TriggerReceiver::class.java), null)
-                }
+                CheckinPrefs.setEnabled(context, newStatus)
                 binding.checkinEnabled = newStatus
             }
         }

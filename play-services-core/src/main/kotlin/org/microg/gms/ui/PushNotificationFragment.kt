@@ -25,12 +25,7 @@ class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
         binding = PushNotificationFragmentBinding.inflate(inflater, container, false)
         binding.switchBarCallback = object : PreferenceSwitchBarCallback {
             override fun onChecked(newStatus: Boolean) {
-                PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).apply()
-                if (!newStatus) {
-                    McsService.stop(context)
-                } else {
-                    requireContext().sendBroadcast(Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, context, TriggerReceiver::class.java))
-                }
+                GcmPrefs.setEnabled(context, newStatus)
                 binding.gcmEnabled = newStatus
             }
         }

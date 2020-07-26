@@ -61,6 +61,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
@@ -74,8 +75,6 @@ android {
 
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-
-//        buildConfigField "boolean", "USE_MAPBOX", "${useMapbox()}"
 
         multiDexEnabled true
 

@@ -6,6 +6,7 @@
 package org.microg.gms.checkin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -43,5 +44,12 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
 
     public boolean isEnabled() {
         return checkinEnabled;
+    }
+
+    public static void setEnabled(Context context, boolean newStatus) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(PREF_ENABLE_CHECKIN, newStatus).commit();
+        if (newStatus) {
+            context.sendOrderedBroadcast(new Intent(context, TriggerReceiver.class), null);
+        }
     }
 }

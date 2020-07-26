@@ -64,6 +64,11 @@
         android:name="org.microg.gms.EXTENDED_ACCESS"
         android:label="@string/perm_extended_access_label"
         android:protectionLevel="dangerous" />
+    <permission
+        android:name="org.microg.gms.PROVISION"
+        android:description="@string/perm_provision_description"
+        android:label="@string/perm_provision_label"
+        android:protectionLevel="privileged|signature" />
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
 
@@ -111,6 +116,13 @@
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
+
+        <!-- Provision -->
+
+        <service
+            android:name="org.microg.gms.provision.ProvisionService"
+            android:exported="true"
+            android:permission="org.microg.gms.PROVISION" />
 
         <!-- Location -->
 

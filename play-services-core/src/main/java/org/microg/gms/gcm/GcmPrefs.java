@@ -17,6 +17,7 @@
 package org.microg.gms.gcm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -195,6 +196,15 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public boolean isEnabledFor(NetworkInfo info) {
         return isEnabled() && info != null && getHeartbeatMsFor(info) >= 0;
+    }
+
+    public static void setEnabled(Context context, boolean newStatus) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).commit();
+        if (!newStatus) {
+            McsService.stop(context);
+        } else {
+            context.sendBroadcast(new Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, context, TriggerReceiver.class));
+        }
     }
 
     public boolean isGcmLogEnabled() {
