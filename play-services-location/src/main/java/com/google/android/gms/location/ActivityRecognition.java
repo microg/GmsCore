@@ -19,7 +19,7 @@ package com.google.android.gms.location;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
 
-import org.microg.gms.location.ActivityRecognitionApiBuilder;
+import org.microg.gms.location.ActivityRecognitionApiClientBuilder;
 import org.microg.gms.location.ActivityRecognitionApiImpl;
 
 /**
@@ -31,7 +31,7 @@ public class ActivityRecognition {
     /**
      * Token to pass to {@link Builder#addApi(Api)} to enable ContextServices.
      */
-    public static final Api<Api.ApiOptions.NoOptions> API = new Api<Api.ApiOptions.NoOptions>(new ActivityRecognitionApiBuilder());
+    public static final Api<Api.ApiOptions.NoOptions> API = new Api<Api.ApiOptions.NoOptions>(new ActivityRecognitionApiClientBuilder());
 
     /**
      * Entry point to the activity recognition APIs.

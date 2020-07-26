@@ -98,6 +98,7 @@ public enum GmsService {
     GASS(116, "com.google.android.gms.gass.START"),
     WORK_ACCOUNT(120),
     AD_CACHE(123, "com.google.android.gms.ads.service.CACHE"),
+    NEARBY_EXPOSURE(236, "com.google.android.gms.nearby.exposurenotification.START")
     ;
 
     public int SERVICE_ID;

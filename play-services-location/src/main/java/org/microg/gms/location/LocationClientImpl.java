@@ -33,7 +33,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.ParcelableGeofence;
 
+import org.microg.gms.common.api.ConnectionCallbacks;
 import org.microg.gms.common.api.GoogleApiClientImpl;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +47,8 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
     private Map<LocationListener, ILocationListener> listenerMap = new HashMap<LocationListener, ILocationListener>();
 
 
-    public LocationClientImpl(Context context, GoogleApiClient.ConnectionCallbacks callbacks,
-                              GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+    public LocationClientImpl(Context context, ConnectionCallbacks callbacks,
+                              OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener);
         Log.d(TAG, "<init>");
     }

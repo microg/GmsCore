@@ -20,10 +20,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.os.RemoteException;
 
-import com.google.android.gms.common.api.GoogleApiClient;
+import org.microg.gms.common.api.ConnectionCallbacks;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
 public class ActivityRecognitionClientImpl extends GoogleLocationManagerClient {
-    public ActivityRecognitionClientImpl(Context context, GoogleApiClient.ConnectionCallbacks callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+    public ActivityRecognitionClientImpl(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener);
     }
 

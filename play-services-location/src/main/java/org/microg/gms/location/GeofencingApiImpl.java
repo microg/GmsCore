@@ -18,8 +18,8 @@ package org.microg.gms.location;
 
 import android.app.PendingIntent;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;

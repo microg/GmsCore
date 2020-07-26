@@ -43,5 +43,6 @@ android {
 
 dependencies {
     api project(':play-services-iid')
-    // compile project(':play-services-measurement')
+
+    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0' // TODO
 }

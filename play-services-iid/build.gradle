@@ -44,4 +44,6 @@ android {
 dependencies {
     api project(':play-services-base')
     api project(':play-services-iid-api')
+
+    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0' // TODO
 }

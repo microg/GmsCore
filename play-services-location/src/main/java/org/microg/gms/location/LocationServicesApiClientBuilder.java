@@ -19,19 +19,17 @@ package org.microg.gms.location;
 import android.content.Context;
 import android.os.Looper;
 
-import com.google.android.gms.common.api.AccountInfo;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Api.ApiOptions.NoOptions;
 
-import org.microg.gms.common.api.ApiBuilder;
-import org.microg.gms.common.api.ApiConnection;
+import org.microg.gms.common.api.ApiClientBuilder;
+import org.microg.gms.common.api.ApiClientSettings;
+import org.microg.gms.common.api.ApiClient;
+import org.microg.gms.common.api.ConnectionCallbacks;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
-public class LocationServicesApiBuilder implements ApiBuilder<Api.ApiOptions.NoOptions> {
+public class LocationServicesApiClientBuilder implements ApiClientBuilder<NoOptions> {
     @Override
-    public ApiConnection build(Context context, Looper looper,
-            Api.ApiOptions.NoOptions options,
-            AccountInfo accountInfo, GoogleApiClient.ConnectionCallbacks callbacks,
-            GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+    public ApiClient build(NoOptions options, Context context, Looper looper, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
         return new LocationClientImpl(context, callbacks, connectionFailedListener);
     }
 }

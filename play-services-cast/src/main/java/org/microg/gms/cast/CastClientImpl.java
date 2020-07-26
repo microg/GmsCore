@@ -19,11 +19,12 @@ package org.microg.gms.cast;
 import android.content.Context;
 
 import com.google.android.gms.cast.Cast;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.microg.gms.common.DummyApiConnection;
+import org.microg.gms.common.DummyApiClient;
+import org.microg.gms.common.api.ConnectionCallbacks;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
-public class CastClientImpl extends DummyApiConnection {
-    public CastClientImpl(Context context, Cast.CastOptions options, GoogleApiClient.ConnectionCallbacks callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+public class CastClientImpl extends DummyApiClient {
+    public CastClientImpl(Context context, Cast.CastOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
     }
 }

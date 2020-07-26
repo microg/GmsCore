@@ -20,16 +20,17 @@ import android.content.Context;
 import android.os.Looper;
 
 import com.google.android.gms.cast.CastRemoteDisplay;
-import com.google.android.gms.common.api.AccountInfo;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.microg.gms.common.DummyApiConnection;
-import org.microg.gms.common.api.ApiBuilder;
-import org.microg.gms.common.api.ApiConnection;
+import org.microg.gms.common.DummyApiClient;
+import org.microg.gms.common.api.ApiClientBuilder;
+import org.microg.gms.common.api.ApiClientSettings;
+import org.microg.gms.common.api.ApiClient;
+import org.microg.gms.common.api.ConnectionCallbacks;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
-public class CastRemoteDisplayApiBuilder implements ApiBuilder<CastRemoteDisplay.CastRemoteDisplayOptions> {
+public class CastRemoteDisplayApiClientBuilder implements ApiClientBuilder<CastRemoteDisplay.CastRemoteDisplayOptions> {
     @Override
-    public ApiConnection build(Context context, Looper looper, CastRemoteDisplay.CastRemoteDisplayOptions options, AccountInfo accountInfo, GoogleApiClient.ConnectionCallbacks callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
-        return new DummyApiConnection();
+    public ApiClient build(CastRemoteDisplay.CastRemoteDisplayOptions options, Context context, Looper looper, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
+        return new DummyApiClient();
     }
 }

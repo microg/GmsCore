@@ -24,7 +24,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 
-import org.microg.gms.cast.CastApiBuilder;
+import org.microg.gms.cast.CastApiClientBuilder;
 import org.microg.gms.cast.CastApiImpl;
 import org.microg.gms.common.PublicApi;
 
@@ -89,7 +89,7 @@ public final class Cast {
     /**
      * Token to pass to {@link GoogleApiClient.Builder#addApi(Api)} to enable the Cast features.
      */
-    public static final Api<CastOptions> API = new Api<CastOptions>(new CastApiBuilder());
+    public static final Api<CastOptions> API = new Api<CastOptions>(new CastApiClientBuilder());
 
     /**
      * An implementation of the CastApi interface. The interface is used to interact with a cast device.

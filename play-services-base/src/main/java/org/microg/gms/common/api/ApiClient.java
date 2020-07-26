@@ -14,30 +14,14 @@
  * limitations under the License.
  */
 
-package org.microg.gms.common;
+package org.microg.gms.common.api;
 
-import org.microg.gms.common.api.ApiConnection;
+public interface ApiClient {
+    void connect();
 
-public class DummyApiConnection implements ApiConnection {
-    private boolean connected = false;
+    void disconnect();
 
-    @Override
-    public void connect() {
-        connected = true;
-    }
+    boolean isConnected();
 
-    @Override
-    public void disconnect() {
-        connected = false;
-    }
-
-    @Override
-    public boolean isConnected() {
-        return connected;
-    }
-
-    @Override
-    public boolean isConnecting() {
-        return false;
-    }
+    boolean isConnecting();
 }

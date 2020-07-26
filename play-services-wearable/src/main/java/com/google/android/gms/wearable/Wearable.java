@@ -23,7 +23,7 @@ import org.microg.gms.common.PublicApi;
 import org.microg.gms.wearable.DataApiImpl;
 import org.microg.gms.wearable.MessageApiImpl;
 import org.microg.gms.wearable.NodeApiImpl;
-import org.microg.gms.wearable.WearableApiBuilder;
+import org.microg.gms.wearable.WearableApiClientBuilder;
 
 /**
  * An API for the Android Wear platform.
@@ -33,7 +33,7 @@ public class Wearable {
     /**
      * Token to pass to {@link GoogleApiClient.Builder#addApi(Api)} to enable the Wearable features.
      */
-    public static final Api<WearableOptions> API = new Api<WearableOptions>(new WearableApiBuilder());
+    public static final Api<WearableOptions> API = new Api<WearableOptions>(new WearableApiClientBuilder());
 
     public static final DataApi DataApi = new DataApiImpl();
     public static final MessageApi MessageApi = new MessageApiImpl();

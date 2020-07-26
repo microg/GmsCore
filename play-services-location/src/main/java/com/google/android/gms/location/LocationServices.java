@@ -16,12 +16,14 @@
 
 package com.google.android.gms.location;
 
+import android.content.Context;
+
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient.Builder;
 
 import org.microg.gms.location.FusedLocationProviderApiImpl;
 import org.microg.gms.location.GeofencingApiImpl;
-import org.microg.gms.location.LocationServicesApiBuilder;
+import org.microg.gms.location.LocationServicesApiClientBuilder;
 import org.microg.gms.location.SettingsApiImpl;
 
 /**
@@ -31,20 +33,27 @@ public class LocationServices {
     /**
      * Token to pass to {@link Builder#addApi(Api)} to enable LocationServices.
      */
-    public static final Api<Api.ApiOptions.NoOptions> API = new Api<Api.ApiOptions.NoOptions>(new LocationServicesApiBuilder());
+    public static final Api<Api.ApiOptions.NoOptions> API = new Api<Api.ApiOptions.NoOptions>(new LocationServicesApiClientBuilder());
 
     /**
      * Entry point to the fused location APIs.
      */
+    @Deprecated
     public static final FusedLocationProviderApi FusedLocationApi = new FusedLocationProviderApiImpl();
 
     /**
      * Entry point to the geofencing APIs.
      */
+    @Deprecated
     public static final GeofencingApi GeofencingApi = new GeofencingApiImpl();
 
     /**
      * Entry point to the location settings-enabler dialog APIs.
      */
+    @Deprecated
     public static final SettingsApi SettingsApi = new SettingsApiImpl();
+
+    public static FusedLocationProviderClient getFusedLocationProviderClient(Context context) {
+        return new FusedLocationProviderClient(context);
+    }
 }

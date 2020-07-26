@@ -20,15 +20,16 @@ import android.content.Context;
 import android.os.Looper;
 
 import com.google.android.gms.cast.Cast;
-import com.google.android.gms.common.api.AccountInfo;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.microg.gms.common.api.ApiBuilder;
-import org.microg.gms.common.api.ApiConnection;
+import org.microg.gms.common.api.ApiClientBuilder;
+import org.microg.gms.common.api.ApiClientSettings;
+import org.microg.gms.common.api.ApiClient;
+import org.microg.gms.common.api.ConnectionCallbacks;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
-public class CastApiBuilder implements ApiBuilder<Cast.CastOptions>{
+public class CastApiClientBuilder implements ApiClientBuilder<Cast.CastOptions> {
     @Override
-    public ApiConnection build(Context context, Looper looper, Cast.CastOptions options, AccountInfo accountInfo, GoogleApiClient.ConnectionCallbacks callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+    public ApiClient build(Cast.CastOptions options, Context context, Looper looper, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
         return new CastClientImpl(context, options, callbacks, connectionFailedListener);
     }
 }

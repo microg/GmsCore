@@ -35,6 +35,7 @@ android {
 dependencies {
     api project(':play-services-basement')
     api project(':play-services-tasks')
+    api project(':play-services-base-api')
 
     implementation "androidx.fragment:fragment:$fragmentVersion"
 }

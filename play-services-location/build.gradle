@@ -44,4 +44,6 @@ android {
 dependencies {
     api project(':play-services-base')
     api project(':play-services-location-api')
+
+    implementation 'androidx.annotation:annotation:1.1.0'
 }

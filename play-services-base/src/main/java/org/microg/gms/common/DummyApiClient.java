@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 
-package org.microg.gms.common.api;
+package org.microg.gms.common;
 
-import android.content.Context;
-import android.os.Looper;
+import org.microg.gms.common.api.ApiClient;
 
-import com.google.android.gms.common.api.AccountInfo;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
+public class DummyApiClient implements ApiClient {
+    private boolean connected = false;
 
-public interface ApiBuilder<O extends Api.ApiOptions> {
-    ApiConnection build(Context context, Looper looper, O options, AccountInfo accountInfo,
-                        GoogleApiClient.ConnectionCallbacks callbacks,
-                        GoogleApiClient.OnConnectionFailedListener connectionFailedListener);
+    @Override
+    public void connect() {
+        connected = true;
+    }
+
+    @Override
+    public void disconnect() {
+        connected = false;
+    }
+
+    @Override
+    public boolean isConnected() {
+        return connected;
+    }
+
+    @Override
+    public boolean isConnecting() {
+        return false;
+    }
 }

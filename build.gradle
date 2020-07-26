@@ -4,8 +4,8 @@
  */
 
 buildscript {
-    ext.nlpVersion = '2.0-alpha1'
-    ext.remoteDroidGuardVersion = '0.1.1'
+    ext.nlpVersion = '2.0-alpha2'
+    ext.remoteDroidGuardVersion = '0.1.2'
     ext.safeParcelVersion = '1.6.0'
     ext.wearableVersion = '0.1.1'
 
@@ -53,7 +53,7 @@ def execResult(...args) {
     return stdout.toString().trim()
 }
 
-def gmsVersion = "19.4.20"
+def gmsVersion = "20.24.14"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))

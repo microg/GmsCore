@@ -26,12 +26,14 @@ import com.google.android.gms.wearable.internal.IWearableService;
 
 import org.microg.gms.common.GmsClient;
 import org.microg.gms.common.GmsService;
+import org.microg.gms.common.api.ConnectionCallbacks;
 import org.microg.gms.common.api.GoogleApiClientImpl;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
 public class WearableClientImpl extends GmsClient<IWearableService> {
     private static final String TAG = "GmsWearClient";
 
-    public WearableClientImpl(Context context, Wearable.WearableOptions options, GoogleApiClient.ConnectionCallbacks callbacks, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+    public WearableClientImpl(Context context, Wearable.WearableOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener, GmsService.WEARABLE.ACTION);
         serviceId = GmsService.WEARABLE.SERVICE_ID;
         if (options != null && options.firstPartyMode)

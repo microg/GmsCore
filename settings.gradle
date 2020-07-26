@@ -2,24 +2,33 @@ include ':wearable-lib'
 
 include ':play-services-basement'
 
-include ':play-services-api'
+include ':play-services-tasks'
+
+include ':play-services-base-api'
 include ':play-services-cast-api'
 include ':play-services-cast-framework-api'
 include ':play-services-iid-api'
 include ':play-services-location-api'
+//include ':play-services-nearby-api'
 include ':play-services-wearable-api'
 
-include ':play-services-base'
-include ':play-services-tasks'
-include ':play-services-wearable'
+include ':play-services-api'
 
 include ':play-services-base-core'
 include ':play-services-location-core'
 include ':play-services-maps-core-mapbox'
-include ':play-services-maps-core-vtm'
 include ':play-services-maps-core-vtm:vtm-microg-theme'
+include ':play-services-maps-core-vtm'
 
+include ':play-services-core:microg-ui-tools' // Legacy
 include ':play-services-core'
-include ':play-services-core:microg-ui-tools'
 
+include ':play-services-base'
+include ':play-services-cast'
+include ':play-services-gcm'
+include ':play-services-iid'
+include ':play-services-location'
+//include ':play-services-nearby'
+include ':play-services-wearable'
 
+include ':play-services'

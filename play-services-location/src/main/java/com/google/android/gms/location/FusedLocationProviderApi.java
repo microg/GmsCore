@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.Status;
 
 import org.microg.gms.location.LocationConstants;
 
+@Deprecated
 public interface FusedLocationProviderApi {
     @Deprecated
     String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";

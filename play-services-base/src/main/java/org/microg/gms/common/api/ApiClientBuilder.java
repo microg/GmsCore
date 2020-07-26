@@ -16,12 +16,11 @@
 
 package org.microg.gms.common.api;
 
-public interface ApiConnection {
-    void connect();
+import android.content.Context;
+import android.os.Looper;
 
-    void disconnect();
+import com.google.android.gms.common.api.Api;
 
-    boolean isConnected();
-
-    boolean isConnecting();
+public interface ApiClientBuilder<O extends Api.ApiOptions> {
+    ApiClient build(O options, Context context, Looper looper, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener);
 }

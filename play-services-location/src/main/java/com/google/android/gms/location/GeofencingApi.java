@@ -36,6 +36,7 @@ import java.util.List;
  *          .build()
  * </pre>
  */
+@Deprecated
 public interface GeofencingApi {
     PendingResult<Status> addGeofences(GoogleApiClient client, GeofencingRequest geofencingRequest, PendingIntent pendingIntent);
 
