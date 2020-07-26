@@ -146,8 +146,8 @@ Dies kann einige Minuten dauern."</string>
     <string name="gcm_unregister_confirm_message">Einige Apps registrieren sich nicht automatisch erneut und haben keine Möglichkeit dies manuell anzustoßen. Diese Apps funktionieren eventuell nach dem abmelden nicht mehr richtig.\nFortsetzen?</string>
     <string name="gcm_unregister_after_deny_message">Du hast einer App die Erlaubnis der Registrierung entzogen, die bereits registriert ist.\nWillst du diese App jetzt auch abmelden damit sie zukünftig keine Push-Nachrichten erhält?</string>
     <string name="gcm_messages_counter">Nachrichten: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
-    <string name="gcm_state_disconnected">Aktueller Zustand: Nicht verbunden</string>
-    <string name="gcm_state_connected">Aktueller Zustand: Verbunden seit <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_network_state_disconnected">Nicht verbunden</string>
+    <string name="gcm_network_state_connected">Verbunden seit <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="snet_intro">Google SafetyNet ist ein System um Geräte zu zertifizieren und so sicherzustellen, dass sie ausreichend geschützt und kompatibel mit Android sind. Einige Anwendungen benutzen SafetyNet aus Sicherheitsgründen oder um einen Kopierschutz zu erzwingen.\n\nmicroG GmsCore enthält eine freie Implementierung von SafetyNet, jedoch verlangen die Google-Server, dass die Anfragen durch das proprietäre DroidGuard signiert sind. Eine unschädliche gemachte Version von DroidGuard ist als separate "DroidGuard Helper" app verfügbar.</string>
 

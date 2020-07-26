@@ -10,17 +10,17 @@
     android:title="Push notifications">
     <PreferenceCategory
         android:key="prefcat_push_apps"
-        android:title="Apps using push notifications">
+        android:title="@string/prefcat_push_apps_title">
         <Preference
             android:enabled="false"
             android:key="pref_push_apps_none"
-            android:title="No apps"
+            android:title="@string/list_no_item_none"
             tools:isPreferenceVisible="true" />
         <Preference
             android:icon="@drawable/ic_expand_apps"
             android:key="pref_push_apps_all"
             android:order="5"
-            android:title="See all" />
+            android:title="@string/list_item_see_all" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_push_status"

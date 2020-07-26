@@ -45,9 +45,9 @@ class DeviceRegistrationPreferencesFragment : PreferenceFragmentCompat() {
         statusCategory.isVisible = CheckinPrefs.get(context).isEnabled
         val checkinInfo = LastCheckinInfo.read(requireContext())
         status.summary = if (checkinInfo.lastCheckin > 0) {
-            "Last registration: " + DateUtils.getRelativeTimeSpanString(checkinInfo.lastCheckin, System.currentTimeMillis(), 0)
+            getString(R.string.checkin_last_registration, DateUtils.getRelativeTimeSpanString(checkinInfo.lastCheckin, System.currentTimeMillis(), 0))
         } else {
-            "Not registered"
+            getString(R.string.checkin_not_registered)
         }
     }
 

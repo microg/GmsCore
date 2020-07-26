@@ -149,8 +149,8 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="gcm_unregister_confirm_message">Certaines applications ne se réenregistrent pas et/ou ne fournisse pas de moyens de le faire manuellement. Ces applications peuvent ne plus fonctionner correctement après le désenregistrement.\nContinuer ?</string>
     <string name="gcm_unregister_after_deny_message">Vous avez empêché une application déjà enregistrée de s’enregistrer pour recevoir des notifications push.\nVoulez-vous la désenregistrer maintenant pour qu’elle ne reçoive plus de notifications push à l’avenir ?</string>
     <string name="gcm_messages_counter">Messages : <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> octets)</string>
-    <string name="gcm_state_disconnected">Status actuel : Déconnecté</string>
-    <string name="gcm_state_connected">Status actuel : Connecté depuis <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_network_state_disconnected">Déconnecté</string>
+    <string name="gcm_network_state_connected">Connecté depuis <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="snet_intro">Google SafetyNet est un système de certification du terminal, assurant que celui-ci est correctement sécurisé et compatible avec Android CTS. Certaines applications utilisent SafetyNet pour des raisons de sécurité ou comme prérequis anti-altérations.\n\nmicroG GmsCore contient une implantation libre de SafetyNet, mais les serveurs officiels requièrent que les requêtes SafetyNet soient signées par le système propriétaire DroidGuard. Une version mise en « bac-à-sable » de DroidGuard est disponible dans une application séparée « DroidGuard Helper ».
 </string>

@@ -137,8 +137,6 @@
     <string name="gcm_unregister_after_deny_message">您拒絕了一個已經註冊的程式去註冊接收推送通知。
 您是否想取消註冊讓它未來不再收到推送通知？</string>
     <string name="gcm_messages_counter">已接收訊息：<xliff:g example="123">%1$d</xliff:g>個（<xliff:g example="12345">%2$d</xliff:g>位元組〉</string>
-    <string name="gcm_state_disconnected">現在狀態：未連接</string>
-    <string name="gcm_state_connected">現在狀態：自<xliff:g example="2 hours ago">%1$s</xliff:g>連接至今</string>
 
     <string name="snet_intro">Google SafetyNet是一個確認手機被確實保護和相容於Android CTS的驗證系統。一些程式基於安全因素使用SafetyNet，一些則是以必須通過的形式來防止篡改。
     	

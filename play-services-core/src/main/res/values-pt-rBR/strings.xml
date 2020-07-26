@@ -131,7 +131,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="gcm_unregister_confirm_message">Algumas aplicações não registam automaticamente e/ou não fornecem uma opção para fazê-lo manualmente. Esses aplicativos podem não funcionar corretamente após o cancelamento do registro.\nContinuar?</string>
     <string name="gcm_unregister_after_deny_message">Você negou um app para se registrar para notificações push que já está registrado.\nDeseja cancelar o registo agora para que não receba mensagens de envio no futuro?</string>
     <string name="gcm_messages_counter">Mensagens: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
-    <string name="gcm_state_disconnected">Estado atual: desconectado</string>
-    <string name="gcm_state_connected">Estado atual: Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_network_state_disconnected">Desconectado</string>
+    <string name="gcm_network_state_connected">Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    </resources>
+</resources>

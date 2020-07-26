@@ -5,19 +5,15 @@
 
 package org.microg.gms.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import com.google.android.gms.R
 import com.google.android.gms.databinding.DeviceRegistrationFragmentBinding
 import org.microg.gms.checkin.CheckinPrefs
-import org.microg.gms.checkin.CheckinPrefs.PREF_ENABLE_CHECKIN
-import org.microg.gms.checkin.TriggerReceiver
 
 class DeviceRegistrationFragment : Fragment(R.layout.device_registration_fragment) {
     private lateinit var binding: DeviceRegistrationFragmentBinding

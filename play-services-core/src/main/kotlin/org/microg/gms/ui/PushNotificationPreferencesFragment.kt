@@ -68,9 +68,9 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
         handler.postDelayed(updateRunnable, UPDATE_INTERVAL)
         pushStatusCategory.isVisible = GcmPrefs.get(context).isEnabled
         pushStatus.summary = if (McsService.isConnected()) {
-            "Connected since: " + DateUtils.getRelativeTimeSpanString(McsService.getStartTimestamp(), System.currentTimeMillis(), 0)
+            getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(McsService.getStartTimestamp(), System.currentTimeMillis(), 0))
         } else {
-            "Disconnected"
+            getString(R.string.gcm_network_state_disconnected)
         }
     }
 

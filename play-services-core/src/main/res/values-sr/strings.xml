@@ -131,7 +131,5 @@
     <string name="gcm_unregister_confirm_message">Неке се апликације не пријављују поново аутоматски и/или не пружају могућност да се то уради ручно. Ове апликације можда неће радити исправно након одјављивања.\nДа наставим?</string>
     <string name="gcm_unregister_after_deny_message">Нисте дозволили апликацији да се пријави на гурана обавештења а која је већ пријављена.\nЖелите ли да је одјавите сада тако да убудуће не прима гурана обавештења?</string>
     <string name="gcm_messages_counter">Порука: %1$d (%2$d бајта)</string>
-    <string name="gcm_state_disconnected">Тренутно стање: неповезан</string>
-    <string name="gcm_state_connected">Тренутно стање: повезан %1$s</string>
 
-    </resources>
+</resources>

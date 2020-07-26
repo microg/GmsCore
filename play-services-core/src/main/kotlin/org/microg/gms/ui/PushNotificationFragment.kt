@@ -4,19 +4,15 @@
  */
 package org.microg.gms.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.preference.*
 import com.google.android.gms.R
 import com.google.android.gms.databinding.PushNotificationFragmentBinding
 import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.gcm.GcmPrefs
-import org.microg.gms.gcm.McsService
-import org.microg.gms.gcm.TriggerReceiver
 
 class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
     lateinit var binding: PushNotificationFragmentBinding

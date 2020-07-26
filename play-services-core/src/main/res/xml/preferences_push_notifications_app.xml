@@ -14,15 +14,15 @@
             android:defaultValue="true"
             android:key="pref_push_app_allow_register"
             android:persistent="false"
-            android:summary="Allow the app to register for push notifications."
-            android:title="Allow registration" />
+            android:summary="@string/pref_push_app_allow_register_summary"
+            android:title="@string/pref_push_app_allow_register_title" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_push_app_wake_for_delivery"
             android:persistent="false"
-            android:summary="Start the app while in background to receive the incoming push messages."
-            android:title="Start app on push message" />
+            android:summary="@string/pref_push_app_wake_for_delivery_summary"
+            android:title="@string/pref_push_app_wake_for_delivery_title" />
 
     </PreferenceCategory>
 
@@ -31,7 +31,7 @@
         android:layout="@layout/preference_category_no_label">
         <Preference
             android:key="pref_push_app_unregister"
-            android:title="Unregister" />
+            android:title="@string/gcm_unregister_app" />
     </PreferenceCategory>
 
     <PreferenceCategory android:layout="@layout/preference_category_no_label">

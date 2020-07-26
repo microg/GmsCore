@@ -159,8 +159,6 @@
     <string name="gcm_unregister_confirm_message">"Некоторые приложение автоматически не перепривязываются и/или не предоставляют возможности сделать это вручную. Такие приложения могут работать некорректно после отвязки.\nПродолжить?"</string>
     <string name="gcm_unregister_after_deny_message">Вы запретили push-уведомления для приложения, которое уже привязано.\nВы хотите отвязать его сейчас чтобы больше не получать от него push-уведомлений?</string>
     <string name="gcm_messages_counter">Уведомлений: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
-    <string name="gcm_state_disconnected">Текущий статус: Отключен</string>
-    <string name="gcm_state_connected">Текущий статус: Подключен <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="snet_intro">Google SafetyNet это система сертификации устройства, гарантирующая, что устройство корректно защищено и совместимо с Android CTS. Некоторые приложения используют SafetyNet из соображений безопасности или в качестве предварительной системы защиты от взлома.\n\nmicroG GmsCore содержит свободную реализацию SafetyNet, но официальный сервер требует, чтобы запросы были подписаны с помощью проприетарной системы DroidGuard. Изолированная версия DroidGuard доступна как отдельное приложение "DroidGuard Helper".</string>
 
