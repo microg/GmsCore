@@ -94,15 +94,4 @@ public class GcmAdvancedFragment extends ResourceSettingsFragment {
         }
         return (heartbeatMs / 60000) + " minutes";
     }
-
-    public static class AsActivity extends AbstractSettingsActivity {
-        public AsActivity() {
-            showHomeAsUp = true;
-        }
-
-        @Override
-        protected Fragment getFragment() {
-            return new GcmAdvancedFragment();
-        }
-    }
 }

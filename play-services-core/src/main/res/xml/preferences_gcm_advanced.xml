@@ -25,7 +25,7 @@
 
     <PreferenceCategory
         android:key="prefcat_networks"
-        android:title="Networks to use for Cloud Messaging">
+        android:title="@string/prefcat_push_networks_title">
 
         <ListPreference
             android:defaultValue="0"

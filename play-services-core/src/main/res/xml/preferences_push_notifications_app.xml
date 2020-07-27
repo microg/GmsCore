@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <PreferenceCategory
+        android:key="prefcat_push_app_settings"
+        android:layout="@layout/preference_category_no_label">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_push_app_allow_register"
+            android:persistent="false"
+            android:summary="@string/pref_push_app_allow_register_summary"
+            android:title="@string/pref_push_app_allow_register_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_push_app_wake_for_delivery"
+            android:persistent="false"
+            android:summary="@string/pref_push_app_wake_for_delivery_summary"
+            android:title="@string/pref_push_app_wake_for_delivery_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="prefcat_push_app_unregister"
+        android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:key="pref_push_app_unregister"
+            android:title="@string/gcm_unregister_app" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:key="pref_push_app_status"
+            android:selectable="false"
+            tools:summary="Messages: 1000 (37 MB)\nLast message: 22 min ago\nRegistered since: 3 month ago" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -29,6 +29,7 @@ import com.google.android.gms.common.ConnectionResult;
 
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.common.api.ApiClientSettings;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
 import java.util.HashMap;
@@ -56,6 +57,7 @@ import java.util.concurrent.TimeUnit;
  * in {@link Activity#onStop()}, regardless of the state.
  */
 @PublicApi
+@Deprecated
 public interface GoogleApiClient {
     /**
      * Connects the client to Google Play services. Blocks until the connection either succeeds or
@@ -271,7 +273,7 @@ public interface GoogleApiClient {
          *                                 attempt fails.
          */
         public Builder(Context context, ConnectionCallbacks connectedListener,
-                OnConnectionFailedListener connectionFailedListener) {
+                       OnConnectionFailedListener connectionFailedListener) {
             this(context);
             addConnectionCallbacks(connectedListener);
             addOnConnectionFailedListener(connectionFailedListener);
@@ -358,16 +360,15 @@ public interface GoogleApiClient {
          * @return The {@link GoogleApiClient} object.
          */
         public GoogleApiClient build() {
-            return new GoogleApiClientImpl(context, looper, getAccountInfo(), apis,
-                    connectionCallbacks, connectionFailedListeners, clientId);
+            return new GoogleApiClientImpl(context, looper, getClientSettings(), apis, connectionCallbacks, connectionFailedListeners, clientId);
         }
 
-        private AccountInfo getAccountInfo() {
+        private ApiClientSettings getClientSettings() {
             return null;
         }
 
         public Builder enableAutoManage(FragmentActivity fragmentActivity, int cliendId,
-                OnConnectionFailedListener unresolvedConnectionFailedListener)
+                                        OnConnectionFailedListener unresolvedConnectionFailedListener)
                 throws NullPointerException, IllegalArgumentException, IllegalStateException {
             this.fragmentActivity = fragmentActivity;
             this.clientId = cliendId;
@@ -433,7 +434,8 @@ public interface GoogleApiClient {
      * service. Most applications implement {@link #onConnected(Bundle)} to start making requests.
      */
     @PublicApi
-    interface ConnectionCallbacks {
+    @Deprecated
+    interface ConnectionCallbacks extends org.microg.gms.common.api.ConnectionCallbacks {
         /**
          * A suspension cause informing that the service has been killed.
          */
@@ -442,34 +444,6 @@ public interface GoogleApiClient {
          * A suspension cause informing you that a peer device connection was lost.
          */
         int CAUSE_NETWORK_LOST = 2;
-
-        /**
-         * After calling {@link #connect()}, this method will be invoked asynchronously when the
-         * connect request has successfully completed. After this callback, the application can
-         * make requests on other methods provided by the client and expect that no user
-         * intervention is required to call methods that use account and scopes provided to the
-         * client constructor.
-         * <p/>
-         * Note that the contents of the {@code connectionHint} Bundle are defined by the specific
-         * services. Please see the documentation of the specific implementation of
-         * {@link GoogleApiClient} you are using for more information.
-         *
-         * @param connectionHint Bundle of data provided to clients by Google Play services. May
-         *                       be null if no content is provided by the service.
-         */
-        void onConnected(Bundle connectionHint);
-
-        /**
-         * Called when the client is temporarily in a disconnected state. This can happen if there
-         * is a problem with the remote service (e.g. a crash or resource problem causes it to be
-         * killed by the system). When called, all requests have been canceled and no outstanding
-         * listeners will be executed. GoogleApiClient will automatically attempt to restore the
-         * connection. Applications should disable UI components that require the service, and wait
-         * for a call to {@link #onConnected(Bundle)} to re-enable them.
-         *
-         * @param cause The reason for the disconnection. Defined by constants {@code CAUSE_*}.
-         */
-        void onConnectionSuspended(int cause);
     }
 
     /**
@@ -478,18 +452,7 @@ public interface GoogleApiClient {
      * resolution.
      */
     @PublicApi
-    interface OnConnectionFailedListener {
-        /**
-         * Called when there was an error connecting the client to the service.
-         *
-         * @param result A {@link ConnectionResult} that can be used for resolving the error, and
-         *               deciding what sort of error occurred. To resolve the error, the resolution
-         *               must be started from an activity with a non-negative {@code requestCode}
-         *               passed to {@link ConnectionResult#startResolutionForResult(Activity, int)}.
-         *               Applications should implement {@link Activity#onActivityResult} in their
-         *               Activity to call {@link #connect()} again if the user has resolved the
-         *               issue (resultCode is {@link Activity#RESULT_OK}).
-         */
-        void onConnectionFailed(ConnectionResult result);
+    @Deprecated
+    interface OnConnectionFailedListener extends org.microg.gms.common.api.OnConnectionFailedListener {
     }
 }
