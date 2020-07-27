@@ -136,7 +136,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_auth_visible_title">Autorizza le applicazioni a visualizzare gli account</string>
     <string name="pref_auth_visible_summary">Quando questa opzione è abilitata, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica dell\'account Google senza autorizzazione preventiva.</string>
 
-    <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. Vengono estrapolati da microG dei bit di identificazione piuttosto che il nome dell\'account Google dai dati di registrazione.</string>
+    <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. Vengono estrapolati da microG alcuni bit funzionali all\'identificazione dai dati di registrazione, piuttosto che il nome dell\'account Google.</string>
 
     <string name="checkin_not_registered">Non registrato</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
