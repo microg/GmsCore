@@ -61,10 +61,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/selfcheckFragment"
-        android:name="org.microg.gms.ui.SelfCheckFragment"
-        android:label="@string/self_check_title" />
-    <fragment
         android:id="@+id/checkinFragment"
         android:name="org.microg.gms.ui.DeviceRegistrationFragment"
         android:label="@string/service_name_checkin"
@@ -121,22 +117,6 @@
         android:id="@+id/gcmAdvancedFragment"
         android:name="org.microg.gms.ui.GcmAdvancedFragment"
         android:label="@string/service_name_mcs" />
-    <fragment
-        android:id="@+id/safetyNetFragment"
-        android:name="org.microg.gms.ui.SafetyNetFragment"
-        android:label="@string/service_name_snet">
-        <action
-            android:id="@+id/openSafetyNetAdvancedSettings"
-            app:destination="@id/safetyNetAdvancedFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
-    </fragment>
-    <fragment
-        android:id="@+id/safetyNetAdvancedFragment"
-        android:name="org.microg.gms.ui.SafetyNetAdvancedFragment"
-        android:label="@string/service_name_snet" />
 
     <fragment
         android:id="@+id/googleMoreFragment"

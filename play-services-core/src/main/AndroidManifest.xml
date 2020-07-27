@@ -345,11 +345,6 @@
             android:theme="@style/Theme.AppCompat.DayNight" />
 
         <activity
-            android:name="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-            android:label="@string/self_check_title"
-            android:theme="@style/Theme.AppCompat.DayNight" />
-
-        <activity
             android:name="org.microg.gms.ui.AccountSettingsActivity"
             android:theme="@style/Theme.AppCompat.DayNight">
             <intent-filter>
@@ -361,17 +356,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="org.microg.gms.ui.LocationSettingsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight">
-            <intent-filter>
-                <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY" />
-                <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS" />
-                <action android:name="com.google.android.gms.location.settings.LOCATION_REPORTING_SETTINGS" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <!-- Other -->
 
