@@ -105,7 +105,7 @@
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Visualizza e gestisci le impostazioni di un gruppo di applicazioni Google</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Leggi e scrivi gli accessi per la API License Manager</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order">Leggi e scrivi gli accessi per amministratori ed utenti che eseguono test nel contenitore delle API, oppure leggi e scrivi gli accessi quando viene evocata una operazione API direttamente</string>
-    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">In aggiunta all\'ambito complessivo di lettura e scrittura OAuth, utilizza l'ambito di sola lettura OAuth quando richiedi i dati dell\'utente</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">In aggiunta all\'ambito complessivo di lettura e scrittura OAuth, utilizza l\'ambito di sola lettura OAuth quando richiedi i dati dell\'utente</string>
     <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">Accedi in sola lettura per la API Admin Audit</string>
     <string name="permission_scope_www.googleapis.com_auth_appstate">Ambito di utilizzo del servizio App State</string>
     <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">Visualizza i tuoi dati di Google BigQuery</string>
