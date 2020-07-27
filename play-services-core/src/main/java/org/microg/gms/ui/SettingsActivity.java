@@ -17,8 +17,6 @@
 package org.microg.gms.ui;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,11 +25,8 @@ import com.mgoogle.android.gms.R;
 
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
-//import org.microg.nlp.Preferences;
 import org.microg.tools.ui.AbstractDashboardActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
-
-import static org.microg.gms.checkin.TriggerReceiver.PREF_ENABLE_CHECKIN;
 
 public class SettingsActivity extends AbstractDashboardActivity {
 
@@ -88,8 +83,6 @@ public class SettingsActivity extends AbstractDashboardActivity {
 //                    Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
 //            findPreference(PREF_UNIFIEDNLP).setSummary(getResources().getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount));
 
-            boolean checkinEnabled = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(PREF_ENABLE_CHECKIN, true);
-            findPreference(PREF_CHECKIN).setSummary(checkinEnabled ? R.string.service_status_enabled : R.string.service_status_disabled);
         }
     }
 }
