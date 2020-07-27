@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_settings"
+    app:startDestination="@id/settingsFragment">
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="org.microg.gms.ui.SettingsFragment"
+        android:label="@string/gms_settings_name">
+        <action
+            android:id="@+id/openUnifiedNlpSettings"
+            app:destination="@id/nav_unlp"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openSelfcheck"
+            app:destination="@id/selfcheckFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openCheckinSettings"
+            app:destination="@id/checkinFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openGcmSettings"
+            app:destination="@id/gcmFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openSafetyNetSettings"
+            app:destination="@id/safetyNetFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openMoreGoogleSettings"
+            app:destination="@id/googleMoreFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openAbout"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/selfcheckFragment"
+        android:name="org.microg.gms.ui.SelfCheckFragment"
+        android:label="@string/self_check_title" />
+    <fragment
+        android:id="@+id/checkinFragment"
+        android:name="org.microg.gms.ui.DeviceRegistrationFragment"
+        android:label="@string/service_name_checkin"
+        tools:layout="@layout/device_registration_fragment" />
+    <fragment
+        android:id="@+id/gcmFragment"
+        android:name="org.microg.gms.ui.PushNotificationFragment"
+        android:label="@string/service_name_mcs"
+        tools:layout="@layout/push_notification_fragment">
+        <action
+            android:id="@+id/openGcmAppDetails"
+            app:destination="@id/gcmAppFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openAllGcmApps"
+            app:destination="@id/gcmAllAppsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openGcmAdvancedSettings"
+            app:destination="@id/gcmAdvancedFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/gcmAllAppsFragment"
+        android:name="org.microg.gms.ui.PushNotificationAllAppsFragment"
+        android:label="Apps using push notifications">
+        <action
+            android:id="@+id/openGcmAppDetailsFromAll"
+            app:destination="@id/gcmAppFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/gcmAppFragment"
+        android:name="org.microg.gms.ui.PushNotificationAppFragment"
+        android:label="@string/service_name_mcs"
+        tools:layout="@layout/push_notification_app_fragment">
+        <argument
+            android:name="package"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/gcmAdvancedFragment"
+        android:name="org.microg.gms.ui.GcmAdvancedFragment"
+        android:label="@string/service_name_mcs" />
+    <fragment
+        android:id="@+id/safetyNetFragment"
+        android:name="org.microg.gms.ui.SafetyNetFragment"
+        android:label="@string/service_name_snet">
+        <action
+            android:id="@+id/openSafetyNetAdvancedSettings"
+            app:destination="@id/safetyNetAdvancedFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/safetyNetAdvancedFragment"
+        android:name="org.microg.gms.ui.SafetyNetAdvancedFragment"
+        android:label="@string/service_name_snet" />
+
+    <fragment
+        android:id="@+id/googleMoreFragment"
+        android:name="org.microg.gms.ui.GoogleMoreFragment"
+        android:label="@string/gms_settings_name" />
+
+    <include app:graph="@navigation/nav_unlp" />
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="org.microg.gms.ui.AboutFragment"
+        android:label="@string/prefcat_about" />
+</navigation>
