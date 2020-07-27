@@ -14,52 +14,52 @@
         <action
             android:id="@+id/openUnifiedNlpSettings"
             app:destination="@id/nav_unlp"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openSelfcheck"
             app:destination="@id/selfcheckFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openCheckinSettings"
             app:destination="@id/checkinFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openGcmSettings"
             app:destination="@id/gcmFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openSafetyNetSettings"
             app:destination="@id/safetyNetFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openAbout"
             app:destination="@id/aboutFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
 
     <fragment
@@ -79,24 +79,24 @@
         <action
             android:id="@+id/openGcmAppDetails"
             app:destination="@id/gcmAppFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openAllGcmApps"
             app:destination="@id/gcmAllAppsFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
         <action
             android:id="@+id/openGcmAdvancedSettings"
             app:destination="@id/gcmAdvancedFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <fragment
         android:id="@+id/gcmAllAppsFragment"
@@ -105,10 +105,10 @@
         <action
             android:id="@+id/openGcmAppDetailsFromAll"
             app:destination="@id/gcmAppFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <fragment
         android:id="@+id/gcmAppFragment"
@@ -130,10 +130,10 @@
         <action
             android:id="@+id/openSafetyNetAdvancedSettings"
             app:destination="@id/safetyNetAdvancedFragment"
-            app:enterAnim="@android:anim/fragment_open_enter"
-            app:exitAnim="@android:anim/fragment_open_exit"
-            app:popEnterAnim="@android:anim/fragment_close_enter"
-            app:popExitAnim="@android:anim/fragment_close_exit" />
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
     <fragment
         android:id="@+id/safetyNetAdvancedFragment"
