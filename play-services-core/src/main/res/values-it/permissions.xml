@@ -16,27 +16,5 @@
   -->
 
 <resources>
-    <string name="permission_service_all_label">Tutti i servizi Google</string>
-    <string name="permission_service_all_description">Permette alle applicazioni di accedere a tutti i servizi Google mediante l\'account Google.</string>
 
-    <string name="permission_service_android_label">Servizi Android</string>
-    <string name="permission_service_android_description">Permette alle applicazioni di accedere ai servizi Android mediante l\'account Google.</string>
-    <string name="permission_service_adsense_label">Google AdSense</string>
-    <string name="permission_service_adsense_description">Permette alle applicazioni di accedere a Google AdSense mediante l\'account Google.</string>
-    <string name="permission_service_adwords_label">Google AdWords</string>
-    <string name="permission_service_adwords_description">Permette alle applicazioni di accedere a Google AdWords mediante l\'account Google.</string>
-    <string name="permission_service_ah_label">Google App Engine</string>
-    <string name="permission_service_ah_description">Permette alle applicazioni di accedere a Google App Engine mediante l\'account Google.</string>
-    <string name="permission_service_blogger_label">Google Blogger</string>
-    <string name="permission_service_blogger_description">Permette alle applicazioni di accedere a Google Blogger mediante l\'account Google.</string>
-    <string name="permission_service_cl_label">Calendario Google</string>
-    <string name="permission_service_cl_description">Permette alle applicazioni di accedere al calendario di Google mediante l\'account Google.</string>
-    <string name="permission_service_cp_label">Contatti Google</string>
-    <string name="permission_service_cp_description">Permette alle applicazioni di accedere ai Contatti Google mediante l\'account Google.</string>
-    <string name="permission_service_dodgeball_label">Dodgeball</string>
-    <string name="permission_service_dodgeball_description">Permette alle applicazioni di accedere a Dodgeball mediante l\'account Google.</string>
-    <string name="permission_service_finance_label">Google Finance</string>
-    <string name="permission_service_finance_description">Permette alle applicazioni di accedere a Google Finance mediante l\'account Google.</string>
-    <string name="permission_service_gbase_label">Google Base</string>
-    <string name="permission_service_gbase_description">Permette alle applicazioni di accedere a Google base mediante l\'account Google.</string>
 </resources>

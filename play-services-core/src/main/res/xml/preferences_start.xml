@@ -17,7 +17,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/prefcat_google_services">
         <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/add_account"
+            android:icon="@drawable/ic_add_account"
             android:summary="@string/pref_add_account_summary"
             android:title="@string/pref_add_account_title">
             <intent
@@ -25,7 +25,7 @@
                 android:targetPackage="com.mgoogle.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/device_login"
+            android:icon="@drawable/ic_device_login"
             android:key="pref_checkin"
             android:title="@string/service_name_checkin">
             <intent
@@ -33,7 +33,7 @@
                 android:targetPackage="com.mgoogle.android.gms"/>
         </org.microg.tools.ui.TintIconPreference>
         <org.microg.tools.ui.TintIconPreference
-            android:icon="@drawable/gcm_bell"
+            android:icon="@drawable/ic_cloud_bell"
             android:key="pref_gcm"
             android:title="@string/service_name_mcs">
             <intent
