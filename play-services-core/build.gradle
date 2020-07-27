@@ -40,6 +40,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
     implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "androidx.navigation:navigation:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui:$navigationVersion"
 }
 
 android {
