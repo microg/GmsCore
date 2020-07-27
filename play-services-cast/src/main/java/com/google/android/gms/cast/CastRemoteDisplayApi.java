@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package org.microg.gms.cast;
+package com.google.android.gms.cast;
 
-import android.content.Context;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 
-import com.google.android.gms.cast.Cast;
+public interface CastRemoteDisplayApi {
+    PendingResult<CastRemoteDisplay.CastRemoteDisplaySessionResult> startRemoteDisplay(GoogleApiClient apiClient, String applicationId);
 
-import org.microg.gms.common.DummyApiClient;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
-
-public class CastClientImpl extends DummyApiClient {
-    public CastClientImpl(Context context, Cast.CastOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-    }
+    PendingResult<CastRemoteDisplay.CastRemoteDisplaySessionResult> stopRemoteDisplay(GoogleApiClient apiClient);
 }

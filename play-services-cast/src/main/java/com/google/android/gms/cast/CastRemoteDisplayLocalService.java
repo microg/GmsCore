@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package org.microg.gms.cast;
+package com.google.android.gms.cast;
 
-import android.content.Context;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 
-import com.google.android.gms.cast.Cast;
-
-import org.microg.gms.common.DummyApiClient;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
-
-public class CastClientImpl extends DummyApiClient {
-    public CastClientImpl(Context context, Cast.CastOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
+public class CastRemoteDisplayLocalService extends Service {
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }

@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package org.microg.gms.cast;
+package com.google.android.gms.cast;
 
+import android.annotation.TargetApi;
+import android.app.Presentation;
 import android.content.Context;
+import android.view.Display;
 
-import com.google.android.gms.cast.Cast;
+@TargetApi(17)
+public class CastPresentation extends Presentation {
+    public CastPresentation(Context outerContext, Display display) {
+        super(outerContext, display);
+    }
 
-import org.microg.gms.common.DummyApiClient;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
-
-public class CastClientImpl extends DummyApiClient {
-    public CastClientImpl(Context context, Cast.CastOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
+    public CastPresentation(Context outerContext, Display display, int theme) {
+        super(outerContext, display, theme);
     }
 }

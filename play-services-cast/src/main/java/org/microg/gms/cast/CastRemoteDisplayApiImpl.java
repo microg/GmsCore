@@ -16,15 +16,19 @@
 
 package org.microg.gms.cast;
 
-import android.content.Context;
+import com.google.android.gms.cast.CastRemoteDisplay;
+import com.google.android.gms.cast.CastRemoteDisplayApi;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 
-import com.google.android.gms.cast.Cast;
+public class CastRemoteDisplayApiImpl implements CastRemoteDisplayApi {
+    @Override
+    public PendingResult<CastRemoteDisplay.CastRemoteDisplaySessionResult> startRemoteDisplay(GoogleApiClient apiClient, String applicationId) {
+        return null;
+    }
 
-import org.microg.gms.common.DummyApiClient;
-import org.microg.gms.common.api.ConnectionCallbacks;
-import org.microg.gms.common.api.OnConnectionFailedListener;
-
-public class CastClientImpl extends DummyApiClient {
-    public CastClientImpl(Context context, Cast.CastOptions options, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
+    @Override
+    public PendingResult<CastRemoteDisplay.CastRemoteDisplaySessionResult> stopRemoteDisplay(GoogleApiClient apiClient) {
+        return null;
     }
 }
