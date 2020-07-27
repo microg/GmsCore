@@ -10,20 +10,6 @@
         android:name="org.microg.gms.ui.SettingsFragment"
         android:label="@string/gms_settings_name">
         <action
-            android:id="@+id/openUnifiedNlpSettings"
-            app:destination="@id/nav_unlp"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
-        <action
-            android:id="@+id/openSelfcheck"
-            app:destination="@id/selfcheckFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
-        <action
             android:id="@+id/openCheckinSettings"
             app:destination="@id/checkinFragment"
             app:enterAnim="@anim/fragment_open_enter"
@@ -33,20 +19,6 @@
         <action
             android:id="@+id/openGcmSettings"
             app:destination="@id/gcmFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
-        <action
-            android:id="@+id/openSafetyNetSettings"
-            app:destination="@id/safetyNetFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
-        <action
-            android:id="@+id/openMoreGoogleSettings"
-            app:destination="@id/googleMoreFragment"
             app:enterAnim="@anim/fragment_open_enter"
             app:exitAnim="@anim/fragment_open_exit"
             app:popEnterAnim="@anim/fragment_close_enter"
@@ -117,13 +89,6 @@
         android:id="@+id/gcmAdvancedFragment"
         android:name="org.microg.gms.ui.GcmAdvancedFragment"
         android:label="@string/service_name_mcs" />
-
-    <fragment
-        android:id="@+id/googleMoreFragment"
-        android:name="org.microg.gms.ui.GoogleMoreFragment"
-        android:label="@string/gms_settings_name" />
-
-    <include app:graph="@navigation/nav_unlp" />
 
     <fragment
         android:id="@+id/aboutFragment"
