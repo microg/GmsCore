@@ -28,7 +28,6 @@ public class SettingsDashboardActivity extends AbstractDashboardActivity {
     public SettingsDashboardActivity() {
         preferencesResource = R.xml.preferences_start;
         addCondition(Conditions.GCM_BATTERY_OPTIMIZATIONS);
-        addCondition(Conditions.PERMISSIONS);
     }
 
     @Override
