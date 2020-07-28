@@ -27,7 +27,7 @@
     <string name="auth_before_connect">"Un\'applicazione sul tuo dispositivo sta tentando di accedere all\'account Google.
 
 Se ciò era intenzionale, utilizzate il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, in caso contrario utilizza il pulsante <b>Cancella</b> per tornare all\'applicazione che ha aperto questa finestra di dialogo."</string>
-    <string name="auth_sign_in">Accedere</string>
+    <string name="auth_sign_in">Accedi</string>
     <string name="auth_connecting">"Il tuo dispositivo sta stabilendo la connessione con i server di Google per autenticarti.
 
 Questa operazione può richiedere alcuni secondi."</string>
