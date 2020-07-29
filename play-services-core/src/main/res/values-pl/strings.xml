@@ -69,6 +69,7 @@ To zajmie kilka minut.</string>
 
     <string name="prefcat_about">O programie</string>
     <string name="prefcat_google_services">Usługi Google</string>
+    <string name="pref_more_settings">Więcej</string>
 
     <string name="cond_gcm_bat_title">Optymalizacja baterii włączona</string>
     <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>

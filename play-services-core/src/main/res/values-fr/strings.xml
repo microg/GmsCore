@@ -69,6 +69,7 @@ Ceci peut prendre plusieurs minutes."</string>
 
     <string name="prefcat_about">À propos</string>
     <string name="prefcat_google_services">Services Google</string>
+    <string name="pref_more_settings">Plus</string>
 
     <string name="cond_gcm_bat_title">Optimisations de la batterie activées</string>
     <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services Core. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>

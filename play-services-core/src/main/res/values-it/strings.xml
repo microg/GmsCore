@@ -77,6 +77,7 @@ Questa operazione può richiedere alcuni minuti."</string>
 
     <string name="prefcat_about">Informazioni</string>
     <string name="prefcat_google_services">Servizi Google</string>
+    <string name="pref_more_settings">Impostazioni avanzate</string>
 
     <string name="cond_gcm_bat_title">Ottimizzazioni della batteria abilitate</string>
     <string name="cond_gcm_bat_summary">Hai abilitato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti slezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>

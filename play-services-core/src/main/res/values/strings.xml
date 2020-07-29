@@ -79,6 +79,7 @@ This can take a couple of minutes."</string>
 
     <string name="prefcat_about">About</string>
     <string name="prefcat_google_services">Google Services</string>
+    <string name="pref_more_settings">More</string>
 
     <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
     <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>

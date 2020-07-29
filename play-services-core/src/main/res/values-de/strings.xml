@@ -70,6 +70,7 @@ Dies kann einige Minuten dauern."</string>
 
     <string name="prefcat_about">Infos</string>
     <string name="prefcat_google_services">Google-Dienste</string>
+    <string name="pref_more_settings">Mehr</string>
 
     <string name="cond_gcm_bat_title">Batterieoptimierung aktiv</string>
     <string name="cond_gcm_bat_summary">Google Cloud Messaging ist aktiv aber Batterieoptimierungen wurden für microG nicht deaktiviert. Damit Push-Nachrichten zugestellt werden können, muss Batterieoptimierung deaktiviert werden.</string>
