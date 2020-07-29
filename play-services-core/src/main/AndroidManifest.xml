@@ -108,6 +108,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="false"
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_core_service_app"
