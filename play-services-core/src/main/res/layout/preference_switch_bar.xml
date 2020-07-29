@@ -39,7 +39,7 @@
         android:paddingLeft="?attr/listPreferredItemPaddingLeft"
         android:paddingEnd="?attr/listPreferredItemPaddingEnd"
         android:paddingRight="?attr/listPreferredItemPaddingRight"
-        android:background="#ff37474f"
+        android:background="?attr/colorAccent"
         tools:background="?attr/colorControlActivated">
 
         <TextView
@@ -54,7 +54,7 @@
             android:paddingLeft="56dp"
             android:text="@{description}"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="?android:attr/textColorPrimaryInverse"
+            android:textColor="#ffffff"
             tools:text="Enabled" />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -66,8 +66,8 @@
             android:checked="@{checked}"
             android:enabled="@{enabled}"
             app:onCheckedChangeListener="@{(v, newStatus) -> callback.onChecked(newStatus)}"
-            app:thumbTint="?android:attr/textColorPrimaryInverse"
-            app:trackTint="?android:attr/textColorSecondaryInverse"
+            app:thumbTint="#ffffff"
+            app:trackTint="#e1e2e3"
             tools:checked="true" />
     </LinearLayout>
 </layout>
