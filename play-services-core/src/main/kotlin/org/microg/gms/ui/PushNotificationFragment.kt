@@ -9,8 +9,8 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.R
-import com.google.android.gms.databinding.PushNotificationFragmentBinding
+import com.mgoogle.android.gms.R
+import com.mgoogle.android.gms.databinding.PushNotificationFragmentBinding
 import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.gcm.GcmPrefs
 

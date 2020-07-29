@@ -11,7 +11,7 @@ import android.text.format.DateUtils
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import com.google.android.gms.R
+import com.mgoogle.android.gms.R
 import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.checkin.LastCheckinInfo
 
