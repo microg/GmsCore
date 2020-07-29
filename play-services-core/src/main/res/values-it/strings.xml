@@ -77,6 +77,7 @@ Questa operazione può richiedere alcuni minuti."</string>
 
     <string name="prefcat_about">Informazioni</string>
     <string name="prefcat_google_services">Servizi Google</string>
+    <string name="pref_more_settings">Impostazioni avanzate</string>
 
     <string name="cond_gcm_bat_title">Ottimizzazioni della batteria abilitate</string>
     <string name="cond_gcm_bat_summary">Hai abilitato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti slezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
@@ -110,7 +111,8 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="gcm_unregister_confirm_message">Alcune applicazioni non rinnovano automaticamente la registrazione e/o non forniscono un\'opzione per farlo manualmente. Queste applicazioni potrebbero non funzionare correttamente a seguito della de-registrazione.\nContinuare?</string>
     <string name="gcm_unregister_after_deny_message">Hai negato ad una applicazione già registrata di registrarsi alle notifiche push.\nDesideri de-registrarla così che non riceva più notifiche push in futuro?</string>
     <string name="gcm_messages_counter">Messaggi: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
-
+    <string name="gcm_network_state_disconnected">Disconnesso</string>
+    <string name="gcm_network_state_connected">Connesso da <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="pref_snet_status_official_info">Server ufficiale</string>
     <string name="pref_snet_status_third_party_info">Server di terze parti</string>
     <string name="pref_snet_status_self_signed_info">Certificato auto-firmato</string>

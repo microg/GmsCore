@@ -76,6 +76,7 @@
 
     <string name="prefcat_about">Про</string>
     <string name="prefcat_google_services">Сервіси Google</string>
+    <string name="pref_more_settings">Додатково</string>
 
     <string name="cond_gcm_bat_title">Увімкнута оптимізація енергоспоживання</string>
     <string name="cond_gcm_bat_summary">Ви увімкнули Google Cloud Messaging але лиши оптимізацію енергоспоживання активним для microG Services Core. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
