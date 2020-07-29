@@ -81,6 +81,9 @@ This can take a couple of minutes."</string>
     <string name="prefcat_google_services">Google Services</string>
     <string name="pref_more_settings">More</string>
 
+    <string name="checkin_not_registered">Not registered</string>
+    <string name="checkin_last_registration">Last registration: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
     <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
     <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
     <string name="cond_gcm_bat_action">Ignore optimizations</string>
@@ -113,6 +116,8 @@ This can take a couple of minutes."</string>
     <string name="gcm_unregister_confirm_message">Some apps do not automatically re-register and/or do not provide an option to do so manually. These apps might not work correctly after unregistering.\nContinue?</string>
     <string name="gcm_unregister_after_deny_message">You denied an app to register for push notifications that is already registered.\nDo you want to unregister it now so it does not receive push messages in the future?</string>
     <string name="gcm_messages_counter">Messages: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_network_state_disconnected">Disconnected</string>
+    <string name="gcm_network_state_connected">Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
 

@@ -101,6 +101,8 @@ Dies kann einige Minuten dauern."</string>
     <string name="gcm_unregister_confirm_message">Einige Apps registrieren sich nicht automatisch erneut und haben keine Möglichkeit dies manuell anzustoßen. Diese Apps funktionieren eventuell nach dem abmelden nicht mehr richtig.\nFortsetzen?</string>
     <string name="gcm_unregister_after_deny_message">Du hast einer App die Erlaubnis der Registrierung entzogen, die bereits registriert ist.\nWillst du diese App jetzt auch abmelden damit sie zukünftig keine Push-Nachrichten erhält?</string>
     <string name="gcm_messages_counter">Nachrichten: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_network_state_disconnected">Nicht verbunden</string>
+    <string name="gcm_network_state_connected">Verbunden seit <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_snet_status_official_info">offizieller Server</string>
     <string name="pref_snet_status_third_party_info">Dritt-Server</string>
