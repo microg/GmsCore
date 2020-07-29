@@ -54,7 +54,6 @@
         <FrameLayout
             android:background="@drawable/circle_shape_background"
             android:layout_marginEnd="-3dp"
-            android:layout_marginRight="-3dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:padding="10dp">
@@ -69,7 +68,6 @@
         <FrameLayout
             android:background="@drawable/circle_shape_background"
             android:layout_marginStart="-3dp"
-            android:layout_marginLeft="-3dp"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:padding="10dp">

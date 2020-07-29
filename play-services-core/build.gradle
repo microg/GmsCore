@@ -15,6 +15,8 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 dependencies {
     implementation "com.squareup.wire:wire-runtime:1.6.1"
@@ -40,6 +42,14 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
     implementation "androidx.preference:preference:$preferenceVersion"
+
+    implementation "androidx.navigation:navigation-fragment:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui:$navigationVersion"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
 }
 
 android {
@@ -52,8 +62,6 @@ android {
 
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-
-        multiDexEnabled true
 
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
@@ -68,6 +76,7 @@ android {
     sourceSets {
         main {
             java.srcDirs += 'src/main/protos-java'
+            java.srcDirs += 'src/main/kotlin'
         }
     }
 

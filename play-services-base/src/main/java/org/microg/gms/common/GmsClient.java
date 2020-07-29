@@ -27,19 +27,20 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
 
-import org.microg.gms.common.api.ApiConnection;
+import org.microg.gms.common.api.ApiClient;
+import org.microg.gms.common.api.ConnectionCallbacks;
+import org.microg.gms.common.api.OnConnectionFailedListener;
 
-public abstract class GmsClient<I extends IInterface> implements ApiConnection {
+public abstract class GmsClient<I extends IInterface> implements ApiClient {
     private static final String TAG = "GmsClient";
 
     private final Context context;
-    protected final GoogleApiClient.ConnectionCallbacks callbacks;
-    protected final GoogleApiClient.OnConnectionFailedListener connectionFailedListener;
+    protected final ConnectionCallbacks callbacks;
+    protected final OnConnectionFailedListener connectionFailedListener;
     protected ConnectionState state = ConnectionState.NOT_CONNECTED;
     private ServiceConnection serviceConnection;
     private I serviceInterface;
@@ -49,8 +50,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     protected Account account = null;
     protected Bundle extras = new Bundle();
 
-    public GmsClient(Context context, GoogleApiClient.ConnectionCallbacks callbacks,
-                     GoogleApiClient.OnConnectionFailedListener connectionFailedListener, String actionString) {
+    public GmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener, String actionString) {
         this.context = context;
         this.callbacks = callbacks;
         this.connectionFailedListener = connectionFailedListener;
@@ -89,8 +89,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
     }
 
     public void handleConnectionFailed() {
-        connectionFailedListener.onConnectionFailed(new ConnectionResult(ConnectionResult
-                .API_UNAVAILABLE, null));
+        connectionFailedListener.onConnectionFailed(new ConnectionResult(ConnectionResult.API_UNAVAILABLE, null));
     }
 
     @Override
@@ -147,8 +146,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiConnection {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             try {
                 Log.d(TAG, "ServiceConnection : onServiceConnected(" + componentName + ")");
-                onConnectedToBroker(IGmsServiceBroker.Stub.asInterface(iBinder),
-                        new GmsCallbacks());
+                onConnectedToBroker(IGmsServiceBroker.Stub.asInterface(iBinder), new GmsCallbacks());
             } catch (RemoteException e) {
                 disconnect();
             }

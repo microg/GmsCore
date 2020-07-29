@@ -65,7 +65,7 @@
     <string name="prefcat_about">關於</string>
 
     <string name="cond_gcm_bat_title">已開啟電池優化</string>
-    <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在Vanced microG上。 為了能收到推送通知您應該取消電池優化。</string>
+    <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在microG Services Core上。 為了能收到推送通知您應該取消電池優化。</string>
     <string name="cond_gcm_bat_action">取消優化</string>
 
     <string name="prefs_account">帳號設定</string>
@@ -75,11 +75,9 @@
     <string name="pref_auth_trust_google_title">允許Google提供程式存取權限</string>
     <string name="pref_auth_trust_google_summary">此功能停用時，使用者將在程式向Google請求驗證前被徵詢。 有些程式可能會因為此功能停用而無法存取Google帳號。</string>
 
-    <string name="pref_checkin_enable_summary">將手機註冊到Google服務並創建一個唯一的設備識別碼。 除了識別碼，microG還會使用您註冊的Google帳號名。</string>
-
     <string name="pref_gcm_enable_mcs_summary">GCM是一個廣為第三方應用程式所採用的推播訊息供應者。 必須先註冊為Google設備才能使用。</string>
     <string name="pref_gcm_apps_title">使用GCM的程式</string>
-    <string name="pref_about_title">關於Vanced microG Services</string>
+    <string name="pref_about_title">關於Vanced microG</string>
 
     <string name="gcm_unregister_app">取消註冊</string>
     <string name="gcm_not_registered">未註冊</string>
@@ -93,7 +91,5 @@
     <string name="gcm_unregister_after_deny_message">您拒絕了一個已經註冊的程式去註冊接收推送通知。
 您是否想取消註冊讓它未來不再收到推送通知？</string>
     <string name="gcm_messages_counter">已接收訊息：<xliff:g example="123">%1$d</xliff:g>個（<xliff:g example="12345">%2$d</xliff:g>位元組〉</string>
-    <string name="gcm_state_disconnected">現在狀態：未連接</string>
-    <string name="gcm_state_connected">現在狀態：自<xliff:g example="2 hours ago">%1$s</xliff:g>連接至今</string>
 
 </resources>

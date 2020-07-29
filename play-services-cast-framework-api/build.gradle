@@ -34,5 +34,7 @@ android {
 
 dependencies {
     api project(':play-services-basement')
+
+    api project(':play-services-base-api')
     api project(':play-services-cast-api')
 }

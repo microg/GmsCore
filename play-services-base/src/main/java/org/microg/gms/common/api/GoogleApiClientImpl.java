@@ -20,11 +20,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Message;
+
 import androidx.fragment.app.FragmentActivity;
+
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.AccountInfo;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -41,10 +42,9 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     private final Context context;
     private final Looper looper;
-    private final AccountInfo accountInfo;
+    private final ApiClientSettings clientSettings;
     private final Map<Api, Api.ApiOptions> apis = new HashMap<Api, Api.ApiOptions>();
-    private final Map<Api, ApiConnection> apiConnections = new HashMap<Api, ApiConnection>();
-    private final Handler handler;
+    private final Map<Api, ApiClient> apiConnections = new HashMap<Api, ApiClient>();
     private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<ConnectionCallbacks>();
     private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<OnConnectionFailedListener>();
     private final int clientId;
@@ -78,23 +78,20 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private int usageCounter = 0;
     private boolean shouldDisconnect = false;
 
-    public GoogleApiClientImpl(Context context, Looper looper, AccountInfo accountInfo,
+    public GoogleApiClientImpl(Context context, Looper looper, ApiClientSettings clientSettings,
                                Map<Api, Api.ApiOptions> apis,
                                Set<ConnectionCallbacks> connectionCallbacks,
                                Set<OnConnectionFailedListener> connectionFailedListeners, int clientId) {
         this.context = context;
         this.looper = looper;
-        this.handler = new Handler(looper);
-        this.accountInfo = accountInfo;
+        this.clientSettings = clientSettings;
         this.apis.putAll(apis);
         this.connectionCallbacks.addAll(connectionCallbacks);
         this.connectionFailedListeners.addAll(connectionFailedListeners);
         this.clientId = clientId;
 
         for (Api api : apis.keySet()) {
-            apiConnections.put(api, api.getBuilder().build(context, looper,
-                    apis.get(api), accountInfo, baseConnectionCallbacks,
-                    baseConnectionFailedListener));
+            apiConnections.put(api, api.getBuilder().build(apis.get(api), context, looper, clientSettings, baseConnectionCallbacks, baseConnectionFailedListener));
         }
     }
 
@@ -111,7 +108,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
         return looper;
     }
 
-    public ApiConnection getApiConnection(Api api) {
+    public ApiClient getApiConnection(Api api) {
         return apiConnections.get(api);
     }
 
@@ -141,7 +138,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
             Log.d(TAG, "Already connected/connecting, nothing to do");
             return;
         }
-        for (ApiConnection connection : apiConnections.values()) {
+        for (ApiClient connection : apiConnections.values()) {
             if (!connection.isConnected()) {
                 connection.connect();
             }
@@ -154,7 +151,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
             shouldDisconnect = true;
         } else {
             Log.d(TAG, "disconnect()");
-            for (ApiConnection connection : apiConnections.values()) {
+            for (ApiClient connection : apiConnections.values()) {
                 if (connection.isConnected()) {
                     connection.disconnect();
                 }
@@ -164,7 +161,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public synchronized boolean isConnected() {
-        for (ApiConnection connection : apiConnections.values()) {
+        for (ApiClient connection : apiConnections.values()) {
             if (!connection.isConnected()) return false;
         }
         return true;
@@ -172,7 +169,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public synchronized boolean isConnecting() {
-        for (ApiConnection connection : apiConnections.values()) {
+        for (ApiClient connection : apiConnections.values()) {
             if (connection.isConnecting()) return true;
         }
         return false;
@@ -219,24 +216,5 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     @Override
     public void unregisterConnectionFailedListener(OnConnectionFailedListener listener) {
         connectionFailedListeners.remove(listener);
-    }
-
-    private class Handler extends android.os.Handler {
-        private Handler(Looper looper) {
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0 && msg.obj instanceof Runnable) {
-                ((Runnable) msg.obj).run();
-            } else {
-                super.handleMessage(msg);
-            }
-        }
-
-        public void sendRunnable(Runnable runnable) {
-            sendMessage(obtainMessage(1, runnable));
-        }
     }
 }

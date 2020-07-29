@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 
 import com.mgoogle.android.gms.R;
@@ -28,10 +27,7 @@ import com.mgoogle.android.gms.R;
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.gcm.TriggerReceiver;
-import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
-
-import java.util.Objects;
 
 public class GcmAdvancedFragment extends ResourceSettingsFragment {
 
@@ -45,18 +41,15 @@ public class GcmAdvancedFragment extends ResourceSettingsFragment {
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
         for (String pref : HEARTBEAT_PREFS) {
-            findPreference(pref).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    getPreferenceManager().getSharedPreferences().edit().putString(preference.getKey(), (String) newValue).apply();
-                    updateContent();
-                    if (newValue.equals("-1") && preference.getKey().equals(McsService.activeNetworkPref)) {
-                        McsService.stop(getContext());
-                    } else if (!McsService.isConnected()) {
-                        getContext().sendBroadcast(new Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, getContext(), TriggerReceiver.class));
-                    }
-                    return true;
+            findPreference(pref).setOnPreferenceChangeListener((preference, newValue) -> {
+                getPreferenceManager().getSharedPreferences().edit().putString(preference.getKey(), (String) newValue).apply();
+                updateContent();
+                if (newValue.equals("-1") && preference.getKey().equals(McsService.activeNetworkPref)) {
+                    McsService.stop(getContext());
+                } else if (!McsService.isConnected()) {
+                    getContext().sendBroadcast(new Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, getContext(), TriggerReceiver.class));
                 }
+                return true;
             });
         }
         updateContent();
@@ -93,16 +86,5 @@ public class GcmAdvancedFragment extends ResourceSettingsFragment {
             return (heartbeatMs / 1000) + " seconds";
         }
         return (heartbeatMs / 60000) + " minutes";
-    }
-
-    public static class AsActivity extends AbstractSettingsActivity {
-        public AsActivity() {
-            showHomeAsUp = true;
-        }
-
-        @Override
-        protected Fragment getFragment() {
-            return new GcmAdvancedFragment();
-        }
     }
 }

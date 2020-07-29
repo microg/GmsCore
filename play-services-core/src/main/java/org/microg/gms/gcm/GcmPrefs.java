@@ -17,6 +17,7 @@
 package org.microg.gms.gcm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -114,7 +115,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public int getHeartbeatMsFor(String pref, boolean rawRoaming) {
         if (PREF_NETWORK_ROAMING.equals(pref) && (rawRoaming || networkRoaming != 0)) {
-            return networkRoaming * 6000;
+            return networkRoaming * 60000;
         } else if (PREF_NETWORK_MOBILE.equals(pref)) {
             if (networkMobile != 0) return networkMobile * 60000;
             else return learntMobile;
@@ -195,6 +196,15 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public boolean isEnabledFor(NetworkInfo info) {
         return isEnabled() && info != null && getHeartbeatMsFor(info) >= 0;
+    }
+
+    public static void setEnabled(Context context, boolean newStatus) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).commit();
+        if (!newStatus) {
+            McsService.stop(context);
+        } else {
+            context.sendBroadcast(new Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, context, TriggerReceiver.class));
+        }
     }
 
     public boolean isGcmLogEnabled() {

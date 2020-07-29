@@ -16,8 +16,12 @@
 
 package com.google.android.gms.common.api;
 
+import android.accounts.Account;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import org.microg.gms.common.PublicApi;
-import org.microg.gms.common.api.ApiBuilder;
+import org.microg.gms.common.api.ApiClientBuilder;
 
 /**
  * Describes a section of the Google Play Services API that should be made available. Instances of
@@ -33,16 +37,15 @@ import org.microg.gms.common.api.ApiBuilder;
  */
 @PublicApi
 public final class Api<O extends Api.ApiOptions> {
-
-    private final ApiBuilder<O> builder;
+    private final ApiClientBuilder<O> builder;
 
     @PublicApi(exclude = true)
-    public Api(ApiBuilder<O> builder) {
+    public Api(ApiClientBuilder<O> builder) {
         this.builder = builder;
     }
 
     @PublicApi(exclude = true)
-    public ApiBuilder<O> getBuilder() {
+    public ApiClientBuilder<O> getBuilder() {
         return builder;
     }
 
@@ -78,6 +81,22 @@ public final class Api<O extends Api.ApiOptions> {
          */
         @PublicApi
         interface Optional extends HasOptions, NotRequiredOptions {
+        }
+
+        /**
+         * An interface for {@link ApiOptions} that include an account.
+         */
+        @PublicApi
+        interface HasAccountOptions extends HasOptions, NotRequiredOptions {
+            Account getAccount();
+        }
+
+        /**
+         * An interface for {@link ApiOptions} that includes a {@link GoogleSignInAccount}
+         */
+        @PublicApi
+        interface HasGoogleSignInAccountOptions extends HasOptions {
+            GoogleSignInAccount getGoogleSignInAccount();
         }
     }
 

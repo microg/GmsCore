@@ -69,9 +69,10 @@ To zajmie kilka minut.</string>
 
     <string name="prefcat_about">O programie</string>
     <string name="prefcat_google_services">Usługi Google</string>
+    <string name="pref_more_settings">Więcej</string>
 
     <string name="cond_gcm_bat_title">Optymalizacja baterii włączona</string>
-    <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi Vanced microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
+    <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
     <string name="cond_gcm_bat_action">Ignoruj optymalizacje</string>
 
     <string name="prefs_account">Ustawienia konta</string>
@@ -81,14 +82,12 @@ To zajmie kilka minut.</string>
     <string name="pref_auth_trust_google_title">Zaufaj uprawnieniom aplikacji Google</string>
     <string name="pref_auth_trust_google_summary">Po wyłączeniu, do użytkownika kierowane jest pytanie przed wysyłaniem prośby o autoryzację do Google. Niektóre aplikacje nie będą mogły skorzystać z konta Google po wyłączeniu tej opcji.</string>
 
-    <string name="pref_checkin_enable_summary">Zgłaszanie urządzenia to ukryty proces, służący do wygenerowania unikalnego identyfikatora dla usług Google. Usługi microG usuwają inne dane identyfikacyjne niż nazwa Twojego konta z tego identyfikatora.</string>
-
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Aby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
     <string name="pref_gcm_apps_title">Aplikacje korzystające z Google Cloud Messaging</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
     <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji w usłudze powiadomień ‘push’</string>
 
-    <string name="pref_about_title">O usłudze microG</string>
+    <string name="pref_about_title">O usłudze Vanced microG</string>
 
     <string name="gcm_unregister_app">Wyrejestruj</string>
     <string name="gcm_not_registered">Niezarejestrowany</string>
@@ -100,7 +99,5 @@ To zajmie kilka minut.</string>
     <string name="gcm_unregister_confirm_message">Niektóre aplikacje nie rejestrują się automatycznie ponownie lub nie posiadają opcji do zrobienia tego ręcznie. Takie aplikacje po wyrejestrowaniu mogą nie działać prawidłowo.\nCzy chcesz kontynuować?</string>
     <string name="gcm_unregister_after_deny_message">Odmówiłeś już zarejestrowanej aplikacji zarejestrować się w usłudze powiadomień ‘push’.\nCzy chcesz ją wyrejestrować, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
-    <string name="gcm_state_disconnected">Obecny stan: rozłączony</string>
-    <string name="gcm_state_connected">Obecny stan: połączony od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
 </resources>

@@ -48,7 +48,7 @@
                     android:layout_width="36dip"
                     android:layout_height="36dip"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/gcm_bell"
+                    android:src="@drawable/ic_cloud_bell"
                     android:tint="?attr/colorAccent">
                 </ImageView>
 

@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Налаштування Vanced microG</string>
+    <string name="gms_settings_name">Налаштування microG</string>
 
     <string name="just_a_sec">Зачекайте трохи…</string>
     <string name="ask_permission_tos">Продовжуючи, ви дозволяєте даному додатку та Google використовувати ваші дані згідно з їх відповідними умовами надання послуг та політикою конфіденційності.</string>
@@ -76,9 +76,10 @@
 
     <string name="prefcat_about">Про</string>
     <string name="prefcat_google_services">Сервіси Google</string>
+    <string name="pref_more_settings">Додатково</string>
 
     <string name="cond_gcm_bat_title">Увімкнута оптимізація енергоспоживання</string>
-    <string name="cond_gcm_bat_summary">Ви увімкнули Google Cloud Messaging але лиши оптимізацію енергоспоживання активним для Vanced microG. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
+    <string name="cond_gcm_bat_summary">Ви увімкнули Google Cloud Messaging але лиши оптимізацію енергоспоживання активним для microG Services Core. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
     <string name="cond_gcm_bat_action">Ігнорувати оптимізацію</string>
 
     <string name="prefs_account">Налаштування облікового запису</string>
@@ -88,14 +89,12 @@
     <string name="pref_auth_trust_google_title">Довіряти дозволам Google в додатках</string>
     <string name="pref_auth_trust_google_summary">Коли вимкнено, у користувача запитується дозвіл на авторизацію Google. Деякі додатки не можуть використовувати обліковий запис Google, без даної можливості.</string>
 
-    <string name="pref_checkin_enable_summary">Реєструє Ваш пристрій в сервісах Google та створює унікальний ідентифікатор. MicroG видаляє всі біти ідентифікації, окрім імені Вашого облікового запису Google.</string>
-
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging надає push-сповіщення, які використовуються в багатьох сторонніх додатках. Аби використовувати їх, ви повинні увімкнути реєстрацію пристрою.</string>
     <string name="pref_gcm_apps_title">Додатки, які використовують Google Cloud Messaging</string>
     <string name="pref_gcm_confirm_new_apps_title">Підтверджувати нові додатки</string>
     <string name="pref_gcm_confirm_new_apps_summary">Запитувати перед реєстрацією нового додатку для отримання push-повідомлень</string>
 
-    <string name="pref_about_title">Про microG Services Core</string>
+    <string name="pref_about_title">Про Vanced microG</string>
 
     <string name="gcm_unregister_app">Відв\'язати</string>
     <string name="gcm_not_registered">Не прив\'язано</string>
@@ -107,7 +106,5 @@
     <string name="gcm_unregister_confirm_message">Деякі додатки автоматично не прив\'язуються або/та не дозволяють зробити це вручну. Такі додатки можуть робити некоректно після відв\'язування.\nПродовжити?</string>
     <string name="gcm_unregister_after_deny_message">Ви заборонили додатку push-повідомлення, який вже був прив\'язаний.\nВи бажаєте відв\'язати його зараз, аби більше не отримувати від нього push-повідомлень?</string>
     <string name="gcm_messages_counter">Повідомлень: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> байт)</string>
-    <string name="gcm_state_disconnected">Поточний стан: Відключено</string>
-    <string name="gcm_state_connected">Поточний стан: Під\'єднано від <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
 </resources>

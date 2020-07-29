@@ -64,4 +64,5 @@ public class Conditions {
                     v.getContext().startActivity(intent);
                 }
             }).build();
+
 }

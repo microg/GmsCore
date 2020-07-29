@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.microg.gms.checkin.TriggerReceiver.PREF_ENABLE_CHECKIN;
-
 public class CheckinManager {
     private static final long MIN_CHECKIN_INTERVAL = 3 * 60 * 60 * 1000; // 3 hours
 
@@ -43,7 +41,7 @@ public class CheckinManager {
         LastCheckinInfo info = LastCheckinInfo.read(context);
         if (!force && info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
             return null;
-        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_ENABLE_CHECKIN, true))
+        if (!CheckinPrefs.get(context).isEnabled())
             return null;
         List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
         AccountManager accountManager = AccountManager.get(context);

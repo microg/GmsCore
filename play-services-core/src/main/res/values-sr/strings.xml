@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_settings_name">Поставке Vanced микроГ</string>
+    <string name="gms_settings_name">Поставке Vanced microG</string>
 
     <string name="just_a_sec">Само тренутак…</string>
     <string name="ask_permission_tos">Ако наставите дозволићете овој апликацији и Гуглу да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
@@ -64,7 +64,7 @@
 
     <string name="prefcat_about">О програму</string>
     <string name="cond_gcm_bat_title">Оптимизација батерије укључена</string>
-    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за Језгро Vanced микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
+    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за Језгро микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
     <string name="cond_gcm_bat_action">Игнориши оптимизацију</string>
 
     <string name="prefs_account">Поставке налога</string>
@@ -73,8 +73,6 @@
 
     <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
     <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
-
-    <string name="pref_checkin_enable_summary">Пријављује ваш уређај на Гуглове сервисе и прави јединствени идентификатор уређаја. микроГ скида идентификујуће бите са података за пријављивање осим вашег Гугл корисничког имена.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Гуглове облак поруке (Google Cloud Messaging) је провајдер гураних обавештења (push) којег користе многе апликације. Да бисте га користили укључите пријаву уређаја.</string>
     <string name="pref_gcm_apps_title">Апликације које користе Гуглове облак поруке</string>
@@ -90,7 +88,5 @@
     <string name="gcm_unregister_confirm_message">Неке се апликације не пријављују поново аутоматски и/или не пружају могућност да се то уради ручно. Ове апликације можда неће радити исправно након одјављивања.\nДа наставим?</string>
     <string name="gcm_unregister_after_deny_message">Нисте дозволили апликацији да се пријави на гурана обавештења а која је већ пријављена.\nЖелите ли да је одјавите сада тако да убудуће не прима гурана обавештења?</string>
     <string name="gcm_messages_counter">Порука: %1$d (%2$d бајта)</string>
-    <string name="gcm_state_disconnected">Тренутно стање: неповезан</string>
-    <string name="gcm_state_connected">Тренутно стање: повезан %1$s</string>
 
-    </resources>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:title="@string/prefcat_push_apps_title">
+    <Preference
+        android:key="pref_push_apps_all_progress"
+        android:layout="@layout/preference_progress_bar"
+        app:allowDividerBelow="false" />
+    <PreferenceCategory
+        android:key="prefcat_push_apps_registered"
+        android:title="@string/prefcat_push_apps_registered_title"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true">
+        <Preference
+            android:enabled="false"
+            android:key="pref_push_apps_registered_none"
+            android:title="@string/list_no_item_none"
+            app:isPreferenceVisible="false"
+            tools:isPreferenceVisible="true" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_push_apps_unregistered"
+        android:title="@string/prefcat_push_apps_unregistered_title"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true">
+        <Preference
+            android:enabled="false"
+            android:key="pref_push_apps_unregistered_none"
+            android:title="@string/list_no_item_none"
+            app:isPreferenceVisible="false"
+            tools:isPreferenceVisible="true" />
+    </PreferenceCategory>
+</PreferenceScreen>
