@@ -49,7 +49,7 @@ allprojects {
 
     group = 'org.microg.gms'
     version = "0.2.11.202414-vanced"
-    ext.appVersionCode = 21124414
+    ext.appVersionCode = 202414022
     ext.isReleaseVersion = false
 }
 
