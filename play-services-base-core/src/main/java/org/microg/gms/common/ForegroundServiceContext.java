@@ -75,7 +75,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
                 .setContentTitle("Running in background")
-                .setContentText("This notification ensures that microG does not get killed.")
+                .setContentText("This notification ensures that microG does not get killed. Disable battery optimisations for microG to remove it")
                 .setSmallIcon(R.drawable.ic_foreground_notification)
                 .build();
     }
