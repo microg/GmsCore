@@ -121,6 +121,15 @@ This can take a couple of minutes."</string>
 
     <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
 
+    <string name="pref_push_app_allow_register_title">Allow registration</string>
+    <string name="pref_push_app_allow_register_summary">Allow the app to register for push notifications.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Start app on push message</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
+    <string name="prefcat_push_apps_title">Apps using push notifications</string>
+    <string name="prefcat_push_apps_registered_title">Registered apps</string>
+    <string name="prefcat_push_apps_unregistered_title">Unregistered apps</string>
+    <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
+
     <string name="pref_snet_status_official_info">official server</string>
     <string name="pref_snet_status_third_party_info">third-party server</string>
     <string name="pref_snet_status_self_signed_info">self-signed certificate</string>
