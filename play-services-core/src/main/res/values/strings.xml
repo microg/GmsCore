@@ -62,6 +62,7 @@ This can take a couple of minutes."</string>
 
     <string name="menu_advanced">Advanced</string>
     <string name="list_no_item_none">None</string>
+    <string name="list_item_see_all">See all</string>
 
     <string name="network_type_mobile">Mobile network</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -105,6 +106,9 @@ This can take a couple of minutes."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
 
     <string name="pref_about_title">About Vanced microG</string>
+
+    <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. Vanced microG strips identifying bits other than your Google account name from registration data.</string>
+    <string name="pref_info_status">Status</string>
 
     <string name="gcm_unregister_app">Unregister</string>
     <string name="gcm_not_registered">Not registered</string>
