@@ -34,7 +34,7 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
     }
 
     private void update() {
-        checkinEnabled = preferences.getBoolean(PREF_ENABLE_CHECKIN, false);
+        checkinEnabled = preferences.getBoolean(PREF_ENABLE_CHECKIN, true);
     }
 
     @Override
