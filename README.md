@@ -12,9 +12,15 @@ This fork tweaks MicroG to be usable by applications that require Google authent
 - No longer a system app
 - Package name changed from `com.google.android.gms` to `com.mgoogle.android.gms` to support installation alongside the official MicroG
 - Removed unnecessary features:
-  - Maps & Location
-  - Wear-Api
-  - Safetynet
-  - Games
+  - Ads
+  - Analytics
   - Car
+  - Games
+  - Location
+  - Maps & Location
+  - SafetyNet
+  - Self-Check
+  - TapandPay
+  - Wallet
+  - Wear-Api
 - Removed all permissions, as none are required for Google authentication
