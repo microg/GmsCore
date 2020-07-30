@@ -72,7 +72,7 @@ Questa operazione può richiedere alcuni minuti."</string>
 
     <string name="games_title">Google Play Giochi</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare Play Giochi</string>
-    <string name="games_info_content">Per usare Play Giochi è necessario installare l\'applicazione di Play Giochi. L\'applicazione può continuare ad essere utilizzata senza Play Games, ma è possibile che funzioni in modo anomalo.</string>
+    <string name="games_info_content">Per usare Play Giochi è necessario installare l\'applicazione di Play Giochi. L\'applicazione può continuare ad essere utilizzata senza Play Giochi, ma è possibile che funzioni in modo anomalo.</string>
 
     <string name="pick_place_title">Seleziona un luogo</string>
     <string name="pick_place_desc">Non è ancora possibile selezionare un luogo.</string>
@@ -93,12 +93,12 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="self_check_cat_gms_packages">Pacchetti installati</string>
     <string name="self_check_cat_system">Sistema</string>
 
-    <string name="self_check_name_fake_sig_perm">Il sistema concede la falsificazione della firma: </string>
+    <string name="self_check_name_fake_sig_perm">Il sistema supporta la falsificazione della firma: </string>
     <string name="self_check_resolution_fake_sig_perm">La tua ROM non dispone del supporto nativo per la falsificazione della firma. Puoi comunque utilizzare Xposed o altri sistemi per garantire la falsificazione della firma. Consulta la documentazione per conoscere quali ROM supportino la falsificazione della firma e su come utilizzare microG sulle ROM che non la supportano.</string>
-    <string name="self_check_name_perm_granted">Il sistema garantisce la falsificazione della firma: </string>
+    <string name="self_check_name_perm_granted">Il sistema concede l\'autorizzazione a falsificare la firma: </string>
     <string name="self_check_resolution_perm_granted">Questo indica che la ROM attuale supporta la falsificazione della firma, ma richiede azioni ulteriori per attivarla. Consulta la documentazione per conoscere quali operazioni siano necessarie.</string>
     <string name="self_check_name_system_spoofs">Il sistema falsifica la firma: </string>
-    <string name="self_check_resolution_system_spoofs">Consulta la documentazione su quali operazioni siano necessarie.</string>
+    <string name="self_check_resolution_system_spoofs">Consulta la documentazione per conoscere quali operazioni siano necessarie.</string>
 
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
@@ -166,7 +166,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="gcm_last_message_at">Ultimo messaggio: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrata</string>
     <string name="gcm_registered_since">Registrata: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_unregister_confirm_title">De-registrazione <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_title">Annulla la registrazione di <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
     <string name="gcm_unregister_confirm_message">Alcune applicazioni non rinnovano automaticamente la registrazione e/o non forniscono un\'opzione per farlo manualmente. Queste applicazioni potrebbero non funzionare correttamente a seguito dell\'annullamento della registrazione.\nContinuare?</string>
     <string name="gcm_unregister_after_deny_message">Hai negato ad un\'applicazione, già registrata in precedenza, di registrarsi per la ricezione delle notifiche push.\nDesideri annullare la registrazione così che non riceva più notifiche push in futuro?</string>
     <string name="gcm_messages_counter">Messaggi: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
