@@ -312,10 +312,12 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     fun <T : Annotation<*>> clear(manager: AnnotationManager<*, T, *, *, *, *>) {
         val annotations = manager.getAnnotations()
-        for (i in 0..annotations.size()) {
+        var i = 0
+        while (i < annotations.size()) {
             val key = annotations.keyAt(i)
-            val value = annotations[key];
+            val value = annotations[key]
             if (value is T) manager.delete(value)
+            else i++
         }
     }
 
