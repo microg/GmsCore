@@ -63,6 +63,7 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.village.boond", "48e7985b8f901df335b5d5223579c81618431c7b");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.subscriptions.red", "de8304ace744ae4c4e05887a27a790815e610ff0");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.meetings", "47a6936b733dbdb45d71997fbe1d610eca36b8bf");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.nbu.paisa.user", "80df78bb700f9172bc671779b017ddefefcbf552");
     }
 
     public static boolean isGooglePackage(Context context, String packageName) {
