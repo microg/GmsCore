@@ -80,12 +80,10 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
             val (apps, showAll) = withContext(Dispatchers.IO) {
                 val apps = database.appList.sortedByDescending { it.lastMessageTimestamp }
                 val res = apps.map { app ->
-                    try {
-                        app to context.packageManager.getApplicationInfo(app.packageName, 0)
-                    } catch (ignored: Exception) {
-                        null
-                    }
-                }.filterNotNull().take(3).mapIndexed { idx, (app, applicationInfo) ->
+                    app to context.packageManager.getApplicationInfoIfExists(app.packageName)
+                }.mapNotNull { (app, info) ->
+                    if (info == null) null else app to info
+                }.take(3).mapIndexed { idx, (app, applicationInfo) ->
                     val pref = AppIconPreference(context)
                     pref.order = idx
                     pref.title = applicationInfo.loadLabel(context.packageManager)
