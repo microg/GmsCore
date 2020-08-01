@@ -78,10 +78,10 @@ public class Attestation {
                 .signatureDigest(getPackageSignatures())
                 .gmsVersionCode(Constants.MAX_REFERENCE_VERSION)
                 //.googleCn(false)
-                .seLinuxState(new SELinuxState(true, true))
+                .seLinuxState(new SELinuxState.Builder().enabled(true).supported(true).build())
                 .suCandidates(Collections.<FileState>emptyList())
                 .build();
-        return this.payload = payload.toByteArray();
+        return this.payload = payload.encode();
     }
 
     public byte[] getPayload() {
@@ -143,7 +143,7 @@ public class Attestation {
         if (payload == null) {
             throw new IllegalStateException("missing payload");
         }
-        return attest(new AttestRequest(ByteString.of(payload), droidGaurdResult), apiKey).result;
+        return attest(new AttestRequest.Builder().safetyNetData(ByteString.of(payload)).droidGuardResult(droidGaurdResult).build(), apiKey).result;
     }
 
     private AttestResponse attest(AttestRequest request, String apiKey) throws IOException {
@@ -158,7 +158,7 @@ public class Attestation {
         connection.setRequestProperty("User-Agent", "SafetyNet/" + Constants.MAX_REFERENCE_VERSION + " (" + build.device + " " + build.id + "); gzip");
 
         OutputStream os = connection.getOutputStream();
-        os.write(request.toByteArray());
+        os.write(request.encode());
         os.close();
 
         if (connection.getResponseCode() != 200) {
@@ -179,7 +179,7 @@ public class Attestation {
         InputStream is = connection.getInputStream();
         byte[] bytes = Utils.readStreamToEnd(new GZIPInputStream(is));
         try {
-            return new Wire().parseFrom(bytes, AttestResponse.class);
+            return AttestResponse.ADAPTER.decode(bytes);
         } catch (IOException e) {
             Log.d(TAG, Base64.encodeToString(bytes, 0));
             throw e;

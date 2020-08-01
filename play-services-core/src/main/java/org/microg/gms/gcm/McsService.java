@@ -392,7 +392,7 @@ public class McsService extends Service implements Handler.Callback {
             if (!key.startsWith("google.")) {
                 Object val = extras.get(key);
                 if (val instanceof String) {
-                    appData.add(new AppData(key, (String) val));
+                    appData.add(new AppData.Builder().key(key).value((String) val).build());
                 }
             }
         }
@@ -413,7 +413,7 @@ public class McsService extends Service implements Handler.Callback {
                     .app_data(appData).build();
 
             send(MCS_DATA_MESSAGE_STANZA_TAG, msg);
-            database.noteAppMessage(packageName, msg.getSerializedSize());
+            database.noteAppMessage(packageName, DataMessageStanza.ADAPTER.encodedSize(msg));
         } catch (Exception e) {
             Log.w(TAG, e);
         }
@@ -501,14 +501,14 @@ public class McsService extends Service implements Handler.Callback {
                 .resource(Long.toString(info.androidId))
                 .user(Long.toString(info.androidId))
                 .use_rmq2(true)
-                .setting(Collections.singletonList(new Setting("new_vc", "1")))
+                .setting(Collections.singletonList(new Setting.Builder().name("new_vc").value("1").build()))
                 .received_persistent_id(GcmPrefs.get(this).getLastPersistedIds())
                 .build();
     }
 
     private void handleAppMessage(DataMessageStanza msg) {
         String packageName = msg.category;
-        database.noteAppMessage(packageName, msg.getSerializedSize());
+        database.noteAppMessage(packageName, DataMessageStanza.ADAPTER.encodedSize(msg));
         GcmDatabase.App app = database.getApp(packageName);
 
         Intent intent = new Intent();
@@ -573,7 +573,7 @@ public class McsService extends Service implements Handler.Callback {
                         .sent(System.currentTimeMillis() / 1000)
                         .ttl(0)
                         .category(SELF_CATEGORY)
-                        .app_data(Collections.singletonList(new AppData(IDLE_NOTIFICATION, "false")));
+                        .app_data(Collections.singletonList(new AppData.Builder().key(IDLE_NOTIFICATION).value("false").build()));
                 if (inputStream.newStreamIdAvailable()) {
                     msgResponse.last_stream_id_received(inputStream.getStreamId());
                 }

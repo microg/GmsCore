@@ -60,7 +60,7 @@ public class CheckinClient {
 
         Log.d(TAG, "-- Request --\n" + request);
         OutputStream os = new GZIPOutputStream(connection.getOutputStream());
-        os.write(request.toByteArray());
+        os.write(request.encode());
         os.close();
 
         if (connection.getResponseCode() != 200) {
@@ -72,7 +72,7 @@ public class CheckinClient {
         }
 
         InputStream is = connection.getInputStream();
-        CheckinResponse response = new Wire().parseFrom(new GZIPInputStream(is), CheckinResponse.class);
+        CheckinResponse response = CheckinResponse.ADAPTER.decode(new GZIPInputStream(is));
         is.close();
         return response;
     }

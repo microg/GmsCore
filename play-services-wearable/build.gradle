@@ -26,12 +26,6 @@ android {
         targetSdkVersion androidTargetSdk
     }
 
-    sourceSets {
-        main {
-            java.srcDirs += 'src/main/protos-java'
-        }
-    }
-
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
@@ -45,5 +39,6 @@ android {
 dependencies {
     api project(':play-services-base')
     api project(':play-services-wearable-api')
-    implementation 'com.squareup.wire:wire-runtime:1.6.1'
+    api project(':play-services-wearable-proto')
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
 }

@@ -20,7 +20,6 @@ import android.util.SparseArray;
 
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataMap;
-import com.squareup.wire.Wire;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class DataBundleUtil {
 
     public static DataMap readDataMap(byte[] bytes, List<Asset> assets) {
         try {
-            return readDataMap(new Wire().parseFrom(bytes, DataBundle.class), assets);
+            return readDataMap(DataBundle.ADAPTER.decode(bytes), assets);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +61,7 @@ public class DataBundleUtil {
     public static AssetAnnotatedDataBundle createDataBundle(DataMap dataMap) {
         AssetAnnotatedDataBundle dataBundle = new AssetAnnotatedDataBundle();
         dataBundle.assets = new ArrayList<Asset>();
-        dataBundle.dataBundle = new DataBundle(createEntryList(dataMap, dataBundle.assets));
+        dataBundle.dataBundle = new DataBundle.Builder().entries(createEntryList(dataMap, dataBundle.assets)).build();
         return dataBundle;
     }
 
@@ -554,7 +553,7 @@ public class DataBundleUtil {
         }
 
         public byte[] getData() {
-            return dataBundle.toByteArray();
+            return dataBundle.encode();
         }
     }
 
@@ -640,7 +639,7 @@ public class DataBundleUtil {
         }
 
         DataBundleTypedValue createTyped(T value, List<Asset> assets) {
-            return new DataBundleTypedValue(type, create(value, assets));
+            return new DataBundleTypedValue.Builder().type(type).value(create(value, assets)).build();
         }
 
         DataBundleValue loadAndCreate(DataMap dataMap, String key, List<Asset> assets) {
@@ -652,7 +651,7 @@ public class DataBundleUtil {
         }
 
         DataBundleEntry loadAndCreateEntry(DataMap dataMap, String key, List<Asset> assets) {
-            return new DataBundleEntry(key, loadAndCreateTyped(dataMap, key, assets));
+            return new DataBundleEntry.Builder().key(key).typedValue(loadAndCreateTyped(dataMap, key, assets)).build();
         }
     }
 }

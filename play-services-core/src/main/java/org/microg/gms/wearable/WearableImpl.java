@@ -280,7 +280,7 @@ public class WearableImpl {
                 .build()).hasAsset(true).build();
         activeConnections.get(nodeId).writeMessage(announceMessage);
         File assetFile = createAssetFile(asset.getDigest());
-        String fileName = calculateDigest(announceMessage.toByteArray());
+        String fileName = calculateDigest(announceMessage.encode());
         FileInputStream fis = new FileInputStream(assetFile);
         byte[] arr = new byte[12215];
         ByteString lastPiece = null;

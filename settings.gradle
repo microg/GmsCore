@@ -1,5 +1,3 @@
-include ':wearable-lib'
-
 include ':play-services-basement'
 
 include ':play-services-tasks'
@@ -17,11 +15,16 @@ include ':play-services-api'
 
 include ':firebase-dynamic-links-api'
 
+include ':play-services-core-proto'
+//include ':play-services-nearby-core-proto'
+include ':play-services-wearable-proto'
+
 include ':play-services-base-core'
 include ':play-services-location-core'
 include ':play-services-maps-core-mapbox'
-include ':play-services-maps-core-vtm:vtm-microg-theme'
 include ':play-services-maps-core-vtm'
+include ':play-services-maps-core-vtm:vtm-microg-theme'
+//include ':play-services-nearby-core'
 
 include ':play-services-core:microg-ui-tools' // Legacy
 include ':play-services-core'
