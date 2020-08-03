@@ -125,6 +125,15 @@ public enum GmsService {
         return UNKNOWN;
     }
 
+    public static GmsService byAction(String action) {
+        for (GmsService service : values()) {
+            for (String serviceAction : service.SECONDARY_ACTIONS) {
+                if (serviceAction.equals(action)) return service;
+            }
+        }
+        return UNKNOWN;
+    }
+
     public static String nameFromServiceId(int serviceId) {
         return byServiceId(serviceId).toString(serviceId);
     }

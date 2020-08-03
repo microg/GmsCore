@@ -27,6 +27,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
@@ -176,6 +177,16 @@ public abstract class GmsClient<I extends IInterface> implements ApiClient {
             }
             Log.d(TAG, "GmsCallbacks : onPostInitComplete(" + serviceInterface + ")");
             callbacks.onConnected(params);
+        }
+
+        @Override
+        public void onAccountValidationComplete(int statusCode, Bundle params) throws RemoteException {
+            Log.d(TAG, "GmsCallbacks : onAccountValidationComplete");
+        }
+
+        @Override
+        public void onPostInitCompleteWithConnectionInfo(int statusCode, IBinder binder, ConnectionInfo info) throws RemoteException {
+            onPostInitComplete(statusCode, binder, info == null ? null : info.params);
         }
     }
 

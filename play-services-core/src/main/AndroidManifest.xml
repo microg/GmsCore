@@ -411,9 +411,9 @@
             </intent-filter>
         </service>
 
-        <!-- Chimera spoof -->
+        <!-- Chimera -->
         <provider
-            android:name="org.microg.gms.ChimeraSpoofProvider"
+            android:name="org.microg.gms.chimera.ServiceProvider"
             android:authorities="com.google.android.gms.chimera"
             android:exported="true" />
 
@@ -475,10 +475,6 @@
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
             android:label="@string/gms_settings_name" />
-
-        <activity
-            android:name="org.microg.gms.ui.SafetyNetFragment$AsActivity"
-            android:label="@string/service_name_snet" />
 
         <activity
             android:name="org.microg.gms.ui.SafetyNetAdvancedFragment$AsActivity"
@@ -625,13 +621,13 @@
 
         <service android:name="org.microg.gms.appinvite.AppInviteService">
             <intent-filter>
-                <action android:name="com.google.android.gms.appinvite.service.START"/>
+                <action android:name="com.google.android.gms.appinvite.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.firebase.dynamiclinks.DynamicLinksService">
             <intent-filter>
-                <action android:name="com.google.firebase.dynamiclinks.service.START"/>
+                <action android:name="com.google.firebase.dynamiclinks.service.START" />
             </intent-filter>
         </service>
 
