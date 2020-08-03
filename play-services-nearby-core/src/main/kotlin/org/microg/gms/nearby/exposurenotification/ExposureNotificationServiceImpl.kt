@@ -159,7 +159,15 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                             val entry = stream.nextEntry ?: break
                             if (entry.name == "export.bin") {
                                 val prefix = ByteArray(16)
-                                if (stream.read(prefix) == prefix.size && String(prefix).trim() == "EK Export v1") {
+                                var totalBytesRead = 0
+                                var bytesRead = 0
+                                while (bytesRead != -1 && totalBytesRead < prefix.size) {
+                                    bytesRead = stream.read(prefix, totalBytesRead, prefix.size - totalBytesRead)
+                                    if (bytesRead > 0) {
+                                        totalBytesRead += bytesRead
+                                    }
+                                }
+                                if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
                                     val fileKeys = storeDiagnosisKeyExport(params.token, TemporaryExposureKeyExport.ADAPTER.decode(stream))
                                     keys + fileKeys
                                 } else {
