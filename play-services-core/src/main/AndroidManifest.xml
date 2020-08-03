@@ -107,6 +107,8 @@
         android:name="android.permission.UPDATE_APP_OPS_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-sdk tools:overrideLibrary="com.db.williamchart" />
+
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="false"
@@ -419,6 +421,15 @@
 
         <!-- microG custom UI -->
 
+        <activity
+            android:name="org.microg.gms.ui.ExposureNotificationsConfirmActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+            <intent-filter>
+                <action android:name="org.microg.gms.nearby.exposurenotification.CONFIRM" />
+            </intent-filter>
+        </activity>
+
         <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
@@ -427,11 +438,11 @@
             android:roundIcon="@mipmap/ic_microg_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+                <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

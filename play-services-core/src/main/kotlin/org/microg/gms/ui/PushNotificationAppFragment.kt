@@ -34,7 +34,7 @@ class PushNotificationAppFragment : Fragment(R.layout.push_notification_fragment
                 val uri: Uri = Uri.fromParts("package", packageName, null)
                 intent.data = uri
                 try {
-                    context!!.startActivity(intent)
+                    requireContext().startActivity(intent)
                 } catch (e: Exception) {
                     Log.w(TAG, "Failed to launch app", e)
                 }

@@ -18,7 +18,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <org.microg.tools.ui.LongTextPreference
+    <org.microg.gms.ui.TextPreference
         android:icon="@drawable/ic_info_outline"
         android:key="pref_snet_summary"
         android:selectable="false"

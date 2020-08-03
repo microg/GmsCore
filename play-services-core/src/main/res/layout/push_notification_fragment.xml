@@ -32,7 +32,7 @@
             layout="@layout/preference_switch_bar"
             app:callback="@{switchBarCallback}"
             app:checked="@{gcmEnabled}"
-            app:description='@{"Receive push notifications"}'
+            app:description='@{@string/gcm_enable_switch}'
             app:enabled="@{checkinEnabled}" />
 
         <androidx.fragment.app.FragmentContainerView

@@ -52,6 +52,13 @@
             app:popEnterAnim="@anim/fragment_close_enter"
             app:popExitAnim="@anim/fragment_close_exit" />
         <action
+            android:id="@+id/openExposureNotificationSettings"
+            app:destination="@id/exposureNotificationsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
             android:id="@+id/openAbout"
             app:destination="@id/aboutFragment"
             app:enterAnim="@anim/fragment_open_enter"
@@ -124,7 +131,8 @@
     <fragment
         android:id="@+id/safetyNetFragment"
         android:name="org.microg.gms.ui.SafetyNetFragment"
-        android:label="@string/service_name_snet">
+        android:label="@string/service_name_snet"
+        tools:layout="@layout/safety_net_fragment">
         <action
             android:id="@+id/openSafetyNetAdvancedSettings"
             app:destination="@id/safetyNetAdvancedFragment"
@@ -146,7 +154,48 @@
     <include app:graph="@navigation/nav_unlp" />
 
     <fragment
+        android:id="@+id/exposureNotificationsFragment"
+        android:name="org.microg.gms.ui.ExposureNotificationsFragment"
+        android:label="@string/service_name_exposure"
+        tools:layout="@layout/exposure_notifications_fragment">
+        <deepLink
+            app:action="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS"
+            app:uri="x-gms-settings://exposure-notifications" />
+
+        <action
+            android:id="@+id/openExposureRpis"
+            app:destination="@id/exposureNotificationsRpisFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/openExposureAppDetails"
+            app:destination="@id/exposureNotificationsAppFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/exposureNotificationsRpisFragment"
+        android:name="org.microg.gms.ui.ExposureNotificationsRpisFragment"
+        android:label="@string/pref_exposure_collected_rpis_title" />
+
+    <fragment
+        android:id="@+id/exposureNotificationsAppFragment"
+        android:name="org.microg.gms.ui.ExposureNotificationsAppFragment"
+        android:label="@string/service_name_exposure"
+        tools:layout="@layout/exposure_notifications_app_fragment">
+        <argument
+            android:name="package"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
         android:id="@+id/aboutFragment"
         android:name="org.microg.gms.ui.AboutFragment"
-        android:label="@string/prefcat_about" />
+        android:label="@string/prefcat_about"
+        tools:layout="@layout/about_root" />
 </navigation>

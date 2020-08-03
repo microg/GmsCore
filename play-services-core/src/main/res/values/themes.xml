@@ -16,6 +16,11 @@
 
 <resources>
 
+    <style name="Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="LoginBlueTheme" parent="LoginBlueTheme.Base" />
 
     <style name="LoginBlueTheme.Base" parent="Theme.AppCompat.Light">

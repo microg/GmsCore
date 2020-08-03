@@ -1,5 +1,6 @@
 package org.microg.gms.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -10,6 +11,7 @@ import com.google.android.gms.R;
 import org.microg.gms.checkin.CheckinPrefs;
 import org.microg.gms.gcm.GcmDatabase;
 import org.microg.gms.gcm.GcmPrefs;
+import org.microg.gms.nearby.exposurenotification.ExposurePreferences;
 import org.microg.gms.snet.SafetyNetPrefs;
 import org.microg.tools.ui.ResourceSettingsFragment;
 
@@ -20,6 +22,7 @@ public class SettingsFragment extends ResourceSettingsFragment {
     public static final String PREF_SNET = "pref_snet";
     public static final String PREF_UNIFIEDNLP = "pref_unifiednlp";
     public static final String PREF_CHECKIN = "pref_checkin";
+    public static final String PREF_EXPOSURE = "pref_exposure";
 
     public SettingsFragment() {
         preferencesResource = R.xml.preferences_start;
@@ -86,6 +89,20 @@ public class SettingsFragment extends ResourceSettingsFragment {
             NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openUnifiedNlpSettings);
             return true;
         });
+        if (Build.VERSION.SDK_INT >= 21) {
+            findPreference(PREF_EXPOSURE).setVisible(true);
+            if (new ExposurePreferences(getContext()).getScannerEnabled()) {
+                findPreference(PREF_EXPOSURE).setSummary(getString(R.string.service_status_enabled_short));
+            } else {
+                findPreference(PREF_EXPOSURE).setSummary(R.string.service_status_disabled_short);
+            }
+            findPreference(PREF_EXPOSURE).setOnPreferenceClickListener(preference -> {
+                NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openExposureNotificationSettings);
+                return true;
+            });
+        } else {
+            findPreference(PREF_EXPOSURE).setVisible(false);
+        }
 
         boolean checkinEnabled = CheckinPrefs.get(getContext()).isEnabled();
         findPreference(PREF_CHECKIN).setSummary(checkinEnabled ? R.string.service_status_enabled_short : R.string.service_status_disabled_short);

@@ -28,7 +28,7 @@
             layout="@layout/preference_switch_bar"
             app:callback="@{switchBarCallback}"
             app:checked="@{checkinEnabled}"
-            app:description='@{"Register device"}'
+            app:description='@{@string/checkin_enable_switch}'
             app:enabled="@{true}" />
 
         <androidx.fragment.app.FragmentContainerView

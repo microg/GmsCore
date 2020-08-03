@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:icon="@drawable/ic_open"
+            android:key="pref_exposure_app_open"
+            android:title="@string/open_app" />
+    </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:key="pref_exposure_app_checks"
+            android:selectable="false"
+            tools:summary="7 checks in past 14 days\nLast check: 3 hours ago" />
+    </PreferenceCategory>
+</PreferenceScreen>
