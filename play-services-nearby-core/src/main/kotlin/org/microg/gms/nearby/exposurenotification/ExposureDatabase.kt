@@ -21,10 +21,25 @@ import java.util.concurrent.Future
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
 
-
 class ExposureDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+    private val refCount = AtomicInteger(0)
+
+    fun ref(): ExposureDatabase {
+        refCount.incrementAndGet()
+        return this
+    }
+
+    fun unref() {
+        val nu = refCount.decrementAndGet()
+        if (nu == 0) {
+            close()
+        } else if (nu < 0) {
+            throw RuntimeException("ref/unref mismatch")
+        }
+    }
 
     override fun onCreate(db: SQLiteDatabase) {
         onUpgrade(db, 0, DB_VERSION)
@@ -149,7 +164,7 @@ class ExposureDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         }
     }
 
-    fun applyDiagnosisKeySearchResult(packageName: String, token: String, key: TemporaryExposureKey, matched: Boolean) = writableDatabase.run {
+    fun applyDiagnosisKeySearchResult(key: TemporaryExposureKey, matched: Boolean) = writableDatabase.run {
         insert(TABLE_TEK_CHECK, "NULL", ContentValues().apply {
             put("keyData", key.keyData)
             put("rollingStartNumber", key.rollingStartIntervalNumber)
@@ -195,10 +210,10 @@ class ExposureDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         for (key in keys) {
             if (oldestRpi == null || key.rollingStartIntervalNumber * ROLLING_WINDOW_LENGTH_MS - ALLOWED_KEY_OFFSET_MS < oldestRpi) {
                 // Early ignore because key is older than since we started scanning.
-                applyDiagnosisKeySearchResult(packageName, token, key, false)
+                applyDiagnosisKeySearchResult(key, false)
             } else {
                 futures.add(executor.submit {
-                    applyDiagnosisKeySearchResult(packageName, token, key, findMeasuredExposures(key).isNotEmpty())
+                    applyDiagnosisKeySearchResult(key, findMeasuredExposures(key).isNotEmpty())
                 })
             }
         }
@@ -207,7 +222,7 @@ class ExposureDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         }
         val time = (System.currentTimeMillis() - start).toDouble() / 1000.0
         executor.shutdown()
-        Log.d(TAG, "Processed ${keys.size} keys in ${System.currentTimeMillis() - start}s -> ${(keys.size.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
+        Log.d(TAG, "Processed ${keys.size} keys in ${time}s -> ${(keys.size.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
     }
 
     fun findAllMeasuredExposures(packageName: String, token: String): List<MeasuredExposure> {

@@ -22,12 +22,15 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
 
     override fun onDestroy() {
         super.onDestroy()
-        database.close()
+        database.unref()
     }
 
     override fun onCreate() {
         super.onCreate()
-        database = ExposureDatabase(this)
+        if (!this::database.isInitialized) {
+            database = ExposureDatabase(this)
+        }
+        database.ref()
     }
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {

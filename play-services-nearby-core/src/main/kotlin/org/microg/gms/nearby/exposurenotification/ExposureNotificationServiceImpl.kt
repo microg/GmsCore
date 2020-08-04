@@ -59,11 +59,9 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             if (resultCode == SUCCESS) {
                 ExposurePreferences(context).scannerEnabled = true
             }
-            database.use {
-                it.noteAppAction(packageName, "start", JSONObject().apply {
-                    put("result", resultCode)
-                }.toString())
-            }
+            database.noteAppAction(packageName, "start", JSONObject().apply {
+                put("result", resultCode)
+            }.toString())
             try {
                 params.callback.onResult(Status(if (resultCode == SUCCESS) SUCCESS else FAILED_REJECTED_OPT_IN, resultData?.getString("message")))
             } catch (e: Exception) {
@@ -77,11 +75,9 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             if (resultCode == SUCCESS) {
                 ExposurePreferences(context).scannerEnabled = false
             }
-            database.use {
-                it.noteAppAction(packageName, "stop", JSONObject().apply {
-                    put("result", resultCode)
-                }.toString())
-            }
+            database.noteAppAction(packageName, "stop", JSONObject().apply {
+                put("result", resultCode)
+            }.toString())
             try {
                 params.callback.onResult(Status.SUCCESS)
             } catch (e: Exception) {
@@ -106,12 +102,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 FAILED_REJECTED_OPT_IN to emptyList()
             }
 
-            database.use {
-                it.noteAppAction(packageName, "getTemporaryExposureKeyHistory", JSONObject().apply {
-                    put("result", resultCode)
-                    put("response_keys_size", response.size)
-                }.toString())
-            }
+            database.noteAppAction(packageName, "getTemporaryExposureKeyHistory", JSONObject().apply {
+                put("result", resultCode)
+                put("response_keys_size", response.size)
+            }.toString())
             try {
                 params.callback.onResult(Status(status, resultData?.getString("message")), response)
             } catch (e: Exception) {
@@ -140,50 +134,51 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun provideDiagnosisKeys(params: ProvideDiagnosisKeysParams) {
+        database.ref()
         Thread(Runnable {
-            if (params.configuration != null) {
-                database.storeConfiguration(packageName, params.token, params.configuration)
-            }
+            try {
+                if (params.configuration != null) {
+                    database.storeConfiguration(packageName, params.token, params.configuration)
+                }
 
-            // keys
-            for (key in params.keys.orEmpty()) {
-                database.storeDiagnosisKey(packageName, params.token, key)
-            }
+                // keys
+                for (key in params.keys.orEmpty()) {
+                    database.storeDiagnosisKey(packageName, params.token, key)
+                }
 
-            // Key files
-            var keys = params.keys?.size ?: 0
-            for (file in params.keyFiles.orEmpty()) {
-                try {
-                    ZipInputStream(ParcelFileDescriptor.AutoCloseInputStream(file)).use { stream ->
-                        do {
-                            val entry = stream.nextEntry ?: break
-                            if (entry.name == "export.bin") {
-                                val prefix = ByteArray(16)
-                                var totalBytesRead = 0
-                                var bytesRead = 0
-                                while (bytesRead != -1 && totalBytesRead < prefix.size) {
-                                    bytesRead = stream.read(prefix, totalBytesRead, prefix.size - totalBytesRead)
-                                    if (bytesRead > 0) {
-                                        totalBytesRead += bytesRead
+                // Key files
+                var keys = params.keys?.size ?: 0
+                for (file in params.keyFiles.orEmpty()) {
+                    try {
+                        ZipInputStream(ParcelFileDescriptor.AutoCloseInputStream(file)).use { stream ->
+                            do {
+                                val entry = stream.nextEntry ?: break
+                                if (entry.name == "export.bin") {
+                                    val prefix = ByteArray(16)
+                                    var totalBytesRead = 0
+                                    var bytesRead = 0
+                                    while (bytesRead != -1 && totalBytesRead < prefix.size) {
+                                        bytesRead = stream.read(prefix, totalBytesRead, prefix.size - totalBytesRead)
+                                        if (bytesRead > 0) {
+                                            totalBytesRead += bytesRead
+                                        }
+                                    }
+                                    if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
+                                        val fileKeys = storeDiagnosisKeyExport(params.token, TemporaryExposureKeyExport.ADAPTER.decode(stream))
+                                        keys + fileKeys
+                                    } else {
+                                        Log.d(TAG, "export.bin had invalid prefix")
                                     }
                                 }
-                                if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
-                                    val fileKeys = storeDiagnosisKeyExport(params.token, TemporaryExposureKeyExport.ADAPTER.decode(stream))
-                                    keys + fileKeys
-                                } else {
-                                    Log.d(TAG, "export.bin had invalid prefix")
-                                }
-                            }
-                            stream.closeEntry()
-                        } while (true);
+                                stream.closeEntry()
+                            } while (true);
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed parsing file", e)
                     }
-                } catch (e: Exception) {
-                    Log.w(TAG, "Failed parsing file", e)
                 }
-            }
-            Log.d(TAG, "$packageName/${params.token} provided $keys keys")
+                Log.d(TAG, "$packageName/${params.token} provided $keys keys")
 
-            Handler(Looper.getMainLooper()).post {
                 database.noteAppAction(packageName, "provideDiagnosisKeys", JSONObject().apply {
                     put("request_token", params.token)
                     put("request_keys_size", params.keys?.size)
@@ -191,25 +186,27 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     put("request_keys_count", keys)
                 }.toString())
 
+                Handler(Looper.getMainLooper()).post {
+                    try {
+                        params.callback.onResult(Status.SUCCESS)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Callback failed", e)
+                    }
+                }
+
+                database.finishMatching(packageName, params.token)
+                val match = database.findAllMeasuredExposures(packageName, params.token).isNotEmpty()
+
                 try {
-                    params.callback.onResult(Status.SUCCESS)
+                    val intent = Intent(if (match) ACTION_EXPOSURE_STATE_UPDATED else ACTION_EXPOSURE_NOT_FOUND)
+                    intent.`package` = packageName
+                    Log.d(TAG, "Sending $intent")
+                    context.sendOrderedBroadcast(intent, PERMISSION_EXPOSURE_CALLBACK)
                 } catch (e: Exception) {
                     Log.w(TAG, "Callback failed", e)
                 }
-            }
-
-            val match = database.use {
-                it.finishMatching(packageName, params.token)
-                it.findAllMeasuredExposures(packageName, params.token).isNotEmpty()
-            }
-
-            try {
-                val intent = Intent(if (match) ACTION_EXPOSURE_STATE_UPDATED else ACTION_EXPOSURE_NOT_FOUND)
-                intent.`package` = packageName
-                Log.d(TAG, "Sending $intent")
-                context.sendOrderedBroadcast(intent, PERMISSION_EXPOSURE_CALLBACK)
-            } catch (e: Exception) {
-                Log.w(TAG, "Callback failed", e)
+            } finally {
+                database.unref()
             }
         }).start()
     }
@@ -237,18 +234,16 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 .setSummationRiskScore(exposures.map { it.getRiskScore(configuration) }.sum())
                 .build()
 
-        database.use {
-            it.noteAppAction(packageName, "getExposureSummary", JSONObject().apply {
-                put("request_token", params.token)
-                put("response_days_since", response.daysSinceLastExposure)
-                put("response_matched_keys", response.matchedKeyCount)
-                put("response_max_risk", response.maximumRiskScore)
-                put("response_attenuation_durations", JSONArray().apply {
-                    response.attenuationDurationsInMinutes.forEach { put(it) }
-                })
-                put("response_summation_risk", response.summationRiskScore)
-            }.toString())
-        }
+        database.noteAppAction(packageName, "getExposureSummary", JSONObject().apply {
+            put("request_token", params.token)
+            put("response_days_since", response.daysSinceLastExposure)
+            put("response_matched_keys", response.matchedKeyCount)
+            put("response_max_risk", response.maximumRiskScore)
+            put("response_attenuation_durations", JSONArray().apply {
+                response.attenuationDurationsInMinutes.forEach { put(it) }
+            })
+            put("response_summation_risk", response.summationRiskScore)
+        }.toString())
         try {
             params.callback.onResult(Status.SUCCESS, response)
         } catch (e: Exception) {
@@ -271,12 +266,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             it.toExposureInformation(configuration)
         }
 
-        database.use {
-            database.noteAppAction(packageName, "getExposureInformation", JSONObject().apply {
-                put("request_token", params.token)
-                put("response_size", response.size)
-            }.toString())
-        }
+        database.noteAppAction(packageName, "getExposureInformation", JSONObject().apply {
+            put("request_token", params.token)
+            put("response_size", response.size)
+        }.toString())
         try {
             params.callback.onResult(Status.SUCCESS, response)
         } catch (e: Exception) {
