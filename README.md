@@ -20,7 +20,7 @@ This fork tweaks MicroG to be usable by applications that require Google authent
   - Maps & Location
   - SafetyNet
   - Self-Check
-  - TapandPay
+  - TapAndPay
   - Wallet
   - Wear-Api
 - Removed all permissions, as none are required for Google authentication

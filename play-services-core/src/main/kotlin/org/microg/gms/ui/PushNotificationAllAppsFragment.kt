@@ -56,11 +56,7 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
             val context = requireContext()
             val apps = withContext(Dispatchers.IO) {
                 val res = database.appList.map { app ->
-                    try {
-                        app to context.packageManager.getApplicationInfo(app.packageName, 0)
-                    } catch (ignored: Exception) {
-                        app to null
-                    }
+                    app to context.packageManager.getApplicationInfoIfExists(app.packageName)
                 }.map { (app, applicationInfo) ->
                     val pref = AppIconPreference(context)
                     pref.title = applicationInfo?.loadLabel(context.packageManager) ?: app.packageName
