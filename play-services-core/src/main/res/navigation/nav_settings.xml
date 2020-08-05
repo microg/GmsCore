@@ -11,60 +11,28 @@
         android:label="@string/gms_settings_name">
         <action
             android:id="@+id/openUnifiedNlpSettings"
-            app:destination="@id/nav_unlp"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/nav_unlp" />
         <action
             android:id="@+id/openSelfcheck"
-            app:destination="@id/selfcheckFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/selfcheckFragment" />
         <action
             android:id="@+id/openCheckinSettings"
-            app:destination="@id/checkinFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/checkinFragment" />
         <action
             android:id="@+id/openGcmSettings"
-            app:destination="@id/gcmFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmFragment" />
         <action
             android:id="@+id/openSafetyNetSettings"
-            app:destination="@id/safetyNetFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/safetyNetFragment" />
         <action
             android:id="@+id/openMoreGoogleSettings"
-            app:destination="@id/googleMoreFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/googleMoreFragment" />
         <action
             android:id="@+id/openExposureNotificationSettings"
-            app:destination="@id/exposureNotificationsFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/exposureNotificationsFragment" />
         <action
             android:id="@+id/openAbout"
-            app:destination="@id/aboutFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/aboutFragment" />
     </fragment>
 
     <fragment
@@ -83,25 +51,13 @@
         tools:layout="@layout/push_notification_fragment">
         <action
             android:id="@+id/openGcmAppDetails"
-            app:destination="@id/gcmAppFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAppFragment" />
         <action
             android:id="@+id/openAllGcmApps"
-            app:destination="@id/gcmAllAppsFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAllAppsFragment" />
         <action
             android:id="@+id/openGcmAdvancedSettings"
-            app:destination="@id/gcmAdvancedFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAdvancedFragment" />
     </fragment>
     <fragment
         android:id="@+id/gcmAllAppsFragment"
@@ -109,11 +65,7 @@
         android:label="Apps using push notifications">
         <action
             android:id="@+id/openGcmAppDetailsFromAll"
-            app:destination="@id/gcmAppFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAppFragment" />
     </fragment>
     <fragment
         android:id="@+id/gcmAppFragment"
@@ -135,11 +87,7 @@
         tools:layout="@layout/safety_net_fragment">
         <action
             android:id="@+id/openSafetyNetAdvancedSettings"
-            app:destination="@id/safetyNetAdvancedFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/safetyNetAdvancedFragment" />
     </fragment>
     <fragment
         android:id="@+id/safetyNetAdvancedFragment"
@@ -164,18 +112,10 @@
 
         <action
             android:id="@+id/openExposureRpis"
-            app:destination="@id/exposureNotificationsRpisFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/exposureNotificationsRpisFragment" />
         <action
             android:id="@+id/openExposureAppDetails"
-            app:destination="@id/exposureNotificationsAppFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/exposureNotificationsAppFragment" />
     </fragment>
 
     <fragment

@@ -40,7 +40,7 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
         collectedRpis = preferenceScreen.findPreference("pref_exposure_collected_rpis") ?: collectedRpis
         advertisingId = preferenceScreen.findPreference("pref_exposure_advertising_id") ?: advertisingId
         collectedRpis.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(R.id.openExposureRpis)
+            findNavController().navigate(requireContext(), R.id.openExposureRpis)
             true
         }
     }
@@ -82,7 +82,7 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
                         pref.title = applicationInfo.loadLabel(context.packageManager)
                         pref.icon = applicationInfo.loadIcon(context.packageManager)
                         pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                            findNavController().navigate(R.id.openExposureAppDetails, bundleOf(
+                            findNavController().navigate(requireContext(), R.id.openExposureAppDetails, bundleOf(
                                     "package" to applicationInfo.packageName
                             ))
                             true

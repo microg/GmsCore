@@ -48,7 +48,7 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_ADVANCED -> {
-                findNavController().navigate(R.id.openSafetyNetAdvancedSettings)
+                findNavController().navigate(requireContext(), R.id.openSafetyNetAdvancedSettings)
                 true
             }
             else -> super.onOptionsItemSelected(item)

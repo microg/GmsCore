@@ -49,7 +49,7 @@ class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             MENU_ADVANCED -> {
-                findNavController().navigate(R.id.openGcmAdvancedSettings)
+                findNavController().navigate(requireContext(), R.id.openGcmAdvancedSettings)
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -67,7 +67,7 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                     pref.icon = applicationInfo?.loadIcon(context.packageManager)
                             ?: AppCompatResources.getDrawable(context, android.R.mipmap.sym_def_app_icon)
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(R.id.openGcmAppDetailsFromAll, bundleOf(
+                        findNavController().navigate(requireContext(), R.id.openGcmAppDetailsFromAll, bundleOf(
                                 "package" to app.packageName
                         ))
                         true

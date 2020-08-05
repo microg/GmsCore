@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.R;
@@ -43,7 +44,7 @@ public class SettingsFragment extends ResourceSettingsFragment {
     private void updateDetails() {
         findPreference(PREF_ABOUT).setSummary(getString(R.string.about_version_str, AboutFragment.getSelfVersion(getContext())));
         findPreference(PREF_ABOUT).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openAbout);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openAbout, null);
             return true;
         });
         if (GcmPrefs.get(getContext()).isEnabled()) {
@@ -55,7 +56,7 @@ public class SettingsFragment extends ResourceSettingsFragment {
             findPreference(PREF_GCM).setSummary(R.string.service_status_disabled_short);
         }
         findPreference(PREF_GCM).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openGcmSettings);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openGcmSettings, null);
             return true;
         });
 
@@ -75,7 +76,7 @@ public class SettingsFragment extends ResourceSettingsFragment {
             findPreference(PREF_SNET).setSummary(R.string.service_status_disabled_short);
         }
         findPreference(PREF_SNET).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openSafetyNetSettings);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openSafetyNetSettings, null);
             return true;
         });
 
@@ -86,7 +87,7 @@ public class SettingsFragment extends ResourceSettingsFragment {
 //                    Preferences.splitBackendString(unifiedNlPrefs.getGeocoderBackends()).length;
 //            findPreference(PREF_UNIFIEDNLP).setSummary(getResources().getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount));
         findPreference(PREF_UNIFIEDNLP).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openUnifiedNlpSettings);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openUnifiedNlpSettings, null);
             return true;
         });
         if (Build.VERSION.SDK_INT >= 21) {
@@ -97,7 +98,7 @@ public class SettingsFragment extends ResourceSettingsFragment {
                 findPreference(PREF_EXPOSURE).setSummary(R.string.service_status_disabled_short);
             }
             findPreference(PREF_EXPOSURE).setOnPreferenceClickListener(preference -> {
-                NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openExposureNotificationSettings);
+                UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openExposureNotificationSettings, null);
                 return true;
             });
         } else {
@@ -107,7 +108,7 @@ public class SettingsFragment extends ResourceSettingsFragment {
         boolean checkinEnabled = CheckinPrefs.get(getContext()).isEnabled();
         findPreference(PREF_CHECKIN).setSummary(checkinEnabled ? R.string.service_status_enabled_short : R.string.service_status_disabled_short);
         findPreference(PREF_CHECKIN).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openCheckinSettings);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openCheckinSettings, null);
             return true;
         });
     }
