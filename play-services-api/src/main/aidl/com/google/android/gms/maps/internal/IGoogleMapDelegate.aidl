@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
@@ -125,7 +126,7 @@ interface IGoogleMapDelegate {
     //void setPolylineClickListener(IOnPolylineClickListener listener) = 86;
     //void setCircleClickListener(IOnCircleClickListener listener) = 88;
 
-    //boolean setMapStyle(in MapStyleOptions options) = 90;
+    boolean setMapStyle(in MapStyleOptions options) = 90;
     void setMinZoomPreference(float minZoom) = 91;
     void setMaxZoomPreference(float maxZoom) = 92;
     void resetMinMaxZoomPreference() = 93;
