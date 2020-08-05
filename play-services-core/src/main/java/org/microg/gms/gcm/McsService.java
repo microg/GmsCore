@@ -43,7 +43,6 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import com.mgoogle.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
@@ -107,7 +106,7 @@ import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
 
-    public static final String SELF_CATEGORY = "com.mgoogle.android.gsf.gtalkservice";
+    public static final String SELF_CATEGORY = "com.google.android.gsf.gtalkservice";
     public static final String IDLE_NOTIFICATION = "IdleNotification";
     public static final String FROM_FIELD = "gcm@android.com";
 
@@ -319,10 +318,24 @@ public class McsService extends Service implements Handler.Callback {
         return START_REDELIVER_INTENT;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Notification buildForegroundNotification() {
+        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_LOW);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
+        channel.setShowBadge(false);
+        getSystemService(NotificationManager.class).createNotificationChannel(channel);
+        return new Notification.Builder(this, channel.getId())
+                .setOngoing(true)
+                .setContentTitle("Running in background")
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .build();
+    }
+
     private void handleSendMessage(Intent intent) {
         String messageId = intent.getStringExtra(EXTRA_MESSAGE_ID);
         String collapseKey = intent.getStringExtra(EXTRA_COLLAPSE_KEY);
 
+        Messenger messenger = intent.getParcelableExtra(EXTRA_MESSENGER);
         intent.removeExtra(EXTRA_MESSENGER);
 
         Parcelable app = intent.getParcelableExtra(EXTRA_APP);
@@ -379,7 +392,7 @@ public class McsService extends Service implements Handler.Callback {
             if (!key.startsWith("google.")) {
                 Object val = extras.get(key);
                 if (val instanceof String) {
-                    appData.add(new AppData(key, (String) val));
+                    appData.add(new AppData.Builder().key(key).value((String) val).build());
                 }
             }
         }
@@ -400,7 +413,7 @@ public class McsService extends Service implements Handler.Callback {
                     .app_data(appData).build();
 
             send(MCS_DATA_MESSAGE_STANZA_TAG, msg);
-            database.noteAppMessage(packageName, msg.getSerializedSize());
+            database.noteAppMessage(packageName, DataMessageStanza.ADAPTER.encodedSize(msg));
         } catch (Exception e) {
             Log.w(TAG, e);
         }
@@ -488,14 +501,14 @@ public class McsService extends Service implements Handler.Callback {
                 .resource(Long.toString(info.androidId))
                 .user(Long.toString(info.androidId))
                 .use_rmq2(true)
-                .setting(Collections.singletonList(new Setting("new_vc", "1")))
+                .setting(Collections.singletonList(new Setting.Builder().name("new_vc").value("1").build()))
                 .received_persistent_id(GcmPrefs.get(this).getLastPersistedIds())
                 .build();
     }
 
     private void handleAppMessage(DataMessageStanza msg) {
         String packageName = msg.category;
-        database.noteAppMessage(packageName, msg.getSerializedSize());
+        database.noteAppMessage(packageName, DataMessageStanza.ADAPTER.encodedSize(msg));
         GcmDatabase.App app = database.getApp(packageName);
 
         Intent intent = new Intent();
@@ -560,7 +573,7 @@ public class McsService extends Service implements Handler.Callback {
                         .sent(System.currentTimeMillis() / 1000)
                         .ttl(0)
                         .category(SELF_CATEGORY)
-                        .app_data(Collections.singletonList(new AppData(IDLE_NOTIFICATION, "false")));
+                        .app_data(Collections.singletonList(new AppData.Builder().key(IDLE_NOTIFICATION).value("false").build()));
                 if (inputStream.newStreamIdAvailable()) {
                     msgResponse.last_stream_id_received(inputStream.getStreamId());
                 }

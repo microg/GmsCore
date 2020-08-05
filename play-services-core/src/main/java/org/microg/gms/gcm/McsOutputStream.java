@@ -111,8 +111,9 @@ public class McsOutputStream extends Thread implements Handler.Callback, Closeab
             initialized = true;
         }
         os.write(tag);
-        writeVarint(os, message.getSerializedSize());
-        os.write(message.toByteArray());
+        byte[] bytes = message.encode();
+        writeVarint(os, bytes.length);
+        os.write(bytes);
         os.flush();
         streamId++;
     }

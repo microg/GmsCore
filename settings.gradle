@@ -9,6 +9,7 @@ include ':play-services-iid-api'
 include ':play-services-base'
 include ':play-services-base-api'
 include ':play-services-tasks'
+include ':play-services-core-proto'
 
 include ':play-services-base-core'
 

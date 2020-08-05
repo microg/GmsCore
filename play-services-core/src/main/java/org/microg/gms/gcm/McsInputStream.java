@@ -146,23 +146,22 @@ public class McsInputStream extends Thread implements Closeable {
     }
 
     private static Message read(int mcsTag, byte[] bytes, int len) throws IOException {
-        Wire wire = new Wire();
         try {
             switch (mcsTag) {
                 case MCS_HEARTBEAT_PING_TAG:
-                    return wire.parseFrom(bytes, 0, len, HeartbeatPing.class);
+                    return HeartbeatPing.ADAPTER.decode(bytes);
                 case MCS_HEARTBEAT_ACK_TAG:
-                    return wire.parseFrom(bytes, 0, len, HeartbeatAck.class);
+                    return HeartbeatAck.ADAPTER.decode(bytes);
                 case MCS_LOGIN_REQUEST_TAG:
-                    return wire.parseFrom(bytes, 0, len, LoginRequest.class);
+                    return LoginRequest.ADAPTER.decode(bytes);
                 case MCS_LOGIN_RESPONSE_TAG:
-                    return wire.parseFrom(bytes, 0, len, LoginResponse.class);
+                    return LoginResponse.ADAPTER.decode(bytes);
                 case MCS_CLOSE_TAG:
-                    return wire.parseFrom(bytes, 0, len, Close.class);
+                    return Close.ADAPTER.decode(bytes);
                 case MCS_IQ_STANZA_TAG:
-                    return wire.parseFrom(bytes, 0, len, IqStanza.class);
+                    return IqStanza.ADAPTER.decode(bytes);
                 case MCS_DATA_MESSAGE_STANZA_TAG:
-                    return wire.parseFrom(bytes, 0, len, DataMessageStanza.class);
+                    return DataMessageStanza.ADAPTER.decode(bytes);
                 default:
                     Log.w(TAG, "Unknown tag: " + mcsTag);
                     return null;

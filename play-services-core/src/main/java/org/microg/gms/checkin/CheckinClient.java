@@ -46,6 +46,8 @@ import java.util.zip.GZIPOutputStream;
 public class CheckinClient {
     private static final String TAG = "GmsCheckinClient";
     private static final Object TODO = null; // TODO
+    private static final List<String> TODO_LIST_STRING = new ArrayList<String>(); // TODO
+    private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<CheckinRequest.Checkin.Statistic>(); // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
 
     public static CheckinResponse request(CheckinRequest request) throws IOException {
@@ -60,7 +62,7 @@ public class CheckinClient {
 
         Log.d(TAG, "-- Request --\n" + request);
         OutputStream os = new GZIPOutputStream(connection.getOutputStream());
-        os.write(request.toByteArray());
+        os.write(request.encode());
         os.close();
 
         if (connection.getResponseCode() != 200) {
@@ -72,7 +74,7 @@ public class CheckinClient {
         }
 
         InputStream is = connection.getInputStream();
-        CheckinResponse response = new Wire().parseFrom(new GZIPInputStream(is), CheckinResponse.class);
+        CheckinResponse response = CheckinResponse.ADAPTER.decode(new GZIPInputStream(is));
         is.close();
         return response;
     }
@@ -108,10 +110,10 @@ public class CheckinClient {
                                 .timeMs(new Date().getTime())
                                 .build()))
                         .lastCheckinMs(checkinInfo.lastCheckin)
-                        .requestedGroup((List<String>) TODO)
+                        .requestedGroup(TODO_LIST_STRING)
                         .roaming(phoneInfo.roaming)
                         .simOperator(phoneInfo.simOperator)
-                        .stat((List<CheckinRequest.Checkin.Statistic>) TODO)
+                        .stat(TODO_LIST_CHECKIN)
                         .userNumber(0)
                         .build())
                 .deviceConfiguration(new CheckinRequest.DeviceConfig.Builder()
