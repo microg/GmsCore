@@ -66,6 +66,12 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
             Log.d(TAG, "returning temp fix module version for " + moduleId + ". Cast API wil not be functional!");
             return 1;
         }
+
+        if (moduleId.equals("com.google.android.gms.maps_dynamite")) {
+            Log.d(TAG, "returning v1 for maps");
+            return 1;
+        }
+
         Log.d(TAG, "unimplemented Method: getModuleVersion for " + moduleId);
         return 0;
     }
