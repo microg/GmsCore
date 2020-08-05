@@ -214,8 +214,7 @@
 
         <!-- Cloud Messaging -->
         <service
-            android:name="org.microg.gms.gcm.PushRegisterService"
-            android:permission="com.google.android.c2dm.permission.RECEIVE">
+            android:name="org.microg.gms.gcm.PushRegisterService">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTER" />
                 <action android:name="com.google.android.c2dm.intent.UNREGISTER" />
@@ -233,8 +232,7 @@
         <service android:name="org.microg.gms.gcm.McsService" />
 
         <receiver
-            android:name="org.microg.gms.gcm.SendReceiver"
-            android:permission="com.google.android.c2dm.permission.RECEIVE">
+            android:name="org.microg.gms.gcm.SendReceiver">
             <intent-filter>
                 <action android:name="com.google.android.gcm.intent.SEND" />
             </intent-filter>
