@@ -18,21 +18,6 @@ import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 
 class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE) {
-    lateinit var database: ExposureDatabase
-
-    override fun onDestroy() {
-        super.onDestroy()
-        database.unref()
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        if (!this::database.isInitialized) {
-            database = ExposureDatabase(this)
-        }
-        database.ref()
-    }
-
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName)
 
@@ -53,7 +38,7 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
         }
 
         Log.d(TAG, "handleServiceRequest: " + request.packageName)
-        callback.onPostInitCompleteWithConnectionInfo(SUCCESS, ExposureNotificationServiceImpl(this, request.packageName, database), ConnectionInfo().apply {
+        callback.onPostInitCompleteWithConnectionInfo(SUCCESS, ExposureNotificationServiceImpl(this, request.packageName), ConnectionInfo().apply {
             features = arrayOf(Feature("nearby_exposure_notification", 2))
         })
     }

@@ -13,7 +13,7 @@ fun PackageManager.getApplicationInfoIfExists(packageName: String?, flags: Int =
     try {
         getApplicationInfo(it, flags)
     } catch (e: Exception) {
-        Log.w(TAG, "Package does not exist", e)
+        Log.w(TAG, "Package $packageName not installed.")
         null
     }
 }

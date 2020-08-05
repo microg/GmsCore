@@ -25,15 +25,9 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var exposureAppsNone: Preference
     private lateinit var collectedRpis: Preference
     private lateinit var advertisingId: Preference
-    private lateinit var database: ExposureDatabase
     private val handler = Handler()
     private val updateStatusRunnable = Runnable { updateStatus() }
     private val updateContentRunnable = Runnable { updateContent() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        database = ExposureDatabase(requireContext())
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications)
@@ -53,13 +47,14 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onResume() {
         super.onResume()
+
         updateStatus()
         updateContent()
     }
 
     override fun onPause() {
         super.onPause()
-        database.close()
+
         handler.removeCallbacks(updateStatusRunnable)
         handler.removeCallbacks(updateContentRunnable)
     }
@@ -78,26 +73,27 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
             handler.postDelayed(updateContentRunnable, UPDATE_CONTENT_INTERVAL)
             val context = requireContext()
             val (apps, lastHourKeys, currentId) = withContext(Dispatchers.IO) {
-                val apps = database.appList.map { packageName ->
-                    context.packageManager.getApplicationInfoIfExists(packageName)
-                }.filterNotNull().mapIndexed { idx, applicationInfo ->
-                    val pref = AppIconPreference(context)
-                    pref.order = idx
-                    pref.title = applicationInfo.loadLabel(context.packageManager)
-                    pref.icon = applicationInfo.loadIcon(context.packageManager)
-                    pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(R.id.openExposureAppDetails, bundleOf(
-                                "package" to applicationInfo.packageName
-                        ))
-                        true
+                ExposureDatabase.with(context) { database ->
+                    val apps = database.appList.map { packageName ->
+                        context.packageManager.getApplicationInfoIfExists(packageName)
+                    }.filterNotNull().mapIndexed { idx, applicationInfo ->
+                        val pref = AppIconPreference(context)
+                        pref.order = idx
+                        pref.title = applicationInfo.loadLabel(context.packageManager)
+                        pref.icon = applicationInfo.loadIcon(context.packageManager)
+                        pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                            findNavController().navigate(R.id.openExposureAppDetails, bundleOf(
+                                    "package" to applicationInfo.packageName
+                            ))
+                            true
+                        }
+                        pref.key = "pref_exposure_app_" + applicationInfo.packageName
+                        pref
                     }
-                    pref.key = "pref_exposure_app_" + applicationInfo.packageName
-                    pref
+                    val lastHourKeys = database.hourRpiCount
+                    val currentId = database.currentRpiId
+                    Triple(apps, lastHourKeys, currentId)
                 }
-                val lastHourKeys = database.hourRpiCount
-                val currentId = database.currentRpiId
-                database.close()
-                Triple(apps, lastHourKeys, currentId)
             }
             collectedRpis.summary = getString(R.string.pref_exposure_collected_rpis_summary, lastHourKeys)
             advertisingId.summary = currentId.toString()

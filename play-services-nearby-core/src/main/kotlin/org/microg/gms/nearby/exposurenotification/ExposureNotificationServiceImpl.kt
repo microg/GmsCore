@@ -26,7 +26,7 @@ import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProt
 import java.util.*
 import java.util.zip.ZipInputStream
 
-class ExposureNotificationServiceImpl(private val context: Context, private val packageName: String, private val database: ExposureDatabase) : INearbyExposureNotificationService.Stub() {
+class ExposureNotificationServiceImpl(private val context: Context, private val packageName: String) : INearbyExposureNotificationService.Stub() {
     private fun confirm(action: String, callback: (resultCode: Int, resultData: Bundle?) -> Unit) {
         val intent = Intent(ACTION_CONFIRM)
         intent.`package` = context.packageName
@@ -59,9 +59,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             if (resultCode == SUCCESS) {
                 ExposurePreferences(context).scannerEnabled = true
             }
-            database.noteAppAction(packageName, "start", JSONObject().apply {
-                put("result", resultCode)
-            }.toString())
+            ExposureDatabase.with(context) { database ->
+                database.noteAppAction(packageName, "start", JSONObject().apply {
+                    put("result", resultCode)
+                }.toString())
+            }
             try {
                 params.callback.onResult(Status(if (resultCode == SUCCESS) SUCCESS else FAILED_REJECTED_OPT_IN, resultData?.getString("message")))
             } catch (e: Exception) {
@@ -75,9 +77,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             if (resultCode == SUCCESS) {
                 ExposurePreferences(context).scannerEnabled = false
             }
-            database.noteAppAction(packageName, "stop", JSONObject().apply {
-                put("result", resultCode)
-            }.toString())
+            ExposureDatabase.with(context) { database ->
+                database.noteAppAction(packageName, "stop", JSONObject().apply {
+                    put("result", resultCode)
+                }.toString())
+            }
             try {
                 params.callback.onResult(Status.SUCCESS)
             } catch (e: Exception) {
@@ -94,7 +98,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
-    override fun getTemporaryExposureKeyHistory(params: GetTemporaryExposureKeyHistoryParams) {
+    override fun getTemporaryExposureKeyHistory(params: GetTemporaryExposureKeyHistoryParams): Unit = ExposureDatabase.with(context) { database ->
         confirm(CONFIRM_ACTION_START) { resultCode, resultData ->
             val (status, response) = if (resultCode == SUCCESS) {
                 SUCCESS to database.allKeys
@@ -122,7 +126,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             .setTransmissionRiskLevel(transmission_risk_level ?: 0)
             .build()
 
-    private fun storeDiagnosisKeyExport(token: String, export: TemporaryExposureKeyExport): Int {
+    private fun storeDiagnosisKeyExport(token: String, export: TemporaryExposureKeyExport): Int = ExposureDatabase.with(context) { database ->
         Log.d(TAG, "Importing keys from file ${export.start_timestamp?.let { Date(it * 1000) }} to ${export.end_timestamp?.let { Date(it * 1000) }}")
         for (key in export.keys) {
             database.storeDiagnosisKey(packageName, token, key.toKey())
@@ -130,13 +134,12 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         for (key in export.revised_keys) {
             database.updateDiagnosisKey(packageName, token, key.toKey())
         }
-        return export.keys.size + export.revised_keys.size
+        export.keys.size + export.revised_keys.size
     }
 
     override fun provideDiagnosisKeys(params: ProvideDiagnosisKeysParams) {
-        database.ref()
         Thread(Runnable {
-            try {
+            ExposureDatabase.with(context) { database ->
                 if (params.configuration != null) {
                     database.storeConfiguration(packageName, params.token, params.configuration)
                 }
@@ -205,13 +208,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 } catch (e: Exception) {
                     Log.w(TAG, "Callback failed", e)
                 }
-            } finally {
-                database.unref()
             }
         }).start()
     }
 
-    override fun getExposureSummary(params: GetExposureSummaryParams) {
+    override fun getExposureSummary(params: GetExposureSummaryParams): Unit = ExposureDatabase.with(context) { database ->
         val configuration = database.loadConfiguration(packageName, params.token)
         if (configuration == null) {
             try {
@@ -219,7 +220,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             } catch (e: Exception) {
                 Log.w(TAG, "Callback failed", e)
             }
-            return
+            return@with
         }
         val exposures = database.findAllMeasuredExposures(packageName, params.token)
         val response = ExposureSummary.ExposureSummaryBuilder()
@@ -251,7 +252,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
-    override fun getExposureInformation(params: GetExposureInformationParams) {
+    override fun getExposureInformation(params: GetExposureInformationParams): Unit = ExposureDatabase.with(context) { database ->
         // TODO: Notify user?
         val configuration = database.loadConfiguration(packageName, params.token)
         if (configuration == null) {
@@ -260,7 +261,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             } catch (e: Exception) {
                 Log.w(TAG, "Callback failed", e)
             }
-            return
+            return@with
         }
         val response = database.findAllMeasuredExposures(packageName, params.token).map {
             it.toExposureInformation(configuration)

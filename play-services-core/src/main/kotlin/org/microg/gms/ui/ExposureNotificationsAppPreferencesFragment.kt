@@ -47,14 +47,14 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
 
     fun updateContent() {
         packageName?.let { packageName ->
-            val database = ExposureDatabase(requireContext())
-            var str = getString(R.string.pref_exposure_app_checks_summary, database.countMethodCalls(packageName, "provideDiagnosisKeys"))
-            val lastCheckTime = database.lastMethodCall(packageName, "provideDiagnosisKeys")
-            if (lastCheckTime != null && lastCheckTime != 0L) {
-                str += "\n" + getString(R.string.pref_exposure_app_last_check_summary, DateUtils.getRelativeDateTimeString(context,  lastCheckTime, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME))
+            ExposureDatabase.with(requireContext()) { database ->
+                var str = getString(R.string.pref_exposure_app_checks_summary, database.countMethodCalls(packageName, "provideDiagnosisKeys"))
+                val lastCheckTime = database.lastMethodCall(packageName, "provideDiagnosisKeys")
+                if (lastCheckTime != null && lastCheckTime != 0L) {
+                    str += "\n" + getString(R.string.pref_exposure_app_last_check_summary, DateUtils.getRelativeDateTimeString(context, lastCheckTime, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME))
+                }
+                checks.summary = str
             }
-            checks.summary = str
-            database.close()
         }
     }
 }

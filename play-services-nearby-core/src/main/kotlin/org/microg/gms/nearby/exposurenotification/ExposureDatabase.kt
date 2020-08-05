@@ -24,22 +24,8 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
 
-class ExposureDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
-    private val refCount = AtomicInteger(0)
-
-    fun ref(): ExposureDatabase {
-        refCount.incrementAndGet()
-        return this
-    }
-
-    fun unref() {
-        val nu = refCount.decrementAndGet()
-        if (nu == 0) {
-            close()
-        } else if (nu < 0) {
-            throw RuntimeException("ref/unref mismatch")
-        }
-    }
+class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+    private var refCount = 0
 
     override fun onCreate(db: SQLiteDatabase) {
         onUpgrade(db, 0, DB_VERSION)
@@ -447,6 +433,35 @@ class ExposureDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
 
     fun generateCurrentPayload(metadata: ByteArray) = currentTemporaryExposureKey.generatePayload(currentIntervalNumber.toInt(), metadata)
 
+    override fun getWritableDatabase(): SQLiteDatabase {
+        if (this != instance) {
+            throw IllegalStateException("Tried to open writable database from secondary instance")
+        }
+        val db = super.getWritableDatabase()
+        db.enableWriteAheadLogging()
+        return db
+    }
+
+    override fun close() {
+        synchronized(Companion) {
+            super.close()
+            instance = null
+        }
+    }
+
+    fun ref(): ExposureDatabase = synchronized(Companion) {
+        refCount++
+        return this
+    }
+
+    fun unref() = synchronized(Companion) {
+        refCount--
+        if (refCount == 0) {
+            close()
+        } else if (refCount < 0) {
+            throw IllegalStateException("ref/unref mismatch")
+        }
+    }
 
     companion object {
         private const val DB_NAME = "exposure.db"
@@ -457,6 +472,23 @@ class ExposureDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, nu
         private const val TABLE_TEK_CHECK = "tek_check"
         private const val TABLE_DIAGNOSIS = "diagnosis"
         private const val TABLE_CONFIGURATIONS = "configurations"
+
+        private var instance: ExposureDatabase? = null
+        fun ref(context: Context): ExposureDatabase = synchronized(this) {
+            if (instance == null) {
+                instance = ExposureDatabase(context.applicationContext)
+            }
+            instance!!.ref()
+        }
+
+        fun <T> with(context: Context, call: (ExposureDatabase) -> T): T {
+            val it = ref(context)
+            try {
+                return call(it)
+            } finally {
+                it.unref()
+            }
+        }
     }
 }
 

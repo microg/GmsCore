@@ -40,7 +40,7 @@ class AdvertiserService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        database = ExposureDatabase(this)
+        database = ExposureDatabase.ref(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -56,7 +56,7 @@ class AdvertiserService : LifecycleService() {
     override fun onDestroy() {
         super.onDestroy()
         stopAdvertising()
-        database.close()
+        database.unref()
     }
 
     fun startAdvertising() {

@@ -15,12 +15,12 @@ import android.os.IBinder
 @TargetApi(21)
 class ScannerService : Service() {
     private var started = false
-    private lateinit var db: ExposureDatabase
+    private lateinit var database: ExposureDatabase
     private val callback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             val data = result?.scanRecord?.serviceData?.get(SERVICE_UUID) ?: return
             if (data.size < 16) return // Ignore invalid advertisements
-            db.noteAdvertisement(data.sliceArray(0..15), data.drop(16).toByteArray(), result.rssi)
+            database.noteAdvertisement(data.sliceArray(0..15), data.drop(16).toByteArray(), result.rssi)
         }
     }
     private val scanner: BluetoothLeScanner
@@ -36,9 +36,15 @@ class ScannerService : Service() {
         return START_STICKY
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        database = ExposureDatabase.ref(this)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         stopScan()
+        database.unref()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -48,7 +54,6 @@ class ScannerService : Service() {
     @Synchronized
     private fun startScan() {
         if (started) return
-        db = ExposureDatabase(this)
         scanner.startScan(
                 listOf(ScanFilter.Builder().setServiceUuid(SERVICE_UUID).setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0)).build()),
                 ScanSettings.Builder().build(),
@@ -61,7 +66,6 @@ class ScannerService : Service() {
     private fun stopScan() {
         if (!started) return
         scanner.stopScan(callback)
-        db.close()
         started = false
     }
 }

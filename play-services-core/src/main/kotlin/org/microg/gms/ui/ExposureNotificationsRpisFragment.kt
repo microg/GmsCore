@@ -22,12 +22,6 @@ import kotlin.math.roundToInt
 class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     private lateinit var histogramCategory: PreferenceCategory
     private lateinit var histogram: BarChartPreference
-    private lateinit var database: ExposureDatabase
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        database = ExposureDatabase(requireContext())
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications_rpis)
@@ -43,28 +37,24 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
         updateChart()
     }
 
-    override fun onPause() {
-        super.onPause()
-        database.close()
-    }
-
     fun updateChart() {
         lifecycleScope.launchWhenResumed {
             val (totalRpiCount, rpiHistogram) = withContext(Dispatchers.IO) {
-                val map = linkedMapOf<String, Float>()
-                val lowestDate = Math.round((Date().time / 24 / 60 / 60 / 1000 - 13).toDouble()) * 24 * 60 * 60 * 1000
-                for (i in 0..13) {
-                    val date = Calendar.getInstance().apply { this.time = Date(lowestDate + i * 24 * 60 * 60 * 1000) }.get(Calendar.DAY_OF_MONTH)
-                    map[date.toString()] = 0f
+                ExposureDatabase.with(requireContext()) { database ->
+                    val map = linkedMapOf<String, Float>()
+                    val lowestDate = Math.round((Date().time / 24 / 60 / 60 / 1000 - 13).toDouble()) * 24 * 60 * 60 * 1000
+                    for (i in 0..13) {
+                        val date = Calendar.getInstance().apply { this.time = Date(lowestDate + i * 24 * 60 * 60 * 1000) }.get(Calendar.DAY_OF_MONTH)
+                        map[date.toString()] = 0f
+                    }
+                    for (entry in database.rpiHistogram) {
+                        val time = Date(entry.key * 24 * 60 * 60 * 1000)
+                        val date = Calendar.getInstance().apply { this.time = time }.get(Calendar.DAY_OF_MONTH)
+                        map[date.toString()] = entry.value.toFloat()
+                    }
+                    val totalRpiCount = database.totalRpiCount
+                    totalRpiCount to map
                 }
-                for (entry in database.rpiHistogram) {
-                    val time = Date(entry.key * 24 * 60 * 60 * 1000)
-                    val date = Calendar.getInstance().apply { this.time = time }.get(Calendar.DAY_OF_MONTH)
-                    map[date.toString()] = entry.value.toFloat()
-                }
-                val totalRpiCount = database.totalRpiCount
-                database.close()
-                totalRpiCount to map
             }
             histogramCategory.title = getString(R.string.prefcat_exposure_rpis_histogram_title, totalRpiCount)
             histogram.labelsFormatter = { it.roundToInt().toString() }
