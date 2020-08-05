@@ -370,13 +370,7 @@
                 <action android:name="com.google.android.gms.icing.INDEX_SERVICE" />
             </intent-filter>
         </service>
-        <service
-            android:name="com.google.android.gms.analytics.service.AnalyticsService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.analytics.service.START" />
-            </intent-filter>
-        </service>
+
         <service android:name="org.microg.gms.playlog.PlayLogService">
             <intent-filter>
                 <action android:name="com.google.android.gms.playlog.service.START" />
