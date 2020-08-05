@@ -458,7 +458,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     }
 
-    override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper) {
+    override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) {
         Log.d(TAG, "unimplemented Method: snapshot")
 
     }
