@@ -53,23 +53,13 @@ public class SettingsFragment extends ResourceSettingsFragment
             NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openAbout);
             return true;
         });
-        findPreference(PREF_CAST_ENABLED).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener()
-        {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue)
-            {
-                if ((boolean) newValue)
-                    getContext().getPackageManager().setComponentEnabledSetting(
-                            new ComponentName(getContext().getApplicationContext(), CastMediaRouteProviderService.class),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP);
-                else
-                    getContext().getPackageManager().setComponentEnabledSetting(
-                            new ComponentName(getContext().getApplicationContext(), CastMediaRouteProviderService.class),
-                            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                            PackageManager.DONT_KILL_APP);
-                return true;
-            }
+        findPreference(PREF_CAST_ENABLED).setOnPreferenceChangeListener((preference, newValue) -> {
+            boolean isEnabled = (boolean) newValue;
+            getContext().getPackageManager().setComponentEnabledSetting(
+                    new ComponentName(getContext().getApplicationContext(), CastMediaRouteProviderService.class),
+                    isEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+            return true;
         });
         if (GcmPrefs.get(getContext()).isEnabled())
         {
