@@ -25,7 +25,7 @@ public class SettingsFragment extends ResourceSettingsFragment
     public static final String PREF_SNET = "pref_snet";
     public static final String PREF_UNIFIEDNLP = "pref_unifiednlp";
     public static final String PREF_CHECKIN = "pref_checkin";
-    public static final String PREF_CAST_ENABLED = "pref_cast_enabled";
+    public static final String PREF_CAST_DOUBLE_FIX_ENABLED = "pref_cast_double_fix_enabled";
 
     public SettingsFragment()
     {
@@ -53,11 +53,11 @@ public class SettingsFragment extends ResourceSettingsFragment
             NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openAbout);
             return true;
         });
-        findPreference(PREF_CAST_ENABLED).setOnPreferenceChangeListener((preference, newValue) -> {
+        findPreference(PREF_CAST_DOUBLE_FIX_ENABLED).setOnPreferenceChangeListener((preference, newValue) -> {
             boolean isEnabled = (boolean) newValue;
             getContext().getPackageManager().setComponentEnabledSetting(
                     new ComponentName(getContext().getApplicationContext(), CastMediaRouteProviderService.class),
-                    isEnabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    isEnabled ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP);
             return true;
         });
