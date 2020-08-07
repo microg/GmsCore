@@ -42,6 +42,11 @@
                 android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
                 android:targetPackage="com.mgoogle.android.gms" />
         </Preference>
+        <SwitchPreferenceCompat
+            android:key="pref_cast_enabled"
+            android:title="@string/pref_cast_service"
+            android:icon="@drawable/ic_cast_black"
+            android:defaultValue="true"/>
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference
