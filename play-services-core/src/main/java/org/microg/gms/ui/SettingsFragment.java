@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
@@ -22,8 +23,6 @@ public class SettingsFragment extends ResourceSettingsFragment
 
     public static final String PREF_ABOUT = "pref_about";
     public static final String PREF_GCM = "pref_gcm";
-    public static final String PREF_SNET = "pref_snet";
-    public static final String PREF_UNIFIEDNLP = "pref_unifiednlp";
     public static final String PREF_CHECKIN = "pref_checkin";
     public static final String PREF_CAST_DOUBLE_FIX_ENABLED = "pref_cast_double_fix_enabled";
 
@@ -50,7 +49,7 @@ public class SettingsFragment extends ResourceSettingsFragment
     {
         findPreference(PREF_ABOUT).setSummary(getString(R.string.about_version_str, AboutFragment.getSelfVersion(getContext())));
         findPreference(PREF_ABOUT).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openAbout);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openAbout, null);
             return true;
         });
         findPreference(PREF_CAST_DOUBLE_FIX_ENABLED).setOnPreferenceChangeListener((preference, newValue) -> {
@@ -72,14 +71,14 @@ public class SettingsFragment extends ResourceSettingsFragment
             findPreference(PREF_GCM).setSummary(R.string.service_status_disabled_short);
         }
         findPreference(PREF_GCM).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openGcmSettings);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openGcmSettings, null);
             return true;
         });
 
         boolean checkinEnabled = CheckinPrefs.get(getContext()).isEnabled();
         findPreference(PREF_CHECKIN).setSummary(checkinEnabled ? R.string.service_status_enabled_short : R.string.service_status_disabled_short);
         findPreference(PREF_CHECKIN).setOnPreferenceClickListener(preference -> {
-            NavHostFragment.findNavController(SettingsFragment.this).navigate(R.id.openCheckinSettings);
+            UtilsKt.navigate(NavHostFragment.findNavController(SettingsFragment.this), getContext(), R.id.openCheckinSettings, null);
             return true;
         });
     }

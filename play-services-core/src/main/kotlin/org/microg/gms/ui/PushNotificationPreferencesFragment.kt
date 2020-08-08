@@ -47,7 +47,7 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
         pushAppsAll = preferenceScreen.findPreference("pref_push_apps_all") ?: pushAppsAll
         pushAppsNone = preferenceScreen.findPreference("pref_push_apps_none") ?: pushAppsNone
         pushAppsAll.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(R.id.openAllGcmApps)
+            findNavController().navigate(requireContext(), R.id.openAllGcmApps)
             true
         }
     }
@@ -89,7 +89,7 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
                     pref.title = applicationInfo.loadLabel(context.packageManager)
                     pref.icon = applicationInfo.loadIcon(context.packageManager)
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        findNavController().navigate(R.id.openGcmAppDetails, bundleOf(
+                        findNavController().navigate(requireContext(), R.id.openGcmAppDetails, bundleOf(
                                 "package" to app.packageName
                         ))
                         true

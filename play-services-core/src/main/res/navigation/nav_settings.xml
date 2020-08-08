@@ -9,27 +9,9 @@
         android:id="@+id/settingsFragment"
         android:name="org.microg.gms.ui.SettingsFragment"
         android:label="@string/gms_settings_name">
-        <action
-            android:id="@+id/openCheckinSettings"
-            app:destination="@id/checkinFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
-        <action
-            android:id="@+id/openGcmSettings"
-            app:destination="@id/gcmFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
-        <action
-            android:id="@+id/openAbout"
-            app:destination="@id/aboutFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+        <action android:id="@+id/openCheckinSettings" app:destination="@id/checkinFragment" />
+        <action android:id="@+id/openGcmSettings" app:destination="@id/gcmFragment" />
+        <action android:id="@+id/openAbout" app:destination="@id/aboutFragment" />
     </fragment>
 
     <fragment
@@ -44,25 +26,13 @@
         tools:layout="@layout/push_notification_fragment">
         <action
             android:id="@+id/openGcmAppDetails"
-            app:destination="@id/gcmAppFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAppFragment" />
         <action
             android:id="@+id/openAllGcmApps"
-            app:destination="@id/gcmAllAppsFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAllAppsFragment" />
         <action
             android:id="@+id/openGcmAdvancedSettings"
-            app:destination="@id/gcmAdvancedFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAdvancedFragment" />
     </fragment>
     <fragment
         android:id="@+id/gcmAllAppsFragment"
@@ -70,11 +40,7 @@
         android:label="Apps using push notifications">
         <action
             android:id="@+id/openGcmAppDetailsFromAll"
-            app:destination="@id/gcmAppFragment"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit"
-            app:popEnterAnim="@anim/fragment_close_enter"
-            app:popExitAnim="@anim/fragment_close_exit" />
+            app:destination="@id/gcmAppFragment" />
     </fragment>
     <fragment
         android:id="@+id/gcmAppFragment"
