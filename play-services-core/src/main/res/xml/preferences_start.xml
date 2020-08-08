@@ -42,12 +42,6 @@
                 android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
                 android:targetPackage="com.mgoogle.android.gms" />
         </Preference>
-        <SwitchPreferenceCompat
-            android:key="pref_cast_double_fix_enabled"
-            android:title="@string/pref_cast_double_fix"
-            android:icon="@drawable/ic_cast_black"
-            android:summary="@string/pref_cast_double_fix_summary"
-            android:defaultValue="false"/>
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference
