@@ -45,7 +45,7 @@
                     android:layout_height="36dip"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_cloud_bell"
-                    android:tint="?attr/colorAccent">
+                    app:tint="?attr/colorAccent">
                 </ImageView>
 
                 <TextView
