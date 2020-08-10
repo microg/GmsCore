@@ -55,11 +55,6 @@
 
     <!-- Self check -->
 
-    <string name="self_check_cat_system">Систем</string>
-
-    <string name="self_check_name_battery_optimizations">Игнорисана оптимизација батерије:</string>
-    <string name="self_check_resolution_battery_optimizations">Тапните овде да бисте искључили оптимизацију батерије. Ако не урадите ово апликације ће можда лоше да се понашају</string>
-
     <!-- Settings strings -->
 
     <string name="prefcat_about">О програму</string>
@@ -75,11 +70,9 @@
     <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Гуглове облак поруке (Google Cloud Messaging) је провајдер гураних обавештења (push) којег користе многе апликације. Да бисте га користили укључите пријаву уређаја.</string>
-    <string name="pref_gcm_apps_title">Апликације које користе Гуглове облак поруке</string>
     <string name="pref_about_title">О језгру микроГ услуга</string>
 
     <string name="gcm_unregister_app">Одјави</string>
-    <string name="gcm_not_registered">Није пријављена</string>
     <string name="gcm_no_message_yet">Ниједна примљена порука до сад</string>
     <string name="gcm_last_message_at">Последња порука: %1$s</string>
     <string name="gcm_registered">Пријављена</string>

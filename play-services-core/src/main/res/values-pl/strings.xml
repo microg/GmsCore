@@ -47,7 +47,6 @@ To zajmie kilka minut.</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
 
     <string name="service_status_disabled">Nieaktywny</string>
-    <string name="service_status_enabled">Aktywny</string>
     <string name="service_status_automatic">Automatyczny</string>
 
     <string name="menu_advanced">Zaawansowane</string>
@@ -59,11 +58,6 @@ To zajmie kilka minut.</string>
     <string name="network_type_other">Inne sieci</string>
 
     <!-- Self check -->
-
-    <string name="self_check_cat_system">System</string>
-
-    <string name="self_check_name_battery_optimizations">Ignorowanie optymalizacji baterii:</string>
-    <string name="self_check_resolution_battery_optimizations">Dotknji, aby wyłączyć optymalizację baterii. W przeciwnym razie aplikacje mogą nie działać prawidłowo.</string>
 
     <!-- Settings strings -->
 
@@ -83,14 +77,12 @@ To zajmie kilka minut.</string>
     <string name="pref_auth_trust_google_summary">Po wyłączeniu, do użytkownika kierowane jest pytanie przed wysyłaniem prośby o autoryzację do Google. Niektóre aplikacje nie będą mogły skorzystać z konta Google po wyłączeniu tej opcji.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Aby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
-    <string name="pref_gcm_apps_title">Aplikacje korzystające z Google Cloud Messaging</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
     <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji w usłudze powiadomień ‘push’</string>
 
     <string name="pref_about_title">O usłudze Vanced microG</string>
 
     <string name="gcm_unregister_app">Wyrejestruj</string>
-    <string name="gcm_not_registered">Niezarejestrowany</string>
     <string name="gcm_no_message_yet">Jak dotąd nie otrzymano wiadomości</string>
     <string name="gcm_last_message_at">Ostatnia wiadomość: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Zarejestrowany</string>

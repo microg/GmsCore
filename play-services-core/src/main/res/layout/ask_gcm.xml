@@ -22,13 +22,11 @@
     android:clipToPadding="false">
 
     <LinearLayout
-        android:id="@+id/dialog_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/desc_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingEnd="16dip"
@@ -38,13 +36,11 @@
             android:paddingTop="18dip">
 
             <LinearLayout
-                android:id="@+id/perm_desc_root"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/permission_icon"
                     android:layout_width="36dip"
                     android:layout_height="36dip"
                     android:scaleType="fitCenter"
@@ -77,7 +73,6 @@
             android:paddingStart="20dip">
 
             <android.support.v7.widget.ButtonBarLayout
-                android:id="@+id/button_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
@@ -88,7 +83,6 @@
                 android:paddingTop="4dp">
 
                 <TextView
-                    android:id="@+id/current_page_text"
                     style="?android:attr/textAppearanceSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

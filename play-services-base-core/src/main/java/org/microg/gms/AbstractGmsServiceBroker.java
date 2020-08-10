@@ -43,80 +43,9 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 
     @Deprecated
     @Override
-    public void getPlusService(IGmsCallbacks callback, int versionCode, String packageName,
-                               String authPackage, String[] scopes, String accountName, Bundle params)
-            throws RemoteException {
-        Bundle extras = params == null ? new Bundle() : params;
-        extras.putString("auth_package", authPackage);
-        callGetService(GmsService.PLUS, callback, versionCode, packageName, extras, accountName, scopes);
-    }
-
-    @Deprecated
-    @Override
-    public void getPanoramaService(IGmsCallbacks callback, int versionCode, String packageName,
-                                   Bundle params) throws RemoteException {
-        callGetService(GmsService.PANORAMA, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getAppDataSearchService(IGmsCallbacks callback, int versionCode, String packageName)
-            throws RemoteException {
-        callGetService(GmsService.INDEX, callback, versionCode, packageName);
-    }
-
-    @Deprecated
-    @Override
-    public void getWalletService(IGmsCallbacks callback, int versionCode) throws RemoteException {
-        getWalletServiceWithPackageName(callback, versionCode, null);
-    }
-
-    @Deprecated
-    @Override
     public void getPeopleService(IGmsCallbacks callback, int versionCode, String packageName,
                                  Bundle params) throws RemoteException {
         callGetService(GmsService.PEOPLE, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getReportingService(IGmsCallbacks callback, int versionCode, String packageName,
-                                    Bundle params) throws RemoteException {
-        callGetService(GmsService.LOCATION_REPORTING, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getLocationService(IGmsCallbacks callback, int versionCode, String packageName,
-                                   Bundle params) throws RemoteException {
-        callGetService(GmsService.LOCATION, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getGoogleLocationManagerService(IGmsCallbacks callback, int versionCode,
-                                                String packageName, Bundle params) throws RemoteException {
-        callGetService(GmsService.LOCATION_MANAGER, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getGamesService(IGmsCallbacks callback, int versionCode, String packageName,
-                                String accountName, String[] scopes, String gamePackageName,
-                                IBinder popupWindowToken, String desiredLocale, Bundle params)
-            throws RemoteException {
-        Bundle extras = params == null ? new Bundle() : params;
-        extras.putString("com.google.android.gms.games.key.gamePackageName", gamePackageName);
-        extras.putString("com.google.android.gms.games.key.desiredLocale", desiredLocale);
-        //extras.putParcelable("com.google.android.gms.games.key.popupWindowToken", popupWindowToken);
-        callGetService(GmsService.GAMES, callback, versionCode, packageName, extras, accountName, scopes);
-    }
-
-    @Deprecated
-    @Override
-    public void getAppStateService(IGmsCallbacks callback, int versionCode, String packageName,
-                                   String accountName, String[] scopes) throws RemoteException {
-        callGetService(GmsService.APPSTATE, callback, versionCode, packageName, null, accountName, scopes);
     }
 
     @Deprecated
@@ -128,37 +57,9 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 
     @Deprecated
     @Override
-    public void getAdMobService(IGmsCallbacks callback, int versionCode, String packageName,
-                                Bundle params) throws RemoteException {
-        callGetService(GmsService.ADREQUEST, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getDroidGuardService(IGmsCallbacks callback, int versionCode, String packageName,
-                                     Bundle params) throws RemoteException {
-        callGetService(GmsService.DROIDGUARD, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getLockboxService(IGmsCallbacks callback, int versionCode, String packageName,
-                                  Bundle params) throws RemoteException {
-        callGetService(GmsService.LOCKBOX, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
     public void getCastMirroringService(IGmsCallbacks callback, int versionCode, String packageName,
                                         Bundle params) throws RemoteException {
         callGetService(GmsService.CAST_MIRRORING, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
-    public void getNetworkQualityService(IGmsCallbacks callback, int versionCode,
-                                         String packageName, Bundle params) throws RemoteException {
-        callGetService(GmsService.NETWORK_QUALITY, callback, versionCode, packageName, params);
     }
 
     @Deprecated
@@ -170,13 +71,6 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 
     @Deprecated
     @Override
-    public void getGoogleFeedbackService(IGmsCallbacks callback, int versionCode,
-                                         String packageName, Bundle params) throws RemoteException {
-        callGetService(GmsService.FEEDBACK, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
     public void getCastService(IGmsCallbacks callback, int versionCode, String packageName,
                                IBinder binder, Bundle params) throws RemoteException {
         callGetService(GmsService.CAST, callback, versionCode, packageName, params);
@@ -184,43 +78,9 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 
     @Deprecated
     @Override
-    public void getDriveService(IGmsCallbacks callback, int versionCode, String packageName,
-                                String[] scopes, String accountName, Bundle params) throws RemoteException {
-        callGetService(GmsService.DRIVE, callback, versionCode, packageName, params, accountName, scopes);
-    }
-
-    @Deprecated
-    @Override
-    public void getLightweightAppDataSearchService(IGmsCallbacks callback, int versionCode,
-                                                   String packageName) throws RemoteException {
-        callGetService(GmsService.LIGHTWEIGHT_INDEX, callback, versionCode, packageName);
-    }
-
-    @Deprecated
-    @Override
-    public void getSearchAdministrationService(IGmsCallbacks callback, int versionCode,
-                                               String packageName) throws RemoteException {
-        callGetService(GmsService.SEARCH_ADMINISTRATION, callback, versionCode, packageName);
-    }
-
-    @Deprecated
-    @Override
-    public void getAutoBackupService(IGmsCallbacks callback, int versionCode, String packageName,
-                                     Bundle params) throws RemoteException {
-        callGetService(GmsService.PHOTO_AUTO_BACKUP, callback, versionCode, packageName, params);
-    }
-
-    @Deprecated
-    @Override
     public void getAddressService(IGmsCallbacks callback, int versionCode, String packageName)
             throws RemoteException {
         callGetService(GmsService.ADDRESS, callback, versionCode, packageName);
-    }
-
-    @Deprecated
-    @Override
-    public void getWalletServiceWithPackageName(IGmsCallbacks callback, int versionCode, String packageName) throws RemoteException {
-        callGetService(GmsService.WALLET, callback, versionCode, packageName);
     }
 
     private void callGetService(GmsService service, IGmsCallbacks callback, int gmsVersion,
