@@ -18,9 +18,10 @@ This fork tweaks MicroG to be usable by applications that require Google authent
   - Feedback
   - Games
   - Location
-  - Maps & Location
+  - Maps
   - SafetyNet
   - Self-Check
+  - Search
   - TapAndPay
   - Wallet
   - Wear-Api
