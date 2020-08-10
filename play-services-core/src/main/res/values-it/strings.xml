@@ -102,7 +102,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Chiedi conferma all\'utente prima di registrare una nuova applicazione per le notifiche push.</string>
 
     <string name="pref_about_title">A proposito di microG</string>
-
+  
     <string name="gcm_status_pref_auto">Automatico</string>
     <string name="gcm_status_pref_manual">Manuale</string>
     <string name="gcm_status_pref_sec">secondi</string>
