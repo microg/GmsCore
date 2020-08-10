@@ -95,13 +95,13 @@
                     android:visibility="invisible">
                 </TextView>
 
-                <androidx.legacy.widget.Space
+                <View
                     android:id="@*android:id/spacer"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:visibility="invisible">
-                </androidx.legacy.widget.Space>
+                </View>
 
                 <Button
                     android:id="@+id/permission_deny_button"
