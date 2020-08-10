@@ -39,7 +39,6 @@ dependencies {
     implementation project(':play-services-cast-api')
 
     // AndroidX UI
-    implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
     implementation "androidx.preference:preference:$preferenceVersion"

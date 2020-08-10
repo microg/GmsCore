@@ -16,6 +16,7 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clipChildren="false"
@@ -72,7 +73,7 @@
             android:paddingRight="16dip"
             android:paddingStart="20dip">
 
-            <android.support.v7.widget.ButtonBarLayout
+            <androidx.appcompat.widget.ButtonBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
@@ -94,13 +95,13 @@
                     android:visibility="invisible">
                 </TextView>
 
-                <android.support.v4.widget.Space
+                <androidx.legacy.widget.Space
                     android:id="@*android:id/spacer"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:visibility="invisible">
-                </android.support.v4.widget.Space>
+                </androidx.legacy.widget.Space>
 
                 <Button
                     android:id="@+id/permission_deny_button"
@@ -118,7 +119,7 @@
                     android:text="@string/allow">
                 </Button>
 
-            </android.support.v7.widget.ButtonBarLayout>
+            </androidx.appcompat.widget.ButtonBarLayout>
 
         </LinearLayout>
 
