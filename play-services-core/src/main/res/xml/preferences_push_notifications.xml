@@ -28,7 +28,7 @@
         <Preference
             android:key="pref_push_status"
             android:selectable="false"
-            android:title="Status"
+            android:title="@string/prefcat_status_title"
             tools:summary="Connected since 15 minutes ago" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">

@@ -47,7 +47,6 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
 
     <string name="service_status_disabled">Désactivé</string>
-    <string name="service_status_enabled">Activé</string>
     <string name="service_status_automatic">Automatique</string>
 
     <string name="menu_advanced">Avancé</string>
@@ -59,11 +58,6 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="network_type_other">Autres réseaux</string>
 
     <!-- Self check -->
-
-    <string name="self_check_cat_system">Système</string>
-
-    <string name="self_check_name_battery_optimizations">Optimisations de la batterie ignorées : </string>
-    <string name="self_check_resolution_battery_optimizations">Appuyez ici pour désactiver les optimisations de la batterie. Des applications peuvent mal se comporter si vous ne le faites pas.</string>
 
     <!-- Settings strings -->
 
@@ -83,14 +77,12 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_auth_trust_google_summary">Si désactivé, l’utilisateur est interrogé avant que la demande d’autorisation d’une application soit envoyée à Google. Certaines applications échoueront à utiliser le compte Google si ceci est désactivé.</string>
 
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging est un fournisseur de notifications push utilisé par beaucoup d’applications tierces. Pour l’utiliser vous devez activer l’enregistrement du terminal.</string>
-    <string name="pref_gcm_apps_title">Applications utilisant Google Cloud Messaging</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirmation pour les nouvelles applications</string>
     <string name="pref_gcm_confirm_new_apps_summary">Demander avant d’enregistrer une nouvelle application auprès de Google Cloud Messaging</string>
 
     <string name="pref_about_title">À propos de microG Services Core</string>
 
     <string name="gcm_unregister_app">Désenregistrer</string>
-    <string name="gcm_not_registered">Non enregistrée</string>
     <string name="gcm_no_message_yet">Aucun message reçu pour l’instant</string>
     <string name="gcm_last_message_at">Dernier message : <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Enregistrée</string>

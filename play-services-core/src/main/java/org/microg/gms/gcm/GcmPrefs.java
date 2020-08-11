@@ -43,8 +43,8 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     public static final String PREF_LEARNT_WIFI = "gcm_learnt_wifi";
     public static final String PREF_LEARNT_OTHER = "gcm_learnt_other";
 
-    private static final int MIN_INTERVAL = 5 * 60 * 1000; // 5 minutes
-    private static final int MAX_INTERVAL = 30 * 60 * 1000; // 30 minutes
+    private static final int MIN_INTERVAL = 1 * 60 * 1000; // 1 minute
+    private static final int MAX_INTERVAL = 3 * 60 * 1000; // 3 minutes
 
     private static GcmPrefs INSTANCE;
 

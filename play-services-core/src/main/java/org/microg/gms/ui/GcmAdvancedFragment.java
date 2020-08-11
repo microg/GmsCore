@@ -69,22 +69,22 @@ public class GcmAdvancedFragment extends ResourceSettingsFragment {
             if (state == 0) {
                 int heartbeat = prefs.getHeartbeatMsFor(preference.getKey(), true);
                 if (heartbeat == 0) {
-                    preference.setSummary("ON / Automatic");
+                    preference.setSummary(getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_auto));
                 } else {
-                    preference.setSummary("ON / Automatic: " + getHeartbeatString(heartbeat));
+                    preference.setSummary(getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_auto) + ": " + getHeartbeatString(heartbeat));
                 }
             } else if (state == -1) {
-                preference.setSummary("OFF");
+                preference.setSummary(getString(R.string.service_status_disabled_short));
             } else {
-                preference.setSummary("ON / Manual: " + getHeartbeatString(state * 60000));
+                preference.setSummary(getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_manual) + ": " + getHeartbeatString(state * 60000));
             }
         }
     }
 
     private String getHeartbeatString(int heartbeatMs) {
         if (heartbeatMs < 120000) {
-            return (heartbeatMs / 1000) + " seconds";
+            return (heartbeatMs / 1000) + " " + getString(R.string.gcm_status_pref_sec);
         }
-        return (heartbeatMs / 60000) + " minutes";
+        return (heartbeatMs / 60000) + " " + getString(R.string.gcm_status_pref_min);
     }
 }

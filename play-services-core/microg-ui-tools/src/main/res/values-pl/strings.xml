@@ -21,12 +21,6 @@
     <string name="about_name_version_str">%1$s %2$s</string>
     <string name="about_default_license">Wszelkie prawa zastrzeżone.</string>
 
-    <string name="self_check_title">Samo-sprawdzenie</string>
-
-    <string name="self_check_cat_permissions">Udzielono uprawnień</string>
-    <string name="self_check_name_permission">Uprawnienie do %1$s:</string>
-    <string name="self_check_resolution_permission">Stuknij, aby udzielić uprawnienia na %1$s. Nieudzielenie uprawnienia może powodować problemy z aplikacjami.</string>
-
     <string name="about_root_title">Demo microG UI</string>
     <string name="about_root_summary">Podsumowanie</string>
     <string name="about_root_version">Wersja v0.1.0</string>

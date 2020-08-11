@@ -53,11 +53,10 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="service_name_checkin">Registrazione del dispositivo</string>
     <string name="service_name_mcs">Messaggistica cloud</string>
 
-    <string name="service_status_disabled">Disabilitato</string>
-    <string name="service_status_enabled">Abilitato</string>
+    <string name="service_status_disabled">Disattivato</string>
     <string name="service_status_automatic">Automatico</string>
-    <string name="service_status_enabled_short">Abilitato</string>
-    <string name="service_status_disabled_short">Disabilitato</string>
+    <string name="service_status_enabled_short">Attivo</string>
+    <string name="service_status_disabled_short">Disattivato</string>
 
     <string name="menu_advanced">Impostazioni avanzate</string>
     <string name="list_no_item_none">Nessuna</string>
@@ -70,8 +69,11 @@ Questa operazione può richiedere alcuni minuti."</string>
 
     <!-- Settings strings -->
 
-    <string name="cond_gcm_bat_title">Ottimizzazioni della batteria abilitate</string>
-    <string name="cond_gcm_bat_summary">Hai abilitato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti selezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
+    <string name="prefcat_about">A proposito di microG</string>
+    <string name="prefcat_google_services">Servizi Google</string>
+
+    <string name="cond_gcm_bat_title">Ottimizzazioni della batteria attive</string>
+    <string name="cond_gcm_bat_summary">Hai attivato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono attive per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti selezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
     <string name="cond_gcm_bat_action">Ignora ottimizzazioni</string>
     
     <string name="prefs_account">Preferenze dell\'account</string>
@@ -79,10 +81,11 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="prefs_account_security">Accesso e sicurezza</string>
 
     <string name="pref_auth_trust_google_title">Dai fiducia a Google per i permessi alle applicazioni</string>
-    <string name="pref_auth_trust_google_summary">Quando questa opzione è disabilitata, viene interpellato l\'utente prima che ogni richiesta di autorizzazione da parte delle applicazioni venga inviata a Google. Alcune applicazioni potrebbero fallire nell\'utilizzare l\'account Google se questa opzione è disabilitata.</string>
+    <string name="pref_auth_trust_google_summary">Quando questa opzione è disattivata, viene interpellato l\'utente prima che ogni richiesta di autorizzazione da parte delle applicazioni venga inviata a Google. Alcune applicazioni potrebbero fallire nell\'utilizzare l\'account Google se questa opzione è disattivata.</string>
     <string name="pref_auth_visible_title">Autorizza le applicazioni a visualizzare gli account</string>
-    <string name="pref_auth_visible_summary">Quando questa opzione è abilitata, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica dell\'account Google senza autorizzazione preventiva.</string>
+    <string name="pref_auth_visible_summary">Quando questa opzione è attiva, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica dell\'account Google senza autorizzazione preventiva.</string>
 
+    <string name="pref_switcher_title">Registra dispositivo</string>
     <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. Vengono rimossi da microG alcuni bit funzionali all\'identificazione dai dati di registrazione, oltre al nome dell\'account Google.</string>
 
     <string name="checkin_not_registered">Non registrato</string>
@@ -93,15 +96,18 @@ Questa operazione può richiedere alcuni minuti."</string>
 
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Aggiungi un account Google</string>
-    <string name="pref_gcm_enable_mcs_summary">Il servizio di messaggistica cloud di Google è un fornitore di notifiche push utilizzato da molte applicazioni di terze parti. Per poterlo utlizzare devi abilitare la registrazione del dispositivo.</string>
-    <string name="pref_gcm_apps_title">Applicazioni che utilizzano il servizio di messaggistica cloud di Google</string>
+    <string name="pref_gcm_switcher_title">Ricevi notifiche push</string>
+    <string name="pref_gcm_enable_mcs_summary">Il servizio di messaggistica cloud di Google è un fornitore di notifiche push utilizzato da molte applicazioni di terze parti. Per poterlo utlizzare devi attivare la registrazione del dispositivo.</string>
     <string name="pref_gcm_confirm_new_apps_title">Conferma le nuove applicazioni</string>
     <string name="pref_gcm_confirm_new_apps_summary">Chiedi conferma all\'utente prima di registrare una nuova applicazione per le notifiche push.</string>
 
     <string name="pref_about_title">A proposito di microG</string>
-    
+  
+    <string name="gcm_status_pref_auto">Automatico</string>
+    <string name="gcm_status_pref_manual">Manuale</string>
+    <string name="gcm_status_pref_sec">secondi</string>
+    <string name="gcm_status_pref_min">minuti</string>
     <string name="gcm_unregister_app">Annulla la registrazione</string>
-    <string name="gcm_not_registered">Non registrata</string>
     <string name="gcm_no_message_yet">Nessun messaggio ricevuto fino ad ora</string>
     <string name="gcm_last_message_at">Ultimo messaggio: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrata</string>
@@ -117,6 +123,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_push_app_allow_register_summary">Permetti all\'applicazione di registrarsi per la ricezione delle notifiche push.</string>
     <string name="pref_push_app_wake_for_delivery_title">Avvia alla ricezione</string>
     <string name="pref_push_app_wake_for_delivery_summary">Avvia l\'applicazione in background in seguito alla ricezione delle notifiche push.</string>
+    <string name="prefcat_status_title">Stato</string>
     <string name="prefcat_push_apps_title">Applicazioni che utilizzano le notifiche push</string>
     <string name="prefcat_push_apps_registered_title">Applicazioni registrate</string>
     <string name="prefcat_push_apps_unregistered_title">Applicazioni non registrate</string>
