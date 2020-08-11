@@ -33,7 +33,6 @@ public class AboutFragment extends AbstractAboutFragment {
         libraries.add(new AbstractAboutFragment.Library("su.litvak.chromecast.api.v2", "ChromeCast Java API v2", "Apache License 2.0, Vitaly Litvak"));
         libraries.add(new AbstractAboutFragment.Library("org.conscrypt", "Conscrypt", "Apache License 2.0, The Android Open Source Project"));
         libraries.add(new AbstractAboutFragment.Library("org.microg.safeparcel", "SafeParcel", "Apache License 2.0, microG Team"));
-        libraries.add(new AbstractAboutFragment.Library("org.slf4j", "SLF4J", "MIT License, QOS.ch"));
         libraries.add(new AbstractAboutFragment.Library("com.squareup.wire", "Wire Protocol Buffers", "Apache License 2.0, Square Inc."));
     }
 

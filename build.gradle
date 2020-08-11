@@ -23,7 +23,6 @@ buildscript {
     ext.recyclerviewVersion = '1.1.0'
 
     ext.supportLibraryVersion = "28.0.0"
-    ext.slf4jVersion = "1.7.25"
     ext.wireVersion = '3.2.2'
 
     ext.androidBuildGradleVersion = "4.0.1"

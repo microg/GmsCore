@@ -29,8 +29,6 @@ dependencies {
 
     // Specified manually due to
     // https://github.com/vitalidze/chromecast-java-api-v2/issues/91
-    api 'org.slf4j:slf4j-api:1.7.30'
-    api 'uk.uuid.slf4j:slf4j-android:1.7.30-0'
 
     implementation project(':play-services-base-core')
     implementation project(':play-services-core-proto')
