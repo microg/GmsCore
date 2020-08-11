@@ -20,6 +20,9 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.measurement.internal.AppMetadata;
+import com.google.android.gms.measurement.internal.ConditionalUserPropertyParcel;
+import com.google.android.gms.measurement.internal.EventParcel;
 import com.google.android.gms.measurement.internal.IMeasurementService;
 
 public class MeasurementServiceImpl extends IMeasurementService.Stub {
@@ -30,5 +33,31 @@ public class MeasurementServiceImpl extends IMeasurementService.Stub {
         if (super.onTransact(code, data, reply, flags)) return true;
         Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
         return false;
+    }
+
+    @Override
+    public void f1(EventParcel p0, AppMetadata p1) throws RemoteException {
+        Log.d(TAG, "f1: " + p1.packageName);
+    }
+
+    @Override
+    public void f4(AppMetadata p0) throws RemoteException {
+        Log.d(TAG, "f4: " + p0.packageName);
+    }
+
+    @Override
+    public void f10(long p0, String p1, String p2, String p3) throws RemoteException {
+        Log.d(TAG, "f10: " + p1);
+    }
+
+    @Override
+    public String f11(AppMetadata p0) throws RemoteException {
+        Log.d(TAG, "f11: " + p0.packageName);
+        return null;
+    }
+
+    @Override
+    public void f12(ConditionalUserPropertyParcel p0, AppMetadata p1) throws RemoteException {
+        Log.d(TAG, "f12: " + p1.packageName);
     }
 }
