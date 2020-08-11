@@ -12,7 +12,7 @@
     android:layout_height="180dp"
     android:padding="16dp"
     app:chart_barsColor="?attr/colorAccent"
-    app:chart_barsRadius="5dp"
+    app:chart_barsRadius="3dp"
     app:chart_labelsColor="?android:attr/textColorSecondary"
     app:chart_labelsSize="14sp"
-    app:chart_spacing="10dp" />
+    app:chart_spacing="6dp" />

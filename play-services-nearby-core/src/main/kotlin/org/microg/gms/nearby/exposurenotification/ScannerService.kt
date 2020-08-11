@@ -10,6 +10,7 @@ import android.app.Service
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.*
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 
 @TargetApi(21)
@@ -55,8 +56,13 @@ class ScannerService : Service() {
     private fun startScan() {
         if (started) return
         scanner.startScan(
-                listOf(ScanFilter.Builder().setServiceUuid(SERVICE_UUID).setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0)).build()),
-                ScanSettings.Builder().build(),
+                listOf(ScanFilter.Builder()
+                        .setServiceUuid(SERVICE_UUID)
+                        .setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0))
+                        .build()),
+                ScanSettings.Builder()
+                        .let { if (Build.VERSION.SDK_INT >= 23) it.setMatchMode(ScanSettings.MATCH_MODE_STICKY) else it }
+                        .build(),
                 callback
         )
         started = true

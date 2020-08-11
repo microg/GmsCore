@@ -27,3 +27,28 @@ const val CONFIRM_ACTION_STOP = "stop"
 const val CONFIRM_ACTION_KEYS = "keys"
 
 const val PERMISSION_EXPOSURE_CALLBACK = "com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"
+
+const val TX_POWER_LOW = -15
+
+const val VERSION_1_0: Byte = 0x40
+const val VERSION_1_1: Byte = 0x50
+
+/**
+ * No calibration data, using fleet-wide as default options.
+ */
+const val CONFIDENCE_LOWEST: Byte = 0
+
+/**
+ * Using average calibration over models from manufacturer.
+ */
+const val CONFIDENCE_LOW: Byte = 1
+
+/**
+ * Using single-antenna orientation for a similar model.
+ */
+const val CONFIDENCE_MEDIUM: Byte = 2
+
+/**
+ * Using significant calibration data for this model.
+ */
+const val CONFIDENCE_HIGH: Byte = 3

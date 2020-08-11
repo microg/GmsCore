@@ -277,4 +277,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             Log.w(TAG, "Callback failed", e)
         }
     }
+
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+        if (super.onTransact(code, data, reply, flags)) return true
+        Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
+        return false
+    }
 }

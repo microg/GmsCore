@@ -10,17 +10,21 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.*
 import android.bluetooth.le.AdvertiseSettings.*
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import java.io.FileDescriptor
 import java.io.PrintWriter
+import java.nio.ByteBuffer
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @TargetApi(21)
 class AdvertiserService : LifecycleService() {
+    private val version = VERSION_1_0
     private var callback: AdvertiseCallback? = null
     private val advertiser: BluetoothLeAdvertiser
         get() = BluetoothAdapter.getDefaultAdapter().bluetoothLeAdvertiser
@@ -62,12 +66,22 @@ class AdvertiserService : LifecycleService() {
     fun startAdvertising() {
         lifecycleScope.launchWhenStarted {
             do {
-                val payload = database.generateCurrentPayload(byteArrayOf(
-                        0x40, // Version 1.0
-                        currentDeviceInfo.txPowerCorrection.toByte(),  // TX Power (TODO)
-                        0x00, // Reserved
-                        0x00  // Reserved
-                ))
+                val aem = when (version) {
+                    VERSION_1_0 -> byteArrayOf(
+                            version, // Version and flags
+                            (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                            0x00, // Reserved
+                            0x00  // Reserved
+                    )
+                    VERSION_1_1 -> byteArrayOf(
+                            (version + currentDeviceInfo.confidence * 4).toByte(), // Version and flags
+                            (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                            0x00, // Reserved
+                            0x00  // Reserved
+                    )
+                    else -> return@launchWhenStarted
+                }
+                val payload = database.generateCurrentPayload(aem)
                 var nextSend = nextKeyMillis.coerceAtMost(180000)
                 startAdvertising(payload, nextSend.toInt())
                 delay(nextSend)
@@ -84,6 +98,8 @@ class AdvertiserService : LifecycleService() {
                 .setTxPowerLevel(ADVERTISE_TX_POWER_MEDIUM)
                 .setConnectable(false)
                 .build()
+        val (uuid, aem) = ByteBuffer.wrap(bytes).let { UUID(it.long, it.long) to it.int }
+        Log.d(TAG, "RPI: $uuid, Version: 0x${version.toString(16)}, TX Power: ${currentDeviceInfo.txPowerCorrection + TX_POWER_LOW}, AEM: 0x${aem.toLong().let { if (it < 0) 0x100000000L + it else it }.toString(16)}, Timeout: ${nextSend}ms")
         callback = advertiser.startAdvertising(settings, data)
     }
 
