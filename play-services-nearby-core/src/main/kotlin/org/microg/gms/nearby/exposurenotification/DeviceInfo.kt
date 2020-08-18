@@ -23,8 +23,8 @@ val currentDeviceInfo: DeviceInfo
     get() {
         var deviceInfo = knownDeviceInfo
         if (deviceInfo == null) {
-            val byOem = allDeviceInfos.filter { it.oem == Build.MANUFACTURER }
-            val exactMatch = byOem.find { it.model == Build.MODEL }
+            val byOem = allDeviceInfos.filter { it.oem.equalsIgnoreCase(Build.MANUFACTURER) }
+            val exactMatch = byOem.find { it.model.equalsIgnoreCase(Build.MODEL) }
             deviceInfo = when {
                 exactMatch != null -> {
                     // Exact match
@@ -44,6 +44,9 @@ val currentDeviceInfo: DeviceInfo
         }
         return deviceInfo
     }
+
+@Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
+private fun String.equalsIgnoreCase(other: String): Boolean = (this as java.lang.String).equalsIgnoreCase(other)
 
 /*
  * Derived from en-calibration-2020-06-13.csv published via

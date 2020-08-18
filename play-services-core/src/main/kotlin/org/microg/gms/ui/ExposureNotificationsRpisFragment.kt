@@ -45,7 +45,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
             val (totalRpiCount, rpiHistogram) = withContext(Dispatchers.IO) {
                 ExposureDatabase.with(requireContext()) { database ->
                     val map = linkedMapOf<String, Float>()
-                    val lowestDate = Math.round((Date().time / 24 / 60 / 60 / 1000 - 13).toDouble()) * 24 * 60 * 60 * 1000
+                    val lowestDate = Math.round((System.currentTimeMillis() / 24 / 60 / 60 / 1000 - 13).toDouble()) * 24 * 60 * 60 * 1000
                     for (i in 0..13) {
                         val date = Calendar.getInstance().apply { this.time = Date(lowestDate + i * 24 * 60 * 60 * 1000) }.get(Calendar.DAY_OF_MONTH)
                         val str = when (i) {
@@ -58,6 +58,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
                     val refDateHigh = Calendar.getInstance().apply { this.time = Date(lowestDate + 13 * 24 * 60 * 60 * 1000) }.get(Calendar.DAY_OF_MONTH)
                     for (entry in database.rpiHistogram) {
                         val time = Date(entry.key * 24 * 60 * 60 * 1000)
+                        if (time.time < lowestDate) continue // Ignore old data
                         val date = Calendar.getInstance().apply { this.time = time }.get(Calendar.DAY_OF_MONTH)
                         val str = when (date) {
                             refDateLow, refDateHigh -> DateFormat.format(DateFormat.getBestDateTimePattern(Locale.getDefault(), "MMMd"), entry.key * 24 * 60 * 60 * 1000).toString()

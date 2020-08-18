@@ -9,11 +9,13 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import org.microg.gms.common.ForegroundServiceContext
 
 class ServiceTrigger : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent?) {
+        Log.d(TAG, "ServiceTrigger: $intent")
         if (ExposurePreferences(context).scannerEnabled) {
             ForegroundServiceContext(context).startService(Intent(context, ScannerService::class.java))
         }

@@ -30,9 +30,6 @@
         <receiver android:name="org.microg.gms.nearby.exposurenotification.ServiceTrigger">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.AIRPLANE_MODE" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.conn.BACKGROUND_DATA_SETTING_CHANGED" />
 
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.PACKAGE_RESTARTED" />
