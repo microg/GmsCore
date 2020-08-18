@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("MissingPermission")
 public class RealLocationProvider {
     public static final String TAG = "GmsLocProviderReal";
+    private static final int MIN_GPS_TIME = 30000;
 
     private final LocationManager locationManager;
     private final String name;
@@ -118,6 +119,12 @@ public class RealLocationProvider {
                 minDistance = Math.min(request.locationRequest.getSmallestDesplacement(), minDistance);
                 if (sb.length() != 0) sb.append(", ");
                 sb.append(request.packageName).append(":").append(request.locationRequest.getInterval()).append("ms");
+            }
+            if (minTime > MIN_GPS_TIME && name.equals("gps")) {
+                Log.d(TAG, name + ": ignoring request as " + minTime + "ms (" + sb + "), is less than " + MIN_GPS_TIME);
+                locationManager.removeUpdates(listener);
+                connected.set(false);
+                return;
             }
             Log.d(TAG, name + ": requesting location updates with interval " + minTime + "ms (" + sb + "), minDistance=" + minDistance);
             if (connected.get()) {
