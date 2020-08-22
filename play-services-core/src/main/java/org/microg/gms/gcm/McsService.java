@@ -26,6 +26,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -51,8 +52,10 @@ import org.microg.gms.common.PackageUtils;
 import org.microg.gms.gcm.mcs.AppData;
 import org.microg.gms.gcm.mcs.Close;
 import org.microg.gms.gcm.mcs.DataMessageStanza;
+import org.microg.gms.gcm.mcs.Extension;
 import org.microg.gms.gcm.mcs.HeartbeatAck;
 import org.microg.gms.gcm.mcs.HeartbeatPing;
+import org.microg.gms.gcm.mcs.IqStanza;
 import org.microg.gms.gcm.mcs.LoginRequest;
 import org.microg.gms.gcm.mcs.LoginResponse;
 import org.microg.gms.gcm.mcs.Setting;
@@ -64,6 +67,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.SSLContext;
 
@@ -74,6 +78,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.ForegroundServiceContext.EXTRA_FOREGROUND;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
@@ -82,6 +87,7 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
+import static org.microg.gms.gcm.McsConstants.ACTION_ACK;
 import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
 import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
@@ -91,8 +97,10 @@ import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_ACK;
 import static org.microg.gms.gcm.McsConstants.MSG_CONNECT;
 import static org.microg.gms.gcm.McsConstants.MSG_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
@@ -119,6 +127,7 @@ public class McsService extends Service implements Handler.Callback {
     private static long lastIncomingNetworkRealtime = 0;
     private static long startTimestamp = 0;
     public static String activeNetworkPref = null;
+    private AtomicInteger nextMessageId = new AtomicInteger(0x1000000);
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -307,6 +316,8 @@ public class McsService extends Service implements Handler.Callback {
                     rootHandler.sendMessage(rootHandler.obtainMessage(MSG_HEARTBEAT, reason));
                 } else if (ACTION_SEND.equals(intent.getAction())) {
                     handleSendMessage(intent);
+                } else if (ACTION_ACK.equals(intent.getAction())) {
+                    rootHandler.sendMessage(rootHandler.obtainMessage(MSG_ACK, reason));
                 }
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             } else if (connectIntent == null) {
@@ -347,12 +358,20 @@ public class McsService extends Service implements Handler.Callback {
             Log.w(TAG, "Failed to send message, missing package name");
             return;
         }
+        if (packageName.equals(getPackageName()) && intent.hasExtra(EXTRA_APP_OVERRIDE)) {
+            packageName = intent.getStringExtra(EXTRA_APP_OVERRIDE);
+            intent.removeExtra(EXTRA_APP_OVERRIDE);
+        }
         intent.removeExtra(EXTRA_APP);
 
         int ttl;
         try {
-            ttl = Integer.parseInt(intent.getStringExtra(EXTRA_TTL));
-            if (ttl < 0 || ttl > maxTtl) {
+            if (intent.hasExtra(EXTRA_TTL)) {
+                ttl = Integer.parseInt(intent.getStringExtra(EXTRA_TTL));
+                if (ttl < 0 || ttl > maxTtl) {
+                    ttl = maxTtl;
+                }
+            } else {
                 ttl = maxTtl;
             }
         } catch (NumberFormatException e) {
@@ -403,7 +422,8 @@ public class McsService extends Service implements Handler.Callback {
         try {
             DataMessageStanza msg = new DataMessageStanza.Builder()
                     .sent(System.currentTimeMillis() / 1000L)
-                    .id(messageId)
+                    .id(Integer.toHexString(nextMessageId.incrementAndGet()))
+                    .persistent_id(messageId)
                     .token(collapseKey)
                     .from(from)
                     .reg_id(registrationId)
@@ -513,9 +533,11 @@ public class McsService extends Service implements Handler.Callback {
 
         Intent intent = new Intent();
         intent.setAction(ACTION_C2DM_RECEIVE);
-        intent.setPackage(packageName);
         intent.putExtra(EXTRA_FROM, msg.from);
         intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
+        if (msg.persistent_id != null) {
+            intent.putExtra(EXTRA_MESSAGE_ID, msg.persistent_id);
+        }
         if (app.wakeForDelivery) {
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         } else {
@@ -526,40 +548,51 @@ public class McsService extends Service implements Handler.Callback {
             intent.putExtra(appData.key, appData.value);
         }
 
-        String receiverPermission;
+        String receiverPermission = null;
         try {
             String name = packageName + ".permission.C2D_MESSAGE";
-            getPackageManager().getPermissionInfo(name, 0);
-            receiverPermission = name;
-        } catch (PackageManager.NameNotFoundException e) {
-            receiverPermission = null;
+            PermissionInfo info = getPackageManager().getPermissionInfo(name, 0);
+            if (info.packageName.equals(packageName)) {
+                receiverPermission = name;
+            }
+        } catch (Exception ignored) {
+            // Keep null, no valid permission found
         }
 
-        List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
-        if (infos == null || infos.isEmpty()) {
-            logd("No target for message, wut?");
+        if (receiverPermission == null) {
+            // Without receiver permission, we only restrict by package name
+            logd("Deliver message to all receivers in package " + packageName);
+            intent.setPackage(packageName);
+            sendOrderedBroadcast(intent, null);
         } else {
-            for (ResolveInfo resolveInfo : infos) {
-                logd("Target: " + resolveInfo);
-                Intent targetIntent = new Intent(intent);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && app.wakeForDelivery) {
-                    try {
-                        if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
-                            int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
-                            logd("Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
-                            addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
+            List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
+            if (infos == null || infos.isEmpty()) {
+                logd("No target for message, wut?");
+            } else {
+                for (ResolveInfo resolveInfo : infos) {
+                    Intent targetIntent = new Intent(intent);
+                    targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
+                    if (resolveInfo.activityInfo.packageName.equals(packageName)) {
+                        // Wake up the package itself
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && app.wakeForDelivery) {
+                            try {
+                                if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
+                                    int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
+                                    logd("Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
+                                    addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
+                                }
+                            } catch (Exception e) {
+                                Log.w(TAG, e);
+                            }
                         }
-                    } catch (Exception e) {
-                        Log.w(TAG, e);
+                        // We don't need receiver permission for our own package
+                        logd("Deliver message to own receiver " + resolveInfo);
+                        sendOrderedBroadcast(targetIntent, null);
+                    } else if (resolveInfo.filter.hasCategory(packageName)) {
+                        // Permission required
+                        logd("Deliver message to third-party receiver (with permission check)" + resolveInfo);
+                        sendOrderedBroadcast(targetIntent, receiverPermission);
                     }
-                }
-                targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
-                if (resolveInfo.activityInfo.packageName.equals(packageName)) {
-                    sendOrderedBroadcast(targetIntent, null);
-                } else if (receiverPermission != null) {
-                    sendOrderedBroadcast(targetIntent, receiverPermission);
-                } else {
-                    Log.w(TAG, resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name + " matches for C2D message to " + packageName + " but corresponding permission was not declared");
                 }
             }
         }
@@ -569,6 +602,7 @@ public class McsService extends Service implements Handler.Callback {
         for (AppData appData : msg.app_data) {
             if (IDLE_NOTIFICATION.equals(appData.key)) {
                 DataMessageStanza.Builder msgResponse = new DataMessageStanza.Builder()
+                        .id(Integer.toHexString(nextMessageId.incrementAndGet()))
                         .from(FROM_FIELD)
                         .sent(System.currentTimeMillis() / 1000)
                         .ttl(0)
@@ -631,6 +665,22 @@ public class McsService extends Service implements Handler.Callback {
                 } else {
                     logd("Ignoring heartbeat, not connected!");
                     scheduleReconnect(this);
+                }
+                return true;
+            case MSG_ACK:
+                logd("Ack initiated, reason: " + msg.obj);
+                if (isConnected()) {
+                    IqStanza.Builder iq = new IqStanza.Builder()
+                            .type(IqStanza.IqType.SET)
+                            .id("")
+                            .extension(new Extension.Builder().id(13).data(ByteString.EMPTY).build()) // StreamAck
+                            .status(0L);
+                    if (inputStream.newStreamIdAvailable()) {
+                        iq.last_stream_id_received(inputStream.getStreamId());
+                    }
+                    send(MCS_IQ_STANZA_TAG, iq.build());
+                } else {
+                    logd("Ignoring ack, not connected!");
                 }
                 return true;
             case MSG_OUTPUT_READY:
