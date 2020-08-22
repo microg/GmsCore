@@ -47,7 +47,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.0"
     implementation project(path: ':play-services-basement')
 }
 
