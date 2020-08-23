@@ -30,7 +30,6 @@ dependencies {
     // Specified manually due to
     // https://github.com/vitalidze/chromecast-java-api-v2/issues/91
 
-    implementation project(':play-services-base-core')
     implementation project(':play-services-core-proto')
     implementation project(':play-services-core:microg-ui-tools') // deprecated
     implementation project(':play-services-api')

@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
@@ -17,7 +18,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import org.microg.gms.base.core.R;
+import com.mgoogle.android.gms.R;
 
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private static Notification buildForegroundNotification(Context context) {
-        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_MIN);
+        NotificationChannel channel = new NotificationChannel("foreground-service", Resources.getSystem().getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_MIN);
         channel.setShowBadge(false);
         channel.setLockscreenVisibility(0);
         channel.setVibrationPattern(new long[0]);
@@ -81,8 +82,8 @@ public class ForegroundServiceContext extends ContextWrapper {
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
                 .setContentIntent(pendingIntent)
-                .setContentTitle("Running in background")
-                .setContentText("Tap me to disable battery optimisations for microG")
+                .setContentTitle(Resources.getSystem().getString(R.string.notification_service_title))
+                .setContentText(Resources.getSystem().getString(R.string.notification_service_content))
                 .setSmallIcon(R.drawable.ic_foreground_notification)
                 .build();
     }

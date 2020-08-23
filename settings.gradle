@@ -11,8 +11,6 @@ include ':play-services-base-api'
 include ':play-services-tasks'
 include ':play-services-core-proto'
 
-include ':play-services-base-core'
-
 include ':play-services-core'
 include ':play-services-core:microg-ui-tools'
 
