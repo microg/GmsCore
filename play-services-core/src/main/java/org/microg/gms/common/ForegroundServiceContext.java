@@ -70,7 +70,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private static Notification buildForegroundNotification(Context context) {
-        NotificationChannel channel = new NotificationChannel("foreground-service", Resources.getSystem().getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_MIN);
+        NotificationChannel channel = new NotificationChannel("foreground-service", context.getResources().getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_MIN);
         channel.setShowBadge(false);
         channel.setLockscreenVisibility(0);
         channel.setVibrationPattern(new long[0]);
@@ -82,8 +82,8 @@ public class ForegroundServiceContext extends ContextWrapper {
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
                 .setContentIntent(pendingIntent)
-                .setContentTitle(Resources.getSystem().getString(R.string.notification_service_title))
-                .setContentText(Resources.getSystem().getString(R.string.notification_service_content))
+                .setContentTitle(context.getResources().getString(R.string.notification_service_title))
+                .setContentText(context.getResources().getString(R.string.notification_service_content))
                 .setSmallIcon(R.drawable.ic_foreground_notification)
                 .build();
     }
