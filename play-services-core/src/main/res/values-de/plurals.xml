@@ -17,16 +17,15 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend eingestellt</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends eingestellt</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> Backend eingestellt</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> Backends eingestellt</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrierte App</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registrierte Apps</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Eine Berechtigungen, die für die ordnungsgemäße Funktionalität von microG Services Core benötigt werden, ist nicht zugeteilt.</item>
-        <item quantity="other">Mehrere Berechtigungen, die für die ordnungsgemäße Funktionalität von microG Services Core benötigt werden, sind nicht zugeteilt.</item>
+        <item quantity="one">Eine Berechtigung, die für die ordnungsgemäße Funktionalität von microG Services Core benötigt wird, ist nicht erteilt.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Fehlende Berechtigung anfragen</item>
