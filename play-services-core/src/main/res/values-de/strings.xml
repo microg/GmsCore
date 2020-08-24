@@ -159,7 +159,7 @@ Dies kann einige Minuten dauern."</string>
 Das Datum, die Zeitdauer und die Signalstärke, die dem Kontakt zugeordnet sind, werden mit der zugehörigen App geteilt."</string>
     <string name="pref_exposure_rpis_details_summary">"Während die Exposure Notification API aktiviert ist, sammelt das Gerät passiv IDs (Rolling Proximity Identifiers bzw. RPIs) von Geräten in der Nähe.
 
-Sobald die Eigentümer von Geräten positiv getestet wurden, können ihre IDs geteilt werden. Dein Gerät prüft, ob eine gespeichtere ID zu einer positiv getesteten Person gehört und berechnet das Infektionsrisiko."</string>
+Sobald die Eigentümer von Geräten positiv getestet wurden, können ihre IDs geteilt werden. Dein Gerät prüft, ob eine gespeicherte ID zu einer positiv getesteten Person gehört und berechnet das Infektionsrisiko."</string>
 
     <string name="exposure_enable_switch">Exposure Notifications aktivieren</string>
     <string name="exposure_confirm_start_title">Exposure Notifications aktivieren?</string>
