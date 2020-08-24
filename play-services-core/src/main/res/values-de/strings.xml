@@ -150,7 +150,7 @@ Dies kann einige Minuten dauern."</string>
     <string name="pref_exposure_collected_rpis_title">Gesammelte IDs</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in den letzten 60 Minuten</string>
     <string name="pref_exposure_advertising_id_title">Aktuell verwendete ID</string>
-    <string name="pref_exposure_app_checks_summary"><xliff:g example="5">%1$d</xliff:g> Prüfungen whärend der letzen 14 Tage</string>
+    <string name="pref_exposure_app_checks_summary"><xliff:g example="5">%1$d</xliff:g> Prüfungen während der letzen 14 Tage</string>
     <string name="pref_exposure_app_last_check_summary">Letzte Prüfung: <xliff:g example="3 hours ago">%1$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> gesammelte IDs</string>
     <string name="pref_exposure_rpi_delete_all_title">Alle gesammelten IDs löschen</string>
@@ -183,7 +183,7 @@ Deine Identität oder das Testergebnis werden nicht geteilt."</string>
 
     <string name="pref_add_account_title">Konto</string>
     <string name="pref_add_account_summary">Google-Konto hinzufügen</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten-Dienst, der von vielen Apps genutzt wird. Zur Benutzung muss der Geräte Check-In aktiviert werden.</string>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging ist ein Push-Nachrichten-Dienst, der von vielen Apps genutzt wird. Zur Benutzung muss die Geräte-Registrierung aktiviert werden.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging Hearbeat-Intervall</string>
     <string name="pref_gcm_heartbeat_summary">Das Intervall in Sekunden, in dem das System die Google-Server kontaktiert. Ein höheres Intervall wird die Akkunutzung reduzieren, kann jedoch Push-Nachrichten verzögern.\nVeraltet, wird in zukünftiger Version ersetzt.</string>
     <string name="pref_gcm_apps_title">Apps die Cloud Messaging benutzen</string>
