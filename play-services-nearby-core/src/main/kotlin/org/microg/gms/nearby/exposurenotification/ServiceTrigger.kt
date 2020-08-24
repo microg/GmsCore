@@ -16,11 +16,15 @@ class ServiceTrigger : BroadcastReceiver() {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent?) {
         Log.d(TAG, "ServiceTrigger: $intent")
-        if (ExposurePreferences(context).scannerEnabled) {
-            ForegroundServiceContext(context).startService(Intent(context, ScannerService::class.java))
+        val serviceContext = ForegroundServiceContext(context)
+        if (ScannerService.isNeeded(context)) {
+            serviceContext.startService(Intent(context, ScannerService::class.java))
         }
-        if (ExposurePreferences(context).advertiserEnabled) {
-            ForegroundServiceContext(context).startService(Intent(context, AdvertiserService::class.java))
+        if (AdvertiserService.isNeeded(context)) {
+            serviceContext.startService(Intent(context, AdvertiserService::class.java))
+        }
+        if (CleanupService.isNeeded(context)) {
+            serviceContext.startService(Intent(context, CleanupService::class.java))
         }
     }
 }

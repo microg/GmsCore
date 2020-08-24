@@ -17,6 +17,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import org.microg.gms.common.ForegroundServiceContext
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.util.*
@@ -26,6 +27,7 @@ class ScannerService : Service() {
     private var started = false
     private var startTime = 0L
     private var seenAdvertisements = 0L
+    private var lastAdvertisement = 0L
     private lateinit var database: ExposureDatabase
     private val callback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
@@ -59,6 +61,7 @@ class ScannerService : Service() {
         get() = getDefaultAdapter().bluetoothLeScanner
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        ForegroundServiceContext.completeForegroundService(this, intent, TAG)
         super.onStartCommand(intent, flags, startId)
         startScanIfNeeded()
         return START_STICKY
@@ -69,6 +72,7 @@ class ScannerService : Service() {
         if (data.size < 16) return // Ignore invalid advertisements
         database.noteAdvertisement(data.sliceArray(0..15), data.drop(16).toByteArray(), result.rssi)
         seenAdvertisements++
+        lastAdvertisement = System.currentTimeMillis()
     }
 
     fun startScanIfNeeded() {
@@ -128,6 +132,13 @@ class ScannerService : Service() {
         if (started) {
             writer?.println("Since ${Date(startTime)}")
             writer?.println("Seen advertisements: $seenAdvertisements")
+            writer?.println("Last advertisement: ${Date(lastAdvertisement)}")
+        }
+    }
+
+    companion object {
+        fun isNeeded(context: Context): Boolean {
+            return ExposurePreferences(context).scannerEnabled
         }
     }
 }

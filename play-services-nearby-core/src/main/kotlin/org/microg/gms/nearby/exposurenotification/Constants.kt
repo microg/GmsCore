@@ -30,6 +30,9 @@ const val PERMISSION_EXPOSURE_CALLBACK = "com.google.android.gms.nearby.exposure
 
 const val TX_POWER_LOW = -15
 
+const val ADVERTISER_OFFSET = 60 * 1000
+const val CLEANUP_INTERVAL = 24 * 60 * 60 * 1000
+
 const val VERSION_1_0: Byte = 0x40
 const val VERSION_1_1: Byte = 0x50
 

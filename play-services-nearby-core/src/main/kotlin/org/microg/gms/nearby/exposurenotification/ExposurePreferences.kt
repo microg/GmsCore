@@ -29,7 +29,12 @@ class ExposurePreferences(private val context: Context) {
     val advertiserEnabled
         get() = scannerEnabled
 
+    var lastCleanup
+        get() = preferences.getLong(PREF_LAST_CLEANUP, 0)
+        set(value) = preferences.edit().putLong(PREF_LAST_CLEANUP, value).apply()
+
     companion object {
         private const val PREF_SCANNER_ENABLED = "exposure_scanner_enabled"
+        private const val PREF_LAST_CLEANUP = "exposure_last_cleanup"
     }
 }

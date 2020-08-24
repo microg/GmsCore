@@ -5,27 +5,37 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.annotation.TargetApi
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import android.database.sqlite.SQLiteOpenHelper
+import android.database.sqlite.SQLiteStatement
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.TextUtils
 import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
+import org.microg.gms.common.PackageUtils
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.concurrent.Future
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.roundToInt
 
-class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+@TargetApi(21)
+class ExposureDatabase private constructor(private val context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     private var refCount = 0
+
+    init {
+        setWriteAheadLoggingEnabled(true)
+    }
 
     override fun onCreate(db: SQLiteDatabase) {
         onUpgrade(db, 0, DB_VERSION)
@@ -39,19 +49,30 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_APP_LOG(package TEXT NOT NULL, timestamp INTEGER NOT NULL, method TEXT NOT NULL, args TEXT);")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_APP_LOG}_package_timestamp ON $TABLE_APP_LOG(package, timestamp);")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK(keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL);")
-            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK(keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, matched INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(keyData, rollingStartNumber, rollingPeriod));")
-            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_DIAGNOSIS(package TEXT NOT NULL, token TEXT NOT NULL, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, transmissionRiskLevel INTEGER NOT NULL, PRIMARY KEY(package, token, keyData));")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_CONFIGURATIONS(package TEXT NOT NULL, token TEXT NOT NULL, configuration BLOB, PRIMARY KEY(package, token))")
+        }
+        if (oldVersion < 2) {
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_TEK_CHECK;")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_DIAGNOSIS;")
+            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK(tcid INTEGER PRIMARY KEY, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, matched INTEGER, UNIQUE(keyData, rollingStartNumber, rollingPeriod));")
+            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_DIAGNOSIS(package TEXT NOT NULL, token TEXT NOT NULL, tcid INTEGER REFERENCES $TABLE_TEK_CHECK(tcid) ON DELETE CASCADE, transmissionRiskLevel INTEGER NOT NULL);")
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_DIAGNOSIS}_package_token ON $TABLE_DIAGNOSIS(package, token);")
         }
     }
 
+    fun SQLiteDatabase.delete(table: String, whereClause: String, args: LongArray): Int =
+            compileStatement("DELETE FROM $table WHERE $whereClause").use {
+                args.forEachIndexed { idx, l -> it.bindLong(idx + 1, l) }
+                it.executeUpdateDelete()
+            }
+
     fun dailyCleanup() = writableDatabase.run {
         val rollingStartTime = currentRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
-        delete(TABLE_ADVERTISEMENTS, "timestamp < ?", arrayOf(rollingStartTime.toString()))
-        delete(TABLE_APP_LOG, "timestamp < ?", arrayOf(rollingStartTime.toString()))
-        delete(TABLE_TEK, "rollingStartNumber + rollingPeriod < ?", arrayOf((rollingStartTime / ROLLING_WINDOW_LENGTH_MS).toString()))
-        delete(TABLE_TEK_CHECK, "rollingStartNumber + rollingPeriod < ?", arrayOf((rollingStartTime / ROLLING_WINDOW_LENGTH_MS).toString()))
-        delete(TABLE_DIAGNOSIS, "rollingStartNumber + rollingPeriod < ?", arrayOf((rollingStartTime / ROLLING_WINDOW_LENGTH_MS).toString()))
+        val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
+        val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime))
+        val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
+        val checkedTemporaryExposureKeys = delete(TABLE_TEK_CHECK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
+        Log.d(TAG, "Deleted on daily cleanup: $advertisements adv, $appLogEntries applogs, $temporaryExposureKeys teks, $checkedTemporaryExposureKeys cteks")
     }
 
     fun noteAdvertisement(rpi: ByteArray, aem: ByteArray, rssi: Int, timestamp: Long = Date().time) = writableDatabase.run {
@@ -78,7 +99,7 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
 
     fun deleteAllCollectedAdvertisements() = writableDatabase.run {
         delete(TABLE_ADVERTISEMENTS, null, null)
-        update(TABLE_DIAGNOSIS, ContentValues().apply {
+        update(TABLE_TEK_CHECK, ContentValues().apply {
             put("matched", 0)
         }, null, null)
     }
@@ -102,37 +123,48 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
         key
     }
 
+    fun getTekCheckId(key: TemporaryExposureKey, mayInsert: Boolean = false): Long? = (if (mayInsert) writableDatabase else readableDatabase).run {
+        if (mayInsert) {
+            insertWithOnConflict(TABLE_TEK_CHECK, "NULL", ContentValues().apply {
+                put("keyData", key.keyData)
+                put("rollingStartNumber", key.rollingStartIntervalNumber)
+                put("rollingPeriod", key.rollingPeriod)
+            }, CONFLICT_IGNORE)
+        }
+        compileStatement("SELECT tcid FROM $TABLE_TEK_CHECK WHERE keyData = ? AND rollingStartNumber = ? AND rollingPeriod = ?").use {
+            it.bindBlob(1, key.keyData)
+            it.bindLong(2, key.rollingStartIntervalNumber.toLong())
+            it.bindLong(3, key.rollingPeriod.toLong())
+            it.simpleQueryForLong()
+        }
+    }
+
     fun storeDiagnosisKey(packageName: String, token: String, key: TemporaryExposureKey) = writableDatabase.run {
+        val tcid = getTekCheckId(key, true)
         insert(TABLE_DIAGNOSIS, "NULL", ContentValues().apply {
             put("package", packageName)
             put("token", token)
-            put("keyData", key.keyData)
-            put("rollingStartNumber", key.rollingStartIntervalNumber)
-            put("rollingPeriod", key.rollingPeriod)
+            put("tcid", tcid)
             put("transmissionRiskLevel", key.transmissionRiskLevel)
         })
     }
 
     fun updateDiagnosisKey(packageName: String, token: String, key: TemporaryExposureKey) = writableDatabase.run {
-        compileStatement("UPDATE $TABLE_DIAGNOSIS SET rollingStartNumber = ?, rollingPeriod = ?, transmissionRiskLevel = ? WHERE package = ? AND token = ? AND keyData = ?;").use {
-            it.bindLong(1, key.rollingStartIntervalNumber.toLong())
-            it.bindLong(2, key.rollingPeriod.toLong())
-            it.bindLong(3, key.transmissionRiskLevel.toLong())
-            it.bindString(4, packageName)
-            it.bindString(5, token)
-            it.bindBlob(6, key.keyData)
+        val tcid = getTekCheckId(key) ?: return 0
+        compileStatement("UPDATE $TABLE_DIAGNOSIS SET transmissionRiskLevel = ? WHERE package = ? AND token = ? AND tcid = ?;").use {
+            it.bindLong(1, key.transmissionRiskLevel.toLong())
+            it.bindString(2, packageName)
+            it.bindString(3, token)
+            it.bindLong(4, tcid)
             it.executeUpdateDelete()
         }
     }
 
     fun listDiagnosisKeysPendingSearch(packageName: String, token: String) = readableDatabase.run {
         rawQuery("""
-            SELECT $TABLE_DIAGNOSIS.keyData, $TABLE_DIAGNOSIS.rollingStartNumber, $TABLE_DIAGNOSIS.rollingPeriod
+            SELECT $TABLE_TEK_CHECK.keyData, $TABLE_TEK_CHECK.rollingStartNumber, $TABLE_TEK_CHECK.rollingPeriod
             FROM $TABLE_DIAGNOSIS
-            LEFT JOIN $TABLE_TEK_CHECK ON 
-                $TABLE_DIAGNOSIS.keyData = $TABLE_TEK_CHECK.keyData AND 
-                $TABLE_DIAGNOSIS.rollingStartNumber = $TABLE_TEK_CHECK.rollingStartNumber AND 
-                $TABLE_DIAGNOSIS.rollingPeriod = $TABLE_TEK_CHECK.rollingPeriod
+            LEFT JOIN $TABLE_TEK_CHECK ON $TABLE_DIAGNOSIS.tcid = $TABLE_TEK_CHECK.tcid
             WHERE 
                 $TABLE_DIAGNOSIS.package = ? AND 
                 $TABLE_DIAGNOSIS.token = ? AND 
@@ -151,22 +183,20 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
     }
 
     fun applyDiagnosisKeySearchResult(key: TemporaryExposureKey, matched: Boolean) = writableDatabase.run {
-        insert(TABLE_TEK_CHECK, "NULL", ContentValues().apply {
-            put("keyData", key.keyData)
-            put("rollingStartNumber", key.rollingStartIntervalNumber)
-            put("rollingPeriod", key.rollingPeriod)
-            put("matched", if (matched) 1 else 0)
-        })
+        compileStatement("UPDATE $TABLE_TEK_CHECK SET matched = ? WHERE keyData = ? AND rollingStartNumber = ? AND rollingPeriod = ?;").use {
+            it.bindLong(1, if (matched) 1 else 0)
+            it.bindBlob(2, key.keyData)
+            it.bindLong(3, key.rollingStartIntervalNumber.toLong())
+            it.bindLong(4, key.rollingPeriod.toLong())
+            it.executeUpdateDelete()
+        }
     }
 
     fun listMatchedDiagnosisKeys(packageName: String, token: String) = readableDatabase.run {
         rawQuery("""
-            SELECT $TABLE_DIAGNOSIS.keyData, $TABLE_DIAGNOSIS.rollingStartNumber, $TABLE_DIAGNOSIS.rollingPeriod, $TABLE_DIAGNOSIS.transmissionRiskLevel
+            SELECT $TABLE_TEK_CHECK.keyData, $TABLE_TEK_CHECK.rollingStartNumber, $TABLE_TEK_CHECK.rollingPeriod, $TABLE_DIAGNOSIS.transmissionRiskLevel
             FROM $TABLE_DIAGNOSIS
-            LEFT JOIN $TABLE_TEK_CHECK ON 
-                $TABLE_DIAGNOSIS.keyData = $TABLE_TEK_CHECK.keyData AND 
-                $TABLE_DIAGNOSIS.rollingStartNumber = $TABLE_TEK_CHECK.rollingStartNumber AND 
-                $TABLE_DIAGNOSIS.rollingPeriod = $TABLE_TEK_CHECK.rollingPeriod
+            LEFT JOIN $TABLE_TEK_CHECK ON $TABLE_DIAGNOSIS.tcid = $TABLE_TEK_CHECK.tcid
             WHERE 
                 $TABLE_DIAGNOSIS.package = ? AND 
                 $TABLE_DIAGNOSIS.token = ? AND 
@@ -208,7 +238,7 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
         }
         val time = (System.currentTimeMillis() - start).toDouble() / 1000.0
         executor.shutdown()
-        Log.d(TAG, "Processed ${keys.size} keys in ${time}s -> ${(keys.size.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
+        Log.d(TAG, "Processed ${keys.size} new keys in ${time}s -> ${(keys.size.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
     }
 
     fun findAllMeasuredExposures(packageName: String, token: String): List<MeasuredExposure> {
@@ -226,7 +256,6 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
             val pos = i * 16
             allRpis.sliceArray(pos until (pos + 16))
         }
-        val start = System.currentTimeMillis()
         val measures = findMeasuredExposures(rpis, key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS - ALLOWED_KEY_OFFSET_MS, (key.rollingStartIntervalNumber.toLong() + key.rollingPeriod) * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS)
         measures.filter {
             val index = rpis.indexOf(it.rpi)
@@ -437,9 +466,7 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
         if (this != instance) {
             throw IllegalStateException("Tried to open writable database from secondary instance")
         }
-        val db = super.getWritableDatabase()
-        db.enableWriteAheadLogging()
-        return db
+        return super.getWritableDatabase()
     }
 
     override fun close() {
@@ -465,7 +492,7 @@ class ExposureDatabase private constructor(context: Context) : SQLiteOpenHelper(
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 1
+        private const val DB_VERSION = 2
         private const val TABLE_ADVERTISEMENTS = "advertisements"
         private const val TABLE_APP_LOG = "app_log"
         private const val TABLE_TEK = "tek"

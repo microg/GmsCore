@@ -7,8 +7,11 @@ package org.microg.gms.nearby.exposurenotification
 
 import android.annotation.TargetApi
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.le.*
+import android.bluetooth.le.AdvertiseCallback
+import android.bluetooth.le.AdvertiseData
+import android.bluetooth.le.AdvertiseSettings
 import android.bluetooth.le.AdvertiseSettings.*
+import android.bluetooth.le.BluetoothLeAdvertiser
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,6 +20,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
+import org.microg.gms.common.ForegroundServiceContext
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.nio.ByteBuffer
@@ -24,6 +28,7 @@ import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import kotlin.random.Random
 
 @TargetApi(21)
 class AdvertiserService : LifecycleService() {
@@ -69,6 +74,7 @@ class AdvertiserService : LifecycleService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        ForegroundServiceContext.completeForegroundService(this, intent, TAG)
         super.onStartCommand(intent, flags, startId)
         if (ExposurePreferences(this).advertiserEnabled) {
             loopAdvertising()
@@ -109,7 +115,7 @@ class AdvertiserService : LifecycleService() {
                         else -> return@launchWhenStarted
                     }
                     val payload = database.generateCurrentPayload(aem)
-                    var nextSend = nextKeyMillis.coerceAtMost(180000)
+                    val nextSend = (nextKeyMillis + Random.nextInt(-ADVERTISER_OFFSET, ADVERTISER_OFFSET)).coerceIn(0, 180000)
                     startAdvertising(payload, nextSend.toInt())
                     if (callback != null) delay(nextSend)
                 } while (callback != null)
@@ -181,5 +187,11 @@ class AdvertiserService : LifecycleService() {
     fun stopAdvertising() {
         callback?.let { advertiser?.stopAdvertising(it) }
         callback = null
+    }
+
+    companion object {
+        fun isNeeded(context: Context): Boolean {
+            return ExposurePreferences(context).scannerEnabled
+        }
     }
 }

@@ -19,8 +19,7 @@ import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import com.google.android.gms.nearby.exposurenotification.internal.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.microg.gms.nearby.exposurenotification.Constants.ACTION_EXPOSURE_NOT_FOUND
-import org.microg.gms.nearby.exposurenotification.Constants.ACTION_EXPOSURE_STATE_UPDATED
+import org.microg.gms.nearby.exposurenotification.Constants.*
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
 import java.util.*
@@ -73,6 +72,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun stop(params: StopParams) {
+        if (!ExposurePreferences(context).scannerEnabled) {
+            params.callback.onResult(Status.SUCCESS)
+            return
+        }
         confirm(CONFIRM_ACTION_STOP) { resultCode, _ ->
             if (resultCode == SUCCESS) {
                 ExposurePreferences(context).scannerEnabled = false
@@ -189,6 +192,8 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     put("request_keys_count", keys)
                 }.toString())
 
+                database.finishMatching(packageName, params.token)
+
                 Handler(Looper.getMainLooper()).post {
                     try {
                         params.callback.onResult(Status.SUCCESS)
@@ -197,11 +202,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     }
                 }
 
-                database.finishMatching(packageName, params.token)
                 val match = database.findAllMeasuredExposures(packageName, params.token).isNotEmpty()
 
                 try {
                     val intent = Intent(if (match) ACTION_EXPOSURE_STATE_UPDATED else ACTION_EXPOSURE_NOT_FOUND)
+                    intent.putExtra(EXTRA_TOKEN, params.token)
                     intent.`package` = packageName
                     Log.d(TAG, "Sending $intent")
                     context.sendOrderedBroadcast(intent, PERMISSION_EXPOSURE_CALLBACK)
