@@ -129,11 +129,11 @@
 
         <!-- Location -->
 
-        <activity android:name="org.microg.nlp.ui.BackendSettingsActivity" />
+        <activity android:name="org.microg.nlp.ui.BackendSettingsActivity" android:process=":ui" />
 
         <activity
             android:name="org.microg.gms.ui.PlacePickerActivity"
-            android:exported="true"
+            android:exported="true" android:process=":ui"
             android:label="@string/pick_place_title"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
@@ -237,6 +237,8 @@
                 <action android:name="com.google.android.gcm.intent.SEND" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name="org.microg.gms.gcm.StatusInfoProvider" />
 
         <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
             <intent-filter>
@@ -346,7 +348,8 @@
         <activity
             android:name="org.microg.tools.AccountPickerActivity"
             android:excludeFromRecents="true"
-            android:exported="true">
+            android:exported="true"
+            android:process=":ui">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
 
@@ -358,6 +361,7 @@
             android:name="org.microg.gms.auth.login.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
+            android:process=":ui"
             android:theme="@style/Theme.LoginBlue">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.login.LOGIN" />
@@ -370,6 +374,7 @@
             android:name="org.microg.gms.auth.AskPermissionActivity"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
 
         <service
@@ -378,7 +383,8 @@
 
         <activity
             android:name=".auth.TokenActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":ui" />
 
         <provider
             android:name="org.microg.gms.auth.AccountContentProvider"
@@ -396,6 +402,7 @@
 
         <activity
             android:name="org.microg.gms.games.UpgradeActivity"
+            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog">
             <intent-filter>
                 <action android:name="com.google.android.gms.games.PLAY_GAMES_UPGRADE" />
@@ -422,6 +429,7 @@
         <activity
             android:name="org.microg.gms.ui.ExposureNotificationsConfirmActivity"
             android:exported="false"
+            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="org.microg.gms.nearby.exposurenotification.CONFIRM" />
@@ -433,6 +441,7 @@
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_microg_settings"
             android:label="@string/gms_settings_name"
+            android:process=":ui"
             android:roundIcon="@mipmap/ic_microg_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -441,6 +450,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -449,6 +459,7 @@
             android:name="org.microg.gms.ui.SettingsDashboardActivity"
             android:icon="@mipmap/ic_microg_settings"
             android:label="Legacy microG Settings"
+            android:process=":ui"
             android:roundIcon="@mipmap/ic_microg_settings" />
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
@@ -456,6 +467,7 @@
             android:name="org.microg.gms.ui.SettingsActivityLink"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
+            android:process=":ui"
             android:targetActivity="org.microg.gms.ui.SettingsActivity">
             <intent-filter>
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
@@ -475,25 +487,32 @@
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
+            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
 
         <activity
             android:name="org.microg.gms.ui.AboutFragment$AsActivity"
-            android:label="@string/pref_about_title" />
+            android:label="@string/pref_about_title"
+            android:process=":ui" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
-            android:label="@string/gms_settings_name" />
+            android:label="@string/gms_settings_name"
+            android:process=":ui" />
 
         <activity
             android:name="org.microg.gms.ui.SafetyNetAdvancedFragment$AsActivity"
-            android:label="@string/service_name_snet" />
+            android:label="@string/service_name_snet"
+            android:process=":ui" />
 
         <activity
             android:name="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-            android:label="@string/self_check_title" />
+            android:label="@string/self_check_title"
+            android:process=":ui" />
 
-        <activity android:name="org.microg.gms.ui.AccountSettingsActivity">
+        <activity
+            android:name="org.microg.gms.ui.AccountSettingsActivity"
+            android:process=":ui">
             <intent-filter>
                 <action android:name="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS" />
                 <action android:name="com.google.android.gms.accountsettings.PRIVACY_SETTINGS" />
@@ -503,7 +522,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.microg.gms.ui.LocationSettingsActivity">
+        <activity
+            android:name="org.microg.gms.ui.LocationSettingsActivity"
+            android:process=":ui">
             <intent-filter>
                 <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY" />
                 <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS" />

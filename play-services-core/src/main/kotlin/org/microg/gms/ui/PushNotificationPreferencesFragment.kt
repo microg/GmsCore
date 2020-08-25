@@ -20,6 +20,7 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.gcm.McsService
+import org.microg.gms.gcm.getStatusInfo
 
 class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var pushStatusCategory: PreferenceCategory
@@ -67,10 +68,13 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
     private fun updateStatus() {
         handler.postDelayed(updateRunnable, UPDATE_INTERVAL)
         pushStatusCategory.isVisible = GcmPrefs.get(context).isEnabled
-        pushStatus.summary = if (McsService.isConnected()) {
-            getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(McsService.getStartTimestamp(), System.currentTimeMillis(), 0))
-        } else {
-            getString(R.string.gcm_network_state_disconnected)
+        lifecycleScope.launchWhenStarted {
+            val statusInfo = getStatusInfo(requireContext())
+            pushStatus.summary = if (statusInfo != null && statusInfo.connected) {
+                getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
+            } else {
+                getString(R.string.gcm_network_state_disconnected)
+            }
         }
     }
 
