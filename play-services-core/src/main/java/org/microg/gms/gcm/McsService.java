@@ -43,6 +43,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import com.mgoogle.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
@@ -320,13 +321,13 @@ public class McsService extends Service implements Handler.Callback {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Notification buildForegroundNotification() {
-        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_LOW);
+        NotificationChannel channel = new NotificationChannel("foreground-service", getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_LOW);
         channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
         channel.setShowBadge(false);
         getSystemService(NotificationManager.class).createNotificationChannel(channel);
         return new Notification.Builder(this, channel.getId())
                 .setOngoing(true)
-                .setContentTitle("Running in background")
+                .setContentTitle(this.getResources().getString(R.string.notification_service_title))
                 .setSmallIcon(android.R.drawable.stat_notify_sync)
                 .build();
     }

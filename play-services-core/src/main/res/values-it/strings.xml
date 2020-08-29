@@ -16,6 +16,11 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_settings_name">Impostazioni di Vanced microG</string>
+    <string name="gms_settings_summary">Configura Vanced microG.</string>
+
+    <string name="notification_service_name">Servizio in Primo Piano</string>
+    <string name="notification_service_title">Esecuzione in secondo piano</string>
+    <string name="notification_service_content">Tocca per disattivare il risparmio energetico per microG</string>
 
     <string name="just_a_sec">Giusto un secondo…</string>
     <string name="ask_permission_tos">Continuando autorizzi questa applicazione e Google ad usare le tue informazioni in accordo con i rispettivi termini di servizio e politiche di riservatezza.</string>
