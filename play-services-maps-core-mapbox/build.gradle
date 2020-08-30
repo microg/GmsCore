@@ -53,6 +53,11 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "String", "MAPBOX_KEY", "\"${mapboxKey()}\""
+        buildConfigField "boolean", "useMapboxStyle", "true"
+        buildConfigField "String", "MAPBOX_STYLE_SATELLITE_URI", "\"\""
+        buildConfigField "String", "MAPBOX_STYLE_SATELLITE_STREETS_URI", "\"\""
+        buildConfigField "String", "MAPBOX_STYLE_STREETS_URI", "\"\""
+        buildConfigField "String", "MAPBOX_STYLE_TERRAIN_URI", "\"\""
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"

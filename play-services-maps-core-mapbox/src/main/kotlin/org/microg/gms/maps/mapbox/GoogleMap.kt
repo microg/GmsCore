@@ -51,6 +51,7 @@ import com.mapbox.mapboxsdk.utils.ColorUtils
 import com.mapbox.mapboxsdk.utils.ThreadUtils
 import org.microg.gms.kotlin.unwrap
 import org.microg.gms.maps.MapsConstants.*
+import org.microg.gms.maps.mapbox.BuildConfig.*
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MapContext
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
@@ -348,16 +349,35 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
         // TODO: Serve map styles locally
-        when (storedMapType) {
-            MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
-            MAP_TYPE_TERRAIN -> map?.setStyle(Style.OUTDOORS, update)
-            MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
-            //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-            else -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"), update)
+        if (BuildConfig.useMapboxStyle) {
+            if (!BuildConfig.MAPBOX_STYLE_SATELLITE_URI.isEmpty() &&
+                    !BuildConfig.MAPBOX_STYLE_SATELLITE_STREETS_URI.isEmpty() &&
+                    !BuildConfig.MAPBOX_STYLE_STREETS_URI.isEmpty() &&
+                    !BuildConfig.MAPBOX_STYLE_TERRAIN_URI.isEmpty()) {
+                when (storedMapType) {
+                    MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUri(MAPBOX_STYLE_SATELLITE_URI), update)
+                    MAP_TYPE_TERRAIN -> map?.setStyle(Style.Builder().fromUri(MAPBOX_STYLE_TERRAIN_URI), update)
+                    MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUri(MAPBOX_STYLE_SATELLITE_STREETS_URI), update)
+                    else -> map?.setStyle(Style.Builder().fromUri(MAPBOX_STYLE_STREETS_URI), update)
+                }
+            } else {
+                when (storedMapType) {
+                    MAP_TYPE_SATELLITE -> map?.setStyle(Style.SATELLITE, update)
+                    MAP_TYPE_TERRAIN -> map?.setStyle(Style.OUTDOORS, update)
+                    MAP_TYPE_HYBRID -> map?.setStyle(Style.SATELLITE_STREETS, update)
+                    else -> map?.setStyle(Style.MAPBOX_STREETS, update)
+                }
+            }
+        } else {
+            when (storedMapType) {
+                MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
+                MAP_TYPE_TERRAIN -> map?.setStyle(Style.OUTDOORS, update)
+                MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
+                else -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"), update)
+            }
         }
 
         map?.let { BitmapDescriptorFactoryImpl.registerMap(it) }
-
     }
 
     override fun setWatermarkEnabled(watermark: Boolean) {
@@ -440,12 +460,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setOnInfoWindowClickListener(listener: IOnInfoWindowClickListener?) {
         Log.d(TAG, "unimplemented Method: setOnInfoWindowClickListener")
-
     }
 
     override fun setInfoWindowAdapter(adapter: IInfoWindowAdapter?) {
         Log.d(TAG, "unimplemented Method: setInfoWindowAdapter")
-
     }
 
     override fun getTestingHelper(): IObjectWrapper? {

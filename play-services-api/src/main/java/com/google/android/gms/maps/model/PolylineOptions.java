@@ -45,6 +45,8 @@ public class PolylineOptions extends AutoSafeParcelable {
     private boolean visible = true;
     @SafeParceled(7)
     private boolean geodesic = false;
+    @SafeParceled(8)
+    private boolean clickable = false;
 
     public PolylineOptions() {
     }
@@ -102,8 +104,17 @@ public class PolylineOptions extends AutoSafeParcelable {
         return visible;
     }
 
+    public boolean isClickable() {
+        return clickable;
+    }
+
     public PolylineOptions visible(boolean visible) {
         this.visible = visible;
+        return this;
+    }
+
+    public PolylineOptions clickable(boolean clickable) {
+        this.clickable = clickable;
         return this;
     }
 
