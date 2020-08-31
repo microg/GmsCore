@@ -153,9 +153,7 @@ public class DeviceConfiguration {
         if (eglcontext != EGL10.EGL_NO_CONTEXT) {
             javax.microedition.khronos.egl.EGLSurface eglsurface =
                     egl10.eglCreatePbufferSurface(egldisplay, eglconfig, ai);
-            if (eglsurface == EGL10.EGL_NO_SURFACE) {
-                egl10.eglDestroyContext(egldisplay, eglcontext);
-            } else {
+            if (eglsurface != EGL10.EGL_NO_SURFACE) {
                 egl10.eglMakeCurrent(egldisplay, eglsurface, eglsurface, eglcontext);
                 String s = GLES10.glGetString(7939);
                 if (s != null && !s.isEmpty()) {
@@ -168,8 +166,8 @@ public class DeviceConfiguration {
                 }
                 egl10.eglMakeCurrent(egldisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
                 egl10.eglDestroySurface(egldisplay, eglsurface);
-                egl10.eglDestroyContext(egldisplay, eglcontext);
             }
+            egl10.eglDestroyContext(egldisplay, eglcontext);
         }
     }
 }

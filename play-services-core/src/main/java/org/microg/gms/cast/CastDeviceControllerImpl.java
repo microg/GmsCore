@@ -147,12 +147,10 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         switch (message.getPayloadType()) {
             case STRING:
                 String response = message.getPayloadUtf8();
-                if (requestId == null) {
-                    this.onTextMessageReceived(message.getNamespace(), response);
-                } else {
+                if (requestId != null) {
                     this.onSendMessageSuccess(response, requestId);
-                    this.onTextMessageReceived(message.getNamespace(), response);
                 }
+                this.onTextMessageReceived(message.getNamespace(), response);
                 break;
             case BINARY:
                 byte[] payload = message.getPayloadBinary();

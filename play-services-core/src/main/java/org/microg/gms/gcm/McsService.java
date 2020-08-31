@@ -647,11 +647,8 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleOutputDone(android.os.Message msg) {
-        switch (msg.arg1) {
-            case MCS_HEARTBEAT_PING_TAG:
-                wakeLock.release();
-                break;
-            default:
+        if (msg.arg1 == MCS_HEARTBEAT_PING_TAG) {
+            wakeLock.release();
         }
     }
 
