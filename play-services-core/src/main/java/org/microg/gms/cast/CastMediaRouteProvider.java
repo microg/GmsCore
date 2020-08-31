@@ -19,12 +19,9 @@ package org.microg.gms.cast;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
@@ -35,22 +32,15 @@ import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteProviderDescriptor;
 import androidx.mediarouter.media.MediaRouter;
 
-import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
 
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
@@ -215,15 +205,15 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                             return;
                         }
                         try {
-                            String id = new String(attributes.get("id"), "UTF-8");
-                            String deviceVersion = new String(attributes.get("ve"), "UTF-8");
-                            String friendlyName = new String(attributes.get("fn"), "UTF-8");
-                            String modelName = new String(attributes.get("md"), "UTF-8");
-                            String iconPath = new String(attributes.get("ic"), "UTF-8");
-                            int status = Integer.parseInt(new String(attributes.get("st"), "UTF-8"));
+                            String id = new String(attributes.get("id"), StandardCharsets.UTF_8);
+                            String deviceVersion = new String(attributes.get("ve"), StandardCharsets.UTF_8);
+                            String friendlyName = new String(attributes.get("fn"), StandardCharsets.UTF_8);
+                            String modelName = new String(attributes.get("md"), StandardCharsets.UTF_8);
+                            String iconPath = new String(attributes.get("ic"), StandardCharsets.UTF_8);
+                            int status = Integer.parseInt(new String(attributes.get("st"), StandardCharsets.UTF_8));
 
                             onChromeCastDiscovered(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status);
-                        } catch (UnsupportedEncodingException | NullPointerException ex) {
+                        } catch (NullPointerException ex) {
                             Log.e(TAG, "Error getting cast details from DNS-SD response", ex);
                             return;
                         }
