@@ -88,5 +88,5 @@ public class CredentialPickerConfig extends AutoSafeParcelable {
         }
     }
 
-    public static final Creator<CredentialPickerConfig> CREATOR = new AutoCreator<CredentialPickerConfig>(CredentialPickerConfig.class);
+    public static final Creator<CredentialPickerConfig> CREATOR = new AutoCreator<>(CredentialPickerConfig.class);
 }

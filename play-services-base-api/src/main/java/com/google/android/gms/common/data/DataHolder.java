@@ -211,7 +211,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
     @SuppressWarnings("deprecation")
     private static CursorWindow[] createCursorWindows(Builder builder) {
         if (builder.columns.length == 0) return new CursorWindow[0];
-        List<CursorWindow> windows = new ArrayList<CursorWindow>();
+        List<CursorWindow> windows = new ArrayList<>();
         try {
             CursorWindow current = null;
             for (int rowIndex = 0; rowIndex < builder.rows.size(); rowIndex++) {
@@ -261,7 +261,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
 
     private static CursorWindow[] createCursorWindows(Cursor cursor) {
         if (cursor.getColumnCount() == 0) return new CursorWindow[0];
-        List<CursorWindow> windows = new ArrayList<CursorWindow>();
+        List<CursorWindow> windows = new ArrayList<>();
         CursorWindow current = null;
         int rowIndex = 0;
         while (cursor.moveToNext()) {
@@ -436,7 +436,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
     }
 
     public void validateContents() {
-        columnIndices = new HashMap<String, Integer>();
+        columnIndices = new HashMap<>();
         for (int i = 0; i < columns.length; i++) {
             columnIndices.put(columns[i], i);
         }
@@ -455,9 +455,9 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
 
         private Builder(String[] columns, String uniqueColumn) {
             this.columns = columns;
-            this.rows = new ArrayList<Map<String, Object>>();
+            this.rows = new ArrayList<>();
             this.uniqueColumn = uniqueColumn;
-            this.uniqueIndizes = new HashMap<Object, Integer>();
+            this.uniqueIndizes = new HashMap<>();
         }
 
         /**
@@ -509,7 +509,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
          * @return {@link DataHolder.Builder} to continue construction.
          */
         public Builder withRow(ContentValues values) {
-            HashMap<String, Object> row = new HashMap<String, Object>();
+            HashMap<String, Object> row = new HashMap<>();
             for (Map.Entry<String, Object> entry : values.valueSet()) {
                 row.put(entry.getKey(), entry.getValue());
             }

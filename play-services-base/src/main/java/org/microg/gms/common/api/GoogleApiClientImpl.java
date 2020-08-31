@@ -43,10 +43,10 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private final Context context;
     private final Looper looper;
     private final ApiClientSettings clientSettings;
-    private final Map<Api, Api.ApiOptions> apis = new HashMap<Api, Api.ApiOptions>();
-    private final Map<Api, ApiClient> apiConnections = new HashMap<Api, ApiClient>();
-    private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<ConnectionCallbacks>();
-    private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<OnConnectionFailedListener>();
+    private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
+    private final Map<Api, ApiClient> apiConnections = new HashMap<>();
+    private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<>();
+    private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<>();
     private final int clientId;
     private final ConnectionCallbacks baseConnectionCallbacks = new ConnectionCallbacks() {
         @Override

@@ -61,5 +61,5 @@ public class CastOptions extends AutoSafeParcelable {
         return this.launchOptions;
     }
 
-    public static Creator<CastOptions> CREATOR = new AutoCreator<CastOptions>(CastOptions.class);
+    public static Creator<CastOptions> CREATOR = new AutoCreator<>(CastOptions.class);
 }

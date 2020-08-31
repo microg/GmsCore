@@ -241,10 +241,10 @@ public interface GoogleApiClient {
     @PublicApi
     class Builder {
         private final Context context;
-        private final Map<Api, Api.ApiOptions> apis = new HashMap<Api, Api.ApiOptions>();
-        private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<ConnectionCallbacks>();
-        private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<OnConnectionFailedListener>();
-        private final Set<String> scopes = new HashSet<String>();
+        private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
+        private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<>();
+        private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<>();
+        private final Set<String> scopes = new HashSet<>();
         private String accountName;
         private int clientId = -1;
         private FragmentActivity fragmentActivity;

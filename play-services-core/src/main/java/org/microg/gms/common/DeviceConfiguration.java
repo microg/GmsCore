@@ -69,7 +69,7 @@ public class DeviceConfiguration {
         glEsVersion = configurationInfo.reqGlEsVersion;
         PackageManager packageManager = context.getPackageManager();
         String[] systemSharedLibraryNames = packageManager.getSystemSharedLibraryNames();
-        sharedLibraries = new ArrayList<String>();
+        sharedLibraries = new ArrayList<>();
         if (systemSharedLibraryNames != null) sharedLibraries.addAll(Arrays.asList(systemSharedLibraryNames));
         for (String s : new String[]{"com.google.android.maps", "com.google.android.media.effects", "com.google.widevine.software.drm"}) {
             if (!sharedLibraries.contains(s)) {
@@ -77,7 +77,7 @@ public class DeviceConfiguration {
             }
         }
         Collections.sort(sharedLibraries);
-        availableFeatures = new ArrayList<String>();
+        availableFeatures = new ArrayList<>();
         if (packageManager.getSystemAvailableFeatures() != null) {
             for (FeatureInfo featureInfo : packageManager.getSystemAvailableFeatures()) {
                 if (featureInfo != null && featureInfo.name != null) availableFeatures.add(featureInfo.name);
@@ -87,14 +87,14 @@ public class DeviceConfiguration {
         this.nativePlatforms = getNativePlatforms();
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
-        locales = new ArrayList<String>(Arrays.asList(context.getAssets().getLocales()));
+        locales = new ArrayList<>(Arrays.asList(context.getAssets().getLocales()));
         for (int i = 0; i < locales.size(); i++) {
             locales.set(i, locales.get(i).replace("-", "_"));
         }
         Collections.sort(locales);
-        Set<String> glExtensions = new HashSet<String>();
+        Set<String> glExtensions = new HashSet<>();
         addEglExtensions(glExtensions);
-        this.glExtensions = new ArrayList<String>(glExtensions);
+        this.glExtensions = new ArrayList<>(glExtensions);
         Collections.sort(this.glExtensions);
     }
 
@@ -104,7 +104,7 @@ public class DeviceConfiguration {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return Arrays.asList(Build.SUPPORTED_ABIS);
         } else {
-            nativePlatforms = new ArrayList<String>();
+            nativePlatforms = new ArrayList<>();
             nativePlatforms.add(Build.CPU_ABI);
             if (Build.CPU_ABI2 != null && !Build.CPU_ABI2.equals("unknown"))
                 nativePlatforms.add(Build.CPU_ABI2);

@@ -45,13 +45,13 @@ import java.util.Map;
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
 
-    private Map<String, CastDevice> castDevices = new HashMap<String, CastDevice>();
-    private Map<String, String> serviceCastIds = new HashMap<String, String>();
+    private Map<String, CastDevice> castDevices = new HashMap<>();
+    private Map<String, String> serviceCastIds = new HashMap<>();
 
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
-    private List<String> customCategories = new ArrayList<String>();
+    private List<String> customCategories = new ArrayList<>();
 
     private enum State {
         NOT_DISCOVERING,
@@ -61,7 +61,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     }
     private State state = State.NOT_DISCOVERING;
 
-    private static final ArrayList<IntentFilter> BASE_CONTROL_FILTERS = new ArrayList<IntentFilter>();
+    private static final ArrayList<IntentFilter> BASE_CONTROL_FILTERS = new ArrayList<>();
     static {
         IntentFilter filter;
 
@@ -318,7 +318,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     private void publishRoutes() {
         MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
         for (CastDevice castDevice : this.castDevices.values()) {
-            ArrayList<IntentFilter> controlFilters = new ArrayList<IntentFilter>(BASE_CONTROL_FILTERS);
+            ArrayList<IntentFilter> controlFilters = new ArrayList<>(BASE_CONTROL_FILTERS);
             // Include any app-specific control filters that have been requested.
             // TODO: Do we need to check with the device?
             for (String category : this.customCategories) {

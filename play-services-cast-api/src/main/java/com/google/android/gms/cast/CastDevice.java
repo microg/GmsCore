@@ -47,7 +47,7 @@ public class CastDevice extends AutoSafeParcelable {
         this.servicePort = port;
         this.deviceVersion = deviceVersion;
         this.friendlyName = friendlyName;
-        this.icons = new ArrayList<WebImage>();
+        this.icons = new ArrayList<>();
         this.icons.add(new WebImage(Uri.parse(String.format("http://%s:8008%s", this.address, iconPath))));
         this.modelName = modelName;
         this.capabilities = capabilities;
@@ -190,5 +190,5 @@ public class CastDevice extends AutoSafeParcelable {
                 "}";
     }
 
-    public static Creator<CastDevice> CREATOR = new AutoCreator<CastDevice>(CastDevice.class);
+    public static Creator<CastDevice> CREATOR = new AutoCreator<>(CastDevice.class);
 }

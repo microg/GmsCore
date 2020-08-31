@@ -26,6 +26,7 @@ import org.microg.safeparcel.SafeParceled;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @PublicApi
 public class Credential extends AutoSafeParcelable {
@@ -143,15 +144,15 @@ public class Credential extends AutoSafeParcelable {
 
         Credential that = (Credential) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (profilePictureUri != null ? !profilePictureUri.equals(that.profilePictureUri) : that.profilePictureUri != null)
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(name, that.name)) return false;
+        if (!Objects.equals(profilePictureUri, that.profilePictureUri))
             return false;
-        if (password != null ? !password.equals(that.password) : that.password != null)
+        if (!Objects.equals(password, that.password))
             return false;
-        if (accountType != null ? !accountType.equals(that.accountType) : that.accountType != null)
+        if (!Objects.equals(accountType, that.accountType))
             return false;
-        return generatedPassword != null ? generatedPassword.equals(that.generatedPassword) : that.generatedPassword == null;
+        return Objects.equals(generatedPassword, that.generatedPassword);
 
     }
 
@@ -245,5 +246,5 @@ public class Credential extends AutoSafeParcelable {
         }
     }
 
-    public static final Creator<Credential> CREATOR = new AutoCreator<Credential>(Credential.class);
+    public static final Creator<Credential> CREATOR = new AutoCreator<>(Credential.class);
 }

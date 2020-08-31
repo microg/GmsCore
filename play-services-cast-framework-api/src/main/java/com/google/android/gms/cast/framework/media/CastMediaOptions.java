@@ -32,5 +32,5 @@ public class CastMediaOptions extends AutoSafeParcelable {
     @SafeParceled(5)
     public NotificationOptions notificationOptions;
 
-    public static Creator<CastMediaOptions> CREATOR = new AutoCreator<CastMediaOptions>(CastMediaOptions.class);
+    public static Creator<CastMediaOptions> CREATOR = new AutoCreator<>(CastMediaOptions.class);
 }

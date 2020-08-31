@@ -72,6 +72,6 @@ public class ObjectWrapper<T> extends IObjectWrapper.Stub {
     }
 
     public static <T> ObjectWrapper<T> wrap(T t) {
-        return new ObjectWrapper<T>(t);
+        return new ObjectWrapper<>(t);
     }
 }

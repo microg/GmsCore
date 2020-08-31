@@ -33,11 +33,11 @@ public class MultiListenerProxy<T extends IInterface> implements InvocationHandl
     private static final String TAG = "GmsMultiListener";
 
     public static <T extends IInterface> T get(Class<T> tClass, final Collection<T> listeners) {
-        return get(tClass, new CollectionListenerPool<T>(listeners));
+        return get(tClass, new CollectionListenerPool<>(listeners));
     }
 
     public static <T extends IInterface> T get(Class<T> tClass, final ListenerPool<T> listenerPool) {
-        return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new MultiListenerProxy<T>(listenerPool));
+        return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new MultiListenerProxy<>(listenerPool));
     }
 
     private final ListenerPool<T> listeners;
@@ -48,7 +48,7 @@ public class MultiListenerProxy<T extends IInterface> implements InvocationHandl
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
-        for (T listener : new HashSet<T>(listeners)) {
+        for (T listener : new HashSet<>(listeners)) {
             try {
                 method.invoke(listener, args);
             } catch (Exception e) {

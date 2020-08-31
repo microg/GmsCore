@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class GoogleApiManager {
     private static GoogleApiManager instance;
@@ -52,7 +53,7 @@ public class GoogleApiManager {
         if (connected) {
             apiCall.execute(client, completionSource);
         } else {
-            waitingApiCallMap.get(new ApiInstance(api)).add(new WaitingApiCall<R>((PendingGoogleApiCall<R, ApiClient>) apiCall, completionSource));
+            waitingApiCallMap.get(new ApiInstance(api)).add(new WaitingApiCall<>((PendingGoogleApiCall<R, ApiClient>) apiCall, completionSource));
             if (!connecting) {
                 client.connect();
             }
@@ -134,8 +135,8 @@ public class GoogleApiManager {
 
             WaitingApiCall<?> that = (WaitingApiCall<?>) o;
 
-            if (apiCall != null ? !apiCall.equals(that.apiCall) : that.apiCall != null) return false;
-            return completionSource != null ? completionSource.equals(that.completionSource) : that.completionSource == null;
+            if (!Objects.equals(apiCall, that.apiCall)) return false;
+            return Objects.equals(completionSource, that.completionSource);
         }
 
         @Override
@@ -166,8 +167,8 @@ public class GoogleApiManager {
 
             ApiInstance that = (ApiInstance) o;
 
-            if (apiClass != null ? !apiClass.equals(that.apiClass) : that.apiClass != null) return false;
-            return apiOptions != null ? apiOptions.equals(that.apiOptions) : that.apiOptions == null;
+            if (!Objects.equals(apiClass, that.apiClass)) return false;
+            return Objects.equals(apiOptions, that.apiOptions);
         }
 
         @Override

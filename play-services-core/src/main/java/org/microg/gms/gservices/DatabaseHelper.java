@@ -75,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Map<String, String> search(String search) {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         Cursor cursor = getReadableDatabase().query("overrides", new String[]{"name", "value"},
                 "name LIKE ?", new String[]{search}, null, null, null, null);
         if (cursor != null) {

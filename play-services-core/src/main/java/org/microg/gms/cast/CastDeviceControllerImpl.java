@@ -107,8 +107,8 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         metadata.name = app.name;
         Log.d(TAG, "unimplemented: ApplicationMetadata.images");
         Log.d(TAG, "unimplemented: ApplicationMetadata.senderAppLaunchUri");
-        metadata.images = new ArrayList<WebImage>();
-        metadata.namespaces = new ArrayList<String>();
+        metadata.images = new ArrayList<>();
+        metadata.namespaces = new ArrayList<>();
         for(Namespace namespace : app.namespaces) {
             metadata.namespaces.add(namespace.name);
         }

@@ -39,5 +39,5 @@ public class ConfirmCredentialsWorkflowRequest extends AutoSafeParcelable {
     @SafeParceled(6)
     public AccountAuthenticatorResponse accountAuthenticatorResponse;
 
-    public static final Creator<ConfirmCredentialsWorkflowRequest> CREATOR = new AutoCreator<ConfirmCredentialsWorkflowRequest>(ConfirmCredentialsWorkflowRequest.class);
+    public static final Creator<ConfirmCredentialsWorkflowRequest> CREATOR = new AutoCreator<>(ConfirmCredentialsWorkflowRequest.class);
 }

@@ -43,7 +43,7 @@ public class CheckinManager {
             return null;
         if (!CheckinPrefs.get(context).isEnabled())
             return null;
-        List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
+        List<CheckinClient.Account> accounts = new ArrayList<>();
         AccountManager accountManager = AccountManager.get(context);
         String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         for (Account account : accountManager.getAccountsByType(accountType)) {

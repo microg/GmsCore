@@ -19,5 +19,5 @@ package com.google.android.gms.common.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ValidateAccountRequest extends AutoSafeParcelable {
-    public static Creator<ValidateAccountRequest> CREATOR = new AutoCreator<ValidateAccountRequest>(ValidateAccountRequest.class);
+    public static Creator<ValidateAccountRequest> CREATOR = new AutoCreator<>(ValidateAccountRequest.class);
 }

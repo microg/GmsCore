@@ -97,5 +97,5 @@ public class PlayLoggerContext extends AutoSafeParcelable {
         return sb.toString();
     }
 
-    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<PlayLoggerContext>(PlayLoggerContext.class);
+    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<>(PlayLoggerContext.class);
 }
