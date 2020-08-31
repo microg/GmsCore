@@ -307,12 +307,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     private void publishRoutesInMainThread() {
         Handler mainHandler = new Handler(this.getContext().getMainLooper());
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                publishRoutes();
-            }
-        });
+        mainHandler.post(this::publishRoutes);
     }
 
     private void publishRoutes() {

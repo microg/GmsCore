@@ -117,15 +117,12 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
     @Override
     public Object invoke(Object proxy, final Method method, final Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(tClass)) {
-            runOncePossible(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Object asInterface = Class.forName(tClass.getName() + "$Stub").getMethod("asInterface", IBinder.class).invoke(null, remote);
-                        method.invoke(asInterface, args);
-                    } catch (Exception e) {
-                        Log.w(TAG, e);
-                    }
+            runOncePossible(() -> {
+                try {
+                    Object asInterface = Class.forName(tClass.getName() + "$Stub").getMethod("asInterface", IBinder.class).invoke(null, remote);
+                    method.invoke(asInterface, args);
+                } catch (Exception e) {
+                    Log.w(TAG, e);
                 }
             });
             connect();

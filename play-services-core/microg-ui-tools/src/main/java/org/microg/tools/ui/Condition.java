@@ -108,16 +108,13 @@ public class Condition {
         }
         final View detailGroup = view.findViewById(R.id.detail_group);
         final ImageView expandIndicator = (ImageView) view.findViewById(R.id.expand_indicator);
-        View.OnClickListener expandListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (detailGroup.getVisibility() == View.VISIBLE) {
-                    expandIndicator.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_expand_more, context.getTheme()));
-                    detailGroup.setVisibility(View.GONE);
-                } else {
-                    expandIndicator.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_expand_less, context.getTheme()));
-                    detailGroup.setVisibility(View.VISIBLE);
-                }
+        View.OnClickListener expandListener = v -> {
+            if (detailGroup.getVisibility() == View.VISIBLE) {
+                expandIndicator.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_expand_more, context.getTheme()));
+                detailGroup.setVisibility(View.GONE);
+            } else {
+                expandIndicator.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.ic_expand_less, context.getTheme()));
+                detailGroup.setVisibility(View.VISIBLE);
             }
         };
         view.findViewById(R.id.collapsed_group).setOnClickListener(expandListener);

@@ -85,12 +85,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
             mSwitch.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         }
 
-        addOnSwitchChangeListener(new OnSwitchChangeListener() {
-            @Override
-            public void onSwitchChanged(SwitchCompat switchView, boolean isChecked) {
-                setTextViewLabel(isChecked);
-            }
-        });
+        addOnSwitchChangeListener((switchView, isChecked) -> setTextViewLabel(isChecked));
 
         setOnClickListener(this);
 

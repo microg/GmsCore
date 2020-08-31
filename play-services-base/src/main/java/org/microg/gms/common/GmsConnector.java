@@ -78,12 +78,9 @@ public class GmsConnector<C extends ApiClient, R extends Result> {
             final AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
             try {
                 C connection = (C) apiClient.getApiConnection(api);
-                callback.onClientAvailable(connection, new GmsConnector.Callback.ResultProvider<R>() {
-                    @Override
-                    public void onResultAvailable(R realResult) {
-                        result.deliverResult(realResult);
-                        apiClient.decrementUsageCounter();
-                    }
+                callback.onClientAvailable(connection, realResult -> {
+                    result.deliverResult(realResult);
+                    apiClient.decrementUsageCounter();
                 });
             } catch (RemoteException ignored) {
 

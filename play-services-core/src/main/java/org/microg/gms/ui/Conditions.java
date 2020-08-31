@@ -55,14 +55,11 @@ public class Conditions {
                     return !pm.isIgnoringBatteryOptimizations(context.getPackageName());
                 }
             })
-            .firstAction(R.string.cond_gcm_bat_action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (SDK_INT < 23) return;
-                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                    intent.setData(Uri.parse("package:" + v.getContext().getPackageName()));
-                    v.getContext().startActivity(intent);
-                }
+            .firstAction(R.string.cond_gcm_bat_action, v -> {
+                if (SDK_INT < 23) return;
+                Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + v.getContext().getPackageName()));
+                v.getContext().startActivity(intent);
             }).build();
 
 }
