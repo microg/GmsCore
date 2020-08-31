@@ -105,7 +105,7 @@ public abstract class AbstractAboutFragment extends Fragment {
         List<Library> libraries = new ArrayList<>();
         collectLibraries(libraries);
         Collections.sort(libraries);
-        ((ListView) aboutRoot.findViewById(android.R.id.list)).setAdapter(new LibraryAdapter(getContext(), libraries.toArray(new Library[libraries.size()])));
+        ((ListView) aboutRoot.findViewById(android.R.id.list)).setAdapter(new LibraryAdapter(getContext(), libraries.toArray(new Library[0])));
 
         return aboutRoot;
     }

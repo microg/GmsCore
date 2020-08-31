@@ -215,7 +215,6 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                             onChromeCastDiscovered(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status);
                         } catch (NullPointerException ex) {
                             Log.e(TAG, "Error getting cast details from DNS-SD response", ex);
-                            return;
                         }
                     }
                 });

@@ -223,7 +223,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
                     windows.add(current);
                     if (!current.allocRow()) {
                         windows.remove(current);
-                        return windows.toArray(new CursorWindow[windows.size()]);
+                        return windows.toArray(new CursorWindow[0]);
                     }
                 }
                 for (int columnIndex = 0; columnIndex < builder.columns.length; columnIndex++) {
@@ -256,7 +256,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
             }
             throw e;
         }
-        return windows.toArray(new CursorWindow[windows.size()]);
+        return windows.toArray(new CursorWindow[0]);
     }
 
     private static CursorWindow[] createCursorWindows(Cursor cursor) {
@@ -272,7 +272,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
                 windows.add(current);
                 if (!current.allocRow()) {
                     windows.remove(current);
-                    return windows.toArray(new CursorWindow[windows.size()]);
+                    return windows.toArray(new CursorWindow[0]);
                 }
             }
             for (int i = 0; i < cursor.getColumnCount(); i++) {
@@ -297,7 +297,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
             rowIndex++;
         }
         cursor.close();
-        return windows.toArray(new CursorWindow[windows.size()]);
+        return windows.toArray(new CursorWindow[0]);
     }
 
     /**

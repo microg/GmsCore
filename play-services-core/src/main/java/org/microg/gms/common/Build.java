@@ -44,10 +44,12 @@ public class Build {
     }
 
     private String generateSerialNumber() {
-        String serial = "008741";
+        String serial;
         Random rand = new Random();
+        StringBuilder serialBuilder = new StringBuilder("008741");
         for (int i = 0; i < 10; i++)
-            serial += Integer.toString(rand.nextInt(16), 16);
+            serialBuilder.append(Integer.toString(rand.nextInt(16), 16));
+        serial = serialBuilder.toString();
         serial = serial.toUpperCase(Locale.US);
         return serial;
     }

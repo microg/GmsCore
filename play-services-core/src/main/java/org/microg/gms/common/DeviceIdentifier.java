@@ -25,22 +25,24 @@ public class DeviceIdentifier {
 
 
     private static String randomMacAddress() {
-        String mac = "b407f9";
+        StringBuilder mac = new StringBuilder("b407f9");
         Random rand = new Random();
         for (int i = 0; i < 6; i++) {
-            mac += Integer.toString(rand.nextInt(16), 16);
+            mac.append(Integer.toString(rand.nextInt(16), 16));
         }
-        return mac;
+        return mac.toString();
     }
 
     private static String randomMeid() {
         // http://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity
         // We start with a known base, and generate random MEID
-        String meid = "35503104";
+        String meid;
         Random rand = new Random();
+        StringBuilder meidBuilder = new StringBuilder("35503104");
         for (int i = 0; i < 6; i++) {
-            meid += Integer.toString(rand.nextInt(10));
+            meidBuilder.append(rand.nextInt(10));
         }
+        meid = meidBuilder.toString();
 
         // Luhn algorithm (check digit)
         int sum = 0;

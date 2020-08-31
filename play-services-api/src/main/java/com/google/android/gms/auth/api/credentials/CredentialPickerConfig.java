@@ -54,7 +54,7 @@ public class CredentialPickerConfig extends AutoSafeParcelable {
         return showCancelButton;
     }
 
-    public class Builder {
+    public static class Builder {
         private boolean showAddAccountButton;
         private boolean showCancelButton;
         private boolean forNewAccount;

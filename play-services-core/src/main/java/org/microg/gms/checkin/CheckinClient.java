@@ -151,8 +151,8 @@ public class CheckinClient {
         }
         if (builder.accountCookie.isEmpty()) builder.accountCookie.add("");
         if (deviceIdent.wifiMac != null) {
-            builder.macAddress(Arrays.asList(deviceIdent.wifiMac))
-                    .macAddressType(Arrays.asList("wifi"));
+            builder.macAddress(Collections.singletonList(deviceIdent.wifiMac))
+                    .macAddressType(Collections.singletonList("wifi"));
         }
         if (checkinInfo.securityToken != 0) {
             builder.securityToken(checkinInfo.securityToken)

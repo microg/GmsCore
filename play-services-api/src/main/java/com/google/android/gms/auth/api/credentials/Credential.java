@@ -140,7 +140,7 @@ public class Credential extends AutoSafeParcelable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof Credential)) return false;
+        if (!(o instanceof Credential)) return false;
 
         Credential that = (Credential) o;
 

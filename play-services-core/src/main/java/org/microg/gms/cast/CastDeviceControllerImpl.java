@@ -119,8 +119,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
     @Override
     public void spontaneousEventReceived(ChromeCastSpontaneousEvent event) {
         switch (event.getType()) {
-            case MEDIA_STATUS:
-                break;
             case STATUS:
                 su.litvak.chromecast.api.v2.Status status = (su.litvak.chromecast.api.v2.Status)event.getData();
                 Application app = status.getRunningApp();
@@ -132,11 +130,11 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
                 int standbyState = status.standBy ? 1 : 0;
                 this.onDeviceStatusChanged(new CastDeviceStatus(status.volume.level, status.volume.muted, activeInputState, metadata, standbyState));
                 break;
-            case APPEVENT:
-                break;
             case CLOSE:
                 this.onApplicationDisconnected(CommonStatusCodes.SUCCESS);
                 break;
+            case MEDIA_STATUS:
+            case APPEVENT:
             default:
                 break;
         }
@@ -165,7 +163,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
             this.chromecast.disconnect();
         } catch (IOException e) {
             Log.e(TAG, "Error disconnecting chromecast: " + e.getMessage());
-            return;
         }
     }
 
@@ -176,7 +173,6 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
         } catch (IOException e) {
             Log.w(TAG, "Error sending cast message: " + e.getMessage());
             this.onSendMessageFailure("", requestId, CommonStatusCodes.NETWORK_ERROR);
-            return;
         }
     }
 
