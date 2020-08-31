@@ -21,8 +21,9 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import org.microg.gms.common.PackageUtils;
 

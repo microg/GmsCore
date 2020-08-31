@@ -8,7 +8,8 @@ package org.microg.gms.checkin;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_ENABLE_CHECKIN = "checkin_enable_service";
