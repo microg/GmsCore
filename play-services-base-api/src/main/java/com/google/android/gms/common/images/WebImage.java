@@ -59,6 +59,6 @@ public class WebImage extends AutoSafeParcelable {
     }
 
     public String toString() {
-        return String.format(Locale.getDefault(), "Image %dx%d %s", new Object[]{Integer.valueOf(width), Integer.valueOf(height), uri.toString()});
+        return String.format(Locale.getDefault(), "Image %dx%d %s", width, height, uri.toString());
     }
 }
