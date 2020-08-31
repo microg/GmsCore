@@ -20,7 +20,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.squareup.wire.Message;
-import com.squareup.wire.Wire;
 
 import org.microg.gms.gcm.mcs.Close;
 import org.microg.gms.gcm.mcs.DataMessageStanza;

@@ -22,8 +22,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.Set;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 5;
     private static final String DB_NAME = "pluscontacts.db";

@@ -3,7 +3,6 @@ package org.microg.gms.ui;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.mgoogle.android.gms.R;

@@ -28,7 +28,6 @@ import androidx.preference.Preference;
 import com.mgoogle.android.gms.R;
 
 import org.microg.gms.auth.AuthConstants;
-import org.microg.gms.auth.AuthManager;
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
 

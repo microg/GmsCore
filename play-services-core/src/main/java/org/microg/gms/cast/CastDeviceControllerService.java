@@ -16,25 +16,13 @@
 
 package org.microg.gms.cast;
 
-import android.os.IBinder;
 import android.os.RemoteException;
-import android.os.Parcel;
-import android.util.ArrayMap;
-import android.util.Log;
 
-import com.google.android.gms.cast.CastDevice;
-import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
 import com.google.android.gms.common.internal.GetServiceRequest;
-import com.google.android.gms.common.internal.BinderWrapper;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
-
-import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
 
 public class CastDeviceControllerService extends BaseService {
     private static final String TAG = CastDeviceControllerService.class.getSimpleName();

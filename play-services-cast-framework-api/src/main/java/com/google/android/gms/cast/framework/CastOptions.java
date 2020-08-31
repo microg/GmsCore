@@ -23,7 +23,6 @@ import com.google.android.gms.cast.framework.media.CastMediaOptions;
 import com.google.android.gms.cast.LaunchOptions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CastOptions extends AutoSafeParcelable {
     @SafeParceled(1)

@@ -18,8 +18,6 @@ package com.google.android.gms.cast.media;
 
 import org.microg.gms.cast.CastMediaRouteProvider;
 
-import android.util.Log;
-
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteProviderService;
 
