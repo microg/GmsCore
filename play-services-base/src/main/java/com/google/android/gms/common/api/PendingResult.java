@@ -40,20 +40,20 @@ public interface PendingResult<R extends Result> {
      * Blocks until the task is completed. This is not allowed on the UI thread. The returned
      * result object can have an additional failure mode of INTERRUPTED.
      */
-    public R await();
+    R await();
 
     /**
      * Blocks until the task is completed or has timed out waiting for the result. This is not
      * allowed on the UI thread. The returned result object can have an additional failure mode
      * of either INTERRUPTED or TIMEOUT.
      */
-    public R await(long time, TimeUnit unit);
+    R await(long time, TimeUnit unit);
 
-    public void cancel();
+    void cancel();
 
-    public boolean isCanceled();
+    boolean isCanceled();
 
-    public void setResultCallback(ResultCallback<R> callback, long time, TimeUnit unit);
+    void setResultCallback(ResultCallback<R> callback, long time, TimeUnit unit);
 
-    public void setResultCallback(ResultCallback<R> callback);
+    void setResultCallback(ResultCallback<R> callback);
 }

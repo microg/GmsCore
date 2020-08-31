@@ -143,7 +143,7 @@ public interface GoogleApiClient {
      * @see #registerConnectionFailedListener(OnConnectionFailedListener)
      * @see #unregisterConnectionFailedListener(OnConnectionFailedListener)
      */
-    public boolean isConnectionFailedListenerRegistered(OnConnectionFailedListener listener);
+    boolean isConnectionFailedListenerRegistered(OnConnectionFailedListener listener);
 
     /**
      * Closes the current connection to Google Play services and creates a new connection.
@@ -198,7 +198,7 @@ public interface GoogleApiClient {
      * @param listener the listener where the results of the asynchronous {@link #connect()} call
      *                 are delivered.
      */
-    public void registerConnectionFailedListener(OnConnectionFailedListener listener);
+    void registerConnectionFailedListener(OnConnectionFailedListener listener);
 
     /**
      * Disconnects the client and stops automatic lifecycle management. Use this before creating a

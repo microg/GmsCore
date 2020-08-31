@@ -217,25 +217,25 @@ public class HttpFormClient {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface RequestHeader {
-        public String[] value();
+        String[] value();
 
-        public boolean truePresent() default true;
+        boolean truePresent() default true;
 
-        public boolean falsePresent() default false;
+        boolean falsePresent() default false;
 
-        public boolean nullPresent() default false;
+        boolean nullPresent() default false;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface RequestContent {
-        public String[] value();
+        String[] value();
 
-        public boolean truePresent() default true;
+        boolean truePresent() default true;
 
-        public boolean falsePresent() default false;
+        boolean falsePresent() default false;
 
-        public boolean nullPresent() default false;
+        boolean nullPresent() default false;
     }
 
     @Retention(RetentionPolicy.RUNTIME)
@@ -246,13 +246,13 @@ public class HttpFormClient {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ResponseField {
-        public String value();
+        String value();
     }
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ResponseHeader {
-        public String value();
+        String value();
     }
 
     @Retention(RetentionPolicy.RUNTIME)

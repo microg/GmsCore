@@ -29,5 +29,5 @@ public interface ResultCallback<R extends Result> {
      *
      * @param result The result from the API call. May not be null.
      */
-    public void onResult(R result);
+    void onResult(R result);
 }

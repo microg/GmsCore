@@ -40,7 +40,7 @@ import static android.os.Build.VERSION.SDK_INT;
 public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedChangeListener,
         View.OnClickListener {
 
-    public static interface OnSwitchChangeListener {
+    public interface OnSwitchChangeListener {
         /**
          * Called when the checked state of the Switch has changed.
          *
