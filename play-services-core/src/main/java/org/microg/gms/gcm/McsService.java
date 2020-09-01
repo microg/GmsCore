@@ -72,7 +72,6 @@ import okio.ByteString;
 
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.common.ForegroundServiceContext.EXTRA_FOREGROUND;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
@@ -647,11 +646,8 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleOutputDone(android.os.Message msg) {
-        switch (msg.arg1) {
-            case MCS_HEARTBEAT_PING_TAG:
-                wakeLock.release();
-                break;
-            default:
+        if (msg.arg1 == MCS_HEARTBEAT_PING_TAG) {
+            wakeLock.release();
         }
     }
 

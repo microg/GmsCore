@@ -54,5 +54,5 @@ public class IdToken extends AutoSafeParcelable {
         return id;
     }
 
-    public static final Creator<IdToken> CREATOR = new AutoCreator<IdToken>(IdToken.class);
+    public static final Creator<IdToken> CREATOR = new AutoCreator<>(IdToken.class);
 }

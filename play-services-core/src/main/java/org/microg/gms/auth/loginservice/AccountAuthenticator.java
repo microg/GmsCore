@@ -27,8 +27,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
-import com.mgoogle.android.gms.R;
-
 import org.microg.gms.auth.AskPermissionActivity;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
@@ -147,8 +145,10 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         if (services != null) {
             List<String> servicesList = Arrays.asList(services.split(","));
             for (String feature : features) {
-                if (feature.startsWith("service_") && !servicesList.contains(feature.substring(8)))
+                if (feature.startsWith("service_") && !servicesList.contains(feature.substring(8))) {
                     res = false;
+                    break;
+                }
             }
         } else {
             res = false;

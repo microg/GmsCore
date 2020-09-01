@@ -24,7 +24,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class WebImage extends AutoSafeParcelable {
-    public static final Creator<WebImage> CREATOR = new AutoCreator<WebImage>(WebImage.class);
+    public static final Creator<WebImage> CREATOR = new AutoCreator<>(WebImage.class);
 
     public WebImage () {
         this.uri = null;
@@ -59,6 +59,6 @@ public class WebImage extends AutoSafeParcelable {
     }
 
     public String toString() {
-        return String.format(Locale.getDefault(), "Image %dx%d %s", new Object[]{Integer.valueOf(width), Integer.valueOf(height), uri.toString()});
+        return String.format(Locale.getDefault(), "Image %dx%d %s", width, height, uri.toString());
     }
 }

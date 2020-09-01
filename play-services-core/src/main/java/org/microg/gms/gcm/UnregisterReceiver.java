@@ -28,19 +28,16 @@ public class UnregisterReceiver extends BroadcastReceiver {
             Log.d(TAG, "Package removed or data cleared: " + packageName);
             final GcmDatabase.App app = database.getApp(packageName);
             if (app != null) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<GcmDatabase.Registration> registrations = database.getRegistrationsByApp(packageName);
-                        boolean deletedAll = true;
-                        for (GcmDatabase.Registration registration : registrations) {
-                            deletedAll &= PushRegisterManager.unregister(context, registration.packageName, registration.signature, null, null).deleted != null;
-                        }
-                        if (deletedAll) {
-                            database.removeApp(packageName);
-                        }
-                        database.close();
+                new Thread(() -> {
+                    List<GcmDatabase.Registration> registrations = database.getRegistrationsByApp(packageName);
+                    boolean deletedAll = true;
+                    for (GcmDatabase.Registration registration : registrations) {
+                        deletedAll &= PushRegisterManager.unregister(context, registration.packageName, registration.signature, null, null).deleted != null;
                     }
+                    if (deletedAll) {
+                        database.removeApp(packageName);
+                    }
+                    database.close();
                 }).start();
             } else {
                 database.close();

@@ -5,7 +5,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -58,30 +57,19 @@ public class AskPushPermission extends FragmentActivity {
             CharSequence label = pm.getApplicationLabel(info);
 
             ((TextView) findViewById(R.id.permission_message)).setText(Html.fromHtml("Allow <b>" + label + "</b> to register for push notifications?"));
-            findViewById(R.id.permission_allow_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (answered) return;
-                    database.noteAppKnown(packageName, true);
-                    answered = true;
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            PushRegisterService.registerAndReply(AskPushPermission.this, database, intent, packageName, requestId);
-                        }
-                    }).start();
-                    finish();
-                }
+            findViewById(R.id.permission_allow_button).setOnClickListener(v -> {
+                if (answered) return;
+                database.noteAppKnown(packageName, true);
+                answered = true;
+                new Thread(() -> PushRegisterService.registerAndReply(AskPushPermission.this, database, intent, packageName, requestId)).start();
+                finish();
             });
-            findViewById(R.id.permission_deny_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (answered) return;
-                    database.noteAppKnown(packageName, false);
-                    answered = true;
-                    PushRegisterService.replyNotAvailable(AskPushPermission.this, intent, packageName, requestId);
-                    finish();
-                }
+            findViewById(R.id.permission_deny_button).setOnClickListener(v -> {
+                if (answered) return;
+                database.noteAppKnown(packageName, false);
+                answered = true;
+                PushRegisterService.replyNotAvailable(AskPushPermission.this, intent, packageName, requestId);
+                finish();
             });
         } catch (PackageManager.NameNotFoundException e) {
             finish();

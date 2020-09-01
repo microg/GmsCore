@@ -50,7 +50,7 @@ class ResultCallbackHandler<R extends Result> extends Handler {
     public void sendResultCallback(ResultCallback<R> callback, R result) {
         Message message = new Message();
         message.what = CALLBACK_ON_COMPLETE;
-        message.obj = new OnCompleteObject<R>(callback, result);
+        message.obj = new OnCompleteObject<>(callback, result);
         sendMessage(message);
     }
 

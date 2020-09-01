@@ -44,7 +44,7 @@ public class GmsConnector<C extends ApiClient, R extends Result> {
     }
 
     public static <C extends ApiClient, R extends Result> PendingResult<R> call(GoogleApiClient client, Api api, GmsConnector.Callback<C, R> callback) {
-        return new GmsConnector<C, R>(client, api, callback).connect();
+        return new GmsConnector<>(client, api, callback).connect();
     }
 
     public AbstractPendingResult<R> connect() {
@@ -52,7 +52,7 @@ public class GmsConnector<C extends ApiClient, R extends Result> {
         apiClient.incrementUsageCounter();
         apiClient.getApiConnection(api);
         Looper looper = apiClient.getLooper();
-        final AbstractPendingResult<R> result = new AbstractPendingResult<R>(looper);
+        final AbstractPendingResult<R> result = new AbstractPendingResult<>(looper);
         Message msg = new Message();
         msg.obj = result;
         new Handler(looper).sendMessage(msg);
@@ -78,12 +78,9 @@ public class GmsConnector<C extends ApiClient, R extends Result> {
             final AbstractPendingResult<R> result = (AbstractPendingResult<R>) msg.obj;
             try {
                 C connection = (C) apiClient.getApiConnection(api);
-                callback.onClientAvailable(connection, new GmsConnector.Callback.ResultProvider<R>() {
-                    @Override
-                    public void onResultAvailable(R realResult) {
-                        result.deliverResult(realResult);
-                        apiClient.decrementUsageCounter();
-                    }
+                callback.onClientAvailable(connection, realResult -> {
+                    result.deliverResult(realResult);
+                    apiClient.decrementUsageCounter();
                 });
             } catch (RemoteException ignored) {
 

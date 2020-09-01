@@ -34,5 +34,5 @@ public class AccountCredentials extends AutoSafeParcelable {
         return new Account(accountName, accountType);
     }
 
-    public static final Creator<AccountCredentials> CREATOR = new AutoCreator<AccountCredentials>(AccountCredentials.class);
+    public static final Creator<AccountCredentials> CREATOR = new AutoCreator<>(AccountCredentials.class);
 }

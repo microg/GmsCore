@@ -18,22 +18,18 @@ package org.microg.gms.checkin;
 
 import android.util.Log;
 
-import com.squareup.wire.Wire;
-
 import org.microg.gms.common.Build;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
 import org.microg.gms.common.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +42,7 @@ import java.util.zip.GZIPOutputStream;
 public class CheckinClient {
     private static final String TAG = "GmsCheckinClient";
     private static final Object TODO = null; // TODO
-    private static final List<String> TODO_LIST_STRING = new ArrayList<String>(); // TODO
+    private static final List<String> TODO_LIST_STRING = new ArrayList<>(); // TODO
     private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<CheckinRequest.Checkin.Statistic>(); // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
 
@@ -151,8 +147,8 @@ public class CheckinClient {
         }
         if (builder.accountCookie.isEmpty()) builder.accountCookie.add("");
         if (deviceIdent.wifiMac != null) {
-            builder.macAddress(Arrays.asList(deviceIdent.wifiMac))
-                    .macAddressType(Arrays.asList("wifi"));
+            builder.macAddress(Collections.singletonList(deviceIdent.wifiMac))
+                    .macAddressType(Collections.singletonList("wifi"));
         }
         if (checkinInfo.securityToken != 0) {
             builder.securityToken(checkinInfo.securityToken)

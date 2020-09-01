@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class AbstractDashboardActivity extends AppCompatActivity {
     protected int preferencesResource = 0;
 
-    private final List<Condition> conditions = new ArrayList<Condition>();
+    private final List<Condition> conditions = new ArrayList<>();
     private ViewGroup conditionContainer;
 
     @Override
@@ -47,19 +47,13 @@ public abstract class AbstractDashboardActivity extends AppCompatActivity {
 
     private void evaluateConditionAsync(final Condition condition) {
         if (condition.willBeEvaluating()) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (condition.isActive(AbstractDashboardActivity.this)) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (conditions.contains(condition) && condition.isEvaluated()) {
-                                    addConditionToView(condition);
-                                }
-                            }
-                        });
-                    }
+            new Thread(() -> {
+                if (condition.isActive(AbstractDashboardActivity.this)) {
+                    runOnUiThread(() -> {
+                        if (conditions.contains(condition) && condition.isEvaluated()) {
+                            addConditionToView(condition);
+                        }
+                    });
                 }
             }).start();
         }

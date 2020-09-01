@@ -32,5 +32,5 @@ public class ApplicationStatus extends AutoSafeParcelable {
     @SafeParceled(2)
     private String applicationStatus;
 
-    public static final Creator<ApplicationStatus> CREATOR = new AutoCreator<ApplicationStatus>(ApplicationStatus.class);
+    public static final Creator<ApplicationStatus> CREATOR = new AutoCreator<>(ApplicationStatus.class);
 }

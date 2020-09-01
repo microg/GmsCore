@@ -89,7 +89,7 @@ public final class Cast {
     /**
      * Token to pass to {@link GoogleApiClient.Builder#addApi(Api)} to enable the Cast features.
      */
-    public static final Api<CastOptions> API = new Api<CastOptions>(new CastApiClientBuilder());
+    public static final Api<CastOptions> API = new Api<>(new CastApiClientBuilder());
 
     /**
      * An implementation of the CastApi interface. The interface is used to interact with a cast device.

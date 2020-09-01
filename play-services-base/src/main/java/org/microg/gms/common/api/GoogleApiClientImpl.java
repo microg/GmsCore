@@ -19,11 +19,9 @@ package org.microg.gms.common.api;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
-import android.os.Message;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
-
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
@@ -43,10 +41,10 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private final Context context;
     private final Looper looper;
     private final ApiClientSettings clientSettings;
-    private final Map<Api, Api.ApiOptions> apis = new HashMap<Api, Api.ApiOptions>();
-    private final Map<Api, ApiClient> apiConnections = new HashMap<Api, ApiClient>();
-    private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<ConnectionCallbacks>();
-    private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<OnConnectionFailedListener>();
+    private final Map<Api, Api.ApiOptions> apis = new HashMap<>();
+    private final Map<Api, ApiClient> apiConnections = new HashMap<>();
+    private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<>();
+    private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<>();
     private final int clientId;
     private final ConnectionCallbacks baseConnectionCallbacks = new ConnectionCallbacks() {
         @Override
@@ -65,16 +63,12 @@ public class GoogleApiClientImpl implements GoogleApiClient {
             }
         }
     };
-    private final OnConnectionFailedListener baseConnectionFailedListener = new
-            OnConnectionFailedListener() {
-                @Override
-                public void onConnectionFailed(ConnectionResult result) {
-                    Log.d(TAG, "OnConnectionFailedListener : onConnectionFailed()");
-                    for (OnConnectionFailedListener listener : connectionFailedListeners) {
-                        listener.onConnectionFailed(result);
-                    }
-                }
-            };
+    private final OnConnectionFailedListener baseConnectionFailedListener = result -> {
+        Log.d(TAG, "OnConnectionFailedListener : onConnectionFailed()");
+        for (OnConnectionFailedListener listener : connectionFailedListeners) {
+            listener.onConnectionFailed(result);
+        }
+    };
     private int usageCounter = 0;
     private boolean shouldDisconnect = false;
 

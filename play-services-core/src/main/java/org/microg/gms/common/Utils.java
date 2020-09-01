@@ -18,7 +18,7 @@ package org.microg.gms.common;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -30,7 +30,6 @@ import com.google.android.gms.cast.framework.CastOptions;
 import com.google.android.gms.cast.framework.IAppVisibilityListener;
 import com.google.android.gms.cast.framework.ICastContext;
 import com.google.android.gms.cast.framework.IDiscoveryManager;
-import com.google.android.gms.cast.framework.ISessionManager;
 import com.google.android.gms.cast.framework.ISessionProvider;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;

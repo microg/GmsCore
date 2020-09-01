@@ -32,7 +32,7 @@ public final class CastRemoteDisplay {
     /**
      * Token to pass to {@link GoogleApiClient.Builder#addApi(Api)} to enable the CastRemoteDisplay features.
      */
-    public static final Api<CastRemoteDisplayOptions> API = new Api<CastRemoteDisplayOptions>(new CastRemoteDisplayApiClientBuilder());
+    public static final Api<CastRemoteDisplayOptions> API = new Api<>(new CastRemoteDisplayApiClientBuilder());
 
     /**
      * An implementation of the CastRemoteDisplayAPI interface. The interface is used to interact with a cast device.

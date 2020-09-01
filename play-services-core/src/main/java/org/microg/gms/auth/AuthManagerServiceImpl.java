@@ -137,7 +137,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     private List<Scope> getScopes(String scope) {
         if (!scope.startsWith("oauth2:")) return null;
         String[] strings = scope.substring(7).split(" ");
-        List<Scope> res = new ArrayList<Scope>();
+        List<Scope> res = new ArrayList<>();
         for (String string : strings) {
             res.add(new Scope(string));
         }

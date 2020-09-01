@@ -19,12 +19,9 @@ package org.microg.gms.cast;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
@@ -35,33 +32,26 @@ import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouteProviderDescriptor;
 import androidx.mediarouter.media.MediaRouter;
 
-import com.google.android.gms.common.images.WebImage;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.CastMediaControlIntent;
 
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
 
-    private Map<String, CastDevice> castDevices = new HashMap<String, CastDevice>();
-    private Map<String, String> serviceCastIds = new HashMap<String, String>();
+    private Map<String, CastDevice> castDevices = new HashMap<>();
+    private Map<String, String> serviceCastIds = new HashMap<>();
 
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
-    private List<String> customCategories = new ArrayList<String>();
+    private List<String> customCategories = new ArrayList<>();
 
     private enum State {
         NOT_DISCOVERING,
@@ -71,7 +61,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
     }
     private State state = State.NOT_DISCOVERING;
 
-    private static final ArrayList<IntentFilter> BASE_CONTROL_FILTERS = new ArrayList<IntentFilter>();
+    private static final ArrayList<IntentFilter> BASE_CONTROL_FILTERS = new ArrayList<>();
     static {
         IntentFilter filter;
 
@@ -215,17 +205,16 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
                             return;
                         }
                         try {
-                            String id = new String(attributes.get("id"), "UTF-8");
-                            String deviceVersion = new String(attributes.get("ve"), "UTF-8");
-                            String friendlyName = new String(attributes.get("fn"), "UTF-8");
-                            String modelName = new String(attributes.get("md"), "UTF-8");
-                            String iconPath = new String(attributes.get("ic"), "UTF-8");
-                            int status = Integer.parseInt(new String(attributes.get("st"), "UTF-8"));
+                            String id = new String(attributes.get("id"), StandardCharsets.UTF_8);
+                            String deviceVersion = new String(attributes.get("ve"), StandardCharsets.UTF_8);
+                            String friendlyName = new String(attributes.get("fn"), StandardCharsets.UTF_8);
+                            String modelName = new String(attributes.get("md"), StandardCharsets.UTF_8);
+                            String iconPath = new String(attributes.get("ic"), StandardCharsets.UTF_8);
+                            int status = Integer.parseInt(new String(attributes.get("st"), StandardCharsets.UTF_8));
 
                             onChromeCastDiscovered(id, name, host, port, deviceVersion, friendlyName, modelName, iconPath, status);
-                        } catch (UnsupportedEncodingException | NullPointerException ex) {
+                        } catch (NullPointerException ex) {
                             Log.e(TAG, "Error getting cast details from DNS-SD response", ex);
-                            return;
                         }
                     }
                 });
@@ -317,18 +306,13 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
 
     private void publishRoutesInMainThread() {
         Handler mainHandler = new Handler(this.getContext().getMainLooper());
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                publishRoutes();
-            }
-        });
+        mainHandler.post(this::publishRoutes);
     }
 
     private void publishRoutes() {
         MediaRouteProviderDescriptor.Builder builder = new MediaRouteProviderDescriptor.Builder();
         for (CastDevice castDevice : this.castDevices.values()) {
-            ArrayList<IntentFilter> controlFilters = new ArrayList<IntentFilter>(BASE_CONTROL_FILTERS);
+            ArrayList<IntentFilter> controlFilters = new ArrayList<>(BASE_CONTROL_FILTERS);
             // Include any app-specific control filters that have been requested.
             // TODO: Do we need to check with the device?
             for (String category : this.customCategories) {

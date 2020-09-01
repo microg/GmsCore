@@ -23,5 +23,5 @@ import org.microg.gms.common.PublicApi;
  */
 @PublicApi
 public interface Result {
-    public Status getStatus();
+    Status getStatus();
 }

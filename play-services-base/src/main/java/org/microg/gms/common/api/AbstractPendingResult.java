@@ -34,7 +34,7 @@ public class AbstractPendingResult<R extends Result> implements PendingResult<R>
     private ResultCallback<R> resultCallback;
 
     public AbstractPendingResult(Looper looper) {
-        handler = new ResultCallbackHandler<R>(looper);
+        handler = new ResultCallbackHandler<>(looper);
     }
 
     private R getResult() {

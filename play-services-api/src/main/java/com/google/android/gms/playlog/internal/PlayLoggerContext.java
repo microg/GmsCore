@@ -83,19 +83,18 @@ public class PlayLoggerContext extends AutoSafeParcelable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PlayLoggerContext[").append(versionCode);
-        sb.append(", package=").append(packageName);
-        sb.append(", packageVersionCode=").append(packageVersionCode);
-        sb.append(", logSource=").append(logSource);
-        sb.append(", uploadAccount=").append(uploadAccount);
-        sb.append(", loggingId=").append(loggingId);
-        sb.append(", logAndroidId=").append(logAndroidId);
-        sb.append(", logSourceName=").append(logSourceName);
-        sb.append(", isAnonymous=").append(isAnonymous);
-        sb.append(", qosTier=").append(qosTier);
-        sb.append(']');
-        return sb.toString();
+        return "PlayLoggerContext[" + versionCode +
+                ", package=" + packageName +
+                ", packageVersionCode=" + packageVersionCode +
+                ", logSource=" + logSource +
+                ", uploadAccount=" + uploadAccount +
+                ", loggingId=" + loggingId +
+                ", logAndroidId=" + logAndroidId +
+                ", logSourceName=" + logSourceName +
+                ", isAnonymous=" + isAnonymous +
+                ", qosTier=" + qosTier +
+                ']';
     }
 
-    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<PlayLoggerContext>(PlayLoggerContext.class);
+    public static Creator<PlayLoggerContext> CREATOR = new AutoCreator<>(PlayLoggerContext.class);
 }

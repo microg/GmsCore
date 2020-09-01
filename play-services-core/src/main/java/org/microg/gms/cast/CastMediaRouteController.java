@@ -16,36 +16,13 @@
 
 package org.microg.gms.cast;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 
 import androidx.mediarouter.media.MediaRouteProvider;
 import androidx.mediarouter.media.MediaRouter;
 
-import com.google.android.gms.common.images.WebImage;
-import com.google.android.gms.cast.CastDevice;
-
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.io.IOException;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
 import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.ChromeCasts;
-import su.litvak.chromecast.api.v2.Status;
-import su.litvak.chromecast.api.v2.ChromeCastsListener;
 
 public class CastMediaRouteController extends MediaRouteProvider.RouteController {
     private static final String TAG = CastMediaRouteController.class.getSimpleName();

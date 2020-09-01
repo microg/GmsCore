@@ -43,5 +43,5 @@ public class LaunchOptions extends AutoSafeParcelable {
         this.relaunchIfRunning = relaunchIfRunning;
     }
 
-    public static Creator<LaunchOptions> CREATOR = new AutoCreator<LaunchOptions>(LaunchOptions.class);
+    public static Creator<LaunchOptions> CREATOR = new AutoCreator<>(LaunchOptions.class);
 }
