@@ -16,7 +16,6 @@
 
 package com.google.android.gms.cast.framework.internal;
 
-import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -30,7 +29,6 @@ import com.google.android.gms.cast.framework.ISessionProxy;
 import com.google.android.gms.cast.framework.media.CastMediaOptions;
 import com.google.android.gms.cast.framework.internal.CastContextImpl;
 import com.google.android.gms.cast.framework.internal.CastSessionImpl;
-import com.google.android.gms.cast.framework.internal.MediaRouterCallbackImpl;
 import com.google.android.gms.cast.framework.internal.SessionImpl;
 import com.google.android.gms.cast.framework.media.IMediaNotificationService;
 import com.google.android.gms.cast.framework.media.internal.IFetchBitmapTask;

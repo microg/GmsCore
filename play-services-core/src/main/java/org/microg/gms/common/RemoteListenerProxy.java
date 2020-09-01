@@ -38,12 +38,12 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
     private final String bindAction;
     private IBinder remote;
     private boolean connecting;
-    private List<Runnable> waiting = new ArrayList<Runnable>();
+    private List<Runnable> waiting = new ArrayList<>();
     private Class<T> tClass;
 
     public static <T extends IInterface> T get(Context context, Intent intent, Class<T> tClass, String bindAction) {
         return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass},
-                new RemoteListenerProxy<T>(context, intent, tClass, bindAction));
+                new RemoteListenerProxy<>(context, intent, tClass, bindAction));
     }
 
     private RemoteListenerProxy(Context context, Intent intent, Class<T> tClass, String bindAction) {
@@ -117,15 +117,12 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
     @Override
     public Object invoke(Object proxy, final Method method, final Object[] args) throws Throwable {
         if (method.getDeclaringClass().equals(tClass)) {
-            runOncePossible(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Object asInterface = Class.forName(tClass.getName() + "$Stub").getMethod("asInterface", IBinder.class).invoke(null, remote);
-                        method.invoke(asInterface, args);
-                    } catch (Exception e) {
-                        Log.w(TAG, e);
-                    }
+            runOncePossible(() -> {
+                try {
+                    Object asInterface = Class.forName(tClass.getName() + "$Stub").getMethod("asInterface", IBinder.class).invoke(null, remote);
+                    method.invoke(asInterface, args);
+                } catch (Exception e) {
+                    Log.w(TAG, e);
                 }
             });
             connect();

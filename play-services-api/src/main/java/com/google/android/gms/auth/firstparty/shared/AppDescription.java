@@ -31,5 +31,5 @@ public class AppDescription extends AutoSafeParcelable {
     @SafeParceled(5)
     public String callingPkg;
 
-    public static final Creator<AppDescription> CREATOR = new AutoCreator<AppDescription>(AppDescription.class);
+    public static final Creator<AppDescription> CREATOR = new AutoCreator<>(AppDescription.class);
 }

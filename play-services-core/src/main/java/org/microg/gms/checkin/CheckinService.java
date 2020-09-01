@@ -22,7 +22,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;

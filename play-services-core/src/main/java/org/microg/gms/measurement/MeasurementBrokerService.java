@@ -16,12 +16,10 @@
 
 package org.microg.gms.measurement;	
 
-import android.os.RemoteException;	
-import android.util.Log;	
+import android.os.RemoteException;
 
-import com.google.android.gms.common.api.CommonStatusCodes;	
-import com.google.android.gms.common.api.Status;	
-import com.google.android.gms.common.internal.GetServiceRequest;	
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;	
 
 import org.microg.gms.BaseService;	

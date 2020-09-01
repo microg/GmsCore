@@ -8,5 +8,5 @@ package com.google.android.gms.auth.api.signin;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GoogleSignInAccount extends AutoSafeParcelable {
-    public static final Creator<GoogleSignInAccount> CREATOR = new AutoCreator<GoogleSignInAccount>(GoogleSignInAccount.class);
+    public static final Creator<GoogleSignInAccount> CREATOR = new AutoCreator<>(GoogleSignInAccount.class);
 }

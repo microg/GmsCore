@@ -71,5 +71,5 @@ public class CredentialRequest extends AutoSafeParcelable {
         return passwordLoginSupported;
     }
 
-    public static final Creator<CredentialRequest> CREATOR = new AutoCreator<CredentialRequest>(CredentialRequest.class);
+    public static final Creator<CredentialRequest> CREATOR = new AutoCreator<>(CredentialRequest.class);
 }

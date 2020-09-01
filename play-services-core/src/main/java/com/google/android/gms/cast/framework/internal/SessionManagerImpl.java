@@ -22,7 +22,6 @@ import android.util.Log;
 
 import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.ICastStateListener;
-import com.google.android.gms.cast.framework.ISession;
 import com.google.android.gms.cast.framework.ISessionManager;
 import com.google.android.gms.cast.framework.ISessionManagerListener;
 import com.google.android.gms.cast.framework.internal.CastContextImpl;
@@ -44,7 +43,7 @@ public class SessionManagerImpl extends ISessionManager.Stub {
     private Set<ISessionManagerListener> sessionManagerListeners = new HashSet<ISessionManagerListener>();
     private Set<ICastStateListener> castStateListeners = new HashSet<ICastStateListener>();
 
-    private Map<String, SessionImpl> routeSessions = new HashMap<String, SessionImpl>();
+    private Map<String, SessionImpl> routeSessions = new HashMap<>();
 
     private SessionImpl currentSession;
 

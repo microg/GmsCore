@@ -16,30 +16,17 @@
 
 package org.microg.gms.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.view.View;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.mgoogle.android.gms.R;
 
 import org.microg.gms.gcm.GcmPrefs;
 import org.microg.tools.ui.Condition;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.GET_ACCOUNTS;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.READ_PHONE_STATE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
 
 public class Conditions {
@@ -55,14 +42,11 @@ public class Conditions {
                     return !pm.isIgnoringBatteryOptimizations(context.getPackageName());
                 }
             })
-            .firstAction(R.string.cond_gcm_bat_action, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (SDK_INT < 23) return;
-                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                    intent.setData(Uri.parse("package:" + v.getContext().getPackageName()));
-                    v.getContext().startActivity(intent);
-                }
+            .firstAction(R.string.cond_gcm_bat_action, v -> {
+                if (SDK_INT < 23) return;
+                Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + v.getContext().getPackageName()));
+                v.getContext().startActivity(intent);
             }).build();
 
 }

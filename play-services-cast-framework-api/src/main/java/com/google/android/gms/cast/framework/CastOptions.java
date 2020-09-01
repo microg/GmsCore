@@ -23,7 +23,6 @@ import com.google.android.gms.cast.framework.media.CastMediaOptions;
 import com.google.android.gms.cast.LaunchOptions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CastOptions extends AutoSafeParcelable {
     @SafeParceled(1)
@@ -61,5 +60,5 @@ public class CastOptions extends AutoSafeParcelable {
         return this.launchOptions;
     }
 
-    public static Creator<CastOptions> CREATOR = new AutoCreator<CastOptions>(CastOptions.class);
+    public static Creator<CastOptions> CREATOR = new AutoCreator<>(CastOptions.class);
 }

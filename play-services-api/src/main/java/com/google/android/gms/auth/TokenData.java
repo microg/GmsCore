@@ -60,5 +60,5 @@ public class TokenData extends AutoSafeParcelable {
         this.scopes = null;
     }
 
-    public static final Creator<TokenData> CREATOR = new AutoCreator<TokenData>(TokenData.class);
+    public static final Creator<TokenData> CREATOR = new AutoCreator<>(TokenData.class);
 }

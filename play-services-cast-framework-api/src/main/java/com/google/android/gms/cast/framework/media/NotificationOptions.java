@@ -92,5 +92,5 @@ public class NotificationOptions extends AutoSafeParcelable {
     @SafeParceled(33)
     public INotificationActionsProvider notificationActionsProvider;
 
-    public static Creator<NotificationOptions> CREATOR = new AutoCreator<NotificationOptions>(NotificationOptions.class);
+    public static Creator<NotificationOptions> CREATOR = new AutoCreator<>(NotificationOptions.class);
 }

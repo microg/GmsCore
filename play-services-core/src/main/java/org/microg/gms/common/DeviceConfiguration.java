@@ -69,7 +69,7 @@ public class DeviceConfiguration {
         glEsVersion = configurationInfo.reqGlEsVersion;
         PackageManager packageManager = context.getPackageManager();
         String[] systemSharedLibraryNames = packageManager.getSystemSharedLibraryNames();
-        sharedLibraries = new ArrayList<String>();
+        sharedLibraries = new ArrayList<>();
         if (systemSharedLibraryNames != null) sharedLibraries.addAll(Arrays.asList(systemSharedLibraryNames));
         for (String s : new String[]{"com.google.android.maps", "com.google.android.media.effects", "com.google.widevine.software.drm"}) {
             if (!sharedLibraries.contains(s)) {
@@ -77,7 +77,7 @@ public class DeviceConfiguration {
             }
         }
         Collections.sort(sharedLibraries);
-        availableFeatures = new ArrayList<String>();
+        availableFeatures = new ArrayList<>();
         if (packageManager.getSystemAvailableFeatures() != null) {
             for (FeatureInfo featureInfo : packageManager.getSystemAvailableFeatures()) {
                 if (featureInfo != null && featureInfo.name != null) availableFeatures.add(featureInfo.name);
@@ -87,14 +87,14 @@ public class DeviceConfiguration {
         this.nativePlatforms = getNativePlatforms();
         widthPixels = displayMetrics.widthPixels;
         heightPixels = displayMetrics.heightPixels;
-        locales = new ArrayList<String>(Arrays.asList(context.getAssets().getLocales()));
+        locales = new ArrayList<>(Arrays.asList(context.getAssets().getLocales()));
         for (int i = 0; i < locales.size(); i++) {
             locales.set(i, locales.get(i).replace("-", "_"));
         }
         Collections.sort(locales);
-        Set<String> glExtensions = new HashSet<String>();
+        Set<String> glExtensions = new HashSet<>();
         addEglExtensions(glExtensions);
-        this.glExtensions = new ArrayList<String>(glExtensions);
+        this.glExtensions = new ArrayList<>(glExtensions);
         Collections.sort(this.glExtensions);
     }
 
@@ -104,7 +104,7 @@ public class DeviceConfiguration {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return Arrays.asList(Build.SUPPORTED_ABIS);
         } else {
-            nativePlatforms = new ArrayList<String>();
+            nativePlatforms = new ArrayList<>();
             nativePlatforms.add(Build.CPU_ABI);
             if (Build.CPU_ABI2 != null && !Build.CPU_ABI2.equals("unknown"))
                 nativePlatforms.add(Build.CPU_ABI2);
@@ -117,7 +117,7 @@ public class DeviceConfiguration {
         if (egl10 != null) {
             EGLDisplay display = egl10.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             egl10.eglInitialize(display, new int[2]);
-            int cf[] = new int[1];
+            int[] cf = new int[1];
             if (egl10.eglGetConfigs(display, null, 0, cf)) {
                 EGLConfig[] configs = new EGLConfig[cf[0]];
                 if (egl10.eglGetConfigs(display, configs, cf[0], cf)) {
@@ -147,29 +147,23 @@ public class DeviceConfiguration {
         }
     }
 
-    private static void addExtensionsForConfig(EGL10 egl10, EGLDisplay egldisplay, EGLConfig eglconfig, int ai[],
-                                               int ai1[], Set<String> set) {
+    private static void addExtensionsForConfig(EGL10 egl10, EGLDisplay egldisplay, EGLConfig eglconfig, int[] ai,
+                                               int[] ai1, Set<String> set) {
         EGLContext eglcontext = egl10.eglCreateContext(egldisplay, eglconfig, EGL10.EGL_NO_CONTEXT, ai1);
         if (eglcontext != EGL10.EGL_NO_CONTEXT) {
             javax.microedition.khronos.egl.EGLSurface eglsurface =
                     egl10.eglCreatePbufferSurface(egldisplay, eglconfig, ai);
-            if (eglsurface == EGL10.EGL_NO_SURFACE) {
-                egl10.eglDestroyContext(egldisplay, eglcontext);
-            } else {
+            if (eglsurface != EGL10.EGL_NO_SURFACE) {
                 egl10.eglMakeCurrent(egldisplay, eglsurface, eglsurface, eglcontext);
                 String s = GLES10.glGetString(7939);
                 if (s != null && !s.isEmpty()) {
-                    String as[] = s.split(" ");
-                    int i = as.length;
-                    for (int j = 0; j < i; j++) {
-                        set.add(as[j]);
-                    }
-
+                    String[] as = s.split(" ");
+                    set.addAll(Arrays.asList(as).subList(0, as.length));
                 }
                 egl10.eglMakeCurrent(egldisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT);
                 egl10.eglDestroySurface(egldisplay, eglsurface);
-                egl10.eglDestroyContext(egldisplay, eglcontext);
             }
+            egl10.eglDestroyContext(egldisplay, eglcontext);
         }
     }
 }

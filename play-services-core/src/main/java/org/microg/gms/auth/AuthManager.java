@@ -21,8 +21,9 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import org.microg.gms.common.PackageUtils;
 
@@ -117,10 +118,7 @@ public class AuthManager {
             }
         }
         String perm = getUserData(buildPermKey());
-        if (!"1".equals(perm)) {
-            return false;
-        }
-        return true;
+        return "1".equals(perm);
     }
 
     public void setExpiry(long expiry) {

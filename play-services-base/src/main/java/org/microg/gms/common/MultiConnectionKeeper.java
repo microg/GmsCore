@@ -39,7 +39,7 @@ public class MultiConnectionKeeper {
     private static MultiConnectionKeeper INSTANCE;
 
     private final Context context;
-    private final Map<String, Connection> connections = new HashMap<String, Connection>();
+    private final Map<String, Connection> connections = new HashMap<>();
 
     public MultiConnectionKeeper(Context context) {
         this.context = context;
@@ -83,7 +83,7 @@ public class MultiConnectionKeeper {
 
     public class Connection {
         private final String actionString;
-        private final Set<ServiceConnection> connectionForwards = new HashSet<ServiceConnection>();
+        private final Set<ServiceConnection> connectionForwards = new HashSet<>();
         private boolean bound = false;
         private boolean connected = false;
         private IBinder binder;

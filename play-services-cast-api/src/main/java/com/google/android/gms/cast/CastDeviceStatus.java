@@ -45,5 +45,5 @@ public class CastDeviceStatus extends AutoSafeParcelable {
     @SafeParceled(6)
     private int standbyState;
 
-    public static final Creator<CastDeviceStatus> CREATOR = new AutoCreator<CastDeviceStatus>(CastDeviceStatus.class);
+    public static final Creator<CastDeviceStatus> CREATOR = new AutoCreator<>(CastDeviceStatus.class);
 }

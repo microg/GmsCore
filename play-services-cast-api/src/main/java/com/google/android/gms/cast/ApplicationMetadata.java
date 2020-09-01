@@ -81,5 +81,5 @@ public class ApplicationMetadata extends AutoSafeParcelable {
         return sb.toString();
     }
 
-    public static final Creator<ApplicationMetadata> CREATOR = new AutoCreator<ApplicationMetadata>(ApplicationMetadata.class);
+    public static final Creator<ApplicationMetadata> CREATOR = new AutoCreator<>(ApplicationMetadata.class);
 }

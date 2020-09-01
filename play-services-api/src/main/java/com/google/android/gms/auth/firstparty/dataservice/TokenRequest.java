@@ -40,5 +40,5 @@ public class TokenRequest extends AutoSafeParcelable{
         return new Account(accountName, accountType);
     }
 
-    public static final Creator<TokenRequest> CREATOR = new AutoCreator<TokenRequest>(TokenRequest.class);
+    public static final Creator<TokenRequest> CREATOR = new AutoCreator<>(TokenRequest.class);
 }
