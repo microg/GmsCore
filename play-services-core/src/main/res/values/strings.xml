@@ -102,6 +102,7 @@ This can take a couple of minutes."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
 
     <string name="pref_about_title">About Vanced microG</string>
+    <string name="pref_cast_double_fix">Cast duplication fix</string>
 
     <string name="pref_switcher_title">Register device</string>
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. Vanced microG strips identifying bits other than your Google account name from registration data.</string>
@@ -132,5 +133,5 @@ This can take a couple of minutes."</string>
     <string name="prefcat_push_apps_registered_title">Registered apps</string>
     <string name="prefcat_push_apps_unregistered_title">Unregistered apps</string>
     <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
-
+    <string name="pref_cast_double_fix_summary">Enable this if you see duplicates in your casting menu</string>
 </resources>

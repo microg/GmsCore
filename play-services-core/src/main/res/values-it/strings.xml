@@ -91,7 +91,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_auth_visible_summary">Quando questa opzione è attiva, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica dell\'account Google senza autorizzazione preventiva.</string>
 
     <string name="pref_switcher_title">Registra dispositivo</string>
-    <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. Vengono rimossi da microG alcuni bit funzionali all\'identificazione dai dati di registrazione, oltre al nome dell\'account Google.</string>
+    <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. Vengono rimossi da microG alcuni bit funzionali all\'identificazione dei dati di registrazione, oltre al nome dell\'account Google.</string>
 
     <string name="checkin_not_registered">Non registrato</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
@@ -107,6 +107,8 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Chiedi conferma all\'utente prima di registrare una nuova applicazione per le notifiche push.</string>
 
     <string name="pref_about_title">A proposito di microG</string>
+    <string name="pref_cast_double_fix">Correzione Cast duplicato</string>
+    <string name="pref_cast_double_fix_summary">Attiva questa opzione in caso di voci duplicate nel menù di cast</string>
   
     <string name="gcm_status_pref_auto">Automatico</string>
     <string name="gcm_status_pref_manual">Manuale</string>
