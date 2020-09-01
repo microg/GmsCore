@@ -26,9 +26,14 @@ import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import org.microg.gms.kotlin.unwrap
 import org.microg.gms.maps.mapbox.GoogleMapImpl
+import org.microg.gms.maps.mapbox.R
+import org.microg.gms.maps.mapbox.utils.InfoWindow
 import org.microg.gms.maps.mapbox.utils.toMapbox
 
 class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options: MarkerOptions) : IMarkerDelegate.Stub(), Markup<Symbol, SymbolOptions> {
+
+    private var infoWindow: InfoWindow? = null
+
     private var position: LatLng = options.position
     private var visible: Boolean = options.isVisible
     private var rotation: Float = options.rotation
@@ -40,6 +45,7 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
     private var zIndex: Float = options.zIndex
     private var draggable: Boolean = options.isDraggable
     private var tag: IObjectWrapper? = null
+    private var infoWindowShown: Boolean = false
 
     override var annotation: Symbol? = null
     override var removed: Boolean = false
@@ -81,6 +87,9 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
         this.position = position ?: return
         annotation?.latLng = position.toMapbox()
         map.symbolManager?.let { update(it) }
+        if (infoWindow != null) {
+            infoWindow?.updateMarkerPosition()
+        }
     }
 
     override fun getPosition(): LatLng = position
@@ -106,16 +115,30 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
     override fun isDraggable(): Boolean = draggable
 
     override fun showInfoWindow() {
-        Log.d(TAG, "unimplemented Method: showInfoWindow")
+        if (!infoWindowShown) {
+            if (infoWindow == null) {
+                infoWindow = InfoWindow(map.mapView!!, R.layout.infowindow, map.map)
+            }
+            if (infoWindow != null) {
+                infoWindowShown = true
+                infoWindow?.open(map.mapView!!, this, position, 0, 0)
+                infoWindow?.updateMarkerText(this, map.map, map.mapView!!);
+            }
+        }
     }
 
     override fun hideInfoWindow() {
-        Log.d(TAG, "unimplemented Method: hideInfoWindow")
+        if (infoWindowShown) {
+            if (infoWindow != null) {
+                infoWindow?.close();
+            }
+        }
+        infoWindowShown = false
     }
 
     override fun isInfoWindowShown(): Boolean {
-        Log.d(TAG, "unimplemented Method: isInfoWindowShow")
-        return false
+        return infoWindowShown
+
     }
 
     override fun setVisible(visible: Boolean) {

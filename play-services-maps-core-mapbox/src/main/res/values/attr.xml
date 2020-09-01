@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="infowindowLayout">
+        <attr format="dimension|reference" name="infowindow_corner_radius"/>
+        <attr format="color|reference" name="infowindow_bg_color"/>
+        <attr format="dimension|reference" name="infowindow_stroke_width"/>
+        <attr format="color|reference" name="infowindow_stroke_color"/>
+    </declare-styleable>
+</resources>

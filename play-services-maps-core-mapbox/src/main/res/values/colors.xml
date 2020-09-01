@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="info_text_color">#F111</color>
+    <color name="info_snippet_color">#F444</color>
+    <color name="infowindow_bg_color">#FFFF</color>
+    <color name="infowindow_stroke_color">#F222</color>
+</resources>

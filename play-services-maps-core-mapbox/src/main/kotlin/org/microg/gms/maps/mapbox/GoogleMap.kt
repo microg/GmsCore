@@ -17,8 +17,8 @@
 package org.microg.gms.maps.mapbox
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
+import android.graphics.PointF
 import android.location.Location
 import android.os.*
 import androidx.annotation.IdRes
@@ -30,6 +30,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.collection.LongSparseArray
+import com.google.android.gms.common.Feature
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.internal.*
@@ -47,8 +48,6 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.*
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
-import com.mapbox.mapboxsdk.utils.ColorUtils
-import com.mapbox.mapboxsdk.utils.ThreadUtils
 import org.microg.gms.kotlin.unwrap
 import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.BuildConfig.*
@@ -74,11 +73,14 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     val view: FrameLayout
     var map: MapboxMap? = null
-        private set
+        protected set
+
     val dpiFactor: Float
         get() = context.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT
 
-    private var mapView: MapView? = null
+    var mapView: MapView? = null
+        protected set
+
     private var created = false
     private var initialized = false
     private var loaded = false

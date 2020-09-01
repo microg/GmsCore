@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.microg.gms.maps.mapbox.utils.InfoWindowLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="4dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="3dp"
+    app:infowindow_bg_color="@color/infowindow_bg_color"
+    app:infowindow_corner_radius="4dp"
+    app:infowindow_stroke_color="@color/infowindow_stroke_color"
+    app:infowindow_stroke_width="1dp">
+
+    <TextView
+        android:id="@+id/show_info_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:textIsSelectable="false"
+        android:maxEms="16"
+        android:textColor="@color/info_text_color"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/show_info_snippet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:textIsSelectable="false"
+        android:lineSpacingExtra="1dp"
+        android:maxEms="16"
+        android:textColor="@color/info_snippet_color"
+        android:textSize="11sp"/>
+
+</org.microg.gms.maps.mapbox.utils.InfoWindowLayout>
