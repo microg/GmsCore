@@ -272,7 +272,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return fill
     }
 
-    override fun addMarker(options: MarkerOptions): IMarkerDelegate? {
+    override fun addMarker(options: MarkerOptions): IMarkerDelegate {
         val marker = MarkerImpl(this, "m${markerId++}", options)
         synchronized(this) {
             val symbolManager = symbolManager

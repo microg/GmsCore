@@ -18,6 +18,7 @@ package org.microg.gms.maps.mapbox.model
 
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
+import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.internal.IMarkerDelegate
@@ -199,7 +200,7 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
         this.tag = obj
     }
 
-    override fun getTag(): IObjectWrapper? = tag
+    override fun getTag(): IObjectWrapper = tag ?: ObjectWrapper.wrap(null)
 
     companion object {
         private val TAG = "GmsMapMarker"
