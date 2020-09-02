@@ -50,13 +50,13 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun start(params: StartParams) {
-        if (ExposurePreferences(context).scannerEnabled) {
+        if (ExposurePreferences(context).enabled) {
             params.callback.onResult(Status(FAILED_ALREADY_STARTED))
             return
         }
         confirm(CONFIRM_ACTION_START) { resultCode, resultData ->
             if (resultCode == SUCCESS) {
-                ExposurePreferences(context).scannerEnabled = true
+                ExposurePreferences(context).enabled = true
             }
             ExposureDatabase.with(context) { database ->
                 database.noteAppAction(packageName, "start", JSONObject().apply {
@@ -72,13 +72,13 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun stop(params: StopParams) {
-        if (!ExposurePreferences(context).scannerEnabled) {
+        if (!ExposurePreferences(context).enabled) {
             params.callback.onResult(Status.SUCCESS)
             return
         }
         confirm(CONFIRM_ACTION_STOP) { resultCode, _ ->
             if (resultCode == SUCCESS) {
-                ExposurePreferences(context).scannerEnabled = false
+                ExposurePreferences(context).enabled = false
             }
             ExposureDatabase.with(context) { database ->
                 database.noteAppAction(packageName, "stop", JSONObject().apply {
@@ -95,7 +95,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     override fun isEnabled(params: IsEnabledParams) {
         try {
-            params.callback.onResult(Status.SUCCESS, ExposurePreferences(context).scannerEnabled)
+            params.callback.onResult(Status.SUCCESS, ExposurePreferences(context).enabled)
         } catch (e: Exception) {
             Log.w(TAG, "Callback failed", e)
         }

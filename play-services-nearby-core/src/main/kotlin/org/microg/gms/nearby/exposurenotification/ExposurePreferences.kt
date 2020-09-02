@@ -8,13 +8,21 @@ package org.microg.gms.nearby.exposurenotification
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.preference.PreferenceManager
+import org.microg.gms.common.PackageUtils
 
 
 class ExposurePreferences(private val context: Context) {
     private var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-    var scannerEnabled
+    init {
+        if (context.packageName != PackageUtils.getProcessName()) {
+            Log.w("Preferences", ExposurePreferences::class.simpleName + " initialized outside main process", RuntimeException())
+        }
+    }
+
+    var enabled
         get() = preferences.getBoolean(PREF_SCANNER_ENABLED, false)
         set(newStatus) {
             preferences.edit().putBoolean(PREF_SCANNER_ENABLED, newStatus).commit()
@@ -25,9 +33,6 @@ class ExposurePreferences(private val context: Context) {
                 context.stopService(Intent(context, AdvertiserService::class.java))
             }
         }
-
-    val advertiserEnabled
-        get() = scannerEnabled
 
     var lastCleanup
         get() = preferences.getLong(PREF_LAST_CLEANUP, 0)

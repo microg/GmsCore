@@ -76,7 +76,7 @@ class AdvertiserService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
         super.onStartCommand(intent, flags, startId)
-        if (ExposurePreferences(this).advertiserEnabled) {
+        if (ExposurePreferences(this).enabled) {
             loopAdvertising()
         } else {
             stopSelf()
@@ -191,7 +191,7 @@ class AdvertiserService : LifecycleService() {
 
     companion object {
         fun isNeeded(context: Context): Boolean {
-            return ExposurePreferences(context).scannerEnabled
+            return ExposurePreferences(context).enabled
         }
     }
 }

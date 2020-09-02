@@ -27,7 +27,7 @@ class CleanupService : LifecycleService() {
     companion object {
         fun isNeeded(context: Context): Boolean {
             return ExposurePreferences(context).let {
-                it.scannerEnabled && it.lastCleanup < System.currentTimeMillis() - CLEANUP_INTERVAL
+                it.enabled && it.lastCleanup < System.currentTimeMillis() - CLEANUP_INTERVAL
             }
         }
     }

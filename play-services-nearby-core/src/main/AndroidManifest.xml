@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application>
+
+        <!-- Exposure Notifications -->
+
         <service android:name="org.microg.gms.nearby.exposurenotification.ScannerService" />
         <service android:name="org.microg.gms.nearby.exposurenotification.AdvertiserService" />
         <service android:name="org.microg.gms.nearby.exposurenotification.CleanupService" />
@@ -23,6 +26,8 @@
                 <action android:name="com.google.android.gms.nearby.exposurenotification.START" />
             </intent-filter>
         </service>
+
+        <receiver android:name="org.microg.gms.nearby.exposurenotification.ServiceInfoReceiver" />
 
         <receiver android:name="org.microg.gms.nearby.exposurenotification.ServiceTrigger">
             <intent-filter>

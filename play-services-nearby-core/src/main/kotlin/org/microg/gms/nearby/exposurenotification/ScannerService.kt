@@ -7,7 +7,6 @@ package org.microg.gms.nearby.exposurenotification
 
 import android.annotation.TargetApi
 import android.app.Service
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.le.*
 import android.content.BroadcastReceiver
@@ -76,7 +75,7 @@ class ScannerService : Service() {
     }
 
     fun startScanIfNeeded() {
-        if (ExposurePreferences(this).scannerEnabled) {
+        if (ExposurePreferences(this).enabled) {
             startScan()
         } else {
             stopSelf()
@@ -138,7 +137,7 @@ class ScannerService : Service() {
 
     companion object {
         fun isNeeded(context: Context): Boolean {
-            return ExposurePreferences(context).scannerEnabled
+            return ExposurePreferences(context).enabled
         }
     }
 }
