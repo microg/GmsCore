@@ -64,16 +64,26 @@ public class GoogleLocationManager implements LocationChangeListener {
             this.gpsProvider = null;
         }
         if (Utils.hasSelfPermissionOrNotify(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            if (locationManager.getAllProviders().contains(NETWORK_PROVIDER)) {
-                this.networkProvider = new UnifiedLocationProvider(context, this);
-            } else {
-                // TODO: Add ability to directly contact UnifiedNlp without the system location provider
-                this.networkProvider = null;
-            }
+            this.networkProvider = new UnifiedLocationProvider(context, this);
         } else {
             this.networkProvider = null;
         }
         mockProvider = new MockLocationProvider(this);
+    }
+
+    public void invokeOnceReady(Runnable runnable) {
+        Runnable networkRunnable = () -> {
+            if (networkProvider != null) {
+                networkProvider.invokeOnceReady(runnable);
+            } else {
+                runnable.run();
+            }
+        };
+        if (gpsProvider != null) {
+            gpsProvider.invokeOnceReady(networkRunnable);
+        } else {
+            networkRunnable.run();
+        }
     }
 
     public Location getLastLocation(String packageName) {

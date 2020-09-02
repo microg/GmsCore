@@ -3,6 +3,7 @@ package org.microg.gms.location
 import android.content.Context
 import android.location.Location
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.microg.nlp.client.UnifiedLocationClient
@@ -22,10 +23,30 @@ class UnifiedLocationProvider(context: Context?, changeListener: LocationChangeL
             changeListener.onLocationChanged()
         }
     }
+    private var ready = false
+    private val invokeOnceReady = hashSetOf<Runnable>()
 
     private fun updateLastLocation() {
-        GlobalScope.launch {
-            client.getLastLocation()?.let { lastLocation = it }
+        GlobalScope.launch(Dispatchers.Main) {
+            Log.d(TAG, "unified network: requesting last location")
+            val lastLocation = client.getLastLocation()
+            Log.d(TAG, "unified network: got last location: $lastLocation")
+            if (lastLocation != null) {
+                this@UnifiedLocationProvider.lastLocation = lastLocation
+            }
+            synchronized(invokeOnceReady) {
+                for (runnable in invokeOnceReady) {
+                    runnable.run()
+                }
+                ready = true
+            }
+        }
+    }
+
+    fun invokeOnceReady(runnable: Runnable) {
+        synchronized(invokeOnceReady) {
+            if (ready) runnable.run()
+            else invokeOnceReady.add(runnable)
         }
     }
 

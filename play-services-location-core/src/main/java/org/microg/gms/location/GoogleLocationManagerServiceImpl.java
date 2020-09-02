@@ -68,6 +68,10 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
         this.context = context;
     }
 
+    public void invokeOnceReady(Runnable runnable) {
+        getLocationManager().invokeOnceReady(runnable);
+    }
+
     private GoogleLocationManager getLocationManager() {
         if (locationManager == null)
             locationManager = new GoogleLocationManager(context);

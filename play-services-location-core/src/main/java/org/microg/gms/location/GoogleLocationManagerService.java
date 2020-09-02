@@ -17,6 +17,7 @@
 package org.microg.gms.location;
 
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -33,6 +34,12 @@ public class GoogleLocationManagerService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, impl.asBinder(), null);
+        impl.invokeOnceReady(() -> {
+            try {
+                callback.onPostInitComplete(0, impl.asBinder(), null);
+            } catch (RemoteException e) {
+                Log.w(TAG, e);
+            }
+        });
     }
 }
