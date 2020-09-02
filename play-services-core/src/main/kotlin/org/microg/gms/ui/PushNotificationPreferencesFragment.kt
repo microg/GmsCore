@@ -18,9 +18,7 @@ import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.gcm.GcmDatabase
-import org.microg.gms.gcm.GcmPrefs
-import org.microg.gms.gcm.McsService
-import org.microg.gms.gcm.getStatusInfo
+import org.microg.gms.gcm.getGcmServiceInfo
 
 class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var pushStatusCategory: PreferenceCategory
@@ -67,9 +65,9 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
 
     private fun updateStatus() {
         handler.postDelayed(updateRunnable, UPDATE_INTERVAL)
-        pushStatusCategory.isVisible = GcmPrefs.get(context).isEnabled
         lifecycleScope.launchWhenStarted {
-            val statusInfo = getStatusInfo(requireContext())
+            val statusInfo = getGcmServiceInfo(requireContext())
+            pushStatusCategory.isVisible = statusInfo.configuration.enabled
             pushStatus.summary = if (statusInfo != null && statusInfo.connected) {
                 getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
             } else {

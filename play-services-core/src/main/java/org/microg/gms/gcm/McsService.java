@@ -176,8 +176,8 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
-    private static void logd(String msg) {
-        if (GcmPrefs.get(null).isGcmLogEnabled()) Log.d(TAG, msg);
+    private static void logd(Context context, String msg) {
+        if (context == null || GcmPrefs.get(context).isGcmLogEnabled()) Log.d(TAG, msg);
     }
 
     @Override
@@ -237,7 +237,7 @@ public class McsService extends Service implements Handler.Callback {
 
     public synchronized static boolean isConnected() {
         if (inputStream == null || !inputStream.isAlive() || outputStream == null || !outputStream.isAlive()) {
-            logd("Connection is not enabled or dead.");
+            logd(null, "Connection is not enabled or dead.");
             return false;
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
@@ -245,7 +245,7 @@ public class McsService extends Service implements Handler.Callback {
         if (heartbeatMs < 0) {
             closeAll();
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
-            logd("No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
+            logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
             GcmPrefs.get(null).learnTimeout(activeNetworkPref);
             return false;
         }
@@ -259,7 +259,7 @@ public class McsService extends Service implements Handler.Callback {
     public static void scheduleReconnect(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         long delay = getCurrentDelay();
-        logd("Scheduling reconnect in " + delay / 1000 + " seconds...");
+        logd(context, "Scheduling reconnect in " + delay / 1000 + " seconds...");
         PendingIntent pi = PendingIntent.getBroadcast(context, 1, new Intent(ACTION_RECONNECT, null, context, TriggerReceiver.class), 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delay, pi);
@@ -275,7 +275,7 @@ public class McsService extends Service implements Handler.Callback {
         if (heartbeatMs < 0) {
             closeAll();
         }
-        logd("Scheduling heartbeat in " + heartbeatMs / 1000 + " seconds...");
+        logd(context, "Scheduling heartbeat in " + heartbeatMs / 1000 + " seconds...");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // This is supposed to work even when running in idle and without battery optimization disabled
             alarmManager.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, heartbeatIntent);
@@ -449,11 +449,11 @@ public class McsService extends Service implements Handler.Callback {
                 return;
             }
 
-            logd("Starting MCS connection...");
+            logd(this, "Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
-            logd("Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
+            logd(this, "Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
             sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, SERVICE_PORT, true);
-            logd("Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
+            logd(this, "Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
             inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
             outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);
             inputStream.start();
@@ -476,7 +476,7 @@ public class McsService extends Service implements Handler.Callback {
     private void handleLoginResponse(LoginResponse loginResponse) {
         if (loginResponse.error == null) {
             GcmPrefs.get(this).clearLastPersistedId();
-            logd("Logged in");
+            logd(this, "Logged in");
             wakeLock.release();
         } else {
             throw new RuntimeException("Could not login: " + loginResponse.error);
@@ -561,13 +561,13 @@ public class McsService extends Service implements Handler.Callback {
 
         if (receiverPermission == null) {
             // Without receiver permission, we only restrict by package name
-            logd("Deliver message to all receivers in package " + packageName);
+            logd(this, "Deliver message to all receivers in package " + packageName);
             intent.setPackage(packageName);
             sendOrderedBroadcast(intent, null);
         } else {
             List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
             if (infos == null || infos.isEmpty()) {
-                logd("No target for message, wut?");
+                logd(this, "No target for message, wut?");
             } else {
                 for (ResolveInfo resolveInfo : infos) {
                     Intent targetIntent = new Intent(intent);
@@ -578,7 +578,7 @@ public class McsService extends Service implements Handler.Callback {
                             try {
                                 if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
                                     int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
-                                    logd("Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
+                                    logd(this, "Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
                                     addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
                                 }
                             } catch (Exception e) {
@@ -586,11 +586,11 @@ public class McsService extends Service implements Handler.Callback {
                             }
                         }
                         // We don't need receiver permission for our own package
-                        logd("Deliver message to own receiver " + resolveInfo);
+                        logd(this, "Deliver message to own receiver " + resolveInfo);
                         sendOrderedBroadcast(targetIntent, null);
                     } else if (resolveInfo.filter.hasCategory(packageName)) {
                         // Permission required
-                        logd("Deliver message to third-party receiver (with permission check)" + resolveInfo);
+                        logd(this, "Deliver message to third-party receiver (with permission check)" + resolveInfo);
                         sendOrderedBroadcast(targetIntent, receiverPermission);
                     }
                 }
@@ -640,21 +640,21 @@ public class McsService extends Service implements Handler.Callback {
                 return true;
             case MSG_INPUT_ERROR:
             case MSG_OUTPUT_ERROR:
-                logd("I/O error: " + msg.obj);
+                logd(this, "I/O error: " + msg.obj);
                 rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, msg.obj));
                 return true;
             case MSG_TEARDOWN:
-                logd("Teardown initiated, reason: " + msg.obj);
+                logd(this, "Teardown initiated, reason: " + msg.obj);
                 handleTeardown(msg);
                 return true;
             case MSG_CONNECT:
-                logd("Connect initiated, reason: " + msg.obj);
+                logd(this, "Connect initiated, reason: " + msg.obj);
                 if (!isConnected()) {
                     connect();
                 }
                 return true;
             case MSG_HEARTBEAT:
-                logd("Heartbeat initiated, reason: " + msg.obj);
+                logd(this, "Heartbeat initiated, reason: " + msg.obj);
                 if (isConnected()) {
                     HeartbeatPing.Builder ping = new HeartbeatPing.Builder();
                     if (inputStream.newStreamIdAvailable()) {
@@ -663,12 +663,12 @@ public class McsService extends Service implements Handler.Callback {
                     send(MCS_HEARTBEAT_PING_TAG, ping.build());
                     scheduleHeartbeat(this);
                 } else {
-                    logd("Ignoring heartbeat, not connected!");
+                    logd(this, "Ignoring heartbeat, not connected!");
                     scheduleReconnect(this);
                 }
                 return true;
             case MSG_ACK:
-                logd("Ack initiated, reason: " + msg.obj);
+                logd(this, "Ack initiated, reason: " + msg.obj);
                 if (isConnected()) {
                     IqStanza.Builder iq = new IqStanza.Builder()
                             .type(IqStanza.IqType.SET)
@@ -680,11 +680,11 @@ public class McsService extends Service implements Handler.Callback {
                     }
                     send(MCS_IQ_STANZA_TAG, iq.build());
                 } else {
-                    logd("Ignoring ack, not connected!");
+                    logd(this, "Ignoring ack, not connected!");
                 }
                 return true;
             case MSG_OUTPUT_READY:
-                logd("Sending login request...");
+                logd(this, "Sending login request...");
                 send(MCS_LOGIN_REQUEST_TAG, buildLoginRequest());
                 return true;
             case MSG_OUTPUT_DONE:

@@ -8,11 +8,14 @@ package org.microg.gms.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.R
 import com.google.android.gms.databinding.SafetyNetFragmentBinding
-import org.microg.gms.checkin.CheckinPrefs
-import org.microg.gms.snet.SafetyNetPrefs
+import org.microg.gms.checkin.getCheckinServiceInfo
+import org.microg.gms.snet.ServiceInfo
+import org.microg.gms.snet.getSafetyNetServiceInfo
+import org.microg.gms.snet.setSafetyNetServiceConfiguration
 
 class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
 
@@ -22,17 +25,30 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
         binding = SafetyNetFragmentBinding.inflate(inflater, container, false)
         binding.switchBarCallback = object : PreferenceSwitchBarCallback {
             override fun onChecked(newStatus: Boolean) {
-                SafetyNetPrefs.get(requireContext()).isEnabled = newStatus
-                binding.safetynetEnabled = newStatus
+                setEnabled(newStatus)
             }
         }
         return binding.root
     }
 
+    fun setEnabled(newStatus: Boolean) {
+        lifecycleScope.launchWhenResumed {
+            val info = getSafetyNetServiceInfo(requireContext())
+            val newConfiguration = info.configuration.copy(enabled = newStatus)
+            displayServiceInfo(setSafetyNetServiceConfiguration(requireContext(), newConfiguration))
+        }
+    }
+
+    fun displayServiceInfo(serviceInfo: ServiceInfo) {
+        binding.safetynetEnabled = serviceInfo.configuration.enabled
+    }
+
     override fun onResume() {
         super.onResume()
-        binding.checkinEnabled = CheckinPrefs.get(requireContext()).isEnabled
-        binding.safetynetEnabled = SafetyNetPrefs.get(requireContext()).isEnabled
+        lifecycleScope.launchWhenResumed {
+            binding.checkinEnabled = getCheckinServiceInfo(requireContext()).configuration.enabled
+            displayServiceInfo(getSafetyNetServiceInfo(requireContext()))
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -14,6 +14,11 @@
             android:selectable="false"
             android:title="@string/pref_info_status"
             tools:summary="Last registration: 13 hours ago" />
+        <Preference
+            android:key="pref_device_registration_android_id"
+            android:selectable="false"
+            android:title="@string/pref_device_registration_android_id"
+            tools:summary="1953a59d1c1b7e4b" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <org.microg.gms.ui.TextPreference

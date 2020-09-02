@@ -193,6 +193,8 @@
             </intent-filter>
         </service>
 
+        <receiver android:name="org.microg.gms.checkin.ServiceInfoReceiver" />
+
         <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
             <intent-filter>
                 <action android:name="android.server.checkin.CHECKIN" />
@@ -238,7 +240,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="org.microg.gms.gcm.StatusInfoProvider" />
+        <receiver android:name="org.microg.gms.gcm.ServiceInfoReceiver" />
 
         <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
             <intent-filter>
@@ -626,6 +628,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <receiver android:name="org.microg.gms.snet.ServiceInfoReceiver" />
 
         <service android:name="org.microg.gms.snet.SafetyNetClientService">
             <intent-filter>

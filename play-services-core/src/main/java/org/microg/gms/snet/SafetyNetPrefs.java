@@ -19,6 +19,11 @@ package org.microg.gms.snet;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import org.microg.gms.common.PackageUtils;
+
+import java.io.File;
 
 public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String OFFICIAL_ATTEST_BASE_URL = "https://www.googleapis.com/androidcheck/v1/attestations/attest";
@@ -33,6 +38,9 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
 
     public static SafetyNetPrefs get(Context context) {
         if (INSTANCE == null) {
+            if (!context.getPackageName().equals(PackageUtils.getProcessName())) {
+                Log.w("Preferences", SafetyNetPrefs.class.getName() + " initialized outside main process", new RuntimeException());
+            }
             if (context == null) return new SafetyNetPrefs(null);
             INSTANCE = new SafetyNetPrefs(context.getApplicationContext());
         }
@@ -45,22 +53,41 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
     private boolean thirdParty;
     private String customUrl;
 
-    private SharedPreferences defaultPreferences;
+    private SharedPreferences preferences;
+    private SharedPreferences systemDefaultPreferences;
 
     private SafetyNetPrefs(Context context) {
         if (context != null) {
-            defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            defaultPreferences.registerOnSharedPreferenceChangeListener(this);
+            preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            preferences.registerOnSharedPreferenceChangeListener(this);
+            try {
+                systemDefaultPreferences = (SharedPreferences) Context.class.getDeclaredMethod("getSharedPreferences", File.class, int.class).invoke(context, new File("/system/etc/microg.xml"), Context.MODE_PRIVATE);
+            } catch (Exception ignored) {
+            }
             update();
         }
     }
 
+    private boolean getSettingsBoolean(String key, boolean def) {
+        if (systemDefaultPreferences != null) {
+            def = systemDefaultPreferences.getBoolean(key, def);
+        }
+        return preferences.getBoolean(key, def);
+    }
+
+    private String getSettingsString(String key, String def) {
+        if (systemDefaultPreferences != null) {
+            def = systemDefaultPreferences.getString(key, def);
+        }
+        return preferences.getString(key, def);
+    }
+
     public void update() {
-        disabled = defaultPreferences.getBoolean(PREF_SNET_DISABLED, true);
-        official = defaultPreferences.getBoolean(PREF_SNET_OFFICIAL, false);
-        selfSigned = defaultPreferences.getBoolean(PREF_SNET_SELF_SIGNED, false);
-        thirdParty = defaultPreferences.getBoolean(PREF_SNET_THIRD_PARTY, false);
-        customUrl = defaultPreferences.getString(PREF_SNET_CUSTOM_URL, null);
+        disabled = getSettingsBoolean(PREF_SNET_DISABLED, true);
+        official = getSettingsBoolean(PREF_SNET_OFFICIAL, false);
+        selfSigned = getSettingsBoolean(PREF_SNET_SELF_SIGNED, false);
+        thirdParty = getSettingsBoolean(PREF_SNET_THIRD_PARTY, false);
+        customUrl = getSettingsString(PREF_SNET_CUSTOM_URL, null);
     }
 
     @Override
@@ -73,11 +100,13 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
     }
 
     public void setEnabled(boolean enabled) {
-        defaultPreferences.edit().putBoolean(PREF_SNET_DISABLED, !enabled).apply();
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putBoolean(PREF_SNET_DISABLED, !enabled);
         if (enabled && !isEnabled()) {
             official = true;
-            defaultPreferences.edit().putBoolean(PREF_SNET_OFFICIAL, true).apply();
+            edit.putBoolean(PREF_SNET_OFFICIAL, true);
         }
+        edit.commit();
     }
 
     public boolean isSelfSigned() {

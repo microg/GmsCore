@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
 import com.google.android.gms.databinding.ExposureNotificationsFragmentBinding
-import org.microg.gms.nearby.exposurenotification.ExposurePreferences
+import org.microg.gms.nearby.exposurenotification.ServiceInfo
+import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
+import org.microg.gms.nearby.exposurenotification.setExposureNotificationsServiceConfiguration
 
 class ExposureNotificationsFragment : Fragment(R.layout.exposure_notifications_fragment) {
     private lateinit var binding: ExposureNotificationsFragmentBinding
@@ -22,17 +24,28 @@ class ExposureNotificationsFragment : Fragment(R.layout.exposure_notifications_f
         binding = ExposureNotificationsFragmentBinding.inflate(inflater, container, false)
         binding.switchBarCallback = object : PreferenceSwitchBarCallback {
             override fun onChecked(newStatus: Boolean) {
-                ExposurePreferences(requireContext()).scannerEnabled = newStatus
-                binding.scannerEnabled = newStatus
+                setEnabled(newStatus)
             }
         }
         return binding.root
     }
 
+    fun setEnabled(newStatus: Boolean) {
+        lifecycleScope.launchWhenResumed {
+            val info = getExposureNotificationsServiceInfo(requireContext())
+            val newConfiguration = info.configuration.copy(enabled = newStatus)
+            displayServiceInfo(setExposureNotificationsServiceConfiguration(requireContext(), newConfiguration))
+        }
+    }
+
+    fun displayServiceInfo(serviceInfo: ServiceInfo) {
+        binding.scannerEnabled = serviceInfo.configuration.enabled
+    }
+
     override fun onResume() {
         super.onResume()
         lifecycleScope.launchWhenResumed {
-            binding.scannerEnabled = ExposurePreferences(requireContext()).scannerEnabled
+            displayServiceInfo(getExposureNotificationsServiceInfo(requireContext()))
         }
     }
 }

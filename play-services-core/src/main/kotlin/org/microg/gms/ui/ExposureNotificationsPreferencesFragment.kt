@@ -17,7 +17,7 @@ import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
-import org.microg.gms.nearby.exposurenotification.ExposurePreferences
+import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
 
 class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var exposureEnableInfo: Preference
@@ -62,9 +62,9 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     private fun updateStatus() {
         lifecycleScope.launchWhenResumed {
             handler.postDelayed(updateStatusRunnable, UPDATE_STATUS_INTERVAL)
-            val preferences = ExposurePreferences(requireContext())
-            exposureEnableInfo.isVisible = !preferences.scannerEnabled
-            advertisingId.isVisible = preferences.advertiserEnabled
+            val enabled = getExposureNotificationsServiceInfo(requireContext()).configuration.enabled
+            exposureEnableInfo.isVisible = !enabled
+            advertisingId.isVisible = enabled
         }
     }
 

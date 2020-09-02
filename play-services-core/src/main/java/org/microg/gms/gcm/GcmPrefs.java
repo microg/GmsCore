@@ -24,6 +24,9 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import org.microg.gms.common.PackageUtils;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +53,9 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public static GcmPrefs get(Context context) {
         if (INSTANCE == null) {
+            if (!context.getPackageName().equals(PackageUtils.getProcessName())) {
+                Log.w("Preferences", GcmPrefs.class.getName() + " initialized outside main process", new RuntimeException());
+            }
             if (context == null) return new GcmPrefs(null);
             INSTANCE = new GcmPrefs(context.getApplicationContext());
         }
@@ -70,30 +76,43 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     private int learntMobile = 300000;
     private int learntOther = 300000;
 
-    private SharedPreferences defaultPreferences;
+    private SharedPreferences preferences;
+    private SharedPreferences systemDefaultPreferences;
 
     private GcmPrefs(Context context) {
         if (context != null) {
-            defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            defaultPreferences.registerOnSharedPreferenceChangeListener(this);
+            preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            preferences.registerOnSharedPreferenceChangeListener(this);
+            try {
+                systemDefaultPreferences = (SharedPreferences) Context.class.getDeclaredMethod("getSharedPreferences", File.class, int.class).invoke(context, new File("/system/etc/microg.xml"), Context.MODE_PRIVATE);
+            } catch (Exception ignored) {
+            }
             update();
         }
     }
 
+    private boolean getSettingsBoolean(String key, boolean def) {
+        if (systemDefaultPreferences != null) {
+            def = systemDefaultPreferences.getBoolean(key, def);
+        }
+        return preferences.getBoolean(key, def);
+    }
+
     public void update() {
-        gcmLogEnabled = defaultPreferences.getBoolean(PREF_FULL_LOG, true);
-        lastPersistedId = defaultPreferences.getString(PREF_LAST_PERSISTENT_ID, "");
-        confirmNewApps = defaultPreferences.getBoolean(PREF_CONFIRM_NEW_APPS, false);
-        gcmEnabled = defaultPreferences.getBoolean(PREF_ENABLE_GCM, false);
+        gcmEnabled = getSettingsBoolean(PREF_ENABLE_GCM, false);
+        gcmLogEnabled = getSettingsBoolean(PREF_FULL_LOG, true);
+        confirmNewApps = getSettingsBoolean(PREF_CONFIRM_NEW_APPS, false);
 
-        networkMobile = Integer.parseInt(defaultPreferences.getString(PREF_NETWORK_MOBILE, "0"));
-        networkWifi = Integer.parseInt(defaultPreferences.getString(PREF_NETWORK_WIFI, "0"));
-        networkRoaming = Integer.parseInt(defaultPreferences.getString(PREF_NETWORK_ROAMING, "0"));
-        networkOther = Integer.parseInt(defaultPreferences.getString(PREF_NETWORK_OTHER, "0"));
+        lastPersistedId = preferences.getString(PREF_LAST_PERSISTENT_ID, "");
 
-        learntMobile = defaultPreferences.getInt(PREF_LEARNT_MOBILE, 300000);
-        learntWifi = defaultPreferences.getInt(PREF_LEARNT_WIFI, 300000);
-        learntOther = defaultPreferences.getInt(PREF_LEARNT_OTHER, 300000);
+        networkMobile = Integer.parseInt(preferences.getString(PREF_NETWORK_MOBILE, "0"));
+        networkWifi = Integer.parseInt(preferences.getString(PREF_NETWORK_WIFI, "0"));
+        networkRoaming = Integer.parseInt(preferences.getString(PREF_NETWORK_ROAMING, "0"));
+        networkOther = Integer.parseInt(preferences.getString(PREF_NETWORK_OTHER, "0"));
+
+        learntMobile = preferences.getInt(PREF_LEARNT_MOBILE, 300000);
+        learntWifi = preferences.getInt(PREF_LEARNT_WIFI, 300000);
+        learntOther = preferences.getInt(PREF_LEARNT_OTHER, 300000);
     }
 
     public String getNetworkPrefForInfo(NetworkInfo info) {
@@ -182,7 +201,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         learntMobile = Math.max(MIN_INTERVAL, Math.min(learntMobile, MAX_INTERVAL));
         learntWifi = Math.max(MIN_INTERVAL, Math.min(learntWifi, MAX_INTERVAL));
         learntOther = Math.max(MIN_INTERVAL, Math.min(learntOther, MAX_INTERVAL));
-        defaultPreferences.edit().putInt(PREF_LEARNT_MOBILE, learntMobile).putInt(PREF_LEARNT_WIFI, learntWifi).putInt(PREF_LEARNT_OTHER, learntOther).apply();
+        preferences.edit().putInt(PREF_LEARNT_MOBILE, learntMobile).putInt(PREF_LEARNT_WIFI, learntWifi).putInt(PREF_LEARNT_OTHER, learntOther).apply();
     }
 
     @Override
@@ -223,11 +242,11 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     public void extendLastPersistedId(String id) {
         if (!lastPersistedId.isEmpty()) lastPersistedId += "|";
         lastPersistedId += id;
-        defaultPreferences.edit().putString(PREF_LAST_PERSISTENT_ID, lastPersistedId).apply();
+        preferences.edit().putString(PREF_LAST_PERSISTENT_ID, lastPersistedId).apply();
     }
 
     public void clearLastPersistedId() {
         lastPersistedId = "";
-        defaultPreferences.edit().putString(PREF_LAST_PERSISTENT_ID, lastPersistedId).apply();
+        preferences.edit().putString(PREF_LAST_PERSISTENT_ID, lastPersistedId).apply();
     }
 }

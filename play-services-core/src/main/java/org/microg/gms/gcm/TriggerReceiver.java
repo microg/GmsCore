@@ -45,7 +45,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
     public synchronized static void register(Context context) {
         if (SDK_INT >= N && !registered) {
             IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-            context.registerReceiver(new TriggerReceiver(), intentFilter);
+            context.getApplicationContext().registerReceiver(new TriggerReceiver(), intentFilter);
             registered = true;
         }
     }
