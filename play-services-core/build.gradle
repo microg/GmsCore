@@ -21,7 +21,7 @@ apply plugin: 'kotlin-android-extensions'
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'org.conscrypt:conscrypt-android:2.4.0'
+    implementation 'org.conscrypt:conscrypt-android:2.5.0'
     // TODO: Switch to upstream once raw requests are merged
     // https://github.com/vitalidze/chromecast-java-api-v2/pull/99
     // implementation "su.litvak.chromecast:api-v2:0.10.4"
