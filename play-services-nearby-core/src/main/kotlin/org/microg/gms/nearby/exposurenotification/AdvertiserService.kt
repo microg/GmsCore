@@ -36,7 +36,7 @@ class AdvertiserService : LifecycleService() {
     private var looping = false
     private var callback: AdvertiseCallback? = null
     private val advertiser: BluetoothLeAdvertiser?
-        get() = BluetoothAdapter.getDefaultAdapter().bluetoothLeAdvertiser
+        get() = BluetoothAdapter.getDefaultAdapter()?.bluetoothLeAdvertiser
     private lateinit var database: ExposureDatabase
     private val trigger = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

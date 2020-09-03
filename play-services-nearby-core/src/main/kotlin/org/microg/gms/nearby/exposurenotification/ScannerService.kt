@@ -57,7 +57,7 @@ class ScannerService : Service() {
     }
 
     private val scanner: BluetoothLeScanner?
-        get() = getDefaultAdapter().bluetoothLeScanner
+        get() = getDefaultAdapter()?.bluetoothLeScanner
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)

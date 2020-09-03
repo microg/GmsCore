@@ -11,19 +11,51 @@ import com.google.android.gms.nearby.exposurenotification.RiskLevel
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import java.util.concurrent.TimeUnit
 
-data class MeasuredExposure(val rpi: ByteArray, val aem: ByteArray, val timestamp: Long, val duration: Long, val rssi: Int, val notCorrectedAttenuation: Int = 0, val key: TemporaryExposureKey? = null) {
+data class PlainExposure(val rpi: ByteArray, val aem: ByteArray, val timestamp: Long, val duration: Long, val rssi: Int)
+
+data class MeasuredExposure(val timestamp: Long, val duration: Long, val rssi: Int, val txPower: Int, val key: TemporaryExposureKey) {
+    val attenuation
+        get() = txPower - (rssi + currentDeviceInfo.rssiCorrection)
+}
+
+fun List<MeasuredExposure>.merge(): List<MergedExposure> {
+    val keys = map { it.key }.distinct()
+    val result = arrayListOf<MergedExposure>()
+    for (key in keys) {
+        var merged: MergedExposure? = null
+        for (exposure in filter { it.key == key }.sortedBy { it.timestamp }) {
+            if (merged == null) {
+                merged = MergedExposure(key, exposure.timestamp, listOf(MergedSubExposure(exposure.attenuation, exposure.duration)))
+            } else if (merged.timestamp + MergedExposure.MAXIMUM_DURATION + ROLLING_WINDOW_LENGTH_MS > exposure.timestamp) {
+                merged += exposure
+            }
+            if (merged.durationInMinutes > 30) {
+                result.add(merged)
+                merged = null
+            }
+        }
+        if (merged != null) {
+            result.add(merged)
+        }
+    }
+    return result
+}
+
+internal data class MergedSubExposure(val attenuation: Int, val duration: Long)
+
+data class MergedExposure internal constructor(val key: TemporaryExposureKey, val timestamp: Long, internal val subs: List<MergedSubExposure>) {
     @RiskLevel
     val transmissionRiskLevel: Int
-        get() = key?.transmissionRiskLevel ?: RiskLevel.RISK_LEVEL_INVALID
-    
+        get() = key.transmissionRiskLevel
+
     val durationInMinutes
-        get() = TimeUnit.MILLISECONDS.toMinutes(duration)
+        get() = TimeUnit.MILLISECONDS.toMinutes(subs.map { it.duration }.sum())
 
     val daysSinceExposure
         get() = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - timestamp)
 
     val attenuation
-        get() = notCorrectedAttenuation - currentDeviceInfo.rssiCorrection
+        get() = subs.map { it.attenuation }.min()!!
 
     fun getAttenuationRiskScore(configuration: ExposureConfiguration): Int {
         return when {
@@ -83,20 +115,26 @@ data class MeasuredExposure(val rpi: ByteArray, val aem: ByteArray, val timestam
     }
 
     fun getAttenuationDurations(configuration: ExposureConfiguration): IntArray {
-        return when {
-            attenuation < configuration.durationAtAttenuationThresholds[0] -> intArrayOf(durationInMinutes.toInt(), 0, 0)
-            attenuation < configuration.durationAtAttenuationThresholds[1] -> intArrayOf(0, durationInMinutes.toInt(), 0)
-            else -> intArrayOf(0, 0, durationInMinutes.toInt())
-        }
+        return intArrayOf(
+                TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation < configuration.durationAtAttenuationThresholds[0] }.map { it.duration }.sum()).toInt(),
+                TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation >= configuration.durationAtAttenuationThresholds[0] && it.attenuation < configuration.durationAtAttenuationThresholds[1] }.map { it.duration }.sum()).toInt(),
+                TimeUnit.MILLISECONDS.toMinutes(subs.filter { it.attenuation >= configuration.durationAtAttenuationThresholds[1] }.map { it.duration }.sum()).toInt()
+        )
     }
 
     fun toExposureInformation(configuration: ExposureConfiguration): ExposureInformation =
             ExposureInformation.ExposureInformationBuilder()
-                    .setDateMillisSinceEpoch(timestamp)
+                    .setDateMillisSinceEpoch(key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS)
                     .setDurationMinutes(durationInMinutes.toInt())
                     .setAttenuationValue(attenuation)
                     .setTransmissionRiskLevel(transmissionRiskLevel)
                     .setTotalRiskScore(getRiskScore(configuration))
                     .setAttenuationDurations(getAttenuationDurations(configuration))
                     .build()
+
+    operator fun plus(exposure: MeasuredExposure): MergedExposure = copy(subs = subs + MergedSubExposure(exposure.attenuation, exposure.duration))
+
+    companion object {
+        const val MAXIMUM_DURATION = 30 * 60 * 1000
+    }
 }

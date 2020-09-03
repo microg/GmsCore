@@ -171,7 +171,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                                     }
                                     if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
                                         val fileKeys = storeDiagnosisKeyExport(params.token, TemporaryExposureKeyExport.ADAPTER.decode(stream))
-                                        keys + fileKeys
+                                        keys += fileKeys
                                     } else {
                                         Log.d(TAG, "export.bin had invalid prefix")
                                     }
@@ -209,7 +209,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     intent.putExtra(EXTRA_TOKEN, params.token)
                     intent.`package` = packageName
                     Log.d(TAG, "Sending $intent")
-                    context.sendOrderedBroadcast(intent, PERMISSION_EXPOSURE_CALLBACK)
+                    context.sendOrderedBroadcast(intent, null)
                 } catch (e: Exception) {
                     Log.w(TAG, "Callback failed", e)
                 }
@@ -227,7 +227,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             }
             return@with
         }
-        val exposures = database.findAllMeasuredExposures(packageName, params.token)
+        val exposures = database.findAllMeasuredExposures(packageName, params.token).merge()
         val response = ExposureSummary.ExposureSummaryBuilder()
                 .setDaysSinceLastExposure(exposures.map { it.daysSinceExposure }.min()?.toInt() ?: 0)
                 .setMatchedKeyCount(exposures.map { it.key }.distinct().size)
@@ -268,7 +268,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             }
             return@with
         }
-        val response = database.findAllMeasuredExposures(packageName, params.token).map {
+        val response = database.findAllMeasuredExposures(packageName, params.token).merge().map {
             it.toExposureInformation(configuration)
         }
 

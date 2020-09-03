@@ -12,15 +12,11 @@ import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import android.database.sqlite.SQLiteOpenHelper
-import android.database.sqlite.SQLiteStatement
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
-import android.text.TextUtils
 import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
-import org.microg.gms.common.PackageUtils
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.concurrent.Future
@@ -224,7 +220,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         val keys = listDiagnosisKeysPendingSearch(packageName, token)
         val oldestRpi = oldestRpi
         for (key in keys) {
-            if (oldestRpi == null || key.rollingStartIntervalNumber * ROLLING_WINDOW_LENGTH_MS - ALLOWED_KEY_OFFSET_MS < oldestRpi) {
+            if (oldestRpi == null || (key.rollingStartIntervalNumber + key.rollingPeriod) * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS < oldestRpi) {
                 // Early ignore because key is older than since we started scanning.
                 applyDiagnosisKeySearchResult(key, false)
             } else {
@@ -250,50 +246,48 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     }
 
     fun findMeasuredExposures(key: TemporaryExposureKey): List<MeasuredExposure> {
-        val list = arrayListOf<MeasuredExposure>()
         val allRpis = key.generateAllRpiIds()
         val rpis = (0 until key.rollingPeriod).map { i ->
             val pos = i * 16
             allRpis.sliceArray(pos until (pos + 16))
         }
-        val measures = findMeasuredExposures(rpis, key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS - ALLOWED_KEY_OFFSET_MS, (key.rollingStartIntervalNumber.toLong() + key.rollingPeriod) * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS)
-        measures.filter {
-            val index = rpis.indexOf(it.rpi)
+        val measures = findExposures(rpis, key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS - ALLOWED_KEY_OFFSET_MS, (key.rollingStartIntervalNumber.toLong() + key.rollingPeriod) * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS)
+        return measures.filter {
+            val index = rpis.indexOfFirst { rpi -> rpi.contentEquals(it.rpi) }
             val targetTimestamp = (key.rollingStartIntervalNumber + index).toLong() * ROLLING_WINDOW_LENGTH_MS
-            it.timestamp > targetTimestamp - ALLOWED_KEY_OFFSET_MS && it.timestamp < targetTimestamp + ALLOWED_KEY_OFFSET_MS
+            it.timestamp >= targetTimestamp - ALLOWED_KEY_OFFSET_MS && it.timestamp <= targetTimestamp + ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS
         }.mapNotNull {
             val decrypted = key.cryptAem(it.rpi, it.aem)
             if (decrypted[0] == 0x40.toByte() || decrypted[0] == 0x50.toByte()) {
                 val txPower = decrypted[1]
-                it.copy(key = key, notCorrectedAttenuation = txPower - it.rssi)
+                MeasuredExposure(it.timestamp, it.duration, it.rssi, txPower.toInt(), key)
             } else {
                 Log.w(TAG, "Unknown AEM version ${decrypted[0]}, ignoring")
                 null
             }
         }
-        return list
     }
 
-    fun findMeasuredExposures(rpis: List<ByteArray>, minTime: Long, maxTime: Long): List<MeasuredExposure> = readableDatabase.run {
+    fun findExposures(rpis: List<ByteArray>, minTime: Long, maxTime: Long): List<PlainExposure> = readableDatabase.run {
         if (rpis.isEmpty()) return emptyList()
         val qs = rpis.map { "?" }.joinToString(",")
         queryWithFactory({ _, cursorDriver, editTable, query ->
             query.bindLong(1, minTime)
             query.bindLong(2, maxTime)
-            for (i in (3..(rpis.size + 2))) {
-                query.bindBlob(i, rpis[i - 3])
+            rpis.forEachIndexed { index, rpi ->
+                query.bindBlob(index + 3, rpi)
             }
             SQLiteCursor(cursorDriver, editTable, query)
         }, false, TABLE_ADVERTISEMENTS, arrayOf("rpi", "aem", "timestamp", "duration", "rssi"), "timestamp > ? AND timestamp < ? AND rpi IN ($qs)", null, null, null, null, null).use { cursor ->
-            val list = arrayListOf<MeasuredExposure>()
+            val list = arrayListOf<PlainExposure>()
             while (cursor.moveToNext()) {
-                list.add(MeasuredExposure(cursor.getBlob(1), cursor.getBlob(2), cursor.getLong(3), cursor.getLong(4), cursor.getInt(5)))
+                list.add(PlainExposure(cursor.getBlob(0), cursor.getBlob(1), cursor.getLong(2), cursor.getLong(3), cursor.getInt(4)))
             }
             list
         }
     }
 
-    fun findMeasuredExposure(rpi: ByteArray, minTime: Long, maxTime: Long): MeasuredExposure? = readableDatabase.run {
+    fun findExposure(rpi: ByteArray, minTime: Long, maxTime: Long): PlainExposure? = readableDatabase.run {
         queryWithFactory({ _, cursorDriver, editTable, query ->
             query.bindBlob(1, rpi)
             query.bindLong(2, minTime)
@@ -301,7 +295,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             SQLiteCursor(cursorDriver, editTable, query)
         }, false, TABLE_ADVERTISEMENTS, arrayOf("aem", "timestamp", "duration", "rssi"), "rpi = ? AND timestamp > ? AND timestamp < ?", null, null, null, null, null).use { cursor ->
             if (cursor.moveToNext()) {
-                MeasuredExposure(rpi, cursor.getBlob(0), cursor.getLong(1), cursor.getLong(2), cursor.getInt(3))
+                PlainExposure(rpi, cursor.getBlob(0), cursor.getLong(1), cursor.getLong(2), cursor.getInt(3))
             } else {
                 null
             }
@@ -518,4 +512,3 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 }
-

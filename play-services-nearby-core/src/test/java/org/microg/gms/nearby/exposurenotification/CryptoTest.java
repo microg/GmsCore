@@ -8,7 +8,6 @@ package org.microg.gms.nearby.exposurenotification;
 
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
 
 import org.junit.Assert;
