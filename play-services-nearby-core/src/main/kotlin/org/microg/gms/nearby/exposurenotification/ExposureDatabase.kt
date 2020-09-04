@@ -444,6 +444,16 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
+    fun lastMethodCallArgs(packageName: String, method: String): String? = readableDatabase.run {
+        query(TABLE_APP_LOG, arrayOf("args"), "package = ? AND method = ?", arrayOf(packageName, method), null, null, "timestamp DESC", "1").use { cursor ->
+            if (cursor.moveToNext()) {
+                cursor.getString(0)
+            } else {
+                null
+            }
+        }
+    }
+
     private val currentTemporaryExposureKey: TemporaryExposureKey
         get() = findOwnKeyAt(currentRollingStartNumber.toInt())
                 ?: storeOwnKey(generateCurrentTemporaryExposureKey())

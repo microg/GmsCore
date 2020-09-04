@@ -16,6 +16,6 @@
         <Preference
             android:key="pref_exposure_app_checks"
             android:selectable="false"
-            tools:summary="7 checks in past 14 days\nLast check: 3 hours ago" />
+            tools:summary="7 checks in past 14 days\nLast check: 3 hours ago\nLast report: 2 matches, latest 3 days ago" />
     </PreferenceCategory>
 </PreferenceScreen>

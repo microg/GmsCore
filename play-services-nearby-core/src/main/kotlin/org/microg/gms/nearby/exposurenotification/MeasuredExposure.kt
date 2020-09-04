@@ -55,7 +55,7 @@ data class MergedExposure internal constructor(val key: TemporaryExposureKey, va
         get() = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - timestamp)
 
     val attenuation
-        get() = subs.map { it.attenuation }.min()!!
+        get() = (subs.map { it.attenuation * it.duration }.sum().toDouble() / subs.map { it.duration }.sum().toDouble()).toInt()
 
     fun getAttenuationRiskScore(configuration: ExposureConfiguration): Int {
         return when {

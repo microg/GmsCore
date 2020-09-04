@@ -8,10 +8,13 @@ package org.microg.gms.ui
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.util.JsonReader
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.R
+import org.json.JSONObject
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
+import java.util.concurrent.TimeUnit
 
 class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var open: Preference
@@ -52,6 +55,19 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
                 val lastCheckTime = database.lastMethodCall(packageName, "provideDiagnosisKeys")
                 if (lastCheckTime != null && lastCheckTime != 0L) {
                     str += "\n" + getString(R.string.pref_exposure_app_last_check_summary, DateUtils.getRelativeDateTimeString(context, lastCheckTime, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME))
+                }
+                val lastExposureSummaryTime = database.lastMethodCall(packageName, "getExposureSummary")
+                val lastExposureSummary = database.lastMethodCallArgs(packageName, "getExposureSummary")
+                if (lastExposureSummaryTime != null && lastExposureSummary != null && System.currentTimeMillis() - lastExposureSummaryTime <= TimeUnit.DAYS.toMillis(1)) {
+                    try {
+                        val json = JSONObject(lastExposureSummary)
+                        val matchedKeys = json.optInt("response_matched_keys")
+                        val daysSince = json.optInt("response_days_since", -1)
+                        if (matchedKeys > 0 && daysSince >= 0) {
+                            str += "\n" + resources.getQuantityString(R.plurals.pref_exposure_app_last_report_summary, matchedKeys, matchedKeys, daysSince)
+                        }
+                    } catch (ignored: Exception) {
+                    }
                 }
                 checks.summary = str
             }

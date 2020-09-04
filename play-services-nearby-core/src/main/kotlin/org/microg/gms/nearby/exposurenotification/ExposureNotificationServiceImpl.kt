@@ -72,24 +72,14 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun stop(params: StopParams) {
-        if (!ExposurePreferences(context).enabled) {
-            params.callback.onResult(Status.SUCCESS)
-            return
+        ExposurePreferences(context).enabled = false
+        ExposureDatabase.with(context) { database ->
+            database.noteAppAction(packageName, "stop")
         }
-        confirm(CONFIRM_ACTION_STOP) { resultCode, _ ->
-            if (resultCode == SUCCESS) {
-                ExposurePreferences(context).enabled = false
-            }
-            ExposureDatabase.with(context) { database ->
-                database.noteAppAction(packageName, "stop", JSONObject().apply {
-                    put("result", resultCode)
-                }.toString())
-            }
-            try {
-                params.callback.onResult(Status.SUCCESS)
-            } catch (e: Exception) {
-                Log.w(TAG, "Callback failed", e)
-            }
+        try {
+            params.callback.onResult(Status.SUCCESS)
+        } catch (e: Exception) {
+            Log.w(TAG, "Callback failed", e)
         }
     }
 
