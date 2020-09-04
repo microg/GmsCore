@@ -6,6 +6,8 @@
 package org.microg.gms.nearby;
 
 import android.content.Context;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
 
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
@@ -25,6 +27,7 @@ import com.google.android.gms.nearby.exposurenotification.internal.IExposureInfo
 import com.google.android.gms.nearby.exposurenotification.internal.IExposureSummaryCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.ITemporaryExposureKeyListCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IsEnabledParams;
+import com.google.android.gms.nearby.exposurenotification.internal.ProvideDiagnosisKeysParams;
 import com.google.android.gms.nearby.exposurenotification.internal.StartParams;
 import com.google.android.gms.nearby.exposurenotification.internal.StopParams;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +35,9 @@ import com.google.android.gms.tasks.Task;
 import org.microg.gms.common.api.PendingGoogleApiCall;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements ExposureNotificationClient {
@@ -40,6 +46,8 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     public ExposureNotificationClientImpl(Context context) {
         super(context, API);
     }
+
+    private static final String TAG = "ENClientImpl";
 
     @Override
     public Task<Void> start() {
@@ -126,8 +134,43 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     }
 
     @Override
-    public Task<Void> provideDiagnosisKeys(List<File> keys, ExposureConfiguration configuration, String token) {
-        return null;
+    public Task<Void> provideDiagnosisKeys(List<File> keyFiles, ExposureConfiguration configuration, String token) {
+        return scheduleTask((PendingGoogleApiCall<Void, ExposureNotificationApiClient>) (client, completionSource) -> {
+            List<ParcelFileDescriptor> fds = new ArrayList<>(keyFiles.size());
+            for (File kf: keyFiles) {
+                ParcelFileDescriptor fd;
+                try {
+                    fd = ParcelFileDescriptor.open(kf, ParcelFileDescriptor.MODE_READ_ONLY);
+                } catch (FileNotFoundException e) {
+                    for (ParcelFileDescriptor ofd : fds) {
+                        try {
+                            ofd.close();
+                        } catch (IOException e2) {
+                            Log.w(TAG, "Failed to close file", e2);
+                        }
+                    }
+                    completionSource.setException(e);
+                    return;
+                }
+                fds.add(fd);
+            }
+
+            ProvideDiagnosisKeysParams params = new ProvideDiagnosisKeysParams(new IStatusCallback.Stub() {
+                @Override
+                public void onResult(Status status) {
+                    if (status == Status.SUCCESS) {
+                        completionSource.setResult(null);
+                    } else {
+                        completionSource.setException(new RuntimeException("Status: " + status));
+                    }
+                }
+            }, fds, configuration, token);
+            try {
+                client.provideDiagnosisKeys(params);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
     }
 
     @Override
