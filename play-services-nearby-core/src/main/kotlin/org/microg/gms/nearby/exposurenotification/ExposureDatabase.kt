@@ -54,6 +54,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_DIAGNOSIS(package TEXT NOT NULL, token TEXT NOT NULL, tcid INTEGER REFERENCES $TABLE_TEK_CHECK(tcid) ON DELETE CASCADE, transmissionRiskLevel INTEGER NOT NULL);")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_DIAGNOSIS}_package_token ON $TABLE_DIAGNOSIS(package, token);")
         }
+        if (oldVersion < 3) {
+            db.execSQL("CREATE TABLE $TABLE_APP_PERMS(package TEXT NOT NULL, sig TEXT NOT NULL, perm TEXT NOT NULL, timestamp INTEGER NOT NULL);")
+        }
     }
 
     fun SQLiteDatabase.delete(table: String, whereClause: String, args: LongArray): Int =
@@ -68,7 +71,23 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime))
         val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
         val checkedTemporaryExposureKeys = delete(TABLE_TEK_CHECK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
-        Log.d(TAG, "Deleted on daily cleanup: $advertisements adv, $appLogEntries applogs, $temporaryExposureKeys teks, $checkedTemporaryExposureKeys cteks")
+        val appPerms = delete(TABLE_APP_PERMS, "timestamp < ?", longArrayOf(System.currentTimeMillis() - CONFIRM_PERMISSION_VALIDITY))
+        Log.d(TAG, "Deleted on daily cleanup: $advertisements adv, $appLogEntries applogs, $temporaryExposureKeys teks, $checkedTemporaryExposureKeys cteks, $appPerms perms")
+    }
+
+    fun grantPermission(packageName: String, signatureDigest: String, permission: String, timestamp: Long = System.currentTimeMillis()) = writableDatabase.run {
+        insert(TABLE_APP_PERMS, "NULL", ContentValues().apply {
+            put("package", packageName)
+            put("sig", signatureDigest)
+            put("perm", permission)
+            put("timestamp", timestamp)
+        })
+    }
+
+    fun hasPermission(packageName: String, signatureDigest: String, permission: String, maxAge: Long = CONFIRM_PERMISSION_VALIDITY) = readableDatabase.run {
+        query(TABLE_APP_PERMS, arrayOf("MAX(timestamp)"), "package = ? AND sig = ? and perm = ?", arrayOf(packageName, signatureDigest, permission), null, null, null).use { cursor ->
+            cursor.moveToNext() && cursor.getLong(0) + maxAge > System.currentTimeMillis()
+        }
     }
 
     fun noteAdvertisement(rpi: ByteArray, aem: ByteArray, rssi: Int, timestamp: Long = Date().time) = writableDatabase.run {
@@ -496,13 +515,14 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 2
+        private const val DB_VERSION = 3
         private const val TABLE_ADVERTISEMENTS = "advertisements"
         private const val TABLE_APP_LOG = "app_log"
         private const val TABLE_TEK = "tek"
         private const val TABLE_TEK_CHECK = "tek_check"
         private const val TABLE_DIAGNOSIS = "diagnosis"
         private const val TABLE_CONFIGURATIONS = "configurations"
+        private const val TABLE_APP_PERMS = "app_perms"
 
         private var instance: ExposureDatabase? = null
         fun ref(context: Context): ExposureDatabase = synchronized(this) {

@@ -25,6 +25,7 @@ const val KEY_CONFIRM_PACKAGE = "package"
 const val CONFIRM_ACTION_START = "start"
 const val CONFIRM_ACTION_STOP = "stop"
 const val CONFIRM_ACTION_KEYS = "keys"
+const val CONFIRM_PERMISSION_VALIDITY = 60 * 60 * 1000L
 
 const val PERMISSION_EXPOSURE_CALLBACK = "com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"
 

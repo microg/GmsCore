@@ -11,12 +11,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.R
-import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes.*
 import org.microg.gms.nearby.exposurenotification.*
 
 class ExposureNotificationsConfirmActivity : AppCompatActivity() {
-    private var resultCode: Int = FAILED
-    private val resultData: Bundle = Bundle()
+    private var resultCode: Int = RESULT_CANCELED
+        set(value) {
+            setResult(value)
+            field = value
+        }
     private val receiver: ResultReceiver?
         get() = intent.getParcelableExtra(KEY_CONFIRM_RECEIVER)
     private val action: String?
@@ -47,22 +49,22 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                 findViewById<Button>(android.R.id.button1).text = getString(R.string.exposure_confirm_keys_button)
             }
             else -> {
-                resultCode = INTERNAL_ERROR
+                resultCode = RESULT_CANCELED
                 finish()
             }
         }
         findViewById<Button>(android.R.id.button1).setOnClickListener {
-            resultCode = SUCCESS
+            resultCode = RESULT_OK
             finish()
         }
         findViewById<Button>(android.R.id.button2).setOnClickListener {
-            resultCode = FAILED_REJECTED_OPT_IN
+            resultCode = RESULT_CANCELED
             finish()
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        receiver?.send(resultCode, resultData)
+    override fun finish() {
+        receiver?.send(resultCode, Bundle())
+        super.finish()
     }
 }

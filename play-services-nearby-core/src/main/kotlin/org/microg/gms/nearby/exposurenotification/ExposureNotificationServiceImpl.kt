@@ -5,6 +5,8 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.app.Activity
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -13,12 +15,14 @@ import android.os.*
 import android.util.Log
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes.*
 import com.google.android.gms.nearby.exposurenotification.ExposureSummary
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import com.google.android.gms.nearby.exposurenotification.internal.*
 import org.json.JSONArray
 import org.json.JSONObject
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.nearby.exposurenotification.Constants.*
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
@@ -26,48 +30,51 @@ import java.util.*
 import java.util.zip.ZipInputStream
 
 class ExposureNotificationServiceImpl(private val context: Context, private val packageName: String) : INearbyExposureNotificationService.Stub() {
-    private fun confirm(action: String, callback: (resultCode: Int, resultData: Bundle?) -> Unit) {
+    private fun pendingConfirm(permission: String): PendingIntent {
         val intent = Intent(ACTION_CONFIRM)
         intent.`package` = context.packageName
         intent.putExtra(KEY_CONFIRM_PACKAGE, packageName)
-        intent.putExtra(KEY_CONFIRM_ACTION, action)
-        intent.putExtra(KEY_CONFIRM_RECEIVER, object : ResultReceiver(Handler(Looper.getMainLooper())) {
+        intent.putExtra(KEY_CONFIRM_ACTION, permission)
+        intent.putExtra(KEY_CONFIRM_RECEIVER, object : ResultReceiver(null) {
             override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-                Log.d(TAG, "Result from action $action: ${getStatusCodeString(resultCode)}")
-                callback(resultCode, resultData)
+                if (resultCode == Activity.RESULT_OK) {
+                    ExposureDatabase.with(context) { database -> database.grantPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission) }
+                }
             }
         })
-        intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(FLAG_ACTIVITY_MULTIPLE_TASK)
-        intent.addFlags(FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
         try {
             intent.component = ComponentName(context, context.packageManager.resolveActivity(intent, 0)?.activityInfo?.name!!)
-            context.startActivity(intent)
         } catch (e: Exception) {
             Log.w(TAG, e)
-            callback(CommonStatusCodes.INTERNAL_ERROR, null)
+        }
+        Log.d(TAG, "Pending: $intent")
+        val pi = PendingIntent.getActivity(context, permission.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT)
+        Log.d(TAG, "Pending: $pi")
+        return pi
+    }
+
+    private fun confirmPermission(permission: String): Status {
+        if (packageName == context.packageName) return Status.SUCCESS
+        return ExposureDatabase.with(context) { database ->
+            if (!database.hasPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission)) {
+                Status(RESOLUTION_REQUIRED, "Permission EN#$permission required.", pendingConfirm(permission))
+            } else {
+                Status.SUCCESS
+            }
         }
     }
 
     override fun start(params: StartParams) {
-        if (ExposurePreferences(context).enabled) {
-            params.callback.onResult(Status(FAILED_ALREADY_STARTED))
-            return
+        if (ExposurePreferences(context).enabled) return
+        val status = confirmPermission(CONFIRM_ACTION_START)
+        if (status.isSuccess) {
+            ExposurePreferences(context).enabled = true
+            ExposureDatabase.with(context) { database -> database.noteAppAction(packageName, "start") }
         }
-        confirm(CONFIRM_ACTION_START) { resultCode, resultData ->
-            if (resultCode == SUCCESS) {
-                ExposurePreferences(context).enabled = true
-            }
-            ExposureDatabase.with(context) { database ->
-                database.noteAppAction(packageName, "start", JSONObject().apply {
-                    put("result", resultCode)
-                }.toString())
-            }
-            try {
-                params.callback.onResult(Status(if (resultCode == SUCCESS) SUCCESS else FAILED_REJECTED_OPT_IN, resultData?.getString("message")))
-            } catch (e: Exception) {
-                Log.w(TAG, "Callback failed", e)
-            }
+        try {
+            params.callback.onResult(status)
+        } catch (e: Exception) {
+            Log.w(TAG, "Callback failed", e)
         }
     }
 
@@ -91,23 +98,25 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
-    override fun getTemporaryExposureKeyHistory(params: GetTemporaryExposureKeyHistoryParams): Unit = ExposureDatabase.with(context) { database ->
-        confirm(CONFIRM_ACTION_START) { resultCode, resultData ->
-            val (status, response) = if (resultCode == SUCCESS) {
-                SUCCESS to database.allKeys
-            } else {
-                FAILED_REJECTED_OPT_IN to emptyList()
+    override fun getTemporaryExposureKeyHistory(params: GetTemporaryExposureKeyHistoryParams) {
+        val status = confirmPermission(CONFIRM_ACTION_KEYS)
+        val response = when {
+            status.isSuccess -> ExposureDatabase.with(context) { database ->
+                database.allKeys
             }
+            else -> emptyList()
+        }
 
+        ExposureDatabase.with(context) { database ->
             database.noteAppAction(packageName, "getTemporaryExposureKeyHistory", JSONObject().apply {
-                put("result", resultCode)
+                put("result", status.statusCode)
                 put("response_keys_size", response.size)
             }.toString())
-            try {
-                params.callback.onResult(Status(status, resultData?.getString("message")), response)
-            } catch (e: Exception) {
-                Log.w(TAG, "Callback failed", e)
-            }
+        }
+        try {
+            params.callback.onResult(status, response)
+        } catch (e: Exception) {
+            Log.w(TAG, "Callback failed", e)
         }
     }
 
