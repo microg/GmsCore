@@ -33,6 +33,11 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         setWriteAheadLoggingEnabled(true)
     }
 
+    override fun onConfigure(db: SQLiteDatabase) {
+        super.onConfigure(db)
+        db.setForeignKeyConstraintsEnabled(true)
+    }
+
     override fun onCreate(db: SQLiteDatabase) {
         onUpgrade(db, 0, DB_VERSION)
     }
@@ -66,13 +71,19 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             }
 
     fun dailyCleanup() = writableDatabase.run {
-        val rollingStartTime = currentRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
-        val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
-        val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime))
-        val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
-        val checkedTemporaryExposureKeys = delete(TABLE_TEK_CHECK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
-        val appPerms = delete(TABLE_APP_PERMS, "timestamp < ?", longArrayOf(System.currentTimeMillis() - CONFIRM_PERMISSION_VALIDITY))
-        Log.d(TAG, "Deleted on daily cleanup: $advertisements adv, $appLogEntries applogs, $temporaryExposureKeys teks, $checkedTemporaryExposureKeys cteks, $appPerms perms")
+        beginTransaction()
+        try {
+            val rollingStartTime = currentRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
+            val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
+            val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime))
+            val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
+            val checkedTemporaryExposureKeys = delete(TABLE_TEK_CHECK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
+            val appPerms = delete(TABLE_APP_PERMS, "timestamp < ?", longArrayOf(System.currentTimeMillis() - CONFIRM_PERMISSION_VALIDITY))
+            Log.d(TAG, "Deleted on daily cleanup: $advertisements adv, $appLogEntries applogs, $temporaryExposureKeys teks, $checkedTemporaryExposureKeys cteks, $appPerms perms")
+            setTransactionSuccessful()
+        } finally {
+            endTransaction()
+        }
     }
 
     fun grantPermission(packageName: String, signatureDigest: String, permission: String, timestamp: Long = System.currentTimeMillis()) = writableDatabase.run {
@@ -129,16 +140,15 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     }
 
 
-    fun storeOwnKey(key: TemporaryExposureKey): TemporaryExposureKey = writableDatabase.run {
+    private fun storeOwnKey(key: TemporaryExposureKey, database: SQLiteDatabase = writableDatabase) = database.run {
         insert(TABLE_TEK, "NULL", ContentValues().apply {
             put("keyData", key.keyData)
             put("rollingStartNumber", key.rollingStartIntervalNumber)
             put("rollingPeriod", key.rollingPeriod)
         })
-        key
     }
 
-    fun getTekCheckId(key: TemporaryExposureKey, mayInsert: Boolean = false): Long? = (if (mayInsert) writableDatabase else readableDatabase).run {
+    private fun getTekCheckId(key: TemporaryExposureKey, mayInsert: Boolean = false, database: SQLiteDatabase = if (mayInsert) writableDatabase else readableDatabase): Long? = database.run {
         if (mayInsert) {
             insertWithOnConflict(TABLE_TEK_CHECK, "NULL", ContentValues().apply {
                 put("keyData", key.keyData)
@@ -154,8 +164,8 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun storeDiagnosisKey(packageName: String, token: String, key: TemporaryExposureKey) = writableDatabase.run {
-        val tcid = getTekCheckId(key, true)
+    fun storeDiagnosisKey(packageName: String, token: String, key: TemporaryExposureKey, database: SQLiteDatabase = writableDatabase) = database.run {
+        val tcid = getTekCheckId(key, true, database)
         insert(TABLE_DIAGNOSIS, "NULL", ContentValues().apply {
             put("package", packageName)
             put("token", token)
@@ -164,8 +174,18 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         })
     }
 
-    fun updateDiagnosisKey(packageName: String, token: String, key: TemporaryExposureKey) = writableDatabase.run {
-        val tcid = getTekCheckId(key) ?: return 0
+    fun batchStoreDiagnosisKey(packageName: String, token: String, keys: List<TemporaryExposureKey>, database: SQLiteDatabase = writableDatabase) = database.run {
+        beginTransaction()
+        try {
+            keys.forEach { storeDiagnosisKey(packageName, token, it, database) }
+            setTransactionSuccessful()
+        } finally {
+            endTransaction()
+        }
+    }
+
+    fun updateDiagnosisKey(packageName: String, token: String, key: TemporaryExposureKey, database: SQLiteDatabase = writableDatabase) = database.run {
+        val tcid = getTekCheckId(key, false, database) ?: return 0
         compileStatement("UPDATE $TABLE_DIAGNOSIS SET transmissionRiskLevel = ? WHERE package = ? AND token = ? AND tcid = ?;").use {
             it.bindLong(1, key.transmissionRiskLevel.toLong())
             it.bindString(2, packageName)
@@ -175,7 +195,17 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun listDiagnosisKeysPendingSearch(packageName: String, token: String) = readableDatabase.run {
+    fun batchUpdateDiagnosisKey(packageName: String, token: String, keys: List<TemporaryExposureKey>, database: SQLiteDatabase = writableDatabase) = database.run {
+        beginTransaction()
+        try {
+            keys.forEach { updateDiagnosisKey(packageName, token, it, database) }
+            setTransactionSuccessful()
+        } finally {
+            endTransaction()
+        }
+    }
+
+    private fun listDiagnosisKeysPendingSearch(packageName: String, token: String, database: SQLiteDatabase = readableDatabase) = database.run {
         rawQuery("""
             SELECT $TABLE_TEK_CHECK.keyData, $TABLE_TEK_CHECK.rollingStartNumber, $TABLE_TEK_CHECK.rollingPeriod
             FROM $TABLE_DIAGNOSIS
@@ -197,7 +227,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun applyDiagnosisKeySearchResult(key: TemporaryExposureKey, matched: Boolean) = writableDatabase.run {
+    private fun applyDiagnosisKeySearchResult(key: TemporaryExposureKey, matched: Boolean, database: SQLiteDatabase = writableDatabase) = database.run {
         compileStatement("UPDATE $TABLE_TEK_CHECK SET matched = ? WHERE keyData = ? AND rollingStartNumber = ? AND rollingPeriod = ?;").use {
             it.bindLong(1, if (matched) 1 else 0)
             it.bindBlob(2, key.keyData)
@@ -207,7 +237,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun listMatchedDiagnosisKeys(packageName: String, token: String) = readableDatabase.run {
+    private fun listMatchedDiagnosisKeys(packageName: String, token: String, database: SQLiteDatabase = readableDatabase) = database.run {
         rawQuery("""
             SELECT $TABLE_TEK_CHECK.keyData, $TABLE_TEK_CHECK.rollingStartNumber, $TABLE_TEK_CHECK.rollingPeriod, $TABLE_DIAGNOSIS.transmissionRiskLevel
             FROM $TABLE_DIAGNOSIS
@@ -230,21 +260,21 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun finishMatching(packageName: String, token: String) {
+    fun finishMatching(packageName: String, token: String, database: SQLiteDatabase = writableDatabase) {
         val start = System.currentTimeMillis()
         val workQueue = LinkedBlockingQueue<Runnable>()
         val poolSize = Runtime.getRuntime().availableProcessors()
         val executor = ThreadPoolExecutor(poolSize, poolSize, 1, TimeUnit.SECONDS, workQueue)
         val futures = arrayListOf<Future<*>>()
-        val keys = listDiagnosisKeysPendingSearch(packageName, token)
+        val keys = listDiagnosisKeysPendingSearch(packageName, token, database)
         val oldestRpi = oldestRpi
         for (key in keys) {
             if (oldestRpi == null || (key.rollingStartIntervalNumber + key.rollingPeriod) * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS < oldestRpi) {
                 // Early ignore because key is older than since we started scanning.
-                applyDiagnosisKeySearchResult(key, false)
+                applyDiagnosisKeySearchResult(key, false, database)
             } else {
                 futures.add(executor.submit {
-                    applyDiagnosisKeySearchResult(key, findMeasuredExposures(key).isNotEmpty())
+                    applyDiagnosisKeySearchResult(key, findMeasuredExposures(key).isNotEmpty(), database)
                 })
             }
         }
@@ -256,21 +286,17 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         Log.d(TAG, "Processed ${keys.size} new keys in ${time}s -> ${(keys.size.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
     }
 
-    fun findAllMeasuredExposures(packageName: String, token: String): List<MeasuredExposure> {
-        val list = arrayListOf<MeasuredExposure>()
-        for (key in listMatchedDiagnosisKeys(packageName, token)) {
-            list.addAll(findMeasuredExposures(key))
-        }
-        return list
+    fun findAllMeasuredExposures(packageName: String, token: String, database: SQLiteDatabase = readableDatabase): List<MeasuredExposure> {
+        return listMatchedDiagnosisKeys(packageName, token, database).flatMap { findMeasuredExposures(it, database) }
     }
 
-    fun findMeasuredExposures(key: TemporaryExposureKey): List<MeasuredExposure> {
+    private fun findMeasuredExposures(key: TemporaryExposureKey, database: SQLiteDatabase = readableDatabase): List<MeasuredExposure> {
         val allRpis = key.generateAllRpiIds()
         val rpis = (0 until key.rollingPeriod).map { i ->
             val pos = i * 16
             allRpis.sliceArray(pos until (pos + 16))
         }
-        val measures = findExposures(rpis, key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS - ALLOWED_KEY_OFFSET_MS, (key.rollingStartIntervalNumber.toLong() + key.rollingPeriod) * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS)
+        val measures = findExposures(rpis, key.rollingStartIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS - ALLOWED_KEY_OFFSET_MS, (key.rollingStartIntervalNumber.toLong() + key.rollingPeriod) * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS, database)
         return measures.filter {
             val index = rpis.indexOfFirst { rpi -> rpi.contentEquals(it.rpi) }
             val targetTimestamp = (key.rollingStartIntervalNumber + index).toLong() * ROLLING_WINDOW_LENGTH_MS
@@ -287,7 +313,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun findExposures(rpis: List<ByteArray>, minTime: Long, maxTime: Long): List<PlainExposure> = readableDatabase.run {
+    private fun findExposures(rpis: List<ByteArray>, minTime: Long, maxTime: Long, database: SQLiteDatabase = readableDatabase): List<PlainExposure> = database.run {
         if (rpis.isEmpty()) return emptyList()
         val qs = rpis.map { "?" }.joinToString(",")
         queryWithFactory({ _, cursorDriver, editTable, query ->
@@ -321,7 +347,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun findOwnKeyAt(rollingStartNumber: Int): TemporaryExposureKey? = readableDatabase.run {
+    private fun findOwnKeyAt(rollingStartNumber: Int, database: SQLiteDatabase = readableDatabase): TemporaryExposureKey? = database.run {
         query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber = ?", arrayOf(rollingStartNumber.toString()), null, null, null).use { cursor ->
             if (cursor.moveToNext()) {
                 TemporaryExposureKey.TemporaryExposureKeyBuilder()
@@ -474,8 +500,20 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     }
 
     private val currentTemporaryExposureKey: TemporaryExposureKey
-        get() = findOwnKeyAt(currentRollingStartNumber.toInt())
-                ?: storeOwnKey(generateCurrentTemporaryExposureKey())
+        get() = writableDatabase.let { database ->
+            database.beginTransaction()
+            try {
+                var key = findOwnKeyAt(currentRollingStartNumber.toInt(), database)
+                if (key == null) {
+                    key = generateCurrentTemporaryExposureKey()
+                    storeOwnKey(key, database)
+                }
+                database.setTransactionSuccessful()
+                key
+            } finally {
+                database.endTransaction()
+            }
+        }
 
     val currentRpiId: UUID
         get() {

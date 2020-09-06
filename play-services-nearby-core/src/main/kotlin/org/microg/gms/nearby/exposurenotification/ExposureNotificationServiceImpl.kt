@@ -28,6 +28,7 @@ import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExpo
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
 import java.util.*
 import java.util.zip.ZipInputStream
+import kotlin.math.roundToInt
 
 class ExposureNotificationServiceImpl(private val context: Context, private val packageName: String) : INearbyExposureNotificationService.Stub() {
     private fun pendingConfirm(permission: String): PendingIntent {
@@ -130,12 +131,8 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     private fun storeDiagnosisKeyExport(token: String, export: TemporaryExposureKeyExport): Int = ExposureDatabase.with(context) { database ->
         Log.d(TAG, "Importing keys from file ${export.start_timestamp?.let { Date(it * 1000) }} to ${export.end_timestamp?.let { Date(it * 1000) }}")
-        for (key in export.keys) {
-            database.storeDiagnosisKey(packageName, token, key.toKey())
-        }
-        for (key in export.revised_keys) {
-            database.updateDiagnosisKey(packageName, token, key.toKey())
-        }
+        database.batchStoreDiagnosisKey(packageName, token, export.keys.map { it.toKey() })
+        database.batchUpdateDiagnosisKey(packageName, token, export.revised_keys.map { it.toKey() })
         export.keys.size + export.revised_keys.size
     }
 
@@ -146,10 +143,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     database.storeConfiguration(packageName, params.token, params.configuration)
                 }
 
+                val start = System.currentTimeMillis()
+
                 // keys
-                for (key in params.keys.orEmpty()) {
-                    database.storeDiagnosisKey(packageName, params.token, key)
-                }
+                params.keys?.let { database.batchStoreDiagnosisKey(packageName, params.token, it) }
 
                 // Key files
                 var keys = params.keys?.size ?: 0
@@ -182,7 +179,8 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                         Log.w(TAG, "Failed parsing file", e)
                     }
                 }
-                Log.d(TAG, "$packageName/${params.token} provided $keys keys")
+                val time = (System.currentTimeMillis() - start).toDouble() / 1000.0
+                Log.d(TAG, "$packageName/${params.token} provided $keys keys in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
 
                 database.noteAppAction(packageName, "provideDiagnosisKeys", JSONObject().apply {
                     put("request_token", params.token)
