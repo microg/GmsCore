@@ -90,6 +90,7 @@ public class ForegroundServiceContext extends ContextWrapper {
                 .setContentTitle(context.getResources().getString(R.string.notification_service_title))
                 .setContentText(context.getResources().getString(R.string.notification_service_content))
                 .setSmallIcon(R.drawable.ic_foreground_notification)
+                .setAutoCancel(true)
                 .build();
     }
 }
