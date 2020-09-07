@@ -82,7 +82,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="cond_gcm_bat_title">Ottimizzazione batteria attivata</string>
-    <string name="cond_gcm_bat_summary">Hai attivato l'\opzione Messaggistica Cloud Google ma i Servizi Vanced microG risultano al momento limitati dall\'ottimizzazione energetica di sistema. Se desideri ricevere le notifiche push, escludi i microG da questa ottimizzazione.</string>
+    <string name="cond_gcm_bat_summary">Hai attivato l\'opzione Messaggistica Cloud Google ma i Servizi Vanced microG risultano al momento limitati dall\'ottimizzazione energetica di sistema. Se desideri ricevere le notifiche push, escludi i microG da questa ottimizzazione.</string>
     <string name="cond_gcm_bat_action">Ignore ottimizzazione</string>
 
     <string name="prefs_account">Preferenze account</string>

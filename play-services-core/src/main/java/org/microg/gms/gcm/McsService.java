@@ -18,8 +18,6 @@ package org.microg.gms.gcm;
 
 import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -40,7 +38,6 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.mgoogle.android.gms.R;
@@ -318,14 +315,9 @@ public class McsService extends Service implements Handler.Callback {
         return START_REDELIVER_INTENT;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private Notification buildForegroundNotification() {
-        NotificationChannel channel = new NotificationChannel("foreground-service", getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_LOW);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
-        channel.setShowBadge(false);
-        getSystemService(NotificationManager.class).createNotificationChannel(channel);
-        return new Notification.Builder(this, channel.getId())
-                .setOngoing(true)
+        return new Notification.Builder(this)
+                .setCategory(Notification.CATEGORY_MESSAGE)
                 .setContentTitle(this.getResources().getString(R.string.notification_service_title))
                 .setSmallIcon(android.R.drawable.stat_notify_sync)
                 .build();

@@ -2,8 +2,6 @@ package org.microg.gms.common;
 
 import android.app.ActivityManager;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -61,24 +59,18 @@ public class ForegroundServiceContext extends ContextWrapper {
     }
 
     public static void completeForegroundService(Service service, Intent intent, String tag) {
-        if (intent.getBooleanExtra(EXTRA_FOREGROUND, false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (intent.getBooleanExtra(EXTRA_FOREGROUND, false)) {
             Log.d(tag, "Started in foreground mode.");
             service.startForeground(tag.hashCode(), buildForegroundNotification(service));
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private static Notification buildForegroundNotification(Context context) {
-        NotificationChannel channel = new NotificationChannel("foreground-service", context.getResources().getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_MIN);
-        channel.setShowBadge(false);
-        channel.setLockscreenVisibility(0);
-        channel.setVibrationPattern(new long[0]);
         Intent mIntent = new Intent();
         mIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mIntent, 0);
-        context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
-        return new Notification.Builder(context, channel.getId())
+        return new Notification.Builder(context)
                 .setOngoing(true)
                 .setContentIntent(pendingIntent)
                 .setContentTitle(context.getResources().getString(R.string.notification_service_title))
