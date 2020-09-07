@@ -75,7 +75,16 @@ public class ForegroundServiceContext extends ContextWrapper {
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mIntent, 0);
 
-        return new NotificationCompat.Builder(context, "foreground-service")
+        String notificationChannelID = "foreground-service";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(notificationChannelID, context.getResources().getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_MIN);
+            channel.setShowBadge(false);
+            channel.setLockscreenVisibility(0);
+            channel.setVibrationPattern(new long[0]);
+            context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
+        }
+        return new NotificationCompat.Builder(context, notificationChannelID)
                 .setOngoing(true)
                 .setContentIntent(pendingIntent)
                 .setContentTitle(context.getResources().getString(R.string.notification_service_title))
