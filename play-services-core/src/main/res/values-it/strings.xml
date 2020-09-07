@@ -22,7 +22,7 @@
     <string name="notification_service_title">Esecuzione in background</string>
     <string name="notification_service_content">Tocca qui per escludere microg dal risparmio energetico</string>
 
-    <string name="just_a_sec">Solo un sec…</string>
+    <string name="just_a_sec">Solo un secondo…</string>
     <string name="ask_permission_tos">Continuando, consentirai a quest\'app e a Google di utilizzare le tue informazioni in conformità con i rispettivi termini di servizio e politiche sulla riservatezza.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare:</string>
@@ -102,7 +102,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="pref_gcm_confirm_new_apps_summary">Chiedi prima di registrare una nuova app per la ricezione di notifiche push</string>
 
     <string name="pref_about_title">Informazioni su Vanced microG</string>
-    <string name="pref_cast_double_fix">Correggi voce cast duplicata</string>
+    <string name="pref_cast_double_fix">Correzione cast duplicato</string>
 
     <string name="pref_switcher_title">Registra dispositivo</string>
     <string name="pref_checkin_enable_summary">Registra il tuo dispositivo sui servizi Google e crea un identificatore univoco del dispositivo. Verranno rimossi dai Servizi Vanced microG alcuni bit utili per identificare i dati di registrazione, oltre al nome dell\'account Google.</string>
