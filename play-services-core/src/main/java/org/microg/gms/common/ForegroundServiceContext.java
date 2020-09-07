@@ -15,6 +15,7 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.mgoogle.android.gms.R;
@@ -29,6 +30,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         super(base);
     }
 
+    @RequiresApi(23)
     @Override
     public ComponentName startService(Intent service) {
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
