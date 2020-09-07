@@ -16,123 +16,122 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_settings_name">Impostazioni di Vanced microG</string>
-    <string name="gms_settings_summary">Configura Vanced microG.</string>
+    <string name="gms_settings_summary">Configurazione di Vanced microG.</string>
 
-    <string name="notification_service_name">Servizio in Primo Piano</string>
-    <string name="notification_service_title">Esecuzione in secondo piano</string>
-    <string name="notification_service_content">Tocca per disattivare il risparmio energetico per microG</string>
+    <string name="notification_service_name">Primo Piano</string>
+    <string name="notification_service_title">Esecuzione in background</string>
+    <string name="notification_service_content">Tocca qui per escludere microg dal risparmio energetico</string>
 
-    <string name="just_a_sec">Giusto un secondo…</string>
-    <string name="ask_permission_tos">Continuando autorizzi questa applicazione e Google ad usare le tue informazioni in accordo con i rispettivi termini di servizio e politiche di riservatezza.</string>
+    <string name="just_a_sec">Solo un sec…</string>
+    <string name="ask_permission_tos">Continuando, consentirai a quest\'app e a Google di utilizzare le tue informazioni in conformità con i rispettivi termini di servizio e politiche sulla riservatezza.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare:</string>
-    <string name="account_manager_title">Gestione dell\'account Google</string>
-    <string name="sorry">Ci dispiace…</string>
-    <string name="auth_before_connect">"Un\'applicazione sul tuo dispositivo sta tentando di accedere all\'account Google.
+    <string name="account_manager_title">Gestore Account Google</string>
+    <string name="sorry">Ci scusiamo…</string>
+    <string name="auth_before_connect">"Un'app sul tuo dispositivo sta tentando di accedere a un account Google.
 
-Se ciò era intenzionale, utilizza il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, in caso contrario utilizza il pulsante <b>Cancella</b> per tornare all\'applicazione che ha aperto questa finestra di dialogo."</string>
+Se ciò è intenzionale, utilizza il pulsante <b>Accedi</b> per connetterti alla relativa pagina di accesso Google, in caso contrario, premi <b>Annulla</b> per tornare all\'applicazione che ha richiamato questa finestra di dialogo."</string>
     <string name="auth_sign_in">Accedi</string>
-    <string name="auth_connecting">"Il tuo dispositivo sta stabilendo la connessione con i server di Google per autenticarti.
+    <string name="auth_connecting">"Il tuo dispositivo sta stabilendo una connessione ai server di Google per eseguire l\'accesso.
 
-Questa operazione può richiedere alcuni secondi."</string>
-    <string name="no_network_error_desc">"Non disponi di una connessione ad internet.
+Questa operazione potrebbe richiedere alcuni secondi."</string>
+    <string name="no_network_error_desc">"Non è stata rilevata alcuna connessione di rete.
 
-Potrebbe trattarsi di un disservizio temporaneo oppure non essere il tuo dispositivo Android fornito di connessione dati. Riprova quando connesso ad una rete cellulare o ad una rete Wi-Fi."</string>
-    <string name="auth_general_error_desc">"C\è stato un problema di comunicazione con i server di Google.
+Questo potrebbe essere un problema temporaneo o legato al mancato collegamento del tuo dispositivo Android ad un servizio dati. Riprova quando sarai connesso ad una rete mobile o connettiti ad una rete Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Si è verificato un problema di comunicazione con i server di Google.
 
-Try again later."</string>
-    <string name="auth_finalize">"Il tuo dispositivo sta comunicando con i server di Google per salvare le informazioni sull\'account.
+Riprova più tardi."</string>
+    <string name="auth_finalize">"Il tuo dispositivo sta tentando di contattare Google per salvare le informazioni sul tuo account.
 
-Questa operazione può richiedere alcuni minuti."</string>
-    <string name="allow">Permetti</string>
+Questo potrà richiedere un paio di minuti"</string>
+    <string name="allow">Consenti</string>
     <string name="deny">Nega</string>
-    <string name="auth_notification_title">Autenticazione necessaria</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> necessita della tua autorizzazione ad accedere all\'account Google.</string>
+    <string name="auth_notification_title">Autenticazione richiesta</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> richiede a tua autorizzazione per accedere al tuo account Google.</string>
 
-    <string name="perm_status_broadcast_label">Ascolta la trasmissione di stati interni</string>
-    <string name="perm_c2dm_receive_label">Ascolta messaggi C2DM</string>
-    <string name="perm_c2dm_send_label">Invia messaggi C2DM ad altre applicazioni</string>
-    <string name="perm_gtalk_svc_label">Scambia messaggi e riceve notifiche di sincronizzazione dai server Google</string>
-    <string name="perm_extended_access_label">Accesso esteso ai servizi Google</string>
-    
-    <string name="service_name_checkin">Registrazione del dispositivo</string>
-    <string name="service_name_mcs">Messaggistica cloud</string>
+    <string name="perm_status_broadcast_label">ascolta le trasmissioni di stato interne</string>
+    <string name="perm_c2dm_receive_label">ascolta i messaggi C2DM</string>
+    <string name="perm_c2dm_send_label">Invia i messaggi C2DM ad altre app</string>
+    <string name="perm_gtalk_svc_label">scambia messaggi e ricevi notifiche di sincronizzazione dai server di Google</string>
+    <string name="perm_extended_access_label">Estendi accesso ai servizi Google</string>
 
-    <string name="service_status_disabled">Disattivato</string>
-    <string name="service_status_automatic">Automatico</string>
-    <string name="service_status_enabled_short">Attivo</string>
-    <string name="service_status_disabled_short">Disattivato</string>
+    <string name="service_name_checkin">Registrazione dispositivo Google</string>
+    <string name="service_name_mcs">Messaggistica Cloud Google</string>
 
-    <string name="menu_advanced">Impostazioni avanzate</string>
-    <string name="list_no_item_none">Nessuna</string>
-    <string name="list_item_see_all">Mostra tutte</string>
+    <string name="service_status_disabled">Disattivata</string>
+    <string name="service_status_automatic">Automatica</string>
+    <string name="service_status_enabled_short">Attiva</string>
+    <string name="service_status_disabled_short">Disattivata</string>
 
-    <string name="network_type_mobile">Reti mobili</string>
+    <string name="menu_advanced">Avanzate</string>
+    <string name="list_no_item_none">Nessuno</string>
+    <string name="list_item_see_all">Vedi tutti</string>
+
+    <string name="network_type_mobile">Rete mobile</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
     <string name="network_type_other">Altre reti</string>
 
     <!-- Settings strings -->
 
-    <string name="prefcat_about">A proposito di microG</string>
+    <string name="prefcat_about">Informazioni su</string>
     <string name="prefcat_google_services">Servizi Google</string>
-
-    <string name="cond_gcm_bat_title">Ottimizzazioni della batteria attive</string>
-    <string name="cond_gcm_bat_summary">Hai attivato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono attive per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti selezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
-    <string name="cond_gcm_bat_action">Ignora ottimizzazioni</string>
-    
-    <string name="prefs_account">Preferenze dell\'account</string>
-    <string name="prefs_account_privacy">Informazioni personali e riservatezza</string>
-    <string name="prefs_account_security">Accesso e sicurezza</string>
-
-    <string name="pref_auth_trust_google_title">Dai fiducia a Google per i permessi alle applicazioni</string>
-    <string name="pref_auth_trust_google_summary">Quando questa opzione è disattivata, viene interpellato l\'utente prima che ogni richiesta di autorizzazione da parte delle applicazioni venga inviata a Google. Alcune applicazioni potrebbero fallire nell\'utilizzare l\'account Google se questa opzione è disattivata.</string>
-    <string name="pref_auth_visible_title">Autorizza le applicazioni a visualizzare gli account</string>
-    <string name="pref_auth_visible_summary">Quando questa opzione è attiva, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica dell\'account Google senza autorizzazione preventiva.</string>
-
-    <string name="pref_switcher_title">Registra dispositivo</string>
-    <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. Vengono rimossi da microG alcuni bit funzionali all\'identificazione dei dati di registrazione, oltre al nome dell\'account Google.</string>
+    <string name="pref_more_settings">Altro</string>
 
     <string name="checkin_not_registered">Non registrato</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
-    <string name="pref_info_status">Stato</string>
-    <string name="pref_more_settings">Impostazioni avanzate</string>
+    <string name="cond_gcm_bat_title">Ottimizzazione batteria attivata</string>
+    <string name="cond_gcm_bat_summary">Hai attivato l'\opzione Messaggistica Cloud Google ma i Servizi Vanced microG risultano al momento limitati dall\'ottimizzazione energetica di sistema. Se desideri ricevere le notifiche push, escludi i microG da questa ottimizzazione.</string>
+    <string name="cond_gcm_bat_action">Ignore ottimizzazione</string>
+
+    <string name="prefs_account">Preferenze account</string>
+    <string name="prefs_account_privacy">Info personali e privacy</string>
+    <string name="prefs_account_security">Accesso e sicurezza</string>
+
+    <string name="pref_auth_trust_google_title">Affidati a Google per le autorizzazioni delle app</string>
+    <string name="pref_auth_trust_google_summary">Se disattivato, verrà chiesto all\'utente di Inviare prima una richiesta di autorizzazione app a Google. Alcune applicazioni non riusciranno ad utilizzare l\'account Google se questa opzione risulterà disattivata.</string>
+    <string name="pref_auth_visible_title">Consenti alle app di trovare gli account</string>
+    <string name="pref_auth_visible_summary">Se attivato, tutte le applicazioni presenti in questo dispositivo potranno visualizzare l\'indirizzo email dei tuoi account Google in assenza di previa autorizzazione.</string>
 
     <string name="pref_add_account_title">Account</string>
-    <string name="pref_add_account_summary">Aggiungi un account Google</string>
+    <string name="pref_add_account_summary">Aggiungi account Google</string>
     <string name="pref_gcm_switcher_title">Ricevi notifiche push</string>
-    <string name="pref_gcm_enable_mcs_summary">Il servizio di messaggistica cloud di Google è un fornitore di notifiche push utilizzato da molte applicazioni di terze parti. Per poterlo utlizzare devi attivare la registrazione del dispositivo.</string>
-    <string name="pref_gcm_confirm_new_apps_title">Conferma le nuove applicazioni</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Chiedi conferma all\'utente prima di registrare una nuova applicazione per le notifiche push.</string>
+    <string name="pref_gcm_enable_mcs_summary">Messaggistica Cloud Google è un fornitore di notifiche push presente in molte applicazioni di terze parti. Per utilizzarlo è necessario attivare la registrazione del dispositivo.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Conferma nuove app</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Chiedi prima di registrare una nuova app per la ricezione di notifiche push</string>
 
-    <string name="pref_about_title">A proposito di microG</string>
-    <string name="pref_cast_double_fix">Correzione Cast duplicato</string>
-    <string name="pref_cast_double_fix_summary">Attiva questa opzione in caso di voci duplicate nel menù di cast</string>
-  
+    <string name="pref_about_title">Informazioni su Vanced microG</string>
+    <string name="pref_cast_double_fix">Correggi voce cast duplicata</string>
+
+    <string name="pref_switcher_title">Registra dispositivo</string>
+    <string name="pref_checkin_enable_summary">Registra il tuo dispositivo sui servizi Google e crea un identificatore univoco del dispositivo. Verranno rimossi dai Servizi Vanced microG alcuni bit utili per identificare i dati di registrazione, oltre al nome dell\'account Google.</string>
+    <string name="pref_info_status">Stato</string>
+
     <string name="gcm_status_pref_auto">Automatico</string>
     <string name="gcm_status_pref_manual">Manuale</string>
     <string name="gcm_status_pref_sec">secondi</string>
     <string name="gcm_status_pref_min">minuti</string>
-    <string name="gcm_unregister_app">Annulla la registrazione</string>
-    <string name="gcm_no_message_yet">Nessun messaggio ricevuto fino ad ora</string>
+    <string name="gcm_unregister_app">Non registrato</string>
+    <string name="gcm_no_message_yet">Nessun messaggio finora ricevuto</string>
     <string name="gcm_last_message_at">Ultimo messaggio: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_registered">Registrata</string>
-    <string name="gcm_registered_since">Registrata: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_unregister_confirm_title">Annulla la registrazione di <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
-    <string name="gcm_unregister_confirm_message">Alcune applicazioni non rinnovano automaticamente la registrazione e/o non forniscono un\'opzione per farlo manualmente. Queste applicazioni potrebbero non funzionare correttamente a seguito dell\'annullamento della registrazione.\nContinuare?</string>
-    <string name="gcm_unregister_after_deny_message">Hai negato ad un\'applicazione, già registrata in precedenza, di registrarsi per la ricezione delle notifiche push.\nDesideri annullare la registrazione così che non riceva più notifiche push in futuro?</string>
+    <string name="gcm_registered">Registrato</string>
+    <string name="gcm_registered_since">Registrato da: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Non registrato <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Alcune app non effettuano una nuova registrazione automatica e/o non forniscono un\'opzione per eseguirla manualmente. Queste app potrebbero non funzionare correttamente dopo l\'annullamento della registrazione.\nDesideri continuare?</string>
+    <string name="gcm_unregister_after_deny_message">Hai negato ad un\'app già registrata, un\'ulteriore registrazione per la ricezione di notifiche push.\nDesideri annullare la registrazione ora, per disattivare la futura ricezione di messaggi push?</string>
     <string name="gcm_messages_counter">Messaggi: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">Disconnesso</string>
-    <string name="gcm_network_state_connected">Connesso <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_network_state_connected">Connesso da m <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="pref_push_app_allow_register_title">Permetti la registrazione</string>
-    <string name="pref_push_app_allow_register_summary">Permetti all\'applicazione di registrarsi per la ricezione delle notifiche push.</string>
-    <string name="pref_push_app_wake_for_delivery_title">Avvia alla ricezione</string>
-    <string name="pref_push_app_wake_for_delivery_summary">Avvia l\'applicazione in background in seguito alla ricezione delle notifiche push.</string>
+    <string name="pref_push_app_allow_register_title">Consenti registrazione</string>
+    <string name="pref_push_app_allow_register_summary">Consenti all\'app di registrarsi per ricevere notifiche push.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Esegui app su messaggio push</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Esegui l\'app in secondo piano per ricevere i messaggi push in arrivo.</string>
     <string name="prefcat_status_title">Stato</string>
-    <string name="prefcat_push_apps_title">Applicazioni che utilizzano le notifiche push</string>
-    <string name="prefcat_push_apps_registered_title">Applicazioni registrate</string>
-    <string name="prefcat_push_apps_unregistered_title">Applicazioni non registrate</string>
-    <string name="prefcat_push_networks_title">Reti da utilizzare per le notifiche push</string>
+    <string name="prefcat_push_apps_title">App che utilizzano le notifiche push</string>
+    <string name="prefcat_push_apps_registered_title">App registrate</string>
+    <string name="prefcat_push_apps_unregistered_title">App non registrate</string>
+    <string name="prefcat_push_networks_title">Reti utilizzate per le notifiche push</string>
+    <string name="pref_cast_double_fix_summary">Attiva questa opzione in caso di voci duplicate nel menù di trasmissione</string>
 </resources>
