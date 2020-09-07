@@ -73,18 +73,12 @@ public class ForegroundServiceContext extends ContextWrapper {
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mIntent, 0);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "foreground-service")
+        return new NotificationCompat.Builder(context, "foreground-service")
                 .setOngoing(true)
                 .setContentIntent(pendingIntent)
                 .setContentTitle(context.getResources().getString(R.string.notification_service_title))
                 .setContentText(context.getResources().getString(R.string.notification_service_content))
-                .setSmallIcon(R.drawable.ic_foreground_notification);
-
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0, notificationBuilder.build());
-
-        return null;
+                .setSmallIcon(R.drawable.ic_foreground_notification)
+                .build();
     }
 }
