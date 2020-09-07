@@ -33,7 +33,7 @@ public class ForegroundServiceContext extends ContextWrapper {
     public ComponentName startService(Intent service) {
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
-        if (!powerManager.isPowerSaveMode() && !isAppOnForeground()) {
+        if (!powerManager.isIgnoringBatteryOptimizations(this.getPackageName()) && !isAppOnForeground()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

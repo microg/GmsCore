@@ -29,7 +29,7 @@ buildscript {
 
     ext.androidBuildVersionTools = "29.0.3"
 
-    ext.androidMinSdk = 21
+    ext.androidMinSdk = 23
     ext.androidTargetSdk = 29
     ext.androidCompileSdk = 29
 
