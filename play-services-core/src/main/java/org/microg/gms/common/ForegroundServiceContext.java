@@ -2,6 +2,8 @@ package org.microg.gms.common;
 
 import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -13,7 +15,7 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import com.mgoogle.android.gms.R;
 
@@ -29,18 +31,18 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @Override
     public ComponentName startService(Intent service) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isIgnoringBatteryOptimizations() && !isAppOnForeground()) {
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+        if (!powerManager.isPowerSaveMode() && !isAppOnForeground()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
-            return super.startForegroundService(service);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return super.startForegroundService(service);
+            } else {
+                return super.startService(service);
+            }
         }
         return super.startService(service);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private boolean isIgnoringBatteryOptimizations() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        return powerManager.isIgnoringBatteryOptimizations(getPackageName());
     }
 
     private boolean isAppOnForeground() {
@@ -70,12 +72,19 @@ public class ForegroundServiceContext extends ContextWrapper {
         mIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, mIntent, 0);
-        return new Notification.Builder(context)
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, "foreground-service")
                 .setOngoing(true)
                 .setContentIntent(pendingIntent)
                 .setContentTitle(context.getResources().getString(R.string.notification_service_title))
                 .setContentText(context.getResources().getString(R.string.notification_service_content))
-                .setSmallIcon(R.drawable.ic_foreground_notification)
-                .build();
+                .setSmallIcon(R.drawable.ic_foreground_notification);
+
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0, notificationBuilder.build());
+
+        return null;
     }
 }
