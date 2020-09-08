@@ -6,25 +6,33 @@
 package org.microg.gms.nearby.exposurenotification
 
 import android.annotation.TargetApi
-import android.app.Service
-import android.bluetooth.BluetoothAdapter.*
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
-import android.os.IBinder
 import android.util.Log
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import org.microg.gms.common.ForegroundServiceContext
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.util.*
+import kotlinx.coroutines.delay
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @TargetApi(21)
-class ScannerService : Service() {
+class ScannerService : LifecycleService() {
+    private val version = VERSION_1_0
     private var started = false
-    private var startTime = 0L
+    private var looping = false
+    private var startLoopTime = 0L
+    private var lastScanTime = 0L
+    private var nextScanTime = 0L
     private var seenAdvertisements = 0L
     private var lastAdvertisement = 0L
     private lateinit var database: ExposureDatabase
@@ -48,21 +56,40 @@ class ScannerService : Service() {
     private val trigger = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == "android.bluetooth.adapter.action.STATE_CHANGED") {
-                when (intent.getIntExtra(EXTRA_STATE, -1)) {
-                    STATE_TURNING_OFF, STATE_OFF -> stopScan()
-                    STATE_ON -> startScanIfNeeded()
+                when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)) {
+                    BluetoothAdapter.STATE_TURNING_OFF, BluetoothAdapter.STATE_OFF -> stopScanLoop()
+                    BluetoothAdapter.STATE_ON -> {
+                        if (looping) {
+                            lifecycleScope.launchWhenStarted { restartScanLoop() }
+                        } else {
+                            startScanLoopIfNeeded()
+                        }
+                    }
                 }
             }
         }
     }
 
     private val scanner: BluetoothLeScanner?
-        get() = getDefaultAdapter()?.bluetoothLeScanner
+        get() = BluetoothAdapter.getDefaultAdapter()?.bluetoothLeScanner
 
+    override fun onCreate() {
+        super.onCreate()
+        database = ExposureDatabase.ref(this)
+        registerReceiver(trigger, IntentFilter().also { it.addAction("android.bluetooth.adapter.action.STATE_CHANGED") })
+    }
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(trigger)
+        stopScanLoop()
+        database.unref()
+    }
+    
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
         super.onStartCommand(intent, flags, startId)
-        startScanIfNeeded()
+        startScanLoopIfNeeded() 
         return START_STICKY
     }
 
@@ -73,32 +100,15 @@ class ScannerService : Service() {
         seenAdvertisements++
         lastAdvertisement = System.currentTimeMillis()
     }
-
-    fun startScanIfNeeded() {
+    
+    fun startScanLoopIfNeeded() {
         if (ExposurePreferences(this).enabled) {
-            startScan()
+            startScanLoop()
         } else {
             stopSelf()
         }
     }
-
-    override fun onCreate() {
-        super.onCreate()
-        database = ExposureDatabase.ref(this)
-        registerReceiver(trigger, IntentFilter().also { it.addAction("android.bluetooth.adapter.action.STATE_CHANGED") })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(trigger)
-        stopScan()
-        database.unref()
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
-
+    
     @Synchronized
     private fun startScan() {
         if (started) return
@@ -115,7 +125,7 @@ class ScannerService : Service() {
                 callback
         )
         started = true
-        startTime = System.currentTimeMillis()
+        lastScanTime = System.currentTimeMillis()
     }
 
     @Synchronized
@@ -125,13 +135,55 @@ class ScannerService : Service() {
         started = false
         scanner?.stopScan(callback)
     }
+    
+    @Synchronized
+    fun startScanLoop() {
+        if (looping) return
+        startLoopTime = System.currentTimeMillis()
+        looping = true
+        lifecycleScope.launchWhenStarted {
+            Log.d(TAG, "Looping ScannerService")
+            try {
+                do {
+                    nextScanTime = System.currentTimeMillis()+SCANNING_INTERVAL_MS
+                    startScan()
+                    delay(SCANNING_TIME_MS.toLong())
+                    stopScan()
+                    val delayNextScan = nextScanTime-System.currentTimeMillis()
+                    if (delayNextScan > 0) {
+                        delay(delayNextScan.toLong())
+                    }
+                } while (looping)
+            } catch (e: Exception) {
+                Log.w(TAG, "Error during ScannerService loop", e)
+            }
+            Log.d(TAG, "No longer looping ScannerService")
+            synchronized(this@ScannerService) {
+                looping = false
+            }
+        }
+    }
+
+    @Synchronized
+    fun stopScanLoop() {
+        stopScan()
+        looping = false
+    }
+
+    suspend fun restartScanLoop() {
+        stopScanLoop()
+        startScanLoop()
+    }
 
     override fun dump(fd: FileDescriptor?, writer: PrintWriter?, args: Array<out String>?) {
-        writer?.println("Started: $started")
-        if (started) {
-            writer?.println("Since ${Date(startTime)}")
-            writer?.println("Seen advertisements: $seenAdvertisements")
+        writer?.println("Looping: $looping")
+        writer?.println("Active: $started")
+        writer?.println("Seen advertisements: $seenAdvertisements")
+        if (looping) {
+            writer?.println("Looping since ${Date(startLoopTime)}")
             writer?.println("Last advertisement: ${Date(lastAdvertisement)}")
+            writer?.println("Last scan: ${Date(lastScanTime)}")
+            writer?.println("Next scan: ${Date(nextScanTime)}")
         }
     }
 

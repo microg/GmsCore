@@ -11,6 +11,10 @@ import java.util.*
 const val TAG = "ExposureNotification"
 val SERVICE_UUID = ParcelUuid(UUID.fromString("0000FD6F-0000-1000-8000-00805F9B34FB"))
 
+const val SCANNING_INTERVAL = 5 * 60
+const val SCANNING_INTERVAL_MS = SCANNING_INTERVAL * 1000
+const val SCANNING_TIME = 20 // Google uses 4s + 13s (if Bluetooth is used by something else)
+const val SCANNING_TIME_MS = SCANNING_TIME * 1000
 const val ROLLING_WINDOW_LENGTH = 10 * 60
 const val ROLLING_WINDOW_LENGTH_MS = ROLLING_WINDOW_LENGTH * 1000
 const val ROLLING_PERIOD = 144
