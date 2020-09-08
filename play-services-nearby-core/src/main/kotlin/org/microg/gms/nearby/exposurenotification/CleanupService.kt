@@ -8,6 +8,9 @@ package org.microg.gms.nearby.exposurenotification
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.microg.gms.common.ForegroundServiceContext
 
 class CleanupService : LifecycleService() {
@@ -15,12 +18,18 @@ class CleanupService : LifecycleService() {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
         super.onStartCommand(intent, flags, startId)
         if (isNeeded(this)) {
-            ExposureDatabase.with(this@CleanupService) {
-                it.dailyCleanup()
+            lifecycleScope.launchWhenStarted {
+                launch(Dispatchers.IO) {
+                    ExposureDatabase.with(this@CleanupService) {
+                        it.dailyCleanup()
+                    }
+                    ExposurePreferences(this@CleanupService).lastCleanup = System.currentTimeMillis()
+                }
+                stopSelf()
             }
-            ExposurePreferences(this).lastCleanup = System.currentTimeMillis()
+        } else {
+            stopSelf()
         }
-        stopSelf()
         return START_NOT_STICKY
     }
 

@@ -62,6 +62,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         if (oldVersion < 3) {
             db.execSQL("CREATE TABLE $TABLE_APP_PERMS(package TEXT NOT NULL, sig TEXT NOT NULL, perm TEXT NOT NULL, timestamp INTEGER NOT NULL);")
         }
+        if (oldVersion < 4) {
+            db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_DIAGNOSIS}_tcid ON $TABLE_DIAGNOSIS(tcid);")
+        }
     }
 
     fun SQLiteDatabase.delete(table: String, whereClause: String, args: LongArray): Int =
@@ -75,11 +78,15 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         try {
             val rollingStartTime = currentRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
             val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
+            Log.d(TAG, "Deleted on daily cleanup: $advertisements adv")
             val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime))
+            Log.d(TAG, "Deleted on daily cleanup: $appLogEntries applogs")
             val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
-            val checkedTemporaryExposureKeys = delete(TABLE_TEK_CHECK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
+            Log.d(TAG, "Deleted on daily cleanup: $temporaryExposureKeys teks")
+            val checkedTemporaryExposureKeys = delete(TABLE_TEK_CHECK, "rollingStartNumber < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS - ROLLING_PERIOD))
+            Log.d(TAG, "Deleted on daily cleanup: $checkedTemporaryExposureKeys cteks")
             val appPerms = delete(TABLE_APP_PERMS, "timestamp < ?", longArrayOf(System.currentTimeMillis() - CONFIRM_PERMISSION_VALIDITY))
-            Log.d(TAG, "Deleted on daily cleanup: $advertisements adv, $appLogEntries applogs, $temporaryExposureKeys teks, $checkedTemporaryExposureKeys cteks, $appPerms perms")
+            Log.d(TAG, "Deleted on daily cleanup: $appPerms perms")
             setTransactionSuccessful()
         } finally {
             endTransaction()
@@ -553,7 +560,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 3
+        private const val DB_VERSION = 4
         private const val TABLE_ADVERTISEMENTS = "advertisements"
         private const val TABLE_APP_LOG = "app_log"
         private const val TABLE_TEK = "tek"
