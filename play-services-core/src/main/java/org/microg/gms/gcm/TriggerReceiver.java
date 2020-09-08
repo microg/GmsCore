@@ -86,7 +86,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                 }
             }
 
-            if (!McsService.isConnected() || force) {
+            if (!McsService.isConnected(context) || force) {
                 Log.d(TAG, "Not connected to GCM but should be, asking the service to start up. Triggered by: " + intent);
                 startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_CONNECT, null, context, McsService.class)
                         .putExtra(EXTRA_REASON, intent));

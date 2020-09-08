@@ -235,18 +235,18 @@ public class McsService extends Service implements Handler.Callback {
         return null;
     }
 
-    public synchronized static boolean isConnected() {
+    public synchronized static boolean isConnected(Context context) {
         if (inputStream == null || !inputStream.isAlive() || outputStream == null || !outputStream.isAlive()) {
             logd(null, "Connection is not enabled or dead.");
             return false;
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
-        int heartbeatMs = GcmPrefs.get(null).getHeartbeatMsFor(activeNetworkPref, false);
+        int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref, false);
         if (heartbeatMs < 0) {
             closeAll();
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
             logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
-            GcmPrefs.get(null).learnTimeout(activeNetworkPref);
+            GcmPrefs.get(context).learnTimeout(activeNetworkPref);
             return false;
         }
         return true;
@@ -649,13 +649,13 @@ public class McsService extends Service implements Handler.Callback {
                 return true;
             case MSG_CONNECT:
                 logd(this, "Connect initiated, reason: " + msg.obj);
-                if (!isConnected()) {
+                if (!isConnected(this)) {
                     connect();
                 }
                 return true;
             case MSG_HEARTBEAT:
                 logd(this, "Heartbeat initiated, reason: " + msg.obj);
-                if (isConnected()) {
+                if (isConnected(this)) {
                     HeartbeatPing.Builder ping = new HeartbeatPing.Builder();
                     if (inputStream.newStreamIdAvailable()) {
                         ping.last_stream_id_received(inputStream.getStreamId());
@@ -669,7 +669,7 @@ public class McsService extends Service implements Handler.Callback {
                 return true;
             case MSG_ACK:
                 logd(this, "Ack initiated, reason: " + msg.obj);
-                if (isConnected()) {
+                if (isConnected(this)) {
                     IqStanza.Builder iq = new IqStanza.Builder()
                             .type(IqStanza.IqType.SET)
                             .id("")

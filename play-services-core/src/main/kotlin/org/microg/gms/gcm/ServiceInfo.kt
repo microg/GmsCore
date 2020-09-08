@@ -38,7 +38,7 @@ class ServiceInfoReceiver : BroadcastReceiver() {
     private fun sendInfoResponse(context: Context) {
         context.sendOrderedBroadcast(Intent(ACTION_SERVICE_INFO_RESPONSE).apply {
             setPackage(context.packageName)
-            putExtra(EXTRA_SERVICE_INFO, ServiceInfo(GcmPrefs.get(context).toConfiguration(), McsService.isConnected(), McsService.getStartTimestamp()))
+            putExtra(EXTRA_SERVICE_INFO, ServiceInfo(GcmPrefs.get(context).toConfiguration(), McsService.isConnected(context), McsService.getStartTimestamp()))
         }, null)
     }
 
