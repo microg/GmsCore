@@ -499,29 +499,29 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    private val currentTemporaryExposureKey: TemporaryExposureKey
-        get() = writableDatabase.let { database ->
-            database.beginTransaction()
-            try {
-                var key = findOwnKeyAt(currentRollingStartNumber.toInt(), database)
-                if (key == null) {
-                    key = generateCurrentTemporaryExposureKey()
-                    storeOwnKey(key, database)
-                }
-                database.setTransactionSuccessful()
-                key
-            } finally {
-                database.endTransaction()
+    private fun ensureTemporaryExposureKey(): TemporaryExposureKey = writableDatabase.let { database ->
+        database.beginTransaction()
+        try {
+            var key = findOwnKeyAt(currentRollingStartNumber.toInt(), database)
+            if (key == null) {
+                key = generateCurrentTemporaryExposureKey()
+                storeOwnKey(key, database)
             }
+            database.setTransactionSuccessful()
+            key
+        } finally {
+            database.endTransaction()
         }
+    }
 
-    val currentRpiId: UUID
+    val currentRpiId: UUID?
         get() {
-            val buffer = ByteBuffer.wrap(currentTemporaryExposureKey.generateRpiId(currentIntervalNumber.toInt()))
+            val key = findOwnKeyAt(currentRollingStartNumber.toInt()) ?: return null
+            val buffer = ByteBuffer.wrap(key.generateRpiId(currentIntervalNumber.toInt()))
             return UUID(buffer.long, buffer.long)
         }
 
-    fun generateCurrentPayload(metadata: ByteArray) = currentTemporaryExposureKey.generatePayload(currentIntervalNumber.toInt(), metadata)
+    fun generateCurrentPayload(metadata: ByteArray) = ensureTemporaryExposureKey().generatePayload(currentIntervalNumber.toInt(), metadata)
 
     override fun getWritableDatabase(): SQLiteDatabase {
         if (this != instance) {

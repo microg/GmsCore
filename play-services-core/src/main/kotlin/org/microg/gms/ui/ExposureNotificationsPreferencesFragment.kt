@@ -96,7 +96,12 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
                 }
             }
             collectedRpis.summary = getString(R.string.pref_exposure_collected_rpis_summary, lastHourKeys)
-            advertisingId.summary = currentId.toString()
+            if (currentId != null) {
+                advertisingId.isVisible = true
+                advertisingId.summary = currentId.toString()
+            } else {
+                advertisingId.isVisible = false
+            }
             exposureApps.removeAll()
             if (apps.isEmpty()) {
                 exposureApps.addPreference(exposureAppsNone)
