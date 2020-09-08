@@ -79,7 +79,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(notificationChannelID, context.getResources().getString(R.string.notification_service_name), NotificationManager.IMPORTANCE_MIN);
-            channel.setShowBadge(false);
+            channel.setShowBadge(true);
             channel.setLockscreenVisibility(0);
             channel.setVibrationPattern(new long[0]);
             context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
@@ -90,7 +90,6 @@ public class ForegroundServiceContext extends ContextWrapper {
                 .setContentTitle(context.getResources().getString(R.string.notification_service_title))
                 .setContentText(context.getResources().getString(R.string.notification_service_content))
                 .setSmallIcon(R.drawable.ic_foreground_notification)
-                .setAutoCancel(true)
                 .build();
     }
 }
