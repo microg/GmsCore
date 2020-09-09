@@ -47,6 +47,7 @@ import com.mgoogle.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
+import org.microg.gms.common.ForegroundServiceContext;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.gcm.mcs.AppData;
 import org.microg.gms.gcm.mcs.Close;
@@ -294,6 +295,7 @@ public class McsService extends Service implements Handler.Callback {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        ForegroundServiceContext.completeForegroundService(this, intent, TAG);
         synchronized (McsService.class) {
             if (rootHandler != null) {
                 if (intent == null) return START_REDELIVER_INTENT;
