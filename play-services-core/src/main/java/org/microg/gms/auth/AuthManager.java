@@ -32,6 +32,8 @@ import java.io.IOException;
 import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
 import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 
+import org.microg.gms.common.StatusNotification;
+
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
@@ -50,6 +52,9 @@ public class AuthManager {
     private String accountType;
 
     public AuthManager(Context context, String accountName, String packageName, String service) {
+
+        StatusNotification.Notify(context);
+
         this.context = context;
         this.accountName = accountName;
         if (packageName.contains("youtube.music")) {
@@ -66,6 +71,8 @@ public class AuthManager {
         this.packageName = packageName;
         this.service = service;
     }
+
+
 
     public String getAccountType() {
         if (accountType == null)

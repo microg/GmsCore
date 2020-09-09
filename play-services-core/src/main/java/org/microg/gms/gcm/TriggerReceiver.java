@@ -26,7 +26,6 @@ import android.util.Log;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import org.microg.gms.checkin.LastCheckinInfo;
-import org.microg.gms.common.ForegroundServiceContext;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.N;
@@ -85,24 +84,8 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                     return;
                 }
             }
-
-            if (!McsService.isConnected() || force) {
-                Log.d(TAG, "Not connected to GCM but should be, asking the service to start up. Triggered by: " + intent);
-                startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_CONNECT, null, context, McsService.class)
-                        .putExtra(EXTRA_REASON, intent));
-            } else {
-                if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
-                    Log.d(TAG, "Ignoring " + intent + ": service is running. schedule reconnect instead.");
-                    McsService.scheduleReconnect(context);
-                } else {
-                    Log.d(TAG, "Ignoring " + intent + ": service is running. heartbeat instead.");
-                    startWakefulService(new ForegroundServiceContext(context), new Intent(ACTION_HEARTBEAT, null, context, McsService.class)
-                            .putExtra(EXTRA_REASON, intent));
-                }
-            }
         } catch (Exception e) {
             Log.w(TAG, e);
         }
     }
-
 }

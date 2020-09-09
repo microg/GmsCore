@@ -24,8 +24,6 @@ import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import org.microg.gms.common.ForegroundServiceContext;
-
 import static org.microg.gms.checkin.CheckinService.EXTRA_FORCE_CHECKIN;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
@@ -48,7 +46,6 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                 if (networkInfo != null && networkInfo.isConnected() || force) {
                     Intent subIntent = new Intent(context, CheckinService.class);
                     subIntent.putExtra(EXTRA_FORCE_CHECKIN, force);
-                    startWakefulService(new ForegroundServiceContext(context), subIntent);
                 }
             } else {
                 Log.d(TAG, "Ignoring " + intent + ": checkin is disabled");
