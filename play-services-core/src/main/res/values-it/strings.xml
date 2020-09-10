@@ -18,9 +18,10 @@
     <string name="gms_settings_name">Impostazioni di Vanced microG</string>
     <string name="gms_settings_summary">Configurazione di Vanced microG.</string>
 
-    <string name="notification_service_name">Primo Piano</string>
-    <string name="notification_service_title">Esecuzione in background</string>
-    <string name="notification_service_content">Tocca qui per escludere microg dal risparmio energetico</string>
+    <string name="notification_service_name">Esclusione Risparmio Energetico</string>
+    <string name="notification_service_title">Escludi i microg dal risparmio energetico</string>
+    <string name="notification_service_content">Per rimuovere questa notifica chiudi l\'app Vanced</string>
+    <string name="notification_service_subcontent">dalla lista delle app in secondo piano e riaprila</string>
 
     <string name="just_a_sec">Solo un secondo…</string>
     <string name="ask_permission_tos">Continuando, consentirai a quest\'app e a Google di utilizzare le tue informazioni in conformità con i rispettivi termini di servizio e politiche sulla riservatezza.</string>
