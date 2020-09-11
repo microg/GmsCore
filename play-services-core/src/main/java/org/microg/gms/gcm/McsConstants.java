@@ -36,10 +36,12 @@ public final class McsConstants {
     public static final int MSG_TEARDOWN = 30;
     public static final int MSG_CONNECT = 40;
     public static final int MSG_HEARTBEAT = 41;
+    public static final int MSG_ACK = 42;
 
     public static String ACTION_CONNECT = "org.microg.gms.gcm.mcs.CONNECT";
     public static String ACTION_RECONNECT = "org.microg.gms.gcm.mcs.RECONNECT";
     public static String ACTION_HEARTBEAT = "org.microg.gms.gcm.mcs.HEARTBEAT";
     public static String ACTION_SEND = "org.microg.gms.gcm.mcs.SEND";
+    public static String ACTION_ACK = "org.microg.gms.gcm.mcs.ACK";
     public static String EXTRA_REASON = "org.microg.gms.gcm.mcs.REASON";
 }

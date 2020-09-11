@@ -10,6 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
+import android.util.Log;
+
+import org.microg.gms.common.PackageUtils;
+
+import java.io.File;
 
 public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_ENABLE_CHECKIN = "checkin_enable_service";
@@ -17,6 +22,9 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
 
     public static CheckinPrefs get(Context context) {
         if (INSTANCE == null) {
+            if (!context.getPackageName().equals(PackageUtils.getProcessName())) {
+                Log.w("Preferences", CheckinPrefs.class.getName() + " initialized outside main process", new RuntimeException());
+            }
             if (context == null) return new CheckinPrefs(null);
             INSTANCE = new CheckinPrefs(context.getApplicationContext());
         }
@@ -24,18 +32,30 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
     }
 
     private SharedPreferences preferences;
+    private SharedPreferences systemDefaultPreferences;
     private boolean checkinEnabled = false;
 
     private CheckinPrefs(Context context) {
         if (context != null) {
             preferences = PreferenceManager.getDefaultSharedPreferences(context);
             preferences.registerOnSharedPreferenceChangeListener(this);
+            try {
+                systemDefaultPreferences = (SharedPreferences) Context.class.getDeclaredMethod("getSharedPreferences", File.class, int.class).invoke(context, new File("/system/etc/microg.xml"), Context.MODE_PRIVATE);
+            } catch (Exception ignored) {
+            }
             update();
         }
     }
 
+    private boolean getSettingsBoolean(String key, boolean def) {
+        if (systemDefaultPreferences != null) {
+            def = systemDefaultPreferences.getBoolean(key, def);
+        }
+        return preferences.getBoolean(key, def);
+    }
+
     private void update() {
-        checkinEnabled = preferences.getBoolean(PREF_ENABLE_CHECKIN, true);
+        checkinEnabled = getSettingsBoolean(PREF_ENABLE_CHECKIN, false);
     }
 
     @Override

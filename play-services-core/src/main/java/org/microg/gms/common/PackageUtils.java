@@ -17,6 +17,7 @@
 package org.microg.gms.common;
 
 import android.app.ActivityManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -26,6 +27,7 @@ import android.os.Binder;
 
 import androidx.annotation.Nullable;
 
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -237,6 +239,19 @@ public class PackageUtils {
             return pi.getTargetPackage();
         } else {
             return pi.getCreatorPackage();
+        }
+    }
+
+    public static String getProcessName() {
+        if (android.os.Build.VERSION.SDK_INT >= 28)
+            return Application.getProcessName();
+        try {
+            Class<?> activityThread = Class.forName("android.app.ActivityThread");
+            String methodName = android.os.Build.VERSION.SDK_INT >= 18 ? "currentProcessName" : "currentPackageName";
+            Method getProcessName = activityThread.getDeclaredMethod(methodName);
+            return (String) getProcessName.invoke(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

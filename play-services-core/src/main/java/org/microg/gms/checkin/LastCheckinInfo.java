@@ -55,6 +55,6 @@ public class LastCheckinInfo {
                 .putLong(PREF_SECURITY_TOKEN, securityToken)
                 .putString(PREF_VERSION_INFO, versionInfo)
                 .putString(PREF_DEVICE_DATA_VERSION_INFO, deviceDataVersionInfo)
-                .apply();
+                .commit();
     }
 }

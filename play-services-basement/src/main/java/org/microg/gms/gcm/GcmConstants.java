@@ -30,6 +30,7 @@ public final class GcmConstants {
     public static final String ACTION_INSTANCE_ID = "com.google.android.gms.iid.InstanceID";
 
     public static final String EXTRA_APP = "app";
+    public static final String EXTRA_APP_OVERRIDE = "org.microg.gms.gcm.APP_OVERRIDE";
     public static final String EXTRA_APP_ID = "appid";
     public static final String EXTRA_APP_VERSION_CODE = "app_ver";
     public static final String EXTRA_APP_VERSION_NAME = "app_ver_name";

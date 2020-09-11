@@ -107,6 +107,7 @@ Questo potrà richiedere un paio di minuti"</string>
 
     <string name="pref_switcher_title">Registra dispositivo</string>
     <string name="pref_checkin_enable_summary">Registra il tuo dispositivo sui servizi Google e crea un identificatore univoco del dispositivo. Verranno rimossi dai Servizi Vanced microG alcuni bit utili per identificare i dati di registrazione, oltre al nome dell\'account Google.</string>
+    <string name="pref_device_registration_android_id">ID Android</string>
     <string name="pref_info_status">Stato</string>
 
     <string name="gcm_status_pref_auto">Automatico</string>

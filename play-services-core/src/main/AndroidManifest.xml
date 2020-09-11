@@ -110,6 +110,8 @@
             </intent-filter>
         </service>
 
+        <receiver android:name="org.microg.gms.checkin.ServiceInfoReceiver" />
+
         <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
             <intent-filter>
                 <action android:name="android.server.checkin.CHECKIN" />
@@ -131,8 +133,7 @@
 
         <!-- Cloud Messaging -->
         <service
-            android:name="org.microg.gms.gcm.PushRegisterService"
-            android:permission="com.mgoogle.android.c2dm.permission.RECEIVE">
+            android:name="org.microg.gms.gcm.PushRegisterService">
             <intent-filter>
                 <action android:name="com.mgoogle.android.c2dm.intent.REGISTER" />
                 <action android:name="com.mgoogle.android.c2dm.intent.UNREGISTER" />
@@ -150,12 +151,13 @@
         <service android:name="org.microg.gms.gcm.McsService" />
 
         <receiver
-            android:name="org.microg.gms.gcm.SendReceiver"
-            android:permission="com.mgoogle.android.c2dm.permission.RECEIVE">
+            android:name="org.microg.gms.gcm.SendReceiver">
             <intent-filter>
                 <action android:name="com.google.android.gcm.intent.SEND" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name="org.microg.gms.gcm.ServiceInfoReceiver" />
 
         <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
             <intent-filter>
@@ -209,7 +211,8 @@
         <activity
             android:name="org.microg.tools.AccountPickerActivity"
             android:excludeFromRecents="true"
-            android:exported="true">
+            android:exported="true"
+            android:process=":ui">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
 
@@ -221,6 +224,7 @@
             android:name="org.microg.gms.auth.login.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
+            android:process=":ui"
             android:theme="@style/Theme.LoginBlue">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.login.LOGIN" />
@@ -233,6 +237,7 @@
             android:name="org.microg.gms.auth.AskPermissionActivity"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
 
         <service
@@ -241,7 +246,8 @@
 
         <activity
             android:name="com.google.android.gms.auth.TokenActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:process=":ui" />
 
         <provider
             android:name="org.microg.gms.auth.AccountContentProvider"
@@ -263,6 +269,7 @@
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/gms_settings_name"
+            android:process=":ui"
             android:roundIcon="@mipmap/ic_launcher"
             android:theme="@style/Theme.AppCompat.DayNight">
             <intent-filter>
@@ -276,6 +283,7 @@
             android:name="org.microg.gms.ui.SettingsActivityLink"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
+            android:process=":ui"
             android:targetActivity="org.microg.gms.ui.SettingsActivity"
             android:theme="@style/Theme.AppCompat.DayNight">
             <intent-filter>
@@ -296,21 +304,22 @@
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
+            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
 
         <activity
             android:name="org.microg.gms.ui.AboutFragment$AsActivity"
             android:label="@string/pref_about_title"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:process=":ui" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
             android:label="@string/gms_settings_name"
-            android:theme="@style/Theme.AppCompat.DayNight" />
+            android:process=":ui" />
 
         <activity
             android:name="org.microg.gms.ui.AccountSettingsActivity"
-            android:theme="@style/Theme.AppCompat.DayNight">
+            android:process=":ui">
             <intent-filter>
                 <action android:name="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS" />
                 <action android:name="com.google.android.gms.accountsettings.PRIVACY_SETTINGS" />

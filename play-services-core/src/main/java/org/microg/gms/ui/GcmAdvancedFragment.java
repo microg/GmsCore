@@ -46,7 +46,7 @@ public class GcmAdvancedFragment extends ResourceSettingsFragment {
                 updateContent();
                 if (newValue.equals("-1") && preference.getKey().equals(McsService.activeNetworkPref)) {
                     McsService.stop(getContext());
-                } else if (!McsService.isConnected()) {
+                } else if (!McsService.isConnected(getContext())) {
                     getContext().sendBroadcast(new Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, getContext(), TriggerReceiver.class));
                 }
                 return true;

@@ -26,6 +26,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -52,8 +53,10 @@ import org.microg.gms.common.PackageUtils;
 import org.microg.gms.gcm.mcs.AppData;
 import org.microg.gms.gcm.mcs.Close;
 import org.microg.gms.gcm.mcs.DataMessageStanza;
+import org.microg.gms.gcm.mcs.Extension;
 import org.microg.gms.gcm.mcs.HeartbeatAck;
 import org.microg.gms.gcm.mcs.HeartbeatPing;
+import org.microg.gms.gcm.mcs.IqStanza;
 import org.microg.gms.gcm.mcs.LoginRequest;
 import org.microg.gms.gcm.mcs.LoginResponse;
 import org.microg.gms.gcm.mcs.Setting;
@@ -65,6 +68,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.SSLContext;
 
@@ -74,6 +78,7 @@ import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
@@ -82,6 +87,7 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
+import static org.microg.gms.gcm.McsConstants.ACTION_ACK;
 import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
 import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
@@ -91,8 +97,10 @@ import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
 import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_ACK;
 import static org.microg.gms.gcm.McsConstants.MSG_CONNECT;
 import static org.microg.gms.gcm.McsConstants.MSG_HEARTBEAT;
 import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
@@ -119,6 +127,7 @@ public class McsService extends Service implements Handler.Callback {
     private static long lastIncomingNetworkRealtime = 0;
     private static long startTimestamp = 0;
     public static String activeNetworkPref = null;
+    private AtomicInteger nextMessageId = new AtomicInteger(0x1000000);
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -167,8 +176,8 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
-    private static void logd(String msg) {
-        if (GcmPrefs.get(null).isGcmLogEnabled()) Log.d(TAG, msg);
+    private static void logd(Context context, String msg) {
+        if (context == null || GcmPrefs.get(context).isGcmLogEnabled()) Log.d(TAG, msg);
     }
 
     @Override
@@ -226,18 +235,18 @@ public class McsService extends Service implements Handler.Callback {
         return null;
     }
 
-    public synchronized static boolean isConnected() {
+    public synchronized static boolean isConnected(Context context) {
         if (inputStream == null || !inputStream.isAlive() || outputStream == null || !outputStream.isAlive()) {
-            logd("Connection is not enabled or dead.");
+            logd(null, "Connection is not enabled or dead.");
             return false;
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
-        int heartbeatMs = GcmPrefs.get(null).getHeartbeatMsFor(activeNetworkPref, false);
+        int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref, false);
         if (heartbeatMs < 0) {
             closeAll();
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
-            logd("No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
-            GcmPrefs.get(null).learnTimeout(activeNetworkPref);
+            logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
+            GcmPrefs.get(context).learnTimeout(activeNetworkPref);
             return false;
         }
         return true;
@@ -250,7 +259,7 @@ public class McsService extends Service implements Handler.Callback {
     public static void scheduleReconnect(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         long delay = getCurrentDelay();
-        logd("Scheduling reconnect in " + delay / 1000 + " seconds...");
+        logd(context, "Scheduling reconnect in " + delay / 1000 + " seconds...");
         PendingIntent pi = PendingIntent.getBroadcast(context, 1, new Intent(ACTION_RECONNECT, null, context, TriggerReceiver.class), 0);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delay, pi);
@@ -266,7 +275,7 @@ public class McsService extends Service implements Handler.Callback {
         if (heartbeatMs < 0) {
             closeAll();
         }
-        logd("Scheduling heartbeat in " + heartbeatMs / 1000 + " seconds...");
+        logd(context, "Scheduling heartbeat in " + heartbeatMs / 1000 + " seconds...");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // This is supposed to work even when running in idle and without battery optimization disabled
             alarmManager.setExactAndAllowWhileIdle(ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + heartbeatMs, heartbeatIntent);
@@ -307,6 +316,8 @@ public class McsService extends Service implements Handler.Callback {
                     rootHandler.sendMessage(rootHandler.obtainMessage(MSG_HEARTBEAT, reason));
                 } else if (ACTION_SEND.equals(intent.getAction())) {
                     handleSendMessage(intent);
+                } else if (ACTION_ACK.equals(intent.getAction())) {
+                    rootHandler.sendMessage(rootHandler.obtainMessage(MSG_ACK, reason));
                 }
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             } else if (connectIntent == null) {
@@ -334,12 +345,20 @@ public class McsService extends Service implements Handler.Callback {
             Log.w(TAG, "Failed to send message, missing package name");
             return;
         }
+        if (packageName.equals(getPackageName()) && intent.hasExtra(EXTRA_APP_OVERRIDE)) {
+            packageName = intent.getStringExtra(EXTRA_APP_OVERRIDE);
+            intent.removeExtra(EXTRA_APP_OVERRIDE);
+        }
         intent.removeExtra(EXTRA_APP);
 
         int ttl;
         try {
-            ttl = Integer.parseInt(intent.getStringExtra(EXTRA_TTL));
-            if (ttl < 0 || ttl > maxTtl) {
+            if (intent.hasExtra(EXTRA_TTL)) {
+                ttl = Integer.parseInt(intent.getStringExtra(EXTRA_TTL));
+                if (ttl < 0 || ttl > maxTtl) {
+                    ttl = maxTtl;
+                }
+            } else {
                 ttl = maxTtl;
             }
         } catch (NumberFormatException e) {
@@ -390,7 +409,8 @@ public class McsService extends Service implements Handler.Callback {
         try {
             DataMessageStanza msg = new DataMessageStanza.Builder()
                     .sent(System.currentTimeMillis() / 1000L)
-                    .id(messageId)
+                    .id(Integer.toHexString(nextMessageId.incrementAndGet()))
+                    .persistent_id(messageId)
                     .token(collapseKey)
                     .from(from)
                     .reg_id(registrationId)
@@ -416,11 +436,11 @@ public class McsService extends Service implements Handler.Callback {
                 return;
             }
 
-            logd("Starting MCS connection...");
+            logd(this, "Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
-            logd("Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
+            logd(this, "Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
             sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, SERVICE_PORT, true);
-            logd("Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
+            logd(this, "Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
             inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
             outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);
             inputStream.start();
@@ -443,7 +463,7 @@ public class McsService extends Service implements Handler.Callback {
     private void handleLoginResponse(LoginResponse loginResponse) {
         if (loginResponse.error == null) {
             GcmPrefs.get(this).clearLastPersistedId();
-            logd("Logged in");
+            logd(this, "Logged in");
             wakeLock.release();
         } else {
             throw new RuntimeException("Could not login: " + loginResponse.error);
@@ -500,9 +520,11 @@ public class McsService extends Service implements Handler.Callback {
 
         Intent intent = new Intent();
         intent.setAction(ACTION_C2DM_RECEIVE);
-        intent.setPackage(packageName);
         intent.putExtra(EXTRA_FROM, msg.from);
         intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
+        if (msg.persistent_id != null) {
+            intent.putExtra(EXTRA_MESSAGE_ID, msg.persistent_id);
+        }
         if (app.wakeForDelivery) {
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         } else {
@@ -513,40 +535,51 @@ public class McsService extends Service implements Handler.Callback {
             intent.putExtra(appData.key, appData.value);
         }
 
-        String receiverPermission;
+        String receiverPermission = null;
         try {
             String name = packageName + ".permission.C2D_MESSAGE";
-            getPackageManager().getPermissionInfo(name, 0);
-            receiverPermission = name;
-        } catch (PackageManager.NameNotFoundException e) {
-            receiverPermission = null;
+            PermissionInfo info = getPackageManager().getPermissionInfo(name, 0);
+            if (info.packageName.equals(packageName)) {
+                receiverPermission = name;
+            }
+        } catch (Exception ignored) {
+            // Keep null, no valid permission found
         }
 
-        List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
-        if (infos == null || infos.isEmpty()) {
-            logd("No target for message, wut?");
+        if (receiverPermission == null) {
+            // Without receiver permission, we only restrict by package name
+            logd(this, "Deliver message to all receivers in package " + packageName);
+            intent.setPackage(packageName);
+            sendOrderedBroadcast(intent, null);
         } else {
-            for (ResolveInfo resolveInfo : infos) {
-                logd("Target: " + resolveInfo);
-                Intent targetIntent = new Intent(intent);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && app.wakeForDelivery) {
-                    try {
-                        if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
-                            int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
-                            logd("Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
-                            addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
+            List<ResolveInfo> infos = getPackageManager().queryBroadcastReceivers(intent, PackageManager.GET_RESOLVED_FILTER);
+            if (infos == null || infos.isEmpty()) {
+                logd(this, "No target for message, wut?");
+            } else {
+                for (ResolveInfo resolveInfo : infos) {
+                    Intent targetIntent = new Intent(intent);
+                    targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
+                    if (resolveInfo.activityInfo.packageName.equals(packageName)) {
+                        // Wake up the package itself
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && app.wakeForDelivery) {
+                            try {
+                                if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
+                                    int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
+                                    logd(this, "Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
+                                    addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
+                                }
+                            } catch (Exception e) {
+                                Log.w(TAG, e);
+                            }
                         }
-                    } catch (Exception e) {
-                        Log.w(TAG, e);
+                        // We don't need receiver permission for our own package
+                        logd(this, "Deliver message to own receiver " + resolveInfo);
+                        sendOrderedBroadcast(targetIntent, null);
+                    } else if (resolveInfo.filter.hasCategory(packageName)) {
+                        // Permission required
+                        logd(this, "Deliver message to third-party receiver (with permission check)" + resolveInfo);
+                        sendOrderedBroadcast(targetIntent, receiverPermission);
                     }
-                }
-                targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
-                if (resolveInfo.activityInfo.packageName.equals(packageName)) {
-                    sendOrderedBroadcast(targetIntent, null);
-                } else if (receiverPermission != null) {
-                    sendOrderedBroadcast(targetIntent, receiverPermission);
-                } else {
-                    Log.w(TAG, resolveInfo.activityInfo.packageName + "/" + resolveInfo.activityInfo.name + " matches for C2D message to " + packageName + " but corresponding permission was not declared");
                 }
             }
         }
@@ -556,6 +589,7 @@ public class McsService extends Service implements Handler.Callback {
         for (AppData appData : msg.app_data) {
             if (IDLE_NOTIFICATION.equals(appData.key)) {
                 DataMessageStanza.Builder msgResponse = new DataMessageStanza.Builder()
+                        .id(Integer.toHexString(nextMessageId.incrementAndGet()))
                         .from(FROM_FIELD)
                         .sent(System.currentTimeMillis() / 1000)
                         .ttl(0)
@@ -593,22 +627,22 @@ public class McsService extends Service implements Handler.Callback {
                 return true;
             case MSG_INPUT_ERROR:
             case MSG_OUTPUT_ERROR:
-                logd("I/O error: " + msg.obj);
+                logd(this, "I/O error: " + msg.obj);
                 rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, msg.obj));
                 return true;
             case MSG_TEARDOWN:
-                logd("Teardown initiated, reason: " + msg.obj);
+                logd(this, "Teardown initiated, reason: " + msg.obj);
                 handleTeardown(msg);
                 return true;
             case MSG_CONNECT:
-                logd("Connect initiated, reason: " + msg.obj);
-                if (!isConnected()) {
+                logd(this, "Connect initiated, reason: " + msg.obj);
+                if (!isConnected(this)) {
                     connect();
                 }
                 return true;
             case MSG_HEARTBEAT:
-                logd("Heartbeat initiated, reason: " + msg.obj);
-                if (isConnected()) {
+                logd(this, "Heartbeat initiated, reason: " + msg.obj);
+                if (isConnected(this)) {
                     HeartbeatPing.Builder ping = new HeartbeatPing.Builder();
                     if (inputStream.newStreamIdAvailable()) {
                         ping.last_stream_id_received(inputStream.getStreamId());
@@ -616,12 +650,28 @@ public class McsService extends Service implements Handler.Callback {
                     send(MCS_HEARTBEAT_PING_TAG, ping.build());
                     scheduleHeartbeat(this);
                 } else {
-                    logd("Ignoring heartbeat, not connected!");
+                    logd(this, "Ignoring heartbeat, not connected!");
                     scheduleReconnect(this);
                 }
                 return true;
+            case MSG_ACK:
+                logd(this, "Ack initiated, reason: " + msg.obj);
+                if (isConnected(this)) {
+                    IqStanza.Builder iq = new IqStanza.Builder()
+                            .type(IqStanza.IqType.SET)
+                            .id("")
+                            .extension(new Extension.Builder().id(13).data(ByteString.EMPTY).build()) // StreamAck
+                            .status(0L);
+                    if (inputStream.newStreamIdAvailable()) {
+                        iq.last_stream_id_received(inputStream.getStreamId());
+                    }
+                    send(MCS_IQ_STANZA_TAG, iq.build());
+                } else {
+                    logd(this, "Ignoring ack, not connected!");
+                }
+                return true;
             case MSG_OUTPUT_READY:
-                logd("Sending login request...");
+                logd(this, "Sending login request...");
                 send(MCS_LOGIN_REQUEST_TAG, buildLoginRequest());
                 return true;
             case MSG_OUTPUT_DONE:

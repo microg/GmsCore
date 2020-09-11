@@ -11,8 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mgoogle.android.gms.R
 import com.mgoogle.android.gms.databinding.PushNotificationFragmentBinding
-import org.microg.gms.checkin.CheckinPrefs
-import org.microg.gms.gcm.GcmPrefs
+import org.microg.gms.checkin.getCheckinServiceInfo
+import org.microg.gms.gcm.ServiceInfo
+import org.microg.gms.gcm.getGcmServiceInfo
+import org.microg.gms.gcm.setGcmServiceConfiguration
 
 class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
     lateinit var binding: PushNotificationFragmentBinding
@@ -21,18 +23,29 @@ class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
         binding = PushNotificationFragmentBinding.inflate(inflater, container, false)
         binding.switchBarCallback = object : PreferenceSwitchBarCallback {
             override fun onChecked(newStatus: Boolean) {
-                GcmPrefs.setEnabled(context, newStatus)
-                binding.gcmEnabled = newStatus
+                setEnabled(newStatus)
             }
         }
         return binding.root
     }
 
+    fun setEnabled(newStatus: Boolean) {
+        lifecycleScope.launchWhenResumed {
+            val info = getGcmServiceInfo(requireContext())
+            val newConfiguration = info.configuration.copy(enabled = newStatus)
+            displayServiceInfo(setGcmServiceConfiguration(requireContext(), newConfiguration))
+        }
+    }
+
+    fun displayServiceInfo(serviceInfo: ServiceInfo) {
+        binding.gcmEnabled = serviceInfo.configuration.enabled
+    }
+
     override fun onResume() {
         super.onResume()
         lifecycleScope.launchWhenResumed {
-            binding.gcmEnabled = GcmPrefs.get(context).isEnabled
-            binding.checkinEnabled = CheckinPrefs.get(context).isEnabled
+            displayServiceInfo(getGcmServiceInfo(requireContext()))
+            binding.checkinEnabled = getCheckinServiceInfo(requireContext()).configuration.enabled
         }
     }
 

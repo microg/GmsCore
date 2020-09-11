@@ -21,6 +21,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public class GcmDatabase extends SQLiteOpenHelper {
     public GcmDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
+        if (Build.VERSION.SDK_INT >= 16) {
+            this.setWriteAheadLoggingEnabled(true);
+        }
     }
 
     public static class App {
