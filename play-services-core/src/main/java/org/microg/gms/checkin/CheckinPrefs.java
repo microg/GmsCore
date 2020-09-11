@@ -55,7 +55,7 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
     }
 
     private void update() {
-        checkinEnabled = getSettingsBoolean(PREF_ENABLE_CHECKIN, false);
+        checkinEnabled = getSettingsBoolean(PREF_ENABLE_CHECKIN, true);
     }
 
     @Override
