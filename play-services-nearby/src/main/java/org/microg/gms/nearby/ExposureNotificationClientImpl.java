@@ -10,6 +10,7 @@ import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.api.internal.ApiKey;
@@ -58,7 +59,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                     if (status == Status.SUCCESS) {
                         completionSource.setResult(null);
                     } else {
-                        completionSource.setException(new RuntimeException("Status: " + status));
+                        completionSource.setException(new ApiException(status));
                     }
                 }
             });
@@ -79,7 +80,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                     if (status == Status.SUCCESS) {
                         completionSource.setResult(null);
                     } else {
-                        completionSource.setException(new RuntimeException("Status: " + status));
+                        completionSource.setException(new ApiException(status));
                     }
                 }
             });
@@ -100,7 +101,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                     if (status == Status.SUCCESS) {
                         completionSource.setResult(result);
                     } else {
-                        completionSource.setException(new RuntimeException("Status: " + status));
+                        completionSource.setException(new ApiException(status));
                     }
                 }
             });
@@ -121,7 +122,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                     if (status == Status.SUCCESS) {
                         completionSource.setResult(result);
                     } else {
-                        completionSource.setException(new RuntimeException("Status: " + status));
+                        completionSource.setException(new ApiException(status));
                     }
                 }
             });
@@ -161,7 +162,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                     if (status == Status.SUCCESS) {
                         completionSource.setResult(null);
                     } else {
-                        completionSource.setException(new RuntimeException("Status: " + status));
+                        completionSource.setException(new ApiException(status));
                     }
                 }
             }, fds, configuration, token);
@@ -182,7 +183,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                     if (status == Status.SUCCESS) {
                         completionSource.setResult(result);
                     } else {
-                        completionSource.setException(new RuntimeException("Status: " + status));
+                        completionSource.setException(new ApiException(status));
                     }
                 }
             }, token);
@@ -203,7 +204,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                     if (status == Status.SUCCESS) {
                         completionSource.setResult(result);
                     } else {
-                        completionSource.setException(new RuntimeException("Status: " + status));
+                        completionSource.setException(new ApiException(status));
                     }
                 }
             }, token);
