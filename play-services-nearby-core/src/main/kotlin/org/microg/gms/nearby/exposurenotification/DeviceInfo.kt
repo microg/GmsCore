@@ -39,7 +39,7 @@ val currentDeviceInfo: DeviceInfo
                     averageCurrentDeviceInfo(Build.MANUFACTURER, Build.MODEL, allDeviceInfos, CONFIDENCE_LOWEST)
                 }
             }
-            Log.d(TAG, "Selected $deviceInfo")
+            Log.i(TAG, "Selected $deviceInfo")
             knownDeviceInfo = deviceInfo
         }
         return deviceInfo

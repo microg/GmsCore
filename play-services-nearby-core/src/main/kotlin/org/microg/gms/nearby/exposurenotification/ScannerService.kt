@@ -5,7 +5,10 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.app.Service
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.le.*
@@ -13,10 +16,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
+import android.os.*
 import android.util.Log
 import org.microg.gms.common.ForegroundServiceContext
 import java.io.FileDescriptor
@@ -36,7 +36,6 @@ class ScannerService : Service() {
         }
 
         override fun onBatchScanResults(results: MutableList<ScanResult>) {
-            Log.d(TAG, "onBatchScanResults: ${results.size}")
             for (result in results) {
                 onScanResult(result)
             }
@@ -59,10 +58,19 @@ class ScannerService : Service() {
     }
     private val handler = Handler(Looper.getMainLooper())
     private val stopLaterRunnable = Runnable { stopScan() }
-    private val startLaterRunnable = Runnable { startScan() }
+
+    // Wake lock for the duration of scan. Otherwise we might fall asleep while scanning
+    // resulting in potentially very long scan times
+    private val wakeLock: PowerManager.WakeLock by lazy {
+        powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, ScannerService::class.java.canonicalName).apply { setReferenceCounted(false) }
+    }
 
     private val scanner: BluetoothLeScanner?
         get() = getDefaultAdapter()?.bluetoothLeScanner
+    private val alarmManager: AlarmManager
+        get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private val powerManager: PowerManager
+        get() = getSystemService(Context.POWER_SERVICE) as PowerManager
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
@@ -104,21 +112,20 @@ class ScannerService : Service() {
         return null
     }
 
+    @SuppressLint("WakelockTimeout")
     @Synchronized
     private fun startScan() {
         if (scanning) return
         val scanner = scanner ?: return
-        Log.d(TAG, "Starting scanner for service $SERVICE_UUID")
-        handler.removeCallbacks(startLaterRunnable)
+        Log.i(TAG, "Starting scanner for service $SERVICE_UUID for ${SCANNING_TIME_MS}ms")
         seenAdvertisements = 0
+        wakeLock.acquire()
         scanner.startScan(
                 listOf(ScanFilter.Builder()
                         .setServiceUuid(SERVICE_UUID)
                         .setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0))
                         .build()),
-                ScanSettings.Builder()
-                        .let { if (Build.VERSION.SDK_INT >= 23) it.setMatchMode(ScanSettings.MATCH_MODE_STICKY) else it }
-                        .build(),
+                ScanSettings.Builder().build(),
                 callback
         )
         scanning = true
@@ -129,12 +136,24 @@ class ScannerService : Service() {
     @Synchronized
     private fun stopScan() {
         if (!scanning) return
-        Log.d(TAG, "Stopping scanner for service $SERVICE_UUID")
+        Log.i(TAG, "Stopping scanner for service $SERVICE_UUID, had seen $seenAdvertisements advertisements")
         handler.removeCallbacks(stopLaterRunnable)
         scanning = false
         scanner?.stopScan(callback)
         if (ExposurePreferences(this).enabled) {
-            handler.postDelayed(startLaterRunnable, ((lastStartTime + SCANNING_INTERVAL_MS) - System.currentTimeMillis()).coerceIn(0, SCANNING_INTERVAL_MS))
+            scheduleStartScan(((lastStartTime + SCANNING_INTERVAL_MS) - System.currentTimeMillis()).coerceIn(0, SCANNING_INTERVAL_MS))
+        }
+        wakeLock.release()
+    }
+
+    private fun scheduleStartScan(nextScan: Long) {
+        val intent = Intent(this, ScannerService::class.java)
+        val pendingIntent = PendingIntent.getService(this, ScannerService::class.java.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT and PendingIntent.FLAG_UPDATE_CURRENT)
+        if (Build.VERSION.SDK_INT >= 23) {
+            // Note: there is no setWindowAndAllowWhileIdle()
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextScan, pendingIntent)
+        } else {
+            alarmManager.setWindow(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextScan - SCANNING_TIME_MS / 2, SCANNING_TIME_MS, pendingIntent)
         }
     }
 
@@ -142,7 +161,6 @@ class ScannerService : Service() {
         writer?.println("Scanning now: $scanning")
         writer?.println("Last scan start: ${Date(lastStartTime)}")
         if (Build.VERSION.SDK_INT >= 29) {
-            writer?.println("Scan start pending: ${handler.hasCallbacks(startLaterRunnable)}")
             writer?.println("Scan stop pending: ${handler.hasCallbacks(stopLaterRunnable)}")
         }
         writer?.println("Seen advertisements since last scan start: $seenAdvertisements")
