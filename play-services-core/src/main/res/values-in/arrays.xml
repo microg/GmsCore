@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="gcm_network_config_names" translatables="false">
+        <item>Ping interval: 60 detik</item>
+        <item>Ping interval: 2 menit</item>
+        <item>Ping interval: 5 menit</item>
+        <item>Ping interval: 10 menit</item>
+        <item>Ping interval: 15 menit</item>
+        <item>Ping interval: 20 menit</item>
+        <item>Ping interval: 30 menit</item>
+    </string-array>
+
+</resources>

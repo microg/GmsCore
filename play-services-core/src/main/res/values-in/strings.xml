@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="gms_settings_name">Pengaturan Vanced microG</string>
+    <string name="gms_settings_summary">Atur Vanced microG.</string>
+
+    <string name="notification_service_name">Pengecualian Menghemat Baterai</string>
+    <string name="notification_service_title">Kecualikan microG dari menghemat baterai</string>
+    <string name="notification_service_content">Untuk menghapus notifikasi ini tutup Vanced</string>
+    <string name="notification_service_subcontent">aplikasi dari pengelola tugas lalu buka ulang</string>
+
+    <string name="just_a_sec">Tunggu sebentar…</string>
+    <string name="ask_permission_tos">Dengan melanjutkan, anda mengizinkan aplikasi ini dan Google untuk menggunakan informasi anda sesuai dengan persyaratan layanan masing-masing dan kebijakan privasi.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin menggunakan:</string>
+    <string name="account_manager_title">Pengelola akun Google</string>
+    <string name="sorry">Maaf…</string>
+    <string name="auth_before_connect">"Sebuah aplikasi di perangkat anda mencoba untuk masuk ke akun Google.
+
+Jika ini disengaja, gunakan tombol <b>Masuk</b> untuk menghubungkan ke halaman masuk Google, jika tidak, tekan <b>Batalkan</b> untuk kembali ke aplikasi yang menyebabkan dialog ini muncul."</string>
+    <string name="auth_sign_in">Sign in</string>
+    <string name="auth_connecting">"Menyambungkan koneksi ke server Google untuk memasukkan anda.
+
+Ini bisa berlangsung beberapa detik."</string>
+    <string name="no_network_error_desc">"Anda tidak punya koneksi internet.
+
+Ini mungkin hanya masalah sementara atau perangkat Android anda mungkin tidak disediakan untuk layanan data."</string>
+    <string name="auth_general_error_desc">"Ada masalah dengan menghubungkan ke server Google.
+
+Coba lagi nanti."</string>
+    <string name="auth_finalize">"Perangkat anda sedang menghubungkan ke Google untuk menyimpan informasi ke akun anda.
+
+Ini bisa berlangsung beberapa menit."</string>
+    <string name="allow">Izinkan</string>
+    <string name="deny">Tolak</string>
+    <string name="auth_notification_title">Autentikasi dibutuhkan</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> membutuhkan autentikasi anda untuk mengakses akun Google anda.</string>
+
+    <string name="perm_status_broadcast_label"> mendengarkan ke siaran internal langsung</string>
+    <string name="perm_c2dm_receive_label">kirim ke pesan C2DM </string>
+    <string name="perm_c2dm_send_label">kirim pesan C2DM ke aplikasi lain</string>
+    <string name="perm_gtalk_svc_label">menukar pesan dan menerima notifikasi sinkronisasi dari server Google</string>
+    <string name="perm_extended_access_label">Akses lebih ke layanan Google</string>
+
+    <string name="service_name_checkin">Google device registration</string>
+    <string name="service_name_mcs">Google Cloud Messaging</string>
+
+    <string name="service_status_disabled">Dinonaktifkan</string>
+    <string name="service_status_automatic">Otomatis</string>
+    <string name="service_status_enabled_short">Hidup</string>
+    <string name="service_status_disabled_short">Mati</string>
+
+    <string name="menu_advanced">Lanjutan</string>
+    <string name="list_no_item_none">Tidak ada</string>
+    <string name="list_item_see_all">Lihat semua</string>
+
+    <string name="network_type_mobile">Koneksi seluler</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Jaringan lainnya</string>
+
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">Tentang</string>
+    <string name="prefcat_google_services">Layanan Google</string>
+    <string name="pref_more_settings">Lebih banyak</string>
+
+    <string name="checkin_not_registered">Tidak diregistrasi</string>
+    <string name="checkin_last_registration">Registrasi terakhir: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
+    <string name="cond_gcm_bat_title">Optimisasi baterai diaktifkan</string>
+    <string name="cond_gcm_bat_summary">Anda mengaktifkan Google Cloud Messaging namun mengaktifkan optimisasi baterai untuk layanan utama microG. Untuk mendapatkan notifikasi push anda harus menonaktifkan optimisasi baterai.</string>
+    <string name="cond_gcm_bat_action">Nonaktifkan optimisasi</string>
+
+    <string name="prefs_account">Preferensi akun</string>
+    <string name="prefs_account_privacy">Informasi pribadi &amp; privasi</string>
+    <string name="prefs_account_security">Masuk &amp; keamanan</string>
+
+    <string name="pref_auth_trust_google_title">Percaya google untuk izin aplikasi</string>
+    <string name="pref_auth_trust_google_summary">Saat dinonaktifkan, pengguna ditanya sebelum permintaan autentikasi dikirim ke Google. Beberapa aplikasi akan gagal untuk menggunakan akun Google apabila ini dinonaktifkan.</string>
+    <string name="pref_auth_visible_title">Izinkan aplikasi untuk mencari akun</string>
+    <string name="pref_auth_visible_summary">Saat diaktifkan, semua aplikasi dalam perangkat ini will akan bisa melihat alamat email dari akun Google anda tanpa otorisasi sebelumnya.</string>
+
+    <string name="pref_add_account_title">Akun</string>
+    <string name="pref_add_account_summary">Tambahkan akun Google</string>
+    <string name="pref_gcm_switcher_title">Terima notifikasi push</string>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging adalah penyedia notifikasi push yang digunakan pada banyak aplikasi pihak ketiga. Untuk menggunakannya anda harus mengaktifkan device registration.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Konfirmasi aplikasi baru</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Tanya sebelum meregistrasi aplikasi baru untuk menerima notifikasi push</string>
+
+    <string name="pref_about_title">Tentang Vanced microG</string>
+    <string name="pref_cast_double_fix"> Perbaikan Cast terduplikasi</string>
+
+    <string name="pref_switcher_title">Registrasi perangkat</string>
+    <string name="pref_checkin_enable_summary">Registrasi perangkat anda ke layanan Google dan buat pengenal perangkat unik. Vanced microG strips mengenal bits selain dari akun Google anda dari data registrasi.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_info_status">Status</string>
+
+    <string name="gcm_status_pref_auto">Otomatis</string>
+    <string name="gcm_status_pref_manual">Manual</string>
+    <string name="gcm_status_pref_sec">detik</string>
+    <string name="gcm_status_pref_min">menit</string>
+    <string name="gcm_unregister_app">Unregister</string>
+    <string name="gcm_no_message_yet">Tidak ada pesan sejauh ini</string>
+    <string name="gcm_last_message_at">Pesan terakhir: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Teregistrasi</string>
+    <string name="gcm_registered_since">Teregistrasi sejak: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Unregister <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Beberapa aplikasi tidak otomatis meregistrasi ulang atau?dan tidak menyediakan opsi untuk melakukannya secara otomatis. Aplikasi ini mungkin tidak bekerja dengan benar setelah registrasi dicabut.\nContinue?</string>
+    <string name="gcm_unregister_after_deny_message">Anda menolak sebuah aplikasi untuk meregistrasi untuk notifikasi push yang sudah teregistrasi.\nApakah anda ingin mencabut registrasi sekarang sehingga tidak menerima notifikasi push lagi?</string>
+    <string name="gcm_messages_counter">Pesan: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_network_state_disconnected">Terputus</string>
+    <string name="gcm_network_state_connected">Terhubung sejak <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+
+    <string name="pref_push_app_allow_register_title">Izinkan registrasi</string>
+    <string name="pref_push_app_allow_register_summary">Izinkan aplikasi untuk meregistrasi untuk notifikasi push.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Mulai aplikasi dalam pesan push</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Mulai aplikasi saat di background untuk menerima pesan push yang akan datang.</string>
+    <string name="prefcat_status_title">Status</string>
+    <string name="prefcat_push_apps_title">Aplikasi menggunakan notifikasi push</string>
+    <string name="prefcat_push_apps_registered_title">Aplikasi yang teregistrasi</string>
+    <string name="prefcat_push_apps_unregistered_title">Aplikasi yang tidak teregistrasi</string>
+    <string name="prefcat_push_networks_title">Internet yang digunakan untuk notifikasi push</string>
+    <string name="pref_cast_double_fix_summary">Aktifkan ini jika anda melihat duplikasi di menu casting</string>
+
+</resources>

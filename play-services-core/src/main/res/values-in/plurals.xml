@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registered App</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
+    </plurals>
+
+</resources>
