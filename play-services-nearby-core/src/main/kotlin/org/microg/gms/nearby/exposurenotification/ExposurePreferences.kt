@@ -25,7 +25,9 @@ class ExposurePreferences(private val context: Context) {
     var enabled
         get() = preferences.getBoolean(PREF_SCANNER_ENABLED, false)
         set(newStatus) {
+            val changed = enabled != newStatus
             preferences.edit().putBoolean(PREF_SCANNER_ENABLED, newStatus).commit()
+            if (!changed) return
             if (newStatus) {
                 context.sendOrderedBroadcast(Intent(context, ServiceTrigger::class.java), null)
             } else {

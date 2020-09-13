@@ -67,7 +67,9 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
     }
 
     public static void setEnabled(Context context, boolean newStatus) {
+        boolean changed = CheckinPrefs.get(context).isEnabled() != newStatus;
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(PREF_ENABLE_CHECKIN, newStatus).commit();
+        if (!changed) return;
         if (newStatus) {
             context.sendOrderedBroadcast(new Intent(context, TriggerReceiver.class), null);
         }
