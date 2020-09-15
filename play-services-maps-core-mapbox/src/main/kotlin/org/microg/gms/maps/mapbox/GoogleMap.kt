@@ -112,6 +112,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     val markers = mutableMapOf<Long, MarkerImpl>()
     var markerId = 0L
 
+    var groundId = 0L
+    var tileId = 0L
+
     var storedMapType: Int = options.mapType
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
 
@@ -287,12 +290,12 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun addGroundOverlay(options: GroundOverlayOptions): IGroundOverlayDelegate? {
         Log.d(TAG, "unimplemented Method: addGroundOverlay")
-        return null
+        return GroundOverlayImpl(this, "g${groundId++}", options)
     }
 
     override fun addTileOverlay(options: TileOverlayOptions): ITileOverlayDelegate? {
         Log.d(TAG, "unimplemented Method: addTileOverlay")
-        return null
+        return TileOverlayImpl(this, "t${tileId++}", options)
     }
 
     override fun addCircle(options: CircleOptions): ICircleDelegate? {
