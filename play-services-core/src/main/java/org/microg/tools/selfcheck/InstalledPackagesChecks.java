@@ -16,8 +16,13 @@
 
 package org.microg.tools.selfcheck;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
+
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.R;
 
@@ -49,9 +54,23 @@ public class InstalledPackagesChecks implements SelfCheckGroup {
 
     private boolean addPackageSignedResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName, String signatureHash) {
         boolean hashMatches = signatureHash.equals(PackageUtils.firstSignatureDigest(context, androidPackageName));
-        collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName), hashMatches ? Positive : Negative,
-                context.getString(R.string.self_check_resolution_correct_sig, nicePackageName));
+        collector.addResult(context.getString(R.string.self_check_name_correct_sig, nicePackageName),
+                hashMatches ? Positive : Negative,
+                context.getString(R.string.self_check_resolution_correct_sig, nicePackageName),
+                fragment -> tryGrantFakeSignaturePermissionActivity(fragment, androidPackageName));
         return hashMatches;
+    }
+
+    private void tryGrantFakeSignaturePermissionActivity(Fragment fragment, String androidPackageName) {
+        ComponentName grantPermissionActivity = new ComponentName(androidPackageName, androidPackageName + ".GrantFakeSignaturePermissionActivity");
+        try {
+            Intent intent = new Intent();
+            intent.setPackage(androidPackageName);
+            intent.setComponent(grantPermissionActivity);
+            fragment.startActivityForResult(intent, 1);
+        } catch (Exception e) {
+            Log.w("SelfCheck", e);
+        }
     }
 
     private boolean addPackageInstalledResult(Context context, ResultCollector collector, String nicePackageName, String androidPackageName) {

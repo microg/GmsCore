@@ -63,13 +63,7 @@ public class PermissionCheckGroup implements SelfCheckGroup {
             collector.addResult(context.getString(R.string.self_check_name_permission, permLabel),
                     context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED ? Positive : Negative,
                     context.getString(R.string.self_check_resolution_permission, groupLabel),
-                    new SelfCheckGroup.CheckResolver() {
-
-                        @Override
-                        public void tryResolve(Fragment fragment) {
-                            fragment.requestPermissions(new String[]{permission}, 0);
-                        }
-                    });
+                    fragment -> fragment.requestPermissions(new String[]{permission}, 0));
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, e);
         }
