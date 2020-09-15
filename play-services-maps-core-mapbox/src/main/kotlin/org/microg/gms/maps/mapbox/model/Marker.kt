@@ -16,6 +16,7 @@
 
 package org.microg.gms.maps.mapbox.model
 
+import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
@@ -41,6 +42,8 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
     private var zIndex: Float = options.zIndex
     private var draggable: Boolean = options.isDraggable
     private var tag: IObjectWrapper? = null
+
+    private var infoWindowShown = false
 
     override var annotation: Symbol? = null
     override var removed: Boolean = false
@@ -108,15 +111,17 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
 
     override fun showInfoWindow() {
         Log.d(TAG, "unimplemented Method: showInfoWindow")
+        infoWindowShown = true
     }
 
     override fun hideInfoWindow() {
         Log.d(TAG, "unimplemented Method: hideInfoWindow")
+        infoWindowShown = false
     }
 
     override fun isInfoWindowShown(): Boolean {
         Log.d(TAG, "unimplemented Method: isInfoWindowShow")
-        return false
+        return infoWindowShown
     }
 
     override fun setVisible(visible: Boolean) {
@@ -201,6 +206,13 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
     }
 
     override fun getTag(): IObjectWrapper = tag ?: ObjectWrapper.wrap(null)
+
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+            if (super.onTransact(code, data, reply, flags)) {
+                true
+            } else {
+                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
+            }
 
     companion object {
         private val TAG = "GmsMapMarker"
