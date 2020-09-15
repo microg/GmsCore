@@ -110,7 +110,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="gcm_unregister_after_deny_message">Hai negato ad un\'app già registrata, un\'ulteriore registrazione per la ricezione di notifiche push.\nDesideri annullare la registrazione ora, per disattivare la futura ricezione di messaggi push?</string>
     <string name="gcm_messages_counter">Messaggi: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">Disconnesso</string>
-    <string name="gcm_network_state_connected">Connesso da <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_network_state_connected">Connesso <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Consenti registrazione</string>
     <string name="pref_push_app_allow_register_summary">Consenti all\'app di registrarsi per ricevere notifiche push.</string>
