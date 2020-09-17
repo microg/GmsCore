@@ -13,7 +13,6 @@ import androidx.preference.PreferenceManager;
 import android.util.Log;
 
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.gcm.McsConstants;
 
 import java.io.File;
 
@@ -44,7 +43,7 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
                 systemDefaultPreferences = (SharedPreferences) Context.class.getDeclaredMethod("getSharedPreferences", File.class, int.class).invoke(context, new File("/system/etc/microg.xml"), Context.MODE_PRIVATE);
             } catch (Exception ignored) {
             }
-            update(context);
+            update();
         }
     }
 
@@ -55,13 +54,13 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
         return preferences.getBoolean(key, def);
     }
 
-    private void update(Context context) {
-        checkinEnabled = getSettingsBoolean(PREF_ENABLE_CHECKIN, McsConstants.gmsExists(context));
+    private void update() {
+        checkinEnabled = getSettingsBoolean(PREF_ENABLE_CHECKIN, true);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        update(null);
+        update();
     }
 
     public boolean isEnabled() {

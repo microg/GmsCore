@@ -16,9 +16,6 @@
 
 package org.microg.gms.gcm;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-
 public final class McsConstants {
     public static final int MCS_HEARTBEAT_PING_TAG = 0;
     public static final int MCS_HEARTBEAT_ACK_TAG = 1;
@@ -47,15 +44,4 @@ public final class McsConstants {
     public static String ACTION_SEND = "org.microg.gms.gcm.mcs.SEND";
     public static String ACTION_ACK = "org.microg.gms.gcm.mcs.ACK";
     public static String EXTRA_REASON = "org.microg.gms.gcm.mcs.REASON";
-
-    public static boolean gmsExists(Context context) {
-        try {
-            if (context != null &&
-                    context.getPackageManager().getApplicationInfo("com.google.android.gms", 0).enabled) {
-                return true;
-            }
-        } catch (PackageManager.NameNotFoundException e) {}
-
-        return false;
-    }
 }

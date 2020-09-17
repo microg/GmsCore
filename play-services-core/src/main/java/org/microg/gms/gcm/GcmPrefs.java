@@ -19,7 +19,6 @@ package org.microg.gms.gcm;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -89,7 +88,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
                 systemDefaultPreferences = (SharedPreferences) Context.class.getDeclaredMethod("getSharedPreferences", File.class, int.class).invoke(context, new File("/system/etc/microg.xml"), Context.MODE_PRIVATE);
             } catch (Exception ignored) {
             }
-            update(context);
+            update();
         }
     }
 
@@ -100,8 +99,8 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         return preferences.getBoolean(key, def);
     }
 
-    public void update(Context context) {
-        gcmEnabled = getSettingsBoolean(PREF_ENABLE_GCM, McsConstants.gmsExists(context));
+    public void update() {
+        gcmEnabled = getSettingsBoolean(PREF_ENABLE_GCM, true);
         gcmLogEnabled = getSettingsBoolean(PREF_FULL_LOG, true);
         confirmNewApps = getSettingsBoolean(PREF_CONFIRM_NEW_APPS, false);
 
@@ -208,7 +207,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        update(null);
+        update();
     }
 
     public boolean isEnabled() {
