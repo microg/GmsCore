@@ -78,7 +78,7 @@ public class CheckinClient {
     public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
-                                             List<Account> accounts) {
+                                             List<Account> accounts, boolean hasGooglePlayServices) {
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
                 .accountCookie(new ArrayList<String>())
                 .androidId(checkinInfo.androidId)
@@ -88,7 +88,8 @@ public class CheckinClient {
                                 .brand(build.brand)
                                 .clientId("android-google")
                                 .device(build.device)
-                                .fingerprint(build.fingerprint)
+                                //.fingerprint(build.fingerprint)
+                                .fingerprint(hasGooglePlayServices ? build.fingerprint : "google/sdk_gphone_x86/generic_x86_arm:11/RPB3.200720.005/6705141:user/release-keys")
                                 .hardware(build.hardware)
                                 .manufacturer(build.manufacturer)
                                 .model(build.model)

@@ -20,6 +20,8 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
 
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthRequest;
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckinManager {
+    private static final String TAG = "GmsCheckinManager";
     private static final long MIN_CHECKIN_INTERVAL = 3 * 60 * 60 * 1000; // 3 hours
 
     @SuppressWarnings("MissingPermission")
@@ -57,7 +60,7 @@ public class CheckinManager {
         }
         CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context),
                 new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
-                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts);
+                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts, hasGooglePlayServices(context));
         return handleResponse(context, CheckinClient.request(request));
     }
 
@@ -77,5 +80,21 @@ public class CheckinManager {
         }
 
         return info;
+    }
+
+    private static boolean hasGooglePlayServices(Context context) {
+        boolean hasGooglePlayServices = false;
+        try {
+            // We will assume that the user has Google Play services installed if context is null
+            if (context == null || (context != null && context.getPackageManager().getApplicationInfo("com.google.android.gms", 0).enabled)) {
+                hasGooglePlayServices = true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            hasGooglePlayServices = false;
+        }
+
+        Log.d(TAG, "checking - has google play services: " + (hasGooglePlayServices ? "yes" : "no"));
+
+        return hasGooglePlayServices;
     }
 }
