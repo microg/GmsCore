@@ -17,27 +17,38 @@ import com.mgoogle.android.gms.R;
 public class StatusNotification {
 
     private static int notificationID;
+    private static String notificationChannelID = "";
     private static boolean notificationExists = false;
 
-    public static boolean Notify(Context context) {
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-
+    public static void Notify(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-            if (!powerManager.isIgnoringBatteryOptimizations(context.getPackageName())) {
-                if (notificationExists) {
-                    return false;
-                }
+            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
-                buildStatusNotification(context);
-            } else {
-                if (notificationExists) {
-                    ((NotificationManager)
-                            context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationID);
-                    notificationExists = false;
+            boolean isChannelEnabled = true;
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationChannelID != "") {
+                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationChannel notificationChannel = notificationManager.getNotificationChannel(notificationChannelID);
+                if (notificationChannel.getImportance() != NotificationManager.IMPORTANCE_NONE) {
+                    isChannelEnabled = true;
+                } else {
+                    isChannelEnabled = false;
+                }
+            }
+
+            if (isChannelEnabled) {
+                if (!powerManager.isIgnoringBatteryOptimizations(context.getPackageName())) {
+                    if (!notificationExists) {
+                        buildStatusNotification(context);
+                    }
+                } else {
+                    if (notificationExists) {
+                        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationID);
+                        notificationExists = false;
+                    }
                 }
             }
         }
-        return false;
     }
 
     private static void buildStatusNotification(Context context) {
@@ -48,9 +59,9 @@ public class StatusNotification {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        String notificationChannelID = "foreground-service";
-
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannelID = "foreground-service";
+
             NotificationChannel channel = new NotificationChannel(notificationChannelID,
                     context.getResources().getString(R.string.notification_service_name),
                     NotificationManager.IMPORTANCE_LOW);
@@ -67,8 +78,7 @@ public class StatusNotification {
                 .setContentTitle(context.getResources().getString(R.string.notification_service_content))
                 .setContentText(context.getResources().getString(R.string.notification_service_subcontent));
 
-        NotificationManager manager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         manager.notify(notificationID, notification.build());
 
