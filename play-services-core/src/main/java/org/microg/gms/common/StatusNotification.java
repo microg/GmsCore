@@ -21,7 +21,7 @@ public class StatusNotification {
     private static boolean notificationExists = false;
 
     public static void Notify(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
             PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
             boolean isChannelEnabled = true;
