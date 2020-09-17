@@ -89,9 +89,7 @@ public class CheckinManager {
             if (context == null || (context != null && context.getPackageManager().getApplicationInfo("com.google.android.gms", 0).enabled)) {
                 hasGooglePlayServices = true;
             }
-        } catch (PackageManager.NameNotFoundException e) {
-            hasGooglePlayServices = false;
-        }
+        } catch (PackageManager.NameNotFoundException e) {}
 
         Log.d(TAG, "checking - has google play services: " + (hasGooglePlayServices ? "yes" : "no"));
 
