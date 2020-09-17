@@ -30,6 +30,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.auth.IAuthManagerService;
 import com.mgoogle.android.gms.R;
@@ -116,7 +117,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 } catch (Exception e) {
                     Log.w(TAG, "Can't decode consent data: ", e);
                 }
-                if (notify) {
+                if (notify && NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
                             .setContentIntent(PendingIntent.getActivity(context, 0, i, 0))

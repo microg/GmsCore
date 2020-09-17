@@ -21,7 +21,8 @@ public class StatusNotification {
     private static boolean notificationExists = false;
 
     public static void Notify(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
             PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
             boolean isChannelEnabled = true;
@@ -29,9 +30,7 @@ public class StatusNotification {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationChannelID != "") {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationChannel notificationChannel = notificationManager.getNotificationChannel(notificationChannelID);
-                if (notificationChannel.getImportance() != NotificationManager.IMPORTANCE_NONE) {
-                    isChannelEnabled = true;
-                } else {
+                if (notificationChannel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
                     isChannelEnabled = false;
                 }
             }
@@ -44,6 +43,7 @@ public class StatusNotification {
                 } else {
                     if (notificationExists) {
                         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationID);
+                        notificationChannelID = "";
                         notificationExists = false;
                     }
                 }
@@ -79,7 +79,6 @@ public class StatusNotification {
                 .setContentText(context.getResources().getString(R.string.notification_service_subcontent));
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         manager.notify(notificationID, notification.build());
 
         notificationExists = true;
