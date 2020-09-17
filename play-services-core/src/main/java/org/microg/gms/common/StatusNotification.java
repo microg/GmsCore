@@ -10,6 +10,7 @@ import android.os.PowerManager;
 import android.provider.Settings;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.mgoogle.android.gms.R;
 
@@ -21,7 +22,7 @@ public class StatusNotification {
     public static boolean Notify(Context context) {
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && NotificationManagerCompat.from(context).areNotificationsEnabled()) {
             if (!powerManager.isIgnoringBatteryOptimizations(context.getPackageName())) {
                 if (notificationExists) {
                     return false;
