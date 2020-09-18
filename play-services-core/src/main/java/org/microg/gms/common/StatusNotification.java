@@ -1,5 +1,6 @@
 package org.microg.gms.common;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -74,9 +75,9 @@ public class StatusNotification {
                 .setOngoing(true)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_foreground_notification)
-                .setSubText(context.getResources().getString(R.string.notification_service_title))
-                .setContentTitle(context.getResources().getString(R.string.notification_service_content))
-                .setContentText(context.getResources().getString(R.string.notification_service_subcontent));
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .setBigContentTitle(context.getResources().getString(R.string.notification_service_title))
+                        .bigText(context.getResources().getString(R.string.notification_service_content)));
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(notificationID, notification.build());

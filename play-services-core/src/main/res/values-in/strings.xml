@@ -6,8 +6,7 @@
 
     <string name="notification_service_name">Pengecualian Menghemat Baterai</string>
     <string name="notification_service_title">Kecualikan microG dari menghemat baterai</string>
-    <string name="notification_service_content">Untuk menghapus notifikasi ini tutup Vanced</string>
-    <string name="notification_service_subcontent">aplikasi dari pengelola tugas lalu buka ulang</string>
+    <string name="notification_service_content">Untuk menghapus notifikasi ini tutup Vanced aplikasi dari pengelola tugas lalu buka ulang</string>
 
     <string name="just_a_sec">Tunggu sebentar…</string>
     <string name="ask_permission_tos">Dengan melanjutkan, anda mengizinkan aplikasi ini dan Google untuk menggunakan informasi anda sesuai dengan persyaratan layanan masing-masing dan kebijakan privasi.</string>
