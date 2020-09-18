@@ -42,7 +42,7 @@ public class StatusNotification {
                     if (!NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
                         resetNotification = true;
                     } else {
-                        if (notificationExists)
+                        if (notificationExists) {
                             if (resetNotification) {
                                 destroyNotification(context);
                                 resetNotification = false;
