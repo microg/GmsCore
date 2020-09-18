@@ -42,11 +42,13 @@ public class StatusNotification {
                     if (!NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
                         resetNotification = true;
                     } else {
-                        if (notificationExists && resetNotification) {
-                            destroyNotification(context);
-                            resetNotification = false;
-                        } else {
-                            buildStatusNotification(context);
+                        if (notificationExists)
+                            if (resetNotification) {
+                                destroyNotification(context);
+                                resetNotification = false;
+                            } else {
+                                buildStatusNotification(context);
+                            }
                         }
                     }
                 } else {
