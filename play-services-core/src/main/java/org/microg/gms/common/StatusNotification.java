@@ -22,8 +22,7 @@ public class StatusNotification {
     private static boolean notificationExists = false;
 
     public static void Notify(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
             boolean isChannelEnabled = true;
@@ -38,18 +37,31 @@ public class StatusNotification {
 
             if (isChannelEnabled) {
                 if (!powerManager.isIgnoringBatteryOptimizations(context.getPackageName())) {
-                    if (!notificationExists) {
-                        buildStatusNotification(context);
+                    boolean resetNotification = false;
+
+                    if (!NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
+                        resetNotification = true;
+                    } else {
+                        if (notificationExists && resetNotification) {
+                            destroyNotification(context);
+                            resetNotification = false;
+                        } else {
+                            buildStatusNotification(context);
+                        }
                     }
                 } else {
                     if (notificationExists) {
-                        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationID);
-                        notificationChannelID = "";
-                        notificationExists = false;
+                        destroyNotification(context);
                     }
                 }
             }
         }
+    }
+
+    private static void destroyNotification(Context context) {
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationID);
+        notificationChannelID = "";
+        notificationExists = false;
     }
 
     private static void buildStatusNotification(Context context) {
