@@ -30,12 +30,18 @@ public class ForegroundServiceContext extends ContextWrapper {
         super(base);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public ComponentName startService(Intent service) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isIgnoringBatteryOptimizations() && !isAppOnForeground()) {
+        if (!isIgnoringBatteryOptimizations() && !isAppOnForeground()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
-            return super.startForegroundService(service);
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+                return super.startService(service);
+            }
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return super.startForegroundService(service);
+            }
         }
         return super.startService(service);
     }
@@ -62,13 +68,12 @@ public class ForegroundServiceContext extends ContextWrapper {
     }
 
     public static void completeForegroundService(Service service, Intent intent, String tag) {
-        if (intent != null && intent.getBooleanExtra(EXTRA_FOREGROUND, false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (intent != null && intent.getBooleanExtra(EXTRA_FOREGROUND, false)) {
             Log.d(tag, "Started in foreground mode.");
             service.startForeground(tag.hashCode(), buildForegroundNotification(service));
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private static Notification buildForegroundNotification(Context context) {
         Intent notificationIntent = new Intent();
         notificationIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
@@ -77,14 +82,15 @@ public class ForegroundServiceContext extends ContextWrapper {
                 0,
                 notificationIntent,
                 0);
-
-        NotificationChannel Channel = new NotificationChannel("foreground-service",
-                context.getResources().getString(R.string.notification_service_name),
-                NotificationManager.IMPORTANCE_LOW);
-        Channel.setShowBadge(false);
-        Channel.setLockscreenVisibility(0);
-        Channel.setVibrationPattern(new long[0]);
-        context.getSystemService(NotificationManager.class).createNotificationChannel(Channel);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel Channel = new NotificationChannel("foreground-service",
+                    context.getResources().getString(R.string.notification_service_name),
+                    NotificationManager.IMPORTANCE_LOW);
+            Channel.setShowBadge(false);
+            Channel.setLockscreenVisibility(0);
+            Channel.setVibrationPattern(new long[0]);
+            context.getSystemService(NotificationManager.class).createNotificationChannel(Channel);
+        }
         return new NotificationCompat.Builder(context, "foreground-service")
                 .setOngoing(true)
                 .setContentIntent(notificationPendingIntent)
