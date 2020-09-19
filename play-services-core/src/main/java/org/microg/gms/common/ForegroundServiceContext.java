@@ -1,6 +1,9 @@
 package org.microg.gms.common;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,7 +27,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @Override
     public ComponentName startService(Intent service) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isIgnoringBatteryOptimizations() && !isAppOnForeground()) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isIgnoringBatteryOptimizations() && !isAppOnForeground()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
             return super.startForegroundService(service);
@@ -56,6 +59,21 @@ public class ForegroundServiceContext extends ContextWrapper {
     public static void completeForegroundService(Service service, Intent intent, String tag) {
         if (intent != null && intent.getBooleanExtra(EXTRA_FOREGROUND, false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(tag, "Started in foreground mode.");
+            service.startForeground(tag.hashCode(), buildForegroundNotification(service));
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static Notification buildForegroundNotification(Context context) {
+        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_NONE);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
+        channel.setShowBadge(false);
+        channel.setVibrationPattern(new long[0]);
+        context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
+        return new Notification.Builder(context, channel.getId())
+                .setOngoing(true)
+                .setContentTitle("Running in background")
+                //.setSmallIcon(R.drawable.ic_cloud_bell)
+                .build();
     }
 }

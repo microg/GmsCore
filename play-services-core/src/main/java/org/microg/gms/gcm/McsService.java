@@ -17,9 +17,6 @@
 package org.microg.gms.gcm;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -41,10 +38,8 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
 
-import androidx.core.app.NotificationCompat;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import com.mgoogle.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
