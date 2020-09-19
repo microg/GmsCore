@@ -36,11 +36,10 @@ public class ForegroundServiceContext extends ContextWrapper {
         if (!isIgnoringBatteryOptimizations() && !isAppOnForeground()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return super.startService(service);
-            }
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 return super.startForegroundService(service);
+            } else {
+                return super.startService(service);
             }
         }
         return super.startService(service);

@@ -20,12 +20,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
@@ -108,6 +111,7 @@ class PushRegisterHandler extends Handler {
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void handleMessage(Message msg) {
         if (msg.what == 0) {
