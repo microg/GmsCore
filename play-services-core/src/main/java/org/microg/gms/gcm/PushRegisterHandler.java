@@ -111,7 +111,6 @@ class PushRegisterHandler extends Handler {
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void handleMessage(Message msg) {
         if (msg.what == 0) {
@@ -179,7 +178,9 @@ class PushRegisterHandler extends Handler {
                 Intent i = new Intent(context, McsService.class);
                 i.setAction(ACTION_ACK);
                 i.putExtra(EXTRA_APP, getSelfAuthIntent());
-                new ForegroundServiceContext(context).startService(i);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    new ForegroundServiceContext(context).startService(i);
+                }
                 break;
             default:
                 Bundle bundle = new Bundle();
