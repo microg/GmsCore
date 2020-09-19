@@ -17,8 +17,9 @@ import com.mgoogle.android.gms.R;
 
 public class StatusNotification {
 
-    private static int notificationID;
-    private static String notificationChannelID = "";
+    private static Notification Notification;
+    private static int notificationID = 1;
+    private static String notificationChannelID = "foreground-service";
     private static boolean notificationExists = false;
 
     public static void Notify(Context context) {
@@ -27,74 +28,64 @@ public class StatusNotification {
 
             boolean isChannelEnabled = true;
 
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationChannelID != "") {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 NotificationChannel notificationChannel = notificationManager.getNotificationChannel(notificationChannelID);
-                if (notificationChannel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+                if (notificationChannel != null
+                        && notificationChannel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
                     isChannelEnabled = false;
                 }
             }
 
-            if (isChannelEnabled) {
+            if (NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()
+                    && isChannelEnabled) {
                 if (!powerManager.isIgnoringBatteryOptimizations(context.getPackageName())) {
-                    boolean resetNotification = false;
-
-                    if (!NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
-                        resetNotification = true;
-                    } else {
-                        if (notificationExists) {
-                            if (resetNotification) {
-                                destroyNotification(context);
-                                resetNotification = false;
-                            } else {
-                                buildStatusNotification(context);
-                            }
+                        if (!notificationExists) {
+                            buildStatusNotification(context);
+                        } else {
+                            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                            notificationManager.notify(notificationID, Notification);
                         }
-                    }
                 } else {
                     if (notificationExists) {
-                        destroyNotification(context);
+                        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationID);
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).deleteNotificationChannel(notificationChannelID);
+                        }
+                        notificationExists = false;
                     }
                 }
             }
         }
     }
 
-    private static void destroyNotification(Context context) {
-        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notificationID);
-        notificationChannelID = "";
-        notificationExists = false;
-    }
-
     private static void buildStatusNotification(Context context) {
-        notificationID = 1;
-
-        Intent intent = new Intent();
-        intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        Intent notificationIntent = new Intent();
+        notificationIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannelID = "foreground-service";
-
-            NotificationChannel channel = new NotificationChannel(notificationChannelID,
+            NotificationChannel Channel = new NotificationChannel(notificationChannelID,
                     context.getResources().getString(R.string.notification_service_name),
                     NotificationManager.IMPORTANCE_LOW);
-            channel.setShowBadge(true);
-            channel.setLockscreenVisibility(0);
-            channel.setVibrationPattern(new long[0]);
-            context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
+            Channel.setShowBadge(false);
+            Channel.setLockscreenVisibility(0);
+            Channel.setVibrationPattern(new long[0]);
+            context.getSystemService(NotificationManager.class).createNotificationChannel(Channel);
         }
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(context, notificationChannelID)
+        Notification = new NotificationCompat.Builder(context, notificationChannelID)
                 .setOngoing(true)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(notificationPendingIntent)
                 .setSmallIcon(R.drawable.ic_foreground_notification)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .setBigContentTitle(context.getResources().getString(R.string.notification_service_title))
-                        .bigText(context.getResources().getString(R.string.notification_service_content)));
+                        .bigText(context.getResources().getString(R.string.notification_service_content)))
+                .build();
 
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(notificationID, notification.build());
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(notificationID, Notification);
 
         notificationExists = true;
     }
