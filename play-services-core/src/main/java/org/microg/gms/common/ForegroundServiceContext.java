@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,9 +12,13 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+
+import com.mgoogle.android.gms.R;
 
 import java.util.List;
 
@@ -65,15 +70,28 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private static Notification buildForegroundNotification(Context context) {
-        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_NONE);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
-        channel.setShowBadge(false);
-        channel.setVibrationPattern(new long[0]);
-        context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
-        return new Notification.Builder(context, channel.getId())
+        Intent notificationIntent = new Intent();
+        notificationIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(context,
+                0,
+                notificationIntent,
+                0);
+
+        NotificationChannel Channel = new NotificationChannel("foreground-service",
+                context.getResources().getString(R.string.notification_service_name),
+                NotificationManager.IMPORTANCE_LOW);
+        Channel.setShowBadge(false);
+        Channel.setLockscreenVisibility(0);
+        Channel.setVibrationPattern(new long[0]);
+        context.getSystemService(NotificationManager.class).createNotificationChannel(Channel);
+        return new NotificationCompat.Builder(context, "foreground-service")
                 .setOngoing(true)
-                .setContentTitle("Running in background")
-                //.setSmallIcon(R.drawable.ic_cloud_bell)
+                .setContentIntent(notificationPendingIntent)
+                .setSmallIcon(R.drawable.ic_foreground_notification)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .setBigContentTitle(context.getResources().getString(R.string.notification_service_title))
+                        .bigText(context.getResources().getString(R.string.notification_service_content)))
                 .build();
     }
 }
