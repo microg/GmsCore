@@ -28,8 +28,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
 import org.microg.gms.common.PackageUtils;
