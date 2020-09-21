@@ -6,7 +6,7 @@
 
     <string name="notification_service_name">Esclusione Risparmio Energetico</string>
     <string name="notification_service_title">Escludi i microg dal risparmio energetico</string>
-    <string name="notification_service_content">Per rimuovere questa notifica chiudi l\'app Vanced dalla lista delle app in secondo piano e riaprila</string>
+    <string name="notification_service_content">Per rimuovere questa notifica chiudi forzatamente i microG dalla lista delle applicazioni installate</string>
 
     <string name="just_a_sec">Solo un secondo…</string>
     <string name="ask_permission_tos">Continuando, consentirai a quest\'app e a Google di utilizzare le tue informazioni in conformità con i rispettivi termini di servizio e politiche sulla riservatezza.</string>
