@@ -48,6 +48,12 @@
             android:icon="@drawable/ic_cast_black"
             android:summary="@string/pref_cast_double_fix_summary"
             android:defaultValue="false"/>
+        <SwitchPreferenceCompat
+            android:key="brand_spoof_fix_enabled"
+            android:title="@string/brand_spoof_title"
+            android:icon="@drawable/ic_brand_spoof"
+            android:summary="@string/brand_spoof_fix"
+            android:defaultValue="false"/>
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference

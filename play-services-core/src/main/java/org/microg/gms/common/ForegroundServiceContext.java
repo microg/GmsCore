@@ -30,10 +30,11 @@ public class ForegroundServiceContext extends ContextWrapper {
         super(base);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public ComponentName startService(Intent service) {
-        if (!isIgnoringBatteryOptimizations() && !isAppOnForeground()) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !isIgnoringBatteryOptimizations()
+                && !isAppOnForeground()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -67,7 +68,9 @@ public class ForegroundServiceContext extends ContextWrapper {
     }
 
     public static void completeForegroundService(Service service, Intent intent, String tag) {
-        if (intent != null && intent.getBooleanExtra(EXTRA_FOREGROUND, false)) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && intent != null
+                && intent.getBooleanExtra(EXTRA_FOREGROUND, false)) {
             Log.d(tag, "Started in foreground mode.");
             service.startForeground(tag.hashCode(), buildForegroundNotification(service));
         }

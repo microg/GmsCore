@@ -88,7 +88,10 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Tanya sebelum meregistrasi aplikasi baru untuk menerima notifikasi push</string>
 
     <string name="pref_about_title">Tentang Vanced microG</string>
-    <string name="pref_cast_double_fix"> Perbaikan Cast terduplikasi</string>
+    <string name="pref_cast_double_fix">Perbaikan Cast terduplikasi</string>
+
+    <string name="brand_spoof_title">Model topeng</string>
+    <string name="brand_spoof_fix">Gunakan opsi ini pada perangkat yang tidak memasang layanan Google atau tidak dapat masuk</string>
 
     <string name="pref_switcher_title">Registrasi perangkat</string>
     <string name="pref_checkin_enable_summary">Registrasi perangkat anda ke layanan Google dan buat pengenal perangkat unik. Vanced microG strips mengenal bits selain dari akun Google anda dari data registrasi.</string>

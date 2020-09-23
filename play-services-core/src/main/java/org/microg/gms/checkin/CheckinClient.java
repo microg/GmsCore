@@ -45,6 +45,7 @@ public class CheckinClient {
     private static final List<String> TODO_LIST_STRING = new ArrayList<>(); // TODO
     private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<CheckinRequest.Checkin.Statistic>(); // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
+    public static boolean brandSpoof = false;
 
     public static CheckinResponse request(CheckinRequest request) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(SERVICE_URL).openConnection();
@@ -78,25 +79,24 @@ public class CheckinClient {
     public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
-                                             List<Account> accounts, boolean hasGooglePlayServices) {
+                                             List<Account> accounts) {
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
                 .accountCookie(new ArrayList<String>())
                 .androidId(checkinInfo.androidId)
                 .checkin(new CheckinRequest.Checkin.Builder()
                         .build(new CheckinRequest.Checkin.Build.Builder()
-                                .bootloader(hasGooglePlayServices ? build.bootloader : "c2f2-0.2-5799621")
-                                .brand(hasGooglePlayServices ? build.brand : "google")
+                                .bootloader(!brandSpoof ? build.bootloader : "c2f2-0.2-5799621")
+                                .brand(!brandSpoof ? build.brand : "google")
                                 .clientId("android-google")
-                                .device(hasGooglePlayServices ? build.device : "generic")
-                                .fingerprint(hasGooglePlayServices ? build.fingerprint : "google/coral/coral:10/QD1A.190821.007/5831595:user/release-keys")
-                                .hardware(hasGooglePlayServices ? build.hardware : "coral")
-                                .manufacturer(hasGooglePlayServices ? build.manufacturer : "Google")
-                                .model(hasGooglePlayServices ? build.model : "mainline")
+                                .device(!brandSpoof ? build.device : "generic")
+                                .fingerprint(!brandSpoof ? build.fingerprint : "google/coral/coral:10/QD1A.190821.007/5831595:user/release-keys")
+                                .hardware(!brandSpoof ? build.hardware : "coral")
+                                .manufacturer(!brandSpoof ? build.manufacturer : "Google")
+                                .model(!brandSpoof ? build.model : "mainline")
                                 .otaInstalled(false) // TODO?
-                                //.packageVersionCode(Constants.MAX_REFERENCE_VERSION)
-                                .product(hasGooglePlayServices ? build.product : "coral")
-                                .radio(build.radio)
-                                .sdkVersion(build.sdk)
+                                .product(!brandSpoof ? build.product : "coral")
+                                .radio(!brandSpoof ? build.radio : "")
+                                .sdkVersion(!brandSpoof ? build.sdk : 29)
                                 .time(build.time / 1000)
                                 .build())
                         .cellOperator(phoneInfo.cellOperator)
