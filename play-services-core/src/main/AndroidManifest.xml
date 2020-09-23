@@ -469,7 +469,6 @@
             android:name="org.microg.gms.ui.SettingsActivityLink"
             android:icon="@drawable/microg_light_color_24"
             android:label="@string/gms_settings_name"
-            android:process=":ui"
             android:targetActivity="org.microg.gms.ui.SettingsActivity">
             <intent-filter>
                 <action android:name="com.android.settings.action.EXTRA_SETTINGS"/>
@@ -490,8 +489,7 @@
             android:name="org.microg.gms.ui.SettingsActivityIALink"
             android:targetActivity="org.microg.gms.ui.SettingsActivity"
             android:icon="@drawable/microg_light_color_24"
-            android:label="@string/gms_settings_name"
-            android:theme="@style/Theme.AppCompat.Settings.Dashboard">
+            android:label="@string/gms_settings_name">
             <intent-filter>
                 <action android:name="com.android.settings.action.IA_SETTINGS"/>
                 <category android:name="android.intent.category.DEFAULT"/>
