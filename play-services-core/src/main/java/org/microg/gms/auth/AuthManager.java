@@ -67,8 +67,6 @@ public class AuthManager {
         this.service = service;
     }
 
-
-
     public String getAccountType() {
         if (accountType == null)
             accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
