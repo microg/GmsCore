@@ -40,7 +40,7 @@ This can take a few seconds."</string>
 This could be a temporary problem or your Android device may not be provisioned for data services. Try again when connected to a mobile network, or connect to a Wi-Fi network."</string>
     <string name="auth_general_error_desc">"There was a problem communicating with Google servers.
 
-Try again later."</string>
+Try again later or try to log in clicking on below \'SPOOF\' button."</string>
     <string name="auth_finalize">"Your device is contacting Google to save information to your account.
 
 This can take a couple of minutes."</string>
@@ -104,8 +104,7 @@ This can take a couple of minutes."</string>
     <string name="pref_about_title">About Vanced microG</string>
     <string name="pref_cast_double_fix">Cast duplication fix</string>
 
-    <string name="brand_spoof_title">Brand spoofing</string>
-    <string name="brand_spoof_fix">Use this option on devices without Google services installed or unable to log in</string>
+    <string name="brand_spoof_button">Spoof</string>
 
     <string name="pref_switcher_title">Register device</string>
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. Vanced microG strips identifying bits other than your Google account name from registration data.</string>

@@ -26,7 +26,7 @@ Ini bisa berlangsung beberapa detik."</string>
 Ini mungkin hanya masalah sementara atau perangkat Android anda mungkin tidak disediakan untuk layanan data."</string>
     <string name="auth_general_error_desc">"Ada masalah dengan menghubungkan ke server Google.
 
-Coba lagi nanti."</string>
+Coba lagi nanti atau coba login dengan mengklik tombol \'SPOOF\' di bawah ini."</string>
     <string name="auth_finalize">"Perangkat anda sedang menghubungkan ke Google untuk menyimpan informasi ke akun anda.
 
 Ini bisa berlangsung beberapa menit."</string>
@@ -90,8 +90,7 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="pref_about_title">Tentang Vanced microG</string>
     <string name="pref_cast_double_fix">Perbaikan Cast terduplikasi</string>
 
-    <string name="brand_spoof_title">Model topeng</string>
-    <string name="brand_spoof_fix">Gunakan opsi ini pada perangkat yang tidak memasang layanan Google atau tidak dapat masuk</string>
+    <string name="brand_spoof_button">Spoof</string>
 
     <string name="pref_switcher_title">Registrasi perangkat</string>
     <string name="pref_checkin_enable_summary">Registrasi perangkat anda ke layanan Google dan buat pengenal perangkat unik. Vanced microG strips mengenal bits selain dari akun Google anda dari data registrasi.</string>

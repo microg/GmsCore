@@ -50,6 +50,7 @@ import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.checkin.CheckinClient;
 import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
@@ -146,8 +147,17 @@ public class LoginActivity extends AssistantActivity {
         } else {
             setMessage(R.string.auth_before_connect);
             setBackButtonText(android.R.string.cancel);
+            CheckinClient.brandSpoof = false;
             setNextButtonText(R.string.auth_sign_in);
         }
+    }
+
+    @Override
+    protected void onSpoofButtonClicked() {
+        super.onSpoofButtonClicked();
+        CheckinClient.brandSpoof = true;
+        state = 1;
+        init();
     }
 
     @Override
@@ -174,6 +184,7 @@ public class LoginActivity extends AssistantActivity {
     private void init() {
         setTitle(R.string.just_a_sec);
         setBackButtonText(null);
+        setSpoofButtonText(null);
         setNextButtonText(null);
         View loading = getLayoutInflater().inflate(R.layout.login_assistant_loading, authContent, false);
         authContent.removeAllViews();
@@ -267,6 +278,7 @@ public class LoginActivity extends AssistantActivity {
             }
         }
         showError(R.string.auth_general_error_desc);
+        setSpoofButtonText(R.string.brand_spoof_button);
     }
 
     private void retrieveRtToken(String oAuthToken) {
@@ -299,6 +311,7 @@ public class LoginActivity extends AssistantActivity {
                             Log.w(TAG, "Account NOT created!");
                             runOnUiThread(() -> {
                                 showError(R.string.auth_general_error_desc);
+                                setSpoofButtonText(R.string.brand_spoof_button);
                                 setNextButtonText(android.R.string.ok);
                             });
                             state = -2;
@@ -310,6 +323,7 @@ public class LoginActivity extends AssistantActivity {
                         Log.w(TAG, "onException", exception);
                         runOnUiThread(() -> {
                             showError(R.string.auth_general_error_desc);
+                            setSpoofButtonText(R.string.brand_spoof_button);
                             setNextButtonText(android.R.string.ok);
                         });
                         state = -2;
@@ -340,12 +354,12 @@ public class LoginActivity extends AssistantActivity {
                         checkin(true);
                         finish();
                     }
-
                     @Override
                     public void onException(Exception exception) {
                         Log.w(TAG, "onException", exception);
                         runOnUiThread(() -> {
                             showError(R.string.auth_general_error_desc);
+                            setSpoofButtonText(R.string.brand_spoof_button);
                             setNextButtonText(android.R.string.ok);
                         });
                         state = -2;

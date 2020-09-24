@@ -26,7 +26,7 @@ Questa operazione potrebbe richiedere alcuni secondi."</string>
 Questo potrebbe essere un problema temporaneo o legato al mancato collegamento del tuo dispositivo Android ad un servizio dati. Riprova quando sarai connesso ad una rete mobile o connettiti ad una rete Wi-Fi."</string>
     <string name="auth_general_error_desc">"Si è verificato un problema di comunicazione con i server di Google.
 
-Riprova più tardi."</string>
+Riprova più tardi o prova ad accedere cliccando sul pulsante \'SPOOF\' in basso."</string>
     <string name="auth_finalize">"Il tuo dispositivo sta tentando di contattare Google per salvare le informazioni sul tuo account.
 
 Questo potrà richiedere un paio di minuti"</string>
@@ -90,8 +90,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="pref_about_title">Informazioni su Vanced microG</string>
     <string name="pref_cast_double_fix">Correzione cast duplicato</string>
 
-    <string name="brand_spoof_title">Maschera modello</string>
-    <string name="brand_spoof_fix">Utilizza questa opzione su dispositivi privi di servizi Google installati o non in grado di accedere</string>
+    <string name="brand_spoof_button">Spoof</string>
 
     <string name="pref_switcher_title">Registra dispositivo</string>
     <string name="pref_checkin_enable_summary">Registra il tuo dispositivo sui servizi Google e crea un identificatore univoco del dispositivo. Verranno rimossi dai Servizi Vanced microG alcuni bit utili per identificare i dati di registrazione, oltre al nome dell\'account Google.</string>

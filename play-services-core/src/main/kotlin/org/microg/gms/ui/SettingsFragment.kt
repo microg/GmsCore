@@ -49,11 +49,6 @@ class SettingsFragment : ResourceSettingsFragment() {
                     PackageManager.DONT_KILL_APP)
             true
         }
-
-        findPreference<SwitchPreferenceCompat>(BRAND_SPOOF_FIX_ENABLED)!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            CheckinClient.brandSpoof = newValue as Boolean
-            true
-        }
     }
 
     override fun onResume() {
