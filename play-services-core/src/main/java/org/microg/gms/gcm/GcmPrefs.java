@@ -47,8 +47,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     public static final String PREF_LEARNT_WIFI = "gcm_learnt_wifi";
     public static final String PREF_LEARNT_OTHER = "gcm_learnt_other";
 
-    private static final int MIN_INTERVAL = 1 * 60 * 1000; // 1 minute
-    private static final int MAX_INTERVAL = 2 * 60 * 1000; // 2 minutes
+    private static final int INTERVAL = 1 * 60 * 1000; // 1 minute
 
     private static GcmPrefs INSTANCE;
 
@@ -111,9 +110,9 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         networkRoaming = Integer.parseInt(preferences.getString(PREF_NETWORK_ROAMING, "0"));
         networkOther = Integer.parseInt(preferences.getString(PREF_NETWORK_OTHER, "0"));
 
-        learntMobile = preferences.getInt(PREF_LEARNT_MOBILE, 300000);
-        learntWifi = preferences.getInt(PREF_LEARNT_WIFI, 300000);
-        learntOther = preferences.getInt(PREF_LEARNT_OTHER, 300000);
+        learntMobile = preferences.getInt(PREF_LEARNT_MOBILE, INTERVAL);
+        learntWifi = preferences.getInt(PREF_LEARNT_WIFI, INTERVAL);
+        learntOther = preferences.getInt(PREF_LEARNT_OTHER, INTERVAL);
     }
 
     public String getNetworkPrefForInfo(NetworkInfo info) {
@@ -199,10 +198,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     private void updateLearntValues() {
-        learntMobile = Math.max(MIN_INTERVAL, Math.min(learntMobile, MAX_INTERVAL));
-        learntWifi = Math.max(MIN_INTERVAL, Math.min(learntWifi, MAX_INTERVAL));
-        learntOther = Math.max(MIN_INTERVAL, Math.min(learntOther, MAX_INTERVAL));
-        preferences.edit().putInt(PREF_LEARNT_MOBILE, learntMobile).putInt(PREF_LEARNT_WIFI, learntWifi).putInt(PREF_LEARNT_OTHER, learntOther).apply();
+        preferences.edit().putInt(PREF_LEARNT_MOBILE, INTERVAL).putInt(PREF_LEARNT_WIFI, INTERVAL).putInt(PREF_LEARNT_OTHER, INTERVAL).apply();
     }
 
     @Override
