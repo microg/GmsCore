@@ -97,7 +97,7 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="pref_info_status">Status</string>
 
-    <string name="gcm_status_pref_auto">Default</string>
+    <string name="gcm_status_pref_default">Default</string>
     <string name="gcm_status_pref_manual">Manual</string>
     <string name="gcm_status_pref_sec">detik</string>
     <string name="gcm_status_pref_min">menit</string>

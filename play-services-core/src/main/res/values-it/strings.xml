@@ -97,7 +97,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="pref_device_registration_android_id">ID Android</string>
     <string name="pref_info_status">Stato</string>
 
-    <string name="gcm_status_pref_auto">Predefinito</string>
+    <string name="gcm_status_pref_default">Predefinito</string>
     <string name="gcm_status_pref_manual">Manuale</string>
     <string name="gcm_status_pref_sec">secondi</string>
     <string name="gcm_status_pref_min">minuti</string>

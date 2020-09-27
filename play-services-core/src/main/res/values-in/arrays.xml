@@ -2,6 +2,8 @@
 <resources>
 
     <string-array name="gcm_network_config_names" translatables="false">
+        <item>Dinonaktifkan</item>
+        <item>Default</item>
         <item>Ping interval: 2 menit</item>
         <item>Ping interval: 5 menit</item>
         <item>Ping interval: 10 menit</item>

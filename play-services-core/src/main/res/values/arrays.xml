@@ -20,7 +20,6 @@
     <string-array name="gcm_network_config_values" translatables="false">
         <item>-1</item>
         <item>0</item>
-        <item>1</item>
         <item>2</item>
         <item>5</item>
         <item>10</item>
@@ -34,6 +33,8 @@
         <item>@string/service_status_automatic</item>
 
         <!-- These will be automatically generated from the OS, no need to translate them -->
+        <item>Disabled</item>
+        <item>Automatic</item>
         <item>Ping interval: 2 minutes</item>
         <item>Ping interval: 5 minutes</item>
         <item>Ping interval: 10 minutes</item>

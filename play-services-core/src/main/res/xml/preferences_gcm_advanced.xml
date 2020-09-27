@@ -32,7 +32,7 @@
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_mobile"
-            android:summary="ON / Automatic: 13 min"
+            android:summary="ON / Default: 60 sec"
             android:title="@string/network_type_mobile"/>
 
         <ListPreference
@@ -40,7 +40,7 @@
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_wifi"
-            android:summary="ON / Manual: 30 min"
+            android:summary="ON / Manual: 2 min"
             android:title="@string/network_type_wifi"/>
 
         <ListPreference
@@ -56,7 +56,7 @@
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_other"
-            android:summary="ON / Automatic: 30 min"
+            android:summary="ON / Default: 60 sec"
             android:title="@string/network_type_other"/>
 
     </PreferenceCategory>

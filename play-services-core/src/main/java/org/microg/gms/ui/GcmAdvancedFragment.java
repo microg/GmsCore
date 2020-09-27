@@ -69,9 +69,9 @@ public class GcmAdvancedFragment extends ResourceSettingsFragment {
             if (state == 0) {
                 int heartbeat = prefs.getHeartbeatMsFor(preference.getKey(), true);
                 if (heartbeat == 0) {
-                    preference.setSummary(getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_auto));
+                    preference.setSummary(getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_default));
                 } else {
-                    preference.setSummary(getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_auto) + ": " + getHeartbeatString(heartbeat));
+                    preference.setSummary(getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_default) + ": " + getHeartbeatString(heartbeat));
                 }
             } else if (state == -1) {
                 preference.setSummary(getString(R.string.service_status_disabled_short));
