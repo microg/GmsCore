@@ -72,7 +72,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
             }
             histogramCategory.title = getString(R.string.prefcat_exposure_rpis_histogram_title, totalRpiCount)
             histogram.labelsFormatter = { it.roundToInt().toString() }
-            histogram.scale = Scale(0f, rpiHistogram.values.max() ?: 0f)
+            histogram.scale = Scale(0f, rpiHistogram.values.max()?.coerceAtLeast(0.1f) ?: 0.1f)
             histogram.data = rpiHistogram
         }
     }
