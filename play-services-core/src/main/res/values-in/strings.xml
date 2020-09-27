@@ -45,7 +45,7 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
 
     <string name="service_status_disabled">Dinonaktifkan</string>
-    <string name="service_status_automatic">Otomatis</string>
+    <string name="service_status_default">Default</string>
     <string name="service_status_enabled_short">Hidup</string>
     <string name="service_status_disabled_short">Mati</string>
 

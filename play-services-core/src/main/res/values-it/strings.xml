@@ -45,7 +45,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="service_name_mcs">Messaggistica Cloud Google</string>
 
     <string name="service_status_disabled">Disattivata</string>
-    <string name="service_status_automatic">Automatica</string>
+    <string name="service_status_default">Predefinito</string>
     <string name="service_status_enabled_short">Attiva</string>
     <string name="service_status_disabled_short">Disattivata</string>
 

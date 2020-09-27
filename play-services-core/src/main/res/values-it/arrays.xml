@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="gcm_network_config_names" translatables="false">
-        <item>Disattivata</item>
-        <item>Predefinito</item>
+        <item>@string/service_status_disabled</item>
+        <item>@string/service_status_default</item>
         <item>Intervallo ping: 2 minuti</item>
         <item>Intervallo ping: 5 minuti</item>
         <item>Intervallo ping: 10 minuti</item>
