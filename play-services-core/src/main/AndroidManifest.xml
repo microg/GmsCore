@@ -516,12 +516,20 @@
             </intent-filter>
         </activity>
 
-        <!-- Other -->
+        <!-- Phenotype -->
 
         <provider
             android:name="org.microg.gms.phenotype.ConfigurationProvider"
             android:authorities="com.google.android.gms.phenotype"
             android:exported="true" />
+
+        <service android:name="org.microg.gms.phenotype.PhenotypeService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.phenotype.service.START" />
+            </intent-filter>
+        </service>
+
+        <!-- Other -->
 
         <service
             android:name="org.microg.gms.measurement.MeasurementBrokerService"
@@ -673,7 +681,6 @@
                 <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
                 <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
-                <action android:name="com.google.android.gms.phenotype.service.START" />
                 <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
                 <action android:name="com.google.android.gms.gass.START" />
             </intent-filter>
