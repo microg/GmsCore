@@ -95,6 +95,7 @@ public enum GmsService {
     MEASUREMENT(93, "com.google.android.gms.measurement.START"),
     FREIGHTER(98, "com.google.android.gms.freighter.service.START"),
     BLE(111, "com.google.android.gms.beacon.internal.IBleService.START"),
+    FIREBASE_AUTH(112, "com.google.firebase.auth.api.gms.service.START"),
     APP_INDEXING(113),
     GASS(116, "com.google.android.gms.gass.START"),
     WORK_ACCOUNT(120),

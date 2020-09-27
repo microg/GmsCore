@@ -13,8 +13,6 @@ include ':play-services-wearable-api'
 
 include ':play-services-api'
 
-include ':firebase-dynamic-links-api'
-
 include ':play-services-core-proto'
 include ':play-services-nearby-core-proto'
 include ':play-services-wearable-proto'
@@ -28,6 +26,11 @@ include ':play-services-nearby-core'
 
 include ':play-services-base-core-ui'
 include ':play-services-nearby-core-ui'
+
+include ':firebase-auth-api'
+include ':firebase-dynamic-links-api'
+
+include ':firebase-auth-core'
 
 include ':play-services-core:microg-ui-tools' // Legacy
 include ':play-services-core'

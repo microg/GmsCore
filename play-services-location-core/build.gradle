@@ -10,6 +10,8 @@ apply plugin: 'kotlin-android-extensions'
 dependencies {
     api project(':play-services-location-api')
 
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+
     implementation project(':play-services-base-core')
     implementation "org.microg.nlp:geocode-v1:$nlpVersion"
     implementation "org.microg.nlp:location-v2:$nlpVersion"

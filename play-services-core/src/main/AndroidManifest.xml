@@ -339,12 +339,6 @@
                 android:value="1" />
         </service>
 
-        <service android:name=".auth.FirebaseAuthService">
-            <intent-filter>
-                <action android:name="com.google.firebase.auth.api.gms.service.START" />
-            </intent-filter>
-        </service>
-
         <activity
             android:name="org.microg.tools.AccountPickerActivity"
             android:excludeFromRecents="true"

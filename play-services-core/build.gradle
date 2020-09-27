@@ -41,6 +41,7 @@ dependencies {
     api "uk.uuid.slf4j:slf4j-android:1.7.25-1"
 
     implementation project(':firebase-dynamic-links-api')
+    implementation project(':firebase-auth-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-base-core-ui')
     implementation project(':play-services-location-core')
