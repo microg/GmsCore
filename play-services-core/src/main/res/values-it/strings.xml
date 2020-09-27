@@ -26,7 +26,7 @@ Questa operazione potrebbe richiedere alcuni secondi."</string>
 Questo potrebbe essere un problema temporaneo o legato al mancato collegamento del tuo dispositivo Android ad un servizio dati. Riprova quando sarai connesso ad una rete mobile o connettiti ad una rete Wi-Fi."</string>
     <string name="auth_general_error_desc">"Si è verificato un problema di comunicazione con i server di Google.
 
-Riprova più tardi o prova ad accedere cliccando sul pulsante \'SPOOF\' in basso."</string>
+Riprova più tardi o prova ad accedere cliccando sul pulsante \'SPOOF\' in basso (se possiedi un dispositivo Huawei)."</string>
     <string name="auth_finalize">"Il tuo dispositivo sta tentando di contattare Google per salvare le informazioni sul tuo account.
 
 Questo potrà richiedere un paio di minuti"</string>
@@ -97,7 +97,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="pref_device_registration_android_id">ID Android</string>
     <string name="pref_info_status">Stato</string>
 
-    <string name="gcm_status_pref_auto">Automatico</string>
+    <string name="gcm_status_pref_auto">Predefinito</string>
     <string name="gcm_status_pref_manual">Manuale</string>
     <string name="gcm_status_pref_sec">secondi</string>
     <string name="gcm_status_pref_min">minuti</string>

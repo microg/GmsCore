@@ -26,7 +26,7 @@ Ini bisa berlangsung beberapa detik."</string>
 Ini mungkin hanya masalah sementara atau perangkat Android anda mungkin tidak disediakan untuk layanan data."</string>
     <string name="auth_general_error_desc">"Ada masalah dengan menghubungkan ke server Google.
 
-Coba lagi nanti atau coba login dengan mengklik tombol \'SPOOF\' di bawah ini."</string>
+Coba lagi nanti atau coba login dengan mengklik tombol \'SPOOF\' di bawah ini (jika Anda memiliki perangkat Huawei)."</string>
     <string name="auth_finalize">"Perangkat anda sedang menghubungkan ke Google untuk menyimpan informasi ke akun anda.
 
 Ini bisa berlangsung beberapa menit."</string>
@@ -97,7 +97,7 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="pref_info_status">Status</string>
 
-    <string name="gcm_status_pref_auto">Otomatis</string>
+    <string name="gcm_status_pref_auto">Default</string>
     <string name="gcm_status_pref_manual">Manual</string>
     <string name="gcm_status_pref_sec">detik</string>
     <string name="gcm_status_pref_min">menit</string>

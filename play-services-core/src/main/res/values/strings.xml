@@ -40,7 +40,7 @@ This can take a few seconds."</string>
 This could be a temporary problem or your Android device may not be provisioned for data services. Try again when connected to a mobile network, or connect to a Wi-Fi network."</string>
     <string name="auth_general_error_desc">"There was a problem communicating with Google servers.
 
-Try again later or try to log in clicking on below \'SPOOF\' button."</string>
+Try again later or try to log in clicking on below \'SPOOF\' button (if you have a Huawei device)."</string>
     <string name="auth_finalize">"Your device is contacting Google to save information to your account.
 
 This can take a couple of minutes."</string>
@@ -111,7 +111,7 @@ This can take a couple of minutes."</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="pref_info_status">Status</string>
 
-    <string name="gcm_status_pref_auto">Automatic</string>
+    <string name="gcm_status_pref_auto">Default</string>
     <string name="gcm_status_pref_manual">Manual</string>
     <string name="gcm_status_pref_sec">seconds</string>
     <string name="gcm_status_pref_min">minutes</string>

@@ -34,7 +34,6 @@
         <item>@string/service_status_automatic</item>
 
         <!-- These will be automatically generated from the OS, no need to translate them -->
-        <item>Ping interval: 60 seconds</item>
         <item>Ping interval: 2 minutes</item>
         <item>Ping interval: 5 minutes</item>
         <item>Ping interval: 10 minutes</item>
