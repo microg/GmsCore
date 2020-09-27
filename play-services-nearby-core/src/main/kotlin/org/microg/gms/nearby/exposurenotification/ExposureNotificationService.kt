@@ -29,8 +29,10 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
             return permission
         }
 
-        checkPermission("android.permission.BLUETOOTH") ?: return
-        checkPermission("android.permission.INTERNET") ?: return
+        if (request.packageName != packageName) {
+            checkPermission("android.permission.BLUETOOTH") ?: return
+            checkPermission("android.permission.INTERNET") ?: return
+        }
 
         if (Build.VERSION.SDK_INT < 21) {
             callback.onPostInitComplete(FAILED_NOT_SUPPORTED, null, null)
@@ -39,7 +41,10 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
 
         Log.d(TAG, "handleServiceRequest: " + request.packageName)
         callback.onPostInitCompleteWithConnectionInfo(SUCCESS, ExposureNotificationServiceImpl(this, request.packageName), ConnectionInfo().apply {
-            features = arrayOf(Feature("nearby_exposure_notification", 3))
+            features = arrayOf(
+                    Feature("nearby_exposure_notification", 3),
+                    Feature("nearby_exposure_notification_get_version", 1)
+            )
         })
     }
 }

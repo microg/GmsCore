@@ -28,6 +28,8 @@
 # Keep AutoSafeParcelables
 -keep public class * extends org.microg.safeparcel.AutoSafeParcelable {
     @org.microg.safeparcel.SafeParceled *;
+    @org.microg.safeparcel.SafeParcelable.Field *;
+    <init>(...);
 }
 
 # Keep form data

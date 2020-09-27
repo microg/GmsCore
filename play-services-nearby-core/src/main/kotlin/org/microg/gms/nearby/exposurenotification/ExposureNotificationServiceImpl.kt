@@ -10,25 +10,29 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.*
 import android.os.*
 import android.util.Log
-import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes
+import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
+import com.google.android.gms.nearby.exposurenotification.ExposureInformation
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes.*
 import com.google.android.gms.nearby.exposurenotification.ExposureSummary
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import com.google.android.gms.nearby.exposurenotification.internal.*
 import org.json.JSONArray
 import org.json.JSONObject
+import org.microg.gms.common.Constants
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.nearby.exposurenotification.Constants.*
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
+import java.io.File
+import java.io.InputStream
+import java.security.MessageDigest
 import java.util.*
-import java.util.zip.ZipInputStream
+import java.util.zip.ZipFile
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 class ExposureNotificationServiceImpl(private val context: Context, private val packageName: String) : INearbyExposureNotificationService.Stub() {
     private fun pendingConfirm(permission: String): PendingIntent {
@@ -65,6 +69,14 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
+    override fun getVersion(params: GetVersionParams) {
+        params.callback.onResult(Status.SUCCESS, Constants.MAX_REFERENCE_VERSION.toLong())
+    }
+
+    override fun getCalibrationConfidence(params: GetCalibrationConfidenceParams) {
+        params.callback.onResult(Status.SUCCESS, currentDeviceInfo.confidence)
+    }
+
     override fun start(params: StartParams) {
         if (ExposurePreferences(context).enabled) return
         val status = confirmPermission(CONFIRM_ACTION_START)
@@ -90,7 +102,6 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             Log.w(TAG, "Callback failed", e)
         }
     }
-
     override fun isEnabled(params: IsEnabledParams) {
         try {
             params.callback.onResult(Status.SUCCESS, ExposurePreferences(context).enabled)
@@ -129,67 +140,73 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             .setTransmissionRiskLevel(transmission_risk_level ?: 0)
             .build()
 
-    private fun storeDiagnosisKeyExport(token: String, export: TemporaryExposureKeyExport): Int = ExposureDatabase.with(context) { database ->
-        Log.d(TAG, "Importing keys from file ${export.start_timestamp?.let { Date(it * 1000) }} to ${export.end_timestamp?.let { Date(it * 1000) }}")
-        database.batchStoreDiagnosisKey(packageName, token, export.keys.map { it.toKey() })
-        database.batchUpdateDiagnosisKey(packageName, token, export.revised_keys.map { it.toKey() })
-        export.keys.size + export.revised_keys.size
+    private fun InputStream.copyToFile(outputFile: File) {
+        outputFile.outputStream().use { output ->
+            copyTo(output)
+            output.flush()
+        }
+    }
+
+    private fun MessageDigest.digest(file: File): ByteArray = file.inputStream().use { input ->
+        val buf = ByteArray(4096)
+        var bytes = input.read(buf)
+        while (bytes != -1) {
+            update(buf, 0, bytes)
+            bytes = input.read(buf)
+        }
+        digest()
     }
 
     override fun provideDiagnosisKeys(params: ProvideDiagnosisKeysParams) {
+        Log.w(TAG, "provideDiagnosisKeys() with $packageName/${params.token}")
+        val tid = ExposureDatabase.with(context) { database ->
+            if (params.configuration != null) {
+                database.storeConfiguration(packageName, params.token, params.configuration)
+            } else {
+                database.getTokenId(packageName, params.token)
+            }
+        }
+        if (tid == null) {
+            Log.w(TAG, "Unknown token without configuration: $packageName/${params.token}")
+            try {
+                params.callback.onResult(Status.INTERNAL_ERROR)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
+            return
+        }
         Thread(Runnable {
             ExposureDatabase.with(context) { database ->
-                if (params.configuration != null) {
-                    database.storeConfiguration(packageName, params.token, params.configuration)
-                }
-
                 val start = System.currentTimeMillis()
 
                 // keys
-                params.keys?.let { database.batchStoreDiagnosisKey(packageName, params.token, it) }
+                params.keys?.let { database.batchStoreSingleDiagnosisKey(tid, it) }
+
+                var keys = params.keys?.size ?: 0
 
                 // Key files
-                var keys = params.keys?.size ?: 0
+                val todoKeyFiles = arrayListOf<Pair<File, ByteArray>>()
                 for (file in params.keyFiles.orEmpty()) {
                     try {
-                        ZipInputStream(ParcelFileDescriptor.AutoCloseInputStream(file)).use { stream ->
-                            do {
-                                val entry = stream.nextEntry ?: break
-                                if (entry.name == "export.bin") {
-                                    val prefix = ByteArray(16)
-                                    var totalBytesRead = 0
-                                    var bytesRead = 0
-                                    while (bytesRead != -1 && totalBytesRead < prefix.size) {
-                                        bytesRead = stream.read(prefix, totalBytesRead, prefix.size - totalBytesRead)
-                                        if (bytesRead > 0) {
-                                            totalBytesRead += bytesRead
-                                        }
-                                    }
-                                    if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
-                                        val fileKeys = storeDiagnosisKeyExport(params.token, TemporaryExposureKeyExport.ADAPTER.decode(stream))
-                                        keys += fileKeys
-                                    } else {
-                                        Log.d(TAG, "export.bin had invalid prefix")
-                                    }
-                                }
-                                stream.closeEntry()
-                            } while (true);
+                        val cacheFile = File(context.cacheDir, "en-keyfile-${System.currentTimeMillis()}-${Random.nextInt()}.zip")
+                        ParcelFileDescriptor.AutoCloseInputStream(file).use { it.copyToFile(cacheFile) }
+                        val hash = MessageDigest.getInstance("SHA-256").digest(cacheFile)
+                        val storedKeys = database.storeDiagnosisFileUsed(tid, hash)
+                        if (storedKeys != null) {
+                            keys += storedKeys.toInt()
+                            cacheFile.delete()
+                        } else {
+                            todoKeyFiles.add(cacheFile to hash)
                         }
                     } catch (e: Exception) {
                         Log.w(TAG, "Failed parsing file", e)
                     }
                 }
-                val time = (System.currentTimeMillis() - start).toDouble() / 1000.0
-                Log.d(TAG, "$packageName/${params.token} provided $keys keys in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
 
-                database.noteAppAction(packageName, "provideDiagnosisKeys", JSONObject().apply {
-                    put("request_token", params.token)
-                    put("request_keys_size", params.keys?.size)
-                    put("request_keyFiles_size", params.keyFiles?.size)
-                    put("request_keys_count", keys)
-                }.toString())
-
-                database.finishMatching(packageName, params.token)
+                if (todoKeyFiles.size > 0) {
+                    val time = (System.currentTimeMillis() - start).toDouble() / 1000.0
+                    Log.d(TAG, "$packageName/${params.token} processed $keys keys (${todoKeyFiles.size} files pending) in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
+                }
 
                 Handler(Looper.getMainLooper()).post {
                     try {
@@ -199,7 +216,47 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     }
                 }
 
-                val match = database.findAllMeasuredExposures(packageName, params.token).isNotEmpty()
+                var newKeys = if (params.keys != null) database.finishSingleMatching(tid) else 0
+                for ((cacheFile, hash) in todoKeyFiles) {
+                    ZipFile(cacheFile).use { zip ->
+                        for (entry in zip.entries()) {
+                            if (entry.name == "export.bin") {
+                                val stream = zip.getInputStream(entry)
+                                val prefix = ByteArray(16)
+                                var totalBytesRead = 0
+                                var bytesRead = 0
+                                while (bytesRead != -1 && totalBytesRead < prefix.size) {
+                                    bytesRead = stream.read(prefix, totalBytesRead, prefix.size - totalBytesRead)
+                                    if (bytesRead > 0) {
+                                        totalBytesRead += bytesRead
+                                    }
+                                }
+                                if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
+                                    val export = TemporaryExposureKeyExport.ADAPTER.decode(stream)
+                                    database.finishFileMatching(tid, hash, export.end_timestamp?.let { it * 1000 }
+                                            ?: System.currentTimeMillis(), export.keys.map { it.toKey() }, export.revised_keys.map { it.toKey() })
+                                    keys += export.keys.size + export.revised_keys.size
+                                    newKeys += export.keys.size
+                                } else {
+                                    Log.d(TAG, "export.bin had invalid prefix")
+                                }
+                            }
+                        }
+                    }
+                    cacheFile.delete()
+                }
+
+                val time = (System.currentTimeMillis() - start).toDouble() / 1000.0
+                Log.d(TAG, "$packageName/${params.token} processed $keys keys ($newKeys new) in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
+
+                database.noteAppAction(packageName, "provideDiagnosisKeys", JSONObject().apply {
+                    put("request_token", params.token)
+                    put("request_keys_size", params.keys?.size)
+                    put("request_keyFiles_size", params.keyFiles?.size)
+                    put("request_keys_count", keys)
+                }.toString())
+
+                val match = database.findAllMeasuredExposures(tid).isNotEmpty()
 
                 try {
                     val intent = Intent(if (match) ACTION_EXPOSURE_STATE_UPDATED else ACTION_EXPOSURE_NOT_FOUND)
@@ -215,16 +272,12 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getExposureSummary(params: GetExposureSummaryParams): Unit = ExposureDatabase.with(context) { database ->
-        val configuration = database.loadConfiguration(packageName, params.token)
-        if (configuration == null) {
-            try {
-                params.callback.onResult(Status.INTERNAL_ERROR, null)
-            } catch (e: Exception) {
-                Log.w(TAG, "Callback failed", e)
-            }
-            return@with
+        val pair = database.loadConfiguration(packageName, params.token)
+        val (configuration, exposures) = if (pair != null) {
+            pair.second to database.findAllMeasuredExposures(pair.first).merge()
+        } else {
+            ExposureConfiguration.ExposureConfigurationBuilder().build() to emptyList()
         }
-        val exposures = database.findAllMeasuredExposures(packageName, params.token).merge()
         val response = ExposureSummary.ExposureSummaryBuilder()
                 .setDaysSinceLastExposure(exposures.map { it.daysSinceExposure }.min()?.toInt() ?: 0)
                 .setMatchedKeyCount(exposures.map { it.key }.distinct().size)
@@ -255,18 +308,13 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getExposureInformation(params: GetExposureInformationParams): Unit = ExposureDatabase.with(context) { database ->
-        // TODO: Notify user?
-        val configuration = database.loadConfiguration(packageName, params.token)
-        if (configuration == null) {
-            try {
-                params.callback.onResult(Status.INTERNAL_ERROR, null)
-            } catch (e: Exception) {
-                Log.w(TAG, "Callback failed", e)
+        val pair = database.loadConfiguration(packageName, params.token)
+        val response = if (pair != null) {
+            database.findAllMeasuredExposures(pair.first).merge().map {
+                it.toExposureInformation(pair.second)
             }
-            return@with
-        }
-        val response = database.findAllMeasuredExposures(packageName, params.token).merge().map {
-            it.toExposureInformation(configuration)
+        } else {
+            emptyList()
         }
 
         database.noteAppAction(packageName, "getExposureInformation", JSONObject().apply {
@@ -278,6 +326,26 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         } catch (e: Exception) {
             Log.w(TAG, "Callback failed", e)
         }
+    }
+
+    override fun getExposureWindows(params: GetExposureWindowsParams) {
+        Log.w(TAG, "Not yet implemented: getExposureWindows")
+        params.callback.onResult(Status.INTERNAL_ERROR, emptyList())
+    }
+
+    override fun getDailySummaries(params: GetDailySummariesParams) {
+        Log.w(TAG, "Not yet implemented: getDailySummaries")
+        params.callback.onResult(Status.INTERNAL_ERROR, emptyList())
+    }
+
+    override fun setDiagnosisKeysDataMapping(params: SetDiagnosisKeysDataMappingParams) {
+        Log.w(TAG, "Not yet implemented: setDiagnosisKeysDataMapping")
+        params.callback.onResult(Status.INTERNAL_ERROR)
+    }
+
+    override fun getDiagnosisKeysDataMapping(params: GetDiagnosisKeysDataMappingParams) {
+        Log.w(TAG, "Not yet implemented: getDiagnosisKeysDataMapping")
+        params.callback.onResult(Status.INTERNAL_ERROR, null)
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {

@@ -10,14 +10,15 @@ package org.microg.gms.nearby.exposurenotification
 
 import android.os.Build
 import android.util.Log
+import com.google.android.gms.nearby.exposurenotification.CalibrationConfidence
 import kotlin.math.roundToInt
 
-data class DeviceInfo(val oem: String, val model: String, val txPowerCorrection: Byte, val rssiCorrection: Byte, val confidence: Byte = CONFIDENCE_MEDIUM)
+data class DeviceInfo(val oem: String, val model: String, val txPowerCorrection: Byte, val rssiCorrection: Byte, @CalibrationConfidence val confidence: Int = CalibrationConfidence.MEDIUM)
 
 private var knownDeviceInfo: DeviceInfo? = null
 
-fun averageCurrentDeviceInfo(oem: String, model: String, deviceInfos: List<DeviceInfo>, confidence: Byte = CONFIDENCE_LOW): DeviceInfo =
-        DeviceInfo(oem, model, deviceInfos.map { it.txPowerCorrection }.average().roundToInt().toByte(), deviceInfos.map { it.txPowerCorrection }.average().roundToInt().toByte(), CONFIDENCE_LOW)
+fun averageCurrentDeviceInfo(oem: String, model: String, deviceInfos: List<DeviceInfo>, @CalibrationConfidence confidence: Int = CalibrationConfidence.LOW): DeviceInfo =
+        DeviceInfo(oem, model, deviceInfos.map { it.txPowerCorrection }.average().roundToInt().toByte(), deviceInfos.map { it.txPowerCorrection }.average().roundToInt().toByte(), CalibrationConfidence.LOW)
 
 val currentDeviceInfo: DeviceInfo
     get() {
@@ -36,7 +37,7 @@ val currentDeviceInfo: DeviceInfo
                 }
                 else -> {
                     // Fallback to all device average
-                    averageCurrentDeviceInfo(Build.MANUFACTURER, Build.MODEL, allDeviceInfos, CONFIDENCE_LOWEST)
+                    averageCurrentDeviceInfo(Build.MANUFACTURER, Build.MODEL, allDeviceInfos, CalibrationConfidence.LOWEST)
                 }
             }
             Log.i(TAG, "Selected $deviceInfo")

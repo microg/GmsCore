@@ -48,7 +48,7 @@ class AdvertiserService : Service() {
     }
 
     @TargetApi(23)
-    private var setCallback: AdvertisingSetCallback? = null
+    private var setCallback: Any? = null
     private val trigger = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == "android.bluetooth.adapter.action.STATE_CHANGED") {
@@ -83,6 +83,7 @@ class AdvertiserService : Service() {
         super.onDestroy()
         unregisterReceiver(trigger)
         stopOrRestartAdvertising()
+        handler.removeCallbacks(startLaterRunnable)
         database.unref()
     }
 
@@ -114,7 +115,7 @@ class AdvertiserService : Service() {
                     0x00  // Reserved
             )
             VERSION_1_1 -> byteArrayOf(
-                    (version + currentDeviceInfo.confidence * 4).toByte(), // Version and flags
+                    (version + currentDeviceInfo.confidence.toByte() * 4).toByte(), // Version and flags
                     (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
                     0x00, // Reserved
                     0x00  // Reserved
@@ -134,7 +135,7 @@ class AdvertiserService : Service() {
                     .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_LOW)
                     .setConnectable(false)
                     .build()
-            advertiser.startAdvertisingSet(params, data, null, null, null, setCallback)
+            advertiser.startAdvertisingSet(params, data, null, null, null, setCallback as AdvertisingSetCallback)
         } else {
             nextSend = nextSend.coerceAtMost(180000)
             val settings = Builder()
@@ -189,19 +190,11 @@ class AdvertiserService : Service() {
         advertising = false
         if (Build.VERSION.SDK_INT >= 26) {
             wantStartAdvertising = true
-            advertiser?.stopAdvertisingSet(setCallback)
+            advertiser?.stopAdvertisingSet(setCallback as AdvertisingSetCallback)
         } else {
             advertiser?.stopAdvertising(callback)
         }
         handler.postDelayed(startLaterRunnable, 1000)
-    }
-
-    companion object {
-        private const val ACTION_RESTART_ADVERTISING = "org.microg.gms.nearby.exposurenotification.RESTART_ADVERTISING"
-
-        fun isNeeded(context: Context): Boolean {
-            return ExposurePreferences(context).enabled
-        }
     }
 
     @TargetApi(26)
@@ -217,6 +210,15 @@ class AdvertiserService : Service() {
             } else {
                 stopOrRestartAdvertising()
             }
+        }
+    }
+
+
+    companion object {
+        private const val ACTION_RESTART_ADVERTISING = "org.microg.gms.nearby.exposurenotification.RESTART_ADVERTISING"
+
+        fun isNeeded(context: Context): Boolean {
+            return ExposurePreferences(context).enabled
         }
     }
 }

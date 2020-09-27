@@ -27,6 +27,9 @@ public class ProvideDiagnosisKeysParams extends AutoSafeParcelable {
     @Field(5)
     public String token;
 
+    private ProvideDiagnosisKeysParams() {
+    }
+
     public ProvideDiagnosisKeysParams(IStatusCallback callback, List<TemporaryExposureKey> keys, List<ParcelFileDescriptor> keyFiles, ExposureConfiguration configuration, String token) {
         this(callback, keyFiles, configuration, token);
         this.keys = keys;
