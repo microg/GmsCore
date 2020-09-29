@@ -94,11 +94,13 @@ public class LoginActivity extends AssistantActivity {
     private InputMethodManager inputMethodManager;
     private ViewGroup authContent;
     private int state = 0;
+    private Bundle initialSavedInstanceState;
 
     @SuppressLint("AddJavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initialSavedInstanceState = savedInstanceState;
         accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         accountManager = AccountManager.get(LoginActivity.this);
         inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -147,7 +149,6 @@ public class LoginActivity extends AssistantActivity {
         } else {
             setMessage(R.string.auth_before_connect);
             setBackButtonText(android.R.string.cancel);
-            CheckinClient.brandSpoof = false;
             setNextButtonText(R.string.auth_sign_in);
         }
     }
@@ -156,8 +157,8 @@ public class LoginActivity extends AssistantActivity {
     protected void onSpoofButtonClicked() {
         super.onSpoofButtonClicked();
         CheckinClient.brandSpoof = true;
-        state = 1;
-        init();
+        state = 0;
+        onCreate(initialSavedInstanceState);
     }
 
     @Override
@@ -353,6 +354,7 @@ public class LoginActivity extends AssistantActivity {
                             accountManager.setUserData(account, "GoogleUserId", accountId);
                         checkin(true);
                         finish();
+                        CheckinClient.brandSpoof = false;
                     }
                     @Override
                     public void onException(Exception exception) {
