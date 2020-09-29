@@ -22,7 +22,7 @@ dependencies {
     api "org.microg:safe-parcel:$safeParcelVersion"
 
     implementation "androidx.annotation:annotation:$annotationVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.0"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10'
 }
 
 android {
