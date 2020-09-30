@@ -104,7 +104,7 @@ This can take a couple of minutes."</string>
     <string name="pref_about_title">About Vanced microG</string>
     <string name="pref_cast_double_fix">Cast duplication fix</string>
 
-    <string name="brand_spoof_button">Spoof</string>
+    <string name="brand_spoof_button">Huawei</string>
 
     <string name="pref_switcher_title">Register device</string>
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. Vanced microG strips identifying bits other than your Google account name from registration data.</string>
