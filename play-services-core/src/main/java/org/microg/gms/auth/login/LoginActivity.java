@@ -168,6 +168,7 @@ public class LoginActivity extends AssistantActivity {
         super.onNextButtonClicked();
         state++;
         if (state == 1) {
+            CheckinClient.brandSpoof = false;
             init();
         } else if (state == -1) {
             setResult(RESULT_CANCELED);
