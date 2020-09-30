@@ -21,6 +21,7 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -94,13 +95,11 @@ public class LoginActivity extends AssistantActivity {
     private InputMethodManager inputMethodManager;
     private ViewGroup authContent;
     private int state = 0;
-    private Bundle initialSavedInstanceState;
 
     @SuppressLint("AddJavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialSavedInstanceState = savedInstanceState;
         accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         accountManager = AccountManager.get(LoginActivity.this);
         inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -148,17 +147,20 @@ public class LoginActivity extends AssistantActivity {
             init();
         } else {
             setMessage(R.string.auth_before_connect);
+            setSpoofButtonText(R.string.brand_spoof_button);
             setBackButtonText(android.R.string.cancel);
             setNextButtonText(R.string.auth_sign_in);
         }
     }
 
     @Override
-    protected void onSpoofButtonClicked() {
-        super.onSpoofButtonClicked();
+    protected void onHuaweiButtonClicked() {
+        super.onHuaweiButtonClicked();
         CheckinClient.brandSpoof = true;
-        state = 0;
-        onCreate(initialSavedInstanceState);
+        state++;
+        if (state == 1) {
+            init();
+        }
     }
 
     @Override
@@ -279,7 +281,6 @@ public class LoginActivity extends AssistantActivity {
             }
         }
         showError(R.string.auth_general_error_desc);
-        setSpoofButtonText(R.string.brand_spoof_button);
     }
 
     private void retrieveRtToken(String oAuthToken) {
@@ -312,7 +313,6 @@ public class LoginActivity extends AssistantActivity {
                             Log.w(TAG, "Account NOT created!");
                             runOnUiThread(() -> {
                                 showError(R.string.auth_general_error_desc);
-                                setSpoofButtonText(R.string.brand_spoof_button);
                                 setNextButtonText(android.R.string.ok);
                             });
                             state = -2;
@@ -324,7 +324,6 @@ public class LoginActivity extends AssistantActivity {
                         Log.w(TAG, "onException", exception);
                         runOnUiThread(() -> {
                             showError(R.string.auth_general_error_desc);
-                            setSpoofButtonText(R.string.brand_spoof_button);
                             setNextButtonText(android.R.string.ok);
                         });
                         state = -2;
@@ -353,15 +352,14 @@ public class LoginActivity extends AssistantActivity {
                         if (!TextUtils.isEmpty(accountId))
                             accountManager.setUserData(account, "GoogleUserId", accountId);
                         checkin(true);
-                        finish();
                         CheckinClient.brandSpoof = false;
+                        finish();
                     }
                     @Override
                     public void onException(Exception exception) {
                         Log.w(TAG, "onException", exception);
                         runOnUiThread(() -> {
                             showError(R.string.auth_general_error_desc);
-                            setSpoofButtonText(R.string.brand_spoof_button);
                             setNextButtonText(android.R.string.ok);
                         });
                         state = -2;

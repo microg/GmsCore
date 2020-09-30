@@ -16,7 +16,7 @@
     <string name="sorry">Maaf…</string>
     <string name="auth_before_connect">"Sebuah aplikasi di perangkat anda mencoba untuk masuk ke akun Google.
 
-Jika ini disengaja, gunakan tombol <b>Masuk</b> untuk menghubungkan ke halaman masuk Google, jika tidak, tekan <b>Batalkan</b> untuk kembali ke aplikasi yang menyebabkan dialog ini muncul."</string>
+Jika ini disengaja, gunakan tombol <b>Masuk</b> (atau <b>Huawei</b>, jika Anda memiliki perangkat dengan merek ini) untuk menghubungkan ke halaman masuk Google, jika tidak, tekan <b>Batalkan</b> untuk kembali ke aplikasi yang menyebabkan dialog ini muncul."</string>
     <string name="auth_sign_in">Sign in</string>
     <string name="auth_connecting">"Menyambungkan koneksi ke server Google untuk memasukkan anda.
 
@@ -26,7 +26,7 @@ Ini bisa berlangsung beberapa detik."</string>
 Ini mungkin hanya masalah sementara atau perangkat Android anda mungkin tidak disediakan untuk layanan data."</string>
     <string name="auth_general_error_desc">"Ada masalah dengan menghubungkan ke server Google.
 
-Coba lagi nanti atau coba login dengan mengklik tombol \'SPOOF\' di bawah ini (jika Anda memiliki perangkat Huawei)."</string>
+Coba lagi nanti."</string>
     <string name="auth_finalize">"Perangkat anda sedang menghubungkan ke Google untuk menyimpan informasi ke akun anda.
 
 Ini bisa berlangsung beberapa menit."</string>

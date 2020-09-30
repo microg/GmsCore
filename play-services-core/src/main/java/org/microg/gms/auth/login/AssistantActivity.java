@@ -38,7 +38,7 @@ public abstract class AssistantActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_assistant);
         formatTitle();
-        findViewById(R.id.spoof_button).setOnClickListener(v -> onSpoofButtonClicked());
+        findViewById(R.id.spoof_button).setOnClickListener(v -> onHuaweiButtonClicked());
         findViewById(R.id.next_button).setOnClickListener(v -> onNextButtonClicked());
         findViewById(R.id.back_button).setOnClickListener(v -> onBackButtonClicked());
     }
@@ -93,7 +93,7 @@ public abstract class AssistantActivity extends Activity {
         }
     }
 
-    protected void onSpoofButtonClicked() {
+    protected void onHuaweiButtonClicked() {
 
     }
 

@@ -16,7 +16,7 @@
     <string name="sorry">Ci scusiamo…</string>
     <string name="auth_before_connect">"Un'app sul tuo dispositivo sta tentando di accedere a un account Google.
 
-Se ciò è intenzionale, utilizza il pulsante <b>Accedi</b> per connetterti alla relativa pagina di accesso Google, in caso contrario, premi <b>Annulla</b> per tornare all\'applicazione che ha richiamato questa finestra di dialogo."</string>
+Se ciò è intenzionale, utilizza il pulsante <b>Accedi</b> (o <b>Huawei</b>, se possiedi un dispositivo con questo marchio) per connetterti alla relativa pagina di accesso Google, in caso contrario, premi <b>Annulla</b> per tornare all\'applicazione che ha richiamato questa finestra di dialogo."</string>
     <string name="auth_sign_in">Accedi</string>
     <string name="auth_connecting">"Il tuo dispositivo sta stabilendo una connessione ai server di Google per eseguire l\'accesso.
 
@@ -26,7 +26,7 @@ Questa operazione potrebbe richiedere alcuni secondi."</string>
 Questo potrebbe essere un problema temporaneo o legato al mancato collegamento del tuo dispositivo Android ad un servizio dati. Riprova quando sarai connesso ad una rete mobile o connettiti ad una rete Wi-Fi."</string>
     <string name="auth_general_error_desc">"Si è verificato un problema di comunicazione con i server di Google.
 
-Riprova più tardi o prova ad accedere cliccando sul pulsante \'SPOOF\' in basso (se possiedi un dispositivo Huawei)."</string>
+Riprova più tardi."</string>
     <string name="auth_finalize">"Il tuo dispositivo sta tentando di contattare Google per salvare le informazioni sul tuo account.
 
 Questo potrà richiedere un paio di minuti"</string>
