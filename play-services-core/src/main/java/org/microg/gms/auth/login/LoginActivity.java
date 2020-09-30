@@ -353,7 +353,6 @@ public class LoginActivity extends AssistantActivity {
                         if (!TextUtils.isEmpty(accountId))
                             accountManager.setUserData(account, "GoogleUserId", accountId);
                         checkin(true);
-                        CheckinClient.brandSpoof = false;
                         finish();
                     }
                     @Override
