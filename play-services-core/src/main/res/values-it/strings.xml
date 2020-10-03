@@ -50,7 +50,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="service_status_disabled_short">Disattivata</string>
 
     <string name="menu_advanced">Avanzate</string>
-    <string name="list_no_item_none">Nessuno</string>
+    <string name="list_no_item_none">Nessuna</string>
     <string name="list_item_see_all">Vedi tutti</string>
 
     <string name="network_type_mobile">Rete mobile</string>
