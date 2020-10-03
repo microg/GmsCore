@@ -18,6 +18,7 @@ import java.io.File;
 
 public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_ENABLE_CHECKIN = "checkin_enable_service";
+    public static final String START_PREF_ENABLE_CHECKIN = "start_checkin_enable_service";
     private static CheckinPrefs INSTANCE;
 
     public static CheckinPrefs get(Context context) {
@@ -33,7 +34,7 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
 
     private SharedPreferences preferences;
     private SharedPreferences systemDefaultPreferences;
-    private boolean checkinEnabled = true;
+    private boolean checkinEnabled = false;
 
     private CheckinPrefs(Context context) {
         if (context != null) {
@@ -68,8 +69,17 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
     }
 
     public static void setEnabled(Context context, boolean newStatus) {
-        boolean changed = CheckinPrefs.get(context).isEnabled() != newStatus;
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(PREF_ENABLE_CHECKIN, newStatus).commit();
+        boolean changed = false;
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(START_PREF_ENABLE_CHECKIN, true)) {
+            changed = CheckinPrefs.get(context).isEnabled() != newStatus;
+        } else {
+            if (CheckinPrefs.get(context).isEnabled()) {
+                changed = true;
+            }
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(START_PREF_ENABLE_CHECKIN, false).apply();
+        }
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(PREF_ENABLE_CHECKIN, newStatus).apply();
+
         if (!changed) return;
         if (newStatus) {
             context.sendOrderedBroadcast(new Intent(context, TriggerReceiver.class), null);

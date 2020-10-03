@@ -65,7 +65,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     private boolean gcmLogEnabled = true;
     private String lastPersistedId = "";
     private boolean confirmNewApps = false;
-    private boolean gcmEnabled = true;
+    private boolean gcmEnabled = false;
 
     private int networkMobile = 0;
     private int networkWifi = 0;
