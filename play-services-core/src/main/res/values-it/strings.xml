@@ -64,7 +64,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="prefcat_google_services">Servizi Google</string>
     <string name="pref_more_settings">Altro</string>
 
-    <string name="checkin_not_registered">Non registrata</string>
+    <string name="checkin_not_registered">Non registrato</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="cond_gcm_bat_title">Ottimizzazione batteria attivata</string>
