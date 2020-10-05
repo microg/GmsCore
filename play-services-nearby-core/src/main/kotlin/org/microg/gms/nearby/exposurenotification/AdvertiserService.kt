@@ -35,7 +35,6 @@ class AdvertiserService : Service() {
         get() = BluetoothAdapter.getDefaultAdapter()?.bluetoothLeAdvertiser
     private val alarmManager: AlarmManager
         get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    private lateinit var database: ExposureDatabase
     private val callback: AdvertiseCallback = object : AdvertiseCallback() {
         override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
             Log.d(TAG, "Advertising active for ${settingsInEffect?.timeout}ms")
@@ -64,7 +63,6 @@ class AdvertiserService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        database = ExposureDatabase.ref(this)
         registerReceiver(trigger, IntentFilter().also { it.addAction("android.bluetooth.adapter.action.STATE_CHANGED") })
     }
 
@@ -84,7 +82,6 @@ class AdvertiserService : Service() {
         unregisterReceiver(trigger)
         stopOrRestartAdvertising()
         handler.removeCallbacks(startLaterRunnable)
-        database.unref()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -123,7 +120,9 @@ class AdvertiserService : Service() {
             else -> return
         }
         var nextSend = nextKeyMillis.coerceAtLeast(10000)
-        val payload = database.generateCurrentPayload(aemBytes)
+        val payload = ExposureDatabase.with(this@AdvertiserService) { database ->
+            database.generateCurrentPayload(aemBytes)
+        }
         val data = AdvertiseData.Builder().addServiceUuid(SERVICE_UUID).addServiceData(SERVICE_UUID, payload).build()
         val (uuid, _) = ByteBuffer.wrap(payload).let { UUID(it.long, it.long) to it.int }
         Log.i(TAG, "Starting advertiser for RPI $uuid")
