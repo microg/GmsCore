@@ -156,9 +156,9 @@ public class LoginActivity extends AssistantActivity {
     @Override
     protected void onHuaweiButtonClicked() {
         super.onHuaweiButtonClicked();
-        CheckinClient.brandSpoof = true;
         state++;
         if (state == 1) {
+            CheckinClient.brandSpoof = true;
             init();
         }
     }
