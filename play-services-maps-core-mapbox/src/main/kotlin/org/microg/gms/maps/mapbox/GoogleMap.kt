@@ -402,7 +402,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return null
     }
 
-    override fun setLocationSource(locationSource: ILocationSourceDelegate) {
+    override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
         Log.d(TAG, "unimplemented Method: setLocationSource")
     }
 
