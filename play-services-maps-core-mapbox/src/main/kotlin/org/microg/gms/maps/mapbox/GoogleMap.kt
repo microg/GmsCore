@@ -41,6 +41,8 @@ import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.R
 import com.mapbox.mapboxsdk.camera.CameraUpdate
 import com.mapbox.mapboxsdk.constants.MapboxConstants
+import com.mapbox.mapboxsdk.location.*
+import com.mapbox.mapboxsdk.location.modes.*
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
@@ -117,6 +119,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     var storedMapType: Int = options.mapType
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
+
+    var locationEnabled = false
 
     init {
         val mapContext = MapContext(context)
@@ -388,13 +392,26 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun isMyLocationEnabled(): Boolean {
-        Log.d(TAG, "unimplemented Method: isMyLocationEnabled")
-        return false
+        synchronized(this) {
+            val locComp = map?.getLocationComponent()
+            val enabled = locComp != null && locComp?.isLocationComponentEnabled()
+            Log.d(TAG, "predefined user location state: " + enabled)
+            return enabled
+        }
     }
 
     override fun setMyLocationEnabled(myLocation: Boolean) {
-        Log.d(TAG, "unimplemented Method: setMyLocationEnabled")
-
+        synchronized(this) {
+            locationEnabled = myLocation
+            val loccomp = map?.getLocationComponent()
+            loccomp?.let {
+                loccomp ->
+                    if (loccomp.isLocationComponentActivated()) {
+	                loccomp?.setLocationComponentEnabled(myLocation)
+                        Log.d(TAG, "predefined user location enabled: " + myLocation)
+                    }
+            }
+        }
     }
 
     override fun getMyLocation(): Location? {
@@ -616,6 +633,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         options.tiltGesturesEnabled?.let { map.uiSettings.isTiltGesturesEnabled = it }
         options.camera?.let { map.cameraPosition = it.toMapbox() }
 
+
         synchronized(mapLock) {
             initialized = true
             waitingCameraUpdates.forEach { map.moveCamera(it) }
@@ -698,6 +716,26 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                         Log.d(TAG, "Invoking callback delayed, as map is loaded")
                         loadedCallback?.onMapLoaded()
                     }
+                }
+
+                map.getStyle()?.let {
+                    style ->
+                        val locOptions = LocationComponentOptions
+                            .builder(MapContext(context))
+                            .pulseEnabled(true)
+                            .build()
+
+                        val locActivationOptions = LocationComponentActivationOptions
+                            .builder(MapContext(context), style)
+                            .locationComponentOptions(locOptions)
+                            .build()
+
+                        val locComp = map.getLocationComponent()
+                        locComp.activateLocationComponent(locActivationOptions)
+                        Log.d(TAG, "location component activated")
+                        locComp.setCameraMode(CameraMode.TRACKING)
+                        locComp.setRenderMode(RenderMode.COMPASS)
+                        setMyLocationEnabled(locationEnabled)
                 }
             }
         }
