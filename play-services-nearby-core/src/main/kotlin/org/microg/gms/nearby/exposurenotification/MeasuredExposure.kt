@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.ExposureInformation
 import com.google.android.gms.nearby.exposurenotification.RiskLevel
@@ -111,7 +112,9 @@ data class MergedExposure internal constructor(val key: TemporaryExposureKey, va
     }
 
     fun getRiskScore(configuration: ExposureConfiguration): Int {
-        return getAttenuationRiskScore(configuration) * getDaysSinceLastExposureRiskScore(configuration) * getDurationRiskScore(configuration) * getTransmissionRiskScore(configuration)
+        val risk = getAttenuationRiskScore(configuration) * getDaysSinceLastExposureRiskScore(configuration) * getDurationRiskScore(configuration) * getTransmissionRiskScore(configuration)
+        Log.d(TAG, "Risk score calculation: ${getAttenuationRiskScore(configuration)} * ${getDaysSinceLastExposureRiskScore(configuration)} * ${getDurationRiskScore(configuration)} * ${getTransmissionRiskScore(configuration)} = $risk")
+        return risk
     }
 
     fun getAttenuationDurations(configuration: ExposureConfiguration): IntArray {

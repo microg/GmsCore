@@ -12,6 +12,7 @@ import android.content.Intent
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.microg.gms.common.ForegroundServiceContext
 
@@ -22,8 +23,12 @@ class CleanupService : LifecycleService() {
         if (isNeeded(this)) {
             lifecycleScope.launchWhenStarted {
                 launch(Dispatchers.IO) {
-                    ExposureDatabase.with(this@CleanupService) {
-                        it.dailyCleanup()
+                    var workPending = true
+                    while (workPending) {
+                        ExposureDatabase.with(this@CleanupService) {
+                            workPending = !it.dailyCleanup()
+                        }
+                        if (workPending) delay(5000L)
                     }
                     ExposurePreferences(this@CleanupService).lastCleanup = System.currentTimeMillis()
                 }
