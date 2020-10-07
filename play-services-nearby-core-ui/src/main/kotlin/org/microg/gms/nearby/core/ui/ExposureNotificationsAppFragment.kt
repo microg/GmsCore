@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.ui
+package org.microg.gms.nearby.core.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -15,10 +15,8 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.R
-import com.google.android.gms.databinding.ExposureNotificationsAppFragmentBinding
-import com.google.android.gms.databinding.ExposureNotificationsFragmentBinding
-import org.microg.gms.nearby.exposurenotification.ExposurePreferences
+import org.microg.gms.nearby.core.ui.databinding.ExposureNotificationsAppFragmentBinding
+import org.microg.gms.ui.getApplicationInfoIfExists
 
 class ExposureNotificationsAppFragment : Fragment(R.layout.exposure_notifications_app_fragment) {
     private lateinit var binding: ExposureNotificationsAppFragmentBinding

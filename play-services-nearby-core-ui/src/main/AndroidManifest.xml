@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.microg.gms.nearby.core.ui">
+
+    <uses-sdk tools:overrideLibrary="com.db.williamchart" />
+
+    <application>
+        <activity
+            android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsConfirmActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+            <intent-filter>
+                <action android:name="org.microg.gms.nearby.exposurenotification.CONFIRM" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

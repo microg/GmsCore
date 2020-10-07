@@ -47,8 +47,6 @@
 
     <string name="service_name_checkin">註冊為Google設備</string>
     <string name="service_name_mcs">Google雲端訊息(GCM)</string>
-    <string name="menu_advanced">進階</string>
-    <string name="list_no_item_none">無</string>
 
     <string name="games_title">Google Play遊戲</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g>將要使用Play遊戲</string>

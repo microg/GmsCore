@@ -47,8 +47,6 @@ Isso pode demorar alguns minutos."</string>
 
     <string name="service_name_checkin">Registro de dispositivo do Google</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
-    <string name="menu_advanced">Avançado</string>
-    <string name="list_no_item_none">Nenhum</string>
 
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar Play Games</string>

@@ -20,7 +20,7 @@
 
         <variable
             name="callbacks"
-            type="org.microg.gms.ui.ExposureNotificationsAppFragmentCallbacks" />
+            type="org.microg.gms.nearby.core.ui.ExposureNotificationsAppFragmentCallbacks" />
     </data>
 
     <LinearLayout
@@ -74,7 +74,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/sub_preferences"
-            android:name="org.microg.gms.ui.ExposureNotificationsAppPreferencesFragment"
+            android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsAppPreferencesFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>

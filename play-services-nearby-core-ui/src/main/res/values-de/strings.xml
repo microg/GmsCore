@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_exposure">Exposure Notifications</string>
+    <string name="pref_exposure_enable_info_summary">Öffne eine App, die Exposure Notifications unterstützt, um diese zu aktivieren.</string>
+    <string name="prefcat_exposure_apps_title">Apps, die Exposure Notifications nutzen</string>
+    <string name="pref_exposure_collected_rpis_title">Gesammelte IDs</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in den letzten 60 Minuten</string>
+    <string name="pref_exposure_advertising_id_title">Aktuell verwendete ID</string>
+    <string name="pref_exposure_app_checks_summary"><xliff:g example="5">%1$d</xliff:g> Prüfungen während der letzen 14 Tage</string>
+    <string name="pref_exposure_app_last_check_summary">Letzte Prüfung: <xliff:g example="3 hours ago">%1$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> gesammelte IDs</string>
+    <string name="pref_exposure_rpi_delete_all_title">Alle gesammelten IDs löschen</string>
+    <string name="pref_exposure_info_summary">"Die Exposure Notifications API ermöglicht es Apps, dich zu warnen, falls du Kontakt zu einer positiv getesteten Person hattest.
+
+Das Datum, die Zeitdauer und die Signalstärke, die dem Kontakt zugeordnet sind, werden mit der zugehörigen App geteilt."</string>
+    <string name="pref_exposure_rpis_details_summary">"Während die Exposure Notification API aktiviert ist, sammelt das Gerät passiv IDs (Rolling Proximity Identifiers bzw. RPIs) von Geräten in der Nähe.
+
+Sobald die Eigentümer von Geräten positiv getestet wurden, können ihre IDs geteilt werden. Dein Gerät prüft, ob eine gespeicherte ID zu einer positiv getesteten Person gehört und berechnet das Infektionsrisiko."</string>
+
+    <string name="exposure_enable_switch">Exposure Notifications aktivieren</string>
+    <string name="exposure_confirm_start_title">Exposure Notifications aktivieren?</string>
+    <string name="exposure_confirm_start_summary">"Dein Smartphone benötigt Bluetooth, um IDs von anderen Personen sicher zu teilen und zu speichern.
+
+<xliff:g example="Corona-Warn">%1$s</xliff:g> kann dich benachrichtigen, falls du Kontakt zu einer positiv getesteten Person hattest.
+
+Das Datum, die Zeitdauer und die Signalstärke, die einem Kontakt zugeordnet wurden werden mit der App geteilt."</string>
+    <string name="exposure_confirm_start_button">Einschalten</string>
+    <string name="exposure_confirm_stop_title">Exposure Notifications deaktivieren?</string>
+    <string name="exposure_confirm_stop_summary">Nach dem Deaktivieren wirst du nicht mehr benachrichtigt, falls du Kontakt mit einer positiv getesteten Person hattest.</string>
+    <string name="exposure_confirm_stop_button">Deaktivieren</string>
+    <string name="exposure_confirm_keys_title">IDs mit <xliff:g example="Corona-Warn">%1$s</xliff:g> teilen?</string>
+    <string name="exposure_confirm_keys_summary">"Deine IDs der letzten Tage werden genutzt, um Nutzer, die in den letzten 14 Tagen mit dir Kontakt hatten, zu benachrichtigen.
+
+Deine Identität oder das Testergebnis werden nicht geteilt."</string>
+    <string name="exposure_confirm_keys_button">Teilen</string>
+</resources>

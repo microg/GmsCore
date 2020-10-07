@@ -58,7 +58,6 @@ This can take a couple of minutes."</string>
     <string name="service_name_checkin">Google device registration</string>
     <string name="service_name_mcs">Google Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
-    <string name="service_name_exposure">Exposure Notifications</string>
 
     <string name="service_status_disabled">Disabled</string>
     <string name="service_status_enabled">Enabled</string>
@@ -66,12 +65,6 @@ This can take a couple of minutes."</string>
     <string name="service_status_manual">Manual</string>
     <string name="service_status_enabled_short">On</string>
     <string name="service_status_disabled_short">Off</string>
-
-    <string name="menu_advanced">Advanced</string>
-    <string name="list_no_item_none">None</string>
-    <string name="list_item_see_all">See all</string>
-
-    <string name="open_app">Open</string>
 
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
@@ -145,39 +138,6 @@ This can take a couple of minutes."</string>
     <string name="checkin_not_registered">Not registered</string>
     <string name="checkin_last_registration">Last registration: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Register device</string>
-
-    <string name="pref_exposure_enable_info_summary">To enable Exposure Notifications, open any app supporting it.</string>
-    <string name="prefcat_exposure_apps_title">Apps using Exposure Notifications</string>
-    <string name="pref_exposure_collected_rpis_title">Collected IDs</string>
-    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in last hour</string>
-    <string name="pref_exposure_advertising_id_title">Currently broadcasted ID</string>
-    <string name="pref_exposure_app_checks_summary"><xliff:g example="5">%1$d</xliff:g> checks in past 14 days</string>
-    <string name="pref_exposure_app_last_check_summary">Last check: <xliff:g example="3 hours ago">%1$s</xliff:g></string>
-    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs collected</string>
-    <string name="pref_exposure_rpi_delete_all_title">Delete all collected IDs</string>
-    <string name="pref_exposure_info_summary">"Exposure Notifications API allows apps to notify you if you were exposed to someone who reported to be diagnosed positive.
-
-The date, duration, and signal strength associated with an exposure will be shared with the corresponding app."</string>
-    <string name="pref_exposure_rpis_details_summary">"While Exposure Notification API is enabled, your device passively collects IDs (called Rolling Proximity Identifiers, or RPIs) from nearby devices.
-
-When device owners report to be diagnosed positive, their IDs can be shared. Your device checks if any of the known diagnosed IDs matches any of the collected IDs and calculates your infection risk."</string>
-
-    <string name="exposure_enable_switch">Use Exposure Notifications</string>
-    <string name="exposure_confirm_start_title">Turn on Exposure Notifications?</string>
-    <string name="exposure_confirm_start_summary">"Your phone needs to use Bluetooth to securely collect and share IDs with other phones that are nearby.
-
-<xliff:g example="Corona-Warn">%1$s</xliff:g> can notify you if you were exposed to someone who reported to be diagnosed positive.
-
-The date, duration, and signal strength associated with an exposure will be shared with the app."</string>
-    <string name="exposure_confirm_start_button">Turn on</string>
-    <string name="exposure_confirm_stop_title">Turn off Exposure Notifications?</string>
-    <string name="exposure_confirm_stop_summary">After disabling Exposure Notifications, you will no longer be notified when you were exposed to someone who reported to be diagnosed positive.</string>
-    <string name="exposure_confirm_stop_button">Turn off</string>
-    <string name="exposure_confirm_keys_title">Share your IDs with <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
-    <string name="exposure_confirm_keys_summary">"Your IDs from the last 14 days will be used to help notify others that you&apos;ve been near about potential exposure.
-
-Your identity or test result won&apos;t be shared with other people."</string>
-    <string name="exposure_confirm_keys_button">Share</string>
 
     <string name="pref_info_status">Status</string>
     <string name="pref_more_settings">More</string>

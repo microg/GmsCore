@@ -66,10 +66,6 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="service_status_enabled_short">Abilitato</string>
     <string name="service_status_disabled_short">Disabilitato</string>
 
-    <string name="menu_advanced">Impostazioni avanzate</string>
-    <string name="list_no_item_none">Nessuna</string>
-    <string name="list_item_see_all">Mostra tutte</string>
-
     <string name="games_title">Google Play Giochi</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare Play Giochi</string>
     <string name="games_info_content">Per usare Play Giochi è necessario installare l\'applicazione di Play Giochi. L\'applicazione può continuare ad essere utilizzata senza Play Giochi, ma è possibile che funzioni in modo anomalo.</string>

@@ -61,9 +61,6 @@
     <string name="service_status_enabled">Активно</string>
 	<string name="service_status_automatic">Автоматически</string>
     <string name="service_status_manual">Руководство</string>
-	
-    <string name="menu_advanced">Дополнительно</string>
-    <string name="list_no_item_none">Пусто</string>
 
     <string name="games_title">Google Play Игры</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> хочет использовать Play Игры</string>

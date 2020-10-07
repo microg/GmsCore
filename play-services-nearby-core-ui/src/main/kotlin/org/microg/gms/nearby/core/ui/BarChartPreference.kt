@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.ui
+package org.microg.gms.nearby.core.ui
 
 import android.content.Context
 import android.util.AttributeSet
@@ -11,7 +11,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.db.williamchart.data.Scale
 import com.db.williamchart.view.BarChartView
-import com.google.android.gms.R
 
 class BarChartPreference : Preference {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)

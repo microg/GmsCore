@@ -32,8 +32,4 @@
         <item quantity="one">Request missing permission</item>
         <item quantity="other">Request missing permissions</item>
     </plurals>
-    <plurals name="pref_exposure_app_last_report_summary">
-        <item quantity="one">Last report: <xliff:g example="1">%1$d</xliff:g> match, <xliff:g example="3">%2$d</xliff:g> days ago</item>
-        <item quantity="other">Last report: <xliff:g example="2">%1$d</xliff:g> matches, latest <xliff:g example="3">%2$d</xliff:g> days ago</item>
-    </plurals>
 </resources>

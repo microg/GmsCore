@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.ui
+package org.microg.gms.nearby.core.ui
 
 import android.os.Bundle
 import android.os.Handler
@@ -13,11 +13,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
 import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
+import org.microg.gms.ui.AppIconPreference
+import org.microg.gms.ui.getApplicationInfoIfExists
+import org.microg.gms.ui.navigate
 
 class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var exposureEnableInfo: Preference

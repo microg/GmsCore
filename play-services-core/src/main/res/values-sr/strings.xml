@@ -47,8 +47,6 @@
 
     <string name="service_name_checkin">Пријава уређаја на Гугл</string>
     <string name="service_name_mcs">Гуглове облак поруке</string>
-    <string name="menu_advanced">Напредно</string>
-    <string name="list_no_item_none">Ништа</string>
 
     <string name="games_title">Гугл Плеј игре</string>
     <string name="games_info_title">%1$s жели да користи Плеј игре</string>

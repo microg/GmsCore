@@ -5,8 +5,7 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -33,9 +32,9 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/sub_preferences"
-            android:name="org.microg.gms.ui.ExposureNotificationsPreferencesFragment"
+            android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsPreferencesFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </LinearLayout>
 </layout>

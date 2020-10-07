@@ -3,15 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.ui
+package org.microg.gms.nearby.core.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.util.JsonReader
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.google.android.gms.R
 import org.json.JSONObject
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
 import java.util.concurrent.TimeUnit

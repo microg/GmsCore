@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.ui
+package org.microg.gms.nearby.core.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,11 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.R
-import com.google.android.gms.databinding.ExposureNotificationsFragmentBinding
+import org.microg.gms.nearby.core.ui.R
+import org.microg.gms.nearby.core.ui.databinding.ExposureNotificationsFragmentBinding
 import org.microg.gms.nearby.exposurenotification.ServiceInfo
 import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
 import org.microg.gms.nearby.exposurenotification.setExposureNotificationsServiceConfiguration
+import org.microg.gms.ui.PreferenceSwitchBarCallback
 
 class ExposureNotificationsFragment : Fragment(R.layout.exposure_notifications_fragment) {
     private lateinit var binding: ExposureNotificationsFragmentBinding

@@ -65,7 +65,8 @@
         <Preference
             android:icon="@drawable/ic_virus_outline"
             android:key="pref_exposure"
-            android:title="@string/service_name_exposure" />
+            android:title="@string/service_name_exposure"
+            app:isPreferenceVisible="false" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference

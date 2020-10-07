@@ -12,7 +12,13 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
+import androidx.core.content.ContextCompat
+import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.R
@@ -50,3 +56,15 @@ val Context.systemAnimationsEnabled: Boolean
         }
         return duration != 0f && transition != 0f
     }
+
+
+@ColorInt
+fun Context.resolveColor(@AttrRes resid: Int): Int? {
+    val typedValue = TypedValue()
+    if (!theme.resolveAttribute(resid, typedValue, true)) return null
+    val colorRes = if (typedValue.resourceId != 0) typedValue.resourceId else typedValue.data
+    return ContextCompat.getColor(this, colorRes)
+}
+
+@BindingAdapter("app:backgroundColorAttr")
+fun View.setBackgroundColorAttribute(@AttrRes resId: Int) = context.resolveColor(resId)?.let { setBackgroundColor(it) }

@@ -3,15 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.ui
+package org.microg.gms.nearby.core.ui
 
 import android.os.Bundle
 import android.os.ResultReceiver
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.R
+import org.microg.gms.nearby.core.ui.R
 import org.microg.gms.nearby.exposurenotification.*
+import org.microg.gms.ui.getApplicationInfoIfExists
 
 class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     private var resultCode: Int = RESULT_CANCELED

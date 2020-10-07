@@ -54,9 +54,6 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="service_status_automatic">Automatique</string>
     <string name="service_status_manual">Manuel</string>
 
-    <string name="menu_advanced">Avancé</string>
-    <string name="list_no_item_none">Aucun</string>
-
     <string name="games_title">Google Play Jeux</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> voudrait utiliser Play Jeux</string>
     <string name="games_info_content">Pour utiliser Play Jeux il est requis d’installer l’application Google Play Jeux. L’application peut poursuivre sans Play Jeux, mais il est possible qu’elle se comporte de manière imprévue.</string>

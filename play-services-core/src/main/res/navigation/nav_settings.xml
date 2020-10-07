@@ -29,7 +29,7 @@
             app:destination="@id/googleMoreFragment" />
         <action
             android:id="@+id/openExposureNotificationSettings"
-            app:destination="@id/exposureNotificationsFragment" />
+            app:destination="@id/nav_nearby" />
         <action
             android:id="@+id/openAbout"
             app:destination="@id/aboutFragment" />
@@ -100,38 +100,7 @@
         android:label="@string/gms_settings_name" />
 
     <include app:graph="@navigation/nav_unlp" />
-
-    <fragment
-        android:id="@+id/exposureNotificationsFragment"
-        android:name="org.microg.gms.ui.ExposureNotificationsFragment"
-        android:label="@string/service_name_exposure"
-        tools:layout="@layout/exposure_notifications_fragment">
-        <deepLink
-            app:action="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS"
-            app:uri="x-gms-settings://exposure-notifications" />
-
-        <action
-            android:id="@+id/openExposureRpis"
-            app:destination="@id/exposureNotificationsRpisFragment" />
-        <action
-            android:id="@+id/openExposureAppDetails"
-            app:destination="@id/exposureNotificationsAppFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/exposureNotificationsRpisFragment"
-        android:name="org.microg.gms.ui.ExposureNotificationsRpisFragment"
-        android:label="@string/pref_exposure_collected_rpis_title" />
-
-    <fragment
-        android:id="@+id/exposureNotificationsAppFragment"
-        android:name="org.microg.gms.ui.ExposureNotificationsAppFragment"
-        android:label="@string/service_name_exposure"
-        tools:layout="@layout/exposure_notifications_app_fragment">
-        <argument
-            android:name="package"
-            app:argType="string" />
-    </fragment>
+    <include app:graph="@navigation/nav_nearby" />
 
     <fragment
         android:id="@+id/aboutFragment"

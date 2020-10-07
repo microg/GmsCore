@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_nearby"
+    app:startDestination="@id/exposureNotificationsFragment"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/exposureNotificationsFragment"
+        android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsFragment"
+        android:label="@string/service_name_exposure"
+        tools:layout="@layout/exposure_notifications_fragment">
+        <deepLink
+            app:action="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS"
+            app:uri="x-gms-settings://exposure-notifications" />
+
+        <action
+            android:id="@+id/openExposureRpis"
+            app:destination="@id/exposureNotificationsRpisFragment" />
+        <action
+            android:id="@+id/openExposureAppDetails"
+            app:destination="@id/exposureNotificationsAppFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/exposureNotificationsRpisFragment"
+        android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsRpisFragment"
+        android:label="@string/pref_exposure_collected_rpis_title" />
+
+    <fragment
+        android:id="@+id/exposureNotificationsAppFragment"
+        android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsAppFragment"
+        android:label="@string/service_name_exposure"
+        tools:layout="@layout/exposure_notifications_app_fragment">
+        <argument
+            android:name="package"
+            app:argType="string" />
+    </fragment>
+</navigation>

@@ -26,6 +26,9 @@ include ':play-services-maps-core-vtm'
 include ':play-services-maps-core-vtm:vtm-microg-theme'
 include ':play-services-nearby-core'
 
+include ':play-services-base-core-ui'
+include ':play-services-nearby-core-ui'
+
 include ':play-services-core:microg-ui-tools' // Legacy
 include ':play-services-core'
 

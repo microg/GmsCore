@@ -107,8 +107,6 @@
         android:name="android.permission.UPDATE_APP_OPS_STATS"
         tools:ignore="ProtectedPermissions" />
 
-    <uses-sdk tools:overrideLibrary="com.db.williamchart" />
-
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="false"
@@ -425,18 +423,6 @@
             android:name="org.microg.gms.chimera.ServiceProvider"
             android:authorities="com.google.android.gms.chimera"
             android:exported="true" />
-
-        <!-- microG custom UI -->
-
-        <activity
-            android:name="org.microg.gms.ui.ExposureNotificationsConfirmActivity"
-            android:exported="false"
-            android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
-            <intent-filter>
-                <action android:name="org.microg.gms.nearby.exposurenotification.CONFIRM" />
-            </intent-filter>
-        </activity>
 
         <!-- microG Settings shown in Launcher -->
         <activity
