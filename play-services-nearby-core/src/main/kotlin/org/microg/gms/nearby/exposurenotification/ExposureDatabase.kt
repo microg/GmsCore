@@ -79,32 +79,33 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         Log.d(TAG, "Finished database upgrade")
     }
 
-    fun SQLiteDatabase.delete(table: String, whereClause: String, args: LongArray, limit: Int): Int =
-            compileStatement("DELETE FROM $table WHERE $whereClause LIMIT $limit").use {
+    fun SQLiteDatabase.delete(table: String, whereClause: String, args: LongArray): Int =
+            compileStatement("DELETE FROM $table WHERE $whereClause").use {
                 args.forEachIndexed { idx, l -> it.bindLong(idx + 1, l) }
                 it.executeUpdateDelete()
             }
 
     fun dailyCleanup(): Boolean = writableDatabase.run {
+        val start = System.currentTimeMillis()
         val rollingStartTime = currentRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
-        val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime), DELETE_LIMIT)
+        val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
         Log.d(TAG, "Deleted on daily cleanup: $advertisements adv")
-        if (advertisements == DELETE_LIMIT) return@run false
-        val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime), DELETE_LIMIT)
+        if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
+        val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime))
         Log.d(TAG, "Deleted on daily cleanup: $appLogEntries applogs")
-        if (appLogEntries == DELETE_LIMIT) return@run false
-        val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS), DELETE_LIMIT)
+        if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
+        val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
         Log.d(TAG, "Deleted on daily cleanup: $temporaryExposureKeys teks")
-        if (temporaryExposureKeys == DELETE_LIMIT) return@run false
-        val singleCheckedTemporaryExposureKeys = delete(TABLE_TEK_CHECK_SINGLE, "rollingStartNumber < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS - ROLLING_PERIOD), DELETE_LIMIT)
+        if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
+        val singleCheckedTemporaryExposureKeys = delete(TABLE_TEK_CHECK_SINGLE, "rollingStartNumber < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS - ROLLING_PERIOD))
         Log.d(TAG, "Deleted on daily cleanup: $singleCheckedTemporaryExposureKeys tcss")
-        if (singleCheckedTemporaryExposureKeys == DELETE_LIMIT) return@run false
-        val fileCheckedTemporaryExposureKeys = delete(TABLE_TEK_CHECK_FILE, "endTimestamp < ?", longArrayOf(rollingStartTime), DELETE_LIMIT)
+        if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
+        val fileCheckedTemporaryExposureKeys = delete(TABLE_TEK_CHECK_FILE, "endTimestamp < ?", longArrayOf(rollingStartTime))
         Log.d(TAG, "Deleted on daily cleanup: $fileCheckedTemporaryExposureKeys tcfs")
-        if (fileCheckedTemporaryExposureKeys == DELETE_LIMIT) return@run false
-        val appPerms = delete(TABLE_APP_PERMS, "timestamp < ?", longArrayOf(System.currentTimeMillis() - CONFIRM_PERMISSION_VALIDITY), DELETE_LIMIT)
+        if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
+        val appPerms = delete(TABLE_APP_PERMS, "timestamp < ?", longArrayOf(System.currentTimeMillis() - CONFIRM_PERMISSION_VALIDITY))
         Log.d(TAG, "Deleted on daily cleanup: $appPerms perms")
-        if (appPerms == DELETE_LIMIT) return@run false
+        if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
         execSQL("VACUUM;")
         Log.d(TAG, "Done vacuuming")
         return@run true
@@ -405,7 +406,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                     found++
                 }
             }
-            Log.d(TAG,  "Processed $processed keys, found $found matches, ignored $ignored keys that are older than our scanning efforts ($oldestRpi)")
+            Log.d(TAG, "Processed $processed keys, found $found matches, ignored $ignored keys that are older than our scanning efforts ($oldestRpi)")
             executor.shutdown()
             for (update in updates) {
                 val matched = compileStatement("SELECT COUNT(tcsid) FROM $TABLE_TEK_CHECK_FILE_MATCH WHERE keyData = ? AND rollingStartNumber = ? AND rollingPeriod = ?").use {
@@ -704,7 +705,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     companion object {
         private const val DB_NAME = "exposure.db"
         private const val DB_VERSION = 5
-        private const val DELETE_LIMIT = 1000
+        private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"
         private const val TABLE_APP_LOG = "app_log"
         private const val TABLE_TEK = "tek"
