@@ -17,7 +17,6 @@
 package org.microg.gms.maps.mapbox
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.location.Location
 import android.os.*
@@ -41,14 +40,16 @@ import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.R
 import com.mapbox.mapboxsdk.camera.CameraUpdate
 import com.mapbox.mapboxsdk.constants.MapboxConstants
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
+import com.mapbox.mapboxsdk.location.LocationComponentOptions
+import com.mapbox.mapboxsdk.location.modes.CameraMode
+import com.mapbox.mapboxsdk.location.modes.RenderMode
 import com.mapbox.mapboxsdk.maps.MapView
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.*
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
-import com.mapbox.mapboxsdk.utils.ColorUtils
-import com.mapbox.mapboxsdk.utils.ThreadUtils
 import org.microg.gms.kotlin.unwrap
 import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.model.*
@@ -117,6 +118,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     var storedMapType: Int = options.mapType
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
+    var locationEnabled: Boolean = false
 
     init {
         val mapContext = MapContext(context)
@@ -388,13 +390,24 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun isMyLocationEnabled(): Boolean {
-        Log.d(TAG, "unimplemented Method: isMyLocationEnabled")
-        return false
+        return locationEnabled
     }
 
     override fun setMyLocationEnabled(myLocation: Boolean) {
-        Log.d(TAG, "unimplemented Method: setMyLocationEnabled")
-
+        synchronized(mapLock) {
+            locationEnabled = myLocation
+            if (!loaded) return
+            val locationComponent = map?.locationComponent ?: return
+            try {
+                if (locationComponent.isLocationComponentActivated) {
+                    locationComponent.isLocationComponentEnabled = myLocation
+                }
+            } catch (e: SecurityException) {
+                Log.w(TAG, e)
+                locationEnabled = false
+            }
+            Unit
+        }
     }
 
     override fun getMyLocation(): Location? {
@@ -692,7 +705,22 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 pendingMarkers.forEach { it.update(symbolManager) }
                 pendingMarkers.clear()
 
+                val mapContext = MapContext(context)
+                map.locationComponent.apply {
+                    activateLocationComponent(LocationComponentActivationOptions.builder(mapContext, it)
+                            .locationComponentOptions(LocationComponentOptions.builder(mapContext).pulseEnabled(true).build())
+                            .build())
+                    cameraMode = CameraMode.TRACKING
+                    renderMode = RenderMode.COMPASS
+                }
+
                 synchronized(mapLock) {
+                    try {
+                        map.locationComponent.isLocationComponentEnabled = locationEnabled
+                    } catch (e: SecurityException) {
+                        Log.w(TAG, e)
+                        locationEnabled = false
+                    }
                     loaded = true
                     if (loadedCallback != null) {
                         Log.d(TAG, "Invoking callback delayed, as map is loaded")
