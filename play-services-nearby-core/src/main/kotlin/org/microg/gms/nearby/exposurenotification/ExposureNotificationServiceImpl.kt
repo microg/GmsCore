@@ -157,6 +157,27 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         digest()
     }
 
+    private fun buildExposureSummary(token: String): ExposureSummary = ExposureDatabase.with(context) { database ->
+        val pair = database.loadConfiguration(packageName, token)
+        val (configuration, exposures) = if (pair != null) {
+            pair.second to database.findAllMeasuredExposures(pair.first).merge()
+        } else {
+            ExposureConfiguration.ExposureConfigurationBuilder().build() to emptyList()
+        }
+
+        ExposureSummary.ExposureSummaryBuilder()
+                .setDaysSinceLastExposure(exposures.map { it.daysSinceExposure }.min()?.toInt() ?: 0)
+                .setMatchedKeyCount(exposures.map { it.key }.distinct().size)
+                .setMaximumRiskScore(exposures.map { it.getRiskScore(configuration) }.max()?.toInt() ?: 0)
+                .setAttenuationDurations(intArrayOf(
+                        exposures.map { it.getAttenuationDurations(configuration)[0] }.sum(),
+                        exposures.map { it.getAttenuationDurations(configuration)[1] }.sum(),
+                        exposures.map { it.getAttenuationDurations(configuration)[2] }.sum()
+                ))
+                .setSummationRiskScore(exposures.map { it.getRiskScore(configuration) }.sum())
+                .build()
+    }
+
     override fun provideDiagnosisKeys(params: ProvideDiagnosisKeysParams) {
         Log.w(TAG, "provideDiagnosisKeys() with $packageName/${params.token}")
         val tid = ExposureDatabase.with(context) { database ->
@@ -256,10 +277,14 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     put("request_keys_count", keys)
                 }.toString())
 
-                val match = database.findAllMeasuredExposures(tid).isNotEmpty()
+                val exposureSummary = buildExposureSummary(params.token)
 
                 try {
-                    val intent = Intent(if (match) ACTION_EXPOSURE_STATE_UPDATED else ACTION_EXPOSURE_NOT_FOUND)
+                    val intent = if (exposureSummary.matchedKeyCount > 0) {
+                        Intent(ACTION_EXPOSURE_STATE_UPDATED).putExtra(EXTRA_EXPOSURE_SUMMARY, exposureSummary)
+                    } else {
+                        Intent(ACTION_EXPOSURE_NOT_FOUND)
+                    }
                     intent.putExtra(EXTRA_TOKEN, params.token)
                     intent.`package` = packageName
                     Log.d(TAG, "Sending $intent")
@@ -272,23 +297,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getExposureSummary(params: GetExposureSummaryParams): Unit = ExposureDatabase.with(context) { database ->
-        val pair = database.loadConfiguration(packageName, params.token)
-        val (configuration, exposures) = if (pair != null) {
-            pair.second to database.findAllMeasuredExposures(pair.first).merge()
-        } else {
-            ExposureConfiguration.ExposureConfigurationBuilder().build() to emptyList()
-        }
-        val response = ExposureSummary.ExposureSummaryBuilder()
-                .setDaysSinceLastExposure(exposures.map { it.daysSinceExposure }.min()?.toInt() ?: 0)
-                .setMatchedKeyCount(exposures.map { it.key }.distinct().size)
-                .setMaximumRiskScore(exposures.map { it.getRiskScore(configuration) }.max()?.toInt() ?: 0)
-                .setAttenuationDurations(intArrayOf(
-                        exposures.map { it.getAttenuationDurations(configuration)[0] }.sum(),
-                        exposures.map { it.getAttenuationDurations(configuration)[1] }.sum(),
-                        exposures.map { it.getAttenuationDurations(configuration)[2] }.sum()
-                ))
-                .setSummationRiskScore(exposures.map { it.getRiskScore(configuration) }.sum())
-                .build()
+        val response = buildExposureSummary(params.token)
 
         database.noteAppAction(packageName, "getExposureSummary", JSONObject().apply {
             put("request_token", params.token)
