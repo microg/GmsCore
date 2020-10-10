@@ -162,11 +162,11 @@ public class LoginActivity extends AssistantActivity {
         super.onHuaweiButtonClicked();
         state++;
         if (state == 1) {
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true);
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, false)) {
                 LastCheckinInfo.ClearCheckinInfo(this);
                 CheckinClient.brandSpoof = true;
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true);
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true).apply();
             }
             init();
         }
@@ -177,11 +177,11 @@ public class LoginActivity extends AssistantActivity {
         super.onNextButtonClicked();
         state++;
         if (state == 1) {
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true);
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true).apply();
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(HuaweiButtonPreference, false)) {
                 LastCheckinInfo.ClearCheckinInfo(this);
                 CheckinClient.brandSpoof = false;
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true);
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
             }
             init();
         } else if (state == -1) {

@@ -216,7 +216,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public static void setEnabled(Context context, boolean newStatus) {
         boolean changed = GcmPrefs.get(context).isEnabled() != newStatus;
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).apply();
         if (!changed) return;
         if (!newStatus) {
             McsService.stop(context);
