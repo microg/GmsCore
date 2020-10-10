@@ -43,6 +43,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.preference.PreferenceManager;
 
 import com.mgoogle.android.gms.R;
 
@@ -95,6 +96,9 @@ public class LoginActivity extends AssistantActivity {
     private InputMethodManager inputMethodManager;
     private ViewGroup authContent;
     private int state = 0;
+
+    private String HuaweiButtonPreference = "huaweiloginbutton";
+    private String LoginButtonPreference = "standardloginbutton";
 
     @SuppressLint("AddJavascriptInterface")
     @Override
@@ -158,11 +162,11 @@ public class LoginActivity extends AssistantActivity {
         super.onHuaweiButtonClicked();
         state++;
         if (state == 1) {
-            CheckinClient.isHuaweiButtonClicked = true;
-            if (CheckinClient.isLoginButtonClicked) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true);
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, false)) {
                 LastCheckinInfo.ClearCheckinInfo(this);
                 CheckinClient.brandSpoof = true;
-                CheckinClient.isLoginButtonClicked = false;
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true);
             }
             init();
         }
@@ -173,11 +177,11 @@ public class LoginActivity extends AssistantActivity {
         super.onNextButtonClicked();
         state++;
         if (state == 1) {
-            CheckinClient.isLoginButtonClicked = true;
-            if (CheckinClient.isHuaweiButtonClicked) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true);
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(HuaweiButtonPreference, false)) {
                 LastCheckinInfo.ClearCheckinInfo(this);
                 CheckinClient.brandSpoof = false;
-                CheckinClient.isHuaweiButtonClicked = false;
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true);
             }
             init();
         } else if (state == -1) {

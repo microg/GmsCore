@@ -45,8 +45,6 @@ public class CheckinClient {
     private static final List<String> TODO_LIST_STRING = new ArrayList<>(); // TODO
     private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<CheckinRequest.Checkin.Statistic>(); // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
-    public static boolean isHuaweiButtonClicked = false;
-    public static boolean isLoginButtonClicked = false;
     public static boolean brandSpoof = false;
 
     public static CheckinResponse request(CheckinRequest request) throws IOException {
