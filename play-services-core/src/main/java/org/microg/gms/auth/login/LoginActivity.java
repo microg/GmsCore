@@ -158,7 +158,12 @@ public class LoginActivity extends AssistantActivity {
         super.onHuaweiButtonClicked();
         state++;
         if (state == 1) {
-            CheckinClient.brandSpoof = true;
+            CheckinClient.isHuaweiButtonClicked = true;
+            if (CheckinClient.isLoginButtonClicked) {
+                LastCheckinInfo.ClearCheckinInfo(this);
+                CheckinClient.brandSpoof = true;
+                CheckinClient.isLoginButtonClicked = false;
+            }
             init();
         }
     }
@@ -168,7 +173,12 @@ public class LoginActivity extends AssistantActivity {
         super.onNextButtonClicked();
         state++;
         if (state == 1) {
-            CheckinClient.brandSpoof = false;
+            CheckinClient.isLoginButtonClicked = true;
+            if (CheckinClient.isHuaweiButtonClicked) {
+                LastCheckinInfo.ClearCheckinInfo(this);
+                CheckinClient.brandSpoof = false;
+                CheckinClient.isHuaweiButtonClicked = false;
+            }
             init();
         } else if (state == -1) {
             setResult(RESULT_CANCELED);
