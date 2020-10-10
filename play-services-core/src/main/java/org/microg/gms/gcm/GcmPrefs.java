@@ -36,6 +36,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     public static final String PREF_FULL_LOG = "gcm_full_log";
     public static final String PREF_LAST_PERSISTENT_ID = "gcm_last_persistent_id";
     public static final String PREF_CONFIRM_NEW_APPS = "gcm_confirm_new_apps";
+    public static final String START_PREF_ENABLE_GCM = "start_gcm_enable_mcs_service";
     public static final String PREF_ENABLE_GCM = "gcm_enable_mcs_service";
 
     public static final String PREF_NETWORK_MOBILE = "gcm_network_mobile";
@@ -215,7 +216,15 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public static void setEnabled(Context context, boolean newStatus) {
-        boolean changed = GcmPrefs.get(context).isEnabled() != newStatus;
+        boolean changed = false;
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(START_PREF_ENABLE_GCM, true)) {
+            changed = GcmPrefs.get(context).isEnabled() != newStatus;
+        } else {
+            if (GcmPrefs.get(context).isEnabled()) {
+                changed = true;
+            }
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(START_PREF_ENABLE_GCM, false).apply();
+        }
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).apply();
         if (!changed) return;
         if (!newStatus) {

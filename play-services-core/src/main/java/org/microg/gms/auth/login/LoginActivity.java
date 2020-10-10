@@ -163,7 +163,7 @@ public class LoginActivity extends AssistantActivity {
         state++;
         if (state == 1) {
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, false)) {
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, true)) {
                 LastCheckinInfo.ClearCheckinInfo(this);
                 CheckinClient.brandSpoof = true;
                 PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true).apply();
