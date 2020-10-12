@@ -30,7 +30,7 @@
 
     <string name="self_check_cat_permissions">Autorisations accordées</string>
     <string name="self_check_name_permission">Autorisation à %1$s :</string>
-    <string name="self_check_resolution_permission">Touchez ici pour accorder l’autorisation %1$s. Des applications peuvent mal se comporter si vous ne le faites pas.</string>
+    <string name="self_check_resolution_permission">Touchez ici pour accorder l’autorisation. Des applications peuvent mal se comporter si vous ne le faites pas.</string>
 
     <string name="about_root_version">Version v0.1.0</string>
     <string name="about_root_libraries">Librairies incluses</string>

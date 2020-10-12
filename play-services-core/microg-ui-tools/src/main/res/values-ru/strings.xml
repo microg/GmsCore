@@ -30,7 +30,7 @@
 
     <string name="self_check_cat_permissions">Права доступа предоставлены</string>
     <string name="self_check_name_permission">Разрешение для %1$s:</string>
-    <string name="self_check_resolution_permission">Нажмите здесь, чтобы дать разрешение на %1$s. Непредоставление разрешения может привести некорректной работе приложения.</string>
+    <string name="self_check_resolution_permission">Нажмите здесь, чтобы дать разрешение. Непредоставление разрешения может привести некорректной работе приложения.</string>
 
     <string name="about_root_title">microG UI Demo</string>
     <string name="about_root_summary">Сводка</string>
