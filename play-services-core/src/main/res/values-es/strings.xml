@@ -4,8 +4,8 @@
     <string name="gms_settings_name">Ajustes Vanced microG</string>
     <string name="gms_settings_summary">Configurar Vanced microG.</string>
 
-    <string name="notification_service_name">Exclusion de Ahorro de Bateria</string>
-    <string name="notification_service_title">Excluir microG del ahorro de batería</string>
+    <string name="notification_service_name">Aviso de Ahorro de Bateria</string>
+    <string name="notification_service_title">Toque aquí para deshabilitar microG ahorro de batería</string>
     <string name="notification_service_content">Para remover esta notificacion forzadamente, fuerze el cierre de microG desde la lista de aplicaciones instaladas en ajustes</string>
 
     <string name="just_a_sec">Solo un momento…</string>

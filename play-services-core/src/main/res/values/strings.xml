@@ -4,8 +4,8 @@
     <string name="gms_settings_name">Vanced microG Settings</string>
     <string name="gms_settings_summary">Setup Vanced microG.</string>
 
-    <string name="notification_service_name">Battery Saving Exclusion</string>
-    <string name="notification_service_title">Exclude microG from battery saving</string>
+    <string name="notification_service_name">Battery Saving Warning</string>
+    <string name="notification_service_title">Ketuk di sini untuk menonaktifkan penghematan baterai microG</string>
     <string name="notification_service_content">To remove this notification forcefully close the microG from installed application list</string>
 
     <string name="just_a_sec">Just a sec…</string>
