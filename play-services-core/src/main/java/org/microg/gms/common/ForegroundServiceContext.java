@@ -97,8 +97,9 @@ public class ForegroundServiceContext extends ContextWrapper {
                 .setOngoing(true)
                 .setContentIntent(notificationPendingIntent)
                 .setSmallIcon(R.drawable.ic_foreground_notification)
+                .setContentTitle(context.getResources().getString(R.string.small_notification_service_title))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .setBigContentTitle(context.getResources().getString(R.string.notification_service_title))
+                        .setBigContentTitle(context.getResources().getString(R.string.big_notification_service_title))
                         .bigText(context.getResources().getString(R.string.notification_service_content)))
                 .build();
     }

@@ -4,9 +4,10 @@
     <string name="gms_settings_name">Ajustes Vanced microG</string>
     <string name="gms_settings_summary">Configurar Vanced microG.</string>
 
-    <string name="notification_service_name">Aviso de Ahorro de Bateria</string>
-    <string name="notification_service_title">Toque aquí para deshabilitar microG ahorro de batería</string>
-    <string name="notification_service_content">Para remover esta notificacion forzadamente, fuerze el cierre de microG desde la lista de aplicaciones instaladas en ajustes</string>
+    <string name="notification_service_name">Exclusion de Ahorro de Bateria</string>
+    <string name="small_notification_service_title">Expandir notificación</string>
+    <string name="big_notification_service_title">Mantener microG en segundo plano</string>
+    <string name="notification_service_content">Toque aqui y deshabilita la optimización de batería para vanced microG, después fuerze el cierre de microG para cerrar esta notificación</string>
 
     <string name="just_a_sec">Solo un momento…</string>
     <string name="ask_permission_tos">Al continuar, permites que esta app y Google usen tu información de acuerdo con sus respectivos términos de servicio y políticas de privacidad.</string>
@@ -16,8 +17,8 @@
     <string name="sorry">Disculpa…</string>
     <string name="auth_before_connect">"Una app en tu dispositivo esta intentando iniciar sesión a una cuenta de Google.
 
-Si esto fue intencional, use el botón de<b>Iniciar Sesión</b> (o <b>Huawei</b>, si tienes un dispositivo de esta marca) para conectarte a la pagina de inicio de sesión de google, si no lo fue, presione <b>Cancelar</b> para ir devuelta a la aplicación que causo que este dialogo apareciera."</string>
-    <string name="auth_sign_in">Iniciar Sesión</string>
+Si esto fue intencional, use el botón de <b>Iniciar</b> (o <b>Huawei</b>, si tienes un dispositivo de esta marca) para conectarte a la pagina de inicio de sesión de google, si no fue intencional, presione <b>Cancelar</b> para ir devuelta a la aplicación que causo que este dialogo apareciera."</string>
+    <string name="auth_sign_in">Iniciar</string>
     <string name="auth_connecting">"Estableciendo una conexión con los servidores de Google para iniciar sesión.
 
 Esto puede tardar unos segundos."</string>
@@ -93,7 +94,7 @@ Esto puede tardar unos minutos."</string>
     <string name="brand_spoof_button">Huawei</string>
 
     <string name="pref_switcher_title">Registrar dispositivo</string>
-    <string name="pref_checkin_enable_summary">Registra tu dispositivo a los servicios de Google y crea un identificador de dispositivo único. tiras de bits de identificaciónRegisters your device to Google services and creates a unique device identifier. Vanced microG strips identifying bits other than your Google account name from registration data.</string>
+    <string name="pref_checkin_enable_summary">Registra tu dispositivo a los servicios de Google y crea un identificador de dispositivo único. Vanced microG remueve de los datos de registro partes de identificación a parte de él nombre de tu cuenta de Google.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="pref_info_status">Estado</string>
 

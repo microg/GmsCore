@@ -5,7 +5,8 @@
     <string name="gms_settings_summary">Atur Vanced microG.</string>
 
     <string name="notification_service_name">Memperhatikan Menghemat Baterai</string>
-    <string name="notification_service_title">Kecualikan microG dari menghemat baterai</string>
+    <string name="small_notification_service_title">Perluas notifikasi</string>
+    <string name="big_notification_service_title">Pertahankan microG di latar belakang</string>
     <string name="notification_service_content">Untuk menghapus pemberitahuan ini secara paksa tutup microG dari daftar aplikasi yang diinstal</string>
 
     <string name="just_a_sec">Tunggu sebentar…</string>
