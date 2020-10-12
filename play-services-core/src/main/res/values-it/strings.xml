@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="gms_settings_name">Impostazioni di Vanced microG</string>
     <string name="gms_settings_summary">Configurazione di Vanced microG.</string>
 
