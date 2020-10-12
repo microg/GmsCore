@@ -7,7 +7,7 @@
     <string name="notification_service_name">Battery Saving Warning</string>
     <string name="small_notification_service_title">Expand notification</string>
     <string name="big_notification_service_title">Keep microG in background</string>
-    <string name="notification_service_content">Ketuk di sini dan nonaktifkan pengoptimalan baterai untuk Vanced microG, lalu tutup paksa ini dari info aplikasi untuk menghapus notifikasi ini.</string>
+    <string name="notification_service_content">Tap here and disable battery optimization for microG, then force close it from app info to remove this notification.</string>
 
     <string name="just_a_sec">Just a sec…</string>
     <string name="ask_permission_tos">By continuing, you allow this app and Google to use your information in accordance with their respective terms of service and privacy policies.</string>
