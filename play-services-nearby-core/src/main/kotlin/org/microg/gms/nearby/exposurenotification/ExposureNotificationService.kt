@@ -40,7 +40,7 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
         }
 
         Log.d(TAG, "handleServiceRequest: " + request.packageName)
-        callback.onPostInitCompleteWithConnectionInfo(SUCCESS, ExposureNotificationServiceImpl(this, request.packageName), ConnectionInfo().apply {
+        callback.onPostInitCompleteWithConnectionInfo(SUCCESS, ExposureNotificationServiceImpl(this, lifecycle, request.packageName), ConnectionInfo().apply {
             features = arrayOf(
                     Feature("nearby_exposure_notification", 3),
                     Feature("nearby_exposure_notification_get_version", 1)

@@ -8,6 +8,7 @@ package org.microg.gms.nearby.core.ui
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import org.json.JSONObject
@@ -48,26 +49,28 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
 
     fun updateContent() {
         packageName?.let { packageName ->
-            ExposureDatabase.with(requireContext()) { database ->
-                var str = getString(R.string.pref_exposure_app_checks_summary, database.countMethodCalls(packageName, "provideDiagnosisKeys"))
-                val lastCheckTime = database.lastMethodCall(packageName, "provideDiagnosisKeys")
-                if (lastCheckTime != null && lastCheckTime != 0L) {
-                    str += "\n" + getString(R.string.pref_exposure_app_last_check_summary, DateUtils.getRelativeDateTimeString(context, lastCheckTime, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME))
-                }
-                val lastExposureSummaryTime = database.lastMethodCall(packageName, "getExposureSummary")
-                val lastExposureSummary = database.lastMethodCallArgs(packageName, "getExposureSummary")
-                if (lastExposureSummaryTime != null && lastExposureSummary != null && System.currentTimeMillis() - lastExposureSummaryTime <= TimeUnit.DAYS.toMillis(1)) {
-                    try {
-                        val json = JSONObject(lastExposureSummary)
-                        val matchedKeys = json.optInt("response_matched_keys")
-                        val daysSince = json.optInt("response_days_since", -1)
-                        if (matchedKeys > 0 && daysSince >= 0) {
-                            str += "\n" + resources.getQuantityString(R.plurals.pref_exposure_app_last_report_summary, matchedKeys, matchedKeys, daysSince)
-                        }
-                    } catch (ignored: Exception) {
+            lifecycleScope.launchWhenResumed {
+                checks.summary = ExposureDatabase.with(requireContext()) { database ->
+                    var str = getString(R.string.pref_exposure_app_checks_summary, database.countMethodCalls(packageName, "provideDiagnosisKeys"))
+                    val lastCheckTime = database.lastMethodCall(packageName, "provideDiagnosisKeys")
+                    if (lastCheckTime != null && lastCheckTime != 0L) {
+                        str += "\n" + getString(R.string.pref_exposure_app_last_check_summary, DateUtils.getRelativeDateTimeString(context, lastCheckTime, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME))
                     }
+                    val lastExposureSummaryTime = database.lastMethodCall(packageName, "getExposureSummary")
+                    val lastExposureSummary = database.lastMethodCallArgs(packageName, "getExposureSummary")
+                    if (lastExposureSummaryTime != null && lastExposureSummary != null && System.currentTimeMillis() - lastExposureSummaryTime <= TimeUnit.DAYS.toMillis(1)) {
+                        try {
+                            val json = JSONObject(lastExposureSummary)
+                            val matchedKeys = json.optInt("response_matched_keys")
+                            val daysSince = json.optInt("response_days_since", -1)
+                            if (matchedKeys > 0 && daysSince >= 0) {
+                                str += "\n" + resources.getQuantityString(R.plurals.pref_exposure_app_last_report_summary, matchedKeys, matchedKeys, daysSince)
+                            }
+                        } catch (ignored: Exception) {
+                        }
+                    }
+                    str
                 }
-                checks.summary = str
             }
         }
     }

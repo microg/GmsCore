@@ -74,28 +74,26 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenResumed {
             handler.postDelayed(updateContentRunnable, UPDATE_CONTENT_INTERVAL)
             val context = requireContext()
-            val (apps, lastHourKeys, currentId) = withContext(Dispatchers.IO) {
-                ExposureDatabase.with(context) { database ->
-                    val apps = database.appList.map { packageName ->
-                        context.packageManager.getApplicationInfoIfExists(packageName)
-                    }.filterNotNull().mapIndexed { idx, applicationInfo ->
-                        val pref = AppIconPreference(context)
-                        pref.order = idx
-                        pref.title = applicationInfo.loadLabel(context.packageManager)
-                        pref.icon = applicationInfo.loadIcon(context.packageManager)
-                        pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                            findNavController().navigate(requireContext(), R.id.openExposureAppDetails, bundleOf(
-                                    "package" to applicationInfo.packageName
-                            ))
-                            true
-                        }
-                        pref.key = "pref_exposure_app_" + applicationInfo.packageName
-                        pref
+            val (apps, lastHourKeys, currentId) = ExposureDatabase.with(context) { database ->
+                val apps = database.appList.map { packageName ->
+                    context.packageManager.getApplicationInfoIfExists(packageName)
+                }.filterNotNull().mapIndexed { idx, applicationInfo ->
+                    val pref = AppIconPreference(context)
+                    pref.order = idx
+                    pref.title = applicationInfo.loadLabel(context.packageManager)
+                    pref.icon = applicationInfo.loadIcon(context.packageManager)
+                    pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        findNavController().navigate(requireContext(), R.id.openExposureAppDetails, bundleOf(
+                                "package" to applicationInfo.packageName
+                        ))
+                        true
                     }
-                    val lastHourKeys = database.hourRpiCount
-                    val currentId = database.currentRpiId
-                    Triple(apps, lastHourKeys, currentId)
+                    pref.key = "pref_exposure_app_" + applicationInfo.packageName
+                    pref
                 }
+                val lastHourKeys = database.hourRpiCount
+                val currentId = database.currentRpiId
+                Triple(apps, lastHourKeys, currentId)
             }
             collectedRpis.summary = getString(R.string.pref_exposure_collected_rpis_summary, lastHourKeys)
             if (currentId != null) {

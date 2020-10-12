@@ -20,6 +20,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.*
 import android.util.Log
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.microg.gms.common.ForegroundServiceContext
 import java.io.FileDescriptor
 import java.io.PrintWriter
@@ -27,7 +31,7 @@ import java.nio.ByteBuffer
 import java.util.*
 
 @TargetApi(21)
-class AdvertiserService : Service() {
+class AdvertiserService : LifecycleService() {
     private val version = VERSION_1_0
     private var advertising = false
     private var wantStartAdvertising = false
@@ -84,13 +88,13 @@ class AdvertiserService : Service() {
         handler.removeCallbacks(startLaterRunnable)
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
-
-    fun startAdvertisingIfNeeded() {
+    private fun startAdvertisingIfNeeded() {
         if (ExposurePreferences(this).enabled) {
-            startAdvertising()
+            lifecycleScope.launchWhenStarted {
+                withContext(Dispatchers.IO) {
+                    startAdvertising()
+                }
+            }
         } else {
             stopSelf()
         }
@@ -98,57 +102,65 @@ class AdvertiserService : Service() {
 
     private var lastStartTime = System.currentTimeMillis()
     private var sendingBytes = ByteArray(0)
+    private var starting = false
 
-    @Synchronized
-    fun startAdvertising() {
-        if (advertising) return
-        val advertiser = advertiser ?: return
-        wantStartAdvertising = false
-        val aemBytes = when (version) {
-            VERSION_1_0 -> byteArrayOf(
-                    version, // Version and flags
-                    (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
-                    0x00, // Reserved
-                    0x00  // Reserved
-            )
-            VERSION_1_1 -> byteArrayOf(
-                    (version + currentDeviceInfo.confidence.toByte() * 4).toByte(), // Version and flags
-                    (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
-                    0x00, // Reserved
-                    0x00  // Reserved
-            )
-            else -> return
+    private suspend fun startAdvertising() {
+        val advertiser = synchronized(this) {
+            if (advertising || starting) return
+            val advertiser = advertiser ?: return
+            wantStartAdvertising = false
+            starting = true
+            advertiser
         }
-        var nextSend = nextKeyMillis.coerceAtLeast(10000)
-        val payload = ExposureDatabase.with(this@AdvertiserService) { database ->
-            database.generateCurrentPayload(aemBytes)
+        try {
+            val aemBytes = when (version) {
+                VERSION_1_0 -> byteArrayOf(
+                        version, // Version and flags
+                        (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                        0x00, // Reserved
+                        0x00  // Reserved
+                )
+                VERSION_1_1 -> byteArrayOf(
+                        (version + currentDeviceInfo.confidence.toByte() * 4).toByte(), // Version and flags
+                        (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                        0x00, // Reserved
+                        0x00  // Reserved
+                )
+                else -> return
+            }
+            var nextSend = nextKeyMillis.coerceAtLeast(10000)
+            val payload = ExposureDatabase.with(this@AdvertiserService) { database ->
+                database.generateCurrentPayload(aemBytes)
+            }
+            val data = AdvertiseData.Builder().addServiceUuid(SERVICE_UUID).addServiceData(SERVICE_UUID, payload).build()
+            val (uuid, _) = ByteBuffer.wrap(payload).let { UUID(it.long, it.long) to it.int }
+            Log.i(TAG, "Starting advertiser for RPI $uuid")
+            if (Build.VERSION.SDK_INT >= 26) {
+                setCallback = SetCallback()
+                val params = AdvertisingSetParameters.Builder()
+                        .setInterval(AdvertisingSetParameters.INTERVAL_MEDIUM)
+                        .setLegacyMode(true)
+                        .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_LOW)
+                        .setConnectable(false)
+                        .build()
+                advertiser.startAdvertisingSet(params, data, null, null, null, setCallback as AdvertisingSetCallback)
+            } else {
+                nextSend = nextSend.coerceAtMost(180000)
+                val settings = Builder()
+                        .setTimeout(nextSend.toInt())
+                        .setAdvertiseMode(ADVERTISE_MODE_BALANCED)
+                        .setTxPowerLevel(ADVERTISE_TX_POWER_LOW)
+                        .setConnectable(false)
+                        .build()
+                advertiser.startAdvertising(settings, data, callback)
+            }
+            synchronized(this) { advertising = true }
+            sendingBytes = payload
+            lastStartTime = System.currentTimeMillis()
+            scheduleRestartAdvertising(nextSend)
+        } finally {
+            synchronized(this) { starting = false }
         }
-        val data = AdvertiseData.Builder().addServiceUuid(SERVICE_UUID).addServiceData(SERVICE_UUID, payload).build()
-        val (uuid, _) = ByteBuffer.wrap(payload).let { UUID(it.long, it.long) to it.int }
-        Log.i(TAG, "Starting advertiser for RPI $uuid")
-        if (Build.VERSION.SDK_INT >= 26) {
-            setCallback = SetCallback()
-            val params = AdvertisingSetParameters.Builder()
-                    .setInterval(AdvertisingSetParameters.INTERVAL_MEDIUM)
-                    .setLegacyMode(true)
-                    .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_LOW)
-                    .setConnectable(false)
-                    .build()
-            advertiser.startAdvertisingSet(params, data, null, null, null, setCallback as AdvertisingSetCallback)
-        } else {
-            nextSend = nextSend.coerceAtMost(180000)
-            val settings = Builder()
-                    .setTimeout(nextSend.toInt())
-                    .setAdvertiseMode(ADVERTISE_MODE_BALANCED)
-                    .setTxPowerLevel(ADVERTISE_TX_POWER_LOW)
-                    .setConnectable(false)
-                    .build()
-            advertiser.startAdvertising(settings, data, callback)
-        }
-        advertising = true
-        sendingBytes = payload
-        lastStartTime = System.currentTimeMillis()
-        scheduleRestartAdvertising(nextSend)
     }
 
     override fun dump(fd: FileDescriptor?, writer: PrintWriter?, args: Array<out String>?) {
@@ -182,7 +194,7 @@ class AdvertiserService : Service() {
     }
 
     @Synchronized
-    fun stopOrRestartAdvertising() {
+    private fun stopOrRestartAdvertising() {
         if (!advertising) return
         val (uuid, _) = ByteBuffer.wrap(sendingBytes).let { UUID(it.long, it.long) to it.int }
         Log.i(TAG, "Stopping advertiser for RPI $uuid")

@@ -17,16 +17,18 @@ import android.os.Parcelable
 import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
+import kotlinx.coroutines.*
 import okio.ByteString
 import java.io.File
+import java.lang.Runnable
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.concurrent.*
-import kotlin.math.roundToInt
 
 @TargetApi(21)
 class ExposureDatabase private constructor(private val context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
-    private var refCount = 0
+    private val createdAt: Exception = Exception("Database ${hashCode()} created")
+    private var refCount = 1
 
     init {
         setWriteAheadLoggingEnabled(true)
@@ -675,27 +677,21 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     fun generateCurrentPayload(metadata: ByteArray) = ensureTemporaryExposureKey().generatePayload(currentIntervalNumber.toInt(), metadata)
 
     override fun getWritableDatabase(): SQLiteDatabase {
-        if (this != instance) {
-            throw IllegalStateException("Tried to open writable database from secondary instance. We are ${hashCode()} but primary is ${instance?.hashCode()}")
-        }
+        requirePrimary(this)
         return super.getWritableDatabase()
     }
 
-    override fun close() {
-        synchronized(Companion) {
-            super.close()
-            instance = null
-        }
-    }
-
-    fun ref(): ExposureDatabase = synchronized(Companion) {
+    @Synchronized
+    fun ref(): ExposureDatabase {
         refCount++
         return this
     }
 
-    fun unref() = synchronized(Companion) {
+    @Synchronized
+    fun unref() {
         refCount--
         if (refCount == 0) {
+            clearInstance(this)
             close()
         } else if (refCount < 0) {
             throw IllegalStateException("ref/unref mismatch")
@@ -705,6 +701,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     companion object {
         private const val DB_NAME = "exposure.db"
         private const val DB_VERSION = 5
+        private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"
         private const val TABLE_APP_LOG = "app_log"
@@ -726,19 +723,134 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         @Deprecated(message = "No longer supported")
         private const val TABLE_CONFIGURATIONS = "configurations"
 
+        private var deferredInstance: Deferred<ExposureDatabase>? = null
+        private var deferredRefCount: Int = 0
         private var instance: ExposureDatabase? = null
-        fun ref(context: Context): ExposureDatabase = synchronized(this) {
-            if (instance == null) {
-                instance = ExposureDatabase(context.applicationContext)
-                Log.d(TAG, "Created instance ${instance?.hashCode()} of database for ${context.javaClass.name}")
+
+        @Synchronized
+        private fun requirePrimary(database: ExposureDatabase) {
+            if (database != instance) {
+                throw IllegalStateException("Operation requires ${database.hashCode()} to be a primary database instance, but ${instance?.hashCode()} is primary", database.createdAt)
             }
-            instance!!.ref()
         }
 
-        fun <T> with(context: Context, call: (ExposureDatabase) -> T): T {
-            val it = ref(context)
+        @Synchronized
+        private fun clearInstance(database: ExposureDatabase) {
+            if (database == instance) {
+                if (deferredRefCount == 0) {
+                    deferredInstance = null
+                    instance = null
+                }
+            } else {
+                throw IllegalStateException("Tried to remove database instance ${database.hashCode()}, but ${instance?.hashCode()} is primary", database.createdAt)
+            }
+        }
+
+        @Synchronized
+        private fun getDeferredInstance(): Pair<Deferred<ExposureDatabase>, Boolean> {
+            val deferredInstance = deferredInstance
+            deferredRefCount++
+            return when {
+                deferredInstance != null -> deferredInstance to false
+                instance != null -> throw IllegalStateException("No deferred database instance, but instance ${instance?.hashCode()} is primary", instance?.createdAt)
+                else -> {
+                    val newInstance = CompletableDeferred<ExposureDatabase>()
+                    this.deferredInstance = newInstance
+                    newInstance to true
+                }
+            }
+        }
+
+        @Synchronized
+        private fun unrefDeferredInstance() {
+            deferredRefCount--;
+        }
+
+        @Synchronized
+        private fun completeInstance(database: ExposureDatabase) {
+            if (instance != null) {
+                throw IllegalStateException("Tried to make ${database.hashCode()} the primary, but ${instance?.hashCode()} is currently primary", instance?.createdAt)
+            }
+            instance = database
+        }
+
+        private fun prepareDatabaseMigration(context: Context): Pair<File, File> {
+            val dbFile = context.getDatabasePath(DB_NAME)
+            val dbWalFile = context.getDatabasePath("$DB_NAME-wal")
+            val dbMigrateFile = context.getDatabasePath("$DB_NAME-migrate")
+            val dbMigrateWalFile = context.getDatabasePath("$DB_NAME-migrate-wal")
+            if (dbFile.length() + dbWalFile.length() > DB_SIZE_TOO_LARGE) {
+                Log.d(TAG, "Database file is larger than $DB_SIZE_TOO_LARGE, force clean up")
+                if (dbFile.exists()) dbFile.renameTo(dbMigrateFile)
+                if (dbWalFile.exists()) dbWalFile.renameTo(dbMigrateWalFile)
+            }
+            return dbMigrateFile to dbMigrateWalFile
+        }
+
+        private fun finishDatabaseMigration(database: ExposureDatabase, dbMigrateFile: File, dbMigrateWalFile: File) {
+            if (dbMigrateFile.exists()) {
+                val writableDatabase = database.writableDatabase
+                writableDatabase.execSQL("ATTACH DATABASE '${dbMigrateFile.absolutePath}' AS old;")
+                writableDatabase.beginTransaction()
+                try {
+                    Log.d(TAG, "Migrating advertisements and TEKs from old database file")
+                    writableDatabase.execSQL("INSERT INTO $TABLE_ADVERTISEMENTS SELECT * FROM old.$TABLE_ADVERTISEMENTS;")
+                    writableDatabase.execSQL("INSERT INTO $TABLE_TEK SELECT * FROM old.$TABLE_TEK;")
+                    Log.d(TAG, "Migration finished successfully")
+                    writableDatabase.setTransactionSuccessful()
+                } finally {
+                    writableDatabase.endTransaction()
+                    writableDatabase.execSQL("DETACH DATABASE old;")
+                }
+            }
+            dbMigrateFile.delete()
+            dbMigrateWalFile.delete()
+        }
+
+        suspend fun ref(context: Context): ExposureDatabase {
+            val (instance, new) = getDeferredInstance()
+            try {
+                if (new) {
+                    val newInstance = instance as CompletableDeferred
+                    try {
+                        val (dbMigrateFile, dbMigrateWalFile) = prepareDatabaseMigration(context)
+                        val database = ExposureDatabase(context.applicationContext)
+                        try {
+                            Log.d(TAG, "Created instance ${database.hashCode()} of database for ${context.javaClass.simpleName}")
+                            finishDatabaseMigration(database, dbMigrateFile, dbMigrateWalFile)
+                            completeInstance(database)
+                            newInstance.complete(database)
+                            return database
+                        } catch (e: Exception) {
+                            database.close()
+                            throw e
+                        }
+                    } catch (e: Exception) {
+                        newInstance.completeExceptionally(e)
+                        throw e;
+                    }
+                } else {
+                    return instance.await().ref()
+                }
+            } finally {
+                unrefDeferredInstance()
+            }
+        }
+
+        @Deprecated(message = "Sync database access is slow", replaceWith = ReplaceWith("with(context, call)"))
+        fun <T> withSync(context: Context, call: (ExposureDatabase) -> T): T {
+            val it = runBlocking { ref(context) }
             try {
                 return call(it)
+            } finally {
+                it.unref()
+            }
+        }
+
+        suspend fun <T> with(context: Context, call: suspend (ExposureDatabase) -> T): T = withContext(Dispatchers.IO) {
+            val it = ref(context)
+            try {
+                call(it)
             } finally {
                 it.unref()
             }

@@ -12,9 +12,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.*
 import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
-import com.google.android.gms.nearby.exposurenotification.ExposureInformation
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes.*
 import com.google.android.gms.nearby.exposurenotification.ExposureSummary
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
@@ -29,12 +31,14 @@ import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProt
 import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
-import java.util.*
 import java.util.zip.ZipFile
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class ExposureNotificationServiceImpl(private val context: Context, private val packageName: String) : INearbyExposureNotificationService.Stub() {
+class ExposureNotificationServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String) : INearbyExposureNotificationService.Stub(), LifecycleOwner {
+
+    override fun getLifecycle(): Lifecycle = lifecycle
+
     private fun pendingConfirm(permission: String): PendingIntent {
         val intent = Intent(ACTION_CONFIRM)
         intent.`package` = context.packageName
@@ -43,7 +47,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         intent.putExtra(KEY_CONFIRM_RECEIVER, object : ResultReceiver(null) {
             override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
                 if (resultCode == Activity.RESULT_OK) {
-                    ExposureDatabase.with(context) { database -> database.grantPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission) }
+                    tempGrantedPermissions.add(packageName to permission)
                 }
             }
         })
@@ -58,10 +62,14 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         return pi
     }
 
-    private fun confirmPermission(permission: String): Status {
+    private suspend fun confirmPermission(permission: String): Status {
         if (packageName == context.packageName) return Status.SUCCESS
         return ExposureDatabase.with(context) { database ->
-            if (!database.hasPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission)) {
+            if (tempGrantedPermissions.contains(packageName to permission)) {
+                database.grantPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission)
+                tempGrantedPermissions.remove(packageName to permission)
+                Status.SUCCESS
+            } else if (!database.hasPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission)) {
                 Status(RESOLUTION_REQUIRED, "Permission EN#$permission required.", pendingConfirm(permission))
             } else {
                 Status.SUCCESS
@@ -79,29 +87,34 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     override fun start(params: StartParams) {
         if (ExposurePreferences(context).enabled) return
-        val status = confirmPermission(CONFIRM_ACTION_START)
-        if (status.isSuccess) {
-            ExposurePreferences(context).enabled = true
-            ExposureDatabase.with(context) { database -> database.noteAppAction(packageName, "start") }
-        }
-        try {
-            params.callback.onResult(status)
-        } catch (e: Exception) {
-            Log.w(TAG, "Callback failed", e)
+        lifecycleScope.launchWhenStarted {
+            val status = confirmPermission(CONFIRM_ACTION_START)
+            if (status.isSuccess) {
+                ExposurePreferences(context).enabled = true
+                ExposureDatabase.with(context) { database -> database.noteAppAction(packageName, "start") }
+            }
+            try {
+                params.callback.onResult(status)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
     override fun stop(params: StopParams) {
-        ExposurePreferences(context).enabled = false
-        ExposureDatabase.with(context) { database ->
-            database.noteAppAction(packageName, "stop")
-        }
-        try {
-            params.callback.onResult(Status.SUCCESS)
-        } catch (e: Exception) {
-            Log.w(TAG, "Callback failed", e)
+        lifecycleScope.launchWhenStarted {
+            ExposurePreferences(context).enabled = false
+            ExposureDatabase.with(context) { database ->
+                database.noteAppAction(packageName, "stop")
+            }
+            try {
+                params.callback.onResult(Status.SUCCESS)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
+
     override fun isEnabled(params: IsEnabledParams) {
         try {
             params.callback.onResult(Status.SUCCESS, ExposurePreferences(context).enabled)
@@ -111,24 +124,26 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getTemporaryExposureKeyHistory(params: GetTemporaryExposureKeyHistoryParams) {
-        val status = confirmPermission(CONFIRM_ACTION_KEYS)
-        val response = when {
-            status.isSuccess -> ExposureDatabase.with(context) { database ->
-                database.allKeys
+        lifecycleScope.launchWhenStarted {
+            val status = confirmPermission(CONFIRM_ACTION_KEYS)
+            val response = when {
+                status.isSuccess -> ExposureDatabase.with(context) { database ->
+                    database.allKeys
+                }
+                else -> emptyList()
             }
-            else -> emptyList()
-        }
 
-        ExposureDatabase.with(context) { database ->
-            database.noteAppAction(packageName, "getTemporaryExposureKeyHistory", JSONObject().apply {
-                put("result", status.statusCode)
-                put("response_keys_size", response.size)
-            }.toString())
-        }
-        try {
-            params.callback.onResult(status, response)
-        } catch (e: Exception) {
-            Log.w(TAG, "Callback failed", e)
+            ExposureDatabase.with(context) { database ->
+                database.noteAppAction(packageName, "getTemporaryExposureKeyHistory", JSONObject().apply {
+                    put("result", status.statusCode)
+                    put("response_keys_size", response.size)
+                }.toString())
+            }
+            try {
+                params.callback.onResult(status, response)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
@@ -157,7 +172,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         digest()
     }
 
-    private fun buildExposureSummary(token: String): ExposureSummary = ExposureDatabase.with(context) { database ->
+    private suspend fun buildExposureSummary(token: String): ExposureSummary = ExposureDatabase.with(context) { database ->
         val pair = database.loadConfiguration(packageName, token)
         val (configuration, exposures) = if (pair != null) {
             pair.second to database.findAllMeasuredExposures(pair.first).merge()
@@ -180,23 +195,23 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     override fun provideDiagnosisKeys(params: ProvideDiagnosisKeysParams) {
         Log.w(TAG, "provideDiagnosisKeys() with $packageName/${params.token}")
-        val tid = ExposureDatabase.with(context) { database ->
-            if (params.configuration != null) {
-                database.storeConfiguration(packageName, params.token, params.configuration)
-            } else {
-                database.getTokenId(packageName, params.token)
+        lifecycleScope.launchWhenStarted {
+            val tid = ExposureDatabase.with(context) { database ->
+                if (params.configuration != null) {
+                    database.storeConfiguration(packageName, params.token, params.configuration)
+                } else {
+                    database.getTokenId(packageName, params.token)
+                }
             }
-        }
-        if (tid == null) {
-            Log.w(TAG, "Unknown token without configuration: $packageName/${params.token}")
-            try {
-                params.callback.onResult(Status.INTERNAL_ERROR)
-            } catch (e: Exception) {
-                Log.w(TAG, "Callback failed", e)
+            if (tid == null) {
+                Log.w(TAG, "Unknown token without configuration: $packageName/${params.token}")
+                try {
+                    params.callback.onResult(Status.INTERNAL_ERROR)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Callback failed", e)
+                }
+                return@launchWhenStarted
             }
-            return
-        }
-        Thread(Runnable {
             ExposureDatabase.with(context) { database ->
                 val start = System.currentTimeMillis()
 
@@ -293,47 +308,55 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     Log.w(TAG, "Callback failed", e)
                 }
             }
-        }).start()
-    }
-
-    override fun getExposureSummary(params: GetExposureSummaryParams): Unit = ExposureDatabase.with(context) { database ->
-        val response = buildExposureSummary(params.token)
-
-        database.noteAppAction(packageName, "getExposureSummary", JSONObject().apply {
-            put("request_token", params.token)
-            put("response_days_since", response.daysSinceLastExposure)
-            put("response_matched_keys", response.matchedKeyCount)
-            put("response_max_risk", response.maximumRiskScore)
-            put("response_attenuation_durations", JSONArray().apply {
-                response.attenuationDurationsInMinutes.forEach { put(it) }
-            })
-            put("response_summation_risk", response.summationRiskScore)
-        }.toString())
-        try {
-            params.callback.onResult(Status.SUCCESS, response)
-        } catch (e: Exception) {
-            Log.w(TAG, "Callback failed", e)
         }
     }
 
-    override fun getExposureInformation(params: GetExposureInformationParams): Unit = ExposureDatabase.with(context) { database ->
-        val pair = database.loadConfiguration(packageName, params.token)
-        val response = if (pair != null) {
-            database.findAllMeasuredExposures(pair.first).merge().map {
-                it.toExposureInformation(pair.second)
+    override fun getExposureSummary(params: GetExposureSummaryParams) {
+        lifecycleScope.launchWhenStarted {
+            val response = buildExposureSummary(params.token)
+
+            ExposureDatabase.with(context) { database ->
+                database.noteAppAction(packageName, "getExposureSummary", JSONObject().apply {
+                    put("request_token", params.token)
+                    put("response_days_since", response.daysSinceLastExposure)
+                    put("response_matched_keys", response.matchedKeyCount)
+                    put("response_max_risk", response.maximumRiskScore)
+                    put("response_attenuation_durations", JSONArray().apply {
+                        response.attenuationDurationsInMinutes.forEach { put(it) }
+                    })
+                    put("response_summation_risk", response.summationRiskScore)
+                }.toString())
             }
-        } else {
-            emptyList()
+            try {
+                params.callback.onResult(Status.SUCCESS, response)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
+    }
 
-        database.noteAppAction(packageName, "getExposureInformation", JSONObject().apply {
-            put("request_token", params.token)
-            put("response_size", response.size)
-        }.toString())
-        try {
-            params.callback.onResult(Status.SUCCESS, response)
-        } catch (e: Exception) {
-            Log.w(TAG, "Callback failed", e)
+    override fun getExposureInformation(params: GetExposureInformationParams) {
+        lifecycleScope.launchWhenStarted {
+            ExposureDatabase.with(context) { database ->
+                val pair = database.loadConfiguration(packageName, params.token)
+                val response = if (pair != null) {
+                    database.findAllMeasuredExposures(pair.first).merge().map {
+                        it.toExposureInformation(pair.second)
+                    }
+                } else {
+                    emptyList()
+                }
+
+                database.noteAppAction(packageName, "getExposureInformation", JSONObject().apply {
+                    put("request_token", params.token)
+                    put("response_size", response.size)
+                }.toString())
+                try {
+                    params.callback.onResult(Status.SUCCESS, response)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Callback failed", e)
+                }
+            }
         }
     }
 
@@ -361,5 +384,9 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         if (super.onTransact(code, data, reply, flags)) return true
         Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
         return false
+    }
+
+    companion object {
+        private val tempGrantedPermissions: MutableSet<Pair<String, String>> = hashSetOf()
     }
 }
