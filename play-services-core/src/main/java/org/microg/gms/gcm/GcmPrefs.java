@@ -216,15 +216,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public static void setEnabled(Context context, boolean newStatus) {
-        boolean changed = false;
-        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(START_PREF_ENABLE_GCM, true)) {
-            changed = GcmPrefs.get(context).isEnabled() != newStatus;
-        } else {
-            if (GcmPrefs.get(context).isEnabled()) {
-                changed = true;
-            }
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(START_PREF_ENABLE_GCM, false).apply();
-        }
+        boolean changed = GcmPrefs.get(context).isEnabled() != newStatus;
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).apply();
         if (!changed) return;
         if (!newStatus) {
