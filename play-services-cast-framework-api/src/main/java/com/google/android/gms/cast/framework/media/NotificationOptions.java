@@ -25,71 +25,71 @@ import org.microg.safeparcel.SafeParceled;
 
 public class NotificationOptions extends AutoSafeParcelable {
 
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
-    @SafeParceled(2)
+    @Field(2)
     public List<String> actions;
-    @SafeParceled(3)
+    @Field(3)
     public int[] compatActionIndices;
-    @SafeParceled(4)
+    @Field(4)
     public long skipStepMs;
-    @SafeParceled(5)
+    @Field(5)
     public String targetActivityClassName;
-    @SafeParceled(6)
+    @Field(6)
     public int getSmallIconDrawableResId;
-    @SafeParceled(7)
+    @Field(7)
     public int getStopLiveStreamDrawableResId;
-    @SafeParceled(8)
+    @Field(8)
     public int getPauseDrawableResId;
-    @SafeParceled(9)
+    @Field(9)
     public int getPlayDrawableResId;
-    @SafeParceled(10)
+    @Field(10)
     public int getSkipNextDrawableResId;
-    @SafeParceled(11)
+    @Field(11)
     public int getSkipPrevDrawableResId;
-    @SafeParceled(12)
+    @Field(12)
     public int getForwardDrawableResId;
-    @SafeParceled(13)
+    @Field(13)
     public int getForward10DrawableResId;
-    @SafeParceled(14)
+    @Field(14)
     public int getForward30DrawableResId;
-    @SafeParceled(15)
+    @Field(15)
     public int getRewindDrawableResId;
-    @SafeParceled(16)
+    @Field(16)
     public int getRewind10DrawableResId;
-    @SafeParceled(17)
+    @Field(17)
     public int getRewind30DrawableResId;
-    @SafeParceled(18)
+    @Field(18)
     public int getDisconnectDrawableResId;
-    @SafeParceled(19)
+    @Field(19)
     public int intvar19;
-    @SafeParceled(20)
+    @Field(20)
     public int getCastingToDeviceStringResId;
-    @SafeParceled(21)
+    @Field(21)
     public int getStopLiveStreamTitleResId;
-    @SafeParceled(22)
+    @Field(22)
     public int intvar22;
-    @SafeParceled(23)
+    @Field(23)
     public int intvar23;
-    @SafeParceled(24)
+    @Field(24)
     public int intvar24;
-    @SafeParceled(25)
+    @Field(25)
     public int intvar25;
-    @SafeParceled(26)
+    @Field(26)
     public int intvar26;
-    @SafeParceled(27)
+    @Field(27)
     public int intvar27;
-    @SafeParceled(28)
+    @Field(28)
     public int intvar28;
-    @SafeParceled(29)
+    @Field(29)
     public int intvar29;
-    @SafeParceled(30)
+    @Field(30)
     public int intvar30;
-    @SafeParceled(31)
+    @Field(31)
     public int intvar31;
-    @SafeParceled(32)
+    @Field(32)
     public int intvar32;
-    @SafeParceled(33)
+    @Field(33)
     public INotificationActionsProvider notificationActionsProvider;
 
     public static Creator<NotificationOptions> CREATOR = new AutoCreator<NotificationOptions>(NotificationOptions.class);

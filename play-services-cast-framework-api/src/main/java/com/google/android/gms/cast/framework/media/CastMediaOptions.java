@@ -21,16 +21,20 @@ import org.microg.safeparcel.SafeParceled;
 
 public class CastMediaOptions extends AutoSafeParcelable {
 
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
-    @SafeParceled(2)
+    @Field(2)
     public String mediaIntentReceiverClassName;
-    @SafeParceled(3)
+    @Field(3)
     public String expandedControllerActivityClassName;
-    @SafeParceled(4)
+    @Field(4)
     public IImagePicker imagePicker;
-    @SafeParceled(5)
+    @Field(5)
     public NotificationOptions notificationOptions;
+    @Field(6)
+    public boolean bool6;
+    @Field(7)
+    public boolean bool7;
 
     public static Creator<CastMediaOptions> CREATOR = new AutoCreator<CastMediaOptions>(CastMediaOptions.class);
 }
