@@ -108,6 +108,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        android:forceQueryable="true"
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="false"
         android:extractNativeLibs="false"

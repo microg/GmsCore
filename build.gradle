@@ -34,7 +34,7 @@ buildscript {
 
     ext.androidMinSdk = 14
     ext.androidTargetSdk = 29
-    ext.androidCompileSdk = 29
+    ext.androidCompileSdk = 30
 
     repositories {
         jcenter()
