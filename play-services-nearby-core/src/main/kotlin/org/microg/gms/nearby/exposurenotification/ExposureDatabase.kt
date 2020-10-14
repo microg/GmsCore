@@ -735,13 +735,13 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
 
         @Synchronized
-        private fun clearInstance(database: ExposureDatabase) {
+        private fun clearInstance(database: ExposureDatabase, errorOnNull: Boolean = true) {
             if (database == instance) {
                 if (deferredRefCount == 0) {
                     deferredInstance = null
                     instance = null
                 }
-            } else {
+            } else if (errorOnNull || instance != null) {
                 throw IllegalStateException("Tried to remove database instance ${database.hashCode()}, but ${instance?.hashCode()} is primary", database.createdAt)
             }
         }
@@ -817,11 +817,12 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                         val database = ExposureDatabase(context.applicationContext)
                         try {
                             Log.d(TAG, "Created instance ${database.hashCode()} of database for ${context.javaClass.simpleName}")
-                            finishDatabaseMigration(database, dbMigrateFile, dbMigrateWalFile)
                             completeInstance(database)
+                            finishDatabaseMigration(database, dbMigrateFile, dbMigrateWalFile)
                             newInstance.complete(database)
                             return database
                         } catch (e: Exception) {
+                            clearInstance(database, false)
                             database.close()
                             throw e
                         }
