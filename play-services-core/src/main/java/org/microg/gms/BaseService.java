@@ -22,6 +22,8 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleService;
+
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 import com.google.android.gms.common.internal.IGmsServiceBroker;
@@ -31,7 +33,7 @@ import org.microg.gms.common.GmsService;
 import java.util.Arrays;
 import java.util.EnumSet;
 
-public abstract class BaseService extends Service {
+public abstract class BaseService extends LifecycleService {
     private final IGmsServiceBroker broker;
     protected final String TAG;
 
@@ -55,6 +57,7 @@ public abstract class BaseService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        super.onBind(intent);
         Log.d(TAG, "onBind: " + intent);
         return broker.asBinder();
     }

@@ -76,6 +76,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        android:forceQueryable="true"
         android:allowBackup="false"
         android:extractNativeLibs="true"
         android:icon="@mipmap/ic_launcher"
@@ -115,8 +116,15 @@
 
         <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
             <intent-filter>
-                <action android:name="android.server.checkin.CHECKIN" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.BACKGROUND_DATA_SETTING_CHANGED" />
+
+                <action android:name="android.server.checkin.CHECKIN" />
+
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
             </intent-filter>
             <intent-filter>
                 <action android:name="com.mgoogle.android.c2dm.intent.RECEIVE" />
@@ -331,12 +339,20 @@
         </activity>
 
 
-        <!-- Other -->
+        <!-- Phenotype -->
 
         <provider
             android:name="org.microg.gms.phenotype.ConfigurationProvider"
             android:authorities="com.mgoogle.android.gms.phenotype"
             android:exported="true" />
+
+        <service android:name="org.microg.gms.phenotype.PhenotypeService">
+            <intent-filter>
+                <action android:name="com.mgoogle.android.gms.phenotype.service.START" />
+            </intent-filter>
+        </service>
+
+        <!-- Other -->
 
         <service
             android:name="org.microg.gms.measurement.MeasurementBrokerService"
@@ -384,7 +400,6 @@
                 <action android:name="com.google.android.gms.cast_mirroring.service.START" />
                 <action android:name="com.google.android.gms.common.service.START" />
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
-                <action android:name="com.mgoogle.android.gms.phenotype.service.START" />
                 <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
                 <action android:name="com.google.android.gms.gass.START" />
             </intent-filter>

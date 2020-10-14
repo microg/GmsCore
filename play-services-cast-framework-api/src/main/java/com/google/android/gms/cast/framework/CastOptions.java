@@ -23,33 +23,26 @@ import com.google.android.gms.cast.framework.media.CastMediaOptions;
 import com.google.android.gms.cast.LaunchOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CastOptions extends AutoSafeParcelable {
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
-
-    @SafeParceled(2)
+    @Field(2)
     private String receiverApplicationId;
-
-    @SafeParceled(3)
+    @Field(3)
     private ArrayList<String> supportedNamespaces;
-
-    @SafeParceled(4)
+    @Field(4)
     private boolean stopReceiverApplicationWhenEndingSession;
-
-    @SafeParceled(5)
+    @Field(5)
     private LaunchOptions launchOptions;
-
-    @SafeParceled(6)
+    @Field(6)
     private boolean resumeSavedSession;
-
-    @SafeParceled(7)
+    @Field(7)
     private CastMediaOptions castMediaOptions;
-
-    @SafeParceled(8)
+    @Field(8)
     private boolean enableReconnectionService;
-
-    @SafeParceled(9)
+    @Field(9)
     private double volumeDeltaBeforeIceCreamSandwich;
 
     public String getReceiverApplicationId() {
@@ -60,5 +53,5 @@ public class CastOptions extends AutoSafeParcelable {
         return this.launchOptions;
     }
 
-    public static Creator<CastOptions> CREATOR = new AutoCreator<>(CastOptions.class);
+    public static Creator<CastOptions> CREATOR = new AutoCreator<CastOptions>(CastOptions.class);
 }
