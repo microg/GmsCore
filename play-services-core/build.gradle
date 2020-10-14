@@ -37,13 +37,13 @@ dependencies {
 
     // AndroidX UI
     implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
+    implementation "androidx.mediarouter:mediarouter:1.2.0"
     implementation "androidx.preference:preference:$preferenceVersion"
 
-    implementation "androidx.navigation:navigation-fragment:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui:$navigationVersion"
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-fragment:2.3.1"
+    implementation "androidx.navigation:navigation-ui:2.3.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.1"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.1"
 
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10'
