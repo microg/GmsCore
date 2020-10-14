@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
@@ -28,10 +27,10 @@ import androidx.legacy.content.WakefulBroadcastReceiver;
 import org.microg.gms.common.ForegroundServiceContext;
 
 import static org.microg.gms.checkin.CheckinService.EXTRA_FORCE_CHECKIN;
+import static org.microg.gms.checkin.CheckinService.REGULAR_CHECKIN_INTERVAL;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";
-    private static final long REGULAR_CHECKIN_INTERVAL = 12 * 60 * 60 * 1000; // 12 hours
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -42,6 +41,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
             if (CheckinPrefs.get(context).isEnabled() || force) {
                 if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()) &&
                         LastCheckinInfo.read(context).lastCheckin > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL) {
+                    CheckinService.schedule(context);
                     return;
                 }
 
