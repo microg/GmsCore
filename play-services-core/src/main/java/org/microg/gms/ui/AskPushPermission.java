@@ -1,9 +1,11 @@
 package org.microg.gms.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
@@ -20,13 +22,15 @@ import static org.microg.gms.gcm.GcmConstants.EXTRA_KID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_PENDING_INTENT;
 
 public class AskPushPermission extends FragmentActivity {
+    public static final String EXTRA_REQUESTED_PACKAGE = "package";
+    public static final String EXTRA_RESULT_RECEIVER = "receiver";
+    public static final String EXTRA_EXPLICIT = "explicit";
 
     private GcmDatabase database;
 
     private String packageName;
-    private Intent intent;
+    private ResultReceiver resultReceiver;
     private boolean answered;
-    private String requestId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,18 +38,17 @@ public class AskPushPermission extends FragmentActivity {
 
         database = new GcmDatabase(this);
 
-        packageName = getIntent().getStringExtra(EXTRA_APP);
-        intent = getIntent().getParcelableExtra(EXTRA_PENDING_INTENT);
-
-        requestId = null;
-        if (intent.hasExtra(EXTRA_KID) && intent.getStringExtra(EXTRA_KID).startsWith("|")) {
-            String[] kid = intent.getStringExtra(EXTRA_KID).split("\\|");
-            if (kid.length >= 3 && "ID".equals(kid[1])) {
-                requestId = kid[2];
-            }
+        packageName = getIntent().getStringExtra(EXTRA_REQUESTED_PACKAGE);
+        resultReceiver = getIntent().getParcelableExtra(EXTRA_RESULT_RECEIVER);
+        if (packageName == null || resultReceiver == null) {
+            answered = true;
+            finish();
+            return;
         }
 
         if (database.getApp(packageName) != null) {
+            resultReceiver.send(Activity.RESULT_OK, Bundle.EMPTY);
+            answered = true;
             finish();
             return;
         }
@@ -64,12 +67,9 @@ public class AskPushPermission extends FragmentActivity {
                     if (answered) return;
                     database.noteAppKnown(packageName, true);
                     answered = true;
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            PushRegisterService.registerAndReply(AskPushPermission.this, database, intent, packageName, requestId);
-                        }
-                    }).start();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(EXTRA_EXPLICIT, true);
+                    resultReceiver.send(Activity.RESULT_OK, bundle);
                     finish();
                 }
             });
@@ -79,7 +79,9 @@ public class AskPushPermission extends FragmentActivity {
                     if (answered) return;
                     database.noteAppKnown(packageName, false);
                     answered = true;
-                    PushRegisterService.replyNotAvailable(AskPushPermission.this, intent, packageName, requestId);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(EXTRA_EXPLICIT, true);
+                    resultReceiver.send(Activity.RESULT_CANCELED, bundle);
                     finish();
                 }
             });
@@ -92,8 +94,7 @@ public class AskPushPermission extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (!answered) {
-            PushRegisterService.replyNotAvailable(AskPushPermission.this, intent, packageName, requestId);
-            answered = true;
+            resultReceiver.send(Activity.RESULT_CANCELED, Bundle.EMPTY);
         }
         database.close();
     }

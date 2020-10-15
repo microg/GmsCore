@@ -31,11 +31,11 @@
             android:id="@+id/desc_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dip"
-            android:paddingLeft="20dip"
-            android:paddingRight="16dip"
             android:paddingStart="20dip"
-            android:paddingTop="18dip">
+            android:paddingLeft="20dip"
+            android:paddingTop="18dip"
+            android:paddingEnd="16dip"
+            android:paddingRight="16dip">
 
             <LinearLayout
                 android:id="@+id/perm_desc_root"
@@ -57,8 +57,8 @@
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="16dip"
                     android:paddingStart="16dip"
+                    android:paddingLeft="16dip"
                     android:text="Allow {appName} to register for push notifications?"
                     android:textSize="20sp">
                 </TextView>
@@ -70,61 +70,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingEnd="16dip"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:paddingStart="20dip"
             android:paddingLeft="20dip"
-            android:paddingRight="16dip"
-            android:paddingStart="20dip">
+            android:paddingEnd="16dip"
+            android:paddingRight="16dip">
 
-            <android.support.v7.widget.ButtonBarLayout
-                android:id="@+id/button_group"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/permission_deny_button"
+                style="?attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:orientation="horizontal"
-                android:paddingBottom="4dp"
-                android:paddingLeft="6dip"
-                android:paddingStart="6dip"
-                android:paddingTop="4dp">
+                android:text="@string/deny">
+            </Button>
 
-                <TextView
-                    android:id="@+id/current_page_text"
-                    style="?android:attr/textAppearanceSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingEnd="12dp"
-                    android:paddingRight="12dp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:visibility="invisible">
-                </TextView>
-
-                <android.support.v4.widget.Space
-                    android:id="@*android:id/spacer"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:visibility="invisible">
-                </android.support.v4.widget.Space>
-
-                <Button
-                    android:id="@+id/permission_deny_button"
-                    style="?attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/deny">
-                </Button>
-
-                <Button
-                    android:id="@+id/permission_allow_button"
-                    style="?attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/allow">
-                </Button>
-
-            </android.support.v7.widget.ButtonBarLayout>
+            <Button
+                android:id="@+id/permission_allow_button"
+                style="?attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/allow">
+            </Button>
 
         </LinearLayout>
 
