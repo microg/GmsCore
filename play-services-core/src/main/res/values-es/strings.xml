@@ -115,6 +115,7 @@ Esto puede tardar unos minutos."</string>
     <string name="gcm_network_state_connected">Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Permitir registro</string>
+    <string name="pref_push_app_allow_register_ask">Permita que {appName} se registre para notificaciones push?</string>
     <string name="pref_push_app_allow_register_summary">Permita la app para registrarse para notificaciones push.</string>
     <string name="pref_push_app_wake_for_delivery_title">Iniciar app en un mensaje push</string>
     <string name="pref_push_app_wake_for_delivery_summary">Iniciar app en segundo plano para recibir mensajes push entrantes.</string>

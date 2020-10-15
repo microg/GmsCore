@@ -113,6 +113,7 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="gcm_network_state_connected">Terhubung sejak <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Izinkan registrasi</string>
+    <string name="pref_push_app_allow_register_ask">Izinkan {appName} untuk mendaftar pemberitahuan push?</string>
     <string name="pref_push_app_allow_register_summary">Izinkan aplikasi untuk meregistrasi untuk notifikasi push.</string>
     <string name="pref_push_app_wake_for_delivery_title">Mulai aplikasi dalam pesan push</string>
     <string name="pref_push_app_wake_for_delivery_summary">Mulai aplikasi saat di background untuk menerima pesan push yang akan datang.</string>
