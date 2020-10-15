@@ -18,13 +18,16 @@ package org.microg.gms.checkin;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.ResultReceiver;
 import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
@@ -38,11 +41,15 @@ import org.microg.gms.people.PeopleManager;
 
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
+    public static final long MAX_VALID_CHECKIN_AGE = 24 * 60 * 60 * 1000; // 12 hours
     public static final long REGULAR_CHECKIN_INTERVAL = 12 * 60 * 60 * 1000; // 12 hours
     public static final long BACKUP_CHECKIN_DELAY = 3 * 60 * 60 * 1000; // 3 hours
     public static final String BIND_ACTION = "com.google.android.gms.checkin.BIND_TO_SERVICE";
     public static final String EXTRA_FORCE_CHECKIN = "force";
+    @Deprecated
     public static final String EXTRA_CALLBACK_INTENT = "callback";
+    public static final String EXTRA_RESULT_RECEIVER = "receiver";
+    public static final String EXTRA_NEW_CHECKIN_TIME = "checkin_time";
 
     private ICheckinService iface = new ICheckinService.Stub() {
         @Override
@@ -71,6 +78,14 @@ public class CheckinService extends IntentService {
                     McsService.scheduleReconnect(this);
                     if (intent.hasExtra(EXTRA_CALLBACK_INTENT)) {
                         startService((Intent) intent.getParcelableExtra(EXTRA_CALLBACK_INTENT));
+                    }
+                    if (intent.hasExtra(EXTRA_RESULT_RECEIVER)) {
+                        ResultReceiver receiver = intent.getParcelableExtra(EXTRA_RESULT_RECEIVER);
+                        if (receiver != null) {
+                            Bundle bundle = new Bundle();
+                            bundle.putLong(EXTRA_NEW_CHECKIN_TIME, info.lastCheckin);
+                            receiver.send(Activity.RESULT_OK, bundle);
+                        }
                     }
                 }
             }

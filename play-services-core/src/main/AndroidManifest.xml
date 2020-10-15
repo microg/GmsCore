@@ -118,9 +118,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.conn.BACKGROUND_DATA_SETTING_CHANGED" />
-
+                
                 <action android:name="android.server.checkin.CHECKIN" />
 
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -314,7 +312,7 @@
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert" />
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
 
         <activity
             android:name="org.microg.gms.ui.AboutFragment$AsActivity"

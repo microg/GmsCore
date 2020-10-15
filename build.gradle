@@ -35,7 +35,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:${androidBuildGradleVersion}"
+        classpath "com.android.tools.build:gradle:4.1.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.squareup.wire:wire-gradle-plugin:$wireVersion"
     }

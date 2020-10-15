@@ -50,7 +50,6 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
         }
     }
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
         try {

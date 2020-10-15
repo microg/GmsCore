@@ -31,20 +31,20 @@ import static org.microg.gms.checkin.CheckinService.REGULAR_CHECKIN_INTERVAL;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";
+    private static boolean registered = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
             boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
+            
             if (CheckinPrefs.get(context).isEnabled() || force) {
-                if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction()) &&
-                        LastCheckinInfo.read(context).lastCheckin > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL) {
+                if (LastCheckinInfo.read(context).lastCheckin > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL && !force) {
                     CheckinService.schedule(context);
                     return;
                 }
 
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected() || force) {
                     Intent subIntent = new Intent(context, CheckinService.class);
