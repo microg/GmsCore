@@ -24,12 +24,19 @@ val currentDeviceInfo: DeviceInfo
     get() {
         var deviceInfo = knownDeviceInfo
         if (deviceInfo == null) {
+            // Note: Custom ROMs sometimes have slightly different model information, so we have some flexibility for those
             val byOem = allDeviceInfos.filter { it.oem.equalsIgnoreCase(Build.MANUFACTURER) }
+            val byDevice = allDeviceInfos.filter { it.device.equalsIgnoreCase(Build.DEVICE) }
+            val byModel = allDeviceInfos.filter { it.model.equalsIgnoreCase(Build.MODEL) }
             val exactMatch = byOem.find { it.device.equalsIgnoreCase(Build.DEVICE) && it.model.equalsIgnoreCase(Build.MODEL) }
             deviceInfo = when {
                 exactMatch != null -> {
                     // Exact match, use provided confidence
                     exactMatch
+                }
+                byModel.isNotEmpty() || byDevice.isNotEmpty() -> {
+                    // We have data from "sister devices", that's way better than taking the OEM average
+                    averageCurrentDeviceInfo(Build.MANUFACTURER, Build.DEVICE, Build.MODEL, (byDevice + byModel).distinct(), CalibrationConfidence.MEDIUM)
                 }
                 byOem.isNotEmpty() -> {
                     // Fallback to OEM average
