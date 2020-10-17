@@ -19,6 +19,7 @@ import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import kotlinx.coroutines.*
 import okio.ByteString
+import org.json.JSONObject
 import java.io.File
 import java.lang.Runnable
 import java.nio.ByteBuffer
@@ -160,9 +161,6 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         delete(TABLE_ADVERTISEMENTS, null, null)
         delete(TABLE_TEK_CHECK_FILE_MATCH, null, null)
         update(TABLE_TEK_CHECK_SINGLE, ContentValues().apply {
-            put("matched", 0)
-        }, null, null)
-        update(TABLE_TEK_CHECK_FILE, ContentValues().apply {
             put("matched", 0)
         }, null, null)
     }
@@ -656,6 +654,34 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                 null
             }
         }
+    }
+
+    fun countDiagnosisKeysInvolved(tid: Long): Long = readableDatabase.run {
+        val fromFile = rawQuery("SELECT SUM($TABLE_TEK_CHECK_FILE.keys) AS keys FROM $TABLE_TEK_CHECK_FILE_TOKEN JOIN $TABLE_TEK_CHECK_FILE ON $TABLE_TEK_CHECK_FILE_TOKEN.tcfid = $TABLE_TEK_CHECK_FILE.tcfid WHERE $TABLE_TEK_CHECK_FILE_TOKEN.tid = $tid;", null).use { cursor ->
+            if (cursor.moveToNext()) {
+                cursor.getLong(0)
+            } else {
+                0
+            }
+        }
+        val single = rawQuery("SELECT COUNT(*) as keys FROM $TABLE_TEK_CHECK_SINGLE_TOKEN WHERE $TABLE_TEK_CHECK_SINGLE_TOKEN.tid = $tid;", null).use { cursor ->
+            if (cursor.moveToNext()) {
+                cursor.getLong(0)
+            } else {
+                0
+            }
+        }
+        return fromFile + single
+    }
+
+    fun methodUsageHistogram(packageName: String): List<Pair<String, Int>> = readableDatabase.run {
+        val list = arrayListOf<Pair<String, Int>>()
+        rawQuery("SELECT method, COUNT(*) AS count FROM $TABLE_APP_LOG WHERE package = ? GROUP BY method;", arrayOf(packageName)).use { cursor ->
+            while (cursor.moveToNext()) {
+                list.add(cursor.getString(0) to cursor.getInt(1))
+            }
+        }
+        list.sortedByDescending { it.second }
     }
 
     private fun ensureTemporaryExposureKey(): TemporaryExposureKey = writableDatabase.let { database ->

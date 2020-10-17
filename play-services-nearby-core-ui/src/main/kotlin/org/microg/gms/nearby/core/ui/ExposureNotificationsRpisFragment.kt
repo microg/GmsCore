@@ -6,9 +6,15 @@
 package org.microg.gms.nearby.core.ui
 
 import android.annotation.TargetApi
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.db.williamchart.data.Scale
@@ -23,6 +29,7 @@ import kotlin.math.roundToLong
 class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     private lateinit var histogramCategory: PreferenceCategory
     private lateinit var histogram: BarChartPreference
+    private lateinit var deleteAll: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications_rpis)
@@ -31,6 +38,22 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     override fun onBindPreferences() {
         histogramCategory = preferenceScreen.findPreference("prefcat_exposure_rpi_histogram") ?: histogramCategory
         histogram = preferenceScreen.findPreference("pref_exposure_rpi_histogram") ?: histogram
+        deleteAll = preferenceScreen.findPreference("pref_exposure_rpi_delete_all") ?: deleteAll
+        deleteAll.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.pref_exposure_rpi_delete_all_title)
+                    .setView(R.layout.exposure_notification_confirm_delete)
+                    .setPositiveButton(R.string.pref_exposure_rpi_delete_all_warning_confirm_button) { _, _ ->
+                        lifecycleScope.launchWhenStarted {
+                            ExposureDatabase.with(requireContext()) { it.deleteAllCollectedAdvertisements() }
+                            updateChart()
+                        }
+                    }
+                    .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                    .create()
+                    .show()
+            true
+        }
     }
 
     override fun onResume() {
@@ -66,6 +89,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
                 val totalRpiCount = database.totalRpiCount
                 totalRpiCount to map
             }
+            deleteAll.isEnabled = totalRpiCount != 0L
             histogramCategory.title = getString(R.string.prefcat_exposure_rpis_histogram_title, totalRpiCount)
             histogram.labelsFormatter = { it.roundToInt().toString() }
             histogram.scale = Scale(0f, rpiHistogram.values.max()?.coerceAtLeast(0.1f) ?: 0.1f)

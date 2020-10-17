@@ -14,8 +14,16 @@
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference
-            android:key="pref_exposure_app_checks"
+            android:key="pref_exposure_app_report"
             android:selectable="false"
-            tools:summary="7 checks in past 14 days\nLast check: 3 hours ago\nLast report: 2 matches, latest 3 days ago" />
+            tools:summary="@string/pref_exposure_app_last_report_summary_encounters_no"
+            tools:title="@string/pref_exposure_app_last_report_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:key="pref_exposure_app_api_usage"
+            android:selectable="false"
+            android:title="@string/pref_exposure_app_api_usage_title"
+            tools:summary="@string/pref_exposure_app_api_usage_summary_line" />
     </PreferenceCategory>
 </PreferenceScreen>
