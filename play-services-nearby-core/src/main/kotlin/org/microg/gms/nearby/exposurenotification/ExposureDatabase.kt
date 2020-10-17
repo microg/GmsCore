@@ -129,7 +129,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     }
 
     fun noteAdvertisement(rpi: ByteArray, aem: ByteArray, rssi: Int, timestamp: Long = Date().time) = writableDatabase.run {
-        val update = compileStatement("UPDATE $TABLE_ADVERTISEMENTS SET rssi = ((rssi * duration) + (? * (? - timestamp - duration)) / (? - timestamp)), duration = (? - timestamp) WHERE rpi = ? AND timestamp > ? AND timestamp < ?").run {
+        val update = compileStatement("UPDATE $TABLE_ADVERTISEMENTS SET rssi = ((rssi * duration) + (? * (? - timestamp - duration))) / (? - timestamp), duration = (? - timestamp) WHERE rpi = ? AND timestamp > ? AND timestamp < ?").run {
             bindLong(1, rssi.toLong())
             bindLong(2, timestamp)
             bindLong(3, timestamp)
