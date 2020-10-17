@@ -78,6 +78,12 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_tcfid ON $TABLE_TEK_CHECK_FILE_MATCH(tcfid);")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_key ON $TABLE_TEK_CHECK_FILE_MATCH(keyData, rollingStartNumber, rollingPeriod);")
         }
+        if (oldVersion < 6) {
+            Log.d(TAG, "Fixing invalid rssi values from previous database version")
+            // There's no bluetooth chip with a sensitivity that would result in rssi -200, so this would be invalid.
+            // RSSI of -100 is already extremely low and thus is a good "default" value
+            db.execSQL("UPDATE $TABLE_ADVERTISEMENTS SET rssi = -100 WHERE rssi < -200;")
+        }
         Log.d(TAG, "Finished database upgrade")
     }
 
@@ -700,7 +706,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 5
+        private const val DB_VERSION = 6
         private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"
