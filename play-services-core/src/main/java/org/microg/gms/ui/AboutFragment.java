@@ -29,7 +29,7 @@ public class AboutFragment extends AbstractAboutFragment {
 
     @Override
     protected void collectLibraries(List<AbstractAboutFragment.Library> libraries) {
-        if (BuildConfig.FLAVOR.contains("mapbox")) {
+        if (BuildConfig.FLAVOR.toLowerCase().contains("mapbox")) {
             libraries.add(new AbstractAboutFragment.Library("com.mapbox.mapboxsdk", "Mapbox Maps SDK for Android", "Three-Clause BSD, Mapbox"));
         } else {
             libraries.add(new AbstractAboutFragment.Library("org.oscim.android", "V™", "GNU LGPLv3, Hannes Janetzek and devemux86"));
@@ -40,6 +40,7 @@ public class AboutFragment extends AbstractAboutFragment {
         libraries.add(new AbstractAboutFragment.Library("org.microg.safeparcel", "SafeParcel", "Apache License 2.0, microG Team"));
         libraries.add(new AbstractAboutFragment.Library("org.slf4j", "SLF4J", "MIT License, QOS.ch"));
         libraries.add(new AbstractAboutFragment.Library("org.microg.nlp.service", "UnifiedNlp", "Apache License 2.0, microG Team"));
+        libraries.add(new AbstractAboutFragment.Library("com.android.volley", "Volley", "Apache License 2.0, The Android Open Source Project"));
         libraries.add(new AbstractAboutFragment.Library("org.microg.wearable", "Wearable", "Apache License 2.0, microG Team"));
         libraries.add(new AbstractAboutFragment.Library("com.squareup.wire", "Wire Protocol Buffers", "Apache License 2.0, Square Inc."));
     }
