@@ -36,7 +36,6 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     public static final String PREF_FULL_LOG = "gcm_full_log";
     public static final String PREF_LAST_PERSISTENT_ID = "gcm_last_persistent_id";
     public static final String PREF_CONFIRM_NEW_APPS = "gcm_confirm_new_apps";
-    public static final String START_PREF_ENABLE_GCM = "start_gcm_enable_mcs_service";
     public static final String PREF_ENABLE_GCM = "gcm_enable_mcs_service";
 
     public static final String PREF_NETWORK_MOBILE = "gcm_network_mobile";
