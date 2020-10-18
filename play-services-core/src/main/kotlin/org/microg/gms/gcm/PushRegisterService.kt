@@ -72,7 +72,7 @@ private suspend fun ensureAppRegistrationAllowed(context: Context, database: Gcm
         if (!accepted) {
             throw RuntimeException("Push permission not granted to app")
         }
-    } else if (!app.allowRegister) {
+    } else if (app?.allowRegister == false) {
         throw RuntimeException("Push permission not granted to app")
     }
 }
