@@ -10,9 +10,9 @@ import android.util.Log
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
-import com.google.android.gms.phenotype.Configurations
-import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks
-import com.google.android.gms.phenotype.internal.IPhenotypeService
+import com.mgoogle.android.gms.phenotype.Configurations
+import com.mgoogle.android.gms.phenotype.internal.IPhenotypeCallbacks
+import com.mgoogle.android.gms.phenotype.internal.IPhenotypeService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 

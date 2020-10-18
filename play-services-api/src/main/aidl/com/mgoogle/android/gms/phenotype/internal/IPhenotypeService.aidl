@@ -1,6 +1,6 @@
-package com.google.android.gms.phenotype.internal;
+package com.mgoogle.android.gms.phenotype.internal;
 
-import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks;
+import com.mgoogle.android.gms.phenotype.internal.IPhenotypeCallbacks;
 
 interface IPhenotypeService {
     void register(IPhenotypeCallbacks callbacks, String p1, int p2, in String[] p3, in byte[] p4) = 0;
