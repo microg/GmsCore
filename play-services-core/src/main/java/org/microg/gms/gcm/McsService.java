@@ -561,6 +561,7 @@ public class McsService extends Service implements Handler.Callback {
 
         if (receiverPermission == null) {
             // Without receiver permission, we only restrict by package name
+            if (app.wakeForDelivery) addPowerSaveTempWhitelistApp(packageName);
             logd(this, "Deliver message to all receivers in package " + packageName);
             intent.setPackage(packageName);
             sendOrderedBroadcast(intent, null);
@@ -573,18 +574,7 @@ public class McsService extends Service implements Handler.Callback {
                     Intent targetIntent = new Intent(intent);
                     targetIntent.setComponent(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
                     if (resolveInfo.activityInfo.packageName.equals(packageName)) {
-                        // Wake up the package itself
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && app.wakeForDelivery) {
-                            try {
-                                if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
-                                    int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
-                                    logd(this, "Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
-                                    addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
-                                }
-                            } catch (Exception e) {
-                                Log.w(TAG, e);
-                            }
-                        }
+                        if (app.wakeForDelivery) addPowerSaveTempWhitelistApp(packageName);
                         // We don't need receiver permission for our own package
                         logd(this, "Deliver message to own receiver " + resolveInfo);
                         sendOrderedBroadcast(targetIntent, null);
@@ -594,6 +584,20 @@ public class McsService extends Service implements Handler.Callback {
                         sendOrderedBroadcast(targetIntent, receiverPermission);
                     }
                 }
+            }
+        }
+    }
+
+    private void addPowerSaveTempWhitelistApp(String packageName) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
+                    int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
+                    logd(this, "Adding app " + packageName + " for userId " + userId + " to the temp whitelist");
+                    addPowerSaveTempWhitelistAppMethod.invoke(deviceIdleController, packageName, 10000, userId, "GCM Push");
+                }
+            } catch (Exception e) {
+                Log.w(TAG, e);
             }
         }
     }
