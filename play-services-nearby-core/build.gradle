@@ -24,7 +24,7 @@ dependencies {
 
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.1'
 }
 
 android {
