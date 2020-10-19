@@ -15,9 +15,12 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 dependencies {
     api project(':play-services-basement')
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 android {
@@ -37,4 +40,7 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+}
+repositories {
+    mavenCentral()
 }

@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 
 String getMyVersionName() {
     def stdout = new ByteArrayOutputStream()
@@ -44,4 +45,9 @@ android {
 dependencies {
     api project(':play-services-base')
     api project(':play-services-cast-api')
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

@@ -4,6 +4,7 @@
  */
 
 buildscript {
+    ext.kotlin_version = '1.4.10'
     ext.nlpVersion = '2.0-alpha4'
     ext.remoteDroidGuardVersion = '0.1.2'
     ext.safeParcelVersion = '1.6.0'
@@ -45,6 +46,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$androidBuildGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.squareup.wire:wire-gradle-plugin:$wireVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 

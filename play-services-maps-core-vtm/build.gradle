@@ -15,6 +15,7 @@
  */
 
 apply plugin: "com.android.library"
+apply plugin: 'kotlin-android'
 
 dependencies {
     implementation project(":play-services-api")
@@ -30,6 +31,8 @@ dependencies {
     implementation project(":play-services-maps-core-vtm:vtm-microg-theme")
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 def execResult(...args) {
@@ -76,4 +79,7 @@ android {
 
 if (file("user.gradle").exists()) {
     apply from: "user.gradle"
+}
+repositories {
+    mavenCentral()
 }
