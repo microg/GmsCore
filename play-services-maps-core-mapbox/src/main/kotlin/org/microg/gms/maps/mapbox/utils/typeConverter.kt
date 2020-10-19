@@ -51,6 +51,8 @@ fun ICancelableCallback.toMapbox(): MapboxMap.CancelableCallback =
 
 fun Bundle.toMapbox(): Bundle {
     val newBundle = Bundle(this)
+    val oldLoader = newBundle.classLoader
+    newBundle.classLoader = GmsLatLng::class.java.classLoader
     for (key in newBundle.keySet()) {
         val value = newBundle.get(key)
         when (value) {
@@ -60,6 +62,7 @@ fun Bundle.toMapbox(): Bundle {
             is Bundle -> newBundle.putBundle(key, value.toMapbox())
         }
     }
+    newBundle.classLoader = oldLoader
     return newBundle
 }
 
@@ -72,6 +75,8 @@ fun CameraPosition.toGms(): GmsCameraPosition =
 
 fun Bundle.toGms(): Bundle {
     val newBundle = Bundle(this)
+    val oldLoader = newBundle.classLoader
+    newBundle.classLoader = LatLng::class.java.classLoader
     for (key in newBundle.keySet()) {
         val value = newBundle.get(key)
         when (value) {
@@ -81,6 +86,7 @@ fun Bundle.toGms(): Bundle {
             is Bundle -> newBundle.putBundle(key, value.toGms())
         }
     }
+    newBundle.classLoader = oldLoader
     return newBundle
 }
 
