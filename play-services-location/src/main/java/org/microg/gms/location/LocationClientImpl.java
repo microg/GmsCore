@@ -176,6 +176,6 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
         state = ConnectionState.PSEUDO_CONNECTED;
         Bundle bundle = new Bundle();
         bundle.putBoolean("fallback_to_native_active", true);
-        callbacks.onConnected(bundle);
+        getCallbacks().onConnected(bundle);
     }
 }

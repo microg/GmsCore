@@ -26,7 +26,9 @@ import com.google.android.gms.common.internal.IGmsServiceBroker
 import org.microg.gms.common.GmsService
 import java.util.*
 
-abstract class BaseService(protected val TAG: String, supportedService: GmsService?, vararg supportedServices: GmsService?) : LifecycleService() {
+abstract class BaseService(
+        @JvmField
+        val TAG: String, supportedService: GmsService?, vararg supportedServices: GmsService?) : LifecycleService() {
     private val broker: IGmsServiceBroker
 
     override fun onBind(intent: Intent): IBinder? {
@@ -43,15 +45,14 @@ abstract class BaseService(protected val TAG: String, supportedService: GmsServi
         services.addAll(listOf(*supportedServices))
         broker = object : AbstractGmsServiceBroker(services) {
             @Throws(RemoteException::class)
-            override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+            override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
                 try {
-                    request.extras.keySet() // call to unparcel()
+                    request?.extras?.keySet() // call to unparcel()
                 } catch (e: Exception) {
                     // Sometimes we need to define the correct ClassLoader before unparcel(). Ignore those.
                 }
                 Log.d(TAG, "bound by: $request")
-                this@BaseService.handleServiceRequest(callback, request, service)
-            }
+                this@BaseService.handleServiceRequest(callback, request, service)            }
         }
     }
 }

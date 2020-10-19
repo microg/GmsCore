@@ -13,6 +13,7 @@ import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
+import org.jetbrains.annotations.Nullable;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.common.api.InstantGoogleApiCall;
 import org.microg.gms.common.api.PendingGoogleApiCall;
@@ -26,16 +27,27 @@ public class FusedLocationProviderClient extends GoogleApi<Api.ApiOptions.NoOpti
     }
 
     public Task<Void> flushLocations() {
-        return scheduleTask(new PendingGoogleApiCall<Void, LocationClientImpl>() {
-            @Override
-            public void execute(LocationClientImpl client, TaskCompletionSource<Void> completionSource) {
-                completionSource.setResult(null);
-            }
-        });
+        return scheduleTask((PendingGoogleApiCall<Void, LocationClientImpl>) (client, completionSource) -> completionSource.setResult(null));
     }
 
     public Task<Location> getLastLocation() {
-        return scheduleTask((InstantGoogleApiCall<Location, LocationClientImpl>) LocationClientImpl::getLastLocation);
+
+        return scheduleTask(new InstantGoogleApiCall<Location, LocationClientImpl>() {
+
+            @Override
+            public void execute(LocationClientImpl client, @Nullable TaskCompletionSource<Location> completionSource) {
+                try {
+                    completionSource.setResult(execute(client));
+                } catch (Exception e) {
+                    completionSource.setException(e);
+                }
+            }
+
+            @Override
+            public Location execute(LocationClientImpl client) throws Exception {
+                return client.getLastLocation();
+            }
+        });
     }
 
 

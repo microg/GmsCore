@@ -18,8 +18,6 @@ package org.microg.gms.common
 import android.accounts.Account
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.common.internal.IGmsServiceBroker
-import org.microg.gms.common.api.OnConnectionFailedListener.onConnectionFailed
-import org.microg.gms.common.api.ConnectionCallbacks.onConnected
 import android.os.IInterface
 import org.microg.gms.common.api.ApiClient
 import org.microg.gms.common.GmsClient.ConnectionState
@@ -148,7 +146,7 @@ abstract class GmsClient<I : IInterface?>(
 
     inner class GmsCallbacks : IGmsCallbacks.Stub() {
         @Throws(RemoteException::class)
-        fun onPostInitComplete(statusCode: Int, binder: IBinder?, params: Bundle?) {
+        override fun onPostInitComplete(statusCode: Int, binder: IBinder?, params: Bundle?) {
             synchronized(this@GmsClient) {
                 if (state == ConnectionState.DISCONNECTING) {
                     state = ConnectionState.CONNECTED
@@ -163,12 +161,12 @@ abstract class GmsClient<I : IInterface?>(
         }
 
         @Throws(RemoteException::class)
-        fun onAccountValidationComplete(statusCode: Int, params: Bundle?) {
+        override fun onAccountValidationComplete(statusCode: Int, params: Bundle?) {
             Log.d(TAG, "GmsCallbacks : onAccountValidationComplete")
         }
 
         @Throws(RemoteException::class)
-        fun onPostInitCompleteWithConnectionInfo(statusCode: Int, binder: IBinder?, info: ConnectionInfo?) {
+        override fun onPostInitCompleteWithConnectionInfo(statusCode: Int, binder: IBinder?, info: ConnectionInfo?) {
             onPostInitComplete(statusCode, binder, info?.params)
         }
     }

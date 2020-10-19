@@ -25,7 +25,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.common.Constants
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.nearby.exposurenotification.Constants.*
+import org.microg.gms.nearby.exposurenotification.Constants.ACTION_EXPOSURE_NOT_FOUND
+import org.microg.gms.nearby.exposurenotification.Constants.ACTION_EXPOSURE_STATE_UPDATED
+import org.microg.gms.nearby.exposurenotification.Constants.EXTRA_EXPOSURE_SUMMARY
+import org.microg.gms.nearby.exposurenotification.Constants.EXTRA_TOKEN
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
 import java.io.File

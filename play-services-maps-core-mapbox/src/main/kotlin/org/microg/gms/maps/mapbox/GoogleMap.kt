@@ -51,7 +51,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.*
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
 import org.microg.gms.kotlin.unwrap
-import org.microg.gms.maps.MapsConstants.*
+import org.microg.gms.maps.MapsConstants.MAP_TYPE_HYBRID
+import org.microg.gms.maps.MapsConstants.MAP_TYPE_SATELLITE
+import org.microg.gms.maps.MapsConstants.MAP_TYPE_TERRAIN
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MapContext
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader

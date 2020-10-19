@@ -38,7 +38,7 @@ public class GoogleApiManager {
         if (clientMap.containsKey(apiInstance)) {
             return (A) clientMap.get(apiInstance);
         } else {
-            ApiClient client = api.api.getBuilder().build(api.getOptions(), context, context.getMainLooper(), null, new ConnectionCallback(apiInstance), new ConnectionFailedListener(apiInstance));
+            ApiClient client = api.getAPI().getBuilder().build(api.getOptions(), context, context.getMainLooper(), null, new ConnectionCallback(apiInstance), new ConnectionFailedListener(apiInstance));
             clientMap.put(apiInstance, client);
             waitingApiCallMap.put(apiInstance, new ArrayList<>());
             return (A) client;

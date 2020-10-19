@@ -21,7 +21,15 @@ import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.ForegroundServiceContext
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.common.Utils
-import org.microg.gms.gcm.GcmConstants.*
+import org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER
+import org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION
+import org.microg.gms.gcm.GcmConstants.ACTION_C2DM_UNREGISTER
+import org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE
+import org.microg.gms.gcm.GcmConstants.EXTRA_APP
+import org.microg.gms.gcm.GcmConstants.EXTRA_DELETE
+import org.microg.gms.gcm.GcmConstants.EXTRA_ERROR
+import org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER
+import org.microg.gms.gcm.GcmConstants.EXTRA_SENDER
 import org.microg.gms.ui.AskPushPermission
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume

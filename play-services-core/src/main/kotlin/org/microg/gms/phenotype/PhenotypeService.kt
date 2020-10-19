@@ -19,8 +19,9 @@ import org.microg.gms.common.GmsService
 private const val TAG = "GmsPhenotypeSvc"
 
 class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest?, service: GmsService?) {
-        callback.onPostInitComplete(0, PhenotypeServiceImpl().asBinder(), null)
+
+    override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
+        callback?.onPostInitComplete(0, PhenotypeServiceImpl().asBinder(), null)
     }
 }
 

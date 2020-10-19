@@ -135,7 +135,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     }
 
     @Override
-    public Task<Void> provideDiagnosisKeys(List<File> keyFiles, ExposureConfiguration configuration, String token) {
+    public Task<Void> provideDiagnosisKeys(List<? extends File> keyFiles, ExposureConfiguration configuration, String token) {
         return scheduleTask((PendingGoogleApiCall<Void, ExposureNotificationApiClient>) (client, completionSource) -> {
             List<ParcelFileDescriptor> fds = new ArrayList<>(keyFiles.size());
             for (File kf: keyFiles) {

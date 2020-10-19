@@ -17,9 +17,12 @@ import org.microg.gms.common.api.PendingGoogleApiCall
 @PublicApi
 abstract class GoogleApi<O : ApiOptions?> @PublicApi(exclude = true) protected constructor(
         context: Context?,
-        @field:PublicApi(exclude = true) var api: Api<O>
+        @field:PublicApi(exclude = true)
+        var api: Api<O>
 ) : HasApiKey<O> {
     private val manager: GoogleApiManager = GoogleApiManager.getInstance(context)
+
+    fun getAPI(): Api<O> = api
 
     @PublicApi(exclude = true)
     protected fun <R, A : ApiClient?> scheduleTask(apiCall: PendingGoogleApiCall<R, A>?): Task<R> {

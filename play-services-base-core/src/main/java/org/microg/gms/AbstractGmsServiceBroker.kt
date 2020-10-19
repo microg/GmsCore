@@ -35,8 +35,8 @@ abstract class AbstractGmsServiceBroker(
 ) : IGmsServiceBroker.Stub() {
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getPlusService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                       authPackage: String?, scopes: Array<String>?, accountName: String?, params: Bundle?) {
+    override fun getPlusService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                authPackage: String?, scopes: Array<String>?, accountName: String?, params: Bundle?) {
         val extras = params ?: Bundle()
         extras.putString("auth_package", authPackage)
         callGetService(GmsService.PLUS, callback, versionCode, packageName, extras, accountName, scopes)
@@ -44,56 +44,56 @@ abstract class AbstractGmsServiceBroker(
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getPanoramaService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                           params: Bundle?) {
+    override fun getPanoramaService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                    params: Bundle?) {
         callGetService(GmsService.PANORAMA, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getAppDataSearchService(callback: IGmsCallbacks, versionCode: Int, packageName: String?) {
+    override fun getAppDataSearchService(callback: IGmsCallbacks, versionCode: Int, packageName: String?) {
         callGetService(GmsService.INDEX, callback, versionCode, packageName)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getWalletService(callback: IGmsCallbacks, versionCode: Int) {
+    override fun getWalletService(callback: IGmsCallbacks, versionCode: Int) {
         getWalletServiceWithPackageName(callback, versionCode, null)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getPeopleService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                         params: Bundle?) {
+    override fun getPeopleService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                  params: Bundle?) {
         callGetService(GmsService.PEOPLE, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getReportingService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                            params: Bundle?) {
+    override fun getReportingService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                     params: Bundle?) {
         callGetService(GmsService.LOCATION_REPORTING, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getLocationService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                           params: Bundle?) {
+    override fun getLocationService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                    params: Bundle?) {
         callGetService(GmsService.LOCATION, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getGoogleLocationManagerService(callback: IGmsCallbacks, versionCode: Int,
-                                        packageName: String?, params: Bundle?) {
+    override fun getGoogleLocationManagerService(callback: IGmsCallbacks, versionCode: Int,
+                                                 packageName: String?, params: Bundle?) {
         callGetService(GmsService.LOCATION_MANAGER, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getGamesService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                        accountName: String?, scopes: Array<String>?, gamePackageName: String?,
-                        popupWindowToken: IBinder?, desiredLocale: String?, params: Bundle?) {
+    override fun getGamesService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                 accountName: String?, scopes: Array<String>?, gamePackageName: String?,
+                                 popupWindowToken: IBinder?, desiredLocale: String?, params: Bundle?) {
         val extras = params ?: Bundle()
         extras.putString("com.google.android.gms.games.key.gamePackageName", gamePackageName)
         extras.putString("com.google.android.gms.games.key.desiredLocale", desiredLocale)
@@ -103,111 +103,111 @@ abstract class AbstractGmsServiceBroker(
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getAppStateService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                           accountName: String?, scopes: Array<String>?) {
+    override fun getAppStateService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                    accountName: String?, scopes: Array<String>?) {
         callGetService(GmsService.APPSTATE, callback, versionCode, packageName, null, accountName, scopes)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getPlayLogService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                          params: Bundle?) {
+    override fun getPlayLogService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                   params: Bundle?) {
         callGetService(GmsService.PLAY_LOG, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getAdMobService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                        params: Bundle?) {
+    override fun getAdMobService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                 params: Bundle?) {
         callGetService(GmsService.ADREQUEST, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getDroidGuardService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                             params: Bundle?) {
+    override fun getDroidGuardService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                      params: Bundle?) {
         callGetService(GmsService.DROIDGUARD, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getLockboxService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                          params: Bundle?) {
+    override fun getLockboxService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                   params: Bundle?) {
         callGetService(GmsService.LOCKBOX, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getCastMirroringService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                                params: Bundle?) {
+    override fun getCastMirroringService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                         params: Bundle?) {
         callGetService(GmsService.CAST_MIRRORING, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getNetworkQualityService(callback: IGmsCallbacks, versionCode: Int,
-                                 packageName: String?, params: Bundle?) {
+    override fun getNetworkQualityService(callback: IGmsCallbacks, versionCode: Int,
+                                          packageName: String?, params: Bundle?) {
         callGetService(GmsService.NETWORK_QUALITY, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getGoogleIdentityService(callback: IGmsCallbacks, versionCode: Int,
-                                 packageName: String?, params: Bundle?) {
+    override fun getGoogleIdentityService(callback: IGmsCallbacks, versionCode: Int,
+                                          packageName: String?, params: Bundle?) {
         callGetService(GmsService.ACCOUNT, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getGoogleFeedbackService(callback: IGmsCallbacks, versionCode: Int,
-                                 packageName: String?, params: Bundle?) {
+    override fun getGoogleFeedbackService(callback: IGmsCallbacks, versionCode: Int,
+                                          packageName: String?, params: Bundle?) {
         callGetService(GmsService.FEEDBACK, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getCastService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                       binder: IBinder?, params: Bundle?) {
+    override fun getCastService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                binder: IBinder?, params: Bundle?) {
         callGetService(GmsService.CAST, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getDriveService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                        scopes: Array<String>?, accountName: String?, params: Bundle?) {
+    override fun getDriveService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                 scopes: Array<String>?, accountName: String?, params: Bundle?) {
         callGetService(GmsService.DRIVE, callback, versionCode, packageName, params, accountName, scopes)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getLightweightAppDataSearchService(callback: IGmsCallbacks, versionCode: Int,
-                                           packageName: String?) {
+    override fun getLightweightAppDataSearchService(callback: IGmsCallbacks, versionCode: Int,
+                                                    packageName: String?) {
         callGetService(GmsService.LIGHTWEIGHT_INDEX, callback, versionCode, packageName)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getSearchAdministrationService(callback: IGmsCallbacks, versionCode: Int,
-                                       packageName: String?) {
+    override fun getSearchAdministrationService(callback: IGmsCallbacks, versionCode: Int,
+                                                packageName: String?) {
         callGetService(GmsService.SEARCH_ADMINISTRATION, callback, versionCode, packageName)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getAutoBackupService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
-                             params: Bundle?) {
+    override fun getAutoBackupService(callback: IGmsCallbacks, versionCode: Int, packageName: String?,
+                                      params: Bundle?) {
         callGetService(GmsService.PHOTO_AUTO_BACKUP, callback, versionCode, packageName, params)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getAddressService(callback: IGmsCallbacks, versionCode: Int, packageName: String?) {
+    override fun getAddressService(callback: IGmsCallbacks, versionCode: Int, packageName: String?) {
         callGetService(GmsService.ADDRESS, callback, versionCode, packageName)
     }
 
     @Deprecated("")
     @Throws(RemoteException::class)
-    fun getWalletServiceWithPackageName(callback: IGmsCallbacks, versionCode: Int, packageName: String?) {
+    override fun getWalletServiceWithPackageName(callback: IGmsCallbacks, versionCode: Int, packageName: String?) {
         callGetService(GmsService.WALLET, callback, versionCode, packageName)
     }
 
@@ -243,7 +243,7 @@ abstract class AbstractGmsServiceBroker(
     }
 
     @Throws(RemoteException::class)
-    fun getService(callback: IGmsCallbacks?, request: GetServiceRequest) {
+    override fun getService(callback: IGmsCallbacks?, request: GetServiceRequest) {
         val gmsService = byServiceId(request.serviceId)
         if (supportedServices.contains(gmsService) || supportedServices.contains(GmsService.ANY)) {
             handleServiceRequest(callback, request, gmsService)
@@ -257,12 +257,12 @@ abstract class AbstractGmsServiceBroker(
     abstract fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?)
 
     @Throws(RemoteException::class)
-    fun validateAccount(callback: IGmsCallbacks?, request: ValidateAccountRequest?) {
+    override fun validateAccount(callback: IGmsCallbacks?, request: ValidateAccountRequest?) {
         throw IllegalArgumentException("ValidateAccountRequest not supported")
     }
 
     @Throws(RemoteException::class)
-    fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
         if (super.onTransact(code, data, reply, flags)) return true
         Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
         return false

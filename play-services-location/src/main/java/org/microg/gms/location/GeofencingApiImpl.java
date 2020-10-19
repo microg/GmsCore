@@ -48,7 +48,7 @@ public class GeofencingApiImpl implements GeofencingApi {
     }
 
     @Override
-    public PendingResult<Status> addGeofences(GoogleApiClient client, final List<Geofence> geofences, final PendingIntent pendingIntent) {
+    public PendingResult<Status> addGeofences(GoogleApiClient client, final List<? extends Geofence> geofences, final PendingIntent pendingIntent) {
         final List<ParcelableGeofence> geofenceList = new ArrayList<ParcelableGeofence>();
         for (Geofence geofence : geofences) {
             if (geofence instanceof ParcelableGeofence) geofenceList.add((ParcelableGeofence) geofence);

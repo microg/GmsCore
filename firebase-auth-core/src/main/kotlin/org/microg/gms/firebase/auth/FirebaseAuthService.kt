@@ -70,14 +70,14 @@ private fun Intent.getSmsMessages(): Array<SmsMessage> {
 }
 
 class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
-    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService?) {
-        PackageUtils.getAndCheckCallingPackage(this, request.packageName)
-        val apiKey = request.extras?.getString(Constants.EXTRA_API_KEY)
-        val libraryVersion = request.extras?.getString(Constants.EXTRA_LIBRARY_VERSION)
+    override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
+        PackageUtils.getAndCheckCallingPackage(this, request?.packageName)
+        val apiKey = request?.extras?.getString(Constants.EXTRA_API_KEY)
+        val libraryVersion = request?.extras?.getString(Constants.EXTRA_LIBRARY_VERSION)
         if (apiKey == null || libraryVersion == null) {
-            callback.onPostInitComplete(CommonStatusCodes.DEVELOPER_ERROR, null, null)
+            callback?.onPostInitComplete(CommonStatusCodes.DEVELOPER_ERROR, null, null)
         } else {
-            callback.onPostInitComplete(0, FirebaseAuthServiceImpl(this, lifecycle, request.packageName, libraryVersion, apiKey).asBinder(), null)
+            callback?.onPostInitComplete(0, FirebaseAuthServiceImpl(this, lifecycle, request.packageName, libraryVersion, apiKey).asBinder(), null)
         }
     }
 }
@@ -431,7 +431,8 @@ class FirebaseAuthServiceImpl(private val context: Context, private val lifecycl
             try {
                 Log.d(TAG, "sendGetOobConfirmationCodeEmail")
                 client.getOobConfirmationCode(
-                        requestType = request.settings?.requestTypeAsString ?: "OOB_REQ_TYPE_UNSPECIFIED",
+                        requestType = request.settings?.requestTypeAsString
+                                ?: "OOB_REQ_TYPE_UNSPECIFIED",
                         email = request.email,
                         iOSBundleId = request.settings?.iOSBundle,
                         iOSAppStoreId = request.settings?.iOSAppStoreId,
@@ -632,7 +633,7 @@ class FirebaseAuthServiceImpl(private val context: Context, private val lifecycl
     }
 
     override fun updateProfileCompat(cachedState: String?, userProfileChangeRequest: UserProfileChangeRequest, callbacks: IFirebaseAuthCallbacks) {
-        updateProfile(UpdateProfileAidlRequest().apply { this.cachedState = cachedState; this.request = userProfileChangeRequest}, callbacks)
+        updateProfile(UpdateProfileAidlRequest().apply { this.cachedState = cachedState; this.request = userProfileChangeRequest }, callbacks)
     }
 
     override fun verifyBeforeUpdateEmail(request: VerifyBeforeUpdateEmailAidlRequest, callbacks: IFirebaseAuthCallbacks) {
