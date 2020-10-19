@@ -28,7 +28,7 @@ buildscript {
     ext.volleyVersion = '1.1.1'
     ext.wireVersion = '3.2.2'
 
-    ext.androidBuildGradleVersion = '3.6.3'
+    ext.androidBuildGradleVersion = '4.1.0'
 
     ext.androidBuildVersionTools = '29.0.3'
 
