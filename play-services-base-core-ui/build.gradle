@@ -15,7 +15,7 @@ dependencies {
     implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
-    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment:$navigationVersion"
