@@ -18,6 +18,6 @@ package org.microg.gms.common.api
 interface ApiClient {
     fun connect()
     fun disconnect()
-    val isConnected: Boolean
-    val isConnecting: Boolean
+    fun isConnected(): Boolean
+    fun isConnecting(): Boolean
 }

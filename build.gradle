@@ -12,6 +12,7 @@ buildscript {
 
     ext.kotlinVersion = '1.4.10'
     ext.coroutineVersion = '1.3.9'
+    ext.androidCoreKotlinVersion = '1.3.2'
 
     ext.annotationVersion = '1.1.0'
     ext.appcompatVersion = '1.2.0'

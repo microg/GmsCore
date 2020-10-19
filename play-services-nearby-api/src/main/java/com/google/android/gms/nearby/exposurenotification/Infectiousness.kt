@@ -5,20 +5,21 @@
  *         according to terms described in the Creative Commons 4.0 Attribution License.
  *         See https://developers.google.com/readme/policies for details.
  */
+package com.google.android.gms.nearby.exposurenotification
 
-package com.google.android.gms.nearby.exposurenotification;
-
-import org.microg.gms.common.PublicApi;
+import org.microg.gms.common.PublicApi
 
 /**
- * Infectiousness defined for an {@link ExposureWindow}.
+ * Infectiousness defined for an [ExposureWindow].
  */
 @PublicApi
-public @interface Infectiousness {
-    int NONE = 0;
-    int STANDARD = 1;
-    int HIGH = 2;
+annotation class Infectiousness {
+    companion object {
+        const val NONE = 0
+        const val STANDARD = 1
+        const val HIGH = 2
 
-    @PublicApi(exclude = true)
-    int VALUES = 3;
+        @PublicApi(exclude = true)
+        const val VALUES = 3
+    }
 }

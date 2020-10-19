@@ -31,7 +31,7 @@ dependencies {
     implementation project(":play-services-maps-core-vtm:vtm-microg-theme")
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.core:core-ktx:$androidCoreKotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 

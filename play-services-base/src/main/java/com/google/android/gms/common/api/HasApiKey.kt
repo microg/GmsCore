@@ -8,5 +8,5 @@ import com.google.android.gms.common.api.Api.ApiOptions
 import com.google.android.gms.common.api.internal.ApiKey
 
 interface HasApiKey<O : ApiOptions?> {
-    val apiKey: ApiKey<O>?
+    fun getApiKey(): ApiKey<O>?
 }

@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.microg.gms.location
 
-package org.microg.gms.location;
-
-public interface LocationChangeListener {
-    public void onLocationChanged();
+interface LocationChangeListener {
+    fun onLocationChanged()
 }

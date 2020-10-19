@@ -38,8 +38,8 @@ dependencies {
     api project(':play-services-tasks')
     api project(':play-services-base-api')
 
-    implementation "androidx.fragment:fragment:$fragmentVersion"
-    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
+    implementation "androidx.core:core-ktx:$androidCoreKotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {

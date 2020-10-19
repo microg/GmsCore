@@ -44,9 +44,10 @@ android {
 
 dependencies {
     api project(':play-services-iid')
+    implementation "androidx.concurrent:concurrent-futures-ktx:1.1.0"
 
     implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
-    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.core:core-ktx:$androidCoreKotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" // TODO
 }
 repositories {

@@ -41,7 +41,7 @@ dependencies {
     api project(':play-services-iid-api')
     api project(':play-services-location-api')
     api project(':play-services-wearable-api')
-    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.core:core-ktx:$androidCoreKotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 repositories {
