@@ -53,30 +53,28 @@ private suspend fun ensureCheckinIsUpToDate(context: Context) {
 }
 
 private suspend fun ensureAppRegistrationAllowed(context: Context, database: GcmDatabase, packageName: String) {
-    try {
-        if (!GcmPrefs.get(context).isEnabled) throw RuntimeException("GCM disabled")
-        val app = database.getApp(packageName)
-        if (app == null && GcmPrefs.get(context).isConfirmNewApps) {
-            val accepted: Boolean = suspendCoroutine { continuation ->
-                val i = Intent(context, AskPushPermission::class.java)
-                i.putExtra(AskPushPermission.EXTRA_REQUESTED_PACKAGE, packageName)
-                i.putExtra(AskPushPermission.EXTRA_RESULT_RECEIVER, object : ResultReceiver(null) {
-                    override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-                        continuation.resume(resultCode == Activity.RESULT_OK)
-                    }
-                })
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-                i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
-                context.startActivity(i)
-            }
-            if (!accepted) {
-                throw RuntimeException("Push permission not granted to app")
-            }
-        } else if (!app.allowRegister) {
+    if (!GcmPrefs.get(context).isEnabled) throw RuntimeException("GCM disabled")
+    val app = database.getApp(packageName)
+    if (app == null && GcmPrefs.get(context).isConfirmNewApps) {
+        val accepted: Boolean = suspendCoroutine { continuation ->
+            val i = Intent(context, AskPushPermission::class.java)
+            i.putExtra(AskPushPermission.EXTRA_REQUESTED_PACKAGE, packageName)
+            i.putExtra(AskPushPermission.EXTRA_RESULT_RECEIVER, object : ResultReceiver(null) {
+                override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
+                    continuation.resume(resultCode == Activity.RESULT_OK)
+                }
+            })
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+            i.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
+            context.startActivity(i)
+        }
+        if (!accepted) {
             throw RuntimeException("Push permission not granted to app")
         }
-    } catch (e: Exception) {}
+    } else if (app?.allowRegister) {
+        throw RuntimeException("Push permission not granted to app")
+    }
 }
 
 suspend fun completeRegisterRequest(context: Context, database: GcmDatabase, request: RegisterRequest, requestId: String? = null): Bundle = suspendCoroutine { continuation ->
