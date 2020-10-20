@@ -2,6 +2,8 @@
  * SPDX-FileCopyrightText: 2020, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
+@file:Suppress("DEPRECATION")
+
 package org.microg.gms.gcm
 
 import android.app.Activity
@@ -144,7 +146,7 @@ class PushRegisterService : LifecycleService() {
     private suspend fun register(intent: Intent) {
         val packageName = intent.appPackageName ?: throw RuntimeException("No package provided")
         ensureAppRegistrationAllowed(this, database, packageName)
-        Log.d(TAG, "register[req]: " + intent.toString() + " extras=" + intent!!.extras)
+        Log.d(TAG, "register[req]: " + intent.toString() + " extras=" + intent.extras)
         val bundle = completeRegisterRequest(this, database,
                 RegisterRequest()
                         .build(Utils.getBuild(this))
@@ -236,7 +238,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
         }
     }
 
-    private fun sendReply(what: Int, id: Int, replyTo: Messenger, data: Bundle, oneWay: Boolean) {
+    private fun sendReply(what: Int, id: Int, replyTo: Messenger, data: Bundle) {
         if (what == 0) {
             val outIntent = Intent(ACTION_C2DM_REGISTRATION)
             outIntent.putExtras(data)
@@ -248,51 +250,51 @@ internal class PushRegisterHandler(private val context: Context, private val dat
         sendReplyViaMessage(what, id, replyTo, messageData)
     }
 
-    private fun replyError(what: Int, id: Int, replyTo: Messenger, errorMessage: String, oneWay: Boolean) {
+    private fun replyError(what: Int, id: Int, replyTo: Messenger, errorMessage: String) {
         val bundle = Bundle()
         bundle.putString(EXTRA_ERROR, errorMessage)
-        sendReply(what, id, replyTo, bundle, oneWay)
+        sendReply(what, id, replyTo, bundle)
     }
 
     private fun replyNotAvailable(what: Int, id: Int, replyTo: Messenger) {
-        replyError(what, id, replyTo, ERROR_SERVICE_NOT_AVAILABLE, false)
+        replyError(what, id, replyTo, ERROR_SERVICE_NOT_AVAILABLE)
     }
 
     private val selfAuthIntent: PendingIntent
-        private get() {
+        get() {
             val intent = Intent()
             intent.setPackage("com.google.example.invalidpackage")
             return PendingIntent.getBroadcast(context, 0, intent, 0)
         }
 
     override fun handleMessage(msg: Message) {
-        var msg = msg
-        val obj = msg.obj
-        if (msg.what == 0) {
+        var getmsg = msg
+        val obj = getmsg.obj
+        if (getmsg.what == 0) {
             if (obj is Intent) {
                 val nuMsg = Message.obtain()
-                nuMsg.what = msg.what
+                nuMsg.what = getmsg.what
                 nuMsg.arg1 = 0
                 nuMsg.replyTo = null
                 val packageName = obj.appPackageName
                 val data = Bundle()
                 data.putBoolean("oneWay", false)
                 data.putString("pkg", packageName)
-                data.putBundle("data", msg.data)
+                data.putBundle("data", getmsg.data)
                 nuMsg.data = data
-                msg = nuMsg
+                getmsg = nuMsg
             } else {
                 return
             }
         }
-        val what = msg.what
-        val id = msg.arg1
-        val replyTo = msg.replyTo
+        val what = getmsg.what
+        val id = getmsg.arg1
+        val replyTo = getmsg.replyTo
         if (replyTo == null) {
             Log.w(TAG, "replyTo is null")
             return
         }
-        val data = msg.data
+        val data = getmsg.data
         val packageName = data.getString("pkg") ?: return
         val subdata = data.getBundle("data")
         try {
@@ -319,7 +321,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
                                         .app(packageName)
                                         .delete(delete)
                                         .extraParams(subdata))
-                        sendReply(what, id, replyTo, bundle, oneWay)
+                        sendReply(what, id, replyTo, bundle)
                     } catch (e: Exception) {
                         Log.w(TAG, e)
                         replyNotAvailable(what, id, replyTo)

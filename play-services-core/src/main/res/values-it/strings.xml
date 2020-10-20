@@ -85,8 +85,6 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="pref_add_account_summary">Aggiungi account Google</string>
     <string name="pref_gcm_switcher_title">Ricevi notifiche push</string>
     <string name="pref_gcm_enable_mcs_summary">Messaggistica Cloud Google è un fornitore di notifiche push presente in molte applicazioni di terze parti. Per utilizzarlo è necessario attivare la registrazione del dispositivo.</string>
-    <string name="pref_gcm_confirm_new_apps_title">Conferma nuove app</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Chiedi prima di registrare una nuova app per la ricezione di notifiche push</string>
 
     <string name="pref_about_title">Informazioni su Vanced microG</string>
     <string name="pref_cast_double_fix">Correzione cast duplicato</string>

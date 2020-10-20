@@ -85,8 +85,6 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="pref_add_account_summary">Tambahkan akun Google</string>
     <string name="pref_gcm_switcher_title">Terima notifikasi push</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging adalah penyedia notifikasi push yang digunakan pada banyak aplikasi pihak ketiga. Untuk menggunakannya anda harus mengaktifkan device registration.</string>
-    <string name="pref_gcm_confirm_new_apps_title">Konfirmasi aplikasi baru</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Tanya sebelum meregistrasi aplikasi baru untuk menerima notifikasi push</string>
 
     <string name="pref_about_title">Tentang Vanced microG</string>
     <string name="pref_cast_double_fix">Perbaikan Cast terduplikasi</string>

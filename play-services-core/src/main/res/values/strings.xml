@@ -85,8 +85,6 @@ This can take a couple of minutes."</string>
     <string name="pref_add_account_summary">Add Google account</string>
     <string name="pref_gcm_switcher_title">Receive push notifications</string>
     <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
-    <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
 
     <string name="pref_about_title">About Vanced microG</string>
     <string name="pref_cast_double_fix">Cast duplication fix</string>

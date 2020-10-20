@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2020, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
+@file:Suppress("DEPRECATION")
 
 package org.microg.gms.ui
 

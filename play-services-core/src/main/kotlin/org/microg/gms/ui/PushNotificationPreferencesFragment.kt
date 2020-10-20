@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2020, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
+@file:Suppress("DEPRECATION")
 
 package org.microg.gms.ui
 
@@ -64,16 +65,18 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateStatus() {
-        handler.postDelayed(updateRunnable, UPDATE_INTERVAL)
-        lifecycleScope.launchWhenStarted {
-            val statusInfo = getGcmServiceInfo(requireContext())
-            pushStatusCategory.isVisible = statusInfo.configuration.enabled
-            pushStatus.summary = if (statusInfo != null && statusInfo.connected) {
-                getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
-            } else {
-                getString(R.string.gcm_network_state_disconnected)
+        try {
+            handler.postDelayed(updateRunnable, UPDATE_INTERVAL)
+            lifecycleScope.launchWhenStarted {
+                val statusInfo = getGcmServiceInfo(requireContext())
+                pushStatusCategory.isVisible = statusInfo.configuration.enabled
+                pushStatus.summary = if (statusInfo.connected) {
+                    getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
+                } else {
+                    getString(R.string.gcm_network_state_disconnected)
+                }
             }
-        }
+        } catch (e: Exception) {}
     }
 
     private fun updateContent() {

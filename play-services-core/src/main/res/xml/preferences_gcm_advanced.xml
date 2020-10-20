@@ -17,12 +17,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreferenceCompat
-        android:defaultValue="false"
-        android:key="gcm_confirm_new_apps"
-        android:summary="@string/pref_gcm_confirm_new_apps_summary"
-        android:title="@string/pref_gcm_confirm_new_apps_title"/>
-
     <PreferenceCategory
         android:key="prefcat_networks"
         android:title="@string/prefcat_push_networks_title">

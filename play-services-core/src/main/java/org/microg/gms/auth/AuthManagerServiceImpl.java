@@ -49,7 +49,6 @@ import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 import static android.accounts.AccountManager.KEY_AUTHTOKEN;
 import static android.accounts.AccountManager.KEY_CALLER_PID;
-import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     private static final String TAG = "GmsAuthManagerSvc";
@@ -103,30 +102,6 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 details.putParcelable("TokenData", new TokenData(res.auth, res.expiry, scope.startsWith("oauth2:"), getScopes(scope)));
                 result.putBundle("tokenDetails", details);
                 result.putString(KEY_ERROR, "OK");
-            } else {
-                result.putString(KEY_ERROR, "NeedPermission");
-                Intent i = new Intent(context, AskPermissionActivity.class);
-                i.putExtras(extras);
-                i.putExtra(KEY_ANDROID_PACKAGE_NAME, packageName);
-                i.putExtra(KEY_ACCOUNT_TYPE, authManager.getAccountType());
-                i.putExtra(KEY_ACCOUNT_NAME, accountName);
-                i.putExtra(KEY_AUTHTOKEN, scope);
-                try {
-                    if (res.consentDataBase64 != null)
-                        i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));
-                } catch (Exception e) {
-                    Log.w(TAG, "Can't decode consent data: ", e);
-                }
-                if (notify && NotificationManagerCompat.from(context.getApplicationContext()).areNotificationsEnabled()) {
-                    NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
-                            .setContentIntent(PendingIntent.getActivity(context, 0, i, 0))
-                            .setContentTitle(context.getString(R.string.auth_notification_title))
-                            .setContentText(context.getString(R.string.auth_notification_content, getPackageLabel(packageName, context.getPackageManager())))
-                            .setSmallIcon(android.R.drawable.stat_notify_error)
-                            .build());
-                }
-                result.putParcelable(KEY_USER_RECOVERY_INTENT, i);
             }
         } catch (IOException e) {
             Log.w(TAG, e);

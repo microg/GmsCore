@@ -31,7 +31,6 @@ import static org.microg.gms.checkin.CheckinService.REGULAR_CHECKIN_INTERVAL;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";
-    private static boolean registered = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
