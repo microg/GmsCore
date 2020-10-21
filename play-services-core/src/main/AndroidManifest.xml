@@ -240,13 +240,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="org.microg.gms.auth.AskPermissionActivity"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
-
         <service
             android:name="com.google.android.gms.auth.GetToken"
             android:exported="true" />
