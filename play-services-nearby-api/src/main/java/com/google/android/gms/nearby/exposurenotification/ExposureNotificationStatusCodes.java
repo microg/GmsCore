@@ -20,6 +20,7 @@ public class ExposureNotificationStatusCodes extends CommonStatusCodes {
     public static final int FAILED_TEMPORARILY_DISABLED = 39505;
     public static final int FAILED_DISK_IO = 39506;
     public static final int FAILED_UNAUTHORIZED = 39507;
+    public static final int FAILED_RATE_LIMITED = 39508;
 
     public static String getStatusCodeString(final int statusCode) {
         switch (statusCode) {
@@ -39,6 +40,8 @@ public class ExposureNotificationStatusCodes extends CommonStatusCodes {
                 return "FAILED_DISK_IO";
             case FAILED_UNAUTHORIZED:
                 return "FAILED_UNAUTHORIZED";
+            case FAILED_RATE_LIMITED:
+                return "FAILED_RATE_LIMITED";
             default:
                 return CommonStatusCodes.getStatusCodeString(statusCode);
         }

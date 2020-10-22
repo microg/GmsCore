@@ -23,8 +23,15 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
     String ACTION_EXPOSURE_NOTIFICATION_SETTINGS = Constants.ACTION_EXPOSURE_NOTIFICATION_SETTINGS;
     String ACTION_EXPOSURE_NOT_FOUND = Constants.ACTION_EXPOSURE_NOT_FOUND;
     String ACTION_EXPOSURE_STATE_UPDATED = Constants.ACTION_EXPOSURE_STATE_UPDATED;
+    String ACTION_SERVICE_STATE_UPDATED = Constants.ACTION_SERVICE_STATE_UPDATED;
     String EXTRA_EXPOSURE_SUMMARY = Constants.EXTRA_EXPOSURE_SUMMARY;
+    String EXTRA_SERVICE_STATE = Constants.EXTRA_SERVICE_STATE;
     String EXTRA_TOKEN = Constants.EXTRA_TOKEN;
+    String TOKEN_A = Constants.TOKEN_A;
+
+    Task<Long> getVersion();
+
+    Task<Integer> getCalibrationConfidence();
 
     Task<Void> start();
 
@@ -39,4 +46,13 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
     Task<ExposureSummary> getExposureSummary(String token);
 
     Task<List<ExposureInformation>> getExposureInformation(String token);
+
+    Task<List<ExposureWindow>> getExposureWindows(String token);
+    Task<List<ExposureWindow>> getExposureWindows();
+
+    Task<List<DailySummary>> getDailySummaries(DailySummariesConfig config);
+
+    Task<Void> setDiagnosisKeysDataMapping(DiagnosisKeysDataMapping mapping);
+
+    Task<DiagnosisKeysDataMapping> getDiagnosisKeysDataMapping();
 }
