@@ -86,7 +86,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun start(params: StartParams) {
-        if (ExposurePreferences(context).enabled) return
+        if (ExposurePreferences(context).enabled) {
+            params.callback.onResult(Status.SUCCESS)
+            return
+        }
         lifecycleScope.launchWhenStarted {
             val status = confirmPermission(CONFIRM_ACTION_START)
             if (status.isSuccess) {
