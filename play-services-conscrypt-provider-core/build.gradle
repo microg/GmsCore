@@ -1,0 +1,28 @@
+/*
+ * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+
+dependencies {
+    implementation "org.microg.gms:conscrypt-gmscore:2.5.1"
+    implementation "androidx.annotation:annotation:$annotationVersion"
+    implementation project(":play-services-base-core")
+}
+
+android {
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
