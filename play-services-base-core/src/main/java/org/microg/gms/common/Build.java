@@ -20,18 +20,24 @@ import java.util.Locale;
 import java.util.Random;
 
 public class Build {
-    public String fingerprint = android.os.Build.FINGERPRINT;
-    public String hardware = android.os.Build.HARDWARE;
-    public String brand = android.os.Build.BRAND;
+    public String fingerprint = "google/angler/angler:6.0.1/MMB29Q/2480792:user/release-keys"; //android.os.Build.FINGERPRINT;
+    public String hardware = "msm8994"; //android.os.Build.HARDWARE;
+    public String brand = "google";//android.os.Build.BRAND;
     public String radio = getRadio();
     public String bootloader = android.os.Build.BOOTLOADER;
+    public String bootloader = "angler-02.45" ;//android.os.Build.BOOTLOADER;
     public long time = android.os.Build.TIME;
     public String device = android.os.Build.DEVICE;
+    public String device = "angler"; //android.os.Build.DEVICE;
     public int sdk = android.os.Build.VERSION.SDK_INT;
     public String model = android.os.Build.MODEL;
     public String manufacturer = android.os.Build.MANUFACTURER;
     public String product = android.os.Build.PRODUCT;
     public String id = android.os.Build.ID;
+    public String model = "Nexus 6P"; //android.os.Build.MODEL;
+    public String manufacturer = "Huawei" ; // android.os.Build.MANUFACTURER;
+    public String product = "angler"; //android.os.Build.PRODUCT;
+    public String id = "MMB29Q" ; //android.os.Build.ID;
     public String serial = generateSerialNumber(); // TODO: static
 
     @SuppressWarnings("deprecation")

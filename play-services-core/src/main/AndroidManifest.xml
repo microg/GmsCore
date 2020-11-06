@@ -114,6 +114,7 @@
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_core_service_app"
         android:label="@string/gms_app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.AppCompat.DayNight">
         <meta-data
             android:name="fake-signature"
