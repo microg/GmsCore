@@ -33,7 +33,7 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleRelease
 
-      - name: Log APK files
+      - name: List Build APKs
         run: ls -al play-services-core/build/outputs/apk
 
       - name: Upload to Artifacts

@@ -33,6 +33,9 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleDebug
 
+      - name: List Build APKs
+        run: ls -al play-services-core/build/outputs/apk
+
       - name: Upload to Artifacts
         uses: actions/upload-artifact@v2
         with:
