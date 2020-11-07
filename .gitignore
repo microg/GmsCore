@@ -6,4 +6,5 @@ build/
 .idea/
 user.gradle
 local.properties
+keystore.properties
 .directory
