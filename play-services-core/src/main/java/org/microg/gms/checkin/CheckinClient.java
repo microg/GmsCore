@@ -18,22 +18,18 @@ package org.microg.gms.checkin;
 
 import android.util.Log;
 
-import com.squareup.wire.Wire;
-
 import org.microg.gms.common.Build;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
 import org.microg.gms.common.Utils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -46,9 +42,10 @@ import java.util.zip.GZIPOutputStream;
 public class CheckinClient {
     private static final String TAG = "GmsCheckinClient";
     private static final Object TODO = null; // TODO
-    private static final List<String> TODO_LIST_STRING = new ArrayList<String>(); // TODO
+    private static final List<String> TODO_LIST_STRING = new ArrayList<>(); // TODO
     private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<CheckinRequest.Checkin.Statistic>(); // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
+    public static boolean brandSpoof = false;
 
     public static CheckinResponse request(CheckinRequest request) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(SERVICE_URL).openConnection();
@@ -82,26 +79,24 @@ public class CheckinClient {
     public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
-                                             List<Account> accounts,
-                                             boolean hasGooglePlayServices) {
+                                             List<Account> accounts) {
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
                 .accountCookie(new ArrayList<String>())
                 .androidId(checkinInfo.androidId)
                 .checkin(new CheckinRequest.Checkin.Builder()
                         .build(new CheckinRequest.Checkin.Build.Builder()
-                                .bootloader(build.bootloader)
-                                .brand(hasGooglePlayServices ? build.brand : "google")
+                                .bootloader(brandSpoof ? "c2f2-0.2-5799621" : build.bootloader)
+                                .brand(brandSpoof ? "google" : build.brand)
                                 .clientId("android-google")
-                                .device(hasGooglePlayServices ? build.device : "angler")
-                                .fingerprint(hasGooglePlayServices ? build.fingerprint : "google/angler/angler:6.0.1/MMB29Q/2480792:user/release-keys")
-                                .hardware(hasGooglePlayServices ? build.hardware : "msm8994")
-                                .manufacturer(hasGooglePlayServices ? build.manufacturer : "Huawei")
-                                .model(hasGooglePlayServices ? build.model : "Nexus 6P")
+                                .device(brandSpoof ? "generic" : build.device)
+                                .fingerprint(brandSpoof ? "google/coral/coral:10/QD1A.190821.007/5831595:user/release-keys" : build.fingerprint)
+                                .hardware(brandSpoof ? "coral" : build.hardware)
+                                .manufacturer(brandSpoof ? "Google" : build.manufacturer)
+                                .model(brandSpoof ? "mainline" : build.model)
                                 .otaInstalled(false) // TODO?
-                                //.packageVersionCode(Constants.MAX_REFERENCE_VERSION)
-                                .product(hasGooglePlayServices ? build.product : "angler")
-                                .radio(build.radio)
-                                .sdkVersion(build.sdk)
+                                .product(brandSpoof ? "coral" : build.product)
+                                .radio(brandSpoof ? "" : build.radio)
+                                .sdkVersion(brandSpoof ? 29 : build.sdk)
                                 .time(build.time / 1000)
                                 .build())
                         .cellOperator(phoneInfo.cellOperator)

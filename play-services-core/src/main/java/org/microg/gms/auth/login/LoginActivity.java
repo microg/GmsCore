@@ -21,7 +21,6 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -36,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -44,6 +42,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.R;
 
@@ -52,6 +51,7 @@ import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
+import org.microg.gms.checkin.CheckinClient;
 import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
@@ -95,6 +95,9 @@ public class LoginActivity extends AssistantActivity {
     private InputMethodManager inputMethodManager;
     private ViewGroup authContent;
     private int state = 0;
+
+    private String HuaweiButtonPreference = "huaweiloginbutton";
+    private String LoginButtonPreference = "standardloginbutton";
 
     @SuppressLint("AddJavascriptInterface")
     @Override
@@ -147,8 +150,24 @@ public class LoginActivity extends AssistantActivity {
             init();
         } else {
             setMessage(R.string.auth_before_connect);
+            setSpoofButtonText(R.string.brand_spoof_button);
             setBackButtonText(android.R.string.cancel);
             setNextButtonText(R.string.auth_sign_in);
+        }
+    }
+
+    @Override
+    protected void onHuaweiButtonClicked() {
+        super.onHuaweiButtonClicked();
+        state++;
+        if (state == 1) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, true)) {
+                LastCheckinInfo.ClearCheckinInfo(this);
+                CheckinClient.brandSpoof = true;
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true).apply();
+            }
+            init();
         }
     }
 
@@ -157,6 +176,12 @@ public class LoginActivity extends AssistantActivity {
         super.onNextButtonClicked();
         state++;
         if (state == 1) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true).apply();
+            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(HuaweiButtonPreference, true)) {
+                LastCheckinInfo.ClearCheckinInfo(this);
+                CheckinClient.brandSpoof = false;
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
+            }
             init();
         } else if (state == -1) {
             setResult(RESULT_CANCELED);
@@ -176,6 +201,7 @@ public class LoginActivity extends AssistantActivity {
     private void init() {
         setTitle(R.string.just_a_sec);
         setBackButtonText(null);
+        setSpoofButtonText(null);
         setNextButtonText(null);
         View loading = getLayoutInflater().inflate(R.layout.login_assistant_loading, authContent, false);
         authContent.removeAllViews();
@@ -342,7 +368,6 @@ public class LoginActivity extends AssistantActivity {
                         checkin(true);
                         finish();
                     }
-
                     @Override
                     public void onException(Exception exception) {
                         Log.w(TAG, "onException", exception);
@@ -439,11 +464,6 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final int getBuildVersionSdk() {
             return SDK_INT;
-        }
-
-        @JavascriptInterface
-        public final void getDroidGuardResult(String s) {
-            Log.d(TAG, "JSBridge: getDroidGuardResult: " + s);
         }
 
         @JavascriptInterface

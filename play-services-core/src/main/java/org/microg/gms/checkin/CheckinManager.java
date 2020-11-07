@@ -45,7 +45,7 @@ public class CheckinManager {
             return null;
         if (!CheckinPrefs.get(context).isEnabled())
             return null;
-        List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
+        List<CheckinClient.Account> accounts = new ArrayList<>();
         AccountManager accountManager = AccountManager.get(context);
         String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         for (Account account : accountManager.getAccountsByType(accountType)) {
@@ -60,7 +60,7 @@ public class CheckinManager {
         }
         CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context),
                 new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
-                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts, hasGooglePlayServices(context));
+                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts);
         return handleResponse(context, CheckinClient.request(request));
     }
 
@@ -82,6 +82,7 @@ public class CheckinManager {
         return info;
     }
 
+    // Unused
     private static boolean hasGooglePlayServices(Context context) {
         // boolean hasGooglePlayServices = false;
         try {

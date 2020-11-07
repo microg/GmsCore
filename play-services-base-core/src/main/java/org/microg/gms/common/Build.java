@@ -20,18 +20,18 @@ import java.util.Locale;
 import java.util.Random;
 
 public class Build {
-    public String fingerprint = "google/angler/angler:6.0.1/MMB29Q/2480792:user/release-keys"; //android.os.Build.FINGERPRINT;
-    public String hardware = "msm8994"; //android.os.Build.HARDWARE;
-    public String brand = "google";//android.os.Build.BRAND;
+    public String fingerprint = "google/coral/coral:10/QD1A.190821.007/5831595:user/release-keys"; //android.os.Build.FINGERPRINT;
+    public String hardware = "coral"; //android.os.Build.HARDWARE;
+    public String brand = "google"; //android.os.Build.BRAND;
     public String radio = getRadio();
-    public String bootloader = "angler-02.45" ;//android.os.Build.BOOTLOADER;
+    public String bootloader = "c2f2-0.2-5799621"; //android.os.Build.BOOTLOADER;
     public long time = android.os.Build.TIME;
-    public String device = "angler"; //android.os.Build.DEVICE;
+    public String device = "generic"; //android.os.Build.DEVICE;
     public int sdk = android.os.Build.VERSION.SDK_INT;
-    public String model = "Nexus 6P"; //android.os.Build.MODEL;
-    public String manufacturer = "Huawei" ; // android.os.Build.MANUFACTURER;
-    public String product = "angler"; //android.os.Build.PRODUCT;
-    public String id = "MMB29Q" ; //android.os.Build.ID;
+    public String model = "mainline"; //android.os.Build.MODEL;
+    public String manufacturer = "Google"; //android.os.Build.MANUFACTURER;
+    public String product = "coral"; //android.os.Build.PRODUCT;
+    public String id = android.os.Build.ID;
     public String serial = generateSerialNumber(); // TODO: static
 
     @SuppressWarnings("deprecation")

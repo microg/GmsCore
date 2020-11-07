@@ -57,4 +57,15 @@ public class LastCheckinInfo {
                 .putString(PREF_DEVICE_DATA_VERSION_INFO, deviceDataVersionInfo)
                 .commit();
     }
+
+    public static void ClearCheckinInfo(Context context) {
+        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+                .putLong(PREF_ANDROID_ID, 0)
+                .putString(PREF_DIGEST, INITIAL_DIGEST)
+                .putLong(PREF_LAST_CHECKIN, 0)
+                .putLong(PREF_SECURITY_TOKEN, 0)
+                .putString(PREF_VERSION_INFO, "")
+                .putString(PREF_DEVICE_DATA_VERSION_INFO, "")
+                .commit();
+    }
 }
