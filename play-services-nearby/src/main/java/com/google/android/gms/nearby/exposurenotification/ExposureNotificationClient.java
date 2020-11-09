@@ -24,9 +24,12 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
     String ACTION_EXPOSURE_NOT_FOUND = Constants.ACTION_EXPOSURE_NOT_FOUND;
     String ACTION_EXPOSURE_STATE_UPDATED = Constants.ACTION_EXPOSURE_STATE_UPDATED;
     String ACTION_SERVICE_STATE_UPDATED = Constants.ACTION_SERVICE_STATE_UPDATED;
+    @Deprecated
     String EXTRA_EXPOSURE_SUMMARY = Constants.EXTRA_EXPOSURE_SUMMARY;
     String EXTRA_SERVICE_STATE = Constants.EXTRA_SERVICE_STATE;
+    @Deprecated
     String EXTRA_TOKEN = Constants.EXTRA_TOKEN;
+    @Deprecated
     String TOKEN_A = Constants.TOKEN_A;
 
     Task<Long> getVersion();
@@ -41,12 +44,19 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
 
     Task<List<TemporaryExposureKey>> getTemporaryExposureKeyHistory();
 
+    @Deprecated
     Task<Void> provideDiagnosisKeys(List<File> keys, ExposureConfiguration configuration, String token);
+    @Deprecated
+    Task<Void> provideDiagnosisKeys(List<File> keys);
+    Task<Void> provideDiagnosisKeys(DiagnosisKeyFileProvider provider);
 
+    @Deprecated
     Task<ExposureSummary> getExposureSummary(String token);
 
+    @Deprecated
     Task<List<ExposureInformation>> getExposureInformation(String token);
 
+    @Deprecated
     Task<List<ExposureWindow>> getExposureWindows(String token);
     Task<List<ExposureWindow>> getExposureWindows();
 

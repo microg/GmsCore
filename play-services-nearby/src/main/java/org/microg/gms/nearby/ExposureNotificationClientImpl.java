@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.internal.ApiKey;
 import com.google.android.gms.common.api.internal.IStatusCallback;
 import com.google.android.gms.nearby.exposurenotification.DailySummariesConfig;
 import com.google.android.gms.nearby.exposurenotification.DailySummary;
+import com.google.android.gms.nearby.exposurenotification.DiagnosisKeyFileProvider;
 import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMapping;
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration;
 import com.google.android.gms.nearby.exposurenotification.ExposureInformation;
@@ -229,6 +230,17 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                 completionSource.setException(e);
             }
         });
+    }
+
+    @Override
+    public Task<Void> provideDiagnosisKeys(List<File> keyFiles) {
+        return provideDiagnosisKeys(keyFiles, null, TOKEN_A);
+    }
+
+    @Override
+    public Task<Void> provideDiagnosisKeys(DiagnosisKeyFileProvider provider) {
+        // NOTE: This will probably need to be modified according to how the provider is used
+        return provideDiagnosisKeys(provider.getFiles());
     }
 
     @Override

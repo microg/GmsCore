@@ -13,6 +13,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import java.util.Arrays;
 import java.util.Date;
 
+@Deprecated
 public class ExposureInformation extends AutoSafeParcelable {
     @Field(1)
     private long dateMillisSinceEpoch;
