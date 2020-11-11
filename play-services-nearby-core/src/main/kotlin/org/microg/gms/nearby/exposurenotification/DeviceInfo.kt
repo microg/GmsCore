@@ -61,6 +61,9 @@ private fun String.equalsIgnoreCase(other: String): Boolean = (this as java.lang
  * https://developers.google.com/android/exposure-notifications/ble-attenuation-computation#device-list
  */
 val allDeviceInfos = listOf(
+        DeviceInfo("asus","ASUS_Z00D","ASUS Asus ZenFone 2 Laser ZE500KG" ,3,-22,1),
+        DeviceInfo("asus","ASUS_Z00D","ASUS ZenFone 2E",3,-22,1),
+        DeviceInfo("asus","ASUS_Z00D","ASUS ZenFone 2",3,-22,1),
         DeviceInfo("asus", "ASUS_A001", "ASUS_A001", 9, -25, 3),
         DeviceInfo("asus", "ASUS_X008_1", "ASUS_X008DC", 0, -21, 3),
         DeviceInfo("asus", "ASUS_X00T_3", "ASUS_X00TD", 2, -26, 3),
