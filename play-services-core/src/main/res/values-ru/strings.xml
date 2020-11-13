@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="gms_settings_name">Настройки Vanced microG</string>
+    <string name="gms_settings_summary">Настройки для Vanced microG.</string>
+
+    <string name="notification_service_name">Уведомление о службе батареи</string>
+    <string name="small_notification_service_title">Разверните уведомление</string>
+    <string name="big_notification_service_title">Удерживать microG в фоне</string>
+    <string name="notification_service_content">Нажмите сюда и отключите экономию заряда батареи для microG. После этого закройте приложение или отключите уведомление.</string>
+
+    <string name="just_a_sec">Секундочку…</string>
+    <string name="ask_permission_tos">Продолжая, вы разрешаете этому приложению и Google использовать вашу информацию в соответствии с их соответствующими условиями использования и политикой конфиденциальности.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> требует разрешение на:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хочет использовать:</string>
+    <string name="account_manager_title">Настройки аккаунта Google</string>
+    <string name="sorry">Извините…</string>
+    <string name="auth_before_connect">"Это приложение на вашем устройстве пытается подключиться к вашему аккаунту Google.
+
+Для продолжения, нажмите кнопку <b>Войти</b> (или <b>Huawei</b>, если у вас устройство от этого бренда) для перехода к странице авторизации в аккаунт Google. Для отмены, нажмите кнопку <b>Отмена</b> для возвращения в приложение, которое запросило авторизацию."</string>
+    <string name="auth_sign_in">Войти</string>
+    <string name="auth_connecting">"Устанавливаем соединение с Google для авторизации.
+
+Это может занять несколько минут."</string>
+    <string name="no_network_error_desc">"У вас не подключения к сети.
+	
+Это может быть временной проблемой или ваше устройство может не иметь доступа в интернет. Попробуйте подключиться еще раз используя мобильный интернет или сеть Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Не удалось подключиться к серверам Google.
+
+Попробуйте позже."</string>
+    <string name="auth_finalize">"Ваше устройство получает данные авторизации от Google.
+
+Это может занять несколько минут."</string>
+    <string name="allow">Разрешить</string>
+    <string name="deny">Отклонить</string>
+    <string name="auth_notification_title">Необходима авторизация</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> требует вас авторизироваться в аккаунт Google.</string>
+
+    <string name="perm_status_broadcast_label">прослушивать внутренние сообщения о состоянии</string>
+    <string name="perm_c2dm_receive_label">прослушивать C2DM сообщения</string>
+    <string name="perm_c2dm_send_label">отправлять C2DM сообщения to other apps</string>
+    <string name="perm_gtalk_svc_label">обменивайтся сообщениями и получать уведомления о синхронизации с серверов Google</string>
+    <string name="perm_extended_access_label">Расширенный доступ к сервисам Google</string>
+
+    <string name="service_name_checkin">Регистрация устройства в Google</string>
+    <string name="service_name_mcs">Google Cloud Messaging</string>
+
+    <string name="service_status_disabled">Отключен</string>
+    <string name="service_status_default">По умолчанию</string>
+    <string name="service_status_enabled_short">Вкл</string>
+    <string name="service_status_disabled_short">Выкл</string>
+
+    <string name="menu_advanced">Доп. настройки</string>
+    <string name="list_no_item_none">Пусто</string>
+    <string name="list_item_see_all">Посмотреть все</string>
+
+    <string name="network_type_mobile">Мобильный интернет</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Роуминг</string>
+    <string name="network_type_other">Другие сети</string>
+
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">О программе</string>
+    <string name="prefcat_google_services">Сервисы Google</string>
+    <string name="pref_more_settings">Подробнее</string>
+
+    <string name="checkin_not_registered">Не зарегистрирован</string>
+    <string name="checkin_last_registration">Последняя регистрация: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
+    <string name="cond_gcm_bat_title">Включена экономия заряда батареи</string>
+    <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но не отключили экономию заряда батареи для Vanced microG. Для корректной работы уведомлений вам нужно отключить экономию заряда батареи.</string>
+    <string name="cond_gcm_bat_action">Отключить экономию</string>
+
+    <string name="prefs_account">Настройки аккаунта</string>
+    <string name="prefs_account_privacy">Конфиденциальность</string>
+    <string name="prefs_account_security">Вход и безопастность</string>
+
+    <string name="pref_auth_trust_google_title">Доверять Google разрешения приложений</string>
+    <string name="pref_auth_trust_google_summary">Если отключено, пользователь приложение будет спращивать пользователя до того, как запрос авторизации будет отправлен в Google. Некоторые приложения не смогут использовать аккаунт в Google если эта опция отключена.</string>
+    <string name="pref_auth_visible_title">Разрешить приложениям находить аккауниы</string>
+    <string name="pref_auth_visible_summary">Если включено, приложения на вашем устройстве могут увидеть ваш email-адрес от Google аккаунта.</string>
+
+    <string name="pref_add_account_title">Аккаунт</string>
+    <string name="pref_add_account_summary">Добавить аккаунт Google</string>
+    <string name="pref_gcm_switcher_title">Получать push-уведомления</string>
+    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging позволяет получать уведомления от многих приложений. Чтобы использовать GCM, включите регистрацию устройства в Google.</string>
+
+    <string name="pref_about_title">О Vanced microG</string>
+    <string name="pref_cast_double_fix">Исправление двух кнопок трансляции</string>
+
+    <string name="brand_spoof_button">Huawei</string>
+
+    <string name="pref_switcher_title">Зарегистрировать устройство</string>
+    <string name="pref_checkin_enable_summary">Регистрирует ваше устроство в сервисах Google и создает уникальный идентификатор устройства. Vanced microG использует только имя аккаунта для регистрации.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_info_status">Cостояние</string>
+
+    <string name="gcm_status_pref_default">По уведомлению</string>
+    <string name="gcm_status_pref_manual">Вручную</string>
+    <string name="gcm_status_pref_sec">секунды</string>
+    <string name="gcm_status_pref_min">минуты</string>
+    <string name="gcm_unregister_app">Отменить регистрацию</string>
+    <string name="gcm_no_message_yet">Никаких сообщений пока не получено</string>
+    <string name="gcm_last_message_at">Последнее сообщение: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Зарегистрировано</string>
+    <string name="gcm_registered_since">Зарегистрировано: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Отменить регистрацию <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Некоторые приложения не проводят перерегистрацию автоматически и не предлагают сделать это вручную, после отмены регистрации они могут работать некорректно.\nПродолжить?</string>
+    <string name="gcm_unregister_after_deny_message">Вы отключили push-уведомления для приложения, которое уже зарегистрировано.\nХотите ли вы отменить регистрацию для этого приложения чтобы оно не получало push-уведомления в будушем?</string>
+    <string name="gcm_messages_counter">Сообщения: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_network_state_disconnected">Отсоединено</string>
+    <string name="gcm_network_state_connected">Соединено: <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+
+    <string name="pref_push_app_allow_register_title">Разрешать авторизацию</string>
+    <string name="pref_push_app_allow_register_ask">Разрешить приложению {appName} регистрацию для push-уведомлений.</string>
+    <string name="pref_push_app_allow_register_summary">Разрешить приложению регистрацию для push-уведомлений.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Запуск приложения при уведомлении</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Запуск приложения в фоне для получения уведомлений.</string>
+    <string name="prefcat_status_title">Состояние</string>
+    <string name="prefcat_push_apps_title">Приложения, использующие push-уведомления</string>
+    <string name="prefcat_push_apps_registered_title">Зарегистрированные приложения</string>
+    <string name="prefcat_push_apps_unregistered_title">Приложения без регистрации</string>
+    <string name="prefcat_push_networks_title">Тип сети для получения уведомлений</string>
+    <string name="pref_cast_double_fix_summary">Включите это если у вас появляются копии устройств в меню трансляции</string>
+
+</resources>
