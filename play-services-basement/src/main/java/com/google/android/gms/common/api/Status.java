@@ -88,6 +88,21 @@ public final class Status extends AutoSafeParcelable implements Result {
         this.resolution = resolution;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Status)) return false;
+
+        Status that = (Status) o;
+
+        return statusCode == that.statusCode;
+    }
+
+    @Override
+    public int hashCode() {
+        return statusCode;
+    }
+
     /**
      * A pending intent to resolve the failure. This intent can be started with
      * {@link Activity#startIntentSenderForResult(IntentSender, int, Intent, int, int, int)} to

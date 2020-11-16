@@ -114,7 +114,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             StartParams params = new StartParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.equals(Status.SUCCESS)) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -135,7 +135,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             StopParams params = new StopParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.equals(Status.SUCCESS)) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -156,7 +156,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             IsEnabledParams params = new IsEnabledParams(new IBooleanCallback.Stub() {
                 @Override
                 public void onResult(Status status, boolean result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.equals(Status.SUCCESS)) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -177,7 +177,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetTemporaryExposureKeyHistoryParams params = new GetTemporaryExposureKeyHistoryParams(new ITemporaryExposureKeyListCallback.Stub() {
                 @Override
                 public void onResult(Status status, List<TemporaryExposureKey> result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.equals(Status.SUCCESS)) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -217,7 +217,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             ProvideDiagnosisKeysParams params = new ProvideDiagnosisKeysParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.equals(Status.SUCCESS)) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -249,7 +249,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetExposureSummaryParams params = new GetExposureSummaryParams(new IExposureSummaryCallback.Stub() {
                 @Override
                 public void onResult(Status status, ExposureSummary result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.equals(Status.SUCCESS)) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -270,7 +270,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetExposureInformationParams params = new GetExposureInformationParams(new IExposureInformationListCallback.Stub() {
                 @Override
                 public void onResult(Status status, List<ExposureInformation> result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.equals(Status.SUCCESS)) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
