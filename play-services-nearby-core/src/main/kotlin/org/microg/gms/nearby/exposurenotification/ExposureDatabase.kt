@@ -458,11 +458,12 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             it.timestamp >= targetTimestamp - ALLOWED_KEY_OFFSET_MS && it.timestamp <= targetTimestamp + ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS
         }.mapNotNull {
             val decrypted = key.cryptAem(it.rpi, it.aem)
-            if (decrypted[0] == 0x40.toByte() || decrypted[0] == 0x50.toByte()) {
+            val aemVersion = (decrypted[0].toInt() and VERSION_MASK).toByte()
+            if (aemVersion == VERSION_1_0 || aemVersion == VERSION_1_1) {
                 val txPower = decrypted[1]
                 MeasuredExposure(it.timestamp, it.duration, it.rssi, txPower.toInt(), key)
             } else {
-                Log.w(TAG, "Unknown AEM version ${decrypted[0]}, ignoring")
+                Log.w(TAG, "Unknown AEM version ${aemVersion}, ignoring")
                 null
             }
         }

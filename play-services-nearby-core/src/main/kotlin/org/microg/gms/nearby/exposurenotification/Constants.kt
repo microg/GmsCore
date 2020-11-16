@@ -40,5 +40,7 @@ const val TX_POWER_LOW = -15
 const val ADVERTISER_OFFSET = 60 * 1000
 const val CLEANUP_INTERVAL = 24 * 60 * 60 * 1000L
 
+// The version is encoded in bits 7..6 (major) and 5..4 (minor); 3..0 are reserved for future use
+const val VERSION_MASK: Int = 0xF0
 const val VERSION_1_0: Byte = 0x40
 const val VERSION_1_1: Byte = 0x50
