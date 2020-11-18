@@ -15,6 +15,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import com.google.android.gms.nearby.exposurenotification.CalibrationConfidence
+import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMapping
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import kotlinx.coroutines.*
@@ -25,6 +27,7 @@ import java.lang.Runnable
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.concurrent.*
+import kotlin.experimental.and
 
 @TargetApi(21)
 class ExposureDatabase private constructor(private val context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -65,7 +68,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("DROP TABLE IF EXISTS $TABLE_DIAGNOSIS;")
             db.execSQL("DROP TABLE IF EXISTS $TABLE_TEK_CHECK;")
             Log.d(TAG, "Creating tables for version >= 3")
-            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TOKENS(tid INTEGER PRIMARY KEY, package TEXT NOT NULL, token TEXT NOT NULL, timestamp INTEGER NOT NULL, configuration BLOB);")
+            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TOKENS(tid INTEGER PRIMARY KEY, package TEXT NOT NULL, token TEXT NOT NULL, timestamp INTEGER NOT NULL, configuration BLOB, diagnosisKeysDataMap BLOB);")
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TOKENS}_package_token ON $TABLE_TOKENS(package, token);")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_SINGLE(tcsid INTEGER PRIMARY KEY, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, matched INTEGER);")
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_SINGLE}_key ON $TABLE_TEK_CHECK_SINGLE(keyData, rollingStartNumber, rollingPeriod);")
@@ -84,6 +87,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             // There's no bluetooth chip with a sensitivity that would result in rssi -200, so this would be invalid.
             // RSSI of -100 is already extremely low and thus is a good "default" value
             db.execSQL("UPDATE $TABLE_ADVERTISEMENTS SET rssi = -100 WHERE rssi < -200;")
+        }
+        if (oldVersion in 5 until 7) {
+            db.execSQL("ALTER TABLE $TABLE_TOKENS ADD COLUMN diagnosisKeysDataMap BLOB;")
         }
         Log.d(TAG, "Finished database upgrade")
     }
@@ -250,10 +256,10 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         val hexHash = ByteString.of(*hash).hex()
         query(TABLE_TEK_CHECK_FILE, arrayOf("tcfid", "keys"), "hash = ?", arrayOf(hexHash), null, null, null, null).use { cursor ->
             if (cursor.moveToNext()) {
-                insert(TABLE_TEK_CHECK_FILE_TOKEN, "NULL", ContentValues().apply {
+                insertWithOnConflict(TABLE_TEK_CHECK_FILE_TOKEN, "NULL", ContentValues().apply {
                     put("tid", tid)
                     put("tcfid", cursor.getLong(0))
-                })
+                }, CONFLICT_IGNORE)
                 cursor.getLong(1)
             } else {
                 null
@@ -386,7 +392,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             var ignored = 0
             var processed = 0
             var found = 0
-            var riskLogged = 0
+            var riskLogged = -1
             for (key in keys) {
                 if (key.transmissionRiskLevel > riskLogged) {
                     riskLogged = key.transmissionRiskLevel
@@ -435,11 +441,11 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    fun findAllSingleMeasuredExposures(tid: Long, database: SQLiteDatabase = readableDatabase): List<MeasuredExposure> {
+    private fun findAllSingleMeasuredExposures(tid: Long, database: SQLiteDatabase = readableDatabase): List<MeasuredExposure> {
         return listMatchedSingleDiagnosisKeys(tid, database).flatMap { findMeasuredExposures(it, database) }
     }
 
-    fun findAllFileMeasuredExposures(tid: Long, database: SQLiteDatabase = readableDatabase): List<MeasuredExposure> {
+    private fun findAllFileMeasuredExposures(tid: Long, database: SQLiteDatabase = readableDatabase): List<MeasuredExposure> {
         return listMatchedFileDiagnosisKeys(tid, database).flatMap { findMeasuredExposures(it, database) }
     }
 
@@ -458,13 +464,13 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             it.timestamp >= targetTimestamp - ALLOWED_KEY_OFFSET_MS && it.timestamp <= targetTimestamp + ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS
         }.mapNotNull {
             val decrypted = key.cryptAem(it.rpi, it.aem)
-            if (decrypted[0] == 0x40.toByte() || decrypted[0] == 0x50.toByte()) {
-                val txPower = decrypted[1]
-                MeasuredExposure(it.timestamp, it.duration, it.rssi, txPower.toInt(), key)
-            } else {
-                Log.w(TAG, "Unknown AEM version ${decrypted[0]}, ignoring")
-                null
+            val version = (decrypted[0] and 0xf0.toByte())
+            val txPower = if (decrypted.size >= 4 && version >= VERSION_1_0) decrypted[1].toInt() else (averageDeviceInfo.txPowerCorrection + TX_POWER_LOW)
+            val confidence = if (decrypted.size >= 4 && version >= VERSION_1_1) ((decrypted[0] and 0xc) / 4) else (averageDeviceInfo.confidence)
+            if (version > VERSION_1_1) {
+                Log.w(TAG, "Unknown AEM version: 0x${version.toString(16)}")
             }
+            MeasuredExposure(it.timestamp, it.duration, it.rssi, txPower, confidence, key)
         }
     }
 
@@ -546,10 +552,25 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         getTokenId(packageName, token, database)
     }
 
-    fun loadConfiguration(packageName: String, token: String, database: SQLiteDatabase = readableDatabase): Pair<Long, ExposureConfiguration>? = database.run {
-        query(TABLE_TOKENS, arrayOf("tid", "configuration"), "package = ? AND token = ?", arrayOf(packageName, token), null, null, null, null).use { cursor ->
+    fun storeConfiguration(packageName: String, token: String, mapping: DiagnosisKeysDataMapping, database: SQLiteDatabase = writableDatabase) = database.run {
+        val update = update(TABLE_TOKENS, ContentValues().apply { put("diagnosisKeysDataMap", mapping.marshall()) }, "package = ? AND token = ?", arrayOf(packageName, token))
+        if (update <= 0) {
+            insert(TABLE_TOKENS, "NULL", ContentValues().apply {
+                put("package", packageName)
+                put("token", token)
+                put("timestamp", System.currentTimeMillis())
+                put("diagnosisKeysDataMap", mapping.marshall())
+            })
+        }
+        getTokenId(packageName, token, database)
+    }
+
+    fun loadConfiguration(packageName: String, token: String, database: SQLiteDatabase = readableDatabase): Triple<Long, ExposureConfiguration?, DiagnosisKeysDataMapping?>? = database.run {
+        query(TABLE_TOKENS, arrayOf("tid", "configuration", "diagnosisKeysDataMap"), "package = ? AND token = ?", arrayOf(packageName, token), null, null, null, null).use { cursor ->
             if (cursor.moveToNext()) {
-                cursor.getLong(0) to ExposureConfiguration.CREATOR.unmarshall(cursor.getBlob(1))
+                val configuration = try {ExposureConfiguration.CREATOR.unmarshall(cursor.getBlob(1)) } catch (e: Exception) { null }
+                val diagnosisKeysDataMapping = try { DiagnosisKeysDataMapping.CREATOR.unmarshall(cursor.getBlob(2)) }  catch (e: Exception) { null }
+                Triple(cursor.getLong(0), configuration, diagnosisKeysDataMapping)
             } else {
                 null
             }
@@ -732,7 +753,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 6
+        private const val DB_VERSION = 7
         private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"

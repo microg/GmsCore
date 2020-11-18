@@ -4,6 +4,8 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 android {
     compileSdkVersion androidCompileSdk
@@ -24,3 +26,5 @@ android {
 dependencies {
     api project(':play-services-basement')
 }
+
+apply from: '../gradle/publish-android.gradle'

@@ -15,6 +15,8 @@ import com.google.android.gms.nearby.exposurenotification.internal.GetDiagnosisK
 import com.google.android.gms.nearby.exposurenotification.internal.GetExposureInformationParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetExposureSummaryParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetExposureWindowsParams;
+import com.google.android.gms.nearby.exposurenotification.internal.GetPackageConfigurationParams;
+import com.google.android.gms.nearby.exposurenotification.internal.GetStatusParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetTemporaryExposureKeyHistoryParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetVersionParams;
 import com.google.android.gms.nearby.exposurenotification.internal.INearbyExposureNotificationService;
@@ -90,5 +92,13 @@ public class ExposureNotificationApiClient extends GmsClient<INearbyExposureNoti
 
     public void getDiagnosisKeysDataMapping(GetDiagnosisKeysDataMappingParams params) throws RemoteException {
         getServiceInterface().getDiagnosisKeysDataMapping(params);
+    }
+
+    public void getPackageConfiguration(GetPackageConfigurationParams params) throws RemoteException {
+        getServiceInterface().getPackageConfiguration(params);
+    }
+
+    public void getStatus(GetStatusParams params) throws RemoteException {
+        getServiceInterface().getStatus(params);
     }
 }

@@ -15,6 +15,8 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 dependencies {
     api project(':play-services-basement')
@@ -38,3 +40,5 @@ android {
         targetCompatibility = 1.8
     }
 }
+
+apply from: '../gradle/publish-android.gradle'

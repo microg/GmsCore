@@ -5,6 +5,8 @@
 
 apply plugin: 'com.squareup.wire'
 apply plugin: 'kotlin'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
@@ -21,3 +23,5 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = 1.8
 }
+
+apply from: '../gradle/publish-java.gradle'

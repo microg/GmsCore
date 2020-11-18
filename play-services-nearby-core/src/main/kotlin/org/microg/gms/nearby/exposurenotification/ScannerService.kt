@@ -75,6 +75,7 @@ class ScannerService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
+        Log.d(TAG, "ScannerService.start: $intent")
         super.onStartCommand(intent, flags, startId)
         startScanIfNeeded()
         return START_STICKY

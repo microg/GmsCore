@@ -7,6 +7,7 @@ package org.microg.gms.nearby;
 
 import android.content.Context;
 import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Api;
@@ -22,8 +23,10 @@ import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMappi
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration;
 import com.google.android.gms.nearby.exposurenotification.ExposureInformation;
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationClient;
+import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatus;
 import com.google.android.gms.nearby.exposurenotification.ExposureSummary;
 import com.google.android.gms.nearby.exposurenotification.ExposureWindow;
+import com.google.android.gms.nearby.exposurenotification.PackageConfiguration;
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey;
 import com.google.android.gms.nearby.exposurenotification.internal.GetCalibrationConfidenceParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetDailySummariesParams;
@@ -31,16 +34,20 @@ import com.google.android.gms.nearby.exposurenotification.internal.GetDiagnosisK
 import com.google.android.gms.nearby.exposurenotification.internal.GetExposureInformationParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetExposureSummaryParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetExposureWindowsParams;
+import com.google.android.gms.nearby.exposurenotification.internal.GetPackageConfigurationParams;
+import com.google.android.gms.nearby.exposurenotification.internal.GetStatusParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetTemporaryExposureKeyHistoryParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetVersionParams;
 import com.google.android.gms.nearby.exposurenotification.internal.IBooleanCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IDailySummaryListCallback;
+import com.google.android.gms.nearby.exposurenotification.internal.IDiagnosisKeyFileSupplier;
 import com.google.android.gms.nearby.exposurenotification.internal.IDiagnosisKeysDataMappingCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IExposureInformationListCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IExposureSummaryCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IExposureWindowListCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IIntCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.ILongCallback;
+import com.google.android.gms.nearby.exposurenotification.internal.IPackageConfigurationCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.ITemporaryExposureKeyListCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IsEnabledParams;
 import com.google.android.gms.nearby.exposurenotification.internal.ProvideDiagnosisKeysParams;
@@ -56,6 +63,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements ExposureNotificationClient {
     private static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new ExposureNotificationApiClient(context, callbacks, connectionFailedListener));
@@ -239,8 +247,42 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
 
     @Override
     public Task<Void> provideDiagnosisKeys(DiagnosisKeyFileProvider provider) {
-        // NOTE: This will probably need to be modified according to how the provider is used
-        return provideDiagnosisKeys(provider.getFiles());
+        return scheduleTask((PendingGoogleApiCall<Void, ExposureNotificationApiClient>) (client, completionSource) -> {
+            ProvideDiagnosisKeysParams params = new ProvideDiagnosisKeysParams(new IStatusCallback.Stub() {
+                @Override
+                public void onResult(Status status) {
+                    if (status == Status.SUCCESS) {
+                        completionSource.setResult(null);
+                    } else {
+                        completionSource.setException(new ApiException(status));
+                    }
+                }
+            }, new IDiagnosisKeyFileSupplier.Stub() {
+                @Override
+                public boolean hasNext() {
+                    return provider.hasNext();
+                }
+
+                @Override
+                public ParcelFileDescriptor next() {
+                    try {
+                        return ParcelFileDescriptor.open(provider.next(), ParcelFileDescriptor.MODE_READ_ONLY);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                @Override
+                public boolean isAvailable() {
+                    return true;
+                }
+            });
+            try {
+                client.provideDiagnosisKeys(params);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
     }
 
     @Override
@@ -312,7 +354,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     }
 
     @Override
-    public Task<List<DailySummary>> getDailySummaries(DailySummariesConfig config) {
+    public Task<List<DailySummary>> getDailySummaries(DailySummariesConfig dailySummariesConfig) {
         return scheduleTask((PendingGoogleApiCall<List<DailySummary>, ExposureNotificationApiClient>) (client, completionSource) -> {
             GetDailySummariesParams params = new GetDailySummariesParams(new IDailySummaryListCallback.Stub() {
                 @Override
@@ -323,7 +365,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                         completionSource.setException(new ApiException(status));
                     }
                 }
-            }, config);
+            }, dailySummariesConfig);
             try {
                 client.getDailySummaries(params);
             } catch (Exception e) {
@@ -333,7 +375,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
     }
 
     @Override
-    public Task<Void> setDiagnosisKeysDataMapping(DiagnosisKeysDataMapping mapping) {
+    public Task<Void> setDiagnosisKeysDataMapping(DiagnosisKeysDataMapping diagnosisKeysMetadataMapping) {
         return scheduleTask((PendingGoogleApiCall<Void, ExposureNotificationApiClient>) (client, completionSource) -> {
             SetDiagnosisKeysDataMappingParams params = new SetDiagnosisKeysDataMappingParams(new IStatusCallback.Stub() {
                 @Override
@@ -344,7 +386,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                         completionSource.setException(new ApiException(status));
                     }
                 }
-            }, mapping);
+            }, diagnosisKeysMetadataMapping);
             try {
                 client.setDiagnosisKeysDataMapping(params);
             } catch (Exception e) {
@@ -372,6 +414,53 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
                 completionSource.setException(e);
             }
         });
+    }
+
+    @Override
+    public Task<PackageConfiguration> getPackageConfiguration() {
+        return scheduleTask((PendingGoogleApiCall<PackageConfiguration, ExposureNotificationApiClient>) (client, completionSource) -> {
+            GetPackageConfigurationParams params = new GetPackageConfigurationParams(new IPackageConfigurationCallback.Stub() {
+                @Override
+                public void onResult(Status status, PackageConfiguration result) {
+                    if (status == Status.SUCCESS) {
+                        completionSource.setResult(result);
+                    } else {
+                        completionSource.setException(new ApiException(status));
+                    }
+                }
+            });
+            try {
+                client.getPackageConfiguration(params);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    @Override
+    public Task<Set<ExposureNotificationStatus>> getStatus() {
+        return scheduleTask((PendingGoogleApiCall<Set<ExposureNotificationStatus>, ExposureNotificationApiClient>) (client, completionSource) -> {
+            GetStatusParams params = new GetStatusParams(new ILongCallback.Stub() {
+                @Override
+                public void onResult(Status status, long flags) {
+                    if (status == Status.SUCCESS) {
+                        completionSource.setResult(ExposureNotificationStatus.flagsToSet(flags));
+                    } else {
+                        completionSource.setException(new ApiException(status));
+                    }
+                }
+            });
+            try {
+                client.getStatus(params);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    @Override
+    public boolean deviceSupportsLocationlessScanning() {
+        return false;
     }
 
     @Override

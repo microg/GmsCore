@@ -19,13 +19,20 @@ import java.util.List;
  */
 @PublicApi
 public class DiagnosisKeyFileProvider {
+    private int index;
     private List<File> files;
 
     public DiagnosisKeyFileProvider(List<File> files) {
         this.files = new ArrayList<>(files);
     }
 
-    public List<File> getFiles() {
-        return files;
+    @PublicApi(exclude = true)
+    public boolean hasNext() {
+        return files.size() > index;
+    }
+
+    @PublicApi(exclude = true)
+    public File next() {
+        return files.get(index++);
     }
 }

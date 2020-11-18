@@ -18,6 +18,8 @@ import com.google.android.gms.nearby.exposurenotification.internal.GetCalibratio
 import com.google.android.gms.nearby.exposurenotification.internal.GetDailySummariesParams;
 import com.google.android.gms.nearby.exposurenotification.internal.SetDiagnosisKeysDataMappingParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetDiagnosisKeysDataMappingParams;
+import com.google.android.gms.nearby.exposurenotification.internal.GetStatusParams;
+import com.google.android.gms.nearby.exposurenotification.internal.GetPackageConfigurationParams;
 
 interface INearbyExposureNotificationService{
     void start(in StartParams params) = 0;
@@ -35,4 +37,6 @@ interface INearbyExposureNotificationService{
     void getDailySummaries(in GetDailySummariesParams params) = 15;
     void setDiagnosisKeysDataMapping(in SetDiagnosisKeysDataMappingParams params) = 16;
     void getDiagnosisKeysDataMapping(in GetDiagnosisKeysDataMappingParams params) = 17;
+    void getStatus(in GetStatusParams params) = 18;
+    void getPackageConfiguration(in GetPackageConfigurationParams params) = 19;
 }

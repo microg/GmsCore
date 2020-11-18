@@ -13,6 +13,9 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
+/**
+ * A key generated for advertising over a window of time.
+ */
 public class TemporaryExposureKey extends AutoSafeParcelable {
     @Field(1)
     private byte[] keyData;
@@ -29,6 +32,11 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
     @Field(6)
     int daysSinceOnsetOfSymptoms;
 
+    /**
+     * The default value for {@link #getDaysSinceOnsetOfSymptoms()}.
+     *
+     * See {@link DiagnosisKeysDataMapping#getDaysSinceOnsetToInfectiousness()} for more information.
+     */
     public static final int DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN = Constants.DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN;
 
     private TemporaryExposureKey() {
@@ -43,29 +51,49 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
         this.daysSinceOnsetOfSymptoms = daysSinceOnsetOfSymptoms;
     }
 
+    /**
+     * The randomly generated Temporary Exposure Key information.
+     */
     public byte[] getKeyData() {
         return Arrays.copyOf(keyData, keyData.length);
     }
 
+    /**
+     * A number describing when a key starts. It is equal to startTimeOfKeySinceEpochInSecs / (60 * 10).
+     */
     public int getRollingStartIntervalNumber() {
         return rollingStartIntervalNumber;
     }
 
+    /**
+     * Risk of transmission associated with the person this key came from.
+     */
     @RiskLevel
     public int getTransmissionRiskLevel() {
         return transmissionRiskLevel;
     }
 
+    /**
+     * A number describing how long a key is valid. It is expressed in increments of 10 minutes (e.g. 144 for 24 hours).
+     */
     public int getRollingPeriod() {
         return rollingPeriod;
     }
 
+    /**
+     * Type of diagnosis associated with a key.
+     */
     @ReportType
     public int getReportType() {
         return reportType;
     }
 
-    int getDaysSinceOnsetOfSymptoms() {
+    /**
+     * Number of days elapsed between symptom onset and the key being used.
+     * <p>
+     * E.g. 2 means the key is 2 days after onset of symptoms.
+     */
+    public int getDaysSinceOnsetOfSymptoms() {
         return daysSinceOnsetOfSymptoms;
     }
 
@@ -107,6 +135,9 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
                 '}';
     }
 
+    /**
+     * A builder for {@link TemporaryExposureKey}.
+     */
     public static class TemporaryExposureKeyBuilder {
         private byte[] keyData;
         private int rollingStartIntervalNumber;
