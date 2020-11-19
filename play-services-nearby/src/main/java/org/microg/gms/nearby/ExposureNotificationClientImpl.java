@@ -80,7 +80,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetVersionParams params = new GetVersionParams(new ILongCallback.Stub() {
                 @Override
                 public void onResult(Status status, long result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -101,7 +101,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetCalibrationConfidenceParams params = new GetCalibrationConfidenceParams(new IIntCallback.Stub() {
                 @Override
                 public void onResult(Status status, int result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -122,7 +122,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             StartParams params = new StartParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -143,7 +143,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             StopParams params = new StopParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -164,7 +164,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             IsEnabledParams params = new IsEnabledParams(new IBooleanCallback.Stub() {
                 @Override
                 public void onResult(Status status, boolean result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -185,7 +185,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetTemporaryExposureKeyHistoryParams params = new GetTemporaryExposureKeyHistoryParams(new ITemporaryExposureKeyListCallback.Stub() {
                 @Override
                 public void onResult(Status status, List<TemporaryExposureKey> result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -225,7 +225,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             ProvideDiagnosisKeysParams params = new ProvideDiagnosisKeysParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -251,7 +251,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             ProvideDiagnosisKeysParams params = new ProvideDiagnosisKeysParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -291,7 +291,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetExposureSummaryParams params = new GetExposureSummaryParams(new IExposureSummaryCallback.Stub() {
                 @Override
                 public void onResult(Status status, ExposureSummary result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -312,7 +312,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetExposureInformationParams params = new GetExposureInformationParams(new IExposureInformationListCallback.Stub() {
                 @Override
                 public void onResult(Status status, List<ExposureInformation> result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -333,7 +333,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetExposureWindowsParams params = new GetExposureWindowsParams(new IExposureWindowListCallback.Stub() {
                 @Override
                 public void onResult(Status status, List<ExposureWindow> result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -359,7 +359,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetDailySummariesParams params = new GetDailySummariesParams(new IDailySummaryListCallback.Stub() {
                 @Override
                 public void onResult(Status status, List<DailySummary> result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -380,7 +380,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             SetDiagnosisKeysDataMappingParams params = new SetDiagnosisKeysDataMappingParams(new IStatusCallback.Stub() {
                 @Override
                 public void onResult(Status status) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(null);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -401,7 +401,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetDiagnosisKeysDataMappingParams params = new GetDiagnosisKeysDataMappingParams(new IDiagnosisKeysDataMappingCallback.Stub() {
                 @Override
                 public void onResult(Status status, DiagnosisKeysDataMapping result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -422,7 +422,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetPackageConfigurationParams params = new GetPackageConfigurationParams(new IPackageConfigurationCallback.Stub() {
                 @Override
                 public void onResult(Status status, PackageConfiguration result) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(result);
                     } else {
                         completionSource.setException(new ApiException(status));
@@ -443,7 +443,7 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             GetStatusParams params = new GetStatusParams(new ILongCallback.Stub() {
                 @Override
                 public void onResult(Status status, long flags) {
-                    if (status == Status.SUCCESS) {
+                    if (status.isSuccess()) {
                         completionSource.setResult(ExposureNotificationStatus.flagsToSet(flags));
                     } else {
                         completionSource.setException(new ApiException(status));
