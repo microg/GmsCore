@@ -12,6 +12,8 @@
 -dontwarn org.slf4j.**
 -dontwarn org.codehaus.jackson.**
 -dontwarn com.android.location.provider.**
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn sun.misc.SignalHandler
 
 # Disable ProGuard Notes, they won't help here
 -dontnote

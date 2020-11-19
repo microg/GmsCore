@@ -19,9 +19,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 dependencies {
-    implementation "com.squareup.wire:wire-runtime:3.4.0"
+    implementation 'com.squareup.wire:wire-runtime:3.5.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'org.conscrypt:conscrypt-android:2.5.1'
+    implementation "org.microg.gms:conscrypt-gmscore:2.5.1"
+    implementation "androidx.annotation:annotation:$annotationVersion"
     // TODO: Switch to upstream once raw requests are merged
     // https://github.com/vitalidze/chromecast-java-api-v2/pull/99
     // implementation "su.litvak.chromecast:api-v2:0.10.4"
@@ -38,16 +39,21 @@ dependencies {
     // AndroidX UI
     implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.mediarouter:mediarouter:1.2.0"
-    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
-    implementation "androidx.navigation:navigation-fragment:2.3.1"
-    implementation "androidx.navigation:navigation-ui:2.3.1"
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.1"
     implementation "androidx.navigation:navigation-ui-ktx:2.3.1"
 
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10'
     implementation project(path: ':play-services-basement')
+
+    // nlp
+    implementation "org.microg.nlp:geocode-v1:$nlpVersion"
+    implementation "org.microg.nlp:location-v2:$nlpVersion"
+    implementation "org.microg.nlp:location-v3:$nlpVersion"
+    implementation "org.microg.nlp:service:$nlpVersion"
+    api project(':play-services-location-api')
 }
 
 android {

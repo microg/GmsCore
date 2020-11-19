@@ -4,6 +4,7 @@
  */
 
 buildscript {
+    ext.nlpVersion = '2.0-alpha4'
     ext.safeParcelVersion = '1.6.0'
 
     ext.kotlinVersion = '1.3.72'
@@ -35,7 +36,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.0"
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.squareup.wire:wire-gradle-plugin:$wireVersion"
     }
@@ -45,8 +46,8 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = "0.2.13.203916"
-    ext.appVersionCode = 203915002
+    version = "0.2.14.204215"
+    ext.appVersionCode = 204215001
     ext.isReleaseVersion = false
 }
 
