@@ -17,16 +17,33 @@
 package org.microg.gms.wallet;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.internal.IOwService;
+import com.google.android.gms.wallet.internal.IWalletServiceCallbacks;
 
 public class OwServiceImpl extends IOwService.Stub {
     private static final String TAG = "GmsWalletOwSvc";
+    private Context context;
 
     public OwServiceImpl(Context context) {
+        this.context = context;
+    }
+
+    @Override
+    public void isReadyToPay(IsReadyToPayRequest request, Bundle args, IWalletServiceCallbacks callbacks) throws RemoteException {
+        Log.d(TAG, "isReadyToPay: " + request.toJson());
+        try {
+            callbacks.onIsReadyToPayResponse(Status.SUCCESS, false, Bundle.EMPTY);
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
     }
 
     @Override
