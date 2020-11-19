@@ -61,16 +61,33 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         return pi
     }
 
+    private fun hasConfirmActivity(): Boolean {
+        val intent = Intent(ACTION_CONFIRM)
+        intent.`package` = context.packageName
+        return try {
+            context.packageManager.resolveActivity(intent, 0) != null
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     private suspend fun confirmPermission(permission: String): Status {
         return ExposureDatabase.with(context) { database ->
-            if (tempGrantedPermissions.contains(packageName to permission)) {
-                database.grantPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission)
-                tempGrantedPermissions.remove(packageName to permission)
-                Status.SUCCESS
-            } else if (!database.hasPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission)) {
-                Status(RESOLUTION_REQUIRED, "Permission EN#$permission required.", pendingConfirm(permission))
-            } else {
-                Status.SUCCESS
+            when {
+                tempGrantedPermissions.contains(packageName to permission) -> {
+                    database.grantPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission)
+                    tempGrantedPermissions.remove(packageName to permission)
+                    Status.SUCCESS
+                }
+                database.hasPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission) -> {
+                    Status.SUCCESS
+                }
+                !hasConfirmActivity() -> {
+                    Status.SUCCESS
+                }
+                else -> {
+                    Status(RESOLUTION_REQUIRED, "Permission EN#$permission required.", pendingConfirm(permission))
+                }
             }
         }
     }
