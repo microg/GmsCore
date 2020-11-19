@@ -13,7 +13,7 @@
             android:title="@string/open_app" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
-        <Preference
+        <org.microg.gms.ui.TextPreference
             android:key="pref_exposure_app_report"
             android:selectable="false"
             tools:summary="@string/pref_exposure_app_last_report_summary_encounters_no"

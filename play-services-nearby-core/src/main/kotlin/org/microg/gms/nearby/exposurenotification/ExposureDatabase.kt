@@ -393,9 +393,11 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             var processed = 0
             var found = 0
             var riskLogged = -1
+            var startLogged = -1
             for (key in keys) {
-                if (key.transmissionRiskLevel > riskLogged) {
+                if (key.transmissionRiskLevel > riskLogged || key.rollingStartIntervalNumber > startLogged) {
                     riskLogged = key.transmissionRiskLevel
+                    startLogged = key.rollingStartIntervalNumber
                     Log.d(TAG, "First key with risk ${key.transmissionRiskLevel}: ${ByteString.of(*key.keyData).hex()} starts ${key.rollingStartIntervalNumber}")
                 }
                 if ((key.rollingStartIntervalNumber + key.rollingPeriod).toLong() * ROLLING_WINDOW_LENGTH_MS + ALLOWED_KEY_OFFSET_MS < oldestRpi) {

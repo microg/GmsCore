@@ -21,8 +21,8 @@ fun List<MeasuredExposure>.merge(): List<MergedExposure> {
     val result = arrayListOf<MergedExposure>()
     for (key in keys) {
         var merged: MergedExposure? = null
-        for (exposure in filter { it.key == key }.sortedBy { it.timestamp }) {
-            if (merged != null && merged.timestamp + MergedExposure.MAXIMUM_DURATION + ROLLING_WINDOW_LENGTH_MS > exposure.timestamp) {
+        for (exposure in filter { it.key == key }.distinctBy { it.timestamp }.sortedBy { it.timestamp }) {
+            if (merged != null && merged.timestamp + MergedExposure.MAXIMUM_DURATION > exposure.timestamp) {
                 merged += exposure
             } else {
                 if (merged != null) {
@@ -30,7 +30,7 @@ fun List<MeasuredExposure>.merge(): List<MergedExposure> {
                 }
                 merged = MergedExposure(key, exposure.timestamp, exposure.txPower, exposure.confidence, listOf(MergedSubExposure(exposure.attenuation, exposure.duration)))
             }
-            if (merged.durationInMinutes > 30) {
+            if (merged.durationInMinutes >= 30) {
                 result.add(merged)
                 merged = null
             }

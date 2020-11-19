@@ -73,7 +73,7 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
                     val encountersLine = if (merged.isEmpty()) {
                         getString(R.string.pref_exposure_app_last_report_summary_encounters_no)
                     } else {
-                        database.findAllMeasuredExposures(config.first).merge().map {
+                        merged.map {
                             val riskScore = it.getRiskScore(config.second.orDefault())
                             "· " + getString(R.string.pref_exposure_app_last_report_summary_encounters_line, DateUtils.formatDateRange(requireContext(), it.timestamp, it.timestamp + it.durationInMinutes * 60 * 1000L, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE), riskScore)
                         }.joinToString("<br>").let { getString(R.string.pref_exposure_app_last_report_summary_encounters_prefix, merged.size) + "<br>$it<br><i>" + getString(R.string.pref_exposure_app_last_report_summary_encounters_suffix) + "</i>" }
