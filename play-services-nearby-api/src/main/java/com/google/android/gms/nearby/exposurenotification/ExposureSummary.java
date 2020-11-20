@@ -12,6 +12,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
+@Deprecated
 public class ExposureSummary extends AutoSafeParcelable {
     @Field(1)
     private int daysSinceLastExposure;

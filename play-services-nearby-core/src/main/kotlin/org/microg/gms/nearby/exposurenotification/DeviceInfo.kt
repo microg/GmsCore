@@ -53,6 +53,9 @@ val currentDeviceInfo: DeviceInfo
         return deviceInfo
     }
 
+val averageDeviceInfo: DeviceInfo
+    get() = averageCurrentDeviceInfo(Build.MANUFACTURER, Build.DEVICE, Build.MODEL, allDeviceInfos, CalibrationConfidence.LOWEST)
+
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 private fun String.equalsIgnoreCase(other: String): Boolean = (this as java.lang.String).equalsIgnoreCase(other)
 

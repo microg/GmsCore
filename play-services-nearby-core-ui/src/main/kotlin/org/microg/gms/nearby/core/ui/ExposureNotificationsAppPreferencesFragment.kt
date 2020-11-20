@@ -12,6 +12,7 @@ import androidx.core.text.HtmlCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import org.json.JSONObject
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
 import org.microg.gms.nearby.exposurenotification.merge
@@ -50,6 +51,9 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
         updateContent()
     }
 
+    private fun ExposureConfiguration?.orDefault() = this
+            ?: ExposureConfiguration.ExposureConfigurationBuilder().build()
+
     fun updateContent() {
         packageName?.let { packageName ->
             lifecycleScope.launchWhenResumed {
@@ -69,8 +73,8 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
                     val encountersLine = if (merged.isEmpty()) {
                         getString(R.string.pref_exposure_app_last_report_summary_encounters_no)
                     } else {
-                        database.findAllMeasuredExposures(config.first).merge().map {
-                            val riskScore = it.getRiskScore(config.second)
+                        merged.map {
+                            val riskScore = it.getRiskScore(config.second.orDefault())
                             "· " + getString(R.string.pref_exposure_app_last_report_summary_encounters_line, DateUtils.formatDateRange(requireContext(), it.timestamp, it.timestamp + it.durationInMinutes * 60 * 1000L, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE), riskScore)
                         }.joinToString("<br>").let { getString(R.string.pref_exposure_app_last_report_summary_encounters_prefix, merged.size) + "<br>$it<br><i>" + getString(R.string.pref_exposure_app_last_report_summary_encounters_suffix) + "</i>" }
                     }

@@ -18,12 +18,15 @@ class ServiceTrigger : BroadcastReceiver() {
         Log.d(TAG, "ServiceTrigger: $intent")
         val serviceContext = ForegroundServiceContext(context)
         if (ScannerService.isNeeded(context)) {
+            Log.d(TAG, "Trigger ${ScannerService::class.java}")
             serviceContext.startService(Intent(context, ScannerService::class.java))
         }
         if (AdvertiserService.isNeeded(context)) {
+            Log.d(TAG, "Trigger ${AdvertiserService::class.java}")
             serviceContext.startService(Intent(context, AdvertiserService::class.java))
         }
         if (CleanupService.isNeeded(context)) {
+            Log.d(TAG, "Trigger ${CleanupService::class.java}")
             serviceContext.startService(Intent(context, CleanupService::class.java))
         }
     }

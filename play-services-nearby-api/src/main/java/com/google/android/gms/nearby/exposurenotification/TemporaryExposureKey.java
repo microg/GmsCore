@@ -8,10 +8,14 @@
 
 package com.google.android.gms.nearby.exposurenotification;
 
+import org.microg.gms.nearby.exposurenotification.Constants;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
+/**
+ * A key generated for advertising over a window of time.
+ */
 public class TemporaryExposureKey extends AutoSafeParcelable {
     @Field(1)
     private byte[] keyData;
@@ -22,32 +26,75 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
     private int transmissionRiskLevel;
     @Field(4)
     private int rollingPeriod;
+    @Field(5)
+    @ReportType
+    private int reportType;
+    @Field(6)
+    int daysSinceOnsetOfSymptoms;
+
+    /**
+     * The default value for {@link #getDaysSinceOnsetOfSymptoms()}.
+     *
+     * See {@link DiagnosisKeysDataMapping#getDaysSinceOnsetToInfectiousness()} for more information.
+     */
+    public static final int DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN = Constants.DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN;
 
     private TemporaryExposureKey() {
     }
 
-    TemporaryExposureKey(byte[] keyData, int rollingStartIntervalNumber, @RiskLevel int transmissionRiskLevel, int rollingPeriod) {
+    TemporaryExposureKey(byte[] keyData, int rollingStartIntervalNumber, @RiskLevel int transmissionRiskLevel, int rollingPeriod, @ReportType int reportType, int daysSinceOnsetOfSymptoms) {
         this.keyData = (keyData == null ? new byte[0] : keyData);
         this.rollingStartIntervalNumber = rollingStartIntervalNumber;
         this.transmissionRiskLevel = transmissionRiskLevel;
         this.rollingPeriod = rollingPeriod;
+        this.reportType = reportType;
+        this.daysSinceOnsetOfSymptoms = daysSinceOnsetOfSymptoms;
     }
 
+    /**
+     * The randomly generated Temporary Exposure Key information.
+     */
     public byte[] getKeyData() {
         return Arrays.copyOf(keyData, keyData.length);
     }
 
+    /**
+     * A number describing when a key starts. It is equal to startTimeOfKeySinceEpochInSecs / (60 * 10).
+     */
     public int getRollingStartIntervalNumber() {
         return rollingStartIntervalNumber;
     }
 
+    /**
+     * Risk of transmission associated with the person this key came from.
+     */
     @RiskLevel
     public int getTransmissionRiskLevel() {
         return transmissionRiskLevel;
     }
 
+    /**
+     * A number describing how long a key is valid. It is expressed in increments of 10 minutes (e.g. 144 for 24 hours).
+     */
     public int getRollingPeriod() {
         return rollingPeriod;
+    }
+
+    /**
+     * Type of diagnosis associated with a key.
+     */
+    @ReportType
+    public int getReportType() {
+        return reportType;
+    }
+
+    /**
+     * Number of days elapsed between symptom onset and the key being used.
+     * <p>
+     * E.g. 2 means the key is 2 days after onset of symptoms.
+     */
+    public int getDaysSinceOnsetOfSymptoms() {
+        return daysSinceOnsetOfSymptoms;
     }
 
     @Override
@@ -60,6 +107,8 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
         if (rollingStartIntervalNumber != that.rollingStartIntervalNumber) return false;
         if (transmissionRiskLevel != that.transmissionRiskLevel) return false;
         if (rollingPeriod != that.rollingPeriod) return false;
+        if (reportType != that.reportType) return false;
+        if (daysSinceOnsetOfSymptoms != that.daysSinceOnsetOfSymptoms) return false;
         return Arrays.equals(keyData, that.keyData);
     }
 
@@ -69,6 +118,8 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
         result = 31 * result + rollingStartIntervalNumber;
         result = 31 * result + transmissionRiskLevel;
         result = 31 * result + rollingPeriod;
+        result = 31 * result + reportType;
+        result = 31 * result + daysSinceOnsetOfSymptoms;
         return result;
     }
 
@@ -79,15 +130,23 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
                 ", rollingStartIntervalNumber=" + rollingStartIntervalNumber +
                 ", transmissionRiskLevel=" + transmissionRiskLevel +
                 ", rollingPeriod=" + rollingPeriod +
+                ", reportType=" + reportType +
+                ", daysSinceOnsetOfSymptoms=" + daysSinceOnsetOfSymptoms +
                 '}';
     }
 
+    /**
+     * A builder for {@link TemporaryExposureKey}.
+     */
     public static class TemporaryExposureKeyBuilder {
         private byte[] keyData;
         private int rollingStartIntervalNumber;
         @RiskLevel
         private int transmissionRiskLevel;
         private int rollingPeriod;
+        @ReportType
+        private int reportType;
+        private int daysSinceOnsetOfSymptoms = DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN;
 
         public TemporaryExposureKeyBuilder setKeyData(byte[] keyData) {
             this.keyData = Arrays.copyOf(keyData, keyData.length);
@@ -109,8 +168,18 @@ public class TemporaryExposureKey extends AutoSafeParcelable {
             return this;
         }
 
+        public TemporaryExposureKeyBuilder setReportType(@ReportType int reportType) {
+            this.reportType = reportType;
+            return this;
+        }
+
+        public TemporaryExposureKeyBuilder setDaysSinceOnsetOfSymptoms(int daysSinceOnsetOfSymptoms) {
+            this.daysSinceOnsetOfSymptoms = daysSinceOnsetOfSymptoms;
+            return this;
+        }
+
         public TemporaryExposureKey build() {
-            return new TemporaryExposureKey(keyData, rollingStartIntervalNumber, transmissionRiskLevel, rollingPeriod);
+            return new TemporaryExposureKey(keyData, rollingStartIntervalNumber, transmissionRiskLevel, rollingPeriod, reportType, daysSinceOnsetOfSymptoms);
         }
     }
 
