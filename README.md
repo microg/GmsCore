@@ -20,7 +20,6 @@ This fork tweaks MicroG to be usable by applications that require Google authent
   - Feedback
   - Firebase
   - Games
-  - Location
   - Maps
   - Recovery
   - Registering app permissions

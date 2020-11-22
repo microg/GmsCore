@@ -122,7 +122,20 @@ public class MultiConnectionKeeper {
         @SuppressLint("InlinedApi")
         public void bind() {
             Log.d(TAG, "Connection(" + actionString + ") : bind()");
-            Intent intent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
+            Intent gmsIntent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
+            Intent selfIntent = new Intent(actionString).setPackage(context.getPackageName());
+            Intent intent;
+            if (context.getPackageManager().resolveService(gmsIntent, 0) == null) {
+                Log.w(TAG, "No GMS service found for " + actionString);
+                if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
+                    Log.d(TAG, "Found service for "+actionString+" in self package, using it instead");
+                    intent = selfIntent;
+                } else {
+                    return;
+                }
+            } else {
+                intent = gmsIntent;
+            }
             int flags = Context.BIND_AUTO_CREATE;
             if (SDK_INT >= ICE_CREAM_SANDWICH) {
                 flags |= Context.BIND_ADJUST_WITH_ACTIVITY;

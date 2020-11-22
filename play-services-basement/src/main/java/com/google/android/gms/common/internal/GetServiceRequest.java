@@ -29,6 +29,8 @@ import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 
+import kotlin.Suppress;
+
 public class GetServiceRequest extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 3;

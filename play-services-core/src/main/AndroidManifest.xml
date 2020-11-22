@@ -49,8 +49,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -264,8 +266,6 @@
             </intent-filter>
         </service>
 
-        <!-- microG custom UI -->
-
         <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
@@ -347,6 +347,20 @@
 
         <!-- Other -->
 
+        <service android:name="org.microg.gms.location.GoogleLocationManagerService">
+            <intent-filter>
+                <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START"/>
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.location.ReportingAndroidService">
+            <intent-filter>
+                <action android:name="com.google.android.location.reporting.service.START"/>
+                <action android:name="com.google.android.gms.location.reporting.service.START"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+
         <service
             android:name="org.microg.gms.measurement.MeasurementBrokerService"
             android:exported="true">
@@ -354,6 +368,19 @@
                 <action android:name="com.google.android.gms.measurement.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.mdm.NetworkQualityService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.mdm.services.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.icing.LightweightIndexService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
             </intent-filter>
         </service>
 
@@ -393,6 +420,7 @@
                 <action android:name="com.google.android.gms.cast_mirroring.service.START" />
                 <action android:name="com.google.android.gms.common.service.START" />
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
+                <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
                 <action android:name="com.google.android.gms.gass.START" />
             </intent-filter>

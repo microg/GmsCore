@@ -19,7 +19,7 @@
 
 Se ciò è intenzionale, utilizza il pulsante <b>Accedi</b> (o <b>Huawei</b>, se possiedi un dispositivo con questo marchio) per connetterti alla relativa pagina di accesso Google, in caso contrario, premi <b>Annulla</b> per tornare all\'applicazione che ha richiamato questa finestra di dialogo."</string>
     <string name="auth_sign_in">Accedi</string>
-    <string name="auth_connecting">"Il tuo dispositivo sta stabilendo una connessione ai server di Google per eseguire l\'accesso.
+    <string name="auth_connecting">"Il tuo dispositivo sta stabilendo una connessione con i server di Google per eseguire l\'accesso.
 
 Questa operazione potrebbe richiedere alcuni secondi."</string>
     <string name="no_network_error_desc">"Non è stata rilevata alcuna connessione di rete.

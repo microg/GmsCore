@@ -6,10 +6,14 @@ include ':play-services-cast-api'
 include ':play-services-cast-framework-api'
 include ':play-services-iid-api'
 
+include ':play-services-location-api'
+include ':play-services-location'
+
 include ':play-services-base'
 include ':play-services-base-api'
 include ':play-services-tasks'
 include ':play-services-core-proto'
+include ':play-services-conscrypt-provider-core'
 
 include ':play-services-core'
 include ':play-services-core:microg-ui-tools'

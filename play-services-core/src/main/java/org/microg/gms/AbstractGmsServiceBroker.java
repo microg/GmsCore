@@ -50,6 +50,20 @@ public abstract class AbstractGmsServiceBroker extends IGmsServiceBroker.Stub {
 
     @Deprecated
     @Override
+    public void getReportingService(IGmsCallbacks callback, int versionCode, String packageName,
+                                    Bundle params) throws RemoteException {
+        callGetService(GmsService.LOCATION_REPORTING, callback, versionCode, packageName, params);
+    }
+
+    @Deprecated
+    @Override
+    public void getGoogleLocationManagerService(IGmsCallbacks callback, int versionCode,
+                                                String packageName, Bundle params) throws RemoteException {
+        callGetService(GmsService.LOCATION_MANAGER, callback, versionCode, packageName, params);
+    }
+
+    @Deprecated
+    @Override
     public void getPlayLogService(IGmsCallbacks callback, int versionCode, String packageName,
                                   Bundle params) throws RemoteException {
         callGetService(GmsService.PLAY_LOG, callback, versionCode, packageName, params);
