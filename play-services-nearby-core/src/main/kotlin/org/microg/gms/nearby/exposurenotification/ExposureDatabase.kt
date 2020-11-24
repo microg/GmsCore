@@ -63,10 +63,6 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE TABLE $TABLE_APP_PERMS(package TEXT NOT NULL, sig TEXT NOT NULL, perm TEXT NOT NULL, timestamp INTEGER NOT NULL);")
         }
         if (oldVersion < 5) {
-            Log.d(TAG, "Dropping legacy tables")
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_CONFIGURATIONS;")
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_DIAGNOSIS;")
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_TEK_CHECK;")
             Log.d(TAG, "Creating tables for version >= 3")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TOKENS(tid INTEGER PRIMARY KEY, package TEXT NOT NULL, token TEXT NOT NULL, timestamp INTEGER NOT NULL, configuration BLOB, diagnosisKeysDataMap BLOB);")
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TOKENS}_package_token ON $TABLE_TOKENS(package, token);")
@@ -82,14 +78,26 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_tcfid ON $TABLE_TEK_CHECK_FILE_MATCH(tcfid);")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_key ON $TABLE_TEK_CHECK_FILE_MATCH(keyData, rollingStartNumber, rollingPeriod);")
         }
-        if (oldVersion < 6) {
-            Log.d(TAG, "Fixing invalid rssi values from previous database version")
+        if (oldVersion in 5 until 7) {
+            Log.d(TAG, "Altering tables for version >= 7")
+            db.execSQL("ALTER TABLE $TABLE_TOKENS ADD COLUMN diagnosisKeysDataMap BLOB;")
+        }
+        if (oldVersion in 1 until 5) {
+            Log.d(TAG, "Dropping legacy tables from version < 5")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_CONFIGURATIONS;")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_DIAGNOSIS;")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_TEK_CHECK;")
+        }
+        if (oldVersion in 1 until 6) {
+            Log.d(TAG, "Fixing invalid rssi values from version < 6")
             // There's no bluetooth chip with a sensitivity that would result in rssi -200, so this would be invalid.
             // RSSI of -100 is already extremely low and thus is a good "default" value
             db.execSQL("UPDATE $TABLE_ADVERTISEMENTS SET rssi = -100 WHERE rssi < -200;")
         }
         if (oldVersion in 5 until 7) {
-            db.execSQL("ALTER TABLE $TABLE_TOKENS ADD COLUMN diagnosisKeysDataMap BLOB;")
+            Log.d(TAG, "Clearing non-matching tek cache from version < 7")
+            // Entries might be invalid due to previously missing support for new bluetooth AEM format
+            db.execSQL("DELETE FROM $TABLE_TEK_CHECK_FILE WHERE tcfid NOT IN (SELECT tcfid FROM $TABLE_TEK_CHECK_FILE_MATCH);")
         }
         Log.d(TAG, "Finished database upgrade")
     }
@@ -755,7 +763,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 7
+        private const val DB_VERSION = 8
         private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"
