@@ -25,6 +25,8 @@ android {
 
 apply from: '../gradle/publish-android.gradle'
 
+description = 'microG implementation of play-services-nearby'
+
 dependencies {
     api project(':play-services-base')
     api project(':play-services-nearby-api')

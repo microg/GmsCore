@@ -64,3 +64,5 @@ android {
 }
 
 apply from: '../gradle/publish-android.gradle'
+
+description = 'UI for microG service implementation for play-services-nearby'

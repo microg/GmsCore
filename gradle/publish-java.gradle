@@ -3,12 +3,33 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+task javaSourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allJava
+}
+
+javadoc {
+    classpath = configurations.compileClasspath
+    source = sourceSets.main.allJava
+}
+
+task javaJavadocsJar(type: Jar) {
+    archiveClassifier.set("javadoc")
+    from javadoc
+}
+
+artifacts {
+    archives javaSourcesJar
+    archives javaJavadocsJar
+}
+
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
                 pom {
                     name = project.name
+                    description = project.description
                     url = 'https://github.com/microg/GmsCore'
                     licenses {
                         license {
@@ -34,6 +55,8 @@ afterEvaluate {
                 }
 
                 from components.java
+                artifact javaSourcesJar
+                artifact javaJavadocsJar
             }
         }
         if (project.hasProperty('sonatype.username')) {

@@ -53,3 +53,5 @@ android {
 }
 
 apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-basement'

@@ -25,3 +25,5 @@ compileTestKotlin {
 }
 
 apply from: '../gradle/publish-java.gradle'
+
+description = 'Protocol buffers for microG implementation of play-services-nearby'
