@@ -65,7 +65,7 @@ public class AccountContentProvider extends ContentProvider {
             if (getContext().checkCallingPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
                 throw new SecurityException("Access denied, missing GET_ACCOUNTS or EXTENDED_ACCESS permission");
         }
-        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method) && AuthConstants.DEFAULT_ACCOUNT_TYPE.equals(arg)) {
+        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method)) {
             Bundle result = new Bundle();
             AccountManager am = AccountManager.get(getContext());
             Account[] accounts = null;
