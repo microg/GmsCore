@@ -7,7 +7,7 @@
     <string name="notification_service_name">Avviso Risparmio Energetico</string>
     <string name="small_notification_service_title">Espandi la notifica</string>
     <string name="big_notification_service_title">Mantieni i microG in secondo piano</string>
-    <string name="notification_service_content">Tocca qui per disattivare l\'ottimizzazione della batteria per microG, quindi effettua una chiusura forzata dalle info dell\'app.</string>
+    <string name="notification_service_content">Tocca qui per disattivare l\'ottimizzazione della batteria per microG, poi riavvia il dispositivo per rimuovere questa notifica.</string>
 
     <string name="just_a_sec">Solo un secondo…</string>
     <string name="ask_permission_tos">Continuando, consentirai a quest\'app e a Google di utilizzare le tue informazioni in conformità con i rispettivi termini di servizio e politiche sulla riservatezza.</string>

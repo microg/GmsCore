@@ -7,7 +7,7 @@
     <string name="notification_service_name">Exclusion de Ahorro de Bateria</string>
     <string name="small_notification_service_title">Expandir notificación</string>
     <string name="big_notification_service_title">Mantener microG en segundo plano</string>
-    <string name="notification_service_content">Toque aqui y deshabilita la optimización de batería para vanced microG, después fuerze el cierre de microG para cerrar esta notificación</string>
+    <string name="notification_service_content">Toque aqui y deshabilita la optimización de batería para vanced microG, luego reinicie el dispositivo para cerrar esta notificación</string>
 
     <string name="just_a_sec">Solo un momento…</string>
     <string name="ask_permission_tos">Al continuar, permites que esta app y Google usen tu información de acuerdo con sus respectivos términos de servicio y políticas de privacidad.</string>
