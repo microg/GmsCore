@@ -48,11 +48,6 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.10'
     implementation project(path: ':play-services-basement')
 
-    // nlp
-    implementation "org.microg.nlp:geocode-v1:$nlpVersion"
-    implementation "org.microg.nlp:location-v2:$nlpVersion"
-    implementation "org.microg.nlp:location-v3:$nlpVersion"
-    implementation "org.microg.nlp:service:$nlpVersion"
     api project(':play-services-location-api')
 }
 
