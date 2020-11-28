@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="gms_settings_name">Настройки Vanced microG</string>
@@ -7,7 +23,7 @@
     <string name="notification_service_name">Уведомление о службе батареи</string>
     <string name="small_notification_service_title">Разверните уведомление</string>
     <string name="big_notification_service_title">Удерживать microG в фоне</string>
-    <string name="notification_service_content">Нажмите сюда и отключите экономию заряда батареи для microG. После этого закройте приложение или отключите уведомление.</string>
+    <string name="notification_service_content">Щелкните здесь, чтобы отключить режим энергосбережения для microG. Затем перезагрузите устройство, чтобы отключить уведомление.</string>
 
     <string name="just_a_sec">Секундочку…</string>
     <string name="ask_permission_tos">Продолжая, вы разрешаете этому приложению и Google использовать вашу информацию в соответствии с их соответствующими условиями использования и политикой конфиденциальности.</string>

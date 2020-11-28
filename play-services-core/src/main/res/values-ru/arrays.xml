@@ -17,17 +17,6 @@
 
 <resources>
 
-    <string-array name="gcm_network_config_values" translatables="false">
-        <item>-1</item>
-        <item>0</item>
-        <item>2</item>
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-        <item>30</item>
-    </string-array>
-
     <string-array name="gcm_network_config_names" translatables="false">
         <item>@string/service_status_disabled</item>
         <item>@string/service_status_default</item>
@@ -38,4 +27,5 @@
         <item>Интервал пинга: 20 минут</item>
         <item>Интервал пинга: 30 минут</item>
     </string-array>
+
 </resources>
