@@ -354,11 +354,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
         // TODO: Serve map styles locally
         when (storedMapType) {
-            MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
-            MAP_TYPE_TERRAIN -> map?.setStyle(Style.OUTDOORS, update)
-            MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
-            //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-            else -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"), update)
+            MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/xxxfreez/ckgrytf560pfp19l42rbu0fms"), update)
+            MAP_TYPE_TERRAIN -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/xxxfreez/ckgrytf560pfp19l42rbu0fms"), update)
+            MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/xxxfreez/ckgrytf560pfp19l42rbu0fms"), update)
+            MAP_TYPE_NORMAL -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/xxxfreez/ckgrytf560pfp19l42rbu0fms"), update)
+            MAP_TYPE_OUTDOORS -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/xxxfreez/ckgrytf560pfp19l42rbu0fms"), update)
+            MAP_TYPE_NONE -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/xxxfreez/ckgrytf560pfp19l42rbu0fms"), update)
+            MAP_TYPE_ALL -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/xxxfreez/ckgrytf560pfp19l42rbu0fms"), update)
         }
 
         map?.let { BitmapDescriptorFactoryImpl.registerMap(it) }
