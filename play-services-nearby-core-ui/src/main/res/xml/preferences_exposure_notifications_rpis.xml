@@ -19,6 +19,12 @@
             android:title="@string/pref_exposure_rpi_delete_all_title" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <Preference
+            android:key="pref_exposure_export_database"
+            android:title="@string/pref_exposure_rpi_export_title"
+            android:summary="@string/pref_exposure_rpi_export_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <org.microg.gms.ui.TextPreference
             android:icon="@drawable/ic_info_outline"
             android:selectable="false"

@@ -8,13 +8,16 @@ package org.microg.gms.nearby.exposurenotification
 import android.annotation.TargetApi
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import android.database.sqlite.SQLiteOpenHelper
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import androidx.core.content.FileProvider
 import com.google.android.gms.nearby.exposurenotification.CalibrationConfidence
 import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMapping
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
@@ -898,6 +901,53 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                 }
             } finally {
                 unrefDeferredInstance()
+            }
+        }
+
+        fun export(context: Context) {
+            // FileProvider cannot directly access /databases, so we have to copy the database first
+            // In addition, we filter out only the Advertisements table to not export sensitive TEKs
+
+            // Create a new database which will store only the Advertisements table
+            val exportDir = File(context.getCacheDir(), "exposureDatabase")
+            exportDir.mkdir()
+            val exportFile = File(exportDir, "database.db")
+            if (exportFile.delete()) {
+                Log.d("EN-DB-Exporter", "Deleted old export database.")
+            }
+            val db = SQLiteDatabase.openOrCreateDatabase(exportFile, null)
+
+            // Attach the full database to the new empty db
+            val databaseFile = context.getDatabasePath(DB_NAME);
+            db.execSQL("ATTACH '$databaseFile' AS fulldb;")
+
+            // copy TABLE_ADVERTISEMENTS over
+            db.execSQL("CREATE TABLE $TABLE_ADVERTISEMENTS AS SELECT * FROM fulldb.$TABLE_ADVERTISEMENTS;")
+
+            // Detach original db, close new db
+            db.execSQL("DETACH DATABASE fulldb;")
+            db.close()
+
+            // Use the FileProvider to get a content URI for the new DB
+            val fileUri: Uri? = try {
+                FileProvider.getUriForFile(context,"org.microg.gms.nearby.exposurenotification.export", exportFile)
+            } catch (e: IllegalArgumentException) {
+                Log.e("EN-DB-Exporter", "The database file can't be shared: $exportFile $e")
+                null
+            }
+
+            // Open a sharesheet
+            if (fileUri != null) {
+                // Grant temporary read permission to the content URI
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_STREAM, fileUri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    type = "application/vnd.sqlite3"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                context.startActivity(shareIntent)
             }
         }
 

@@ -23,6 +23,8 @@
     <string name="pref_exposure_rpi_delete_all_title">Alle gesammelten IDs löschen</string>
     <string name="pref_exposure_rpi_delete_all_warning">Nach dem Löschen der gesammelten IDs kannst du nicht mehr informiert werden, falls einer deiner Kontakte der letzten 14 Tage positiv getested wurde.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Trotzdem löschen</string>
+    <string name="pref_exposure_rpi_export_title">Datenbank Export</string>
+    <string name="pref_exposure_rpi_export_summary">Exportiere die aktuelle Datenbank um sie mit einer anderen App zu analysieren.</string>
     <string name="pref_exposure_info_summary">"Die Exposure Notifications API ermöglicht es Apps, dich zu warnen, falls du Kontakt zu einer positiv getesteten Person hattest.
 
 Das Datum, die Zeitdauer und die Signalstärke, die dem Kontakt zugeordnet sind, werden mit der zugehörigen App geteilt."</string>
