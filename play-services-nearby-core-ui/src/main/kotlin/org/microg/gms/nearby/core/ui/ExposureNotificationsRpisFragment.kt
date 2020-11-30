@@ -24,6 +24,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     private lateinit var histogramCategory: PreferenceCategory
     private lateinit var histogram: BarChartPreference
     private lateinit var deleteAll: Preference
+    private lateinit var exportDb: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications_rpis)
@@ -33,6 +34,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
         histogramCategory = preferenceScreen.findPreference("prefcat_exposure_rpi_histogram") ?: histogramCategory
         histogram = preferenceScreen.findPreference("pref_exposure_rpi_histogram") ?: histogram
         deleteAll = preferenceScreen.findPreference("pref_exposure_rpi_delete_all") ?: deleteAll
+        exportDb = preferenceScreen.findPreference("pref_exposure_export_database") ?: exportDb
         deleteAll.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             AlertDialog.Builder(requireContext())
                     .setTitle(R.string.pref_exposure_rpi_delete_all_title)
@@ -46,6 +48,10 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
                     .setNegativeButton(android.R.string.cancel) { _, _ -> }
                     .create()
                     .show()
+            true
+        }
+        exportDb.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            ExposureDatabase.export(requireContext())
             true
         }
     }
