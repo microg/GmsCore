@@ -56,4 +56,6 @@ The date, duration, and signal strength associated with an exposure will be shar
 
 Your identity or test result won&apos;t be shared with other people."</string>
     <string name="exposure_confirm_keys_button">Share</string>
+    <string name="exposure_confirm_permission_description">You need to grant permissions to <xliff:g example="microG Services Core">%1$s</xliff:g> for Exposure Notifications to function correctly.</string>
+    <string name="exposure_confirm_permission_button">Grant</string>
 </resources>

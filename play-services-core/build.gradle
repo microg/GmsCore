@@ -29,7 +29,6 @@ configurations {
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "de.hdodenhof:circleimageview:1.3.0"
-    implementation "org.conscrypt:conscrypt-android:2.1.0"
     // TODO: Switch to upstream once raw requests are merged
     // https://github.com/vitalidze/chromecast-java-api-v2/pull/99
     // implementation "su.litvak.chromecast:api-v2:0.10.4"
@@ -44,6 +43,7 @@ dependencies {
     implementation project(':firebase-auth-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-base-core-ui')
+    implementation project(':play-services-conscrypt-provider-core')
     implementation project(':play-services-location-core')
     withNearbyImplementation project(':play-services-nearby-core')
     withNearbyImplementation project(':play-services-nearby-core-ui')
@@ -62,11 +62,9 @@ dependencies {
     implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
-    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui:$navigationVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 

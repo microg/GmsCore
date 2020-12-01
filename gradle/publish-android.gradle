@@ -1,0 +1,67 @@
+/*
+ * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from android.sourceSets.main.java.source
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                pom {
+                    name = project.name
+                    url = 'https://github.com/microg/GmsCore'
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'microg'
+                            name = 'microG Team'
+                        }
+                        developer {
+                            id = 'mar-v-in'
+                            name = 'Marvin W.'
+                        }
+                    }
+                    scm {
+                        url = 'https://github.com/microg/GmsCore'
+                        connection = 'scm:git:https://github.com/microg/GmsCore.git'
+                        developerConnection = 'scm:git:ssh://github.com/microg/GmsCore.git'
+                    }
+                }
+
+                from components.release
+                artifact androidSourcesJar
+            }
+        }
+        if (project.hasProperty('sonatype.username')) {
+            repositories {
+                maven {
+                    name = 'sonatype'
+                    url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+                    credentials {
+                        username project.getProperty('sonatype.username')
+                        password project.getProperty('sonatype.password')
+                    }
+                }
+            }
+        }
+    }
+    if (project.hasProperty('signing.keyId')) {
+        signing {
+            sign publishing.publications
+        }
+    }
+}

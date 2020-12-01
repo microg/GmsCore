@@ -1,6 +1,6 @@
 <img src="http://i.imgur.com/hXY4lcC.png" height="42px" alt="microG" /> Services Core (GmsCore)
 =======
-[![Build Status](https://travis-ci.org/microg/android_packages_apps_GmsCore.svg?branch=master)](https://travis-ci.org/microg/android_packages_apps_GmsCore)
+[![Build Status](https://travis-ci.com/microg/GmsCore.svg?branch=master)](https://travis-ci.com/microg/GmsCore)
 
 microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
