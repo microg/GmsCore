@@ -1,14 +1,30 @@
-<img src="http://i.imgur.com/hXY4lcC.png" height="42px" alt="microG" /> Services Core (GmsCore)
-=======
-[![Build Status](https://travis-ci.org/microg/android_packages_apps_GmsCore.svg?branch=master)](https://travis-ci.org/microg/android_packages_apps_GmsCore)
+# microG Services Core (HUAWEI patched)
+
+[![Build Status](https://travis-ci.com/jcchikikomori/GmsCoreHuawei.svg?branch=feature%2FHUAWEI-patch)](https://travis-ci.org/jcchikikomori/GmsCoreHuawei)
+
+## What is microG
 
 microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
-### Please refer to the [wiki](https://github.com/microg/android_packages_apps_GmsCore/wiki) for downloads and instructions
+## Then why GmsCoreHuawei
 
+GmsCoreHuawei is a forked version of microG GmsCore which is a free software reimplementation of Google's Play Services. The difference is to attempt to allow applications calling proprietary Google APIs to run specifically on Google-less HUAWEI devices (EMUI 10 and up).
 
-License
--------
+Also, this fork applies the following compared to original microG
+
+- Fake device info to bypass Google's restrictions
+- Based on YouTube Vanced's codebase
+
+### Please refer to the [wiki](https://github.com/jcchikikomori/GmsCoreHuawei/wiki) for downloads and instructions. Also check my [article](https://johncyrillcorsanes.medium.com/google-alternatives-for-huawei-devices-c91f6fae6300)
+
+## DISCLAIMER
+
+    This project is not recommended for production & enterprise purposes, since device faking is somewhat illegal in Google's legal terms.
+
+    This is only a experiment on how Google Services works on the entire Android space.
+
+## License
+
     Copyright 2013-2020 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
