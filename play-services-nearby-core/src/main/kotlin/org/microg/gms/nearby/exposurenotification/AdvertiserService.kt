@@ -232,5 +232,31 @@ class AdvertiserService : LifecycleService() {
         fun isNeeded(context: Context): Boolean {
             return ExposurePreferences(context).enabled
         }
+
+        fun isSupported(context: Context): Boolean? {
+            val adapter = BluetoothAdapter.getDefaultAdapter()
+            return when {
+                adapter == null -> {
+                    Log.d(TAG, "LE advertising not supported via adapter")
+                    false
+                }
+                Build.VERSION.SDK_INT >= 26 && (adapter.isLeExtendedAdvertisingSupported || adapter.isLePeriodicAdvertisingSupported) -> {
+                    Log.d(TAG, "LE advertising supported via feature")
+                    true
+                }
+                adapter.state != BluetoothAdapter.STATE_ON -> {
+                    Log.d(TAG, "LE advertising unknown via state")
+                    null
+                }
+                adapter.bluetoothLeAdvertiser != null -> {
+                    Log.d(TAG, "LE advertising supported via advertiser")
+                    true
+                }
+                else -> {
+                    Log.d(TAG, "LE advertising not supported via advertiser")
+                    false
+                }
+            }
+        }
     }
 }

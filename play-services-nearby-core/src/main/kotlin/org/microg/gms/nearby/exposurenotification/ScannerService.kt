@@ -10,6 +10,7 @@ import android.annotation.TargetApi
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.le.*
 import android.content.BroadcastReceiver
@@ -170,6 +171,32 @@ class ScannerService : LifecycleService() {
     companion object {
         fun isNeeded(context: Context): Boolean {
             return ExposurePreferences(context).enabled
+        }
+
+        fun isSupported(context: Context): Boolean? {
+            if (AdvertiserService.isSupported(context) == true) {
+                Log.d(TAG, "LE scanning supported via advertiser")
+                return true
+            }
+            val adapter = BluetoothAdapter.getDefaultAdapter()
+            return when {
+                adapter == null -> {
+                    Log.d(TAG, "LE scanning not supported via adapter")
+                    false
+                }
+                adapter.state != BluetoothAdapter.STATE_ON -> {
+                    Log.d(TAG, "LE scanning unknown via state")
+                    null
+                }
+                adapter.bluetoothLeScanner != null -> {
+                    Log.d(TAG, "LE scanning supported via scanner")
+                    true
+                }
+                else -> {
+                    Log.d(TAG, "LE scanning not supported via scanner")
+                    false
+                }
+            }
         }
     }
 }
