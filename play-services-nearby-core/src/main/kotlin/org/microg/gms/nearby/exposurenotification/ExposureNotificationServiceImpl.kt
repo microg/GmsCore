@@ -280,7 +280,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 }
 
                 if (todoKeyFiles.size > 0) {
-                    val time = (System.currentTimeMillis() - start).toDouble() / 1000.0
+                    val time = (System.currentTimeMillis() - start).coerceAtLeast(1).toDouble() / 1000.0
                     Log.d(TAG, "$packageName/${params.token} processed $keys keys (${todoKeyFiles.size} files pending) in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
                 }
 
