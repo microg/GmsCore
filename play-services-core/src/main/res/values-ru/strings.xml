@@ -23,7 +23,7 @@
     <string name="notification_service_name">Уведомление о службе батареи</string>
     <string name="small_notification_service_title">Разверните уведомление</string>
     <string name="big_notification_service_title">Удерживать microG в фоне</string>
-    <string name="notification_service_content">Щелкните здесь, чтобы отключить режим энергосбережения для microG. Затем перезагрузите устройство, чтобы отключить уведомление.</string>
+    <string name="notification_service_content">Нажмите здесь, чтобы отключить режим энергосбережения для microG. Затем перезагрузите устройство, чтобы отключить уведомление.</string>
 
     <string name="just_a_sec">Секундочку…</string>
     <string name="ask_permission_tos">Продолжая, вы разрешаете этому приложению и Google использовать вашу информацию в соответствии с их соответствующими условиями использования и политикой конфиденциальности.</string>
