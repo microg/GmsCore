@@ -215,6 +215,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun provideDiagnosisKeys(params: ProvideDiagnosisKeysParams) {
+        params.token = params.token ?: TOKEN_A
         Log.w(TAG, "provideDiagnosisKeys() with $packageName/${params.token}")
         lifecycleScope.launchWhenStarted {
             val tid = ExposureDatabase.with(context) { database ->
