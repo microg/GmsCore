@@ -17,11 +17,12 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:clipChildren="false"
-             android:layout_marginBottom="0.25dp"
-             android:clipToPadding="false">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="0.25dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:id="@+id/content"
@@ -32,8 +33,8 @@
         android:elevation="2dp"
         android:focusable="true"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp">
+        android:paddingStart="16dp"
+        android:paddingLeft="16dp">
 
         <LinearLayout
             android:id="@+id/collapsed_group"
@@ -44,12 +45,12 @@
 
             <ImageView
                 android:id="@android:id/icon"
-                android:src="@android:drawable/ic_dialog_alert"
                 android:layout_width="24dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="36dp"
                 android:layout_marginRight="36dp"
-                android:tint="?android:attr/textColorPrimaryInverse"/>
+                android:src="@android:drawable/ic_dialog_alert"
+                app:tint="?android:attr/textColorPrimaryInverse" />
 
             <TextView
                 android:id="@android:id/title"
@@ -58,7 +59,7 @@
                 android:layout_weight="1"
                 android:text="Test Condition"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?android:attr/textColorPrimaryInverse"/>
+                android:textColor="?android:attr/textColorPrimaryInverse" />
 
             <ImageView
                 android:id="@+id/expand_indicator"
@@ -69,7 +70,7 @@
                 android:focusable="true"
                 android:padding="16dp"
                 android:src="@drawable/ic_expand_more"
-                android:tint="?android:attr/textColorPrimaryInverse"/>
+                app:tint="?android:attr/textColorPrimaryInverse" />
 
         </LinearLayout>
 
@@ -78,37 +79,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="60dp"
             android:paddingStart="60dp"
+            android:paddingLeft="60dp"
             android:visibility="gone">
 
             <TextView
                 android:id="@android:id/summary"
-                android:text="This condition just exists for testing. This is a summary describing it."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha=".7"
-                android:paddingBottom="16dp"
                 android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
                 android:paddingRight="?attr/listPreferredItemPaddingRight"
+                android:paddingBottom="16dp"
+                android:text="This condition just exists for testing. This is a summary describing it."
                 android:textAppearance="?attr/textAppearanceListItemSmall"
-                android:textColor="?android:attr/textColorPrimaryInverse"/>
+                android:textColor="?android:attr/textColorPrimaryInverse" />
 
             <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="0.25dp"
-                android:background="@android:color/white"/>
+                android:background="@android:color/white" />
 
             <androidx.appcompat.widget.ButtonBarLayout
                 android:id="@+id/buttonBar"
                 style="?attr/buttonBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
                 android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
                 android:paddingRight="?attr/listPreferredItemPaddingRight"
-                android:paddingTop="8dp">
+                android:paddingBottom="8dp">
 
                 <Button
                     android:id="@+id/first_action"
@@ -116,10 +117,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.8"
-                    android:paddingLeft="0dp"
                     android:paddingStart="0dp"
+                    android:paddingLeft="0dp"
                     android:text="Fix it!"
-                    android:textColor="?android:attr/textColorPrimaryInverse"/>
+                    android:textColor="?android:attr/textColorPrimaryInverse" />
 
                 <Button
                     android:id="@+id/second_action"
@@ -127,8 +128,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.8"
-                    android:visibility="gone"
-                    android:textColor="?android:attr/textColorPrimaryInverse"/>
+                    android:textColor="?android:attr/textColorPrimaryInverse"
+                    android:visibility="gone" />
 
             </androidx.appcompat.widget.ButtonBarLayout>
         </LinearLayout>

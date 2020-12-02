@@ -72,6 +72,7 @@ class AdvertiserService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
+        Log.d(TAG, "AdvertisingService.start: $intent")
         super.onStartCommand(intent, flags, startId)
         if (intent?.action == ACTION_RESTART_ADVERTISING && advertising) {
             stopOrRestartAdvertising()

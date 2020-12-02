@@ -6,15 +6,12 @@
 package org.microg.gms.nearby.exposurenotification
 
 import android.util.Log
-import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
-import com.google.android.gms.nearby.exposurenotification.ExposureInformation
-import com.google.android.gms.nearby.exposurenotification.RiskLevel
-import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
+import com.google.android.gms.nearby.exposurenotification.*
 import java.util.concurrent.TimeUnit
 
 data class PlainExposure(val rpi: ByteArray, val aem: ByteArray, val timestamp: Long, val duration: Long, val rssi: Int)
 
-data class MeasuredExposure(val timestamp: Long, val duration: Long, val rssi: Int, val txPower: Int, val key: TemporaryExposureKey) {
+data class MeasuredExposure(val timestamp: Long, val duration: Long, val rssi: Int, val txPower: Int, @CalibrationConfidence val confidence: Int, val key: TemporaryExposureKey) {
     val attenuation
         get() = txPower - (rssi + currentDeviceInfo.rssiCorrection)
 }
@@ -24,16 +21,16 @@ fun List<MeasuredExposure>.merge(): List<MergedExposure> {
     val result = arrayListOf<MergedExposure>()
     for (key in keys) {
         var merged: MergedExposure? = null
-        for (exposure in filter { it.key == key }.sortedBy { it.timestamp }) {
-            if (merged != null && merged.timestamp + MergedExposure.MAXIMUM_DURATION + ROLLING_WINDOW_LENGTH_MS > exposure.timestamp) {
+        for (exposure in filter { it.key == key }.distinctBy { it.timestamp }.sortedBy { it.timestamp }) {
+            if (merged != null && merged.timestamp + MergedExposure.MAXIMUM_DURATION > exposure.timestamp) {
                 merged += exposure
             } else {
                 if (merged != null) {
                     result.add(merged)
                 }
-                merged = MergedExposure(key, exposure.timestamp, listOf(MergedSubExposure(exposure.attenuation, exposure.duration)))
+                merged = MergedExposure(key, exposure.timestamp, exposure.txPower, exposure.confidence, listOf(MergedSubExposure(exposure.attenuation, exposure.duration)))
             }
-            if (merged.durationInMinutes > 30) {
+            if (merged.durationInMinutes >= 30) {
                 result.add(merged)
                 merged = null
             }
@@ -47,7 +44,7 @@ fun List<MeasuredExposure>.merge(): List<MergedExposure> {
 
 internal data class MergedSubExposure(val attenuation: Int, val duration: Long)
 
-data class MergedExposure internal constructor(val key: TemporaryExposureKey, val timestamp: Long, internal val subs: List<MergedSubExposure>) {
+data class MergedExposure internal constructor(val key: TemporaryExposureKey, val timestamp: Long, val txPower: Int, @CalibrationConfidence val confidence: Int, internal val subs: List<MergedSubExposure>) {
     @RiskLevel
     val transmissionRiskLevel: Int
         get() = key.transmissionRiskLevel

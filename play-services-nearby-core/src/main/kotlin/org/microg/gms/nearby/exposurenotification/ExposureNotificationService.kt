@@ -31,7 +31,6 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
 
         if (request.packageName != packageName) {
             checkPermission("android.permission.BLUETOOTH") ?: return
-            checkPermission("android.permission.INTERNET") ?: return
         }
 
         if (Build.VERSION.SDK_INT < 21) {
@@ -41,9 +40,17 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
 
         Log.d(TAG, "handleServiceRequest: " + request.packageName)
         callback.onPostInitCompleteWithConnectionInfo(SUCCESS, ExposureNotificationServiceImpl(this, lifecycle, request.packageName), ConnectionInfo().apply {
+            // Note: this is just a list of all possible features as of 1.7.1-eap
             features = arrayOf(
                     Feature("nearby_exposure_notification", 3),
-                    Feature("nearby_exposure_notification_get_version", 1)
+                    Feature("nearby_exposure_notification_1p", 1),
+                    Feature("nearby_exposure_notification_get_version", 1),
+                    Feature("nearby_exposure_notification_get_calibration_confidence", 1),
+                    Feature("nearby_exposure_notification_get_day_summaries", 1),
+                    Feature("nearby_exposure_notification_get_status", 1),
+                    Feature("nearby_exposure_notification_diagnosis_keys_data_mapping", 1),
+                    Feature("nearby_exposure_notification_diagnosis_key_file_supplier", 1),
+                    Feature("nearby_exposure_notification_package_configuration", 1)
             )
         })
     }
