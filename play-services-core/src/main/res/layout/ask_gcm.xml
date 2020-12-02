@@ -18,6 +18,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clipChildren="false"
     android:clipToPadding="false">
 
@@ -49,7 +50,7 @@
                     android:layout_height="36dip"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_cloud_bell"
-                    android:tint="?attr/colorAccent">
+                    app:tint="?attr/colorAccent">
                 </ImageView>
 
                 <TextView

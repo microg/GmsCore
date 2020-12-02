@@ -8,6 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:orientation="vertical">
 
     <TextView
@@ -29,6 +30,36 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         tools:text="Your phone needs to use Bluetooth to securely collect and share IDs with other phones that are nearby.\n\nCorona Warn can notify you if you were exposed to someone who reported to be diagnosed positive.\n\nThe date, duration, and signal strength associated with an exposure will be shared with the app." />
+
+    <LinearLayout
+        android:id="@+id/grant_permission_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/colorAccent"
+        android:clipToPadding="false"
+        android:padding="16dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/grant_permission_summary"
+            style="@style/TextAppearance.AppCompat.Small.Inverse"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/exposure_confirm_permission_description" />
+
+        <Button
+            android:id="@+id/grant_permission_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="-8dp"
+            android:text="@string/exposure_confirm_permission_button"
+            android:textColor="?android:attr/textColorPrimaryInverse" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -26,6 +26,8 @@ public class ProvideDiagnosisKeysParams extends AutoSafeParcelable {
     public ExposureConfiguration configuration;
     @Field(5)
     public String token;
+    @Field(6)
+    public IDiagnosisKeyFileSupplier keyFileSupplier;
 
     private ProvideDiagnosisKeysParams() {
     }
@@ -40,6 +42,11 @@ public class ProvideDiagnosisKeysParams extends AutoSafeParcelable {
         this.keyFiles = keyFiles;
         this.configuration = configuration;
         this.token = token;
+    }
+
+    public ProvideDiagnosisKeysParams(IStatusCallback callback, IDiagnosisKeyFileSupplier keyFileSupplier) {
+        this.callback = callback;
+        this.keyFileSupplier = keyFileSupplier;
     }
 
     public static final Creator<ProvideDiagnosisKeysParams> CREATOR = new AutoCreator<>(ProvideDiagnosisKeysParams.class);

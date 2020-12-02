@@ -9,6 +9,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import org.microg.gms.common.ForegroundServiceContext
 class CleanupService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
+        Log.d(TAG, "CleanupService.start: $intent")
         super.onStartCommand(intent, flags, startId)
         if (isNeeded(this)) {
             lifecycleScope.launchWhenStarted {
