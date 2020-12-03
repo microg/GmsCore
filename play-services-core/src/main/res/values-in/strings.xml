@@ -23,7 +23,7 @@
     <string name="notification_service_name">Memperhatikan Menghemat Baterai</string>
     <string name="small_notification_service_title">Perluas notifikasi</string>
     <string name="big_notification_service_title">Pertahankan microG di latar belakang</string>
-    <string name="notification_service_content">Untuk menghapus pemberitahuan ini secara paksa tutup microG dari daftar aplikasi yang diinstal</string>
+    <string name="notification_service_content">Ketuk di sini dan nonaktifkan pengoptimalan baterai untuk microG, lalu reboot perangkat untuk menghapus notifikasi ini.</string>
 
     <string name="just_a_sec">Tunggu sebentar…</string>
     <string name="ask_permission_tos">Dengan melanjutkan, anda mengizinkan aplikasi ini dan Google untuk menggunakan informasi anda sesuai dengan persyaratan layanan masing-masing dan kebijakan privasi.</string>
