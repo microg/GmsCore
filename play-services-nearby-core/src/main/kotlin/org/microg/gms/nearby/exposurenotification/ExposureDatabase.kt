@@ -22,6 +22,7 @@ import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import kotlinx.coroutines.*
 import okio.ByteString
 import org.json.JSONObject
+import org.microg.gms.nearby.exposurenotification.Constants.TOKEN_A
 import java.io.File
 import java.lang.Runnable
 import java.nio.ByteBuffer
@@ -220,6 +221,20 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             } else {
                 null
             }
+        }
+    }
+
+    fun getOrCreateTokenId(packageName: String, token: String, database: SQLiteDatabase = writableDatabase) = database.run {
+        val tid = getTokenId(packageName, token, this)
+        if (tid != null) {
+            tid
+        } else {
+            insert(TABLE_TOKENS, "NULL", ContentValues().apply {
+                put("package", packageName)
+                put("token", token)
+                put("timestamp", System.currentTimeMillis())
+            })
+            getTokenId(packageName, token, this)
         }
     }
 

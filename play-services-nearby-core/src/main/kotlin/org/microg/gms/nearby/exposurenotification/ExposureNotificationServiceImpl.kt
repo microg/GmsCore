@@ -215,17 +215,19 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun provideDiagnosisKeys(params: ProvideDiagnosisKeysParams) {
-        Log.w(TAG, "provideDiagnosisKeys() with $packageName/${params.token}")
+        val token = params.token ?: TOKEN_A
+        Log.w(TAG, "provideDiagnosisKeys() with $packageName/$token")
         lifecycleScope.launchWhenStarted {
             val tid = ExposureDatabase.with(context) { database ->
-                if (params.configuration != null) {
-                    database.storeConfiguration(packageName, params.token, params.configuration)
+                val configuration = params.configuration
+                if (configuration != null) {
+                    database.storeConfiguration(packageName, token, configuration)
                 } else {
-                    database.getTokenId(packageName, params.token)
+                    database.getOrCreateTokenId(packageName, token)
                 }
             }
             if (tid == null) {
-                Log.w(TAG, "Unknown token without configuration: $packageName/${params.token}")
+                Log.w(TAG, "Unknown token without configuration: $packageName/$token")
                 try {
                     params.callback.onResult(Status.INTERNAL_ERROR)
                 } catch (e: Exception) {
@@ -281,7 +283,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
                 if (todoKeyFiles.size > 0) {
                     val time = (System.currentTimeMillis() - start).coerceAtLeast(1).toDouble() / 1000.0
-                    Log.d(TAG, "$packageName/${params.token} processed $keys keys (${todoKeyFiles.size} files pending) in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
+                    Log.d(TAG, "$packageName/$token processed $keys keys (${todoKeyFiles.size} files pending) in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
                 }
 
                 Handler(Looper.getMainLooper()).post {
@@ -323,16 +325,16 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 }
 
                 val time = (System.currentTimeMillis() - start).coerceAtLeast(1).toDouble() / 1000.0
-                Log.d(TAG, "$packageName/${params.token} processed $keys keys ($newKeys new) in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
+                Log.d(TAG, "$packageName/$token processed $keys keys ($newKeys new) in ${time}s -> ${(keys.toDouble() / time * 1000).roundToInt().toDouble() / 1000.0} keys/s")
 
                 database.noteAppAction(packageName, "provideDiagnosisKeys", JSONObject().apply {
-                    put("request_token", params.token)
+                    put("request_token", token)
                     put("request_keys_size", params.keys?.size)
                     put("request_keyFiles_size", params.keyFiles?.size)
                     put("request_keys_count", keys)
                 }.toString())
 
-                val exposureSummary = buildExposureSummary(params.token)
+                val exposureSummary = buildExposureSummary(token)
 
                 try {
                     val intent = if (exposureSummary.matchedKeyCount > 0) {
@@ -340,7 +342,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     } else {
                         Intent(ACTION_EXPOSURE_NOT_FOUND)
                     }
-                    intent.putExtra(EXTRA_TOKEN, params.token)
+                    intent.putExtra(EXTRA_TOKEN, token)
                     intent.`package` = packageName
                     Log.d(TAG, "Sending $intent")
                     context.sendOrderedBroadcast(intent, null)

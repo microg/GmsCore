@@ -7,6 +7,8 @@ package com.google.android.gms.nearby.exposurenotification.internal;
 
 import android.os.ParcelFileDescriptor;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.common.api.internal.IStatusCallback;
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration;
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey;
@@ -17,16 +19,21 @@ import java.util.List;
 
 public class ProvideDiagnosisKeysParams extends AutoSafeParcelable {
     @Field(1)
+    @Nullable
     public List<TemporaryExposureKey> keys;
     @Field(2)
     public IStatusCallback callback;
     @Field(3)
+    @Nullable
     public List<ParcelFileDescriptor> keyFiles;
     @Field(4)
+    @Nullable
     public ExposureConfiguration configuration;
     @Field(5)
+    @Nullable
     public String token;
     @Field(6)
+    @Nullable
     public IDiagnosisKeyFileSupplier keyFileSupplier;
 
     private ProvideDiagnosisKeysParams() {
