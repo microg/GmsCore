@@ -28,12 +28,14 @@ import com.google.android.gms.dynamite.IDynamiteLoader;
 
 import org.microg.gms.common.Constants;
 
+import java.lang.reflect.Field;
+
 public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
     private static final String TAG = "GmsDynamiteLoaderImpl";
 
     @Override
     public IObjectWrapper createModuleContext(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
-        Log.d(TAG, "unimplemented Method: createModuleContext for " + moduleId + " at version " + minVersion + ", returning gms context");
+        Log.d(TAG, "createModuleContext for " + moduleId + " at version " + minVersion);
         final Context context = (Context) ObjectWrapper.unwrap(wrappedContext);
         try {
             return ObjectWrapper.wrap(new ContextWrapper(context.createPackageContext(Constants.GMS_PACKAGE_NAME, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY)) {
@@ -55,6 +57,12 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
 
     @Override
     public int getModuleVersion2(IObjectWrapper context, String moduleId, boolean updateConfigIfRequired) throws RemoteException {
+        try {
+            return Class.forName("com.google.android.gms.dynamite.descriptors." + moduleId + ".ModuleDescriptor").getDeclaredField("MODULE_VERSION").getInt(null);
+        } catch (Exception e) {
+            Log.w(TAG, "No such module known: " + moduleId);
+        }
+
         if (moduleId.equals("com.google.android.gms.firebase_database")) {
             Log.d(TAG, "returning temp fix module version for " + moduleId + ". Firebase Database will not be functional!");
             return com.google.android.gms.dynamite.descriptors.com.google.android.gms.firebase_database.ModuleDescriptor.MODULE_VERSION;
