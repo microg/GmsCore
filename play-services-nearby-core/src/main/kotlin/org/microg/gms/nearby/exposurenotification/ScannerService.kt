@@ -174,28 +174,12 @@ class ScannerService : LifecycleService() {
         }
 
         fun isSupported(context: Context): Boolean? {
-            if (AdvertiserService.isSupported(context) == true) {
-                Log.d(TAG, "LE scanning supported via advertiser")
-                return true
-            }
             val adapter = BluetoothAdapter.getDefaultAdapter()
             return when {
-                adapter == null -> {
-                    Log.d(TAG, "LE scanning not supported via adapter")
-                    false
-                }
-                adapter.state != BluetoothAdapter.STATE_ON -> {
-                    Log.d(TAG, "LE scanning unknown via state")
-                    null
-                }
-                adapter.bluetoothLeScanner != null -> {
-                    Log.d(TAG, "LE scanning supported via scanner")
-                    true
-                }
-                else -> {
-                    Log.d(TAG, "LE scanning not supported via scanner")
-                    false
-                }
+                adapter == null -> false
+                adapter.state != BluetoothAdapter.STATE_ON -> null
+                adapter.bluetoothLeScanner != null -> true
+                else -> false
             }
         }
     }

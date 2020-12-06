@@ -5,24 +5,34 @@
 
 package org.microg.gms.nearby.core.ui
 
+import android.bluetooth.BluetoothAdapter
+import android.content.Context.LOCATION_SERVICE
+import android.content.Intent
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import org.microg.gms.nearby.exposurenotification.AdvertiserService
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
+import org.microg.gms.nearby.exposurenotification.ScannerService
 import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
 import org.microg.gms.ui.AppIconPreference
 import org.microg.gms.ui.getApplicationInfoIfExists
 import org.microg.gms.ui.navigate
 
+
 class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var exposureEnableInfo: Preference
+    private lateinit var exposureBluetoothOff: Preference
+    private lateinit var exposureLocationOff: Preference
+    private lateinit var exposureBluetoothUnsupported: Preference
+    private lateinit var exposureBluetoothNoAdvertisement: Preference
     private lateinit var exposureApps: PreferenceCategory
     private lateinit var exposureAppsNone: Preference
     private lateinit var collectedRpis: Preference
@@ -37,10 +47,27 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onBindPreferences() {
         exposureEnableInfo = preferenceScreen.findPreference("pref_exposure_enable_info") ?: exposureEnableInfo
+        exposureBluetoothOff = preferenceScreen.findPreference("pref_exposure_error_bluetooth_off") ?: exposureBluetoothOff
+        exposureLocationOff = preferenceScreen.findPreference("pref_exposure_error_location_off") ?: exposureLocationOff
+        exposureBluetoothUnsupported = preferenceScreen.findPreference("pref_exposure_error_bluetooth_unsupported") ?: exposureBluetoothUnsupported
+        exposureBluetoothNoAdvertisement = preferenceScreen.findPreference("pref_exposure_error_bluetooth_no_advertise") ?: exposureBluetoothNoAdvertisement
         exposureApps = preferenceScreen.findPreference("prefcat_exposure_apps") ?: exposureApps
         exposureAppsNone = preferenceScreen.findPreference("pref_exposure_apps_none") ?: exposureAppsNone
         collectedRpis = preferenceScreen.findPreference("pref_exposure_collected_rpis") ?: collectedRpis
         advertisingId = preferenceScreen.findPreference("pref_exposure_advertising_id") ?: advertisingId
+
+        exposureLocationOff.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+            true
+        }
+
+        exposureBluetoothOff.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivity(intent)
+            true
+        }
+
         collectedRpis.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openExposureRpis)
             true
@@ -61,12 +88,38 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
         handler.removeCallbacks(updateContentRunnable)
     }
 
+    private fun isLocationEnabled(): Boolean {
+        val lm = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
+        var gpsEnabled = false
+        var networkEnabled = false
+
+        try {
+            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        } catch (ex: Exception) {
+        }
+
+        try {
+            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        } catch (ex: Exception) {
+        }
+        return gpsEnabled || networkEnabled
+    }
+
     private fun updateStatus() {
         lifecycleScope.launchWhenResumed {
             handler.postDelayed(updateStatusRunnable, UPDATE_STATUS_INTERVAL)
             val enabled = getExposureNotificationsServiceInfo(requireContext()).configuration.enabled
             exposureEnableInfo.isVisible = !enabled
-            advertisingId.isVisible = enabled
+
+            val bluetoothSupported = ScannerService.isSupported(requireContext())
+            val advertisingSupported = if (bluetoothSupported == true) AdvertiserService.isSupported(requireContext()) else bluetoothSupported
+
+            exposureLocationOff.isVisible = enabled && bluetoothSupported != false && !isLocationEnabled()
+            exposureBluetoothOff.isVisible = enabled && bluetoothSupported == null
+            exposureBluetoothUnsupported.isVisible = enabled && bluetoothSupported == false
+            exposureBluetoothNoAdvertisement.isVisible = enabled && bluetoothSupported == true && advertisingSupported != true
+
+            advertisingId.isVisible = enabled && advertisingSupported == true
         }
     }
 

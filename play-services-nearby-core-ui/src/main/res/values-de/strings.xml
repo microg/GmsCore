@@ -7,6 +7,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_exposure">Exposure Notifications</string>
     <string name="pref_exposure_enable_info_summary">Öffne eine App, die Exposure Notifications unterstützt, um diese zu aktivieren.</string>
+    <string name="pref_exposure_error_bluetooth_off_summary">Aktiviere Bluetooth, um Exposure Notifications zu nutzen.</string>
+    <string name="pref_exposure_error_location_off_summary">Aktiviere Ortungsdienste, um Exposure Notifications zu nutzen.</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Leider ist dein Gerät nicht mit Exposure Notifications kompatibel.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Leider ist dein Gerät nicht vollständig mit Exposure Notifications kompatibel. Du wirst Warnungen über Risikokontakte erhalten, aber nicht andere Benachrichtigen können.</string>
     <string name="prefcat_exposure_apps_title">Apps, die Exposure Notifications nutzen</string>
     <string name="pref_exposure_collected_rpis_title">Gesammelte IDs</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in den letzten 60 Minuten</string>

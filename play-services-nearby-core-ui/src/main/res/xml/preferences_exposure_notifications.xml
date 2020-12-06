@@ -15,6 +15,36 @@
         app:isPreferenceVisible="false"
         tools:isPreferenceVisible="true" />
 
+    <Preference
+        android:icon="@drawable/ic_bluetooth_off"
+        android:key="pref_exposure_error_bluetooth_off"
+        android:summary="@string/pref_exposure_error_bluetooth_off_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_location_off"
+        android:key="pref_exposure_error_location_off"
+        android:summary="@string/pref_exposure_error_location_off_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_alert"
+        android:key="pref_exposure_error_bluetooth_unsupported"
+        android:selectable="false"
+        android:summary="@string/pref_exposure_error_bluetooth_unsupported_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_alert"
+        android:key="pref_exposure_error_bluetooth_no_advertise"
+        android:selectable="false"
+        android:summary="@string/pref_exposure_error_bluetooth_no_advertise_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
     <PreferenceCategory
         android:key="prefcat_exposure_apps"
         android:title="@string/prefcat_exposure_apps_title">
