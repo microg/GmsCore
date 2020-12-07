@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="permission_service_all_label">全てのGoogleサービス</string>
+    <string name="permission_service_all_description">アプリにリンクされたGoogleアカウントを介したすべてのGoogleサービスの使用を許可します。</string>
+
+    <string name="permission_service_android_label">Androidサービス</string>
+    <string name="permission_service_android_description">アプリにリンクされたGoogleアカウントを介したAndroidサービスの使用を許可します。</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">アプリにリンクされたGoogleアカウントを介したAdSenseの使用を許可します。</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">アプリにリンクされたGoogleアカウントを介したAdWordsの使用を許可します。</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_ah_description">アプリにリンクされたGoogleアカウントを介したGoogle App Engineの使用を許可します。</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">アプリにリンクされたGoogleアカウントを介したBloggerの使用を許可します。</string>
+    <string name="permission_service_cl_label">Googleカレンダー</string>
+    <string name="permission_service_cl_description">アプリにリンクされたGoogleアカウントを介したGoogleカレンダーの使用を許可します。</string>
+    <string name="permission_service_cp_label">連絡先</string>
+    <string name="permission_service_cp_description">アプリにリンクされたGoogleアカウントを介した連絡先の使用を許可します。</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">アプリにリンクされたGoogleアカウントを介したDodgeballの使用を許可します。</string>
+    <string name="permission_service_finance_label">Google Finance</string>
+    <string name="permission_service_finance_description">アプリにリンクされたGoogleアカウントを介したGoogle Financeの使用を許可します。</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_gbase_description">アプリにリンクされたGoogleアカウントを介したGoogle Baseの使用を許可します。</string>
+    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_grandcentral_description">アプリにリンクされたGoogleアカウントを介したGoogle Voiceの使用を許可します。</string>
+    <string name="permission_service_groups2_label">Google Groups</string>
+    <string name="permission_service_groups2_description">アプリにリンクされたGoogleアカウントを介したGoogle Groupsの使用を許可します。</string>
+    <string name="permission_service_health_label">Google Health</string>
+    <string name="permission_service_health_description">アプリにリンクされたGoogleアカウントを介したGoogle Healthの使用を許可します。</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_service_ig_description">アプリにリンクされたGoogleアカウントを介したiGoogleの使用を許可します。</string>
+    <string name="permission_service_jotspot_label">JotSpot</string>
+    <string name="permission_service_jotspot_description">アプリにリンクされたGoogleアカウントを介したJotSpotの使用を許可します。</string>
+    <string name="permission_service_knol_label">Knol</string>
+    <string name="permission_service_knol_description">アプリにリンクされたGoogleアカウントを介したKnolの使用を許可します。</string>
+    <string name="permission_service_lh2_label">Picasa Web Albums</string>
+    <string name="permission_service_lh2_description">アプリにリンクされたGoogleアカウントを介したPicasa Web Albumsの使用を許可します。</string>
+    <string name="permission_service_local_label">Googleマップ</string>
+    <string name="permission_service_local_description">アプリにリンクされたGoogleアカウントを介したGoogleマップの使用を許可します。</string>
+    <string name="permission_service_mail_label">Googleメール</string>
+    <string name="permission_service_mail_description">アプリにリンクされたGoogleアカウントを介したGoogleメールの使用を許可します。</string>
+    <string name="permission_service_news_label">Googleニュース</string>
+    <string name="permission_service_news_description">アプリにリンクされたGoogleアカウントを介したGoogleニュースの使用を許可します。</string>
+    <string name="permission_service_notebook_label">Google Notebook</string>
+    <string name="permission_service_notebook_description">アプリにリンクされたGoogleアカウントを介したGoogle Notebookの使用を許可します。</string>
+    <string name="permission_service_orkut_label">Orkut</string>
+    <string name="permission_service_orkut_description">アプリにリンクされたGoogleアカウントを介したOrkutの使用を許可します。</string>
+    <string name="permission_service_print_label">Google Book Search</string>
+    <string name="permission_service_print_description">アプリにリンクされたGoogleアカウントを介したGoogle Book Searchの使用を許可します。</string>
+    <string name="permission_service_sierra_label">Google Checkoutアカウント</string>
+    <string name="permission_service_sierra_description">アプリにリンクされたGoogleアカウントを介したGoogle Checkoutアカウントの使用を許可します。</string>
+    <string name="permission_service_sierraqa_label">Google Checkout QAアカウント</string>
+    <string name="permission_service_sierraqa_description">アプリにリンクされたGoogleアカウントを介したGoogle Checkout QAアカウントの使用を許可します。</string>
+    <string name="permission_service_sierrasandbox_label">Google Checkout Sandboxアカウント</string>
+    <string name="permission_service_sierrasandbox_description">アプリにリンクされたGoogleアカウントを介したGoogle Checkout Sandboxアカウントの使用を許可します。</string>
+    <string name="permission_service_sitemaps_label">Google Webmaster Tools</string>
+    <string name="permission_service_sitemaps_description">アプリにリンクされたGoogleアカウントを介したGoogle Webmaster Toolsの使用を許可します。</string>
+    <string name="permission_service_speech_label">音声検索</string>
+    <string name="permission_service_speech_description">アプリにリンクされたGoogleアカウントを介した音声検索の使用を許可します。</string>
+    <string name="permission_service_speechpersonalization_label">カスタマイズされた音声認識</string>
+    <string name="permission_service_speechpersonalization_description">アプリにリンクされたGoogleアカウントを介したカスタマイズされた音声認識の使用を許可します。</string>
+    <string name="permission_service_talk_label">Google Talk</string>
+    <string name="permission_service_talk_description">アプリにリンクされたGoogleアカウントを介したGoogle Talkの使用を許可します。</string>
+    <string name="permission_service_wifi_label">Google Wi-Fi</string>
+    <string name="permission_service_wifi_description">アプリにリンクされたGoogleアカウントを介したGoogle Wi-Fiの使用を許可します。</string>
+    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_description">アプリにリンクされたGoogleアカウントを介したGoogle Spreadsheetsの使用を許可します。</string>
+    <string name="permission_service_writely_label">Google Docs</string>
+    <string name="permission_service_writely_description">アプリにリンクされたGoogleアカウントを介したGoogle Docsの使用を許可します。</string>
+    <string name="permission_service_youtube_label">YouTube</string>
+    <string name="permission_service_youtube_description">アプリにリンクされたGoogleアカウントを介したYouTubeの使用を許可します。</string>
+    <string name="permission_service_YouTubeUser_label">YouTubeユーザー</string>
+    <string name="permission_service_YouTubeUser_description">アプリにリンクされたGoogleアカウントを介したYouTubeユーザーの使用を許可します。</string>
+</resources>
