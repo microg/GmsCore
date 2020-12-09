@@ -18,6 +18,11 @@
             <intent-filter>
                 <action android:name="org.microg.gms.nearby.exposurenotification.CONFIRM" />
             </intent-filter>
+            <intent-filter android:priority="-100">
+                <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 </manifest>
