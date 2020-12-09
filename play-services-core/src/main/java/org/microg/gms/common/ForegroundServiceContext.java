@@ -1,6 +1,5 @@
 package org.microg.gms.common;
 
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,8 +19,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.mgoogle.android.gms.R;
 
-import java.util.List;
-
 public class ForegroundServiceContext extends ContextWrapper {
     private static final String TAG = "ForegroundService";
     public static final String EXTRA_FOREGROUND = "foreground";
@@ -33,8 +30,7 @@ public class ForegroundServiceContext extends ContextWrapper {
     @Override
     public ComponentName startService(Intent service) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && !isIgnoringBatteryOptimizations()
-                && !isAppOnForeground()) {
+                && !isIgnoringBatteryOptimizations()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -50,21 +46,6 @@ public class ForegroundServiceContext extends ContextWrapper {
     private boolean isIgnoringBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         return powerManager.isIgnoringBatteryOptimizations(getPackageName());
-    }
-
-    private boolean isAppOnForeground() {
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
-        if (appProcesses == null) {
-            return false;
-        }
-        final String packageName = getPackageName();
-        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName.equals(packageName)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void completeForegroundService(Service service, Intent intent, String tag) {
