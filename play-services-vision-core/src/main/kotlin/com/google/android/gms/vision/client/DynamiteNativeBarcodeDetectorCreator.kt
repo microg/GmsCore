@@ -15,7 +15,7 @@ import com.google.android.gms.vision.barcode.internal.client.INativeBarcodeDetec
 import org.microg.gms.vision.barcode.BarcodeDetector
 
 @Keep
-class ChimeraNativeBarcodeDetectorCreator : INativeBarcodeDetectorCreator.Stub() {
+class DynamiteNativeBarcodeDetectorCreator : INativeBarcodeDetectorCreator.Stub() {
     override fun create(context: IObjectWrapper, options: BarcodeDetectorOptions): INativeBarcodeDetector {
         return BarcodeDetector(context.unwrap<Context>()!!, options)
     }

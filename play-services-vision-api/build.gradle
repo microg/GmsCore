@@ -30,6 +30,7 @@ description = 'microG API for play-services-vision'
 dependencies {
     api project(':play-services-basement')
     api project(':play-services-base-api')
+    api project(':play-services-vision-common-api')
 
     implementation "androidx.annotation:annotation:$annotationVersion"
 }

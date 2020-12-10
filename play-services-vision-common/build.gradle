@@ -25,10 +25,11 @@ android {
 
 apply from: '../gradle/publish-android.gradle'
 
-description = 'microG implementation of play-services-vision'
+description = 'microG implementation of play-services-vision-common'
 
 dependencies {
     api project(':play-services-base')
     api project(':play-services-vision-api')
-    api project(':play-services-vision-common')
+
+    implementation "androidx.annotation:annotation:$annotationVersion"
 }
