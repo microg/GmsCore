@@ -117,13 +117,13 @@ class AdvertiserService : LifecycleService() {
             val aemBytes = when (version) {
                 VERSION_1_0 -> byteArrayOf(
                         version, // Version and flags
-                        (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                        currentDeviceInfo.txPowerCorrection, // TX power
                         0x00, // Reserved
                         0x00  // Reserved
                 )
                 VERSION_1_1 -> byteArrayOf(
                         (version + currentDeviceInfo.confidence.toByte() * 4).toByte(), // Version and flags
-                        (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                        currentDeviceInfo.txPowerCorrection, // TX power
                         0x00, // Reserved
                         0x00  // Reserved
                 )
@@ -175,7 +175,7 @@ class AdvertiserService : LifecycleService() {
                     Since: ${Date(startTime)}
                     RPI: $uuid
                     Version: 0x${version.toString(16)}
-                    TX Power: ${currentDeviceInfo.txPowerCorrection + TX_POWER_LOW}
+                    TX Power: ${currentDeviceInfo.txPowerCorrection}
                     AEM: 0x${aem.toLong().let { if (it < 0) 0x100000000L + it else it }.toString(16)}
                 """.trimIndent())
         } catch (e: Exception) {

@@ -490,7 +490,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }.mapNotNull {
             val decrypted = key.cryptAem(it.rpi, it.aem)
             val version = (decrypted[0] and 0xf0.toByte())
-            val txPower = if (decrypted.size >= 4 && version >= VERSION_1_0) decrypted[1].toInt() else (averageDeviceInfo.txPowerCorrection + TX_POWER_LOW)
+            val txPower = if (decrypted.size >= 4 && version >= VERSION_1_0) decrypted[1].toInt() else averageDeviceInfo.txPowerCorrection.toInt()
             val confidence = if (decrypted.size >= 4 && version >= VERSION_1_1) ((decrypted[0] and 0xc) / 4) else (averageDeviceInfo.confidence)
             if (version > VERSION_1_1) {
                 Log.w(TAG, "Unknown AEM version: 0x${version.toString(16)}")
