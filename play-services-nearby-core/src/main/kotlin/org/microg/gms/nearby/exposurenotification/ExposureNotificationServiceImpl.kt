@@ -465,7 +465,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 }.toString())
             }
 
-            params.callback.onResult(Status.SUCCESS, response)
+            try {
+                params.callback.onResult(Status.SUCCESS, response)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
@@ -512,7 +516,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 }.toString())
             }
 
-            params.callback.onResult(Status.SUCCESS, response)
+            try {
+                params.callback.onResult(Status.SUCCESS, response)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
@@ -522,7 +530,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 database.storeConfiguration(packageName, TOKEN_A, params.mapping)
                 database.noteAppAction(packageName, "setDiagnosisKeysDataMapping")
             }
-            params.callback.onResult(Status.SUCCESS)
+            try {
+                params.callback.onResult(Status.SUCCESS)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
@@ -533,7 +545,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 database.noteAppAction(packageName, "getDiagnosisKeysDataMapping")
                 triple?.third
             }
-            params.callback.onResult(Status.SUCCESS, mapping.orDefault())
+            try {
+                params.callback.onResult(Status.SUCCESS, mapping.orDefault())
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
@@ -543,7 +559,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             ExposureDatabase.with(context) { database ->
                 database.noteAppAction(packageName, "getPackageConfiguration")
             }
-            params.callback.onResult(Status.SUCCESS, PackageConfiguration.PackageConfigurationBuilder().setValues(Bundle.EMPTY).build())
+            try {
+                params.callback.onResult(Status.SUCCESS, PackageConfiguration.PackageConfigurationBuilder().setValues(Bundle.EMPTY).build())
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
@@ -553,7 +573,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             ExposureDatabase.with(context) { database ->
                 database.noteAppAction(packageName, "getStatus")
             }
-            params.callback.onResult(Status.SUCCESS, ExposureNotificationStatus.setToFlags(setOf(ExposureNotificationStatus.UNKNOWN)))
+            try {
+                params.callback.onResult(Status.SUCCESS, ExposureNotificationStatus.setToFlags(setOf(ExposureNotificationStatus.UNKNOWN)))
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
