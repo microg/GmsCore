@@ -42,9 +42,9 @@ fun List<MeasuredExposure>.merge(): List<MergedExposure> {
     return result
 }
 
-internal data class MergedSubExposure(val attenuation: Int, val duration: Long)
+data class MergedSubExposure(val attenuation: Int, val duration: Long)
 
-data class MergedExposure internal constructor(val key: TemporaryExposureKey, val timestamp: Long, val txPower: Int, @CalibrationConfidence val confidence: Int, internal val subs: List<MergedSubExposure>) {
+data class MergedExposure internal constructor(val key: TemporaryExposureKey, val timestamp: Long, val txPower: Int, @CalibrationConfidence val confidence: Int, val subs: List<MergedSubExposure>) {
     @RiskLevel
     val transmissionRiskLevel: Int
         get() = key.transmissionRiskLevel
@@ -56,7 +56,7 @@ data class MergedExposure internal constructor(val key: TemporaryExposureKey, va
         get() = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - timestamp)
 
     val attenuation
-        get() = (subs.map { it.attenuation * it.duration }.sum().toDouble() / subs.map { it.duration }.sum().toDouble()).toInt()
+        get() = if (subs.map { it.duration }.sum() == 0L) subs[0].attenuation else (subs.map { it.attenuation * it.duration }.sum().toDouble() / subs.map { it.duration }.sum().toDouble()).toInt()
 
     fun getAttenuationRiskScore(configuration: ExposureConfiguration): Int {
         return when {

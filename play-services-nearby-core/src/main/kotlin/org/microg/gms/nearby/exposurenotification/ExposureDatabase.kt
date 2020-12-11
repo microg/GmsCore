@@ -907,7 +907,6 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                         val (dbMigrateFile, dbMigrateWalFile) = prepareDatabaseMigration(context)
                         val database = ExposureDatabase(context.applicationContext)
                         try {
-                            Log.d(TAG, "Created instance ${database.hashCode()} of database for ${context.javaClass.simpleName}")
                             completeInstance(database)
                             finishDatabaseMigration(database, dbMigrateFile, dbMigrateWalFile)
                             newInstance.complete(database)

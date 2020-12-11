@@ -25,7 +25,13 @@
     <string name="pref_exposure_collected_rpis_title">Collected IDs</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in last hour</string>
     <string name="pref_exposure_advertising_id_title">Currently broadcasted ID</string>
-    <string name="pref_exposure_app_last_report_title">Last report (<xliff:g example="3 hours ago">%1$s</xliff:g>)</string>
+    <string name="prefcat_exposure_app_report_title">Reported exposures</string>
+    <string name="pref_exposure_app_report_updated_title">Updated: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Less than 5 minutes</string>
+    <string name="pref_exposure_app_report_entry_time_about">About <xliff:g example="13">%1$d</xliff:g> minutes</string>
+    <string name="pref_exposure_app_report_entry_distance_close">nearby exposure</string>
+    <string name="pref_exposure_app_report_entry_distance_far">distant exposure</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Processed <xliff:g example="121031">%1$d</xliff:g> diagnosis keys.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">No exposure encounters reported.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_prefix">Reported <xliff:g example="3">%1$d</xliff:g> exposure encounters:</string>

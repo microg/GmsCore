@@ -15,7 +15,13 @@
     <string name="pref_exposure_collected_rpis_title">Gesammelte IDs</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in den letzten 60 Minuten</string>
     <string name="pref_exposure_advertising_id_title">Aktuell verwendete ID</string>
-    <string name="pref_exposure_app_last_report_title">Letzter Bericht (<xliff:g example="vor 2 Stunden">%1$s</xliff:g>)</string>
+    <string name="prefcat_exposure_app_report_title">Gemeldete Begegnungen</string>
+    <string name="pref_exposure_app_report_updated_title">Aktualisiert: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Kürzer als 5 Minutem</string>
+    <string name="pref_exposure_app_report_entry_time_about">Etwa <xliff:g example="13">%1$d</xliff:g> Minuten</string>
+    <string name="pref_exposure_app_report_entry_distance_close">nahe Begegnung</string>
+    <string name="pref_exposure_app_report_entry_distance_far">entfernte Begegnung</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g> Diagnoseschlüssel verarbeitet.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">Keine Risiko-Begegnung erfasst.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_prefix"><xliff:g example="3">%1$d</xliff:g> Risiko-Begegnungen:</string>

@@ -61,7 +61,7 @@
             tools:summary="@string/pref_exposure_collected_rpis_summary" />
         <Preference
             android:key="pref_exposure_advertising_id"
-            android:selectable="false"
+            android:enabled="false"
             android:title="@string/pref_exposure_advertising_id_title"
             tools:summary="9a799d68-925f-4c0c-a73c-b418f22a1250" />
     </PreferenceCategory>
