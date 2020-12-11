@@ -15,14 +15,11 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
-import com.google.android.gms.nearby.exposurenotification.CalibrationConfidence
 import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMapping
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import kotlinx.coroutines.*
 import okio.ByteString
-import org.json.JSONObject
-import org.microg.gms.nearby.exposurenotification.Constants.TOKEN_A
 import java.io.File
 import java.lang.Runnable
 import java.nio.ByteBuffer
@@ -111,7 +108,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     fun dailyCleanup(): Boolean = writableDatabase.run {
         val start = System.currentTimeMillis()
-        val rollingStartTime = currentRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
+        val rollingStartTime = currentDayRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
         val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
         Log.d(TAG, "Deleted on daily cleanup: $advertisements adv")
         if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
@@ -533,8 +530,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    private fun findOwnKeyAt(rollingStartNumber: Int, database: SQLiteDatabase = readableDatabase): TemporaryExposureKey? = database.run {
-        query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber = ?", arrayOf(rollingStartNumber.toString()), null, null, null).use { cursor ->
+    private fun findOwnKeyAt(intervalNumber: Int, database: SQLiteDatabase = readableDatabase): TemporaryExposureKey? = database.run {
+        val dayRollingStartNumber = getDayRollingStartNumber(intervalNumber)
+        query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber >= ? AND (rollingStartNumber + rollingPeriod) < ?", arrayOf(dayRollingStartNumber.toString(), intervalNumber.toString()), null, null, "rollingStartNumber DESC").use { cursor ->
             if (cursor.moveToNext()) {
                 TemporaryExposureKey.TemporaryExposureKeyBuilder()
                         .setKeyData(cursor.getBlob(0))
@@ -602,18 +600,33 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    val allKeys: List<TemporaryExposureKey> = readableDatabase.run {
-        val startRollingNumber = (currentRollingStartNumber - 14 * ROLLING_PERIOD)
-        query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber >= ? AND rollingStartNumber < ?", arrayOf(startRollingNumber.toString(), currentIntervalNumber.toString()), null, null, null).use { cursor ->
-            val list = arrayListOf<TemporaryExposureKey>()
-            while (cursor.moveToNext()) {
-                list.add(TemporaryExposureKey.TemporaryExposureKeyBuilder()
-                        .setKeyData(cursor.getBlob(0))
-                        .setRollingStartIntervalNumber(cursor.getLong(1).toInt())
-                        .setRollingPeriod(cursor.getLong(2).toInt())
-                        .build())
+    fun exportKeys(database: SQLiteDatabase = writableDatabase): List<TemporaryExposureKey> = database.run {
+        database.beginTransactionNonExclusive()
+        try {
+            val intervalNumber = currentIntervalNumber
+            val key = findOwnKeyAt(intervalNumber, database)
+            if (key != null && intervalNumber != key.rollingStartIntervalNumber) {
+                // Rotate key
+                update(TABLE_TEK, ContentValues().apply {
+                    put("rollingPeriod", intervalNumber - key.rollingStartIntervalNumber)
+                }, "rollingStartNumber = ?", arrayOf(key.rollingStartIntervalNumber.toString()))
+                storeOwnKey(generateIntraDayTemporaryExposureKey(intervalNumber), database)
             }
-            list
+            database.setTransactionSuccessful()
+            val startRollingNumber = (getDayRollingStartNumber(intervalNumber) - 14 * ROLLING_PERIOD)
+            query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber >= ? AND (rollingStartNumber + rollingPeriod) <= ?", arrayOf(startRollingNumber.toString(), intervalNumber.toString()), null, null, null).use { cursor ->
+                val list = arrayListOf<TemporaryExposureKey>()
+                while (cursor.moveToNext()) {
+                    list.add(TemporaryExposureKey.TemporaryExposureKeyBuilder()
+                            .setKeyData(cursor.getBlob(0))
+                            .setRollingStartIntervalNumber(cursor.getLong(1).toInt())
+                            .setRollingPeriod(cursor.getLong(2).toInt())
+                            .build())
+                }
+                list
+            }
+        } finally {
+            database.endTransaction()
         }
     }
 
@@ -733,9 +746,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     private fun ensureTemporaryExposureKey(): TemporaryExposureKey = writableDatabase.let { database ->
         database.beginTransactionNonExclusive()
         try {
-            var key = findOwnKeyAt(currentRollingStartNumber.toInt(), database)
+            var key = findOwnKeyAt(currentIntervalNumber.toInt(), database)
             if (key == null) {
-                key = generateCurrentTemporaryExposureKey()
+                key = generateCurrentDayTemporaryExposureKey()
                 storeOwnKey(key, database)
             }
             database.setTransactionSuccessful()
@@ -747,7 +760,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     val currentRpiId: UUID?
         get() {
-            val key = findOwnKeyAt(currentRollingStartNumber.toInt()) ?: return null
+            val key = findOwnKeyAt(currentIntervalNumber.toInt()) ?: return null
             val buffer = ByteBuffer.wrap(key.generateRpiId(currentIntervalNumber.toInt()))
             return UUID(buffer.long, buffer.long)
         }

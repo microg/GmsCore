@@ -146,7 +146,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             val status = confirmPermission(CONFIRM_ACTION_KEYS)
             val response = when {
                 status.isSuccess -> ExposureDatabase.with(context) { database ->
-                    database.allKeys
+                    database.exportKeys()
                 }
                 else -> emptyList()
             }
