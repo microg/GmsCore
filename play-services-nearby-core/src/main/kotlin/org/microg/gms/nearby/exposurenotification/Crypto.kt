@@ -6,6 +6,7 @@
 package org.microg.gms.nearby.exposurenotification
 
 import android.annotation.TargetApi
+import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -45,7 +46,7 @@ fun getPeriodInDay(intervalNumber: Int) = intervalNumber - getDayRollingStartNum
 
 val nextKeyMillis: Long
     get() {
-        val currentWindowStart = currentIntervalNumber * ROLLING_WINDOW_LENGTH * 1000
+        val currentWindowStart = currentIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH * 1000
         val currentWindowEnd = currentWindowStart + ROLLING_WINDOW_LENGTH * 1000
         return (currentWindowEnd - System.currentTimeMillis()).coerceAtLeast(0)
     }

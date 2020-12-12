@@ -20,6 +20,7 @@ import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import kotlinx.coroutines.*
 import okio.ByteString
+import org.microg.gms.common.PackageUtils
 import java.io.File
 import java.lang.Runnable
 import java.nio.ByteBuffer
@@ -61,7 +62,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE TABLE $TABLE_APP_PERMS(package TEXT NOT NULL, sig TEXT NOT NULL, perm TEXT NOT NULL, timestamp INTEGER NOT NULL);")
         }
         if (oldVersion < 5) {
-            Log.d(TAG, "Creating tables for version >= 3")
+            Log.d(TAG, "Creating tables for version >= 5")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TOKENS(tid INTEGER PRIMARY KEY, package TEXT NOT NULL, token TEXT NOT NULL, timestamp INTEGER NOT NULL, configuration BLOB, diagnosisKeysDataMap BLOB);")
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TOKENS}_package_token ON $TABLE_TOKENS(package, token);")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_SINGLE(tcsid INTEGER PRIMARY KEY, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, matched INTEGER);")
@@ -75,6 +76,10 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_FILE_MATCH(tcfid INTEGER REFERENCES $TABLE_TEK_CHECK_FILE(tcfid) ON DELETE CASCADE, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, transmissionRiskLevel INTEGER NOT NULL, UNIQUE(tcfid, keyData, rollingStartNumber, rollingPeriod));")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_tcfid ON $TABLE_TEK_CHECK_FILE_MATCH(tcfid);")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_key ON $TABLE_TEK_CHECK_FILE_MATCH(keyData, rollingStartNumber, rollingPeriod);")
+        }
+        if (oldVersion < 9) {
+            Log.d(TAG, "Creating tables for version >= 9")
+            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_APP(package TEXT NOT NULL, sig TEXT NOT NULL, PRIMARY KEY (package, sig));")
         }
         if (oldVersion in 5 until 7) {
             Log.d(TAG, "Altering tables for version >= 7")
@@ -96,6 +101,22 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             Log.d(TAG, "Clearing non-matching tek cache from version < 7")
             // Entries might be invalid due to previously missing support for new bluetooth AEM format
             db.execSQL("DELETE FROM $TABLE_TEK_CHECK_FILE WHERE tcfid NOT IN (SELECT tcfid FROM $TABLE_TEK_CHECK_FILE_MATCH);")
+        }
+        if (oldVersion in 1 until 9) {
+            Log.d(TAG, "Migrating authorized apps from version < 9")
+            val pm = context.packageManager
+            db.query(true, TABLE_APP_LOG, arrayOf("package"), null, null, null, null, null, null).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val packageName = cursor.getString(0)
+                    val signatureDigest = PackageUtils.firstSignatureDigest(pm, packageName)
+                    if (signatureDigest != null) {
+                        db.insertWithOnConflict(TABLE_APP, "NULL", ContentValues().apply {
+                            put("package", packageName)
+                            put("sig", signatureDigest)
+                        }, CONFLICT_IGNORE)
+                    }
+                }
+            }
         }
         Log.d(TAG, "Finished database upgrade")
     }
@@ -177,6 +198,21 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }, null, null)
     }
 
+    fun authorizeApp(packageName: String?, signatureDigest: String? = PackageUtils.firstSignatureDigest(context, packageName)) = writableDatabase.run {
+        if (packageName == null || signatureDigest == null) return@run
+        insertWithOnConflict(TABLE_APP, "NULL", ContentValues().apply {
+            put("package", packageName)
+            put("sig", signatureDigest)
+        }, CONFLICT_IGNORE)
+    }
+
+    fun isAppAuthorized(packageName: String?, signatureDigest: String? = PackageUtils.firstSignatureDigest(context, packageName)): Boolean = readableDatabase.run {
+        if (packageName == null || signatureDigest == null) return@run false
+        query(TABLE_APP, arrayOf("package"), "package = ? AND sig = ?", arrayOf(packageName, signatureDigest), null, null, null).use { cursor ->
+            return@use cursor.moveToNext()
+        }
+    }
+
     fun noteAppAction(packageName: String, method: String, args: String? = null, timestamp: Long = Date().time) = writableDatabase.run {
         insert(TABLE_APP_LOG, "NULL", ContentValues().apply {
             put("package", packageName)
@@ -185,7 +221,6 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             put("args", args)
         })
     }
-
 
     private fun storeOwnKey(key: TemporaryExposureKey, database: SQLiteDatabase = writableDatabase) = database.run {
         insert(TABLE_TEK, "NULL", ContentValues().apply {
@@ -746,7 +781,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     private fun ensureTemporaryExposureKey(): TemporaryExposureKey = writableDatabase.let { database ->
         database.beginTransactionNonExclusive()
         try {
-            var key = findOwnKeyAt(currentIntervalNumber.toInt(), database)
+            var key = findOwnKeyAt(currentIntervalNumber, database)
             if (key == null) {
                 key = generateCurrentDayTemporaryExposureKey()
                 storeOwnKey(key, database)
@@ -760,12 +795,12 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     val currentRpiId: UUID?
         get() {
-            val key = findOwnKeyAt(currentIntervalNumber.toInt()) ?: return null
-            val buffer = ByteBuffer.wrap(key.generateRpiId(currentIntervalNumber.toInt()))
+            val key = findOwnKeyAt(currentIntervalNumber) ?: return null
+            val buffer = ByteBuffer.wrap(key.generateRpiId(currentIntervalNumber))
             return UUID(buffer.long, buffer.long)
         }
 
-    fun generateCurrentPayload(metadata: ByteArray) = ensureTemporaryExposureKey().generatePayload(currentIntervalNumber.toInt(), metadata)
+    fun generateCurrentPayload(metadata: ByteArray) = ensureTemporaryExposureKey().generatePayload(currentIntervalNumber, metadata)
 
     override fun getWritableDatabase(): SQLiteDatabase {
         requirePrimary(this)
@@ -791,10 +826,11 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 8
+        private const val DB_VERSION = 9
         private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"
+        private const val TABLE_APP = "app"
         private const val TABLE_APP_LOG = "app_log"
         private const val TABLE_TEK = "tek"
         private const val TABLE_APP_PERMS = "app_perms"

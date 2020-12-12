@@ -101,15 +101,14 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun start(params: StartParams) {
-        if (ExposurePreferences(context).enabled) {
-            params.callback.onResult(Status.SUCCESS)
-            return
-        }
         lifecycleScope.launchWhenStarted {
             val status = confirmPermission(CONFIRM_ACTION_START)
             if (status.isSuccess) {
                 ExposurePreferences(context).enabled = true
-                ExposureDatabase.with(context) { database -> database.noteAppAction(packageName, "start") }
+                ExposureDatabase.with(context) { database ->
+                    database.authorizeApp(packageName)
+                    database.noteAppAction(packageName, "start")
+                }
             }
             try {
                 params.callback.onResult(status)
@@ -121,9 +120,13 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     override fun stop(params: StopParams) {
         lifecycleScope.launchWhenStarted {
-            ExposurePreferences(context).enabled = false
-            ExposureDatabase.with(context) { database ->
-                database.noteAppAction(packageName, "stop")
+            val isAuthorized = ExposureDatabase.with(context) { database ->
+                database.isAppAuthorized(packageName).also {
+                    if (it) database.noteAppAction(packageName, "stop")
+                }
+            }
+            if (isAuthorized) {
+                ExposurePreferences(context).enabled = false
             }
             try {
                 params.callback.onResult(Status.SUCCESS)
@@ -134,10 +137,17 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun isEnabled(params: IsEnabledParams) {
-        try {
-            params.callback.onResult(Status.SUCCESS, ExposurePreferences(context).enabled)
-        } catch (e: Exception) {
-            Log.w(TAG, "Callback failed", e)
+        lifecycleScope.launchWhenStarted {
+            val isAuthorized = ExposureDatabase.with(context) { database ->
+                database.isAppAuthorized(packageName).also {
+                    if (it) database.noteAppAction(packageName, "isEnabled")
+                }
+            }
+            try {
+                params.callback.onResult(Status.SUCCESS, isAuthorized && ExposurePreferences(context).enabled)
+            } catch (e: Exception) {
+                Log.w(TAG, "Callback failed", e)
+            }
         }
     }
 
@@ -146,6 +156,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             val status = confirmPermission(CONFIRM_ACTION_KEYS)
             val response = when {
                 status.isSuccess -> ExposureDatabase.with(context) { database ->
+                    database.authorizeApp(packageName)
                     database.exportKeys()
                 }
                 else -> emptyList()
@@ -194,6 +205,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             ?: ExposureConfiguration.ExposureConfigurationBuilder().build()
 
     private suspend fun buildExposureSummary(token: String): ExposureSummary = ExposureDatabase.with(context) { database ->
+        if (!database.isAppAuthorized(packageName)) {
+            // Not providing summary if app not authorized
+            Log.d(TAG, "$packageName not yet authorized")
+            return@with ExposureSummary.ExposureSummaryBuilder().build()
+        }
         val pair = database.loadConfiguration(packageName, token)
         val (configuration, exposures) = if (pair != null) {
             pair.second.orDefault() to database.findAllMeasuredExposures(pair.first).merge()
@@ -334,6 +350,12 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     put("request_keys_count", keys)
                 }.toString())
 
+                if (!database.isAppAuthorized(packageName)) {
+                    // Not sending results via broadcast if app not authorized
+                    Log.d(TAG, "$packageName not yet authorized")
+                    return@with
+                }
+
                 val exposureSummary = buildExposureSummary(token)
 
                 try {
@@ -381,11 +403,13 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         lifecycleScope.launchWhenStarted {
             ExposureDatabase.with(context) { database ->
                 val pair = database.loadConfiguration(packageName, params.token)
-                val response = if (pair != null) {
+                val response = if (pair != null && database.isAppAuthorized(packageName)) {
                     database.findAllMeasuredExposures(pair.first).merge().map {
                         it.toExposureInformation(pair.second.orDefault())
                     }
                 } else {
+                    // Not providing information if app not authorized
+                    Log.d(TAG, "$packageName not yet authorized")
                     emptyList()
                 }
 
@@ -425,9 +449,11 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     private suspend fun getExposureWindowsInternal(token: String = TOKEN_A): List<ExposureWindow> {
         val (exposures, mapping) = ExposureDatabase.with(context) { database ->
             val triple = database.loadConfiguration(packageName, token)
-            if (triple != null) {
+            if (triple != null && database.isAppAuthorized(packageName)) {
                 database.findAllMeasuredExposures(triple.first).merge() to triple.third.orDefault()
             } else {
+                // Not providing windows if app not authorized
+                Log.d(TAG, "$packageName not yet authorized")
                 emptyList<MergedExposure>() to DiagnosisKeysDataMapping()
             }
         }
