@@ -6,20 +6,14 @@
 package org.microg.gms.nearby.core.ui
 
 import android.annotation.TargetApi
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.setPadding
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.db.williamchart.data.Scale
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
 import java.util.*
 import kotlin.math.roundToInt
@@ -42,7 +36,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
         deleteAll.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             AlertDialog.Builder(requireContext())
                     .setTitle(R.string.pref_exposure_rpi_delete_all_title)
-                    .setView(R.layout.exposure_notification_confirm_delete)
+                    .setView(R.layout.exposure_notifications_confirm_delete)
                     .setPositiveButton(R.string.pref_exposure_rpi_delete_all_warning_confirm_button) { _, _ ->
                         lifecycleScope.launchWhenStarted {
                             ExposureDatabase.with(requireContext()) { it.deleteAllCollectedAdvertisements() }

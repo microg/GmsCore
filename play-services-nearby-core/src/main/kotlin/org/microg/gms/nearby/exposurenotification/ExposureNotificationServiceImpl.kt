@@ -102,13 +102,19 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     override fun start(params: StartParams) {
         lifecycleScope.launchWhenStarted {
-            val status = confirmPermission(CONFIRM_ACTION_START)
-            if (status.isSuccess) {
-                ExposurePreferences(context).enabled = true
-                ExposureDatabase.with(context) { database ->
-                    database.authorizeApp(packageName)
-                    database.noteAppAction(packageName, "start")
+            val isAuthorized = ExposureDatabase.with(context) { it.isAppAuthorized(packageName) }
+            val status = if (isAuthorized && ExposurePreferences(context).enabled) {
+                Status.SUCCESS
+            } else {
+                val status = confirmPermission(CONFIRM_ACTION_START)
+                if (status.isSuccess) {
+                    ExposurePreferences(context).enabled = true
+                    ExposureDatabase.with(context) { database ->
+                        database.authorizeApp(packageName)
+                        database.noteAppAction(packageName, "start")
+                    }
                 }
+                status
             }
             try {
                 params.callback.onResult(status)
