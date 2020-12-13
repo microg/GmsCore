@@ -17,15 +17,21 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_exposure">Уведомления о риске инфицирования</string>
     <string name="pref_exposure_enable_info_summary">Чтобы включить уведомления о риске инфицирования запустите любое приложение, которое их поддерживает.</string>
-    <string name="pref_exposure_error_bluetooth_off_summary">Чтобы использовать уведомления о риске инфицирования включите Bluetooth в настройках системы.</string>
-    <string name="pref_exposure_error_location_off_summary">Чтобы использовать уведомления о риске инфицирования включите доступ к местоположению в настройках системы.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Включить Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Открыть настройки местоположения</string>
     <string name="pref_exposure_error_bluetooth_unsupported_summary">К сожалению ваше устройство несовместимо с уведомлениями о риске инфицирования.</string>
     <string name="pref_exposure_error_bluetooth_no_advertise_summary">К сожалению ваше устройство лишь частично совместимо с уведомлениями о риске инфицирования. Вы можете получать уведомления об опасных контактах, но не сможете уведомлять других.</string>
     <string name="prefcat_exposure_apps_title">Приложения использующие уведомления о риске инфицирования</string>
     <string name="pref_exposure_collected_rpis_title">Собранные идентификаторы</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> Количество идентификаторов за последний час</string>
     <string name="pref_exposure_advertising_id_title">Транслируемый в настоящее время идентификатор</string>
-    <string name="pref_exposure_app_last_report_title">Последний отчёт (<xliff:g example="3 hours ago">%1$s</xliff:g>)</string>
+    <string name="prefcat_exposure_app_report_title">Сообщения о взаимодействиях</string>
+    <string name="pref_exposure_app_report_updated_title">Обновлено: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Менее пяти минут назад</string>
+    <string name="pref_exposure_app_report_entry_time_about">Около <xliff:g example="13">%1$d</xliff:g> минут</string>
+    <string name="pref_exposure_app_report_entry_distance_close">взаимодействия рядом</string>
+    <string name="pref_exposure_app_report_entry_distance_far">вдаимодействия далеко</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Обработано <xliff:g example="121031">%1$d</xliff:g> диагностических ключей.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">Сообщения об опасных контактах отсутствуют.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_prefix">Сообщено о <xliff:g example="3">%1$d</xliff:g> опасных контактах:</string>
@@ -60,6 +66,9 @@
 
 Ваша личность или результат теста не будут переданы другим людям."</string>
     <string name="exposure_confirm_keys_button">Поделиться</string>
-    <string name="exposure_confirm_permission_description">Вам нужно предоставить разрешение для <xliff:g example="microG Services Core">%1$s</xliff:g> чтобы уведомления о риске инфицирования работали корректно.</string>
+    <string name="exposure_confirm_permission_description">Для <xliff:g example="microG Services Core">%1$s</xliff:g> требуются дополнительные разрешения.</string>
     <string name="exposure_confirm_permission_button">Предоставить</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth должен быть включён.</string>
+    <string name="exposure_confirm_location_description">требуется доступ к местоположению.</string>
+    <string name="exposure_confirm_button">Включить</string>
 </resources>
