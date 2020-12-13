@@ -16,8 +16,8 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_exposure">Notifiche di esposizione al virus</string>
-    <string name="pref_exposure_enable_info_summary">Per abilitare le notifiche di esposizione al virus, apri qualsiasi applicazioni che le supporti.</string>
-    <string name="prefcat_exposure_apps_title">Applicazioni che utilizzano le notifiche di esposizone al virus</string>
+    <string name="pref_exposure_enable_info_summary">Per abilitare le notifiche di esposizione al virus, apri qualsiasi applicazione che le supporti.</string>
+    <string name="prefcat_exposure_apps_title">Applicazioni che utilizzano le notifiche di esposizione al virus</string>
     <string name="pref_exposure_collected_rpis_title">Identificativi univoci raccolti</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> identificativi univoci nell\'ultima ora</string>
     <string name="pref_exposure_advertising_id_title">Identificativi univoci attualmente trasmessi</string>
@@ -36,7 +36,7 @@
     <string name="pref_exposure_info_summary">"L\'API per le notifiche di esposizione al virus permette alle applicazioni di notificarti nel caso in cui tu sia stato esposto a qualcuno che ha riportato di esser stato diagnosticato positivo al virus.
 
 Data, durata e potenza del segnale associati ad una esposizione verranno condivisi con l\'applicazione relativa."</string>
-    <string name="pref_exposure_rpis_details_summary">"Quando l\'API per le notifiche di esposizione al virus è abilitata, il tuo dispositivo raccoglie passivamente identificativi univoci (chiamati Identificatori di Prossimita a Rotazione, ovvero RPI) dai dispositivi vicini.
+    <string name="pref_exposure_rpis_details_summary">"Quando l\'API per le notifiche di esposizione al virus è abilitata, il tuo dispositivo raccoglie passivamente identificativi univoci (chiamati Identificatori di Prossimità a Rotazione, ovvero RPI) dai dispositivi vicini.
 
 Quando i possessori dei dispositivi riportano di essere stati diagnosticati positivi al virus, i loro identificativi univoci possono essere condivisi. Il tuo dispositivo verifica se tra gli identificativi univoci diagnosticati positivi al virus vi sono corrispondenze con quelli raccolti e calcola il tuo punteggio di rischio."</string>
 
@@ -52,7 +52,7 @@ Data, durata e potenza del segnale associati ad una esposizione al virus verrann
     <string name="exposure_confirm_stop_summary">Dopo aver disabilitato le notifiche di esposizione al virus, non verrai più notificato nel caso in cui tu sia stato esposto a qualcuno che ha riportato di esser stato diagnosticato positivo.</string>
     <string name="exposure_confirm_stop_button">Disabilita</string>
     <string name="exposure_confirm_keys_title">Condividi i tuoi identificativi univoci con <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
-    <string name="exposure_confirm_keys_summary">"I tuoi identificativi univoci degli ultimi 14 giorni saranno utilizzati per aiutare a notificare altri se tu sei stato vicino ad una potenziale esposizione al virus.
+    <string name="exposure_confirm_keys_summary">"I tuoi identificativi univoci degli ultimi 14 giorni saranno utilizzati per aiutare a notificare altri se sei stato vicino ad una potenziale esposizione al virus.
 
 La tua identità o il risultato del test non saranno condivisi con altre persone"</string>
     <string name="exposure_confirm_keys_button">Condividi</string>
