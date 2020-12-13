@@ -21,7 +21,7 @@
     <string name="pref_exposure_collected_rpis_title">Identificativi univoci raccolti</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> identificativi univoci nell\'ultima ora</string>
     <string name="pref_exposure_advertising_id_title">Identificativi univoci attualmente trasmessi</string>
-    <string name="pref_exposure_app_last_report_title">Ultimo resoconto (<xliff:g example="3 hours ago">%1$s</xliff:g>)</string>
+<!--    <string name="pref_exposure_app_last_report_title">Ultimo resoconto (<xliff:g example="3 hours ago">%1$s</xliff:g>)</string>-->
     <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Processate <xliff:g example="121031">%1$d</xliff:g> chiavi di diagnosi.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">Nessun incontro esposto al virus riscontrato.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_prefix">Riscontrati <xliff:g example="3">%1$d</xliff:g> incontri esposti:</string>
