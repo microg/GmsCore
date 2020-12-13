@@ -52,7 +52,7 @@
     <string name="perm_extended_access_label">Googleサービスへの拡張アクセス</string>
 
     <string name="service_name_checkin">Googleデバイス登録</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
 
     <string name="service_status_disabled">無効</string>
     <string name="service_status_enabled">有効</string>
@@ -114,7 +114,7 @@
     <string name="prefcat_test">テスト</string>
 
     <string name="cond_gcm_bat_title">バッテリーの最適化が有効です</string>
-    <string name="cond_gcm_bat_summary">Google Cloud Messagingが有効になっていますが、microG Service Coreのバッテリーの最適化が有効に設定されています。 プッシュ通知が正しく動作するためには、バッテリーの最適化を無効にする必要があります。</string>
+    <string name="cond_gcm_bat_summary">Cloud Messagingが有効になっていますが、microG Service Coreのバッテリーの最適化が有効に設定されています。 プッシュ通知が正しく動作するためには、バッテリーの最適化を無効にする必要があります。</string>
     <string name="cond_gcm_bat_action">最適化無効</string>
     <string name="cond_perm_title">権限がありません</string>
 
@@ -134,11 +134,11 @@
 
     <string name="pref_add_account_title">アカウント</string>
     <string name="pref_add_account_summary">Googleアカウントを追加</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging は、サードパーティアプリケーションで広く採用されているプッシュメッセージプロバイダーです。 使用する前に、デバイスの登録を有効にする必要があります。</string>
-    <string name="pref_gcm_heartbeat_title">Google Cloud Messagingの同期周期</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging は、サードパーティアプリケーションで広く採用されているプッシュメッセージプロバイダーです。 使用する前に、デバイスの登録を有効にする必要があります。</string>
+    <string name="pref_gcm_heartbeat_title">Cloud Messagingの同期周期</string>
     <string name="pref_gcm_heartbeat_summary">システムがGoogleサーバーと同期する秒単位の間隔。 この数値を増やすとバッテリーの消費量は減りますが、メッセージの遅延が発生する可能性があります。\n 非推奨: 将来のリリースで置き換えられる予定</string>
-    <string name="pref_gcm_apps_title">Google Cloud Messagingを使用するアプリ</string>
-    <string name="pref_gcm_apps_summary">このリストはGoogle Cloud Messagingを使用するために登録されたアプリの一覧です。</string>
+    <string name="pref_gcm_apps_title">Cloud Messagingを使用するアプリ</string>
+    <string name="pref_gcm_apps_summary">このリストは Cloud Messagingを使用するために登録されたアプリの一覧です。</string>
     <string name="pref_gcm_confirm_new_apps_title">新しいアプリの確認</string>
     <string name="pref_gcm_confirm_new_apps_summary">プッシュ通知を受信する新しいアプリが登録される前に確認する</string>
     <string name="pref_gcm_ping_interval">Ping間隔: <xliff:g example="10 minutes">%1$s</xliff:g></string>

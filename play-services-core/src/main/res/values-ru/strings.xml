@@ -56,7 +56,7 @@
     <string name="perm_provision_description">Позволить приложению настраивать сервисы microG без вмешательства пользователя</string>
 
     <string name="service_name_checkin">Регистрация устройства в Google</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Выключено</string>
@@ -119,7 +119,7 @@
     <string name="prefcat_test">Тест</string>
 
     <string name="cond_gcm_bat_title">Активна оптимизация энергопотребления</string>
-    <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но у вас активна оптимизация энергопотребления для microG Services Core. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
+    <string name="cond_gcm_bat_summary">Вы включили Cloud Messaging, но у вас активна оптимизация энергопотребления для microG Services Core. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
     <string name="cond_gcm_bat_action">Разрешить работу в фоне</string>
     <string name="cond_perm_title">Отсутствуют разрешения</string>
 
@@ -144,11 +144,11 @@
 
     <string name="pref_add_account_title">Аккаунт</string>
     <string name="pref_add_account_summary">Добавить аккаунт Google</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
     <string name="pref_gcm_heartbeat_title">Интервал соединения Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
-    <string name="pref_gcm_apps_title">Приложения, использующие Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Список приложений, которые привязаны к Google Cloud Messaging.</string>
+    <string name="pref_gcm_apps_title">Приложения, использующие Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Список приложений, которые привязаны к Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Подтверждать новые приложения</string>
     <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение перед привязкой новых приложений для получения push-уведомлений</string>
     <string name="pref_gcm_ping_interval">Интервал проверки: <xliff:g example="10 минут">%1$s</xliff:g></string>

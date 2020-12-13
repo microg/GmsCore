@@ -86,7 +86,7 @@ Esto podría tardar algunos minutos."</string>
 
     <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
 
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging es un proveedor de notificaciones push usado por muchas aplicaciones. Para usarlo debes habilitar el registro del dispositivo.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging es un proveedor de notificaciones push usado por muchas aplicaciones. Para usarlo debes habilitar el registro del dispositivo.</string>
     <string name="pref_gcm_heartbeat_title">Intervalo del Cloud Messaging heartbeat</string>
     <string name="pref_gcm_heartbeat_summary">El intervalo en segundos para el heartbeat a los servidores de Google. Aumentar este número reducirá el gasto de la batería, pero podría causar retrasos en mensajes push.</string>
     <string name="pref_about_title">Acerca de los Servicios de microG Core</string>
