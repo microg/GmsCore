@@ -24,7 +24,7 @@
     <string name="ask_permission_tos">Продолжая, вы позволяете этому приложению и Google использовать свою информацию в соответствии с их соответствующими условиями предоставления услуг и политиками конфиденциальности.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы использовать:</string>
-    <string name="account_manager_title">Google Account Manager</string>
+    <string name="account_manager_title">Менеджер аккаунта Google</string>
     <string name="sorry">Извините…</string>
 	<string name="auth_before_connect">"Приложение на вашем устройстве пытается войти в учетную запись Google.
 
@@ -43,7 +43,7 @@
 
 Это может занять несколько минут."</string>
     <string name="allow">Разрешить</string>
-    <string name="deny">Отказано</string>
+    <string name="deny">Отказать</string>
     <string name="auth_notification_title">Требуется аутентификация</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> требуется авторизация чтобы получить доступ к вашей учетной записи Google.</string>
 
@@ -56,7 +56,7 @@
     <string name="perm_provision_description">Позволить приложению настраивать сервисы microG без вмешательства пользователя</string>
 
     <string name="service_name_checkin">Регистрация устройства в Google</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Облачный обмен сообщениями</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Выключено</string>
@@ -119,7 +119,7 @@
     <string name="prefcat_test">Тест</string>
 
     <string name="cond_gcm_bat_title">Активна оптимизация энергопотребления</string>
-    <string name="cond_gcm_bat_summary">Вы включили Cloud Messaging, но у вас активна оптимизация энергопотребления для microG Services Core. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
+    <string name="cond_gcm_bat_summary">Вы включили облачный обмен сообщениями, но у вас активна оптимизация энергопотребления для microG Services Core. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
     <string name="cond_gcm_bat_action">Разрешить работу в фоне</string>
     <string name="cond_perm_title">Отсутствуют разрешения</string>
 
@@ -144,11 +144,11 @@
 
     <string name="pref_add_account_title">Аккаунт</string>
     <string name="pref_add_account_summary">Добавить аккаунт Google</string>
-    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
-    <string name="pref_gcm_heartbeat_title">Интервал соединения Cloud Messaging</string>
+    <string name="pref_gcm_enable_mcs_summary">Облачный обмен сообщениями предоставляет push-уведомления, которые используются во многих в сторонних приложениях. Чтобы использовать их, вы должны включить регистрацию устройства.</string>
+    <string name="pref_gcm_heartbeat_title">Интервал соединения облачных сообщений</string>
     <string name="pref_gcm_heartbeat_summary">"Интервал в секундах, для использования серверов Google. Увеличение этого числа сократит потребление батареи, но может привести к задержкам push-сообщений.\nУстарело, будет изменено в следующем релизе."</string>
-    <string name="pref_gcm_apps_title">Приложения, использующие Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Список приложений, которые привязаны к Cloud Messaging.</string>
+    <string name="pref_gcm_apps_title">Приложения, использующие облачный обмен сообщениями</string>
+    <string name="pref_gcm_apps_summary">Список приложений, которые привязаны к облачному обмену сообщениями.</string>
     <string name="pref_gcm_confirm_new_apps_title">Подтверждать новые приложения</string>
     <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение перед привязкой новых приложений для получения push-уведомлений</string>
     <string name="pref_gcm_ping_interval">Интервал проверки: <xliff:g example="10 минут">%1$s</xliff:g></string>
@@ -175,7 +175,7 @@
     <string name="pref_push_app_allow_register_title">Разрешить регистрацию</string>
     <string name="pref_push_app_allow_register_summary">Разрешить приложению регистрироваться для получения push-уведомлений.</string>
     <string name="pref_push_app_wake_for_delivery_title">Запускать приложение при получении сообщения</string>
-    <string name="pref_push_app_wake_for_delivery_summary">Запустите приложение в фоновом режиме, чтобы получать входящие push-уведомления.</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Запускать приложение в фоновом режиме, чтобы получать входящие push-уведомления.</string>
     <string name="prefcat_push_apps_title">Приложения использующие push-уведомления</string>
     <string name="prefcat_push_apps_registered_title">Зарегистрированные приложения</string>
     <string name="prefcat_push_apps_unregistered_title">Незарегистрированные приложения</string>
