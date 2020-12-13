@@ -169,7 +169,7 @@
     <string name="permission_scope_www.googleapis.com_auth_userinfo.email">Паглядзець свой адрас электроннай пошты</string>
     <string name="permission_scope_www.googleapis.com_auth_userinfo.profile">Прагляд асноўнай інфармацыі аб акаўнце</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube">Кіраванне акаўнтам YouTube</string>
-    <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Прагляд і кіраванне сваімі аб'ектамі і кантэнтам на YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Прагляд і кіраванне сваімі аб\'ектамі і кантэнтам на YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">Прагляд свайго акаўнта YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Кіраванне вашымі відэа на YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Прагляд грашовых справаздачаў YouTube Analytics для вашага кантэнту на YouTube</string>
