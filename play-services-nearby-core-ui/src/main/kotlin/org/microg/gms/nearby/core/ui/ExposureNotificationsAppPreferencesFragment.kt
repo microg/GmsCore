@@ -92,9 +92,11 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
                 }
 
                 reportedExposures.removeAll()
+                reportedExposures.addPreference(reportedExposuresNone)
                 if (mergedExposures.isNullOrEmpty()) {
-                    reportedExposures.addPreference(reportedExposuresNone)
+                    reportedExposuresNone.isVisible = true
                 } else {
+                    reportedExposuresNone.isVisible = false
                     for (exposure in mergedExposures) {
                         val minAttenuation = exposure.subs.map { it.attenuation }.minOrNull() ?: exposure.attenuation
                         val nearby = exposure.attenuation < 63 || minAttenuation < 55

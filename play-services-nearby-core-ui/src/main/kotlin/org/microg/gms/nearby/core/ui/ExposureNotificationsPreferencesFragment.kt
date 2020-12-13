@@ -12,16 +12,16 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import android.util.Log
+import android.view.View
+import androidx.core.location.LocationManagerCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import org.microg.gms.nearby.exposurenotification.AdvertiserService
-import org.microg.gms.nearby.exposurenotification.ExposureDatabase
-import org.microg.gms.nearby.exposurenotification.ScannerService
-import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
+import org.microg.gms.nearby.exposurenotification.*
 import org.microg.gms.ui.AppIconPreference
 import org.microg.gms.ui.getApplicationInfoIfExists
 import org.microg.gms.ui.navigate
@@ -37,6 +37,7 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var exposureAppsNone: Preference
     private lateinit var collectedRpis: Preference
     private lateinit var advertisingId: Preference
+    private var turningBluetoothOn: Boolean = false
     private val handler = Handler()
     private val updateStatusRunnable = Runnable { updateStatus() }
     private val updateContentRunnable = Runnable { updateContent() }
@@ -63,8 +64,19 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
         }
 
         exposureBluetoothOff.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivity(intent)
+            lifecycleScope.launchWhenStarted {
+                turningBluetoothOn = true
+                it.isVisible = false
+                val adapter = BluetoothAdapter.getDefaultAdapter()
+                if (adapter != null && !adapter.enableAsync(requireContext())) {
+                    turningBluetoothOn = false
+                    val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                    startActivityForResult(intent, 144)
+                } else {
+                    turningBluetoothOn = false
+                    updateStatus()
+                }
+            }
             true
         }
 
@@ -88,23 +100,6 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
         handler.removeCallbacks(updateContentRunnable)
     }
 
-    private fun isLocationEnabled(): Boolean {
-        val lm = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
-        var gpsEnabled = false
-        var networkEnabled = false
-
-        try {
-            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        } catch (ex: Exception) {
-        }
-
-        try {
-            networkEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        } catch (ex: Exception) {
-        }
-        return gpsEnabled || networkEnabled
-    }
-
     private fun updateStatus() {
         lifecycleScope.launchWhenResumed {
             handler.postDelayed(updateStatusRunnable, UPDATE_STATUS_INTERVAL)
@@ -114,8 +109,8 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
             val bluetoothSupported = ScannerService.isSupported(requireContext())
             val advertisingSupported = if (bluetoothSupported == true) AdvertiserService.isSupported(requireContext()) else bluetoothSupported
 
-            exposureLocationOff.isVisible = enabled && bluetoothSupported != false && !isLocationEnabled()
-            exposureBluetoothOff.isVisible = enabled && bluetoothSupported == null
+            exposureLocationOff.isVisible = enabled && bluetoothSupported != false && !LocationManagerCompat.isLocationEnabled(requireContext().getSystemService(LOCATION_SERVICE) as LocationManager)
+            exposureBluetoothOff.isVisible = enabled && bluetoothSupported == null && !turningBluetoothOn
             exposureBluetoothUnsupported.isVisible = enabled && bluetoothSupported == false
             exposureBluetoothNoAdvertisement.isVisible = enabled && bluetoothSupported == true && advertisingSupported != true
 

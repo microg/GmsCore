@@ -54,6 +54,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
+                .setSmallIcon(android.R.drawable.stat_notify_error)
                 .setContentTitle("Running in background")
                 .setContentText("microG " + context.getClass().getSimpleName() + " is running in background.")
                 .build();

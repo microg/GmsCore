@@ -9,8 +9,6 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.Service
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.le.*
 import android.content.BroadcastReceiver
@@ -50,7 +48,7 @@ class ScannerService : LifecycleService() {
     }
     private val trigger = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "android.bluetooth.adapter.action.STATE_CHANGED") {
+            if (intent?.action == ACTION_STATE_CHANGED) {
                 when (intent.getIntExtra(EXTRA_STATE, -1)) {
                     STATE_TURNING_OFF, STATE_OFF -> stopScan()
                     STATE_ON -> startScanIfNeeded()
@@ -104,7 +102,7 @@ class ScannerService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        registerReceiver(trigger, IntentFilter().also { it.addAction("android.bluetooth.adapter.action.STATE_CHANGED") })
+        registerReceiver(trigger, IntentFilter().apply { addAction(ACTION_STATE_CHANGED) })
     }
 
     override fun onDestroy() {
@@ -174,10 +172,10 @@ class ScannerService : LifecycleService() {
         }
 
         fun isSupported(context: Context): Boolean? {
-            val adapter = BluetoothAdapter.getDefaultAdapter()
+            val adapter = getDefaultAdapter()
             return when {
                 adapter == null -> false
-                adapter.state != BluetoothAdapter.STATE_ON -> null
+                adapter.state != STATE_ON -> null
                 adapter.bluetoothLeScanner != null -> true
                 else -> false
             }

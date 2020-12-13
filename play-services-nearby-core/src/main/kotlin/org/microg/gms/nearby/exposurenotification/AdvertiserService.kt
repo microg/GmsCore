@@ -10,15 +10,17 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.app.Service
-import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.le.*
 import android.bluetooth.le.AdvertiseSettings.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.*
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
@@ -36,7 +38,7 @@ class AdvertiserService : LifecycleService() {
     private var advertising = false
     private var wantStartAdvertising = false
     private val advertiser: BluetoothLeAdvertiser?
-        get() = BluetoothAdapter.getDefaultAdapter()?.bluetoothLeAdvertiser
+        get() = getDefaultAdapter()?.bluetoothLeAdvertiser
     private val alarmManager: AlarmManager
         get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val callback: AdvertiseCallback = object : AdvertiseCallback() {
@@ -54,10 +56,10 @@ class AdvertiserService : LifecycleService() {
     private var setCallback: Any? = null
     private val trigger = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "android.bluetooth.adapter.action.STATE_CHANGED") {
-                when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)) {
-                    BluetoothAdapter.STATE_TURNING_OFF, BluetoothAdapter.STATE_OFF -> stopOrRestartAdvertising()
-                    BluetoothAdapter.STATE_ON -> startAdvertisingIfNeeded()
+            if (intent?.action == ACTION_STATE_CHANGED) {
+                when (intent.getIntExtra(EXTRA_STATE, -1)) {
+                    STATE_TURNING_OFF, STATE_OFF -> stopOrRestartAdvertising()
+                    STATE_ON -> startAdvertisingIfNeeded()
                 }
             }
         }
@@ -67,7 +69,7 @@ class AdvertiserService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        registerReceiver(trigger, IntentFilter().also { it.addAction("android.bluetooth.adapter.action.STATE_CHANGED") })
+        registerReceiver(trigger, IntentFilter().apply { addAction(ACTION_STATE_CHANGED) })
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -234,11 +236,11 @@ class AdvertiserService : LifecycleService() {
         }
 
         fun isSupported(context: Context): Boolean? {
-            val adapter = BluetoothAdapter.getDefaultAdapter()
+            val adapter = getDefaultAdapter()
             return when {
                 adapter == null -> false
                 Build.VERSION.SDK_INT >= 26 && (adapter.isLeExtendedAdvertisingSupported || adapter.isLePeriodicAdvertisingSupported) -> true
-                adapter.state != BluetoothAdapter.STATE_ON -> null
+                adapter.state != STATE_ON -> null
                 adapter.bluetoothLeAdvertiser != null -> true
                 else -> false
             }

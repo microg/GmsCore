@@ -20,7 +20,9 @@
             android:enabled="false"
             android:key="pref_exposure_app_report_none"
             android:order="0"
-            android:title="@string/list_no_item_none" />
+            android:title="@string/list_no_item_none"
+            app:isPreferenceVisible="false"
+            tools:isPreferenceVisible="true" />
         <Preference
             android:enabled="false"
             android:key="pref_exposure_app_report_updated"

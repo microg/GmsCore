@@ -9,6 +9,9 @@
 
     <uses-sdk tools:overrideLibrary="com.db.williamchart" />
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <application>
         <activity
             android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsConfirmActivity"
@@ -26,6 +29,7 @@
             android:theme="@style/Theme.AppCompat.DayNight">
             <intent-filter android:priority="-100">
                 <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

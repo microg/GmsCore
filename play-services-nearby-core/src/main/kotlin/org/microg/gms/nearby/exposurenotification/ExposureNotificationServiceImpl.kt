@@ -7,9 +7,8 @@ package org.microg.gms.nearby.exposurenotification
 
 import android.app.Activity
 import android.app.PendingIntent
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
+import android.bluetooth.BluetoothAdapter
+import android.content.*
 import android.os.*
 import android.util.Log
 import androidx.lifecycle.Lifecycle
@@ -19,6 +18,8 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.nearby.exposurenotification.*
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes.*
 import com.google.android.gms.nearby.exposurenotification.internal.*
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.withTimeout
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.common.Constants
@@ -71,7 +72,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
-    private suspend fun confirmPermission(permission: String): Status {
+    private suspend fun confirmPermission(permission: String, force: Boolean = false): Status {
         return ExposureDatabase.with(context) { database ->
             when {
                 tempGrantedPermissions.contains(packageName to permission) -> {
@@ -79,7 +80,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     tempGrantedPermissions.remove(packageName to permission)
                     Status.SUCCESS
                 }
-                database.hasPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission) -> {
+                !force && database.hasPermission(packageName, PackageUtils.firstSignatureDigest(context, packageName)!!, permission) -> {
                     Status.SUCCESS
                 }
                 !hasConfirmActivity() -> {
@@ -103,11 +104,16 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     override fun start(params: StartParams) {
         lifecycleScope.launchWhenStarted {
             val isAuthorized = ExposureDatabase.with(context) { it.isAppAuthorized(packageName) }
+            val adapter = BluetoothAdapter.getDefaultAdapter()
             val status = if (isAuthorized && ExposurePreferences(context).enabled) {
                 Status.SUCCESS
+            } else if (adapter == null) {
+                Status(FAILED_NOT_SUPPORTED, "No Bluetooth Adapter available.")
             } else {
-                val status = confirmPermission(CONFIRM_ACTION_START)
+                val status = confirmPermission(CONFIRM_ACTION_START, !adapter.isEnabled)
                 if (status.isSuccess) {
+                    val context = context
+                    adapter.enableAsync(context)
                     ExposurePreferences(context).enabled = true
                     ExposureDatabase.with(context) { database ->
                         database.authorizeApp(packageName)
