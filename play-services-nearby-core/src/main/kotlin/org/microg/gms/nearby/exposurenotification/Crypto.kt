@@ -41,13 +41,13 @@ val currentIntervalNumber: Int
 val currentDayRollingStartNumber: Int
     get() = getDayRollingStartNumber(currentIntervalNumber)
 
-fun getDayRollingStartNumber(intervalNumber: Int) = (floor(currentIntervalNumber.toDouble() / ROLLING_PERIOD).toLong() * ROLLING_PERIOD).toInt()
+fun getDayRollingStartNumber(intervalNumber: Int) = (floor(intervalNumber.toDouble() / ROLLING_PERIOD).toLong() * ROLLING_PERIOD).toInt()
 fun getPeriodInDay(intervalNumber: Int) = intervalNumber - getDayRollingStartNumber(intervalNumber)
 
 val nextKeyMillis: Long
     get() {
-        val currentWindowStart = currentIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH * 1000
-        val currentWindowEnd = currentWindowStart + ROLLING_WINDOW_LENGTH * 1000
+        val currentWindowStart = currentIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS
+        val currentWindowEnd = currentWindowStart + ROLLING_WINDOW_LENGTH_MS
         return (currentWindowEnd - System.currentTimeMillis()).coerceAtLeast(0)
     }
 

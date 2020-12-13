@@ -129,7 +129,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     fun dailyCleanup(): Boolean = writableDatabase.run {
         val start = System.currentTimeMillis()
-        val rollingStartTime = currentDayRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
+        val rollingStartTime = currentDayRollingStartNumber.toLong() * ROLLING_WINDOW_LENGTH_MS - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
         val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
         Log.d(TAG, "Deleted on daily cleanup: $advertisements adv")
         if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
