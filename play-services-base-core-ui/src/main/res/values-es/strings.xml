@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_advanced">Avanzado</string>
+    <string name="list_no_item_none">Ninguno</string>
+    <string name="list_item_see_all">Ver todo</string>
+    <string name="open_app">Abrir</string>
+</resources>
