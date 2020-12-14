@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_exposure">Notificaciones de Exposición</string>
     <string name="pref_exposure_enable_info_summary">Para habilitar las Notificaciones de Exposición, abre cualquier aplicación que lo soporte.</string>
     <string name="pref_exposure_error_bluetooth_off_title">Habilitar el Bluetooth</string>
