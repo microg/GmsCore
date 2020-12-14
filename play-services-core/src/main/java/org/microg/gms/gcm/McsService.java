@@ -329,19 +329,6 @@ public class McsService extends Service implements Handler.Callback {
         return START_REDELIVER_INTENT;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private Notification buildForegroundNotification() {
-        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_LOW);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
-        channel.setShowBadge(false);
-        getSystemService(NotificationManager.class).createNotificationChannel(channel);
-        return new Notification.Builder(this, channel.getId())
-                .setOngoing(true)
-                .setContentTitle("Running in background")
-                .setSmallIcon(android.R.drawable.stat_notify_sync)
-                .build();
-    }
-
     private void handleSendMessage(Intent intent) {
         String messageId = intent.getStringExtra(EXTRA_MESSAGE_ID);
         String collapseKey = intent.getStringExtra(EXTRA_COLLAPSE_KEY);

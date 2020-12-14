@@ -50,7 +50,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_NONE);
         channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
         channel.setShowBadge(false);
-        channel.setVibrationPattern(new long[0]);
+        channel.setVibrationPattern(new long[] {0});
         context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
         return new Notification.Builder(context, channel.getId())
                 .setOngoing(true)
