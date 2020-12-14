@@ -943,7 +943,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_STREAM, fileUri)
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    type = "application/vnd.sqlite3"
+                    type = "application/vnd.microg.exposure+sqlite3"
                 }
 
                 val shareIntent = Intent.createChooser(sendIntent, null)
