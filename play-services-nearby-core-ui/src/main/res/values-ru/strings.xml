@@ -41,7 +41,7 @@
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> запросов к <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> идентификаторов собрано</string>
     <string name="pref_exposure_rpi_delete_all_title">Удалить</string>
-    <string name="pref_exposure_rpi_delete_all_summary">Удалить все собранные идентификаторы</string
+    <string name="pref_exposure_rpi_delete_all_summary">Удалить все собранные идентификаторы</string>
     <string name="pref_exposure_rpi_delete_all_warning">Удаление собранных идентификаторов приведёт к невозможности информирования, в случае если у одного из ваших контактов за последние 14 дней окажется положительный диагноз.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Всё равно удалить</string>
     <string name="pref_exposure_rpi_export_title">Экспортировать</string>
