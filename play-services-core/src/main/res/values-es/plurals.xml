@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 microG Project Team
+  ~ Copyright (C) 2020 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -32,4 +32,4 @@
         <item quantity="one">Solicitar el permiso que falta</item>
         <item quantity="other">Solicitar los permisos que faltan</item>
     </plurals>
-    </resources>
+</resources>
