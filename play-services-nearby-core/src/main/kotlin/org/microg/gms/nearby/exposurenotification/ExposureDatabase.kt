@@ -994,7 +994,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
             // Use the FileProvider to get a content URI for the new DB
             val fileUri: Uri? = try {
-                FileProvider.getUriForFile(context,"org.microg.gms.nearby.exposurenotification.export", exportFile)
+                FileProvider.getUriForFile(context,"${context.packageName}.microg.exposure.export", exportFile)
             } catch (e: IllegalArgumentException) {
                 Log.e("EN-DB-Exporter", "The database file can't be shared: $exportFile $e")
                 null

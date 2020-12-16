@@ -45,7 +45,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="org.microg.gms.nearby.exposurenotification.export"
+            android:authorities="${applicationId}.microg.exposure.export"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data
