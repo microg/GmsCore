@@ -62,7 +62,7 @@
     <fragment
         android:id="@+id/gcmAllAppsFragment"
         android:name="org.microg.gms.ui.PushNotificationAllAppsFragment"
-        android:label="Apps using push notifications">
+        android:label="@string/prefcat_push_apps_title">
         <action
             android:id="@+id/openGcmAppDetailsFromAll"
             app:destination="@id/gcmAppFragment" />
