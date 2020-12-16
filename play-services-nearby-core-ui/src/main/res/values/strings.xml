@@ -40,11 +40,12 @@
     <string name="pref_exposure_app_api_usage_title">API usage in the last 14 days</string>
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> calls to <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs collected</string>
-    <string name="pref_exposure_rpi_delete_all_title">Delete all collected IDs</string>
+    <string name="pref_exposure_rpi_delete_all_title">Delete</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Delete all collected IDs</string>
     <string name="pref_exposure_rpi_delete_all_warning">Deleting collected IDs will make it impossible to notify you in case any of your contacts of the last 14 days is diagnosed.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Delete anyways</string>
-    <string name="pref_exposure_rpi_export_title">Export Database</string>
-    <string name="pref_exposure_rpi_export_summary">Export the current database for analysis with another app.</string>
+    <string name="pref_exposure_rpi_export_title">Export</string>
+    <string name="pref_exposure_rpi_export_summary">Export collected IDs for extended analysis with another app.</string>
     <string name="pref_exposure_info_summary">"Exposure Notifications API allows apps to notify you if you were exposed to someone who reported to be diagnosed positive.
 
 The date, duration, and signal strength associated with an exposure will be shared with the corresponding app."</string>

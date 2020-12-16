@@ -975,7 +975,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             // Create a new database which will store only the Advertisements table
             val exportDir = File(context.getCacheDir(), "exposureDatabase")
             exportDir.mkdir()
-            val exportFile = File(exportDir, "database.db")
+            val exportFile = File(exportDir, "exposure.db")
             if (exportFile.delete()) {
                 Log.d("EN-DB-Exporter", "Deleted old export database.")
             }
