@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright (C) 2020 microG Project Team
+  ~ Copyright (C) 2013-2020 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="place_picker_nearby_places">Lugares cercanos</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">Servicios de microG Core: Sin permiso para <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">Servicios de microG Core: Sin permiso para <xliff:g example="acceso completo a la red">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Red móvil</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -87,11 +87,11 @@ Esto podría tardar algunos minutos."</string>
     <string name="self_check_cat_gms_packages">Aplicaciones instaladas</string>
     <string name="self_check_cat_system">Sistema</string>
 
-    <string name="self_check_name_fake_sig_perm">El sistema tiene soporte de spoofing: </string>
+    <string name="self_check_name_fake_sig_perm">Soporte de spoofing: </string>
     <string name="self_check_resolution_fake_sig_perm">Tu ROM no tiene soporte nativo para spoofing de firmas. Todavía puedes usar Xposed o otros sistemas para conseguirlo. Por favor, compruebe la documentación en que ROMs soportan spoofing de firmas y como usar microG en las que no.</string>
-    <string name="self_check_name_perm_granted">El sistema concede el permiso de spoofing de firmas: </string>
+    <string name="self_check_name_perm_granted">Se concede el permiso de spoofing de firmas: </string>
     <string name="self_check_resolution_perm_granted">Este es un fuerte indicador de que la ROM si soporta spoofing de firmas, pero requiere otra acción para activarlo. Por favor, compruebe la documentación en que pasos se deben seguir.</string>
-    <string name="self_check_name_system_spoofs">El sistema hace spoofing de firmas: </string>
+    <string name="self_check_name_system_spoofs">Spoofing de firmas: </string>
     <string name="self_check_resolution_system_spoofs">Por favor compruebe la documentación en que pasos se deben seguir.</string>
 
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>

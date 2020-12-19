@@ -40,9 +40,12 @@
     <string name="pref_exposure_app_api_usage_title">El uso de la API en los últimos 14 días</string>
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> peticiones a <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> identificaciones recogidas</string>
-    <string name="pref_exposure_rpi_delete_all_title">Eliminar todas las identificaciones recogidas</string>
-    <string name="pref_exposure_rpi_delete_all_warning">Borrar las identificaciones recogidas hará imposible notificarle en caso de que alguno de sus contactos de los últimos 14 días sea diagnosticado.</string>
-    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Borrar de todas formas</string>
+    <string name="pref_exposure_rpi_delete_all_title">Eliminar</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Eliminar todas las identificaciones recogidas</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Eliminar las identificaciones recogidas hará imposible notificarle en caso de que alguno de sus contactos de los últimos 14 días sea diagnosticado.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Eliminar de todas formas</string>
+    <string name="pref_exposure_rpi_export_title">Exportar</string>
+    <string name="pref_exposure_rpi_export_summary">Exportar identificaciones recogidas para su análisis ampliado con otra aplicación.</string>
     <string name="pref_exposure_info_summary">La API de Notificaciones de Exposición permite que las aplicaciones le notifiquen si estuvo expuesto a alguien que informó haber sido diagnosticado como positivo.
 
 La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación correspondiente.</string>
