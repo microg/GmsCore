@@ -649,7 +649,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                 update(TABLE_TEK, ContentValues().apply {
                     put("rollingPeriod", intervalNumber - key.rollingStartIntervalNumber)
                 }, "rollingStartNumber = ?", arrayOf(key.rollingStartIntervalNumber.toString()))
-                storeOwnKey(generateIntraDayTemporaryExposureKey(intervalNumber), database)
+                storeOwnKey(generateCurrentDayTemporaryExposureKey(), database)
             }
             database.setTransactionSuccessful()
             val startRollingNumber = (getDayRollingStartNumber(intervalNumber) - 14 * ROLLING_PERIOD)
