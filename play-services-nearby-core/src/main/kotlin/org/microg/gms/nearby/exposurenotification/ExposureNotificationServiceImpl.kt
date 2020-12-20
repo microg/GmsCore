@@ -370,9 +370,12 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
                 try {
                     val intent = if (exposureSummary.matchedKeyCount > 0) {
-                        Intent(ACTION_EXPOSURE_STATE_UPDATED).putExtra(EXTRA_EXPOSURE_SUMMARY, exposureSummary)
+                        Intent(ACTION_EXPOSURE_STATE_UPDATED)
                     } else {
                         Intent(ACTION_EXPOSURE_NOT_FOUND)
+                    }
+                    if (token != TOKEN_A) {
+                        intent.putExtra(EXTRA_EXPOSURE_SUMMARY, exposureSummary)
                     }
                     intent.putExtra(EXTRA_TOKEN, token)
                     intent.`package` = packageName
