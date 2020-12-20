@@ -151,9 +151,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     override fun isEnabled(params: IsEnabledParams) {
         lifecycleScope.launchWhenStarted {
             val isAuthorized = ExposureDatabase.with(context) { database ->
-                database.isAppAuthorized(packageName).also {
-                    if (it) database.noteAppAction(packageName, "isEnabled")
-                }
+                database.isAppAuthorized(packageName)
             }
             try {
                 params.callback.onResult(Status.SUCCESS, isAuthorized && ExposurePreferences(context).enabled)

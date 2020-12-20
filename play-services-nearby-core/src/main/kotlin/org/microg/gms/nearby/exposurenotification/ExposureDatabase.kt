@@ -122,6 +122,10 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                 }
             }
         }
+        if (oldVersion == 9) {
+            Log.d(TAG, "Get rid of isEnabled log entries")
+            db.delete(TABLE_APP_LOG, "method = ?", arrayOf("isEnabled"));
+        }
         Log.d(TAG, "Finished database upgrade")
     }
 
@@ -830,7 +834,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 9
+        private const val DB_VERSION = 10
         private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"
