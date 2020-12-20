@@ -8,18 +8,14 @@ package org.microg.gms.nearby.exposurenotification
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils
-
 
 class ExposurePreferences(private val context: Context) {
     private var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     init {
-        if (context.packageName != PackageUtils.getProcessName()) {
-            Log.w("Preferences", ExposurePreferences::class.simpleName + " initialized outside main process", RuntimeException())
-        }
+        PackageUtils.warnIfNotPersistentProcess(ExposurePreferences::class.java)
     }
 
     var enabled

@@ -53,9 +53,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public static GcmPrefs get(Context context) {
         if (INSTANCE == null) {
-            if (!context.getPackageName().equals(PackageUtils.getProcessName())) {
-                Log.w("Preferences", GcmPrefs.class.getName() + " initialized outside main process", new RuntimeException());
-            }
+            PackageUtils.warnIfNotPersistentProcess(GcmPrefs.class);
             if (context == null) return new GcmPrefs(null);
             INSTANCE = new GcmPrefs(context.getApplicationContext());
         }

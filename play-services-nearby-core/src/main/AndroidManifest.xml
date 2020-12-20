@@ -21,20 +21,34 @@
 
         <!-- Exposure Notifications -->
 
-        <service android:name="org.microg.gms.nearby.exposurenotification.ScannerService" />
-        <service android:name="org.microg.gms.nearby.exposurenotification.AdvertiserService" />
-        <service android:name="org.microg.gms.nearby.exposurenotification.CleanupService" />
-        <service android:name="org.microg.gms.nearby.exposurenotification.NotifyService" />
+        <service
+            android:name="org.microg.gms.nearby.exposurenotification.ScannerService"
+            android:process=":persistent" />
+        <service
+            android:name="org.microg.gms.nearby.exposurenotification.AdvertiserService"
+            android:process=":persistent" />
+        <service
+            android:name="org.microg.gms.nearby.exposurenotification.CleanupService"
+            android:process=":persistent" />
+        <service
+            android:name="org.microg.gms.nearby.exposurenotification.NotifyService"
+            android:process=":persistent" />
 
-        <service android:name="org.microg.gms.nearby.exposurenotification.ExposureNotificationService">
+        <service
+            android:name="org.microg.gms.nearby.exposurenotification.ExposureNotificationService"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="com.google.android.gms.nearby.exposurenotification.START" />
             </intent-filter>
         </service>
 
-        <receiver android:name="org.microg.gms.nearby.exposurenotification.ServiceInfoReceiver" />
+        <receiver
+            android:name="org.microg.gms.nearby.exposurenotification.ServiceInfoReceiver"
+            android:process=":persistent" />
 
-        <receiver android:name="org.microg.gms.nearby.exposurenotification.ServiceTrigger">
+        <receiver
+            android:name="org.microg.gms.nearby.exposurenotification.ServiceTrigger"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
@@ -46,8 +60,8 @@
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.microg.exposure.export"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/preferences_exposure_notifications_exportedfiles" />
