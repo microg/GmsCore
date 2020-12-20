@@ -17,9 +17,6 @@
 package org.microg.gms.gcm;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -41,7 +38,6 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.squareup.wire.Message;
@@ -75,7 +71,6 @@ import okio.ByteString;
 
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.common.ForegroundServiceContext.EXTRA_FOREGROUND;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
@@ -241,7 +236,7 @@ public class McsService extends Service implements Handler.Callback {
             return false;
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
-        int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref, false);
+        int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref);
         if (heartbeatMs < 0) {
             closeAll();
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
@@ -271,7 +266,7 @@ public class McsService extends Service implements Handler.Callback {
     public void scheduleHeartbeat(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
-        int heartbeatMs = GcmPrefs.get(this).getHeartbeatMsFor(activeNetworkPref, false);
+        int heartbeatMs = GcmPrefs.get(this).getHeartbeatMsFor(activeNetworkPref);
         if (heartbeatMs < 0) {
             closeAll();
         }

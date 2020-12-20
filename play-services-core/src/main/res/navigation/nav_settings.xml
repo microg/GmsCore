@@ -78,7 +78,7 @@
     </fragment>
     <fragment
         android:id="@+id/gcmAdvancedFragment"
-        android:name="org.microg.gms.ui.GcmAdvancedFragment"
+        android:name="org.microg.gms.ui.PushNotificationAdvancedFragment"
         android:label="@string/service_name_mcs" />
     <fragment
         android:id="@+id/safetyNetFragment"
