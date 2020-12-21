@@ -42,7 +42,7 @@ class NotifyService : LifecycleService() {
         if (Build.VERSION.SDK_INT >= 29) {
             channel.setAllowBubbles(false)
         }
-        channel.vibrationPattern = LongArray(0)
+        channel.vibrationPattern = longArrayOf(0)
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
         return channel.id
     }
