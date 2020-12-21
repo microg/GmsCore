@@ -109,7 +109,8 @@
 
     <application
         android:name="androidx.multidex.MultiDexApplication"
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:fullBackupOnly="true"
         android:extractNativeLibs="false"
         android:forceQueryable="true"
         android:icon="@mipmap/ic_core_service_app"
