@@ -20,6 +20,7 @@ apply plugin: 'kotlin-android-extensions'
 
 dependencies {
     implementation project(':play-services-api')
+    implementation project(':play-services-base-core')
     implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1") {
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-accounts'
     }
