@@ -27,12 +27,14 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.common.ForegroundServiceInfo
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.nio.ByteBuffer
 import java.util.*
 
 @TargetApi(21)
+@ForegroundServiceInfo("Exposure Notification")
 class AdvertiserService : LifecycleService() {
     private val version = VERSION_1_0
     private var advertising = false

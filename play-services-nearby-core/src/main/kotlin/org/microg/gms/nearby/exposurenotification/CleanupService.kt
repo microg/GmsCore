@@ -17,7 +17,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.common.ForegroundServiceInfo
 
+@ForegroundServiceInfo("Exposure Notification")
 class CleanupService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)

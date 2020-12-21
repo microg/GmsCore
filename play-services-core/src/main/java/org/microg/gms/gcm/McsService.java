@@ -40,10 +40,12 @@ import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import com.google.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
+import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.gcm.mcs.AppData;
 import org.microg.gms.gcm.mcs.Close;
@@ -106,6 +108,7 @@ import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
 import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
 import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
+@ForegroundServiceInfo(value = "Cloud messaging", res = R.string.service_name_mcs)
 public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
 

@@ -32,13 +32,16 @@ import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import com.google.android.gms.R;
 import com.google.android.gms.checkin.internal.ICheckinService;
 
 import org.microg.gms.auth.AuthConstants;
+import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.common.ForegroundServiceContext;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
+@ForegroundServiceInfo(value = "Google device registration", res = R.string.service_name_checkin)
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
     public static final long MAX_VALID_CHECKIN_AGE = 24 * 60 * 60 * 1000; // 12 hours

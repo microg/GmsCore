@@ -20,11 +20,13 @@ import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.common.ForegroundServiceInfo
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.util.*
 
 @TargetApi(21)
+@ForegroundServiceInfo("Exposure Notification")
 class ScannerService : LifecycleService() {
     private var scanning = false
     private var lastStartTime = 0L
