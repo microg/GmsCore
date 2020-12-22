@@ -16,8 +16,8 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
-    <string name="gms_settings_name">Налады MicroG</string>
-    <string name="gms_settings_summary">Канфігураванне сэрвісаў microG.</string>
+    <string name="gms_settings_name">Налады microG</string>
+    <string name="gms_settings_summary">Канфігураванне сэрвісаў microG</string>
 
     <string name="just_a_sec">Калі ласка, пачакайце...</string>
     <string name="google_account_label">Google</string>
@@ -56,7 +56,7 @@
     <string name="perm_provision_description">Дазволіць прыкладанню настраіваць сэрвісы microG без ўмяшання карыстальніка</string>
 
     <string name="service_name_checkin">Рэгістрацыя прылады ў Google</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Воблачны абмен паведамленнямі</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Выключана</string>
@@ -119,7 +119,7 @@
     <string name="prefcat_test">Тэст</string>
 
     <string name="cond_gcm_bat_title">Актыўная аптымізацыя энергаспажывання</string>
-    <string name="cond_gcm_bat_summary">Вы ўключылі Google Cloud Messaging, але ў вас актыўная аптымізацыя энергаспажывання для microG Services Core. Каб атрымліваць push-паведамленні вам неабходна дазволіць прыкладанню працаваць у фонавым рэжыме.</string>
+    <string name="cond_gcm_bat_summary">Вы ўключылі воблачны абмен паведамленнямі, але ў вас актыўная аптымізацыя энергаспажывання для microG Services Core. Каб атрымліваць push-паведамленні вам неабходна дазволіць прыкладанню працаваць у фонавым рэжыме.</string>
     <string name="cond_gcm_bat_action">Дазволіць работу ў фоне</string>
     <string name="cond_perm_title">Адсутнічаюць дазволы</string>
 
@@ -144,11 +144,11 @@
 
     <string name="pref_add_account_title">Уліковы запіс</string>
     <string name="pref_add_account_summary">Дадаць уліковы запіс Google</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging прадастаўляе push-паведамленні, якія выкарыстоўваюцца ў многіх у іншых прыкладаннях. Каб выкарыстоўваць іх, вы павінны ўключыць рэгістрацыю прылады.</string>
-    <string name="pref_gcm_heartbeat_title">Інтэрвал злучэння Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">"Інтэрвал у секундах, для выкарыстання сервераў Google. Павелічэнне гэтага ліку скароціць спажыванне батарэі, але можа прывесці да затрымак push-паведамленняў.\nУстарело, будзе зменена ў наступным рэлізе."</string>
-    <string name="pref_gcm_apps_title">Прыкладанні, якія выкарыстоўваюць Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Спіс прыкладанняў, якія прывязаныя да Google Cloud Messaging.</string>
+    <string name="pref_gcm_enable_mcs_summary">Воблачны абмен паведамленнямі прадастаўляе push-паведамленні, якія выкарыстоўваюцца ў многіх у іншых прыкладаннях. Каб выкарыстоўваць іх, вы павінны ўключыць рэгістрацыю прылады.</string>
+    <string name="pref_gcm_heartbeat_title">Інтэрвал злучэння воблачных паведамленняў</string>
+    <string name="pref_gcm_heartbeat_summary">"Інтэрвал у секундах, для выкарыстання сервераў Google. Павелічэнне гэтага ліку скароціць спажыванне батарэі, але можа прывесці да затрымак push-паведамленняў.\nСастарэла, будзе зменена ў наступным рэлізе."</string>
+    <string name="pref_gcm_apps_title">Прыкладанні, якія выкарыстоўваюць воблачны абмен паведамленнямі</string>
+    <string name="pref_gcm_apps_summary">Спіс прыкладанняў, якія прывязаныя да воблачнага абмену паведамленнямі.</string>
     <string name="pref_gcm_confirm_new_apps_title">Пацверджваць новыя прыкладанні</string>
     <string name="pref_gcm_confirm_new_apps_summary">Пытаць дазвол перад прывязкай новых прыкладанняў для атрымання push-паведамленняў</string>
     <string name="pref_gcm_ping_interval">Інтэрвал праверкі: <xliff:g example="10 минут">%1$s</xliff:g></string>
