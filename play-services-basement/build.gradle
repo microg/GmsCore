@@ -19,7 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 dependencies {
-    api "org.microg:safe-parcel:$safeParcelVersion"
+    api "org.microg:safe-parcel:1.7.0"
 
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.21'

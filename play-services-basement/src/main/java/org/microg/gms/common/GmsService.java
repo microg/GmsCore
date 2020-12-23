@@ -46,6 +46,7 @@ public enum GmsService {
     CREDENTIALS(68, "com.google.android.gms.auth.api.credentials.service.START"),
     MEASUREMENT(93, "com.google.android.gms.measurement.START"),
     GASS(116, "com.google.android.gms.gass.START"),
+    IDENTITY_SIGN_IN(212, "com.google.android.gms.auth.api.identity.service.signin.START"),
     ;
 
     public int SERVICE_ID;
@@ -61,6 +62,15 @@ public enum GmsService {
     public static GmsService byServiceId(int serviceId) {
         for (GmsService service : values()) {
             if (service.SERVICE_ID == serviceId) return service;
+        }
+        return UNKNOWN;
+    }
+
+    public static GmsService byAction(String action) {
+        for (GmsService service : values()) {
+            for (String serviceAction : service.SECONDARY_ACTIONS) {
+                if (serviceAction.equals(action)) return service;
+            }
         }
         return UNKNOWN;
     }

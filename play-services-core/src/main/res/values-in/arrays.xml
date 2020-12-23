@@ -18,8 +18,8 @@
 <resources>
 
     <string-array name="gcm_network_config_names" translatables="false">
-        <item>@string/service_status_disabled</item>
-        <item>@string/service_status_default</item>
+        <item>@string/service_status_disabled_short</item>
+        <item>@string/gcm_status_pref_default</item>
         <item>Ping interval: 2 menit</item>
         <item>Ping interval: 5 menit</item>
         <item>Ping interval: 10 menit</item>

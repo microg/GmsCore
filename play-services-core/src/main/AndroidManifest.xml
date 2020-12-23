@@ -80,9 +80,10 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:forceQueryable="true"
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:fullBackupOnly="true"
         android:extractNativeLibs="true"
+        android:forceQueryable="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config">
@@ -144,7 +145,8 @@
 
         <!-- Cloud Messaging -->
         <service
-            android:name="org.microg.gms.gcm.PushRegisterService">
+            android:name="org.microg.gms.gcm.PushRegisterService"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="com.mgoogle.android.c2dm.intent.REGISTER" />
                 <action android:name="com.mgoogle.android.c2dm.intent.UNREGISTER" />
@@ -153,24 +155,33 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="org.microg.gms.gcm.PushRegisterReceiver">
+        <receiver
+            android:name="org.microg.gms.gcm.PushRegisterReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="com.mgoogle.iid.TOKEN_REQUEST" />
             </intent-filter>
         </receiver>
 
-        <service android:name="org.microg.gms.gcm.McsService" />
+        <service
+            android:name="org.microg.gms.gcm.McsService"
+            android:process=":persistent" />
 
         <receiver
-            android:name="org.microg.gms.gcm.SendReceiver">
+            android:name="org.microg.gms.gcm.SendReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="com.google.android.gcm.intent.SEND" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name="org.microg.gms.gcm.ServiceInfoReceiver" />
+        <receiver
+            android:name="org.microg.gms.gcm.ServiceInfoReceiver"
+            android:process=":persistent" />
 
-        <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
+        <receiver
+            android:name="org.microg.gms.gcm.TriggerReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
@@ -191,7 +202,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="org.microg.gms.gcm.UnregisterReceiver">
+        <receiver
+            android:name="org.microg.gms.gcm.UnregisterReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
