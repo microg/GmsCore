@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.gcm.GcmPrefs
+import org.microg.gms.gcm.getGcmServiceInfo
+import org.microg.gms.gcm.setGcmServiceConfiguration
 
 class ProvisionService : LifecycleService() {
     private fun Bundle.getBooleanOrNull(key: String): Boolean? {
@@ -29,7 +31,7 @@ class ProvisionService : LifecycleService() {
             }
 
             intent?.extras?.getBooleanOrNull("checkin_enabled")?.let { CheckinPrefs.setEnabled(this@ProvisionService, it) }
-            intent?.extras?.getBooleanOrNull("gcm_enabled")?.let { GcmPrefs.setEnabled(this@ProvisionService, it) }
+            intent?.extras?.getBooleanOrNull("gcm_enabled")?.let { setGcmServiceConfiguration(this@ProvisionService, getGcmServiceInfo(this@ProvisionService).configuration.copy(enabled = it)) }
             // What else?
 
             delay(2 * 1000) // Wait 2 seconds to give provisioning some extra time

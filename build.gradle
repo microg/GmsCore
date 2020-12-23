@@ -45,8 +45,8 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = "0.2.14.204218"
-    ext.appVersionCode = 204215004
+    version = "0.2.16.204713"
+    ext.appVersionCode = 204713001
     ext.isReleaseVersion = false
 }
 

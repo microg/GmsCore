@@ -59,10 +59,8 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="perm_extended_access_label">Estendi accesso ai servizi Google</string>
 
     <string name="service_name_checkin">Registrazione dispositivo Google</string>
-    <string name="service_name_mcs">Messaggistica Cloud Google</string>
+    <string name="service_name_mcs">Messaggistica Cloud</string>
 
-    <string name="service_status_disabled">Disattivata</string>
-    <string name="service_status_default">Predefinito</string>
     <string name="service_status_enabled_short">Attiva</string>
     <string name="service_status_disabled_short">Disattivata</string>
 
@@ -85,7 +83,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="cond_gcm_bat_title">Ottimizzazione batteria attivata</string>
-    <string name="cond_gcm_bat_summary">Hai attivato l\'opzione Messaggistica Cloud Google ma i Servizi Vanced microG risultano al momento limitati dall\'ottimizzazione energetica di sistema. Se desideri ricevere le notifiche push, escludi i microG da questa ottimizzazione.</string>
+    <string name="cond_gcm_bat_summary">Hai attivato l\'opzione Messaggistica Cloud ma i Servizi Vanced microG risultano al momento limitati dall\'ottimizzazione energetica di sistema. Se desideri ricevere le notifiche push, escludi i microG da questa ottimizzazione.</string>
     <string name="cond_gcm_bat_action">Disattiva ottimizzazione</string>
 
     <string name="prefs_account">Preferenze account</string>
@@ -100,7 +98,7 @@ Questo potrà richiedere un paio di minuti"</string>
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Aggiungi account Google</string>
     <string name="pref_gcm_switcher_title">Ricevi notifiche push</string>
-    <string name="pref_gcm_enable_mcs_summary">Messaggistica Cloud Google è un fornitore di notifiche push presente in molte applicazioni di terze parti. Per utilizzarlo è necessario attivare la registrazione del dispositivo.</string>
+    <string name="pref_gcm_enable_mcs_summary">Messaggistica Cloud è un fornitore di notifiche push presente in molte applicazioni di terze parti. Per utilizzarlo è necessario attivare la registrazione del dispositivo.</string>
 
     <string name="pref_about_title">Informazioni su Vanced microG</string>
     <string name="pref_cast_double_fix">Correzione cast duplicato</string>

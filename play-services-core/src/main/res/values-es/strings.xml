@@ -59,10 +59,8 @@ Esto puede tardar unos minutos."</string>
     <string name="perm_extended_access_label">Acceso extendido a los servicios de Google</string>
 
     <string name="service_name_checkin">Registro de dispositivos Google</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
 
-    <string name="service_status_disabled">Deshabilitado</string>
-    <string name="service_status_default">Por Defecto</string>
     <string name="service_status_enabled_short">Encendido</string>
     <string name="service_status_disabled_short">Apagado</string>
 
@@ -85,7 +83,7 @@ Esto puede tardar unos minutos."</string>
     <string name="checkin_last_registration">Ultimo registro: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="cond_gcm_bat_title">Optimizaciones de bateria habilitadas</string>
-    <string name="cond_gcm_bat_summary">Has habilitado Google Cloud Messaging pero tienes las optimizacion de bateria activada para los servicios de microG. Para que lleguen las notificaciones deberás deshabilitar la optimización de batería para microG.</string>
+    <string name="cond_gcm_bat_summary">Has habilitado Cloud Messaging pero tienes las optimizacion de bateria activada para los servicios de microG. Para que lleguen las notificaciones deberás deshabilitar la optimización de batería para microG.</string>
     <string name="cond_gcm_bat_action">Deshabilitar optimizaciones</string>
 
     <string name="prefs_account">Preferencias de Cuenta</string>
@@ -100,7 +98,7 @@ Esto puede tardar unos minutos."</string>
     <string name="pref_add_account_title">Cuenta</string>
     <string name="pref_add_account_summary">Añadir cuenta de Google</string>
     <string name="pref_gcm_switcher_title">Recibir notificaciones push</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging es un proveedor de notificaciónes push usado por muchas aplicaciones de terceros. Pará usarlo tienes que activar registro de dispositivos.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging es un proveedor de notificaciónes push usado por muchas aplicaciones de terceros. Pará usarlo tienes que activar registro de dispositivos.</string>
 
     <string name="pref_about_title">Acerca de Vanced microG</string>
     <string name="pref_cast_double_fix">Solucion para Cast duplicado</string>

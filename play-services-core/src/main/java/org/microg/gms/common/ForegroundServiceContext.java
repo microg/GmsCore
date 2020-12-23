@@ -48,16 +48,46 @@ public class ForegroundServiceContext extends ContextWrapper {
         return powerManager.isIgnoringBatteryOptimizations(getPackageName());
     }
 
+    private static String getServiceName(Service service) {
+        String serviceName = null;
+        try {
+            ForegroundServiceInfo annotation = service.getClass().getAnnotation(ForegroundServiceInfo.class);
+            if (annotation != null) {
+                if (annotation.res() != 0) {
+                    try {
+                        serviceName = service.getString(annotation.res());
+                    } catch (Exception ignored) {
+                    }
+                }
+                if (serviceName == null) {
+                    serviceName = annotation.value();
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        if (serviceName == null) {
+            serviceName = service.getClass().getSimpleName();
+        }
+        return serviceName;
+    }
+
     public static void completeForegroundService(Service service, Intent intent, String tag) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && intent != null
                 && intent.getBooleanExtra(EXTRA_FOREGROUND, false)) {
-            Log.d(tag, "Started in foreground mode.");
-            service.startForeground(tag.hashCode(), buildForegroundNotification(service));
+            String serviceName = getServiceName(service);
+            Log.d(tag, "Started " + serviceName + " in foreground mode.");
+            try {
+                Notification notification = buildForegroundNotification(service, serviceName);
+                service.startForeground(serviceName.hashCode(), notification);
+                Log.d(tag, "Notification: " + notification.toString());
+            } catch (Exception e) {
+                Log.w(tag, e);
+            }
         }
     }
 
-    private static Notification buildForegroundNotification(Context context) {
+    private static Notification buildForegroundNotification(Context context, String serviceName) {
         Intent notificationIntent = new Intent();
         notificationIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -70,6 +100,7 @@ public class ForegroundServiceContext extends ContextWrapper {
                     context.getResources().getString(R.string.notification_service_name),
                     NotificationManager.IMPORTANCE_LOW);
             Channel.setShowBadge(false);
+            Channel.setVibrationPattern(new long[]{0});
             Channel.setLockscreenVisibility(0);
             context.getSystemService(NotificationManager.class).createNotificationChannel(Channel);
         }
