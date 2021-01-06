@@ -19,10 +19,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.nearby.exposurenotification.*
 import com.google.android.gms.nearby.exposurenotification.ExposureNotificationStatusCodes.*
 import com.google.android.gms.nearby.exposurenotification.internal.*
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.common.Constants
@@ -296,19 +293,21 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     Log.d(TAG, "Using key file supplier")
                     try {
                         while (keyFileSupplier.isAvailable && keyFileSupplier.hasNext()) {
-                            try {
-                                val cacheFile = File(context.cacheDir, "en-keyfile-${System.currentTimeMillis()}-${Random.nextInt()}.zip")
-                                ParcelFileDescriptor.AutoCloseInputStream(keyFileSupplier.next()).use { it.copyToFile(cacheFile) }
-                                val hash = MessageDigest.getInstance("SHA-256").digest(cacheFile)
-                                val storedKeys = database.storeDiagnosisFileUsed(tid, hash)
-                                if (storedKeys != null) {
-                                    keys += storedKeys.toInt()
-                                    cacheFile.delete()
-                                } else {
-                                    todoKeyFiles.add(cacheFile to hash)
+                            withContext(Dispatchers.IO) {
+                                try {
+                                    val cacheFile = File(context.cacheDir, "en-keyfile-${System.currentTimeMillis()}-${Random.nextLong()}.zip")
+                                    ParcelFileDescriptor.AutoCloseInputStream(keyFileSupplier.next()).use { it.copyToFile(cacheFile) }
+                                    val hash = MessageDigest.getInstance("SHA-256").digest(cacheFile)
+                                    val storedKeys = database.storeDiagnosisFileUsed(tid, hash)
+                                    if (storedKeys != null) {
+                                        keys += storedKeys.toInt()
+                                        cacheFile.delete()
+                                    } else {
+                                        todoKeyFiles.add(cacheFile to hash)
+                                    }
+                                } catch (e: Exception) {
+                                    Log.w(TAG, "Failed parsing file", e)
                                 }
-                            } catch (e: Exception) {
-                                Log.w(TAG, "Failed parsing file", e)
                             }
                         }
                     } catch (e: Exception) {
@@ -331,32 +330,38 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
                 var newKeys = if (params.keys != null) database.finishSingleMatching(tid) else 0
                 for ((cacheFile, hash) in todoKeyFiles) {
-                    ZipFile(cacheFile).use { zip ->
-                        for (entry in zip.entries()) {
-                            if (entry.name == "export.bin") {
-                                val stream = zip.getInputStream(entry)
-                                val prefix = ByteArray(16)
-                                var totalBytesRead = 0
-                                var bytesRead = 0
-                                while (bytesRead != -1 && totalBytesRead < prefix.size) {
-                                    bytesRead = stream.read(prefix, totalBytesRead, prefix.size - totalBytesRead)
-                                    if (bytesRead > 0) {
-                                        totalBytesRead += bytesRead
+                    withContext(Dispatchers.IO) {
+                        try {
+                            ZipFile(cacheFile).use { zip ->
+                                for (entry in zip.entries()) {
+                                    if (entry.name == "export.bin") {
+                                        val stream = zip.getInputStream(entry)
+                                        val prefix = ByteArray(16)
+                                        var totalBytesRead = 0
+                                        var bytesRead = 0
+                                        while (bytesRead != -1 && totalBytesRead < prefix.size) {
+                                            bytesRead = stream.read(prefix, totalBytesRead, prefix.size - totalBytesRead)
+                                            if (bytesRead > 0) {
+                                                totalBytesRead += bytesRead
+                                            }
+                                        }
+                                        if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
+                                            val export = TemporaryExposureKeyExport.ADAPTER.decode(stream)
+                                            database.finishFileMatching(tid, hash, export.end_timestamp?.let { it * 1000 }
+                                                    ?: System.currentTimeMillis(), export.keys.map { it.toKey() }, export.revised_keys.map { it.toKey() })
+                                            keys += export.keys.size + export.revised_keys.size
+                                            newKeys += export.keys.size
+                                        } else {
+                                            Log.d(TAG, "export.bin had invalid prefix")
+                                        }
                                     }
                                 }
-                                if (totalBytesRead == prefix.size && String(prefix).trim() == "EK Export v1") {
-                                    val export = TemporaryExposureKeyExport.ADAPTER.decode(stream)
-                                    database.finishFileMatching(tid, hash, export.end_timestamp?.let { it * 1000 }
-                                            ?: System.currentTimeMillis(), export.keys.map { it.toKey() }, export.revised_keys.map { it.toKey() })
-                                    keys += export.keys.size + export.revised_keys.size
-                                    newKeys += export.keys.size
-                                } else {
-                                    Log.d(TAG, "export.bin had invalid prefix")
-                                }
                             }
+                            cacheFile.delete()
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Failed parsing file", e)
                         }
                     }
-                    cacheFile.delete()
                 }
 
                 val time = (System.currentTimeMillis() - start).coerceAtLeast(1).toDouble() / 1000.0
