@@ -17,7 +17,7 @@
     <string name="pref_exposure_advertising_id_title">Aktuell verwendete ID</string>
     <string name="prefcat_exposure_app_report_title">Gemeldete Begegnungen</string>
     <string name="pref_exposure_app_report_updated_title">Aktualisiert: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
-    <string name="pref_exposure_app_report_entry_time_short">Kürzer als 5 Minutem</string>
+    <string name="pref_exposure_app_report_entry_time_short">Kürzer als 5 Minuten</string>
     <string name="pref_exposure_app_report_entry_time_about">Etwa <xliff:g example="13">%1$d</xliff:g> Minuten</string>
     <string name="pref_exposure_app_report_entry_distance_close">nahe Begegnung</string>
     <string name="pref_exposure_app_report_entry_distance_far">entfernte Begegnung</string>
