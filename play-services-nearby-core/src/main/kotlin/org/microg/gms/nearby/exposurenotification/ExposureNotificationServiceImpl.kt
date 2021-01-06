@@ -450,7 +450,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     private fun ScanInstance.Builder.apply(subExposure: MergedSubExposure): ScanInstance.Builder {
         return this
-                .setSecondsSinceLastScan(subExposure.duration.coerceAtMost(5 * 60 * 1000L).toInt())
+                .setSecondsSinceLastScan(subExposure.duration.coerceAtMost(5 * 60).toInt())
                 .setMinAttenuationDb(subExposure.attenuation) // FIXME: We use the average for both, because we don't store the minimum attenuation yet
                 .setTypicalAttenuationDb(subExposure.attenuation)
     }
@@ -460,7 +460,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         for (subExposure in this) {
             res.add(ScanInstance.Builder().apply(subExposure).build())
             if (subExposure.duration > 5 * 60 * 1000L) {
-                res.add(ScanInstance.Builder().apply(subExposure).setSecondsSinceLastScan((subExposure.duration - 5 * 60 * 1000L).coerceAtMost(5 * 60 * 1000L).toInt()).build())
+                res.add(ScanInstance.Builder().apply(subExposure).setSecondsSinceLastScan((subExposure.duration - 5 * 60).coerceAtMost(5 * 60).toInt()).build())
             }
         }
         return res
