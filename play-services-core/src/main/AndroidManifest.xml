@@ -56,6 +56,11 @@
         android:description="@string/permission_service_writely_description"
         android:label="@string/permission_service_writely_label"
         android:protectionLevel="dangerous" />
+
+    <permission
+        android:name="com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"
+        android:protectionLevel="normal" />
+
     <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
