@@ -9,6 +9,8 @@ import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.*
 import java.util.concurrent.TimeUnit
 
+data class ExposureScanSummary(val time: Long, val rpis: Int, val records: Int)
+
 data class PlainExposure(val rpi: ByteArray, val aem: ByteArray, val timestamp: Long, val duration: Long, val rssi: Int)
 
 data class MeasuredExposure(val timestamp: Long, val duration: Long, val rssi: Int, val txPower: Int, @CalibrationConfidence val confidence: Int, val key: TemporaryExposureKey) {

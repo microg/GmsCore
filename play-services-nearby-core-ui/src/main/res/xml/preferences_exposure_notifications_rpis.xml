@@ -9,15 +9,16 @@
     <PreferenceCategory
         android:key="prefcat_exposure_rpi_histogram"
         tools:title="@string/prefcat_exposure_rpis_histogram_title">
-        <org.microg.gms.nearby.core.ui.BarChartPreference
+        <org.microg.gms.nearby.core.ui.DotChartPreference
             android:key="pref_exposure_rpi_histogram"
-            tools:layout="@layout/preference_bar_chart" />
+            android:selectable="false"
+            tools:layout="@layout/preference_dot_chart" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference
             android:key="pref_exposure_export_database"
-            android:title="@string/pref_exposure_rpi_export_title"
-            android:summary="@string/pref_exposure_rpi_export_summary" />
+            android:summary="@string/pref_exposure_rpi_export_summary"
+            android:title="@string/pref_exposure_rpi_export_title" />
         <Preference
             android:key="pref_exposure_rpi_delete_all"
             android:summary="@string/pref_exposure_rpi_delete_all_summary"

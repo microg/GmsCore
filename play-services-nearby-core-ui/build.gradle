@@ -14,8 +14,6 @@ dependencies {
     implementation project(':play-services-nearby-core')
     implementation project(':play-services-base-core-ui')
 
-    implementation "com.diogobernardino:williamchart:3.7.1"
-
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"

@@ -7,8 +7,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.microg.gms.nearby.core.ui">
 
-    <uses-sdk tools:overrideLibrary="com.db.williamchart" />
-
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
