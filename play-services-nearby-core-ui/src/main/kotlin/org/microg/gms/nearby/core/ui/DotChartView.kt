@@ -8,15 +8,13 @@ package org.microg.gms.nearby.core.ui
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.*
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
-import android.util.TypedValue
 import android.view.View
 import org.microg.gms.nearby.exposurenotification.ExposureScanSummary
+import org.microg.gms.ui.resolveColor
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
@@ -58,10 +56,10 @@ class DotChartView : View {
                     displayData[day]?.second?.set(hour, (displayData[day]?.second?.get(hour) ?: 0) + summary.rpis)
                 }
             }
-            for (hour in 0..((min-lowest)/1000/60/60).toInt()) {
+            for (hour in 0..((min - lowest) / 1000 / 60 / 60).toInt()) {
                 displayData[0]?.second?.set(hour, displayData[0]?.second?.get(hour) ?: -1)
             }
-            for (hour in ((min-lowest)/1000/60/60).toInt() until 24) {
+            for (hour in ((min - lowest) / 1000 / 60 / 60).toInt() until 24) {
                 displayData[14]?.second?.set(hour, displayData[14]?.second?.get(hour) ?: -1)
             }
             this.displayData = displayData
@@ -69,89 +67,112 @@ class DotChartView : View {
         }
 
     private var displayData: Map<Int, Pair<String, Map<Int, Int>>> = emptyMap()
-    private val paint = Paint()
-    private val tempRect = Rect()
-    private val tempRectF = RectF()
+    private val drawPaint = Paint()
+    private val drawTempRect = RectF()
+    private val fontPaint = Paint()
+    private val fontTempRect = Rect()
 
-    private fun fetchAccentColor(): Int {
-        val typedValue = TypedValue()
-        val a: TypedArray = context.obtainStyledAttributes(typedValue.data, intArrayOf(androidx.appcompat.R.attr.colorAccent))
-        val color = a.getColor(0, 0)
-        a.recycle()
-        return color
+    fun Canvas.drawMyRect(x: Float, y: Float, width: Float, height: Float, color: Int) {
+        drawTempRect.set(x + drawPaint.strokeWidth, y + drawPaint.strokeWidth, x + width - drawPaint.strokeWidth, y + height - drawPaint.strokeWidth)
+        if (Color.alpha(color) >= 80) {
+            drawPaint.style = Paint.Style.FILL_AND_STROKE
+            drawPaint.color = color
+            drawRoundRect(drawTempRect, 2f, 2f, drawPaint)
+            drawPaint.style = Paint.Style.FILL
+        } else {
+            drawPaint.color = color or (80 shl 24) and (80 shl 24 or 0xffffff)
+            drawPaint.style = Paint.Style.STROKE
+            drawRoundRect(drawTempRect, 2f, 2f, drawPaint)
+            drawPaint.style = Paint.Style.FILL
+            drawPaint.color = color
+            drawRoundRect(drawTempRect, 2f, 2f, drawPaint)
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
         if (data == null) data = emptySet()
-        paint.textSize = 10 * resources.displayMetrics.scaledDensity
-        paint.isAntiAlias = true
-        paint.strokeWidth = 2f
+        val d = resources.displayMetrics.scaledDensity
+        fontPaint.textSize = 10 * d
+        fontPaint.isAntiAlias = true
+        drawPaint.isAntiAlias = true
+        drawPaint.strokeWidth = 2f
+        val innerPadding = 2 * d
         var maxTextWidth = 0
         var maxTextHeight = 0
         for (dateString in displayData.values.map { it.first }) {
-            paint.getTextBounds(dateString, 0, dateString.length, tempRect)
-            maxTextWidth = max(maxTextWidth, tempRect.width())
-            maxTextHeight = max(maxTextHeight, tempRect.height())
+            fontPaint.getTextBounds(dateString, 0, dateString.length, fontTempRect)
+            maxTextWidth = max(maxTextWidth, fontTempRect.width())
+            maxTextHeight = max(maxTextHeight, fontTempRect.height())
         }
 
-        val legendLeft = maxTextWidth + 4 * resources.displayMetrics.scaledDensity
-        val legendBottom = maxTextHeight + 4 * resources.displayMetrics.scaledDensity
+        val legendLeft = maxTextWidth + 4 * d
+        val legendBottom = maxTextHeight + 4 * d
+        val subHeight = maxTextHeight + 4 * d + paddingBottom
 
-        val distHeight = (height - 28 - paddingTop - paddingBottom - legendBottom).toDouble()
-        val distWidth = (width - 46 - paddingLeft - paddingRight - legendLeft).toDouble()
+        val distHeight = (height - innerPadding * 14 - paddingTop - paddingBottom - legendBottom - subHeight).toDouble()
+        val distWidth = (width - innerPadding * 23 - paddingLeft - paddingRight - legendLeft).toDouble()
         val perHeight = distHeight / 15.0
         val perWidth = distWidth / 24.0
 
-        paint.textAlign = Paint.Align.RIGHT
         val maxValue = displayData.values.mapNotNull { it.second.values.maxOrNull() }.maxOrNull() ?: 0
-        val accentColor = fetchAccentColor()
-        val accentRed = Color.red(accentColor)
-        val accentGreen = Color.green(accentColor)
-        val accentBlue = Color.blue(accentColor)
+        val averageValue = (displayData.values.mapNotNull { it.second.values.average().takeIf { !it.isNaN() } }.average().takeIf { !it.isNaN() }
+                ?: 0.0).toInt()
+        val accentColor = context.resolveColor(androidx.appcompat.R.attr.colorAccent) ?: 0
+        val fontColor = context.resolveColor(android.R.attr.textColorSecondary) ?: 0
+        val grayBoxColor = fontColor or (255 shl 24) and (80 shl 24 or 0xffffff)
+        fontPaint.textAlign = Paint.Align.RIGHT
+        fontPaint.color = fontColor
         for (day in 0 until 15) {
             val (dateString, hours) = displayData[day] ?: "" to emptyMap()
-            val top = day * (perHeight + 2) + paddingTop
+            val top = day * (perHeight + innerPadding) + paddingTop
             if (day % 2 == 0) {
-                paint.setARGB(255, 100, 100, 100)
-                canvas.drawText(dateString, (paddingLeft + legendLeft - 4 * resources.displayMetrics.scaledDensity), (top + perHeight / 2.0 + maxTextHeight / 2.0).toFloat(), paint)
+                canvas.drawText(dateString, (paddingLeft + legendLeft - 4 * d), (top + perHeight / 2.0 + maxTextHeight / 2.0).toFloat(), fontPaint)
             }
             for (hour in 0 until 24) {
-                val value = hours[hour] ?: 0 // TODO: Actually allow null to display offline state as soon as we properly record it
-                val left = hour * (perWidth + 2) + paddingLeft + legendLeft
-                tempRectF.set(left.toFloat() + 2f, top.toFloat() + 2f, (left + perWidth).toFloat() - 2f, (top + perHeight).toFloat() - 2f)
+                val value = hours[hour]
+                val left = hour * (perWidth + innerPadding) + paddingLeft + legendLeft
                 when {
                     value == null -> {
-                        paint.style = Paint.Style.FILL_AND_STROKE
-                        paint.setARGB(30, 100, 100, 100)
-                        canvas.drawRoundRect(tempRectF, 2f, 2f, paint)
-                        paint.style = Paint.Style.FILL
+                        canvas.drawMyRect(left.toFloat(), top.toFloat(), perWidth.toFloat(), perHeight.toFloat(), grayBoxColor)
                     }
                     maxValue == 0 -> {
-                        paint.setARGB(50, accentRed, accentGreen, accentBlue)
-                        paint.style = Paint.Style.STROKE
-                        canvas.drawRoundRect(tempRectF, 2f, 2f, paint)
-                        paint.style = Paint.Style.FILL
+                        canvas.drawMyRect(left.toFloat(), top.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and 0xffffff)
                     }
                     value >= 0 -> {
-                        val alpha = ((value.toDouble() / maxValue.toDouble()) * 255).toInt()
-                        paint.setARGB(max(50, alpha), accentRed, accentGreen, accentBlue)
-                        paint.style = Paint.Style.STROKE
-                        canvas.drawRoundRect(tempRectF, 2f, 2f, paint)
-                        paint.style = Paint.Style.FILL
-                        paint.setARGB(alpha, accentRed, accentGreen, accentBlue)
-                        canvas.drawRoundRect(tempRectF, 2f, 2f, paint)
+                        val alpha = if (value < averageValue) {
+                            value.toDouble() / averageValue.toDouble() * 127
+                        } else {
+                            (value - averageValue).toDouble() / (maxValue - averageValue).toDouble() * 128 + 127
+                        }.toInt()
+                        canvas.drawMyRect(left.toFloat(), top.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (alpha shl 24 or 0xffffff))
                     }
                 }
             }
         }
-        val legendTop = 15 * (perHeight + 2) + paddingTop + maxTextHeight + 4 * resources.displayMetrics.scaledDensity
-        paint.textAlign = Paint.Align.CENTER
-        paint.setARGB(255, 100, 100, 100)
+        val legendTop = 15 * (perHeight + innerPadding) + paddingTop + maxTextHeight + 4 * d
+        fontPaint.textAlign = Paint.Align.CENTER
         for (hour in 0 until 24) {
             if (hour % 3 == 0) {
-                val left = hour * (perWidth + 2) + paddingLeft + legendLeft + perWidth / 2.0
-                canvas.drawText("${hour}:00", left.toFloat(), legendTop.toFloat(), paint)
+                val left = hour * (perWidth + innerPadding) + paddingLeft + legendLeft + perWidth / 2.0
+                canvas.drawText("${hour}:00", left.toFloat(), legendTop.toFloat(), fontPaint)
             }
         }
+
+        val subTop = legendTop + paddingBottom
+        val subLeft = paddingLeft + legendLeft
+
+        canvas.drawMyRect(subLeft, subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), grayBoxColor)
+
+        val strNoRecords = "No records"
+        fontPaint.textAlign = Paint.Align.LEFT
+        fontPaint.getTextBounds(strNoRecords, 0, strNoRecords.length, fontTempRect)
+        canvas.drawText(strNoRecords, (subLeft + perWidth + 4 * d).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
+
+        canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 1 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and 0xffffff)
+        canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 2 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (128 shl 24 or 0xffffff))
+        canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 3 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor)
+
+        val strRecords = "0 / $averageValue / $maxValue IDs per hour"
+        canvas.drawText(strRecords, (subLeft + (perWidth + innerPadding) * 3 + 16 * d + fontTempRect.width() + perWidth).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
     }
 }
