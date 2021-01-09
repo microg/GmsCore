@@ -163,7 +163,7 @@ class DotChartView : View {
 
         canvas.drawMyRect(subLeft, subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), grayBoxColor)
 
-        val strNoRecords = "No records"
+        val strNoRecords = context.getString(R.string.pref_exposure_rpis_histogram_legend_no_records)
         fontPaint.textAlign = Paint.Align.LEFT
         fontPaint.getTextBounds(strNoRecords, 0, strNoRecords.length, fontTempRect)
         canvas.drawText(strNoRecords, (subLeft + perWidth + 4 * d).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
@@ -172,7 +172,7 @@ class DotChartView : View {
         canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 2 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (128 shl 24 or 0xffffff))
         canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 3 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor)
 
-        val strRecords = "0 / $averageValue / $maxValue IDs per hour"
+        val strRecords = context.getString(R.string.pref_exposure_rpis_histogram_legend_records, 0, averageValue, maxValue)
         canvas.drawText(strRecords, (subLeft + (perWidth + innerPadding) * 3 + 16 * d + fontTempRect.width() + perWidth).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
     }
 }

@@ -30,6 +30,8 @@
     <string name="pref_exposure_app_api_usage_title">Nutzung der API in den letzten 14 Tagen</string>
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> Aufrufe von <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> gesammelte IDs</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Keine Daten</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0">%1$d</xliff:g> / <xliff:g example="5">%2$d</xliff:g> / <xliff:g example="50">%3$d</xliff:g> IDs pro Stunde</string>
     <string name="pref_exposure_rpi_delete_all_title">Löschen</string>
     <string name="pref_exposure_rpi_delete_all_summary">Alle gesammelten IDs löschen</string>
     <string name="pref_exposure_rpi_delete_all_warning">Nach dem Löschen der gesammelten IDs kannst du nicht mehr informiert werden, falls einer deiner Kontakte der letzten 14 Tage positiv getested wurde.</string>
