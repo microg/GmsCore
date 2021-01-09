@@ -40,6 +40,8 @@
     <string name="pref_exposure_app_api_usage_title">Использование API за последние 14 дней</string>
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> запросов к <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> идентификаторов собрано</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Нет записей</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0">%1$d</xliff:g> / <xliff:g example="5">%2$d</xliff:g> / <xliff:g example="50">%3$d</xliff:g> Идентификаторов в час</string>
     <string name="pref_exposure_rpi_delete_all_title">Удалить</string>
     <string name="pref_exposure_rpi_delete_all_summary">Удалить все собранные идентификаторы</string>
     <string name="pref_exposure_rpi_delete_all_warning">Удаление собранных идентификаторов приведёт к невозможности информирования, в случае если у одного из ваших контактов за последние 14 дней окажется положительный диагноз.</string>
