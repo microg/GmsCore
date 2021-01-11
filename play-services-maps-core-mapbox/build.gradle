@@ -41,7 +41,11 @@ def execResult(...args) {
 
 def mapboxKey() {
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    try {
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    } catch (ignored) {
+        // Ignore
+    }
     return properties.getProperty("mapbox.key", "invalid")
 }
 
