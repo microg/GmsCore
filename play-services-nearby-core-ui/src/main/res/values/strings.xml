@@ -41,7 +41,7 @@
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> calls to <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs collected</string>
     <string name="pref_exposure_rpis_histogram_legend_no_records">No records</string>
-    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0">%1$d</xliff:g> / <xliff:g example="5">%2$d</xliff:g> / <xliff:g example="50">%3$d</xliff:g> IDs per hour</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs per hour</string>
     <string name="pref_exposure_rpi_delete_all_title">Delete</string>
     <string name="pref_exposure_rpi_delete_all_summary">Delete all collected IDs</string>
     <string name="pref_exposure_rpi_delete_all_warning">Deleting collected IDs will make it impossible to notify you in case any of your contacts of the last 14 days is diagnosed.</string>
