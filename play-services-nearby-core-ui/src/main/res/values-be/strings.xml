@@ -40,9 +40,14 @@
     <string name="pref_exposure_app_api_usage_title">Выкарыстанне API за апошнія 14 дзён</string>
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> запытаў да <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ідэнтыфікатараў сабрана</string>
-    <string name="pref_exposure_rpi_delete_all_title">Выдаліць усе сабраныя ідэнтыфікатары</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Няма запісаў</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> Ідэнтыфікатараў у гадзіну</string>
+    <string name="pref_exposure_rpi_delete_all_title">Выдаліць</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Выдаліць усе сабраныя ідэнтыфікатары</string>
     <string name="pref_exposure_rpi_delete_all_warning">Выдаленне сабраных ідэнтыфікатараў прывядзе да немагчымасці інфармавання, у выпадку калі ў аднаго з вашых кантактаў за апошнія 14 дзён будзе пацверджаны дыягназ.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Усё роўна выдаліць</string>
+    <string name="pref_exposure_rpi_export_title">Экспартаваць</string>
+    <string name="pref_exposure_rpi_export_summary">Экспартаваць сабраныя ідэнтыфікатары для пашыранага аналізу ў іншым прыкладанні.</string>
     <string name="pref_exposure_info_summary">"API паведамленняў аб рызыцы інфікавання (Exposure Notifications API) дазваляе прыкладанням апавяшчаць вас, калі вы сутыкнуліся з кімсьці, у каго быў пацверджаны дыягназ.
 
 Дата, працягласць і магутнасць сігналу, звязаныя з уздзеяннем, будуць перададзены адпаведным прыкладанням."</string>
