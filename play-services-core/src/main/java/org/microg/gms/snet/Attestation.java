@@ -76,7 +76,7 @@ public class Attestation {
                 .packageName(packageName)
                 .fileDigest(getPackageFileDigest())
                 .signatureDigest(getPackageSignatures())
-                .gmsVersionCode(Constants.MAX_REFERENCE_VERSION)
+                .gmsVersionCode(Constants.GMS_VERSION_CODE)
                 //.googleCn(false)
                 .seLinuxState(new SELinuxState.Builder().enabled(true).supported(true).build())
                 .suCandidates(Collections.<FileState>emptyList())
@@ -155,7 +155,7 @@ public class Attestation {
         connection.setRequestProperty("content-type", "application/x-protobuf");
         connection.setRequestProperty("Accept-Encoding", "gzip");
         Build build = Utils.getBuild(context);
-        connection.setRequestProperty("User-Agent", "SafetyNet/" + Constants.MAX_REFERENCE_VERSION + " (" + build.device + " " + build.id + "); gzip");
+        connection.setRequestProperty("User-Agent", "SafetyNet/" + Constants.GMS_VERSION_CODE + " (" + build.device + " " + build.id + "); gzip");
 
         OutputStream os = connection.getOutputStream();
         os.write(request.encode());

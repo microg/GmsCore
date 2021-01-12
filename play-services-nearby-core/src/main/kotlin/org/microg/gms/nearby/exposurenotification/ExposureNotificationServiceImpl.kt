@@ -96,7 +96,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getVersion(params: GetVersionParams) {
-        params.callback.onResult(Status.SUCCESS, Constants.MAX_REFERENCE_VERSION.toLong())
+        params.callback.onResult(Status.SUCCESS, Constants.GMS_VERSION_CODE.toLong())
     }
 
     override fun getCalibrationConfidence(params: GetCalibrationConfidenceParams) {
