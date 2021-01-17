@@ -23,7 +23,7 @@
     <string name="about_name_version_str">%1$s %2$s</string>
     <string name="about_default_license">Ĉiuj rajtoj rezervitaj.</string>
 
-    <string name="prefcat_setup">Instalado</string>
+    <string name="prefcat_setup">Agordoj</string>
 
     <string name="self_check_title">Memkontrolo</string>
     <string name="self_check_desc">Kontroli, ĉu la operaciumo estas ĝuste agordita por labori kun microG.</string>
@@ -42,5 +42,3 @@
     <string name="about_android_support_v7_preference">v7 preference Support Library</string>
     <string name="about_android_support_license">Permesilo de Apache 2.0, Android Open Source Project</string>
 </resources>
-
-
