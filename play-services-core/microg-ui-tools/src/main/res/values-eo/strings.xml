@@ -16,4 +16,31 @@
   -->
 
 <resources>
-    </resources>
+    <string name="lib_name">microG: iloj de fasado</string>
+    <string name="lib_license">Permesilo de Apache 2.0, Teamo microG</string>
+
+    <string name="about_version_str">Versio %1$s</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">Ĉiuj rajtoj rezervitaj.</string>
+
+    <string name="prefcat_setup">Instalado</string>
+
+    <string name="self_check_title">Memkontrolo</string>
+    <string name="self_check_desc">Kontroli, ĉu la operaciumo estas ĝuste agordita por labori kun microG.</string>
+
+    <string name="self_check_cat_permissions">Donitaj permesoj</string>
+    <string name="self_check_name_permission">Permeso: %1$s:</string>
+    <string name="self_check_resolution_permission">Frapetu por doni permeson. Aliokaze aplikaĵoj povus mislabori.</string>
+
+    <string name="about_root_title">microG: prezento de fasado</string>
+    <string name="about_root_summary">Sumigo</string>
+    <string name="about_root_version">Versio v0.1.0</string>
+    <string name="about_root_libraries">Uzataj bibliotekoj</string>
+
+    <string name="about_android_support_v4">v4 Support Library</string>
+    <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>
+    <string name="about_android_support_v7_preference">v7 preference Support Library</string>
+    <string name="about_android_support_license">Permesilo de Apache 2.0, Android Open Source Project</string>
+</resources>
+
+
