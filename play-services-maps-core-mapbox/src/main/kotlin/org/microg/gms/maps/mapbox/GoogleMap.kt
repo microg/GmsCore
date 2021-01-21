@@ -708,6 +708,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 val mapContext = MapContext(context)
                 map.locationComponent.apply {
                     activateLocationComponent(LocationComponentActivationOptions.builder(mapContext, it)
+                            .useSpecializedLocationLayer(true)
                             .locationComponentOptions(LocationComponentOptions.builder(mapContext).pulseEnabled(true).build())
                             .build())
                     cameraMode = CameraMode.TRACKING
