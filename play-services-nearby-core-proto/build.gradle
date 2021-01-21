@@ -16,6 +16,10 @@ wire {
     kotlin {}
 }
 
+sourceSets {
+    main.java.srcDirs += "$buildDir/generated/source/wire"
+}
+
 compileKotlin {
     kotlinOptions.jvmTarget = 1.8
 }
