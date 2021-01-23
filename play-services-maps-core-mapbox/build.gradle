@@ -20,6 +20,7 @@ apply plugin: 'kotlin-android-extensions'
 
 dependencies {
     implementation project(':play-services-api')
+    implementation project(':play-services-base-core')
     implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1") {
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-accounts'
     }
@@ -40,7 +41,11 @@ def execResult(...args) {
 
 def mapboxKey() {
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    try {
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    } catch (ignored) {
+        // Ignore
+    }
     return properties.getProperty("mapbox.key", "invalid")
 }
 

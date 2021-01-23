@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Фонавая актыўнасць</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> працуе ў фонавым рэжыме.</string>
+    <string name="foreground_service_notification_big_text">Адключыце эканомію выкарыстання акумулятара для <xliff:g example="microG Services Core">%1$s</xliff:g>, каб ўбраць гэтае паведамленне.</string>
+</resources>

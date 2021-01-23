@@ -40,6 +40,7 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+        buildConfigField "int", "VERSION_CODE", "$appVersionCode"
     }
 
     sourceSets {
@@ -53,3 +54,5 @@ android {
 }
 
 apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-basement'

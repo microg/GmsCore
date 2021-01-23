@@ -22,23 +22,29 @@ private const val EXTRA_SERVICE_INFO = "org.microg.gms.gcm.SERVICE_INFO"
 private const val EXTRA_CONFIGURATION = "org.microg.gms.gcm.CONFIGURATION"
 private const val TAG = "GmsGcmStatusInfo"
 
-data class ServiceInfo(val configuration: ServiceConfiguration, val connected: Boolean, val startTimestamp: Long) : Serializable
+data class ServiceInfo(val configuration: ServiceConfiguration, val connected: Boolean, val startTimestamp: Long, val learntMobileInterval: Int, val learntWifiInterval: Int, val learntOtherInterval: Int) : Serializable
 
-// TODO: Intervals
-data class ServiceConfiguration(val enabled: Boolean, val confirmNewApps: Boolean) : Serializable {
+data class ServiceConfiguration(val enabled: Boolean, val confirmNewApps: Boolean, val mobile: Int, val wifi: Int, val roaming: Int, val other: Int) : Serializable {
     fun saveToPrefs(context: Context) {
-        GcmPrefs.setEnabled(context, enabled)
-        // TODO: confirm new apps
+        GcmPrefs.get(context).apply {
+            isEnabled = enabled
+            isConfirmNewApps = confirmNewApps
+            mobileInterval = mobile
+            wifiInterval = wifi
+            roamingInterval = roaming
+            otherInterval = other
+        }
     }
 }
 
-private fun GcmPrefs.toConfiguration(): ServiceConfiguration = ServiceConfiguration(isEnabled, isConfirmNewApps)
+private fun GcmPrefs.toConfiguration(): ServiceConfiguration = ServiceConfiguration(isEnabled, isConfirmNewApps, mobileInterval, wifiInterval, roamingInterval, otherInterval)
 
 class ServiceInfoReceiver : BroadcastReceiver() {
     private fun sendInfoResponse(context: Context) {
         context.sendOrderedBroadcast(Intent(ACTION_SERVICE_INFO_RESPONSE).apply {
             setPackage(context.packageName)
-            putExtra(EXTRA_SERVICE_INFO, ServiceInfo(GcmPrefs.get(context).toConfiguration(), McsService.isConnected(context), McsService.getStartTimestamp()))
+            val prefs = GcmPrefs.get(context)
+            putExtra(EXTRA_SERVICE_INFO, ServiceInfo(prefs.toConfiguration(), McsService.isConnected(context), McsService.getStartTimestamp(), prefs.learntMobileInterval, prefs.learntWifiInterval, prefs.learntOtherInterval))
         }, null)
     }
 

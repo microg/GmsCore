@@ -46,7 +46,7 @@ To zajmie kilka minut.</string>
     <string name="perm_extended_access_label">Rozszerzony dostęp do usług Google</string>
 
     <string name="service_name_checkin">Rejestracja urządzenia Google</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Nieaktywny</string>
@@ -107,7 +107,7 @@ To zajmie kilka minut.</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Optymalizacja baterii włączona</string>
-    <string name="cond_gcm_bat_summary">Aktywowałeś usługę Google Cloud Messaging, ale optymalizacja baterii dla usługi microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
+    <string name="cond_gcm_bat_summary">Aktywowałeś usługę Cloud Messaging, ale optymalizacja baterii dla usługi microG jest włączona. Aby powiadomienia ‘push’ działały, powinieneś wyłączyć optymalizację baterii dla microG.</string>
     <string name="cond_gcm_bat_action">Ignoruj optymalizacje</string>
     <string name="cond_perm_title">Brakuje uprawnień</string>
 
@@ -122,11 +122,11 @@ To zajmie kilka minut.</string>
 
     <string name="pref_more_settings">Więcej</string>
 
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Aby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Aby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
     <string name="pref_gcm_heartbeat_title">Częstotliwość sprawdzania Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">Częstotliwość (w sekundach) do sprawdzania serwerów Google. Zwiększenie tej wartości zmniejszy zużycie baterii, ale może spowodować opóźnienia w dostarczaniu powiadomień ‘push’.\nPrzestarzałe, zostanie to usunięte w nowszej wersji.</string>
-    <string name="pref_gcm_apps_title">Aplikacje korzystające z Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych w usłudze Google Cloud Messaging.</string>
+    <string name="pref_gcm_apps_title">Aplikacje korzystające z Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych w usłudze Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
     <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji w usłudze powiadomień ‘push’</string>
     <string name="pref_gcm_ping_interval">Częstotliwość sprawdzania: <xliff:g example="10 minutes">%1$s</xliff:g></string>

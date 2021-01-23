@@ -18,6 +18,7 @@ afterEvaluate {
             release(MavenPublication) {
                 pom {
                     name = project.name
+                    description = project.description
                     url = 'https://github.com/microg/GmsCore'
                     licenses {
                         license {

@@ -11,6 +11,7 @@ package com.google.android.gms.nearby.exposurenotification;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +22,8 @@ import java.util.Map;
  */
 @PublicApi
 public class DiagnosisKeysDataMapping extends AutoSafeParcelable {
-    @Field(1)
-    private List<Integer> daysSinceOnsetToInfectiousness;
+    @Field(value = 1, useDirectList = true)
+    private List<Integer> daysSinceOnsetToInfectiousness = new ArrayList<>();
     @Field(2)
     @ReportType
     private int reportTypeWhenMissing;
@@ -82,7 +83,7 @@ public class DiagnosisKeysDataMapping extends AutoSafeParcelable {
             if (infectiousnessWhenDaysSinceOnsetMissing == null)
                 throw new IllegalStateException("Must set infectiousnessWhenDaysSinceOnsetMissing");
             DiagnosisKeysDataMapping mapping = new DiagnosisKeysDataMapping();
-            mapping.daysSinceOnsetToInfectiousness = daysSinceOnsetToInfectiousness;
+            mapping.daysSinceOnsetToInfectiousness = new ArrayList<>(daysSinceOnsetToInfectiousness);
             mapping.reportTypeWhenMissing = reportTypeWhenMissing;
             mapping.infectiousnessWhenDaysSinceOnsetMissing = infectiousnessWhenDaysSinceOnsetMissing;
             return mapping;

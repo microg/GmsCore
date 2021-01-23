@@ -131,7 +131,7 @@ public class ProviderInstallerImpl {
         // TODO: Move manual loading into helper function (as it is also used in both maps implementations)
         String primaryCpuAbi = (String) ApplicationInfo.class.getField("primaryCpuAbi").get(otherAppInfo);
         if (primaryCpuAbi != null) {
-            String path = "lib/" + primaryCpuAbi + "/libconscrypt_jni.so";
+            String path = "lib/" + primaryCpuAbi + "/libconscrypt_gmscore_jni.so";
             File cacheFile = new File(context.createPackageContext(packageName, 0).getCacheDir().getAbsolutePath() + "/.gmscore/" + path);
             cacheFile.getParentFile().mkdirs();
             File apkFile = new File(context.getPackageCodePath());
@@ -144,7 +144,7 @@ public class ProviderInstallerImpl {
                     Log.d(TAG, "Can't load native library: " + path + " does not exist in " + apkFile);
                 }
             }
-            Log.d(TAG, "Loading conscrypt_jni from " + cacheFile.getPath());
+            Log.d(TAG, "Loading conscrypt_gmscore_jni from " + cacheFile.getPath());
             System.load(cacheFile.getAbsolutePath());
 
             Class<NativeCrypto> clazz = NativeCrypto.class;

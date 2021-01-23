@@ -25,7 +25,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -39,7 +38,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.R;
-import com.squareup.wire.Wire;
 
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.people.PeopleManager;
@@ -107,7 +105,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         try {
             applicationInfo = packageManager.getApplicationInfo(packageName, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            Log.w(TAG, e);
+            Log.w(TAG, "Failed to find package " + packageName, e);
             finish();
             return;
         }
@@ -119,18 +117,9 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         if (profileIcon != null) {
             ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(profileIcon);
         } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    final Bitmap profileIcon = PeopleManager.getOwnerAvatarBitmap(AskPermissionActivity.this, account.name, true);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(profileIcon);
-                        }
-                    });
-
-                }
+            new Thread(() -> {
+                final Bitmap profileIcon1 = PeopleManager.getOwnerAvatarBitmap(AskPermissionActivity.this, account.name, true);
+                runOnUiThread(() -> ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(profileIcon1));
             }).start();
         }
 
@@ -140,18 +129,8 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         } else {
             ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_service_permission_title, appLabel));
         }
-        findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onAllow();
-            }
-        });
-        findViewById(android.R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onDeny();
-            }
-        });
+        findViewById(android.R.id.button1).setOnClickListener(v -> onAllow());
+        findViewById(android.R.id.button2).setOnClickListener(v -> onDeny());
         ((ListView) findViewById(R.id.permissions)).setAdapter(new PermissionAdapter());
     }
 
@@ -161,24 +140,20 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         findViewById(android.R.id.button2).setEnabled(false);
         findViewById(R.id.progress_bar).setVisibility(VISIBLE);
         findViewById(R.id.no_progress_bar).setVisibility(GONE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    AuthResponse response = authManager.requestAuth(fromAccountManager);
-                    Bundle result = new Bundle();
-                    result.putString(KEY_AUTHTOKEN, response.auth);
-                    result.putString(KEY_ACCOUNT_NAME, account.name);
-                    result.putString(KEY_ACCOUNT_TYPE, account.type);
-                    result.putString(KEY_ANDROID_PACKAGE_NAME, packageName);
-                    result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
-                    setAccountAuthenticatorResult(result);
-                } catch (IOException e) {
-                    Log.w(TAG, e);
-                }
-                finish();
-
+        new Thread(() -> {
+            try {
+                AuthResponse response = authManager.requestAuth(fromAccountManager);
+                Bundle result = new Bundle();
+                result.putString(KEY_AUTHTOKEN, response.auth);
+                result.putString(KEY_ACCOUNT_NAME, account.name);
+                result.putString(KEY_ACCOUNT_TYPE, account.type);
+                result.putString(KEY_ANDROID_PACKAGE_NAME, packageName);
+                result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+                setAccountAuthenticatorResult(result);
+            } catch (IOException e) {
+                Log.w(TAG, e);
             }
+            finish();
         }).start();
     }
 
@@ -189,8 +164,10 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
 
     @Override
     public void finish() {
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancel(packageName.hashCode());
+        if (packageName != null) {
+            NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.cancel(packageName.hashCode());
+        }
         super.finish();
     }
 

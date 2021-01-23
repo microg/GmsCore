@@ -16,6 +16,10 @@ wire {
     kotlin {}
 }
 
+sourceSets {
+    main.java.srcDirs += "$buildDir/generated/source/wire"
+}
+
 compileKotlin {
     kotlinOptions.jvmTarget = 1.8
 }
@@ -25,3 +29,5 @@ compileTestKotlin {
 }
 
 apply from: '../gradle/publish-java.gradle'
+
+description = 'Protocol buffers for microG implementation of play-services-nearby'

@@ -29,5 +29,9 @@ class ServiceTrigger : BroadcastReceiver() {
             Log.d(TAG, "Trigger ${CleanupService::class.java}")
             serviceContext.startService(Intent(context, CleanupService::class.java))
         }
+        if (NotifyService.isNeeded(context)) {
+            Log.d(TAG, "Trigger ${NotifyService::class.java}")
+            serviceContext.startService(Intent(context, NotifyService::class.java))
+        }
     }
 }

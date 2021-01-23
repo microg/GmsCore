@@ -31,3 +31,5 @@ android {
 }
 
 apply from: '../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-base'

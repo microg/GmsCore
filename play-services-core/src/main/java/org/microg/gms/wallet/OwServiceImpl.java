@@ -18,7 +18,6 @@ package org.microg.gms.wallet;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;

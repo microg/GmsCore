@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 microG Project Team
+  ~ Copyright (C) 2017-2020 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,19 +17,23 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend-программа сконфигурирована</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-программ(ы) сконфигурировано</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend-программа настроена</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> backend-программы настроены</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-программ настроено</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> привязанное приложение</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> привязанных приложения</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> привязанных приложений</item>
     </plurals>
     <plurals name="cond_perm_summary">
-		<item quantity="one">Не предоставлено разрешение, которое требуется для правильного функционирования microG Service Core.</item>
-        <item quantity="other">Не предоставлены разрешения, которые требуются для правильного функционирования microG Service Core.</item>
+        <item quantity="one">Не предоставлено разрешение, которое требуется для правильного функционирования microG Services Core.</item>
+        <item quantity="few">Не предоставлены разрешения, которые требуются для правильного функционирования microG Services Core.</item>
+        <item quantity="other">Не предоставлены разрешения, которые требуются для правильного функционирования microG Services Core.</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">Запросить отсутствующее разрешение</item>	
+        <item quantity="one">Запросить отсутствующее разрешение</item>
+        <item quantity="few">Запросить отсутствующие разрешения</item>
         <item quantity="other">Запросить отсутствующие разрешения</item>
     </plurals>
 </resources>

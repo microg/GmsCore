@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Уведомления о риске инфицирования не активны</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth должен быть включён, чтобы принимать уведомления о риске инфицирования.</string>
+    <string name="exposure_notify_off_location">Доступ к местоположению обязателен, чтобы принимать уведомления о риске инфицирования.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth и определение местоположения должны быть включены, чтобы принимать уведомления о риске инфицирования</string>
+</resources>

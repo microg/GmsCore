@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2013-2017 microG Project Team
+  ~ Copyright (C) 2013-2020 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -29,11 +29,12 @@
     <string name="self_check_desc">Проверьте, правильно ли настроена система для использования microG.</string>
 
     <string name="self_check_cat_permissions">Права доступа предоставлены</string>
-    <string name="self_check_name_permission">Разрешение для %1$s:</string>
-    <string name="self_check_resolution_permission">Нажмите здесь, чтобы дать разрешение. Непредоставление разрешения может привести некорректной работе приложения.</string>
+    <!-- it's better if the next line stays like this -->
+    <string name="self_check_name_permission">%1$s:</string>
+    <string name="self_check_resolution_permission">Нажмите здесь, чтобы дать разрешение. Непредоставление разрешения может привести к некорректной работе приложения.</string>
 
     <string name="about_root_title">microG UI Demo</string>
-    <string name="about_root_summary">Сводка</string>
+    <string name="about_root_summary">Подробности</string>
     <string name="about_root_version">Версия v0.1.0</string>
     <string name="about_root_libraries">Используемые библиотеки</string>
 

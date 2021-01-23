@@ -17,13 +17,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.common.ForegroundServiceInfo
 
+@ForegroundServiceInfo("Exposure Notification")
 class CleanupService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ForegroundServiceContext.completeForegroundService(this, intent, TAG)
         Log.d(TAG, "CleanupService.start: $intent")
         super.onStartCommand(intent, flags, startId)
-        if (isNeeded(this)) {
+        if (isNeeded(this, true)) {
             lifecycleScope.launchWhenStarted {
                 withContext(Dispatchers.IO) {
                     var workPending = true
@@ -51,9 +53,9 @@ class CleanupService : LifecycleService() {
     }
 
     companion object {
-        fun isNeeded(context: Context): Boolean {
+        fun isNeeded(context: Context, now: Boolean = false): Boolean {
             return ExposurePreferences(context).let {
-                it.enabled && it.lastCleanup < System.currentTimeMillis() - CLEANUP_INTERVAL
+                (it.enabled && !now) || it.lastCleanup < System.currentTimeMillis() - CLEANUP_INTERVAL
             }
         }
     }

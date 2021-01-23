@@ -56,6 +56,11 @@
         android:description="@string/permission_service_writely_description"
         android:label="@string/permission_service_writely_label"
         android:protectionLevel="dangerous" />
+
+    <permission
+        android:name="com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"
+        android:protectionLevel="normal" />
+
     <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
@@ -108,10 +113,11 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:forceQueryable="true"
         android:name="androidx.multidex.MultiDexApplication"
-        android:allowBackup="false"
+        android:allowBackup="true"
+        android:fullBackupOnly="true"
         android:extractNativeLibs="false"
+        android:forceQueryable="true"
         android:icon="@mipmap/ic_core_service_app"
         android:label="@string/gms_app_name"
         android:theme="@style/Theme.AppCompat.DayNight">
@@ -128,12 +134,15 @@
 
         <!-- Location -->
 
-        <activity android:name="org.microg.nlp.ui.BackendSettingsActivity" android:process=":ui" />
+        <activity
+            android:name="org.microg.nlp.ui.BackendSettingsActivity"
+            android:process=":ui" />
 
         <activity
             android:name="org.microg.gms.ui.PlacePickerActivity"
-            android:exported="true" android:process=":ui"
+            android:exported="true"
             android:label="@string/pick_place_title"
+            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.location.places.ui.PICK_PLACE" />
@@ -220,7 +229,8 @@
 
         <!-- Cloud Messaging -->
         <service
-            android:name="org.microg.gms.gcm.PushRegisterService">
+            android:name="org.microg.gms.gcm.PushRegisterService"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.REGISTER" />
                 <action android:name="com.google.android.c2dm.intent.UNREGISTER" />
@@ -229,24 +239,33 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="org.microg.gms.gcm.PushRegisterReceiver">
+        <receiver
+            android:name="org.microg.gms.gcm.PushRegisterReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="com.google.iid.TOKEN_REQUEST" />
             </intent-filter>
         </receiver>
 
-        <service android:name="org.microg.gms.gcm.McsService" />
+        <service
+            android:name="org.microg.gms.gcm.McsService"
+            android:process=":persistent" />
 
         <receiver
-            android:name="org.microg.gms.gcm.SendReceiver">
+            android:name="org.microg.gms.gcm.SendReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="com.google.android.gcm.intent.SEND" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name="org.microg.gms.gcm.ServiceInfoReceiver" />
+        <receiver
+            android:name="org.microg.gms.gcm.ServiceInfoReceiver"
+            android:process=":persistent" />
 
-        <receiver android:name="org.microg.gms.gcm.TriggerReceiver">
+        <receiver
+            android:name="org.microg.gms.gcm.TriggerReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
@@ -267,7 +286,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="org.microg.gms.gcm.UnregisterReceiver">
+        <receiver
+            android:name="org.microg.gms.gcm.UnregisterReceiver"
+            android:process=":persistent">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_DATA_CLEARED" />
                 <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />

@@ -124,6 +124,13 @@ public class AuthManager {
         getAccountManager().setUserData(getAccount(), key, value);
     }
 
+    public boolean accountExists() {
+        for (Account refAccount : getAccountManager().getAccountsByType(accountType)) {
+            if (refAccount.name.equalsIgnoreCase(accountName)) return true;
+        }
+        return false;
+    }
+
     public String peekAuthToken() {
         Log.d(TAG, "peekAuthToken: " + buildTokenKey());
         return getAccountManager().peekAuthToken(getAccount(), buildTokenKey());

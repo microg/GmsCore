@@ -17,9 +17,6 @@
 package org.microg.gms.gcm;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -41,13 +38,14 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import com.google.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
+import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.gcm.mcs.AppData;
 import org.microg.gms.gcm.mcs.Close;
@@ -75,7 +73,6 @@ import okio.ByteString;
 
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.common.ForegroundServiceContext.EXTRA_FOREGROUND;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
@@ -111,6 +108,7 @@ import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
 import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
 import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
+@ForegroundServiceInfo(value = "Cloud messaging", res = R.string.service_name_mcs)
 public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
 
@@ -241,7 +239,7 @@ public class McsService extends Service implements Handler.Callback {
             return false;
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
-        int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref, false);
+        int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref);
         if (heartbeatMs < 0) {
             closeAll();
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
@@ -271,7 +269,7 @@ public class McsService extends Service implements Handler.Callback {
     public void scheduleHeartbeat(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
-        int heartbeatMs = GcmPrefs.get(this).getHeartbeatMsFor(activeNetworkPref, false);
+        int heartbeatMs = GcmPrefs.get(this).getHeartbeatMsFor(activeNetworkPref);
         if (heartbeatMs < 0) {
             closeAll();
         }
@@ -327,19 +325,6 @@ public class McsService extends Service implements Handler.Callback {
             }
         }
         return START_REDELIVER_INTENT;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private Notification buildForegroundNotification() {
-        NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_LOW);
-        channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
-        channel.setShowBadge(false);
-        getSystemService(NotificationManager.class).createNotificationChannel(channel);
-        return new Notification.Builder(this, channel.getId())
-                .setOngoing(true)
-                .setContentTitle("Running in background")
-                .setSmallIcon(android.R.drawable.stat_notify_sync)
-                .build();
     }
 
     private void handleSendMessage(Intent intent) {

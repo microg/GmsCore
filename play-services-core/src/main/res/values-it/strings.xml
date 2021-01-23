@@ -36,7 +36,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="no_network_error_desc">"Non disponi di una connessione ad internet.
 
 Potrebbe trattarsi di un disservizio temporaneo oppure non essere il tuo dispositivo Android fornito di connessione dati. Riprova quando connesso ad una rete cellulare o ad una rete Wi-Fi."</string>
-    <string name="auth_general_error_desc">"C\è stato un problema di comunicazione con i server di Google.
+    <string name="auth_general_error_desc">"C\'è stato un problema di comunicazione con i server di Google.
 
 Try again later."</string>
     <string name="auth_finalize">"Il tuo dispositivo sta comunicando con i server di Google per salvare le informazioni sull\'account.
@@ -133,9 +133,11 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="pref_auth_visible_summary">Quando questa opzione è abilitata, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica dell\'account Google senza autorizzazione preventiva.</string>
 
     <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. Vengono rimossi da microG alcuni bit funzionali all\'identificazione dai dati di registrazione, oltre al nome dell\'account Google.</string>
+    <string name="pref_device_registration_android_id">Identificativo univoco Android</string>
 
     <string name="checkin_not_registered">Non registrato</string>
     <string name="checkin_last_registration">Ultima registrazione: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Registra il dispositivo</string>
 
     <string name="pref_info_status">Stato</string>
     <string name="pref_more_settings">Impostazioni avanzate</string>
@@ -168,6 +170,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="gcm_messages_counter">Messaggi: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">Disconnesso</string>
     <string name="gcm_network_state_connected">Connesso <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Ricevi le notifiche push</string>
 
     <string name="pref_push_app_allow_register_title">Permetti la registrazione</string>
     <string name="pref_push_app_allow_register_summary">Permetti all\'applicazione di registrarsi per la ricezione delle notifiche push.</string>
@@ -179,6 +182,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="prefcat_push_networks_title">Reti da utilizzare per le notifiche push</string>
 
     <string name="snet_intro">SafetyNet di Google è un sistema di certificazione dispositivo che ne garantisce la sicurezza e la compatibilità con Android CTS. Alcune applicazioni utlizzano SafetyNet per ragioni di sicurezza o come prerequisito per la protezione da manomissione.\n\nUn\'implementazione libera di SafetyNet è contenuta in microG, tuttavia i server ufficiali richiedono che le richieste SafetyNet siano firmate utilizzando il sistema proprietario DroidGuard. Una versione contenitore di DroidGuard è disponibile come applicazione “microG DroidGuard Helper”.</string>
+    <string name="snet_enable_switch">Permetti l\'attestazione del dispositivo</string>
 
     <string name="pref_snet_testdrive_title">Prova l\'attestazione di SafetyNet</string>
 

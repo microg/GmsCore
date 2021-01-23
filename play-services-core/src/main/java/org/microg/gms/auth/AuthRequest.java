@@ -58,7 +58,7 @@ public class AuthRequest extends HttpFormClient.Request {
     @RequestContent("lang")
     public String locale;
     @RequestContent("google_play_services_version")
-    public int gmsVersion = Constants.MAX_REFERENCE_VERSION;
+    public int gmsVersion = Constants.GMS_VERSION_CODE;
     @RequestContent("accountType")
     public String accountType;
     @RequestContent("Email")
