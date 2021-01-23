@@ -57,7 +57,7 @@ import static com.google.android.gms.iid.InstanceID.ERROR_SERVICE_NOT_AVAILABLE;
 import static com.google.android.gms.iid.InstanceID.ERROR_TIMEOUT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GSF_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.MAX_REFERENCE_VERSION;
+import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTER;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
 import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
@@ -284,7 +284,7 @@ public class InstanceIdRpc {
         data.putString(EXTRA_OS_VERSION, Integer.toString(Build.VERSION.SDK_INT));
         data.putString(EXTRA_APP_VERSION_CODE, Integer.toString(getSelfVersionCode(context)));
         data.putString(EXTRA_APP_VERSION_NAME, getSelfVersionName(context));
-        data.putString(EXTRA_CLIENT_VERSION, "iid-" + MAX_REFERENCE_VERSION);
+        data.putString(EXTRA_CLIENT_VERSION, "iid-" + GMS_VERSION_CODE);
         data.putString(EXTRA_APP_ID, InstanceID.sha1KeyPair(keyPair));
         String pub = base64encode(keyPair.getPublic().getEncoded());
         data.putString(EXTRA_PUBLIC_KEY, pub);

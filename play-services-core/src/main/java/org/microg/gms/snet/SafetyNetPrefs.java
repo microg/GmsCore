@@ -38,9 +38,7 @@ public class SafetyNetPrefs implements SharedPreferences.OnSharedPreferenceChang
 
     public static SafetyNetPrefs get(Context context) {
         if (INSTANCE == null) {
-            if (!context.getPackageName().equals(PackageUtils.getProcessName())) {
-                Log.w("Preferences", SafetyNetPrefs.class.getName() + " initialized outside main process", new RuntimeException());
-            }
+            PackageUtils.warnIfNotMainProcess(context, SafetyNetPrefs.class);
             if (context == null) return new SafetyNetPrefs(null);
             INSTANCE = new SafetyNetPrefs(context.getApplicationContext());
         }

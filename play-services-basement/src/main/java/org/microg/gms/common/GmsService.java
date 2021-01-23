@@ -101,6 +101,7 @@ public enum GmsService {
     WORK_ACCOUNT(120),
     AD_CACHE(123, "com.google.android.gms.ads.service.CACHE"),
     DYNAMIC_LINKS(131, "com.google.firebase.dynamiclinks.service.START"),
+    IDENTITY_SIGN_IN(212, "com.google.android.gms.auth.api.identity.service.signin.START"),
     NEARBY_EXPOSURE(236, "com.google.android.gms.nearby.exposurenotification.START"),
     ;
 

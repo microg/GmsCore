@@ -8,20 +8,23 @@ package org.microg.gms.nearby.exposurenotification
 import android.annotation.TargetApi
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import android.database.sqlite.SQLiteOpenHelper
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import androidx.core.content.FileProvider
 import com.google.android.gms.nearby.exposurenotification.CalibrationConfidence
 import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMapping
 import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import kotlinx.coroutines.*
 import okio.ByteString
-import org.json.JSONObject
+import org.microg.gms.common.PackageUtils
 import java.io.File
 import java.lang.Runnable
 import java.nio.ByteBuffer
@@ -63,11 +66,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE TABLE $TABLE_APP_PERMS(package TEXT NOT NULL, sig TEXT NOT NULL, perm TEXT NOT NULL, timestamp INTEGER NOT NULL);")
         }
         if (oldVersion < 5) {
-            Log.d(TAG, "Dropping legacy tables")
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_CONFIGURATIONS;")
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_DIAGNOSIS;")
-            db.execSQL("DROP TABLE IF EXISTS $TABLE_TEK_CHECK;")
-            Log.d(TAG, "Creating tables for version >= 3")
+            Log.d(TAG, "Creating tables for version >= 5")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TOKENS(tid INTEGER PRIMARY KEY, package TEXT NOT NULL, token TEXT NOT NULL, timestamp INTEGER NOT NULL, configuration BLOB, diagnosisKeysDataMap BLOB);")
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TOKENS}_package_token ON $TABLE_TOKENS(package, token);")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_SINGLE(tcsid INTEGER PRIMARY KEY, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, matched INTEGER);")
@@ -82,14 +81,50 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_tcfid ON $TABLE_TEK_CHECK_FILE_MATCH(tcfid);")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_key ON $TABLE_TEK_CHECK_FILE_MATCH(keyData, rollingStartNumber, rollingPeriod);")
         }
-        if (oldVersion < 6) {
-            Log.d(TAG, "Fixing invalid rssi values from previous database version")
+        if (oldVersion < 9) {
+            Log.d(TAG, "Creating tables for version >= 9")
+            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_APP(package TEXT NOT NULL, sig TEXT NOT NULL, PRIMARY KEY (package, sig));")
+        }
+        if (oldVersion in 5 until 7) {
+            Log.d(TAG, "Altering tables for version >= 7")
+            db.execSQL("ALTER TABLE $TABLE_TOKENS ADD COLUMN diagnosisKeysDataMap BLOB;")
+        }
+        if (oldVersion in 1 until 5) {
+            Log.d(TAG, "Dropping legacy tables from version < 5")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_CONFIGURATIONS;")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_DIAGNOSIS;")
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_TEK_CHECK;")
+        }
+        if (oldVersion in 1 until 6) {
+            Log.d(TAG, "Fixing invalid rssi values from version < 6")
             // There's no bluetooth chip with a sensitivity that would result in rssi -200, so this would be invalid.
             // RSSI of -100 is already extremely low and thus is a good "default" value
             db.execSQL("UPDATE $TABLE_ADVERTISEMENTS SET rssi = -100 WHERE rssi < -200;")
         }
         if (oldVersion in 5 until 7) {
-            db.execSQL("ALTER TABLE $TABLE_TOKENS ADD COLUMN diagnosisKeysDataMap BLOB;")
+            Log.d(TAG, "Clearing non-matching tek cache from version < 7")
+            // Entries might be invalid due to previously missing support for new bluetooth AEM format
+            db.execSQL("DELETE FROM $TABLE_TEK_CHECK_FILE WHERE tcfid NOT IN (SELECT tcfid FROM $TABLE_TEK_CHECK_FILE_MATCH);")
+        }
+        if (oldVersion in 1 until 9) {
+            Log.d(TAG, "Migrating authorized apps from version < 9")
+            val pm = context.packageManager
+            db.query(true, TABLE_APP_LOG, arrayOf("package"), null, null, null, null, null, null).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val packageName = cursor.getString(0)
+                    val signatureDigest = PackageUtils.firstSignatureDigest(pm, packageName)
+                    if (signatureDigest != null) {
+                        db.insertWithOnConflict(TABLE_APP, "NULL", ContentValues().apply {
+                            put("package", packageName)
+                            put("sig", signatureDigest)
+                        }, CONFLICT_IGNORE)
+                    }
+                }
+            }
+        }
+        if (oldVersion == 9) {
+            Log.d(TAG, "Get rid of isEnabled log entries")
+            db.delete(TABLE_APP_LOG, "method = ?", arrayOf("isEnabled"));
         }
         Log.d(TAG, "Finished database upgrade")
     }
@@ -102,7 +137,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     fun dailyCleanup(): Boolean = writableDatabase.run {
         val start = System.currentTimeMillis()
-        val rollingStartTime = currentRollingStartNumber * ROLLING_WINDOW_LENGTH * 1000 - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
+        val rollingStartTime = currentDayRollingStartNumber.toLong() * ROLLING_WINDOW_LENGTH_MS - TimeUnit.DAYS.toMillis(KEEP_DAYS.toLong())
         val advertisements = delete(TABLE_ADVERTISEMENTS, "timestamp < ?", longArrayOf(rollingStartTime))
         Log.d(TAG, "Deleted on daily cleanup: $advertisements adv")
         if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
@@ -171,6 +206,21 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }, null, null)
     }
 
+    fun authorizeApp(packageName: String?, signatureDigest: String? = PackageUtils.firstSignatureDigest(context, packageName)) = writableDatabase.run {
+        if (packageName == null || signatureDigest == null) return@run
+        insertWithOnConflict(TABLE_APP, "NULL", ContentValues().apply {
+            put("package", packageName)
+            put("sig", signatureDigest)
+        }, CONFLICT_IGNORE)
+    }
+
+    fun isAppAuthorized(packageName: String?, signatureDigest: String? = PackageUtils.firstSignatureDigest(context, packageName)): Boolean = readableDatabase.run {
+        if (packageName == null || signatureDigest == null) return@run false
+        query(TABLE_APP, arrayOf("package"), "package = ? AND sig = ?", arrayOf(packageName, signatureDigest), null, null, null).use { cursor ->
+            return@use cursor.moveToNext()
+        }
+    }
+
     fun noteAppAction(packageName: String, method: String, args: String? = null, timestamp: Long = Date().time) = writableDatabase.run {
         insert(TABLE_APP_LOG, "NULL", ContentValues().apply {
             put("package", packageName)
@@ -179,7 +229,6 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             put("args", args)
         })
     }
-
 
     private fun storeOwnKey(key: TemporaryExposureKey, database: SQLiteDatabase = writableDatabase) = database.run {
         insert(TABLE_TEK, "NULL", ContentValues().apply {
@@ -212,6 +261,20 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             } else {
                 null
             }
+        }
+    }
+
+    fun getOrCreateTokenId(packageName: String, token: String, database: SQLiteDatabase = writableDatabase) = database.run {
+        val tid = getTokenId(packageName, token, this)
+        if (tid != null) {
+            tid
+        } else {
+            insert(TABLE_TOKENS, "NULL", ContentValues().apply {
+                put("package", packageName)
+                put("token", token)
+                put("timestamp", System.currentTimeMillis())
+            })
+            getTokenId(packageName, token, this)
         }
     }
 
@@ -467,7 +530,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }.mapNotNull {
             val decrypted = key.cryptAem(it.rpi, it.aem)
             val version = (decrypted[0] and 0xf0.toByte())
-            val txPower = if (decrypted.size >= 4 && version >= VERSION_1_0) decrypted[1].toInt() else (averageDeviceInfo.txPowerCorrection + TX_POWER_LOW)
+            val txPower = if (decrypted.size >= 4 && version >= VERSION_1_0) decrypted[1].toInt() else averageDeviceInfo.txPowerCorrection.toInt()
             val confidence = if (decrypted.size >= 4 && version >= VERSION_1_1) ((decrypted[0] and 0xc) / 4) else (averageDeviceInfo.confidence)
             if (version > VERSION_1_1) {
                 Log.w(TAG, "Unknown AEM version: 0x${version.toString(16)}")
@@ -510,8 +573,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    private fun findOwnKeyAt(rollingStartNumber: Int, database: SQLiteDatabase = readableDatabase): TemporaryExposureKey? = database.run {
-        query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber = ?", arrayOf(rollingStartNumber.toString()), null, null, null).use { cursor ->
+    private fun findOwnKeyAt(intervalNumber: Int, database: SQLiteDatabase = readableDatabase): TemporaryExposureKey? = database.run {
+        val dayRollingStartNumber = getDayRollingStartNumber(intervalNumber)
+        query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber >= ? AND (rollingStartNumber + rollingPeriod) < ?", arrayOf(dayRollingStartNumber.toString(), intervalNumber.toString()), null, null, "rollingStartNumber DESC").use { cursor ->
             if (cursor.moveToNext()) {
                 TemporaryExposureKey.TemporaryExposureKeyBuilder()
                         .setKeyData(cursor.getBlob(0))
@@ -579,40 +643,44 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
-    val allKeys: List<TemporaryExposureKey> = readableDatabase.run {
-        val startRollingNumber = (currentRollingStartNumber - 14 * ROLLING_PERIOD)
-        query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber >= ? AND rollingStartNumber < ?", arrayOf(startRollingNumber.toString(), currentIntervalNumber.toString()), null, null, null).use { cursor ->
-            val list = arrayListOf<TemporaryExposureKey>()
-            while (cursor.moveToNext()) {
-                list.add(TemporaryExposureKey.TemporaryExposureKeyBuilder()
-                        .setKeyData(cursor.getBlob(0))
-                        .setRollingStartIntervalNumber(cursor.getLong(1).toInt())
-                        .setRollingPeriod(cursor.getLong(2).toInt())
-                        .build())
+    fun exportKeys(database: SQLiteDatabase = writableDatabase): List<TemporaryExposureKey> = database.run {
+        database.beginTransactionNonExclusive()
+        try {
+            val intervalNumber = currentIntervalNumber
+            val key = findOwnKeyAt(intervalNumber, database)
+            if (key != null && intervalNumber != key.rollingStartIntervalNumber) {
+                // Rotate key
+                update(TABLE_TEK, ContentValues().apply {
+                    put("rollingPeriod", intervalNumber - key.rollingStartIntervalNumber)
+                }, "rollingStartNumber = ?", arrayOf(key.rollingStartIntervalNumber.toString()))
+                storeOwnKey(generateCurrentDayTemporaryExposureKey(), database)
             }
-            list
+            database.setTransactionSuccessful()
+            val startRollingNumber = (getDayRollingStartNumber(intervalNumber) - 14 * ROLLING_PERIOD)
+            query(TABLE_TEK, arrayOf("keyData", "rollingStartNumber", "rollingPeriod"), "rollingStartNumber >= ? AND (rollingStartNumber + rollingPeriod) <= ?", arrayOf(startRollingNumber.toString(), intervalNumber.toString()), null, null, null).use { cursor ->
+                val list = arrayListOf<TemporaryExposureKey>()
+                while (cursor.moveToNext()) {
+                    list.add(TemporaryExposureKey.TemporaryExposureKeyBuilder()
+                            .setKeyData(cursor.getBlob(0))
+                            .setRollingStartIntervalNumber(cursor.getLong(1).toInt())
+                            .setRollingPeriod(cursor.getLong(2).toInt())
+                            .build())
+                }
+                list
+            }
+        } finally {
+            database.endTransaction()
         }
     }
 
-    val rpiHistogram: Map<Long, Long>
+    val rpiHourHistogram: Set<ExposureScanSummary>
         get() = readableDatabase.run {
-            rawQuery("SELECT round(timestamp/(24*60*60*1000)), COUNT(*) FROM $TABLE_ADVERTISEMENTS WHERE timestamp > ? GROUP BY round(timestamp/(24*60*60*1000)) ORDER BY timestamp ASC;", arrayOf((Date().time - (14 * 24 * 60 * 60 * 1000)).toString())).use { cursor ->
-                val map = linkedMapOf<Long, Long>()
+            rawQuery("SELECT round(timestamp/(60*60*1000))*60*60*1000, COUNT(*), COUNT(*) FROM $TABLE_ADVERTISEMENTS WHERE timestamp > ? GROUP BY round(timestamp/(60*60*1000)) ORDER BY timestamp ASC;", arrayOf((System.currentTimeMillis() - (14 * 24 * 60 * 60 * 1000L)).toString())).use { cursor ->
+                val set = hashSetOf<ExposureScanSummary>()
                 while (cursor.moveToNext()) {
-                    map[cursor.getLong(0)] = cursor.getLong(1)
+                    set.add(ExposureScanSummary(cursor.getLong(0), cursor.getInt(1), cursor.getInt(2)))
                 }
-                map
-            }
-        }
-
-    val totalRpiCount: Long
-        get() = readableDatabase.run {
-            rawQuery("SELECT COUNT(*) FROM $TABLE_ADVERTISEMENTS WHERE timestamp > ?;", arrayOf((Date().time - (14 * 24 * 60 * 60 * 1000)).toString())).use { cursor ->
-                if (cursor.moveToNext()) {
-                    cursor.getLong(0)
-                } else {
-                    0L
-                }
+                set
             }
         }
 
@@ -710,9 +778,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
     private fun ensureTemporaryExposureKey(): TemporaryExposureKey = writableDatabase.let { database ->
         database.beginTransactionNonExclusive()
         try {
-            var key = findOwnKeyAt(currentRollingStartNumber.toInt(), database)
+            var key = findOwnKeyAt(currentIntervalNumber, database)
             if (key == null) {
-                key = generateCurrentTemporaryExposureKey()
+                key = generateCurrentDayTemporaryExposureKey()
                 storeOwnKey(key, database)
             }
             database.setTransactionSuccessful()
@@ -724,12 +792,12 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     val currentRpiId: UUID?
         get() {
-            val key = findOwnKeyAt(currentRollingStartNumber.toInt()) ?: return null
-            val buffer = ByteBuffer.wrap(key.generateRpiId(currentIntervalNumber.toInt()))
+            val key = findOwnKeyAt(currentIntervalNumber) ?: return null
+            val buffer = ByteBuffer.wrap(key.generateRpiId(currentIntervalNumber))
             return UUID(buffer.long, buffer.long)
         }
 
-    fun generateCurrentPayload(metadata: ByteArray) = ensureTemporaryExposureKey().generatePayload(currentIntervalNumber.toInt(), metadata)
+    fun generateCurrentPayload(metadata: ByteArray) = ensureTemporaryExposureKey().generatePayload(currentIntervalNumber, metadata)
 
     override fun getWritableDatabase(): SQLiteDatabase {
         requirePrimary(this)
@@ -755,10 +823,11 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 7
+        private const val DB_VERSION = 10
         private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"
+        private const val TABLE_APP = "app"
         private const val TABLE_APP_LOG = "app_log"
         private const val TABLE_TEK = "tek"
         private const val TABLE_APP_PERMS = "app_perms"
@@ -871,7 +940,6 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                         val (dbMigrateFile, dbMigrateWalFile) = prepareDatabaseMigration(context)
                         val database = ExposureDatabase(context.applicationContext)
                         try {
-                            Log.d(TAG, "Created instance ${database.hashCode()} of database for ${context.javaClass.simpleName}")
                             completeInstance(database)
                             finishDatabaseMigration(database, dbMigrateFile, dbMigrateWalFile)
                             newInstance.complete(database)
@@ -890,6 +958,53 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                 }
             } finally {
                 unrefDeferredInstance()
+            }
+        }
+
+        fun export(context: Context) {
+            // FileProvider cannot directly access /databases, so we have to copy the database first
+            // In addition, we filter out only the Advertisements table to not export sensitive TEKs
+
+            // Create a new database which will store only the Advertisements table
+            val exportDir = File(context.getCacheDir(), "exposureDatabase")
+            exportDir.mkdir()
+            val exportFile = File(exportDir, "exposure.db")
+            if (exportFile.delete()) {
+                Log.d("EN-DB-Exporter", "Deleted old export database.")
+            }
+            val db = SQLiteDatabase.openOrCreateDatabase(exportFile, null)
+
+            // Attach the full database to the new empty db
+            val databaseFile = context.getDatabasePath(DB_NAME);
+            db.execSQL("ATTACH '$databaseFile' AS fulldb;")
+
+            // copy TABLE_ADVERTISEMENTS over
+            db.execSQL("CREATE TABLE $TABLE_ADVERTISEMENTS AS SELECT * FROM fulldb.$TABLE_ADVERTISEMENTS;")
+
+            // Detach original db, close new db
+            db.execSQL("DETACH DATABASE fulldb;")
+            db.close()
+
+            // Use the FileProvider to get a content URI for the new DB
+            val fileUri: Uri? = try {
+                FileProvider.getUriForFile(context,"${context.packageName}.microg.exposure.export", exportFile)
+            } catch (e: IllegalArgumentException) {
+                Log.e("EN-DB-Exporter", "The database file can't be shared: $exportFile $e")
+                null
+            }
+
+            // Open a sharesheet
+            if (fileUri != null) {
+                // Grant temporary read permission to the content URI
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_STREAM, fileUri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    type = "application/vnd.microg.exposure+sqlite3"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                context.startActivity(shareIntent)
             }
         }
 

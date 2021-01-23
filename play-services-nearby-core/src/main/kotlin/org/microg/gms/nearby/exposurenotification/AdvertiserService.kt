@@ -10,33 +10,37 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.app.Service
-import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.le.*
 import android.bluetooth.le.AdvertiseSettings.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.*
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.common.ForegroundServiceInfo
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.nio.ByteBuffer
 import java.util.*
 
 @TargetApi(21)
+@ForegroundServiceInfo("Exposure Notification")
 class AdvertiserService : LifecycleService() {
     private val version = VERSION_1_0
     private var advertising = false
     private var wantStartAdvertising = false
     private val advertiser: BluetoothLeAdvertiser?
-        get() = BluetoothAdapter.getDefaultAdapter()?.bluetoothLeAdvertiser
+        get() = getDefaultAdapter()?.bluetoothLeAdvertiser
     private val alarmManager: AlarmManager
         get() = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val callback: AdvertiseCallback = object : AdvertiseCallback() {
@@ -54,10 +58,10 @@ class AdvertiserService : LifecycleService() {
     private var setCallback: Any? = null
     private val trigger = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "android.bluetooth.adapter.action.STATE_CHANGED") {
-                when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)) {
-                    BluetoothAdapter.STATE_TURNING_OFF, BluetoothAdapter.STATE_OFF -> stopOrRestartAdvertising()
-                    BluetoothAdapter.STATE_ON -> startAdvertisingIfNeeded()
+            if (intent?.action == ACTION_STATE_CHANGED) {
+                when (intent.getIntExtra(EXTRA_STATE, -1)) {
+                    STATE_TURNING_OFF, STATE_OFF -> stopOrRestartAdvertising()
+                    STATE_ON -> startAdvertisingIfNeeded()
                 }
             }
         }
@@ -67,7 +71,7 @@ class AdvertiserService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        registerReceiver(trigger, IntentFilter().also { it.addAction("android.bluetooth.adapter.action.STATE_CHANGED") })
+        registerReceiver(trigger, IntentFilter().apply { addAction(ACTION_STATE_CHANGED) })
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -117,13 +121,13 @@ class AdvertiserService : LifecycleService() {
             val aemBytes = when (version) {
                 VERSION_1_0 -> byteArrayOf(
                         version, // Version and flags
-                        (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                        currentDeviceInfo.txPowerCorrection, // TX power
                         0x00, // Reserved
                         0x00  // Reserved
                 )
                 VERSION_1_1 -> byteArrayOf(
                         (version + currentDeviceInfo.confidence.toByte() * 4).toByte(), // Version and flags
-                        (currentDeviceInfo.txPowerCorrection + TX_POWER_LOW).toByte(), // TX power
+                        currentDeviceInfo.txPowerCorrection, // TX power
                         0x00, // Reserved
                         0x00  // Reserved
                 )
@@ -175,7 +179,7 @@ class AdvertiserService : LifecycleService() {
                     Since: ${Date(startTime)}
                     RPI: $uuid
                     Version: 0x${version.toString(16)}
-                    TX Power: ${currentDeviceInfo.txPowerCorrection + TX_POWER_LOW}
+                    TX Power: ${currentDeviceInfo.txPowerCorrection}
                     AEM: 0x${aem.toLong().let { if (it < 0) 0x100000000L + it else it }.toString(16)}
                 """.trimIndent())
         } catch (e: Exception) {
@@ -231,6 +235,17 @@ class AdvertiserService : LifecycleService() {
 
         fun isNeeded(context: Context): Boolean {
             return ExposurePreferences(context).enabled
+        }
+
+        fun isSupported(context: Context): Boolean? {
+            val adapter = getDefaultAdapter()
+            return when {
+                adapter == null -> false
+                Build.VERSION.SDK_INT >= 26 && (adapter.isLeExtendedAdvertisingSupported || adapter.isLePeriodicAdvertisingSupported) -> true
+                adapter.state != STATE_ON -> null
+                adapter.bluetoothLeAdvertiser != null -> true
+                else -> false
+            }
         }
     }
 }

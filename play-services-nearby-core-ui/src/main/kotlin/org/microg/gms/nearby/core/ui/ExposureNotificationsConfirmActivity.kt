@@ -5,17 +5,25 @@
 
 package org.microg.gms.nearby.core.ui
 
+import android.bluetooth.BluetoothAdapter
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.ResultReceiver
+import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
+import androidx.lifecycle.lifecycleScope
 import org.microg.gms.nearby.exposurenotification.*
 import org.microg.gms.ui.getApplicationInfoIfExists
+
 
 class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     private var resultCode: Int = RESULT_CANCELED
@@ -44,6 +52,8 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                 findViewById<TextView>(R.id.grant_permission_summary).text = getString(R.string.exposure_confirm_permission_description, selfApplicationInfo?.loadLabel(packageManager)
                         ?: packageName)
                 checkPermissions()
+                checkBluetooth()
+                checkLocation()
             }
             CONFIRM_ACTION_STOP -> {
                 findViewById<TextView>(android.R.id.title).text = getString(R.string.exposure_confirm_stop_title)
@@ -72,8 +82,28 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
         findViewById<Button>(R.id.grant_permission_button).setOnClickListener {
             requestPermissions()
         }
+        findViewById<Button>(R.id.enable_bluetooth_button).setOnClickListener {
+            requestBluetooth()
+        }
+        findViewById<Button>(R.id.enable_location_button).setOnClickListener {
+            requestLocation()
+        }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (permissionNeedsHandling) checkPermissions()
+        if (bluetoothNeedsHandling) checkBluetooth()
+        if (locationNeedsHandling) checkLocation()
+    }
+
+    private fun updateButton() {
+        findViewById<Button>(android.R.id.button1).isEnabled = !permissionNeedsHandling && !bluetoothNeedsHandling && !locationNeedsHandling
+    }
+
+    // Permissions
+    private var permissionNeedsHandling: Boolean = false
+    private var permissionRequestCode = 33
     private val permissions by lazy {
         if (Build.VERSION.SDK_INT >= 29) {
             arrayOf("android.permission.ACCESS_BACKGROUND_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
@@ -81,22 +111,70 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
             arrayOf("android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
         }
     }
-    private var requestCode = 33
     private fun checkPermissions() {
-        val needRequest = Build.VERSION.SDK_INT >= 23 && permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
-        findViewById<Button>(android.R.id.button1).isEnabled = !needRequest
-        findViewById<View>(R.id.grant_permission_view).visibility = if (needRequest) View.VISIBLE else View.GONE
+        permissionNeedsHandling = Build.VERSION.SDK_INT >= 23 && permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
+        findViewById<View>(R.id.grant_permission_view).visibility = if (permissionNeedsHandling) View.VISIBLE else View.GONE
+        updateButton()
     }
 
     private fun requestPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(permissions, ++requestCode)
+            requestPermissions(permissions, ++permissionRequestCode)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == this.requestCode) checkPermissions()
+        if (requestCode == this.permissionRequestCode) checkPermissions()
+    }
+
+    // Bluetooth
+    private var bluetoothNeedsHandling: Boolean = false
+    private var bluetoothRequestCode = 112
+    private fun checkBluetooth() {
+        val adapter = BluetoothAdapter.getDefaultAdapter()
+        bluetoothNeedsHandling = adapter?.isEnabled != true
+        findViewById<View>(R.id.enable_bluetooth_view).visibility = if (adapter?.isEnabled == false) View.VISIBLE else View.GONE
+        updateButton()
+    }
+
+    private fun requestBluetooth() {
+        val adapter = BluetoothAdapter.getDefaultAdapter()
+        findViewById<View>(R.id.enable_bluetooth_spinner).visibility = View.VISIBLE
+        findViewById<View>(R.id.enable_bluetooth_button).visibility = View.INVISIBLE
+        lifecycleScope.launchWhenStarted {
+            if (adapter != null && !adapter.enableAsync(this@ExposureNotificationsConfirmActivity)) {
+                requestBluetoothViaIntent()
+            } else {
+                checkBluetooth()
+            }
+            findViewById<View>(R.id.enable_bluetooth_spinner).visibility = View.INVISIBLE
+            findViewById<View>(R.id.enable_bluetooth_button).visibility = View.VISIBLE
+        }
+    }
+
+    private fun requestBluetoothViaIntent() {
+        val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        startActivityForResult(intent, ++bluetoothRequestCode)
+    }
+
+    // Location
+    private var locationNeedsHandling: Boolean = false
+    private var locationRequestCode = 231
+    private fun checkLocation() {
+        locationNeedsHandling = !LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        findViewById<View>(R.id.enable_location_view).visibility = if (locationNeedsHandling) View.VISIBLE else View.GONE
+        updateButton()
+    }
+
+    private fun requestLocation() {
+        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivityForResult(intent, ++locationRequestCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == bluetoothRequestCode) checkBluetooth()
     }
 
     override fun finish() {

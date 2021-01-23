@@ -21,6 +21,8 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.util.Log
 import com.mapbox.mapboxsdk.LibraryLoader
+import org.microg.gms.common.Constants
+import org.microg.gms.common.PackageUtils
 import java.io.*
 import java.util.zip.ZipFile
 
@@ -36,9 +38,12 @@ class MultiArchLoader(private val mapContext: Context, private val appContext: C
             if (primaryCpuAbi != null) {
                 val path = "lib/$primaryCpuAbi/lib$name.so"
                 val cacheFile = File("${appContext.cacheDir.absolutePath}/.gmscore/$path")
-                cacheFile.parentFile.mkdirs()
+                cacheFile.parentFile?.mkdirs()
+                val cacheFileStamp = File("${appContext.cacheDir.absolutePath}/.gmscore/$path.stamp")
+                val cacheVersion = kotlin.runCatching { cacheFileStamp.readText().toInt() }.getOrNull()
+                val mapVersion = PackageUtils.versionCode(mapContext, Constants.GMS_PACKAGE_NAME)
                 val apkFile = File(mapContext.packageCodePath)
-                if (!cacheFile.exists() || cacheFile.lastModified() < apkFile.lastModified()) {
+                if (!cacheFile.exists() || cacheVersion == null || cacheVersion != mapVersion) {
                     val zipFile = ZipFile(apkFile)
                     val entry = zipFile.getEntry(path)
                     if (entry != null) {
@@ -46,6 +51,7 @@ class MultiArchLoader(private val mapContext: Context, private val appContext: C
                     } else {
                         Log.d(TAG, "Can't load native library: $path does not exist in $apkFile")
                     }
+                    cacheFileStamp.writeText(mapVersion.toString())
                 }
                 Log.d(TAG, "Loading $name from ${cacheFile.getPath()}")
                 System.load(cacheFile.absolutePath)

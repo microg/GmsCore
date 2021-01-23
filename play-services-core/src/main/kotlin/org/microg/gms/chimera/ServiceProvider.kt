@@ -30,7 +30,7 @@ class ServiceProvider : ContentProvider() {
         when (method) {
             "serviceIntentCall" -> {
                 val serviceAction = extras?.getString("serviceActionBundleKey") ?: return null
-                val ourServiceAction = GmsService.byAction(serviceAction)?.takeIf { it.SERVICE_ID > 0 }?.ACTION
+                val ourServiceAction = GmsService.byAction(serviceAction)?.takeIf { it.SERVICE_ID > 0 }?.ACTION ?: serviceAction
                 val context = context!!
                 val intent = Intent(ourServiceAction).apply { `package` = context.packageName }
                 val resolveInfo = context.packageManager.resolveService(intent, 0)

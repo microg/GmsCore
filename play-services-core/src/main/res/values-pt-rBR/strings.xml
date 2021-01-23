@@ -46,7 +46,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="perm_extended_access_label">Acesso extendido aos serviços Google</string>
 
     <string name="service_name_checkin">Registro de dispositivo do Google</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
 
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar Play Games</string>
@@ -96,7 +96,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="prefcat_location_service">Servico de localização</string>
     <string name="prefcat_services">Serviços</string>
     <string name="cond_gcm_bat_title">Otimização de bateria ativada</string>
-    <string name="cond_gcm_bat_summary">Você ativou o Google Cloud Messaging, mas possui otimizações de bateria ativas para o MicroG Services Core. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
+    <string name="cond_gcm_bat_summary">Você ativou o Cloud Messaging, mas possui otimizações de bateria ativas para o MicroG Services Core. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
     <string name="cond_gcm_bat_action">Ignorar otimização</string>
     <string name="cond_perm_title">Permissão ausente</string>
 
@@ -109,11 +109,11 @@ Isso pode demorar alguns minutos."</string>
 
     <string name="pref_checkin_enable_summary">Registre seu dispositivo nos serviços do Google e crie um identificador de dispositivo exclusivo. MicroG que identifica outros bits que o nome da sua conta do Google a partir de dados de registro.</string>
 
-    <string name="pref_gcm_enable_mcs_summary">O Google Cloud Messaging é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
+    <string name="pref_gcm_enable_mcs_summary">O Cloud Messaging é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
     <string name="pref_gcm_heartbeat_title">Intervalo de pulsação da Messagem na nuvem</string>
     <string name="pref_gcm_heartbeat_summary">O intervalo em segundos para o sistema a pulsar os servidores do Google. Aumentar esse número reduzirá o consumo da bateria, mas poderá causar atrasos nas mensagens push.\nDesativado, será substituído em versão futura.</string>
-    <string name="pref_gcm_apps_title">Aplicativos que usam o Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados no Google Cloud Messaging.</string>
+    <string name="pref_gcm_apps_title">Aplicativos que usam o Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados no Cloud Messaging.</string>
     <string name="pref_about_title">Sobre microG Services Core</string>
     <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
 

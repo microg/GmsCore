@@ -7,7 +7,9 @@ package org.microg.gms.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import com.google.android.gms.R
 import org.microg.gms.nearby.exposurenotification.Constants
 import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
@@ -25,6 +27,8 @@ interface NearbyPreferencesIntegration {
                 intent.data = Uri.parse("x-gms-settings://exposure-notifications")
             }
         }
+
+        fun getIcon(context: Context): Drawable? = ContextCompat.getDrawable(context, org.microg.gms.nearby.core.R.drawable.ic_virus_outline)
 
         val isAvailable: Boolean = android.os.Build.VERSION.SDK_INT >= 21
 

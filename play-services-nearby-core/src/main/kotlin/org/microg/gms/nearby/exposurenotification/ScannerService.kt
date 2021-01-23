@@ -9,7 +9,6 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.Service
 import android.bluetooth.BluetoothAdapter.*
 import android.bluetooth.le.*
 import android.content.BroadcastReceiver
@@ -21,11 +20,13 @@ import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import org.microg.gms.common.ForegroundServiceContext
+import org.microg.gms.common.ForegroundServiceInfo
 import java.io.FileDescriptor
 import java.io.PrintWriter
 import java.util.*
 
 @TargetApi(21)
+@ForegroundServiceInfo("Exposure Notification")
 class ScannerService : LifecycleService() {
     private var scanning = false
     private var lastStartTime = 0L
@@ -49,7 +50,7 @@ class ScannerService : LifecycleService() {
     }
     private val trigger = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == "android.bluetooth.adapter.action.STATE_CHANGED") {
+            if (intent?.action == ACTION_STATE_CHANGED) {
                 when (intent.getIntExtra(EXTRA_STATE, -1)) {
                     STATE_TURNING_OFF, STATE_OFF -> stopScan()
                     STATE_ON -> startScanIfNeeded()
@@ -103,7 +104,7 @@ class ScannerService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-        registerReceiver(trigger, IntentFilter().also { it.addAction("android.bluetooth.adapter.action.STATE_CHANGED") })
+        registerReceiver(trigger, IntentFilter().apply { addAction(ACTION_STATE_CHANGED) })
     }
 
     override fun onDestroy() {
@@ -170,6 +171,16 @@ class ScannerService : LifecycleService() {
     companion object {
         fun isNeeded(context: Context): Boolean {
             return ExposurePreferences(context).enabled
+        }
+
+        fun isSupported(context: Context): Boolean? {
+            val adapter = getDefaultAdapter()
+            return when {
+                adapter == null -> false
+                adapter.state != STATE_ON -> null
+                adapter.bluetoothLeScanner != null -> true
+                else -> false
+            }
         }
     }
 }

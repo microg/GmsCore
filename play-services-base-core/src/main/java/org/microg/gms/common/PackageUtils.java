@@ -24,6 +24,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Binder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -242,6 +243,36 @@ public class PackageUtils {
             return (String) getProcessName.invoke(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean isPersistentProcess() {
+        String processName = getProcessName();
+        if (processName == null) {
+            Log.w("GmsPackageUtils", "Can't determine process name of current process");
+            return false;
+        }
+        return processName.endsWith(":persistent");
+    }
+
+    public static boolean isMainProcess(Context context) {
+        String processName = getProcessName();
+        if (processName == null) {
+            Log.w("GmsPackageUtils", "Can't determine process name of current process");
+            return false;
+        }
+        return processName.equals(context.getPackageName());
+    }
+
+    public static void warnIfNotPersistentProcess(Class<?> clazz) {
+        if (!isPersistentProcess()) {
+            Log.w("GmsPackageUtils", clazz.getSimpleName() + " initialized outside persistent process", new RuntimeException());
+        }
+    }
+
+    public static void warnIfNotMainProcess(Context context, Class<?> clazz) {
+        if (!isMainProcess(context)) {
+            Log.w("GmsPackageUtils", clazz.getSimpleName() + " initialized outside main process", new RuntimeException());
         }
     }
 

@@ -36,6 +36,8 @@ android {
 
 apply from: '../gradle/publish-android.gradle'
 
+description = 'microG implementation of play-services-base'
+
 dependencies {
     api project(':play-services-basement')
     api project(':play-services-tasks')

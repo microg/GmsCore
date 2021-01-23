@@ -26,7 +26,7 @@ import com.google.android.gms.maps.model.internal.IMarkerDelegate
 import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
-import org.microg.gms.kotlin.unwrap
+import com.google.android.gms.dynamic.unwrap
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.utils.toMapbox
 

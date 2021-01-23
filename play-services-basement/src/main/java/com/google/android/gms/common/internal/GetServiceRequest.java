@@ -60,12 +60,12 @@ public class GetServiceRequest extends AutoSafeParcelable {
 
     private GetServiceRequest() {
         serviceId = -1;
-        gmsVersion = Constants.MAX_REFERENCE_VERSION;
+        gmsVersion = Constants.GMS_VERSION_CODE;
     }
 
     public GetServiceRequest(int serviceId) {
         this.serviceId = serviceId;
-        this.gmsVersion = Constants.MAX_REFERENCE_VERSION;
+        this.gmsVersion = Constants.GMS_VERSION_CODE;
         this.field12 = true;
     }
 

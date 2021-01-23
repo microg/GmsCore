@@ -74,7 +74,7 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName)
         val apiKey = request.extras?.getString(Constants.EXTRA_API_KEY)
         val libraryVersion = request.extras?.getString(Constants.EXTRA_LIBRARY_VERSION)
-        if (apiKey == null || libraryVersion == null) {
+        if (apiKey == null) {
             callback.onPostInitComplete(CommonStatusCodes.DEVELOPER_ERROR, null, null)
         } else {
             callback.onPostInitComplete(0, FirebaseAuthServiceImpl(this, lifecycle, request.packageName, libraryVersion, apiKey).asBinder(), null)
@@ -82,7 +82,7 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
     }
 }
 
-class FirebaseAuthServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
+class FirebaseAuthServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
     private val client = IdentityToolkitClient(context, apiKey)
     private var authorizedDomain: String? = null
 
