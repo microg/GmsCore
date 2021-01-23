@@ -42,150 +42,151 @@
     <string name="perm_c2dm_send_label">sendi mesaĝojn C2DM al aliaj aplikaĵoj</string>
     <string name="perm_gtalk_svc_label">interŝanĝi mesaĝojn kaj ricevi samtempigajn sciigojn el Google-serviloj</string>
     <string name="perm_extended_access_label">etendita aliro al Google-servoj</string>
-    <string name="perm_provision_label">provision microG services</string>
-    <string name="perm_provision_description">Allows the app to configure microG services without user interaction</string>
+    <string name="perm_provision_label">agordi microG-servojn</string>
+    <string name="perm_provision_description">Permesas al aplikaĵo agordi la servojn microG sen sciigi la uzanton.</string>
 
-    <string name="service_name_checkin">Google device registration</string>
+    <string name="service_name_checkin">Registrado de Google-aparato</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
-    <string name="service_status_disabled">Disabled</string>
-    <string name="service_status_enabled">Enabled</string>
-    <string name="service_status_automatic">Automatic</string>
-    <string name="service_status_manual">Manual</string>
-    <string name="service_status_enabled_short">On</string>
-    <string name="service_status_disabled_short">Off</string>
+    <string name="service_status_disabled">Malaktiva</string>
+    <string name="service_status_enabled">Aktiva</string>
+    <string name="service_status_automatic">Aŭtomata</string>
+    <string name="service_status_manual">Permana</string>
+    <string name="service_status_enabled_short">Ek</string>
+    <string name="service_status_disabled_short">For</string>
 
-    <string name="games_title">Google Play Games</string>
-    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
-    <string name="games_info_content">To use Play Games it is required to install the Google Play Games app. The application might continue without Play Games, but it is possible that it will behave unexpectedly.</string>
+    <string name="games_title">Google Play Ludoj</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> volas uzi la servon Google Play Ludoj.</string>
+    <string name="games_info_content">Por uzi Google Play Ludoj necesas instali la aplikaĵon “Google Play Games”. La aplikaĵo eble funkcios sen Google Ludoj, tamen povos sinteni neatendite.</string>
 
-    <string name="pick_place_title">Pick a place</string>
-    <string name="pick_place_desc">Place picker is not yet available.</string>
-    <string name="place_picker_select_title">Select this location</string>
-    <string name="place_picker_nearby_places">Nearby places</string>
-    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="pick_place_title">Elekti lokon</string>
+    <string name="pick_place_desc">Elektilo de lokoj jam ne estas disponebla.</string>
+    <string name="place_picker_select_title">Elekti tiun ĉi lokon</string>
+    <string name="place_picker_nearby_places">Proksimaj lokoj</string>
+    <string name="place_picker_location_lat_lng">(%1$,7f %2$,7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: Lacking permission to <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">microG: baza servo: mankas la permeso por <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
-    <string name="network_type_mobile">Mobile network</string>
-    <string name="network_type_wifi">Wi-Fi</string>
-    <string name="network_type_roaming">Roaming</string>
-    <string name="network_type_other">Other networks</string>
+    <string name="network_type_mobile">Poŝtelefona reto</string>
+    <string name="network_type_wifi">Vifio</string>
+    <string name="network_type_roaming">Retmigra reto</string>
+    <string name="network_type_other">Aliaj retoj</string>
 
     <!-- Self check -->
 
-    <string name="self_check_cat_fake_sig">Signature spoofing support</string>
-    <string name="self_check_cat_gms_packages">Installed packages</string>
-    <string name="self_check_cat_system">System</string>
+    <string name="self_check_cat_fake_sig">Imitado de signaturoj</string>
+    <string name="self_check_cat_gms_packages">Instalitaj pakaĵoj</string>
+    <string name="self_check_cat_system">Operaciumo</string>
 
-    <string name="self_check_name_fake_sig_perm">System has signature spoofing support: </string>
-    <string name="self_check_resolution_fake_sig_perm">Your ROM has no native support for signature spoofing. You can still use Xposed or other systems to spoof signature. Please check the documentation on which ROMs do support signature spoofing and how to use microG on ROMs that do not.</string>
-    <string name="self_check_name_perm_granted">System grants signature spoofing permission: </string>
-    <string name="self_check_resolution_perm_granted">This is a strong indicator that the ROM does support signature spoofing, but requires further action to activate it. Please check the documentation on which steps might be required.</string>
-    <string name="self_check_name_system_spoofs">System spoofs signature: </string>
-    <string name="self_check_resolution_system_spoofs">Please check the documentation on which steps might be required.</string>
+    <string name="self_check_name_fake_sig_perm">Operaciumo subtenas imitadon de signaturoj: </string>
+    <string name="self_check_resolution_fake_sig_perm">Via Android-distribuaĵo ne havas indiĝenan subtenon por imiti signaturojn. Vi plue povas uzi Xposed aŭ alian manieron por imiti signaturojn. Legu la dokumentaron pri Android-distribuaĵoj subtenantaj imitadon de signatoroj kaj pri kiel uzi microG ĉe distribuaĵoj, kiuj ne subtanas tion ĉi.</string>
+    <string name="self_check_name_perm_granted">Operaciumo donis la permeson por imiti signaturojn: </string>
+    <string name="self_check_resolution_perm_granted">Tio ĉi indikas, ke via Android-distribuaĵo subtenas imitadon de signaturoj, sed plia ago estas necesa por aktivigi ĝin. Legu la dokumentaron por sciiĝi pli.</string>
+    <string name="self_check_name_system_spoofs">Operaciumo imitas signaturon: </string>
+    <string name="self_check_resolution_system_spoofs">Legu la dokumentaron por sciiĝi pli.</string>
 
-    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
-    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gms">Servo Play (GmsCore)</string>
+    <string name="self_check_pkg_vending">Vendejo Play (Phonesky)</string>
     <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
-    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> installed: </string>
-    <string name="self_check_resolution_app_installed">Install the application <xliff:g example="F-Droid">%1$s</xliff:g> or a compatible one. Please check the documentation on which applications are compatible.</string>
-    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> has correct signature: </string>
-    <string name="self_check_resolution_correct_sig">Either the installed <xliff:g example="F-Droid">%1$s</xliff:g> is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalita: </string>
+    <string name="self_check_resolution_app_installed">Instalu la aplikaĵon <xliff:g example="F-Droid">%1$s</xliff:g> aŭ kongruan. Legu la dokumentaron pri kongruaj aplikaĵoj.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> havas ĝustan subskribon: </string>
+    <string name="self_check_resolution_correct_sig">Aŭ la instalita <xliff:g example="F-Droid">%1$s</xliff:g> ne estas kongrua, aŭ imitado de signaturoj ne estas aktiva por ĝi. Legu la dokumentaron pri kongruaj aplikaĵoj kaj Android-distribuaĵoj.</string>
 
-    <string name="self_check_name_battery_optimizations">Battery optimizations ignored:</string>
-    <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications.</string>
+    <string name="self_check_name_battery_optimizations">Optimumigo de baterio ignorata: </string>
+    <string name="self_check_resolution_battery_optimizations">Frapetu por malaktivigi optimumigon de baterio. Aliokaze iuj aplikaĵoj povos misfunkcii.</string>
 
     <!-- Settings strings -->
 
-    <string name="prefcat_about">About</string>
-    <string name="prefcat_components">Components</string>
-    <string name="prefcat_configuration">Configuration</string>
-    <string name="prefcat_google_services">Google Services</string>
-    <string name="prefcat_location_service">Location service</string>
-    <string name="prefcat_operation_mode">Operation mode</string>
-    <string name="prefcat_services">Services</string>
-    <string name="prefcat_test">Test</string>
+    <string name="prefcat_about">Pri</string>
+    <string name="prefcat_components">Elementoj</string>
+    <string name="prefcat_configuration">Agordaro</string>
+    <string name="prefcat_google_services">Google-servoj</string>
+    <string name="prefcat_location_service">Pozici‑trovaj servoj</string>
+    <string name="prefcat_operation_mode">Reĝimo de agado</string>
+    <string name="prefcat_services">Servoj</string>
+    <string name="prefcat_test">Kontrolo</string>
 
-    <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
-    <string name="cond_gcm_bat_summary">You enabled Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
-    <string name="cond_gcm_bat_action">Ignore optimizations</string>
-    <string name="cond_perm_title">Permission missing</string>
+    <string name="cond_gcm_bat_title">Optimumigo de baterio aktiva</string>
+    <string name="cond_gcm_bat_summary">Vi aktivigis «Cloud Messaging», tamen optimumigo de baterio estas aktiva por la aplikaĵo “microG: baza servo”. Por ricevi sciigojn «push» necesas malaktivigi optimumigon de baterio.</string>
+    <string name="cond_gcm_bat_action">Ignori optimumigon</string>
+    <string name="cond_perm_title">Permeso mankas</string>
 
-    <string name="prefs_account">Account preferences</string>
-    <string name="prefs_account_privacy">Personal info &amp; privacy</string>
-    <string name="prefs_account_security">Sign-in &amp; security</string>
+    <string name="prefs_account">Agordoj pri konto</string>
+    <string name="prefs_account_privacy">Personaj informoj kaj privateco</string>
+    <string name="prefs_account_security">Ensaluto kaj sekureco</string>
 
-    <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
-    <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an apps authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
-    <string name="pref_auth_visible_title">Allow apps to find accounts</string>
-    <string name="pref_auth_visible_summary">When enabled, all applications on this device will be able to see email address of your Google Accounts without prior authorization.</string>
+    <string name="pref_auth_trust_google_title">Fidi je Google pri aplikaĵaj permesoj</string>
+    <string name="pref_auth_trust_google_summary">Kiam malaktiva, la uzanto estos demandata antaŭ aŭtentiga peto estos sendita al Google. Iuj aplikaĵoj fiaskos uzi Google-konton kiam tiu ĉi eblaĵo estos malaktiva.</string>
+    <string name="pref_auth_visible_title">Permesi al aplikaĵoj trovi kontojn</string>
+    <string name="pref_auth_visible_summary">Kiam aktiva, ĉiuj aplikaĵoj ĉe tiu ĉi aparato povos vidi retpoŝtajn adresojn de viaj Google-kontoj antaŭ aŭtentigi.</string>
 
-    <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
-    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_checkin_enable_summary">Registri vian aparaton al Google kaj krei unikan identigilon de aparato. MicroG forigas identigajn datumojn aliajn ol nomo de Google-konto el sendataj datumoj.</string>
+    <string name="pref_device_registration_android_id">Android-identigilo</string>
 
-    <string name="checkin_not_registered">Not registered</string>
-    <string name="checkin_last_registration">Last registration: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="checkin_enable_switch">Register device</string>
+    <string name="checkin_not_registered">Malregistrita</string>
+    <string name="checkin_last_registration">Antaŭa registrado: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Registri aparaton</string>
 
-    <string name="pref_info_status">Status</string>
-    <string name="pref_more_settings">More</string>
+    <string name="pref_info_status">Stato</string>
+    <string name="pref_more_settings">Pli</string>
 
-    <string name="pref_add_account_title">Account</string>
-    <string name="pref_add_account_summary">Add Google account</string>
-    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
-    <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
-    <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.\nDeprecated, will be replaced in future release.</string>
-    <string name="pref_gcm_apps_title">Apps using Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">List of apps currently registered for Cloud Messaging.</string>
-    <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
-    <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_add_account_title">Konto</string>
+    <string name="pref_add_account_summary">Aldoni Google-konton</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging estas liveranto de sciigojn «push», kiuj estas uzataj por pluraj eksteraj aplikaĵoj. Por uzi ĝin necesas aktivigi la eblaĵon “registrado de Google-aparato”.</string>
+    <string name="pref_gcm_heartbeat_title">Ofteco de petoj Cloud Messaging</string>
+    <string name="pref_gcm_heartbeat_summary">Ofteco (en sekundoj) por sendi petojn al Google-serviloj. Pliigu tiun ĉi valoron por malpliigi konsumon de baterio, sed povas kaŭzi prokrastojn desciigojn «push».\n(Kaduka, estos forigita en venontaj versioj).</string>
+    <string name="pref_gcm_apps_title">Aplikaĵoj uzantaj Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Listo de aplikaĵoj nuntempe registritaj por Cloud Messaging.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Konfirmi novajn aplikaĵojn</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Demandi antaŭ registri novan aplikaĵon por ricevi sciigojn «push»</string>
+    <string name="pref_gcm_ping_interval">Ofteco de petoj: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
-    <string name="pref_about_title">About microG Services Core</string>
-    <string name="pref_about_summary">Version information and used libraries</string>
+    <string name="pref_about_title">Pri microG: baza servo</string>
+    <string name="pref_about_summary">Informoj pri versio kaj uzataj bibliotekoj</string>
 
-    <string name="gcm_app_error_unregistering">Error unregistering</string>
-    <string name="gcm_app_not_installed_anymore">No longer installed</string>
-    <string name="gcm_unregister_app">Unregister</string>
-    <string name="gcm_not_registered">Not registered</string>
-    <string name="gcm_no_message_yet">No messages received so far</string>
-    <string name="gcm_last_message_at">Last message: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_registered">Registered</string>
-    <string name="gcm_registered_since">Registered since: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_unregister_confirm_title">Unregister <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
-    <string name="gcm_unregister_confirm_message">Some apps do not automatically re-register and/or do not provide an option to do so manually. These apps might not work correctly after unregistering.\nContinue?</string>
-    <string name="gcm_unregister_after_deny_message">You denied an app to register for push notifications that is already registered.\nDo you want to unregister it now so it does not receive push messages in the future?</string>
-    <string name="gcm_messages_counter">Messages: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
-    <string name="gcm_network_state_disconnected">Disconnected</string>
-    <string name="gcm_network_state_connected">Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
-    <string name="gcm_enable_switch">Receive push notifications</string>
+    <string name="gcm_app_error_unregistering">Eraro dum malregistrado</string>
+    <string name="gcm_app_not_installed_anymore">Ne plu instalita</string>
+    <string name="gcm_unregister_app">Malregistri</string>
+    <string name="gcm_not_registered">Malregistrita</string>
+    <string name="gcm_no_message_yet">Ankoraŭ neniu ricevita mesaĝo</string>
+    <string name="gcm_last_message_at">Antaŭa mesaĝo: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registrita</string>
+    <string name="gcm_registered_since">Registrita ekde: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Ĉu malregistri la aplikaĵon <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Iuj aplikaĵoj ne reregistriĝas aŭtomate kaj ne ebligas fari tion permane. Tiuj aplikaĵoj povos ne funkcii ĝuste post malregistri.\nĈu pluigi?</string>
+    <string name="gcm_unregister_after_deny_message">Vi malpermesis al jam registrita aplikaĵo registriĝi por ricevi sciigojn «push».\nĈu vi volas malregistri ĝin por ke ĝi ne ricevu sciigojn «push» estontece?</string>
+    <string name="gcm_messages_counter">Mesaĝoj: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> B)</string>
+    <string name="gcm_network_state_disconnected">Malkonektita</string>
+    <string name="gcm_network_state_connected">Konektita de <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Ricevi sciigojn «push»</string>
 
-    <string name="pref_push_app_allow_register_title">Allow registration</string>
-    <string name="pref_push_app_allow_register_summary">Allow the app to register for push notifications.</string>
-    <string name="pref_push_app_wake_for_delivery_title">Start app on push message</string>
-    <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
-    <string name="prefcat_push_apps_title">Apps using push notifications</string>
-    <string name="prefcat_push_apps_registered_title">Registered apps</string>
-    <string name="prefcat_push_apps_unregistered_title">Unregistered apps</string>
-    <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
+    <string name="pref_push_app_allow_register_title">Ebligi registradon</string>
+    <string name="pref_push_app_allow_register_summary">Ebligi al la aplikaĵo registriĝi por ricevi sciigojn «push»</string>
+    <string name="pref_push_app_wake_for_delivery_title">Ekigi aplikaĵon je sciigo «push»</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Ekigi la aplikaĵon (dum labori malfone) por ricevi alvenantajn sciigojn «push»</string>
+    <string name="prefcat_push_apps_title">Aplikaĵoj uzantaj sciigojn «push»</string>
+    <string name="prefcat_push_apps_registered_title">Registritaj aplikaĵoj</string>
+    <string name="prefcat_push_apps_unregistered_title">Malregistritaj aplikaĵoj</string>
+    <string name="prefcat_push_networks_title">Retoj por uzi sciigojn «push»</string>
 
-    <string name="snet_intro">Google SafetyNet is a device certification system, ensuring that the device is properly secured and compatible with Android CTS. Some applications use SafetyNet for security reasons or as a prerequisite for tamper-protection.\n\nmicroG GmsCore contains a free implementation of SafetyNet, but the official server requires SafetyNet requests to be signed using the proprietary DroidGuard system. A sandboxed version of DroidGuard is available as a separate “DroidGuard Helper” app.</string>
-    <string name="snet_enable_switch">Allow device attestation</string>
+    <string name="snet_intro">Google SafetyNet estas atest‑sistemo, kiu certigas ke la aparato estas ĝuste sekirigita kaj kongrua kun Android CTS. Iuj aplikaĵoj uzas SefetyNet pro sekurecaj kialoj aŭ por kontraŭi modifojn.\n\n
+      La baza servo microG enhavas liberan realigon de SafetyNet, sed la oficiala servilo postulas, ke SafetyNet-petoj estu subskribitaj per la fermkoda modulo DroidGuard. Izolata versio de DroidGuard estas disponebla kiel aparta aplikaĵo “microG DroidGuard Helper”.</string>
+    <string name="snet_enable_switch">Ebligi atestadon de aparato</string>
 
-    <string name="pref_snet_testdrive_title">Try SafetyNet attestation</string>
+    <string name="pref_snet_testdrive_title">Kontroli atestadon SafetyNet</string>
 
-    <string name="pref_snet_status_official_title">Use official server</string>
-    <string name="pref_snet_status_official_summary">Requires an unrooted system and microG DroidGuard Helper installed</string>
-    <string name="pref_snet_status_official_info">official server</string>
-    <string name="pref_snet_status_third_party_title">Use third-party server</string>
-    <string name="pref_snet_status_third_party_summary">Third-party servers might be able to reply to SafetyNet requests without DroidGuard signature</string>
-    <string name="pref_snet_status_third_party_info">third-party server</string>
-    <string name="pref_snet_custom_url_title">Custom server URL</string>
-    <string name="pref_snet_custom_url_summary">Full URL of the third-party server answering SafetyNet attestation requests</string>
-    <string name="pref_snet_self_signed_title">Use self-signed certificate</string>
-    <string name="pref_snet_self_signed_summary">Instead of requesting a server, sign SafetyNet responses locally using a self-signed certificate. Most apps will refuse to use self-signed responses.</string>
-    <string name="pref_snet_status_self_signed_info">self-signed certificate</string>
+    <string name="pref_snet_status_official_title">Uzi oficialan servilon</string>
+    <string name="pref_snet_status_official_summary">Postulas operaciumon sen «root» kaj instalitan “microG DroidGuard Helper”</string>
+    <string name="pref_snet_status_official_info">oficiala servilo</string>
+    <string name="pref_snet_status_third_party_title">Uzi propran servilon</string>
+    <string name="pref_snet_status_third_party_summary">Neoficialaj serviloj eble povos respondi al SafetyNet-petoj sen subskribo de DroidGuard</string>
+    <string name="pref_snet_status_third_party_info">neoficiala servilo</string>
+    <string name="pref_snet_custom_url_title">Ligilo al propra servilo</string>
+    <string name="pref_snet_custom_url_summary">Plena ligilo al neoficiala servilo, kiu respondas al atestaj SafetyNet-petoj</string>
+    <string name="pref_snet_self_signed_title">Uzi memsubskribitan atestilon</string>
+    <string name="pref_snet_self_signed_summary">Anstataŭ peti servilon, subskribi SafetyNet-petojn loke uzante memsubskribitan atestilon. Plejparto da aplikaĵoj rifuzos uzi memsubskribitajn respondojn.</string>
+    <string name="pref_snet_status_self_signed_info">memsubskribita atestilo</string>
 
 </resources>
