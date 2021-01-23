@@ -38,7 +38,7 @@
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> postulas vian aŭtentigon por aliri al via Google-konto.</string>
 
     <string name="perm_status_broadcast_label">aŭskulti internajn sciigojn de stato</string>
-    <string name="perm_c2dm_receive_label">aŭskulti meaĝojn C2DM</string>
+    <string name="perm_c2dm_receive_label">aŭskulti mesaĝojn C2DM</string>
     <string name="perm_c2dm_send_label">sendi mesaĝojn C2DM al aliaj aplikaĵoj</string>
     <string name="perm_gtalk_svc_label">interŝanĝi mesaĝojn kaj ricevi samtempigajn sciigojn el Google-serviloj</string>
     <string name="perm_extended_access_label">etendita aliro al Google-servoj</string>
@@ -136,7 +136,7 @@
     <string name="pref_add_account_summary">Aldoni Google-konton</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging estas liveranto de sciigojn «push», kiuj estas uzataj por pluraj eksteraj aplikaĵoj. Por uzi ĝin necesas aktivigi la eblaĵon “registrado de Google-aparato”.</string>
     <string name="pref_gcm_heartbeat_title">Ofteco de petoj Cloud Messaging</string>
-    <string name="pref_gcm_heartbeat_summary">Ofteco (en sekundoj) por sendi petojn al Google-serviloj. Pliigu tiun ĉi valoron por malpliigi konsumon de baterio, sed povas kaŭzi prokrastojn desciigojn «push».\n(Kaduka, estos forigita en venontaj versioj).</string>
+    <string name="pref_gcm_heartbeat_summary">Ofteco (en sekundoj) por sendi petojn al Google-serviloj. Pliigu tiun ĉi valoron por malpliigi konsumon de baterio, sed povas kaŭzi prokrastojn de sciigoj «push».\n(Kaduka, estos forigita en venontaj versioj).</string>
     <string name="pref_gcm_apps_title">Aplikaĵoj uzantaj Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Listo de aplikaĵoj nuntempe registritaj por Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Konfirmi novajn aplikaĵojn</string>
@@ -171,7 +171,7 @@
     <string name="prefcat_push_apps_unregistered_title">Malregistritaj aplikaĵoj</string>
     <string name="prefcat_push_networks_title">Retoj por uzi sciigojn «push»</string>
 
-    <string name="snet_intro">Google SafetyNet estas atest‑sistemo, kiu certigas ke la aparato estas ĝuste sekirigita kaj kongrua kun Android CTS. Iuj aplikaĵoj uzas SefetyNet pro sekurecaj kialoj aŭ por kontraŭi modifojn.\n\n
+    <string name="snet_intro">Google SafetyNet estas atest‑sistemo, kiu certigas ke la aparato estas ĝuste sekurigita kaj kongrua kun Android CTS. Iuj aplikaĵoj uzas SefetyNet pro sekurecaj kialoj aŭ por kontraŭi modifojn.\n\n
       La baza servo microG enhavas liberan realigon de SafetyNet, sed la oficiala servilo postulas, ke SafetyNet-petoj estu subskribitaj per la fermkoda modulo DroidGuard. Izolata versio de DroidGuard estas disponebla kiel aparta aplikaĵo “microG DroidGuard Helper”.</string>
     <string name="snet_enable_switch">Ebligi atestadon de aparato</string>
 
