@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.gcm.GcmPrefs
+import org.microg.gms.gcm.getGcmServiceInfo
+import org.microg.gms.gcm.setGcmServiceConfiguration
 import org.microg.gms.snet.SafetyNetPrefs
 
 class ProvisionService : LifecycleService() {
@@ -30,7 +32,7 @@ class ProvisionService : LifecycleService() {
             }
 
             intent?.extras?.getBooleanOrNull("checkin_enabled")?.let { CheckinPrefs.setEnabled(this@ProvisionService, it) }
-            intent?.extras?.getBooleanOrNull("gcm_enabled")?.let { GcmPrefs.setEnabled(this@ProvisionService, it) }
+            intent?.extras?.getBooleanOrNull("gcm_enabled")?.let { setGcmServiceConfiguration(this@ProvisionService, getGcmServiceInfo(this@ProvisionService).configuration.copy(enabled = it)) }
             intent?.extras?.getBooleanOrNull("safetynet_enabled")?.let { SafetyNetPrefs.get(this@ProvisionService).isEnabled = it }
             // What else?
 

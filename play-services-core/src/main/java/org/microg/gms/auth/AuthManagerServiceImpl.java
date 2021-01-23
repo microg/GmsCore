@@ -93,6 +93,10 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         Bundle result = new Bundle();
         result.putString(KEY_ACCOUNT_NAME, accountName);
         result.putString(KEY_ACCOUNT_TYPE, authManager.getAccountType());
+        if (!authManager.accountExists()) {
+            result.putString(KEY_ERROR, "NetworkError");
+            return result;
+        }
         try {
             AuthResponse res = authManager.requestAuth(false);
             if (res.auth != null) {

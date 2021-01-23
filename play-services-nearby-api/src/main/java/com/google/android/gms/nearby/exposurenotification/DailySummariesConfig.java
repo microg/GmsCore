@@ -41,13 +41,13 @@ import java.util.Map;
  */
 @PublicApi
 public class DailySummariesConfig extends AutoSafeParcelable {
-    @Field(1)
+    @Field(value = 1, useDirectList = true)
     private List<Double> reportTypeWeights;
-    @Field(2)
+    @Field(value = 2, useDirectList = true)
     private List<Double> infectiousnessWeights;
-    @Field(3)
+    @Field(value = 3, useDirectList = true)
     private List<Integer> attenuationBucketThresholdDb;
-    @Field(4)
+    @Field(value = 4, useDirectList = true)
     private List<Double> attenuationBucketWeights;
     @Field(5)
     private int daysSinceExposureThreshold;

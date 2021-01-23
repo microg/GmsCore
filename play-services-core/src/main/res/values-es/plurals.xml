@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 microG Project Team
+  ~ Copyright (C) 2017-2020 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,4 +16,20 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    </resources>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurado</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicación registrada</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicaciones registradas</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">No se concede el permiso necesario para el correcto funcionamiento del núcleo de servicio de microG.</item>
+        <item quantity="other">No se conceden los permisos necesarios para el correcto funcionamiento del núcleo de servicio de microG.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Solicitar el permiso que falta</item>
+        <item quantity="other">Solicitar los permisos que faltan</item>
+    </plurals>
+</resources>

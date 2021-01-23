@@ -21,9 +21,7 @@ public class CheckinPrefs implements SharedPreferences.OnSharedPreferenceChangeL
 
     public static CheckinPrefs get(Context context) {
         if (INSTANCE == null) {
-            if (!context.getPackageName().equals(PackageUtils.getProcessName())) {
-                Log.w("Preferences", CheckinPrefs.class.getName() + " initialized outside main process", new RuntimeException());
-            }
+            PackageUtils.warnIfNotMainProcess(context, CheckinPrefs.class);
             if (context == null) return new CheckinPrefs(null);
             INSTANCE = new CheckinPrefs(context.getApplicationContext());
         }

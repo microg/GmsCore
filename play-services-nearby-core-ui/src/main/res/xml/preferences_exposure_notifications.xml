@@ -15,6 +15,38 @@
         app:isPreferenceVisible="false"
         tools:isPreferenceVisible="true" />
 
+    <Preference
+        android:icon="@drawable/ic_bluetooth_off"
+        android:key="pref_exposure_error_bluetooth_off"
+        android:title="@string/pref_exposure_error_bluetooth_off_title"
+        android:summary="@string/exposure_confirm_bluetooth_description"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_location_off"
+        android:key="pref_exposure_error_location_off"
+        android:title="@string/pref_exposure_error_location_off_title"
+        android:summary="@string/exposure_confirm_location_description"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_alert"
+        android:key="pref_exposure_error_bluetooth_unsupported"
+        android:selectable="false"
+        android:summary="@string/pref_exposure_error_bluetooth_unsupported_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
+        android:icon="@drawable/ic_alert"
+        android:key="pref_exposure_error_bluetooth_no_advertise"
+        android:selectable="false"
+        android:summary="@string/pref_exposure_error_bluetooth_no_advertise_summary"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
     <PreferenceCategory
         android:key="prefcat_exposure_apps"
         android:title="@string/prefcat_exposure_apps_title">
@@ -30,8 +62,8 @@
             android:title="@string/pref_exposure_collected_rpis_title"
             tools:summary="@string/pref_exposure_collected_rpis_summary" />
         <Preference
+            android:enabled="false"
             android:key="pref_exposure_advertising_id"
-            android:selectable="false"
             android:title="@string/pref_exposure_advertising_id_title"
             tools:summary="9a799d68-925f-4c0c-a73c-b418f22a1250" />
     </PreferenceCategory>

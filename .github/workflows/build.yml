@@ -1,0 +1,13 @@
+name: Build
+on: [pull_request, push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: ./gradlew --no-daemon build
+        env:
+          TERM: dumb
+          JAVA_OPTS: -Xmx2048m

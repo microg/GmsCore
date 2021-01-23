@@ -7,11 +7,21 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_name_exposure">Exposure Notifications</string>
     <string name="pref_exposure_enable_info_summary">Öffne eine App, die Exposure Notifications unterstützt, um diese zu aktivieren.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Bluetooth einschalten</string>
+    <string name="pref_exposure_error_location_off_title">Standortzugriff verwalten</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Leider ist dein Gerät nicht mit Exposure Notifications kompatibel.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Leider ist dein Gerät nicht vollständig mit Exposure Notifications kompatibel. Du wirst Warnungen über Risikokontakte erhalten, aber nicht andere Benachrichtigen können.</string>
     <string name="prefcat_exposure_apps_title">Apps, die Exposure Notifications nutzen</string>
     <string name="pref_exposure_collected_rpis_title">Gesammelte IDs</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in den letzten 60 Minuten</string>
     <string name="pref_exposure_advertising_id_title">Aktuell verwendete ID</string>
-    <string name="pref_exposure_app_last_report_title">Letzter Bericht (<xliff:g example="vor 2 Stunden">%1$s</xliff:g>)</string>
+    <string name="prefcat_exposure_app_report_title">Gemeldete Begegnungen</string>
+    <string name="pref_exposure_app_report_updated_title">Aktualisiert: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Kürzer als 5 Minuten</string>
+    <string name="pref_exposure_app_report_entry_time_about">Etwa <xliff:g example="13">%1$d</xliff:g> Minuten</string>
+    <string name="pref_exposure_app_report_entry_distance_close">nahe Begegnung</string>
+    <string name="pref_exposure_app_report_entry_distance_far">entfernte Begegnung</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g> Diagnoseschlüssel verarbeitet.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">Keine Risiko-Begegnung erfasst.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_prefix"><xliff:g example="3">%1$d</xliff:g> Risiko-Begegnungen:</string>
@@ -20,9 +30,14 @@
     <string name="pref_exposure_app_api_usage_title">Nutzung der API in den letzten 14 Tagen</string>
     <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> Aufrufe von <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
     <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> gesammelte IDs</string>
-    <string name="pref_exposure_rpi_delete_all_title">Alle gesammelten IDs löschen</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Keine Daten</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs pro Stunde</string>
+    <string name="pref_exposure_rpi_delete_all_title">Löschen</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Alle gesammelten IDs löschen</string>
     <string name="pref_exposure_rpi_delete_all_warning">Nach dem Löschen der gesammelten IDs kannst du nicht mehr informiert werden, falls einer deiner Kontakte der letzten 14 Tage positiv getested wurde.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Trotzdem löschen</string>
+    <string name="pref_exposure_rpi_export_title">Exportieren</string>
+    <string name="pref_exposure_rpi_export_summary">Exportiere gesammelte IDs zur weiteren Analyse mit einer anderen App.</string>
     <string name="pref_exposure_info_summary">"Die Exposure Notifications API ermöglicht es Apps, dich zu warnen, falls du Kontakt zu einer positiv getesteten Person hattest.
 
 Das Datum, die Zeitdauer und die Signalstärke, die dem Kontakt zugeordnet sind, werden mit der zugehörigen App geteilt."</string>
@@ -46,4 +61,9 @@ Das Datum, die Zeitdauer und die Signalstärke, die einem Kontakt zugeordnet wur
 
 Deine Identität oder das Testergebnis werden nicht geteilt."</string>
     <string name="exposure_confirm_keys_button">Teilen</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> benötigt zusätzliche Berechtigungen.</string>
+    <string name="exposure_confirm_permission_button">Erteilen</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth muss eingeschaltet sein.</string>
+    <string name="exposure_confirm_location_description">Standortzugriff muss eingeschaltet sein.</string>
+    <string name="exposure_confirm_button">Aktivieren</string>
 </resources>

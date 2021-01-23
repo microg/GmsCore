@@ -46,7 +46,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="perm_extended_access_label">Accès étendu aux services Google</string>
 
     <string name="service_name_checkin">Enregistrement du terminal auprès de Google</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Désactivé</string>
@@ -107,7 +107,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Optimisations de la batterie activées</string>
-    <string name="cond_gcm_bat_summary">Vous avez activé Google Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services Core. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
+    <string name="cond_gcm_bat_summary">Vous avez activé Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services Core. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
     <string name="cond_gcm_bat_action">Désactiver les optimisations de la batterie</string>
     <string name="cond_perm_title">Autorisations manquantes</string>
 
@@ -122,13 +122,13 @@ Ceci peut prendre plusieurs minutes."</string>
 
     <string name="pref_more_settings">Plus</string>
 
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging est un fournisseur de notifications push utilisé par beaucoup d’applications tierces. Pour l’utiliser vous devez activer l’enregistrement du terminal.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging est un fournisseur de notifications push utilisé par beaucoup d’applications tierces. Pour l’utiliser vous devez activer l’enregistrement du terminal.</string>
     <string name="pref_gcm_heartbeat_title">Intervalle des signaux de présence Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">L’intervalle en secondes auquel le système signale sa présence aux serveurs de Google. Augmenter ce nombre réduira la consommation de batterie mais peu induire un délai dans la réception des messages push.\nDéprécié, sera remplacé dans une prochaine version.</string>
-    <string name="pref_gcm_apps_title">Applications utilisant Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">Liste des applications actuellement enregistrées auprès de Google Cloud Messaging.</string>
+    <string name="pref_gcm_apps_title">Applications utilisant Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Liste des applications actuellement enregistrées auprès de Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirmation pour les nouvelles applications</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Demander avant d’enregistrer une nouvelle application auprès de Google Cloud Messaging</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Demander avant d’enregistrer une nouvelle application auprès de Cloud Messaging</string>
     <string name="pref_gcm_ping_interval">Intervalle de ping : <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">À propos de microG Services Core</string>

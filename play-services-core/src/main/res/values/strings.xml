@@ -56,7 +56,7 @@ This can take a couple of minutes."</string>
     <string name="perm_provision_description">Allows the app to configure microG services without user interaction</string>
 
     <string name="service_name_checkin">Google device registration</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
     <string name="service_status_disabled">Disabled</string>
@@ -119,7 +119,7 @@ This can take a couple of minutes."</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
-    <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
+    <string name="cond_gcm_bat_summary">You enabled Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
     <string name="cond_gcm_bat_action">Ignore optimizations</string>
     <string name="cond_perm_title">Permission missing</string>
 
@@ -144,11 +144,11 @@ This can take a couple of minutes."</string>
 
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Add Google account</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
     <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.\nDeprecated, will be replaced in future release.</string>
-    <string name="pref_gcm_apps_title">Apps using Google Cloud Messaging</string>
-    <string name="pref_gcm_apps_summary">List of apps currently registered for Google Cloud Messaging.</string>
+    <string name="pref_gcm_apps_title">Apps using Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">List of apps currently registered for Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>

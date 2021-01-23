@@ -25,7 +25,7 @@ import com.google.android.gms.maps.internal.IProjectionDelegate
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.VisibleRegion
 import com.mapbox.mapboxsdk.maps.Projection
-import org.microg.gms.kotlin.unwrap
+import com.google.android.gms.dynamic.unwrap
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 import kotlin.math.roundToInt

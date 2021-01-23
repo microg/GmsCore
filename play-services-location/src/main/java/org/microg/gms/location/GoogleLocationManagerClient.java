@@ -46,7 +46,7 @@ public abstract class GoogleLocationManagerClient extends GmsClient<IGoogleLocat
             throws RemoteException {
         Bundle bundle = new Bundle();
         bundle.putString("client_name", "locationServices");
-        broker.getGoogleLocationManagerService(callbacks, Constants.MAX_REFERENCE_VERSION,
+        broker.getGoogleLocationManagerService(callbacks, Constants.GMS_VERSION_CODE,
                 getContext().getPackageName(), bundle);
     }
 }

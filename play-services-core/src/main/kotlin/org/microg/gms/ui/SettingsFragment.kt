@@ -37,7 +37,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openUnifiedNlpSettings)
             true
         }
-        findPreference<Preference>(PREF_EXPOSURE)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        findPreference<Preference>(PREF_EXPOSURE)?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), NearbyPreferencesIntegration.exposureNotificationNavigationId)
             true
         }
@@ -71,8 +71,9 @@ class SettingsFragment : ResourceSettingsFragment() {
         val backendCount = UnifiedLocationClient[requireContext()].getLocationBackends().size + UnifiedLocationClient[requireContext()].getGeocoderBackends().size
         findPreference<Preference>(PREF_UNIFIEDNLP)!!.summary = resources.getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount);
 
-        findPreference<Preference>(PREF_EXPOSURE)!!.isVisible = NearbyPreferencesIntegration.isAvailable
-        findPreference<Preference>(PREF_EXPOSURE)!!.summary = NearbyPreferencesIntegration.getExposurePreferenceSummary(requireContext())
+        findPreference<Preference>(PREF_EXPOSURE)?.isVisible = NearbyPreferencesIntegration.isAvailable
+        findPreference<Preference>(PREF_EXPOSURE)?.icon = NearbyPreferencesIntegration.getIcon(requireContext())
+        findPreference<Preference>(PREF_EXPOSURE)?.summary = NearbyPreferencesIntegration.getExposurePreferenceSummary(requireContext())
     }
 
     companion object {

@@ -73,7 +73,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.MAX_REFERENCE_VERSION;
+import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -463,7 +463,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final int getPlayServicesVersionCode() {
-            return MAX_REFERENCE_VERSION;
+            return GMS_VERSION_CODE;
         }
 
         @JavascriptInterface

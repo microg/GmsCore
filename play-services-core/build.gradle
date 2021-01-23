@@ -45,6 +45,7 @@ dependencies {
     implementation project(':play-services-base-core-ui')
     implementation project(':play-services-conscrypt-provider-core')
     implementation project(':play-services-location-core')
+    implementation project(':play-services-vision-core')
     withNearbyImplementation project(':play-services-nearby-core')
     withNearbyImplementation project(':play-services-nearby-core-ui')
     implementation project(':play-services-core-proto')

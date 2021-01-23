@@ -5,6 +5,7 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference
@@ -12,17 +13,27 @@
             android:key="pref_exposure_app_open"
             android:title="@string/open_app" />
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
-        <org.microg.gms.ui.TextPreference
-            android:key="pref_exposure_app_report"
-            android:selectable="false"
-            tools:summary="@string/pref_exposure_app_last_report_summary_encounters_no"
-            tools:title="@string/pref_exposure_app_last_report_title" />
+    <PreferenceCategory
+        android:key="prefcat_exposure_app_report"
+        android:title="@string/prefcat_exposure_app_report_title">
+        <Preference
+            android:enabled="false"
+            android:key="pref_exposure_app_report_none"
+            android:order="0"
+            android:title="@string/list_no_item_none"
+            app:isPreferenceVisible="false"
+            tools:isPreferenceVisible="true" />
+        <Preference
+            android:enabled="false"
+            android:key="pref_exposure_app_report_updated"
+            android:order="100"
+            android:summary="@string/pref_exposure_app_last_report_summary_diagnosis_keys"
+            android:title="@string/pref_exposure_app_report_updated_title" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference
+            android:enabled="false"
             android:key="pref_exposure_app_api_usage"
-            android:selectable="false"
             android:title="@string/pref_exposure_app_api_usage_title"
             tools:summary="@string/pref_exposure_app_api_usage_summary_line" />
     </PreferenceCategory>

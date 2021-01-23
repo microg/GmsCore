@@ -6,6 +6,7 @@
 package org.microg.gms.nearby.exposurenotification
 
 import android.annotation.TargetApi
+import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -34,31 +35,32 @@ private const val AES_BLOCK_SIZE = 16
 
 private const val AEM_ALGORITHM = "AES/CTR/NoPadding"
 
-val currentIntervalNumber: Long
-    get() = floor(System.currentTimeMillis() / 1000.0 / ROLLING_WINDOW_LENGTH).toLong()
+val currentIntervalNumber: Int
+    get() = floor(System.currentTimeMillis() / 1000.0 / ROLLING_WINDOW_LENGTH).toInt()
 
-val currentRollingStartNumber: Long
-    get() = floor(currentIntervalNumber.toDouble() / ROLLING_PERIOD).toLong() * ROLLING_PERIOD
+val currentDayRollingStartNumber: Int
+    get() = getDayRollingStartNumber(currentIntervalNumber)
+
+fun getDayRollingStartNumber(intervalNumber: Int) = (floor(intervalNumber.toDouble() / ROLLING_PERIOD).toLong() * ROLLING_PERIOD).toInt()
+fun getPeriodInDay(intervalNumber: Int) = intervalNumber - getDayRollingStartNumber(intervalNumber)
 
 val nextKeyMillis: Long
     get() {
-        val currentWindowStart = currentIntervalNumber * ROLLING_WINDOW_LENGTH * 1000
-        val currentWindowEnd = currentWindowStart + ROLLING_WINDOW_LENGTH * 1000
+        val currentWindowStart = currentIntervalNumber.toLong() * ROLLING_WINDOW_LENGTH_MS
+        val currentWindowEnd = currentWindowStart + ROLLING_WINDOW_LENGTH_MS
         return (currentWindowEnd - System.currentTimeMillis()).coerceAtLeast(0)
     }
 
-fun TemporaryExposureKey.TemporaryExposureKeyBuilder.setCurrentRollingStartNumber(): TemporaryExposureKey.TemporaryExposureKeyBuilder =
-        setRollingStartIntervalNumber(currentRollingStartNumber.toInt())
-
-fun TemporaryExposureKey.TemporaryExposureKeyBuilder.generate(): TemporaryExposureKey.TemporaryExposureKeyBuilder {
+fun generateTemporaryExposureKey(intervalNumber: Int): TemporaryExposureKey.TemporaryExposureKeyBuilder = TemporaryExposureKey.TemporaryExposureKeyBuilder().apply {
     var keyData = ByteArray(16)
     SecureRandom().nextBytes(keyData)
     setKeyData(keyData)
-    setRollingPeriod(ROLLING_PERIOD)
-    return this
+    setRollingStartIntervalNumber(intervalNumber)
+    setRollingPeriod((ROLLING_PERIOD - getPeriodInDay(intervalNumber)))
 }
 
-fun generateCurrentTemporaryExposureKey(): TemporaryExposureKey = TemporaryExposureKey.TemporaryExposureKeyBuilder().generate().setCurrentRollingStartNumber().build()
+fun generateCurrentDayTemporaryExposureKey(): TemporaryExposureKey = generateTemporaryExposureKey(currentDayRollingStartNumber).build()
+fun generateIntraDayTemporaryExposureKey(intervalNumber: Int = currentIntervalNumber): TemporaryExposureKey = generateTemporaryExposureKey(intervalNumber).build()
 
 @TargetApi(21)
 fun TemporaryExposureKey.generateRpiKey(): SecretKeySpec {

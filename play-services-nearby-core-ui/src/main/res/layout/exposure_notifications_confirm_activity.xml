@@ -5,6 +5,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,65 +24,204 @@
         android:textColor="?android:attr/textColorPrimary"
         tools:text="@string/exposure_confirm_start_title" />
 
-    <TextView
-        android:id="@android:id/summary"
-        style="@style/TextAppearance.AppCompat.Small"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        tools:text="Your phone needs to use Bluetooth to securely collect and share IDs with other phones that are nearby.\n\nCorona Warn can notify you if you were exposed to someone who reported to be diagnosed positive.\n\nThe date, duration, and signal strength associated with an exposure will be shared with the app." />
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/grant_permission_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="?attr/colorAccent"
-        android:clipToPadding="false"
-        android:padding="16dp"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <TextView
-            android:id="@+id/grant_permission_summary"
-            style="@style/TextAppearance.AppCompat.Small.Inverse"
-            android:layout_width="0dip"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/exposure_confirm_permission_description" />
+            android:animateLayoutChanges="true"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/grant_permission_button"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginRight="-8dp"
-            android:text="@string/exposure_confirm_permission_button"
-            android:textColor="?android:attr/textColorPrimaryInverse" />
-    </LinearLayout>
+            <TextView
+                android:id="@android:id/summary"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                tools:text="Your phone needs to use Bluetooth to securely collect and share IDs with other phones that are nearby.\n\nCorona Warn can notify you if you were exposed to someone who reported to be diagnosed positive.\n\nThe date, duration, and signal strength associated with an exposure will be shared with the app." />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:paddingLeft="8dp"
-        android:paddingTop="0dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="8dp">
+            <RelativeLayout
+                android:id="@+id/grant_permission_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/colorAccent"
+                android:clipToPadding="false"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-        <Button
-            android:id="@android:id/button2"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/cancel" />
+                <ImageView
+                    android:id="@+id/grant_permission_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignTop="@id/grant_permission_summary"
+                    android:layout_alignBottom="@id/grant_permission_summary"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_alert"
+                    app:tint="?attr/colorPrimary" />
 
-        <Button
-            android:id="@android:id/button1"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/ok" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/grant_permission_summary"
+                    style="@style/TextAppearance.AppCompat.Small.Inverse"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@id/grant_permission_icon"
+                    android:layout_weight="1"
+                    android:text="@string/exposure_confirm_permission_description" />
+
+                <Button
+                    android:id="@+id/grant_permission_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/grant_permission_summary"
+                    android:layout_alignLeft="@id/grant_permission_summary"
+                    android:layout_marginLeft="-16dp"
+                    android:text="@string/exposure_confirm_permission_button"
+                    android:textColor="?android:attr/textColorPrimaryInverse" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/enable_bluetooth_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/colorAccent"
+                android:clipToPadding="false"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/enable_bluetooth_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignTop="@id/enable_bluetooth_summary"
+                    android:layout_alignBottom="@id/enable_bluetooth_summary"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_bluetooth_off"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/enable_bluetooth_summary"
+                    style="@style/TextAppearance.AppCompat.Small.Inverse"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@id/enable_bluetooth_icon"
+                    android:layout_weight="1"
+                    android:text="@string/exposure_confirm_bluetooth_description" />
+
+                <Button
+                    android:id="@+id/enable_bluetooth_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/enable_bluetooth_summary"
+                    android:layout_alignLeft="@id/enable_bluetooth_summary"
+                    android:layout_marginLeft="-16dp"
+                    android:text="@string/exposure_confirm_button"
+                    android:textColor="?android:attr/textColorPrimaryInverse" />
+
+                <ProgressBar
+                    android:id="@+id/enable_bluetooth_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/enable_bluetooth_button"
+                    android:layout_alignTop="@id/enable_bluetooth_button"
+                    android:layout_alignRight="@id/enable_bluetooth_button"
+                    android:layout_alignBottom="@id/enable_bluetooth_button"
+                    android:indeterminate="true"
+                    android:indeterminateTint="?attr/colorPrimary"
+                    android:padding="8dp"
+                    android:visibility="invisible" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/enable_location_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/colorAccent"
+                android:clipToPadding="false"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/enable_location_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignTop="@id/enable_location_summary"
+                    android:layout_alignBottom="@id/enable_location_summary"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_location_off"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/enable_location_summary"
+                    style="@style/TextAppearance.AppCompat.Small.Inverse"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@id/enable_location_icon"
+                    android:layout_weight="1"
+                    android:text="@string/exposure_confirm_location_description" />
+
+                <Button
+                    android:id="@+id/enable_location_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/enable_location_summary"
+                    android:layout_alignLeft="@id/enable_location_summary"
+                    android:layout_marginLeft="-16dp"
+                    android:text="@string/exposure_confirm_button"
+                    android:textColor="?android:attr/textColorPrimaryInverse" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:paddingLeft="8dp"
+                android:paddingTop="0dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp">
+
+                <Button
+                    android:id="@android:id/button2"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel" />
+
+                <Button
+                    android:id="@android:id/button1"
+                    style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

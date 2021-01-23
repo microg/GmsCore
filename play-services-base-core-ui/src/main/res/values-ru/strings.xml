@@ -8,4 +8,7 @@
     <string name="menu_advanced">Дополнительно</string>
 
     <string name="list_no_item_none">Пусто</string>
+    <string name="list_item_see_all">Показать всё</string>
+
+    <string name="open_app">открыть</string>
 </resources>

@@ -35,6 +35,7 @@ import org.microg.gms.common.PackageUtils;
 
 import java.util.Arrays;
 
+import static org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE;
 import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_ACCOUNTS;
 import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_CLEAR_PASSWORD;
 import static org.microg.gms.auth.AuthConstants.PROVIDER_METHOD_CLEAR_PASSWORD;
@@ -65,15 +66,20 @@ public class AccountContentProvider extends ContentProvider {
             if (getContext().checkCallingPermission(Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED)
                 throw new SecurityException("Access denied, missing GET_ACCOUNTS or EXTENDED_ACCESS permission");
         }
-        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method) && AuthConstants.DEFAULT_ACCOUNT_TYPE.equals(arg)) {
+        if (PROVIDER_METHOD_GET_ACCOUNTS.equals(method)) {
             Bundle result = new Bundle();
-            AccountManager am = AccountManager.get(getContext());
             Account[] accounts = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                accounts = am.getAccountsByTypeForPackage(arg, packageName);
+            if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
+                AccountManager am = AccountManager.get(getContext());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    accounts = am.getAccountsByTypeForPackage(arg, packageName);
+                }
+                if (accounts == null || accounts.length == 0) {
+                    accounts = am.getAccountsByType(arg);
+                }
             }
-            if (accounts == null || accounts.length == 0) {
-                accounts = am.getAccountsByType(arg);
+            if (accounts == null) {
+                accounts = new Account[0];
             }
             result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
             return result;
