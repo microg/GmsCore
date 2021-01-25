@@ -16,4 +16,20 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    </resources>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> subservo agordita</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> subservoj agorditaj</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> registrita apo</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registritaj apoj</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Necesas doni la permeson por ke la baza servo de microG ĝuste funkciu.</item>
+        <item quantity="other">Necesas doni la permesojn por ke la baza servo de microG ĝuste funkciu.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Necesa permeso mankas</item>
+        <item quantity="other">Necesaj permesoj mankas</item>
+    </plurals>
+</resources>
