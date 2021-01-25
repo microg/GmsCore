@@ -25,9 +25,20 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce wykorzystać:</string>
     <string name="account_manager_title">Zarządzanie kontem Google</string>
     <string name="sorry">Przepraszamy…</string>
-    <string name="no_network_error_desc">Nie masz połączenia z siecią. To może być chwilowy problem lub Twoje urządzenie nie posiada aktualnych usług wykorzystywania danych. Połącz się z Wi-Fi lub siecią mobilną i spróbuj ponownie.</string>
-    <string name="auth_general_error_desc">"Wystąpił błąd podczas łączenia z serwerami Google. Spróbuj ponownie później."</string>
-    <string name="auth_finalize">Twoje urządzenie łączy się z Google, aby zapisać informacje o koncie. To zajmie kilka minut.</string>
+    <string name="auth_before_connect">Aplikacja na Twoim urządzeniu próbuje zalogować się do konta Google.\n\nJeżeli jest to celowe, użyj przycisku <b>Zaloguj się</b>, aby przejść do strony logowania Google, w przeciwnym razie użyj przycisku <b>Anuluj</b>, aby powrócić do aplikacji, która wywołała ten komunikat.</string>
+    <string name="auth_sign_in">Zaloguj się</string>
+    <string name="auth_connecting">"Twoje urządzenie łączy się z serwerami Google celem zalogowania Cię.
+ 
+Może to potrwać kilka sekund."</string>
+    <string name="no_network_error_desc">"Nie masz połączenia z siecią.
+ 
+To może być chwilowy problem lub Twoje urządzenie nie posiada aktualnych usług wykorzystywania danych. Połącz się z Wi-Fi lub siecią mobilną i spróbuj ponownie."</string>
+    <string name="auth_general_error_desc">"Wystąpił błąd podczas łączenia z serwerami Google.
+ 
+ Spróbuj ponownie później."</string>
+    <string name="auth_finalize">"Twoje urządzenie łączy się z Google, aby zapisać informacje o koncie.
+ 
+To zajmie kilka minut."</string>
     <string name="allow">Zezwól</string>
     <string name="deny">Zabroń</string>
     <string name="auth_notification_title">Wymagana autoryzacja</string>
@@ -156,8 +167,6 @@
     <string name="pref_snet_self_signed_summary">Zamiast sprawdzać serwer, podpisuj odpowiedzi SafetyNet lokalnie używając samo-podpisanego certyfikatu. Większość aplikacji odmówi użycia samo-podpisanych odpowiedzi.</string>
     <string name="gms_settings_summary">Konfiguracja usług microG.</string>
     <string name="pref_add_account_summary">Dodaj konto Google</string>
-    <string name="auth_before_connect">Aplikacja na Twoim urządzeniu próbuje zalogować się do konta Google.\n\nJeżeli jest to celowe, użyj przycisku <b>Zaloguj się</b>, aby przejść do strony logowania Google, w przeciwnym razie użyj przycisku <b>Anuluj</b>, aby powrócić do aplikacji, która wywołała ten komunikat.</string>
-    <string name="auth_sign_in">Zaloguj się</string>
     <string name="perm_provision_label">konfiguracja usług microG</string>
     <string name="perm_provision_description">Zezwala aplikacji skonfigurować usługi microG bez udziału użytkownika</string>
     <string name="service_status_enabled_short">Wł.</string>
