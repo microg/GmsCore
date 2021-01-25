@@ -101,7 +101,7 @@
     <string name="permission_scope_www.googleapis.com_auth_analytics">vidi kaj administri viajn datumojn de Google Analytics</string>
     <string name="permission_scope_www.googleapis.com_auth_androidpublisher">aliro al Google Play Android Developer</string>
     <string name="permission_scope_www.googleapis.com_auth_appengine.admin">amplekso de App Engine Admin</string>
-    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">skrib-/leg-aliron al Groups Migration API</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">skrib-/leg-aliro al Groups Migration API</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">vidi kaj administri agordojn de Google Apps Group</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">skrib-/leg-aliro al License Manager API</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order">skri-/leg-aliro por vendistestroj kaj uzantoj dum testi en la izolejo; aŭ skrib-/leg-aliro dum senperaj API-petoj</string>
@@ -172,7 +172,7 @@
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">vidi kaj administri viajn havaĵojn kaj kunligita enhavo en YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">vidi vian YouTube-konton</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">administri viajn filmetojn ĉe YouTube</string>
-    <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">vidi mon‑raportojn YouTube Analytics por via enhavo ĉe YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">vidi financajn raportojn YouTube Analytics por via enhavo ĉe YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">vidi viajn raportojn YouTube Analytics por via enhavo ĉe YouTube</string>
 
 </resources>
