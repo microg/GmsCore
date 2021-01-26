@@ -26,9 +26,9 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> volas uzi:</string>
     <string name="account_manager_title">Administrilo de Google-kontoj</string>
     <string name="sorry">Ho ne…</string>
-    <string name="auth_before_connect">"Aplikaĵo en via aparato provas ensaluti en Google-konto.
+    <string name="auth_before_connect">"Aplikaĵo en via aparato provas ensaluti en Google-konton.
  
-Se vi volas fari tion ĉi, uzu la butonon <b>Ensaluti</b> por malfermi la ensalut‑paĝon de Google, aliokaze premu <b>nuligi</b> por reveni al la aplikaĵo, kiu igis tiun ĉi fenestron montri."</string>
+Se vi volas fari tion ĉi, uzu la butonon <b>ensaluti</b> por malfermi la ensalut‑paĝon de Google, aliokaze premu <b>nuligi</b> por reveni al la aplikaĵo, kiu igis tiun ĉi fenestron montri."</string>
     <string name="auth_sign_in">Ensaluti</string>
     <string name="auth_connecting">"Via aparato konektas al Google-serviloj por ensaluti.
  
