@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_exposure">Sciigoj pri Infektrisko</string>
+    <string name="pref_exposure_enable_info_summary">Por aktivigi la eblaĵon Sciigoj pri Infektrisko (GAEN), malfermu iun aplikaĵon subtenantan tiun ĉi eblaĵon.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Aktivigi Bludenton</string>
+    <string name="pref_exposure_error_location_off_title">Malfermi agordojn pri pozicio</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Bedaŭrinde via aparato ne estas kongrua kun Sciigoj pri Infektrisko.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Bedaŭrinde via aparato estas nur parte kongrua kun Sciigoj pri Infektrisko. Vi ricevos sciigojn pri eblajn riskajn kontaktojn, sed ne povos sciigi aliulojn.</string>
+    <string name="prefcat_exposure_apps_title">Aplikaĵoj uzantaj Sciigojn pri Infektrisko</string>
+    <string name="pref_exposure_collected_rpis_title">Kolektitaj identigiloj</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> identigiloj antaŭhore</string>
+    <string name="pref_exposure_advertising_id_title">Nune anoncata identigilo</string>
+    <string name="prefcat_exposure_app_report_title">Raportitaj infektriskoj</string>
+    <string name="pref_exposure_app_report_updated_title">Aktualiĝo: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Pli frue ol 5 minutoj</string>
+    <string name="pref_exposure_app_report_entry_time_about">Proksimume antaŭ <xliff:g example="13">%1$d</xliff:g> minutoj</string>
+    <string name="pref_exposure_app_report_entry_distance_close">proksima infektrisko</string>
+    <string name="pref_exposure_app_report_entry_distance_far">malproksima infektrisko</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Pritraktis <xliff:g example="121031">%1$d</xliff:g> diagnozitaj ŝlosiloj.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Neniu raportita infektita kontakto.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Raportis <xliff:g example="3">%1$d</xliff:g> infektitajn kontaktojn:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, risk‑poentoj <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Rimarko: risk‑poentoj estas difinataj de la aplikaĵo. Altaj valoroj povas signifi malaltan riskon aŭ inverse.</string>
+    <string name="pref_exposure_app_api_usage_title">Uzado de API dum la antaŭaj 14 tagoj</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> petoj al <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title">Kolektitaj identigiloj: <xliff:g example="230">%1$d</xliff:g></string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Neniu identigilo</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> identigiloj hore</string>
+    <string name="pref_exposure_rpi_delete_all_title">Forigi</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Forigi ĉiujn kolektitajn identigilojn</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Forigo de ĉiuj kolektitaj identigiloj malebligos al vi sciiĝi pri renkontitaj diagnozitaj kontaktoj dum la antaŭaj 14 tagoj.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">FORIGI</string>
+    <string name="pref_exposure_rpi_export_title">Elporti</string>
+    <string name="pref_exposure_rpi_export_summary">Elporti kolektitajn identigilojn por pli profunda analizo per alia aplikaĵo.</string>
+    <string name="pref_exposure_info_summary">"La API Sciigoj pri Infektrisko ebligas al aplikaĵoj sciigi vin pri renkonti iun, kiu estis diagnozita kiel infektita.
+
+Tempo, daŭro kaj signal‑forteco de renkontita kontakto estos elportitaj al la difinita aplikaĵo."</string>
+    <string name="pref_exposure_rpis_details_summary">"Kiam la API Sciigoj pri Infektriskoj estas aktiva, via aparato pasive kolektas identigilojn «Rolling Proximity Identifier» de proksimaj aparatoj.
+
+Kiam posedanto de aparato raportas sin esti infektita, liaj identigiloj povas esti kunhavigitaj. Via aparato kontrolas, ĉu la konataj identigiloj de infektantoj kongruas kun kolektitaj identigiloj kaj sekve kalkulas riskon de infekto."</string>
+
+    <string name="exposure_enable_switch">Uzi Sciigojn pri Infektrisko</string>
+    <string name="exposure_confirm_start_title">Ĉu aktivigi Sciigojn pri Infektrisko?</string>
+    <string name="exposure_confirm_start_summary">"Via telefono bezonas uzi Bludenton por sekure kolekti kaj anonci identigilojn kun telefonoj de proksimaj personoj.
+
+La aplikaĵo <xliff:g example="Corona-Warn">%1$s</xliff:g> povas sciigi vin pri renkonti iun, kiu estis diagnozita kiel infektita.
+
+Tempo, daŭro kaj signal‑forteco de renkontita kontakto estos elportitaj al la aplikaĵo."</string>
+    <string name="exposure_confirm_start_button">Aktivigi</string>
+    <string name="exposure_confirm_stop_title">Ĉu malaktivigi Sciigojn pri Infektrisko?</string>
+    <string name="exposure_confirm_stop_summary">Post malaktivigi Sciigojn pri Infektrisko, vi ne estos sciigita pri renkonti kontakton, kiu estis diagnozita kiel infektita.</string>
+    <string name="exposure_confirm_stop_button">Malaktivigi</string>
+    <string name="exposure_confirm_keys_title">Ĉu kunhavigi viajn identigilojn al <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
+    <string name="exposure_confirm_keys_summary">"Viaj identigiloj de la antaŭaj 14 tagoj estos uzataj por helpi sciigi aliulojn – kiuj vi estis proksime – pri ebla infekto.
+
+Via persona identeco aŭ test‑rezulto ne estos sendita al aliaj homoj."</string>
+    <string name="exposure_confirm_keys_button">Kunhavigi</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> postulas pliajn permesojn.</string>
+    <string name="exposure_confirm_permission_button">Doni</string>
+    <string name="exposure_confirm_bluetooth_description">Necesas aktivigi Bludenton.</string>
+    <string name="exposure_confirm_location_description">Aliro al via pozicio estas necesa.</string>
+    <string name="exposure_confirm_button">Aktivigi</string>
+</resources>
