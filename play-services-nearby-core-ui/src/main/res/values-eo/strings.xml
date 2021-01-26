@@ -50,7 +50,7 @@
     <string name="pref_exposure_rpi_export_summary">Elporti kolektitajn identigilojn por pli profunda analizo per alia aplikaĵo.</string>
     <string name="pref_exposure_info_summary">"La API Sciigoj pri Infektrisko ebligas al aplikaĵoj sciigi vin pri renkonti iun, kiu estis diagnozita kiel infektita.
 
-Tempo, daŭro kaj signal‑forteco de renkontita kontakto estos elportitaj al la difinita aplikaĵo."</string>
+Tempo, daŭro kaj signal‑forteco de renkontita kontakto estos kunhavigitaj al la difinita aplikaĵo."</string>
     <string name="pref_exposure_rpis_details_summary">"Kiam la API Sciigoj pri Infektriskoj estas aktiva, via aparato pasive kolektas identigilojn «Rolling Proximity Identifier» de proksimaj aparatoj.
 
 Kiam posedanto de aparato raportas sin esti infektita, liaj identigiloj povas esti kunhavigitaj. Via aparato kontrolas, ĉu la konataj identigiloj de infektantoj kongruas kun kolektitaj identigiloj kaj sekve kalkulas riskon de infekto."</string>
@@ -61,7 +61,7 @@ Kiam posedanto de aparato raportas sin esti infektita, liaj identigiloj povas es
 
 La aplikaĵo <xliff:g example="Corona-Warn">%1$s</xliff:g> povas sciigi vin pri renkonti iun, kiu estis diagnozita kiel infektita.
 
-Tempo, daŭro kaj signal‑forteco de renkontita kontakto estos elportitaj al la aplikaĵo."</string>
+Tempo, daŭro kaj signal‑forteco de renkontita kontakto estos kunhavigitaj al la aplikaĵo."</string>
     <string name="exposure_confirm_start_button">Aktivigi</string>
     <string name="exposure_confirm_stop_title">Ĉu malaktivigi Sciigojn pri Infektrisko?</string>
     <string name="exposure_confirm_stop_summary">Post malaktivigi Sciigojn pri Infektrisko, vi ne estos sciigita pri renkonti kontakton, kiu estis diagnozita kiel infektita.</string>
