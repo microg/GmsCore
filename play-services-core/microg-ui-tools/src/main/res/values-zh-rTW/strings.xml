@@ -33,7 +33,7 @@
     <string name="self_check_resolution_permission">按這裡給權限。不允許權限可能導致程式運作不正常。</string>
 
     <string name="about_root_title">microG UI Demo</string>
-    <string name="about_root_summary">大綱</string>
+    <string name="about_root_summary">概要</string>
     <string name="about_root_version">版本 v0.1.0</string>
     <string name="about_root_libraries">使用的程式庫</string>
 
