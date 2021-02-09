@@ -57,6 +57,17 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             Pair("ch.admin.bag.dp3t",
                     "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEK2k9nZ8guo7JP2ELPQXnUkqDyjjJmYmpt9Zy0HPsiGXCdI3SFmLr204KNzkuITppNV5P7+bXRxiiY04NMrEITg=="),
         )
+
+    // Back-end public key for this package
+    private val backendPublicKey = backendPubKeyForPackage[packageName]?.let {
+        try {
+            KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(Base64.decode(it, Base64.DEFAULT)))
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to retrieve back-end public key for ${packageName}: " + e.message)
+            null
+        }
+    }
+
     // Table of supported signature algorithms for the diagnosed TEKs.
     // The table is indexed by ASN.1 OIDs as specified in https://tools.ietf.org/html/rfc5758#section-3.2
     private val sigAlgoForOid = mapOf<String, Signature>(
@@ -358,9 +369,9 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 var newKeys = if (params.keys != null) database.finishSingleMatching(tid) else 0
                 for ((cacheFile, hash) in todoKeyFiles) {
                     withContext(Dispatchers.IO) {
-                        if (!verifyKeyFile(cacheFile)) {
-                            // FIXME: do something, perhaps reject according to some user setting
-                            Log.w(TAG, "Using non-verified key file")
+                        if (backendPublicKey != null && !verifyKeyFile(cacheFile)) {
+                            Log.w(TAG, "Skipping non-verified key file")
+                            return@withContext
                         }
                         try {
                             ZipFile(cacheFile).use { zip ->
@@ -435,10 +446,6 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     private fun verifyKeyFile(file: File): Boolean {
         try {
-            val publicKeyData = backendPubKeyForPackage.get(packageName) ?: throw Exception("Public key for ${packageName} is not available")
-            val publicKeyBytes: ByteArray = Base64.decode(publicKeyData, Base64.DEFAULT)
-            val publicKey = KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(publicKeyBytes))
-
             ZipFile(file).use { zip ->
                 var dataEntry: ZipEntry? = null
                 var sigEntry: ZipEntry? = null
@@ -475,7 +482,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
                     val signature = sig.signature?.toByteArray() ?: throw Exception("Signature contents is missing")
                     val sigVerifier = sigAlgoForOid.get(sigInfo.signature_algorithm) ?: throw Exception("Signature algorithm not supported: ${sigInfo.signature_algorithm}")
-                    sigVerifier.initVerify(publicKey)
+                    sigVerifier.initVerify(backendPublicKey)
 
                     val stream = zip.getInputStream(dataEntry)
                     val buf = ByteArray(1024)
