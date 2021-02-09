@@ -445,8 +445,18 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
                 for (entry in zip.entries()) {
                     when (entry.name) {
-                        "export.bin" -> dataEntry = entry
-                        "export.sig" -> sigEntry = entry
+                        "export.bin" ->
+                            if (dataEntry != null) {
+                                throw Exception("Zip archive contains more than one 'export.bin' entry")
+                            } else {
+                                dataEntry = entry
+                            }
+                        "export.sig" ->
+                            if (sigEntry != null) {
+                                throw Exception("Zip archive contains more than one 'export.sig' entry")
+                            } else {
+                                sigEntry = entry
+                            }
                         else -> throw Exception("Unexpected entry in zip archive: ${entry.name}")
                     }
                 }
