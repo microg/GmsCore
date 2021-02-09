@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.*
 import android.location.LocationManager
 import android.os.*
+import android.util.Base64
 import android.util.Log
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.Lifecycle
@@ -26,18 +27,42 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.nearby.exposurenotification.Constants.*
+import org.microg.gms.nearby.exposurenotification.proto.TEKSignatureList
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
 import org.microg.gms.utils.warnOnTransactionIssues
 import java.io.File
 import java.io.InputStream
+import java.security.KeyFactory
 import java.security.MessageDigest
+import java.security.Signature
+import java.security.spec.X509EncodedKeySpec
+import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class ExposureNotificationServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String) : INearbyExposureNotificationService.Stub(), LifecycleOwner {
+
+    // Table of back-end public keys, used to verify the signature of the diagnosed TEKs.
+    // The table is indexed by package names.
+    private val backendPubKeyForPackage = mapOf<String, String>(
+            Pair("ch.admin.bag.dp3t.dev",
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ=="),
+            Pair("ch.admin.bag.dp3t.test",
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ=="),
+            Pair("ch.admin.bag.dp3t.abnahme",
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ=="),
+            Pair("ch.admin.bag.dp3t",
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEK2k9nZ8guo7JP2ELPQXnUkqDyjjJmYmpt9Zy0HPsiGXCdI3SFmLr204KNzkuITppNV5P7+bXRxiiY04NMrEITg=="),
+        )
+    // Table of supported signature algorithms for the diagnosed TEKs.
+    // The table is indexed by ASN.1 OIDs as specified in https://tools.ietf.org/html/rfc5758#section-3.2
+    private val sigAlgoForOid = mapOf<String, Signature>(
+            Pair("1.2.840.10045.4.3.2", Signature.getInstance("SHA256withECDSA")),
+            Pair("1.2.840.10045.4.3.4", Signature.getInstance("SHA512withECDSA")),
+    )
 
     private fun LifecycleCoroutineScope.launchSafely(block: suspend CoroutineScope.() -> Unit): Job = launchWhenStarted { try { block() } catch (e: Exception) { Log.w(TAG, "Error in coroutine", e) } }
 
@@ -333,6 +358,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 var newKeys = if (params.keys != null) database.finishSingleMatching(tid) else 0
                 for ((cacheFile, hash) in todoKeyFiles) {
                     withContext(Dispatchers.IO) {
+                        if (!verifyKeyFile(cacheFile)) {
+                            // FIXME: do something, perhaps reject according to some user setting
+                            Log.w(TAG, "Using non-verified key file")
+                        }
                         try {
                             ZipFile(cacheFile).use { zip ->
                                 for (entry in zip.entries()) {
@@ -402,6 +431,64 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 }
             }
         }
+    }
+
+    private fun verifyKeyFile(file: File): Boolean {
+        try {
+            val publicKeyData = backendPubKeyForPackage.get(packageName) ?: throw Exception("Public key for ${packageName} is not available")
+            val publicKeyBytes: ByteArray = Base64.decode(publicKeyData, Base64.DEFAULT)
+            val publicKey = KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(publicKeyBytes))
+
+            ZipFile(file).use { zip ->
+                var dataEntry: ZipEntry? = null
+                var sigEntry: ZipEntry? = null
+
+                for (entry in zip.entries()) {
+                    when (entry.name) {
+                        "export.bin" -> dataEntry = entry
+                        "export.sig" -> sigEntry = entry
+                        else -> throw Exception("Unexpected entry in zip archive: ${entry.name}")
+                    }
+                }
+                when {
+                    dataEntry == null -> throw Exception("Zip archive does not contain 'export.bin'")
+                    sigEntry == null -> throw Exception("Zip archive does not contain 'export.sin'")
+                }
+
+                val sigStream = zip.getInputStream(sigEntry)
+                val sigList = TEKSignatureList.ADAPTER.decode(sigStream)
+
+                for (sig in sigList.signatures) {
+                    Log.d(TAG, "Verifying signature ${sig.batch_num}/${sig.batch_size}")
+                    val sigInfo = sig.signature_info ?: throw Exception("Signature information is missing")
+                    Log.d(TAG, "Signature info: algo=${sigInfo.signature_algorithm} key={id=${sigInfo.verification_key_id}, version=${sigInfo.verification_key_version}}")
+
+                    val signature = sig.signature?.toByteArray() ?: throw Exception("Signature contents is missing")
+                    val sigVerifier = sigAlgoForOid.get(sigInfo.signature_algorithm) ?: throw Exception("Signature algorithm not supported: ${sigInfo.signature_algorithm}")
+                    sigVerifier.initVerify(publicKey)
+
+                    val stream = zip.getInputStream(dataEntry)
+                    val buf = ByteArray(1024)
+                    var nbRead = 0
+                    while (nbRead != -1) {
+                        nbRead = stream.read(buf)
+                        if (nbRead > 0) {
+                            sigVerifier.update(buf, 0, nbRead)
+                        }
+                    }
+
+                    if (!sigVerifier.verify(signature)) {
+                        throw Exception("Signature does not verify")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Key file verification failed: " + e.message)
+            return false
+        }
+
+        Log.i(TAG, "Key file verification successful")
+        return true
     }
 
     override fun getExposureSummary(params: GetExposureSummaryParams) {
