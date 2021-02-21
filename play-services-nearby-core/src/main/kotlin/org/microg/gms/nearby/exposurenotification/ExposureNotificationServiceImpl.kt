@@ -634,6 +634,20 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
+    override fun requestPreAuthorizedTemporaryExposureKeyHistory(params: RequestPreAuthorizedTemporaryExposureKeyHistoryParams) {
+        // TODO: Proper implementation
+        lifecycleScope.launchSafely {
+            params.callback.onResult(Status.CANCELED)
+        }
+    }
+
+    override fun requestPreAuthorizedTemporaryExposureKeyRelease(params: RequestPreAuthorizedTemporaryExposureKeyReleaseParams) {
+        // TODO: Proper implementation
+        lifecycleScope.launchSafely {
+            params.callback.onResult(Status.CANCELED)
+        }
+    }
+
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
         if (super.onTransact(code, data, reply, flags)) return true
         Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")

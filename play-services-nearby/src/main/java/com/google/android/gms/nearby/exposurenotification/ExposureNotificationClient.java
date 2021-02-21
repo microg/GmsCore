@@ -39,6 +39,12 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
      */
     String ACTION_EXPOSURE_STATE_UPDATED = Constants.ACTION_EXPOSURE_STATE_UPDATED;
     /**
+     * Action broadcast to a client application if {@link #requestPreAuthorizedTemporaryExposureKeyRelease()} has been authorized and the user has unlocked their phone, granting release of their keys after a positive diagnosis.
+     *
+     * This action will include an {@link java.util.ArrayList} of {@link TemporaryExposureKey}s keyed by {@link #EXTRA_TEMPORARY_EXPOSURE_KEY_LIST}.
+     */
+    String ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED = Constants.ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED;
+    /**
      * Action which will be invoked via a BroadcastReceiver when the user modifies the state of exposure notifications via the Google Settings page.
      * {@link #EXTRA_SERVICE_STATE} will be included as part of this broadcast.
      */
@@ -55,6 +61,10 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
      * Boolean extra attached to the {@link #ACTION_SERVICE_STATE_UPDATED} broadcast signifying whether the service is enabled or disabled.
      */
     String EXTRA_SERVICE_STATE = Constants.EXTRA_SERVICE_STATE;
+    /**
+     * Extra included in the {@link #ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED} broadcast, containing an {@link java.util.ArrayList} of {@link TemporaryExposureKey}s.
+     */
+    String EXTRA_TEMPORARY_EXPOSURE_KEY_LIST = Constants.EXTRA_TEMPORARY_EXPOSURE_KEY_LIST;
     /**
      * Extra attached to the {@link #ACTION_EXPOSURE_STATE_UPDATED} broadcast, providing the token associated with the {@link #provideDiagnosisKeys(DiagnosisKeyFileProvider)} request.
      *
@@ -210,6 +220,18 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
      */
     @Deprecated
     Task<Void> provideDiagnosisKeys(List<File> keys, ExposureConfiguration configuration, String token);
+
+    /**
+     * Shows a dialog to the user asking for authorization to get {@link TemporaryExposureKey}s in the background.
+     * <p>
+     * If approved, the client application will be able to call {@link #requestPreAuthorizedTemporaryExposureKeyRelease()} one time in the next 5 days to get a list of {@link TemporaryExposureKey}s for a user which has tested positive.
+     */
+    Task<Void> requestPreAuthorizedTemporaryExposureKeyHistory();
+
+    /**
+     * If consent has previously been requested and granted by the user using {@link #requestPreAuthorizedTemporaryExposureKeyHistory()}, then this method will cause keys to be released to the client application after the screen is unlocked by the user. Keys will be delivered via a broadcast denoted with the {@link #ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED} action.
+     */
+    Task<Void> requestPreAuthorizedTemporaryExposureKeyRelease ();
 
     /**
      * Sets the diagnosis keys data mapping if it wasn't already changed recently.

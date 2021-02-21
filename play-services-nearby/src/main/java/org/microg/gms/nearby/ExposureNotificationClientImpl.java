@@ -51,6 +51,8 @@ import com.google.android.gms.nearby.exposurenotification.internal.IPackageConfi
 import com.google.android.gms.nearby.exposurenotification.internal.ITemporaryExposureKeyListCallback;
 import com.google.android.gms.nearby.exposurenotification.internal.IsEnabledParams;
 import com.google.android.gms.nearby.exposurenotification.internal.ProvideDiagnosisKeysParams;
+import com.google.android.gms.nearby.exposurenotification.internal.RequestPreAuthorizedTemporaryExposureKeyHistoryParams;
+import com.google.android.gms.nearby.exposurenotification.internal.RequestPreAuthorizedTemporaryExposureKeyReleaseParams;
 import com.google.android.gms.nearby.exposurenotification.internal.SetDiagnosisKeysDataMappingParams;
 import com.google.android.gms.nearby.exposurenotification.internal.StartParams;
 import com.google.android.gms.nearby.exposurenotification.internal.StopParams;
@@ -452,6 +454,48 @@ public class ExposureNotificationClientImpl extends GoogleApi<Api.ApiOptions.NoO
             });
             try {
                 client.getStatus(params);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    @Override
+    public Task<Void> requestPreAuthorizedTemporaryExposureKeyHistory() {
+        return scheduleTask((PendingGoogleApiCall<Void, ExposureNotificationApiClient>) (client, completionSource) -> {
+            RequestPreAuthorizedTemporaryExposureKeyHistoryParams params = new RequestPreAuthorizedTemporaryExposureKeyHistoryParams(new IStatusCallback.Stub() {
+                @Override
+                public void onResult(Status status) {
+                    if (status.isSuccess()) {
+                        completionSource.setResult(null);
+                    } else {
+                        completionSource.setException(new ApiException(status));
+                    }
+                }
+            });
+            try {
+                client.requestPreAuthorizedTemporaryExposureKeyHistory(params);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    @Override
+    public Task<Void> requestPreAuthorizedTemporaryExposureKeyRelease() {
+        return scheduleTask((PendingGoogleApiCall<Void, ExposureNotificationApiClient>) (client, completionSource) -> {
+            RequestPreAuthorizedTemporaryExposureKeyReleaseParams params = new RequestPreAuthorizedTemporaryExposureKeyReleaseParams(new IStatusCallback.Stub() {
+                @Override
+                public void onResult(Status status) {
+                    if (status.isSuccess()) {
+                        completionSource.setResult(null);
+                    } else {
+                        completionSource.setException(new ApiException(status));
+                    }
+                }
+            });
+            try {
+                client.requestPreAuthorizedTemporaryExposureKeyRelease(params);
             } catch (Exception e) {
                 completionSource.setException(e);
             }
