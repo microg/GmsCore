@@ -59,10 +59,8 @@
     <string name="perm_extended_access_label">Расширенный доступ к сервисам Google</string>
 
     <string name="service_name_checkin">Регистрация устройства в Google</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
 
-    <string name="service_status_disabled">Отключен</string>
-    <string name="service_status_default">По умолчанию</string>
     <string name="service_status_enabled_short">Вкл</string>
     <string name="service_status_disabled_short">Выкл</string>
 
@@ -85,7 +83,7 @@
     <string name="checkin_last_registration">Последняя регистрация: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="cond_gcm_bat_title">Включена экономия заряда батареи</string>
-    <string name="cond_gcm_bat_summary">Вы включили Google Cloud Messaging, но не отключили экономию заряда батареи для Vanced microG. Для корректной работы уведомлений вам нужно отключить экономию заряда батареи.</string>
+    <string name="cond_gcm_bat_summary">Вы включили Cloud Messaging, но не отключили экономию заряда батареи для Vanced microG. Для корректной работы уведомлений вам нужно отключить экономию заряда батареи.</string>
     <string name="cond_gcm_bat_action">Отключить экономию</string>
 
     <string name="prefs_account">Настройки аккаунта</string>
@@ -100,7 +98,7 @@
     <string name="pref_add_account_title">Аккаунт</string>
     <string name="pref_add_account_summary">Добавить аккаунт Google</string>
     <string name="pref_gcm_switcher_title">Получать push-уведомления</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging позволяет получать уведомления от многих приложений. Чтобы использовать GCM, включите регистрацию устройства в Google.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging позволяет получать уведомления от многих приложений. Чтобы использовать GCM, включите регистрацию устройства в Google.</string>
 
     <string name="pref_about_title">О Vanced microG</string>
     <string name="pref_cast_double_fix">Исправление двух кнопок трансляции</string>

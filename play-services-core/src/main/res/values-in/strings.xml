@@ -59,10 +59,8 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="perm_extended_access_label">Akses lebih ke layanan Google</string>
 
     <string name="service_name_checkin">Google device registration</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
 
-    <string name="service_status_disabled">Dinonaktifkan</string>
-    <string name="service_status_default">Default</string>
     <string name="service_status_enabled_short">Hidup</string>
     <string name="service_status_disabled_short">Mati</string>
 
@@ -85,7 +83,7 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="checkin_last_registration">Registrasi terakhir: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="cond_gcm_bat_title">Optimisasi baterai diaktifkan</string>
-    <string name="cond_gcm_bat_summary">Anda mengaktifkan Google Cloud Messaging namun mengaktifkan optimisasi baterai untuk layanan utama microG. Untuk mendapatkan notifikasi push anda harus menonaktifkan optimisasi baterai.</string>
+    <string name="cond_gcm_bat_summary">Anda mengaktifkan Cloud Messaging namun mengaktifkan optimisasi baterai untuk layanan utama microG. Untuk mendapatkan notifikasi push anda harus menonaktifkan optimisasi baterai.</string>
     <string name="cond_gcm_bat_action">Nonaktifkan optimisasi</string>
 
     <string name="prefs_account">Preferensi akun</string>
@@ -100,7 +98,7 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="pref_add_account_title">Akun</string>
     <string name="pref_add_account_summary">Tambahkan akun Google</string>
     <string name="pref_gcm_switcher_title">Terima notifikasi push</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging adalah penyedia notifikasi push yang digunakan pada banyak aplikasi pihak ketiga. Untuk menggunakannya anda harus mengaktifkan device registration.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging adalah penyedia notifikasi push yang digunakan pada banyak aplikasi pihak ketiga. Untuk menggunakannya anda harus mengaktifkan device registration.</string>
 
     <string name="pref_about_title">Tentang Vanced microG</string>
     <string name="pref_cast_double_fix">Perbaikan Cast terduplikasi</string>

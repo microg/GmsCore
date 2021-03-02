@@ -18,14 +18,14 @@
 <resources>
 
    <string-array name="gcm_network_config_names" translatables="false">
-        <item>@string/service_status_disabled</item>
-        <item>@string/service_status_default</item>
-        <item>Intervalo de ping: 2 minutos</item>
-        <item>Intervalo de ping: 5 minutos</item>
-        <item>Intervalo de ping: 10 minutos</item>
-        <item>Intervalo de ping: 15 minutos</item>
-        <item>Intervalo de ping: 20 minutos</item>
-        <item>Intervalo de ping: 30 minutos</item>
+       <item>@string/service_status_disabled_short</item>
+       <item>@string/gcm_status_pref_default</item>
+       <item>Intervalo de ping: 2 minutos</item>
+       <item>Intervalo de ping: 5 minutos</item>
+       <item>Intervalo de ping: 10 minutos</item>
+       <item>Intervalo de ping: 15 minutos</item>
+       <item>Intervalo de ping: 20 minutos</item>
+       <item>Intervalo de ping: 30 minutos</item>
     </string-array>
 
 </resources>

@@ -59,10 +59,8 @@ This can take a couple of minutes."</string>
     <string name="perm_extended_access_label">Extended access to Google services</string>
 
     <string name="service_name_checkin">Google device registration</string>
-    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
 
-    <string name="service_status_disabled">Disabled</string>
-    <string name="service_status_default">Default</string>
     <string name="service_status_enabled_short">On</string>
     <string name="service_status_disabled_short">Off</string>
 
@@ -85,7 +83,7 @@ This can take a couple of minutes."</string>
     <string name="checkin_last_registration">Last registration: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
-    <string name="cond_gcm_bat_summary">You enabled Google Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should disable battery optimizations.</string>
+    <string name="cond_gcm_bat_summary">You enabled Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should disable battery optimizations.</string>
     <string name="cond_gcm_bat_action">Disable optimization</string>
 
     <string name="prefs_account">Account preferences</string>
@@ -100,7 +98,7 @@ This can take a couple of minutes."</string>
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Add Google account</string>
     <string name="pref_gcm_switcher_title">Receive push notifications</string>
-    <string name="pref_gcm_enable_mcs_summary">Google Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
 
     <string name="pref_about_title">About Vanced microG</string>
     <string name="pref_cast_double_fix">Cast duplication fix</string>

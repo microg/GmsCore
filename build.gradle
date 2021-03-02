@@ -4,7 +4,6 @@
  */
 
 buildscript {
-    ext.nlpVersion = '2.0-alpha4'
     ext.safeParcelVersion = '1.6.0'
 
     ext.kotlinVersion = '1.3.72'
@@ -46,8 +45,8 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = "0.2.14.204216"
-    ext.appVersionCode = 204215002
+    version = "0.2.16.204713"
+    ext.appVersionCode = 204713001
     ext.isReleaseVersion = false
 }
 

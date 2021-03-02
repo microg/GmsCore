@@ -53,10 +53,7 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public static GcmPrefs get(Context context) {
         if (INSTANCE == null) {
-            if (!context.getPackageName().equals(PackageUtils.getProcessName())) {
-                Log.w("Preferences", GcmPrefs.class.getName() + " initialized outside main process", new RuntimeException());
-            }
-            if (context == null) return new GcmPrefs(null);
+            PackageUtils.warnIfNotPersistentProcess(GcmPrefs.class);
             INSTANCE = new GcmPrefs(context.getApplicationContext());
         }
         return INSTANCE;
@@ -64,7 +61,6 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
 
     private boolean gcmLogEnabled = true;
     private String lastPersistedId = "";
-    private boolean confirmNewApps = false;
     private boolean gcmEnabled = false;
 
     private int networkMobile = 0;
@@ -76,19 +72,19 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     private int learntMobile = 300000;
     private int learntOther = 300000;
 
+    private final Context context;
     private SharedPreferences preferences;
     private SharedPreferences systemDefaultPreferences;
 
     private GcmPrefs(Context context) {
-        if (context != null) {
-            preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            preferences.registerOnSharedPreferenceChangeListener(this);
-            try {
-                systemDefaultPreferences = (SharedPreferences) Context.class.getDeclaredMethod("getSharedPreferences", File.class, int.class).invoke(context, new File("/system/etc/microg.xml"), Context.MODE_PRIVATE);
-            } catch (Exception ignored) {
-            }
-            update();
+        this.context = context;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.registerOnSharedPreferenceChangeListener(this);
+        try {
+            systemDefaultPreferences = (SharedPreferences) Context.class.getDeclaredMethod("getSharedPreferences", File.class, int.class).invoke(context, new File("/system/etc/microg.xml"), Context.MODE_PRIVATE);
+        } catch (Exception ignored) {
         }
+        update();
     }
 
     private boolean getSettingsBoolean(String key, boolean def) {
@@ -101,7 +97,6 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     public void update() {
         gcmEnabled = getSettingsBoolean(PREF_ENABLE_GCM, true);
         gcmLogEnabled = getSettingsBoolean(PREF_FULL_LOG, true);
-        confirmNewApps = getSettingsBoolean(PREF_CONFIRM_NEW_APPS, false);
 
         lastPersistedId = preferences.getString(PREF_LAST_PERSISTENT_ID, "");
 
@@ -129,12 +124,49 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
     }
 
     public int getHeartbeatMsFor(NetworkInfo info) {
-        return getHeartbeatMsFor(getNetworkPrefForInfo(info), false);
+        return getHeartbeatMsFor(getNetworkPrefForInfo(info));
     }
 
-    public int getHeartbeatMsFor(String pref, boolean rawRoaming) {
-        if (PREF_NETWORK_ROAMING.equals(pref) && (rawRoaming || networkRoaming != 0)) {
-            return networkRoaming * 60000;
+    public int getMobileInterval() {
+        return networkMobile;
+    }
+
+    public int getWifiInterval() {
+        return networkWifi;
+    }
+
+    public int getRoamingInterval() {
+        return networkRoaming;
+    }
+
+    public int getOtherInterval() {
+        return networkOther;
+    }
+
+    public void setMobileInterval(int value) {
+        this.networkMobile = value;
+        preferences.edit().putString(PREF_NETWORK_MOBILE, Integer.toString(networkMobile)).apply();
+    }
+
+    public void setWifiInterval(int value) {
+        this.networkWifi = value;
+        preferences.edit().putString(PREF_NETWORK_WIFI, Integer.toString(networkWifi)).apply();
+    }
+
+    public void setRoamingInterval(int value) {
+        this.networkRoaming = value;
+        preferences.edit().putString(PREF_NETWORK_ROAMING, Integer.toString(networkRoaming)).apply();
+    }
+
+    public void setOtherInterval(int value) {
+        this.networkOther = value;
+        preferences.edit().putString(PREF_NETWORK_OTHER, Integer.toString(networkOther)).apply();
+    }
+
+    public int getHeartbeatMsFor(String pref) {
+        if (PREF_NETWORK_ROAMING.equals(pref)) {
+            if (networkRoaming != 0) return networkRoaming * 60000;
+            else return learntMobile;
         } else if (PREF_NETWORK_MOBILE.equals(pref)) {
             if (networkMobile != 0) return networkMobile * 60000;
             else return learntMobile;
@@ -201,6 +233,18 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         preferences.edit().putInt(PREF_LEARNT_MOBILE, INTERVAL).putInt(PREF_LEARNT_WIFI, INTERVAL).putInt(PREF_LEARNT_OTHER, INTERVAL).apply();
     }
 
+    public int getLearntMobileInterval() {
+        return learntMobile;
+    }
+
+    public int getLearntWifiInterval() {
+        return learntWifi;
+    }
+
+    public int getLearntOtherInterval() {
+        return learntOther;
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         update();
@@ -210,27 +254,23 @@ public class GcmPrefs implements SharedPreferences.OnSharedPreferenceChangeListe
         return gcmEnabled;
     }
 
-    public boolean isEnabledFor(NetworkInfo info) {
-        return isEnabled() && info != null && getHeartbeatMsFor(info) >= 0;
-    }
-
-    public static void setEnabled(Context context, boolean newStatus) {
-        boolean changed = GcmPrefs.get(context).isEnabled() != newStatus;
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, newStatus).apply();
+    public void setEnabled(boolean value) {
+        boolean changed = gcmEnabled != value;
+        preferences.edit().putBoolean(GcmPrefs.PREF_ENABLE_GCM, value).apply();
         if (!changed) return;
-        if (!newStatus) {
+        if (!value) {
             McsService.stop(context);
         } else {
             context.sendBroadcast(new Intent(TriggerReceiver.FORCE_TRY_RECONNECT, null, context, TriggerReceiver.class));
         }
     }
 
-    public boolean isGcmLogEnabled() {
-        return gcmLogEnabled;
+    public boolean isEnabledFor(NetworkInfo info) {
+        return isEnabled() && info != null && getHeartbeatMsFor(info) >= 0;
     }
 
-    public boolean isConfirmNewApps() {
-        return confirmNewApps;
+    public boolean isGcmLogEnabled() {
+        return gcmLogEnabled;
     }
 
     public List<String> getLastPersistedIds() {
