@@ -48,6 +48,11 @@
             android:icon="@drawable/ic_cast_black"
             android:summary="@string/pref_cast_double_fix_summary"
             android:defaultValue="false"/>
+        <SwitchPreferenceCompat
+            android:key="pref_hide_launcher_icon"
+            android:title="@string/pref_hide_launcher_icon"
+            android:icon="@drawable/ic_baseline_hide_source_24"
+            android:defaultValue="true"/>
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <Preference

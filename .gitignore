@@ -7,3 +7,4 @@ build/
 user.gradle
 local.properties
 .directory
+play-services-core/release

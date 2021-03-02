@@ -38,14 +38,14 @@ dependencies {
 
     // AndroidX UI
     implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "androidx.mediarouter:mediarouter:1.2.0"
+    implementation "androidx.mediarouter:mediarouter:1.2.2"
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
 
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.21'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31'
     implementation project(path: ':play-services-basement')
 
     api project(':play-services-location-api')

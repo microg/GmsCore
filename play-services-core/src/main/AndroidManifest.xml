@@ -279,7 +279,6 @@
             </intent-filter>
         </service>
 
-        <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
             android:icon="@mipmap/ic_launcher"
@@ -289,13 +288,25 @@
             android:theme="@style/Theme.AppCompat.DayNight">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
+
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- microG Settings shown in Launcher -->
+        <activity-alias
+            android:name="org.microg.gms.ui.SettingsActivityLauncher"
+            android:targetActivity="org.microg.gms.ui.SettingsActivity"
+            android:enabled="false"
+            android:exported="true">
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+
+        </activity-alias>
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
