@@ -11,7 +11,7 @@ buildscript {
 
     ext.annotationVersion = '1.1.0'
     ext.appcompatVersion = '1.1.0'
-    ext.fragmentVersion = '1.2.5'
+    ext.fragmentVersion = '1.3.0'
     ext.lifecycleVersion = '2.3.0'
     ext.mediarouterVersion = '1.1.0'
     ext.navigationVersion = '2.3.0'

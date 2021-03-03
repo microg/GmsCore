@@ -19,7 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 dependencies {
-    implementation 'com.squareup.wire:wire-runtime:3.5.0'
+    implementation 'com.squareup.wire:wire-runtime:3.6.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation "org.microg.gms:conscrypt-gmscore:2.5.1"
     implementation "androidx.annotation:annotation:$annotationVersion"
