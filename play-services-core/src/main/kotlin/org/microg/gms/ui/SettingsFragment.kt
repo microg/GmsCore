@@ -25,6 +25,8 @@ class SettingsFragment : ResourceSettingsFragment() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
 
+        val pm = requireActivity().packageManager
+
         findPreference<Preference>(PREF_CHECKIN)?.setOnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openCheckinSettings)
             true
@@ -40,7 +42,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         findPreference<Preference>(PREF_ABOUT)?.summary = getString(R.string.about_version_str, AboutFragment.getSelfVersion(context))
 
         findPreference<SwitchPreferenceCompat>(PREF_CAST_DOUBLE_FIX_ENABLED)?.setOnPreferenceChangeListener { _, newValue ->
-            context?.packageManager?.setComponentEnabledSetting(
+            pm?.setComponentEnabledSetting(
                     ComponentName(requireActivity().applicationContext, CastMediaRouteProviderService::class.java),
                     when (newValue) {
                         true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
@@ -48,6 +50,25 @@ class SettingsFragment : ResourceSettingsFragment() {
                     },
                     PackageManager.DONT_KILL_APP)
             true
+        }
+
+        findPreference<SwitchPreferenceCompat>(PREF_CAST_HIDE_LAUNCHER_ICON)?.apply {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                setOnPreferenceChangeListener { _, newValue ->
+                    pm.setComponentEnabledSetting(
+                        ComponentName.createRelative(requireActivity(), "org.microg.gms.ui.SettingsActivityLauncher"),
+                        when (newValue) {
+                            true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                            else -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        },
+                        PackageManager.DONT_KILL_APP
+                    )
+                    true
+                }
+            } else {
+                preferenceScreen.removePreference(this)
+            }
+
         }
     }
 
@@ -76,6 +97,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_GCM = "pref_gcm"
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_CAST_DOUBLE_FIX_ENABLED = "pref_cast_double_fix_enabled"
+        const val PREF_CAST_HIDE_LAUNCHER_ICON = "pref_hide_launcher_icon"
         const val BRAND_SPOOF_FIX_ENABLED = "brand_spoof_fix_enabled"
     }
 
