@@ -112,11 +112,12 @@ class PushRegisterService : LifecycleService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        WakefulBroadcastReceiver.completeWakefulIntent(intent)
-        Log.d(TAG, "onStartCommand: $intent")
-        lifecycleScope.launchWhenStarted {
-            if (intent == null) return@launchWhenStarted
-            handleIntent(intent)
+        if (intent != null) {
+            WakefulBroadcastReceiver.completeWakefulIntent(intent)
+            Log.d(TAG, "onStartCommand: $intent")
+            lifecycleScope.launchWhenStarted {
+                handleIntent(intent)
+            }
         }
         return super.onStartCommand(intent, flags, startId)
     }
