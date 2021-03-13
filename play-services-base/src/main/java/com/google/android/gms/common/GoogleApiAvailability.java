@@ -55,7 +55,7 @@ public class GoogleApiAvailability {
     /**
      * Google Play services client library version (declared in library's AndroidManifest.xml android:versionCode).
      */
-    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = Constants.MAX_REFERENCE_VERSION;
+    public static final int GOOGLE_PLAY_SERVICES_VERSION_CODE = Constants.GMS_VERSION_CODE;
 
     private static GoogleApiAvailability instance;
 
