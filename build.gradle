@@ -4,24 +4,24 @@
  */
 
 buildscript {
-    ext.safeParcelVersion = '1.6.0'
+    ext.safeParcelVersion = '1.7.0'
 
     ext.kotlinVersion = '1.4.31'
     ext.coroutineVersion = '1.3.7'
 
     ext.annotationVersion = '1.1.0'
-    ext.appcompatVersion = '1.1.0'
+    ext.appcompatVersion = '1.2.0'
     ext.fragmentVersion = '1.3.0'
     ext.lifecycleVersion = '2.3.0'
-    ext.mediarouterVersion = '1.1.0'
-    ext.navigationVersion = '2.3.0'
+    ext.mediarouterVersion = '1.2.0'
+    ext.navigationVersion = '2.3.1'
     ext.preferenceVersion = '1.1.1'
     ext.recyclerviewVersion = '1.1.0'
 
     ext.supportLibraryVersion = "28.0.0"
     ext.wireVersion = '3.2.2'
 
-    ext.androidBuildGradleVersion = "4.0.1"
+    ext.androidBuildGradleVersion = "4.1.0"
 
     ext.androidBuildVersionTools = "29.0.3"
 
@@ -45,8 +45,8 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = "0.2.16.204713"
-    ext.appVersionCode = 204713001
+    version = "0.2.18.210390"
+    ext.appVersionCode = 210390001
     ext.isReleaseVersion = false
 }
 
@@ -56,4 +56,3 @@ subprojects {
         google()
     }
 }
-
