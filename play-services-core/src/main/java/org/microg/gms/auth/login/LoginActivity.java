@@ -162,6 +162,7 @@ public class LoginActivity extends AssistantActivity {
         super.onHuaweiButtonClicked();
         state++;
         if (state == 1) {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("pref_hide_launcher_icon", false).apply();
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, true)) {
                 LastCheckinInfo.ClearCheckinInfo(this);
