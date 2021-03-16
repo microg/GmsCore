@@ -58,6 +58,7 @@ import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
+import org.microg.gms.ui.UtilsKt;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -147,8 +148,6 @@ public class LoginActivity extends AssistantActivity {
             } else {
                 retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
             }
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            init();
         } else {
             setMessage(R.string.auth_before_connect);
             setSpoofButtonText(R.string.brand_spoof_button);
@@ -162,7 +161,10 @@ public class LoginActivity extends AssistantActivity {
         super.onHuaweiButtonClicked();
         state++;
         if (state == 1) {
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("pref_hide_launcher_icon", false).apply();
+            if (SDK_INT >= Build.VERSION_CODES.M) {
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("pref_hide_launcher_icon", false).apply();
+                UtilsKt.hideIcon(this, false);
+            }
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
             if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, true)) {
                 LastCheckinInfo.ClearCheckinInfo(this);
