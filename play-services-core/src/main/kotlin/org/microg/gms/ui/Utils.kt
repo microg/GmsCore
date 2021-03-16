@@ -5,13 +5,16 @@
 
 package org.microg.gms.ui
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import androidx.annotation.IdRes
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.R
@@ -34,6 +37,18 @@ fun NavController.navigate(context: Context, @IdRes resId: Int, args: Bundle? = 
             popExit = R.anim.nav_default_pop_exit_anim
         }
     } else null)
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+fun Context.hideIcon(hide: Boolean) {
+    packageManager.setComponentEnabledSetting(
+        ComponentName.createRelative(this, "org.microg.gms.ui.SettingsActivityLauncher"),
+        when (hide) {
+            true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            false -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        },
+        PackageManager.DONT_KILL_APP
+    )
 }
 
 val Context.systemAnimationsEnabled: Boolean
