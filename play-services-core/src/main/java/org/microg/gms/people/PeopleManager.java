@@ -51,7 +51,7 @@ public class PeopleManager {
         String url = null;
         if (cursor.moveToNext()) {
             int idx = cursor.getColumnIndex("avatar");
-            if (!cursor.isNull(idx)) url = cursor.getString(idx);
+            if (idx >= 0 && !cursor.isNull(idx)) url = cursor.getString(idx);
         }
         cursor.close();
         databaseHelper.close();
