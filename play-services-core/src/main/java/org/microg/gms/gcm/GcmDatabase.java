@@ -1,17 +1,6 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2016, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.microg.gms.gcm;
@@ -81,13 +70,13 @@ public class GcmDatabase extends SQLiteOpenHelper {
         public final boolean wakeForDelivery;
 
         private App(Cursor cursor) {
-            packageName = cursor.getString(cursor.getColumnIndex(FIELD_PACKAGE_NAME));
-            lastError = cursor.getString(cursor.getColumnIndex(FIELD_LAST_ERROR));
-            lastMessageTimestamp = cursor.getLong(cursor.getColumnIndex(FIELD_LAST_MESSAGE_TIMESTAMP));
-            totalMessageCount = cursor.getLong(cursor.getColumnIndex(FIELD_TOTAL_MESSAGE_COUNT));
-            totalMessageBytes = cursor.getLong(cursor.getColumnIndex(FIELD_TOTAL_MESSAGE_BYTES));
-            allowRegister = cursor.getLong(cursor.getColumnIndex(FIELD_ALLOW_REGISTER)) == 1;
-            wakeForDelivery = cursor.getLong(cursor.getColumnIndex(FIELD_WAKE_FOR_DELIVERY)) == 1;
+            packageName = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_PACKAGE_NAME));
+            lastError = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_LAST_ERROR));
+            lastMessageTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_LAST_MESSAGE_TIMESTAMP));
+            totalMessageCount = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TOTAL_MESSAGE_COUNT));
+            totalMessageBytes = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TOTAL_MESSAGE_BYTES));
+            allowRegister = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_ALLOW_REGISTER)) == 1;
+            wakeForDelivery = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_WAKE_FOR_DELIVERY)) == 1;
         }
 
         public boolean hasError() {
@@ -102,10 +91,10 @@ public class GcmDatabase extends SQLiteOpenHelper {
         public final String registerId;
 
         public Registration(Cursor cursor) {
-            packageName = cursor.getString(cursor.getColumnIndex(FIELD_PACKAGE_NAME));
-            signature = cursor.getString(cursor.getColumnIndex(FIELD_SIGNATURE));
-            timestamp = cursor.getLong(cursor.getColumnIndex(FIELD_TIMESTAMP));
-            registerId = cursor.getString(cursor.getColumnIndex(FIELD_REGISTER_ID));
+            packageName = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_PACKAGE_NAME));
+            signature = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_SIGNATURE));
+            timestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FIELD_TIMESTAMP));
+            registerId = cursor.getString(cursor.getColumnIndexOrThrow(FIELD_REGISTER_ID));
         }
     }
 
