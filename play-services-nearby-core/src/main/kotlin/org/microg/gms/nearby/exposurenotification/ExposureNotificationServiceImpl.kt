@@ -22,7 +22,6 @@ import com.google.android.gms.nearby.exposurenotification.internal.*
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
-import org.microg.gms.common.Constants
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.nearby.exposurenotification.Constants.*
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
@@ -96,7 +95,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getVersion(params: GetVersionParams) {
-        params.callback.onResult(Status.SUCCESS, Constants.GMS_VERSION_CODE.toLong())
+        params.callback.onResult(Status.SUCCESS, VERSION_FULL)
     }
 
     override fun getCalibrationConfidence(params: GetCalibrationConfidenceParams) {
@@ -631,6 +630,20 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             } catch (e: Exception) {
                 Log.w(TAG, "Callback failed", e)
             }
+        }
+    }
+
+    override fun requestPreAuthorizedTemporaryExposureKeyHistory(params: RequestPreAuthorizedTemporaryExposureKeyHistoryParams) {
+        // TODO: Proper implementation
+        lifecycleScope.launchSafely {
+            params.callback.onResult(Status.CANCELED)
+        }
+    }
+
+    override fun requestPreAuthorizedTemporaryExposureKeyRelease(params: RequestPreAuthorizedTemporaryExposureKeyReleaseParams) {
+        // TODO: Proper implementation
+        lifecycleScope.launchSafely {
+            params.callback.onResult(Status.CANCELED)
         }
     }
 
