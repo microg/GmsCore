@@ -171,6 +171,7 @@ This can take a couple of minutes."</string>
     <string name="gcm_network_state_disconnected">Disconnected</string>
     <string name="gcm_network_state_connected">Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Receive push notifications</string>
+    <string name="gcm_allow_app_popup">Allow <xliff:g example="F-Droid">%1$s</xliff:g> to register for push notifications?</string>
 
     <string name="pref_push_app_allow_register_title">Allow registration</string>
     <string name="pref_push_app_allow_register_summary">Allow the app to register for push notifications.</string>

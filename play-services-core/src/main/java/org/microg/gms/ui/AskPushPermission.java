@@ -4,9 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
 
@@ -58,9 +65,12 @@ public class AskPushPermission extends FragmentActivity {
         try {
             PackageManager pm = getPackageManager();
             final ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
-            CharSequence label = pm.getApplicationLabel(info);
+            String label = pm.getApplicationLabel(info).toString();
+            String raw = getString(R.string.gcm_allow_app_popup, label);
+            SpannableString s = new SpannableString(raw);
+            s.setSpan(new StyleSpan(Typeface.BOLD), raw.indexOf(label), raw.indexOf(label) + label.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
-            ((TextView) findViewById(R.id.permission_message)).setText(Html.fromHtml("Allow <b>" + label + "</b> to register for push notifications?"));
+            ((TextView) findViewById(R.id.permission_message)).setText(s);
             findViewById(R.id.permission_allow_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -14,88 +14,87 @@
      limitations under the License.
 -->
 
-<FrameLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/dialog_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
         android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/desc_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dip"
-            android:paddingLeft="20dip"
-            android:paddingTop="18dip"
-            android:paddingEnd="16dip"
-            android:paddingRight="16dip">
-
-            <LinearLayout
-                android:id="@+id/perm_desc_root"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/permission_icon"
-                    android:layout_width="36dip"
-                    android:layout_height="36dip"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_cloud_bell"
-                    app:tint="?attr/colorAccent">
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/permission_message"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dip"
-                    android:paddingLeft="16dip"
-                    android:text="Allow {appName} to register for push notifications?"
-                    android:textSize="20sp">
-                </TextView>
-
-            </LinearLayout>
-
-        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal"
-            android:paddingStart="20dip"
-            android:paddingLeft="20dip"
-            android:paddingEnd="16dip"
-            android:paddingRight="16dip">
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingTop="18dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="24dp">
 
-            <Button
-                android:id="@+id/permission_deny_button"
-                style="?attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/permission_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginBottom="12dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_cloud_bell"
+                app:tint="?attr/colorAccent">
+            </ImageView>
+
+            <TextView
+                android:id="@+id/permission_message"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/deny">
-            </Button>
+                android:gravity="center"
+                android:text="@string/gcm_allow_app_popup"
+                android:textSize="18sp">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.25dp"
+            android:background="?android:attr/textColorSecondary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/permission_allow_button"
-                style="?attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:text="@string/allow">
+            </Button>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.25dp"
+                android:background="?android:attr/textColorSecondary" />
+
+            <Button
+                android:id="@+id/permission_deny_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/deny">
             </Button>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+</ScrollView>
