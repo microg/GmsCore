@@ -45,13 +45,13 @@ public class PeopleManager {
     public static final String USERINFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     public static final String REGEX_SEARCH_USER_PHOTO = "https?\\:\\/\\/lh([0-9]*)\\.googleusercontent\\.com/";
 
-    public static File getOwnerAvaterFile(Context context, String accountName, boolean network) {
+    public static File getOwnerAvatarFile(Context context, String accountName, boolean network) {
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         Cursor cursor = databaseHelper.getOwner(accountName);
         String url = null;
         if (cursor.moveToNext()) {
             int idx = cursor.getColumnIndex("avatar");
-            if (!cursor.isNull(idx)) url = cursor.getString(idx);
+            if (idx >= 0 && !cursor.isNull(idx)) url = cursor.getString(idx);
         }
         cursor.close();
         databaseHelper.close();
@@ -78,7 +78,7 @@ public class PeopleManager {
     }
 
     public static Bitmap getOwnerAvatarBitmap(Context context, String accountName, boolean network) {
-        File avaterFile = getOwnerAvaterFile(context, accountName, network);
+        File avaterFile = getOwnerAvatarFile(context, accountName, network);
         if (avaterFile == null) return null;
         return BitmapFactory.decodeFile(avaterFile.getPath());
     }

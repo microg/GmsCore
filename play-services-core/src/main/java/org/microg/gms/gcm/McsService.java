@@ -320,7 +320,7 @@ public class McsService extends Service implements Handler.Callback {
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             } else if (connectIntent == null) {
                 connectIntent = intent;
-            } else {
+            } else if (intent != null) {
                 WakefulBroadcastReceiver.completeWakefulIntent(intent);
             }
         }
