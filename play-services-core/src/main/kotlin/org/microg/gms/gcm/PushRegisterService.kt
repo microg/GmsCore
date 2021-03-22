@@ -24,7 +24,6 @@ import org.microg.gms.common.ForegroundServiceContext
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.common.Utils
 import org.microg.gms.gcm.GcmConstants.*
-import org.microg.gms.ui.AskPushPermission
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -97,11 +96,12 @@ class PushRegisterService : LifecycleService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        WakefulBroadcastReceiver.completeWakefulIntent(intent)
-        Log.d(TAG, "onStartCommand: $intent")
-        lifecycleScope.launchWhenStarted {
-            if (intent == null) return@launchWhenStarted
-            handleIntent(intent)
+        if (intent != null) {
+            WakefulBroadcastReceiver.completeWakefulIntent(intent)
+            Log.d(TAG, "onStartCommand: $intent")
+            lifecycleScope.launchWhenStarted {
+                handleIntent(intent)
+            }
         }
         return super.onStartCommand(intent, flags, startId)
     }

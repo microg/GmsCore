@@ -16,7 +16,6 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 dependencies {
     api "org.microg:safe-parcel:1.7.0"
@@ -39,6 +38,10 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "int", "VERSION_CODE", "$appVersionCode"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     sourceSets {

@@ -35,7 +35,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:4.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.squareup.wire:wire-gradle-plugin:$wireVersion"
     }
@@ -45,8 +45,8 @@ allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = "0.2.18.210390"
-    ext.appVersionCode = 210390001
+    version = "0.2.18.210500"
+    ext.appVersionCode = 210500001
     ext.isReleaseVersion = false
 }
 
