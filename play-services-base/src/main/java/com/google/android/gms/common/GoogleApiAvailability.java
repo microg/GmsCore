@@ -164,6 +164,19 @@ public class GoogleApiAvailability {
     }
 
     /**
+     * Verifies that Google Play services is installed and enabled on this device, and that the version installed on
+     * this device is no older than the one required by this client or the version is not older than the one specified
+     * in <code>minApkVersion</code>.
+     *
+     * @return status code indicating whether there was an error. Can be one of following in
+     * {@link ConnectionResult}: SUCCESS, SERVICE_MISSING, SERVICE_UPDATING,
+     * SERVICE_VERSION_UPDATE_REQUIRED, SERVICE_DISABLED, SERVICE_INVALID
+     */
+    public int isGooglePlayServicesAvailable(Context context, int minApkVersion) {
+        return isGooglePlayServicesAvailable(context);
+    }
+
+    /**
      * Determines whether an error can be resolved via user action. If true, proceed by calling
      * {@link #getErrorDialog(Activity, int, int)} and showing the dialog.
      *

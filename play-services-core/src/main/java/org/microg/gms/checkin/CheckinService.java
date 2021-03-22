@@ -95,7 +95,9 @@ public class CheckinService extends IntentService {
         } catch (Exception e) {
             Log.w(TAG, e);
         } finally {
-            WakefulBroadcastReceiver.completeWakefulIntent(intent);
+            if (intent != null) {
+                WakefulBroadcastReceiver.completeWakefulIntent(intent);
+            }
             schedule(this);
             stopSelf();
         }
