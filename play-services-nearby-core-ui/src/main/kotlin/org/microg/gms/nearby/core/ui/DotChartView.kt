@@ -38,11 +38,11 @@ class DotChartView : View {
             val now = System.currentTimeMillis()
             val min = now - 14 * 24 * 60 * 60 * 1000L
             val date = Date(min)
-            val format = Settings.System.getString(context.contentResolver, Settings.System.DATE_FORMAT);
+            val format = Settings.System.getString(context.contentResolver, Settings.System.DATE_FORMAT)
             val dateFormat = if (TextUtils.isEmpty(format)) {
                 android.text.format.DateFormat.getMediumDateFormat(context)
             } else {
-                SimpleDateFormat(format)
+                SimpleDateFormat(format.replace('m', 'M'))
             }
             val lowest = dateFormat.parse(dateFormat.format(date))?.time ?: date.time
             for (day in 0 until 15) {
