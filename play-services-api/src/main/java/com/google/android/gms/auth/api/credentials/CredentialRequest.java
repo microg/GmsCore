@@ -25,19 +25,16 @@ import org.microg.safeparcel.SafeParceled;
  */
 public class CredentialRequest extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
+    @Field(1000)
     private int versionCode = 1;
 
-    @SafeParceled(1)
+    @Field(1)
     private boolean passwordLoginSupported;
-
-    @SafeParceled(2)
+    @Field(2)
     private String[] accountTypes;
-
-    @SafeParceled(3)
+    @Field(3)
     private CredentialPickerConfig credentialPickerConfig;
-
-    @SafeParceled(4)
+    @Field(4)
     private CredentialPickerConfig credentialHintPickerConfig;
 
     public CredentialRequest(boolean passwordLoginSupported, String[] accountTypes, CredentialPickerConfig credentialPickerConfig, CredentialPickerConfig credentialHintPickerConfig) {
@@ -72,4 +69,15 @@ public class CredentialRequest extends AutoSafeParcelable {
     }
 
     public static final Creator<CredentialRequest> CREATOR = new AutoCreator<CredentialRequest>(CredentialRequest.class);
+
+    public static class Builder {
+        private boolean passwordLoginSupported;
+        private String[] accountTypes;
+        private CredentialPickerConfig credentialPickerConfig;
+        private CredentialPickerConfig credentialHintPickerConfig;
+
+        public void setAccountTypes(String... accountTypes) {
+            this.accountTypes = accountTypes.clone();
+        }
+    }
 }

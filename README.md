@@ -9,7 +9,7 @@ microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow a
 
 License
 -------
-    Copyright 2013-2020 microG Project Team
+    Copyright 2013-2021 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
