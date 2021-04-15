@@ -16,21 +16,23 @@
 
 package com.google.android.gms.auth.api.credentials;
 
+import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+@PublicApi
 public class CredentialPickerConfig extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
+    @Field(1000)
     private int versionCode = 1;
 
-    @SafeParceled(1)
+    @Field(1)
     private boolean showAddAccountButton;
 
-    @SafeParceled(2)
+    @Field(2)
     private boolean showCancelButton;
 
-    @SafeParceled(3)
+    @Field(3)
     private boolean forNewAccount;
 
     private CredentialPickerConfig() {
@@ -42,6 +44,10 @@ public class CredentialPickerConfig extends AutoSafeParcelable {
         this.forNewAccount = forNewAccount;
     }
 
+    /**
+     * @deprecated It was determined that this method was not useful for developers.
+     */
+    @Deprecated
     public boolean isForNewAccount() {
         return forNewAccount;
     }
@@ -52,6 +58,14 @@ public class CredentialPickerConfig extends AutoSafeParcelable {
 
     public boolean shouldShowCancelButton() {
         return showCancelButton;
+    }
+
+    @Override
+    public String toString() {
+        return "CredentialPickerConfig{" +
+                "showAddAccountButton=" + showAddAccountButton +
+                ", showCancelButton=" + showCancelButton +
+                '}';
     }
 
     public static class Builder {

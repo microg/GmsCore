@@ -37,14 +37,14 @@ dependencies {
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
     implementation "org.microg.gms:conscrypt-gmscore:2.5.1"
-    implementation "androidx.annotation:annotation:$annotationVersion"
-    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+    implementation "androidx.annotation:annotation:1.2.0"
+    implementation "androidx.lifecycle:lifecycle-service:2.3.1"
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
-    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-service:2.3.1"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31'
 
     api project(':play-services-basement')

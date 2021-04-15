@@ -20,7 +20,7 @@ apply plugin: 'kotlin-android'
 dependencies {
     api "org.microg:safe-parcel:1.7.0"
 
-    implementation "androidx.annotation:annotation:$annotationVersion"
+    implementation "androidx.annotation:annotation:1.2.0"
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31'
 }
 
