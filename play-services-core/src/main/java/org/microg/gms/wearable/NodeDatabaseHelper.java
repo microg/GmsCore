@@ -289,8 +289,8 @@ public class NodeDatabaseHelper extends SQLiteOpenHelper {
         Cursor status = db.query("assetsReadyStatus", null, "nowReady != markedReady", null, null, null, null);
         while (status.moveToNext()) {
             cv = new ContentValues();
-            cv.put("assetsPresent", status.getInt(status.getColumnIndex("nowReady")));
-            db.update("dataitems", cv, "_id=?", new String[]{Integer.toString(status.getInt(status.getColumnIndex("dataitems_id")))});
+            cv.put("assetsPresent", status.getInt(status.getColumnIndexOrThrow("nowReady")));
+            db.update("dataitems", cv, "_id=?", new String[]{Integer.toString(status.getInt(status.getColumnIndexOrThrow("dataitems_id")))});
         }
         status.close();
     }

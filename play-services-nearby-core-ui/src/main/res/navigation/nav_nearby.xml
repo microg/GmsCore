@@ -26,7 +26,11 @@
     <fragment
         android:id="@+id/exposureNotificationsRpisFragment"
         android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsRpisFragment"
-        android:label="@string/pref_exposure_collected_rpis_title" />
+        android:label="@string/pref_exposure_collected_rpis_title">
+        <deepLink
+            app:action="ACTION_VIEW"
+            app:uri="x-gms-settings://exposure-notifications-rpis" />
+    </fragment>
 
     <fragment
         android:id="@+id/exposureNotificationsAppFragment"

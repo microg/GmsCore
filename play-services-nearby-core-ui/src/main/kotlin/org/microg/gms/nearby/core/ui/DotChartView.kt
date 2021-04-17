@@ -10,14 +10,12 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
 import android.os.Build
-import android.provider.Settings
-import android.text.TextUtils
+import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import org.microg.gms.nearby.exposurenotification.ExposureScanSummary
 import org.microg.gms.ui.resolveColor
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -38,12 +36,7 @@ class DotChartView : View {
             val now = System.currentTimeMillis()
             val min = now - 14 * 24 * 60 * 60 * 1000L
             val date = Date(min)
-            val format = Settings.System.getString(context.contentResolver, Settings.System.DATE_FORMAT);
-            val dateFormat = if (TextUtils.isEmpty(format)) {
-                android.text.format.DateFormat.getMediumDateFormat(context)
-            } else {
-                SimpleDateFormat(format)
-            }
+            val dateFormat = DateFormat.getMediumDateFormat(context)
             val lowest = dateFormat.parse(dateFormat.format(date))?.time ?: date.time
             for (day in 0 until 15) {
                 date.time = now - (14 - day) * 24 * 60 * 60 * 1000L
@@ -181,13 +174,15 @@ class DotChartView : View {
         fontPaint.getTextBounds(strNoRecords, 0, strNoRecords.length, fontTempRect)
         canvas.drawText(strNoRecords, (subLeft + perWidth + 4 * d).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
 
-        canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 1 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and 0xffffff)
-        canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 2 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (80 shl 24 or 0xffffff))
-        canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 3 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (170 shl 24 or 0xffffff))
-        canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 4 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor)
+        if (maxValue >= 0) {
+            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 1 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and 0xffffff)
+            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 2 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (80 shl 24 or 0xffffff))
+            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 3 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor and (170 shl 24 or 0xffffff))
+            canvas.drawMyRect((subLeft + (perWidth + innerPadding) * 4 + 12 * d + fontTempRect.width()).toFloat(), subTop.toFloat(), perWidth.toFloat(), perHeight.toFloat(), accentColor)
 
-        val strRecords = context.getString(R.string.pref_exposure_rpis_histogram_legend_records, "0 - $maxValue")
-        canvas.drawText(strRecords, (subLeft + (perWidth + innerPadding) * 4 + 16 * d + fontTempRect.width() + perWidth).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
+            val strRecords = context.getString(R.string.pref_exposure_rpis_histogram_legend_records, "0 - $maxValue")
+            canvas.drawText(strRecords, (subLeft + (perWidth + innerPadding) * 4 + 16 * d + fontTempRect.width() + perWidth).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
+        }
 
         if (focusHour != -1 && Build.VERSION.SDK_INT >= 23) {
             val floatingColor = context.resolveColor(androidx.appcompat.R.attr.colorBackgroundFloating) ?: 0

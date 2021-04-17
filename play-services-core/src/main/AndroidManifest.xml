@@ -58,10 +58,6 @@
         android:protectionLevel="dangerous" />
 
     <permission
-        android:name="com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"
-        android:protectionLevel="normal" />
-
-    <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
         android:protectionLevel="normal" />
@@ -412,6 +408,15 @@
             android:authorities="com.google.android.gms.auth.accounts"
             android:exported="true" />
 
+        <activity
+            android:name="org.microg.gms.ui.CredentialPickerActivity"
+            android:process=":ui">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.credentials.PICKER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Games -->
 
         <service android:name="org.microg.gms.games.GamesStubService">
@@ -452,6 +457,13 @@
             android:label="@string/gms_settings_name"
             android:process=":ui"
             android:roundIcon="@mipmap/ic_microg_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:host="exposure-notifications-rpis"
+                    android:scheme="x-gms-settings" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -22,6 +22,8 @@ import com.google.android.gms.nearby.exposurenotification.internal.GetVersionPar
 import com.google.android.gms.nearby.exposurenotification.internal.INearbyExposureNotificationService;
 import com.google.android.gms.nearby.exposurenotification.internal.IsEnabledParams;
 import com.google.android.gms.nearby.exposurenotification.internal.ProvideDiagnosisKeysParams;
+import com.google.android.gms.nearby.exposurenotification.internal.RequestPreAuthorizedTemporaryExposureKeyHistoryParams;
+import com.google.android.gms.nearby.exposurenotification.internal.RequestPreAuthorizedTemporaryExposureKeyReleaseParams;
 import com.google.android.gms.nearby.exposurenotification.internal.SetDiagnosisKeysDataMappingParams;
 import com.google.android.gms.nearby.exposurenotification.internal.StartParams;
 import com.google.android.gms.nearby.exposurenotification.internal.StopParams;
@@ -100,5 +102,13 @@ public class ExposureNotificationApiClient extends GmsClient<INearbyExposureNoti
 
     public void getStatus(GetStatusParams params) throws RemoteException {
         getServiceInterface().getStatus(params);
+    }
+
+    public void requestPreAuthorizedTemporaryExposureKeyHistory(RequestPreAuthorizedTemporaryExposureKeyHistoryParams params) throws RemoteException {
+        getServiceInterface().requestPreAuthorizedTemporaryExposureKeyHistory(params);
+    }
+
+    public void requestPreAuthorizedTemporaryExposureKeyRelease(RequestPreAuthorizedTemporaryExposureKeyReleaseParams params) throws RemoteException {
+        getServiceInterface().requestPreAuthorizedTemporaryExposureKeyRelease(params);
     }
 }

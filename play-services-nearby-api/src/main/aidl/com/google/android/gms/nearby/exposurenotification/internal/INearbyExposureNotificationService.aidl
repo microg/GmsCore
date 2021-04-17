@@ -20,6 +20,8 @@ import com.google.android.gms.nearby.exposurenotification.internal.SetDiagnosisK
 import com.google.android.gms.nearby.exposurenotification.internal.GetDiagnosisKeysDataMappingParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetStatusParams;
 import com.google.android.gms.nearby.exposurenotification.internal.GetPackageConfigurationParams;
+import com.google.android.gms.nearby.exposurenotification.internal.RequestPreAuthorizedTemporaryExposureKeyHistoryParams;
+import com.google.android.gms.nearby.exposurenotification.internal.RequestPreAuthorizedTemporaryExposureKeyReleaseParams;
 
 interface INearbyExposureNotificationService{
     void start(in StartParams params) = 0;
@@ -39,4 +41,6 @@ interface INearbyExposureNotificationService{
     void getDiagnosisKeysDataMapping(in GetDiagnosisKeysDataMappingParams params) = 17;
     void getStatus(in GetStatusParams params) = 18;
     void getPackageConfiguration(in GetPackageConfigurationParams params) = 19;
+    void requestPreAuthorizedTemporaryExposureKeyHistory(in RequestPreAuthorizedTemporaryExposureKeyHistoryParams params) = 20;
+    void requestPreAuthorizedTemporaryExposureKeyRelease(in RequestPreAuthorizedTemporaryExposureKeyReleaseParams params) = 21;
 }

@@ -127,7 +127,7 @@ public class PeopleServiceImpl extends IPeopleService.Stub {
                 extras.putBoolean("rewindable", false);
                 extras.putInt("width", 0);
                 extras.putInt("height", 0);
-                File avaterFile = PeopleManager.getOwnerAvaterFile(context, account, true);
+                File avaterFile = PeopleManager.getOwnerAvatarFile(context, account, true);
                 try {
                     ParcelFileDescriptor fileDescriptor = null;
                     if (avaterFile != null) {
