@@ -12,8 +12,8 @@ import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
-import org.microg.gms.checkin.CheckinPrefs
-import org.microg.gms.gcm.GcmPrefs
+import org.microg.gms.checkin.getCheckinServiceInfo
+import org.microg.gms.checkin.setCheckinServiceConfiguration
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.gms.gcm.setGcmServiceConfiguration
 
@@ -30,7 +30,7 @@ class ProvisionService : LifecycleService() {
                 Log.d(TAG, "Provisioning: $s")
             }
 
-            intent?.extras?.getBooleanOrNull("checkin_enabled")?.let { CheckinPrefs.setEnabled(this@ProvisionService, it) }
+            intent?.extras?.getBooleanOrNull("checkin_enabled")?.let { setCheckinServiceConfiguration(this@ProvisionService, getCheckinServiceInfo(this@ProvisionService).configuration.copy(enabled = it)) }
             intent?.extras?.getBooleanOrNull("gcm_enabled")?.let { setGcmServiceConfiguration(this@ProvisionService, getGcmServiceInfo(this@ProvisionService).configuration.copy(enabled = it)) }
             // What else?
 
