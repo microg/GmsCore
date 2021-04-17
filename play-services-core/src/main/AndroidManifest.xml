@@ -271,6 +271,15 @@
             android:authorities="com.mgoogle.android.gms.auth.accounts"
             android:exported="true" />
 
+        <activity
+            android:name="org.microg.gms.ui.CredentialPickerActivity"
+            android:process=":ui">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.credentials.PICKER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Cast -->
 
         <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
