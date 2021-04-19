@@ -538,6 +538,7 @@
                 <action android:name="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS" />
                 <action android:name="com.google.android.gms.accountsettings.PRIVACY_SETTINGS" />
                 <action android:name="com.google.android.gms.accountsettings.SECURITY_SETTINGS" />
+                <action android:name="com.google.android.gms.accountsettings.action.VIEW_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
