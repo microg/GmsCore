@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Notificações de Exposição inativas</string>
+    <string name="exposure_notify_off_bluetooth">O Bluetooth deve estar ativo para receber Notificações de Exposição.</string>
+    <string name="exposure_notify_off_location">É necessário acesso à localização para receber Notificações de Exposição.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth e acesso à Localização devem estar ativos para receber Notificações de Exposição.</string>
+</resources>

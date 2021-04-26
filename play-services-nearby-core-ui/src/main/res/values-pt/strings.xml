@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_exposure">Notificações de Exposição</string>
+    <string name="pref_exposure_enable_info_summary">Para ativar as Notificações de Exposição, abra qualquer aplicação que as suporte.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Ativar Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Abrir definições de Localização</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Infelizmente o seu dispositivo não é compatível com as Notificações de Exposição.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Infelizmente o seu dispositivo é apenas parcialmente compatível com as Notificações de Exposição. Poderá ser notificado sobre contactos de risco mas não poderá notificar outros.</string>
+    <string name="prefcat_exposure_apps_title">Aplicações que utilizam Notificações de Exposição</string>
+    <string name="pref_exposure_collected_rpis_title">IDs recolhidos</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs durante a ultima hora</string>
+    <string name="pref_exposure_advertising_id_title">ID transmitido atualmente</string>
+    <string name="prefcat_exposure_app_report_title">Exposições reportadas</string>
+    <string name="pref_exposure_app_report_updated_title">Atualizado: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Menos de 5 minutos</string>
+    <string name="pref_exposure_app_report_entry_time_about">Cerca de <xliff:g example="13">%1$d</xliff:g> minutos</string>
+    <string name="pref_exposure_app_report_entry_distance_close">exposição próxima</string>
+    <string name="pref_exposure_app_report_entry_distance_far">exposição distante</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys"><xliff:g example="121031">%1$d</xliff:g> chaves de diagnóstico processadas.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Nenhum encontro de exposição reportado.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix"><xliff:g example="3">%1$d</xliff:g> encontros de exposição reportados:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, nível de risco <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Nota: O nível de risco é definido pela aplicação. Valores altos podem indicar baixo risco ou vice-versa.</string>
+    <string name="pref_exposure_app_api_usage_title">Utilização da API nos últimos 14 dias</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> ligações a <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs recolhidos</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Não existem registos</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs por hora</string>
+    <string name="pref_exposure_rpi_delete_all_title">Apagar</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Apagar todos os IDs recolhidos</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Apagar os IDs recolhidos impossibilitará que seja notificado caso algum dos seus contactos dos últimos 14 dias tenha diagnóstico positivo.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Apagar mesmo assim</string>
+    <string name="pref_exposure_rpi_export_title">Exportar</string>
+    <string name="pref_exposure_rpi_export_summary">Exportar IDs recolhidos para uma análise aprofundada com outra aplicação.</string>
+    <string name="pref_exposure_info_summary">"A API das Notificações de Exposição permite que as aplicações o notifiquem caso tenha sido exposto a alguém que tenha um diagnóstico positivo.
+
+A data, duração e força do sinal associadas a tal exposição serão partilhadas com as aplicações correspondentes."</string>
+    <string name="pref_exposure_rpis_details_summary">"Enquanto a API das Notificações de Exposição está ativa, o seu dispositivo recolhe IDs (denominados Rolling Proximity Identifiers ou RPIs) de outros dispositivos nas proximidades de forma passiva.
+
+Quando os proprietários de um dispositivo declaram ter diagnóstico positivo, os seus IDs são partilhados. O seu dispositivo verifica se os IDs com diagnóstico positivo correspondem a algum dos IDs recolhidos e calcula o risco de infeção."</string>
+
+    <string name="exposure_enable_switch">Usar as Notificações de Exposição</string>
+    <string name="exposure_confirm_start_title">Ligar as Notificações de Exposição?</string>
+    <string name="exposure_confirm_start_summary">"O Bluetooth do seu telemóvel é utilizado para recolher e partilhar IDs de forma segura com outros dispositivos nas proximidades.
+
+<xliff:g example="Corona-Warn">%1$s</xliff:g> pode notificá-lo caso tenha estado exposto a alguém com diagnóstico positivo.
+
+        A data, duração e força do sinal associadas a tal exposição serão partilhadas com a aplicação."</string>
+    <string name="exposure_confirm_start_button">Ligar</string>
+    <string name="exposure_confirm_stop_title">Desligar as Notificações de Exposição?</string>
+    <string name="exposure_confirm_stop_summary">Após desativar as Notificações de Exposição não receberá qualquer notificação caso tenha tido um contacto de risco com alguém diagnosticado positivamente.</string>
+    <string name="exposure_confirm_stop_button">Desligar</string>
+    <string name="exposure_confirm_keys_title">Partilhar os seus IDs com <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
+    <string name="exposure_confirm_keys_summary">"Os seus IDs dos últimos 14 dias serão usados para notificar outros de que teve um potencial contacto de risco.
+
+A sua identidade e resultado do teste não serão partilhados com outras pessoas."</string>
+    <string name="exposure_confirm_keys_button">Partilhar</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> necessita de permissões adicionais.</string>
+    <string name="exposure_confirm_permission_button">Conceder</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth tem que estar ativado.</string>
+    <string name="exposure_confirm_location_description">Acesso à Localização é necessária.</string>
+    <string name="exposure_confirm_button">Ativar</string>
+</resources>
