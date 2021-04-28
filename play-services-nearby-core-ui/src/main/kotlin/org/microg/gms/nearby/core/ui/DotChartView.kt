@@ -16,6 +16,7 @@ import android.view.MotionEvent
 import android.view.View
 import org.microg.gms.nearby.exposurenotification.ExposureScanSummary
 import org.microg.gms.ui.resolveColor
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -37,18 +38,24 @@ class DotChartView : View {
             val min = now - 14 * 24 * 60 * 60 * 1000L
             val date = Date(min)
             val dateFormat = DateFormat.getMediumDateFormat(context)
+            val hourFormat = SimpleDateFormat("H")
             val lowest = dateFormat.parse(dateFormat.format(date))?.time ?: date.time
             for (day in 0 until 15) {
                 date.time = now - (14 - day) * 24 * 60 * 60 * 1000L
                 displayData[day] = dateFormat.format(date) to hashMapOf()
+            }
+            fun dayByDate(date: Date) : Int? {
+                val dateString = dateFormat.format(date)
+                return displayData.entries.firstOrNull { it.value.first == dateString }?.key
             }
             if (value != null) {
                 for (summary in value) {
                     val off = summary.time - lowest
                     if (off < 0) continue
                     val totalHours = (off / 1000 / 60 / 60).toInt()
-                    val day = totalHours / 24
-                    val hour = totalHours % 24
+                    date.time = summary.time
+                    val day = dayByDate(date) ?: (totalHours / 24)
+                    val hour = hourFormat.format(date).toIntOrNull() ?: (totalHours % 24)
                     displayData[day]?.second?.set(hour, (displayData[day]?.second?.get(hour) ?: 0) + summary.rpis)
                 }
             }
