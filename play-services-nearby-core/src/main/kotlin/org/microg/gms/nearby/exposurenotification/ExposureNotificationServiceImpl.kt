@@ -9,8 +9,10 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.bluetooth.BluetoothAdapter
 import android.content.*
+import android.location.LocationManager
 import android.os.*
 import android.util.Log
+import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LifecycleOwner
@@ -622,11 +624,33 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     override fun getStatus(params: GetStatusParams) {
         Log.w(TAG, "Not yet implemented: getStatus")
         lifecycleScope.launchSafely {
-            ExposureDatabase.with(context) { database ->
+            val isAuthorized = ExposureDatabase.with(context) { database ->
                 database.noteAppAction(packageName, "getStatus")
+                database.isAppAuthorized(packageName)
+            }
+            val flags = hashSetOf<ExposureNotificationStatus>()
+            val adapter = BluetoothAdapter.getDefaultAdapter()
+            if (adapter == null || !adapter.isEnabled) {
+                flags.add(ExposureNotificationStatus.BLUETOOTH_DISABLED)
+                flags.add(ExposureNotificationStatus.BLUETOOTH_SUPPORT_UNKNOWN)
+            } else if (Build.VERSION.SDK_INT < 21) {
+                flags.add(ExposureNotificationStatus.EN_NOT_SUPPORT)
+            } else if (adapter.bluetoothLeScanner == null){
+                flags.add(ExposureNotificationStatus.HW_NOT_SUPPORT)
+            }
+            if (!LocationManagerCompat.isLocationEnabled(context.getSystemService(Context.LOCATION_SERVICE) as LocationManager)) {
+                flags.add(ExposureNotificationStatus.LOCATION_DISABLED)
+            }
+            if (!isAuthorized) {
+                flags.add(ExposureNotificationStatus.NO_CONSENT)
+            }
+            if (isAuthorized && ExposurePreferences(context).enabled) {
+                flags.add(ExposureNotificationStatus.ACTIVATED)
+            } else {
+                flags.add(ExposureNotificationStatus.INACTIVATED)
             }
             try {
-                params.callback.onResult(Status.SUCCESS, ExposureNotificationStatus.setToFlags(setOf(ExposureNotificationStatus.UNKNOWN)))
+                params.callback.onResult(Status.SUCCESS, ExposureNotificationStatus.setToFlags(flags))
             } catch (e: Exception) {
                 Log.w(TAG, "Callback failed", e)
             }
