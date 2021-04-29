@@ -200,8 +200,7 @@ class AdvertiserService : LifecycleService() {
     @Synchronized
     private fun stopOrRestartAdvertising() {
         if (!advertising) return
-        val (uuid, _) = ByteBuffer.wrap(sendingBytes).let { UUID(it.long, it.long) to it.int }
-        Log.i(TAG, "Stopping advertiser for RPI $uuid")
+        Log.i(TAG, "Stopping advertiser")
         advertising = false
         if (Build.VERSION.SDK_INT >= 26) {
             wantStartAdvertising = true
