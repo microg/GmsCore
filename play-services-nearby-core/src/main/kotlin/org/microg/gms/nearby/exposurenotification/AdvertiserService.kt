@@ -138,8 +138,7 @@ class AdvertiserService : LifecycleService() {
                 database.generateCurrentPayload(aemBytes)
             }
             val data = AdvertiseData.Builder().addServiceUuid(SERVICE_UUID).addServiceData(SERVICE_UUID, payload).build()
-            val (uuid, _) = ByteBuffer.wrap(payload).let { UUID(it.long, it.long) to it.int }
-            Log.i(TAG, "Starting advertiser for RPI $uuid")
+            Log.i(TAG, "Starting advertiser")
             if (Build.VERSION.SDK_INT >= 26) {
                 setCallback = SetCallback()
                 val params = AdvertisingSetParameters.Builder()
