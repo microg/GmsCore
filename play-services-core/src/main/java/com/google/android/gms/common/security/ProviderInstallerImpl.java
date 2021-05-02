@@ -131,7 +131,7 @@ public class ProviderInstallerImpl {
         // TODO: Move manual loading into helper function (as it is also used in both maps implementations)
         String primaryCpuAbi = (String) ApplicationInfo.class.getField("primaryCpuAbi").get(otherAppInfo);
         if (primaryCpuAbi != null) {
-            String path = "lib/" + primaryCpuAbi + "/libconscrypt_gmscore_jni.so";
+            String path = "lib/" + primaryCpuAbi;
             File cacheFile = new File(context.createPackageContext(packageName, 0).getCacheDir().getAbsolutePath() + "/.gmscore/" + path);
             cacheFile.getParentFile().mkdirs();
             File apkFile = new File(context.getPackageCodePath());
