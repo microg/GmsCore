@@ -7,11 +7,14 @@ package org.microg.gms.nearby.core.ui
 
 import android.annotation.TargetApi
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.recyclerview.widget.RecyclerView
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
 
 @TargetApi(21)
@@ -20,6 +23,18 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     private lateinit var histogram: DotChartPreference
     private lateinit var deleteAll: Preference
     private lateinit var exportDb: Preference
+
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater?,
+        parent: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): RecyclerView {
+        return super.onCreateRecyclerView(inflater, parent, savedInstanceState).apply {
+            // Allow drawing under system navbar / status bar
+            fitsSystemWindows = true
+            clipToPadding = false
+        }
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications_rpis)
