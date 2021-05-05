@@ -40,6 +40,7 @@ public class GoogleLocationManagerService extends BaseService {
             try {
                 ConnectionInfo info = new ConnectionInfo();
                 info.features = new Feature[] {
+                        new Feature("get_current_location", 1),
                         new Feature("name_sleep_segment_request", 1)
                 };
                 callback.onPostInitCompleteWithConnectionInfo(0, impl.asBinder(), info);
