@@ -9,4 +9,5 @@ interface ISafetyNetService {
     void lookupUri(ISafetyNetCallbacks callbacks, String s1, in int[] threatTypes, int i, String s2) = 2;
     void init(ISafetyNetCallbacks callbacks) = 3;
     void getHarmfulAppsList(ISafetyNetCallbacks callbacks) = 4;
+    void verifyWithRecaptcha(ISafetyNetCallbacks callbacks, String siteKey) = 5;
 }

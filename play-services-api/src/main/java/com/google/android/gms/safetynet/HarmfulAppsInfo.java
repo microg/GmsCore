@@ -16,30 +16,17 @@
 
 package com.google.android.gms.safetynet;
 
-import android.os.ParcelFileDescriptor;
-
-import com.google.android.gms.common.data.DataHolder;
-
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
-import java.io.File;
-
-public class SafeBrowsingData extends AutoSafeParcelable {
-    @Field(1)
-    public int versionCode = 1;
+public class HarmfulAppsInfo extends AutoSafeParcelable {
     @Field(2)
-    public String status;
+    public long field2;
     @Field(3)
-    public DataHolder data;
+    public HarmfulAppsData[] data;
     @Field(4)
-    public ParcelFileDescriptor fileDescriptor;
-    public File file;
-    public byte[] fileContents;
+    public int field4;
     @Field(5)
-    public long field5;
-    @Field(6)
-    public byte[] field6;
+    public boolean field5;
 
-    public static final Creator<SafeBrowsingData> CREATOR = new AutoCreator<SafeBrowsingData>(SafeBrowsingData.class);
+    public static final Creator<HarmfulAppsInfo> CREATOR = new AutoCreator<HarmfulAppsInfo>(HarmfulAppsInfo.class);
 }

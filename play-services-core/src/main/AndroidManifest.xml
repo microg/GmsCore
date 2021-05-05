@@ -294,7 +294,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- DroidGuard -->
+        <!-- DroidGuard / SafetyNet / reCAPTCHA -->
 
         <service android:name="org.microg.gms.droidguard.DroidGuardService">
             <intent-filter>
@@ -304,6 +304,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+        <receiver android:name="org.microg.gms.droidguard.ServiceInfoReceiver" />
+
+        <service android:name="org.microg.gms.safetynet.SafetyNetClientService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.safetynet.service.START" />
+            </intent-filter>
+        </service>
+        <receiver android:name="org.microg.gms.safetynet.ServiceInfoReceiver" />
+
+        <!-- TODO: Should be in :ui process and contact DroidGuardService instead of directly invoking droidguard -->
+        <activity
+            android:name="org.microg.gms.recaptcha.ReCaptchaActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.NoActionBar" />
 
         <!-- Car -->
 
@@ -657,13 +670,6 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="org.microg.gms.snet.ServiceInfoReceiver" />
-
-        <service android:name="org.microg.gms.snet.SafetyNetClientService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.safetynet.service.START" />
-            </intent-filter>
-        </service>
         <service android:name="org.microg.gms.wallet.PaymentService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wallet.service.BIND" />
