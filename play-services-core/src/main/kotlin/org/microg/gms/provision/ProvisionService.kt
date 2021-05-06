@@ -16,8 +16,8 @@ import org.microg.gms.checkin.getCheckinServiceInfo
 import org.microg.gms.checkin.setCheckinServiceConfiguration
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.gms.gcm.setGcmServiceConfiguration
-import org.microg.gms.snet.getSafetyNetServiceInfo
-import org.microg.gms.snet.setSafetyNetServiceConfiguration
+import org.microg.gms.safetynet.getSafetyNetServiceInfo
+import org.microg.gms.safetynet.setSafetyNetServiceConfiguration
 
 class ProvisionService : LifecycleService() {
     private fun Bundle.getBooleanOrNull(key: String): Boolean? {
