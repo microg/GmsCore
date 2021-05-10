@@ -5,7 +5,6 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -26,7 +25,7 @@ dependencies {
 
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 android {
