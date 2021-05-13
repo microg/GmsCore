@@ -21,6 +21,8 @@ public class ExposureNotificationStatusCodes extends CommonStatusCodes {
     public static final int FAILED_DISK_IO = 39506;
     public static final int FAILED_UNAUTHORIZED = 39507;
     public static final int FAILED_RATE_LIMITED = 39508;
+    public static final int FAILED_NOT_IN_FOREGROUND = 39509;
+    public static final int FAILED_KEY_RELEASE_NOT_PREAUTHORIZED = 39510;
 
     public static String getStatusCodeString(final int statusCode) {
         switch (statusCode) {
@@ -42,6 +44,10 @@ public class ExposureNotificationStatusCodes extends CommonStatusCodes {
                 return "FAILED_UNAUTHORIZED";
             case FAILED_RATE_LIMITED:
                 return "FAILED_RATE_LIMITED";
+            case FAILED_NOT_IN_FOREGROUND:
+                return "FAILED_NOT_IN_FOREGROUND";
+            case FAILED_KEY_RELEASE_NOT_PREAUTHORIZED:
+                return "FAILED_KEY_RELEASE_NOT_PREAUTHORIZED";
             default:
                 return CommonStatusCodes.getStatusCodeString(statusCode);
         }

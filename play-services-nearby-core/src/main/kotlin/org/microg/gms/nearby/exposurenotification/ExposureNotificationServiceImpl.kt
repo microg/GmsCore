@@ -667,7 +667,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     override fun requestPreAuthorizedTemporaryExposureKeyRelease(params: RequestPreAuthorizedTemporaryExposureKeyReleaseParams) {
         // TODO: Proper implementation
         lifecycleScope.launchSafely {
-            params.callback.onResult(Status.CANCELED)
+            params.callback.onResult(Status(FAILED_KEY_RELEASE_NOT_PREAUTHORIZED))
         }
     }
 
