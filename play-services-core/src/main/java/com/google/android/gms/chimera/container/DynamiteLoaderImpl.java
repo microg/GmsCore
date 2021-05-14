@@ -35,28 +35,41 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
 
     @Override
     public IObjectWrapper createModuleContext(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
+        // We don't have crash utils, so just forward
+        return createModuleContextNoCrashUtils(wrappedContext, moduleId, minVersion);
+    }
+
+    @Override
+    public IObjectWrapper createModuleContextNoCrashUtils(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
         Log.d(TAG, "createModuleContext for " + moduleId + " at version " + minVersion);
+        final Context originalContext = (Context) ObjectWrapper.unwrap(wrappedContext);
+        return ObjectWrapper.wrap(DynamiteContext.create(moduleId, originalContext));
+    }
+
+    @Override
+    public int getIDynamiteLoaderVersion() throws RemoteException {
+        return 2;
+    }
+
+    @Override
+    public int getModuleVersion(IObjectWrapper wrappedContext, String moduleId) throws RemoteException {
+        return getModuleVersion2(wrappedContext, moduleId, true);
+    }
+
+    @Override
+    public int getModuleVersion2(IObjectWrapper wrappedContext, String moduleId, boolean updateConfigIfRequired) throws RemoteException {
+        // We don't have crash utils, so just forward
+        return getModuleVersion2NoCrashUtils(wrappedContext, moduleId, updateConfigIfRequired);
+    }
+
+    @Override
+    public int getModuleVersion2NoCrashUtils(IObjectWrapper wrappedContext, String moduleId, boolean updateConfigIfRequired) throws RemoteException {
         final Context context = (Context) ObjectWrapper.unwrap(wrappedContext);
-        try {
-            return ObjectWrapper.wrap(new ContextWrapper(context.createPackageContext(Constants.GMS_PACKAGE_NAME, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY)) {
-                @Override
-                public Context getApplicationContext() {
-                    return context;
-                }
-            });
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.w(TAG, "returning null instead", e);
-            return null;
+        if (context == null) {
+            Log.w(TAG, "Invalid client context");
+            return 0;
         }
-    }
 
-    @Override
-    public int getModuleVersion(IObjectWrapper context, String moduleId) throws RemoteException {
-        return getModuleVersion2(context, moduleId, true);
-    }
-
-    @Override
-    public int getModuleVersion2(IObjectWrapper context, String moduleId, boolean updateConfigIfRequired) throws RemoteException {
         try {
             return Class.forName("com.google.android.gms.dynamite.descriptors." + moduleId + ".ModuleDescriptor").getDeclaredField("MODULE_VERSION").getInt(null);
         } catch (Exception e) {
