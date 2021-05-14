@@ -46,7 +46,9 @@ public enum GmsService {
     CREDENTIALS(68, "com.google.android.gms.auth.api.credentials.service.START"),
     MEASUREMENT(93, "com.google.android.gms.measurement.START"),
     GASS(116, "com.google.android.gms.gass.START"),
+    FACS_CACHE(202, "com.google.android.gms.facs.cache.service.START"),
     IDENTITY_SIGN_IN(212, "com.google.android.gms.auth.api.identity.service.signin.START"),
+    FACS_SYNC(220, "com.google.android.gms.facs.internal.service.START"),
     ;
 
     public int SERVICE_ID;

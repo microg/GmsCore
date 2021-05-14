@@ -444,6 +444,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.udc.FacsCacheService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.facs.cache.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.gms.accounts.ACCOUNT_SERVICE" />
@@ -455,6 +461,7 @@
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
                 <action android:name="com.google.android.gms.gass.START" />
+                <action android:name="com.google.android.gms.audit.service.START" />
             </intent-filter>
         </service>
     </application>
