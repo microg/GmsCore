@@ -23,14 +23,14 @@ import dalvik.system.PathClassLoader;
 
 public class DynamiteContext extends ContextWrapper {
     private static final String TAG = "DynamiteContext";
-    private String moduleId;
+    private DynamiteModuleInfo moduleInfo;
     private Context originalContext;
     private Context gmsContext;
     private DynamiteContext appContext;
 
-    public DynamiteContext(String moduleId, Context base, Context gmsContext, DynamiteContext appContext) {
+    public DynamiteContext(DynamiteModuleInfo moduleInfo, Context base, Context gmsContext, DynamiteContext appContext) {
         super(base);
-        this.moduleId = moduleId;
+        this.moduleInfo = moduleInfo;
         this.originalContext = base;
         this.gmsContext = gmsContext;
         this.appContext = appContext;
@@ -38,23 +38,19 @@ public class DynamiteContext extends ContextWrapper {
 
     @Override
     public ClassLoader getClassLoader() {
-        if (new DynamiteModuleInfo(moduleId).isMergeClassLoader()) {
-            StringBuilder nativeLoaderDirs = new StringBuilder(gmsContext.getApplicationInfo().nativeLibraryDir);
-            if (Build.VERSION.SDK_INT >= 23 && Process.is64Bit()) {
-                for (String abi : Build.SUPPORTED_64_BIT_ABIS) {
-                    nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(abi);
-                }
-            } else if (Build.VERSION.SDK_INT >= 21) {
-                for (String abi : Build.SUPPORTED_32_BIT_ABIS) {
-                    nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(abi);
-                }
-            } else {
-                nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(Build.CPU_ABI);
+        StringBuilder nativeLoaderDirs = new StringBuilder(gmsContext.getApplicationInfo().nativeLibraryDir);
+        if (Build.VERSION.SDK_INT >= 23 && Process.is64Bit()) {
+            for (String abi : Build.SUPPORTED_64_BIT_ABIS) {
+                nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(abi);
             }
-            return new PathClassLoader(gmsContext.getApplicationInfo().sourceDir, nativeLoaderDirs.toString(), originalContext.getClassLoader());
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            for (String abi : Build.SUPPORTED_32_BIT_ABIS) {
+                nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(abi);
+            }
         } else {
-            return gmsContext.getClassLoader();
+            nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(Build.CPU_ABI);
         }
+        return new PathClassLoader(gmsContext.getApplicationInfo().sourceDir, nativeLoaderDirs.toString(), new FilteredClassLoader(originalContext.getClassLoader(), moduleInfo.getMergedClasses(), moduleInfo.getMergedPackages()));
     }
 
     @Override
@@ -75,17 +71,18 @@ public class DynamiteContext extends ContextWrapper {
     @RequiresApi(24)
     @Override
     public Context createDeviceProtectedStorageContext() {
-        return new DynamiteContext(moduleId, originalContext.createDeviceProtectedStorageContext(), gmsContext.createDeviceProtectedStorageContext(), appContext);
+        return new DynamiteContext(moduleInfo, originalContext.createDeviceProtectedStorageContext(), gmsContext.createDeviceProtectedStorageContext(), appContext);
     }
 
     public static DynamiteContext create(String moduleId, Context originalContext) {
         try {
-            Context gmsContext = originalContext.createPackageContext(Constants.GMS_PACKAGE_NAME, new DynamiteModuleInfo(moduleId).getCreatePackageOptions());
+            DynamiteModuleInfo moduleInfo = new DynamiteModuleInfo(moduleId);
+            Context gmsContext = originalContext.createPackageContext(Constants.GMS_PACKAGE_NAME, 0);
             Context originalAppContext = originalContext.getApplicationContext();
             if (originalAppContext == null || originalAppContext == originalContext) {
-                return new DynamiteContext(moduleId, originalContext, gmsContext, null);
+                return new DynamiteContext(moduleInfo, originalContext, gmsContext, null);
             } else {
-                return new DynamiteContext(moduleId, originalContext, gmsContext, new DynamiteContext(moduleId, originalAppContext, gmsContext, null));
+                return new DynamiteContext(moduleInfo, originalContext, gmsContext, new DynamiteContext(moduleInfo, originalAppContext, gmsContext, null));
             }
         } catch (PackageManager.NameNotFoundException e) {
             Log.w(TAG, e);

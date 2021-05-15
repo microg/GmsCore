@@ -5,6 +5,9 @@
 
 package com.google.android.gms.chimera.container;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import static android.content.Context.CONTEXT_IGNORE_SECURITY;
 import static android.content.Context.CONTEXT_INCLUDE_CODE;
 
@@ -33,19 +36,19 @@ public class DynamiteModuleInfo {
         }
     }
 
-    public int getCreatePackageOptions() {
+    public Collection<String> getMergedPackages() {
         try {
-            return descriptor.getDeclaredField("CREATE_PACKAGE_OPTIONS").getInt(null);
+            return (Collection<String>) descriptor.getDeclaredField("MERGED_PACKAGES").get(null);
         } catch (Exception e) {
-            return CONTEXT_INCLUDE_CODE | CONTEXT_IGNORE_SECURITY;
+            return Collections.emptySet();
         }
     }
 
-    public boolean isMergeClassLoader() {
+    public Collection<String> getMergedClasses() {
         try {
-            return descriptor.getDeclaredField("MERGE_CLASS_LOADER").getBoolean(null);
+            return (Collection<String>) descriptor.getDeclaredField("MERGED_CLASSES").get(null);
         } catch (Exception e) {
-            return false;
+            return Collections.emptySet();
         }
     }
 }
