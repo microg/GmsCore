@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mgoogle.android.gms.chimera.container;
+package com.google.android.gms.chimera.container;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -24,7 +24,7 @@ import android.util.Log;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
-import com.mgoogle.android.gms.dynamite.IDynamiteLoader;
+import com.google.android.gms.dynamite.IDynamiteLoader;
 
 import org.microg.gms.common.Constants;
 
