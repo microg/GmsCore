@@ -1,4 +1,4 @@
-package com.mgoogle.android.gms.dynamite;
+package com.google.android.gms.dynamite;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 

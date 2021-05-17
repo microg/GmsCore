@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.mgoogle.android.gms.chimera.container;
+package com.google.android.gms.chimera.container;
 
 import android.util.Log;
 
