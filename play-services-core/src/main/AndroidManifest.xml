@@ -463,6 +463,12 @@
             android:authorities="com.google.android.gms.chimera"
             android:exported="true" />
 
+        <!-- Fonts -->
+        <provider
+            android:name="org.microg.gms.fonts.FontsProvider"
+            android:authorities="com.google.android.gms.fonts"
+            android:exported="true"/>
+
         <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
