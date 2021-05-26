@@ -1,20 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.snet;
+package org.microg.gms.safetynet;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -24,11 +13,15 @@ import android.content.pm.Signature;
 import android.util.Base64;
 import android.util.Log;
 
-import com.squareup.wire.Wire;
-
 import org.microg.gms.common.Build;
 import org.microg.gms.common.Constants;
+import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.Utils;
+import org.microg.gms.snet.AttestRequest;
+import org.microg.gms.snet.AttestResponse;
+import org.microg.gms.snet.FileState;
+import org.microg.gms.snet.SELinuxState;
+import org.microg.gms.snet.SafetyNetData;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -81,6 +74,7 @@ public class Attestation {
                 .seLinuxState(new SELinuxState.Builder().enabled(true).supported(true).build())
                 .suCandidates(Collections.<FileState>emptyList())
                 .build();
+        Log.d(TAG, "Payload: "+payload.toString());
         return this.payload = payload.encode();
     }
 
@@ -108,35 +102,48 @@ public class Attestation {
 
     private ByteString getPackageFileDigest() {
         try {
-            FileInputStream is = new FileInputStream(new File(context.getPackageManager().getApplicationInfo(packageName, 0).sourceDir));
-            MessageDigest digest = getSha256Digest();
-            byte[] data = new byte[16384];
-            while (true) {
-                int read = is.read(data);
-                if (read < 0) break;
-                digest.update(data, 0, read);
-            }
-            return ByteString.of(digest.digest());
+            return ByteString.of(getPackageFileDigest(context, packageName));
         } catch (Exception e) {
             Log.w(TAG, e);
             return null;
         }
     }
 
+    public static byte[] getPackageFileDigest(Context context, String packageName) throws Exception {
+        FileInputStream is = new FileInputStream(new File(context.getPackageManager().getApplicationInfo(packageName, 0).sourceDir));
+        MessageDigest digest = getSha256Digest();
+        byte[] data = new byte[4096];
+        while (true) {
+            int read = is.read(data);
+            if (read < 0) break;
+            digest.update(data, 0, read);
+        }
+        is.close();
+        return digest.digest();
+    }
+
     @SuppressLint("PackageManagerGetSignatures")
     private List<ByteString> getPackageSignatures() {
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
             ArrayList<ByteString> res = new ArrayList<>();
-            MessageDigest digest = getSha256Digest();
-            for (Signature signature : pi.signatures) {
-                res.add(ByteString.of(digest.digest(signature.toByteArray())));
+            for (byte[] bytes : getPackageSignatures(context, packageName)) {
+                res.add(ByteString.of(bytes));
             }
             return res;
         } catch (Exception e) {
             Log.w(TAG, e);
             return null;
         }
+    }
+
+    public static byte[][] getPackageSignatures(Context context, String packageName) throws Exception {
+        PackageInfo pi = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+        ArrayList<byte[]> res = new ArrayList<>();
+        MessageDigest digest = getSha256Digest();
+        for (Signature signature : pi.signatures) {
+            res.add(digest.digest(signature.toByteArray()));
+        }
+        return res.toArray(new byte[][]{});
     }
 
     public String attest(String apiKey) throws IOException {
@@ -154,6 +161,8 @@ public class Attestation {
         connection.setDoOutput(true);
         connection.setRequestProperty("content-type", "application/x-protobuf");
         connection.setRequestProperty("Accept-Encoding", "gzip");
+        connection.setRequestProperty("X-Android-Package", packageName);
+        connection.setRequestProperty("X-Android-Cert", PackageUtils.firstSignatureDigest(context, packageName));
         Build build = Utils.getBuild(context);
         connection.setRequestProperty("User-Agent", "SafetyNet/" + Constants.GMS_VERSION_CODE + " (" + build.device + " " + build.id + "); gzip");
 

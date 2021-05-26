@@ -25,7 +25,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/colorBackground"
-        android:orientation="vertical">
+        android:divider="?attr/dividerHorizontal"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,15 +60,12 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.25dp"
-            android:background="?android:attr/textColorSecondary" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:divider="?attr/dividerHorizontal"
+            android:orientation="vertical"
+            android:showDividers="middle">
 
             <Button
                 android:id="@+id/permission_allow_button"
@@ -77,11 +76,6 @@
                 android:paddingRight="8dp"
                 android:text="@string/allow">
             </Button>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.25dp"
-                android:background="?android:attr/textColorSecondary" />
 
             <Button
                 android:id="@+id/permission_deny_button"

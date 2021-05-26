@@ -108,6 +108,10 @@ public class ProviderInstallerImpl {
         }
     }
 
+    public void reportRequestStats(Context context, long a, long b) {
+        // Ignore stats
+    }
+
     private static void initProvider(Context context, String packageName) {
         Log.d(TAG, "Initializing provider for " + packageName);
 

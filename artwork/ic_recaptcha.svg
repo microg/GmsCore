@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2021, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   width="48mm"
+   height="48mm"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="svg8">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient883"
+       x1="52.914062"
+       y1="90.708984"
+       x2="52.914062"
+       y2="78.548767"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         style="stop-color:#1e88e5;stop-opacity:1"
+         offset="0"
+         id="stop877" />
+      <stop
+         style="stop-color:#2196f3;stop-opacity:1"
+         offset="1"
+         id="stop879" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient887"
+       gradientUnits="userSpaceOnUse"
+       x1="52.914062"
+       y1="90.708984"
+       x2="52.914062"
+       y2="78.548767"
+       gradientTransform="matrix(0,0.26458333,-0.26458333,0,48.00017,-8.2278639e-8)">
+      <stop
+         style="stop-color:#3949ab;stop-opacity:1"
+         offset="0"
+         id="stop904" />
+      <stop
+         style="stop-color:#3f51b5;stop-opacity:1"
+         offset="1"
+         id="stop906" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient918"
+       x1="24.000086"
+       y1="1.9998779"
+       x2="46.000294"
+       y2="24.000086"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.09411765"
+         offset="0"
+         id="stop912" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0"
+         offset="1"
+         id="stop914" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1">
+    <path
+       id="circle855"
+       style="fill:#bdbdbd;fill-opacity:1;stroke:#000000;stroke-width:0"
+       d="M 7.5585938,90.708984 V 153.07227 L 22.445312,138.18555 a 83.149605,83.149605 0 0 0 36.44336,29.34375 83.149605,83.149605 0 0 0 90.615238,-18.02539 L 117.43359,117.43359 A 37.795276,37.795276 0 0 1 90.708984,128.50391 37.795276,37.795276 0 0 1 55.695312,104.93555 L 69.921875,90.708984 H 52.914062 Z"
+       transform="scale(0.26458333)" />
+    <path
+       id="circle857"
+       style="fill:url(#linearGradient883);fill-opacity:1;stroke:#000000;stroke-width:0"
+       d="M 28.345703,7.5585938 43.232422,22.445312 A 83.149605,83.149605 0 0 0 7.5585938,90.708984 H 52.914062 A 37.795276,37.795276 0 0 1 76.482422,55.695312 L 90.708984,69.921875 V 52.914062 7.5585938 h -0.257812 z"
+       transform="scale(0.26458333)" />
+    <path
+       id="path885"
+       style="fill:url(#linearGradient887);fill-opacity:1;stroke:#000000;stroke-width:0"
+       d="M 46.000292,7.4997999 42.061515,11.438578 A 21.999999,21.999999 0 0 0 24.000085,1.9998779 V 14.000179 a 10,10 0 0 1 9.264034,6.235795 l -3.764112,3.764111 h 4.499984 12.000301 v -0.06821 z" />
+    <path
+       id="path910"
+       style="fill:url(#linearGradient918);fill-opacity:1;stroke:#000000;stroke-width:0"
+       d="M 46.000292,7.4997999 42.061515,11.438578 C 37.949082,5.5254753 31.202646,1.9998641 24.000085,1.9998779 L 46.000292,24.000085 v -0.06821 z" />
+  </g>
+</svg>

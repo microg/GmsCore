@@ -50,7 +50,8 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
                     Feature("nearby_exposure_notification_get_status", 1),
                     Feature("nearby_exposure_notification_diagnosis_keys_data_mapping", 1),
                     Feature("nearby_exposure_notification_diagnosis_key_file_supplier", 1),
-                    Feature("nearby_exposure_notification_package_configuration", 1)
+                    Feature("nearby_exposure_notification_package_configuration", 1),
+                    Feature("nearby_exposure_notification_preauthorize_key_release", 1)
             )
         })
     }
