@@ -6,6 +6,11 @@
 
 <resources>
 
+    <style name="Theme.AppCompat.Light.Dialog.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="Theme.AppCompat.Light.Dialog.Alert.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

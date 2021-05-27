@@ -13,9 +13,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.R
 import com.google.android.gms.databinding.SafetyNetFragmentBinding
 import org.microg.gms.checkin.getCheckinServiceInfo
-import org.microg.gms.snet.ServiceInfo
-import org.microg.gms.snet.getSafetyNetServiceInfo
-import org.microg.gms.snet.setSafetyNetServiceConfiguration
+import org.microg.gms.safetynet.ServiceInfo
+import org.microg.gms.safetynet.getSafetyNetServiceInfo
+import org.microg.gms.safetynet.setSafetyNetServiceConfiguration
 
 class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
 

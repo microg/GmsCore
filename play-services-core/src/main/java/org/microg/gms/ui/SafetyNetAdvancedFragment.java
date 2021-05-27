@@ -28,9 +28,9 @@ import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.RadioButtonPreference;
 import org.microg.tools.ui.ResourceSettingsFragment;
 
-import static org.microg.gms.snet.SafetyNetPrefs.PREF_SNET_OFFICIAL;
-import static org.microg.gms.snet.SafetyNetPrefs.PREF_SNET_SELF_SIGNED;
-import static org.microg.gms.snet.SafetyNetPrefs.PREF_SNET_THIRD_PARTY;
+import static org.microg.gms.safetynet.SafetyNetPrefs.PREF_SNET_OFFICIAL;
+import static org.microg.gms.safetynet.SafetyNetPrefs.PREF_SNET_SELF_SIGNED;
+import static org.microg.gms.safetynet.SafetyNetPrefs.PREF_SNET_THIRD_PARTY;
 
 public class SafetyNetAdvancedFragment extends ResourceSettingsFragment {
 

@@ -13,7 +13,7 @@ import com.google.android.gms.R
 import org.microg.gms.checkin.getCheckinServiceInfo
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.getGcmServiceInfo
-import org.microg.gms.snet.getSafetyNetServiceInfo
+import org.microg.gms.safetynet.getSafetyNetServiceInfo
 import org.microg.nlp.client.UnifiedLocationClient
 import org.microg.tools.ui.ResourceSettingsFragment
 

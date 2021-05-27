@@ -67,6 +67,8 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.subscriptions.red", "de8304ace744ae4c4e05887a27a790815e610ff0");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.meetings", "47a6936b733dbdb45d71997fbe1d610eca36b8bf");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.nbu.paisa.user", "80df78bb700f9172bc671779b017ddefefcbf552");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.dynamite", "519c5a17a60596e6fe5933b9cb4285e7b0e5eb7b");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.projection.gearhead", "9ca91f9e704d630ef67a23f52bf1577a92b9ca5d");
     }
 
     public static boolean isGooglePackage(Context context, String packageName) {

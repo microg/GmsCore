@@ -6,7 +6,7 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    implementation "org.microg.gms:conscrypt-gmscore:2.5.1"
+    implementation "org.microg.gms:conscrypt-gmscore:2.5.2"
     implementation "androidx.annotation:annotation:$annotationVersion"
     implementation project(":play-services-base-core")
 }
