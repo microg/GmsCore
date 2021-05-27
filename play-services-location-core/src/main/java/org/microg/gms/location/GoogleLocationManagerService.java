@@ -19,6 +19,8 @@ package org.microg.gms.location;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
@@ -36,7 +38,12 @@ public class GoogleLocationManagerService extends BaseService {
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
         impl.invokeOnceReady(() -> {
             try {
-                callback.onPostInitComplete(0, impl.asBinder(), null);
+                ConnectionInfo info = new ConnectionInfo();
+                info.features = new Feature[] {
+                        new Feature("get_current_location", 1),
+                        new Feature("name_sleep_segment_request", 1)
+                };
+                callback.onPostInitCompleteWithConnectionInfo(0, impl.asBinder(), info);
             } catch (RemoteException e) {
                 Log.w(TAG, e);
             }

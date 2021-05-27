@@ -10,8 +10,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
 import android.os.Build
-import android.provider.Settings
-import android.text.TextUtils
+import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -38,24 +37,25 @@ class DotChartView : View {
             val now = System.currentTimeMillis()
             val min = now - 14 * 24 * 60 * 60 * 1000L
             val date = Date(min)
-            val format = Settings.System.getString(context.contentResolver, Settings.System.DATE_FORMAT);
-            val dateFormat = if (TextUtils.isEmpty(format)) {
-                android.text.format.DateFormat.getMediumDateFormat(context)
-            } else {
-                SimpleDateFormat(format)
-            }
+            val dateFormat = DateFormat.getMediumDateFormat(context)
+            val hourFormat = SimpleDateFormat("H")
             val lowest = dateFormat.parse(dateFormat.format(date))?.time ?: date.time
             for (day in 0 until 15) {
                 date.time = now - (14 - day) * 24 * 60 * 60 * 1000L
                 displayData[day] = dateFormat.format(date) to hashMapOf()
+            }
+            fun dayByDate(date: Date) : Int? {
+                val dateString = dateFormat.format(date)
+                return displayData.entries.firstOrNull { it.value.first == dateString }?.key
             }
             if (value != null) {
                 for (summary in value) {
                     val off = summary.time - lowest
                     if (off < 0) continue
                     val totalHours = (off / 1000 / 60 / 60).toInt()
-                    val day = totalHours / 24
-                    val hour = totalHours % 24
+                    date.time = summary.time
+                    val day = dayByDate(date) ?: (totalHours / 24)
+                    val hour = hourFormat.format(date).toIntOrNull() ?: (totalHours % 24)
                     displayData[day]?.second?.set(hour, (displayData[day]?.second?.get(hour) ?: 0) + summary.rpis)
                 }
             }

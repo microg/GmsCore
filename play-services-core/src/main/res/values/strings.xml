@@ -30,7 +30,7 @@
 
 If this was intentional, use the <b>Sign in</b> button to connect to Google’s sign-in page, if not, press <b>Cancel</b> to go back to the application that caused this dialog to show up."</string>
     <string name="auth_sign_in">Sign in</string>
-    <string name="auth_connecting">"Your device is establishing an connection to Google’s servers to sign you in.
+    <string name="auth_connecting">"Your device is establishing a connection to Google’s servers to sign you in.
 
 This can take a few seconds."</string>
     <string name="no_network_error_desc">"You don’t have a network connection.

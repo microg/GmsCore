@@ -1,17 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2016, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.auth.api.credentials;
@@ -30,28 +22,22 @@ import java.util.Locale;
 @PublicApi
 public class Credential extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
+    @Field(1000)
     private int versionCode = 1;
 
-    @SafeParceled(1)
+    @Field(1)
     private String id;
-
-    @SafeParceled(2)
+    @Field(2)
     private String name;
-
-    @SafeParceled(3)
+    @Field(3)
     private Uri profilePictureUri;
-
-    @SafeParceled(value = 4, subClass = IdToken.class)
+    @Field(value = 4, subClass = IdToken.class)
     private List<IdToken> tokens;
-
-    @SafeParceled(5)
+    @Field(5)
     private String password;
-
-    @SafeParceled(6)
+    @Field(6)
     private String accountType;
-
-    @SafeParceled(7)
+    @Field(7)
     private String generatedPassword;
 
     private Credential() {
