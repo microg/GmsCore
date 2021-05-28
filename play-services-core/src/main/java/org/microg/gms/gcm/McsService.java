@@ -62,6 +62,7 @@ import java.io.Closeable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -223,6 +224,7 @@ public class McsService extends Service implements Handler.Callback {
 
     @Override
     public void onDestroy() {
+        Log.d(TAG, "onDestroy");
         alarmManager.cancel(heartbeatIntent);
         closeAll();
         database.close();
@@ -242,7 +244,7 @@ public class McsService extends Service implements Handler.Callback {
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
         int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref);
-        if (heartbeatMs < 0) {
+        if (heartbeatMs < 0) { // TODO how can this be negative?
             closeAll();
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
             logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
@@ -633,6 +635,12 @@ public class McsService extends Service implements Handler.Callback {
             case MSG_INPUT_ERROR:
             case MSG_OUTPUT_ERROR:
                 logd(this, "I/O error: " + msg.obj);
+                if (msg.obj instanceof SocketException) {
+                    SocketException e = (SocketException) msg.obj;
+                    if ("Connection reset".equals(e.getMessage())) {
+                        GcmPrefs.get(this).learnTimeout(this, activeNetworkPref);
+                    }
+                }
                 rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, msg.obj));
                 return true;
             case MSG_TEARDOWN:
