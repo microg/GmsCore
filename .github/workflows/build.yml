@@ -10,4 +10,5 @@ jobs:
       - run: ./gradlew --no-daemon build
         env:
           TERM: dumb
-          JAVA_OPTS: -Xmx2048m
+          JAVA_OPTS: -Xms512m -Xmx2048m
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"

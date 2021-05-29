@@ -4,9 +4,16 @@ on:
   push:
     branches:
       - master
+      - feature/**
+      - bugfix/**
   pull_request:
     branches:
-      - master
+      - feature/**
+      - bugfix/**
+
+env:
+  JAVA_OPTS: -Xms512m -Xmx2048m
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"
 
 jobs:
   build:
