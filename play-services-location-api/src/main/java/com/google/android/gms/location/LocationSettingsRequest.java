@@ -37,8 +37,13 @@ public class LocationSettingsRequest extends AutoSafeParcelable {
     @PublicApi(exclude = true)
     public boolean alwaysShow;
 
+    @SafeParceled(3)
     @PublicApi(exclude = true)
     public boolean needBle;
+
+    @SafeParceled(5)
+    @PublicApi(exclude = true)
+    public int getConfiguration;
 
     private LocationSettingsRequest() {
     }
