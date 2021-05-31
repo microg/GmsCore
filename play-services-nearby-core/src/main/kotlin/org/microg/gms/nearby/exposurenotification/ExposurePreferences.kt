@@ -7,22 +7,23 @@ package org.microg.gms.nearby.exposurenotification
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
-import org.microg.gms.common.PackageUtils
+import org.microg.gms.settings.SettingsContract.Exposure.CONTENT_URI
+import org.microg.gms.settings.SettingsContract.Exposure.LAST_CLEANUP
+import org.microg.gms.settings.SettingsContract.Exposure.SCANNER_ENABLED
+import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.settings.SettingsContract.setSettings
 
 class ExposurePreferences(private val context: Context) {
-    private var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-    init {
-        PackageUtils.warnIfNotPersistentProcess(ExposurePreferences::class.java)
-    }
 
     var enabled
-        get() = preferences.getBoolean(PREF_SCANNER_ENABLED, false)
+        get() = getSettings(context, CONTENT_URI, arrayOf(SCANNER_ENABLED)) { c ->
+            c.getInt(0) != 0
+        }
         set(newStatus) {
             val changed = enabled != newStatus
-            preferences.edit().putBoolean(PREF_SCANNER_ENABLED, newStatus).commit()
+            setSettings(context, CONTENT_URI) {
+                put(SCANNER_ENABLED, newStatus)
+            }
             if (!changed) return
             if (newStatus) {
                 context.sendOrderedBroadcast(Intent(context, ServiceTrigger::class.java), null)
@@ -33,11 +34,11 @@ class ExposurePreferences(private val context: Context) {
         }
 
     var lastCleanup
-        get() = preferences.getLong(PREF_LAST_CLEANUP, 0)
-        set(value) = preferences.edit().putLong(PREF_LAST_CLEANUP, value).apply()
+        get() = getSettings(context, CONTENT_URI, arrayOf(LAST_CLEANUP)) { c ->
+            c.getLong(0)
+        }
+        set(value) = setSettings(context, CONTENT_URI) {
+            put(LAST_CLEANUP, value)
+        }
 
-    companion object {
-        private const val PREF_SCANNER_ENABLED = "exposure_scanner_enabled"
-        private const val PREF_LAST_CLEANUP = "exposure_last_cleanup"
-    }
 }

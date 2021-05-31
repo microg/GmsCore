@@ -129,6 +129,13 @@
             android:exported="true"
             android:permission="org.microg.gms.PROVISION" />
 
+        <!-- Internal Settings -->
+
+        <provider
+            android:name="org.microg.gms.settings.SettingsProvider"
+            android:authorities="org.microg.gms.settings"
+            android:exported="false" />
+
         <!-- Location -->
 
         <activity
@@ -197,8 +204,6 @@
                 <action android:name="com.google.android.gms.checkin.BIND_TO_SERVICE" />
             </intent-filter>
         </service>
-
-        <receiver android:name="org.microg.gms.checkin.ServiceInfoReceiver" />
 
         <receiver android:name="org.microg.gms.checkin.TriggerReceiver">
             <intent-filter>

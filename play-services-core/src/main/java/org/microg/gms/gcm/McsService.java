@@ -73,6 +73,7 @@ import okio.ByteString;
 
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
@@ -234,6 +235,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     public synchronized static boolean isConnected(Context context) {
+        warnIfNotPersistentProcess(McsService.class);
         if (inputStream == null || !inputStream.isAlive() || outputStream == null || !outputStream.isAlive()) {
             logd(null, "Connection is not enabled or dead.");
             return false;
@@ -244,13 +246,14 @@ public class McsService extends Service implements Handler.Callback {
             closeAll();
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
             logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
-            GcmPrefs.get(context).learnTimeout(activeNetworkPref);
+            GcmPrefs.get(context).learnTimeout(context, activeNetworkPref);
             return false;
         }
         return true;
     }
 
     public static long getStartTimestamp() {
+        warnIfNotPersistentProcess(McsService.class);
         return startTimestamp;
     }
 
@@ -460,7 +463,7 @@ public class McsService extends Service implements Handler.Callback {
 
     private void handleLoginResponse(LoginResponse loginResponse) {
         if (loginResponse.error == null) {
-            GcmPrefs.get(this).clearLastPersistedId();
+            GcmPrefs.clearLastPersistedId(this);
             logd(this, "Logged in");
             wakeLock.release();
         } else {
@@ -470,7 +473,7 @@ public class McsService extends Service implements Handler.Callback {
 
     private void handleCloudMessage(DataMessageStanza message) {
         if (message.persistent_id != null) {
-            GcmPrefs.get(this).extendLastPersistedId(message.persistent_id);
+            GcmPrefs.get(this).extendLastPersistedId(this, message.persistent_id);
         }
         if (SELF_CATEGORY.equals(message.category)) {
             handleSelfMessage(message);
@@ -488,7 +491,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleHeartbeatAck(HeartbeatAck ack) {
-        GcmPrefs.get(this).learnReached(activeNetworkPref, SystemClock.elapsedRealtime() - lastIncomingNetworkRealtime);
+        GcmPrefs.get(this).learnReached(this, activeNetworkPref, SystemClock.elapsedRealtime() - lastIncomingNetworkRealtime);
         lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
         wakeLock.release();
     }
@@ -498,13 +501,13 @@ public class McsService extends Service implements Handler.Callback {
         return new LoginRequest.Builder()
                 .adaptive_heartbeat(false)
                 .auth_service(LoginRequest.AuthService.ANDROID_ID)
-                .auth_token(Long.toString(info.securityToken))
+                .auth_token(Long.toString(info.getSecurityToken()))
                 .id("android-" + SDK_INT)
                 .domain("mcs.android.com")
-                .device_id("android-" + Long.toHexString(info.androidId))
+                .device_id("android-" + Long.toHexString(info.getAndroidId()))
                 .network_type(1)
-                .resource(Long.toString(info.androidId))
-                .user(Long.toString(info.androidId))
+                .resource(Long.toString(info.getAndroidId()))
+                .user(Long.toString(info.getAndroidId()))
                 .use_rmq2(true)
                 .setting(Collections.singletonList(new Setting.Builder().name("new_vc").value("1").build()))
                 .received_persistent_id(GcmPrefs.get(this).getLastPersistedIds())
