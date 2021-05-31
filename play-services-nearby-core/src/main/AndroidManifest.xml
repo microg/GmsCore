@@ -41,10 +41,6 @@
         </service>
 
         <receiver
-            android:name="org.microg.gms.nearby.exposurenotification.ServiceInfoReceiver"
-            android:process=":persistent" />
-
-        <receiver
             android:name="org.microg.gms.nearby.exposurenotification.ServiceTrigger"
             android:process=":persistent">
             <intent-filter>

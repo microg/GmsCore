@@ -70,8 +70,8 @@ public class RegisterRequest extends HttpFormClient.Request {
     }
 
     public RegisterRequest checkin(LastCheckinInfo lastCheckinInfo) {
-        androidId = lastCheckinInfo.androidId;
-        securityToken = lastCheckinInfo.securityToken;
+        androidId = lastCheckinInfo.getAndroidId();
+        securityToken = lastCheckinInfo.getSecurityToken();
         return this;
     }
 
