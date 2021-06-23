@@ -22,6 +22,7 @@ include ':play-services-wearable-proto'
 
 include ':play-services-base-core'
 include ':play-services-conscrypt-provider-core'
+include ':play-services-cronet-core'
 include ':play-services-location-core'
 include ':play-services-maps-core-mapbox'
 include ':play-services-maps-core-vtm'

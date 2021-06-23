@@ -4,6 +4,7 @@
  */
 
 buildscript {
+    ext.cronetVersion = '91.0.4472.120'
     ext.nlpVersion = '2.0-alpha6'
     ext.remoteDroidGuardVersion = '0.1.2'
     ext.safeParcelVersion = '1.7.0'
