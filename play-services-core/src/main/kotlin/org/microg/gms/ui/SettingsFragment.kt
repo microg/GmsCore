@@ -7,7 +7,9 @@ package org.microg.gms.ui
 
 import android.content.ComponentName
 import android.content.pm.PackageManager
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
@@ -17,6 +19,9 @@ import com.mgoogle.android.gms.R
 import org.microg.gms.checkin.CheckinClient
 import org.microg.gms.checkin.getCheckinServiceInfo
 import org.microg.gms.gcm.GcmDatabase
+import org.microg.gms.gcm.McsConstants.ACTION_RECONNECT
+import org.microg.gms.gcm.McsService
+import org.microg.gms.gcm.TriggerReceiver
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.tools.ui.ResourceSettingsFragment
 
@@ -73,16 +78,22 @@ class SettingsFragment : ResourceSettingsFragment() {
     }
 
     private suspend fun updateDetails() {
-        findPreference<Preference>(PREF_GCM)?.summary = if (getGcmServiceInfo(requireContext()).configuration.enabled) {
+        val context = requireContext()
+        val gcmServiceInfo = getGcmServiceInfo(context)
+        if (gcmServiceInfo.configuration.enabled) {
             val database = GcmDatabase(context)
             val regCount = database.registrationList.size
+            // check if we are connected as we should be and re-connect if not
+            if (!gcmServiceInfo.connected) {
+                context.sendBroadcast(Intent(ACTION_RECONNECT, null, context, TriggerReceiver::class.java))
+            }
             database.close()
             getString(R.string.service_status_enabled_short) + " - " + resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount)
         } else {
             getString(R.string.service_status_disabled_short)
         }
 
-        findPreference<Preference>(PREF_CHECKIN)?.setSummary(if (getCheckinServiceInfo(requireContext()).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_CHECKIN)?.setSummary(if (getCheckinServiceInfo(context).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
     }
 
     companion object {

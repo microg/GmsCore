@@ -5,89 +5,38 @@
 
 package org.microg.gms.checkin
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.microg.gms.settings.SettingsContract.CheckIn
+import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.settings.SettingsContract.setSettings
 import java.io.Serializable
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
-
-private const val ACTION_SERVICE_INFO_REQUEST = "org.microg.gms.checkin.SERVICE_INFO_REQUEST"
-private const val ACTION_UPDATE_CONFIGURATION = "org.microg.gms.checkin.UPDATE_CONFIGURATION"
-private const val ACTION_SERVICE_INFO_RESPONSE = "org.microg.gms.checkin.SERVICE_INFO_RESPONSE"
-private const val EXTRA_SERVICE_INFO = "org.microg.gms.checkin.SERVICE_INFO"
-private const val EXTRA_CONFIGURATION = "org.microg.gms.checkin.CONFIGURATION"
-private const val TAG = "GmsCheckinStatusInfo"
 
 data class ServiceInfo(val configuration: ServiceConfiguration, val lastCheckin: Long, val androidId: Long) : Serializable
 
-data class ServiceConfiguration(val enabled: Boolean) : Serializable {
-    fun saveToPrefs(context: Context) {
-        CheckinPrefs.setEnabled(context, enabled)
+data class ServiceConfiguration(val enabled: Boolean) : Serializable
+
+suspend fun getCheckinServiceInfo(context: Context): ServiceInfo = withContext(Dispatchers.IO) {
+    val projection = arrayOf(CheckIn.ENABLED, CheckIn.LAST_CHECK_IN, CheckIn.ANDROID_ID)
+    getSettings(context, CheckIn.CONTENT_URI, projection) { c ->
+        ServiceInfo(
+            configuration = ServiceConfiguration(c.getInt(0) != 0),
+            lastCheckin = c.getLong(1),
+            androidId = c.getLong(2),
+        )
     }
 }
 
-private fun CheckinPrefs.toConfiguration(): ServiceConfiguration = ServiceConfiguration(isEnabled)
-
-class ServiceInfoReceiver : BroadcastReceiver() {
-    private fun sendInfoResponse(context: Context) {
-        context.sendOrderedBroadcast(Intent(ACTION_SERVICE_INFO_RESPONSE).apply {
-            setPackage(context.packageName)
-            val checkinInfo = LastCheckinInfo.read(context)
-            putExtra(EXTRA_SERVICE_INFO, ServiceInfo(CheckinPrefs.get(context).toConfiguration(), checkinInfo.lastCheckin, checkinInfo.androidId))
-        }, null)
+suspend fun setCheckinServiceConfiguration(context: Context, configuration: ServiceConfiguration) = withContext(Dispatchers.IO) {
+    val serviceInfo = getCheckinServiceInfo(context)
+    if (serviceInfo.configuration == configuration) return@withContext
+    // enabled state is not already set, setting it now
+    setSettings(context, CheckIn.CONTENT_URI) {
+        put(CheckIn.ENABLED, configuration.enabled)
     }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        try {
-            when (intent.action) {
-                ACTION_UPDATE_CONFIGURATION -> {
-                    (intent.getSerializableExtra(EXTRA_CONFIGURATION) as? ServiceConfiguration)?.saveToPrefs(context)
-                }
-            }
-            sendInfoResponse(context)
-        } catch (e: Exception) {
-            Log.w(TAG, e)
-        }
+    if (configuration.enabled) {
+        context.sendOrderedBroadcast(Intent(context, TriggerReceiver::class.java), null)
     }
 }
-
-
-
-private suspend fun sendToServiceInfoReceiver(intent: Intent, context: Context): ServiceInfo = suspendCoroutine {
-    context.registerReceiver(object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            context.unregisterReceiver(this)
-            val serviceInfo = try {
-                intent.getSerializableExtra(EXTRA_SERVICE_INFO) as ServiceInfo
-            } catch (e: Exception) {
-                it.resumeWithException(e)
-                return
-            }
-            try {
-                it.resume(serviceInfo)
-            } catch (e: Exception) {
-                Log.w(TAG, e)
-            }
-        }
-    }, IntentFilter(ACTION_SERVICE_INFO_RESPONSE))
-    try {
-        context.sendOrderedBroadcast(intent, null)
-    } catch (e: Exception) {
-        it.resumeWithException(e)
-    }
-}
-
-suspend fun getCheckinServiceInfo(context: Context): ServiceInfo = sendToServiceInfoReceiver(
-        Intent(context, ServiceInfoReceiver::class.java).apply {
-            action = ACTION_SERVICE_INFO_REQUEST
-        }, context)
-
-suspend fun setCheckinServiceConfiguration(context: Context, configuration: ServiceConfiguration): ServiceInfo = sendToServiceInfoReceiver(
-        Intent(context, ServiceInfoReceiver::class.java).apply {
-            action = ACTION_UPDATE_CONFIGURATION
-            putExtra(EXTRA_CONFIGURATION, configuration)
-        }, context)

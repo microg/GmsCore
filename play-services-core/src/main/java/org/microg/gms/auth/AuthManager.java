@@ -23,21 +23,20 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.preference.PreferenceManager;
-
 import org.microg.gms.common.PackageUtils;
+import org.microg.gms.settings.SettingsContract;
 
 import java.io.IOException;
 
 import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
 import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
 
 public class AuthManager {
 
     private static final String TAG = "GmsAuthManager";
     public static final String PERMISSION_TREE_BASE = "com.mgoogle.android.googleapps.permission.GOOGLE_AUTH.";
-    private static final String PREF_AUTH_TRUST_GOOGLE = "auth_manager_trust_google";
-    public static final String PREF_AUTH_VISIBLE = "auth_manager_visible";
+    public static final String PREF_AUTH_VISIBLE = SettingsContract.Auth.VISIBLE;
     public static final int ONE_HOUR_IN_SECONDS = 60 * 60;
 
     private final Context context;
@@ -192,14 +191,6 @@ public class AuthManager {
                 setExpiry(System.currentTimeMillis() / 1000 + ONE_HOUR_IN_SECONDS); // make valid for one hour by default
             }
         }
-    }
-
-    public static boolean isTrustGooglePermitted(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_AUTH_TRUST_GOOGLE, true);
-    }
-
-    public static boolean isAuthVisible(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_AUTH_VISIBLE, false);
     }
 
     private boolean isSystemApp() {

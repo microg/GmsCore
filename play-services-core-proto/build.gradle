@@ -7,7 +7,7 @@ apply plugin: 'com.squareup.wire'
 apply plugin: 'kotlin'
 
 dependencies {
-    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation "com.squareup.wire:wire-runtime:3.6.1"
 }
 
 wire {
