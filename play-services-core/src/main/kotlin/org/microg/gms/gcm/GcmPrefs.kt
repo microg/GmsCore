@@ -42,14 +42,14 @@ data class GcmPrefs(
                 GcmPrefs(
                     isGcmLogEnabled = c.getInt(0) != 0,
                     lastPersistedId = c.getString(1),
-                    gcmEnabled = c.getInt(3) != 0,
-                    networkMobile = c.getInt(4),
-                    networkWifi = c.getInt(5),
-                    networkRoaming = c.getInt(6),
-                    networkOther = c.getInt(7),
-                    learntMobileInterval = c.getInt(8),
-                    learntWifiInterval = c.getInt(9),
-                    learntOtherInterval = c.getInt(10),
+                    gcmEnabled = c.getInt(2) != 0,
+                    networkMobile = c.getInt(3),
+                    networkWifi = c.getInt(4),
+                    networkRoaming = c.getInt(5),
+                    networkOther = c.getInt(6),
+                    learntMobileInterval = c.getInt(7),
+                    learntWifiInterval = c.getInt(8),
+                    learntOtherInterval = c.getInt(9),
                 )
             }
         }
