@@ -65,7 +65,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                 McsService.resetCurrentDelay();
             }
 
-            if (LastCheckinInfo.read(context).androidId == 0) {
+            if (LastCheckinInfo.read(context).getAndroidId() == 0) {
                 Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
                 return;
             }

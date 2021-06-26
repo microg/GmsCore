@@ -39,9 +39,9 @@ public class CheckinManager {
     @SuppressWarnings("MissingPermission")
     public static synchronized LastCheckinInfo checkin(Context context, boolean force) throws IOException {
         LastCheckinInfo info = LastCheckinInfo.read(context);
-        if (!force && info.lastCheckin > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
+        if (!force && info.getLastCheckin() > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
             return null;
-        if (!CheckinPrefs.get(context).isEnabled())
+        if (!CheckinPrefs.isEnabled(context))
             return null;
         List<CheckinClient.Account> accounts = new ArrayList<>();
         AccountManager accountManager = AccountManager.get(context);
@@ -63,13 +63,7 @@ public class CheckinManager {
     }
 
     private static LastCheckinInfo handleResponse(Context context, CheckinResponse response) {
-        LastCheckinInfo info = new LastCheckinInfo();
-        info.androidId = response.androidId;
-        info.lastCheckin = response.timeMs;
-        info.securityToken = response.securityToken;
-        info.digest = response.digest;
-        info.versionInfo = response.versionInfo;
-        info.deviceDataVersionInfo = response.deviceDataVersionInfo;
+        LastCheckinInfo info = new LastCheckinInfo(response);
         info.write(context);
 
         ContentResolver resolver = context.getContentResolver();

@@ -55,14 +55,6 @@ public class GServicesProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        if (CheckinPrefs.get(getContext()).isEnabled()) {
-            getContext().sendOrderedBroadcast(new Intent(getContext(), org.microg.gms.checkin.TriggerReceiver.class), null);
-
-            if (GcmPrefs.get(getContext()).isEnabled()) {
-                getContext().sendBroadcast(new Intent(org.microg.gms.gcm.TriggerReceiver.FORCE_TRY_RECONNECT, null, getContext(), org.microg.gms.gcm.TriggerReceiver.class));
-            }
-        }
-
         databaseHelper = new DatabaseHelper(getContext());
         return true;
     }

@@ -16,6 +16,7 @@ import org.microg.gms.gcm.ServiceInfo
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.gms.gcm.setGcmServiceConfiguration
 
+@Suppress("Warnings")
 class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
     lateinit var binding: PushNotificationFragmentBinding
 
@@ -33,11 +34,12 @@ class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
         lifecycleScope.launchWhenResumed {
             val info = getGcmServiceInfo(requireContext())
             val newConfiguration = info.configuration.copy(enabled = newStatus)
-            displayServiceInfo(setGcmServiceConfiguration(requireContext(), newConfiguration))
+            setGcmServiceConfiguration(requireContext(), newConfiguration)
+            displayServiceInfo(info.copy(configuration = newConfiguration))
         }
     }
 
-    fun displayServiceInfo(serviceInfo: ServiceInfo) {
+    private fun displayServiceInfo(serviceInfo: ServiceInfo) {
         binding.gcmEnabled = serviceInfo.configuration.enabled
     }
 
