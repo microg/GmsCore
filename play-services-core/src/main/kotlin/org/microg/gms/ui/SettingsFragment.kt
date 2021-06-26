@@ -88,9 +88,9 @@ class SettingsFragment : ResourceSettingsFragment() {
                 context.sendBroadcast(Intent(ACTION_RECONNECT, null, context, TriggerReceiver::class.java))
             }
             database.close()
-            getString(R.string.service_status_enabled_short) + " - " + resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount)
+            findPreference<Preference>(PREF_GCM)?.setSummary(context.getResources().getString(R.string.service_status_enabled_short) + " - " + resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount))
         } else {
-            getString(R.string.service_status_disabled_short)
+            findPreference<Preference>(PREF_GCM)?.setSummary(R.string.service_status_disabled_short)
         }
 
         findPreference<Preference>(PREF_CHECKIN)?.setSummary(if (getCheckinServiceInfo(context).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
