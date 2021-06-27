@@ -688,11 +688,6 @@
                 <action android:name="com.google.android.gms.wallet.service.BIND" />
             </intent-filter>
         </service>
-        <service android:name="org.microg.gms.tapandpay.TapAndPayService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.tapandpay.service.BIND" />
-            </intent-filter>
-        </service>
 
         <service android:name="org.microg.gms.cast.CastDeviceControllerService">
             <intent-filter>

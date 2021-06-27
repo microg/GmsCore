@@ -1,18 +1,11 @@
 /*
- * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-FileCopyrightText: 2021, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-
-dependencies {
-    api project(':play-services-basement')
-    api "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
-
-    implementation "androidx.annotation:annotation:$annotationVersion"
-}
 
 android {
     compileSdkVersion androidCompileSdk
@@ -30,6 +23,14 @@ android {
     }
 }
 
-apply from: '../gradle/publish-android.gradle'
+// Nothing to publish yet
+//apply from: '../gradle/publish-android.gradle'
 
-description = 'microG service implementation for play-services-base'
+description = 'microG API for play-services-tapandpay'
+
+dependencies {
+    api project(':play-services-basement')
+    api project(':play-services-base-api')
+
+    implementation "androidx.annotation:annotation:$annotationVersion"
+}
