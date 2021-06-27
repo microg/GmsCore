@@ -26,6 +26,7 @@ dependencies {
     // implementation "su.litvak.chromecast:api-v2:0.10.4"
     implementation "info.armills.chromecast-java-api-v2:api-v2-raw-request:0.10.4-raw-request-1"
 
+    implementation project(':play-services-cronet-core')
     implementation project(':play-services-core-proto')
     implementation project(':play-services-core:microg-ui-tools') // deprecated
     implementation project(':play-services-api')
@@ -62,7 +63,7 @@ android {
         targetSdkVersion androidTargetSdk
 
         ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86"
         }
 
     }
