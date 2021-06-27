@@ -4,6 +4,7 @@
  */
 
 buildscript {
+    ext.cronetVersion = '91.0.4472.120'
     ext.safeParcelVersion = '1.7.0'
 
     ext.kotlinVersion = '1.4.32'

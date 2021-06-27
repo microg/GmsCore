@@ -277,13 +277,19 @@
             android:exported="true" />
 
         <activity
-            android:name="org.microg.gms.ui.CredentialPickerActivity"
+            android:name="org.microg.gms.auth.CredentialPickerActivity"
             android:process=":ui">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.credentials.PICKER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <service android:name="org.microg.gms.auth.CredentialsService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
+            </intent-filter>
+        </service>
 
         <!-- Cast -->
 
@@ -470,7 +476,6 @@
                 <action android:name="com.google.android.gms.common.service.START" />
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
-                <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
                 <action android:name="com.google.android.gms.gass.START" />
                 <action android:name="com.google.android.gms.audit.service.START" />
             </intent-filter>
