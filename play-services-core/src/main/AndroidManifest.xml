@@ -96,7 +96,7 @@
         <provider
             android:name="org.microg.gms.settings.SettingsProvider"
             android:authorities="org.microg.gms.settings"
-            android:exported="true" />
+            android:exported="false" />
 
         <!-- Services Framework -->
 
