@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package org.microg.gms.settings
 
 import android.content.ContentProvider
@@ -8,13 +13,13 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
-import androidx.preference.PreferenceManager
+import android.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
-import org.microg.gms.settings.SettingsContract.AUTHORITY
 import org.microg.gms.settings.SettingsContract.Auth
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.Gcm
+import org.microg.gms.settings.SettingsContract.getAuthority
 import java.io.File
 
 /**
@@ -52,10 +57,10 @@ class SettingsProvider : ContentProvider() {
         selectionArgs: Array<out String>?,
         sortOrder: String?
     ): Cursor? = when (uri) {
-        CheckIn.CONTENT_URI -> queryCheckIn(projection ?: CheckIn.PROJECTION)
-        Gcm.CONTENT_URI -> queryGcm(projection ?: Gcm.PROJECTION)
-        Auth.CONTENT_URI -> queryAuth(projection ?: Auth.PROJECTION)
-        Exposure.CONTENT_URI -> queryExposure(projection ?: Exposure.PROJECTION)
+        CheckIn.getContentUri(context!!) -> queryCheckIn(projection ?: CheckIn.PROJECTION)
+        Gcm.getContentUri(context!!) -> queryGcm(projection ?: Gcm.PROJECTION)
+        Auth.getContentUri(context!!) -> queryAuth(projection ?: Auth.PROJECTION)
+        Exposure.getContentUri(context!!) -> queryExposure(projection ?: Exposure.PROJECTION)
         else -> null
     }
 
@@ -68,10 +73,10 @@ class SettingsProvider : ContentProvider() {
         warnIfNotMainProcess(context, this.javaClass)
         if (values == null) return 0
         when (uri) {
-            CheckIn.CONTENT_URI -> updateCheckIn(values)
-            Gcm.CONTENT_URI -> updateGcm(values)
-            Auth.CONTENT_URI -> updateAuth(values)
-            Exposure.CONTENT_URI -> updateExposure(values)
+            CheckIn.getContentUri(context!!) -> updateCheckIn(values)
+            Gcm.getContentUri(context!!) -> updateGcm(values)
+            Auth.getContentUri(context!!) -> updateAuth(values)
+            Exposure.getContentUri(context!!) -> updateExposure(values)
             else -> return 0
         }
         return 1
@@ -221,7 +226,7 @@ class SettingsProvider : ContentProvider() {
     }
 
     override fun getType(uri: Uri): String {
-        return "vnd.android.cursor.item/vnd.$AUTHORITY.${uri.path}"
+        return "vnd.android.cursor.item/vnd.${getAuthority(context!!)}.${uri.path}"
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {

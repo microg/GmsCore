@@ -128,13 +128,6 @@
             android:exported="true"
             android:permission="org.microg.gms.PROVISION" />
 
-        <!-- Internal Settings -->
-
-        <provider
-            android:name="org.microg.gms.settings.SettingsProvider"
-            android:authorities="org.microg.gms.settings"
-            android:exported="false" />
-
         <!-- Location -->
 
         <activity

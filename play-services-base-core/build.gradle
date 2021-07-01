@@ -4,6 +4,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -12,6 +13,7 @@ dependencies {
     api "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
 
     implementation "androidx.annotation:annotation:$annotationVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
 android {
@@ -22,6 +24,10 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
     }
 
     compileOptions {
