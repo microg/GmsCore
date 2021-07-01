@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Binder
 
 object SettingsContract {
     const val AUTHORITY = "org.microg.gms.settings"
@@ -103,15 +104,24 @@ object SettingsContract {
         const val CONTENT_TYPE = "vnd.android.cursor.item/vnd.$AUTHORITY.$id"
     }
 
-    fun <T> getSettings(context: Context, uri: Uri, projection: Array<out String>?, f: (Cursor) -> T): T {
-        context.contentResolver.query(uri, projection, null, null, null).use { c ->
-            require(c != null) { "Cursor for query $uri ${projection?.toList()} was null" }
-            if (!c.moveToFirst()) error("Cursor for query $uri ${projection?.toList()} was empty")
-            return f.invoke(c)
+    private fun <T> withoutCallingIdentity(f: () -> T): T {
+        val identity = Binder.clearCallingIdentity()
+        try {
+            return f.invoke()
+        } finally {
+            Binder.restoreCallingIdentity(identity)
         }
     }
 
-    fun setSettings(context: Context, uri: Uri, v: ContentValues.() -> Unit) {
+    fun <T> getSettings(context: Context, uri: Uri, projection: Array<out String>?, f: (Cursor) -> T): T = withoutCallingIdentity {
+        context.contentResolver.query(uri, projection, null, null, null).use { c ->
+            require(c != null) { "Cursor for query $uri ${projection?.toList()} was null" }
+            if (!c.moveToFirst()) error("Cursor for query $uri ${projection?.toList()} was empty")
+            f.invoke(c)
+        }
+    }
+
+    fun setSettings(context: Context, uri: Uri, v: ContentValues.() -> Unit) = withoutCallingIdentity {
         val values = ContentValues().apply { v.invoke(this) }
         val affected = context.contentResolver.update(uri, values, null, null)
         require(affected == 1) { "Update for $uri with $values affected 0 rows"}
