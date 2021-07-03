@@ -134,9 +134,9 @@ class SettingsProvider : ContentProvider() {
             Gcm.NETWORK_ROAMING -> Integer.parseInt(preferences.getString(key, "0") ?: "0")
             Gcm.NETWORK_OTHER -> Integer.parseInt(preferences.getString(key, "0") ?: "0")
 
-            Gcm.LEARNT_MOBILE -> preferences.getInt(key, 300000)
-            Gcm.LEARNT_WIFI -> preferences.getInt(key, 300000)
-            Gcm.LEARNT_OTHER -> preferences.getInt(key, 300000)
+            Gcm.LEARNT_MOBILE -> preferences.getInt(key, 60000)
+            Gcm.LEARNT_WIFI -> preferences.getInt(key, 60000)
+            Gcm.LEARNT_OTHER -> preferences.getInt(key, 60000)
 
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
