@@ -740,6 +740,7 @@
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.gass.START" />
                 <action android:name="com.google.android.gms.audit.service.START" />
+                <action android:name="com.google.android.mobstore.service.START" />
             </intent-filter>
         </service>
     </application>
