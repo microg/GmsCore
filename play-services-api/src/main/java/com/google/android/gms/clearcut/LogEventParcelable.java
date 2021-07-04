@@ -18,6 +18,8 @@ package com.google.android.gms.clearcut;
 
 import android.util.Base64;
 
+import com.google.android.gms.phenotype.ExperimentToken;
+import com.google.android.gms.phenotype.GenericDimension;
 import com.google.android.gms.playlog.internal.PlayLoggerContext;
 
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -30,29 +32,35 @@ import java.nio.charset.CharsetDecoder;
 import java.util.Arrays;
 
 public class LogEventParcelable extends AutoSafeParcelable {
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
 
-    @SafeParceled(2)
+    @Field(2)
     public final PlayLoggerContext context;
 
-    @SafeParceled(3)
+    @Field(3)
     public final byte[] bytes;
 
-    @SafeParceled(4)
+    @Field(4)
     public final int[] testCodes;
 
-    @SafeParceled(5)
+    @Field(5)
     public final String[] mendelPackages;
 
-    @SafeParceled(6)
+    @Field(6)
     public final int[] experimentIds;
 
-    @SafeParceled(7)
+    @Field(7)
     public final byte[][] experimentTokens;
 
-    @SafeParceled(8)
+    @Field(8)
     public final boolean addPhenotypeExperimentTokens;
+
+    @Field(9)
+    public final ExperimentToken[] experimentTokenParcelables;
+
+    @Field(10)
+    public final GenericDimension[] genericDimensions;
 
     private LogEventParcelable() {
         context = null;
@@ -61,6 +69,8 @@ public class LogEventParcelable extends AutoSafeParcelable {
         mendelPackages = null;
         experimentTokens = null;
         addPhenotypeExperimentTokens = false;
+        experimentTokenParcelables = null;
+        genericDimensions = null;
     }
 
     public LogEventParcelable(PlayLoggerContext context, byte[] bytes, int[] testCodes, String[] mendelPackages, int[] experimentIds, byte[][] experimentTokens, boolean addPhenotypeExperimentTokens) {
@@ -71,6 +81,8 @@ public class LogEventParcelable extends AutoSafeParcelable {
         this.experimentIds = experimentIds;
         this.experimentTokens = experimentTokens;
         this.addPhenotypeExperimentTokens = addPhenotypeExperimentTokens;
+        this.experimentTokenParcelables = null;
+        this.genericDimensions = null;
     }
 
     @Override
