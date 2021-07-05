@@ -1,4 +1,4 @@
-package org.microg.gms.settings
+package org.microg.mgms.settings
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Binder
 
 object SettingsContract {
-    const val AUTHORITY = "org.microg.gms.settings"
+    const val AUTHORITY = "org.microg.mgms.settings"
     val AUTHORITY_URI: Uri = Uri.parse("content://$AUTHORITY")
 
     object CheckIn {
