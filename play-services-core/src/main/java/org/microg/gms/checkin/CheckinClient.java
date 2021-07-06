@@ -45,8 +45,7 @@ public class CheckinClient {
     private static final List<String> TODO_LIST_STRING = new ArrayList<>(); // TODO
     private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<CheckinRequest.Checkin.Statistic>(); // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
-    public static boolean brandSpoof = false;
-
+    
     public static CheckinResponse request(CheckinRequest request) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(SERVICE_URL).openConnection();
         connection.setRequestMethod("POST");
@@ -79,7 +78,7 @@ public class CheckinClient {
     public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
-                                             List<Account> accounts) {
+                                             List<Account> accounts, Boolean brandSpoof) {
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
                 .accountCookie(new ArrayList<>())
                 .androidId(checkinInfo.getAndroidId())

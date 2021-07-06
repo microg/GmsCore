@@ -7,6 +7,7 @@ package org.microg.gms.checkin
 import android.content.Context
 import org.microg.mgms.settings.SettingsContract
 import org.microg.mgms.settings.SettingsContract.CheckIn
+import org.microg.mgms.settings.SettingsContract.setSettings
 
 object CheckinPrefs {
 
@@ -15,6 +16,28 @@ object CheckinPrefs {
         val projection = arrayOf(CheckIn.ENABLED)
         return SettingsContract.getSettings(context, CheckIn.CONTENT_URI, projection) { c ->
             c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun isSpoofingEnabled(context: Context): Boolean {
+        val projection = arrayOf(CheckIn.BRAND_SPOOF)
+        return SettingsContract.getSettings(context, CheckIn.CONTENT_URI, projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setSpoofingEnabled(context: Context, enabled: Boolean) {
+        setSettings(context, CheckIn.CONTENT_URI) {
+            put(CheckIn.BRAND_SPOOF, enabled)
+        }
+    }
+
+    @JvmStatic
+    fun hideLauncherIcon(context: Context, enabled: Boolean) {
+        setSettings(context, CheckIn.CONTENT_URI) {
+            put(CheckIn.HIDE_LAUNCHER_ICON, enabled)
         }
     }
 

@@ -102,7 +102,7 @@
 
     <string name="pref_about_title">О Vanced microG</string>
     <string name="pref_cast_double_fix">Исправление двух кнопок трансляции</string>
-    <string name="pref_hide_launcher_icon">скрыть микрог из лаунчера</string>
+    <string name="hideLauncherIcon">скрыть микрог из лаунчера</string>
 
     <string name="brand_spoof_button">Huawei</string>
 

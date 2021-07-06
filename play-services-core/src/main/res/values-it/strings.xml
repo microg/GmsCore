@@ -102,7 +102,7 @@ Questo potrà richiedere un paio di minuti"</string>
 
     <string name="pref_about_title">Informazioni su Vanced microG</string>
     <string name="pref_cast_double_fix">Correzione cast duplicato</string>
-    <string name="pref_hide_launcher_icon">Nascondi microG dal launcher</string>
+    <string name="hideLauncherIcon">Nascondi microG dal launcher</string>
 
     <string name="pref_switcher_title">Registra dispositivo</string>
     <string name="pref_checkin_enable_summary">Registra il tuo dispositivo sui servizi Google e crea un identificatore univoco del dispositivo. Verranno rimossi dai Servizi Vanced microG alcuni bit utili per identificare i dati di registrazione, oltre al nome dell\'account Google.</string>

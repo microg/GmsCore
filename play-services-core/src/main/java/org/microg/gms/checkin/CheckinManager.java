@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.microg.gms.checkin.CheckinPrefs.isSpoofingEnabled;
+
 public class CheckinManager {
     private static final String TAG = "GmsCheckinManager";
     private static final long MIN_CHECKIN_INTERVAL = 3 * 60 * 60 * 1000; // 3 hours
@@ -58,7 +60,8 @@ public class CheckinManager {
         }
         CheckinRequest request = CheckinClient.makeRequest(Utils.getBuild(context),
                 new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
-                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts);
+                Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts,
+                isSpoofingEnabled(context));
         return handleResponse(context, CheckinClient.request(request));
     }
 

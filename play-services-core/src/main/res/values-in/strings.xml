@@ -102,7 +102,7 @@ Ini bisa berlangsung beberapa menit."</string>
 
     <string name="pref_about_title">Tentang Vanced microG</string>
     <string name="pref_cast_double_fix">Perbaikan Cast terduplikasi</string>
-    <string name="pref_hide_launcher_icon">Sembunyikan microG dari peluncur</string>
+    <string name="hideLauncherIcon">Sembunyikan microG dari peluncur</string>
 
     <string name="pref_switcher_title">Registrasi perangkat</string>
     <string name="pref_checkin_enable_summary">Registrasi perangkat anda ke layanan Google dan buat pengenal perangkat unik. Vanced microG strips mengenal bits selain dari akun Google anda dari data registrasi.</string>

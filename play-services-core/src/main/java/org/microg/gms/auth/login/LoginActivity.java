@@ -75,6 +75,9 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
+import static org.microg.gms.checkin.CheckinPrefs.hideLauncherIcon;
+import static org.microg.gms.checkin.CheckinPrefs.isSpoofingEnabled;
+import static org.microg.gms.checkin.CheckinPrefs.setSpoofingEnabled;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 
@@ -163,16 +166,17 @@ public class LoginActivity extends AssistantActivity {
         state++;
         if (state == 1) {
             if (SDK_INT >= Build.VERSION_CODES.M) {
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("pref_hide_launcher_icon", false).apply();
+                hideLauncherIcon(this, false);
                 UtilsKt.hideIcon(this, false);
             }
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(LoginButtonPreference, true)) {
+            if (!isSpoofingEnabled(this)) {
                 LastCheckinInfo.clear(this);
-                CheckinClient.brandSpoof = true;
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true).apply();
+                setSpoofingEnabled(this, true);
             }
             init();
+        } else if (state == -1) {
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
@@ -181,11 +185,9 @@ public class LoginActivity extends AssistantActivity {
         super.onNextButtonClicked();
         state++;
         if (state == 1) {
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(LoginButtonPreference, true).apply();
-            if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(HuaweiButtonPreference, true)) {
+            if (isSpoofingEnabled(this)) {
                 LastCheckinInfo.clear(this);
-                CheckinClient.brandSpoof = false;
-                PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(HuaweiButtonPreference, true).apply();
+                setSpoofingEnabled(this, false);
             }
             init();
         } else if (state == -1) {

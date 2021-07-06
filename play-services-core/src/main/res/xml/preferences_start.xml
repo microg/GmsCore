@@ -49,8 +49,8 @@
             android:summary="@string/pref_cast_double_fix_summary"
             android:defaultValue="false"/>
         <SwitchPreferenceCompat
-            android:key="pref_hide_launcher_icon"
-            android:title="@string/pref_hide_launcher_icon"
+            android:key="hideLauncherIcon"
+            android:title="@string/hideLauncherIcon"
             android:icon="@drawable/ic_baseline_hide_source_24"
             android:defaultValue="true"/>
     </PreferenceCategory>
