@@ -94,8 +94,8 @@
         <!-- Internal Settings -->
 
         <provider
-            android:name="org.microg.gms.settings.SettingsProvider"
-            android:authorities="org.microg.gms.settings"
+            android:name="org.microg.mgms.settings.SettingsProvider"
+            android:authorities="org.microg.mgms.settings"
             android:exported="false" />
 
         <!-- Services Framework -->
@@ -105,7 +105,7 @@
             android:authorities="com.mgoogle.android.gsf.gservices"
             android:exported="true" />
         <provider
-            android:name="org.microg.gms.settings.GoogleSettingsProvider"
+            android:name="org.microg.mgms.settings.GoogleSettingsProvider"
             android:authorities="com.mgoogle.settings"
             android:exported="true" />
         <provider

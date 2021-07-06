@@ -24,7 +24,7 @@ import android.os.Build;
 import android.util.Log;
 
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.settings.SettingsContract;
+import org.microg.mgms.settings.SettingsContract;
 
 import java.io.IOException;
 

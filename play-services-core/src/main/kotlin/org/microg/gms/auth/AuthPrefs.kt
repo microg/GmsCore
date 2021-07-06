@@ -1,8 +1,8 @@
 package org.microg.gms.auth
 
 import android.content.Context
-import org.microg.gms.settings.SettingsContract
-import org.microg.gms.settings.SettingsContract.Auth
+import org.microg.mgms.settings.SettingsContract
+import org.microg.mgms.settings.SettingsContract.Auth
 
 object AuthPrefs {
 

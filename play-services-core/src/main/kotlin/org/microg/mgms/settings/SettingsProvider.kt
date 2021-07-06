@@ -1,4 +1,4 @@
-package org.microg.gms.settings
+package org.microg.mgms.settings
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -11,10 +11,10 @@ import android.net.Uri
 import android.util.Log
 import androidx.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
-import org.microg.gms.settings.SettingsContract.AUTHORITY
-import org.microg.gms.settings.SettingsContract.Auth
-import org.microg.gms.settings.SettingsContract.CheckIn
-import org.microg.gms.settings.SettingsContract.Gcm
+import org.microg.mgms.settings.SettingsContract.AUTHORITY
+import org.microg.mgms.settings.SettingsContract.Auth
+import org.microg.mgms.settings.SettingsContract.CheckIn
+import org.microg.mgms.settings.SettingsContract.Gcm
 import java.io.File
 
 /**
