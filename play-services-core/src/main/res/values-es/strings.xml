@@ -102,7 +102,7 @@ Esto puede tardar unos minutos."</string>
 
     <string name="pref_about_title">Acerca de Vanced microG</string>
     <string name="pref_cast_double_fix">Solucion para Cast duplicado</string>
-    <string name="pref_hide_launcher_icon">Ocultar microG del lanzador</string>
+    <string name="hideLauncherIcon">Ocultar microG del lanzador</string>
 
     <string name="brand_spoof_button">Huawei</string>
 

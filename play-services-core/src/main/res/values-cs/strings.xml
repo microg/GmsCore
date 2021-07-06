@@ -102,7 +102,7 @@ Tato akce může trvat několik minut."</string>
 
     <string name="pref_about_title">O aplikaci Vanced microG</string>
     <string name="pref_cast_double_fix">Opravit duplicity ve Vysílání</string>
-    <string name="pref_hide_launcher_icon">Skrýt ikonu ze spouštěče</string>
+    <string name="hideLauncherIcon">Skrýt ikonu ze spouštěče</string>
 
     <string name="brand_spoof_button">Huawei</string>
 

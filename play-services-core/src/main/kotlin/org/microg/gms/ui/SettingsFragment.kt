@@ -9,7 +9,6 @@ import android.content.ComponentName
 import android.content.pm.PackageManager
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
@@ -23,6 +22,7 @@ import org.microg.gms.gcm.McsConstants.ACTION_RECONNECT
 import org.microg.gms.gcm.McsService
 import org.microg.gms.gcm.TriggerReceiver
 import org.microg.gms.gcm.getGcmServiceInfo
+import org.microg.mgms.settings.SettingsContract
 import org.microg.tools.ui.ResourceSettingsFragment
 
 class SettingsFragment : ResourceSettingsFragment() {
@@ -57,7 +57,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             true
         }
 
-        findPreference<SwitchPreferenceCompat>(PREF_CAST_HIDE_LAUNCHER_ICON)?.apply {
+        findPreference<SwitchPreferenceCompat>(SettingsContract.CheckIn.HIDE_LAUNCHER_ICON)?.apply {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 setOnPreferenceChangeListener { _, newValue ->
                     requireActivity().hideIcon(newValue as Boolean)
@@ -101,8 +101,6 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_GCM = "pref_gcm"
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_CAST_DOUBLE_FIX_ENABLED = "pref_cast_double_fix_enabled"
-        const val PREF_CAST_HIDE_LAUNCHER_ICON = "pref_hide_launcher_icon"
-        const val BRAND_SPOOF_FIX_ENABLED = "brand_spoof_fix_enabled"
     }
 
     init {
