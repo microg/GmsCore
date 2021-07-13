@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
-import android.util.Log
 import androidx.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
 import org.microg.gms.settings.SettingsContract.AUTHORITY
@@ -101,8 +100,6 @@ class SettingsProvider : ContentProvider() {
         }
         val editor = checkInPrefs.edit()
         values.valueSet().forEach { (key, value) ->
-            // TODO remove log
-            Log.e("TEST", "check-in update: $key = $value")
             if (key == CheckIn.ENABLED) {
                 // special case: not saved in checkInPrefs
                 updateCheckInEnabled(value as Boolean)
@@ -150,8 +147,6 @@ class SettingsProvider : ContentProvider() {
         if (values.size() == 0) return
         val editor = preferences.edit()
         values.valueSet().forEach { (key, value) ->
-            // TODO remove log
-            Log.e("TEST", "gcm update: $key = $value")
             when (key) {
                 Gcm.ENABLE_GCM -> editor.putBoolean(key, value as Boolean)
                 Gcm.FULL_LOG -> editor.putBoolean(key, value as Boolean)
@@ -186,8 +181,6 @@ class SettingsProvider : ContentProvider() {
         if (values.size() == 0) return
         val editor = preferences.edit()
         values.valueSet().forEach { (key, value) ->
-            // TODO remove log
-            Log.e("TEST", "auth update: $key = $value")
             when (key) {
                 Auth.TRUST_GOOGLE -> editor.putBoolean(key, value as Boolean)
                 Auth.VISIBLE -> editor.putBoolean(key, value as Boolean)
@@ -209,8 +202,6 @@ class SettingsProvider : ContentProvider() {
         if (values.size() == 0) return
         val editor = preferences.edit()
         values.valueSet().forEach { (key, value) ->
-            // TODO remove log
-            Log.e("TEST", "exposure update: $key = $value")
             when (key) {
                 Exposure.SCANNER_ENABLED -> editor.putBoolean(key, value as Boolean)
                 Exposure.LAST_CLEANUP -> editor.putLong(key, value as Long)
@@ -225,10 +216,7 @@ class SettingsProvider : ContentProvider() {
         valueGetter: (String) -> Any
     ): MatrixCursor {
         val row = newRow()
-        for (key in p) row.add(valueGetter.invoke(key).apply {
-            // TODO remove log
-            Log.e("TEST", "$key = $this")
-        })
+        for (key in p) row.add(valueGetter.invoke(key))
         return this
     }
 
