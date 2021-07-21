@@ -622,7 +622,6 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getStatus(params: GetStatusParams) {
-        Log.w(TAG, "Not yet implemented: getStatus")
         lifecycleScope.launchSafely {
             val isAuthorized = ExposureDatabase.with(context) { database ->
                 database.noteAppAction(packageName, "getStatus")
