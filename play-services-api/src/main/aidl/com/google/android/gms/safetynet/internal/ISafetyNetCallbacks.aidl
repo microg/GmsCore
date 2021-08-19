@@ -9,12 +9,12 @@ import com.google.android.gms.safetynet.RemoveHarmfulAppData;
 import com.google.android.gms.safetynet.SafeBrowsingData;
 
 interface ISafetyNetCallbacks {
-    void onAttestationData(in Status status, in AttestationData attestationData) = 0;
-    void onString(String s) = 1;
-    void onSafeBrowsingData(in Status status, in SafeBrowsingData safeBrowsingData) = 2;
-    void onBoolean(in Status status, boolean b) = 3;
-    void onHarmfulAppsData(in Status status, in List<HarmfulAppsData> harmfulAppsData) = 4;
-    void onRecaptchaResult(in Status status, in RecaptchaResultData recaptchaResultData) = 5;
-    void onHarmfulAppsInfo(in Status status, in HarmfulAppsInfo harmfulAppsInfo) = 7;
-    void onRemoveHarmfulAppData(in Status status, in RemoveHarmfulAppData removeHarmfulAppData) = 14;
+    oneway void onAttestationData(in Status status, in AttestationData attestationData) = 0;
+    oneway void onString(String s) = 1;
+    oneway void onSafeBrowsingData(in Status status, in SafeBrowsingData safeBrowsingData) = 2;
+    oneway void onBoolean(in Status status, boolean b) = 3;
+    oneway void onHarmfulAppsData(in Status status, in List<HarmfulAppsData> harmfulAppsData) = 4;
+    oneway void onRecaptchaResult(in Status status, in RecaptchaResultData recaptchaResultData) = 5;
+    oneway void onHarmfulAppsInfo(in Status status, in HarmfulAppsInfo harmfulAppsInfo) = 7;
+    oneway void onRemoveHarmfulAppData(in Status status, in RemoveHarmfulAppData removeHarmfulAppData) = 14;
 }
