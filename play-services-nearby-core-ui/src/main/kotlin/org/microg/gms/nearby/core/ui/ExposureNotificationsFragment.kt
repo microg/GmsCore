@@ -35,7 +35,8 @@ class ExposureNotificationsFragment : Fragment(R.layout.exposure_notifications_f
         lifecycleScope.launchWhenResumed {
             val info = getExposureNotificationsServiceInfo(requireContext())
             val newConfiguration = info.configuration.copy(enabled = newStatus)
-            displayServiceInfo(setExposureNotificationsServiceConfiguration(requireContext(), newConfiguration))
+            setExposureNotificationsServiceConfiguration(requireContext(), newConfiguration)
+            displayServiceInfo(info.copy(configuration = newConfiguration))
         }
     }
 

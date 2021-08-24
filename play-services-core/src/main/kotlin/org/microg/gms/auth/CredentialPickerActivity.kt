@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.ui
+package org.microg.gms.auth
 
 import android.app.Activity
 import android.os.Bundle

@@ -8,5 +8,5 @@ package com.google.android.gms.nearby.exposurenotification.internal;
 import com.google.android.gms.common.api.Status;
 
 interface IBooleanCallback {
-    void onResult(in Status status, boolean result);
+    oneway void onResult(in Status status, boolean result);
 }

@@ -21,7 +21,6 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -36,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -72,6 +70,7 @@ import static android.view.KeyEvent.KEYCODE_BACK;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
+import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 
@@ -136,7 +135,7 @@ public class LoginActivity extends AssistantActivity {
                 AccountManager accountManager = AccountManager.get(this);
                 Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), accountType);
                 accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
-                if (AuthManager.isAuthVisible(this) && SDK_INT >= Build.VERSION_CODES.O) {
+                if (isAuthVisible(this) && SDK_INT >= Build.VERSION_CODES.O) {
                     accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
                 }
                 retrieveGmsToken(account);
@@ -223,7 +222,7 @@ public class LoginActivity extends AssistantActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            if (LastCheckinInfo.read(this).androidId == 0) {
+            if (LastCheckinInfo.read(this).getAndroidId() == 0) {
                 new Thread(() -> {
                     Runnable next;
                     next = checkin(false) ? this::loadLoginPage : () -> showError(R.string.auth_general_error_desc);
@@ -425,7 +424,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final String getAndroidId() {
-            long androidId = LastCheckinInfo.read(LoginActivity.this).androidId;
+            long androidId = LastCheckinInfo.read(LoginActivity.this).getAndroidId();
             Log.d(TAG, "JSBridge: getAndroidId " + androidId);
             if (androidId == 0 || androidId == -1) return null;
             return Long.toHexString(androidId);
