@@ -38,7 +38,7 @@ Questa operazione può richiedere alcuni secondi."</string>
 Potrebbe trattarsi di un disservizio temporaneo oppure non essere il tuo dispositivo Android fornito di connessione dati. Riprova quando connesso ad una rete cellulare o ad una rete Wi-Fi."</string>
     <string name="auth_general_error_desc">"C\'è stato un problema di comunicazione con i server di Google.
 
-Try again later."</string>
+Riprova tra poco."</string>
     <string name="auth_finalize">"Il tuo dispositivo sta comunicando con i server di Google per salvare le informazioni sull\'account.
 
 Questa operazione può richiedere alcuni minuti."</string>
@@ -119,7 +119,7 @@ Questa operazione può richiedere alcuni minuti."</string>
     <string name="prefcat_test">Sperimentale</string>
 
     <string name="cond_gcm_bat_title">Ottimizzazioni della batteria abilitate</string>
-    <string name="cond_gcm_bat_summary">Hai abilitato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notisfiche push, dovresti selezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
+    <string name="cond_gcm_bat_summary">Hai abilitato il servizio di messaggistica cloud di Google, tuttavia le ottimizzazioni della batteria sono abilitate per microG. Al fine di garantire la ricezione delle notifiche push, dovresti selezionare l\'opzione per ignorare le ottimizzazioni della batteria.</string>
     <string name="cond_gcm_bat_action">Ignora ottimizzazioni</string>
     <string name="cond_perm_title">Permesso mancante</string>
 
