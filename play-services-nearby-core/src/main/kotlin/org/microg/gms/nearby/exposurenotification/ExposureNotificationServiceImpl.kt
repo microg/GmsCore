@@ -28,6 +28,7 @@ import org.microg.gms.common.PackageUtils
 import org.microg.gms.nearby.exposurenotification.Constants.*
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
+import org.microg.gms.utils.warnOnTransactionIssues
 import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
@@ -622,7 +623,6 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     }
 
     override fun getStatus(params: GetStatusParams) {
-        Log.w(TAG, "Not yet implemented: getStatus")
         lifecycleScope.launchSafely {
             val isAuthorized = ExposureDatabase.with(context) { database ->
                 database.noteAppAction(packageName, "getStatus")
@@ -671,11 +671,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-        if (super.onTransact(code, data, reply, flags)) return true
-        Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
-        return false
-    }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(TAG, code, reply, flags) { super.onTransact(code, data, reply, flags) }
 
     companion object {
         private val tempGrantedPermissions: MutableSet<Pair<String, String>> = hashSetOf()

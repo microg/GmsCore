@@ -7,3 +7,7 @@ build/
 user.gradle
 local.properties
 .directory
+
+.settings
+.classpath
+.project

@@ -21,55 +21,49 @@ import org.microg.safeparcel.SafeParceled;
 
 public class PlayLoggerContext extends AutoSafeParcelable {
 
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
 
-    @SafeParceled(2)
+    @Field(2)
     public final String packageName;
 
-    @SafeParceled(3)
+    @Field(3)
     public final int packageVersionCode;
 
-    @SafeParceled(4)
+    @Field(4)
     public final int logSource;
 
-    @SafeParceled(5)
-    public final String uploadAccount;
-
-    @SafeParceled(6)
-    public final int loggingId;
-
-    @SafeParceled(7)
-    public final boolean logAndroidId;
-
-    @SafeParceled(8)
+    @Field(8)
     public final String logSourceName;
 
-    @SafeParceled(9)
+    @Field(5)
+    public final String uploadAccount;
+
+    @Field(6)
+    public final String loggingId;
+
+    @Field(7)
+    public final boolean logAndroidId;
+
+    @Field(9)
     public final boolean isAnonymous;
 
-    @SafeParceled(10)
+    @Field(10)
     public final int qosTier;
 
+    @Field(11)
+    public final Integer appMobileSpecId;
+
+    @Field(12)
+    public final boolean scrubMccMnc;
+
     private PlayLoggerContext() {
-        packageName = uploadAccount = logSourceName = null;
-        qosTier = packageVersionCode = logSource = loggingId = -1;
-        isAnonymous = logAndroidId = false;
+        packageName = uploadAccount = logSourceName = loggingId = null;
+        qosTier = packageVersionCode = logSource = appMobileSpecId = -1;
+        isAnonymous = logAndroidId = scrubMccMnc = false;
     }
 
-    public PlayLoggerContext(String packageName, int packageVersionCode, int logSource, String uploadAccount, int loggingId, boolean logAndroidId) {
-        this.packageName = packageName;
-        this.packageVersionCode = packageVersionCode;
-        this.logSource = logSource;
-        this.logSourceName = null;
-        this.uploadAccount = uploadAccount;
-        this.loggingId = loggingId;
-        this.logAndroidId = logAndroidId;
-        this.isAnonymous = false;
-        this.qosTier = 0;
-    }
-
-    public PlayLoggerContext(String packageName, int packageVersionCode, int logSource, String logSourceName, String uploadAccount, int loggingId, boolean isAnonymous, int qosTier) {
+    public PlayLoggerContext(String packageName, int packageVersionCode, int logSource, String logSourceName, String uploadAccount, String loggingId, boolean isAnonymous,  int qosTier, boolean scrubMccMnc) {
         this.packageName = packageName;
         this.packageVersionCode = packageVersionCode;
         this.logSource = logSource;
@@ -79,6 +73,8 @@ public class PlayLoggerContext extends AutoSafeParcelable {
         this.logAndroidId = !isAnonymous;
         this.isAnonymous = isAnonymous;
         this.qosTier = qosTier;
+        this.appMobileSpecId = null;
+        this.scrubMccMnc = scrubMccMnc;
     }
 
     @Override

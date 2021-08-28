@@ -29,6 +29,8 @@ public class CredentialRequest extends AutoSafeParcelable {
     @Field(4)
     private CredentialPickerConfig credentialHintPickerConfig;
 
+    private CredentialRequest() { }
+
     public CredentialRequest(boolean passwordLoginSupported, String[] accountTypes, CredentialPickerConfig credentialPickerConfig, CredentialPickerConfig credentialHintPickerConfig) {
         this.passwordLoginSupported = passwordLoginSupported;
         this.accountTypes = accountTypes;

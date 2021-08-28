@@ -118,14 +118,26 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     }
 
     private fun requestPermissions() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(permissions, ++permissionRequestCode)
+        when {
+            Build.VERSION.SDK_INT >= 30 -> requestPermissions(
+                permissions.toSet().minus("android.permission.ACCESS_BACKGROUND_LOCATION").toTypedArray(), ++permissionRequestCode
+            )
+            Build.VERSION.SDK_INT >= 23 -> requestPermissions(permissions, ++permissionRequestCode)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == this.permissionRequestCode) checkPermissions()
+        if (requestCode == this.permissionRequestCode) {
+            when {
+                Build.VERSION.SDK_INT >= 30 && permissions.contains("android.permission.ACCESS_FINE_LOCATION") ->
+                    requestPermissions(
+                        arrayOf("android.permission.ACCESS_BACKGROUND_LOCATION"),
+                        ++permissionRequestCode
+                    )
+                else -> checkPermissions()
+            }
+        }
     }
 
     // Bluetooth

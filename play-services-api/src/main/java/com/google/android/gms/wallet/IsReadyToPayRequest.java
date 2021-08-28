@@ -19,13 +19,13 @@ import java.util.Collection;
  */
 @PublicApi
 public class IsReadyToPayRequest extends AutoSafeParcelable {
-    @Field(2)
+    @Field(value = 2, useDirectList = true)
     private ArrayList<Integer> allowedCardNetworks;
     @Field(4)
     private String unknown4;
     @Field(5)
     private String unknown5;
-    @Field(6)
+    @Field(value = 6, useDirectList = true)
     private ArrayList<Integer> allowedPaymentMethods;
     @Field(7)
     private boolean existingPaymentMethodRequired;
