@@ -89,13 +89,13 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
     private fun getSummaryString(value: Int, learnt: Int): String = when (value) {
         -1 -> getString(R.string.service_status_disabled_short)
         0 -> getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_default) + ": " + getHeartbeatString(learnt)
-        else -> getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_manual) + ": " + getHeartbeatString(value * 60000)
+        else -> getString(R.string.service_status_enabled_short) + " / " + getString(R.string.gcm_status_pref_manual) + ": " + getHeartbeatString(value * GcmPrefs.INTERVAL)
     }
 
     private fun getHeartbeatString(heartbeatMs: Int): String {
         return if (heartbeatMs < 120000) {
             (heartbeatMs / 1000).toString() + " " + getString(R.string.gcm_status_pref_sec)
-        } else (heartbeatMs / 60000).toString() + " " + getString(R.string.gcm_status_pref_min)
+        } else (heartbeatMs / GcmPrefs.INTERVAL).toString() + " " + getString(R.string.gcm_status_pref_min)
     }
 
     companion object {

@@ -34,11 +34,11 @@ data class GcmPrefs(
         const val PREF_NETWORK_ROAMING = Gcm.NETWORK_ROAMING
         const val PREF_NETWORK_OTHER = Gcm.NETWORK_OTHER
 
-        private const val INTERVAL = 1 * 60 * 1000 // 1 minute
+        public const val INTERVAL = 1 * 60 * 1000 // 1 minute
 
         @JvmStatic
         fun get(context: Context): GcmPrefs {
-            return SettingsContract.getSettings(context, Gcm.CONTENT_URI, Gcm.PROJECTION) { c ->
+            return SettingsContract.getSettings(context, Gcm.getContentUri(context), Gcm.PROJECTION) { c ->
                 GcmPrefs(
                     isGcmLogEnabled = c.getInt(0) != 0,
                     lastPersistedId = c.getString(1),
@@ -56,7 +56,7 @@ data class GcmPrefs(
 
         fun write(context: Context, config: ServiceConfiguration) {
             val gcmPrefs = get(context)
-            setSettings(context, Gcm.CONTENT_URI) {
+            setSettings(context, Gcm.getContentUri(context)) {
                 put(Gcm.ENABLE_GCM, config.enabled)
                 put(Gcm.NETWORK_MOBILE, config.mobile)
                 put(Gcm.NETWORK_WIFI, config.wifi)
@@ -68,7 +68,7 @@ data class GcmPrefs(
 
         @JvmStatic
         fun clearLastPersistedId(context: Context) {
-            setSettings(context, Gcm.CONTENT_URI) {
+            setSettings(context, Gcm.getContentUri(context)) {
                 put(Gcm.LAST_PERSISTENT_ID, "")
             }
         }
@@ -104,26 +104,26 @@ data class GcmPrefs(
 
     fun getHeartbeatMsFor(pref: String): Int {
         return if (PREF_NETWORK_ROAMING == pref) {
-            if (networkRoaming != 0) networkRoaming * 60000 else learntMobileInterval
+            if (networkRoaming != 0) networkRoaming * GcmPrefs.INTERVAL else learntMobileInterval
         } else if (PREF_NETWORK_MOBILE == pref) {
-            if (networkMobile != 0) networkMobile * 60000 else learntMobileInterval
+            if (networkMobile != 0) networkMobile * GcmPrefs.INTERVAL else learntMobileInterval
         } else if (PREF_NETWORK_WIFI == pref) {
-            if (networkWifi != 0) networkWifi * 60000 else learntWifiInterval
+            if (networkWifi != 0) networkWifi * GcmPrefs.INTERVAL else learntWifiInterval
         } else {
-            if (networkOther != 0) networkOther * 60000 else learntOtherInterval
+            if (networkOther != 0) networkOther * GcmPrefs.INTERVAL else learntOtherInterval
         }
     }
 
     fun learnTimeout(context: Context, pref: String) {
         Log.d("GmsGcmPrefs", "learnTimeout: $pref")
         when (pref) {
-            PREF_NETWORK_MOBILE, PREF_NETWORK_ROAMING -> setSettings(context, Gcm.CONTENT_URI) {
+            PREF_NETWORK_MOBILE, PREF_NETWORK_ROAMING -> setSettings(context, Gcm.getContentUri(context)) {
                 put(Gcm.LEARNT_MOBILE, (learntMobileInterval * 0.95).toInt())
             }
-            PREF_NETWORK_WIFI -> setSettings(context, Gcm.CONTENT_URI) {
+            PREF_NETWORK_WIFI -> setSettings(context, Gcm.getContentUri(context)) {
                 put(Gcm.LEARNT_WIFI, (learntWifiInterval * 0.95).toInt())
             }
-            else -> setSettings(context, Gcm.CONTENT_URI) {
+            else -> setSettings(context, Gcm.getContentUri(context)) {
                 put(Gcm.LEARNT_OTHER, (learntOtherInterval * 0.95).toInt())
             }
         }
@@ -134,21 +134,21 @@ data class GcmPrefs(
         when (pref) {
             PREF_NETWORK_MOBILE, PREF_NETWORK_ROAMING -> {
                 if (time > learntMobileInterval / 4 * 3) {
-                    setSettings(context, Gcm.CONTENT_URI) {
+                    setSettings(context, Gcm.getContentUri(context)) {
                         put(Gcm.LEARNT_MOBILE, INTERVAL)
                     }
                 }
             }
             PREF_NETWORK_WIFI -> {
                 if (time > learntWifiInterval / 4 * 3) {
-                    setSettings(context, Gcm.CONTENT_URI) {
+                    setSettings(context, Gcm.getContentUri(context)) {
                         put(Gcm.LEARNT_WIFI, INTERVAL)
                     }
                 }
             }
             else -> {
                 if (time > learntOtherInterval / 4 * 3) {
-                    setSettings(context, Gcm.CONTENT_URI) {
+                    setSettings(context, Gcm.getContentUri(context)) {
                         put(Gcm.LEARNT_OTHER, INTERVAL)
                     }
                 }
@@ -163,7 +163,7 @@ data class GcmPrefs(
 
     fun extendLastPersistedId(context: Context, id: String) {
         val newId = if (lastPersistedId.isNullOrEmpty()) id else "$lastPersistedId|$id"
-        setSettings(context, Gcm.CONTENT_URI) {
+        setSettings(context, Gcm.getContentUri(context)) {
             put(Gcm.LAST_PERSISTENT_ID, newId)
         }
     }

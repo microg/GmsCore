@@ -16,7 +16,7 @@ jobs:
       - name: JDK 8 Setup
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11.0.8
 
       - name: Install NDK
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"

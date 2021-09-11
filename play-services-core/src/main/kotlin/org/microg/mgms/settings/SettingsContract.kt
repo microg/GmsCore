@@ -7,13 +7,13 @@ import android.net.Uri
 import android.os.Binder
 
 object SettingsContract {
-    const val AUTHORITY = "org.microg.mgms.settings"
-    val AUTHORITY_URI: Uri = Uri.parse("content://$AUTHORITY")
+    fun getAuthority(context: Context) = "${context.packageName}.microg.settings"
+    fun getAuthorityUri(context: Context): Uri = Uri.parse("content://${getAuthority(context)}")
 
     object CheckIn {
         private const val id = "check-in"
-        val CONTENT_URI: Uri = Uri.withAppendedPath(AUTHORITY_URI, id)
-        const val CONTENT_TYPE = "vnd.android.cursor.item/vnd.$AUTHORITY.$id"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
         const val ENABLED = "checkin_enable_service"
         const val ANDROID_ID = "androidId"
@@ -44,8 +44,8 @@ object SettingsContract {
 
     object Gcm {
         private const val id = "gcm"
-        val CONTENT_URI: Uri = Uri.withAppendedPath(AUTHORITY_URI, id)
-        const val CONTENT_TYPE = "vnd.android.cursor.item/vnd.$AUTHORITY.$id"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
         const val FULL_LOG = "gcm_full_log"
         const val LAST_PERSISTENT_ID = "gcm_last_persistent_id"
@@ -76,8 +76,8 @@ object SettingsContract {
 
     object Auth {
         private const val id = "auth"
-        val CONTENT_URI: Uri = Uri.withAppendedPath(AUTHORITY_URI, id)
-        const val CONTENT_TYPE = "vnd.android.cursor.item/vnd.$AUTHORITY.$id"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
         const val TRUST_GOOGLE = "auth_manager_trust_google"
         const val VISIBLE = "auth_manager_visible"

@@ -48,7 +48,7 @@ data class LastCheckinInfo(
                 CheckIn.VERSION_INFO,
                 CheckIn.DEVICE_DATA_VERSION_INFO,
             )
-            return SettingsContract.getSettings(context, CheckIn.CONTENT_URI, projection) { c ->
+            return SettingsContract.getSettings(context, CheckIn.getContentUri(context), projection) { c ->
                 LastCheckinInfo(
                     androidId = c.getLong(0),
                     digest = c.getString(1),
@@ -61,7 +61,7 @@ data class LastCheckinInfo(
         }
 
         @JvmStatic
-        fun clear(context: Context) = SettingsContract.setSettings(context, CheckIn.CONTENT_URI) {
+        fun clear(context: Context) = SettingsContract.setSettings(context, CheckIn.getContentUri(context)) {
             put(CheckIn.ANDROID_ID, 0L)
             put(CheckIn.DIGEST, CheckIn.INITIAL_DIGEST)
             put(CheckIn.LAST_CHECK_IN, 0L)
@@ -71,7 +71,7 @@ data class LastCheckinInfo(
         }
     }
 
-    fun write(context: Context) = SettingsContract.setSettings(context, CheckIn.CONTENT_URI) {
+    fun write(context: Context) = SettingsContract.setSettings(context, CheckIn.getContentUri(context)) {
         put(CheckIn.ANDROID_ID, androidId)
         put(CheckIn.DIGEST, digest)
         put(CheckIn.LAST_CHECK_IN, lastCheckin)

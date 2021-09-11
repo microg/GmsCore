@@ -8,14 +8,14 @@ object AuthPrefs {
 
     @JvmStatic
     fun isTrustGooglePermitted(context: Context): Boolean {
-        return SettingsContract.getSettings(context, Auth.CONTENT_URI, arrayOf(Auth.TRUST_GOOGLE)) { c ->
+        return SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(Auth.TRUST_GOOGLE)) { c ->
             c.getInt(0) != 0
         }
     }
 
     @JvmStatic
     fun isAuthVisible(context: Context): Boolean {
-        return SettingsContract.getSettings(context, Auth.CONTENT_URI, arrayOf(Auth.VISIBLE)) { c ->
+        return SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(Auth.VISIBLE)) { c ->
             c.getInt(0) != 0
         }
     }

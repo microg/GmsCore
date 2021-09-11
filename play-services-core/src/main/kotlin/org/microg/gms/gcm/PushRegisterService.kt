@@ -57,7 +57,7 @@ private suspend fun ensureAppRegistrationAllowed(context: Context, database: Gcm
     if (!GcmPrefs.get(context).isEnabled) throw RuntimeException("GCM disabled")
     val app = database.getApp(packageName)
     if (app?.allowRegister == false) {
-        throw RuntimeException("Push permission not granted to app")
+        throw RuntimeException("Push permission not granted to $packageName")
     }
 }
 

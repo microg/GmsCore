@@ -21,9 +21,6 @@ apply plugin: 'kotlin-kapt'
 dependencies {
     implementation 'com.squareup.wire:wire-runtime:3.6.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    // TODO: Switch to upstream once raw requests are merged
-    // https://github.com/vitalidze/chromecast-java-api-v2/pull/99
-    // implementation "su.litvak.chromecast:api-v2:0.10.4"
     implementation "info.armills.chromecast-java-api-v2:api-v2-raw-request:0.10.4-raw-request-1"
 
     implementation project(':play-services-cronet-core')
@@ -33,8 +30,8 @@ dependencies {
     implementation project(':play-services-cast-api')
 
     // AndroidX UI
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'androidx.mediarouter:mediarouter:1.2.4'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.mediarouter:mediarouter:1.2.5'
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
     implementation "org.microg.gms:conscrypt-gmscore:2.5.1"
