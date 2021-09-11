@@ -293,8 +293,8 @@ public class McsService extends Service implements Handler.Callback {
 
     public synchronized static long getCurrentDelay() {
         long delay = currentDelay == 0 ? 5000 : currentDelay;
-        if (currentDelay < 60000) currentDelay += 10000;
-        if (currentDelay >= 60000 && currentDelay < 600000) currentDelay += 60000;
+        if (currentDelay < GcmPrefs.INTERVAL) currentDelay += 10000;
+        if (currentDelay >= GcmPrefs.INTERVAL && currentDelay < 600000) currentDelay += GcmPrefs.INTERVAL;
         return delay;
     }
 

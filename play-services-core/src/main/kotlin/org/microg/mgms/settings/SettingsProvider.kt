@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+@file:Suppress("DEPRECATION")
+
 package org.microg.mgms.settings
 
 import android.content.ContentProvider
@@ -8,13 +14,13 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
-import android.util.Log
-import androidx.preference.PreferenceManager
+import android.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
-import org.microg.mgms.settings.SettingsContract.AUTHORITY
+import org.microg.gms.gcm.GcmPrefs
 import org.microg.mgms.settings.SettingsContract.Auth
 import org.microg.mgms.settings.SettingsContract.CheckIn
 import org.microg.mgms.settings.SettingsContract.Gcm
+import org.microg.mgms.settings.SettingsContract.getAuthority
 import java.io.File
 
 /**
@@ -52,9 +58,9 @@ class SettingsProvider : ContentProvider() {
         selectionArgs: Array<out String>?,
         sortOrder: String?
     ): Cursor? = when (uri) {
-        CheckIn.CONTENT_URI -> queryCheckIn(projection ?: CheckIn.PROJECTION)
-        Gcm.CONTENT_URI -> queryGcm(projection ?: Gcm.PROJECTION)
-        Auth.CONTENT_URI -> queryAuth(projection ?: Auth.PROJECTION)
+        CheckIn.getContentUri(context!!) -> queryCheckIn(projection ?: CheckIn.PROJECTION)
+        Gcm.getContentUri(context!!) -> queryGcm(projection ?: Gcm.PROJECTION)
+        Auth.getContentUri(context!!) -> queryAuth(projection ?: Auth.PROJECTION)
         else -> null
     }
 
@@ -67,9 +73,9 @@ class SettingsProvider : ContentProvider() {
         warnIfNotMainProcess(context, this.javaClass)
         if (values == null) return 0
         when (uri) {
-            CheckIn.CONTENT_URI -> updateCheckIn(values)
-            Gcm.CONTENT_URI -> updateGcm(values)
-            Auth.CONTENT_URI -> updateAuth(values)
+            CheckIn.getContentUri(context!!) -> updateCheckIn(values)
+            Gcm.getContentUri(context!!) -> updateGcm(values)
+            Auth.getContentUri(context!!) -> updateAuth(values)
             else -> return 0
         }
         return 1
@@ -100,8 +106,6 @@ class SettingsProvider : ContentProvider() {
         }
         val editor = checkInPrefs.edit()
         values.valueSet().forEach { (key, value) ->
-            // TODO remove log
-            Log.e("TEST", "check-in update: $key = $value")
             if (key == CheckIn.ENABLED) {
                 // special case: not saved in checkInPrefs
                 updateCheckInEnabled(value as Boolean)
@@ -156,9 +160,9 @@ class SettingsProvider : ContentProvider() {
             Gcm.NETWORK_ROAMING -> Integer.parseInt(preferences.getString(key, "0") ?: "0")
             Gcm.NETWORK_OTHER -> Integer.parseInt(preferences.getString(key, "0") ?: "0")
 
-            Gcm.LEARNT_MOBILE -> preferences.getInt(key, 60000)
-            Gcm.LEARNT_WIFI -> preferences.getInt(key, 60000)
-            Gcm.LEARNT_OTHER -> preferences.getInt(key, 60000)
+            Gcm.LEARNT_MOBILE -> preferences.getInt(key, GcmPrefs.INTERVAL)
+            Gcm.LEARNT_WIFI -> preferences.getInt(key, GcmPrefs.INTERVAL)
+            Gcm.LEARNT_OTHER -> preferences.getInt(key, GcmPrefs.INTERVAL)
 
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
@@ -168,8 +172,6 @@ class SettingsProvider : ContentProvider() {
         if (values.size() == 0) return
         val editor = preferences.edit()
         values.valueSet().forEach { (key, value) ->
-            // TODO remove log
-            Log.e("TEST", "gcm update: $key = $value")
             when (key) {
                 Gcm.ENABLE_GCM -> editor.putBoolean(key, value as Boolean)
                 Gcm.FULL_LOG -> editor.putBoolean(key, value as Boolean)
@@ -203,8 +205,6 @@ class SettingsProvider : ContentProvider() {
         if (values.size() == 0) return
         val editor = preferences.edit()
         values.valueSet().forEach { (key, value) ->
-            // TODO remove log
-            Log.e("TEST", "auth update: $key = $value")
             when (key) {
                 Auth.TRUST_GOOGLE -> editor.putBoolean(key, value as Boolean)
                 Auth.VISIBLE -> editor.putBoolean(key, value as Boolean)
@@ -219,15 +219,12 @@ class SettingsProvider : ContentProvider() {
         valueGetter: (String) -> Any
     ): MatrixCursor {
         val row = newRow()
-        for (key in p) row.add(valueGetter.invoke(key).apply {
-            // TODO remove log
-            Log.e("TEST", "$key = $this")
-        })
+        for (key in p) row.add(valueGetter.invoke(key))
         return this
     }
 
     override fun getType(uri: Uri): String {
-        return "vnd.android.cursor.item/vnd.$AUTHORITY.${uri.path}"
+        return "vnd.android.cursor.item/vnd.${getAuthority(context!!)}.${uri.path}"
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {

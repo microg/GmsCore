@@ -21,7 +21,6 @@ android {
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
@@ -39,6 +38,6 @@ dependencies {
     api project(':play-services-tasks')
     api project(':play-services-base-api')
 
-    implementation 'androidx.fragment:fragment:1.3.5'
+    implementation 'androidx.fragment:fragment:1.3.6'
     implementation 'com.google.android.gms:play-services-base:17.6.0'
 }

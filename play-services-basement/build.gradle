@@ -21,7 +21,7 @@ dependencies {
     api "org.microg:safe-parcel:1.7.0"
 
     implementation "androidx.annotation:annotation:1.2.0"
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32'
 }
 
 android {
@@ -34,7 +34,6 @@ android {
     aidlPackageWhiteList "com/google/android/gms/dynamic/IObjectWrapper.aidl"
 
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "int", "VERSION_CODE", "$appVersionCode"
