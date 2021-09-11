@@ -24,7 +24,6 @@ android {
     aidlPackageWhiteList "com/google/android/gms/cast/LaunchOptions.aidl"
 
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }

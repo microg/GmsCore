@@ -28,7 +28,6 @@ android {
     aidlPackageWhiteList "com/google/android/gms/common/images/WebImage.aidl"
 
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
