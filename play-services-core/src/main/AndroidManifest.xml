@@ -91,6 +91,13 @@
             android:name="fake-signature"
             android:value="@string/fake_signature" />
 
+        <!-- Internal Settings -->
+
+        <provider
+            android:name="org.microg.mgms.settings.SettingsProvider"
+            android:authorities="${applicationId}.microg.settings"
+            android:exported="false" />
+
         <!-- Services Framework -->
 
         <provider
