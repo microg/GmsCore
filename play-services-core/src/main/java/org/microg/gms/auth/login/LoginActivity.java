@@ -442,7 +442,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void getDroidGuardResult(String s) {
-            Log.d(TAG, "JSBridge: getDroidGuardResult: " + s);
+            Log.d(TAG, "JSBridge: getDroidGuardResult");
         }
 
         @JavascriptInterface
