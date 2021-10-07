@@ -44,6 +44,8 @@ dependencies {
     implementation project(':play-services-base-core-ui')
     implementation project(':play-services-conscrypt-provider-core')
     implementation project(':play-services-cronet-core')
+    implementation project(':play-services-droidguard') // TODO: Move to play-services-safetynet-core once we have it
+    implementation project(':play-services-droidguard-core')
     implementation project(':play-services-location-core')
     withNearbyImplementation project(':play-services-nearby-core')
     withNearbyImplementation project(':play-services-nearby-core-ui')

@@ -5,7 +5,6 @@
 
 package org.microg.gms.droidguard
 
-import com.google.android.gms.droidguard.internal.IDroidGuardHandle
 import com.google.android.gms.tasks.Task
 
 interface DroidGuardClient {

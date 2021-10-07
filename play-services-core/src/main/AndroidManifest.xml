@@ -26,10 +26,12 @@
     <permission
         android:name="com.google.android.c2dm.permission.SEND"
         android:label="@string/perm_c2dm_send_label"
-        android:protectionLevel="signature" />
+        android:permissionGroup="android.permission-group.NETWORK"
+        android:protectionLevel="privileged|signature" />
     <permission
         android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE"
         android:label="@string/perm_gtalk_svc_label"
+        android:permissionGroup="android.permission-group.MESSAGES"
         android:protectionLevel="signature" />
 
     <permission-tree
@@ -109,14 +111,17 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:fullBackupOnly="true"
         android:extractNativeLibs="false"
         android:forceQueryable="true"
+        android:multiArch="true"
         android:icon="@mipmap/ic_core_service_app"
         android:label="@string/gms_app_name"
         android:theme="@style/Theme.AppCompat.DayNight">
+
+        <library android:name="com.google.android.gms"/>
+
         <meta-data
             android:name="fake-signature"
             android:value="@string/fake_signature" />
@@ -293,16 +298,6 @@
         </receiver>
 
         <!-- DroidGuard / SafetyNet / reCAPTCHA -->
-
-        <service android:name="org.microg.gms.droidguard.DroidGuardService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.droidguard.service.START" />
-                <action android:name="com.google.android.gms.droidguard.service.PING" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-        <receiver android:name="org.microg.gms.droidguard.ServiceInfoReceiver" />
 
         <service android:name="org.microg.gms.safetynet.SafetyNetClientService">
             <intent-filter>

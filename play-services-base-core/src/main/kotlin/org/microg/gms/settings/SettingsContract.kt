@@ -107,6 +107,28 @@ object SettingsContract {
         private const val id = "safety-net"
         fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+
+        const val ENABLED = "safetynet_enabled"
+
+        val PROJECTION = arrayOf(
+            ENABLED
+        )
+    }
+
+    object DroidGuard {
+        private const val id = "droidguard"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+
+        const val ENABLED = "droidguard_enabled"
+        const val MODE = "droidguard_mode"
+        const val NETWORK_SERVER_URL = "droidguard_network_server_url"
+
+        val PROJECTION = arrayOf(
+            ENABLED,
+            MODE,
+            NETWORK_SERVER_URL
+        )
     }
 
     private fun <T> withoutCallingIdentity(f: () -> T): T {
@@ -118,6 +140,7 @@ object SettingsContract {
         }
     }
 
+    @JvmStatic
     fun <T> getSettings(context: Context, uri: Uri, projection: Array<out String>?, f: (Cursor) -> T): T = withoutCallingIdentity {
         context.contentResolver.query(uri, projection, null, null, null).use { c ->
             require(c != null) { "Cursor for query $uri ${projection?.toList()} was null" }
@@ -126,6 +149,7 @@ object SettingsContract {
         }
     }
 
+    @JvmStatic
     fun setSettings(context: Context, uri: Uri, v: ContentValues.() -> Unit) = withoutCallingIdentity {
         val values = ContentValues().apply { v.invoke(this) }
         val affected = context.contentResolver.update(uri, values, null, null)

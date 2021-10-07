@@ -36,6 +36,7 @@ include ':firebase-dynamic-links-api'
 // core only
 
 include ':play-services-core-proto'
+include ':play-services-droidguard-core-proto'
 include ':play-services-nearby-core-proto'
 include ':play-services-wearable-proto'
 
@@ -46,6 +47,7 @@ include ':play-services-base-core'
 include ':play-services-chimera-core'
 include ':play-services-conscrypt-provider-core'
 include ':play-services-cronet-core'
+include ':play-services-droidguard-core'
 include ':play-services-location-core'
 include ':play-services-maps-core-mapbox'
 include ':play-services-maps-core-vtm'

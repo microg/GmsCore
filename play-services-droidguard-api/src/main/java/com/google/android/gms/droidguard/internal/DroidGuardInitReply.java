@@ -9,11 +9,13 @@ import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 
-public class DroidGuardInitReply implements Parcelable {
-    public ParcelFileDescriptor pfd;
-    public Parcelable object;
+import androidx.annotation.Nullable;
 
-    public DroidGuardInitReply(ParcelFileDescriptor pfd, Parcelable object) {
+public class DroidGuardInitReply implements Parcelable {
+    public @Nullable ParcelFileDescriptor pfd;
+    public @Nullable Parcelable object;
+
+    public DroidGuardInitReply(@Nullable ParcelFileDescriptor pfd, @Nullable Parcelable object) {
         this.pfd = pfd;
         this.object = object;
     }

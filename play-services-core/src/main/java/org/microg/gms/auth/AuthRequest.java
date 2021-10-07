@@ -92,7 +92,7 @@ public class AuthRequest extends HttpFormClient.Request {
     }
 
     public AuthRequest build(Build build) {
-        sdkVersion = build.sdk;
+        sdkVersion = build.version_sdk_int;
         deviceName = build.device;
         buildVersion = build.id;
         return this;

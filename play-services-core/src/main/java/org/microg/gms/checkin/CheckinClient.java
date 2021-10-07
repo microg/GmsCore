@@ -97,7 +97,7 @@ public class CheckinClient {
                                 //.packageVersionCode(Constants.MAX_REFERENCE_VERSION)
                                 .product(build.product)
                                 .radio(build.radio)
-                                .sdkVersion(build.sdk)
+                                .sdkVersion(build.version_sdk_int)
                                 .time(build.time / 1000)
                                 .build())
                         .cellOperator(phoneInfo.cellOperator)

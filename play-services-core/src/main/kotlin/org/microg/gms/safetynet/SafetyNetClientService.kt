@@ -29,6 +29,7 @@ import org.microg.gms.BaseService
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.droidguard.DroidGuardPreferences
 import org.microg.gms.droidguard.DroidGuardResultCreator
 import org.microg.gms.recaptcha.ReCaptchaActivity
 import org.microg.gms.recaptcha.appendUrlEncodedParam
@@ -57,8 +58,15 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
             callbacks.onAttestationData(Status(CommonStatusCodes.DEVELOPER_ERROR), null)
             return
         }
+
         if (!SafetyNetPrefs.get(context).isEnabled) {
-            Log.d(TAG, "ignoring SafetyNet request, it's disabled")
+            Log.d(TAG, "ignoring SafetyNet request, SafetyNet is disabled")
+            callbacks.onAttestationData(Status.CANCELED, null)
+            return
+        }
+
+        if (!DroidGuardPreferences.isEnabled(context)) {
+            Log.d(TAG, "ignoring SafetyNet request, DroidGuard is disabled")
             callbacks.onAttestationData(Status.CANCELED, null)
             return
         }
@@ -67,17 +75,12 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
             try {
                 val attestation = Attestation(context, packageName)
                 attestation.buildPayload(nonce)
-                try {
-                    val dg = DroidGuardResultCreator.getResult(context, "attest", mapOf("contentBinding" to attestation.payloadHashBase64))
-                    attestation.setDroidGaurdResult(Base64.encodeToString(dg, Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE))
-                } catch (e: Exception) {
-                    if (SafetyNetPrefs.get(context).isOfficial) throw e
-                    Log.w(TAG, e)
-                    null
-                }
-                val data = withContext(Dispatchers.IO) { AttestationData(attestation.attest(apiKey)) }
-                callbacks.onAttestationData(Status.SUCCESS, data)
-            } catch (e: IOException) {
+                val data = mapOf("contentBinding" to attestation.payloadHashBase64)
+                val dg = withContext(Dispatchers.IO) { DroidGuardResultCreator.getResult(context, "attest", data) }
+                attestation.setDroidGaurdResult(Base64.encodeToString(dg, Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE))
+                val resultData = withContext(Dispatchers.IO) { AttestationData(attestation.attest(apiKey)) }
+                callbacks.onAttestationData(Status.SUCCESS, resultData)
+            } catch (e: Exception) {
                 Log.w(TAG, e)
                 callbacks.onAttestationData(Status.INTERNAL_ERROR, null)
             }
@@ -112,11 +115,13 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
             callbacks.onAttestationData(Status(CommonStatusCodes.DEVELOPER_ERROR), null)
             return
         }
+
         if (!SafetyNetPrefs.get(context).isEnabled) {
-            Log.d(TAG, "ignoring SafetyNet request, it's disabled")
+            Log.d(TAG, "ignoring SafetyNet request, SafetyNet is disabled")
             callbacks.onAttestationData(Status.CANCELED, null)
             return
         }
+
         val intent = Intent(context, ReCaptchaActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

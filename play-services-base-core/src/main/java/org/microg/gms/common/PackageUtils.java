@@ -153,6 +153,18 @@ public class PackageUtils {
     }
 
     @Nullable
+    public static String getAndCheckCallingPackageOrExtendedAccess(Context context, String suggestedPackageName) {
+        try {
+            return getAndCheckCallingPackage(context, suggestedPackageName, 0);
+        } catch (Exception e) {
+            if (callerHasExtendedAccess(context)) {
+                return suggestedPackageName;
+            }
+            throw e;
+        }
+    }
+
+    @Nullable
     public static String getAndCheckCallingPackage(Context context, int suggestedCallerUid) {
         return getAndCheckCallingPackage(context, null, suggestedCallerUid);
     }
