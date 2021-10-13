@@ -125,13 +125,16 @@ data class GcmPrefs(
         Log.d("GmsGcmPrefs", "learnTimeout: $pref")
         when (pref) {
             PREF_NETWORK_MOBILE, PREF_NETWORK_ROAMING -> setSettings(context, Gcm.getContentUri(context)) {
-                put(Gcm.LEARNT_MOBILE, (learntMobileInterval * 0.95).toInt())
+                val newInterval = (learntMobileInterval * 0.95).toInt()
+                put(Gcm.LEARNT_MOBILE, max(MIN_INTERVAL, min(newInterval, MAX_INTERVAL)))
             }
             PREF_NETWORK_WIFI -> setSettings(context, Gcm.getContentUri(context)) {
-                put(Gcm.LEARNT_WIFI, (learntWifiInterval * 0.95).toInt())
+                val newInterval = (learntWifiInterval * 0.95).toInt()
+                put(Gcm.LEARNT_WIFI, max(MIN_INTERVAL, min(newInterval, MAX_INTERVAL)))
             }
             else -> setSettings(context, Gcm.getContentUri(context)) {
-                put(Gcm.LEARNT_OTHER, (learntOtherInterval * 0.95).toInt())
+                val newInterval = (learntOtherInterval * 0.95).toInt()
+                put(Gcm.LEARNT_OTHER, max(MIN_INTERVAL, min(newInterval, MAX_INTERVAL)))
             }
         }
     }
