@@ -244,9 +244,10 @@ public class McsService extends Service implements Handler.Callback {
         }
         // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
         int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref);
-        if (heartbeatMs < 0) { // TODO how can this be negative?
+        // if disabled for active network, heartbeatMs will be -1
+        if (heartbeatMs < 0) {
             closeAll();
-        } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2 * heartbeatMs) {
+        } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2L * heartbeatMs) {
             logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
             GcmPrefs.get(context).learnTimeout(context, activeNetworkPref);
             return false;
