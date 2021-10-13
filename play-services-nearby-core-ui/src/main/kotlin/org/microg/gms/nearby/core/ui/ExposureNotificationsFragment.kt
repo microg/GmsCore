@@ -32,10 +32,11 @@ class ExposureNotificationsFragment : Fragment(R.layout.exposure_notifications_f
     }
 
     fun setEnabled(newStatus: Boolean) {
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val info = getExposureNotificationsServiceInfo(requireContext())
+            val info = getExposureNotificationsServiceInfo(appContext)
             val newConfiguration = info.configuration.copy(enabled = newStatus)
-            setExposureNotificationsServiceConfiguration(requireContext(), newConfiguration)
+            setExposureNotificationsServiceConfiguration(appContext, newConfiguration)
             displayServiceInfo(info.copy(configuration = newConfiguration))
         }
     }
@@ -46,8 +47,9 @@ class ExposureNotificationsFragment : Fragment(R.layout.exposure_notifications_f
 
     override fun onResume() {
         super.onResume()
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            displayServiceInfo(getExposureNotificationsServiceInfo(requireContext()))
+            displayServiceInfo(getExposureNotificationsServiceInfo(appContext))
         }
     }
 }
