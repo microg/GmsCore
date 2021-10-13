@@ -44,8 +44,9 @@ class DeviceRegistrationPreferencesFragment : PreferenceFragmentCompat() {
 
     private fun updateStatus() {
         handler.postDelayed(updateRunnable, UPDATE_INTERVAL)
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val serviceInfo = getCheckinServiceInfo(requireContext())
+            val serviceInfo = getCheckinServiceInfo(appContext)
             statusCategory.isVisible = serviceInfo.configuration.enabled
             if (serviceInfo.lastCheckin > 0) {
                 status.summary = getString(R.string.checkin_last_registration, DateUtils.getRelativeTimeSpanString(serviceInfo.lastCheckin, System.currentTimeMillis(), 0))

@@ -72,8 +72,9 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     }
 
     fun updateChart() {
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val rpiHourHistogram = ExposureDatabase.with(requireContext()) { database -> database.rpiHourHistogram }
+            val rpiHourHistogram = ExposureDatabase.with(appContext) { database -> database.rpiHourHistogram }
             val totalRpiCount = rpiHourHistogram.map { it.rpis }.sum()
             deleteAll.isEnabled = totalRpiCount > 0
             histogramCategory.title = getString(R.string.prefcat_exposure_rpis_histogram_title, totalRpiCount)

@@ -5,6 +5,7 @@
 
 package org.microg.gms.ui
 
+import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -50,12 +51,13 @@ class SettingsFragment : ResourceSettingsFragment() {
 
     override fun onResume() {
         super.onResume()
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            updateDetails()
+            updateDetails(appContext)
         }
     }
 
-    private suspend fun updateDetails() {
+    private suspend fun updateDetails(context: Context) {
         if (getGcmServiceInfo(requireContext()).configuration.enabled) {
             val database = GcmDatabase(context)
             val regCount = database.registrationList.size
@@ -68,7 +70,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (getCheckinServiceInfo(requireContext()).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
         findPreference<Preference>(PREF_SNET)!!.setSummary(if (getSafetyNetServiceInfo(requireContext()).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
 
-        val backendCount = UnifiedLocationClient[requireContext()].getLocationBackends().size + UnifiedLocationClient[requireContext()].getGeocoderBackends().size
+        val backendCount = UnifiedLocationClient[context].getLocationBackends().size + UnifiedLocationClient[requireContext()].getGeocoderBackends().size
         findPreference<Preference>(PREF_UNIFIEDNLP)!!.summary = resources.getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount);
 
         findPreference<Preference>(PREF_EXPOSURE)?.isVisible = NearbyPreferencesIntegration.isAvailable
