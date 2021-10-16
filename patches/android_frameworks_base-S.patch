@@ -1,0 +1,161 @@
+From 0deff13d05e451fbe3803f66be73853237c6729c Mon Sep 17 00:00:00 2001
+From: Danny Lin <danny@kdrag0n.dev>
+Date: Sat, 16 Oct 2021 05:27:57 -0700
+Subject: [PATCH 1/1] Add support for app signature spoofing
+
+This is needed by microG GmsCore to pretend to be the official Google
+Play Services package, because client apps check the package signature
+to make sure it matches Google's official certificate.
+
+This was forward-ported from the Android 10 patch by gudenau:
+https://github.com/microg/android_packages_apps_GmsCore/pull/957
+
+Changes made for Android 11:
+  - Updated PackageInfo calls
+  - Added new permission to public API surface, needed for
+    PermissionController which is now an updatable APEX on 11
+  - Added a dummy permission group to allow users to manage the
+    permission through the PermissionController UI
+    (by Vachounet <vachounet@live.fr>)
+  - Updated location provider comment for conciseness
+
+Changes made for Android 12:
+  - Moved mayFakeSignature into lock-free Computer subclass
+  - Always get permissions for packages that request signature spoofing
+    (otherwise permissions are usually ommitted and thus the permission
+    check doesn't work properly)
+  - Optimize mayFakeSignature check order to improve performance
+
+Link: https://github.com/microg/GmsCore/pull/1586
+Change-Id: Ied7d6ce0b83a2d2345c3abba0429998d86494a88
+---
+ core/api/current.txt                          |  2 ++
+ core/res/AndroidManifest.xml                  | 15 +++++++++
+ core/res/res/values/strings.xml               | 12 +++++++
+ .../server/pm/PackageManagerService.java      | 31 +++++++++++++++++--
+ 4 files changed, 57 insertions(+), 3 deletions(-)
+
+diff --git a/core/api/current.txt b/core/api/current.txt
+index 1de47b548a5c..52c7ea2e1321 100644
+--- a/core/api/current.txt
++++ b/core/api/current.txt
+@@ -84,6 +84,7 @@ package android {
+     field public static final String DUMP = "android.permission.DUMP";
+     field public static final String EXPAND_STATUS_BAR = "android.permission.EXPAND_STATUS_BAR";
+     field public static final String FACTORY_TEST = "android.permission.FACTORY_TEST";
++    field public static final String FAKE_PACKAGE_SIGNATURE = "android.permission.FAKE_PACKAGE_SIGNATURE";
+     field public static final String FOREGROUND_SERVICE = "android.permission.FOREGROUND_SERVICE";
+     field public static final String GET_ACCOUNTS = "android.permission.GET_ACCOUNTS";
+     field public static final String GET_ACCOUNTS_PRIVILEGED = "android.permission.GET_ACCOUNTS_PRIVILEGED";
+@@ -199,6 +200,7 @@ package android {
+     field public static final String CALL_LOG = "android.permission-group.CALL_LOG";
+     field public static final String CAMERA = "android.permission-group.CAMERA";
+     field public static final String CONTACTS = "android.permission-group.CONTACTS";
++    field public static final String FAKE_PACKAGE = "android.permission-group.FAKE_PACKAGE";
+     field public static final String LOCATION = "android.permission-group.LOCATION";
+     field public static final String MICROPHONE = "android.permission-group.MICROPHONE";
+     field public static final String NEARBY_DEVICES = "android.permission-group.NEARBY_DEVICES";
+diff --git a/core/res/AndroidManifest.xml b/core/res/AndroidManifest.xml
+index bad79eb13749..5ee73f64e690 100644
+--- a/core/res/AndroidManifest.xml
++++ b/core/res/AndroidManifest.xml
+@@ -3186,6 +3186,21 @@
+         android:description="@string/permdesc_getPackageSize"
+         android:protectionLevel="normal" />
+ 
++    <!-- Dummy user-facing group for faking package signature -->
++    <permission-group android:name="android.permission-group.FAKE_PACKAGE"
++        android:label="@string/permgrouplab_fake_package_signature"
++        android:description="@string/permgroupdesc_fake_package_signature"
++        android:request="@string/permgrouprequest_fake_package_signature"
++        android:priority="100" />
++
++    <!-- Allows an application to change the package signature as
++         seen by applications -->
++    <permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE"
++        android:permissionGroup="android.permission-group.UNDEFINED"
++        android:protectionLevel="dangerous"
++        android:label="@string/permlab_fakePackageSignature"
++        android:description="@string/permdesc_fakePackageSignature" />
++
+     <!-- @deprecated No longer useful, see
+          {@link android.content.pm.PackageManager#addPackageToPreferred}
+          for details. -->
+diff --git a/core/res/res/values/strings.xml b/core/res/res/values/strings.xml
+index a99a22009e3b..81ca9b23ae70 100644
+--- a/core/res/res/values/strings.xml
++++ b/core/res/res/values/strings.xml
+@@ -880,6 +880,18 @@
+ 
+     <!--  Permissions -->
+ 
++    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permlab_fakePackageSignature">Spoof package signature</string>
++    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permdesc_fakePackageSignature">Allows the app to pretend to be a different app. Malicious applications might be able to use this to access private application data. Legitimate uses include an emulator pretending to be what it emulates. Grant this permission with caution only!</string>
++    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permgrouplab_fake_package_signature">Spoof package signature</string>
++    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permgroupdesc_fake_package_signature">allow to spoof package signature</string>
++    <!-- Message shown to the user when the apps requests permission from this group. If ever possible this should stay below 80 characters (assuming the parameters takes 20 characters). Don't abbreviate until the message reaches 120 characters though. [CHAR LIMIT=120] -->
++    <string name="permgrouprequest_fake_package_signature">Allow
++        &lt;b><xliff:g id="app_name" example="Gmail">%1$s</xliff:g>&lt;/b> to spoof package signature?</string>
++
+     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+     <string name="permlab_statusBar">disable or modify status bar</string>
+     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+diff --git a/services/core/java/com/android/server/pm/PackageManagerService.java b/services/core/java/com/android/server/pm/PackageManagerService.java
+index c4775463ee75..e26cd6a4c16f 100644
+--- a/services/core/java/com/android/server/pm/PackageManagerService.java
++++ b/services/core/java/com/android/server/pm/PackageManagerService.java
+@@ -3299,6 +3299,29 @@ public class PackageManagerService extends IPackageManager.Stub
+             return result;
+         }
+ 
++        private boolean requestsFakeSignature(AndroidPackage p) {
++            return p.getMetaData() != null &&
++                    p.getMetaData().getString("fake-signature") != null;
++        }
++
++        private PackageInfo mayFakeSignature(AndroidPackage p, PackageInfo pi,
++                Set<String> permissions) {
++            try {
++                if (p.getMetaData() != null &&
++                        p.getTargetSdkVersion() > Build.VERSION_CODES.LOLLIPOP_MR1) {
++                    String sig = p.getMetaData().getString("fake-signature");
++                    if (sig != null &&
++                            permissions.contains("android.permission.FAKE_PACKAGE_SIGNATURE")) {
++                        pi.signatures = new Signature[] {new Signature(sig)};
++                    }
++                }
++            } catch (Throwable t) {
++                // We should never die because of any failures, this is system code!
++                Log.w("PackageManagerService.FAKE_PACKAGE_SIGNATURE", t);
++            }
++            return pi;
++        }
++
+         public final PackageInfo generatePackageInfo(PackageSetting ps, int flags, int userId) {
+             if (!mUserManager.exists(userId)) return null;
+             if (ps == null) {
+@@ -3327,12 +3350,14 @@ public class PackageManagerService extends IPackageManager.Stub
+                 final int[] gids = (flags & PackageManager.GET_GIDS) == 0 ? EMPTY_INT_ARRAY
+                         : mPermissionManager.getGidsForUid(UserHandle.getUid(userId, ps.appId));
+                 // Compute granted permissions only if package has requested permissions
+-                final Set<String> permissions = ((flags & PackageManager.GET_PERMISSIONS) == 0
++                final Set<String> permissions = (((flags & PackageManager.GET_PERMISSIONS) == 0
++                        && !requestsFakeSignature(p))
+                         || ArrayUtils.isEmpty(p.getRequestedPermissions())) ? Collections.emptySet()
+                         : mPermissionManager.getGrantedPermissions(ps.name, userId);
+ 
+-                PackageInfo packageInfo = PackageInfoUtils.generate(p, gids, flags,
+-                        ps.firstInstallTime, ps.lastUpdateTime, permissions, state, userId, ps);
++                PackageInfo packageInfo = mayFakeSignature(p, PackageInfoUtils.generate(p, gids, flags,
++                        ps.firstInstallTime, ps.lastUpdateTime, permissions, state, userId, ps),
++                        permissions);
+ 
+                 if (packageInfo == null) {
+                     return null;
+-- 
+2.33.0
+
