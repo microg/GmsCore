@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -248,6 +249,7 @@ public class McsService extends Service implements Handler.Callback {
         // if disabled for active network, heartbeatMs will be -1
         if (heartbeatMs < 0) {
             closeAll();
+            return false;
         } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2L * heartbeatMs) {
             logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
             GcmPrefs.get(context).learnTimeout(context, activeNetworkPref);
@@ -436,8 +438,10 @@ public class McsService extends Service implements Handler.Callback {
         try {
             closeAll();
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(cm.getActiveNetworkInfo());
-            if (!GcmPrefs.get(this).isEnabledFor(cm.getActiveNetworkInfo())) {
+            NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+            activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(activeNetworkInfo);
+            if (!GcmPrefs.get(this).isEnabledFor(activeNetworkInfo)) {
+                logd(this, "Don't connect, because disabled for " + activeNetworkInfo.getTypeName());
                 scheduleReconnect(this);
                 return;
             }
