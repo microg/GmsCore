@@ -127,6 +127,7 @@ public class McsService extends Service implements Handler.Callback {
     private static long lastIncomingNetworkRealtime = 0;
     private static long startTimestamp = 0;
     public static String activeNetworkPref = null;
+    private boolean wasTornDown = false;
     private AtomicInteger nextMessageId = new AtomicInteger(0x1000000);
 
     private static Socket sslSocket;
@@ -431,6 +432,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private synchronized void connect() {
+        wasTornDown = false;
         try {
             closeAll();
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -692,7 +694,7 @@ public class McsService extends Service implements Handler.Callback {
                 handleOutputDone(msg);
                 return true;
         }
-        Log.w(TAG, "Unknown message: " + msg);
+        Log.w(TAG, "Unknown message (" + msg.what + "): " + msg);
         return false;
     }
 
@@ -754,6 +756,14 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void handleTeardown(android.os.Message msg) {
+        if (wasTornDown) {
+            // This can get called multiple times from different places via MSG_TEARDOWN
+            // this causes the reconnect delay to increase with each call to scheduleReconnect(),
+            // increasing the time we are disconnected.
+            logd(this, "Was torn down already, not doing it again");
+            return;
+        }
+        wasTornDown = true;
         closeAll();
 
         scheduleReconnect(this);
