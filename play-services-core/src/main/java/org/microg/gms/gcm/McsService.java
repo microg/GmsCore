@@ -123,7 +123,10 @@ public class McsService extends Service implements Handler.Callback {
     public static final int SERVICE_PORT = 5228;
 
     private static final int WAKELOCK_TIMEOUT = 5000;
+    // On bad mobile network a ping can take >60s, so we wait for an ACK for 90s
+    private static final int HEARTBEAT_ACK_AFTER_PING_TIMEOUT_MS = 90000;
 
+    private static long lastHeartbeatPingElapsedRealtime = -1;
     private static long lastHeartbeatAckElapsedRealtime = -1;
     private static long lastIncomingNetworkRealtime = 0;
     private static long startTimestamp = 0;
@@ -244,16 +247,20 @@ public class McsService extends Service implements Handler.Callback {
             logd(null, "Connection is not enabled or dead.");
             return false;
         }
-        // consider connection to be dead if we did not receive an ack within twice the heartbeat interval
+        // consider connection to be dead if we did not receive an ack within 90s to our ping
         int heartbeatMs = GcmPrefs.get(context).getHeartbeatMsFor(activeNetworkPref);
         // if disabled for active network, heartbeatMs will be -1
         if (heartbeatMs < 0) {
             closeAll();
             return false;
-        } else if (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime > 2L * heartbeatMs) {
-            logd(null, "No heartbeat for " + (SystemClock.elapsedRealtime() - lastHeartbeatAckElapsedRealtime) / 1000 + " seconds, connection assumed to be dead after " + 2 * heartbeatMs / 1000 + " seconds");
-            GcmPrefs.get(context).learnTimeout(context, activeNetworkPref);
-            return false;
+        } else {
+            boolean noAckReceived = lastHeartbeatAckElapsedRealtime < lastHeartbeatPingElapsedRealtime;
+            long timeSinceLastPing = SystemClock.elapsedRealtime() - lastHeartbeatPingElapsedRealtime;
+            if (noAckReceived && timeSinceLastPing > HEARTBEAT_ACK_AFTER_PING_TIMEOUT_MS) {
+                logd(null, "No heartbeat for " + timeSinceLastPing / 1000 + "s, connection assumed to be dead after 90s");
+                GcmPrefs.get(context).learnTimeout(context, activeNetworkPref);
+                return false;
+            }
         }
         return true;
     }
@@ -457,6 +464,7 @@ public class McsService extends Service implements Handler.Callback {
             outputStream.start();
 
             startTimestamp = System.currentTimeMillis();
+            lastHeartbeatPingElapsedRealtime = SystemClock.elapsedRealtime();
             lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
             lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
             scheduleHeartbeat(this);
@@ -668,6 +676,7 @@ public class McsService extends Service implements Handler.Callback {
                         ping.last_stream_id_received(inputStream.getStreamId());
                     }
                     send(MCS_HEARTBEAT_PING_TAG, ping.build());
+                    lastHeartbeatPingElapsedRealtime = SystemClock.elapsedRealtime();
                     scheduleHeartbeat(this);
                 } else {
                     logd(this, "Ignoring heartbeat, not connected!");
