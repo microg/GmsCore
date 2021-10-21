@@ -41,10 +41,10 @@ public class McsOutputStream extends Thread implements Handler.Callback, Closeab
     private int version = MCS_VERSION_CODE;
     private int streamId = 0;
 
-    private Handler mainHandler;
+    private final Handler mainHandler;
     private Handler myHandler;
 
-    private boolean closed = false;
+    private volatile boolean closed = false;
 
     public McsOutputStream(OutputStream os, Handler mainHandler) {
         this(os, mainHandler, false);
@@ -78,7 +78,11 @@ public class McsOutputStream extends Thread implements Handler.Callback, Closeab
                     writeInternal((Message) msg.obj, msg.arg1);
                     mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_DONE, msg.arg1, msg.arg2, msg.obj));
                 } catch (IOException e) {
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_ERROR, e));
+                    if (closed) {
+                        Log.d(TAG, "We were closed already. Ignoring IOException");
+                    } else {
+                        mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_ERROR, e));
+                    }
                 }
                 return true;
             case MSG_TEARDOWN:
