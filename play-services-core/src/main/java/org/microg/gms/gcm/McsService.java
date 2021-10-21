@@ -441,7 +441,6 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private synchronized void connect() {
-        wasTornDown = false;
         try {
             closeAll();
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -452,6 +451,7 @@ public class McsService extends Service implements Handler.Callback {
                 scheduleReconnect(this);
                 return;
             }
+            wasTornDown = false;
 
             logd(this, "Starting MCS connection...");
             Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
@@ -744,6 +744,7 @@ public class McsService extends Service implements Handler.Callback {
             resetCurrentDelay();
             lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
         } catch (Exception e) {
+            Log.w(TAG, "Exception when handling input: " + message, e);
             rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
         }
     }
@@ -758,6 +759,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private static void closeAll() {
+        logd(null, "Closing all sockets...");
         tryClose(inputStream);
         tryClose(outputStream);
         if (sslSocket != null) {

@@ -20,7 +20,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.squareup.wire.Message;
-import com.squareup.wire.Wire;
 
 import org.microg.gms.gcm.mcs.Close;
 import org.microg.gms.gcm.mcs.DataMessageStanza;
@@ -57,7 +56,7 @@ public class McsInputStream extends Thread implements Closeable {
     private int streamId = 0;
     private long lastMsgTime = 0;
 
-    private boolean closed = false;
+    private volatile boolean closed = false;
 
     public McsInputStream(InputStream is, Handler mainHandler) {
         this(is, mainHandler, false);
@@ -83,7 +82,11 @@ public class McsInputStream extends Thread implements Closeable {
                 }
             }
         } catch (IOException e) {
-            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT_ERROR, e));
+            if (closed) {
+                Log.d(TAG, "We were closed already. Ignoring IOException");
+            } else {
+                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT_ERROR, e));
+            }
         }
         try {
             is.close();
@@ -120,7 +123,7 @@ public class McsInputStream extends Thread implements Closeable {
                 Log.d(TAG, "Reading from MCS version: " + version);
                 initialized = true;
             } catch (IOException e) {
-                Log.w(TAG, e);
+                Log.w(TAG, "Error reading version", e);
             }
         }
     }
