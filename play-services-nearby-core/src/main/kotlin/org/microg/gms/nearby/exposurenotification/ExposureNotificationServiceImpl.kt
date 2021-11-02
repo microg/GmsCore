@@ -48,14 +48,14 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
     // Table of back-end public keys, used to verify the signature of the diagnosed TEKs.
     // The table is indexed by package names.
     private val backendPubKeyForPackage = mapOf<String, String>(
-            Pair("ch.admin.bag.dp3t.dev",
-                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ=="),
-            Pair("ch.admin.bag.dp3t.test",
-                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ=="),
-            Pair("ch.admin.bag.dp3t.abnahme",
-                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ=="),
-            Pair("ch.admin.bag.dp3t",
-                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEK2k9nZ8guo7JP2ELPQXnUkqDyjjJmYmpt9Zy0HPsiGXCdI3SFmLr204KNzkuITppNV5P7+bXRxiiY04NMrEITg=="),
+            "ch.admin.bag.dp3t.dev" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ==",
+            "ch.admin.bag.dp3t.test" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ==",
+            "ch.admin.bag.dp3t.abnahme" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ==",
+            "ch.admin.bag.dp3t" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEK2k9nZ8guo7JP2ELPQXnUkqDyjjJmYmpt9Zy0HPsiGXCdI3SFmLr204KNzkuITppNV5P7+bXRxiiY04NMrEITg==",
         )
 
     // Back-end public key for this package
@@ -70,9 +70,9 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     // Table of supported signature algorithms for the diagnosed TEKs.
     // The table is indexed by ASN.1 OIDs as specified in https://tools.ietf.org/html/rfc5758#section-3.2
-    private val sigAlgoForOid = mapOf<String, Signature>(
-            Pair("1.2.840.10045.4.3.2", Signature.getInstance("SHA256withECDSA")),
-            Pair("1.2.840.10045.4.3.4", Signature.getInstance("SHA512withECDSA")),
+    private val sigAlgoForOid = mapOf<String, Function0<Signature>>(
+            "1.2.840.10045.4.3.2" to { Signature.getInstance("SHA256withECDSA") },
+            "1.2.840.10045.4.3.4" to { Signature.getInstance("SHA512withECDSA") },
     )
 
     private fun LifecycleCoroutineScope.launchSafely(block: suspend CoroutineScope.() -> Unit): Job = launchWhenStarted { try { block() } catch (e: Exception) { Log.w(TAG, "Error in coroutine", e) } }
@@ -481,7 +481,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     Log.d(TAG, "Signature info: algo=${sigInfo.signature_algorithm} key={id=${sigInfo.verification_key_id}, version=${sigInfo.verification_key_version}}")
 
                     val signature = sig.signature?.toByteArray() ?: throw Exception("Signature contents is missing")
-                    val sigVerifier = sigAlgoForOid.get(sigInfo.signature_algorithm) ?: throw Exception("Signature algorithm not supported: ${sigInfo.signature_algorithm}")
+                    val sigVerifier = (sigAlgoForOid.get(sigInfo.signature_algorithm) ?: throw Exception("Signature algorithm not supported: ${sigInfo.signature_algorithm}"))()
                     sigVerifier.initVerify(backendPublicKey)
 
                     val stream = zip.getInputStream(dataEntry)
