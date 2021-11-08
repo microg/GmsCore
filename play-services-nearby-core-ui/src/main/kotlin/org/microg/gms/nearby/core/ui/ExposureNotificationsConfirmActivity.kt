@@ -105,7 +105,11 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     private var permissionNeedsHandling: Boolean = false
     private var permissionRequestCode = 33
     private val permissions by lazy {
-        if (Build.VERSION.SDK_INT >= 29) {
+        if (Build.VERSION.SDK_INT >= 31){
+            arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN", "android.permission.ACCESS_BACKGROUND_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
+
+        }
+        else if (Build.VERSION.SDK_INT >= 29) {
             arrayOf("android.permission.ACCESS_BACKGROUND_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
         } else {
             arrayOf("android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")

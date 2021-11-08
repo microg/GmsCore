@@ -42,3 +42,5 @@ const val CLEANUP_INTERVAL = 24 * 60 * 60 * 1000L
 
 const val VERSION_1_0: Byte = 0x40
 const val VERSION_1_1: Byte = 0x50
+
+const val NOTIFICATION_UPDATE_ACTION = "org.microg.gms.nearby.UPDATE_NOTIFICATION"
