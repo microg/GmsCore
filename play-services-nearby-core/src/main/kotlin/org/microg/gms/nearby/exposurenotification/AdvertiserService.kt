@@ -147,7 +147,11 @@ class AdvertiserService : LifecycleService() {
                         .setTxPowerLevel(AdvertisingSetParameters.TX_POWER_LOW)
                         .setConnectable(false)
                         .build()
-                advertiser.startAdvertisingSet(params, data, null, null, null, setCallback as AdvertisingSetCallback)
+                try {
+                    advertiser.startAdvertisingSet(params, data, null, null, null, setCallback as AdvertisingSetCallback)
+                } catch (e: SecurityException) {
+                    Log.e(TAG, "Couldn't start advertising: Need android.permission.BLUETOOTH_ADVERTISE permission.", )
+                }
             } else {
                 nextSend = nextSend.coerceAtMost(180000)
                 val settings = Builder()
@@ -156,7 +160,11 @@ class AdvertiserService : LifecycleService() {
                         .setTxPowerLevel(ADVERTISE_TX_POWER_LOW)
                         .setConnectable(false)
                         .build()
-                advertiser.startAdvertising(settings, data, callback)
+                try {
+                    advertiser.startAdvertising(settings, data, callback)
+                } catch (e: SecurityException) {
+                    Log.e(TAG, "Couldn't start advertising: Need android.permission.BLUETOOTH_ADVERTISE permission.", )
+                }
             }
             synchronized(this) { advertising = true }
             sendingBytes = payload
@@ -204,7 +212,11 @@ class AdvertiserService : LifecycleService() {
         advertising = false
         if (Build.VERSION.SDK_INT >= 26) {
             wantStartAdvertising = true
-            advertiser?.stopAdvertisingSet(setCallback as AdvertisingSetCallback)
+            try {
+                advertiser?.stopAdvertisingSet(setCallback as AdvertisingSetCallback)
+            } catch (e: SecurityException) {
+                Log.i(TAG, "Tried calling stopAdvertisingSet without android.permission.BLUETOOTH_ADVERTISE permission.", )
+            }
         } else {
             advertiser?.stopAdvertising(callback)
         }

@@ -32,6 +32,14 @@
         tools:isPreferenceVisible="true" />
 
     <Preference
+        android:icon="@drawable/ic_info_outline"
+        android:key="pref_exposure_error_nearby_not_granted"
+        android:title="@string/pref_exposure_error_nearby_not_granted_title"
+        android:summary="@string/pref_exposure_error_nearby_not_granted_description"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+    <Preference
         android:icon="@drawable/ic_alert"
         android:key="pref_exposure_error_bluetooth_unsupported"
         android:selectable="false"

@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
 import android.os.Build
@@ -53,9 +54,14 @@ class NotifyService : LifecycleService() {
     private fun updateNotification() {
         val location = !LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)
         val bluetooth = BluetoothAdapter.getDefaultAdapter()?.state.let { it != BluetoothAdapter.STATE_ON && it != BluetoothAdapter.STATE_TURNING_ON }
-        Log.d(TAG, "notify: location: $location, bluetooth: $bluetooth")
+        val nearbyPermissions = arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
+        val permissionNeedsHandling = Build.VERSION.SDK_INT >= 31 && nearbyPermissions.any {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+        Log.d( TAG,"notify: location: $location, bluetooth: $bluetooth, permissionNeedsHandling: $permissionNeedsHandling")
 
         val text: String = when {
+            permissionNeedsHandling -> getString(R.string.exposure_notify_off_nearby)
             location && bluetooth -> getString(R.string.exposure_notify_off_bluetooth_location)
             location -> getString(R.string.exposure_notify_off_location)
             bluetooth -> getString(R.string.exposure_notify_off_bluetooth)
@@ -105,6 +111,7 @@ class NotifyService : LifecycleService() {
             addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
             if (Build.VERSION.SDK_INT >= 19) addAction(LocationManager.MODE_CHANGED_ACTION)
             addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
+            addAction(NOTIFICATION_UPDATE_ACTION)
         })
     }
 

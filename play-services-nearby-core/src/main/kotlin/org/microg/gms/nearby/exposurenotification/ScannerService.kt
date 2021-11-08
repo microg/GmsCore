@@ -121,14 +121,18 @@ class ScannerService : LifecycleService() {
         Log.i(TAG, "Starting scanner for service $SERVICE_UUID for ${SCANNING_TIME_MS}ms")
         seenAdvertisements = 0
         wakeLock.acquire()
-        scanner.startScan(
-                listOf(ScanFilter.Builder()
-                        .setServiceUuid(SERVICE_UUID)
-                        .setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0))
-                        .build()),
-                ScanSettings.Builder().build(),
-                callback
-        )
+        try {
+            scanner.startScan(
+                    listOf(ScanFilter.Builder()
+                            .setServiceUuid(SERVICE_UUID)
+                            .setServiceData(SERVICE_UUID, byteArrayOf(0), byteArrayOf(0))
+                            .build()),
+                    ScanSettings.Builder().build(),
+                    callback
+            )
+        } catch (e: SecurityException) {
+            Log.e(TAG, "Couldn't start ScannerService, need android.permission.BLUETOOTH_SCAN permission.")
+        }
         scanning = true
         lastStartTime = System.currentTimeMillis()
         handler.postDelayed(stopLaterRunnable, SCANNING_TIME_MS)

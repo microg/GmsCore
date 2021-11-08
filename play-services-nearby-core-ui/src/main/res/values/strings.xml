@@ -76,4 +76,6 @@ Your identity or test result won&apos;t be shared with other people."</string>
     <string name="exposure_confirm_bluetooth_description">Bluetooth needs to be enabled.</string>
     <string name="exposure_confirm_location_description">Location access is required.</string>
     <string name="exposure_confirm_button">Enable</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">New Permissions required</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tap to grant required permissions to Exposure Notifications</string>
 </resources>
