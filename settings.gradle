@@ -43,6 +43,7 @@ include ':play-services-basement-ktx'
 include ':play-services-tasks-ktx'
 
 include ':play-services-base-core'
+include ':play-services-chimera-core'
 include ':play-services-conscrypt-provider-core'
 include ':play-services-cronet-core'
 include ':play-services-location-core'
