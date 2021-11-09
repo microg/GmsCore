@@ -56,6 +56,15 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                     "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ==",
             "ch.admin.bag.dp3t" to
                     "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEK2k9nZ8guo7JP2ELPQXnUkqDyjjJmYmpt9Zy0HPsiGXCdI3SFmLr204KNzkuITppNV5P7+bXRxiiY04NMrEITg==",
+            // CWA, see https://github.com/corona-warn-app/cwa-documentation/issues/740#issuecomment-963223074
+            "de.rki.coronawarnapp" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEc7DEstcUIRcyk35OYDJ95/hTg3UVhsaDXKT0zK7NhHPXoyzipEnOp3GyNXDVpaPi3cAfQmxeuFMZAIX2+6A5Xg==",
+            // CCTG uses CWA infrastucture
+            "de.corona.tracing" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEc7DEstcUIRcyk35OYDJ95/hTg3UVhsaDXKT0zK7NhHPXoyzipEnOp3GyNXDVpaPi3cAfQmxeuFMZAIX2+6A5Xg==",
+            // CCTG-Test builds don't have access any staging infrastructure, so again CWA key
+            "de.corona.tracing.test" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEc7DEstcUIRcyk35OYDJ95/hTg3UVhsaDXKT0zK7NhHPXoyzipEnOp3GyNXDVpaPi3cAfQmxeuFMZAIX2+6A5Xg==",
         )
 
     // Back-end public key for this package
