@@ -78,4 +78,6 @@ Your identity or test result won&apos;t be shared with other people."</string>
     <string name="exposure_confirm_button">Enable</string>
     <string name="pref_exposure_error_nearby_not_granted_title">New Permissions required</string>
     <string name="pref_exposure_error_nearby_not_granted_description">Tap to grant required permissions to Exposure Notifications</string>
+    <string name="exposure_grant_background_location_description">Almost there! You will need to enable background location access by selecting the \'Allow all the time\' option on the next screen. Then press back.</string>
+    <string name="exposure_grant_background_location_button">Update Settings</string>
 </resources>

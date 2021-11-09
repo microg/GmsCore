@@ -82,6 +82,9 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
         findViewById<Button>(R.id.grant_permission_button).setOnClickListener {
             requestPermissions()
         }
+        findViewById<Button>(R.id.grant_background_location_button).setOnClickListener {
+            requestBackgroundLocation()
+        }
         findViewById<Button>(R.id.enable_bluetooth_button).setOnClickListener {
             requestBluetooth()
         }
@@ -98,50 +101,87 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     }
 
     private fun updateButton() {
-        findViewById<Button>(android.R.id.button1).isEnabled = !permissionNeedsHandling && !bluetoothNeedsHandling && !locationNeedsHandling
+        findViewById<Button>(android.R.id.button1).isEnabled =
+            !permissionNeedsHandling && !backgroundLocationNeedsHandling && !bluetoothNeedsHandling && !locationNeedsHandling
     }
 
     // Permissions
     private var permissionNeedsHandling: Boolean = false
+    private var backgroundLocationNeedsHandling: Boolean = false
     private var permissionRequestCode = 33
     private val permissions by lazy {
-        if (Build.VERSION.SDK_INT >= 31){
-            arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN", "android.permission.ACCESS_BACKGROUND_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
-
-        }
-        else if (Build.VERSION.SDK_INT >= 29) {
-            arrayOf("android.permission.ACCESS_BACKGROUND_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
-        } else {
-            arrayOf("android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION")
+        when {
+            Build.VERSION.SDK_INT >= 31 -> {
+                // We shouldn't be needing the LOCATION permissions on 31+ anymore, at least when
+                // apps making use of this target 31+ as well, but this needs more testing. See
+                // https://developer.android.com/guide/topics/connectivity/bluetooth/permissions#assert-never-for-location
+                arrayOf(
+                    "android.permission.BLUETOOTH_ADVERTISE",
+                    "android.permission.BLUETOOTH_SCAN",
+                    "android.permission.ACCESS_COARSE_LOCATION",
+                    "android.permission.ACCESS_FINE_LOCATION"
+                )
+            }
+            Build.VERSION.SDK_INT == 29 -> {
+                // We only can directly request background location permission on 29.
+                // We need it on 30 (and possibly later) as well, but it has to be requested in a two
+                // step process, see https://fosstodon.org/@utf8equalsX/104359649537615235
+                arrayOf(
+                    "android.permission.ACCESS_BACKGROUND_LOCATION",
+                    "android.permission.ACCESS_COARSE_LOCATION",
+                    "android.permission.ACCESS_FINE_LOCATION"
+                )
+            }
+            else -> {
+                // Below 29 or equals 30
+                arrayOf(
+                    "android.permission.ACCESS_COARSE_LOCATION",
+                    "android.permission.ACCESS_FINE_LOCATION"
+                )
+            }
         }
     }
+
     private fun checkPermissions() {
-        permissionNeedsHandling = Build.VERSION.SDK_INT >= 23 && permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }
-        findViewById<View>(R.id.grant_permission_view).visibility = if (permissionNeedsHandling) View.VISIBLE else View.GONE
+        permissionNeedsHandling = Build.VERSION.SDK_INT >= 23 && permissions.any {
+            ContextCompat.checkSelfPermission(
+                this,
+                it
+            ) != PackageManager.PERMISSION_GRANTED
+        }
+
+        backgroundLocationNeedsHandling = Build.VERSION.SDK_INT >= 30
+                && ContextCompat.checkSelfPermission(
+            this,
+            "android.permission.ACCESS_FINE_LOCATION"
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            this,
+            "android.permission.ACCESS_BACKGROUND_LOCATION"
+        ) != PackageManager.PERMISSION_GRANTED
+
+        findViewById<View>(R.id.grant_permission_view).visibility =
+            if (permissionNeedsHandling) View.VISIBLE else View.GONE
+        findViewById<View>(R.id.grant_background_location_view).visibility =
+            if (!permissionNeedsHandling && backgroundLocationNeedsHandling) View.VISIBLE else View.GONE
         updateButton()
     }
 
     private fun requestPermissions() {
-        when {
-            Build.VERSION.SDK_INT >= 30 -> requestPermissions(
-                permissions.toSet().minus("android.permission.ACCESS_BACKGROUND_LOCATION").toTypedArray(), ++permissionRequestCode
-            )
-            Build.VERSION.SDK_INT >= 23 -> requestPermissions(permissions, ++permissionRequestCode)
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermissions(permissions, ++permissionRequestCode)
+        }
+    }
+
+    private fun requestBackgroundLocation() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermissions(arrayOf("android.permission.ACCESS_BACKGROUND_LOCATION"), ++permissionRequestCode)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == this.permissionRequestCode) {
-            when {
-                Build.VERSION.SDK_INT >= 30 && permissions.contains("android.permission.ACCESS_FINE_LOCATION") ->
-                    requestPermissions(
-                        arrayOf("android.permission.ACCESS_BACKGROUND_LOCATION"),
-                        ++permissionRequestCode
-                    )
-                else -> checkPermissions()
-            }
-        }
+        if (requestCode == this.permissionRequestCode) checkPermissions()
     }
 
     // Bluetooth

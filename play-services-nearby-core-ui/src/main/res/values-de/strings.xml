@@ -66,4 +66,8 @@ Deine Identität oder das Testergebnis werden nicht geteilt."</string>
     <string name="exposure_confirm_bluetooth_description">Bluetooth muss eingeschaltet sein.</string>
     <string name="exposure_confirm_location_description">Standortzugriff muss eingeschaltet sein.</string>
     <string name="exposure_confirm_button">Aktivieren</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Neue Berechtigung benötigt</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tippe hier um die benötigten Berechtigungen zu erteilen</string>
+    <string name="exposure_grant_background_location_description">Fast geschafft! Du musst den Zugriff auf den Standort im Hintergrund erlauben indem du auf dem nächsten Bildschirm \'Immer zulassen\' auswählst und dann hierher zurück kommst.</string>
+    <string name="exposure_grant_background_location_button">Einstellungen Öffnen</string>
 </resources>
