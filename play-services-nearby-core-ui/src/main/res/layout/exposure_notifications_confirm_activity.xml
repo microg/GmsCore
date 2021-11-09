@@ -91,6 +91,54 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/grant_background_location_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/colorAccent"
+                android:clipToPadding="false"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/grant_background_location_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignTop="@id/grant_background_location_summary"
+                    android:layout_alignBottom="@id/grant_background_location_summary"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_outline_location_on"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/grant_background_location_summary"
+                    style="@style/TextAppearance.AppCompat.Small.Inverse"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@id/grant_background_location_icon"
+                    android:layout_weight="1"
+                    android:text="@string/exposure_grant_background_location_description"/>
+
+                <Button
+                    android:id="@+id/grant_background_location_button"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/grant_background_location_summary"
+                    android:layout_alignLeft="@id/grant_background_location_summary"
+                    android:layout_marginLeft="-16dp"
+                    android:text="@string/exposure_grant_background_location_button"
+                    android:textColor="?android:attr/textColorPrimaryInverse" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/enable_bluetooth_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
