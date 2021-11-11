@@ -17,19 +17,19 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend-программа настроена</item>
-        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> backend-программы настроены</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-программ настроено</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend-модуль настроена</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> backend-модуля настроены</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-модулей настроено</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> привязанное приложение</item>
-        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> привязанных приложения</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> привязанных приложений</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> зарегистрированное приложение</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> зарегистрированных приложения</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> зарегистрированных приложений</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Не предоставлено разрешение, которое требуется для правильного функционирования microG Services Core.</item>
-        <item quantity="few">Не предоставлены разрешения, которые требуются для правильного функционирования microG Services Core.</item>
-        <item quantity="other">Не предоставлены разрешения, которые требуются для правильного функционирования microG Services Core.</item>
+        <item quantity="one">Не предоставлено разрешение, необходимое для правильного функционирования Сервисов microG.</item>
+        <item quantity="few">Не предоставлены разрешения, необходимые для правильного функционирования Сервисов microG.</item>
+        <item quantity="other">Не предоставлены разрешения, необходимые для правильного функционирования Сервисов microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Запросить отсутствующее разрешение</item>

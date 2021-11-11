@@ -8,4 +8,7 @@
     <string name="menu_advanced">Zaawansowane</string>
 
     <string name="list_no_item_none">Brak</string>
+    <string name="list_item_see_all">Pokaż wszystkie</string>
+
+    <string name="open_app">Otwórz</string>
 </resources>

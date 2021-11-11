@@ -8,4 +8,7 @@
     <string name="menu_advanced">Додатково</string>
 
     <string name="list_no_item_none">Порожньо</string>
+    <string name="list_item_see_all">Показати все</string>
+
+    <string name="open_app">Відкрити</string>
 </resources>
