@@ -673,6 +673,17 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
     }
 
+    val rpiDayHistogram: Map<Long, Long>
+        get() = readableDatabase.run {
+            rawQuery("SELECT round(timestamp/(24*60*60*1000)), COUNT(*) FROM $TABLE_ADVERTISEMENTS WHERE timestamp > ? GROUP BY round(timestamp/(24*60*60*1000)) ORDER BY timestamp ASC;", arrayOf((Date().time - (14 * 24 * 60 * 60 * 1000)).toString())).use { cursor ->
+                val map = linkedMapOf<Long, Long>()
+                while (cursor.moveToNext()) {
+                    map[cursor.getLong(0)] = cursor.getLong(1)
+                }
+                map
+            }
+        }
+
     val rpiHourHistogram: Set<ExposureScanSummary>
         get() = readableDatabase.run {
             rawQuery("SELECT round(timestamp/(60*60*1000))*60*60*1000, COUNT(*), COUNT(*) FROM $TABLE_ADVERTISEMENTS WHERE timestamp > ? GROUP BY round(timestamp/(60*60*1000)) ORDER BY timestamp ASC;", arrayOf((System.currentTimeMillis() - (14 * 24 * 60 * 60 * 1000L)).toString())).use { cursor ->
