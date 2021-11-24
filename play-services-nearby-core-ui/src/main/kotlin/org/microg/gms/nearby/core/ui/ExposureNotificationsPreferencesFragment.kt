@@ -131,7 +131,8 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
             val advertisingSupported = if (bluetoothSupported == true) AdvertiserService.isSupported(appContext) else bluetoothSupported
 
             val nearbyPermissions = arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
-            val nearbyPermissionsGranted = Build.VERSION.SDK_INT >= 31 || nearbyPermissions.all {
+            // Expresses implication (API 31+ → all new permissions granted) ≡ (¬API 31+ | all new permissions granted)
+            val nearbyPermissionsGranted = Build.VERSION.SDK_INT < 31 || nearbyPermissions.all {
                 ContextCompat.checkSelfPermission(appContext, it) == PackageManager.PERMISSION_GRANTED
             }
             exposureNearbyNotGranted.isVisible = enabled && !nearbyPermissionsGranted
