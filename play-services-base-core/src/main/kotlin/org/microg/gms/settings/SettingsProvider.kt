@@ -20,6 +20,7 @@ import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.Gcm
+import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
 import org.microg.gms.settings.SettingsContract.getAuthority
 import java.io.File
@@ -65,6 +66,7 @@ class SettingsProvider : ContentProvider() {
         Exposure.getContentUri(context!!) -> queryExposure(projection ?: Exposure.PROJECTION)
         SafetyNet.getContentUri(context!!) -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
         DroidGuard.getContentUri(context!!) -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
+        Profile.getContentUri(context!!) -> queryProfile(projection ?: Profile.PROJECTION)
         else -> null
     }
 
@@ -83,6 +85,7 @@ class SettingsProvider : ContentProvider() {
             Exposure.getContentUri(context!!) -> updateExposure(values)
             SafetyNet.getContentUri(context!!) -> updateSafetyNet(values)
             DroidGuard.getContentUri(context!!) -> updateDroidGuard(values)
+            Profile.getContentUri(context!!) -> updateProfile(values)
             else -> return 0
         }
         return 1
@@ -258,6 +261,27 @@ class SettingsProvider : ContentProvider() {
                 DroidGuard.ENABLED -> editor.putBoolean(key, value as Boolean)
                 DroidGuard.MODE -> editor.putString(key, value as String)
                 DroidGuard.NETWORK_SERVER_URL -> editor.putString(key, value as String)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
+    private fun queryProfile(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            Profile.PROFILE -> getSettingsString(key, "auto")
+            Profile.SERIAL -> getSettingsString(key)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateProfile(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                Profile.PROFILE -> editor.putString(key, value as String?)
+                Profile.SERIAL -> editor.putString(key, value as String?)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

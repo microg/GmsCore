@@ -41,7 +41,7 @@ public class PushRegisterManager {
         RegisterResponse response = new RegisterResponse();
         try {
             response = new RegisterRequest()
-                    .build(Utils.getBuild(context))
+                    .build(context)
                     .sender(sender)
                     .info(info)
                     .checkin(LastCheckinInfo.read(context))

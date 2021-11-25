@@ -131,6 +131,20 @@ object SettingsContract {
         )
     }
 
+    object Profile {
+        private const val id = "profile"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+
+        const val PROFILE = "device_profile"
+        const val SERIAL = "device_profile_serial"
+
+        val PROJECTION = arrayOf(
+            PROFILE,
+            SERIAL
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {

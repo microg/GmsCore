@@ -16,12 +16,14 @@
 
 package org.microg.gms.gcm;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import org.microg.gms.checkin.LastCheckinInfo;
-import org.microg.gms.common.Build;
 import org.microg.gms.common.HttpFormClient;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -103,9 +105,10 @@ public class RegisterRequest extends HttpFormClient.Request {
         return this;
     }
 
-    public RegisterRequest build(Build build) {
-        deviceName = build.device;
-        buildVersion = build.id;
+    public RegisterRequest build(Context context) {
+        ProfileManager.ensureInitialized(context);
+        deviceName = Build.DEVICE;
+        buildVersion = Build.ID;
         return this;
     }
 

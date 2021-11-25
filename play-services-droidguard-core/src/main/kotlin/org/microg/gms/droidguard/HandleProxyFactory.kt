@@ -14,8 +14,9 @@ import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import dalvik.system.DexClassLoader
 import okio.ByteString.Companion.decodeHex
 import okio.ByteString.Companion.of
-import org.microg.gms.common.Build
 import org.microg.gms.droidguard.core.BuildConfig
+import org.microg.gms.profile.Build
+import org.microg.gms.profile.ProfileManager
 import java.io.File
 import java.io.IOException
 import java.security.MessageDigest
@@ -25,10 +26,9 @@ import com.android.volley.Request as VolleyRequest
 import com.android.volley.Response as VolleyResponse
 
 class HandleProxyFactory(private val context: Context) {
-    private val build: Build = Build()
     private val classMap = hashMapOf<String, Class<*>>()
     private val dgDb: DgDatabaseHelper = DgDatabaseHelper(context)
-    private val version = VersionUtil(context, build)
+    private val version = VersionUtil(context)
     private val queue = Volley.newRequestQueue(context)
 
     fun createHandle(packageName: String, flow: String?, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
@@ -55,40 +55,42 @@ class HandleProxyFactory(private val context: Context) {
     }
 
     private fun readFromDatabase(flow: String?): Triple<String, ByteArray, ByteArray>? {
-        val id = "$flow/${version.versionString}/${build.fingerprint}"
+        ProfileManager.ensureInitialized(context)
+        val id = "$flow/${version.versionString}/${Build.FINGERPRINT}"
         return dgDb.get(id)
     }
 
     fun createRequest(flow: String?, packageName: String, pingData: PingData? = null, extra: ByteArray? = null): Request {
+        ProfileManager.ensureInitialized(context)
         return Request(
                 usage = Usage(flow, packageName),
                 info = listOf(
-                        KeyValuePair("BOARD", build.board),
-                        KeyValuePair("BOOTLOADER", build.bootloader),
-                        KeyValuePair("BRAND", build.brand),
-                        KeyValuePair("CPU_ABI", build.cpu_abi),
-                        KeyValuePair("CPU_ABI2", build.cpu_abi2),
-                        KeyValuePair("SUPPORTED_ABIS", build.supported_abis.joinToString(",")),
-                        KeyValuePair("DEVICE", build.device),
-                        KeyValuePair("DISPLAY", build.display),
-                        KeyValuePair("FINGERPRINT", build.fingerprint),
-                        KeyValuePair("HARDWARE", build.hardware),
-                        KeyValuePair("HOST", build.host),
-                        KeyValuePair("ID", build.id),
-                        KeyValuePair("MANUFACTURER", build.manufacturer),
-                        KeyValuePair("MODEL", build.model),
-                        KeyValuePair("PRODUCT", build.product),
-                        KeyValuePair("RADIO", build.radio),
-                        KeyValuePair("SERIAL", build.serial),
-                        KeyValuePair("TAGS", build.tags),
-                        KeyValuePair("TIME", build.time.toString()),
-                        KeyValuePair("TYPE", build.type),
-                        KeyValuePair("USER", build.user),
-                        KeyValuePair("VERSION.CODENAME", build.version_codename),
-                        KeyValuePair("VERSION.INCREMENTAL", build.version_incremental),
-                        KeyValuePair("VERSION.RELEASE", build.version_release),
-                        KeyValuePair("VERSION.SDK", build.version_sdk),
-                        KeyValuePair("VERSION.SDK_INT", build.version_sdk_int.toString()),
+                        KeyValuePair("BOARD", Build.BOARD),
+                        KeyValuePair("BOOTLOADER", Build.BOOTLOADER),
+                        KeyValuePair("BRAND", Build.BRAND),
+                        KeyValuePair("CPU_ABI", Build.CPU_ABI),
+                        KeyValuePair("CPU_ABI2", Build.CPU_ABI2),
+                        KeyValuePair("SUPPORTED_ABIS", Build.SUPPORTED_ABIS.joinToString(",")),
+                        KeyValuePair("DEVICE", Build.DEVICE),
+                        KeyValuePair("DISPLAY", Build.DISPLAY),
+                        KeyValuePair("FINGERPRINT", Build.FINGERPRINT),
+                        KeyValuePair("HARDWARE", Build.HARDWARE),
+                        KeyValuePair("HOST", Build.HOST),
+                        KeyValuePair("ID", Build.ID),
+                        KeyValuePair("MANUFACTURER", Build.MANUFACTURER),
+                        KeyValuePair("MODEL", Build.MODEL),
+                        KeyValuePair("PRODUCT", Build.PRODUCT),
+                        KeyValuePair("RADIO", Build.RADIO),
+                        KeyValuePair("SERIAL", Build.SERIAL),
+                        KeyValuePair("TAGS", Build.TAGS),
+                        KeyValuePair("TIME", Build.TIME.toString()),
+                        KeyValuePair("TYPE", Build.TYPE),
+                        KeyValuePair("USER", Build.USER),
+                        KeyValuePair("VERSION.CODENAME", Build.VERSION.CODENAME),
+                        KeyValuePair("VERSION.INCREMENTAL", Build.VERSION.INCREMENTAL),
+                        KeyValuePair("VERSION.RELEASE", Build.VERSION.RELEASE),
+                        KeyValuePair("VERSION.SDK", Build.VERSION.SDK),
+                        KeyValuePair("VERSION.SDK_INT", Build.VERSION.SDK_INT.toString()),
                 ),
                 versionName = version.versionString,
                 versionCode = BuildConfig.VERSION_CODE,
@@ -107,6 +109,7 @@ class HandleProxyFactory(private val context: Context) {
     }
 
     fun fetchFromServer(flow: String?, request: Request): Triple<String, ByteArray, ByteArray> {
+        ProfileManager.ensureInitialized(context)
         val future = RequestFuture.newFuture<SignedResponse>()
         queue.add(object : VolleyRequest<SignedResponse>(Method.POST, SERVER_URL, future) {
             override fun parseNetworkResponse(response: NetworkResponse): VolleyResponse<SignedResponse> {
@@ -146,11 +149,13 @@ class HandleProxyFactory(private val context: Context) {
                 throw IllegalStateException()
             }
         }
-        val id = "$flow/${version.versionString}/${build.fingerprint}"
+        val id = "$flow/${version.versionString}/${Build.FINGERPRINT}"
         val expiry = (response.expiryTimeSecs ?: 0).toLong()
-        val byteCode = response.byteCode!!.toByteArray()
-        val extra = response.extra!!.toByteArray()
-        dgDb.put(id, expiry, vmKey, byteCode, extra)
+        val byteCode = response.byteCode?.toByteArray() ?: ByteArray(0)
+        val extra = response.extra?.toByteArray() ?: ByteArray(0)
+        if (response.save != false) {
+            dgDb.put(id, expiry, vmKey, byteCode, extra)
+        }
         return Triple(vmKey, byteCode, extra)
     }
 

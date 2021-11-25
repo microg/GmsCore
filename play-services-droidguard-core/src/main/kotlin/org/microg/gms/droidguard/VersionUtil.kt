@@ -6,14 +6,16 @@
 package org.microg.gms.droidguard
 
 import android.content.Context
-import org.microg.gms.common.Build
 import org.microg.gms.droidguard.core.BuildConfig
+import org.microg.gms.profile.Build
+import org.microg.gms.profile.ProfileManager
 
-class VersionUtil(private val context: Context, private val build: Build = Build()) {
+class VersionUtil(private val context: Context) {
     val buildType: String
         get() {
+            ProfileManager.ensureInitialized(context)
             // Note: Android TV and Watch use different version codes
-            val versionCode = when (build.version_sdk_int) {
+            val versionCode = when (Build.VERSION.SDK_INT) {
                 31 -> "19"
                 30 -> "15"
                 29 -> "12"
@@ -22,14 +24,14 @@ class VersionUtil(private val context: Context, private val build: Build = Build
                 21, 22 -> "02"
                 else -> "00"
             }
-            val architectureCode = when (build.cpu_abi) {
+            val architectureCode = when (Build.CPU_ABI) {
                 "x86_64" -> "08"
                 "x86" -> "07"
                 "arm64-v8a" -> "04"
                 "arm", "armeabi", "armeabi-v7a" -> "03"
                 else -> "00"
             }
-            val dpiCode = when (context.resources.displayMetrics.densityDpi) {
+            val dpiCode = when (context.resources.displayMetrics.densityDpi) { // TODO: Also something to get from profile
                 160 -> "02"
                 240 -> "04"
                 320 -> "06"

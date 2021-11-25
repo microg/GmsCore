@@ -33,10 +33,6 @@ public class Utils {
         return Locale.getDefault(); // TODO
     }
 
-    public static Build getBuild(Context context) {
-        return new Build();
-    }
-
     public static DeviceIdentifier getDeviceIdentifier(Context context) {
         return new DeviceIdentifier();
     }

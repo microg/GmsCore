@@ -24,7 +24,7 @@ import com.google.android.gms.wearable.ConnectionConfiguration;
 import com.google.android.gms.wearable.internal.MessageEventParcelable;
 
 import org.microg.gms.checkin.LastCheckinInfo;
-import org.microg.gms.common.Build;
+import org.microg.gms.profile.Build;
 import org.microg.wearable.ServerMessageListener;
 import org.microg.wearable.proto.AckAsset;
 import org.microg.wearable.proto.Connect;
@@ -48,7 +48,7 @@ public class MessageHandler extends ServerMessageListener {
     private String peerNodeId;
 
     public MessageHandler(WearableImpl wearable, ConnectionConfiguration config) {
-        this(wearable, config, new Build().model, config.nodeId, LastCheckinInfo.read(wearable.getContext()).getAndroidId());
+        this(wearable, config, Build.MODEL, config.nodeId, LastCheckinInfo.read(wearable.getContext()).getAndroidId());
     }
 
     private MessageHandler(WearableImpl wearable, ConnectionConfiguration config, String name, String networkId, long androidId) {

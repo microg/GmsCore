@@ -40,7 +40,7 @@ public abstract class TracingIntentService extends IntentService {
             public PackageInfo getPackageInfo(@NonNull String packageName, int flags) {
                 PackageInfo packageInfo = super.getPackageInfo(packageName, flags);
                 if ("com.google.android.gms".equals(packageName)) {
-                    VersionUtil versionUtil = new VersionUtil(TracingIntentService.this, new org.microg.gms.common.Build());
+                    VersionUtil versionUtil = new VersionUtil(TracingIntentService.this);
                     packageInfo.versionCode = versionUtil.getVersionCode();
                     packageInfo.versionName = versionUtil.getVersionString();
                     packageInfo.sharedUserId = "com.google.uid.shared";

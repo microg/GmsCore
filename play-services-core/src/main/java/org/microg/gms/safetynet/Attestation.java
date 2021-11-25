@@ -13,10 +13,11 @@ import android.content.pm.Signature;
 import android.util.Base64;
 import android.util.Log;
 
-import org.microg.gms.common.Build;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.Utils;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 import org.microg.gms.snet.AttestRequest;
 import org.microg.gms.snet.AttestResponse;
 import org.microg.gms.snet.FileState;
@@ -154,6 +155,7 @@ public class Attestation {
     }
 
     private AttestResponse attest(AttestRequest request, String apiKey) throws IOException {
+        ProfileManager.ensureInitialized(context);
         String requestUrl = SafetyNetPrefs.get(context).getServiceUrl() + "?alt=PROTO&key=" + apiKey;
         HttpURLConnection connection = (HttpURLConnection) new URL(requestUrl).openConnection();
         connection.setRequestMethod("POST");
@@ -163,8 +165,7 @@ public class Attestation {
         connection.setRequestProperty("Accept-Encoding", "gzip");
         connection.setRequestProperty("X-Android-Package", packageName);
         connection.setRequestProperty("X-Android-Cert", PackageUtils.firstSignatureDigest(context, packageName));
-        Build build = Utils.getBuild(context);
-        connection.setRequestProperty("User-Agent", "SafetyNet/" + Constants.GMS_VERSION_CODE + " (" + build.device + " " + build.id + "); gzip");
+        connection.setRequestProperty("User-Agent", "SafetyNet/" + Constants.GMS_VERSION_CODE + " (" + Build.DEVICE + " " + Build.ID + "); gzip");
 
         OutputStream os = connection.getOutputStream();
         os.write(request.encode());

@@ -16,13 +16,15 @@
 
 package org.microg.gms.checkin;
 
+import android.content.Context;
 import android.util.Log;
 
-import org.microg.gms.common.Build;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
 import org.microg.gms.common.Utils;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,29 +78,30 @@ public class CheckinClient {
         return response;
     }
 
-    public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
+    public static CheckinRequest makeRequest(Context context, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
                                              List<Account> accounts) {
+        ProfileManager.ensureInitialized(context);
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
                 .accountCookie(new ArrayList<>())
                 .androidId(checkinInfo.getAndroidId())
                 .checkin(new CheckinRequest.Checkin.Builder()
                         .build(new CheckinRequest.Checkin.Build.Builder()
-                                .bootloader(build.bootloader)
-                                .brand(build.brand)
+                                .bootloader(Build.BOOTLOADER)
+                                .brand(Build.BRAND)
                                 .clientId("android-google")
-                                .device(build.device)
-                                .fingerprint(build.fingerprint)
-                                .hardware(build.hardware)
-                                .manufacturer(build.manufacturer)
-                                .model(build.model)
+                                .device(Build.DEVICE)
+                                .fingerprint(Build.FINGERPRINT)
+                                .hardware(Build.HARDWARE)
+                                .manufacturer(Build.MANUFACTURER)
+                                .model(Build.MODEL)
                                 .otaInstalled(false) // TODO?
                                 //.packageVersionCode(Constants.MAX_REFERENCE_VERSION)
-                                .product(build.product)
-                                .radio(build.radio)
-                                .sdkVersion(build.version_sdk_int)
-                                .time(build.time / 1000)
+                                .product(Build.PRODUCT)
+                                .radio(Build.RADIO)
+                                .sdkVersion(Build.VERSION.SDK_INT)
+                                .time(Build.TIME / 1000)
                                 .build())
                         .cellOperator(phoneInfo.cellOperator)
                         .event(Collections.singletonList(new CheckinRequest.Checkin.Event.Builder()
@@ -137,7 +140,7 @@ public class CheckinClient {
                 .loggingId(new Random().nextLong()) // TODO: static
                 .meid(deviceIdent.meid)
                 .otaCert(Collections.singletonList("71Q6Rn2DDZl1zPDVaaeEHItd"))
-                .serial(build.serial)
+                .serial(Build.SERIAL)
                 .timeZone(TimeZone.getDefault().getID())
                 .userName((String) TODO)
                 .userSerialNumber((Integer) TODO)
