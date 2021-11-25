@@ -163,7 +163,7 @@ class AdvertiserService : LifecycleService() {
                 try {
                     advertiser.startAdvertising(settings, data, callback)
                 } catch (e: SecurityException) {
-                    Log.e(TAG, "Couldn't start advertising: Need android.permission.BLUETOOTH_ADVERTISE permission.", )
+                    Log.e(TAG, "Couldn't start advertising.", )
                 }
             }
             synchronized(this) { advertising = true }
