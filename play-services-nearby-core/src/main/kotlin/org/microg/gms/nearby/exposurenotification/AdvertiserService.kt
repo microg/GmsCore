@@ -218,7 +218,11 @@ class AdvertiserService : LifecycleService() {
                 Log.i(TAG, "Tried calling stopAdvertisingSet without android.permission.BLUETOOTH_ADVERTISE permission.", )
             }
         } else {
-            advertiser?.stopAdvertising(callback)
+            try {
+                advertiser?.stopAdvertising(callback)
+            } catch (e: SecurityException) {
+                Log.i(TAG, "stopAdvertising() failed with a SecurityException. Maybe some permissions are missing?", )
+            }
         }
         handler.postDelayed(startLaterRunnable, 1000)
     }
