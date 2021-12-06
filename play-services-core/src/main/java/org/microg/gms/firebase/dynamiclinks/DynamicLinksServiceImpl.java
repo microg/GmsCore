@@ -21,15 +21,13 @@ import android.os.RemoteException;
 import android.os.Bundle;
 import android.util.Log;
 import android.content.Context;
-import android.content.Intent;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.api.CommonStatusCodes;
 
 import com.google.firebase.dynamiclinks.internal.IDynamicLinksService;
 import com.google.firebase.dynamiclinks.internal.IDynamicLinksCallbacks;
 import com.google.firebase.dynamiclinks.internal.DynamicLinkData;
-import com.google.firebase.dynamiclinks.internal.ShortDynamicLink;
+import com.google.firebase.dynamiclinks.internal.ShortDynamicLinkImpl;
 
 
 public class DynamicLinksServiceImpl extends IDynamicLinksService.Stub {
@@ -40,15 +38,14 @@ public class DynamicLinksServiceImpl extends IDynamicLinksService.Stub {
 
 
     @Override
-    public void getInitialLink(IDynamicLinksCallbacks callback, String var2) throws RemoteException {
+    public void getInitialLink(IDynamicLinksCallbacks callback, String link) throws RemoteException {
         callback.onStatusDynamicLinkData(Status.SUCCESS, new DynamicLinkData());
     }
 
 
     @Override
-    public void func2(IDynamicLinksCallbacks callback, Bundle var2) throws RemoteException {
-        Log.d(TAG, "func2: " + callback + ", " + var2);
-        callback.onStatusShortDynamicLink(Status.SUCCESS, new ShortDynamicLink());
+    public void createShortDynamicLink(IDynamicLinksCallbacks callback, Bundle extras) throws RemoteException {
+        callback.onStatusShortDynamicLink(Status.SUCCESS, new ShortDynamicLinkImpl());
     }
 
 
