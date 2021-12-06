@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-FileCopyrightText: 2021, microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -9,22 +9,13 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 dependencies {
-    api project(':play-services-basement-ktx')
-    api "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
-
-    implementation "androidx.annotation:annotation:$annotationVersion"
+    api project(":play-services-basement")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
 android {
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
-
-    defaultConfig {
-        versionName version
-        minSdkVersion androidMinSdk
-        targetSdkVersion androidTargetSdk
-    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -38,4 +29,4 @@ android {
 
 apply from: '../gradle/publish-android.gradle'
 
-description = 'microG service implementation for play-services-base'
+description = 'microG kotlin extensions for play-services-basement'
