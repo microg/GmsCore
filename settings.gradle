@@ -40,6 +40,7 @@ include ':play-services-nearby-core-proto'
 include ':play-services-wearable-proto'
 
 include ':play-services-basement-ktx'
+include ':play-services-tasks-ktx'
 
 include ':play-services-base-core'
 include ':play-services-conscrypt-provider-core'
