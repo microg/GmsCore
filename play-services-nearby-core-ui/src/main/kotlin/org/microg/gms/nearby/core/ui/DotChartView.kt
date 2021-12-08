@@ -11,7 +11,9 @@ import android.content.Context
 import android.graphics.*
 import android.os.Build
 import android.text.format.DateFormat
+import android.text.format.DateUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import org.microg.gms.nearby.exposurenotification.ExposureScanSummary
@@ -40,12 +42,13 @@ class DotChartView : View {
             val dateFormat = DateFormat.getMediumDateFormat(context)
             val hourFormat = SimpleDateFormat("H")
             val lowest = dateFormat.parse(dateFormat.format(date))?.time ?: date.time
+            fun formatDateForView(date: Date) = DateUtils.formatDateTime(context, date.time, DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_NO_YEAR)
             for (day in 0 until 15) {
                 date.time = now - (14 - day) * 24 * 60 * 60 * 1000L
-                displayData[day] = dateFormat.format(date) to hashMapOf()
+                displayData[day] = formatDateForView(date) to hashMapOf()
             }
             fun dayByDate(date: Date) : Int? {
-                val dateString = dateFormat.format(date)
+                val dateString = formatDateForView(date)
                 return displayData.entries.firstOrNull { it.value.first == dateString }?.key
             }
             if (value != null) {
@@ -113,8 +116,8 @@ class DotChartView : View {
             maxTextHeight = max(maxTextHeight, fontTempRect.height())
         }
 
-        val legendLeft = maxTextWidth + 4 * d
-        val legendBottom = maxTextHeight + 4 * d
+        val legendLeft = max(56 * d, maxTextWidth + 8 * d)
+        val legendBottom = maxTextHeight + 8 * d
         val subHeight = maxTextHeight + 4 * d + paddingBottom
 
         val distHeight = (height - innerPadding * 14 - paddingTop - paddingBottom - legendBottom - subHeight).toDouble()
@@ -134,7 +137,7 @@ class DotChartView : View {
             val (dateString, hours) = displayData[day] ?: "" to emptyMap()
             val top = day * (perHeight + innerPadding) + paddingTop
             if (day % 2 == 0) {
-                canvas.drawText(dateString, (paddingLeft + legendLeft - 4 * d), (top + perHeight / 2.0 + maxTextHeight / 2.0).toFloat(), fontPaint)
+                canvas.drawText(dateString, (paddingLeft + legendLeft - 8 * d), (top + perHeight / 2.0 + maxTextHeight / 2.0).toFloat(), fontPaint)
             }
             focusPoint?.let { if (it.y > top && it.y < top + perHeight) focusDay = day }
             for (hour in 0 until 24) {
@@ -162,7 +165,7 @@ class DotChartView : View {
                 }
             }
         }
-        val legendTop = 15 * (perHeight + innerPadding) + paddingTop + maxTextHeight + 4 * d
+        val legendTop = 15 * (perHeight + innerPadding) + paddingTop + maxTextHeight + 8 * d
         fontPaint.textAlign = Paint.Align.CENTER
         for (hour in 0 until 24) {
             if (hour % 3 == 0) {
