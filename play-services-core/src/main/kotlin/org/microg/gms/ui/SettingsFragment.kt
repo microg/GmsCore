@@ -51,9 +51,9 @@ class SettingsFragment : ResourceSettingsFragment() {
 
     override fun onResume() {
         super.onResume()
-        val appContext = requireContext().applicationContext
+        val context = requireContext()
         lifecycleScope.launchWhenResumed {
-            updateDetails(appContext)
+            updateDetails(context)
         }
     }
 
@@ -63,7 +63,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             val database = GcmDatabase(context)
             val regCount = database.registrationList.size
             database.close()
-            findPreference<Preference>(PREF_GCM)!!.summary = getString(R.string.service_status_enabled_short) + " - " + resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount)
+            findPreference<Preference>(PREF_GCM)!!.summary = context.getString(R.string.service_status_enabled_short) + " - " + context.resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount)
         } else {
             findPreference<Preference>(PREF_GCM)!!.setSummary(R.string.service_status_disabled_short)
         }
@@ -72,7 +72,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         findPreference<Preference>(PREF_SNET)!!.setSummary(if (getSafetyNetServiceInfo(context).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
 
         val backendCount = UnifiedLocationClient[context].getLocationBackends().size + UnifiedLocationClient[context].getGeocoderBackends().size
-        findPreference<Preference>(PREF_UNIFIEDNLP)!!.summary = resources.getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount)
+        findPreference<Preference>(PREF_UNIFIEDNLP)!!.summary = context.resources.getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount)
 
         findPreference<Preference>(PREF_EXPOSURE)?.isVisible = NearbyPreferencesIntegration.isAvailable
         findPreference<Preference>(PREF_EXPOSURE)?.icon = NearbyPreferencesIntegration.getIcon(context)

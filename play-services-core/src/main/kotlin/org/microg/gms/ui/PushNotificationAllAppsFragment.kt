@@ -52,7 +52,7 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateContent() {
-        val context = requireContext().applicationContext
+        val context = requireContext()
         lifecycleScope.launchWhenResumed {
             val apps = withContext(Dispatchers.IO) {
                 val res = database.appList.map { app ->

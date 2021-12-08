@@ -120,7 +120,7 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateContent() {
-        val context = requireContext().applicationContext
+        val context = requireContext()
         lifecycleScope.launchWhenResumed {
             handler.postDelayed(updateContentRunnable, UPDATE_CONTENT_INTERVAL)
             val (apps, lastHourKeys, currentId) = ExposureDatabase.with(context) { database ->

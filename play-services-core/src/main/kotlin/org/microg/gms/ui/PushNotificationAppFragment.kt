@@ -46,13 +46,13 @@ class PushNotificationAppFragment : Fragment(R.layout.push_notification_fragment
 
     override fun onResume() {
         super.onResume()
-        val appContext = requireContext().applicationContext
+        val context = requireContext()
         lifecycleScope.launchWhenResumed {
-            val pm = appContext.packageManager
+            val pm = context.packageManager
             val applicationInfo = pm.getApplicationInfoIfExists(packageName)
             binding.appName = applicationInfo?.loadLabel(pm)?.toString() ?: packageName
             binding.appIcon = applicationInfo?.loadIcon(pm)
-                    ?: AppCompatResources.getDrawable(appContext, android.R.mipmap.sym_def_app_icon)
+                    ?: AppCompatResources.getDrawable(context, android.R.mipmap.sym_def_app_icon)
         }
     }
 }
