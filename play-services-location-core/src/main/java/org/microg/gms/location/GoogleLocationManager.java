@@ -22,7 +22,10 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
+import android.util.Log;
 
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -39,17 +42,19 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.location.LocationManager.GPS_PROVIDER;
-import static android.location.LocationManager.NETWORK_PROVIDER;
 import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
 import static com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER;
 
 public class GoogleLocationManager implements LocationChangeListener {
     private static final String TAG = "GmsLocManager";
     private static final String MOCK_PROVIDER = "mock";
+    private static final long VERIFY_CURRENT_REQUESTS_INTERVAL_MS = 5000; // 5 seconds
     private static final long SWITCH_ON_FRESHNESS_CLIFF_MS = 30000; // 30 seconds
     private static final String ACCESS_MOCK_LOCATION = "android.permission.ACCESS_MOCK_LOCATION";
 
     private final Context context;
+    private final Handler handler;
+    private final Runnable verifyCurrentRequestsRunnable = this::verifyCurrentRequests;
     private final RealLocationProvider gpsProvider;
     private final UnifiedLocationProvider networkProvider;
     private final MockLocationProvider mockProvider;
@@ -69,6 +74,7 @@ public class GoogleLocationManager implements LocationChangeListener {
             this.networkProvider = null;
         }
         mockProvider = new MockLocationProvider(this);
+        handler = new Handler(Looper.getMainLooper());
     }
 
     public void invokeOnceReady(Runnable runnable) {
@@ -203,6 +209,7 @@ public class GoogleLocationManager implements LocationChangeListener {
             } catch (RemoteException ignored) {
             }
         }
+        verifyCurrentRequests();
     }
 
     public void setMockMode(boolean mockMode) {
@@ -215,6 +222,22 @@ public class GoogleLocationManager implements LocationChangeListener {
         if (!hasMockLocationPermission())
             return;
         mockProvider.setLocation(mockLocation);
+    }
+
+    private void verifyCurrentRequests() {
+        handler.removeCallbacks(verifyCurrentRequestsRunnable);
+        try {
+            for (int i = 0; i < currentRequests.size(); i++) {
+                LocationRequestHelper request = currentRequests.get(i);
+                if (!request.isActive()) {
+                    removeLocationUpdates(request);
+                    i--;
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        }
+        handler.postDelayed(verifyCurrentRequestsRunnable, VERIFY_CURRENT_REQUESTS_INTERVAL_MS);
     }
 
     @Override

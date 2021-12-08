@@ -82,23 +82,26 @@ class UnifiedLocationProvider(context: Context?, changeListener: LocationChangeL
             Log.d(TAG, "unified network: no longer requesting location update")
             client.removeLocationUpdates(listener)
             connected.set(false)
-        } else if (!requests.isEmpty()) {
+        } else if (requests.isNotEmpty()) {
             var minTime = Long.MAX_VALUE
+            var maxUpdates = Int.MAX_VALUE
             val sb = StringBuilder()
             var opPackageName: String? = null
             for (request in requests) {
                 if (request.locationRequest.interval < minTime) {
                     opPackageName = request.packageName
                     minTime = request.locationRequest.interval
+                    maxUpdates = request.locationRequest.numUpdates
                 }
                 if (sb.isNotEmpty()) sb.append(", ")
                 sb.append("${request.packageName}:${request.locationRequest.interval}ms")
             }
             client.opPackageName = opPackageName
-            Log.d(TAG, "unified network: requesting location updates with interval ${minTime}ms ($sb)")
-            if (!connected.get() || connectedMinTime != minTime) {
-                client.requestLocationUpdates(listener, minTime)
+            if (minTime <= 0) {
+                client.forceNextUpdate = true
             }
+            Log.d(TAG, "unified network: requesting location updates with interval ${minTime}ms ($sb)")
+            client.requestLocationUpdates(listener, minTime, maxUpdates)
             connected.set(true)
             connectedMinTime = minTime
         }

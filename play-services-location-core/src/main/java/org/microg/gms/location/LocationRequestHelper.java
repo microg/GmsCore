@@ -89,12 +89,33 @@ public class LocationRequestHelper {
         this.callback = data.callback;
     }
 
+    public boolean isActive() {
+        if (!hasCoarsePermission()) return false;
+        if (listener != null) {
+            try {
+                return listener.asBinder().isBinderAlive();
+            } catch (Exception e) {
+                return false;
+            }
+        } else if (pendingIntent != null) {
+            return true;
+        } else if (callback != null) {
+            try {
+                return callback.asBinder().isBinderAlive();
+            } catch (Exception e) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @return whether to continue sending reports to this {@link LocationRequestHelper}
      */
     public boolean report(Location location) {
         if (location == null) return true;
-        if (!hasCoarsePermission()) return false;
+        if (!isActive()) return false;
         if (lastReport != null) {
             if (location.getTime() - lastReport.getTime() < locationRequest.getFastestInterval()) {
                 return true;
