@@ -89,8 +89,8 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             Log.d(TAG, "Altering tables for version >= 7")
             db.execSQL("ALTER TABLE $TABLE_TOKENS ADD COLUMN diagnosisKeysDataMap BLOB;")
         }
-        if (oldVersion in 5 until 10) {
-            Log.d(TAG, "Altering tables for version >= 10")
+        if (oldVersion in 5 until 11) {
+            Log.d(TAG, "Altering tables for version >= 11")
             db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN reportType INTEGER NOT NULL;")
             db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN daysSinceOnsetOfSymptoms INTEGER NOT NULL;")
             db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_FILE_MATCH ADD COLUMN reportType INTEGER NOT NULL;")
