@@ -36,7 +36,7 @@ import java.util.*
 @TargetApi(21)
 @ForegroundServiceInfo("Exposure Notification")
 class AdvertiserService : LifecycleService() {
-    private val version = VERSION_1_0
+    private val version = VERSION_1_1
     private var advertising = false
     private var wantStartAdvertising = false
     private val advertiser: BluetoothLeAdvertiser?
