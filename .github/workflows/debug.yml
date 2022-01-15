@@ -31,6 +31,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'playservices.jks'
+          fileDir: './'
           encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Decode Keystore Properties
@@ -38,10 +39,11 @@ jobs:
         uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'keystore.properties'
+          fileDir: './'
           encodedString: ${{ secrets.KEYSTORE_PROPERTIES }}
 
       - name: List some files
-        run: ls -lah .
+        run: ls -lah ./
 
       - name: Build
         run: |
