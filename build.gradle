@@ -59,7 +59,7 @@ def execResult(...args) {
     return stdout.toString().trim()
 }
 
-def gmsVersion = "21.26.58"
+def gmsVersion = "21.45.16"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))

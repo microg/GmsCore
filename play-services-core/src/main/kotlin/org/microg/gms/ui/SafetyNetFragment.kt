@@ -32,10 +32,11 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
     }
 
     fun setEnabled(newStatus: Boolean) {
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val info = getSafetyNetServiceInfo(requireContext())
+            val info = getSafetyNetServiceInfo(appContext)
             val newConfiguration = info.configuration.copy(enabled = newStatus)
-            displayServiceInfo(setSafetyNetServiceConfiguration(requireContext(), newConfiguration))
+            displayServiceInfo(setSafetyNetServiceConfiguration(appContext, newConfiguration))
         }
     }
 
@@ -45,9 +46,10 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
 
     override fun onResume() {
         super.onResume()
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            binding.checkinEnabled = getCheckinServiceInfo(requireContext()).configuration.enabled
-            displayServiceInfo(getSafetyNetServiceInfo(requireContext()))
+            binding.checkinEnabled = getCheckinServiceInfo(appContext).configuration.enabled
+            displayServiceInfo(getSafetyNetServiceInfo(appContext))
         }
     }
 

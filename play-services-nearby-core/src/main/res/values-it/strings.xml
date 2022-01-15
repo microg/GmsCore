@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="exposure_notify_off_title">Notifiche di esposizione al virus non attive</string>
+    <string name="exposure_notify_off_bluetooth">Il Bluetooth dev\'essere attivato per poter ricevere le notifiche di esposizione al virus.</string>
+    <string name="exposure_notify_off_location">È necessario attivare la geolocalizzazione per poter ricevere le notifiche di esposizione al virus.</string>
+    <string name="exposure_notify_off_bluetooth_location">È necessario attivare il Bluetooth e la geolocalizzazione per poter ricevere le notifiche di esposizione al virus.</string>
+</resources>
