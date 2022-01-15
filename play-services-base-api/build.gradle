@@ -28,6 +28,7 @@ android {
 
     aidlPackageWhiteList "com/google/android/gms/common/data/DataHolder.aidl"
     aidlPackageWhiteList "com/google/android/gms/common/images/WebImage.aidl"
+    aidlPackageWhiteList "com/google/android/gms/common/api/internal/IStatusCallback.aidl"
 
     defaultConfig {
         versionName version

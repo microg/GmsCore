@@ -71,13 +71,13 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TOKENS}_package_token ON $TABLE_TOKENS(package, token);")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_SINGLE(tcsid INTEGER PRIMARY KEY, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, matched INTEGER);")
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_SINGLE}_key ON $TABLE_TEK_CHECK_SINGLE(keyData, rollingStartNumber, rollingPeriod);")
-            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_SINGLE_TOKEN(tcsid INTEGER REFERENCES $TABLE_TEK_CHECK_SINGLE(tcsid) ON DELETE CASCADE, tid INTEGER REFERENCES $TABLE_TOKENS(tid) ON DELETE CASCADE, transmissionRiskLevel INTEGER NOT NULL, UNIQUE(tcsid, tid));")
+            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_SINGLE_TOKEN(tcsid INTEGER REFERENCES $TABLE_TEK_CHECK_SINGLE(tcsid) ON DELETE CASCADE, tid INTEGER REFERENCES $TABLE_TOKENS(tid) ON DELETE CASCADE, transmissionRiskLevel INTEGER NOT NULL, reportType INTEGER NOT NULL, daysSinceOnsetOfSymptoms INTEGER NOT NULL, UNIQUE(tcsid, tid));")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_SINGLE_TOKEN}_tid ON $TABLE_TEK_CHECK_SINGLE_TOKEN(tid);")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_FILE(tcfid INTEGER PRIMARY KEY, hash TEXT NOT NULL, endTimestamp INTEGER NOT NULL, keys INTEGER NOT NULL);")
             db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE}_hash ON $TABLE_TEK_CHECK_FILE(hash);")
             db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_FILE_TOKEN(tcfid INTEGER REFERENCES $TABLE_TEK_CHECK_FILE(tcfid) ON DELETE CASCADE, tid INTEGER REFERENCES $TABLE_TOKENS(tid) ON DELETE CASCADE, UNIQUE(tcfid, tid));")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_TOKEN}_tid ON $TABLE_TEK_CHECK_FILE_TOKEN(tid);")
-            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_FILE_MATCH(tcfid INTEGER REFERENCES $TABLE_TEK_CHECK_FILE(tcfid) ON DELETE CASCADE, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, transmissionRiskLevel INTEGER NOT NULL, UNIQUE(tcfid, keyData, rollingStartNumber, rollingPeriod));")
+            db.execSQL("CREATE TABLE IF NOT EXISTS $TABLE_TEK_CHECK_FILE_MATCH(tcfid INTEGER REFERENCES $TABLE_TEK_CHECK_FILE(tcfid) ON DELETE CASCADE, keyData BLOB NOT NULL, rollingStartNumber INTEGER NOT NULL, rollingPeriod INTEGER NOT NULL, transmissionRiskLevel INTEGER NOT NULL, reportType INTEGER NOT NULL, daysSinceOnsetOfSymptoms INTEGER NOT NULL, UNIQUE(tcfid, keyData, rollingStartNumber, rollingPeriod));")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_tcfid ON $TABLE_TEK_CHECK_FILE_MATCH(tcfid);")
             db.execSQL("CREATE INDEX IF NOT EXISTS index_${TABLE_TEK_CHECK_FILE_MATCH}_key ON $TABLE_TEK_CHECK_FILE_MATCH(keyData, rollingStartNumber, rollingPeriod);")
         }
@@ -88,6 +88,13 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         if (oldVersion in 5 until 7) {
             Log.d(TAG, "Altering tables for version >= 7")
             db.execSQL("ALTER TABLE $TABLE_TOKENS ADD COLUMN diagnosisKeysDataMap BLOB;")
+        }
+        if (oldVersion in 5 until 11) {
+            Log.d(TAG, "Altering tables for version >= 11")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN reportType INTEGER NOT NULL;")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN daysSinceOnsetOfSymptoms INTEGER NOT NULL;")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_FILE_MATCH ADD COLUMN reportType INTEGER NOT NULL;")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_FILE_MATCH ADD COLUMN daysSinceOnsetOfSymptoms INTEGER NOT NULL;")
         }
         if (oldVersion in 1 until 5) {
             Log.d(TAG, "Dropping legacy tables from version < 5")
@@ -284,6 +291,8 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             put("tid", tid)
             put("tcsid", tcsid)
             put("transmissionRiskLevel", key.transmissionRiskLevel)
+            put("reportType", key.reportType)
+            put("daysSinceOnsetOfSymptoms", key.daysSinceOnsetOfSymptoms)
         })
     }
 
@@ -368,12 +377,14 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
             put("rollingStartNumber", key.rollingStartIntervalNumber)
             put("rollingPeriod", key.rollingPeriod)
             put("transmissionRiskLevel", key.transmissionRiskLevel)
+            put("reportType", key.reportType)
+            put("daysSinceOnsetOfSymptoms", key.daysSinceOnsetOfSymptoms)
         })
     }
 
     private fun listMatchedSingleDiagnosisKeys(tid: Long, database: SQLiteDatabase = readableDatabase) = database.run {
         rawQuery("""
-            SELECT $TABLE_TEK_CHECK_SINGLE.keyData, $TABLE_TEK_CHECK_SINGLE.rollingStartNumber, $TABLE_TEK_CHECK_SINGLE.rollingPeriod, $TABLE_TEK_CHECK_SINGLE_TOKEN.transmissionRiskLevel
+            SELECT $TABLE_TEK_CHECK_SINGLE.keyData, $TABLE_TEK_CHECK_SINGLE.rollingStartNumber, $TABLE_TEK_CHECK_SINGLE.rollingPeriod, $TABLE_TEK_CHECK_SINGLE_TOKEN.transmissionRiskLevel, $TABLE_TEK_CHECK_SINGLE_TOKEN.reportType, $TABLE_TEK_CHECK_SINGLE_TOKEN.daysSinceOnsetOfSymptoms
             FROM $TABLE_TEK_CHECK_SINGLE_TOKEN
             JOIN $TABLE_TEK_CHECK_SINGLE ON $TABLE_TEK_CHECK_SINGLE.tcsid = $TABLE_TEK_CHECK_SINGLE_TOKEN.tcsid
             WHERE 
@@ -387,6 +398,8 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                         .setRollingStartIntervalNumber(cursor.getLong(1).toInt())
                         .setRollingPeriod(cursor.getLong(2).toInt())
                         .setTransmissionRiskLevel(cursor.getLong(3).toInt())
+                        .setReportType(cursor.getLong(4).toInt())
+                        .setDaysSinceOnsetOfSymptoms(cursor.getLong(5).toInt())
                         .build())
             }
             list
@@ -395,7 +408,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     private fun listMatchedFileDiagnosisKeys(tid: Long, database: SQLiteDatabase = readableDatabase) = database.run {
         rawQuery("""
-            SELECT $TABLE_TEK_CHECK_FILE_MATCH.keyData, $TABLE_TEK_CHECK_FILE_MATCH.rollingStartNumber, $TABLE_TEK_CHECK_FILE_MATCH.rollingPeriod, $TABLE_TEK_CHECK_FILE_MATCH.transmissionRiskLevel
+            SELECT $TABLE_TEK_CHECK_FILE_MATCH.keyData, $TABLE_TEK_CHECK_FILE_MATCH.rollingStartNumber, $TABLE_TEK_CHECK_FILE_MATCH.rollingPeriod, $TABLE_TEK_CHECK_FILE_MATCH.transmissionRiskLevel, $TABLE_TEK_CHECK_FILE_MATCH.reportType, $TABLE_TEK_CHECK_FILE_MATCH.daysSinceOnsetOfSymptoms
             FROM $TABLE_TEK_CHECK_FILE_TOKEN
             JOIN $TABLE_TEK_CHECK_FILE_MATCH ON $TABLE_TEK_CHECK_FILE_MATCH.tcfid = $TABLE_TEK_CHECK_FILE_TOKEN.tcfid
             WHERE 
@@ -408,6 +421,8 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                         .setRollingStartIntervalNumber(cursor.getLong(1).toInt())
                         .setRollingPeriod(cursor.getLong(2).toInt())
                         .setTransmissionRiskLevel(cursor.getLong(3).toInt())
+                        .setReportType(cursor.getLong(4).toInt())
+                        .setDaysSinceOnsetOfSymptoms(cursor.getLong(5).toInt())
                         .build())
             }
             list
@@ -823,7 +838,7 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
 
     companion object {
         private const val DB_NAME = "exposure.db"
-        private const val DB_VERSION = 10
+        private const val DB_VERSION = 11
         private const val DB_SIZE_TOO_LARGE = 256L * 1024 * 1024
         private const val MAX_DELETE_TIME = 5000L
         private const val TABLE_ADVERTISEMENTS = "advertisements"

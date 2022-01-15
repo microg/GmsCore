@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.*
 import android.location.LocationManager
 import android.os.*
+import android.util.Base64
 import android.util.Log
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.Lifecycle
@@ -26,18 +27,62 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.nearby.exposurenotification.Constants.*
+import org.microg.gms.nearby.exposurenotification.proto.TEKSignatureList
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyExport
 import org.microg.gms.nearby.exposurenotification.proto.TemporaryExposureKeyProto
 import org.microg.gms.utils.warnOnTransactionIssues
 import java.io.File
 import java.io.InputStream
+import java.security.KeyFactory
 import java.security.MessageDigest
+import java.security.Signature
+import java.security.spec.X509EncodedKeySpec
+import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class ExposureNotificationServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String) : INearbyExposureNotificationService.Stub(), LifecycleOwner {
+
+    // Table of back-end public keys, used to verify the signature of the diagnosed TEKs.
+    // The table is indexed by package names.
+    private val backendPubKeyForPackage = mapOf<String, String>(
+            "ch.admin.bag.dp3t.dev" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ==",
+            "ch.admin.bag.dp3t.test" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ==",
+            "ch.admin.bag.dp3t.abnahme" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEsFcEnOPY4AOAKkpv9HSdW2BrhUCWwL15Hpqu5zHaWy1Wno2KR8G6dYJ8QO0uZu1M6j8z6NGXFVZcpw7tYeXAqQ==",
+            "ch.admin.bag.dp3t" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEK2k9nZ8guo7JP2ELPQXnUkqDyjjJmYmpt9Zy0HPsiGXCdI3SFmLr204KNzkuITppNV5P7+bXRxiiY04NMrEITg==",
+            // CWA, see https://github.com/corona-warn-app/cwa-documentation/issues/740#issuecomment-963223074
+            "de.rki.coronawarnapp" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEc7DEstcUIRcyk35OYDJ95/hTg3UVhsaDXKT0zK7NhHPXoyzipEnOp3GyNXDVpaPi3cAfQmxeuFMZAIX2+6A5Xg==",
+            // CCTG uses CWA infrastucture
+            "de.corona.tracing" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEc7DEstcUIRcyk35OYDJ95/hTg3UVhsaDXKT0zK7NhHPXoyzipEnOp3GyNXDVpaPi3cAfQmxeuFMZAIX2+6A5Xg==",
+            // CCTG-Test builds don't have access any staging infrastructure, so again CWA key
+            "de.corona.tracing.test" to
+                    "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEc7DEstcUIRcyk35OYDJ95/hTg3UVhsaDXKT0zK7NhHPXoyzipEnOp3GyNXDVpaPi3cAfQmxeuFMZAIX2+6A5Xg==",
+        )
+
+    // Back-end public key for this package
+    private val backendPublicKey = backendPubKeyForPackage[packageName]?.let {
+        try {
+            KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(Base64.decode(it, Base64.DEFAULT)))
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to retrieve back-end public key for ${packageName}: " + e.message)
+            null
+        }
+    }
+
+    // Table of supported signature algorithms for the diagnosed TEKs.
+    // The table is indexed by ASN.1 OIDs as specified in https://tools.ietf.org/html/rfc5758#section-3.2
+    private val sigAlgoForOid = mapOf<String, Function0<Signature>>(
+            "1.2.840.10045.4.3.2" to { Signature.getInstance("SHA256withECDSA") },
+            "1.2.840.10045.4.3.4" to { Signature.getInstance("SHA512withECDSA") },
+    )
 
     private fun LifecycleCoroutineScope.launchSafely(block: suspend CoroutineScope.() -> Unit): Job = launchWhenStarted { try { block() } catch (e: Exception) { Log.w(TAG, "Error in coroutine", e) } }
 
@@ -333,6 +378,10 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 var newKeys = if (params.keys != null) database.finishSingleMatching(tid) else 0
                 for ((cacheFile, hash) in todoKeyFiles) {
                     withContext(Dispatchers.IO) {
+                        if (backendPublicKey != null && !verifyKeyFile(cacheFile)) {
+                            Log.w(TAG, "Skipping non-verified key file")
+                            return@withContext
+                        }
                         try {
                             ZipFile(cacheFile).use { zip ->
                                 for (entry in zip.entries()) {
@@ -402,6 +451,70 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
                 }
             }
         }
+    }
+
+    private fun verifyKeyFile(file: File): Boolean {
+        try {
+            ZipFile(file).use { zip ->
+                var dataEntry: ZipEntry? = null
+                var sigEntry: ZipEntry? = null
+
+                for (entry in zip.entries()) {
+                    when (entry.name) {
+                        "export.bin" ->
+                            if (dataEntry != null) {
+                                throw Exception("Zip archive contains more than one 'export.bin' entry")
+                            } else {
+                                dataEntry = entry
+                            }
+                        "export.sig" ->
+                            if (sigEntry != null) {
+                                throw Exception("Zip archive contains more than one 'export.sig' entry")
+                            } else {
+                                sigEntry = entry
+                            }
+                        else -> throw Exception("Unexpected entry in zip archive: ${entry.name}")
+                    }
+                }
+                when {
+                    dataEntry == null -> throw Exception("Zip archive does not contain 'export.bin'")
+                    sigEntry == null -> throw Exception("Zip archive does not contain 'export.sin'")
+                }
+
+                val sigStream = zip.getInputStream(sigEntry)
+                val sigList = TEKSignatureList.ADAPTER.decode(sigStream)
+
+                for (sig in sigList.signatures) {
+                    Log.d(TAG, "Verifying signature ${sig.batch_num}/${sig.batch_size}")
+                    val sigInfo = sig.signature_info ?: throw Exception("Signature information is missing")
+                    Log.d(TAG, "Signature info: algo=${sigInfo.signature_algorithm} key={id=${sigInfo.verification_key_id}, version=${sigInfo.verification_key_version}}")
+
+                    val signature = sig.signature?.toByteArray() ?: throw Exception("Signature contents is missing")
+                    val sigVerifier = (sigAlgoForOid.get(sigInfo.signature_algorithm) ?: throw Exception("Signature algorithm not supported: ${sigInfo.signature_algorithm}"))()
+                    sigVerifier.initVerify(backendPublicKey)
+
+                    val stream = zip.getInputStream(dataEntry)
+                    val buf = ByteArray(1024)
+                    var nbRead = 0
+                    while (nbRead != -1) {
+                        nbRead = stream.read(buf)
+                        if (nbRead > 0) {
+                            sigVerifier.update(buf, 0, nbRead)
+                        }
+                    }
+
+                    if (!sigVerifier.verify(signature)) {
+                        throw Exception("Signature does not verify")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Key file verification failed: " + e.message)
+            return false
+        }
+
+        Log.i(TAG, "Key file verification successful")
+        return true
     }
 
     override fun getExposureSummary(params: GetExposureSummaryParams) {

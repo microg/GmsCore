@@ -101,15 +101,16 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateStatus() {
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
             handler.postDelayed(updateStatusRunnable, UPDATE_STATUS_INTERVAL)
-            val enabled = getExposureNotificationsServiceInfo(requireContext()).configuration.enabled
+            val enabled = getExposureNotificationsServiceInfo(appContext).configuration.enabled
             exposureEnableInfo.isVisible = !enabled
 
-            val bluetoothSupported = ScannerService.isSupported(requireContext())
-            val advertisingSupported = if (bluetoothSupported == true) AdvertiserService.isSupported(requireContext()) else bluetoothSupported
+            val bluetoothSupported = ScannerService.isSupported(appContext)
+            val advertisingSupported = if (bluetoothSupported == true) AdvertiserService.isSupported(appContext) else bluetoothSupported
 
-            exposureLocationOff.isVisible = enabled && bluetoothSupported != false && !LocationManagerCompat.isLocationEnabled(requireContext().getSystemService(LOCATION_SERVICE) as LocationManager)
+            exposureLocationOff.isVisible = enabled && bluetoothSupported != false && !LocationManagerCompat.isLocationEnabled(appContext.getSystemService(LOCATION_SERVICE) as LocationManager)
             exposureBluetoothOff.isVisible = enabled && bluetoothSupported == null && !turningBluetoothOn
             exposureBluetoothUnsupported.isVisible = enabled && bluetoothSupported == false
             exposureBluetoothNoAdvertisement.isVisible = enabled && bluetoothSupported == true && advertisingSupported != true
@@ -119,9 +120,9 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateContent() {
+        val context = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
             handler.postDelayed(updateContentRunnable, UPDATE_CONTENT_INTERVAL)
-            val context = requireContext()
             val (apps, lastHourKeys, currentId) = ExposureDatabase.with(context) { database ->
                 val apps = database.appList.map { packageName ->
                     context.packageManager.getApplicationInfoIfExists(packageName)

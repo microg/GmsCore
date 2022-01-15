@@ -70,10 +70,10 @@ private suspend fun ensureAppRegistrationAllowed(context: Context, database: Gcm
             context.startActivity(i)
         }
         if (!accepted) {
-            throw RuntimeException("Push permission not granted to app")
+            throw RuntimeException("Push permission not granted to $packageName")
         }
     } else if (app?.allowRegister == false) {
-        throw RuntimeException("Push permission not granted to app")
+        throw RuntimeException("Push permission not granted to $packageName")
     }
 }
 

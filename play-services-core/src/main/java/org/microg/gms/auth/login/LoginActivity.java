@@ -416,7 +416,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void addAccount(String json) {
-            Log.d(TAG, "JSBridge: addAccount " + json);
+            Log.d(TAG, "JSBridge: addAccount");
         }
 
         @JavascriptInterface
@@ -452,7 +452,7 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final String getAndroidId() {
             long androidId = LastCheckinInfo.read(LoginActivity.this).getAndroidId();
-            Log.d(TAG, "JSBridge: getAndroidId " + androidId);
+            Log.d(TAG, "JSBridge: getAndroidId");
             if (androidId == 0 || androidId == -1) return null;
             return Long.toHexString(androidId);
         }
@@ -465,6 +465,11 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final int getBuildVersionSdk() {
             return SDK_INT;
+        }
+
+        @JavascriptInterface
+        public final void getDroidGuardResult(String s) {
+            Log.d(TAG, "JSBridge: getDroidGuardResult");
         }
 
         @JavascriptInterface
@@ -514,7 +519,6 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void hideKeyboard() {
-            Log.d(TAG, "JSBridge: hideKeyboard");
             inputMethodManager.hideSoftInputFromWindow(webView.getWindowToken(), 0);
         }
 
@@ -530,7 +534,7 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void log(String s) {
-            Log.d(TAG, "JSBridge: log " + s);
+            Log.d(TAG, "JSBridge: log");
         }
 
         @JavascriptInterface
@@ -540,13 +544,12 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void setAccountIdentifier(String accountIdentifier) {
-            Log.d(TAG, "JSBridge: setAccountIdentifier " + accountIdentifier);
+            Log.d(TAG, "JSBridge: setAccountIdentifier");
         }
 
         @TargetApi(HONEYCOMB)
         @JavascriptInterface
         public final void setBackButtonEnabled(boolean backButtonEnabled) {
-            Log.d(TAG, "JSBridge: setBackButtonEnabled: " + backButtonEnabled);
             if (SDK_INT <= GINGERBREAD_MR1) return;
             int visibility = getWindow().getDecorView().getSystemUiVisibility();
             if (backButtonEnabled)
@@ -564,13 +567,11 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final void showKeyboard() {
-            Log.d(TAG, "JSBridge: showKeyboard");
             inputMethodManager.showSoftInput(webView, SHOW_IMPLICIT);
         }
 
         @JavascriptInterface
         public final void showView() {
-            Log.d(TAG, "JSBridge: showView");
             runOnUiThread(() -> webView.setVisibility(VISIBLE));
         }
 
