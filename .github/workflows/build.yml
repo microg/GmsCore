@@ -4,6 +4,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: Decode Keystore
         id: decode_keystore
         uses: timheuer/base64-to-file@v1
@@ -18,9 +22,9 @@ jobs:
           fileName: 'keystore.properties'
           encodedString: ${{ secrets.KEYSTORE_PROPERTIES }}
 
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - name: List some files
+        run: ls -lah .
+
       - run: ./gradlew --no-daemon build
         env:
           TERM: dumb

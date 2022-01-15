@@ -8,20 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Decode Keystore
-        id: decode_keystore
-        uses: timheuer/base64-to-file@v1
-        with:
-          fileName: 'playservices.jks'
-          encodedString: ${{ secrets.KEYSTORE }}
-
-      - name: Decode Keystore Properties
-        id: decode_keystore_properties
-        uses: timheuer/base64-to-file@v1
-        with:
-          fileName: 'keystore.properties'
-          encodedString: ${{ secrets.KEYSTORE_PROPERTIES }}
-
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -39,6 +25,23 @@ jobs:
 
       - name: Before build project
         run: echo sdk.dir $ANDROID_HOME > local.properties
+
+      - name: Decode Keystore
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'playservices.jks'
+          encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Decode Keystore Properties
+        id: decode_keystore_properties
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'keystore.properties'
+          encodedString: ${{ secrets.KEYSTORE_PROPERTIES }}
+
+      - name: List some files
+        run: ls -lah .
 
       - name: Build
         run: |
