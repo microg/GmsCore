@@ -48,7 +48,7 @@ public class MessageHandler extends ServerMessageListener {
     private String peerNodeId;
 
     public MessageHandler(WearableImpl wearable, ConnectionConfiguration config) {
-        this(wearable, config, new Build().model, config.nodeId, LastCheckinInfo.read(wearable.getContext()).androidId);
+        this(wearable, config, new Build().model, config.nodeId, LastCheckinInfo.read(wearable.getContext()).getAndroidId());
     }
 
     private MessageHandler(WearableImpl wearable, ConnectionConfiguration config, String name, String networkId, long androidId) {

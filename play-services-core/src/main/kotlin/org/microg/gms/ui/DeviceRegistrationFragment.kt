@@ -34,11 +34,12 @@ class DeviceRegistrationFragment : Fragment(R.layout.device_registration_fragmen
         lifecycleScope.launchWhenResumed {
             val info = getCheckinServiceInfo(requireContext())
             val newConfiguration = info.configuration.copy(enabled = newStatus)
-            displayServiceInfo(setCheckinServiceConfiguration(requireContext(), newConfiguration))
+            setCheckinServiceConfiguration(requireContext(), newConfiguration)
+            displayServiceInfo(info.copy(configuration = newConfiguration))
         }
     }
 
-    fun displayServiceInfo(serviceInfo: ServiceInfo) {
+    private fun displayServiceInfo(serviceInfo: ServiceInfo) {
         binding.checkinEnabled = serviceInfo.configuration.enabled
     }
 

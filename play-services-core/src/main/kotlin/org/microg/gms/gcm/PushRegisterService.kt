@@ -30,7 +30,7 @@ import kotlin.coroutines.suspendCoroutine
 private const val TAG = "GmsGcmRegister"
 
 private suspend fun ensureCheckinIsUpToDate(context: Context) {
-    if (!CheckinPrefs.get(context).isEnabled) throw RuntimeException("Checkin disabled")
+    if (!CheckinPrefs.isEnabled(context)) throw RuntimeException("Checkin disabled")
     val lastCheckin = LastCheckinInfo.read(context).lastCheckin
     if (lastCheckin < System.currentTimeMillis() - CheckinService.MAX_VALID_CHECKIN_AGE) {
         val resultData: Bundle = suspendCoroutine { continuation ->
@@ -55,7 +55,7 @@ private suspend fun ensureCheckinIsUpToDate(context: Context) {
 private suspend fun ensureAppRegistrationAllowed(context: Context, database: GcmDatabase, packageName: String) {
     if (!GcmPrefs.get(context).isEnabled) throw RuntimeException("GCM disabled")
     val app = database.getApp(packageName)
-    if (app == null && GcmPrefs.get(context).isConfirmNewApps) {
+    if (app == null && GcmPrefs.get(context).confirmNewApps) {
         val accepted: Boolean = suspendCoroutine { continuation ->
             val i = Intent(context, AskPushPermission::class.java)
             i.putExtra(AskPushPermission.EXTRA_REQUESTED_PACKAGE, packageName)
