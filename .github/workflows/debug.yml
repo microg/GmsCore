@@ -28,14 +28,14 @@ jobs:
 
       - name: Decode Keystore
         id: decode_keystore
-        uses: timheuer/base64-to-file@v1
+        uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'playservices.jks'
           encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Decode Keystore Properties
         id: decode_keystore_properties
-        uses: timheuer/base64-to-file@v1
+        uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'keystore.properties'
           encodedString: ${{ secrets.KEYSTORE_PROPERTIES }}
