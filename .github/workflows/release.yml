@@ -31,8 +31,8 @@ jobs:
           ./gradlew --no-daemon build
           ./gradlew --no-daemon assembleDebug
         env:
-          JAVA_OPTS: -Xms512m -Xmx2048m
-          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"
+          JAVA_OPTS: -Xms256m -Xmx3080m -XX:MaxPermSize=350m -XX:ReservedCodeCacheSize=225m -XX:+UseCompressedOops
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3080m -XX:+HeapDumpOnOutOfMemoryError"
 
       - name: Log APK files
         run: ls -al play-services-core/build/outputs/apk
