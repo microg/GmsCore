@@ -30,10 +30,11 @@ class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
     }
 
     fun setEnabled(newStatus: Boolean) {
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val info = getGcmServiceInfo(requireContext())
+            val info = getGcmServiceInfo(appContext)
             val newConfiguration = info.configuration.copy(enabled = newStatus)
-            setGcmServiceConfiguration(requireContext(), newConfiguration)
+            setGcmServiceConfiguration(appContext, newConfiguration)
             displayServiceInfo(info.copy(configuration = newConfiguration))
         }
     }
@@ -44,9 +45,10 @@ class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
 
     override fun onResume() {
         super.onResume()
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            displayServiceInfo(getGcmServiceInfo(requireContext()))
-            binding.checkinEnabled = getCheckinServiceInfo(requireContext()).configuration.enabled
+            displayServiceInfo(getGcmServiceInfo(appContext))
+            binding.checkinEnabled = getCheckinServiceInfo(appContext).configuration.enabled
         }
     }
 

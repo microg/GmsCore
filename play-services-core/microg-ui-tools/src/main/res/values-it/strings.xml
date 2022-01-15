@@ -25,15 +25,15 @@
 
     <string name="prefcat_setup">Configurazione</string>
 
-    <string name="self_check_title">Auto-controllo</string>
+    <string name="self_check_title">Controllo dei problemi</string>
     <string name="self_check_desc">Verifica se il sistema è correttamente configurato per utilizzare microG.</string>
 
-    <string name="self_check_cat_permissions">Autorizzazione concessa</string>
-    <string name="self_check_name_permission">Autorizzazione a %1$s:</string>
+    <string name="self_check_cat_permissions">Autorizzazioni concesse</string>
+    <string name="self_check_name_permission">%1$s:</string>
     <string name="self_check_resolution_permission">Tocca qui per concedere l\'autorizzazione. Negare l\'autorizzazione può comportare il funzionamento anomalo di altre applicazioni.</string>
 
     <string name="about_root_title">microG UI Demo</string>
-    <string name="about_root_summary">Sommario</string>
+    <string name="about_root_summary">Riepilogo</string>
     <string name="about_root_version">Versione v0.1.0</string>
     <string name="about_root_libraries">Librerie incluse</string>
 
