@@ -4,10 +4,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Decode Keystore
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'playservices.jks'
+          encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Decode Keystore Properties
+        id: decode_keystore_properties
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'keystore.properties'
+          encodedString: ${{ secrets.KEYSTORE_PROPERTIES }}
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - run: ./gradlew --no-daemon build
         env:
           TERM: dumb
-          JAVA_OPTS: -Xmx2048m
+          JAVA_OPTS: -Xms256m -Xmx3080m -XX:MaxPermSize=350m -XX:ReservedCodeCacheSize=225m -XX:+UseCompressedOops
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3080m -XX:+HeapDumpOnOutOfMemoryError"
