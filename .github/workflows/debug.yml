@@ -1,18 +1,31 @@
 name: Debug APK Builder
-
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+on: [pull_request, push]
+env:
+  JAVA_OPTS: -Xms512m -Xmx2048m
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Decode Keystore
+        id: decode_keystore
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'playservices.jks'
+          encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Decode Keystore Properties
+        id: decode_keystore_properties
+        uses: timheuer/base64-to-file@v1
+        with:
+          fileName: 'keystore.properties'
+          encodedString: ${{ secrets.KEYSTORE_PROPERTIES }}
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - name: JDK 8 Setup
         uses: actions/setup-java@v1
         with:
@@ -27,11 +40,16 @@ jobs:
       - name: Before build project
         run: echo sdk.dir $ANDROID_HOME > local.properties
 
-      - name: Build project
-        run: ./gradlew --no-daemon build
+      - name: Build
+        run: |
+          ./gradlew --no-daemon build
+          ./gradlew --no-daemon assembleDebug
+        env:
+          JAVA_OPTS: -Xms256m -Xmx3080m -XX:MaxPermSize=350m -XX:ReservedCodeCacheSize=225m -XX:+UseCompressedOops
+          GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3080m -XX:+HeapDumpOnOutOfMemoryError"
 
-      - name: Build APK
-        run: ./gradlew assembleDebug
+      - name: Log APK files
+        run: ls -al play-services-core/build/outputs/apk
 
       - name: Upload to Artifacts
         uses: actions/upload-artifact@v2
