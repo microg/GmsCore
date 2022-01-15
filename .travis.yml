@@ -8,10 +8,11 @@ install:
   - echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'build-tools;29.0.3'
   - echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'platforms;android-30'
 env:
-  - ANDROID_HOME=$HOME/android-sdk TERM=dumb JAVA_OPTS="-Xmx2048m"
+  - ANDROID_HOME=$HOME/android-sdk TERM=dumb JAVA_OPTS="-Xms256m -Xmx3080m -XX:MaxPermSize=350m -XX:ReservedCodeCacheSize=225m -XX:+UseCompressedOops"
 before_script:
   - echo sdk.dir $ANDROID_HOME > local.properties
   - echo "$KEYSTORE_FILE" | base64 -d > play-services-core/playservices.jks
   - echo "$KEYSTORE_PROPERTIES" | base64 -d > keystore.properties
 script:
+  - travis_wait 30
   - ./gradlew --no-daemon build
