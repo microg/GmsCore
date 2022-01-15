@@ -1,0 +1,42 @@
+/*
+ * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    // TODO: Embedding the API causes random crashes as the Android AOT compiler will link the native implementation to
+    // out API classes even if embedded by a third-party app that comes with their own API classes.
+    // Need to find a better way to disable AOT for Cronet. Could be by packaging cronet as it's own apk that is
+    // embedded in the main APK but only loaded at runtime so that the AOT compiler has no way to become active.
+    // implementation("org.microg:cronet-api:$cronetVersion")
+    implementation("org.microg:cronet-common:$cronetVersion")
+    implementation("org.microg:cronet-native:$cronetVersion")
+}
+
+android {
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-cronet'

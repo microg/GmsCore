@@ -8,3 +8,7 @@ user.gradle
 local.properties
 keystore.properties
 .directory
+
+.settings
+.classpath
+.project

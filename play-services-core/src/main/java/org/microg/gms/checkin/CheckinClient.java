@@ -43,7 +43,7 @@ public class CheckinClient {
     private static final String TAG = "GmsCheckinClient";
     private static final Object TODO = null; // TODO
     private static final List<String> TODO_LIST_STRING = new ArrayList<>(); // TODO
-    private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<CheckinRequest.Checkin.Statistic>(); // TODO
+    private static final List<CheckinRequest.Checkin.Statistic> TODO_LIST_CHECKIN = new ArrayList<>(); // TODO
     private static final String SERVICE_URL = "https://android.clients.google.com/checkin";
     public static boolean brandSpoof = false;
 
@@ -81,8 +81,8 @@ public class CheckinClient {
                                              LastCheckinInfo checkinInfo, Locale locale,
                                              List<Account> accounts) {
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
-                .accountCookie(new ArrayList<String>())
-                .androidId(checkinInfo.androidId)
+                .accountCookie(new ArrayList<>())
+                .androidId(checkinInfo.getAndroidId())
                 .checkin(new CheckinRequest.Checkin.Builder()
                         .build(new CheckinRequest.Checkin.Build.Builder()
                                 .bootloader(brandSpoof ? "c2f2-0.2-5799621" : build.bootloader)
@@ -101,11 +101,11 @@ public class CheckinClient {
                                 .build())
                         .cellOperator(phoneInfo.cellOperator)
                         .event(Collections.singletonList(new CheckinRequest.Checkin.Event.Builder()
-                                .tag(checkinInfo.androidId == 0 ? "event_log_start" : "system_update")
-                                .value(checkinInfo.androidId == 0 ? null : "1536,0,-1,NULL")
+                                .tag(checkinInfo.getAndroidId() == 0 ? "event_log_start" : "system_update")
+                                .value(checkinInfo.getAndroidId() == 0 ? null : "1536,0,-1,NULL")
                                 .timeMs(new Date().getTime())
                                 .build()))
-                        .lastCheckinMs(checkinInfo.lastCheckin)
+                        .lastCheckinMs(checkinInfo.getLastCheckin())
                         .requestedGroup(TODO_LIST_STRING)
                         .roaming(phoneInfo.roaming)
                         .simOperator(phoneInfo.simOperator)
@@ -129,7 +129,7 @@ public class CheckinClient {
                         .touchScreen(deviceConfiguration.touchScreen)
                         .widthPixels(deviceConfiguration.widthPixels)
                         .build())
-                .digest(checkinInfo.digest)
+                .digest(checkinInfo.getDigest())
                 .esn(deviceIdent.esn)
                 .fragment(0)
                 .locale(locale.toString())
@@ -150,8 +150,8 @@ public class CheckinClient {
             builder.macAddress(Collections.singletonList(deviceIdent.wifiMac))
                     .macAddressType(Collections.singletonList("wifi"));
         }
-        if (checkinInfo.securityToken != 0) {
-            builder.securityToken(checkinInfo.securityToken)
+        if (checkinInfo.getSecurityToken() != 0) {
+            builder.securityToken(checkinInfo.getSecurityToken())
                     .fragment(1);
         }
         return builder.build();
