@@ -18,10 +18,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
 import androidx.core.content.FileProvider
-import com.google.android.gms.nearby.exposurenotification.CalibrationConfidence
-import com.google.android.gms.nearby.exposurenotification.DiagnosisKeysDataMapping
-import com.google.android.gms.nearby.exposurenotification.ExposureConfiguration
-import com.google.android.gms.nearby.exposurenotification.TemporaryExposureKey
+import com.google.android.gms.nearby.exposurenotification.*
 import kotlinx.coroutines.*
 import okio.ByteString
 import org.microg.gms.common.PackageUtils
@@ -91,10 +88,10 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         }
         if (oldVersion in 5 until 11) {
             Log.d(TAG, "Altering tables for version >= 11")
-            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN reportType INTEGER NOT NULL;")
-            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN daysSinceOnsetOfSymptoms INTEGER NOT NULL;")
-            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_FILE_MATCH ADD COLUMN reportType INTEGER NOT NULL;")
-            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_FILE_MATCH ADD COLUMN daysSinceOnsetOfSymptoms INTEGER NOT NULL;")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN reportType INTEGER NOT NULL DEFAULT ${ReportType.UNKNOWN};")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_SINGLE_TOKEN ADD COLUMN daysSinceOnsetOfSymptoms INTEGER NOT NULL DEFAULT ${TemporaryExposureKey.DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN};")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_FILE_MATCH ADD COLUMN reportType INTEGER NOT NULL DEFAULT ${ReportType.UNKNOWN};")
+            db.execSQL("ALTER TABLE $TABLE_TEK_CHECK_FILE_MATCH ADD COLUMN daysSinceOnsetOfSymptoms INTEGER NOT NULL DEFAULT ${TemporaryExposureKey.DAYS_SINCE_ONSET_OF_SYMPTOMS_UNKNOWN};")
         }
         if (oldVersion in 1 until 5) {
             Log.d(TAG, "Dropping legacy tables from version < 5")
