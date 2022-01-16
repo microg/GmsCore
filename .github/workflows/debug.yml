@@ -13,9 +13,19 @@ jobs:
           fetch-depth: 0
 
       - name: JDK 8 Setup
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
-          java-version: 1.8
+          distribution: 'adopt'
+          java-version: '8'
+
+      - name: Install Android Tools
+        run: |
+          mkdir $HOME/android-cmdline-tools
+          curl https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip > $HOME/android-cmdline-tools/cmdline-tools.zip
+          unzip -qq -n $HOME/android-cmdline-tools/cmdline-tools.zip -d $HOME/android-cmdline-tools
+          echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'platform-tools'
+          echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'build-tools;29.0.3'
+          echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'platforms;android-30'
 
       - name: Install NDK
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;23.1.7779620"
@@ -50,6 +60,7 @@ jobs:
           ./gradlew --no-daemon build
           ./gradlew --no-daemon assembleDebug
         env:
+          ANDROID_HOME: $HOME/android-sdk
           TERM: dumb
           JAVA_OPTS: -Xms256m -Xmx3080m -XX:MaxPermSize=350m -XX:ReservedCodeCacheSize=225m -XX:+UseCompressedOops
           GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3080m -XX:+HeapDumpOnOutOfMemoryError"

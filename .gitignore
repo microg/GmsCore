@@ -12,3 +12,5 @@ keystore.properties
 .settings
 .classpath
 .project
+
+*.hprof
