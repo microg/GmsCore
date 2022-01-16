@@ -42,6 +42,9 @@ jobs:
       - name: List some files
         run: ls -lah ./
 
+      - name: Copy keystore for release
+        run: cp playservices.jks play-services-core/
+
       - run: ./gradlew --no-daemon build
         env:
           TERM: dumb
