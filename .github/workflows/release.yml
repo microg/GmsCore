@@ -74,4 +74,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'MicroG'
-          path: play-services-core/build/outputs/apk/withMapboxWithoutNearby/release/play-services-core-withMapbox-withoutNearby-release-unsigned.apk
+          path: |
+            play-services-core/build/outputs/apk/
+            play-services-core/build/outputs/apk/**/**/*.apk

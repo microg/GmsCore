@@ -68,9 +68,6 @@ jobs:
           JAVA_OPTS: -Xms256m -Xmx3080m -XX:MaxPermSize=350m -XX:ReservedCodeCacheSize=225m -XX:+UseCompressedOops
           GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx3080m -XX:+HeapDumpOnOutOfMemoryError"
 
-      - name: Log APK files
-        run: ls -al play-services-core/build/outputs/apk
-
       - name: List Build APKs
         run: ls -al play-services-core/build/outputs/apk
 
@@ -78,4 +75,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'MicroG'
-          path: play-services-core/build/outputs/apk/withMapboxWithoutNearby/debug/play-services-core-withMapbox-withoutNearby-debug.apk
+          path: |
+            play-services-core/build/outputs/apk/
+            play-services-core/build/outputs/apk/**/**/*.apk
