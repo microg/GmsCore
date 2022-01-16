@@ -8,6 +8,21 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: JDK 8 Setup
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+
+      - name: Install Android Tools
+        run: |
+          mkdir $HOME/android-cmdline-tools
+          curl https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip > $HOME/android-cmdline-tools/cmdline-tools.zip
+          unzip -qq -n $HOME/android-cmdline-tools/cmdline-tools.zip -d $HOME/android-cmdline-tools
+          echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'platform-tools'
+          echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'build-tools;29.0.3'
+          echo y | $HOME/android-cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/android-sdk 'platforms;android-30'
+
       - name: Decode Keystore
         id: decode_keystore
         uses: timheuer/base64-to-file@v1.1
@@ -26,6 +41,9 @@ jobs:
 
       - name: List some files
         run: ls -lah ./
+
+      - name: Copy keystore for release
+        run: cp playservices.jks play-services-core/
 
       - run: ./gradlew --no-daemon build
         env:
