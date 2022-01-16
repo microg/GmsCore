@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_exposure">Powiadomienia o narażeniu</string>
+    <string name="pref_exposure_enable_info_summary">Aby włączyć funkcję Powiadomienia o narażeniu (GAEN), otwórz dowolną aplikację ją wspierającą.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Włącz Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Otwórz ustawienia lokalizacji</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Niestety Twoje urządzenie nie jest zgodne z funkcją Powiadomienia o narażeniu.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Niestety Twoje urządzenie jest tylko częściowo zgodne z funkcją Powiadomienia o narażeniu. Zostaniesz poinformowany/a o ryzykownych kontaktach, ale nie będziesz mógł/mogła poinformować innych.</string>
+    <string name="prefcat_exposure_apps_title">Aplikacje korzystające z Powiadomień o narażeniu</string>
+    <string name="pref_exposure_collected_rpis_title">Zebrane identyfikatory</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> identyfikatorów w ostatniej godzinie</string>
+    <string name="pref_exposure_advertising_id_title">Obecnie rozgłaszany identyfikator</string>
+    <string name="prefcat_exposure_app_report_title">Zaraportowane narażenia</string>
+    <string name="pref_exposure_app_report_updated_title">Aktualizacja: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Mniej niż 5 minut temu</string>
+    <string name="pref_exposure_app_report_entry_time_about">Około <xliff:g example="13">%1$d</xliff:g> minut temu</string>
+    <string name="pref_exposure_app_report_entry_distance_close">pobliskie narażenie</string>
+    <string name="pref_exposure_app_report_entry_distance_far">dalsze narażenie</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Przetworzono <xliff:g example="121031">%1$d</xliff:g> zdiagnozowanych kluczy.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Brak raportów o narażeniach.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Zaraportowano <xliff:g example="3">%1$d</xliff:g> narażeń:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, punkty narażenia: <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Uwaga: punkty narażenia są zależne od aplikacji. Wysokie wartości mogą odpowiadać niskiemu ryzyku, bądź odwrotnie.</string>
+    <string name="pref_exposure_app_api_usage_title">Użycie API w ciągu ostatnich 14 dni</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> wywołań do <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title">Zebrane identyfikatory: <xliff:g example="230">%1$d</xliff:g></string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Brak identyfikatorów</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> identyfikatorów na godzinę</string>
+    <string name="pref_exposure_rpi_delete_all_title">Usuń</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Usuń wszystkie zebrane identyfikatory</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Usunięcie wszystkich zebranych identyfikatorów uniemożliwi poinformowanie Cię o napotkanych zdiagnozowanych kontaktach w przeciągu ostatnich 14 dni.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">USUŃ</string>
+    <string name="pref_exposure_rpi_export_title">Eksport</string>
+    <string name="pref_exposure_rpi_export_summary">Eksport zebranych identyfikatorów do dalszej analizy przez inną aplikację.</string>
+    <string name="pref_exposure_info_summary">"API Powiadomień o narażeniu (GAEN) umożliwia aplikacjom poinformowanie Cię o byciu blisko osoby, która została zdiagnozowana jako pozytywna.
+
+Data, czas narażenia i siła sygnału napotkanego kontaktu zostaną udostępnione odpowiedniej aplikacji."</string>
+    <string name="pref_exposure_rpis_details_summary">"Kiedy API Powiadomień o narażeniu (GAEN) jest aktywne, Twoje urządzenie pasywnie zbiera identyfikatory (Rolling Proximity Identifier) sąsiednich urządzeń.
+
+Kiedy właściciel urządzenia zostanie zdiagnozowany jako pozytywny, wszystkie jego identyfikatory mogą zostać udostępnione. Następnie Twoje urządzenie sprawdza, czy któryś z identyfikatorów zdiagnozowanej osoby pasuje do identyfikatorów zebranych przez Ciebie i oblicza ryzyko infekcji."</string>
+
+    <string name="exposure_enable_switch">Użyj Powiadomień o narażeniu</string>
+    <string name="exposure_confirm_start_title">Czy włączyć Powiadomienia o narażeniu?</string>
+    <string name="exposure_confirm_start_summary">"Twój telefon musi korzystać z Bluetooth, aby bezpiecznie zbierać i rozgłaszać identyfikatory pobliskim urządzeniom.
+
+Aplikacja <xliff:g example="Corona-Warn">%1$s</xliff:g> może poinformować Cię o narażeniu na kontakt z osobą zarażoną.
+
+Data, czas narażenia i siła sygnału napotkanego kontaktu zostaną udostępnione aplikacji."</string>
+    <string name="exposure_confirm_start_button">Włącz</string>
+    <string name="exposure_confirm_stop_title">Czy wyłączyć Powiadomienia o narażeniu?</string>
+    <string name="exposure_confirm_stop_summary">Po wyłączeniu Powiadomień o narażeniu, nie będziesz już poinformowany/a o napotkaniu osoby, która została zdiagnozowana jako pozytywna.</string>
+    <string name="exposure_confirm_stop_button">Wyłącz</string>
+    <string name="exposure_confirm_keys_title">Czy udostępnić Twoje identyfikatory aplikacji <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
+    <string name="exposure_confirm_keys_summary">"Twoje identyfikatory z ostatnich 14 dni zostaną użyte do innych o możliwym kontakcie z osobą zarażoną.
+
+Twoja tożsamośći i rezultat testu nie zostaną ujawnione innym."</string>
+    <string name="exposure_confirm_keys_button">Udostępnij</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> wymaga dodatkowych uprawnień.</string>
+    <string name="exposure_confirm_permission_button">Zezwól</string>
+    <string name="exposure_confirm_bluetooth_description">Należy włączyć Bluetooth.</string>
+    <string name="exposure_confirm_location_description">Dostęp do lokalizacji jest wymagany.</string>
+    <string name="exposure_confirm_button">Włącz</string>
+</resources>

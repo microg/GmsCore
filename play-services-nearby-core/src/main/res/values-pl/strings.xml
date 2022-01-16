@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Powiadomienia o narażeniu nieaktywne</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth musi być włączony, aby móc odbierać Powiadomienia o narażeniu.</string>
+    <string name="exposure_notify_off_location">Dostęp do lokalizacji jest niezbędny, aby móc odbierać Powiadomienia o narażeniu.</string>
+    <string name="exposure_notify_off_bluetooth_location">Dostęp do Bluetooth i do lokalizacji jest niezbędny, aby móc odbierać Powiadomienia o narażeniu.</string>
+</resources>

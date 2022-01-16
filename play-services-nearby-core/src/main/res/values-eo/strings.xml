@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Sciigoj pri Infektrisko malaktivaj</string>
+    <string name="exposure_notify_off_bluetooth">Bludento estu aktiva por ricevi Sciigojn pri Infektrisko.</string>
+    <string name="exposure_notify_off_location">Aliro al pozicio estas necesa por ricevi Sciigojn pri Infektrisko.</string>
+    <string name="exposure_notify_off_bluetooth_location">Aliroj al Bludento kaj al pozicio estas necesaj por ricevi Sciigojn pri Infektrisko.</string>
+</resources>
