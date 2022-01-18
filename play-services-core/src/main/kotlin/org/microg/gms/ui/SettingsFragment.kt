@@ -11,10 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.google.android.gms.R
-import org.microg.gms.checkin.getCheckinServiceInfo
+import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.getGcmServiceInfo
-import org.microg.gms.safetynet.getSafetyNetServiceInfo
+import org.microg.gms.safetynet.SafetyNetPreferences
+import org.microg.nlp.client.GeocodeClient
+import org.microg.nlp.client.LocationClient
 import org.microg.nlp.client.UnifiedLocationClient
 import org.microg.tools.ui.ResourceSettingsFragment
 
@@ -68,10 +70,14 @@ class SettingsFragment : ResourceSettingsFragment() {
             findPreference<Preference>(PREF_GCM)!!.setSummary(R.string.service_status_disabled_short)
         }
 
-        findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (getCheckinServiceInfo(context).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
-        findPreference<Preference>(PREF_SNET)!!.setSummary(if (getSafetyNetServiceInfo(context).configuration.enabled) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPrefs.isEnabled(context)) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(context)) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
 
-        val backendCount = UnifiedLocationClient[context].getLocationBackends().size + UnifiedLocationClient[context].getGeocoderBackends().size
+        val backendCount = try {
+            LocationClient(context, lifecycle).getLocationBackends().size + GeocodeClient(context, lifecycle).getGeocodeBackends().size
+        } catch (e: Exception) {
+            0
+        }
         findPreference<Preference>(PREF_UNIFIEDNLP)!!.summary = context.resources.getQuantityString(R.plurals.pref_unifiednlp_summary, backendCount, backendCount)
 
         findPreference<Preference>(PREF_EXPOSURE)?.isVisible = NearbyPreferencesIntegration.isAvailable

@@ -14,10 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import org.microg.gms.checkin.getCheckinServiceInfo
 import org.microg.gms.checkin.setCheckinServiceConfiguration
+import org.microg.gms.droidguard.core.DroidGuardPreferences
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.gms.gcm.setGcmServiceConfiguration
-import org.microg.gms.safetynet.getSafetyNetServiceInfo
-import org.microg.gms.safetynet.setSafetyNetServiceConfiguration
+import org.microg.gms.safetynet.SafetyNetPreferences
 
 class ProvisionService : LifecycleService() {
     private fun Bundle.getBooleanOrNull(key: String): Boolean? {
@@ -34,7 +34,10 @@ class ProvisionService : LifecycleService() {
 
             intent?.extras?.getBooleanOrNull("checkin_enabled")?.let { setCheckinServiceConfiguration(this@ProvisionService, getCheckinServiceInfo(this@ProvisionService).configuration.copy(enabled = it)) }
             intent?.extras?.getBooleanOrNull("gcm_enabled")?.let { setGcmServiceConfiguration(this@ProvisionService, getGcmServiceInfo(this@ProvisionService).configuration.copy(enabled = it)) }
-            intent?.extras?.getBooleanOrNull("safetynet_enabled")?.let { setSafetyNetServiceConfiguration(this@ProvisionService, getSafetyNetServiceInfo(this@ProvisionService).configuration.copy(enabled = it)) }
+            intent?.extras?.getBooleanOrNull("safetynet_enabled")?.let {
+                SafetyNetPreferences.setEnabled(this@ProvisionService, it)
+                DroidGuardPreferences.setEnabled(this@ProvisionService, it)
+            }
             // What else?
 
             delay(2 * 1000) // Wait 2 seconds to give provisioning some extra time

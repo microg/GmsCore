@@ -15,6 +15,7 @@ import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks
 import com.google.android.gms.phenotype.internal.IPhenotypeService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "GmsPhenotypeSvc"
 
@@ -26,7 +27,12 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
 
 class PhenotypeServiceImpl : IPhenotypeService.Stub() {
     override fun register(callbacks: IPhenotypeCallbacks, p1: String?, p2: Int, p3: Array<out String>?, p4: ByteArray?) {
-        Log.d(TAG, "register($p1, $p2, ${p3?.contentToString()}, $p4)")
+        Log.d(TAG, "register($p1, $p2, $p3, $p4)")
+        callbacks.onRegister(Status.SUCCESS)
+    }
+
+    override fun register2(callbacks: IPhenotypeCallbacks, p1: String?, p2: Int, p3: Array<out String>?, p4: IntArray?, p5: ByteArray?) {
+        Log.d(TAG, "register2($p1, $p2, $p3, $p4, $p5)")
         callbacks.onRegister(Status.SUCCESS)
     }
 
@@ -37,9 +43,5 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
         })
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-        if (super.onTransact(code, data, reply, flags)) return true
-        Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
-        return false
-    }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
 }
