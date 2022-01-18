@@ -57,6 +57,10 @@ public class GetServiceRequest extends AutoSafeParcelable {
     private boolean field12;
     @Field(13)
     private int field13;
+    @Field(14)
+    private boolean field14;
+    @Field(15)
+    private String field15;
 
     private GetServiceRequest() {
         serviceId = -1;

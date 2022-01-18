@@ -29,16 +29,19 @@ import com.google.android.gms.common.internal.IGmsServiceBroker;
 
 import org.microg.gms.common.GmsService;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.EnumSet;
 
 public abstract class BaseService extends LifecycleService {
     private final IGmsServiceBroker broker;
+    private final EnumSet<GmsService> services;
     protected final String TAG;
 
     public BaseService(String tag, GmsService supportedService, GmsService... supportedServices) {
         this.TAG = tag;
-        EnumSet<GmsService> services = EnumSet.of(supportedService);
+        services = EnumSet.of(supportedService);
         services.addAll(Arrays.asList(supportedServices));
         broker = new AbstractGmsServiceBroker(services) {
             @Override
@@ -59,6 +62,11 @@ public abstract class BaseService extends LifecycleService {
         super.onBind(intent);
         Log.d(TAG, "onBind: " + intent);
         return broker.asBinder();
+    }
+
+    @Override
+    protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
+        writer.println(TAG + " providing services " + services.toString());
     }
 
     public abstract void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException;

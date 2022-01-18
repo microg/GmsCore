@@ -138,6 +138,30 @@ public class PackageUtils {
     }
 
     @Nullable
+    public static byte[] firstSignatureDigestBytes(Context context, String packageName) {
+        return firstSignatureDigestBytes(context.getPackageManager(), packageName);
+    }
+
+    @Nullable
+    public static byte[] firstSignatureDigestBytes(PackageManager packageManager, String packageName) {
+        final PackageInfo info;
+        try {
+            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+        if (info != null && info.signatures != null && info.signatures.length > 0) {
+            for (Signature sig : info.signatures) {
+                byte[] digest = sha1bytes(sig.toByteArray());
+                if (digest != null) {
+                    return digest;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
     public static String getCallingPackage(Context context) {
         int callingUid = Binder.getCallingUid(), callingPid = Binder.getCallingPid();
         String packageName = packageFromProcessId(context, callingPid);
@@ -307,6 +331,19 @@ public class PackageUtils {
                 }
                 return sb.toString();
             }
+        }
+        return null;
+    }
+
+    public static byte[] sha1bytes(byte[] bytes) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA1");
+        } catch (final NoSuchAlgorithmException e) {
+            return null;
+        }
+        if (md != null) {
+            return md.digest(bytes);
         }
         return null;
     }

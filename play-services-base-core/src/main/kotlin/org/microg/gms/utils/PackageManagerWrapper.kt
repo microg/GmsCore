@@ -62,7 +62,7 @@ open class PackageManagerWrapper(private val wrapped: PackageManager) : PackageM
         return wrapped.getPermissionInfo(permName, flags)
     }
 
-    override fun queryPermissionsByGroup(permissionGroup: String, flags: Int): MutableList<PermissionInfo> {
+    override fun queryPermissionsByGroup(permissionGroup: String?, flags: Int): MutableList<PermissionInfo> {
         return wrapped.queryPermissionsByGroup(permissionGroup, flags)
     }
 

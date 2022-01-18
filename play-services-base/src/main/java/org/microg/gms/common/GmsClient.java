@@ -111,7 +111,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiClient {
 
     @Override
     public synchronized boolean isConnected() {
-        return state == ConnectionState.CONNECTED || state == ConnectionState.PSEUDO_CONNECTED;
+        return (state == ConnectionState.CONNECTED && serviceInterface != null && serviceInterface.asBinder().isBinderAlive() ) || state == ConnectionState.PSEUDO_CONNECTED;
     }
 
     @Override
