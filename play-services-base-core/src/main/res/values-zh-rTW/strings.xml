@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">在背景執行</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> 目前在背景執行。</string>
+    <string name="foreground_service_notification_big_text">在電池優化排除 <xliff:g example="microG Services Core">%1$s</xliff:g> 或更改通知設定，以隱藏此通知。</string>
+</resources>
