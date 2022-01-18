@@ -1,9 +1,9 @@
 /*
- * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-FileCopyrightText: 2022 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.auth
+package org.microg.gms.auth.credentials
 
 import android.app.Activity
 import android.os.Bundle
