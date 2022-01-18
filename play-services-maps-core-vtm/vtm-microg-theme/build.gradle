@@ -1,11 +1,16 @@
 apply plugin: 'java'
-apply plugin: 'maven'
 
 dependencies {
-    compile "org.microg:vtm:0.9.1-mod"
+    implementation "org.microg:vtm:0.9.1-mod"
 }
 
 sourceSets {
-    main.java.srcDirs = ['src']
-    main.resources.srcDirs = ['resources']
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
 }
