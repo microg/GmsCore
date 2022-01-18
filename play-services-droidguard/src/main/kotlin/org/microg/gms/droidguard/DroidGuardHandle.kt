@@ -5,7 +5,9 @@
 
 package org.microg.gms.droidguard
 
+import android.os.Bundle
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import com.google.android.gms.droidguard.internal.DroidGuardResultsRequest
 import com.google.android.gms.droidguard.internal.IDroidGuardHandle
 
@@ -16,7 +18,18 @@ class DroidGuardHandle(private val handle: IDroidGuardHandle) {
     fun init(flow: String) {
         if (state != 0) throw IllegalStateException("init() already called")
         try {
-            handle.initWithRequest(flow, DroidGuardResultsRequest().setOpenHandles(openHandles++).also { fd?.let { fd -> it.fd = fd } })
+            val reply = handle.initWithRequest(flow, DroidGuardResultsRequest().setOpenHandles(openHandles++).also { fd?.let { fd -> it.fd = fd } })
+            if (reply != null) {
+                if (reply.pfd != null && reply.`object` != null) {
+                    Log.w(TAG, "DroidGuardInitReply suggests additional actions in main thread")
+                    val bundle = reply.`object` as? Bundle
+                    if (bundle != null) {
+                        for (key in bundle.keySet()) {
+                            Log.d(TAG, "reply.object[$key] = ${bundle[key]}")
+                        }
+                    }
+                }
+            }
             state = 1
         } catch (e: Exception) {
             state = -1
@@ -51,6 +64,7 @@ class DroidGuardHandle(private val handle: IDroidGuardHandle) {
     }
 
     companion object {
+        private const val TAG = "DroidGuardHandler"
         private var openHandles = 0
     }
 }

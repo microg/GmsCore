@@ -6,7 +6,6 @@
 package com.google.android.gms.droidguard;
 
 import android.content.Intent;
-import android.os.Debug;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Base64;
@@ -16,9 +15,9 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.framework.tracing.wrapper.TracingIntentService;
 
-import org.microg.gms.droidguard.DroidGuardServiceBroker;
+import org.microg.gms.droidguard.core.DroidGuardServiceBroker;
 import org.microg.gms.droidguard.GuardCallback;
-import org.microg.gms.droidguard.HandleProxyFactory;
+import org.microg.gms.droidguard.core.HandleProxyFactory;
 import org.microg.gms.droidguard.PingData;
 import org.microg.gms.droidguard.Request;
 

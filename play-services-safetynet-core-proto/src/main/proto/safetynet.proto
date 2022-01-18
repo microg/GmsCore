@@ -1,0 +1,34 @@
+option java_package = "org.microg.gms.safetynet";
+
+option java_outer_classname = "SafetyNetProto";
+
+message SELinuxState {
+    optional bool supported = 1;
+    optional bool enabled = 2;
+}
+
+message FileState {
+    optional string fileName = 1;
+    optional bytes digest = 2;
+}
+
+message SafetyNetData {
+    optional bytes nonce = 1;
+    optional string packageName = 2;
+    repeated bytes signatureDigest = 3;
+    optional bytes fileDigest = 4;
+    optional int32 gmsVersionCode = 5;
+    repeated FileState suCandidates = 6;
+    optional SELinuxState seLinuxState = 7;
+    optional int64 currentTimeMs = 8;
+    optional bool googleCn = 9;
+}
+
+message AttestRequest {
+    optional bytes safetyNetData = 1;
+    optional string droidGuardResult = 2;
+}
+
+message AttestResponse {
+    optional string result = 2;
+}

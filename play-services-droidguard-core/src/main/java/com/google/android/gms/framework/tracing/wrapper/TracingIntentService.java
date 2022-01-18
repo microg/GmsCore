@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import com.google.android.chimera.IntentService;
 
 import org.microg.gms.utils.PackageManagerWrapper;
-import org.microg.gms.droidguard.VersionUtil;
+import org.microg.gms.droidguard.core.VersionUtil;
 
 public abstract class TracingIntentService extends IntentService {
     private static final String TAG = "TracingIntentService";

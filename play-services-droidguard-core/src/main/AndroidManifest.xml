@@ -11,7 +11,7 @@
 
     <application>
         <service
-            android:name="org.microg.gms.droidguard.DroidGuardService"
+            android:name=".DroidGuardService"
             android:enabled="true"
             android:exported="true"
             android:process="com.google.android.gms.unstable">
