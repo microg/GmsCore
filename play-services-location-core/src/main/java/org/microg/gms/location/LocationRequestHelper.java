@@ -17,7 +17,6 @@
 package org.microg.gms.location;
 
 import android.annotation.TargetApi;
-import android.app.ActivityManager;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -35,12 +34,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
 
-import org.microg.gms.common.PackageUtils;
-
 import java.util.Arrays;
-import java.util.List;
+import java.util.UUID;
 
-import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -56,6 +52,7 @@ public class LocationRequestHelper {
     public ILocationListener listener;
     public PendingIntent pendingIntent;
     public ILocationCallback callback;
+    public String id = UUID.randomUUID().toString();
 
     private Location lastReport;
     private int numReports = 0;
@@ -117,10 +114,13 @@ public class LocationRequestHelper {
         if (location == null) return true;
         if (!isActive()) return false;
         if (lastReport != null) {
+            if (location.equals(lastReport)) {
+                return true;
+            }
             if (location.getTime() - lastReport.getTime() < locationRequest.getFastestInterval()) {
                 return true;
             }
-            if (location.distanceTo(lastReport) < locationRequest.getSmallestDesplacement()) {
+            if (location.distanceTo(lastReport) < locationRequest.getSmallestDisplacement()) {
                 return true;
             }
         }

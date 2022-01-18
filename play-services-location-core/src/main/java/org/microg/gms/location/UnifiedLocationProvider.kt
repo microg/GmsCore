@@ -2,32 +2,54 @@ package org.microg.gms.location
 
 import android.content.Context
 import android.location.Location
+import android.os.Bundle
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.microg.nlp.client.UnifiedLocationClient
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import org.microg.nlp.client.LocationClient
+import org.microg.nlp.service.api.Constants
+import org.microg.nlp.service.api.ILocationListener
+import org.microg.nlp.service.api.LocationRequest
+import java.io.PrintWriter
+import java.lang.Exception
 import java.util.*
-import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.collections.ArrayList
 
-class UnifiedLocationProvider(context: Context?, changeListener: LocationChangeListener) {
-    private val client: UnifiedLocationClient
-    private var connectedMinTime: Long = 0
+class UnifiedLocationProvider(private val context: Context, private val changeListener: LocationChangeListener, private val lifecycle: Lifecycle): LifecycleOwner {
+    private val client: LocationClient = LocationClient(context, lifecycle)
     private var lastLocation: Location? = null
-    private val connected = AtomicBoolean(false)
-    private val changeListener: LocationChangeListener
     private val requests: MutableList<LocationRequestHelper> = ArrayList()
-    private val listener: UnifiedLocationClient.LocationListener = object : UnifiedLocationClient.LocationListener {
-        override fun onLocation(location: Location) {
-            lastLocation = location
-            changeListener.onLocationChanged()
+    private val activeRequestIds = hashSetOf<String>()
+    private val activeRequestMutex = Mutex(false)
+    private val listener: ILocationListener = object : ILocationListener.Stub() {
+        override fun onLocation(statusCode: Int, location: Location?) {
+            if (statusCode == Constants.STATUS_OK && location != null) {
+                lastLocation = Location(location)
+                try {
+                    for (key in lastLocation?.extras?.keySet()?.toList().orEmpty()) {
+                        if (key?.startsWith("org.microg.nlp.") == true) {
+                            lastLocation?.extras?.remove(key)
+                        }
+                    }
+                } catch (e:Exception){
+                    // Sometimes we need to define the correct ClassLoader before unparcel(). Ignore those.
+                }
+                changeListener.onLocationChanged()
+            }
         }
     }
     private var ready = false
     private val invokeOnceReady = hashSetOf<Runnable>()
 
+    init {
+        updateLastLocation()
+    }
+
     private fun updateLastLocation() {
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launchWhenStarted {
             Log.d(TAG, "unified network: requesting last location")
             val lastLocation = client.getLastLocation()
             Log.d(TAG, "unified network: got last location: $lastLocation")
@@ -78,42 +100,40 @@ class UnifiedLocationProvider(context: Context?, changeListener: LocationChangeL
 
     @Synchronized
     private fun updateConnection() {
-        if (connected.get() && requests.isEmpty()) {
-            Log.d(TAG, "unified network: no longer requesting location update")
-            client.removeLocationUpdates(listener)
-            connected.set(false)
-        } else if (requests.isNotEmpty()) {
-            var minTime = Long.MAX_VALUE
-            var maxUpdates = Int.MAX_VALUE
-            val sb = StringBuilder()
-            var opPackageName: String? = null
-            for (request in requests) {
-                if (request.locationRequest.interval < minTime) {
-                    opPackageName = request.packageName
-                    minTime = request.locationRequest.interval
-                    maxUpdates = request.locationRequest.numUpdates
+        lifecycleScope.launchWhenStarted {
+            activeRequestMutex.withLock {
+                if (activeRequestIds.isNotEmpty() && requests.isEmpty()) {
+                    Log.d(TAG, "unified network: no longer requesting location update")
+                    for (id in activeRequestIds) {
+                        client.cancelLocationRequestById(id)
+                    }
+                    activeRequestIds.clear()
+                } else if (requests.isNotEmpty()) {
+                    val requests = ArrayList(requests).filter { it.isActive }
+                    for (id in activeRequestIds.filter { id -> requests.none { it.id == id } }) {
+                        client.cancelLocationRequestById(id)
+                    }
+                    for (request in requests.filter { it.id !in activeRequestIds }) {
+                        client.updateLocationRequest(LocationRequest(listener, request.locationRequest.interval, request.locationRequest.numUpdates, request.id), Bundle().apply {
+                            putString("packageName", request.packageName)
+                            putString("source", "GoogleLocationManager")
+                        })
+                        activeRequestIds.add(request.id)
+                    }
                 }
-                if (sb.isNotEmpty()) sb.append(", ")
-                sb.append("${request.packageName}:${request.locationRequest.interval}ms")
             }
-            client.opPackageName = opPackageName
-            if (minTime <= 0) {
-                client.forceNextUpdate = true
-            }
-            Log.d(TAG, "unified network: requesting location updates with interval ${minTime}ms ($sb)")
-            client.requestLocationUpdates(listener, minTime, maxUpdates)
-            connected.set(true)
-            connectedMinTime = minTime
         }
+    }
+
+    override fun getLifecycle(): Lifecycle = lifecycle
+
+    fun dump(writer: PrintWriter) {
+        writer.println("network provider (via direct client):")
+        writer.println("  last location: $lastLocation")
+        writer.println("  ready: $ready")
     }
 
     companion object {
         const val TAG = "GmsLocProviderU"
-    }
-
-    init {
-        client = UnifiedLocationClient[context!!]
-        this.changeListener = changeListener
-        updateLastLocation()
     }
 }

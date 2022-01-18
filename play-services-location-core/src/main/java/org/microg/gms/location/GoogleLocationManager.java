@@ -27,6 +27,7 @@ import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ILocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.internal.FusedLocationProviderResult;
@@ -35,6 +36,7 @@ import com.google.android.gms.location.internal.LocationRequestUpdateData;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.common.Utils;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +47,10 @@ import static android.location.LocationManager.GPS_PROVIDER;
 import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
 import static com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER;
 
+import androidx.lifecycle.Lifecycle;
+
 public class GoogleLocationManager implements LocationChangeListener {
-    private static final String TAG = "GmsLocManager";
+    private static final String TAG = "LocationManager";
     private static final String MOCK_PROVIDER = "mock";
     private static final long VERIFY_CURRENT_REQUESTS_INTERVAL_MS = 5000; // 5 seconds
     private static final long SWITCH_ON_FRESHNESS_CLIFF_MS = 30000; // 30 seconds
@@ -60,7 +64,8 @@ public class GoogleLocationManager implements LocationChangeListener {
     private final MockLocationProvider mockProvider;
     private final List<LocationRequestHelper> currentRequests = new ArrayList<LocationRequestHelper>();
 
-    public GoogleLocationManager(Context context) {
+    public GoogleLocationManager(Context context, Lifecycle lifecycle) {
+        long callingIdentity = Binder.clearCallingIdentity();
         this.context = context;
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (Utils.hasSelfPermissionOrNotify(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -69,12 +74,13 @@ public class GoogleLocationManager implements LocationChangeListener {
             this.gpsProvider = null;
         }
         if (Utils.hasSelfPermissionOrNotify(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            this.networkProvider = new UnifiedLocationProvider(context, this);
+            this.networkProvider = new UnifiedLocationProvider(context, this, lifecycle);
         } else {
             this.networkProvider = null;
         }
         mockProvider = new MockLocationProvider(this);
         handler = new Handler(Looper.getMainLooper());
+        Binder.restoreCallingIdentity(callingIdentity);
     }
 
     public void invokeOnceReady(Runnable runnable) {
@@ -140,19 +146,29 @@ public class GoogleLocationManager implements LocationChangeListener {
             }
         }
         if (old != null) {
+            Log.d(TAG, "Removing replaced location request: " + old);
             currentRequests.remove(old);
         }
         currentRequests.add(request);
         if (gpsProvider != null && request.hasFinePermission() && request.locationRequest.getPriority() == PRIORITY_HIGH_ACCURACY) {
+            Log.d(TAG, "Registering request with high accuracy location provider");
             gpsProvider.addRequest(request);
         } else if (gpsProvider != null && old != null) {
+            Log.d(TAG, "Unregistering request with high accuracy location provider");
             gpsProvider.removeRequest(old);
+        } else {
+            Log.w(TAG, "Not providing high accuracy location: missing permission");
         }
         if (networkProvider != null && request.hasCoarsePermission() && request.locationRequest.getPriority() != PRIORITY_NO_POWER) {
+            Log.d(TAG, "Registering request with low accuracy location provider");
             networkProvider.addRequest(request);
         } else if (networkProvider != null && old != null) {
+            Log.d(TAG, "Unregistering request with low accuracy location provider");
             networkProvider.removeRequest(old);
+        } else {
+            Log.w(TAG, "Not providing low accuracy location: missing permission");
         }
+        handler.postDelayed(this::onLocationChanged, request.locationRequest.getFastestInterval());
     }
 
     public void requestLocationUpdates(LocationRequest request, ILocationListener listener, String packageName) {
@@ -188,28 +204,43 @@ public class GoogleLocationManager implements LocationChangeListener {
     }
 
     public void updateLocationRequest(LocationRequestUpdateData data) {
-        String packageName = PackageUtils.getCallingPackage(context);
-        if (data.pendingIntent != null)
-            packageName = PackageUtils.packageFromPendingIntent(data.pendingIntent);
-        if (data.opCode == LocationRequestUpdateData.REQUEST_UPDATES) {
-            requestLocationUpdates(new LocationRequestHelper(context, packageName, Binder.getCallingUid(), data));
-        } else if (data.opCode == LocationRequestUpdateData.REMOVE_UPDATES) {
-            for (int i = 0; i < currentRequests.size(); i++) {
-                if (currentRequests.get(i).respondsTo(data.listener)
-                        || currentRequests.get(i).respondsTo(data.pendingIntent)
-                        || currentRequests.get(i).respondsTo(data.callback)) {
-                    removeLocationUpdates(currentRequests.get(i));
-                    i--;
+        try {
+            Log.d(TAG, "updateLocationRequest: " + data);
+            String packageName = PackageUtils.getCallingPackage(context);
+            if (data.pendingIntent != null)
+                packageName = PackageUtils.packageFromPendingIntent(data.pendingIntent);
+            Log.d(TAG, "Using source package: " + packageName);
+            if (data.opCode == LocationRequestUpdateData.REQUEST_UPDATES) {
+                requestLocationUpdates(new LocationRequestHelper(context, packageName, Binder.getCallingUid(), data));
+            } else if (data.opCode == LocationRequestUpdateData.REMOVE_UPDATES) {
+                for (int i = 0; i < currentRequests.size(); i++) {
+                    if (currentRequests.get(i).respondsTo(data.listener)
+                            || currentRequests.get(i).respondsTo(data.pendingIntent)
+                            || currentRequests.get(i).respondsTo(data.callback)) {
+                        removeLocationUpdates(currentRequests.get(i));
+                        i--;
+                    }
+                }
+            }
+            Log.d(TAG, "Updated current requests, verifying");
+            verifyCurrentRequests();
+            if (data.fusedLocationProviderCallback != null) {
+                try {
+                    Log.d(TAG, "Send success result to " + packageName);
+                    data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS);
+                } catch (RemoteException ignored) {
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Exception in updateLocationRequest", e);
+            if (data.fusedLocationProviderCallback != null) {
+                try {
+                    Log.d(TAG, "Send internal error result");
+                    data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.create(Status.INTERNAL_ERROR));
+                } catch (RemoteException ignored) {
                 }
             }
         }
-        if (data.fusedLocationProviderCallback != null) {
-            try {
-                data.fusedLocationProviderCallback.onFusedLocationProviderResult(FusedLocationProviderResult.SUCCESS);
-            } catch (RemoteException ignored) {
-            }
-        }
-        verifyCurrentRequests();
     }
 
     public void setMockMode(boolean mockMode) {
@@ -248,6 +279,15 @@ public class GoogleLocationManager implements LocationChangeListener {
                 removeLocationUpdates(request);
                 i--;
             }
+        }
+    }
+
+    public void dump(PrintWriter writer) {
+        if (gpsProvider != null) gpsProvider.dump(writer);
+        if (networkProvider != null) networkProvider.dump(writer);
+        writer.println(currentRequests.size() + " requests:");
+        for (LocationRequestHelper request : currentRequests) {
+            writer.println("  " + request.id + " package=" + request.packageName + " interval=" + request.locationRequest.getInterval() + " smallestDisplacement=" + request.locationRequest.getSmallestDisplacement());
         }
     }
 }

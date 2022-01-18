@@ -8,19 +8,16 @@ apply plugin: 'kotlin-android'
 
 dependencies {
     api project(':play-services-location-api')
-
-    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
-
     implementation project(':play-services-base-core')
-    implementation "org.microg.nlp:geocode-v1:$nlpVersion"
-    implementation "org.microg.nlp:location-v2:$nlpVersion"
-    implementation "org.microg.nlp:location-v3:$nlpVersion"
-    implementation "org.microg.nlp:service:$nlpVersion"
+
+    runtimeOnly "org.microg.nlp:service:$nlpVersion"
+    api "org.microg.nlp:client:$nlpVersion"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
-    api "org.microg.nlp:client:$nlpVersion"
-    api "org.microg.nlp:ui:$nlpVersion"
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
 }
 
 android {

@@ -135,7 +135,7 @@ public class NativeLocationClientImpl {
         i.putExtras(bundle);
         pendingCount.put(pendingIntent, request.getNumUpdates());
         nativePendingMap.put(pendingIntent, PendingIntent.getActivity(context, 0, i, 0));
-        locationManager.requestLocationUpdates(request.getInterval(), request.getSmallestDesplacement(),
+        locationManager.requestLocationUpdates(request.getInterval(), request.getSmallestDisplacement(),
                 makeNativeCriteria(request), nativePendingMap.get(pendingIntent));
     }
 
@@ -147,7 +147,7 @@ public class NativeLocationClientImpl {
         }
         nativeListenerMap.put(listener, new NativeListener(listener, request.getNumUpdates()));
         locationManager.requestLocationUpdates(request.getInterval(),
-                request.getSmallestDesplacement(), makeNativeCriteria(request),
+                request.getSmallestDisplacement(), makeNativeCriteria(request),
                 nativeListenerMap.get(listener), looper);
     }
 
