@@ -59,6 +59,16 @@ public class CheckinService extends IntentService {
         public String getDeviceDataVersionInfo() throws RemoteException {
             return LastCheckinInfo.read(CheckinService.this).getDeviceDataVersionInfo();
         }
+
+        @Override
+        public long getLastCheckinSuccessTime() throws RemoteException {
+            return LastCheckinInfo.read(CheckinService.this).getLastCheckin();
+        }
+
+        @Override
+        public String getLastSimOperator() throws RemoteException {
+            return null;
+        }
     };
 
     public CheckinService() {
