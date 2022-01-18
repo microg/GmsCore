@@ -12,11 +12,12 @@ import android.net.Uri
 import androidx.core.content.ContextCompat
 import com.google.android.gms.R
 import org.microg.gms.nearby.exposurenotification.Constants
+import org.microg.gms.nearby.exposurenotification.ExposurePreferences
 import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
 
 interface NearbyPreferencesIntegration {
     companion object {
-        suspend fun getExposurePreferenceSummary(context: Context): String = if (isAvailable && getExposureNotificationsServiceInfo(context).configuration.enabled) {
+        suspend fun getExposurePreferenceSummary(context: Context): String = if (isAvailable && ExposurePreferences(context).enabled) {
             context.getString(R.string.service_status_enabled_short)
         } else {
             context.getString(R.string.service_status_disabled_short)

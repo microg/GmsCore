@@ -102,7 +102,6 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="prefcat_configuration">Configuration</string>
     <string name="prefcat_google_services">Services Google</string>
     <string name="prefcat_location_service">Service de localisation</string>
-    <string name="prefcat_operation_mode">Mode d’opération</string>
     <string name="prefcat_services">Services</string>
     <string name="prefcat_test">Test</string>
 
@@ -149,18 +148,8 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="gcm_network_state_disconnected">Déconnecté</string>
     <string name="gcm_network_state_connected">Connecté depuis <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="snet_intro">Google SafetyNet est un système de certification du terminal, assurant que celui-ci est correctement sécurisé et compatible avec Android CTS. Certaines applications utilisent SafetyNet pour des raisons de sécurité ou comme prérequis anti-altérations.\n\nmicroG GmsCore contient une implantation libre de SafetyNet, mais les serveurs officiels requièrent que les requêtes SafetyNet soient signées par le système propriétaire DroidGuard. Une version mise en « bac-à-sable » de DroidGuard est disponible dans une application séparée « DroidGuard Helper ».
-</string>
+    <string name="snet_intro">Google SafetyNet est un système de certification du terminal, assurant que celui-ci est correctement sécurisé et compatible avec Android CTS. Certaines applications utilisent SafetyNet pour des raisons de sécurité ou comme prérequis anti-altérations.\n\nmicroG GmsCore contient une implantation libre de SafetyNet, mais les serveurs officiels requièrent que les requêtes SafetyNet soient signées par le système propriétaire DroidGuard.</string>
 
-    <string name="pref_snet_testdrive_title">Tester la certification SafetyNet</string>
-
-    <string name="pref_snet_status_official_title">Utiliser les serveurs officiels</string>
-    <string name="pref_snet_status_official_summary">Nécessite un système non-rooté et microG DroidGuard Helper installé</string>
-    <string name="pref_snet_status_third_party_title">Utiliser un serveur tiers</string>
-    <string name="pref_snet_status_third_party_summary">Les serveurs tiers peuvent être capable de répondre aux requêtes SafetyNet sans signature de DroidGuard.</string>
-    <string name="pref_snet_custom_url_title">URL serveur tiers</string>
-    <string name="pref_snet_custom_url_summary">URL complète du serveur tiers répondant aux requêtes de certification SafetyNet</string>
-    <string name="pref_snet_self_signed_title">Utiliser un certificat auto-signé</string>
-    <string name="pref_snet_self_signed_summary">Au lieu de requérir un serveur, signer les réponses SafetyNet localement en utilisant un certificat auto-signé. La plupart des applications refuseront d’utiliser des réponses auto-signées.</string>
-
+    <string name="pref_safetynet_test_title">Tester la certification SafetyNet</string>
+    <string name="pref_droidguard_operation_mode">Mode d’opération</string>
 </resources>

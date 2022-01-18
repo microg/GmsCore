@@ -102,7 +102,6 @@ To zajmie kilka minut.</string>
     <string name="prefcat_configuration">Konfiguracja</string>
     <string name="prefcat_google_services">Usługi Google</string>
     <string name="prefcat_location_service">Usługa lokalizacji</string>
-    <string name="prefcat_operation_mode">Tryb działania</string>
     <string name="prefcat_services">Usługi w tle</string>
     <string name="prefcat_test">Test</string>
 
@@ -147,17 +146,8 @@ To zajmie kilka minut.</string>
     <string name="gcm_unregister_after_deny_message">Odmówiłeś już zarejestrowanej aplikacji zarejestrować się w usłudze powiadomień ‘push’.\nCzy chcesz ją wyrejestrować, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
 
-    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga by SafetyNet był podpisany przez własnościowy system DroidGuard. Specjalna wersja DroidGuard-a jest dostępna do pobrania jako oddzielna aplikacja “DroidGuard Helper” w repozytorium miroG w F-Droid.</string>
+    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga by SafetyNet był podpisany przez własnościowy system DroidGuard.</string>
 
-    <string name="pref_snet_testdrive_title">Wypróbuj działanie SafetyNet</string>
-
-    <string name="pref_snet_status_official_title">Użyj oficjalnego serwera</string>
-    <string name="pref_snet_status_official_summary">Wymaga niezrootowanego ROM-u i zainstalowanego microG DroidGuard Helper</string>
-    <string name="pref_snet_status_third_party_title">Użyj serwera strony trzeciej</string>
-    <string name="pref_snet_status_third_party_summary">Serwery stron trzecich mogą być w stanie odpowiedzieć na zapytania SafetyNet bez sygnatury DroidGuard</string>
-    <string name="pref_snet_custom_url_title">URL własnego serwera</string>
-    <string name="pref_snet_custom_url_summary">Pełny adres URL serwera strony trzeciej odpowiadającego na zapytania SafetyNet</string>
-    <string name="pref_snet_self_signed_title">Użyj samo-podpisanego certyfikatu</string>
-    <string name="pref_snet_self_signed_summary">Zamiast sprawdzać serwer, podpisuj odpowiedzi SafetyNet lokalnie używając samo-podpisanego certyfikatu. Większość aplikacji odmówi użycia samo-podpisanych odpowiedzi.</string>
-
+    <string name="pref_safetynet_test_title">Wypróbuj działanie SafetyNet</string>
+    <string name="pref_droidguard_operation_mode">Tryb działania</string>
 </resources>

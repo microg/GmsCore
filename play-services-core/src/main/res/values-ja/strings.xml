@@ -109,7 +109,6 @@
     <string name="prefcat_configuration">設定</string>
     <string name="prefcat_google_services">Googleサービス</string>
     <string name="prefcat_location_service">位置情報サービス</string>
-    <string name="prefcat_operation_mode">動作モード</string>
     <string name="prefcat_services">サービス</string>
     <string name="prefcat_test">テスト</string>
 
@@ -171,20 +170,9 @@
 
     <string name="snet_intro">Google SafetyNetはデバイス認証システムであり、デバイスが適切に保護され、Android CTSと互換性があることを保証します。 一部のアプリケーションは、セキュリティ上の理由または改ざん防止の前提条件としてSafetyNetを使用します。
     
-    microG GmsCoreにはSafetyNetのオープンソースな実装が含まれていますが、公式サーバーでは、プロプライエタリなDroidGuardシステムを使用してSafetyNetリクエストに署名する必要があります。 DroidGuardのサンドボックスバージョンは、個別の「DroidGuardHelper」アプリとして利用できます。</string>
+    microG GmsCoreにはSafetyNetのオープンソースな実装が含まれていますが、公式サーバーでは、プロプライエタリなDroidGuardシステムを使用してSafetyNetリクエストに署名する必要があります。</string>
     <string name="snet_enable_switch">デバイスの認証を許可</string>
 
-    <string name="pref_snet_testdrive_title">SafetyNetテストの実行</string>
-
-    <string name="pref_snet_status_official_title">公式サーバーを使用</string>
-    <string name="pref_snet_status_official_summary">root化されていないシステムと、microG DroidGuardHelperのインストールが必要です。</string>
-    <string name="pref_snet_status_official_info">公式サーバー</string>
-    <string name="pref_snet_status_third_party_title">サードパーティのサーバーを使用</string>
-    <string name="pref_snet_status_third_party_summary">サードパーティのサーバーは、DroidGuardの署名がないSafetyNetリクエストに応答できる場合があります</string>
-    <string name="pref_snet_status_third_party_info">third-party server</string>
-    <string name="pref_snet_custom_url_title">カスタムサーバーのURL</string>
-    <string name="pref_snet_custom_url_summary">SafetyNet認証リクエストに応答するサードパーティサーバーの完全なURL</string>
-    <string name="pref_snet_self_signed_title">自己署名証明書を使用</string>
-    <string name="pref_snet_self_signed_summary">サーバーにリクエストする代わりに、自己署名証明書を使用してローカルでSafetyNet応答に署名します。 ほとんどのアプリは、自己署名証明書を使用した応答の使用を拒否します。</string>
-    <string name="pref_snet_status_self_signed_info">自己署名証明書</string>
+    <string name="pref_safetynet_test_title">SafetyNetテストの実行</string>
+    <string name="pref_droidguard_operation_mode">動作モード</string>
 </resources>

@@ -17,19 +17,26 @@
 
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <org.microg.gms.ui.TextPreference
-        android:icon="@drawable/ic_info_outline"
-        android:key="pref_snet_summary"
-        android:selectable="false"
-        android:summary="@string/snet_intro" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <PreferenceCategory
-        android:title="@string/prefcat_test"
-        app:isPreferenceVisible="false">
+        android:layout="@layout/preference_category_no_label">
         <Preference
-            android:enabled="false"
             android:key="pref_snet_run_attest"
-            android:summary="Not yet available"
-            android:title="@string/pref_snet_testdrive_title" />
+            android:title="@string/pref_safetynet_test_title"
+            tools:icon="@drawable/ic_circle_check"
+            tools:summary="@string/pref_test_summary_passed" />
+        <Preference
+            android:key="pref_recaptcha_run_test"
+            android:title="@string/pref_recaptcha_test_title"
+            tools:icon="@drawable/ic_circle_check"
+            tools:summary="@string/pref_test_summary_passed" />
+    </PreferenceCategory>
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <org.microg.gms.ui.TextPreference
+            android:icon="@drawable/ic_info_outline"
+            android:key="pref_snet_summary"
+            android:selectable="false"
+            android:summary="@string/snet_intro" />
     </PreferenceCategory>
 </PreferenceScreen>

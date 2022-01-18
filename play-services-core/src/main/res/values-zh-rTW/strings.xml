@@ -138,16 +138,7 @@
 
     <string name="snet_intro">Google SafetyNet是一個確認手機被確實保護和相容於Android CTS的驗證系統。一些程式基於安全因素使用SafetyNet，一些則是以必須通過的形式來防止篡改。
     	
-    	microG GmsCore包含了SafetyNet的自由執行，但官方伺服器需要SafetyNet請求經非自由軟體性質的DroidGuard系統簽名。有一個可用的沙盒測試版本DroidGuard：獨立程式“DroidGuard Helper”。</string>
+    	microG GmsCore包含了SafetyNet的自由執行，但官方伺服器需要SafetyNet請求經非自由軟體性質的DroidGuard系統簽名。</string>
 
-    <string name="pref_snet_testdrive_title">測試SafetyNet驗證</string>
-
-    <string name="pref_snet_status_official_title">使用官方伺服器</string>
-    <string name="pref_snet_status_official_summary">需要未root的系統及安裝microG DroidGuard Helper</string>
-    <string name="pref_snet_status_third_party_title">使用第三方伺服器</string>
-    <string name="pref_snet_status_third_party_summary">第三方伺服器可能不需要DroidGuard簽名便能回應SafetyNet請求</string>
-    <string name="pref_snet_custom_url_title">自訂伺服器網址</string>
-    <string name="pref_snet_custom_url_summary">回應SafetyNet驗證請求之第三方伺服器的完整網址</string>
-    <string name="pref_snet_self_signed_title">使用自行簽名認證</string>
-    <string name="pref_snet_self_signed_summary">不向伺服器請求簽名，而是用本地的認證文件自行簽名SafetyNet。大部分的程式都會拒絕自行簽名認證。</string>
+    <string name="pref_safetynet_test_title">測試SafetyNet驗證</string>
 </resources>

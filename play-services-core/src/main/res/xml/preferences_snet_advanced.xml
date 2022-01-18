@@ -15,29 +15,12 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/prefcat_operation_mode">
-        <org.microg.tools.ui.RadioButtonPreference
-            android:checked="true"
-            android:key="snet_official"
-            android:summary="@string/pref_snet_status_official_summary"
-            android:title="@string/pref_snet_status_official_title"/>
-        <org.microg.tools.ui.RadioButtonPreference
-            android:checked="false"
-            android:enabled="false"
-            android:key="snet_self_signed"
-            android:summary="@string/pref_snet_self_signed_summary"
-            android:title="@string/pref_snet_self_signed_title"/>
-        <org.microg.tools.ui.RadioButtonPreference
-            android:checked="false"
-            android:key="snet_third_party"
-            android:summary="@string/pref_snet_status_third_party_summary"
-            android:title="@string/pref_snet_status_third_party_title"/>
-        <EditTextPreference
-            android:dependency="snet_third_party"
-            android:hint="https://example.com/server?key=123"
-            android:key="snet_custom_url"
-            android:summary="@string/pref_snet_custom_url_summary"
-            android:title="@string/pref_snet_custom_url_title"/>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <PreferenceCategory android:title="DroidGuard">
+        <Preference
+            android:key="pref_droidguard_mode"
+            android:title="@string/pref_droidguard_operation_mode"
+            tools:summary="Local (embedded)" />
     </PreferenceCategory>
 </PreferenceScreen>

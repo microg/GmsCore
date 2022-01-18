@@ -44,11 +44,12 @@ dependencies {
     implementation project(':play-services-base-core-ui')
     implementation project(':play-services-conscrypt-provider-core')
     implementation project(':play-services-cronet-core')
-    implementation project(':play-services-droidguard') // TODO: Move to play-services-safetynet-core once we have it
     implementation project(':play-services-droidguard-core')
+    implementation project(':play-services-droidguard-core-ui')
     implementation project(':play-services-location-core')
     withNearbyImplementation project(':play-services-nearby-core')
     withNearbyImplementation project(':play-services-nearby-core-ui')
+    implementation project(':play-services-safetynet-core')
     implementation project(':play-services-tapandpay-core')
     implementation project(':play-services-vision-core')
 
@@ -58,7 +59,11 @@ dependencies {
     implementation project(':play-services-cast-api')
     implementation project(':play-services-wearable')
     implementation "org.microg:wearable:$wearableVersion"
-    implementation "org.microg.gms:remote-droid-guard:$remoteDroidGuardVersion"
+
+    runtimeOnly "org.microg.nlp:geocode-v1:$nlpVersion"
+    runtimeOnly "org.microg.nlp:location-v2:$nlpVersion"
+    runtimeOnly "org.microg.nlp:location-v3:$nlpVersion"
+    implementation "org.microg.nlp:ui:$nlpVersion"
 
     withMapboxImplementation project(':play-services-maps-core-mapbox')
     withVtmImplementation project(':play-services-maps-core-vtm')

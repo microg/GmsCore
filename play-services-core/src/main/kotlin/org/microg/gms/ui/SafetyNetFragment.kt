@@ -12,10 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.R
 import com.google.android.gms.databinding.SafetyNetFragmentBinding
-import org.microg.gms.checkin.getCheckinServiceInfo
-import org.microg.gms.safetynet.ServiceInfo
-import org.microg.gms.safetynet.getSafetyNetServiceInfo
-import org.microg.gms.safetynet.setSafetyNetServiceConfiguration
+import org.microg.gms.checkin.CheckinPrefs
+import org.microg.gms.droidguard.core.DroidGuardPreferences
+import org.microg.gms.safetynet.SafetyNetPreferences
 
 class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
 
@@ -34,22 +33,22 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
     fun setEnabled(newStatus: Boolean) {
         val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val info = getSafetyNetServiceInfo(appContext)
-            val newConfiguration = info.configuration.copy(enabled = newStatus)
-            displayServiceInfo(setSafetyNetServiceConfiguration(appContext, newConfiguration))
+            SafetyNetPreferences.setEnabled(appContext, newStatus)
+            DroidGuardPreferences.setEnabled(appContext, newStatus)
+            displayServiceInfo()
         }
     }
 
-    fun displayServiceInfo(serviceInfo: ServiceInfo) {
-        binding.safetynetEnabled = serviceInfo.configuration.enabled
+    fun displayServiceInfo() {
+        binding.safetynetEnabled = SafetyNetPreferences.isEnabled(requireContext()) && DroidGuardPreferences.isEnabled(requireContext())
     }
 
     override fun onResume() {
         super.onResume()
         val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            binding.checkinEnabled = getCheckinServiceInfo(appContext).configuration.enabled
-            displayServiceInfo(getSafetyNetServiceInfo(appContext))
+            binding.checkinEnabled = CheckinPrefs.isEnabled(appContext)
+            displayServiceInfo()
         }
     }
 

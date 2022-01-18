@@ -26,7 +26,7 @@
         android:layout="@layout/preference_category_no_label">
         <Preference
             android:key="pref_push_status"
-            android:selectable="false"
+            android:enabled="false"
             android:title="@string/pref_info_status"
             tools:summary="Connected since 15 minutes ago" />
     </PreferenceCategory>

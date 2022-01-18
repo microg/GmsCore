@@ -114,7 +114,6 @@
     <string name="prefcat_configuration">Канфігурацыя</string>
     <string name="prefcat_google_services">Google сэрвісы</string>
     <string name="prefcat_location_service">Служба вызначэння месцазнаходжання</string>
-    <string name="prefcat_operation_mode">Рэжым работы</string>
     <string name="prefcat_services">Сэрвісы</string>
     <string name="prefcat_test">Тэст</string>
 
@@ -181,21 +180,10 @@
     <string name="prefcat_push_apps_unregistered_title">Незарэгістраваныя прыкладанні</string>
     <string name="prefcat_push_networks_title">Сеткі для прыёму push-паведамленняў</string>
 
-    <string name="snet_intro">Google SafetyNet гэта сістэма сертыфікацыі прылады, якая гарантуе, што прылада карэктна абаронена і сумяшчальна з Android CTS. Пэўныя праграмы выкарыстоўваюць SafetyNet з меркаванняў бяспекі або ў якасці папярэдняй сістэмы абароны ад узлому.\n\nmicroG GmsCore змяшчае свабодную рэалізацыю SafetyNet, але афіцыйны сервер патрабуе, каб запыты былі падпісаны з дапамогай прапрыетарнай сістэмы DroidGuard. Ізаляваная версія DroidGuard даступная як асобнае прыкладанне "DroidGuard Helper".</string>
+    <string name="snet_intro">Google SafetyNet гэта сістэма сертыфікацыі прылады, якая гарантуе, што прылада карэктна абаронена і сумяшчальна з Android CTS. Пэўныя праграмы выкарыстоўваюць SafetyNet з меркаванняў бяспекі або ў якасці папярэдняй сістэмы абароны ад узлому.\n\nmicroG GmsCore змяшчае свабодную рэалізацыю SafetyNet, але афіцыйны сервер патрабуе, каб запыты былі падпісаны з дапамогай прапрыетарнай сістэмы DroidGuard.</string>
     <string name="snet_enable_switch">Дазволіць праверку статусу прылады</string>
 
-    <string name="pref_snet_testdrive_title">Тэст верыфікацыі SafetyNet</string>
-
-    <string name="pref_snet_status_official_title">Выкарыстоўваць афіцыйны сервер</string>
-    <string name="pref_snet_status_official_summary">Патрабуецца сістэма без root і ўсталяваны microG DroidGuard Helper</string>
-    <string name="pref_snet_status_official_info">афіцыйны сервер</string>
-    <string name="pref_snet_status_third_party_title">Выкарыстоўваць іншы сервер</string>
-    <string name="pref_snet_status_third_party_summary">Іншыя серверы могуць быць у стане адказаць на запыты SafetyNet без подпісу DroidGuard</string>
-    <string name="pref_snet_status_third_party_info">іншы сервер</string>
-    <string name="pref_snet_custom_url_title">URL іншага сервера</string>
-    <string name="pref_snet_custom_url_summary">Поўны URL іншага сервера, які адказвае на праверачныя запыты SafetyNet</string>
-    <string name="pref_snet_self_signed_title">Выкарыстоўваць самастойна падпісаны сертыфікат</string>
-    <string name="pref_snet_self_signed_summary">Замест запытаў на сервер падпісваць SafetyNet лакальна, выкарыстоўваючы самастойна створаны сертыфікат. Большасць прыкладанняў будуць адмаўляцца выкарыстоўваць самастойна падпісаныя адказы.</string>
-    <string name="pref_snet_status_self_signed_info">самастойна падпісаны сертыфікат</string>
+    <string name="pref_safetynet_test_title">Тэст верыфікацыі SafetyNet</string>
+    <string name="pref_droidguard_operation_mode">Рэжым работы</string>
 
 </resources>
