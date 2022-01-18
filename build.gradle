@@ -6,37 +6,35 @@
 buildscript {
     ext.cronetVersion = '91.0.4472.120.1'
     ext.nlpVersion = '2.0-alpha6'
-    ext.remoteDroidGuardVersion = '0.1.2'
     ext.safeParcelVersion = '1.7.0'
     ext.wearableVersion = '0.1.1'
 
-    ext.kotlinVersion = '1.4.32'
+    ext.kotlinVersion = '1.6.10'
     ext.coroutineVersion = '1.5.2'
 
     ext.annotationVersion = '1.2.0'
-    ext.appcompatVersion = '1.2.0'
-    ext.coreVersion = '1.3.0'
-    ext.fragmentVersion = '1.2.5'
-    ext.lifecycleVersion = '2.3.1'
-    ext.mediarouterVersion = '1.2.2'
+    ext.appcompatVersion = '1.4.0'
+    ext.coreVersion = '1.7.0'
+    ext.fragmentVersion = '1.4.0'
+    ext.lifecycleVersion = '2.4.0'
+    ext.mediarouterVersion = '1.2.5'
     ext.multidexVersion = '2.0.1'
     ext.navigationVersion = '2.3.5'
     ext.preferenceVersion = '1.1.1'
-    ext.recyclerviewVersion = '1.1.0'
+    ext.recyclerviewVersion = '1.2.0'
     ext.webkitVersion = '1.4.0'
 
-    ext.supportLibraryVersion = '28.0.0'
     ext.slf4jVersion = '1.7.25'
     ext.volleyVersion = '1.2.1'
     ext.wireVersion = '3.2.2'
 
-    ext.androidBuildGradleVersion = '4.1.0'
+    ext.androidBuildGradleVersion = '7.0.4'
 
     ext.androidBuildVersionTools = '30.0.2'
 
     ext.androidMinSdk = 14
     ext.androidTargetSdk = 29
-    ext.androidCompileSdk = 30
+    ext.androidCompileSdk = 31
 
     repositories {
         jcenter()
