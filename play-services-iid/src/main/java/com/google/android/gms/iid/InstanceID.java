@@ -154,7 +154,7 @@ public class InstanceID {
      */
     public long getCreationTime() {
         if (creationTime == 0) {
-            String s = storeInstance.get(subtype, "cre");
+            String s = storeInstance.getSecret(subtype, "cre");
             if (s != null) {
                 creationTime = Long.parseLong(s);
             }
@@ -211,7 +211,14 @@ public class InstanceID {
     public String getToken(String authorizedEntity, String scope, Bundle extras) throws IOException {
         if (Looper.getMainLooper() == Looper.myLooper()) throw new IOException(ERROR_MAIN_THREAD);
 
-        throw new UnsupportedOperationException();
+        long tokenTimestamp = storeInstance.getTokenTimestamp(subtype, authorizedEntity, scope);
+        if (tokenTimestamp > System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000L) {
+            String token = storeInstance.getToken(subtype, authorizedEntity, scope);
+            if (token != null) return token;
+        }
+        String token = requestToken(authorizedEntity, scope, extras);
+        storeInstance.putToken(subtype, authorizedEntity, scope, token);
+        return token;
     }
 
     /**
@@ -252,7 +259,7 @@ public class InstanceID {
                     rsaGenerator.initialize(RSA_KEY_SIZE);
                     keyPair = rsaGenerator.generateKeyPair();
                     creationTime = System.currentTimeMillis();
-                    storeInstance.put(subtype, keyPair, creationTime);
+                    storeInstance.putKeyPair(subtype, keyPair, creationTime);
                 } catch (NoSuchAlgorithmException e) {
                     Log.w(TAG, e);
                 }

@@ -38,21 +38,29 @@ public class InstanceIdStore {
         this.sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public synchronized String get(String key) {
+    public synchronized String getString(String key) {
         return sharedPreferences.getString(key, null);
     }
 
-    public String get(String subtype, String key) {
-        return get(subtype + "|S|" + key);
+    public synchronized long getLong(String key) {
+        return sharedPreferences.getLong(key, -1);
     }
 
-    public String get(String subtype, String authorizedEntity, String scope) {
-        return get(subtype + "|T|" + authorizedEntity + "|" + scope);
+    public String getSecret(String subtype, String key) {
+        return getString(subtype + "|S|" + key);
+    }
+
+    public String getToken(String subtype, String authorizedEntity, String scope) {
+        return getString(subtype + "|T|" + authorizedEntity + "|" + scope);
+    }
+
+    public long getTokenTimestamp(String subtype, String authorizedEntity, String scope) {
+        return getLong(subtype + "|T-timestamp|" + authorizedEntity + "|" + scope);
     }
 
     public KeyPair getKeyPair(String subtype) {
-        String pub = get(subtype, "|P|");
-        String priv = get(subtype, "|K|");
+        String pub = getSecret(subtype, "|P|");
+        String priv = getSecret(subtype, "|K|");
         if (pub == null || priv == null) {
             return null;
         }
@@ -67,24 +75,31 @@ public class InstanceIdStore {
         }
     }
 
-    public synchronized void put(String key, String value) {
+    public synchronized void putString(String key, String value) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.apply();
     }
 
-    public void put(String subtype, String key, String value) {
-        put(subtype + "|S|" + key, value);
+    public synchronized void putLong(String key, long value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(key, value);
+        editor.apply();
     }
 
-    public void put(String subtype, String authorizedEntity, String scope, String value) {
-        put(subtype + "|T|" + authorizedEntity + "|" + scope, value);
+    public void putSecret(String subtype, String key, String value) {
+        putString(subtype + "|S|" + key, value);
     }
 
-    public synchronized void put(String subtype, KeyPair keyPair, long timestamp) {
-        put(subtype, "|P|", Base64.encodeToString(keyPair.getPublic().getEncoded(), Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING));
-        put(subtype, "|K|", Base64.encodeToString(keyPair.getPrivate().getEncoded(), Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING));
-        put(subtype, "cre", Long.toString(timestamp));
+    public void putToken(String subtype, String authorizedEntity, String scope, String token) {
+        putString(subtype + "|T|" + authorizedEntity + "|" + scope, token);
+        putLong(subtype + "|T-timestamp|" + authorizedEntity + "|" + scope, System.currentTimeMillis());
+    }
+
+    public synchronized void putKeyPair(String subtype, KeyPair keyPair, long timestamp) {
+        putSecret(subtype, "|P|", Base64.encodeToString(keyPair.getPublic().getEncoded(), Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING));
+        putSecret(subtype, "|K|", Base64.encodeToString(keyPair.getPrivate().getEncoded(), Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING));
+        putSecret(subtype, "cre", Long.toString(timestamp));
     }
 
     public synchronized void delete() {
@@ -106,6 +121,7 @@ public class InstanceIdStore {
     public synchronized void delete(String subtype, String authorizedEntity, String scope) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(subtype + "|T|" + authorizedEntity + "|" + scope);
+        editor.remove(subtype + "|T-timestamp|" + authorizedEntity + "|" + scope);
         editor.apply();
     }
 }

@@ -30,13 +30,10 @@ import org.microg.gms.gcm.GcmConstants;
 
 import java.io.IOException;
 
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_DELAY;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_TYPE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SENDER_LEGACY;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
@@ -317,6 +314,6 @@ public class GoogleCloudMessaging {
         if (i > 0) {
             to = to.substring(0, i);
         }
-        return InstanceID.getInstance(context).getStore().get("", to, INSTANCE_ID_SCOPE);
+        return InstanceID.getInstance(context).getStore().getToken("", to, INSTANCE_ID_SCOPE);
     }
 }
