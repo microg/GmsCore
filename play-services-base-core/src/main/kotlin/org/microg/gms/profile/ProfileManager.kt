@@ -6,12 +6,12 @@
 package org.microg.gms.profile
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.Profile
 import org.xmlpull.v1.XmlPullParser
+import java.util.*
 import kotlin.random.Random
 
 object ProfileManager {
@@ -24,18 +24,18 @@ object ProfileManager {
 
     private fun getProfileFromSettings(context: Context) = SettingsContract.getSettings(context, Profile.getContentUri(context), arrayOf(Profile.PROFILE)) { it.getString(0) }
     private fun getAutoProfile(context: Context): String {
-        val profile = "${android.os.Build.DEVICE}_${android.os.Build.VERSION.SDK_INT}"
+        val profile = "${android.os.Build.PRODUCT}_${android.os.Build.VERSION.SDK_INT}"
         if (hasProfile(context, profile)) return profile
         return PROFILE_NATIVE
     }
 
-    private fun getProfileResId(context: Context, profile: String) = context.resources.getIdentifier("${context.packageName}:xml/profile_$profile", null, null)
+    private fun getProfileResId(context: Context, profile: String) = context.resources.getIdentifier("${context.packageName}:xml/profile_$profile".toLowerCase(Locale.US), null, null)
     private fun hasProfile(context: Context, profile: String): Boolean = getProfileResId(context, profile) != 0
-    private fun getProfileData(context: Context, profile: String, realData: Map<String, String>): Map<String, String>? {
+    private fun getProfileData(context: Context, profile: String, realData: Map<String, String>): Map<String, String> {
         try {
-            if (profile in listOf(PROFILE_REAL, PROFILE_NATIVE)) return null
+            if (profile in listOf(PROFILE_REAL, PROFILE_NATIVE)) return realData
             val profileResId = getProfileResId(context, profile)
-            if (profileResId == 0) return null
+            if (profileResId == 0) return realData
             val resultData = mutableMapOf<String, String>()
             resultData.putAll(realData)
             context.resources.getXml(profileResId).use {
@@ -54,13 +54,10 @@ object ProfileManager {
                     next = it.next()
                 }
             }
-            for (entry in resultData) {
-                Log.d(TAG, "<data key=\"${entry.key}\" value=\"${entry.value}\" />")
-            }
             return resultData
         } catch (e: Exception) {
             Log.w(TAG, e)
-            return null
+            return realData
         }
     }
 
@@ -88,13 +85,16 @@ object ProfileManager {
     private fun getProfileSerialTemplate(context: Context, profile: String): String {
         // Native
         if (profile in listOf(PROFILE_REAL, PROFILE_NATIVE)) {
-            return kotlin.runCatching {
+            var candidate = try {
                 if (android.os.Build.VERSION.SDK_INT >= 26) {
                     android.os.Build.getSerial()
                 } else {
-                    null
+                    android.os.Build.SERIAL
                 }
-            }.getOrNull()?.takeIf { it != android.os.Build.UNKNOWN } ?: android.os.Build.SERIAL
+            } catch (e: Exception) {
+                android.os.Build.SERIAL
+            }
+            if (candidate != android.os.Build.UNKNOWN) return candidate
         }
 
         // From profile
@@ -160,8 +160,11 @@ object ProfileManager {
             "Build.VERSION.SDK" to android.os.Build.VERSION.SDK,
             "Build.VERSION.SDK_INT" to android.os.Build.VERSION.SDK_INT.toString()
     ).apply {
-        if (android.os.Build.VERSION.SDK_INT > 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
             put("Build.SUPPORTED_ABIS", android.os.Build.SUPPORTED_ABIS.joinToString(","))
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            put("Build.VERSION.SECURITY_PATCH", android.os.Build.VERSION.SECURITY_PATCH)
         }
     }
 
@@ -195,8 +198,15 @@ object ProfileManager {
         applyStringField("Build.VERSION.RELEASE") { Build.VERSION.RELEASE = it }
         applyStringField("Build.VERSION.SDK") { Build.VERSION.SDK = it }
         applyIntField("Build.VERSION.SDK_INT") { Build.VERSION.SDK_INT = it }
-        if (android.os.Build.VERSION.SDK_INT > 21) {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
             Build.SUPPORTED_ABIS = profileData["Build.SUPPORTED_ABIS"]?.split(",")?.toTypedArray() ?: emptyArray()
+        } else {
+            Build.SUPPORTED_ABIS = emptyArray()
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 23) {
+            Build.VERSION.SECURITY_PATCH = profileData["Build.VERSION.SECURITY_PATCH"]
+        } else {
+            Build.VERSION.SECURITY_PATCH = null
         }
     }
 
@@ -217,15 +227,15 @@ object ProfileManager {
 
     @JvmStatic
     fun ensureInitialized(context: Context) {
-        if (initialized) return
-        try {
-            val profile = getActiveProfile(context)
-            applyProfile(context, profile)
-            initialized = true
-        } catch (e: Exception) {
-            Log.w(TAG, e)
+        synchronized(this) {
+            if (initialized) return
+            try {
+                val profile = getActiveProfile(context)
+                applyProfile(context, profile)
+                initialized = true
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
         }
     }
-
-
 }

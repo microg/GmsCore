@@ -90,5 +90,8 @@ object Build {
 
         @JvmField
         var SDK_INT: Int = 0
+
+        @JvmField
+        var SECURITY_PATCH: String? = null
     }
 }

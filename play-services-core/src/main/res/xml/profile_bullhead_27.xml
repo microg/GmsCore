@@ -3,7 +3,7 @@
   ~ SPDX-FileCopyrightText: 2021, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<profile name="Google Nexus 5X (Android 8.1.0)" device="bullhead" sdk="27" id="bullhead_27">
+<profile name="Google Nexus 5X (Android 8.1.0)" product="bullhead" sdk="27" id="bullhead_27">
     <!-- Data from OPM3.171019.016, Mar 2018 -->
     <data key="Build.BOARD" value="bullhead" />
     <data key="Build.BOOTLOADER" value="BHZ31b" />
