@@ -277,9 +277,9 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
 
         ExposureSummary.ExposureSummaryBuilder()
-                .setDaysSinceLastExposure(exposures.map { it.daysSinceExposure }.min()?.toInt() ?: 0)
+                .setDaysSinceLastExposure(exposures.map { it.daysSinceExposure }.minOrNull()?.toInt() ?: 0)
                 .setMatchedKeyCount(exposures.map { it.key }.distinct().size)
-                .setMaximumRiskScore(exposures.map { it.getRiskScore(configuration) }.max()?.toInt() ?: 0)
+                .setMaximumRiskScore(exposures.map { it.getRiskScore(configuration) }.maxOrNull()?.toInt() ?: 0)
                 .setAttenuationDurations(intArrayOf(
                         exposures.map { it.getAttenuationDurations(configuration)[0] }.sum(),
                         exposures.map { it.getAttenuationDurations(configuration)[1] }.sum(),
@@ -784,7 +784,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(TAG, code, reply, flags) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
 
     companion object {
         private val tempGrantedPermissions: MutableSet<Pair<String, String>> = hashSetOf()
