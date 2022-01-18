@@ -1,17 +1,6 @@
 /*
- * Copyright (C) 2019 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2019 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.microg.gms.maps.mapbox.model
@@ -80,7 +69,11 @@ class PolygonImpl(private val map: GoogleMapImpl, private val id: String, option
         }
         strokes.forEachIndexed { idx, it -> if (idx > 0) it.points = this.holes[idx - 1] }
         if (this.holes.size + 1 > strokes.size) {
-            strokes.addAll(this.holes.subList(strokes.size, this.holes.size - 1).mapIndexed { idx, it -> PolylineImpl(map, "$id-stroke-hole-${strokes.size + idx}", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)) })
+            try {
+                strokes.addAll(this.holes.subList(strokes.size, this.holes.size - 1).mapIndexed { idx, it -> PolylineImpl(map, "$id-stroke-hole-${strokes.size + idx}", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)) })
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
         }
         map.fillManager?.let { update(it) }
     }
