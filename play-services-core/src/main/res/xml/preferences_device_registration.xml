@@ -11,12 +11,18 @@
         android:title="Device profile">
         <ListPreference
             android:key="pref_device_profile"
+            android:persistent="false"
             android:title="Select profile"
             tools:summary="Automatic (Google Pixel 3, Android 11)" />
         <Preference
             android:key="pref_device_profile_import"
             android:summary="Import device profile from file"
-            android:title="Import profile" />
+            android:title="Import custom profile" />
+        <Preference
+            android:enabled="false"
+            android:key="pref_device_serial"
+            android:title="Serial"
+            tools:summary="123456" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_device_registration_status"

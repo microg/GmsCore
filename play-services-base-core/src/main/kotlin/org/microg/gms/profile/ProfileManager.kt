@@ -7,10 +7,13 @@ package org.microg.gms.profile
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.XmlResourceParser
 import android.util.Log
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.Profile
+import org.microg.gms.utils.FileXmlResourceParser
 import org.xmlpull.v1.XmlPullParser
+import java.io.File
 import java.util.*
 import kotlin.random.Random
 
@@ -19,18 +22,67 @@ object ProfileManager {
     const val PROFILE_REAL = "real"
     const val PROFILE_AUTO = "auto"
     const val PROFILE_NATIVE = "native"
+    const val PROFILE_USER = "user"
+    const val PROFILE_SYSTEM = "system"
 
-    private var initialized = false
+    private var activeProfile: String? = null
 
-    private fun getProfileFromSettings(context: Context) = SettingsContract.getSettings(context, Profile.getContentUri(context), arrayOf(Profile.PROFILE)) { it.getString(0) }
-    private fun getAutoProfile(context: Context): String {
+    private fun getUserProfileFile(context: Context): File = File(context.filesDir, "device_profile.xml")
+    private fun getSystemProfileFile(context: Context): File = File("/system/etc/microg_device_profile.xml")
+    private fun getProfileResId(context: Context, profile: String) = context.resources.getIdentifier("${context.packageName}:xml/profile_$profile".toLowerCase(Locale.US), null, null)
+
+    fun getConfiguredProfile(context: Context): String = SettingsContract.getSettings(context, Profile.getContentUri(context), arrayOf(Profile.PROFILE)) { it.getString(0) } ?: PROFILE_AUTO
+
+    fun getAutoProfile(context: Context): String {
+        if (hasProfile(context, PROFILE_SYSTEM) && isAutoProfile(context, PROFILE_SYSTEM)) return PROFILE_SYSTEM
         val profile = "${android.os.Build.PRODUCT}_${android.os.Build.VERSION.SDK_INT}"
-        if (hasProfile(context, profile)) return profile
+        if (hasProfile(context, profile) && isAutoProfile(context, profile)) return profile
         return PROFILE_NATIVE
     }
 
-    private fun getProfileResId(context: Context, profile: String) = context.resources.getIdentifier("${context.packageName}:xml/profile_$profile".toLowerCase(Locale.US), null, null)
-    private fun hasProfile(context: Context, profile: String): Boolean = getProfileResId(context, profile) != 0
+    fun hasProfile(context: Context, profile: String): Boolean = when (profile) {
+        PROFILE_AUTO -> hasProfile(context, getAutoProfile(context))
+        PROFILE_NATIVE, PROFILE_REAL -> true
+        PROFILE_USER -> getUserProfileFile(context).exists()
+        PROFILE_SYSTEM -> getSystemProfileFile(context).exists()
+        else -> getProfileResId(context, profile) != 0
+    }
+
+    private fun getProfileXml(context: Context, profile: String): XmlResourceParser? = kotlin.runCatching {
+            when (profile) {
+                PROFILE_AUTO -> getProfileXml(context, getAutoProfile(context))
+                PROFILE_NATIVE, PROFILE_REAL -> null
+                PROFILE_USER -> FileXmlResourceParser(getUserProfileFile(context))
+                PROFILE_SYSTEM -> FileXmlResourceParser(getSystemProfileFile(context))
+                else -> {
+                    val profileResId = getProfileResId(context, profile)
+                    if (profileResId == 0) return@runCatching null
+                    context.resources.getXml(profileResId)
+                }
+            }
+    }.getOrNull()
+
+    fun isAutoProfile(context: Context, profile: String): Boolean = kotlin.runCatching {
+        when (profile) {
+            PROFILE_AUTO -> false
+            PROFILE_REAL -> false
+            PROFILE_NATIVE -> true
+            else -> getProfileXml(context, profile)?.use {
+                var next = it.next()
+                while (next != XmlPullParser.END_DOCUMENT) {
+                    when (next) {
+                        XmlPullParser.START_TAG -> when (it.name) {
+                            "profile" -> {
+                                return@use it.getAttributeBooleanValue(null, "auto", false)
+                            }
+                        }
+                    }
+                    next = it.next()
+                }
+            } == true
+        }
+    }.getOrDefault(false)
+
     private fun getProfileData(context: Context, profile: String, realData: Map<String, String>): Map<String, String> {
         try {
             if (profile in listOf(PROFILE_REAL, PROFILE_NATIVE)) return realData
@@ -38,7 +90,7 @@ object ProfileManager {
             if (profileResId == 0) return realData
             val resultData = mutableMapOf<String, String>()
             resultData.putAll(realData)
-            context.resources.getXml(profileResId).use {
+            getProfileXml(context, profile)?.use {
                 var next = it.next()
                 while (next != XmlPullParser.END_DOCUMENT) {
                     when (next) {
@@ -61,7 +113,7 @@ object ProfileManager {
         }
     }
 
-    private fun getActiveProfile(context: Context) = getProfileFromSettings(context).let { if (it != PROFILE_AUTO) it else getAutoProfile(context) }
+    private fun getProfile(context: Context) = getConfiguredProfile(context).let { if (it != PROFILE_AUTO) it else getAutoProfile(context) }
     private fun getSerialFromSettings(context: Context): String? = SettingsContract.getSettings(context, Profile.getContentUri(context), arrayOf(Profile.SERIAL)) { it.getString(0) }
     private fun saveSerial(context: Context, serial: String) = SettingsContract.setSettings(context, Profile.getContentUri(context)) { put(Profile.SERIAL, serial) }
 
@@ -99,18 +151,15 @@ object ProfileManager {
 
         // From profile
         try {
-            val profileResId = getProfileResId(context, profile)
-            if (profileResId != 0) {
-                context.resources.getXml(profileResId).use {
-                    var next = it.next()
-                    while (next != XmlPullParser.END_DOCUMENT) {
-                        when (next) {
-                            XmlPullParser.START_TAG -> when (it.name) {
-                                "serial" -> return it.getAttributeValue(null, "template")
-                            }
+            getProfileXml(context, profile)?.use {
+                var next = it.next()
+                while (next != XmlPullParser.END_DOCUMENT) {
+                    when (next) {
+                        XmlPullParser.START_TAG -> when (it.name) {
+                            "serial" -> return it.getAttributeValue(null, "template")
                         }
-                        next = it.next()
                     }
+                    next = it.next()
                 }
             }
         } catch (e: Exception) {
@@ -118,18 +167,18 @@ object ProfileManager {
         }
 
         // Fallback
-        return "008741A0B2C4D6E8"
+        return randomSerial("008741A0B2C4D6E8")
     }
 
     @SuppressLint("MissingPermission")
-    private fun getEffectiveProfileSerial(context: Context, profile: String): String {
-        getSerialFromSettings(context)?.let { return it }
+    fun getSerial(context: Context, profile: String = getProfile(context), local: Boolean = false): String {
+        if (!local) getSerialFromSettings(context)?.let { return it }
         val serialTemplate = getProfileSerialTemplate(context, profile)
         val serial = when {
             profile == PROFILE_REAL && serialTemplate != android.os.Build.UNKNOWN -> serialTemplate
             else -> randomSerial(serialTemplate)
         }
-        saveSerial(context, serial)
+        if (!local) saveSerial(context, serial)
         return serial
     }
 
@@ -210,29 +259,67 @@ object ProfileManager {
         }
     }
 
-    private fun applyProfile(context: Context, profile: String) {
-        val profileData = getProfileData(context, profile, getRealData()) ?: getRealData()
+    private fun applyProfile(context: Context, profile: String, serial: String = getSerial(context, profile)) {
+        val profileData = getProfileData(context, profile, getRealData())
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            for ((key, value) in profileData) {
+                Log.v(TAG, "<data key=\"$key\" value=\"$value\" />")
+            }
+        }
         applyProfileData(profileData)
-        Build.SERIAL = getEffectiveProfileSerial(context, profile)
+        Build.SERIAL = serial
         Log.d(TAG, "Using Serial ${Build.SERIAL}")
+        activeProfile = profile
+    }
+
+    fun getProfileName(context: Context, profile: String): String? = getProfileName { getProfileXml(context, profile) }
+
+    private fun getProfileName(parserCreator: () -> XmlResourceParser?): String? = parserCreator()?.use {
+        var next = it.next()
+        while (next != XmlPullParser.END_DOCUMENT) {
+            when (next) {
+                XmlPullParser.START_TAG -> when (it.name) {
+                    "profile" -> {
+                        return@use it.getAttributeValue(null, "name")
+                    }
+                }
+            }
+            next = it.next()
+        }
+        null
     }
 
     fun setProfile(context: Context, profile: String?) {
+        val changed = getProfile(context) != profile
+        val newProfile = profile ?: PROFILE_AUTO
+        val newSerial = if (changed) getSerial(context, newProfile, true) else getSerial(context)
         SettingsContract.setSettings(context, Profile.getContentUri(context)) {
-            put(Profile.PROFILE, profile)
-            put(Profile.SERIAL, null as String?)
+            put(Profile.PROFILE, newProfile)
+            if (changed) put(Profile.SERIAL, newSerial)
         }
-        applyProfile(context, profile ?: PROFILE_AUTO)
+        if (changed && activeProfile != null) applyProfile(context, newProfile, newSerial)
+    }
+
+    fun importUserProfile(context: Context, file: File): Boolean {
+        val profileName = getProfileName { FileXmlResourceParser(file) } ?: return false
+        try {
+            Log.d(TAG, "Importing user profile '$profileName'")
+            file.copyTo(getUserProfileFile(context))
+            if (activeProfile == PROFILE_USER) applyProfile(context, PROFILE_USER)
+            return true
+        } catch (e: Exception) {
+            Log.w(TAG, e)
+            return false
+        }
     }
 
     @JvmStatic
     fun ensureInitialized(context: Context) {
         synchronized(this) {
-            if (initialized) return
             try {
-                val profile = getActiveProfile(context)
+                val profile = getProfile(context)
+                if (activeProfile == profile) return
                 applyProfile(context, profile)
-                initialized = true
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
