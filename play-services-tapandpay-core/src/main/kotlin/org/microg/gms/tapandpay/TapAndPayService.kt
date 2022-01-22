@@ -7,8 +7,10 @@ package org.microg.gms.tapandpay
 import android.os.Parcel
 import android.os.RemoteException
 import android.util.Log
+import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.tapandpay.TapAndPayStatusCodes.TAP_AND_PAY_NO_ACTIVE_WALLET
@@ -21,7 +23,11 @@ private const val TAG = "GmsTapAndPay"
 
 class TapAndPayService : BaseService(TAG, GmsService.TAP_AND_PAY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, TapAndPayImpl(), null)
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, TapAndPayImpl(), ConnectionInfo().apply {
+            features = arrayOf(
+                Feature("tapandpay_token_listing", 3)
+            )
+        })
     }
 }
 
