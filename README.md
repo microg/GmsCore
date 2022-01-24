@@ -17,13 +17,15 @@ Also, this fork applies the following compared to original microG
 
 ### Please refer to the [wiki](https://github.com/jcchikikomori/GmsCoreHuawei/wiki) for downloads and instructions. Also check my [article](https://johncyrillcorsanes.medium.com/google-alternatives-for-huawei-devices-c91f6fae6300)
 
-## DISCLAIMER
-
+DISCLAIMER
+-------
     This project is not recommended for production & enterprise purposes, since device faking is somewhat illegal in Google's legal terms.
-
     This is only a experiment on how Google Services works on the entire Android space.
+    
+## Contribute
 
-## License
+I am working on a private company full time, so if can contribute to lift my workload, please go on and make a PR.
+I don't have exact format but i will review as much as i can.
 
 License
 -------
