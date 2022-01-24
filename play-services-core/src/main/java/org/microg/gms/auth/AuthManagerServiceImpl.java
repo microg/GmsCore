@@ -20,6 +20,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -205,6 +206,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     }
 
     @Override
+    @SuppressLint("MissingPermission") // Workaround bug in Android Linter
     public Bundle clearToken(String token, Bundle extras) {
         String packageName = extras.getString(KEY_ANDROID_PACKAGE_NAME);
         if (packageName == null) packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);

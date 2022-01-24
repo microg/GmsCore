@@ -146,6 +146,7 @@ PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 0) {
             for (int grantResult : grantResults) {
                 if (grantResult != PERMISSION_GRANTED) return;
