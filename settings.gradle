@@ -62,6 +62,7 @@ include ':play-services-vision-core'
 include ':play-services-base-core-ui'
 include ':play-services-droidguard-core-ui'
 include ':play-services-nearby-core-ui'
+include ':play-services-safetynet-core-ui'
 
 include ':firebase-auth-core'
 

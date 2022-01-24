@@ -35,6 +35,7 @@ import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.CheckIn.getContentUri
 import org.microg.gms.settings.SettingsContract.getSettings
 import java.io.IOException
+import java.net.URLEncoder
 import java.util.*
 
 private const val TAG = "GmsSafetyNet"
@@ -46,6 +47,10 @@ class SafetyNetClientService : BaseService(TAG, GmsService.SAFETY_NET_CLIENT) {
     }
 }
 
+private fun StringBuilder.appendUrlEncodedParam(key: String, value: String?) = append("&")
+    .append(URLEncoder.encode(key, "UTF-8"))
+    .append("=")
+    .append(value?.let { URLEncoder.encode(it, "UTF-8") } ?: "")
 
 class SafetyNetClientServiceImpl(private val context: Context, private val packageName: String, private val lifecycle: Lifecycle) : ISafetyNetService.Stub(), LifecycleOwner {
     override fun getLifecycle(): Lifecycle = lifecycle
@@ -133,7 +138,8 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
             return
         }
 
-        val intent = Intent(context, ReCaptchaActivity::class.java)
+        val intent = Intent("org.microg.gms.safetynet.RECAPTCHA_ACTIVITY")
+        intent.`package` = context.packageName
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)

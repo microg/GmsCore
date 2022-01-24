@@ -13,12 +13,5 @@
                 <action android:name="com.google.android.gms.safetynet.service.START" />
             </intent-filter>
         </service>
-
-        <activity
-            android:name="org.microg.gms.safetynet.ReCaptchaActivity"
-            android:autoRemoveFromRecents="true"
-            android:icon="@drawable/ic_recaptcha"
-            android:process=":ui"
-            android:theme="@style/Theme.AppCompat.Light.Dialog.NoActionBar" />
     </application>
 </manifest>

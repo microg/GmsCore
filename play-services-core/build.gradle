@@ -50,6 +50,7 @@ dependencies {
     withNearbyImplementation project(':play-services-nearby-core')
     withNearbyImplementation project(':play-services-nearby-core-ui')
     implementation project(':play-services-safetynet-core')
+    implementation project(':play-services-safetynet-core-ui')
     implementation project(':play-services-tapandpay-core')
     implementation project(':play-services-vision-core')
 

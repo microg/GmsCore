@@ -13,7 +13,7 @@ buildscript {
     ext.coroutineVersion = '1.5.2'
 
     ext.annotationVersion = '1.2.0'
-    ext.appcompatVersion = '1.4.0'
+    ext.appcompatVersion = '1.4.1'
     ext.coreVersion = '1.7.0'
     ext.fragmentVersion = '1.4.0'
     ext.lifecycleVersion = '2.4.0'

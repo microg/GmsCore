@@ -22,7 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebViewClientCompat
 import com.google.android.gms.safetynet.SafetyNetStatusCodes.*
 import org.microg.gms.droidguard.core.DroidGuardResultCreator
-import org.microg.gms.safetynet.core.R
+import org.microg.gms.safetynet.core.ui.R
 import java.io.ByteArrayInputStream
 import java.net.URLEncoder
 import java.security.MessageDigest
@@ -30,7 +30,7 @@ import kotlin.math.min
 
 private const val TAG = "GmsReCAPTCHA"
 
-fun StringBuilder.appendUrlEncodedParam(key: String, value: String?) = append("&")
+private fun StringBuilder.appendUrlEncodedParam(key: String, value: String?) = append("&")
         .append(URLEncoder.encode(key, "UTF-8"))
         .append("=")
         .append(value?.let { URLEncoder.encode(it, "UTF-8") } ?: "")

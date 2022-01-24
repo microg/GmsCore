@@ -12,20 +12,18 @@ dependencies {
     api project(':play-services-safetynet-api')
 
     implementation project(':play-services-base-core')
+    implementation project(':play-services-base-core-ui')
     implementation project(':play-services-droidguard')
     implementation project(':play-services-droidguard-core')
-    implementation project(':play-services-safetynet-core-proto')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
-
-    implementation "com.android.volley:volley:$volleyVersion"
-    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation "androidx.webkit:webkit:$webkitVersion"
 }
 
 android {
@@ -58,4 +56,4 @@ android {
 
 apply from: '../gradle/publish-android.gradle'
 
-description = 'microG service implementation for play-services-safetynet'
+description = 'UI for microG service implementation for play-services-safetynet'
