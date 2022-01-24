@@ -15,7 +15,7 @@ Also, this fork applies the following compared to original microG
 - Fake device info to bypass Google's restrictions
 - Based on YouTube Vanced's codebase
 
-### Please refer to the [wiki](https://github.com/jcchikikomori/GmsCoreHuawei/wiki) for downloads and instructions. Also check my [article](https://johncyrillcorsanes.medium.com/google-alternatives-for-huawei-devices-c91f6fae6300)
+### Please refer to the [wiki](https://github.com/jcchikikomori/GmsCoreHuawei/wiki) for downloads and instructions. Also check my [article](https://jcchikikomori.github.io/blog/article/google-alternatives-for-huawei-devices/)
 
 DISCLAIMER
 -------
