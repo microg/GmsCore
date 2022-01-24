@@ -21,11 +21,20 @@ DISCLAIMER
 -------
     This project is not recommended for production & enterprise purposes, since device faking is somewhat illegal in Google's legal terms.
     This is only a experiment on how Google Services works on the entire Android space.
-    
+
 ## Contribute
 
-I am working on a private company full time, so if can contribute to lift my workload, please go on and make a PR.
+I am working on a private company full time, and i don't have much time to learn such as
+Google APIs, Kotlin, etc, so if can contribute to lift my workload, please go on and make a PR.
 I don't have exact format but i will review as much as i can.
+
+## Future Goal
+
+- Create a rootless variant with working signature (just like YouTube Vanced did)
+- Patch/Modify Google Apps (except system apps) to recognize MicroG
+    - Apply FakeGApps (Xposed module) 
+- Remove "HUAWEI" button, since we can apply to other Google-less devices
+- Prevent using WebView, use Custom/Dynamic WebVIew instead
 
 License
 -------
