@@ -42,7 +42,7 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
             runAttest.setIcon(R.drawable.ic_circle_pending)
             runAttest.setSummary(R.string.pref_test_summary_running)
             val handler = Handler(Looper.myLooper()!!)
-            SafetyNetClientServiceImpl(context, "com.scottyab.safetynet.sample", lifecycle).attestWithApiKey(object : ISafetyNetCallbacks.Default() {
+            SafetyNetClientServiceImpl(context, context.packageName, lifecycle).attestWithApiKey(object : ISafetyNetCallbacks.Default() {
                 override fun onAttestationData(status: Status?, attestationData: AttestationData?) {
                     handler.post {
                         if (status?.isSuccess == true) {
@@ -95,7 +95,7 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
                         }
                     }
                 }
-            }, Random.nextBytes(32), "AIzaSyAfcNLBpWkqrt50mluU6GswUmtysmLn9cY")
+            }, Random.nextBytes(32), "AIzaSyCcJO6IZiA5Or_AXw3LFdaTCmpnfL4pJ-Q")
             true
         }
         runReCaptcha.setOnPreferenceClickListener {
@@ -103,7 +103,7 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
             runReCaptcha.setIcon(R.drawable.ic_circle_pending)
             runReCaptcha.setSummary(R.string.pref_test_summary_running)
             val handler = Handler(Looper.myLooper()!!)
-            SafetyNetClientServiceImpl(context, "com.blogspot.android_er.recaptcha", lifecycle).verifyWithRecaptcha(object : ISafetyNetCallbacks.Default() {
+            SafetyNetClientServiceImpl(context, context.packageName, lifecycle).verifyWithRecaptcha(object : ISafetyNetCallbacks.Default() {
                 override fun onRecaptchaResult(status: Status?, recaptchaResultData: RecaptchaResultData?) {
                     handler.post {
                         if (status?.isSuccess == true) {
@@ -115,7 +115,7 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
                         }
                     }
                 }
-            }, "6LdMKyUUAAAAAN0ndw7byI03_qpbpjxKY-mTQnLw")
+            }, "6Lc4TzgeAAAAAJnW7Jbo6UtQ0xGuTKjHAeyhINuq")
             true
         }
     }

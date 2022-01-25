@@ -100,9 +100,6 @@ public class Attestation {
         try {
             return ByteString.of(getPackageFileDigest(context, packageName));
         } catch (Exception e) {
-            if (packageName.equals("com.scottyab.safetynet.sample")) {
-                return ByteString.decodeHex("66a3b8ff8c9444ec14eee94fa006548c4c7b542d54c27f3b06635e459e77c9a0");
-            }
             Log.w(TAG, e);
             return null;
         }
@@ -130,9 +127,6 @@ public class Attestation {
             }
             return res;
         } catch (Exception e) {
-            if (packageName.equals("com.scottyab.safetynet.sample")) {
-                return Collections.singletonList(ByteString.decodeHex("31936c0e1cfc54024c985c4f3eca37f1946f644eabed5232cd4ab2a646a41bc1"));
-            }
             Log.w(TAG, e);
             return null;
         }

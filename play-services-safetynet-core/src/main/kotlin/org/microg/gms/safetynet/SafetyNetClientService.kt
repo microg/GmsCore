@@ -148,22 +148,14 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
         val packageFileDigest = try {
             Base64.encodeToString(Attestation.getPackageFileDigest(context, packageName), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING)
         } catch (e: Exception) {
-            if (packageName == "com.blogspot.android_er.recaptcha") {
-                "kXkOWm-DT-q__5MnrdyCRLowptdd2PjNA1RAnyQ1A-4"
-            } else {
-                callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
-                return
-            }
+            callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
+            return
         }
         val packageSignatures = try {
             Attestation.getPackageSignatures(context, packageName).map { Base64.encodeToString(it, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING) }
         } catch (e: Exception) {
-            if (packageName == "com.blogspot.android_er.recaptcha") {
-                listOf("xgEpqm72luj7TLUt7kMxIyN-orV6v03_T_yCkR4A93Y")
-            } else {
-                callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
-                return
-            }
+            callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
+            return
         }
         params.appendUrlEncodedParam("k", siteKey)
                 .appendUrlEncodedParam("di", androidId.toString())
