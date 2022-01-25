@@ -91,20 +91,20 @@ class DeviceRegistrationPreferencesFragment : PreferenceFragmentCompat() {
         val configuredProfile = ProfileManager.getConfiguredProfile(context)
         val autoProfile = ProfileManager.getAutoProfile(context)
         val autoProfileName = when (autoProfile) {
-            PROFILE_NATIVE -> "Native"
-            PROFILE_REAL -> "Real"
+            PROFILE_NATIVE -> getString(R.string.profile_name_native)
+            PROFILE_REAL -> getString(R.string.profile_name_real)
             else -> ProfileManager.getProfileName(context, autoProfile)
         }
         val profiles =
             mutableListOf(PROFILE_AUTO, PROFILE_NATIVE, PROFILE_REAL)
-        val profileNames = mutableListOf("Automatic: $autoProfileName", "Native", "Real")
+        val profileNames = mutableListOf(getString(R.string.profile_name_auto, autoProfileName), getString(R.string.profile_name_native), getString(R.string.profile_name_real))
         if (ProfileManager.hasProfile(context, PROFILE_SYSTEM)) {
             profiles.add(PROFILE_SYSTEM)
-            profileNames.add("System: ${ProfileManager.getProfileName(context, PROFILE_SYSTEM)}")
+            profileNames.add(getString(R.string.profile_name_system, ProfileManager.getProfileName(context, PROFILE_SYSTEM)))
         }
         if (ProfileManager.hasProfile(context, PROFILE_USER)) {
             profiles.add(PROFILE_USER)
-            profileNames.add("Custom: ${ProfileManager.getProfileName(context, PROFILE_USER)}")
+            profileNames.add(getString(R.string.profile_name_user, ProfileManager.getProfileName(context, PROFILE_USER)))
         }
         for (profile in R.xml::class.java.declaredFields.map { it.name }
             .filter { it.startsWith("profile_") }
