@@ -26,9 +26,6 @@
     <string name="notification_service_content">Klepnutím zde přejděte do nastavení a zakažte optimalizaci baterie pro aplikaci Vanced microG. Po provedení této akce a restartu zařízení toto oznámení zmizí</string>
 
     <string name="just_a_sec">Počkejte chviličku…</string>
-    <string name="ask_permission_tos">Pokud budete pokračovat, povolíte této aplikaci a společnosti Google využívat vaše informace v souladu s jejich příslušnými podmínkami služby a zásadami ochrany osobních údajů.</string>
-    <string name="ask_scope_permission_title">Aplikace <xliff:g example="F-Droid">%1$s</xliff:g> by chtěla:</string>
-    <string name="ask_service_permission_title">Aplikace <xliff:g example="F-Droid">%1$s</xliff:g> by chtěla použít:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Promiňte…</string>
     <string name="auth_before_connect">"Aplikace na vašem zařízení se pokouší přihlásit se k účtu Google.
@@ -47,10 +44,6 @@ Zkuste to později."</string>
     <string name="auth_finalize">"Vaše zařízení právě kontaktuje Google za účelem uložení informací do vašeho účtu.
 
 Tato akce může trvat několik minut."</string>
-    <string name="allow">Povolit</string>
-    <string name="deny">Zamítnout</string>
-    <string name="auth_notification_title">Je vyžadováno ověření</string>
-    <string name="auth_notification_content">Aplikace <xliff:g example="F-Droid">%1$s</xliff:g> pro přístup k vašemu účtu Google vyžaduje vaše ověření.</string>
 
     <string name="perm_status_broadcast_label">poslouchat interní stavová vysílání</string>
     <string name="perm_c2dm_receive_label">poslouchat zprávy C2DM</string>
@@ -81,10 +74,6 @@ Tato akce může trvat několik minut."</string>
 
     <string name="checkin_not_registered">Neregistrováno</string>
     <string name="checkin_last_registration">Naposledy registrováno: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-
-    <string name="cond_gcm_bat_title">Optimalizace baterie jsou povoleny</string>
-    <string name="cond_gcm_bat_summary">Máte povolenou funkci Cloud Messaging, ale zároveň máte aktivní i optimalizace baterie pro microG Services Core. Aby vám mohla být doručována push oznámení, je potřeba optimalizace baterie zakázat.</string>
-    <string name="cond_gcm_bat_action">Zakázat optimalizace</string>
 
     <string name="prefs_account">Předvolby účtu</string>
     <string name="prefs_account_privacy">Osobní informace a soukromí</string>
@@ -128,7 +117,6 @@ Tato akce může trvat několik minut."</string>
     <string name="gcm_network_state_connected">Připojeno: <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Povolit registraci</string>
-    <string name="pref_push_app_allow_register_ask">Povolit aplikaci {appName} registraci pro příjem push oznámení?</string>
     <string name="pref_push_app_allow_register_summary">Povolit aplikaci registraci pro příjem push oznámení.</string>
     <string name="pref_push_app_wake_for_delivery_title">Spouštět aplikaci pro přijímání push zpráv</string>
     <string name="pref_push_app_wake_for_delivery_summary">Spouštět aplikaci na pozadí, aby mohla přijímat příchozí push zprávy.</string>

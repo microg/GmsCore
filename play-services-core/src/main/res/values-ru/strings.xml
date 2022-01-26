@@ -26,9 +26,6 @@
     <string name="notification_service_content">Нажмите здесь, чтобы отключить режим энергосбережения для microG. Затем перезагрузите устройство, чтобы отключить уведомление.</string>
 
     <string name="just_a_sec">Секундочку…</string>
-    <string name="ask_permission_tos">Продолжая, вы разрешаете этому приложению и Google использовать вашу информацию в соответствии с их соответствующими условиями использования и политикой конфиденциальности.</string>
-    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> требует разрешение на:</string>
-    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хочет использовать:</string>
     <string name="account_manager_title">Настройки аккаунта Google</string>
     <string name="sorry">Извините…</string>
     <string name="auth_before_connect">"Это приложение на вашем устройстве пытается подключиться к вашему аккаунту Google.
@@ -47,10 +44,6 @@
     <string name="auth_finalize">"Ваше устройство получает данные авторизации от Google.
 
 Это может занять несколько минут."</string>
-    <string name="allow">Разрешить</string>
-    <string name="deny">Отклонить</string>
-    <string name="auth_notification_title">Необходима авторизация</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> требует вас авторизироваться в аккаунт Google.</string>
 
     <string name="perm_status_broadcast_label">прослушивать внутренние сообщения о состоянии</string>
     <string name="perm_c2dm_receive_label">прослушивать C2DM сообщения</string>
@@ -81,10 +74,6 @@
 
     <string name="checkin_not_registered">Не зарегистрирован</string>
     <string name="checkin_last_registration">Последняя регистрация: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-
-    <string name="cond_gcm_bat_title">Включена экономия заряда батареи</string>
-    <string name="cond_gcm_bat_summary">Вы включили Cloud Messaging, но не отключили экономию заряда батареи для Vanced microG. Для корректной работы уведомлений вам нужно отключить экономию заряда батареи.</string>
-    <string name="cond_gcm_bat_action">Отключить экономию</string>
 
     <string name="prefs_account">Настройки аккаунта</string>
     <string name="prefs_account_privacy">Конфиденциальность</string>
@@ -128,7 +117,6 @@
     <string name="gcm_network_state_connected">Соединено: <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Разрешать авторизацию</string>
-    <string name="pref_push_app_allow_register_ask">Разрешить приложению {appName} регистрацию для push-уведомлений.</string>
     <string name="pref_push_app_allow_register_summary">Разрешить приложению регистрацию для push-уведомлений.</string>
     <string name="pref_push_app_wake_for_delivery_title">Запуск приложения при уведомлении</string>
     <string name="pref_push_app_wake_for_delivery_summary">Запуск приложения в фоне для получения уведомлений.</string>

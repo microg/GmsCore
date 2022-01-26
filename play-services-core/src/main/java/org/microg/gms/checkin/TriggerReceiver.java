@@ -55,14 +55,14 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
                     subIntent.putExtra(EXTRA_FORCE_CHECKIN, force);
                     startWakefulService(new ForegroundServiceContext(context), subIntent);
                 } else if (SDK_INT >= 23) {
-                // no network, register a network callback to retry when we have internet
-                NetworkRequest networkRequest = new NetworkRequest.Builder()
-                        .addCapability(NET_CAPABILITY_INTERNET)
-                        .build();
-                Intent i = new Intent(context, TriggerReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, i, FLAG_UPDATE_CURRENT);
-                cm.registerNetworkCallback(networkRequest, pendingIntent);
-            }
+                    // no network, register a network callback to retry when we have internet
+                    NetworkRequest networkRequest = new NetworkRequest.Builder()
+                            .addCapability(NET_CAPABILITY_INTERNET)
+                            .build();
+                    Intent i = new Intent(context, TriggerReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, i, FLAG_UPDATE_CURRENT);
+                    cm.registerNetworkCallback(networkRequest, pendingIntent);
+                }
             } else {
                 Log.d(TAG, "Ignoring " + intent + ": checkin is disabled");
             }

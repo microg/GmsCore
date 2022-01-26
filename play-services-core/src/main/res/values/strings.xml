@@ -16,7 +16,6 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
     <string name="gms_settings_name">Vanced microG Settings</string>
     <string name="gms_settings_summary">Setup Vanced microG.</string>
 
@@ -26,9 +25,6 @@
     <string name="notification_service_content">Tap here to disable battery optimization for vanced microG, then restart the device to remove this notification</string>
 
     <string name="just_a_sec">Just a sec…</string>
-    <string name="ask_permission_tos">By continuing, you allow this app and Google to use your information in accordance with their respective terms of service and privacy policies.</string>
-    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to:</string>
-    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Sorry…</string>
     <string name="auth_before_connect">"An app on your device is trying to sign in to a Google account.
@@ -47,10 +43,6 @@ Try again later."</string>
     <string name="auth_finalize">"Your device is contacting Google to save information to your account.
 
 This can take a couple of minutes."</string>
-    <string name="allow">Allow</string>
-    <string name="deny">Deny</string>
-    <string name="auth_notification_title">Authentication required</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> requires your authorization to access your Google account.</string>
 
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
@@ -81,10 +73,6 @@ This can take a couple of minutes."</string>
 
     <string name="checkin_not_registered">Not registered</string>
     <string name="checkin_last_registration">Last registration: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-
-    <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
-    <string name="cond_gcm_bat_summary">You enabled Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should disable battery optimizations.</string>
-    <string name="cond_gcm_bat_action">Disable optimization</string>
 
     <string name="prefs_account">Account preferences</string>
     <string name="prefs_account_privacy">Personal info &amp; privacy</string>
@@ -128,7 +116,6 @@ This can take a couple of minutes."</string>
     <string name="gcm_network_state_connected">Connected since <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Allow registration</string>
-    <string name="pref_push_app_allow_register_ask">Allow {appName} to register for push notifications?</string>
     <string name="pref_push_app_allow_register_summary">Allow the app to register for push notifications.</string>
     <string name="pref_push_app_wake_for_delivery_title">Start app on push message</string>
     <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
@@ -139,4 +126,14 @@ This can take a couple of minutes."</string>
     <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
     <string name="pref_cast_double_fix_summary">Enable this if you see duplicates in your casting menu</string>
 
+    <string name="device_profile_name">Device profile</string>
+    <string name="profile_name">Select profile</string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_user">Custom: %s</string>
+    <string name="profile_name_auto">Automatic: %s</string>
+    <string name="profile_name_system">System: %s</string>
+    <string name="import_profile_name">Import custom profile</string>
+    <string name="import_profile_summary">Import device profile from file</string>
+    <string name="serial_name">Serial</string>
 </resources>

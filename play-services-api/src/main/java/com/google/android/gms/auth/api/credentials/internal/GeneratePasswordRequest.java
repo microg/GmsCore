@@ -19,5 +19,5 @@ package com.google.android.gms.auth.api.credentials.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class GeneratePasswordRequest extends AutoSafeParcelable {
-    public static final Creator<GeneratePasswordRequest> CREATOR = new AutoCreator<>(GeneratePasswordRequest.class);
+    public static final Creator<GeneratePasswordRequest> CREATOR = new AutoCreator<GeneratePasswordRequest>(GeneratePasswordRequest.class);
 }

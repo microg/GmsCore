@@ -30,5 +30,5 @@ public class ConfirmCredentialsRequest extends AutoSafeParcelable {
     @SafeParceled(3)
     public CaptchaSolution captchaSolution;
 
-    public static final Creator<ConfirmCredentialsRequest> CREATOR = new AutoCreator<>(ConfirmCredentialsRequest.class);
+    public static final Creator<ConfirmCredentialsRequest> CREATOR = new AutoCreator<ConfirmCredentialsRequest>(ConfirmCredentialsRequest.class);
 }

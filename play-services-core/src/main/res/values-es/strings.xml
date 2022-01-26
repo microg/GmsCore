@@ -26,9 +26,6 @@
     <string name="notification_service_content">Toque aqui y deshabilita la optimización de batería para vanced microG, luego reinicie el dispositivo para cerrar esta notificación</string>
 
     <string name="just_a_sec">Solo un momento…</string>
-    <string name="ask_permission_tos">Al continuar, permites que esta app y Google usen tu información de acuerdo con sus respectivos términos de servicio y políticas de privacidad.</string>
-    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> Le gustaria que:</string>
-    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> Le gustaria usar:</string>
     <string name="account_manager_title">Administrador de Cuentas Google</string>
     <string name="sorry">Disculpa…</string>
     <string name="auth_before_connect">"Una app en tu dispositivo esta intentando iniciar sesión a una cuenta de Google.
@@ -47,10 +44,6 @@ Vuelva a intentar en un rato."</string>
     <string name="auth_finalize">"Tu dispositivo esta contactando a Google para guardar información en tu cuenta.
 
 Esto puede tardar unos minutos."</string>
-    <string name="allow">Permitir</string>
-    <string name="deny">Denegar</string>
-    <string name="auth_notification_title">Autenticación requerida</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> requiere tu autorización para acceder a tu cuenta de Google.</string>
 
     <string name="perm_status_broadcast_label">escuchar transmisiones de estatus interno</string>
     <string name="perm_c2dm_receive_label">escuchar mensajes de C2DM</string>
@@ -81,10 +74,6 @@ Esto puede tardar unos minutos."</string>
 
     <string name="checkin_not_registered">No registrado</string>
     <string name="checkin_last_registration">Ultimo registro: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-
-    <string name="cond_gcm_bat_title">Optimizaciones de bateria habilitadas</string>
-    <string name="cond_gcm_bat_summary">Has habilitado Cloud Messaging pero tienes las optimizacion de bateria activada para los servicios de microG. Para que lleguen las notificaciones deberás deshabilitar la optimización de batería para microG.</string>
-    <string name="cond_gcm_bat_action">Deshabilitar optimizaciones</string>
 
     <string name="prefs_account">Preferencias de Cuenta</string>
     <string name="prefs_account_privacy">Informacion personal &amp; privacidad</string>
@@ -128,7 +117,6 @@ Esto puede tardar unos minutos."</string>
     <string name="gcm_network_state_connected">Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Permitir registro</string>
-    <string name="pref_push_app_allow_register_ask">Permita que {appName} se registre para notificaciones push?</string>
     <string name="pref_push_app_allow_register_summary">Permita la app para registrarse para notificaciones push.</string>
     <string name="pref_push_app_wake_for_delivery_title">Iniciar app en un mensaje push</string>
     <string name="pref_push_app_wake_for_delivery_summary">Iniciar app en segundo plano para recibir mensajes push entrantes.</string>

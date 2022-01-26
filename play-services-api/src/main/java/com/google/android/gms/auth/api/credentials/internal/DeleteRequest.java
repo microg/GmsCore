@@ -19,5 +19,5 @@ package com.google.android.gms.auth.api.credentials.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class DeleteRequest extends AutoSafeParcelable {
-    public static final Creator<DeleteRequest> CREATOR = new AutoCreator<>(DeleteRequest.class);
+    public static final Creator<DeleteRequest> CREATOR = new AutoCreator<DeleteRequest>(DeleteRequest.class);
 }

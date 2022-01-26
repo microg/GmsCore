@@ -30,5 +30,5 @@ public class AvatarReference extends AutoSafeParcelable {
     @SafeParceled(2)
     public String location;
 
-    public static final Creator<AvatarReference> CREATOR = new AutoCreator<>(AvatarReference.class);
+    public static final Creator<AvatarReference> CREATOR = new AutoCreator<AvatarReference>(AvatarReference.class);
 }

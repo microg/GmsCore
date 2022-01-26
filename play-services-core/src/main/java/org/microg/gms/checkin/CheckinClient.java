@@ -16,13 +16,14 @@
 
 package org.microg.gms.checkin;
 
+import android.content.Context;
 import android.util.Log;
 
-import org.microg.gms.common.Build;
 import org.microg.gms.common.DeviceConfiguration;
 import org.microg.gms.common.DeviceIdentifier;
 import org.microg.gms.common.PhoneInfo;
 import org.microg.gms.common.Utils;
+import org.microg.gms.profile.Build;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +76,7 @@ public class CheckinClient {
         return response;
     }
 
-    public static CheckinRequest makeRequest(Build build, DeviceConfiguration deviceConfiguration,
+    public static CheckinRequest makeRequest(Context context, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
                                              List<Account> accounts, Boolean brandSpoof) {
@@ -84,19 +85,19 @@ public class CheckinClient {
                 .androidId(checkinInfo.getAndroidId())
                 .checkin(new CheckinRequest.Checkin.Builder()
                         .build(new CheckinRequest.Checkin.Build.Builder()
-                                .bootloader(brandSpoof ? "c2f2-0.2-5799621" : build.bootloader)
-                                .brand(brandSpoof ? "google" : build.brand)
+                                .bootloader(brandSpoof ? "c2f2-0.2-5799621" : Build.BOOTLOADER)
+                                .brand(brandSpoof ? "google" : Build.BOOTLOADER)
                                 .clientId("android-google")
-                                .device(brandSpoof ? "generic" : build.device)
-                                .fingerprint(brandSpoof ? "google/coral/coral:10/QD1A.190821.007/5831595:user/release-keys" : build.fingerprint)
-                                .hardware(brandSpoof ? "coral" : build.hardware)
-                                .manufacturer(brandSpoof ? "Google" : build.manufacturer)
-                                .model(brandSpoof ? "mainline" : build.model)
+                                .device(brandSpoof ? "generic" : Build.DEVICE)
+                                .fingerprint(brandSpoof ? "google/coral/coral:10/QD1A.190821.007/5831595:user/release-keys" : Build.FINGERPRINT)
+                                .hardware(brandSpoof ? "coral" : Build.HARDWARE)
+                                .manufacturer(brandSpoof ? "Google" : Build.MANUFACTURER)
+                                .model(brandSpoof ? "mainline" : Build.MODEL)
                                 .otaInstalled(false) // TODO?
-                                .product(brandSpoof ? "coral" : build.product)
-                                .radio(brandSpoof ? "" : build.radio)
-                                .sdkVersion(brandSpoof ? 29 : build.sdk)
-                                .time(build.time / 1000)
+                                .product(brandSpoof ? "coral" : Build.PRODUCT)
+                                .radio(brandSpoof ? "" : Build.RADIO)
+                                .sdkVersion(brandSpoof ? 29 : Build.VERSION.SDK_INT)
+                                .time(Build.TIME / 1000)
                                 .build())
                         .cellOperator(phoneInfo.cellOperator)
                         .event(Collections.singletonList(new CheckinRequest.Checkin.Event.Builder()
@@ -135,7 +136,7 @@ public class CheckinClient {
                 .loggingId(new Random().nextLong()) // TODO: static
                 .meid(deviceIdent.meid)
                 .otaCert(Collections.singletonList("71Q6Rn2DDZl1zPDVaaeEHItd"))
-                .serial(build.serial)
+                .serial(Build.SERIAL)
                 .timeZone(TimeZone.getDefault().getID())
                 .userName((String) TODO)
                 .userSerialNumber((Integer) TODO)

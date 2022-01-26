@@ -57,5 +57,9 @@ public class AppMetadata extends AutoSafeParcelable {
     @Field(25)
     private String field25;
 
+    public String toString() {
+        return "AppMetadata[" + packageName + "]";
+    }
+
     public static final Creator<AppMetadata> CREATOR = new AutoCreator<>(AppMetadata.class);
 }

@@ -42,5 +42,5 @@ public class AccountRecoveryGuidanceRequest extends AutoSafeParcelable {
         this.account = account;
     }
 
-    public static final Creator<AccountRecoveryGuidanceRequest> CREATOR = new AutoCreator<>(AccountRecoveryGuidanceRequest.class);
+    public static final Creator<AccountRecoveryGuidanceRequest> CREATOR = new AutoCreator<AccountRecoveryGuidanceRequest>(AccountRecoveryGuidanceRequest.class);
 }

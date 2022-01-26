@@ -33,7 +33,6 @@ import java.util.List;
  * A geofence triggering event generated when a geofence transition happens.
  * An error happens after geofences are registered and being monitored.
  */
-@SuppressWarnings("unchecked")
 @PublicApi
 public class GeofencingEvent {
     @PublicApi(exclude = true)

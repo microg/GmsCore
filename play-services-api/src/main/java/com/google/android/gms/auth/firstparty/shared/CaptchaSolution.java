@@ -25,5 +25,5 @@ public class CaptchaSolution extends AutoSafeParcelable {
     @SafeParceled(1)
     private int versionCode = 1;
 
-    public static final Creator<CaptchaSolution> CREATOR = new AutoCreator<>(CaptchaSolution.class);
+    public static final Creator<CaptchaSolution> CREATOR = new AutoCreator<CaptchaSolution>(CaptchaSolution.class);
 }

@@ -19,10 +19,11 @@ package org.microg.gms.auth;
 import android.content.Context;
 
 import org.microg.gms.checkin.LastCheckinInfo;
-import org.microg.gms.common.Build;
+import org.microg.gms.profile.Build;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
+import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -77,8 +78,6 @@ public class AuthRequest extends HttpFormClient.Request {
     public boolean getAccountId;
     @RequestContent("ACCESS_TOKEN")
     public boolean isAccessToken;
-    @RequestContent("droidguard_results")
-    public String droidguardResults;
     @RequestContent("has_permission")
     public boolean hasPermission;
     @RequestContent("add_account")
@@ -91,10 +90,11 @@ public class AuthRequest extends HttpFormClient.Request {
         userAgent = String.format(USER_AGENT, deviceName, buildVersion);
     }
 
-    public AuthRequest build(Build build) {
-        sdkVersion = build.sdk;
-        deviceName = build.device;
-        buildVersion = build.id;
+    public AuthRequest build(Context context) {
+        ProfileManager.ensureInitialized(context);
+        sdkVersion = Build.VERSION.SDK_INT;
+        deviceName = Build.DEVICE;
+        buildVersion = Build.ID;
         return this;
     }
 
@@ -111,7 +111,7 @@ public class AuthRequest extends HttpFormClient.Request {
     }
 
     public AuthRequest fromContext(Context context) {
-        build(Utils.getBuild(context));
+        build(context);
         locale(Utils.getLocale(context));
         androidIdHex = Long.toHexString(LastCheckinInfo.read(context).getAndroidId());
         return this;
@@ -183,11 +183,6 @@ public class AuthRequest extends HttpFormClient.Request {
 
     public AuthRequest isAccessToken() {
         isAccessToken = true;
-        return this;
-    }
-
-    public AuthRequest droidguardResults(String droidguardResults) {
-        this.droidguardResults = droidguardResults;
         return this;
     }
 

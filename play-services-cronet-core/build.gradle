@@ -13,13 +13,13 @@ dependencies {
     // Need to find a better way to disable AOT for Cronet. Could be by packaging cronet as it's own apk that is
     // embedded in the main APK but only loaded at runtime so that the AOT compiler has no way to become active.
     // implementation("org.microg:cronet-api:$cronetVersion")
-    implementation("org.microg:cronet-common:$cronetVersion")
-    implementation("org.microg:cronet-native:$cronetVersion")
+    implementation("org.microg:cronet-common:91.0.4472.120.1")
+    implementation("org.microg:cronet-native:91.0.4472.120.1")
 }
 
 android {
     compileSdkVersion androidCompileSdk
-    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion androidMinSdk

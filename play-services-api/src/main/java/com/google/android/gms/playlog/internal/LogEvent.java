@@ -21,6 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 import java.util.Date;
 
+@Deprecated
 public class LogEvent extends AutoSafeParcelable {
 
     @SafeParceled(1)
@@ -50,5 +51,5 @@ public class LogEvent extends AutoSafeParcelable {
                 '}';
     }
 
-    public static Creator<LogEvent> CREATOR = new AutoCreator<>(LogEvent.class);
+    public static Creator<LogEvent> CREATOR = new AutoCreator<LogEvent>(LogEvent.class);
 }

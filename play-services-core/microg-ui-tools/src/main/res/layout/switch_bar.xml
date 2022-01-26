@@ -29,7 +29,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="@string/v7_preference_on"
-        android:theme="@style/TextAppearance.AppCompat.Title.Inverse"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Title.Inverse"/>
 
     <org.microg.tools.ui.ToggleSwitch
         android:id="@+id/switch_widget"

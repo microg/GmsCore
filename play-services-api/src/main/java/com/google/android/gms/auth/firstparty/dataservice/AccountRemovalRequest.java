@@ -42,5 +42,5 @@ public class AccountRemovalRequest extends AutoSafeParcelable {
         this.account = account;
     }
 
-    public static final Creator<AccountRemovalRequest> CREATOR = new AutoCreator<>(AccountRemovalRequest.class);
+    public static final Creator<AccountRemovalRequest> CREATOR = new AutoCreator<AccountRemovalRequest>(AccountRemovalRequest.class);
 }

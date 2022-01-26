@@ -22,10 +22,11 @@ dependencies {
 
 android {
     compileSdkVersion androidCompileSdk
-    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "30.0.3"
 
     aidlPackageWhiteList "com/google/android/gms/common/data/DataHolder.aidl"
     aidlPackageWhiteList "com/google/android/gms/common/images/WebImage.aidl"
+    aidlPackageWhiteList "com/google/android/gms/common/api/internal/IStatusCallback.aidl"
 
     defaultConfig {
         minSdkVersion androidMinSdk

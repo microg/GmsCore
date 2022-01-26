@@ -71,5 +71,5 @@ public class GoogleCertificatesQuery extends AutoSafeParcelable {
         return certData;
     }
 
-    public static final Creator<GoogleCertificatesQuery> CREATOR = new AutoCreator<>(GoogleCertificatesQuery.class);
+    public static final Creator<GoogleCertificatesQuery> CREATOR = new AutoCreator<GoogleCertificatesQuery>(GoogleCertificatesQuery.class);
 }

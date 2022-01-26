@@ -18,7 +18,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion androidCompileSdk
-    buildToolsVersion "$androidBuildVersionTools"
+    buildToolsVersion "30.0.3"
 
     aidlPackageWhiteList "com/google/android/gms/cast/ApplicationMetadata.aidl"
     aidlPackageWhiteList "com/google/android/gms/cast/LaunchOptions.aidl"

@@ -36,5 +36,5 @@ public class AccountMetadata extends AutoSafeParcelable {
     @SafeParceled(5)
     public boolean hasFeature4 = true;
 
-    public static Creator<AccountMetadata> CREATOR = new AutoCreator<>(AccountMetadata.class);
+    public static Creator<AccountMetadata> CREATOR = new AutoCreator<AccountMetadata>(AccountMetadata.class);
 }

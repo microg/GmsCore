@@ -22,13 +22,10 @@ public class CredentialRequest extends AutoSafeParcelable {
 
     @Field(1)
     private boolean passwordLoginSupported;
-
     @Field(2)
     private String[] accountTypes;
-
     @Field(3)
     private CredentialPickerConfig credentialPickerConfig;
-
     @Field(4)
     private CredentialPickerConfig credentialHintPickerConfig;
 
@@ -65,7 +62,7 @@ public class CredentialRequest extends AutoSafeParcelable {
         return passwordLoginSupported;
     }
 
-    public static final Creator<CredentialRequest> CREATOR = new AutoCreator<>(CredentialRequest.class);
+    public static final Creator<CredentialRequest> CREATOR = new AutoCreator<CredentialRequest>(CredentialRequest.class);
 
     public static class Builder {
         private boolean passwordLoginSupported;

@@ -19,5 +19,5 @@ package com.google.android.gms.auth.api.credentials.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class SaveRequest extends AutoSafeParcelable {
-    public static final Creator<SaveRequest> CREATOR = new AutoCreator<>(SaveRequest.class);
+    public static final Creator<SaveRequest> CREATOR = new AutoCreator<SaveRequest>(SaveRequest.class);
 }

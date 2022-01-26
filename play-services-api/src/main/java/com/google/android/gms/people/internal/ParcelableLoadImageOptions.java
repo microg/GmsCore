@@ -32,5 +32,5 @@ public class ParcelableLoadImageOptions extends AutoSafeParcelable {
     @SafeParceled(3)
     public boolean useLargePictureForCp2Images;
 
-    public static final Creator<ParcelableLoadImageOptions> CREATOR = new AutoCreator<>(ParcelableLoadImageOptions.class);
+    public static final Creator<ParcelableLoadImageOptions> CREATOR = new AutoCreator<ParcelableLoadImageOptions>(ParcelableLoadImageOptions.class);
 }
