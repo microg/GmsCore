@@ -16,6 +16,12 @@
 
 package org.microg.gms.gcm;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
+import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
+import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
+import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -28,12 +34,6 @@ import androidx.legacy.content.WakefulBroadcastReceiver;
 import org.microg.gms.checkin.CheckinPrefs;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N;
-import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
-import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
-import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";

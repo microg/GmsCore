@@ -17,9 +17,7 @@
 package org.microg.gms.location;
 
 import android.os.RemoteException;
-import android.util.Log;
 
-import com.google.android.gms.common.Feature;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 

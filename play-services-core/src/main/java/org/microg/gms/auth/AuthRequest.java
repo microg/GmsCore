@@ -16,20 +16,20 @@
 
 package org.microg.gms.auth;
 
+import static org.microg.gms.common.HttpFormClient.RequestContent;
+import static org.microg.gms.common.HttpFormClient.RequestHeader;
+
 import android.content.Context;
 
 import org.microg.gms.checkin.LastCheckinInfo;
-import org.microg.gms.profile.Build;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
+import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.util.Locale;
-
-import static org.microg.gms.common.HttpFormClient.RequestContent;
-import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
 public class AuthRequest extends HttpFormClient.Request {
     private static final String SERVICE_URL = "https://android.googleapis.com/auth";

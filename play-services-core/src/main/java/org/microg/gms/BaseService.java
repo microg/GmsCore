@@ -16,7 +16,6 @@
 
 package org.microg.gms;
 
-import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -32,7 +31,6 @@ import org.microg.gms.common.GmsService;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-
 import java.util.Arrays;
 import java.util.EnumSet;
 

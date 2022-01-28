@@ -13,7 +13,6 @@ import android.text.TextUtils;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 import java.util.List;

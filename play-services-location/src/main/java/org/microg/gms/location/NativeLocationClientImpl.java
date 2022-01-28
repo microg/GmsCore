@@ -16,6 +16,9 @@
 
 package org.microg.gms.location;
 
+import static android.location.LocationManager.KEY_LOCATION_CHANGED;
+import static android.location.LocationManager.KEY_PROXIMITY_ENTERING;
+
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,9 +47,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.location.LocationManager.KEY_LOCATION_CHANGED;
-import static android.location.LocationManager.KEY_PROXIMITY_ENTERING;
 
 @SuppressWarnings("MissingPermission")
 public class NativeLocationClientImpl {

@@ -16,12 +16,11 @@
 
 package com.google.android.gms.cast.framework.media;
 
-import java.util.List;
-
 import com.google.android.gms.cast.framework.media.INotificationActionsProvider;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
+
+import java.util.List;
 
 public class NotificationOptions extends AutoSafeParcelable {
 

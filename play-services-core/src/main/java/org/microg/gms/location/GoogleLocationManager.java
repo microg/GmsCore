@@ -16,6 +16,12 @@
 
 package org.microg.gms.location;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.location.LocationManager.GPS_PROVIDER;
+import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
+
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,6 +32,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
+
+import androidx.lifecycle.Lifecycle;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ILocationListener;
@@ -39,15 +47,6 @@ import org.microg.gms.common.Utils;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static android.location.LocationManager.GPS_PROVIDER;
-import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
-import static com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER;
-
-import androidx.lifecycle.Lifecycle;
 
 public class GoogleLocationManager implements LocationChangeListener {
     private static final String TAG = "LocationManager";

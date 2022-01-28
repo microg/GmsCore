@@ -5,8 +5,6 @@
 
 package com.google.android.gms.chimera.container;
 
-import android.util.Log;
-
 import java.util.Collection;
 import java.util.HashSet;
 

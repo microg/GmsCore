@@ -16,8 +16,11 @@
 
 package org.microg.gms.gcm;
 
-import android.content.Context;
+import static org.microg.gms.common.HttpFormClient.RequestContent;
+import static org.microg.gms.common.HttpFormClient.RequestContentDynamic;
+import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 
@@ -29,10 +32,6 @@ import org.microg.gms.profile.ProfileManager;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static org.microg.gms.common.HttpFormClient.RequestContent;
-import static org.microg.gms.common.HttpFormClient.RequestContentDynamic;
-import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
 public class RegisterRequest extends HttpFormClient.Request {
     private static final String SERVICE_URL = "https://android.clients.google.com/c2dm/register3";

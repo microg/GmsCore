@@ -2,7 +2,8 @@ package org.microg.gms.gcm
 
 import android.content.Context
 import android.content.Intent
-import android.net.*
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.util.Log
 import org.microg.gms.gcm.TriggerReceiver.FORCE_TRY_RECONNECT
 import org.microg.mgms.settings.SettingsContract

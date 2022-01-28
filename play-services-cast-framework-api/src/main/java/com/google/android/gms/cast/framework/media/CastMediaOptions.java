@@ -17,7 +17,6 @@
 package com.google.android.gms.cast.framework.media;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 public class CastMediaOptions extends AutoSafeParcelable {
 

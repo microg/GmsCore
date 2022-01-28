@@ -19,7 +19,6 @@ package com.google.android.gms.location.internal;
 import com.google.android.gms.location.LocationRequest;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.List;
 

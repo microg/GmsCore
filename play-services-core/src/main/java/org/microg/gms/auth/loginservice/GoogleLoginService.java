@@ -16,11 +16,11 @@
 
 package org.microg.gms.auth.loginservice;
 
+import static android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-
-import static android.accounts.AccountManager.ACTION_AUTHENTICATOR_INTENT;
 
 public class GoogleLoginService extends Service {
     private AccountAuthenticator authenticator;

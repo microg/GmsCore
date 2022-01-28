@@ -16,6 +16,17 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
+
 import android.os.Handler;
 import android.util.Log;
 
@@ -32,17 +43,6 @@ import org.microg.gms.gcm.mcs.LoginResponse;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
 public class McsInputStream extends Thread implements Closeable {
     private static final String TAG = "GmsGcmMcsInput";

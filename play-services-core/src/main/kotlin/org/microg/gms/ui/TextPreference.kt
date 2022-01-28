@@ -7,7 +7,6 @@ package org.microg.gms.ui
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout

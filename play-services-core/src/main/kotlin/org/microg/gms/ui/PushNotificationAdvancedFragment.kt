@@ -9,9 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.TwoStatePreference
 import com.mgoogle.android.gms.R
-import org.microg.gms.gcm.*
+import org.microg.gms.gcm.GcmPrefs
+import org.microg.gms.gcm.getGcmServiceInfo
+import org.microg.gms.gcm.setGcmServiceConfiguration
 
 class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
     private lateinit var networkMobile: ListPreference

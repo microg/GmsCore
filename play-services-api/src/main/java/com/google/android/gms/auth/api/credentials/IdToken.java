@@ -10,7 +10,6 @@ package com.google.android.gms.auth.api.credentials;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 @PublicApi
 public class IdToken extends AutoSafeParcelable {

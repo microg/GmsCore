@@ -9,9 +9,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.XmlResourceParser
 import android.util.Log
+import org.microg.gms.utils.FileXmlResourceParser
 import org.microg.mgms.settings.SettingsContract
 import org.microg.mgms.settings.SettingsContract.Profile
-import org.microg.gms.utils.FileXmlResourceParser
 import org.xmlpull.v1.XmlPullParser
 import java.io.File
 import java.util.*

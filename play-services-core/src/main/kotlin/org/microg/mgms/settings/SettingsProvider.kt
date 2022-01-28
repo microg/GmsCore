@@ -17,10 +17,10 @@ import android.net.Uri
 import android.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
 import org.microg.gms.gcm.GcmPrefs
-import org.microg.mgms.settings.SettingsContract.Profile
 import org.microg.mgms.settings.SettingsContract.Auth
 import org.microg.mgms.settings.SettingsContract.CheckIn
 import org.microg.mgms.settings.SettingsContract.Gcm
+import org.microg.mgms.settings.SettingsContract.Profile
 import org.microg.mgms.settings.SettingsContract.getAuthority
 import java.io.File
 

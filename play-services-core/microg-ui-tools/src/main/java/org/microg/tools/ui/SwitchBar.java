@@ -17,6 +17,8 @@
 
 package org.microg.tools.ui;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Parcel;
@@ -34,8 +36,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
-
-import static android.os.Build.VERSION.SDK_INT;
 
 public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedChangeListener,
         View.OnClickListener {

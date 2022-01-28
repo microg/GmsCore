@@ -16,27 +16,23 @@
 
 package org.microg.gms.auth;
 
+import static android.accounts.AccountManager.KEY_ACCOUNTS;
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
+import static android.accounts.AccountManager.KEY_AUTHTOKEN;
+import static android.accounts.AccountManager.KEY_CALLER_PID;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.annotation.SuppressLint;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.RemoteException;
-import android.util.Base64;
 import android.util.Log;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
 import com.google.android.auth.IAuthManagerService;
-import com.mgoogle.android.gms.R;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
 import com.google.android.gms.auth.TokenData;
@@ -48,12 +44,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static android.accounts.AccountManager.KEY_ACCOUNTS;
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static android.accounts.AccountManager.KEY_CALLER_PID;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     private static final String TAG = "GmsAuthManagerSvc";

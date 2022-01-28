@@ -16,6 +16,9 @@
 
 package org.microg.gms.location;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
@@ -36,9 +39,6 @@ import com.google.android.gms.location.internal.LocationRequestUpdateData;
 
 import java.util.Arrays;
 import java.util.UUID;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class LocationRequestHelper {
     public static final String TAG = "GmsLocRequestHelper";

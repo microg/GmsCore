@@ -16,6 +16,10 @@
 
 package org.microg.gms.common;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
@@ -28,10 +32,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConKeeper";

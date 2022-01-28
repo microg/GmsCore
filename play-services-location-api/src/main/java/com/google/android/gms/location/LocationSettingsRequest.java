@@ -7,7 +7,6 @@ package com.google.android.gms.location;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.ArrayList;
 import java.util.Collection;

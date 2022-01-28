@@ -21,9 +21,9 @@ import android.os.Looper;
 
 import com.google.android.gms.cast.Cast;
 
+import org.microg.gms.common.api.ApiClient;
 import org.microg.gms.common.api.ApiClientBuilder;
 import org.microg.gms.common.api.ApiClientSettings;
-import org.microg.gms.common.api.ApiClient;
 import org.microg.gms.common.api.ConnectionCallbacks;
 import org.microg.gms.common.api.OnConnectionFailedListener;
 

@@ -9,16 +9,12 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.cast.media.CastMediaRouteProviderService
 import com.mgoogle.android.gms.R
-import org.microg.gms.checkin.CheckinClient
 import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.gcm.GcmDatabase
-import org.microg.gms.gcm.McsService
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.mgms.settings.SettingsContract
 import org.microg.tools.ui.ResourceSettingsFragment

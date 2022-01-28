@@ -16,8 +16,8 @@
 
 package com.google.android.gms.cast;
 
-import android.os.Bundle;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.google.android.gms.common.images.WebImage;

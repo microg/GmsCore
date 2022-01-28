@@ -16,6 +16,44 @@
 
 package org.microg.gms.gcm;
 
+import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
+import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
+import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
+import static org.microg.gms.gcm.McsConstants.ACTION_ACK;
+import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
+import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
+import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
+import static org.microg.gms.gcm.McsConstants.ACTION_SEND;
+import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
+import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_ACK;
+import static org.microg.gms.gcm.McsConstants.MSG_CONNECT;
+import static org.microg.gms.gcm.McsConstants.MSG_HEARTBEAT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -72,44 +110,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.net.ssl.SSLContext;
 
 import okio.ByteString;
-
-import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
-import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
-import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
-import static org.microg.gms.gcm.McsConstants.ACTION_ACK;
-import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
-import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
-import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
-import static org.microg.gms.gcm.McsConstants.ACTION_SEND;
-import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
-import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MSG_ACK;
-import static org.microg.gms.gcm.McsConstants.MSG_CONNECT;
-import static org.microg.gms.gcm.McsConstants.MSG_HEARTBEAT;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
-import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
 
 @ForegroundServiceInfo(value = "Cloud messaging", res = R.string.service_name_mcs)
 public class McsService extends Service implements Handler.Callback {

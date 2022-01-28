@@ -26,7 +26,6 @@ import com.google.android.gms.common.api.Scope;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.GmsService;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 

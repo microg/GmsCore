@@ -16,6 +16,8 @@
 
 package org.microg.gms.checkin;
 
+import static org.microg.gms.checkin.CheckinPrefs.isSpoofingEnabled;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
@@ -31,8 +33,6 @@ import org.microg.gms.gservices.GServices;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.microg.gms.checkin.CheckinPrefs.isSpoofingEnabled;
 
 public class CheckinManager {
     private static final String TAG = "GmsCheckinManager";

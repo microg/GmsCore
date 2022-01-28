@@ -6,7 +6,6 @@
 package com.google.android.gms.cast;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 public class RequestItem extends AutoSafeParcelable {
     @Field(2)

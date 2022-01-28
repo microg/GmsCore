@@ -16,12 +16,29 @@
 
 package org.microg.gms.auth.login;
 
+import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
+import static android.view.KeyEvent.KEYCODE_BACK;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
+import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
+import static org.microg.gms.checkin.CheckinPrefs.hideLauncherIcon;
+import static org.microg.gms.checkin.CheckinPrefs.isSpoofingEnabled;
+import static org.microg.gms.checkin.CheckinPrefs.setSpoofingEnabled;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -43,7 +60,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.preference.PreferenceManager;
 
 import com.mgoogle.android.gms.R;
 
@@ -52,7 +68,6 @@ import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthManager;
 import org.microg.gms.auth.AuthRequest;
 import org.microg.gms.auth.AuthResponse;
-import org.microg.gms.checkin.CheckinClient;
 import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
@@ -62,24 +77,6 @@ import org.microg.gms.ui.UtilsKt;
 
 import java.io.IOException;
 import java.util.Locale;
-
-import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
-import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
-import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
-import static android.view.KeyEvent.KEYCODE_BACK;
-import static android.view.View.INVISIBLE;
-import static android.view.View.VISIBLE;
-import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
-import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
-import static org.microg.gms.checkin.CheckinPrefs.hideLauncherIcon;
-import static org.microg.gms.checkin.CheckinPrefs.isSpoofingEnabled;
-import static org.microg.gms.checkin.CheckinPrefs.setSpoofingEnabled;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";

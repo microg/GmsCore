@@ -16,6 +16,12 @@
 
 package org.microg.gms.checkin;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
+import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.checkin.CheckinService.EXTRA_FORCE_CHECKIN;
+import static org.microg.gms.checkin.CheckinService.REGULAR_CHECKIN_INTERVAL;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -27,12 +33,6 @@ import android.util.Log;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import org.microg.gms.common.ForegroundServiceContext;
-
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
-import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.checkin.CheckinService.EXTRA_FORCE_CHECKIN;
-import static org.microg.gms.checkin.CheckinService.REGULAR_CHECKIN_INTERVAL;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsCheckinTrigger";

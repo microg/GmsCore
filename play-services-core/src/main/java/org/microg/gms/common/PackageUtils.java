@@ -16,6 +16,10 @@
 
 package org.microg.gms.common;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+
 import android.app.ActivityManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -35,10 +39,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 
 public class PackageUtils {
 

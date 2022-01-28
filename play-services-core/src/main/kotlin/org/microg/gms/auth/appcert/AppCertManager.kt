@@ -17,7 +17,6 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.mgoogle.android.gms.BuildConfig
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import okio.ByteString.Companion.of

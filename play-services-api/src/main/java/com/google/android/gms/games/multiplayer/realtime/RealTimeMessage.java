@@ -18,7 +18,6 @@ package com.google.android.gms.games.multiplayer.realtime;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 public final class RealTimeMessage implements Parcelable {
     public static final int RELIABLE = 1;

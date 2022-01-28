@@ -16,22 +16,6 @@
 
 package com.google.android.gms.common;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
-import android.util.Log;
-
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-
-import org.microg.gms.common.Constants;
-import org.microg.gms.common.PublicApi;
-
 import static com.google.android.gms.common.ConnectionResult.INTERNAL_ERROR;
 import static com.google.android.gms.common.ConnectionResult.INVALID_ACCOUNT;
 import static com.google.android.gms.common.ConnectionResult.NETWORK_ERROR;
@@ -42,6 +26,23 @@ import static com.google.android.gms.common.ConnectionResult.SERVICE_MISSING;
 import static com.google.android.gms.common.ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED;
 import static com.google.android.gms.common.ConnectionResult.SIGN_IN_REQUIRED;
 import static com.google.android.gms.common.ConnectionResult.SUCCESS;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+
+import org.microg.gms.common.Constants;
+import org.microg.gms.common.PublicApi;
 
 @PublicApi
 public class GoogleApiAvailability {

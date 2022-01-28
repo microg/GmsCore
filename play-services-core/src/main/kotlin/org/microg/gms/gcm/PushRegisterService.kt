@@ -6,7 +6,6 @@
 
 package org.microg.gms.gcm
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -22,7 +21,6 @@ import org.microg.gms.checkin.CheckinService
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.ForegroundServiceContext
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.common.Utils
 import org.microg.gms.gcm.GcmConstants.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume

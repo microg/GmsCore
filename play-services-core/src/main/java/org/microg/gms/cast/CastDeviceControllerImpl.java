@@ -16,9 +16,6 @@
 
 package org.microg.gms.cast;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -35,15 +32,18 @@ import com.google.android.gms.cast.internal.ICastDeviceControllerListener;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.BinderWrapper;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import su.litvak.chromecast.api.v2.Application;
 import su.litvak.chromecast.api.v2.ChromeCast;
-import su.litvak.chromecast.api.v2.Namespace;
-import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
-import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
-import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
 import su.litvak.chromecast.api.v2.ChromeCastConnectionEvent;
-import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastConnectionEventListener;
 import su.litvak.chromecast.api.v2.ChromeCastRawMessage;
+import su.litvak.chromecast.api.v2.ChromeCastRawMessageListener;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEvent;
+import su.litvak.chromecast.api.v2.ChromeCastSpontaneousEventListener;
+import su.litvak.chromecast.api.v2.Namespace;
 
 public class CastDeviceControllerImpl extends ICastDeviceController.Stub implements
     ChromeCastConnectionEventListener,

@@ -24,16 +24,13 @@ import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.ICastStateListener;
 import com.google.android.gms.cast.framework.ISessionManager;
 import com.google.android.gms.cast.framework.ISessionManagerListener;
-import com.google.android.gms.cast.framework.internal.CastContextImpl;
-import com.google.android.gms.cast.framework.internal.SessionImpl;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Set;
-import java.util.HashSet;
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class SessionManagerImpl extends ISessionManager.Stub {
     private static final String TAG = SessionManagerImpl.class.getSimpleName();

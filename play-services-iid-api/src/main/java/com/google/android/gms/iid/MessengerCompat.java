@@ -16,6 +16,9 @@
 
 package com.google.android.gms.iid;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.LOLLIPOP;
+
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,9 +27,6 @@ import android.os.Messenger;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 public class MessengerCompat implements Parcelable {
     private Messenger messenger;

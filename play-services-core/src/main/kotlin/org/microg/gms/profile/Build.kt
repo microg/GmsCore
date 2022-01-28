@@ -6,9 +6,6 @@
 package org.microg.gms.profile
 
 import android.annotation.TargetApi
-import android.content.Context
-import android.os.Build
-import kotlin.random.Random
 
 object Build {
     @JvmField

@@ -1,17 +1,17 @@
 package org.microg.gms.gcm;
 
+import static android.content.Intent.ACTION_PACKAGE_DATA_CLEARED;
+import static android.content.Intent.ACTION_PACKAGE_FULLY_REMOVED;
+import static android.content.Intent.ACTION_PACKAGE_REMOVED;
+import static android.content.Intent.EXTRA_DATA_REMOVED;
+import static android.content.Intent.EXTRA_REPLACING;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import java.util.List;
-
-import static android.content.Intent.ACTION_PACKAGE_REMOVED;
-import static android.content.Intent.ACTION_PACKAGE_DATA_CLEARED;
-import static android.content.Intent.ACTION_PACKAGE_FULLY_REMOVED;
-import static android.content.Intent.EXTRA_DATA_REMOVED;
-import static android.content.Intent.EXTRA_REPLACING;
 
 public class UnregisterReceiver extends BroadcastReceiver {
     private static final String TAG = "GmsGcmUnregisterRcvr";

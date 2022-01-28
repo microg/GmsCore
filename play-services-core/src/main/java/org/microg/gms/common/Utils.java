@@ -16,6 +16,8 @@
 
 package org.microg.gms.common;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -23,8 +25,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class Utils {
 

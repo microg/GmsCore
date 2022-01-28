@@ -8,9 +8,6 @@ package com.google.android.gms.chimera.container;
 import java.util.Collection;
 import java.util.Collections;
 
-import static android.content.Context.CONTEXT_IGNORE_SECURITY;
-import static android.content.Context.CONTEXT_INCLUDE_CODE;
-
 public class DynamiteModuleInfo {
     private Class<?> descriptor;
     private String moduleId;

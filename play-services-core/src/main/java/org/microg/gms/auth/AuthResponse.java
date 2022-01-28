@@ -16,11 +16,11 @@
 
 package org.microg.gms.auth;
 
+import static org.microg.gms.common.HttpFormClient.ResponseField;
+
 import android.util.Log;
 
 import java.lang.reflect.Field;
-
-import static org.microg.gms.common.HttpFormClient.ResponseField;
 
 public class AuthResponse {
     private static final String TAG = "GmsAuthResponse";
