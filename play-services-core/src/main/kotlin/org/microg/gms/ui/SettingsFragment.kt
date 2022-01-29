@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+@file:Suppress("UnusedImport")
+
 package org.microg.gms.ui
 
 import android.content.ComponentName
@@ -18,6 +20,8 @@ import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.mgms.settings.SettingsContract
 import org.microg.tools.ui.ResourceSettingsFragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 
 class SettingsFragment : ResourceSettingsFragment() {
 
