@@ -54,7 +54,7 @@ public class CheckinService extends IntentService {
     public static final String EXTRA_RESULT_RECEIVER = "receiver";
     public static final String EXTRA_NEW_CHECKIN_TIME = "checkin_time";
 
-    private ICheckinService iface = new ICheckinService.Stub() {
+    private final ICheckinService iface = new ICheckinService.Stub() {
         @Override
         public String getDeviceDataVersionInfo() throws RemoteException {
             return LastCheckinInfo.read(CheckinService.this).getDeviceDataVersionInfo();

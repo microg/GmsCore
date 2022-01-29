@@ -52,12 +52,12 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
 
     private final TextAppearanceSpan mSummarySpan;
 
-    private ToggleSwitch mSwitch;
-    private TextView mTextView;
+    private final ToggleSwitch mSwitch;
+    private final TextView mTextView;
     private String mLabel;
     private String mSummary;
 
-    private ArrayList<OnSwitchChangeListener> mSwitchChangeListeners =
+    private final ArrayList<OnSwitchChangeListener> mSwitchChangeListeners =
             new ArrayList<>();
 
     public SwitchBar(Context context) {

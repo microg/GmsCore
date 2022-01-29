@@ -14,7 +14,7 @@ public class ProxyResponse extends AutoSafeParcelable {
     public static final int STATUS_CODE_NO_CONNECTION = -1;
 
     @Field(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @Field(1)
     public int gmsStatusCode;
     @Field(2)

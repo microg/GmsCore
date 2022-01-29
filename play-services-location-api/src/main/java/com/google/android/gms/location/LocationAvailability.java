@@ -55,7 +55,7 @@ public class LocationAvailability extends AutoSafeParcelable {
     public static final int STATUS_IN_PROGRESS = 8;
 
     @SafeParceled(1000)
-    private int versionCode = 2;
+    private final int versionCode = 2;
 
     @SafeParceled(1)
     @PublicApi(exclude = true)

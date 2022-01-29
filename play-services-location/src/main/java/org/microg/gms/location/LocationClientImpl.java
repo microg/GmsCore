@@ -44,7 +44,7 @@ import java.util.Map;
 public class LocationClientImpl extends GoogleLocationManagerClient {
     private static final String TAG = "GmsLocationClientImpl";
     private NativeLocationClientImpl nativeLocation = null;
-    private Map<LocationListener, ILocationListener> listenerMap = new HashMap<LocationListener, ILocationListener>();
+    private final Map<LocationListener, ILocationListener> listenerMap = new HashMap<LocationListener, ILocationListener>();
 
 
     public LocationClientImpl(Context context, ConnectionCallbacks callbacks,

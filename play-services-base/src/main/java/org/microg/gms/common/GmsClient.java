@@ -44,7 +44,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiClient {
     protected ConnectionState state = ConnectionState.NOT_CONNECTED;
     private ServiceConnection serviceConnection;
     private I serviceInterface;
-    private String actionString;
+    private final String actionString;
 
     protected int serviceId = -1;
     protected Account account = null;

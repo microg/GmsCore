@@ -21,7 +21,7 @@ public class DeviceOrientation extends AutoSafeParcelable {
     @Field(5)
     private float headingErrorDegrees = Float.NaN;
     @Field(6)
-    private long elapsedRealtimeNanos = 0;
+    private final long elapsedRealtimeNanos = 0;
     @Field(7)
     private byte flags = 0;
     @Field(8)

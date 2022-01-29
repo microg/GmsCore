@@ -39,7 +39,7 @@ public final class Status extends AutoSafeParcelable implements Result {
     public static final Status SUCCESS = new Status(CommonStatusCodes.SUCCESS, "Success");
 
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(1)
     private final int statusCode;

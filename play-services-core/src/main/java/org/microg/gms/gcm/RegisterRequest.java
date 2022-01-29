@@ -63,7 +63,7 @@ public class RegisterRequest extends HttpFormClient.Request {
     @RequestContent("target_ver")
     public Integer sdkVersion;
     @RequestContentDynamic
-    private Map<String, String> extraParams = new LinkedHashMap<>();
+    private final Map<String, String> extraParams = new LinkedHashMap<>();
 
     @Override
     public void prepare() {

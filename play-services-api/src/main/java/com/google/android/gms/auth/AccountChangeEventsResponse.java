@@ -24,9 +24,9 @@ import java.util.List;
 
 public class AccountChangeEventsResponse extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @SafeParceled(value = 2, subClass = AccountChangeEvent.class)
-    private List<AccountChangeEvent> events;
+    private final List<AccountChangeEvent> events;
 
     public AccountChangeEventsResponse() {
         events = new ArrayList<AccountChangeEvent>();

@@ -23,10 +23,10 @@ import dalvik.system.PathClassLoader;
 
 public class DynamiteContext extends ContextWrapper {
     private static final String TAG = "DynamiteContext";
-    private DynamiteModuleInfo moduleInfo;
-    private Context originalContext;
-    private Context gmsContext;
-    private DynamiteContext appContext;
+    private final DynamiteModuleInfo moduleInfo;
+    private final Context originalContext;
+    private final Context gmsContext;
+    private final DynamiteContext appContext;
 
     private ClassLoader classLoader;
 

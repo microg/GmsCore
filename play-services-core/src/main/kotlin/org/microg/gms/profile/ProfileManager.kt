@@ -17,6 +17,7 @@ import java.io.File
 import java.util.*
 import kotlin.random.Random
 
+@Suppress("Warnings")
 object ProfileManager {
     private const val TAG = "ProfileManager"
     const val PROFILE_REAL = "real"

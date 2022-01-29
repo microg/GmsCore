@@ -21,7 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class SuggestionResults extends AutoSafeParcelable {
     @SafeParceled(1000)
-    private int versionCode;
+    private final int versionCode;
     @SafeParceled(1)
     public final String errorMessage;
 

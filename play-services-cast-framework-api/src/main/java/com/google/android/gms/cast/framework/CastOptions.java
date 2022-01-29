@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class CastOptions extends AutoSafeParcelable {
     @Field(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @Field(2)
     private String receiverApplicationId;
     @Field(3)

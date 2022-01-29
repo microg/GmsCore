@@ -27,25 +27,25 @@ import org.microg.safeparcel.SafeParceled;
 public class LocationSettingsStates extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    private int versionCode = 2;
+    private final int versionCode = 2;
 
     @SafeParceled(1)
-    private boolean gpsUsable;
+    private final boolean gpsUsable;
 
     @SafeParceled(2)
-    private boolean networkLocationUsable;
+    private final boolean networkLocationUsable;
 
     @SafeParceled(3)
-    private boolean bleUsable;
+    private final boolean bleUsable;
 
     @SafeParceled(4)
-    private boolean gpsPresent;
+    private final boolean gpsPresent;
 
     @SafeParceled(5)
-    private boolean networkLocationPresent;
+    private final boolean networkLocationPresent;
 
     @SafeParceled(6)
-    private boolean blePresent;
+    private final boolean blePresent;
 
     public boolean isBlePresent() {
         return blePresent;

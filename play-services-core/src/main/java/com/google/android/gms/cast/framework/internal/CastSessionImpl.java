@@ -30,9 +30,9 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 
 public class CastSessionImpl extends ICastSession.Stub {
     private static final String TAG = CastSessionImpl.class.getSimpleName();
-    private CastOptions options;
-    private SessionImpl session;
-    private ICastConnectionController controller;
+    private final CastOptions options;
+    private final SessionImpl session;
+    private final ICastConnectionController controller;
 
     public CastSessionImpl(CastOptions options, IObjectWrapper session, ICastConnectionController controller) throws RemoteException {
         this.options = options;

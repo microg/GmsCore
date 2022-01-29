@@ -43,13 +43,13 @@ public class CastContextImpl extends ICastContext.Stub {
     private SessionManagerImpl sessionManager;
     private DiscoveryManagerImpl discoveryManager;
 
-    private Context context;
-    private CastOptions options;
-    private IMediaRouter router;
-    private Map<String, ISessionProvider> sessionProviders = new HashMap<String, ISessionProvider>();
+    private final Context context;
+    private final CastOptions options;
+    private final IMediaRouter router;
+    private final Map<String, ISessionProvider> sessionProviders = new HashMap<String, ISessionProvider>();
     public ISessionProvider defaultSessionProvider;
 
-    private MediaRouteSelector mergedSelector;
+    private final MediaRouteSelector mergedSelector;
 
     public CastContextImpl(IObjectWrapper context, CastOptions options, IMediaRouter router, Map<String, IBinder> sessionProviders) throws RemoteException {
         this.context = (Context) ObjectWrapper.unwrap(context);

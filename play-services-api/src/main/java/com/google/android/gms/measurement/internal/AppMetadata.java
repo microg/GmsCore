@@ -25,7 +25,7 @@ public class AppMetadata extends AutoSafeParcelable {
     @Field(8)
     private String field8;
     @Field(9)
-    private boolean field9 = true;
+    private final boolean field9 = true;
     @Field(10)
     private boolean field10;
     @Field(11)

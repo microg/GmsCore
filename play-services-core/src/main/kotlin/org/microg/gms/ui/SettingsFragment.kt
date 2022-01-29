@@ -82,7 +82,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             val database = GcmDatabase(context)
             val regCount = database.registrationList.size
             database.close()
-            findPreference<Preference>(PREF_GCM)?.setSummary(context.getResources().getString(R.string.service_status_enabled_short) + " - " + resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount))
+            findPreference<Preference>(PREF_GCM)?.summary = context.resources.getString(R.string.service_status_enabled_short) + " - " + resources.getQuantityString(R.plurals.gcm_registered_apps_counter, regCount, regCount)
         } else {
             findPreference<Preference>(PREF_GCM)?.setSummary(R.string.service_status_disabled_short)
         }

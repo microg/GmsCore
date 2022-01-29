@@ -10,7 +10,7 @@ import java.util.Collections;
 
 public class DynamiteModuleInfo {
     private Class<?> descriptor;
-    private String moduleId;
+    private final String moduleId;
 
     public DynamiteModuleInfo(String moduleId) {
         this.moduleId = moduleId;

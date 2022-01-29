@@ -25,7 +25,7 @@ import java.util.Date;
 public class LogEvent extends AutoSafeParcelable {
 
     @SafeParceled(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(2)
     public final long eventTime;

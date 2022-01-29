@@ -25,7 +25,7 @@ import java.util.List;
 public class LocationRequestInternal extends AutoSafeParcelable {
 
     @Field(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @Field(1)
     public LocationRequest request;

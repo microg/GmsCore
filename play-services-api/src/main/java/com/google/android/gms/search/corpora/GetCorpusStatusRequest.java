@@ -22,7 +22,7 @@ import org.microg.safeparcel.SafeParceled;
 public class GetCorpusStatusRequest extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(1)
     public final String packageName;

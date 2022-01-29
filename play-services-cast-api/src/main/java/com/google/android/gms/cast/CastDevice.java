@@ -73,7 +73,7 @@ public class CastDevice extends AutoSafeParcelable {
     public static final int CAPABILITY_AUDIO_IN = 8;
 
     @SafeParceled(1)
-    private int versionCode = 3;
+    private final int versionCode = 3;
 
     @SafeParceled(2)
     private String deviceId;
@@ -183,7 +183,7 @@ public class CastDevice extends AutoSafeParcelable {
                 ", modelName=" + modelName +
                 ", deviceVersion=" + deviceVersion +
                 ", servicePort=" + servicePort +
-                (icons == null ? "" : (", icons=" + icons.toString())) +
+                (icons == null ? "" : (", icons=" + icons)) +
                 ", capabilities=" + capabilities +
                 ", status=" + status +
                 "}";

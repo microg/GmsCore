@@ -30,7 +30,7 @@ public class TaskImpl<TResult> extends Task<TResult> {
     private boolean cancelled;
     private TResult result;
     private Exception exception;
-    private Queue<UpdateListener<TResult>> completionQueue = new LinkedBlockingQueue<>();
+    private final Queue<UpdateListener<TResult>> completionQueue = new LinkedBlockingQueue<>();
 
     @Override
     public Task<TResult> addOnCanceledListener(OnCanceledListener listener) {

@@ -25,7 +25,7 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
 public class PeopleService extends BaseService {
-    private PeopleServiceImpl impl = new PeopleServiceImpl(this);
+    private final PeopleServiceImpl impl = new PeopleServiceImpl(this);
 
     public PeopleService() {
         super("GmsPeopleSvc", GmsService.PEOPLE);

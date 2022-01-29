@@ -33,7 +33,7 @@ import java.util.Locale;
 
 public class PlaceImpl extends AutoSafeParcelable implements Place {
     @SafeParceled(1000)
-    private int versionCode = 2;
+    private final int versionCode = 2;
     @SafeParceled(1)
     public String id;
     @SafeParceled(2)

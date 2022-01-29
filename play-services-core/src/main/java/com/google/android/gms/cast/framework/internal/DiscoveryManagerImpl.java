@@ -30,9 +30,9 @@ import java.util.Set;
 public class DiscoveryManagerImpl extends IDiscoveryManager.Stub {
     private static final String TAG = DiscoveryManagerImpl.class.getSimpleName();
 
-    private CastContextImpl castContextImpl;
+    private final CastContextImpl castContextImpl;
 
-    private Set discoveryManagerListeners = new HashSet();
+    private final Set discoveryManagerListeners = new HashSet();
 
     public DiscoveryManagerImpl(CastContextImpl castContextImpl) {
         this.castContextImpl = castContextImpl;

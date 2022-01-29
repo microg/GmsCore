@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package org.microg.gms.gcm
 
 import android.content.Context
@@ -10,7 +12,6 @@ import org.microg.mgms.settings.SettingsContract
 import org.microg.mgms.settings.SettingsContract.Gcm
 import org.microg.mgms.settings.SettingsContract.setSettings
 
-@Suppress("Warnings")
 data class GcmPrefs(
     val isGcmLogEnabled: Boolean,
     val lastPersistedId: String?,
@@ -88,7 +89,6 @@ data class GcmPrefs(
         }
     }
 
-    @Suppress("DEPRECATION")
     fun getNetworkPrefForInfo(info: NetworkInfo?): String {
         if (info == null) return PREF_NETWORK_OTHER
         return if (info.isRoaming) PREF_NETWORK_ROAMING else when (info.type) {
@@ -98,7 +98,6 @@ data class GcmPrefs(
         }
     }
 
-    @Suppress("DEPRECATION")
     fun getHeartbeatMsFor(info: NetworkInfo?): Int {
         return getHeartbeatMsFor(getNetworkPrefForInfo(info))
     }
@@ -160,7 +159,6 @@ data class GcmPrefs(
         }
     }
 
-    @Suppress("DEPRECATION")
     fun isEnabledFor(info: NetworkInfo?): Boolean {
         return isEnabled && info != null && getHeartbeatMsFor(info) >= 0
     }

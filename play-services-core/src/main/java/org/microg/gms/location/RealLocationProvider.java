@@ -42,7 +42,7 @@ public class RealLocationProvider {
     private float connectedMinDistance;
     private Location lastLocation;
     private final List<LocationRequestHelper> requests = new ArrayList<LocationRequestHelper>();
-    private LocationListener listener = new LocationListener() {
+    private final LocationListener listener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             lastLocation = new Location(location);

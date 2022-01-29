@@ -25,7 +25,7 @@ public class FusedLocationProviderResult extends AutoSafeParcelable {
     public static final FusedLocationProviderResult SUCCESS = FusedLocationProviderResult.create(Status.SUCCESS);
 
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(1)
     public Status status;

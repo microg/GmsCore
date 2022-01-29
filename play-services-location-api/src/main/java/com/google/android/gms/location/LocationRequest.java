@@ -102,7 +102,7 @@ public class LocationRequest extends AutoSafeParcelable {
     public static final int PRIORITY_NO_POWER = 105;
 
     @Field(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @Field(1)
     private int priority;
     @Field(2)
@@ -244,10 +244,7 @@ public class LocationRequest extends AutoSafeParcelable {
             return false;
         if (priority != that.priority)
             return false;
-        if (Float.compare(that.smallestDisplacement, smallestDisplacement) != 0)
-            return false;
-
-        return true;
+        return Float.compare(that.smallestDisplacement, smallestDisplacement) == 0;
     }
 
     @Override

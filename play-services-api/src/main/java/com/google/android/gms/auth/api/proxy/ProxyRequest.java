@@ -20,7 +20,7 @@ public class ProxyRequest extends AutoSafeParcelable {
     public static final int HTTP_METHOD_PATCH = 7;
 
     @Field(1000)
-    private int versionCode = 2;
+    private final int versionCode = 2;
     @Field(1)
     public String url;
     @Field(2)

@@ -99,8 +99,8 @@ public class LoginActivity extends AssistantActivity {
     private ViewGroup authContent;
     private int state = 0;
 
-    private String HuaweiButtonPreference = "huaweiloginbutton";
-    private String LoginButtonPreference = "standardloginbutton";
+    private final String HuaweiButtonPreference = "huaweiloginbutton";
+    private final String LoginButtonPreference = "standardloginbutton";
 
     @SuppressLint("AddJavascriptInterface")
     @Override

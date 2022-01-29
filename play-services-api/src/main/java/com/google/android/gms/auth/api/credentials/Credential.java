@@ -22,7 +22,7 @@ import java.util.Locale;
 public class Credential extends AutoSafeParcelable {
 
     @Field(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @Field(1)
     private String id;
@@ -146,7 +146,7 @@ public class Credential extends AutoSafeParcelable {
     }
 
     public static class Builder {
-        private String id;
+        private final String id;
         private String name;
         private Uri profilePictureUri;
         private String password;

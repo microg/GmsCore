@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 public class GetServiceRequest extends AutoSafeParcelable {
     @Field(1)
-    private int versionCode = 4;
+    private final int versionCode = 4;
     @Field(2)
     public final int serviceId;
     @Field(3)

@@ -25,7 +25,7 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
 public class LightweightIndexService extends BaseService {
-    private LightweightAppDataSearchImpl appDataSearch = new LightweightAppDataSearchImpl();
+    private final LightweightAppDataSearchImpl appDataSearch = new LightweightAppDataSearchImpl();
 
     public LightweightIndexService() {
         super("GmsIcingLightIndexSvc", GmsService.LIGHTWEIGHT_INDEX);

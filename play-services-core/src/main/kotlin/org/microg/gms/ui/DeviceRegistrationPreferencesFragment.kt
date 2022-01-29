@@ -5,6 +5,7 @@
 
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -28,6 +29,7 @@ import org.microg.gms.profile.ProfileManager.PROFILE_USER
 import java.io.File
 import java.io.FileOutputStream
 
+@Suppress("Warnings")
 class DeviceRegistrationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var deviceProfile: ListPreference
     private lateinit var importProfile: Preference
@@ -67,6 +69,7 @@ class DeviceRegistrationPreferencesFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_device_registration)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         deviceProfile = preferenceScreen.findPreference("pref_device_profile") ?: deviceProfile
         importProfile = preferenceScreen.findPreference("pref_device_profile_import") ?: importProfile
@@ -89,8 +92,7 @@ class DeviceRegistrationPreferencesFragment : PreferenceFragmentCompat() {
     private fun configureProfilePreference() {
         val context = requireContext()
         val configuredProfile = ProfileManager.getConfiguredProfile(context)
-        val autoProfile = ProfileManager.getAutoProfile(context)
-        val autoProfileName = when (autoProfile) {
+        val autoProfileName = when (val autoProfile = ProfileManager.getAutoProfile(context)) {
             PROFILE_NATIVE -> getString(R.string.profile_name_native)
             PROFILE_REAL -> getString(R.string.profile_name_real)
             else -> ProfileManager.getProfileName(context, autoProfile)

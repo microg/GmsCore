@@ -22,7 +22,7 @@ import org.microg.safeparcel.SafeParceled;
 public class AccountMetadata extends AutoSafeParcelable {
 
     @SafeParceled(1)
-    private int versionCode = 2;
+    private final int versionCode = 2;
 
     @SafeParceled(2)
     public boolean hasGooglePlus = true;

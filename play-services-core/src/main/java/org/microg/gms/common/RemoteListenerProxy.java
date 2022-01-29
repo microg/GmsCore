@@ -38,8 +38,8 @@ public class RemoteListenerProxy<T extends IInterface> implements ServiceConnect
     private final String bindAction;
     private IBinder remote;
     private boolean connecting;
-    private List<Runnable> waiting = new ArrayList<>();
-    private Class<T> tClass;
+    private final List<Runnable> waiting = new ArrayList<>();
+    private final Class<T> tClass;
 
     public static <T extends IInterface> T get(Context context, Intent intent, Class<T> tClass, String bindAction) {
         return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass},

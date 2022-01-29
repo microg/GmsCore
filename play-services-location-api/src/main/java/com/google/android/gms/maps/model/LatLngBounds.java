@@ -28,7 +28,7 @@ import java.util.Arrays;
 @PublicApi
 public final class LatLngBounds extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     /**
      * Southwest corner of the bound.
      */
@@ -114,10 +114,7 @@ public final class LatLngBounds extends AutoSafeParcelable {
 
         if (!northeast.equals(that.northeast))
             return false;
-        if (!southwest.equals(that.southwest))
-            return false;
-
-        return true;
+        return southwest.equals(that.southwest);
     }
 
     /**

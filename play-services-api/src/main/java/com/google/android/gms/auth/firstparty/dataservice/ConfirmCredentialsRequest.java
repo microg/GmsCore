@@ -24,7 +24,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class ConfirmCredentialsRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @SafeParceled(2)
     public AccountCredentials accountCredentials;
     @SafeParceled(3)

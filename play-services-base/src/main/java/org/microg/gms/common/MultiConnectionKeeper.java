@@ -88,7 +88,7 @@ public class MultiConnectionKeeper {
         private boolean connected = false;
         private IBinder binder;
         private ComponentName component;
-        private ServiceConnection serviceConnection = new ServiceConnection() {
+        private final ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 Log.d(TAG, "Connection(" + actionString + ") : ServiceConnection : " +

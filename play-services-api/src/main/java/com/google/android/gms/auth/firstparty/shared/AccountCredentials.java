@@ -24,7 +24,7 @@ import org.microg.safeparcel.SafeParceled;
 // TODO
 public class AccountCredentials extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 2;
+    private final int versionCode = 2;
     @SafeParceled(3)
     public String accountName;
     @SafeParceled(9)

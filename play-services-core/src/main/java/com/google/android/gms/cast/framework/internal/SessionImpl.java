@@ -30,9 +30,9 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 public class SessionImpl extends ISession.Stub {
     private static final String TAG = SessionImpl.class.getSimpleName();
 
-    private String category;
-    private String sessionId;
-    private ISessionProxy proxy;
+    private final String category;
+    private final String sessionId;
+    private final ISessionProxy proxy;
 
     private CastSessionImpl castSession;
 

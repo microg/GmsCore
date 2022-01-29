@@ -26,7 +26,7 @@ import org.microg.safeparcel.SafeParceled;
 public class TokenRequest extends AutoSafeParcelable{
 
     @SafeParceled(1)
-    private int versionCode = 4;
+    private final int versionCode = 4;
     @SafeParceled(3)
     public String accountName;
     @SafeParceled(4)

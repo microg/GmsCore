@@ -14,6 +14,8 @@
 -dontwarn com.android.location.provider.**
 -dontwarn java.lang.instrument.ClassFileTransformer
 -dontwarn sun.misc.SignalHandler
+-dontwarn com.android.org.conscrypt.SSLParametersImpl
+-dontwarn org.apache.harmony.xnet.provider.jsse.SSLParametersImpl
 
 # Disable ProGuard Notes, they won't help here
 -dontnote

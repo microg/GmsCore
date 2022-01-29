@@ -31,7 +31,7 @@ public class GcmLegacyData {
     static final String REMOVED = "%%REMOVED%%";
     static final String ERROR = "%%ERROR%%";
 
-    private Context context;
+    private final Context context;
 
     public GcmLegacyData(Context context) {
         this.context = context;
@@ -46,7 +46,7 @@ public class GcmLegacyData {
         private final int STATE_ERROR = 1;
         private final int STATE_REMOVED = 2;
         private final int STATE_REGISTERED = 3;
-        private int state;
+        private final int state;
 
         public LegacyAppInfo(String key, String value) {
             if (ERROR.equals(value)) {

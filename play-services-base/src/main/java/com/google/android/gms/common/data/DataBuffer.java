@@ -28,7 +28,7 @@ import java.util.Iterator;
 @PublicApi
 public abstract class DataBuffer<T> implements Releasable, Iterable<T> {
 
-    private DataHolder dataHolder;
+    private final DataHolder dataHolder;
 
     @PublicApi(exclude = true)
     public DataBuffer(DataHolder dataHolder) {

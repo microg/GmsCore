@@ -132,7 +132,7 @@ public class McsService extends Service implements Handler.Callback {
     private static long startTimestamp = 0;
     public static String activeNetworkPref = null;
     private boolean wasTornDown = false;
-    private AtomicInteger nextMessageId = new AtomicInteger(0x1000000);
+    private final AtomicInteger nextMessageId = new AtomicInteger(0x1000000);
 
     private static Socket sslSocket;
     private static McsInputStream inputStream;
@@ -153,7 +153,7 @@ public class McsService extends Service implements Handler.Callback {
 
     private Intent connectIntent;
 
-    private static int maxTtl = 24 * 60 * 60;
+    private static final int maxTtl = 24 * 60 * 60;
 
     private Object deviceIdleController;
     private Method getUserIdMethod;

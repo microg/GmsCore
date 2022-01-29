@@ -13,14 +13,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.util.TypedValue
-import android.view.View
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
-import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.R
@@ -59,26 +53,8 @@ fun Context.hideIcon(hide: Boolean) {
 
 val Context.systemAnimationsEnabled: Boolean
     get() {
-        val duration: Float
-        val transition: Float
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            duration = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
-            transition = Settings.Global.getFloat(contentResolver, Settings.Global.TRANSITION_ANIMATION_SCALE, 1f)
-        } else {
-            duration = Settings.System.getFloat(contentResolver, Settings.System.ANIMATOR_DURATION_SCALE, 1f)
-            transition = Settings.System.getFloat(contentResolver, Settings.System.TRANSITION_ANIMATION_SCALE, 1f)
-        }
+        val duration: Float = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
+        val transition: Float = Settings.Global.getFloat(contentResolver, Settings.Global.TRANSITION_ANIMATION_SCALE, 1f)
+
         return duration != 0f && transition != 0f
     }
-
-
-@ColorInt
-fun Context.resolveColor(@AttrRes resid: Int): Int? {
-    val typedValue = TypedValue()
-    if (!theme.resolveAttribute(resid, typedValue, true)) return null
-    val colorRes = if (typedValue.resourceId != 0) typedValue.resourceId else typedValue.data
-    return ContextCompat.getColor(this, colorRes)
-}
-
-@BindingAdapter("app:backgroundColorAttr")
-fun View.setBackgroundColorAttribute(@AttrRes resId: Int) = context.resolveColor(resId)?.let { setBackgroundColor(it) }

@@ -251,9 +251,7 @@ public class NativeLocationClientImpl {
 
             NativeListener that = (NativeListener) o;
 
-            if (!listener.equals(that.listener)) return false;
-
-            return true;
+            return listener.equals(that.listener);
         }
 
         @Override

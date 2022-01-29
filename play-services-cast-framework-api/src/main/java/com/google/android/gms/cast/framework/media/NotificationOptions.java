@@ -25,7 +25,7 @@ import java.util.List;
 public class NotificationOptions extends AutoSafeParcelable {
 
     @Field(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @Field(2)
     public List<String> actions;
     @Field(3)

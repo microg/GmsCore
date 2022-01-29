@@ -53,9 +53,9 @@ public class CastDeviceControllerImpl extends ICastDeviceController.Stub impleme
 {
     private static final String TAG = "GmsCastDeviceController";
 
-    private Context context;
-    private String packageName;
-    private CastDevice castDevice;
+    private final Context context;
+    private final String packageName;
+    private final CastDevice castDevice;
     boolean notificationEnabled;
     long castFlags;
     ICastDeviceControllerListener listener;

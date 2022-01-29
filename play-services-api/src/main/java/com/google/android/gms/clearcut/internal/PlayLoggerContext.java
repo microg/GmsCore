@@ -10,7 +10,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 public class PlayLoggerContext extends AutoSafeParcelable {
 
     @Field(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @Field(2)
     public final String packageName;

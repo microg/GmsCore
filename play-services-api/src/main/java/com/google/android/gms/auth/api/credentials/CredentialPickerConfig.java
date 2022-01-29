@@ -15,7 +15,7 @@ import org.microg.safeparcel.AutoSafeParcelable;
 public class CredentialPickerConfig extends AutoSafeParcelable {
 
     @Field(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @Field(1)
     private boolean showAddAccountButton;

@@ -38,7 +38,7 @@ public class McsOutputStream extends Thread implements Handler.Callback, Closeab
 
     private final OutputStream os;
     private boolean initialized;
-    private int version = MCS_VERSION_CODE;
+    private final int version = MCS_VERSION_CODE;
     private int streamId = 0;
 
     private final Handler mainHandler;

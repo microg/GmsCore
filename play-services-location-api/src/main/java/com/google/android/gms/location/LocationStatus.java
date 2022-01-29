@@ -32,7 +32,7 @@ public class LocationStatus extends AutoSafeParcelable {
     public static final int STATUS_LOCATION_DISABLED_IN_SETTINGS = 7;
     public static final int STATUS_IN_PROGRESS = 8;
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @SafeParceled(1)
     int cellStatus;
     @SafeParceled(2)
@@ -53,10 +53,7 @@ public class LocationStatus extends AutoSafeParcelable {
             return false;
         if (elapsedRealtimeNanos != that.elapsedRealtimeNanos)
             return false;
-        if (wifiStatus != that.wifiStatus)
-            return false;
-
-        return true;
+        return wifiStatus == that.wifiStatus;
     }
 
     @Override

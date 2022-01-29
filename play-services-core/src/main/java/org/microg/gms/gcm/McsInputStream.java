@@ -54,7 +54,7 @@ public class McsInputStream extends Thread implements Closeable {
     private int version = -1;
     private int lastStreamIdReported = -1;
     private int streamId = 0;
-    private long lastMsgTime = 0;
+    private final long lastMsgTime = 0;
 
     private volatile boolean closed = false;
 

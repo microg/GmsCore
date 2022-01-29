@@ -43,8 +43,8 @@ public final class CastRemoteDisplay {
     }
 
     public static final class CastRemoteDisplayOptions implements Api.ApiOptions.HasOptions {
-        private CastDevice castDevice;
-        private CastRemoteDisplaySessionCallbacks callbacks;
+        private final CastDevice castDevice;
+        private final CastRemoteDisplaySessionCallbacks callbacks;
 
         private CastRemoteDisplayOptions(CastDevice castDevice, CastRemoteDisplaySessionCallbacks callbacks) {
             this.castDevice = castDevice;
@@ -52,8 +52,8 @@ public final class CastRemoteDisplay {
         }
 
         public static final class Builder {
-            private CastDevice castDevice;
-            private CastRemoteDisplaySessionCallbacks callbacks;
+            private final CastDevice castDevice;
+            private final CastRemoteDisplaySessionCallbacks callbacks;
 
             public Builder(CastDevice castDevice, CastRemoteDisplaySessionCallbacks callbacks) {
                 this.castDevice = castDevice;
