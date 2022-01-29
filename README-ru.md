@@ -1,17 +1,17 @@
-<img src="http://i.imgur.com/hXY4lcC.png" height="42px" alt="microG" /> Services Core (GmsCore)
+Сервисы <img src="http://i.imgur.com/hXY4lcC.png" height="42px" alt="microG" /> (GmsCore)
 =======
 
 [English](https://github.com/microG/GmsCore/tree/master/README.md) | [Русский](https://github.com/microG/GmsCore/tree/master/README-ru.md)
 
 [![Build Status](https://github.com/microg/GmsCore/workflows/Build/badge.svg)](https://travis-ci.com/microg/GmsCore)
 
-microG GmsCore is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
+microG GmsCore — это свободная библиотека, позволяющая работать приложениям, зависящим от Сервисов Google Play, на системах без этих сервисов.
 
-### Please refer to the [wiki](https://github.com/microg/android_packages_apps_GmsCore/wiki) for downloads and instructions
+### Пожалуйста, обратитесь к [wiki](https://github.com/microg/android_packages_apps_GmsCore/wiki) за загрузками и инструкциями
 
 
-License
--------
+Лицензия
+--------
     Copyright 2013-2021 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,3 +25,4 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
