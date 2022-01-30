@@ -76,4 +76,8 @@
     <string name="exposure_confirm_bluetooth_description">Bluetooth должен быть включён.</string>
     <string name="exposure_confirm_location_description">требуется доступ к местоположению.</string>
     <string name="exposure_confirm_button">Включить</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Необходимы дополнительные разрешения</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Нажмите, чтобы предоставить необходимые разрешения для уведомлений о риске инфицирования</string>
+    <string name="exposure_grant_background_location_description">Почти готово! В следующем окне выберите \'Всегда разрешать\' для фонового доступа к геолокации. Затем нажмите \'Назад\'.</string>
+    <string name="exposure_grant_background_location_button">Обновить настройки</string>
 </resources>
