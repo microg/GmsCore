@@ -32,14 +32,14 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public final class Status extends AutoSafeParcelable implements Result {
     @PublicApi(exclude = true)
-    public static final Status INTERNAL_ERROR = new Status(CommonStatusCodes.INTERNAL_ERROR);
+    public static final Status INTERNAL_ERROR = new Status(CommonStatusCodes.INTERNAL_ERROR, "Internal error");
     @PublicApi(exclude = true)
-    public static final Status CANCELED = new Status(CommonStatusCodes.CANCELED);
+    public static final Status CANCELED = new Status(CommonStatusCodes.CANCELED, "Cancelled");
     @PublicApi(exclude = true)
-    public static final Status SUCCESS = new Status(CommonStatusCodes.SUCCESS);
+    public static final Status SUCCESS = new Status(CommonStatusCodes.SUCCESS, "Success");
 
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(1)
     private final int statusCode;

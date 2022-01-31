@@ -26,7 +26,7 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 public class MediaRouterCallbackImpl extends IMediaRouterCallback.Stub {
     private static final String TAG = MediaRouterCallbackImpl.class.getSimpleName();
 
-    private CastContextImpl castContext;
+    private final CastContextImpl castContext;
 
     public MediaRouterCallbackImpl(CastContextImpl castContext) {
         this.castContext = castContext;

@@ -16,6 +16,17 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
+import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
+
 import android.os.Handler;
 import android.util.Log;
 
@@ -33,17 +44,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
-
 public class McsInputStream extends Thread implements Closeable {
     private static final String TAG = "GmsGcmMcsInput";
 
@@ -54,9 +54,9 @@ public class McsInputStream extends Thread implements Closeable {
     private int version = -1;
     private int lastStreamIdReported = -1;
     private int streamId = 0;
-    private long lastMsgTime = 0;
+    private final long lastMsgTime = 0;
 
-    private boolean closed = false;
+    private volatile boolean closed = false;
 
     public McsInputStream(InputStream is, Handler mainHandler) {
         this(is, mainHandler, false);
@@ -82,7 +82,11 @@ public class McsInputStream extends Thread implements Closeable {
                 }
             }
         } catch (IOException e) {
-            mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT_ERROR, e));
+            if (closed) {
+                Log.d(TAG, "We were closed already. Ignoring IOException");
+            } else {
+                mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_INPUT_ERROR, e));
+            }
         }
         try {
             is.close();
@@ -119,7 +123,7 @@ public class McsInputStream extends Thread implements Closeable {
                 Log.d(TAG, "Reading from MCS version: " + version);
                 initialized = true;
             } catch (IOException e) {
-                Log.w(TAG, e);
+                Log.w(TAG, "Error reading version", e);
             }
         }
     }

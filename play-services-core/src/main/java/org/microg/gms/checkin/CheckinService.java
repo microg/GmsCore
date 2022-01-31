@@ -32,12 +32,12 @@ import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import com.mgoogle.android.gms.R;
 import com.google.android.gms.checkin.internal.ICheckinService;
+import com.mgoogle.android.gms.R;
 
 import org.microg.gms.auth.AuthConstants;
-import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.common.ForegroundServiceContext;
+import org.microg.gms.common.ForegroundServiceInfo;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
@@ -54,10 +54,20 @@ public class CheckinService extends IntentService {
     public static final String EXTRA_RESULT_RECEIVER = "receiver";
     public static final String EXTRA_NEW_CHECKIN_TIME = "checkin_time";
 
-    private ICheckinService iface = new ICheckinService.Stub() {
+    private final ICheckinService iface = new ICheckinService.Stub() {
         @Override
         public String getDeviceDataVersionInfo() throws RemoteException {
             return LastCheckinInfo.read(CheckinService.this).getDeviceDataVersionInfo();
+        }
+
+        @Override
+        public long getLastCheckinSuccessTime() throws RemoteException {
+            return LastCheckinInfo.read(CheckinService.this).getLastCheckin();
+        }
+
+        @Override
+        public String getLastSimOperator() throws RemoteException {
+            return null;
         }
     };
 

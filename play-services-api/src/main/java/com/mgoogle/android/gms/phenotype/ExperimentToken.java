@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.phenotype;
+package com.mgoogle.android.gms.phenotype;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 

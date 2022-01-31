@@ -16,6 +16,10 @@
 
 package org.microg.gms.common;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+
 import android.app.ActivityManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -35,10 +39,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 
 public class PackageUtils {
 
@@ -131,6 +131,30 @@ public class PackageUtils {
     }
 
     @Nullable
+    public static byte[] firstSignatureDigestBytes(Context context, String packageName) {
+        return firstSignatureDigestBytes(context.getPackageManager(), packageName);
+    }
+
+    @Nullable
+    public static byte[] firstSignatureDigestBytes(PackageManager packageManager, String packageName) {
+        final PackageInfo info;
+        try {
+            info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
+        if (info != null && info.signatures != null && info.signatures.length > 0) {
+            for (Signature sig : info.signatures) {
+                byte[] digest = sha1bytes(sig.toByteArray());
+                if (digest != null) {
+                    return digest;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
     public static String getCallingPackage(Context context) {
         int callingUid = Binder.getCallingUid(), callingPid = Binder.getCallingPid();
         String packageName = packageFromProcessId(context, callingPid);
@@ -140,9 +164,34 @@ public class PackageUtils {
         return packageName;
     }
 
+    public static byte[] sha1bytes(byte[] bytes) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA1");
+        } catch (final NoSuchAlgorithmException e) {
+            return null;
+        }
+        if (md != null) {
+            return md.digest(bytes);
+        }
+        return null;
+    }
+
     @Nullable
     public static String getAndCheckCallingPackage(Context context, String suggestedPackageName) {
         return getAndCheckCallingPackage(context, suggestedPackageName, 0);
+    }
+
+    @Nullable
+    public static String getAndCheckCallingPackageOrExtendedAccess(Context context, String suggestedPackageName) {
+        try {
+            return getAndCheckCallingPackage(context, suggestedPackageName, 0);
+        } catch (Exception e) {
+            if (callerHasExtendedAccess(context)) {
+                return suggestedPackageName;
+            }
+            throw e;
+        }
     }
 
     @Nullable

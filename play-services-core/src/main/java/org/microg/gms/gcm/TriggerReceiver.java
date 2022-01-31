@@ -16,6 +16,12 @@
 
 package org.microg.gms.gcm;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
+import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
+import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
+import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,14 +31,9 @@ import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import org.microg.gms.checkin.CheckinPrefs;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N;
-import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
-import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
-import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
 
 public class TriggerReceiver extends WakefulBroadcastReceiver {
     private static final String TAG = "GmsGcmTrigger";
@@ -67,6 +68,14 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
 
             if (LastCheckinInfo.read(context).getAndroidId() == 0) {
                 Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
+                if (CheckinPrefs.isEnabled(context)) {
+                    // Do a check-in if we are not actually checked in,
+                    // but should be, e.g. cleared app data
+                    Log.d(TAG, "Requesting check-in...");
+                    String action = "android.server.checkin.CHECKIN";
+                    Class<?> clazz = org.microg.gms.checkin.TriggerReceiver.class;
+                    context.sendBroadcast(new Intent(action, null, context, clazz));
+                }
                 return;
             }
 

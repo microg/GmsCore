@@ -26,7 +26,7 @@ class ProvisionService : LifecycleService() {
         super.onStartCommand(intent, flags, startId)
         lifecycleScope.launchWhenStarted {
             intent?.extras?.let {
-                val s = it.keySet().joinToString(", ") { key -> "$key = ${it[key]}" }
+                val s = it.keySet().map { key -> "$key = ${it[key]}" }.joinToString(", ")
                 Log.d(TAG, "Provisioning: $s")
             }
 

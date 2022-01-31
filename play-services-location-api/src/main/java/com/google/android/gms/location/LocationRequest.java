@@ -17,8 +17,8 @@
 package com.google.android.gms.location;
 
 import android.os.SystemClock;
+
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 
@@ -101,24 +101,26 @@ public class LocationRequest extends AutoSafeParcelable {
      */
     public static final int PRIORITY_NO_POWER = 105;
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
-    @SafeParceled(1)
+    @Field(1000)
+    private final int versionCode = 1;
+    @Field(1)
     private int priority;
-    @SafeParceled(2)
+    @Field(2)
     private long interval;
-    @SafeParceled(3)
+    @Field(3)
     private long fastestInterval;
-    @SafeParceled(4)
+    @Field(4)
     private boolean explicitFastestInterval;
-    @SafeParceled(5)
+    @Field(5)
     private long expirationTime;
-    @SafeParceled(6)
+    @Field(6)
     private int numUpdates;
-    @SafeParceled(7)
-    private float smallestDesplacement;
-    @SafeParceled(8)
+    @Field(7)
+    private float smallestDisplacement;
+    @Field(8)
     private long maxWaitTime;
+    @Field(9)
+    private boolean waitForAccurateLocation;
 
     public LocationRequest() {
         this.priority = PRIORITY_BALANCED_POWER_ACCURACY;
@@ -127,7 +129,7 @@ public class LocationRequest extends AutoSafeParcelable {
         this.explicitFastestInterval = false;
         this.expirationTime = Long.MAX_VALUE;
         this.numUpdates = Integer.MAX_VALUE;
-        this.smallestDesplacement = 0;
+        this.smallestDisplacement = 0;
         this.maxWaitTime = 0;
     }
 
@@ -177,6 +179,17 @@ public class LocationRequest extends AutoSafeParcelable {
     }
 
     /**
+     * Gets the maximum wait time in milliseconds for location updates. If the wait time is smaller than the interval
+     * requested with {@link #setInterval(long)}, then the interval will be used instead.
+     *
+     * @return maximum wait time in milliseconds, inexact
+     * @see #setMaxWaitTime(long)
+     */
+    public long getMaxWaitTime() {
+        return maxWaitTime;
+    }
+
+    /**
      * Get the number of updates requested.
      * <p/>
      * By default this is {@link java.lang.Integer#MAX_VALUE}, which indicates that locations are
@@ -204,8 +217,8 @@ public class LocationRequest extends AutoSafeParcelable {
      *
      * @return minimum displacement between location updates in meters
      */
-    public float getSmallestDesplacement() {
-        return smallestDesplacement;
+    public float getSmallestDisplacement() {
+        return smallestDisplacement;
     }
 
     @Override
@@ -231,18 +244,32 @@ public class LocationRequest extends AutoSafeParcelable {
             return false;
         if (priority != that.priority)
             return false;
-        if (Float.compare(that.smallestDesplacement, smallestDesplacement) != 0)
-            return false;
-
-        return true;
+        return Float.compare(that.smallestDisplacement, smallestDisplacement) == 0;
     }
 
     @Override
     public int hashCode() {
         return Arrays.hashCode(
-                new Object[] { priority, interval, fastestInterval, explicitFastestInterval,
-                        explicitFastestInterval, numUpdates, smallestDesplacement, maxWaitTime
+                new Object[]{priority, interval, fastestInterval, explicitFastestInterval,
+                        explicitFastestInterval, numUpdates, smallestDisplacement, maxWaitTime
                 });
+    }
+
+    /**
+     * Returns whether or not the fastest interval was explicitly specified for the location request.
+     *
+     * @return True if the fastest interval was explicitly set for the location request; false otherwise
+     */
+    public boolean isFastestIntervalExplicitlySet() {
+        return explicitFastestInterval;
+    }
+
+    /**
+     * Returns whether the location services will wait a few seconds initially for accurate locations, if accurate
+     * locations cannot be computed on the device for {@link #PRIORITY_HIGH_ACCURACY} requests.
+     */
+    public boolean isWaitForAccurateLocation() {
+        return waitForAccurateLocation;
     }
 
     /**
@@ -312,6 +339,7 @@ public class LocationRequest extends AutoSafeParcelable {
         if (millis < 0)
             throw new IllegalArgumentException("interval must not be negative");
         fastestInterval = millis;
+        explicitFastestInterval = true;
         return this;
     }
 
@@ -345,6 +373,27 @@ public class LocationRequest extends AutoSafeParcelable {
         if (millis < 0)
             throw new IllegalArgumentException("interval must not be negative");
         interval = millis;
+        return this;
+    }
+
+    /**
+     * Sets the maximum wait time in milliseconds for location updates.
+     * <p>
+     * If you pass a value at least 2x larger than the interval specified with {@link #setInterval(long)}, then
+     * location delivery may be delayed and multiple locations can be delivered at once. Locations are determined at
+     * the {@link #setInterval(long)} rate, but can be delivered in batch after the interval you set in this method.
+     * This can consume less battery and give more accurate locations, depending on the device's hardware capabilities.
+     * You should set this value to be as large as possible for your needs if you don't need immediate location
+     * delivery.
+     *
+     * @param millis desired maximum wait time in millisecond, inexact
+     * @return the same object, so that setters can be chained
+     * @throws IllegalArgumentException if the interval is less than zero
+     */
+    public LocationRequest setMaxWaitTime(long millis) throws IllegalArgumentException {
+        if (millis < 0)
+            throw new IllegalArgumentException("interval must not be negative");
+        maxWaitTime = millis;
         return this;
     }
 
@@ -417,22 +466,58 @@ public class LocationRequest extends AutoSafeParcelable {
     public LocationRequest setSmallestDisplacement(float smallestDisplacementMeters) {
         if (smallestDisplacementMeters < 0)
             throw new IllegalArgumentException("smallestDisplacementMeters must not be negative");
-        this.smallestDesplacement = smallestDisplacementMeters;
+        this.smallestDisplacement = smallestDisplacementMeters;
         return this;
+    }
+
+    /**
+     * Sets whether the client wants the locations services to wait a few seconds for accurate locations initially,
+     * when accurate locations could not be computed on the device immediately after {@link #PRIORITY_HIGH_ACCURACY}
+     * request is made. By default the location services will wait for accurate locations.
+     * <p>
+     * Note that this only applies to clients with {@link #PRIORITY_HIGH_ACCURACY} requests.
+     * <p>
+     * Also note this only applies to the initial locations computed right after the location request is added. The
+     * following inaccurate locations may still be delivered to the clients without delay.
+     */
+    public LocationRequest setWaitForAccurateLocation(boolean waitForAccurateLocation) {
+        this.waitForAccurateLocation = waitForAccurateLocation;
+        return this;
+    }
+
+    private static String priorityToString(int priority) {
+        switch (priority) {
+            case PRIORITY_HIGH_ACCURACY:
+                return "PRIORITY_HIGH_ACCURACY";
+            case PRIORITY_BALANCED_POWER_ACCURACY:
+                return "PRIORITY_BALANCED_POWER_ACCURACY";
+            case PRIORITY_LOW_POWER:
+                return "PRIORITY_LOW_POWER";
+            case PRIORITY_NO_POWER:
+                return "PRIORITY_NO_POWER";
+            default:
+                return "???";
+        }
     }
 
     @Override
     public String toString() {
-        return "LocationRequest{" +
-                "priority=" + priority +
-                ", interval=" + interval +
-                ", fastestInterval=" + fastestInterval +
-                ", explicitFastestInterval=" + explicitFastestInterval +
-                ", expirationTime=" + expirationTime +
-                ", numUpdates=" + numUpdates +
-                ", smallestDesplacement=" + smallestDesplacement +
-                ", maxWaitTime=" + maxWaitTime +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Request[");
+        sb.append(priorityToString(priority));
+        if (priority != PRIORITY_NO_POWER)
+            sb.append(" requested=").append(interval).append("ms");
+        sb.append(" fastest=").append(fastestInterval).append("ms");
+        if (maxWaitTime > interval)
+            sb.append(" maxWait=").append(maxWaitTime).append("ms");
+        if (smallestDisplacement > 0)
+            sb.append(" smallestDisplacement=").append(smallestDisplacement).append("m");
+        if (expirationTime != Long.MAX_VALUE)
+            sb.append(" expireIn=").append(SystemClock.elapsedRealtime() - expirationTime).append("ms");
+        if (numUpdates != Integer.MAX_VALUE)
+            sb.append(" num=").append(numUpdates);
+        sb.append("]");
+        return sb.toString();
     }
 
     public static final Creator<LocationRequest> CREATOR = new AutoCreator<LocationRequest>(LocationRequest.class);

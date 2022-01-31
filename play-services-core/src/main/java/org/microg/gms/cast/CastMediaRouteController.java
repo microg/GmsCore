@@ -27,9 +27,9 @@ import su.litvak.chromecast.api.v2.ChromeCast;
 public class CastMediaRouteController extends MediaRouteProvider.RouteController {
     private static final String TAG = CastMediaRouteController.class.getSimpleName();
 
-    private CastMediaRouteProvider provider;
-    private String routeId;
-    private ChromeCast chromecast;
+    private final CastMediaRouteProvider provider;
+    private final String routeId;
+    private final ChromeCast chromecast;
 
     public CastMediaRouteController(CastMediaRouteProvider provider, String routeId, String address) {
         super();

@@ -17,7 +17,6 @@
 package org.microg.gms.location;
 
 import android.os.RemoteException;
-import android.util.Log;
 
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -25,15 +24,23 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+
 public class GoogleLocationManagerService extends BaseService {
-    private GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this);
+    private final GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this, getLifecycle());
 
     public GoogleLocationManagerService() {
-        super("GmsLocManagerSvc", GmsService.LOCATION_MANAGER, GmsService.GEODATA, GmsService.PLACE_DETECTION);
+        super("LocationManager", GmsService.LOCATION_MANAGER, GmsService.GEODATA, GmsService.PLACE_DETECTION);
     }
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
 
+    }
+
+    @Override
+    protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
+        impl.getLocationManager().dump(writer);
     }
 }

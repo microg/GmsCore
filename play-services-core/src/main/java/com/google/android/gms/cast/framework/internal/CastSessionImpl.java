@@ -16,8 +16,6 @@
 
 package com.google.android.gms.cast.framework.internal;
 
-import com.google.android.gms.cast.framework.ICastSession;
-
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
@@ -25,15 +23,16 @@ import android.util.Log;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.framework.CastOptions;
 import com.google.android.gms.cast.framework.ICastConnectionController;
+import com.google.android.gms.cast.framework.ICastSession;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
 public class CastSessionImpl extends ICastSession.Stub {
     private static final String TAG = CastSessionImpl.class.getSimpleName();
-    private CastOptions options;
-    private SessionImpl session;
-    private ICastConnectionController controller;
+    private final CastOptions options;
+    private final SessionImpl session;
+    private final ICastConnectionController controller;
 
     public CastSessionImpl(CastOptions options, IObjectWrapper session, ICastConnectionController controller) throws RemoteException {
         this.options = options;

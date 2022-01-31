@@ -36,10 +36,10 @@ import org.microg.safeparcel.SafeParceled;
 public class LocationSettingsResult extends AutoSafeParcelable implements Result {
 
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(1)
-    private Status status;
+    private final Status status;
 
     @SafeParceled(2)
     private LocationSettingsStates settings;

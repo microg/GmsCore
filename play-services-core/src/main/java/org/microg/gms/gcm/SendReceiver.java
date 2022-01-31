@@ -16,14 +16,14 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.McsConstants.ACTION_SEND;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
-
-import static org.microg.gms.gcm.McsConstants.ACTION_SEND;
 
 public class SendReceiver extends WakefulBroadcastReceiver {
     @Override

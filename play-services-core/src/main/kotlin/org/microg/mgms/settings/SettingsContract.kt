@@ -88,6 +88,20 @@ object SettingsContract {
         )
     }
 
+    object Profile {
+        private const val id = "profile"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+
+        const val PROFILE = "device_profile"
+        const val SERIAL = "device_profile_serial"
+
+        val PROJECTION = arrayOf(
+                PROFILE,
+                SERIAL
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {
@@ -97,6 +111,7 @@ object SettingsContract {
         }
     }
 
+    @JvmStatic
     fun <T> getSettings(context: Context, uri: Uri, projection: Array<out String>?, f: (Cursor) -> T): T = withoutCallingIdentity {
         context.contentResolver.query(uri, projection, null, null, null).use { c ->
             require(c != null) { "Cursor for query $uri ${projection?.toList()} was null" }
@@ -105,6 +120,7 @@ object SettingsContract {
         }
     }
 
+    @JvmStatic
     fun setSettings(context: Context, uri: Uri, v: ContentValues.() -> Unit) = withoutCallingIdentity {
         val values = ContentValues().apply { v.invoke(this) }
         val affected = context.contentResolver.update(uri, values, null, null)

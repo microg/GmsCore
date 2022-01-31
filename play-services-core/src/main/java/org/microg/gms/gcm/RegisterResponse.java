@@ -16,10 +16,10 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.common.HttpFormClient.ResponseField;
+
 import org.microg.gms.common.HttpFormClient.ResponseHeader;
 import org.microg.gms.common.HttpFormClient.ResponseStatusText;
-
-import static org.microg.gms.common.HttpFormClient.ResponseField;
 
 public class RegisterResponse {
     @ResponseField("token")

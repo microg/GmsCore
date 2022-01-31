@@ -24,7 +24,7 @@ public final class TaskExecutors {
      * An Executor that uses the main application thread.
      */
     public static final Executor MAIN_THREAD = new Executor() {
-        private Handler handler = new Handler(Looper.getMainLooper());
+        private final Handler handler = new Handler(Looper.getMainLooper());
         @Override
         public void execute(Runnable command) {
             handler.post(command);

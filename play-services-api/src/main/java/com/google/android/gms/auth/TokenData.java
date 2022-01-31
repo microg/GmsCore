@@ -25,7 +25,7 @@ import java.util.List;
 
 public class TokenData extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(2)
     public final String token;
@@ -60,5 +60,5 @@ public class TokenData extends AutoSafeParcelable {
         this.scopes = null;
     }
 
-    public static final Creator<TokenData> CREATOR = new AutoCreator<>(TokenData.class);
+    public static final Creator<TokenData> CREATOR = new AutoCreator<TokenData>(TokenData.class);
 }

@@ -21,7 +21,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class SuggestSpecification extends AutoSafeParcelable {
     @SafeParceled(1000)
-    private int versionCode;
+    private final int versionCode;
 
     public SuggestSpecification() {
         versionCode = 2;

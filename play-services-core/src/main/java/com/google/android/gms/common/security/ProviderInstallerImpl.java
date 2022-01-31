@@ -5,6 +5,8 @@
 
 package com.google.android.gms.common.security;
 
+import static com.google.android.gms.security.ProviderInstaller.PROVIDER_NAME;
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
@@ -37,8 +39,6 @@ import java.util.zip.ZipFile;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-
-import static com.google.android.gms.security.ProviderInstaller.PROVIDER_NAME;
 
 @Keep
 public class ProviderInstallerImpl {

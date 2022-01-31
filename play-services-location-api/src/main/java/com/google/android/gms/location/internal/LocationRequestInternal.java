@@ -19,44 +19,52 @@ package com.google.android.gms.location.internal;
 import com.google.android.gms.location.LocationRequest;
 
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.List;
 
 public class LocationRequestInternal extends AutoSafeParcelable {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
+    @Field(1000)
+    private final int versionCode = 1;
 
-    @SafeParceled(1)
+    @Field(1)
     public LocationRequest request;
 
-    @SafeParceled(2)
+    @Field(2) @Deprecated
     public boolean requestNlpDebugInfo;
 
-    @SafeParceled(3)
+    @Field(3) @Deprecated
     public boolean restorePendingIntentListeners;
 
-    @SafeParceled(4)
+    @Field(4) @Deprecated
     public boolean triggerUpdate;
 
-    @SafeParceled(value = 5, subClass = ClientIdentity.class)
+    @Field(value = 5, subClass = ClientIdentity.class)
     public List<ClientIdentity> clients;
 
-    @SafeParceled(6)
+    @Field(6)
     public String tag;
 
-    @SafeParceled(7)
+    @Field(7)
     public boolean hideFromAppOps;
 
-    @SafeParceled(8)
+    @Field(8)
     public boolean forceCoarseLocation;
 
-    @SafeParceled(9)
+    @Field(9)
     public boolean exemptFromThrottle;
 
-    @SafeParceled(10)
+    @Field(10)
     public String moduleId;
+
+    @Field(11)
+    public boolean locationSettingsIgnored;
+
+    @Field(12)
+    public boolean inaccurateLocationsDelayed;
+
+    @Field(13)
+    public String contextAttributeTag;
 
     @Override
     public String toString() {
@@ -71,6 +79,9 @@ public class LocationRequestInternal extends AutoSafeParcelable {
                 ", forceCoarseLocation=" + forceCoarseLocation +
                 ", exemptFromThrottle=" + exemptFromThrottle +
                 ", moduleId=" + moduleId +
+                ", locationSettingsIgnored=" + locationSettingsIgnored +
+                ", inaccurateLocationsDelayed=" + inaccurateLocationsDelayed +
+                ", contextAttributeTag=" + contextAttributeTag +
                 '}';
     }
 

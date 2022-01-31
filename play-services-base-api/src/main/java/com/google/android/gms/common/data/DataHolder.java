@@ -46,7 +46,7 @@ import java.util.Map;
 @PublicApi(until = "1")
 public class DataHolder extends AutoSafeParcelable implements Closeable {
     @SafeParceled(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(1)
     private final String[] columns;

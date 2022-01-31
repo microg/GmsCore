@@ -20,12 +20,13 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.clearcut.internal.PlayLoggerContext;
 import com.google.android.gms.playlog.internal.IPlayLogService;
 import com.google.android.gms.playlog.internal.LogEvent;
-import com.google.android.gms.playlog.internal.PlayLoggerContext;
 
 import java.util.List;
 
+@Deprecated
 public class PlayLogServiceImpl extends IPlayLogService.Stub {
     private static final String TAG = "GmsPlayLogSvcImpl";
 

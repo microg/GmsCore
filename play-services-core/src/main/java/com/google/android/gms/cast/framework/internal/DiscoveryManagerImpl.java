@@ -21,19 +21,18 @@ import android.util.Log;
 
 import com.google.android.gms.cast.framework.IDiscoveryManager;
 import com.google.android.gms.cast.framework.IDiscoveryManagerListener;
-import com.google.android.gms.cast.framework.internal.CastContextImpl;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 public class DiscoveryManagerImpl extends IDiscoveryManager.Stub {
     private static final String TAG = DiscoveryManagerImpl.class.getSimpleName();
 
-    private CastContextImpl castContextImpl;
+    private final CastContextImpl castContextImpl;
 
-    private Set discoveryManagerListeners = new HashSet();
+    private final Set discoveryManagerListeners = new HashSet();
 
     public DiscoveryManagerImpl(CastContextImpl castContextImpl) {
         this.castContextImpl = castContextImpl;

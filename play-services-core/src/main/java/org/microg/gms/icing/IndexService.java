@@ -27,10 +27,10 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
 public class IndexService extends BaseService {
-    private AppDataSearchImpl appDataSearch = new AppDataSearchImpl();
-    private GlobalSearchAdminImpl globalSearchAdmin = new GlobalSearchAdminImpl();
-    private SearchCorporaImpl searchCorpora = new SearchCorporaImpl();
-    private SearchQueriesImpl searchQueries = new SearchQueriesImpl();
+    private final AppDataSearchImpl appDataSearch = new AppDataSearchImpl();
+    private final GlobalSearchAdminImpl globalSearchAdmin = new GlobalSearchAdminImpl();
+    private final SearchCorporaImpl searchCorpora = new SearchCorporaImpl();
+    private final SearchQueriesImpl searchQueries = new SearchQueriesImpl();
 
     public IndexService() {
         super("GmsIcingIndexSvc",

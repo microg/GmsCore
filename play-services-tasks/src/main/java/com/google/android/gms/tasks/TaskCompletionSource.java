@@ -17,7 +17,7 @@ import org.microg.gms.tasks.TaskImpl;
  */
 @PublicApi
 public class TaskCompletionSource<TResult> {
-    private TaskImpl<TResult> task = new TaskImpl<>();
+    private final TaskImpl<TResult> task = new TaskImpl<>();
 
     /**
      * Creates an instance of {@link TaskCompletionSource}.

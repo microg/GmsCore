@@ -21,9 +21,9 @@ import java.util.Objects;
 
 public class GoogleApiManager {
     private static GoogleApiManager instance;
-    private Context context;
-    private Map<ApiInstance, ApiClient> clientMap = new HashMap<>();
-    private Map<ApiInstance, List<WaitingApiCall<?>>> waitingApiCallMap = new HashMap<>();
+    private final Context context;
+    private final Map<ApiInstance, ApiClient> clientMap = new HashMap<>();
+    private final Map<ApiInstance, List<WaitingApiCall<?>>> waitingApiCallMap = new HashMap<>();
 
     private GoogleApiManager(Context context) {
         this.context = context;
@@ -81,7 +81,7 @@ public class GoogleApiManager {
     }
 
     private class ConnectionCallback implements ConnectionCallbacks {
-        private ApiInstance apiInstance;
+        private final ApiInstance apiInstance;
 
         public ConnectionCallback(ApiInstance apiInstance) {
             this.apiInstance = apiInstance;
@@ -99,7 +99,7 @@ public class GoogleApiManager {
     }
 
     private class ConnectionFailedListener implements OnConnectionFailedListener {
-        private ApiInstance apiInstance;
+        private final ApiInstance apiInstance;
 
         public ConnectionFailedListener(ApiInstance apiInstance) {
             this.apiInstance = apiInstance;
@@ -112,8 +112,8 @@ public class GoogleApiManager {
     }
 
     private static class WaitingApiCall<R> {
-        private PendingGoogleApiCall<R, ApiClient> apiCall;
-        private TaskCompletionSource<R> completionSource;
+        private final PendingGoogleApiCall<R, ApiClient> apiCall;
+        private final TaskCompletionSource<R> completionSource;
 
         public WaitingApiCall(PendingGoogleApiCall<R, ApiClient> apiCall, TaskCompletionSource<R> completionSource) {
             this.apiCall = apiCall;
@@ -148,8 +148,8 @@ public class GoogleApiManager {
     }
 
     private static class ApiInstance {
-        private Class<?> apiClass;
-        private Api.ApiOptions apiOptions;
+        private final Class<?> apiClass;
+        private final Api.ApiOptions apiOptions;
 
         public ApiInstance(Class<?> apiClass, Api.ApiOptions apiOptions) {
             this.apiClass = apiClass;

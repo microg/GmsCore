@@ -6,7 +6,6 @@
 
 package org.microg.gms.gcm
 
-import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -22,7 +21,6 @@ import org.microg.gms.checkin.CheckinService
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.ForegroundServiceContext
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.common.Utils
 import org.microg.gms.gcm.GcmConstants.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
@@ -132,7 +130,7 @@ class PushRegisterService : LifecycleService() {
         Log.d(TAG, "register[req]: " + intent.toString() + " extras=" + intent.extras)
         val bundle = completeRegisterRequest(this, database,
                 RegisterRequest()
-                        .build(Utils.getBuild(this))
+                        .build(this)
                         .sender(intent.getStringExtra(EXTRA_SENDER))
                         .checkin(LastCheckinInfo.read(this))
                         .app(packageName)
@@ -148,7 +146,7 @@ class PushRegisterService : LifecycleService() {
         val packageName = intent.appPackageName ?: throw RuntimeException("No package provided")
         Log.d(TAG, "unregister[req]: " + intent.toString() + " extras=" + intent.extras)
         val bundle = completeRegisterRequest(this, database, RegisterRequest()
-                .build(Utils.getBuild(this))
+                .build(this)
                 .sender(intent.getStringExtra(EXTRA_SENDER))
                 .checkin(LastCheckinInfo.read(this))
                 .app(packageName)
@@ -298,7 +296,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
                         if (!delete) ensureAppRegistrationAllowed(context, database, packageName)
                         val bundle = completeRegisterRequest(context, database,
                                 RegisterRequest()
-                                        .build(Utils.getBuild(context))
+                                        .build(context)
                                         .sender(sender)
                                         .checkin(LastCheckinInfo.read(context))
                                         .app(packageName)

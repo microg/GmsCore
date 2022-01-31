@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 public class UpdateListenerLifecycleObserver {
-    private static WeakHashMap<Activity, WeakReference<UpdateListenerLifecycleObserver>> map = new WeakHashMap<>();
+    private static final WeakHashMap<Activity, WeakReference<UpdateListenerLifecycleObserver>> map = new WeakHashMap<>();
     private static boolean activityLifecycleCallbacksRegistered = false;
-    private List<WeakReference<UpdateListener<?>>> list = new ArrayList<>();
+    private final List<WeakReference<UpdateListener<?>>> list = new ArrayList<>();
 
     public synchronized static UpdateListenerLifecycleObserver getObserverForActivity(Activity activity) {
         WeakReference<UpdateListenerLifecycleObserver> ref = map.get(activity);

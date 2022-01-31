@@ -17,6 +17,7 @@
 package org.microg.gms.location;
 
 import android.accounts.Account;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -57,5 +58,16 @@ public class ReportingServiceImpl extends IReportingService.Stub {
     public int reportDeviceAtPlace(Account account, PlaceReport report) throws RemoteException {
         Log.d(TAG, "reportDeviceAtPlace");
         return 0;
+    }
+
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+        if (super.onTransact(code, data, reply, flags)) {
+            return true;
+        }
+
+        Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
+        return false;
     }
 }

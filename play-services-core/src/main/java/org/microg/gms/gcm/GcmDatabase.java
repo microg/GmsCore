@@ -20,7 +20,7 @@ import java.util.List;
 public class GcmDatabase extends SQLiteOpenHelper {
     private static final String TAG = GcmDatabase.class.getSimpleName();
     public static final String DB_NAME = "gcmstatus";
-    private static int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
     private static final String CREATE_TABLE_APPS = "CREATE TABLE apps (" +
             "package_name TEXT," +
             "last_error TEXT DEFAULT ''," +
@@ -50,7 +50,7 @@ public class GcmDatabase extends SQLiteOpenHelper {
     private static final String FIELD_TIMESTAMP = "timestamp";
     private static final String FIELD_REGISTER_ID = "register_id";
 
-    private Context context;
+    private final Context context;
 
     public GcmDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

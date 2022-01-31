@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 
 import com.mgoogle.android.gms.R;
 
-//import org.microg.nlp.Preferences;
 import org.microg.tools.ui.AbstractDashboardActivity;
 
 public class SettingsDashboardActivity extends AbstractDashboardActivity {

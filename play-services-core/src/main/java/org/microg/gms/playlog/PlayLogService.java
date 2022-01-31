@@ -24,9 +24,10 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
+@Deprecated
 public class PlayLogService extends BaseService {
 
-    private PlayLogServiceImpl playLogService = new PlayLogServiceImpl();
+    private final PlayLogServiceImpl playLogService = new PlayLogServiceImpl();
 
     public PlayLogService() {
         super("GmsPlayLogSvc", GmsService.PLAY_LOG);

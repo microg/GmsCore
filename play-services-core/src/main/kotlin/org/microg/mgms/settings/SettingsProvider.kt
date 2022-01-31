@@ -20,6 +20,7 @@ import org.microg.gms.gcm.GcmPrefs
 import org.microg.mgms.settings.SettingsContract.Auth
 import org.microg.mgms.settings.SettingsContract.CheckIn
 import org.microg.mgms.settings.SettingsContract.Gcm
+import org.microg.mgms.settings.SettingsContract.Profile
 import org.microg.mgms.settings.SettingsContract.getAuthority
 import java.io.File
 
@@ -61,6 +62,7 @@ class SettingsProvider : ContentProvider() {
         CheckIn.getContentUri(context!!) -> queryCheckIn(projection ?: CheckIn.PROJECTION)
         Gcm.getContentUri(context!!) -> queryGcm(projection ?: Gcm.PROJECTION)
         Auth.getContentUri(context!!) -> queryAuth(projection ?: Auth.PROJECTION)
+        Profile.getContentUri(context!!) -> queryProfile(projection ?: Profile.PROJECTION)
         else -> null
     }
 
@@ -76,6 +78,7 @@ class SettingsProvider : ContentProvider() {
             CheckIn.getContentUri(context!!) -> updateCheckIn(values)
             Gcm.getContentUri(context!!) -> updateGcm(values)
             Auth.getContentUri(context!!) -> updateAuth(values)
+            Profile.getContentUri(context!!) -> updateProfile(values)
             else -> return 0
         }
         return 1
@@ -214,9 +217,30 @@ class SettingsProvider : ContentProvider() {
         editor.apply()
     }
 
+    private fun queryProfile(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            Profile.PROFILE -> getSettingsString(key, "auto")
+            Profile.SERIAL -> getSettingsString(key)
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+
+    private fun updateProfile(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                Profile.PROFILE -> editor.putString(key, value as String?)
+                Profile.SERIAL -> editor.putString(key, value as String?)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
     private fun MatrixCursor.addRow(
         p: Array<out String>,
-        valueGetter: (String) -> Any
+        valueGetter: (String) -> Any?
     ): MatrixCursor {
         val row = newRow()
         for (key in p) row.add(valueGetter.invoke(key))
@@ -241,7 +265,16 @@ class SettingsProvider : ContentProvider() {
      * @return the current setting as [Int], because [ContentProvider] does not support [Boolean].
      */
     private fun getSettingsBoolean(key: String, def: Boolean): Int {
-        val default = systemDefaultPreferences?.getBoolean(key, def) ?: def
-        return if (preferences.getBoolean(key, default)) 1 else 0
+        return listOf(preferences, systemDefaultPreferences).getBooleanAsInt(key, def)
     }
+
+    private fun getSettingsString(key: String, def: String? = null): String? = listOf(preferences, systemDefaultPreferences).getString(key, def)
+    private fun getSettingsInt(key: String, def: Int): Int = listOf(preferences, systemDefaultPreferences).getInt(key, def)
+    private fun getSettingsLong(key: String, def: Long): Long = listOf(preferences, systemDefaultPreferences).getLong(key, def)
+
+    private fun List<SharedPreferences?>.getString(key: String, def: String?): String? = foldRight(def) { preferences, defValue -> preferences?.getString(key, defValue) ?: defValue }
+    private fun List<SharedPreferences?>.getInt(key: String, def: Int): Int = foldRight(def) { preferences, defValue -> preferences?.getInt(key, defValue) ?: defValue }
+    private fun List<SharedPreferences?>.getLong(key: String, def: Long): Long = foldRight(def) { preferences, defValue -> preferences?.getLong(key, defValue) ?: defValue }
+    private fun List<SharedPreferences?>.getBoolean(key: String, def: Boolean): Boolean = foldRight(def) { preferences, defValue -> preferences?.getBoolean(key, defValue) ?: defValue }
+    private fun List<SharedPreferences?>.getBooleanAsInt(key: String, def: Boolean): Int = if (getBoolean(key, def)) 1 else 0
 }

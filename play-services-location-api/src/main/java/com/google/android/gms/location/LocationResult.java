@@ -28,7 +28,7 @@ import java.util.List;
 public class LocationResult extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    private int versionCode = 2;
+    private final int versionCode = 2;
 
     @SafeParceled(value = 1, subClass = Location.class)
     public final List<Location> locations;

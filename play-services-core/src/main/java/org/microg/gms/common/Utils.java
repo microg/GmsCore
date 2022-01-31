@@ -16,6 +16,8 @@
 
 package org.microg.gms.common;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -24,16 +26,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
 public class Utils {
 
     public static Locale getLocale(Context context) {
         return Locale.getDefault(); // TODO
-    }
-
-    public static Build getBuild(Context context) {
-        return new Build();
     }
 
     public static DeviceIdentifier getDeviceIdentifier(Context context) {

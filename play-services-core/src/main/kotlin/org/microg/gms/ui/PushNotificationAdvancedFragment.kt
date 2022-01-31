@@ -4,14 +4,16 @@
  */
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.TwoStatePreference
 import com.mgoogle.android.gms.R
-import org.microg.gms.gcm.*
+import org.microg.gms.gcm.GcmPrefs
+import org.microg.gms.gcm.getGcmServiceInfo
+import org.microg.gms.gcm.setGcmServiceConfiguration
 
 class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
     private lateinit var networkMobile: ListPreference
@@ -23,6 +25,7 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_gcm_advanced)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         networkMobile = preferenceScreen.findPreference(GcmPrefs.PREF_NETWORK_MOBILE) ?: networkMobile
         networkWifi = preferenceScreen.findPreference(GcmPrefs.PREF_NETWORK_WIFI) ?: networkWifi
@@ -30,36 +33,40 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         networkOther = preferenceScreen.findPreference(GcmPrefs.PREF_NETWORK_OTHER) ?: networkOther
 
         networkMobile.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
-                    setGcmServiceConfiguration(requireContext(), getGcmServiceInfo(requireContext()).configuration.copy(mobile = it))
+                    setGcmServiceConfiguration(requireContext(), getGcmServiceInfo(appContext).configuration.copy(mobile = it))
                 }
                 updateContent()
             }
             true
         }
         networkWifi.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
-                    setGcmServiceConfiguration(requireContext(), getGcmServiceInfo(requireContext()).configuration.copy(wifi = it))
+                    setGcmServiceConfiguration(appContext, getGcmServiceInfo(requireContext()).configuration.copy(wifi = it))
                 }
                 updateContent()
             }
             true
         }
         networkRoaming.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
-                    setGcmServiceConfiguration(requireContext(), getGcmServiceInfo(requireContext()).configuration.copy(roaming = it))
+                    setGcmServiceConfiguration(appContext, getGcmServiceInfo(requireContext()).configuration.copy(roaming = it))
                 }
                 updateContent()
             }
             true
         }
         networkOther.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
                 (newValue as? String)?.toIntOrNull()?.let {
-                    setGcmServiceConfiguration(requireContext(), getGcmServiceInfo(requireContext()).configuration.copy(other = it))
+                    setGcmServiceConfiguration(appContext, getGcmServiceInfo(requireContext()).configuration.copy(other = it))
                 }
                 updateContent()
             }
@@ -73,8 +80,9 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateContent() {
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            val serviceInfo = getGcmServiceInfo(requireContext())
+            val serviceInfo = getGcmServiceInfo(appContext)
             networkMobile.value = serviceInfo.configuration.mobile.toString()
             networkMobile.summary = getSummaryString(serviceInfo.configuration.mobile, serviceInfo.learntMobileInterval)
             networkWifi.value = serviceInfo.configuration.wifi.toString()

@@ -16,6 +16,13 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.McsConstants.MCS_VERSION_CODE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
+import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
+import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -26,25 +33,18 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.microg.gms.gcm.McsConstants.MCS_VERSION_CODE;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
-import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
-
 public class McsOutputStream extends Thread implements Handler.Callback, Closeable {
     private static final String TAG = "GmsGcmMcsOutput";
 
     private final OutputStream os;
     private boolean initialized;
-    private int version = MCS_VERSION_CODE;
+    private final int version = MCS_VERSION_CODE;
     private int streamId = 0;
 
-    private Handler mainHandler;
+    private final Handler mainHandler;
     private Handler myHandler;
 
-    private boolean closed = false;
+    private volatile boolean closed = false;
 
     public McsOutputStream(OutputStream os, Handler mainHandler) {
         this(os, mainHandler, false);
@@ -78,7 +78,11 @@ public class McsOutputStream extends Thread implements Handler.Callback, Closeab
                     writeInternal((Message) msg.obj, msg.arg1);
                     mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_DONE, msg.arg1, msg.arg2, msg.obj));
                 } catch (IOException e) {
-                    mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_ERROR, e));
+                    if (closed) {
+                        Log.d(TAG, "We were closed already. Ignoring IOException");
+                    } else {
+                        mainHandler.dispatchMessage(mainHandler.obtainMessage(MSG_OUTPUT_ERROR, e));
+                    }
                 }
                 return true;
             case MSG_TEARDOWN:

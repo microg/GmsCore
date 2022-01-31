@@ -24,26 +24,23 @@ import com.google.android.gms.cast.framework.CastState;
 import com.google.android.gms.cast.framework.ICastStateListener;
 import com.google.android.gms.cast.framework.ISessionManager;
 import com.google.android.gms.cast.framework.ISessionManagerListener;
-import com.google.android.gms.cast.framework.internal.CastContextImpl;
-import com.google.android.gms.cast.framework.internal.SessionImpl;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
-import java.util.Set;
-import java.util.HashSet;
-
-import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class SessionManagerImpl extends ISessionManager.Stub {
     private static final String TAG = SessionManagerImpl.class.getSimpleName();
 
-    private CastContextImpl castContext;
+    private final CastContextImpl castContext;
 
-    private Set<ISessionManagerListener> sessionManagerListeners = new HashSet<ISessionManagerListener>();
-    private Set<ICastStateListener> castStateListeners = new HashSet<ICastStateListener>();
+    private final Set<ISessionManagerListener> sessionManagerListeners = new HashSet<ISessionManagerListener>();
+    private final Set<ICastStateListener> castStateListeners = new HashSet<ICastStateListener>();
 
-    private Map<String, SessionImpl> routeSessions = new HashMap<>();
+    private final Map<String, SessionImpl> routeSessions = new HashMap<>();
 
     private SessionImpl currentSession;
 

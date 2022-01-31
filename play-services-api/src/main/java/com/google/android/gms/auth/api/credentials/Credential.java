@@ -13,37 +13,29 @@ import android.text.TextUtils;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 @PublicApi
 public class Credential extends AutoSafeParcelable {
 
     @Field(1000)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @Field(1)
     private String id;
-
     @Field(2)
     private String name;
-
     @Field(3)
     private Uri profilePictureUri;
-
     @Field(value = 4, subClass = IdToken.class)
     private List<IdToken> tokens;
-
     @Field(5)
     private String password;
-
     @Field(6)
     private String accountType;
-
     @Field(7)
     private String generatedPassword;
 
@@ -132,19 +124,19 @@ public class Credential extends AutoSafeParcelable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Credential)) return false;
+        if (o == null || !(o instanceof Credential)) return false;
 
         Credential that = (Credential) o;
 
-        if (!Objects.equals(id, that.id)) return false;
-        if (!Objects.equals(name, that.name)) return false;
-        if (!Objects.equals(profilePictureUri, that.profilePictureUri))
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (profilePictureUri != null ? !profilePictureUri.equals(that.profilePictureUri) : that.profilePictureUri != null)
             return false;
-        if (!Objects.equals(password, that.password))
+        if (password != null ? !password.equals(that.password) : that.password != null)
             return false;
-        if (!Objects.equals(accountType, that.accountType))
+        if (accountType != null ? !accountType.equals(that.accountType) : that.accountType != null)
             return false;
-        return Objects.equals(generatedPassword, that.generatedPassword);
+        return generatedPassword != null ? generatedPassword.equals(that.generatedPassword) : that.generatedPassword == null;
 
     }
 
@@ -154,7 +146,7 @@ public class Credential extends AutoSafeParcelable {
     }
 
     public static class Builder {
-        private String id;
+        private final String id;
         private String name;
         private Uri profilePictureUri;
         private String password;
@@ -238,5 +230,5 @@ public class Credential extends AutoSafeParcelable {
         }
     }
 
-    public static final Creator<Credential> CREATOR = new AutoCreator<>(Credential.class);
+    public static final Creator<Credential> CREATOR = new AutoCreator<Credential>(Credential.class);
 }

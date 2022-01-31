@@ -26,9 +26,6 @@
     <string name="notification_service_content">Ketuk di sini dan nonaktifkan pengoptimalan baterai untuk microG, lalu reboot perangkat untuk menghapus notifikasi ini.</string>
 
     <string name="just_a_sec">Tunggu sebentar…</string>
-    <string name="ask_permission_tos">Dengan melanjutkan, anda mengizinkan aplikasi ini dan Google untuk menggunakan informasi anda sesuai dengan persyaratan layanan masing-masing dan kebijakan privasi.</string>
-    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin:</string>
-    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> ingin menggunakan:</string>
     <string name="account_manager_title">Pengelola akun Google</string>
     <string name="sorry">Maaf…</string>
     <string name="auth_before_connect">"Sebuah aplikasi di perangkat anda mencoba untuk masuk ke akun Google.
@@ -47,10 +44,6 @@ Coba lagi nanti."</string>
     <string name="auth_finalize">"Perangkat anda sedang menghubungkan ke Google untuk menyimpan informasi ke akun anda.
 
 Ini bisa berlangsung beberapa menit."</string>
-    <string name="allow">Izinkan</string>
-    <string name="deny">Tolak</string>
-    <string name="auth_notification_title">Autentikasi dibutuhkan</string>
-    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> membutuhkan autentikasi anda untuk mengakses akun Google anda.</string>
 
     <string name="perm_status_broadcast_label"> mendengarkan ke siaran internal langsung</string>
     <string name="perm_c2dm_receive_label">kirim ke pesan C2DM </string>
@@ -81,10 +74,6 @@ Ini bisa berlangsung beberapa menit."</string>
 
     <string name="checkin_not_registered">Tidak diregistrasi</string>
     <string name="checkin_last_registration">Registrasi terakhir: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-
-    <string name="cond_gcm_bat_title">Optimisasi baterai diaktifkan</string>
-    <string name="cond_gcm_bat_summary">Anda mengaktifkan Cloud Messaging namun mengaktifkan optimisasi baterai untuk layanan utama microG. Untuk mendapatkan notifikasi push anda harus menonaktifkan optimisasi baterai.</string>
-    <string name="cond_gcm_bat_action">Nonaktifkan optimisasi</string>
 
     <string name="prefs_account">Preferensi akun</string>
     <string name="prefs_account_privacy">Informasi pribadi &amp; privasi</string>
@@ -126,7 +115,6 @@ Ini bisa berlangsung beberapa menit."</string>
     <string name="gcm_network_state_connected">Terhubung sejak <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
     <string name="pref_push_app_allow_register_title">Izinkan registrasi</string>
-    <string name="pref_push_app_allow_register_ask">Izinkan {appName} untuk mendaftar pemberitahuan push?</string>
     <string name="pref_push_app_allow_register_summary">Izinkan aplikasi untuk meregistrasi untuk notifikasi push.</string>
     <string name="pref_push_app_wake_for_delivery_title">Mulai aplikasi dalam pesan push</string>
     <string name="pref_push_app_wake_for_delivery_summary">Mulai aplikasi saat di background untuk menerima pesan push yang akan datang.</string>

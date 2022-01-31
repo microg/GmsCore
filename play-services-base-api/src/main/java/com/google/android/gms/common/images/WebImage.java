@@ -16,12 +16,12 @@
 
 package com.google.android.gms.common.images;
 
-import java.util.Locale;
-
 import android.net.Uri;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
+
+import java.util.Locale;
 
 public class WebImage extends AutoSafeParcelable {
     public static final Creator<WebImage> CREATOR = new AutoCreator<>(WebImage.class);
@@ -35,7 +35,7 @@ public class WebImage extends AutoSafeParcelable {
     }
 
     @SafeParceled(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
 
     @SafeParceled(2)
     private final Uri uri;

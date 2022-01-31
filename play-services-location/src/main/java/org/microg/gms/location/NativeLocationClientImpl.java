@@ -16,6 +16,9 @@
 
 package org.microg.gms.location;
 
+import static android.location.LocationManager.KEY_LOCATION_CHANGED;
+import static android.location.LocationManager.KEY_PROXIMITY_ENTERING;
+
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,9 +47,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.location.LocationManager.KEY_LOCATION_CHANGED;
-import static android.location.LocationManager.KEY_PROXIMITY_ENTERING;
 
 @SuppressWarnings("MissingPermission")
 public class NativeLocationClientImpl {
@@ -135,7 +135,7 @@ public class NativeLocationClientImpl {
         i.putExtras(bundle);
         pendingCount.put(pendingIntent, request.getNumUpdates());
         nativePendingMap.put(pendingIntent, PendingIntent.getActivity(context, 0, i, 0));
-        locationManager.requestLocationUpdates(request.getInterval(), request.getSmallestDesplacement(),
+        locationManager.requestLocationUpdates(request.getInterval(), request.getSmallestDisplacement(),
                 makeNativeCriteria(request), nativePendingMap.get(pendingIntent));
     }
 
@@ -147,7 +147,7 @@ public class NativeLocationClientImpl {
         }
         nativeListenerMap.put(listener, new NativeListener(listener, request.getNumUpdates()));
         locationManager.requestLocationUpdates(request.getInterval(),
-                request.getSmallestDesplacement(), makeNativeCriteria(request),
+                request.getSmallestDisplacement(), makeNativeCriteria(request),
                 nativeListenerMap.get(listener), looper);
     }
 
@@ -251,9 +251,7 @@ public class NativeLocationClientImpl {
 
             NativeListener that = (NativeListener) o;
 
-            if (!listener.equals(that.listener)) return false;
-
-            return true;
+            return listener.equals(that.listener);
         }
 
         @Override

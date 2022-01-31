@@ -20,7 +20,7 @@ import org.microg.gms.tasks.CancellationTokenImpl;
  */
 @PublicApi
 public class CancellationTokenSource {
-    private CancellationTokenImpl token = new CancellationTokenImpl();
+    private final CancellationTokenImpl token = new CancellationTokenImpl();
 
     /**
      * Creates a new {@link CancellationTokenSource} instance.

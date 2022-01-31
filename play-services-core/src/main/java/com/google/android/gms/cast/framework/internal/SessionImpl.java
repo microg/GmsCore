@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
-
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.cast.framework.ISession;
@@ -31,9 +30,9 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 public class SessionImpl extends ISession.Stub {
     private static final String TAG = SessionImpl.class.getSimpleName();
 
-    private String category;
-    private String sessionId;
-    private ISessionProxy proxy;
+    private final String category;
+    private final String sessionId;
+    private final ISessionProxy proxy;
 
     private CastSessionImpl castSession;
 

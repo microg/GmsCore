@@ -52,8 +52,8 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
     }
 
     private fun updateContent() {
+        val context = requireContext()
         lifecycleScope.launchWhenResumed {
-            val context = requireContext()
             val apps = withContext(Dispatchers.IO) {
                 val res = database.appList.map { app ->
                     app to context.packageManager.getApplicationInfoIfExists(app.packageName)
@@ -75,7 +75,7 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                     pref.key = "pref_push_app_" + app.packageName
                     pref to (database.getRegistrationsByApp(app.packageName))
                 }.sortedBy {
-                    it.first.title.toString().toLowerCase()
+                    it.first.title.toString().lowercase()
                 }.mapIndexed { idx, pair ->
                     pair.first.order = idx
                     pair

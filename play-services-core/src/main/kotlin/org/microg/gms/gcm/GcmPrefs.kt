@@ -1,15 +1,17 @@
+@file:Suppress("DEPRECATION")
+
 package org.microg.gms.gcm
 
 import android.content.Context
 import android.content.Intent
-import android.net.*
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.util.Log
 import org.microg.gms.gcm.TriggerReceiver.FORCE_TRY_RECONNECT
 import org.microg.mgms.settings.SettingsContract
 import org.microg.mgms.settings.SettingsContract.Gcm
 import org.microg.mgms.settings.SettingsContract.setSettings
 
-@Suppress("Warnings")
 data class GcmPrefs(
     val isGcmLogEnabled: Boolean,
     val lastPersistedId: String?,
@@ -87,7 +89,6 @@ data class GcmPrefs(
         }
     }
 
-    @Suppress("DEPRECATION")
     fun getNetworkPrefForInfo(info: NetworkInfo?): String {
         if (info == null) return PREF_NETWORK_OTHER
         return if (info.isRoaming) PREF_NETWORK_ROAMING else when (info.type) {
@@ -97,7 +98,6 @@ data class GcmPrefs(
         }
     }
 
-    @Suppress("DEPRECATION")
     fun getHeartbeatMsFor(info: NetworkInfo?): Int {
         return getHeartbeatMsFor(getNetworkPrefForInfo(info))
     }
@@ -118,13 +118,16 @@ data class GcmPrefs(
         Log.d("GmsGcmPrefs", "learnTimeout: $pref")
         when (pref) {
             PREF_NETWORK_MOBILE, PREF_NETWORK_ROAMING -> setSettings(context, Gcm.getContentUri(context)) {
-                put(Gcm.LEARNT_MOBILE, (learntMobileInterval * 0.95).toInt())
+                val newInterval = (learntMobileInterval * 0.95).toInt()
+                put(Gcm.LEARNT_MOBILE, newInterval)
             }
             PREF_NETWORK_WIFI -> setSettings(context, Gcm.getContentUri(context)) {
-                put(Gcm.LEARNT_WIFI, (learntWifiInterval * 0.95).toInt())
+                val newInterval = (learntMobileInterval * 0.95).toInt()
+                put(Gcm.LEARNT_WIFI, newInterval)
             }
             else -> setSettings(context, Gcm.getContentUri(context)) {
-                put(Gcm.LEARNT_OTHER, (learntOtherInterval * 0.95).toInt())
+                val newInterval = (learntMobileInterval * 0.95).toInt()
+                put(Gcm.LEARNT_OTHER, newInterval)
             }
         }
     }
@@ -156,7 +159,6 @@ data class GcmPrefs(
         }
     }
 
-    @Suppress("DEPRECATION")
     fun isEnabledFor(info: NetworkInfo?): Boolean {
         return isEnabled && info != null && getHeartbeatMsFor(info) >= 0
     }

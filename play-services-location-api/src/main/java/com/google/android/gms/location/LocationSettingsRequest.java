@@ -1,24 +1,12 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package com.google.android.gms.location;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,34 +14,40 @@ import java.util.List;
 
 @PublicApi
 public class LocationSettingsRequest extends AutoSafeParcelable {
-    @SafeParceled(1000)
-    private int versionCode = 2;
+    @Field(1000)
+    private final int versionCode = 2;
 
-    @SafeParceled(value = 1, subClass = LocationRequest.class)
+    @Field(value = 1, subClass = LocationRequest.class)
     @PublicApi(exclude = true)
     public List<LocationRequest> requests;
 
-    @SafeParceled(2)
+    @Field(2)
     @PublicApi(exclude = true)
     public boolean alwaysShow;
 
+    @Field(3)
     @PublicApi(exclude = true)
     public boolean needBle;
+
+    @Field(5)
+    @PublicApi(exclude = true)
+    public LocationSettingsConfiguration configuration;
 
     private LocationSettingsRequest() {
     }
 
-    private LocationSettingsRequest(List<LocationRequest> requests, boolean alwaysShow, boolean needBle) {
+    private LocationSettingsRequest(List<LocationRequest> requests, boolean alwaysShow, boolean needBle, LocationSettingsConfiguration configuration) {
         this.requests = requests;
         this.alwaysShow = alwaysShow;
         this.needBle = needBle;
+        this.configuration = configuration;
     }
 
     /**
      * A builder that builds {@link LocationSettingsRequest}.
      */
     public static class Builder {
-        private List<LocationRequest> requests = new ArrayList<LocationRequest>();
+        private final List<LocationRequest> requests = new ArrayList<LocationRequest>();
         private boolean alwaysShow = false;
         private boolean needBle = false;
 
@@ -79,7 +73,7 @@ public class LocationSettingsRequest extends AutoSafeParcelable {
          * Creates a LocationSettingsRequest that can be used with SettingsApi.
          */
         public LocationSettingsRequest build() {
-            return new LocationSettingsRequest(requests, alwaysShow, needBle);
+            return new LocationSettingsRequest(requests, alwaysShow, needBle, null);
         }
 
         /**

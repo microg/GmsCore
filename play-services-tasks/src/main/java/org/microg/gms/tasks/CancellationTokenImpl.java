@@ -10,7 +10,7 @@ import com.google.android.gms.tasks.DuplicateTaskCompletionException;
 import com.google.android.gms.tasks.OnTokenCanceledListener;
 
 public class CancellationTokenImpl extends CancellationToken {
-    private TaskImpl<Void> task = new TaskImpl<>();
+    private final TaskImpl<Void> task = new TaskImpl<>();
 
     @Override
     public boolean isCancellationRequested() {

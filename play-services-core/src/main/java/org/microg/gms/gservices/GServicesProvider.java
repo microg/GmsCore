@@ -18,15 +18,11 @@ package org.microg.gms.gservices;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-
-import org.microg.gms.checkin.CheckinPrefs;
-import org.microg.gms.gcm.GcmPrefs;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,8 +46,8 @@ public class GServicesProvider extends ContentProvider {
     private static final String TAG = "GmsServicesProvider";
 
     private DatabaseHelper databaseHelper;
-    private Map<String, String> cache = new HashMap<>();
-    private Set<String> cachedPrefixes = new HashSet<>();
+    private final Map<String, String> cache = new HashMap<>();
+    private final Set<String> cachedPrefixes = new HashSet<>();
 
     @Override
     public boolean onCreate() {

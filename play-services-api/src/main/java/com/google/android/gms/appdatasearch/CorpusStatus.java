@@ -24,7 +24,7 @@ import org.microg.safeparcel.SafeParceled;
 public class CorpusStatus extends AutoSafeParcelable {
 
     @SafeParceled(1000)
-    private int versionCode;
+    private final int versionCode;
     @SafeParceled(1)
     public boolean found;
     @SafeParceled(2)

@@ -16,20 +16,22 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.common.HttpFormClient.RequestContent;
+import static org.microg.gms.common.HttpFormClient.RequestContentDynamic;
+import static org.microg.gms.common.HttpFormClient.RequestHeader;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import org.microg.gms.checkin.LastCheckinInfo;
-import org.microg.gms.common.Build;
 import org.microg.gms.common.HttpFormClient;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static org.microg.gms.common.HttpFormClient.RequestContent;
-import static org.microg.gms.common.HttpFormClient.RequestContentDynamic;
-import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
 public class RegisterRequest extends HttpFormClient.Request {
     private static final String SERVICE_URL = "https://android.clients.google.com/c2dm/register3";
@@ -61,7 +63,7 @@ public class RegisterRequest extends HttpFormClient.Request {
     @RequestContent("target_ver")
     public Integer sdkVersion;
     @RequestContentDynamic
-    private Map<String, String> extraParams = new LinkedHashMap<>();
+    private final Map<String, String> extraParams = new LinkedHashMap<>();
 
     @Override
     public void prepare() {
@@ -103,9 +105,10 @@ public class RegisterRequest extends HttpFormClient.Request {
         return this;
     }
 
-    public RegisterRequest build(Build build) {
-        deviceName = build.device;
-        buildVersion = build.id;
+    public RegisterRequest build(Context context) {
+        ProfileManager.ensureInitialized(context);
+        deviceName = Build.DEVICE;
+        buildVersion = Build.ID;
         return this;
     }
 

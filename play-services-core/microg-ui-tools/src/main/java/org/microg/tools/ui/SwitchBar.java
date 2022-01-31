@@ -17,6 +17,8 @@
 
 package org.microg.tools.ui;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Parcel;
@@ -35,8 +37,6 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import java.util.ArrayList;
 
-import static android.os.Build.VERSION.SDK_INT;
-
 public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedChangeListener,
         View.OnClickListener {
 
@@ -52,12 +52,12 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
 
     private final TextAppearanceSpan mSummarySpan;
 
-    private ToggleSwitch mSwitch;
-    private TextView mTextView;
+    private final ToggleSwitch mSwitch;
+    private final TextView mTextView;
     private String mLabel;
     private String mSummary;
 
-    private ArrayList<OnSwitchChangeListener> mSwitchChangeListeners =
+    private final ArrayList<OnSwitchChangeListener> mSwitchChangeListeners =
             new ArrayList<>();
 
     public SwitchBar(Context context) {

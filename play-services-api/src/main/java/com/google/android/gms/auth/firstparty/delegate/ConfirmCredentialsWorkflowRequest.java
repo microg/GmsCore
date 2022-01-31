@@ -27,7 +27,7 @@ import org.microg.safeparcel.SafeParceled;
 
 public class ConfirmCredentialsWorkflowRequest extends AutoSafeParcelable {
     @SafeParceled(1)
-    private int versionCode = 3;
+    private final int versionCode = 3;
     @SafeParceled(2)
     public String accountName;
     @SafeParceled(3)
@@ -39,5 +39,5 @@ public class ConfirmCredentialsWorkflowRequest extends AutoSafeParcelable {
     @SafeParceled(6)
     public AccountAuthenticatorResponse accountAuthenticatorResponse;
 
-    public static final Creator<ConfirmCredentialsWorkflowRequest> CREATOR = new AutoCreator<>(ConfirmCredentialsWorkflowRequest.class);
+    public static final Creator<ConfirmCredentialsWorkflowRequest> CREATOR = new AutoCreator<ConfirmCredentialsWorkflowRequest>(ConfirmCredentialsWorkflowRequest.class);
 }

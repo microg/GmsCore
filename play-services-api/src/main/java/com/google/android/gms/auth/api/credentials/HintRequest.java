@@ -20,7 +20,7 @@ import java.util.Arrays;
 @PublicApi
 public class HintRequest extends AutoSafeParcelable {
     @Field(1000)
-    private int versionCode = 2;
+    private final int versionCode = 2;
 
     @Field(1)
     private CredentialPickerConfig hintPickerConfig;

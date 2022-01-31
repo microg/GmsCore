@@ -25,7 +25,7 @@ public class AppMetadata extends AutoSafeParcelable {
     @Field(8)
     private String field8;
     @Field(9)
-    private boolean field9 = true;
+    private final boolean field9 = true;
     @Field(10)
     private boolean field10;
     @Field(11)
@@ -56,6 +56,10 @@ public class AppMetadata extends AutoSafeParcelable {
     public String gaAppId;
     @Field(25)
     private String field25;
+
+    public String toString() {
+        return "AppMetadata[" + packageName + "]";
+    }
 
     public static final Creator<AppMetadata> CREATOR = new AutoCreator<>(AppMetadata.class);
 }

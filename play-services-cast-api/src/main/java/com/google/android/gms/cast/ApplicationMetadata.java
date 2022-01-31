@@ -30,7 +30,7 @@ import java.util.List;
 public class ApplicationMetadata extends AutoSafeParcelable {
 
     @SafeParceled(1)
-    private int versionCode = 1;
+    private final int versionCode = 1;
     @SafeParceled(2)
     public String applicationId;
     @SafeParceled(3)

@@ -80,7 +80,7 @@ public class ForegroundServiceContext extends ContextWrapper {
             try {
                 Notification notification = buildForegroundNotification(service, serviceName);
                 service.startForeground(serviceName.hashCode(), notification);
-                Log.d(tag, "Notification: " + notification.toString());
+                Log.d(tag, "Notification: " + notification);
             } catch (Exception e) {
                 Log.w(tag, e);
             }

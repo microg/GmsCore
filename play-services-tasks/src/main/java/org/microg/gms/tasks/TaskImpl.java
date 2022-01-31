@@ -5,6 +5,8 @@
 
 package org.microg.gms.tasks;
 
+import static com.google.android.gms.tasks.TaskExecutors.MAIN_THREAD;
+
 import android.app.Activity;
 
 import com.google.android.gms.tasks.Continuation;
@@ -22,15 +24,13 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static com.google.android.gms.tasks.TaskExecutors.MAIN_THREAD;
-
 public class TaskImpl<TResult> extends Task<TResult> {
     private final Object lock = new Object();
     private boolean completed;
     private boolean cancelled;
     private TResult result;
     private Exception exception;
-    private Queue<UpdateListener<TResult>> completionQueue = new LinkedBlockingQueue<>();
+    private final Queue<UpdateListener<TResult>> completionQueue = new LinkedBlockingQueue<>();
 
     @Override
     public Task<TResult> addOnCanceledListener(OnCanceledListener listener) {

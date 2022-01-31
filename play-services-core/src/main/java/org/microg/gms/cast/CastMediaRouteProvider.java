@@ -45,13 +45,13 @@ import java.util.Map;
 public class CastMediaRouteProvider extends MediaRouteProvider {
     private static final String TAG = CastMediaRouteProvider.class.getSimpleName();
 
-    private Map<String, CastDevice> castDevices = new HashMap<>();
-    private Map<String, String> serviceCastIds = new HashMap<>();
+    private final Map<String, CastDevice> castDevices = new HashMap<>();
+    private final Map<String, String> serviceCastIds = new HashMap<>();
 
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
-    private List<String> customCategories = new ArrayList<>();
+    private final List<String> customCategories = new ArrayList<>();
 
     private enum State {
         NOT_DISCOVERING,

@@ -106,7 +106,7 @@ public class MultiListenerProxy<T extends IInterface> implements InvocationHandl
 
     private static class CollectionListenerPool<T> extends ListenerPool<T> {
 
-        private Collection<T> listeners;
+        private final Collection<T> listeners;
 
         public CollectionListenerPool(Collection<T> listeners) {
             this.listeners = listeners;
@@ -145,7 +145,7 @@ public class MultiListenerProxy<T extends IInterface> implements InvocationHandl
     }
 
     public static class MultiCollectionListenerPool<T> extends ListenerPool<T> {
-        private Collection<? extends Collection<T>> multiCol;
+        private final Collection<? extends Collection<T>> multiCol;
 
         public MultiCollectionListenerPool(Collection<? extends Collection<T>> multiCol) {
             this.multiCol = multiCol;

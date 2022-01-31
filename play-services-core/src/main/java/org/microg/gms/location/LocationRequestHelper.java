@@ -16,6 +16,9 @@
 
 package org.microg.gms.location;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
@@ -35,9 +38,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
 
 import java.util.Arrays;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import java.util.UUID;
 
 public class LocationRequestHelper {
     public static final String TAG = "GmsLocRequestHelper";
@@ -51,6 +52,7 @@ public class LocationRequestHelper {
     public ILocationListener listener;
     public PendingIntent pendingIntent;
     public ILocationCallback callback;
+    public String id = UUID.randomUUID().toString();
 
     private Location lastReport;
     private int numReports = 0;
@@ -84,17 +86,41 @@ public class LocationRequestHelper {
         this.callback = data.callback;
     }
 
+    public boolean isActive() {
+        if (!hasCoarsePermission()) return false;
+        if (listener != null) {
+            try {
+                return listener.asBinder().isBinderAlive();
+            } catch (Exception e) {
+                return false;
+            }
+        } else if (pendingIntent != null) {
+            return true;
+        } else if (callback != null) {
+            try {
+                return callback.asBinder().isBinderAlive();
+            } catch (Exception e) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @return whether to continue sending reports to this {@link LocationRequestHelper}
      */
     public boolean report(Location location) {
         if (location == null) return true;
-        if (!hasCoarsePermission()) return false;
+        if (!isActive()) return false;
         if (lastReport != null) {
+            if (location.equals(lastReport)) {
+                return true;
+            }
             if (location.getTime() - lastReport.getTime() < locationRequest.getFastestInterval()) {
                 return true;
             }
-            if (location.distanceTo(lastReport) < locationRequest.getSmallestDesplacement()) {
+            if (location.distanceTo(lastReport) < locationRequest.getSmallestDisplacement()) {
                 return true;
             }
         }

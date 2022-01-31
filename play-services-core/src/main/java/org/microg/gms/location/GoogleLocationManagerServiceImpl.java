@@ -20,12 +20,19 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.location.Location;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.internal.IStatusCallback;
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.GestureRequest;
@@ -35,6 +42,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 import com.google.android.gms.location.internal.ISettingsCallbacks;
@@ -58,19 +66,31 @@ import org.microg.gms.common.PackageUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerService.Stub {
+public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerService.Stub implements LifecycleOwner {
     private static final String TAG = "GmsLocManagerSvcImpl";
 
     private final Context context;
+    private final Lifecycle lifecycle;
     private GoogleLocationManager locationManager;
 
-    public GoogleLocationManagerServiceImpl(Context context) {
+    public GoogleLocationManagerServiceImpl(Context context, Lifecycle lifecycle) {
         this.context = context;
+        this.lifecycle = lifecycle;
     }
 
-    private GoogleLocationManager getLocationManager() {
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return lifecycle;
+    }
+
+    public void invokeOnceReady(Runnable runnable) {
+        getLocationManager().invokeOnceReady(runnable);
+    }
+
+    public synchronized GoogleLocationManager getLocationManager() {
         if (locationManager == null)
-            locationManager = new GoogleLocationManager(context);
+            locationManager = new GoogleLocationManager(context, lifecycle);
         return locationManager;
     }
 
@@ -116,18 +136,6 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public ActivityRecognitionResult getLastActivity(String packageName) throws RemoteException {
         Log.d(TAG, "getLastActivity");
         PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
-        return null;
-    }
-
-    @Override
-    public Status iglms65(PendingIntent pendingIntent) throws RemoteException {
-        Log.d(TAG, "iglms65");
-        return null;
-    }
-
-    @Override
-    public Status iglms66(PendingIntent pendingIntent) throws RemoteException {
-        Log.d(TAG, "iglms66");
         return null;
     }
 
@@ -196,6 +204,11 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     }
 
     @Override
+    public void injectLocation(Location mockLocation, int injectionType) throws RemoteException {
+        Log.d(TAG, "injectLocation[" + injectionType + "]: " + mockLocation);
+    }
+
+    @Override
     public void iglms14(LatLngBounds var1, int var2, PlaceFilter var3, PlacesParams var4,
                         IPlacesCallbacks var5) throws RemoteException {
         Log.d(TAG, "iglms14: " + var1);
@@ -246,13 +259,14 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     }
 
     @Override
-    public void iglms25(PlaceReport var1, PlacesParams var2) throws RemoteException {
-        Log.d(TAG, "iglms25: " + var1);
+    public Location getLastLocationWith(String s) throws RemoteException {
+        Log.d(TAG, "getLastLocationWith: " + s);
+        return getLastLocation();
     }
 
     @Override
-    public void iglms26(Location var1, int var2) throws RemoteException {
-        Log.d(TAG, "iglms26: " + var1);
+    public void iglms25(PlaceReport var1, PlacesParams var2) throws RemoteException {
+        Log.d(TAG, "iglms25: " + var1);
     }
 
     @Override
@@ -260,6 +274,11 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
         Log.d(TAG, "getLocationAvailabilityWithPackage: " + packageName);
         PackageUtils.checkPackageUid(context, packageName, Binder.getCallingUid());
         return new LocationAvailability();
+    }
+
+    @Override
+    public void removeSleepSegmentUpdates(PendingIntent pendingIntent, IStatusCallback callback) throws RemoteException {
+        Log.d(TAG, "removeSleepSegmentUpdates");
     }
 
     @Override
@@ -307,7 +326,29 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void requestLocationSettingsDialog(LocationSettingsRequest settingsRequest, ISettingsCallbacks callback, String packageName) throws RemoteException {
         Log.d(TAG, "requestLocationSettingsDialog: " + settingsRequest);
         PackageUtils.getAndCheckCallingPackage(context, packageName);
-        callback.onLocationSettingsResult(new LocationSettingsResult(new LocationSettingsStates(true, true, false, true, true, false), Status.SUCCESS));
+        (new Handler(Looper.getMainLooper())).post(() -> {
+            try {
+                callback.onLocationSettingsResult(new LocationSettingsResult(new LocationSettingsStates(true, true, true, true, true, true), Status.SUCCESS));
+            } catch (RemoteException e) {
+                Log.w(TAG, e);
+            }
+        });
+    }
+
+    @Override
+    public void removeActivityTransitionUpdates(PendingIntent pendingIntent, IStatusCallback callback) throws RemoteException {
+        Log.d(TAG, "removeActivityTransitionUpdates");
+    }
+
+    @Override
+    public void updateDeviceOrientationRequest(DeviceOrientationRequestUpdateData request) throws RemoteException {
+        Log.d(TAG, "updateDeviceOrientationRequest: " + request);
+    }
+
+    @Override
+    public boolean setActivityRecognitionMode(int mode) throws RemoteException {
+        Log.d(TAG, "setActivityRecognitionMode: " + mode);
+        return false;
     }
 
     @Override
@@ -346,6 +387,37 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void iglms58(List var1, PlacesParams var2, IPlacesCallbacks var3)
             throws RemoteException {
         Log.d(TAG, "iglms58: " + var1);
+    }
+
+    @Override
+    public void iglms65(PendingIntent pendingIntent, IStatusCallback callback) throws RemoteException {
+        Log.d(TAG, "iglms65");
+    }
+
+    @Override
+    public void iglms66(PendingIntent pendingIntent, IStatusCallback callback) throws RemoteException {
+        Log.d(TAG, "iglms66");
+    }
+
+    @Override
+    public void iglms68(PendingIntent pendingIntent, IStatusCallback callback) throws RemoteException {
+        Log.d(TAG, "iglms68");
+    }
+
+    @Override
+    public void iglms71(IStatusCallback callback) throws RemoteException {
+        Log.d(TAG, "iglms71");
+    }
+
+    @Override
+    public void iglms76(PendingIntent pendingIntent) throws RemoteException {
+        Log.d(TAG, "iglms76");
+    }
+
+    @Override
+    public int iglms78() throws RemoteException {
+        Log.d(TAG, "iglms78");
+        return 0;
     }
 
     @Override

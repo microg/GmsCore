@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -41,10 +42,15 @@ public class RealLocationProvider {
     private float connectedMinDistance;
     private Location lastLocation;
     private final List<LocationRequestHelper> requests = new ArrayList<LocationRequestHelper>();
-    private LocationListener listener = new LocationListener() {
+    private final LocationListener listener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            lastLocation = location;
+            lastLocation = new Location(location);
+            try {
+                lastLocation.getExtras().keySet(); // call to unparcel()
+            } catch (Exception e) {
+                // Sometimes we need to define the correct ClassLoader before unparcel(). Ignore those.
+            }
             changeListener.onLocationChanged();
         }
 
@@ -121,7 +127,7 @@ public class RealLocationProvider {
             StringBuilder sb = new StringBuilder();
             for (LocationRequestHelper request : requests) {
                 minTime = Math.min(request.locationRequest.getInterval(), minTime);
-                minDistance = Math.min(request.locationRequest.getSmallestDesplacement(), minDistance);
+                minDistance = Math.min(request.locationRequest.getSmallestDisplacement(), minDistance);
                 if (sb.length() != 0) sb.append(", ");
                 sb.append(request.packageName).append(":").append(request.locationRequest.getInterval()).append("ms");
             }
@@ -144,6 +150,18 @@ public class RealLocationProvider {
             connected.set(true);
             connectedMinTime = minTime;
             connectedMinDistance = minDistance;
+        }
+    }
+
+    public void dump(PrintWriter writer) {
+        if (writer != null) {
+            writer.println(name + " provider:");
+            writer.println("  last location: " + lastLocation);
+            writer.println("  active: " + connected.get());
+            if (connected.get()) {
+                writer.println("  interval: " + connectedMinTime);
+                writer.println("  distance: " + connectedMinDistance);
+            }
         }
     }
 }

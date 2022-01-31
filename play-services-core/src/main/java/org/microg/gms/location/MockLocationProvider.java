@@ -16,10 +16,10 @@
 
 package org.microg.gms.location;
 
+import static org.microg.gms.location.LocationConstants.KEY_MOCK_LOCATION;
+
 import android.location.Location;
 import android.os.Bundle;
-
-import static org.microg.gms.location.LocationConstants.KEY_MOCK_LOCATION;
 
 public class MockLocationProvider {
     private boolean mockEnabled = false;

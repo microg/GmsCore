@@ -38,7 +38,7 @@ public class SearchCorporaImpl extends ISearchCorporaService.Stub {
     private static final String TAG = "GmsIcingCorporaImpl";
 
     // We count the sequence number here to make clients happy.
-    private Map<String, Long> corpusSequenceNumbers = new HashMap<String, Long>();
+    private final Map<String, Long> corpusSequenceNumbers = new HashMap<String, Long>();
 
     @Override
     public void requestIndexing(RequestIndexingRequest request, ISearchCorporaCallbacks callbacks) throws RemoteException {

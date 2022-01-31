@@ -1,0 +1,32 @@
+option java_package = "org.microg.gms.auth.appcert";
+option java_outer_classname = "AppCertProto";
+
+message DeviceKeyRequest {
+    optional uint64 androidId = 2;
+    optional uint64 sessionId = 3;
+    message VersionInfo {
+        optional uint32 sdkVersion = 1;
+        optional uint32 gmsVersion = 2;
+    }
+    optional VersionInfo versionInfo = 4;
+    optional string token = 5;
+}
+
+message DeviceKey {
+    optional uint64 keyId = 1;
+    optional uint64 deviceId = 3;
+    optional bytes macSecret = 4;
+    optional bytes keyCert = 5;
+}
+
+message SpatulaHeaderProto {
+    message PackageInfo {
+        optional string packageName = 1;
+        optional string packageCertificateHash = 3;
+    }
+    optional PackageInfo packageInfo = 1;
+    optional bytes hmac = 2;
+    optional uint64 deviceId = 3;
+    optional uint64 keyId = 4;
+    optional bytes keyCert = 5;
+}

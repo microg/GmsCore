@@ -46,19 +46,19 @@ public class ActivityRecognitionResult extends AutoSafeParcelable {
     public static final String EXTRA_ACTIVITY_RESULT_LIST = "com.google.android.location.internal.EXTRA_ACTIVITY_RESULT_LIST";
 
     @SafeParceled(1000)
-    private int versionCode = 2;
+    private final int versionCode = 2;
 
     @SafeParceled(value = 1, subClass = DetectedActivity.class)
-    private List<DetectedActivity> probableActivities;
+    private final List<DetectedActivity> probableActivities;
 
     @SafeParceled(2)
-    private long time;
+    private final long time;
 
     @SafeParceled(3)
-    private long elapsedRealtimeMillis;
+    private final long elapsedRealtimeMillis;
 
     @SafeParceled(5)
-    private Bundle extras;
+    private final Bundle extras;
 
     /**
      * Constructs an ActivityRecognitionResult.

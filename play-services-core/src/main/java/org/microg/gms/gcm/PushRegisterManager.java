@@ -16,6 +16,12 @@
 
 package org.microg.gms.gcm;
 
+import static org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_RETRY_AFTER;
+import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,15 +29,8 @@ import android.util.Log;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.PackageUtils;
-import org.microg.gms.common.Utils;
 
 import java.io.IOException;
-
-import static org.microg.gms.gcm.GcmConstants.ERROR_SERVICE_NOT_AVAILABLE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_ERROR;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_RETRY_AFTER;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_UNREGISTERED;
 
 public class PushRegisterManager {
     private static final String TAG = "GmsGcmRegisterMgr";
@@ -41,7 +40,7 @@ public class PushRegisterManager {
         RegisterResponse response = new RegisterResponse();
         try {
             response = new RegisterRequest()
-                    .build(Utils.getBuild(context))
+                    .build(context)
                     .sender(sender)
                     .info(info)
                     .checkin(LastCheckinInfo.read(context))

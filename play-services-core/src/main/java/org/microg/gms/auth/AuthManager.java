@@ -16,6 +16,10 @@
 
 package org.microg.gms.auth;
 
+import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
+import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -27,10 +31,6 @@ import org.microg.gms.common.PackageUtils;
 import org.microg.mgms.settings.SettingsContract;
 
 import java.io.IOException;
-
-import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
-import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
 
 public class AuthManager {
 
