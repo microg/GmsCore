@@ -4,8 +4,8 @@
  */
 
 buildscript {
-    ext.androidMinSdk = 21
-    ext.androidTargetSdk = 29
+    ext.androidMinSdk = 23
+    ext.androidTargetSdk = 30
     ext.androidCompileSdk = 31
 
     repositories {
