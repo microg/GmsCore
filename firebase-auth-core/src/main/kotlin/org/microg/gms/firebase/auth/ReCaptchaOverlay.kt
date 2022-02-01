@@ -7,7 +7,6 @@ package org.microg.gms.firebase.auth
 
 import android.content.Context
 import android.graphics.PixelFormat
-import android.os.Build
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
@@ -17,6 +16,8 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.widget.FrameLayout
 import org.microg.gms.firebase.auth.core.R
+import org.microg.gms.profile.Build
+import org.microg.gms.profile.ProfileManager
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -32,7 +33,7 @@ class ReCaptchaOverlay(val context: Context, val apiKey: String, val hostname: S
     var container: View? = null
 
     private fun show() {
-        val layoutParamsType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val layoutParamsType = if (android.os.Build.VERSION.SDK_INT >= 26) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
             WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
@@ -80,6 +81,8 @@ class ReCaptchaOverlay(val context: Context, val apiKey: String, val hostname: S
             settings.setSupportZoom(false)
             settings.displayZoomControls = false
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
+            ProfileManager.ensureInitialized(context)
+            settings.userAgentString = Build.generateWebViewUserAgentString(settings.userAgentString)
             view.addJavascriptInterface(object : Any() {
                 @JavascriptInterface
                 fun onReCaptchaToken(token: String) {
@@ -110,7 +113,7 @@ class ReCaptchaOverlay(val context: Context, val apiKey: String, val hostname: S
     }
 
     companion object {
-        fun isSupported(context: Context): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context)
+        fun isSupported(context: Context): Boolean = android.os.Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context)
 
         suspend fun awaitToken(context: Context, apiKey: String, hostname: String? = null) = suspendCoroutine<String> { continuation ->
             ReCaptchaOverlay(context, apiKey, hostname ?: "localhost:5000", continuation).show()

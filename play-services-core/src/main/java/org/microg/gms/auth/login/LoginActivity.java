@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,11 +36,11 @@ import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.webkit.WebViewClientCompat;
 
 import com.google.android.gms.R;
 
@@ -55,6 +54,8 @@ import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -106,7 +107,7 @@ public class LoginActivity extends AssistantActivity {
         webView.addJavascriptInterface(new JsBridge(), "mm");
         authContent = (ViewGroup) findViewById(R.id.auth_content);
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
-        webView.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new WebViewClientCompat() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "pageFinished: " + view.getUrl());
@@ -135,14 +136,14 @@ public class LoginActivity extends AssistantActivity {
                 AccountManager accountManager = AccountManager.get(this);
                 Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), accountType);
                 accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
-                if (isAuthVisible(this) && SDK_INT >= Build.VERSION_CODES.O) {
+                if (isAuthVisible(this) && SDK_INT >= 26) {
                     accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
                 }
                 retrieveGmsToken(account);
             } else {
                 retrieveRtToken(getIntent().getStringExtra(EXTRA_TOKEN));
             }
-        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        } else if (android.os.Build.VERSION.SDK_INT < 21) {
             init();
         } else {
             setMessage(R.string.auth_before_connect);
@@ -200,13 +201,14 @@ public class LoginActivity extends AssistantActivity {
         webView.setLayoutParams(new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         webView.setBackgroundColor(Color.TRANSPARENT);
-        prepareWebViewSettings(webView.getSettings());
+        prepareWebViewSettings(context, webView.getSettings());
         return webView;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private static void prepareWebViewSettings(WebSettings settings) {
-        settings.setUserAgentString(settings.getUserAgentString() + MAGIC_USER_AGENT);
+    private static void prepareWebViewSettings(Context context, WebSettings settings) {
+        ProfileManager.ensureInitialized(context);
+        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
         settings.setJavaScriptEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setSaveFormData(false);

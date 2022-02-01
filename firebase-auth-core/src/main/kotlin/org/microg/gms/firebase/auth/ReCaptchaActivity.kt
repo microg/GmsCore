@@ -18,6 +18,8 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
 import org.microg.gms.firebase.auth.core.R
+import org.microg.gms.profile.Build
+import org.microg.gms.profile.ProfileManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -47,6 +49,8 @@ class ReCaptchaActivity : AppCompatActivity() {
         settings.setSupportZoom(false)
         settings.displayZoomControls = false
         settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        ProfileManager.ensureInitialized(this)
+        settings.userAgentString = Build.generateWebViewUserAgentString(settings.userAgentString)
         view.addJavascriptInterface(object : Any() {
             @JavascriptInterface
             fun onReCaptchaToken(token: String) {
