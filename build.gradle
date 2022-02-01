@@ -5,7 +5,7 @@
 
 buildscript {
     ext.cronetVersion = '91.0.4472.120.1'
-    ext.nlpVersion = '2.0-alpha7'
+    ext.nlpVersion = '2.0-alpha8'
     ext.safeParcelVersion = '1.7.0'
     ext.wearableVersion = '0.1.1'
 
