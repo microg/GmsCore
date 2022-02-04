@@ -123,7 +123,10 @@ public class McsService extends Service implements Handler.Callback {
     public static final String FROM_FIELD = "gcm@android.com";
 
     public static final String SERVICE_HOST = "mtalk.google.com";
-    public static final int SERVICE_PORT = 5228;
+    // A few ports are available: 443, 5228-5230 but also 5222-5223
+    // See https://github.com/microg/GmsCore/issues/408
+    // Likely if the main port 5228 is blocked by a firewall, the other 52xx are blocked as well
+    public static final int[] SERVICE_PORTS = {5228, 443};
 
     private static final int WAKELOCK_TIMEOUT = 5000;
     // On bad mobile network a ping can take >60s, so we wait for an ACK for 90s
@@ -460,38 +463,52 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
+    private void connect(int port) throws Exception {
+        this.wasTornDown = false;
+
+        logd(this, "Starting MCS connection to port " + port + "...");
+        Socket socket = new Socket(SERVICE_HOST, port);
+        logd(this, "Connected to " + SERVICE_HOST + ":" + port);
+        sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, port, true);
+        logd(this, "Activated SSL with " + SERVICE_HOST + ":" + port);
+        inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
+        outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);
+        inputStream.start();
+        outputStream.start();
+
+        startTimestamp = System.currentTimeMillis();
+        lastHeartbeatPingElapsedRealtime = SystemClock.elapsedRealtime();
+        lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
+        lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
+        scheduleHeartbeat(this);
+    }
+
     private synchronized void connect() {
-        try {
-            closeAll();
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
-            activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(activeNetworkInfo);
-            if (!GcmPrefs.get(this).isEnabledFor(activeNetworkInfo)) {
-                logd(this, "Don't connect, because disabled for " + activeNetworkInfo.getTypeName());
-                scheduleReconnect(this);
-                return;
-            }
-            wasTornDown = false;
+        closeAll();
 
-            logd(this, "Starting MCS connection...");
-            Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
-            logd(this, "Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
-            sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, SERVICE_PORT, true);
-            logd(this, "Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
-            inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
-            outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);
-            inputStream.start();
-            outputStream.start();
-
-            startTimestamp = System.currentTimeMillis();
-            lastHeartbeatPingElapsedRealtime = SystemClock.elapsedRealtime();
-            lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
-            lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
-            scheduleHeartbeat(this);
-        } catch (Exception e) {
-            Log.w(TAG, "Exception while connecting!", e);
-            rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+        activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(activeNetworkInfo);
+        if (!GcmPrefs.get(this).isEnabledFor(activeNetworkInfo)) {
+            logd(this, "Don't connect, because disabled for " + activeNetworkInfo.getTypeName());
+            scheduleReconnect(this);
+            return;
         }
+
+        Exception exception = null;
+        for (int port : SERVICE_PORTS) {
+            try {
+                connect(port);
+                return;
+            } catch (Exception e) {
+                exception = e;
+                Log.w(TAG, "Exception while connecting to " + SERVICE_HOST + ":" + port, e);
+                closeAll();
+            }
+        }
+
+        logd(this, "Unable to connect to all different ports, retrying later");
+        rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, exception));
     }
 
     private void handleClose(Close close) {
