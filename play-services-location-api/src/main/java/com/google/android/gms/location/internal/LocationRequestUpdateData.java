@@ -20,7 +20,6 @@ import android.app.PendingIntent;
 
 import com.google.android.gms.location.ILocationCallback;
 import com.google.android.gms.location.ILocationListener;
-import com.google.android.gms.location.internal.IFusedLocationProviderCallback;
 
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;

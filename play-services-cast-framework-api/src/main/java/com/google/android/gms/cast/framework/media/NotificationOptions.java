@@ -16,8 +16,6 @@
 
 package com.google.android.gms.cast.framework.media;
 
-import com.google.android.gms.cast.framework.media.INotificationActionsProvider;
-
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.List;
