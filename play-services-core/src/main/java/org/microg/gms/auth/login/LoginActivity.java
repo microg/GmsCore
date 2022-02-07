@@ -19,9 +19,6 @@ package org.microg.gms.auth.login;
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.GINGERBREAD_MR1;
-import static android.os.Build.VERSION_CODES.HONEYCOMB;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 import static android.telephony.TelephonyManager.SIM_STATE_UNKNOWN;
 import static android.view.KeyEvent.KEYCODE_BACK;
 import static android.view.View.INVISIBLE;
@@ -37,13 +34,11 @@ import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,11 +50,11 @@ import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.webkit.WebViewClientCompat;
 
 import com.mgoogle.android.gms.R;
 
@@ -73,6 +68,8 @@ import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.people.PeopleManager;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 import org.microg.gms.ui.UtilsKt;
 
 import java.io.IOException;
@@ -113,7 +110,7 @@ public class LoginActivity extends AssistantActivity {
         webView.addJavascriptInterface(new JsBridge(), "mm");
         authContent = (ViewGroup) findViewById(R.id.auth_content);
         ((ViewGroup) findViewById(R.id.auth_root)).addView(webView);
-        webView.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new WebViewClientCompat() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "pageFinished: " + view.getUrl());
@@ -142,7 +139,7 @@ public class LoginActivity extends AssistantActivity {
                 AccountManager accountManager = AccountManager.get(this);
                 Account account = new Account(getIntent().getStringExtra(EXTRA_EMAIL), accountType);
                 accountManager.addAccountExplicitly(account, getIntent().getStringExtra(EXTRA_TOKEN), null);
-                if (isAuthVisible(this) && SDK_INT >= Build.VERSION_CODES.O) {
+                if (isAuthVisible(this) && SDK_INT >= 26) {
                     accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
                 }
                 retrieveGmsToken(account);
@@ -162,7 +159,7 @@ public class LoginActivity extends AssistantActivity {
         super.onHuaweiButtonClicked();
         state++;
         if (state == 1) {
-            if (SDK_INT >= Build.VERSION_CODES.M) {
+            if (SDK_INT >= 23) {
                 hideLauncherIcon(this, false);
                 UtilsKt.hideIcon(this, false);
             }
@@ -212,7 +209,7 @@ public class LoginActivity extends AssistantActivity {
         authContent.addView(loading);
         setMessage(R.string.auth_connecting);
         CookieManager.getInstance().setAcceptCookie(true);
-        if (SDK_INT >= LOLLIPOP) {
+        if (SDK_INT >= 21) {
             CookieManager.getInstance().removeAllCookies(value -> start());
         } else {
             //noinspection deprecation
@@ -223,7 +220,7 @@ public class LoginActivity extends AssistantActivity {
 
     private static WebView createWebView(Context context) {
         WebView webView = new WebView(context);
-        if (SDK_INT < LOLLIPOP) {
+        if (SDK_INT < 21) {
             webView.setVisibility(VISIBLE);
         } else {
             webView.setVisibility(INVISIBLE);
@@ -231,13 +228,14 @@ public class LoginActivity extends AssistantActivity {
         webView.setLayoutParams(new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         webView.setBackgroundColor(Color.TRANSPARENT);
-        prepareWebViewSettings(webView.getSettings());
+        prepareWebViewSettings(context, webView.getSettings());
         return webView;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private static void prepareWebViewSettings(WebSettings settings) {
-        settings.setUserAgentString(settings.getUserAgentString() + MAGIC_USER_AGENT);
+    private static void prepareWebViewSettings(Context context, WebSettings settings) {
+        ProfileManager.ensureInitialized(context);
+        settings.setUserAgentString(Build.INSTANCE.generateWebViewUserAgentString(settings.getUserAgentString()) + MAGIC_USER_AGENT);
         settings.setJavaScriptEnabled(true);
         settings.setSupportMultipleWindows(false);
         settings.setSaveFormData(false);
@@ -544,10 +542,8 @@ public class LoginActivity extends AssistantActivity {
             Log.d(TAG, "JSBridge: setAccountIdentifier");
         }
 
-        @TargetApi(HONEYCOMB)
         @JavascriptInterface
         public final void setBackButtonEnabled(boolean backButtonEnabled) {
-            if (SDK_INT <= GINGERBREAD_MR1) return;
             int visibility = getWindow().getDecorView().getSystemUiVisibility();
             if (backButtonEnabled)
                 visibility &= -STATUS_BAR_DISABLE_BACK;

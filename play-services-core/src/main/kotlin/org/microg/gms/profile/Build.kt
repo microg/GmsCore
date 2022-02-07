@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-FileCopyrightText: 2021 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -90,5 +90,12 @@ object Build {
 
         @JvmField
         var SECURITY_PATCH: String? = null
+    }
+
+    fun generateWebViewUserAgentString(original: String): String {
+        if (!original.startsWith("Mozilla/5.0 (")) return original
+        val closeParen: Int = original.indexOf(')')
+
+        return "Mozilla/5.0 (Linux; Android ${VERSION.RELEASE}; $MODEL Build/$ID; wv)${original.substring(closeParen + 1)}"
     }
 }
