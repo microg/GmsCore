@@ -20,25 +20,25 @@
     <string name="gms_settings_name">Nastavení Vanced microG</string>
     <string name="gms_settings_summary">Nastavení Vanced microG.</string>
 
-    <string name="notification_service_name">Varování o úspoře baterie</string>
+    <string name="notification_service_name">Varování o úspoře baterie</string>
     <string name="small_notification_service_title">Rozbalit oznámení</string>
     <string name="big_notification_service_title">Nechte microG běžet na pozadí</string>
-    <string name="notification_service_content">Klepnutím zde přejděte do nastavení a zakažte optimalizaci baterie pro aplikaci Vanced microG. Po provedení této akce a restartu zařízení toto oznámení zmizí</string>
+    <string name="notification_service_content">Klepnutím zde přejděte do nastavení a zakažte optimalizaci baterie pro aplikaci Vanced microG. Po provedení této akce a restartu zařízení toto oznámení zmizí</string>
 
     <string name="just_a_sec">Počkejte chviličku…</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Promiňte…</string>
-    <string name="auth_before_connect">"Aplikace na vašem zařízení se pokouší přihlásit se k účtu Google.
+    <string name="auth_before_connect">"Aplikace na vašem zařízení se pokouší přihlásit se k účtu Google.
 
-Jestliže tuto aktivitu poznáváte, a provádíte ji úmyslně, klepněte na tlačítko <b>PŘIHLÁSIT</b> (nebo na tlačítko <b>HUAWEI</b>, pokud používáte zařízení od tohoto výrobce) pro připojení k přihlašovací stránce Google. Jestliže ji nepoznáváte, klepněte na tlačítko <b>ZRUŠIT</b> pro návrat do aplikace, kvůli které se tento dialog zobrazil."</string>
+Jestliže tuto aktivitu poznáváte, a provádíte ji úmyslně, klepněte na tlačítko <b>PŘIHLÁSIT</b> (nebo na tlačítko <b>HUAWEI</b>, pokud používáte zařízení od tohoto výrobce) pro připojení k přihlašovací stránce Google. Jestliže ji nepoznáváte, klepněte na tlačítko <b>ZRUŠIT</b> pro návrat do aplikace, kvůli které se tento dialog zobrazil."</string>
     <string name="auth_sign_in">Přihlásit</string>
     <string name="auth_connecting">"Zahajuje se navázání spojení se servery Google, abyste se mohli přihlásit.
 
 Může to chvilku trvat."</string>
-    <string name="no_network_error_desc">"Nemáte přístup k síti.
+    <string name="no_network_error_desc">"Nemáte přístup k síti.
 
-Může jít o dočasný problém nebo ve vašem zařízení nemusí být zřízeny datové služby. Připojte se k mobilní síti nebo k síti Wi\u2011Fi."</string>
-    <string name="auth_general_error_desc">"Při komunikaci se servery Google došlo k potížím.
+Může jít o dočasný problém nebo ve vašem zařízení nemusí být zřízeny datové služby. Připojte se k mobilní síti nebo k síti Wi\u2011Fi."</string>
+    <string name="auth_general_error_desc">"Při komunikaci se servery Google došlo k potížím.
 
 Zkuste to později."</string>
     <string name="auth_finalize">"Vaše zařízení právě kontaktuje Google za účelem uložení informací do vašeho účtu.
@@ -46,9 +46,9 @@ Zkuste to později."</string>
 Tato akce může trvat několik minut."</string>
 
     <string name="perm_status_broadcast_label">poslouchat interní stavová vysílání</string>
-    <string name="perm_c2dm_receive_label">poslouchat zprávy C2DM</string>
-    <string name="perm_c2dm_send_label">odesílat zprávy C2DM do ostatních aplikací</string>
-    <string name="perm_gtalk_svc_label">vyměňovat si zprávy a přijímat oznámení o synchronizaci ze serverů Google</string>
+    <string name="perm_c2dm_receive_label">poslouchat zprávy C2DM</string>
+    <string name="perm_c2dm_send_label">odesílat zprávy C2DM do ostatních aplikací</string>
+    <string name="perm_gtalk_svc_label">vyměňovat si zprávy a přijímat oznámení o synchronizaci ze serverů Google</string>
     <string name="perm_extended_access_label">Rozšířený přístup ke službám Google</string>
 
     <string name="service_name_checkin">Registrace zařízení Google</string>
@@ -68,7 +68,7 @@ Tato akce může trvat několik minut."</string>
 
     <!-- Settings strings -->
 
-    <string name="prefcat_about">O aplikaci</string>
+    <string name="prefcat_about">O aplikaci</string>
     <string name="prefcat_google_services">Služby Google</string>
     <string name="pref_more_settings">Více</string>
 
@@ -76,11 +76,11 @@ Tato akce může trvat několik minut."</string>
     <string name="checkin_last_registration">Naposledy registrováno: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
     <string name="prefs_account">Předvolby účtu</string>
-    <string name="prefs_account_privacy">Osobní informace a soukromí</string>
-    <string name="prefs_account_security">Přihlášení a zabezpečení</string>
+    <string name="prefs_account_privacy">Osobní informace a soukromí</string>
+    <string name="prefs_account_security">Přihlášení a zabezpečení</string>
 
     <string name="pref_auth_trust_google_title">Důvěřovat společnosti Google ohledně oprávnění aplikací</string>
-    <string name="pref_auth_trust_google_summary">Je-li toto nastavení zakázáno, uživatel je dotázán ještě předtím, než je žádost aplikace o ověření odeslána společnosti Google. Pokud je toto nastavení zakázano, některé aplikace nebudou moci používat účet Google.</string>
+    <string name="pref_auth_trust_google_summary">Je-li toto nastavení zakázáno, uživatel je dotázán ještě předtím, než je žádost aplikace o ověření odeslána společnosti Google. Pokud je toto nastavení zakázano, některé aplikace nebudou moci používat účet Google.</string>
     <string name="pref_auth_visible_title">Dovolit aplikacím vyhledávat účty</string>
     <string name="pref_auth_visible_summary">Je-li toto nastavení povoleno, všechny aplikace na tomto zařízení budou moci přečíst e\u2011mailovou adresu všech vašich účtů Google bez předchozího vyžádání oprávnění.</string>
 
@@ -90,14 +90,14 @@ Tato akce může trvat několik minut."</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging je poskytovatel push oznámení využívaný mnoha aplikacemi třetích stran. Chcete\u2011li jej použít, musíte povolit registraci zařízení.</string>
 
     <string name="pref_about_title">O aplikaci Vanced microG</string>
-    <string name="pref_cast_double_fix">Opravit duplicity ve Vysílání</string>
+    <string name="pref_cast_double_fix">Opravit duplicity ve Vysílání</string>
     <string name="hideLauncherIcon">Skrýt ikonu ze spouštěče</string>
 
     <string name="brand_spoof_button">Huawei</string>
 
     <string name="pref_switcher_title">Registrovat zařízení</string>
-    <string name="pref_checkin_enable_summary">Zaregistruje vaše zařízení do služeb Google a vytvoří pro něj unikátní identifikátor. Vanced microG z dat nutných pro registraci odstraní všechny identifikační údaje kromě názvu vašeho účtu Google.</string>
-    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_checkin_enable_summary">Zaregistruje vaše zařízení do služeb Google a vytvoří pro něj unikátní identifikátor. Vanced microG z dat nutných pro registraci odstraní všechny identifikační údaje kromě názvu vašeho účtu Google.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
     <string name="pref_info_status">Stav</string>
 
     <string name="gcm_status_pref_default">Výchozí</string>
@@ -112,7 +112,7 @@ Tato akce může trvat několik minut."</string>
     <string name="gcm_unregister_confirm_title">Zrušit registraci aplikaci <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
     <string name="gcm_unregister_confirm_message">Některé aplikace se nezaregistrují znovu automaticky a/nebo neposkytují možnost tento úkon provést manuálně. Takové aplikace nemusí po zrušení registrace fungovat správně.\nPřejete si pokračovat?</string>
     <string name="gcm_unregister_after_deny_message">Aplikaci, která již je registrovaná, jste zamítli registraci pro příjem push oznámení.\nPřejete si pro ní registraci zrušit, aby push zprávy do budoucna již nepřijímala?</string>
-    <string name="gcm_messages_counter">Počet zpráv: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtů)</string>
+    <string name="gcm_messages_counter">Počet zpráv: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtů)</string>
     <string name="gcm_network_state_disconnected">Odpojeno</string>
     <string name="gcm_network_state_connected">Připojeno: <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
@@ -125,6 +125,17 @@ Tato akce může trvat několik minut."</string>
     <string name="prefcat_push_apps_registered_title">Registrované aplikace</string>
     <string name="prefcat_push_apps_unregistered_title">Aplikace se zrušenou registrací</string>
     <string name="prefcat_push_networks_title">Sítě používané pro push oznámení</string>
-    <string name="pref_cast_double_fix_summary">Povolte toto nastavení, jestliže zaznamenáte duplicity v menu Vysílání</string>
+    <string name="pref_cast_double_fix_summary">Povolte toto nastavení, jestliže zaznamenáte duplicity v menu Vysílání</string>
+
+    <string name="device_profile_name">Profil zařízení</string>
+    <string name="profile_name">Vybrat profil</string>
+    <string name="profile_name_native">Nativní</string>
+    <string name="profile_name_real">Reálný</string>
+    <string name="profile_name_user">Vlastní: %s</string>
+    <string name="profile_name_auto">Automatický: %s</string>
+    <string name="profile_name_system">Systém: %s</string>
+    <string name="import_profile_name">Importovat vlastní profil</string>
+    <string name="import_profile_summary">Importovat profil zařízení ze souboru</string>
+    <string name="serial_name">Serial</string>
 
 </resources>
