@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2016, microG Project Team
+ * SPDX-FileCopyrightText: 2016 microG Project Team
  * SPDX-License-Identifier: Apache-2.0 AND CC-BY-4.0
  * Notice: Portions of this file are reproduced from work created and shared by Google and used
  *         according to terms described in the Creative Commons 4.0 Attribution License.
@@ -28,8 +28,9 @@ public interface Continuation<TResult, TContinuationResult> {
      * <p/>
      * To suppress specific failures call {@link Task#getResult(Class)} and catch the exception
      * types of interest:
-     * <pre>task.continueWith(new Continuation<String, String>() {
-     *     @Override
+     * <pre>
+     * task.continueWith(new Continuation<String, String>() {
+     *     &#64;Override
      *     public String then(Task<String> task) {
      *         try {
      *             return task.getResult(IOException.class);
@@ -42,8 +43,9 @@ public interface Continuation<TResult, TContinuationResult> {
      * }</pre>
      * <p/>
      * To suppress all failures guard any calls to {@link Task#getResult()} with {@link Task#isSuccessful()}:
-     * <pre>task.continueWith(new Continuation<String, String>() {
-     *     @Override
+     * <pre>
+     * task.continueWith(new Continuation<String, String>() {
+     *     &#64;Override
      *     public String then(Task<String> task) {
      *         if (task.isSuccessful()) {
      *             return task.getResult();

@@ -1,12 +1,11 @@
 /*
- * SPDX-FileCopyrightText: 2016, JetBrains s.r.o.
- * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-FileCopyrightText: 2016 JetBrains s.r.o.
+ * SPDX-FileCopyrightText: 2021 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
 package com.google.android.gms.tasks
 
-import com.google.android.gms.tasks.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.*
 

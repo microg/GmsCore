@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2016, microG Project Team
+ * SPDX-FileCopyrightText: 2016 microG Project Team
  * SPDX-License-Identifier: Apache-2.0 AND CC-BY-4.0
  * Notice: Portions of this file are reproduced from work created and shared by Google and used
  *         according to terms described in the Creative Commons 4.0 Attribution License.
@@ -177,6 +177,8 @@ public abstract class Task<TResult> {
      * Continuation to this Task.
      * <p/>
      * The Continuation will be called on the main application thread.
+     * <p/>
+     * If the previous Task is canceled, the returned Task will also be canceled and the Continuation would not execute.
      *
      * @see Continuation#then(Task)
      */
@@ -186,6 +188,8 @@ public abstract class Task<TResult> {
 
     /**
      * Returns a new Task that will be completed with the result of applying the specified Continuation to this Task.
+     * <p/>
+     * If the previous Task is canceled, the returned Task will also be canceled and the Continuation would not execute.
      *
      * @param executor the executor to use to call the Continuation
      * @see Continuation#then(Task)
@@ -199,6 +203,9 @@ public abstract class Task<TResult> {
      * Continuation to this Task.
      * <p/>
      * The Continuation will be called on the main application thread.
+     * <p/>
+     * If the previous Task is canceled, the Continuation would still execute and task.isCanceled() is true can be
+     * observed in the Continuation.
      *
      * @see Continuation#then(Task)
      */
@@ -208,6 +215,9 @@ public abstract class Task<TResult> {
 
     /**
      * Returns a new Task that will be completed with the result of applying the specified Continuation to this Task.
+     * <p/>
+     * If the previous Task is canceled, the Continuation would still execute and task.isCanceled() is true can be
+     * observed in the Continuation.
      *
      * @param executor the executor to use to call the Continuation
      * @see Continuation#then(Task)
