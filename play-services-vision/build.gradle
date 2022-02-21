@@ -28,7 +28,10 @@ apply from: '../gradle/publish-android.gradle'
 description = 'microG implementation of play-services-vision'
 
 dependencies {
-    api project(':play-services-base')
     api project(':play-services-vision-api')
+
+    // Dependencies from play-services-vision:20.1.3
+    api project(':play-services-base')
+    api project(':play-services-basement')
     api project(':play-services-vision-common')
 }

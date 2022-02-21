@@ -39,9 +39,12 @@ apply from: '../gradle/publish-android.gradle'
 description = 'microG implementation of play-services-base'
 
 dependencies {
-    api project(':play-services-basement')
-    api project(':play-services-tasks')
     api project(':play-services-base-api')
 
-    implementation "androidx.fragment:fragment:$fragmentVersion"
+    // Dependencies from play-services-base:18.0.1
+    api "androidx.collection:collection:1.0.0"
+    api "androidx.core:core:1.2.0"
+    api "androidx.fragment:fragment:1.0.0"
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
 }
