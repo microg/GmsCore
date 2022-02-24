@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.microg.gms.oss.licenses.core">
+
+    <application>
+        <service
+            android:name=".OssLicensesService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.oss.licenses.service.START" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

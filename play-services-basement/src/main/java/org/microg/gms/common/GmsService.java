@@ -125,6 +125,7 @@ public enum GmsService {
     FIDO2_ZEROPARTY(180, "com.google.android.gms.fido.fido2.zeroparty.START"),
     G1_RESTORE(181, "com.google.android.gms.backup.G1_RESTORE"),
     G1_BACKUP(182, "com.google.android.gms.backup.G1_BACKUP"),
+    OSS_LICENSES(185, "com.google.android.gms.oss.licenses.service.START"),
     PAYSE(188, "com.google.android.gms.payse.service.BIND"),
     RCS(189, "com.google.android.gms.rcs.START"),
     CARRIER_AUTH(191, "com.google.android.gms.carrierauth.service.START"),
