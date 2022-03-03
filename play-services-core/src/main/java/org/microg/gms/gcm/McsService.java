@@ -16,6 +16,7 @@
 
 package org.microg.gms.gcm;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -39,6 +40,8 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
 import com.google.android.gms.R;
@@ -155,9 +158,18 @@ public class McsService extends Service implements Handler.Callback {
 
     private static int maxTtl = 24 * 60 * 60;
 
-    private Object deviceIdleController;
+    @Nullable
     private Method getUserIdMethod;
+    @Nullable
+    private Object deviceIdleController;
+    @Nullable
     private Method addPowerSaveTempWhitelistAppMethod;
+    @Nullable
+    @RequiresApi(Build.VERSION_CODES.S)
+    private Object powerExemptionManager;
+    @Nullable
+    @RequiresApi(Build.VERSION_CODES.S)
+    private Method addToTemporaryAllowListMethod;
 
     private class HandlerThread extends Thread {
 
@@ -186,6 +198,7 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     @Override
+    @SuppressLint("PrivateApi")
     public void onCreate() {
         super.onCreate();
         TriggerReceiver.register(this);
@@ -195,20 +208,27 @@ public class McsService extends Service implements Handler.Callback {
         powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission("android.permission.CHANGE_DEVICE_IDLE_TEMP_WHITELIST") == PackageManager.PERMISSION_GRANTED) {
             try {
-                String deviceIdleControllerName = "deviceidle";
-                try {
-                    Field field = Context.class.getField("DEVICE_IDLE_CONTROLLER");
-                    deviceIdleControllerName = (String) field.get(null);
-                } catch (Exception ignored) {
-                }
-                IBinder binder = (IBinder) Class.forName("android.os.ServiceManager")
-                        .getMethod("getService", String.class).invoke(null, deviceIdleControllerName);
-                if (binder != null) {
-                    deviceIdleController = Class.forName("android.os.IDeviceIdleController$Stub")
-                            .getMethod("asInterface", IBinder.class).invoke(null, binder);
-                    getUserIdMethod = UserHandle.class.getMethod("getUserId", int.class);
-                    addPowerSaveTempWhitelistAppMethod = deviceIdleController.getClass()
-                            .getMethod("addPowerSaveTempWhitelistApp", String.class, long.class, int.class, String.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    Class<?> powerExemptionManagerClass = Class.forName("android.os.PowerExemptionManager");
+                    powerExemptionManager = getSystemService(powerExemptionManagerClass);
+                    addToTemporaryAllowListMethod =
+                            powerExemptionManagerClass.getMethod("addToTemporaryAllowList", String.class, int.class, String.class, long.class);
+                } else {
+                    String deviceIdleControllerName = "deviceidle";
+                    try {
+                        Field field = Context.class.getField("DEVICE_IDLE_CONTROLLER");
+                        deviceIdleControllerName = (String) field.get(null);
+                    } catch (Exception ignored) {
+                    }
+                    IBinder binder = (IBinder) Class.forName("android.os.ServiceManager")
+                            .getMethod("getService", String.class).invoke(null, deviceIdleControllerName);
+                    if (binder != null) {
+                        deviceIdleController = Class.forName("android.os.IDeviceIdleController$Stub")
+                                .getMethod("asInterface", IBinder.class).invoke(null, binder);
+                        getUserIdMethod = UserHandle.class.getMethod("getUserId", int.class);
+                        addPowerSaveTempWhitelistAppMethod = deviceIdleController.getClass()
+                                .getMethod("addPowerSaveTempWhitelistApp", String.class, long.class, int.class, String.class);
+                    }
                 }
             } catch (Exception e) {
                 Log.w(TAG, e);
@@ -594,7 +614,16 @@ public class McsService extends Service implements Handler.Callback {
     }
 
     private void addPowerSaveTempWhitelistApp(String packageName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                if (addToTemporaryAllowListMethod != null && powerExemptionManager != null) {
+                    logd(this, "Adding app " + packageName + " to the temp allowlist");
+                    addToTemporaryAllowListMethod.invoke(powerExemptionManager, packageName, 0, "GCM Push", 10000);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error adding app" + packageName + " to the temp allowlist.", e);
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 if (getUserIdMethod != null && addPowerSaveTempWhitelistAppMethod != null && deviceIdleController != null) {
                     int userId = (int) getUserIdMethod.invoke(null, getPackageManager().getApplicationInfo(packageName, 0).uid);
