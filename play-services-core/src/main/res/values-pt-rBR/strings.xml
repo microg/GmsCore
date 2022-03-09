@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_settings_name">Configurações do Vanced microG</string>
+    <string name="gms_settings_summary">Configuração do Vanced microG.</string>
+
+    <string name="notification_service_name">Aviso de Economia de Bateria</string>
+    <string name="small_notification_service_title">Expandir notificação</string>
+    <string name="big_notification_service_title">Mantenha o microG em segundo plano</string>
+    <string name="notification_service_content">Toque aqui para desativar a otimização da bateria para o vanced microG e, em seguida, reinicie o dispositivo para remover esta notificação</string>
+
+    <string name="just_a_sec">Só um segundo...</string>
+    <string name="account_manager_title">Gerente de Contas do Google</string>
+    <string name="sorry">Desculpa...</string>
+    <string name="auth_before_connect">"Um aplicativo em seu dispositivo está tentando fazer login em uma conta do Google.
+
+Se isso foi intencional, use o botão <b>Entrar</b> (ou <b>Huawei</b>, se você tiver um dispositivo com esta marca) para se conectar à página de login do Google, se não, pressione <b>Cancelar</b> para voltar ao aplicativo que fez com que essa caixa de diálogo aparecesse."</string>
+    <string name="auth_sign_in">Entrar</string>
+    <string name="auth_connecting">"Estabelecendo uma conexão com os servidores do Google para fazer login.
+
+Isso pode levar alguns segundos."</string>
+    <string name="no_network_error_desc">"Você não tem uma conexão de rede.
+
+Isso pode ser um problema temporário ou seu dispositivo Android pode não ser configurado para serviços de dados. Tente novamente quando conectado a uma rede móvel ou conecte-se a uma rede Wi-Fi."</string>
+    <string name="auth_general_error_desc">"Houve um problema na comunicação com os servidores do Google.
+
+Tente de novo mais tarde."</string>
+    <string name="auth_finalize">"Seu dispositivo está entrando em contato com o Google para salvar informações em sua conta.
+
+Isso pode levar alguns minutos."</string>
+
+    <string name="perm_status_broadcast_label">Escutar as transmissões de status interno</string>
+    <string name="perm_c2dm_receive_label">Escutar mensagens C2DM</string>
+    <string name="perm_c2dm_send_label">Enviar mensagens C2DM para outros aplicativos</string>
+    <string name="perm_gtalk_svc_label">Trocar mensagens e receber notificações de sincronização de servidores do Google</string>
+    <string name="perm_extended_access_label">Acesso estendido aos serviços do Google</string>
+
+    <string name="service_name_checkin">Registro de dispositivos do Google</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+
+    <string name="service_status_enabled_short">Ligado</string>
+    <string name="service_status_disabled_short">Desligado</string>
+
+    <string name="menu_advanced">Avançado</string>
+    <string name="list_no_item_none">Nenhum</string>
+    <string name="list_item_see_all">Veja tudo</string>
+
+    <string name="network_type_mobile">Rede móvel</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Outras redes</string>
+
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">Sobre</string>
+    <string name="prefcat_google_services">Serviços do Google</string>
+    <string name="pref_more_settings">Mais</string>
+
+    <string name="checkin_not_registered">Não registrado</string>
+    <string name="checkin_last_registration">Último registro: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
+    <string name="prefs_account">Preferências da conta</string>
+    <string name="prefs_account_privacy">Informações pessoais &amp; privacidade</string>
+    <string name="prefs_account_security">Entrar &amp; segurança</string>
+
+    <string name="pref_auth_trust_google_title">Confiar permissões de aplicativos no Google</string>
+    <string name="pref_auth_trust_google_summary">Quando desativado, o usuário é solicitado antes que uma solicitação de autorização de aplicativos seja enviada ao Google. Alguns aplicativos não usarão a conta do Google se isso for desativado.</string>
+    <string name="pref_auth_visible_title">Permitir que aplicativos encontrem contas</string>
+    <string name="pref_auth_visible_summary">Quando ativado, todos os aplicativos deste dispositivo poderão ver o endereço de e-mail de suas contas do Google sem autorização prévia.</string>
+
+    <string name="pref_add_account_title">Conta</string>
+    <string name="pref_add_account_summary">Adicionar conta do Google</string>
+    <string name="pref_gcm_switcher_title">Receba notificações push</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar ao registro do dispositivo.</string>
+
+    <string name="pref_about_title">Sobre o Vanced microG</string>
+    <string name="pref_cast_double_fix">Corrigir duplicação do Cast</string>
+    <string name="hideLauncherIcon">Ocultar ícone no menu</string>
+
+    <string name="brand_spoof_button">Huawei</string>
+
+    <string name="pref_switcher_title">Registar dispositivo</string>
+    <string name="pref_checkin_enable_summary">Registre seu dispositivo nos serviços do Google e cria um identificador de dispositivo exclusivo. Vanced microG identifica e tiras bits que não sejam o nome da sua conta do Google a partir de dados de registro.</string>
+    <string name="pref_device_registration_android_id">ID do Android</string>
+    <string name="pref_info_status">Status</string>
+
+    <string name="gcm_status_pref_default">Padrão</string>
+    <string name="gcm_status_pref_manual">Manual</string>
+    <string name="gcm_status_pref_sec">segundos</string>
+    <string name="gcm_status_pref_min">minutos</string>
+    <string name="gcm_unregister_app">Sem registrado</string>
+    <string name="gcm_no_message_yet">Nenhuma mensagem recebida até agora</string>
+    <string name="gcm_last_message_at">Última mensagem: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Registrado</string>
+    <string name="gcm_registered_since">Registrado desde: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Sem registrado <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Alguns aplicativos não se recadastram automaticamente e/ou não oferecem uma opção para fazê-lo manualmente. Esses aplicativos podem não funcionar corretamente após o não registro.\nContinuar?</string>
+    <string name="gcm_unregister_after_deny_message">Você negou um aplicativo para se registrar notificações push que já estão registradas.\nVocê quer desregissá-lo agora para que ele não receba mensagens push no futuro?</string>
+    <string name="gcm_messages_counter">Mensagens: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_network_state_disconnected">Desconectado</string>
+    <string name="gcm_network_state_connected">Conectado à <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+
+    <string name="pref_push_app_allow_register_title">Permitir registro</string>
+    <string name="pref_push_app_allow_register_summary">Permita que o aplicativo se registre para notificações push.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Iniciar aplicativo na mensagem push</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Inicie o aplicativo em segundo plano para receber as mensagens push recebidas.</string>
+    <string name="prefcat_status_title">Status</string>
+    <string name="prefcat_push_apps_title">Aplicativos usando notificações push</string>
+    <string name="prefcat_push_apps_registered_title">Aplicativos registrados</string>
+    <string name="prefcat_push_apps_unregistered_title">Aplicativos não registrados</string>
+    <string name="prefcat_push_networks_title">Redes para usar em notificações push</string>
+    <string name="pref_cast_double_fix_summary">Ative isso se você ver o menu casting duplicado</string>
+
+    <string name="device_profile_name">Perfil do dispositivo</string>
+    <string name="profile_name">Selecionar perfil</string>
+    <string name="profile_name_native">Nativo</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_user">Personalizado: %s</string>
+    <string name="profile_name_auto">Automático: %s</string>
+    <string name="profile_name_system">Sistema: %s</string>
+    <string name="import_profile_name">Importar perfil personalizado</string>
+    <string name="import_profile_summary">Importar perfil do dispositivo a partir do arquivo</string>
+    <string name="serial_name">Serial</string>
+</resources>
