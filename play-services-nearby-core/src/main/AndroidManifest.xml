@@ -37,7 +37,8 @@
 
         <service
             android:name="org.microg.gms.nearby.exposurenotification.ExposureNotificationService"
-            android:process=":persistent">
+            android:process=":persistent"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.nearby.exposurenotification.START" />
             </intent-filter>
@@ -45,7 +46,8 @@
 
         <receiver
             android:name="org.microg.gms.nearby.exposurenotification.ServiceTrigger"
-            android:process=":persistent">
+            android:process=":persistent"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
