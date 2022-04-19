@@ -7,6 +7,8 @@ package org.microg.gms.nearby.exposurenotification
 
 import android.annotation.TargetApi
 import android.app.*
+import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -96,7 +98,7 @@ class NotifyService : LifecycleService() {
             try {
                 val intent = Intent(Constants.ACTION_EXPOSURE_NOTIFICATION_SETTINGS).apply { `package` = packageName }
                 intent.resolveActivity(packageManager)
-                setContentIntent(PendingIntent.getActivity(this@NotifyService, notificationId, Intent(Constants.ACTION_EXPOSURE_NOTIFICATION_SETTINGS).apply { `package` = packageName }, PendingIntent.FLAG_UPDATE_CURRENT))
+                setContentIntent(PendingIntent.getActivity(this@NotifyService, notificationId, Intent(Constants.ACTION_EXPOSURE_NOTIFICATION_SETTINGS).apply { `package` = packageName }, FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE))
             } catch (e: Exception) {
                 // Ignore
             }

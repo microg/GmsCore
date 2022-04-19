@@ -106,7 +106,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             Log.w(TAG, e)
         }
         Log.d(TAG, "Pending: $intent")
-        val pi = PendingIntent.getActivity(context, permission.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT)
+        val pi = PendingIntent.getActivity(context, permission.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
         Log.d(TAG, "Pending: $pi")
         return pi
     }
