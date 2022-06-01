@@ -58,7 +58,7 @@ import org.microg.gms.maps.mapbox.utils.MultiArchLoader
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
 
-private fun <T : Any> LongSparseArray<T>.values() = (0..size()).map { valueAt(it) }.mapNotNull { it }
+private fun <T : Any> LongSparseArray<T>.values() = (0 until size()).mapNotNull { valueAt(it) }
 
 fun runOnMainLooper(method: () -> Unit) {
     if (Looper.myLooper() == Looper.getMainLooper()) {
