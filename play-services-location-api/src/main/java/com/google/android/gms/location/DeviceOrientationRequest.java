@@ -28,7 +28,7 @@ public class DeviceOrientationRequest extends AutoSafeParcelable {
         sb.append(" minimumSamplingPeriod=").append(minimumSamplingPeriodMs).append("ms");
         sb.append(" smallesAngleChange=").append(smallesAngleChangeRadians).append("rad");
         if (expirationTime != Long.MAX_VALUE)
-            sb.append(" expireIn=").append(SystemClock.elapsedRealtime() - expirationTime).append("ms");
+            sb.append(" expireIn=").append(expirationTime - SystemClock.elapsedRealtime()).append("ms");
         if (numUpdates != Integer.MAX_VALUE)
             sb.append(" num=").append(numUpdates);
         sb.append("]");

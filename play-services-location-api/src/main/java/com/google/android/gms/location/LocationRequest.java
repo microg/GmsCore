@@ -516,7 +516,7 @@ public class LocationRequest extends AutoSafeParcelable {
         if (smallestDisplacement > 0)
             sb.append(" smallestDisplacement=").append(smallestDisplacement).append("m");
         if (expirationTime != Long.MAX_VALUE)
-            sb.append(" expireIn=").append(SystemClock.elapsedRealtime() - expirationTime).append("ms");
+            sb.append(" expireIn=").append(expirationTime - SystemClock.elapsedRealtime()).append("ms");
         if (numUpdates != Integer.MAX_VALUE)
             sb.append(" num=").append(numUpdates);
         sb.append("]");

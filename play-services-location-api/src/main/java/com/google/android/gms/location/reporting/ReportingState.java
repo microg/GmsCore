@@ -20,24 +20,27 @@ import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class ReportingState extends AutoSafeParcelable {
-    @SafeParceled(1)
-    public int versionCode = 2;
-    @SafeParceled(2)
+    @Field(1)
+    @Deprecated
+    private int versionCode = 2;
+    @Field(2)
     public int reportingEnabled;
-    @SafeParceled(3)
+    @Field(3)
     public int historyEnabled;
-    @SafeParceled(4)
+    @Field(4)
     public boolean allowed;
-    @SafeParceled(5)
+    @Field(5)
     public boolean active;
-    @SafeParceled(6)
+    @Field(6)
     public boolean defer;
-    @SafeParceled(7)
+    @Field(7)
     public int expectedOptInResult;
-    @SafeParceled(8)
+    @Field(8)
     public Integer deviceTag;
-    @SafeParceled(9)
+    @Field(9)
     public int expectedOptInResultAssumingLocationEnabled;
+    @Field(10)
+    public boolean canAccessSettings;
 
     public static final Creator<ReportingState> CREATOR = new AutoCreator<ReportingState>(ReportingState.class);
 }

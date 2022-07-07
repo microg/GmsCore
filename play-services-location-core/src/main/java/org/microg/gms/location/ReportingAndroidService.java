@@ -25,7 +25,7 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
 public class ReportingAndroidService extends BaseService {
-    private ReportingServiceImpl reportingService = new ReportingServiceImpl();
+    private ReportingServiceImpl reportingService = new ReportingServiceImpl(this);
 
     public ReportingAndroidService() {
         super("GmsLocReportingSvc", GmsService.LOCATION_REPORTING);

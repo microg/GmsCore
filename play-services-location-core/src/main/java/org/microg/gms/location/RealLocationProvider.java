@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("MissingPermission")
 public class RealLocationProvider {
     public static final String TAG = "GmsLocProviderReal";
-    private static final int MIN_GPS_TIME = 10000;
+    private static final int MIN_GPS_TIME = 60000;
 
     private final LocationManager locationManager;
     private final String name;
