@@ -20,6 +20,10 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
 
     private lateinit var binding: SafetyNetFragmentBinding
 
+    init {
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = SafetyNetFragmentBinding.inflate(inflater, container, false)
         binding.switchBarCallback = object : PreferenceSwitchBarCallback {
@@ -50,11 +54,6 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
             binding.checkinEnabled = CheckinPrefs.isEnabled(appContext)
             displayServiceInfo()
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

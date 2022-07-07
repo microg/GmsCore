@@ -21,6 +21,7 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.safetynet.AttestationData
 import com.google.android.gms.safetynet.RecaptchaResultData
+import com.google.android.gms.safetynet.SafeBrowsingData
 import com.google.android.gms.safetynet.SafetyNetStatusCodes
 import com.google.android.gms.safetynet.internal.ISafetyNetCallbacks
 import com.google.android.gms.safetynet.internal.ISafetyNetService
@@ -92,7 +93,11 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
                     is IOException -> SafetyNetStatusCodes.NETWORK_ERROR
                     else -> SafetyNetStatusCodes.ERROR
                 }
-                callbacks.onAttestationData(Status(code, e.localizedMessage), null)
+                try {
+                    callbacks.onAttestationData(Status(code, e.localizedMessage), null)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Exception while sending error", e)
+                }
             }
         }
     }
@@ -106,8 +111,9 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
         callbacks.onString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
     }
 
-    override fun lookupUri(callbacks: ISafetyNetCallbacks, s1: String, threatTypes: IntArray, i: Int, s2: String) {
+    override fun lookupUri(callbacks: ISafetyNetCallbacks, apiKey: String, threatTypes: IntArray, i: Int, s2: String) {
         Log.d(TAG, "unimplemented Method: lookupUri")
+        callbacks.onSafeBrowsingData(Status.SUCCESS, SafeBrowsingData())
     }
 
     override fun init(callbacks: ISafetyNetCallbacks) {

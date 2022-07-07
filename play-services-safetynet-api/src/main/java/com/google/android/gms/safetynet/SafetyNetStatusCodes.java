@@ -15,7 +15,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
  */
 public class SafetyNetStatusCodes extends CommonStatusCodes {
     public static final int SAFE_BROWSING_UNSUPPORTED_THREAT_TYPES = 12000;
-    public static final int SAFE_BROWSING_MISSING_API_KEYINT = 12001;
+    public static final int SAFE_BROWSING_MISSING_API_KEY = 12001;
     public static final int SAFE_BROWSING_API_NOT_AVAILABLE = 12002;
     public static final int VERIFY_APPS_NOT_AVAILABLE = 12003;
     public static final int VERIFY_APPS_INTERNAL_ERROR = 12004;
