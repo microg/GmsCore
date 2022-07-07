@@ -41,7 +41,7 @@ public enum ExposureNotificationStatus {
     /**
      * The client is not in approved client list.
      */
-    NOT_IN_WHITELIST,
+    NOT_IN_ALLOWLIST,
     /**
      * Can't detected the BLE supporting of this device due to bluetooth is not enabled.
      */
@@ -69,10 +69,13 @@ public enum ExposureNotificationStatus {
     /**
      * Exposure notification is not supported for current user profile.
      */
-    USER_PROFILE_NOT_SUPPORT
+    USER_PROFILE_NOT_SUPPORT,
+    @Deprecated
+    NOT_IN_WHITELIST
     ;
 
     private long flag() {
+        if (this == NOT_IN_WHITELIST) return NOT_IN_ALLOWLIST.flag();
         return 1 << ordinal();
     }
 
@@ -89,8 +92,10 @@ public enum ExposureNotificationStatus {
     public static Set<ExposureNotificationStatus> flagsToSet(long flags) {
         Set<ExposureNotificationStatus> set = new HashSet<>();
         for (ExposureNotificationStatus status : values()) {
+            if (status == NOT_IN_WHITELIST) continue;
             if ((flags & status.flag()) > 0) {
                 set.add(status);
+                if (status == NOT_IN_ALLOWLIST) set.add(NOT_IN_WHITELIST);
             }
         }
         return set;
