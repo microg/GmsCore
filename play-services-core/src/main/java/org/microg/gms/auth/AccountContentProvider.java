@@ -16,6 +16,8 @@
 
 package org.microg.gms.auth;
 
+import static android.accounts.AccountManager.VISIBILITY_VISIBLE;
+
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -57,7 +59,7 @@ public class AccountContentProvider extends ContentProvider {
             suggestedPackageName = getCallingPackage();
         }
         String packageName = PackageUtils.getAndCheckCallingPackage(getContext(), suggestedPackageName);
-        Log.d(TAG, "Call from " + packageName);
+        Log.d(TAG, "Call " + method + " from " + packageName + " with arg " + arg);
         if (!PackageUtils.callerHasExtendedAccess(getContext())) {
             String[] packagesForUid = getContext().getPackageManager().getPackagesForUid(Binder.getCallingUid());
             if (packagesForUid != null && packagesForUid.length != 0)
@@ -71,17 +73,27 @@ public class AccountContentProvider extends ContentProvider {
             Account[] accounts = null;
             if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
                 AccountManager am = AccountManager.get(getContext());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                if (Build.VERSION.SDK_INT >= 18) {
                     accounts = am.getAccountsByTypeForPackage(arg, packageName);
                 }
                 if (accounts == null || accounts.length == 0) {
                     accounts = am.getAccountsByType(arg);
                 }
+                if (Build.VERSION.SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
+                    for (Account account : accounts) {
+                        if (am.getAccountVisibility(account, packageName) == AccountManager.VISIBILITY_UNDEFINED) {
+                            Log.d(TAG, "Make account " + account + " visible to " + packageName);
+                            am.setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+                        }
+                    }
+                }
             }
             if (accounts == null) {
                 accounts = new Account[0];
             }
+
             result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
+            Log.d(TAG, "get_accounts returns: " + Arrays.toString(accounts));
             return result;
         } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method)) {
             Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);

@@ -133,10 +133,12 @@ public class HttpFormClient {
             String[] keyValuePair = s.split("=", 2);
             String key = keyValuePair[0].trim();
             String value = keyValuePair[1].trim();
+            boolean matched = false;
             try {
                 for (Field field : tClass.getDeclaredFields()) {
                     if (field.isAnnotationPresent(ResponseField.class) &&
                             key.equals(field.getAnnotation(ResponseField.class).value())) {
+                        matched = true;
                         if (field.getType().equals(String.class)) {
                             field.set(response, value);
                         } else if (field.getType().equals(boolean.class)) {
@@ -150,6 +152,9 @@ public class HttpFormClient {
                 }
             } catch (Exception e) {
                 Log.w(TAG, e);
+            }
+            if (!matched) {
+                Log.w(TAG, "Response line '" + s + "' not processed");
             }
         }
         for (Field field : tClass.getDeclaredFields()) {

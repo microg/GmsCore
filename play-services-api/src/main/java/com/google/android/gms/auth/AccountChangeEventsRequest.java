@@ -16,16 +16,29 @@
 
 package com.google.android.gms.auth;
 
+import static org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE;
+
+import android.accounts.Account;
+
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 public class AccountChangeEventsRequest extends AutoSafeParcelable {
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
-    @SafeParceled(2)
-    private int i;
-    @SafeParceled(3)
-    private String s;
+    @Field(2)
+    private int since;
+    @Field(3)
+    @Deprecated
+    private String accountName;
+    @Field(4)
+    private Account account;
+
+    public Account getAccount() {
+        if (account != null) return account;
+        if (accountName != null) return new Account(accountName, DEFAULT_ACCOUNT_TYPE);
+        return null;
+    }
 
     public static Creator<AccountChangeEventsRequest> CREATOR = new AutoCreator<AccountChangeEventsRequest>(AccountChangeEventsRequest.class);
 

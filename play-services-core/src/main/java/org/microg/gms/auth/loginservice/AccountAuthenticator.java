@@ -147,8 +147,10 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
         if (services != null) {
             List<String> servicesList = Arrays.asList(services.split(","));
             for (String feature : features) {
-                if (feature.startsWith("service_") && !servicesList.contains(feature.substring(8)))
+                if (feature.startsWith("service_") && !servicesList.contains(feature.substring(8))) {
+                    Log.d(TAG, "Feature " + feature + " not supported");
                     res = false;
+                }
             }
         } else {
             res = false;
