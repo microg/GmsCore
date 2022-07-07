@@ -111,7 +111,7 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
                             }
                         }
                         preference.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_alert)
-                        preference.title = DateUtils.formatDateRange(requireContext(), exposure.timestamp, exposure.timestamp + exposure.durationInMinutes * 60 * 1000L, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE)
+                        preference.title = DateUtils.formatDateRange(requireContext(), exposure.timestamp, exposure.timestamp + exposure.durationInMinutes * 60 * 1000L, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
                         preference.summary = getString(R.string.pref_exposure_app_report_entry_combined, durationString, distanceString)
                         preference.isSelectable = false
                         reportedExposures.addPreference(preference)
