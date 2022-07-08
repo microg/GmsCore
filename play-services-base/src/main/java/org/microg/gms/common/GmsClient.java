@@ -27,6 +27,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -166,17 +167,23 @@ public abstract class GmsClient<I extends IInterface> implements ApiClient {
         @Override
         public void onPostInitComplete(int statusCode, IBinder binder, Bundle params)
                 throws RemoteException {
-            synchronized (GmsClient.this) {
-                if (state == ConnectionState.DISCONNECTING) {
-                    state = ConnectionState.CONNECTED;
-                    disconnect();
-                    return;
-                }
+            if (statusCode != CommonStatusCodes.SUCCESS) {
                 state = ConnectionState.CONNECTED;
-                serviceInterface = interfaceFromBinder(binder);
+                disconnect();
+                connectionFailedListener.onConnectionFailed(new ConnectionResult(statusCode));
+            } else {
+                synchronized (GmsClient.this) {
+                    if (state == ConnectionState.DISCONNECTING) {
+                        state = ConnectionState.CONNECTED;
+                        disconnect();
+                        return;
+                    }
+                    state = ConnectionState.CONNECTED;
+                    serviceInterface = interfaceFromBinder(binder);
+                }
+                Log.d(TAG, "GmsCallbacks : onPostInitComplete(" + serviceInterface + ")");
+                callbacks.onConnected(params);
             }
-            Log.d(TAG, "GmsCallbacks : onPostInitComplete(" + serviceInterface + ")");
-            callbacks.onConnected(params);
         }
 
         @Override

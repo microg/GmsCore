@@ -35,6 +35,8 @@ dependencies {
     implementation project(':play-services-cronet-core')
     implementation project(':play-services-droidguard-core')
     implementation project(':play-services-droidguard-core-ui')
+    implementation project(':play-services-fido-core')
+    implementation project(':play-services-gmscompliance-core')
     implementation project(':play-services-location-core')
     withNearbyImplementation project(':play-services-nearby-core')
     withNearbyImplementation project(':play-services-nearby-core-ui')
@@ -77,7 +79,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
