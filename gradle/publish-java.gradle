@@ -42,10 +42,6 @@ afterEvaluate {
                             id = 'microg'
                             name = 'microG Team'
                         }
-                        developer {
-                            id = 'mar-v-in'
-                            name = 'Marvin W.'
-                        }
                     }
                     scm {
                         url = 'https://github.com/microg/GmsCore'

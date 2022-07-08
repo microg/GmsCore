@@ -4,8 +4,8 @@
  */
 
 buildscript {
-    ext.cronetVersion = '91.0.4472.120.1'
-    ext.nlpVersion = '2.0-alpha8'
+    ext.cronetVersion = '102.5005.125'
+    ext.nlpVersion = '2.0-alpha9'
     ext.safeParcelVersion = '1.7.0'
     ext.wearableVersion = '0.1.1'
 
@@ -14,6 +14,7 @@ buildscript {
 
     ext.annotationVersion = '1.3.0'
     ext.appcompatVersion = '1.4.1'
+    ext.biometricVersion = '1.1.0'
     ext.coreVersion = '1.7.0'
     ext.fragmentVersion = '1.4.0'
     ext.lifecycleVersion = '2.4.0'
@@ -70,17 +71,6 @@ def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCo
 def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
 logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
 
-@Deprecated
-String getMyVersionName() {
-    return ourVersionName
-}
-
-@Deprecated
-int getMyVersionCode() {
-    return ourVersionCode
-}
-
-
 allprojects {
     apply plugin: 'idea'
 
@@ -88,25 +78,6 @@ allprojects {
     version = ourVersionName
     ext.appVersionCode = ourVersionCode
     ext.isReleaseVersion = false
-}
-
-@Deprecated
-def androidCompileSdk() { return androidCompileSdk }
-
-@Deprecated
-def androidTargetSdk() { return androidTargetSdk }
-
-@Deprecated
-def androidMinSdk() { return androidMinSdk }
-
-@Deprecated
-def versionCode() {
-    return ourVersionCode
-}
-
-@Deprecated
-def versionName() {
-    return ourVersionName
 }
 
 subprojects {
