@@ -18,7 +18,9 @@ package org.microg.gms.maps.vtm.markup;
 
 import android.os.RemoteException;
 
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.internal.IPolygonDelegate;
 
@@ -195,5 +197,41 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     @Override
     public int hashCodeRemote() throws RemoteException {
         return id.hashCode();
+    }
+
+    // Not implemented
+    @Override
+    public void setClickable(boolean click) throws RemoteException {
+
+    }
+
+    @Override
+    public void setStrokeJointType(int type) throws RemoteException {
+
+    }
+
+    @Override
+    public int getStrokeJointType() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public void setStrokePattern(List<PatternItem> items) throws RemoteException {
+
+    }
+
+    @Override
+    public List<PatternItem> getStrokePattern() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void setTag(IObjectWrapper obj) throws RemoteException {
+
+    }
+
+    @Override
+    public IObjectWrapper getTag() throws RemoteException {
+        return null;
     }
 }

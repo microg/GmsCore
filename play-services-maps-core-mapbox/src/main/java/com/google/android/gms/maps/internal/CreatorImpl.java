@@ -71,6 +71,16 @@ public class CreatorImpl extends ICreator.Stub {
     }
 
     @Override
+    public int getRendererType() throws RemoteException {
+        return 2;
+    }
+
+    @Override
+    public void logInitialization(IObjectWrapper context, int preferredRenderer) throws RemoteException {
+        Log.d(TAG, "Mapbox-based Map initialized (preferred renderer was " + preferredRenderer + ")");
+    }
+
+    @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
         if (super.onTransact(code, data, reply, flags)) return true;
         Log.d(TAG, "onTransact [unknown]: " + code + ", " + data + ", " + flags);
