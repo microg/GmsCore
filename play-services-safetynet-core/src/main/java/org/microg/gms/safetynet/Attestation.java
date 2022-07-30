@@ -46,7 +46,7 @@ public class Attestation {
     private Context context;
     private String packageName;
     private byte[] payload;
-    private String droidGaurdResult;
+    private String droidGuardResult;
 
     public Attestation(Context context, String packageName) {
         this.context = context;
@@ -58,7 +58,7 @@ public class Attestation {
     }
 
     public byte[] buildPayload(byte[] nonce) {
-        this.droidGaurdResult = null;
+        this.droidGuardResult = null;
         SafetyNetData payload = new SafetyNetData.Builder()
                 .nonce(ByteString.of(nonce))
                 .currentTimeMs(System.currentTimeMillis())
@@ -92,8 +92,8 @@ public class Attestation {
         return MessageDigest.getInstance("SHA-256");
     }
 
-    public void setDroidGaurdResult(String droidGaurdResult) {
-        this.droidGaurdResult = droidGaurdResult;
+    public void setDroidGuardResult(String droidGuardResult) {
+        this.droidGuardResult = droidGuardResult;
     }
 
     private ByteString getPackageFileDigest() {
@@ -146,7 +146,7 @@ public class Attestation {
         if (payload == null) {
             throw new IllegalStateException("missing payload");
         }
-        return attest(new AttestRequest.Builder().safetyNetData(ByteString.of(payload)).droidGuardResult(droidGaurdResult).build(), apiKey).result;
+        return attest(new AttestRequest.Builder().safetyNetData(ByteString.of(payload)).droidGuardResult(droidGuardResult).build(), apiKey).result;
     }
 
     private AttestResponse attest(AttestRequest request, String apiKey) throws IOException {
