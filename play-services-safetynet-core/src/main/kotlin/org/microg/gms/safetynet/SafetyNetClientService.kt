@@ -84,7 +84,7 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
                 attestation.buildPayload(nonce)
                 val data = mapOf("contentBinding" to attestation.payloadHashBase64)
                 val dg = withContext(Dispatchers.IO) { DroidGuardResultCreator.getResult(context, "attest", data) }
-                attestation.setDroidGaurdResult(Base64.encodeToString(dg, Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE))
+                attestation.setDroidGuardResult(Base64.encodeToString(dg, Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE))
                 val jwsResult = withContext(Dispatchers.IO) { attestation.attest(apiKey) }
                 callbacks.onAttestationData(Status.SUCCESS, AttestationData(jwsResult))
             } catch (e: Exception) {
