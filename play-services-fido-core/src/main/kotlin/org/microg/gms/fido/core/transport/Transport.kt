@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.fido.core.ui
+package org.microg.gms.fido.core.transport
 
 enum class Transport {
     BLUETOOTH,

@@ -14,7 +14,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.fido.fido2.api.common.ErrorCode
+import com.google.android.gms.fido.fido2.api.common.RequestOptions
 import org.microg.gms.fido.core.*
+import org.microg.gms.fido.core.transport.Transport
 
 @TargetApi(24)
 abstract class AuthenticatorActivityFragment : Fragment() {
@@ -22,8 +24,12 @@ abstract class AuthenticatorActivityFragment : Fragment() {
         get() = AuthenticatorActivityFragmentData(arguments ?: Bundle.EMPTY)
     val authenticatorActivity: AuthenticatorActivity?
         get() = activity as? AuthenticatorActivity
+    val options: RequestOptions?
+        get() = authenticatorActivity?.options
 
-    fun startScreenLockHandling() = authenticatorActivity?.startScreenLockHandling()
+    fun startTransportHandling(transport: Transport) = authenticatorActivity?.startTransportHandling(transport)
+    fun cancelTransportHandling(transport: Transport) = authenticatorActivity?.cancelTransportHandling(transport)
+    fun shouldStartTransportInstantly(transport: Transport) = authenticatorActivity?.shouldStartTransportInstantly(transport) == true
 
     abstract override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
 }

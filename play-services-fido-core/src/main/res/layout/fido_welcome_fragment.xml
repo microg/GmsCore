@@ -17,6 +17,8 @@
         <variable
             name="onGetStartedClick"
             type="android.view.View.OnClickListener" />
+
+        <import type="android.view.View" />
     </data>
 
     <LinearLayout
@@ -47,6 +49,24 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             tools:text="@string/fido_welcome_body" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:visibility="@{data.privilegedCallerName != null ? View.VISIBLE : View.GONE}"
+            android:text="@{@string/fido_welcome_privileged_info(data.privilegedCallerName, data.appName)}"
+            tools:text="@string/fido_welcome_privileged_info" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/privilegedCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:visibility="@{data.requiresPrivilege ? View.VISIBLE : View.GONE}"
+            android:text="@{@string/fido_welcome_privileged_check(data.privilegedCallerName)}"
+            tools:text="@string/fido_welcome_privileged_check" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -59,6 +79,7 @@
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:enabled="@{privilegedCheck.checked || !data.requiresPrivilege}"
                 android:onClick="@{onGetStartedClick}"
                 android:text="@string/fido_welcome_button_get_started" />
         </LinearLayout>

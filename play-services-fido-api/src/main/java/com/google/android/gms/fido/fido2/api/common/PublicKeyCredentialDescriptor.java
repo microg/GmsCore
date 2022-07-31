@@ -8,8 +8,6 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
-import android.util.Base64;
-
 import com.google.android.gms.fido.common.Transport;
 
 import org.microg.gms.common.PublicApi;
@@ -31,6 +29,19 @@ public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
     private byte[] id;
     @Field(4)
     private List<Transport> transports;
+
+    private PublicKeyCredentialDescriptor() {
+    }
+
+    public PublicKeyCredentialDescriptor(String type, byte[] id, List<Transport> transports) throws UnsupportedPubKeyCredDescriptorException {
+        try {
+            this.type = PublicKeyCredentialType.fromString(type);
+        } catch (PublicKeyCredentialType.UnsupportedPublicKeyCredTypeException e) {
+            throw new UnsupportedPubKeyCredDescriptorException(e.getMessage(), e);
+        }
+        this.id = id;
+        this.transports = transports;
+    }
 
     public byte[] getId() {
         return id;

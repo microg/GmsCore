@@ -1,0 +1,59 @@
+/*
+ * SPDX-FileCopyrightText: 2022 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package org.microg.gms.fido.core
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
+import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.database.getLongOrNull
+
+class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VERSION) {
+
+    fun isPrivileged(packageName: String, signatureDigest: String): Boolean = readableDatabase.use {
+        it.count(TABLE_PRIVILEGED_APPS, "$COLUMN_PACKAGE_NAME = ? AND $COLUMN_SIGNATURE_DIGEST = ?", packageName, signatureDigest) > 0
+    }
+
+    fun insertPrivileged(packageName: String, signatureDigest: String) = writableDatabase.use {
+        it.insertWithOnConflict(TABLE_PRIVILEGED_APPS, null, ContentValues().apply {
+            put(COLUMN_PACKAGE_NAME, packageName)
+            put(COLUMN_SIGNATURE_DIGEST, signatureDigest)
+            put(COLUMN_TIMESTAMP, System.currentTimeMillis())
+        }, CONFLICT_IGNORE)
+    }
+
+    override fun onCreate(db: SQLiteDatabase) {
+        onUpgrade(db, 0, VERSION)
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 1) {
+            db.execSQL("CREATE TABLE $TABLE_PRIVILEGED_APPS($COLUMN_PACKAGE_NAME TEXT, $COLUMN_SIGNATURE_DIGEST TEXT, $COLUMN_TIMESTAMP INT, UNIQUE($COLUMN_PACKAGE_NAME, $COLUMN_SIGNATURE_DIGEST) ON CONFLICT REPLACE);")
+        }
+    }
+
+    companion object {
+        const val VERSION = 1
+        private const val TABLE_PRIVILEGED_APPS = "privileged_apps"
+        private const val COLUMN_PACKAGE_NAME = "package_name"
+        private const val COLUMN_SIGNATURE_DIGEST = "signature_digest"
+        private const val COLUMN_TIMESTAMP = "timestamp"
+    }
+}
+
+fun SQLiteDatabase.count(table: String, selection: String? = null, vararg selectionArgs: String) =
+    if (selection == null) {
+        rawQuery("SELECT COUNT(*) FROM $table", null)
+    } else {
+        rawQuery("SELECT COUNT(*) FROM $table WHERE $selection", selectionArgs)
+    }.use {
+        if (it.moveToFirst()) {
+            it.getLongOrNull(0) ?: 0
+        } else {
+            0
+        }
+    }

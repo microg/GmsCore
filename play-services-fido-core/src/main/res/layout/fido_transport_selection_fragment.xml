@@ -11,7 +11,7 @@
 
         <import type="android.view.View" />
 
-        <import type="org.microg.gms.fido.core.ui.Transport" />
+        <import type="org.microg.gms.fido.core.transport.Transport" />
 
         <variable
             name="data"
@@ -66,8 +66,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
+            android:clickable="@{data.implementedTransports.contains(Transport.BLUETOOTH)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.BLUETOOTH)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.BLUETOOTH) ? 1.0f : 0.5f}"
             android:onClick="@{onBluetoothClick}"
             android:orientation="horizontal"
             android:visibility="@{data.supportedTransports.contains(Transport.BLUETOOTH) ? View.VISIBLE : View.GONE}">
@@ -105,8 +106,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
+            android:clickable="@{data.implementedTransports.contains(Transport.NFC)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.NFC)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.NFC) ? 1.0f : 0.5f}"
             android:onClick="@{onNfcClick}"
             android:orientation="horizontal"
             android:visibility="@{data.supportedTransports.contains(Transport.NFC) ? View.VISIBLE : View.GONE}">
@@ -143,8 +145,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
+            android:clickable="@{data.implementedTransports.contains(Transport.USB)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.USB)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.USB) ? 1.0f : 0.5f}"
             android:onClick="@{onUsbClick}"
             android:orientation="horizontal"
             android:visibility="@{data.supportedTransports.contains(Transport.USB) ? View.VISIBLE : View.GONE}">
@@ -181,8 +184,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
+            android:clickable="@{data.implementedTransports.contains(Transport.SCREEN_LOCK)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.SCREEN_LOCK)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.SCREEN_LOCK) ? 1.0f : 0.5f}"
             android:onClick="@{onScreenLockClick}"
             android:orientation="horizontal"
             android:visibility="@{data.supportedTransports.contains(Transport.SCREEN_LOCK) ? View.VISIBLE : View.GONE}">

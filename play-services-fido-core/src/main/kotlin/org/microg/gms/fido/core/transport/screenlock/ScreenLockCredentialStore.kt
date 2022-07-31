@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.fido.core
+package org.microg.gms.fido.core.transport.screenlock
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -18,10 +18,7 @@ import java.security.*
 import java.security.spec.ECGenParameterSpec
 import kotlin.random.Random
 
-const val TAG = "FidoApi"
-
-@RequiresApi(23)
-class InternalCredentialStore(val context: Context) {
+class ScreenLockCredentialStore(val context: Context) {
     private val keyStore by lazy { KeyStore.getInstance("AndroidKeyStore").apply { load(null) } }
 
     private fun getAlias(rpId: String, keyId: ByteArray): String =
@@ -29,6 +26,7 @@ class InternalCredentialStore(val context: Context) {
 
     private fun getPrivateKey(rpId: String, keyId: ByteArray) = keyStore.getKey(getAlias(rpId, keyId), null) as? PrivateKey
 
+    @RequiresApi(23)
     fun createKey(rpId: String): ByteArray {
         val keyId = Random.nextBytes(32)
         val identifier = getAlias(rpId, keyId)
@@ -56,4 +54,8 @@ class InternalCredentialStore(val context: Context) {
     }
 
     fun containsKey(rpId: String, keyId: ByteArray): Boolean = keyStore.containsAlias(getAlias(rpId, keyId))
+
+    companion object {
+        const val TAG = "FidoLockStore"
+    }
 }
