@@ -110,12 +110,19 @@ public class LocationRequestHelper {
         }
     }
 
+    public boolean locationIsValid(Location location) {
+        if (location == null) return false;
+        if (Double.isNaN(location.getLatitude()) || location.getLatitude() > 90 || location.getLatitude() < -90) return false;
+        if (Double.isNaN(location.getLongitude()) || location.getLongitude() > 180 || location.getLongitude() < -180) return false;
+        return true;
+    }
+
     /**
      * @return whether to continue sending reports to this {@link LocationRequestHelper}
      */
     public boolean report(Location location) {
         if (!isActive()) return false;
-        if (location == null || !Double.isFinite(location.getLatitude()) || !Double.isFinite(location.getLongitude())) return true;
+        if (!locationIsValid(location)) return true;
         if (lastReport != null) {
             if (location.equals(lastReport)) {
                 return true;

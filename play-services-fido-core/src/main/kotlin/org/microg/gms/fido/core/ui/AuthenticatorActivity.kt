@@ -77,12 +77,11 @@ class AuthenticatorActivity : AppCompatActivity() {
 
         try {
 
-            val callerPackage = callingActivity?.packageName
-            if (callerPackage == null) {
-                return finish()
-            } else if (!intent.extras?.keySet().orEmpty().containsAll(REQUIRED_EXTRAS)) {
+            val callerPackage = callingActivity?.packageName ?: return finish()
+            if (!intent.extras?.keySet().orEmpty().containsAll(REQUIRED_EXTRAS)) {
                 return finishWithError(UNKNOWN_ERR, "Extra missing from request")
-            } else if (Build.VERSION.SDK_INT < 24) {
+            }
+            if (Build.VERSION.SDK_INT < 24) {
                 return finishWithError(NOT_SUPPORTED_ERR, "FIDO2 API is not supported on devices below N")
             }
             val options = options ?: return finishWithError(DATA_ERR, "The request options are not valid")
