@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_advanced">高级</string>
+    <string name="list_no_item_none">无</string>
+    <string name="list_item_see_all">全部显示</string>
+    <string name="open_app">打开</string>
+</resources>

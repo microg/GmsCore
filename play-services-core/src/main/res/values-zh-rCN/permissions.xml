@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="permission_service_all_label">所有 Google 服务</string>
+    <string name="permission_service_all_description">允许应用通过任何已关联的 Google 账号来使用所有 Google 服务。</string>
+
+    <string name="permission_service_android_label">Android 服务</string>
+    <string name="permission_service_android_description">允许应用通过任何已关联的 Google 账号来使用所有 Android 服务。</string>
+    <string name="permission_service_adsense_description">允许应用通过任何已关联的 Google 账号来使用 AdSense。</string>
+    <string name="permission_service_adwords_description">允许应用通过任何已关联的 Google 账号来使用 AdWords。</string>
+    <string name="permission_service_ah_description">允许应用通过任何已关联的 Google 账号来使用 Google App Engine。</string>
+    <string name="permission_service_blogger_description">允许应用通过任何已关联的 Google 账号来使用 Blogger。</string>
+    <string name="permission_service_cl_description">允许应用通过任何已关联的 Google 账号来使用 Google 日历。</string>
+    <string name="permission_service_cp_description">允许应用通过任何已关联的 Google 账号来访问联系人。</string>
+    <string name="permission_service_dodgeball_description">允许应用通过任何已关联的 Google 账号来使用 Dodgeball。</string>
+    <string name="permission_service_finance_description">允许应用通过任何已关联的 Google 账号来使用 Google 财经。</string>
+    <string name="permission_service_gbase_description">允许应用通过任何已关联的 Google 账号来使用 Google Base。</string>
+    <string name="permission_service_finance_label">Google 财经</string>
+    <string name="permission_service_cp_label">联系人</string>
+    <string name="permission_service_cl_label">Google 日历</string>
+    <string name="permission_service_grandcentral_description">允许应用通过任何已关联的 Google 账号来使用 Google Voice。</string>
+    <string name="permission_service_speech_label">语音搜索</string>
+    <string name="permission_service_speech_description">允许应用通过任何已关联的 Google 账号来使用语音搜索。</string>
+    <string name="permission_service_speechpersonalization_label">个性化语音识别</string>
+    <string name="permission_service_speechpersonalization_description">允许应用通过任何已关联的 Google 账号来使用个性化语音识别。</string>
+    <string name="permission_service_talk_description">允许应用通过任何已关联的 Google 账号来使用 Google Talk。</string>
+    <string name="permission_service_wifi_description">允许应用通过任何已关联的 Google 账号来使用 Google Wi-Fi。</string>
+    <string name="permission_service_wise_description">允许应用通过任何已关联的 Google 账号来使用 Google Spreadsheets。</string>
+    <string name="permission_service_writely_label">Google 文档</string>
+    <string name="permission_service_writely_description">允许应用通过任何已关联的 Google 账号来使用 Google 文档。</string>
+    <string name="permission_service_youtube_description">允许应用通过任何已关联的 Google 账号来使用 YouTube。</string>
+    <string name="permission_service_YouTubeUser_label">YouTube 用户名</string>
+    <string name="permission_service_YouTubeUser_description">允许应用通过任何已关联的 Google 账号获知其 YouTube 用户名。</string>
+    <string name="permission_service_lh2_label">Picasa 网络相册</string>
+    <string name="permission_service_lh2_description">允许应用通过任何已关联的 Google 账号来使用 Picasa 网络相册。</string>
+    <string name="permission_service_local_label">Google 地图</string>
+    <string name="permission_service_local_description">允许应用通过任何已关联的 Google 账号来使用 Google 地图。</string>
+    <string name="permission_service_mail_label">Google 电子邮件</string>
+    <string name="permission_service_mail_description">允许应用通过任何已关联的 Google 账号来使用 Google 电子邮件。</string>
+    <string name="permission_service_news_label">Google 新闻</string>
+    <string name="permission_service_news_description">允许应用通过任何已关联的 Google 账号来使用 Google 新闻。</string>
+    <string name="permission_service_orkut_description">允许应用通过任何已关联的 Google 账号来使用 Orkut。</string>
+    <string name="permission_service_notebook_description">允许应用通过任何已关联的 Google 账号来使用 Google 笔记本。</string>
+    <string name="permission_service_notebook_label">Google 笔记本</string>
+    <string name="permission_service_groups2_label">Google 网上论坛</string>
+    <string name="permission_service_groups2_description">允许应用通过任何已关联的 Google 账号来使用 Google 网上论坛。</string>
+    <string name="permission_service_youtube_label">YouTube</string>
+    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wifi_label">Google Wi-Fi</string>
+    <string name="permission_service_talk_label">Google Talk</string>
+    <string name="permission_service_print_label">Google 图书搜索</string>
+    <string name="permission_service_print_description">允许应用通过任何已关联的 Google 账号来使用 Google 图书搜索。</string>
+    <string name="permission_service_orkut_label">Orkut</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adwords_label">Adwords</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_health_label">Google Health</string>
+    <string name="permission_service_health_description">允许应用通过任何已关联的 Google 账号来使用 Google Health。</string>
+
+    <string name="permission_scope_www.googleapis.com_auth_youtube">管理您的 YouTube 账号</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtubepartner">查看并管理您在 YouTube 上的资产和相关内容</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">查看您的 YouTube 账号</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.upload">管理您的 YouTube 视频</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">查看您 YouTube 内容的分析报告</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">查看您 YouTube 内容的收入报告</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.profile">查看您账号的基本内容</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.email">查看您的邮件地址</string>
+    <string name="permission_scope_www.googleapis.com_auth_urlshortener">管理您的 goo.gl 短网址</string>
+    <string name="permission_scope_www.googleapis.com_auth_taskqueue">管理您的任务</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks">管理您的任务</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks.readonly">查看您的任务</string>
+    <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">Chrome 的消息推送</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan">管理您的 GAN 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan.readonly">查看您的 GAN 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_games">从 Google Play 游戏获取资料的权限。</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase.readonly">查看您的 Freebase 账号</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase">用您的账号登录到 Freebase</string>
+    <string name="permission_scope_www.googleapis.com_auth_books">管理您的图书</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar">管理您的日历</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar.readonly">查看您的日历</string>
+    <string name="permission_scope_www.googleapis.com_auth_cloudprint">查看并管理您的 Google 云端打印数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute.readonly">查看您的 Google Compute Engine 资源</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute">查看并管理您的 Google Compute Engine 资源</string>
+    <string name="permission_scope_www.googleapis.com_auth_activity">查看您在 Google 应用中的活动历史</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">查看您的 AdSense 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense">查看并管理您的 AdSense 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">查看您的 Google Analytics 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics">查看并管理您的 Google Analytics 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">使用 Google Play Android 开发者的权限</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">查看您的 Ad Exchange 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">查看并管理您的 Ad Exchange 数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger.readonly">查看您的 Blogger 账号</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger">管理您的 Blogger 账号</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">查看您在 Google Big Query 上的数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery">查看并管理您在 Google Big Query 上的数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_write">管理您 Google 云存储中的数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_only">查看您 Google 云存储中的数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">管理您 Google 云存储中的数据与权限</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.apps.readonly">查看您的 Google 云端硬盘应用</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.file">查看并管理此应用在您 Google 云端硬盘中打开 / 创建的文件</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.metadata.readonly">查看您 Google 云端硬盘中文件和档案的元数据</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.readonly">查看您 Google 云端硬盘中的文件和档案</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive">查看并管理您 Google 云端硬盘中的文件和档案</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables">管理您的 Fusion Tables</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables.readonly">"查看您的 Fusion Tables"</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsensehost">查看并管理您的 AdSense 服务资料和关联账户</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">License Manager API 的读写权限。</string>
+    <string name="permission_scope_www.googleapis.com_auth_plus.me">知道您在 Google 是谁</string>
+
+</resources>
