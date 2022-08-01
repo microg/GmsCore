@@ -115,7 +115,7 @@ public class LocationRequestHelper {
      */
     public boolean report(Location location) {
         if (!isActive()) return false;
-        if (location == null) return true;
+        if (location == null || !Double.isFinite(location.getLatitude()) || !Double.isFinite(location.getLongitude())) return true;
         if (lastReport != null) {
             if (location.equals(lastReport)) {
                 return true;

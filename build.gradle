@@ -5,7 +5,7 @@
 
 buildscript {
     ext.cronetVersion = '102.5005.125'
-    ext.nlpVersion = '2.0-alpha9'
+    ext.nlpVersion = '2.0-alpha10'
     ext.safeParcelVersion = '1.7.0'
     ext.wearableVersion = '0.1.1'
 
@@ -39,7 +39,7 @@ buildscript {
     ext.androidCompileSdk = 31
 
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
 
@@ -82,7 +82,7 @@ allprojects {
 
 subprojects {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
 }
