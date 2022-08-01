@@ -180,6 +180,10 @@ This can take a couple of minutes."</string>
     <string name="pref_test_summary_warn">Warning: %s</string>
     <string name="pref_test_summary_running">Running…</string>
     <string name="pref_droidguard_operation_mode">Operation mode</string>
+    <string name="pref_snet_recent_title">See recent SafetyNet requests</string>
+    <string name="snet_recent_requests">SafetyNet Recent Requests</string>
+    <string name="no_recent_snet_requests">No recent SafetyNet requests !</string>
+    <string name="menu_clear_recent_requests">Clear recent requests</string>
 
     <string name="profile_name_native">Native</string>
     <string name="profile_name_real">Real</string>
@@ -191,5 +195,16 @@ This can take a couple of minutes."</string>
     <string name="pref_device_registration_import_custom_profile_summary">Import device profile from file</string>
     <string name="pref_device_registration_select_profile_title">Select profile</string>
     <string name="pref_device_registration_device_profile_category">Device profile</string>
+    <string name="pref_snet_recent_copy_json">Copy JSON JWS data</string>
+    <string name="pref_snet_recent_advice">Advice</string>
+    <string name="pref_snet_recent_eval_type">Evaluation type</string>
+    <string name="pref_snet_recent_response_status">Response status</string>
+    <string name="pref_snet_recent_cat_response">Response data</string>
+    <string name="pref_snet_recent_cat_request">Request data</string>
+    <string name="pref_snet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_snet_recent_request_time">Time of request</string>
+    <string name="pref_snet_recent_request_type">Request type</string>
+    <string name="pref_snet_recent_cat_basic">Basic data</string>
+    <string name="pref_snet_recent_token">Token</string>
 
 </resources>
