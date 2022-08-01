@@ -23,6 +23,8 @@ import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.R
 
+fun ByteArray.toHexString() : String = joinToString("") { "%02x".format(it) }
+
 fun PackageManager.getApplicationInfoIfExists(packageName: String?, flags: Int = 0): ApplicationInfo? = packageName?.let {
     try {
         getApplicationInfo(it, flags)

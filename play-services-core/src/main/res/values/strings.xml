@@ -186,5 +186,9 @@ This can take a couple of minutes."</string>
     <string name="profile_name_user">Custom: %s</string>
     <string name="profile_name_auto">Automatic: %s</string>
     <string name="profile_name_system">System: %s</string>
+    <string name="pref_snet_recent_title">See recent SafetyNet requests</string>
+    <string name="snet_recent_requests">SafetyNet Recent Requests</string>
+    <string name="no_recent_snet_requests">No recent SafetyNet requests !</string>
+    <string name="menu_clear_recent_requests">Clear recent requests</string>
 
 </resources>

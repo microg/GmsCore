@@ -31,6 +31,9 @@
             android:title="@string/pref_recaptcha_test_title"
             tools:icon="@drawable/ic_circle_check"
             tools:summary="@string/pref_test_summary_passed" />
+        <Preference
+            android:key="pref_snet_recent"
+            android:title="@string/pref_snet_recent_title" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <org.microg.gms.ui.TextPreference

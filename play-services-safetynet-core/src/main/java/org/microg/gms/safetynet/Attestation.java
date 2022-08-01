@@ -57,7 +57,7 @@ public class Attestation {
         this.payload = payload;
     }
 
-    public byte[] buildPayload(byte[] nonce) {
+    public SafetyNetData buildPayload(byte[] nonce) {
         this.droidGuardResult = null;
         SafetyNetData payload = new SafetyNetData.Builder()
                 .nonce(ByteString.of(nonce))
@@ -71,7 +71,8 @@ public class Attestation {
                 .suCandidates(Collections.<FileState>emptyList())
                 .build();
         Log.d(TAG, "Payload: "+payload.toString());
-        return this.payload = payload.encode();
+        this.payload = payload.encode();
+        return payload;
     }
 
     public byte[] getPayload() {
