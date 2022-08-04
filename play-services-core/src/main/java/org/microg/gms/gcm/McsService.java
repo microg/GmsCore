@@ -490,7 +490,11 @@ public class McsService extends Service implements Handler.Callback {
         NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
         activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(activeNetworkInfo);
         if (!GcmPrefs.get(this).isEnabledFor(activeNetworkInfo)) {
-            logd(this, "Don't connect, because disabled for " + activeNetworkInfo.getTypeName());
+            if (activeNetworkInfo != null) {
+                logd(this, "Don't connect, because disabled for " + activeNetworkInfo.getTypeName());
+            } else {
+                logd(this, "Don't connect, no active network");
+            }
             scheduleReconnect(this);
             return;
         }
