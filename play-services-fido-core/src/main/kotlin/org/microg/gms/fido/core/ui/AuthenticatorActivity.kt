@@ -10,11 +10,18 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
+import androidx.navigation.ui.NavigationUI
 import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import kotlinx.coroutines.CancellationException
@@ -26,6 +33,7 @@ import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.Transport.SCREEN_LOCK
 import org.microg.gms.fido.core.transport.Transport.USB
 import org.microg.gms.fido.core.transport.TransportHandler
+import org.microg.gms.fido.core.transport.TransportHandlerCallback
 import org.microg.gms.fido.core.transport.bluetooth.BluetoothTransportHandler
 import org.microg.gms.fido.core.transport.nfc.NfcTransportHandler
 import org.microg.gms.fido.core.transport.screenlock.ScreenLockTransportHandler
@@ -36,7 +44,7 @@ import org.microg.gms.utils.toBase64
 
 const val TAG = "FidoUi"
 
-class AuthenticatorActivity : AppCompatActivity() {
+class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     val options: RequestOptions?
         get() = when (intent.getStringExtra(KEY_SOURCE) to intent.getStringExtra(KEY_TYPE)) {
             SOURCE_BROWSER to TYPE_REGISTER ->
@@ -55,10 +63,10 @@ class AuthenticatorActivity : AppCompatActivity() {
     private val database by lazy { Database(this) }
     private val transportHandlers by lazy {
         setOfNotNull(
-            BluetoothTransportHandler(this),
-            NfcTransportHandler(this),
-            if (Build.VERSION.SDK_INT >= 21) UsbTransportHandler(this) else null,
-            ScreenLockTransportHandler(this)
+            BluetoothTransportHandler(this, this),
+            NfcTransportHandler(this, this),
+            if (Build.VERSION.SDK_INT >= 21) UsbTransportHandler(this, this) else null,
+            ScreenLockTransportHandler(this, this)
         )
     }
 
@@ -122,16 +130,60 @@ class AuthenticatorActivity : AppCompatActivity() {
                 this.requiresPrivilege = requiresPrivilege
                 this.supportedTransports = transportHandlers.filter { it.isSupported }.map { it.transport }.toSet()
             }.arguments
-            navHostFragment = NavHostFragment.create(R.navigation.nav_fido_authenticator, arguments)
-            // TODO: Go directly to appropriate fragment for known key
-            // TODO: If not first usage, skip welcome and go directly to transport selection
-            //navHostFragment.findNavController().navigate(next, arguments)
+            val next = if (!requiresPrivilege) {
+                val knownRegistrationTransports = mutableSetOf<Transport>()
+                val allowedTransports = mutableSetOf<Transport>()
+                if (options.type == RequestOptionsType.SIGN) {
+                    for (descriptor in options.signOptions.allowList) {
+                        val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
+                        if (knownTransport != null && knownTransport in IMPLEMENTED_TRANSPORTS)
+                            knownRegistrationTransports.add(knownTransport)
+                        if (descriptor.transports.isNullOrEmpty()) {
+                            allowedTransports.addAll(Transport.values())
+                        } else {
+                            for (transport in descriptor.transports) {
+                                val allowedTransport = when (transport) {
+                                    com.google.android.gms.fido.common.Transport.BLUETOOTH_CLASSIC -> Transport.BLUETOOTH
+                                    com.google.android.gms.fido.common.Transport.BLUETOOTH_LOW_ENERGY -> Transport.BLUETOOTH
+                                    com.google.android.gms.fido.common.Transport.NFC -> Transport.NFC
+                                    com.google.android.gms.fido.common.Transport.USB -> Transport.USB
+                                    com.google.android.gms.fido.common.Transport.INTERNAL -> Transport.SCREEN_LOCK
+                                    else -> null
+                                }
+                                if (allowedTransport != null && allowedTransport in IMPLEMENTED_TRANSPORTS)
+                                    allowedTransports.add(allowedTransport)
+                            }
+                        }
+                    }
+                }
+                val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
+                if (database.wasUsed()) {
+                    if (preselectedTransport == USB) {
+                        R.id.usbFragment
+                    } else {
+                        R.id.transportSelectionFragment
+                    }
+                } else {
+                    null
+                }
+            } else {
+                null
+            }
+            navHostFragment = NavHostFragment()
             supportFragmentManager.commit {
                 replace(R.id.fragment_container, navHostFragment)
+                runOnCommit {
+                    val navGraph = navHostFragment.navController.navInflater.inflate(R.navigation.nav_fido_authenticator)
+                    if (next != null) {
+                        navGraph.startDestination = next
+                    }
+                    navHostFragment.navController.setGraph(navGraph, arguments)
+                }
             }
         } catch (e: RequestHandlingException) {
             finishWithError(e.errorCode, e.message ?: e.errorCode.name)
         } catch (e: Exception) {
+            Log.w(TAG, e)
             finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)
         }
     }
@@ -143,10 +195,18 @@ class AuthenticatorActivity : AppCompatActivity() {
         )
     }
 
-    fun finishWithSuccessResponse(response: AuthenticatorResponse) {
+    fun finishWithSuccessResponse(response: AuthenticatorResponse, transport: Transport) {
         Log.d(TAG, "Finish with success response: $response")
         if (options is BrowserRequestOptions) database.insertPrivileged(callerPackage, callerSignature)
-        finishWithCredential(PublicKeyCredential.Builder().setResponse(response).build())
+        val rpId = options?.rpId
+        val rawId = when(response) {
+            is AuthenticatorAttestationResponse -> response.keyHandle
+            is AuthenticatorAssertionResponse -> response.keyHandle
+            else -> null
+        }
+        val id = rawId?.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
+        if (rpId != null && id != null) database.insertKnownRegistration(rpId, id, transport)
+        finishWithCredential(PublicKeyCredential.Builder().setResponse(response).setRawId(rawId).setId(id).build())
     }
 
     private fun finishWithCredential(publicKeyCredential: PublicKeyCredential) {
@@ -173,9 +233,7 @@ class AuthenticatorActivity : AppCompatActivity() {
     fun startTransportHandling(transport: Transport): Job = lifecycleScope.launchWhenStarted {
         val options = options ?: return@launchWhenStarted
         try {
-            finishWithSuccessResponse(
-                getTransportHandler(transport)!!.start(options, callerPackage)
-            )
+            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage), transport)
         } catch (e: CancellationException) {
             Log.w(TAG, e)
             // Ignoring cancellation here
@@ -188,8 +246,37 @@ class AuthenticatorActivity : AppCompatActivity() {
         }
     }
 
-    fun cancelTransportHandling(transport: Transport) {
-        // TODO
+    override fun onStatusChanged(transport: Transport, status: String, extras: Bundle?) {
+        Log.d(TAG, "$transport status set to $status ($extras)")
+        try {
+            for (callback in navHostFragment.childFragmentManager.fragments.filterIsInstance<TransportHandlerCallback>()) {
+                try {
+                    callback.onStatusChanged(transport, status, extras)
+                } catch (e: Exception) {
+                    // Ignoring
+                }
+            }
+        } catch (e: Exception) {
+            // Ignoring
+        }
+    }
+
+    override fun onBackPressed() {
+        try {
+            if (navHostFragment.navController.popBackStack()) return
+        } catch (e: Exception) {
+            // Ignore
+        }
+        super.onBackPressed()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        try {
+            if (navHostFragment.navController.navigateUp()) return true
+        } catch (e: Exception) {
+            // Ignore
+        }
+        return super.onSupportNavigateUp()
     }
 
     companion object {
@@ -205,7 +292,7 @@ class AuthenticatorActivity : AppCompatActivity() {
         const val TYPE_REGISTER = "register"
         const val TYPE_SIGN = "sign"
 
-        val IMPLEMENTED_TRANSPORTS = setOf(SCREEN_LOCK)
+        val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK)
         val INSTANT_SUPPORTED_TRANSPORTS = setOf(SCREEN_LOCK)
     }
 }

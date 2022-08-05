@@ -14,6 +14,6 @@ abstract class AttestationObject(val authData: AuthenticatorData) {
     fun encode(): ByteArray = CBORObject.NewMap().apply {
         set("fmt", fmt.encodeAsCbor())
         set("attStmt", attStmt)
-        set("authData", authData.toCBOR())
+        set("authData", authData.encodeAsCbor())
     }.EncodeToBytes()
 }

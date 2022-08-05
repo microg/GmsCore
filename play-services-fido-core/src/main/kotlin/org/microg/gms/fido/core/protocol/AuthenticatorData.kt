@@ -30,20 +30,20 @@ class AuthenticatorData(
             .array()
     }
 
-    fun toCBOR(): CBORObject = encode().encodeAsCbor()
+    fun encodeAsCbor(): CBORObject = encode().encodeAsCbor()
 
     companion object {
         /** User Present **/
-        private const val FLAG_UP: Byte = 1
+        private const val FLAG_UP: Byte = 0x01
 
         /** User Verified **/
-        private const val FLAG_UV: Byte = 4
+        private const val FLAG_UV: Byte = 0x04
 
         /** Attested credential data included **/
-        private const val FLAG_AT: Byte = 64
+        private const val FLAG_AT: Byte = 0x40
 
         /** Extension data included **/
-        private const val FLAG_ED: Byte = -128
+        private const val FLAG_ED: Byte = -0x80
 
         private fun buildFlags(up: Boolean, uv: Boolean, at: Boolean, ed: Boolean): Byte =
             (if (up) FLAG_UP else 0) or (if (uv) FLAG_UV else 0) or (if (at) FLAG_AT else 0) or (if (ed) FLAG_ED else 0)

@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
-                    android:text="Use security key with Bluetooth"
+                    android:text="@string/fido_transport_selection_bluetooth"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <View
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
-                    android:text="Use security key with NFC"
+                    android:text="@string/fido_transport_selection_nfc"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <View
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
-                    android:text="Use security key with USB"
+                    android:text="@string/fido_transport_selection_usb"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <View
@@ -213,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="12dp"
                     android:paddingBottom="12dp"
-                    android:text="Use this device with screen lock"
+                    android:text="@string/fido_transport_selection_biometric"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                 <View

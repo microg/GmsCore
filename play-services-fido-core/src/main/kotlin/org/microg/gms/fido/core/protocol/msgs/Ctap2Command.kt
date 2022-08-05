@@ -12,7 +12,7 @@ import java.io.InputStream
 abstract class Ctap2Command<Q: Ctap2Request, R: Ctap2Response>(val request: Q) {
     val hasParameters: Boolean
         get() = request.parameters != null
-    fun decodeResponse(bytes: ByteArray, offset: Int): R =
+    fun decodeResponse(bytes: ByteArray, offset: Int = 0): R =
         decodeResponse(ByteArrayInputStream(bytes, offset, bytes.size - offset))
     open fun decodeResponse(i: InputStream) = decodeResponse(CBORObject.Read(i))
     abstract fun decodeResponse(obj: CBORObject): R

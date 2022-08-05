@@ -69,7 +69,7 @@ fun CBORObject.decodeAsPublicKeyCredentialDescriptor() = PublicKeyCredentialDesc
     get("transports")?.AsStringSequence()?.map { Transport.fromString(it) }
 )
 
-fun<T> List<T>.encodeAsCbor(f: (T) -> CBORObject) = CBORObject.NewArray().apply { this@encodeAsCbor.forEachIndexed { index, t -> set(index, f(t)) } }
+fun<T> List<T>.encodeAsCbor(f: (T) -> CBORObject) = CBORObject.NewArray().apply { this@encodeAsCbor.forEach { Add(f(it)) } }
 fun<T> Map<String,T>.encodeAsCbor(f: (T) -> CBORObject) = CBORObject.NewMap().apply {
     for (entry in this@encodeAsCbor) {
         set(entry.key, f(entry.value))

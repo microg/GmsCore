@@ -6,10 +6,7 @@
 package org.microg.gms.fido.core.transport.usb
 
 import android.content.Context
-import android.hardware.usb.UsbDevice
-import android.hardware.usb.UsbDeviceConnection
-import android.hardware.usb.UsbInterface
-import android.hardware.usb.UsbManager
+import android.hardware.usb.*
 
 val Context.usbManager: UsbManager?
     get() = getSystemService(Context.USB_SERVICE) as? UsbManager?
@@ -18,12 +15,21 @@ val UsbDevice.interfaces: Iterable<UsbInterface>
     get() = Iterable {
         object : Iterator<UsbInterface> {
             private var index = 0
-            override fun hasNext(): Boolean = index + 1 < interfaceCount
+            override fun hasNext(): Boolean = index < interfaceCount
             override fun next(): UsbInterface = getInterface(index++)
         }
     }
 
-fun <R> UsbDeviceConnection.use(block: (UsbDeviceConnection) -> R): R {
+val UsbInterface.endpoints: Iterable<UsbEndpoint>
+    get() = Iterable {
+        object : Iterator<UsbEndpoint> {
+            private var index = 0
+            override fun hasNext(): Boolean = index < endpointCount
+            override fun next(): UsbEndpoint = getEndpoint(index++)
+        }
+    }
+
+inline fun <R> UsbDeviceConnection.use(block: (UsbDeviceConnection) -> R): R {
     var exception: Throwable? = null
     try {
         return block(this)

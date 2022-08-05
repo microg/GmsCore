@@ -28,7 +28,6 @@ abstract class AuthenticatorActivityFragment : Fragment() {
         get() = authenticatorActivity?.options
 
     fun startTransportHandling(transport: Transport) = authenticatorActivity?.startTransportHandling(transport)
-    fun cancelTransportHandling(transport: Transport) = authenticatorActivity?.cancelTransportHandling(transport)
     fun shouldStartTransportInstantly(transport: Transport) = authenticatorActivity?.shouldStartTransportInstantly(transport) == true
 
     abstract override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?

@@ -10,7 +10,8 @@
 
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <uses-permission android:name="android.permission.MANAGE_USB"
+    <uses-permission
+        android:name="android.permission.MANAGE_USB"
         tools:ignore="ProtectedPermissions" />
 
     <application>
@@ -24,6 +25,7 @@
         </service>
         <activity
             android:name=".ui.AuthenticatorActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:exported="false"
             android:process=":ui"
             android:theme="@style/Theme.Fido.Translucent" />

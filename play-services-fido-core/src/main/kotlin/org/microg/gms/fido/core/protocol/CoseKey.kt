@@ -11,20 +11,28 @@ import java.math.BigInteger
 
 class CoseKey(
     val algorithm: Algorithm,
-    val x: BigInteger,
-    val y: BigInteger,
-    val curveId: Int,
-    val curvePointSize: Int
+    val x: ByteArray,
+    val y: ByteArray,
+    val curveId: Int
 ) {
+    constructor(algorithm: Algorithm, x: BigInteger, y: BigInteger, curveId: Int, curvePointSize: Int) :
+            this(algorithm, x.toByteArray(curvePointSize), y.toByteArray(curvePointSize), curveId)
+
     fun encode(): ByteArray = CBORObject.NewMap().apply {
-        set(1, 2.encodeAsCbor())
-        set(3, algorithm.algoValue.encodeAsCbor())
-        set(-1, curveId.encodeAsCbor())
-        set(-2, x.toByteArray(curvePointSize).encodeAsCbor())
-        set(-3, y.toByteArray(curvePointSize).encodeAsCbor())
+        set(KTY, 2.encodeAsCbor())
+        set(ALG, algorithm.algoValue.encodeAsCbor())
+        set(CRV, curveId.encodeAsCbor())
+        set(X, x.encodeAsCbor())
+        set(Y, y.encodeAsCbor())
     }.EncodeToBytes()
 
     companion object {
+        private const val KTY = 1
+        private const val ALG = 3
+        private const val CRV = -1
+        private const val X = -2
+        private const val Y = -3
+
         fun BigInteger.toByteArray(size: Int): ByteArray {
             val res = ByteArray(size)
             val orig = toByteArray()

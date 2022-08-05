@@ -17,12 +17,14 @@ import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.protocol.*
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
+import org.microg.gms.fido.core.transport.TransportHandlerCallback
 import java.security.Signature
 import java.security.interfaces.ECPublicKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class ScreenLockTransportHandler(private val activity: FragmentActivity): TransportHandler(Transport.SCREEN_LOCK) {
+class ScreenLockTransportHandler(private val activity: FragmentActivity, callback: TransportHandlerCallback? = null) :
+    TransportHandler(Transport.SCREEN_LOCK, callback) {
     private val store by lazy { ScreenLockCredentialStore(activity) }
 
     override val isSupported: Boolean
@@ -53,6 +55,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity): Transp
                 )
                 .setNegativeButtonText(activity.getString(android.R.string.cancel))
                 .build()
+            invokeStatusChanged(TransportHandlerCallback.STATUS_WAITING_FOR_USER)
             if (signature != null) {
                 prompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(signature))
             } else {
@@ -189,10 +192,11 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity): Transp
     }
 
     @RequiresApi(23)
-    override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse = when (options.type) {
-        RequestOptionsType.REGISTER -> register(options, callerPackage)
-        RequestOptionsType.SIGN -> sign(options, callerPackage)
-    }
+    override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse =
+        when (options.type) {
+            RequestOptionsType.REGISTER -> register(options, callerPackage)
+            RequestOptionsType.SIGN -> sign(options, callerPackage)
+        }
 
     override fun shouldBeUsedInstantly(options: RequestOptions): Boolean {
         if (options.type != RequestOptionsType.SIGN) return false
