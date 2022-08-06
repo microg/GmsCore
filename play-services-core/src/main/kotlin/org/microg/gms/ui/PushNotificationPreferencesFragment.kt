@@ -5,6 +5,7 @@
 
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.text.format.DateUtils
@@ -39,6 +40,7 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_push_notifications)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         pushStatusCategory = preferenceScreen.findPreference("prefcat_push_status") ?: pushStatusCategory
         pushStatus = preferenceScreen.findPreference("pref_push_status") ?: pushStatus

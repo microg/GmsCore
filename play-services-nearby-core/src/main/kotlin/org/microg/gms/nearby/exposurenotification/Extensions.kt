@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -14,6 +15,7 @@ import android.util.Log
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withTimeout
 
+@SuppressLint("MissingPermission")
 suspend fun BluetoothAdapter.enableAsync(context: Context): Boolean {
     val deferred = CompletableDeferred<Unit>()
     val receiver: BroadcastReceiver = object : BroadcastReceiver() {

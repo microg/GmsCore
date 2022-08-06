@@ -21,7 +21,7 @@ apply plugin: 'signing'
 dependencies {
     api "org.microg:safe-parcel:$safeParcelVersion"
 
-    // Dependencies from play-services-basement:18.0.0
+    // Dependencies from play-services-basement:18.1.0
     api "androidx.collection:collection:1.0.0"
     api "androidx.core:core:1.2.0"
     api "androidx.fragment:fragment:1.0.0"

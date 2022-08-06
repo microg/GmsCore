@@ -5,6 +5,7 @@
 
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -67,6 +68,7 @@ class DeviceRegistrationPreferencesFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_device_registration)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         deviceProfile = preferenceScreen.findPreference("pref_device_profile") ?: deviceProfile
         importProfile = preferenceScreen.findPreference("pref_device_profile_import") ?: importProfile

@@ -175,7 +175,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 runOnCommit {
                     val navGraph = navHostFragment.navController.navInflater.inflate(R.navigation.nav_fido_authenticator)
                     if (next != null) {
-                        navGraph.startDestination = next
+                        navGraph.setStartDestination(next)
                     }
                     navHostFragment.navController.setGraph(navGraph, arguments)
                 }

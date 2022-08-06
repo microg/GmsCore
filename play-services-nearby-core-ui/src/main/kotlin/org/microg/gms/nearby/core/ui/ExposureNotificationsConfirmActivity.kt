@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.core.ui
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
@@ -209,9 +210,14 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun requestBluetoothViaIntent() {
         val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-        startActivityForResult(intent, ++bluetoothRequestCode)
+        try {
+            startActivityForResult(intent, ++bluetoothRequestCode)
+        } catch (e: Exception) {
+            // Ignored
+        }
     }
 
     // Location

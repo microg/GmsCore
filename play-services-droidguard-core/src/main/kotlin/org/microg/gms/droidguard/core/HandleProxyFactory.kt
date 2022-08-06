@@ -47,8 +47,8 @@ class HandleProxyFactory(private val context: Context) {
     }
 
     fun SignedResponse.unpack(): Response {
-        if (SignatureVerifier.verifySignature(data!!.toByteArray(), signature!!.toByteArray())) {
-            return Response.ADAPTER.decode(data!!)
+        if (SignatureVerifier.verifySignature(data_!!.toByteArray(), signature!!.toByteArray())) {
+            return Response.ADAPTER.decode(data_!!)
         } else {
             throw SecurityException("Signature invalid")
         }

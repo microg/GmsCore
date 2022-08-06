@@ -141,13 +141,18 @@ class ScannerService : LifecycleService() {
         handler.postDelayed(stopLaterRunnable, SCANNING_TIME_MS)
     }
 
+    @SuppressLint("MissingPermission")
     @Synchronized
     private fun stopScan() {
         if (!scanning) return
         Log.i(TAG, "Stopping scanner for service $SERVICE_UUID, had seen $seenAdvertisements advertisements")
         handler.removeCallbacks(stopLaterRunnable)
         scanning = false
-        scanner?.stopScan(callback)
+        try {
+            scanner?.stopScan(callback)
+        } catch (e: Exception) {
+            // Ignored
+        }
         if (ExposurePreferences(this).enabled) {
             scheduleStartScan(((lastStartTime + SCANNING_INTERVAL_MS) - System.currentTimeMillis()).coerceIn(0, SCANNING_INTERVAL_MS))
         }

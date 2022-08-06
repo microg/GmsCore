@@ -9,30 +9,30 @@ buildscript {
     ext.safeParcelVersion = '1.7.0'
     ext.wearableVersion = '0.1.1'
 
-    ext.kotlinVersion = '1.6.10'
-    ext.coroutineVersion = '1.5.2'
+    ext.kotlinVersion = '1.7.10'
+    ext.coroutineVersion = '1.6.4'
 
     ext.annotationVersion = '1.3.0'
-    ext.appcompatVersion = '1.4.1'
+    ext.appcompatVersion = '1.4.2'
     ext.biometricVersion = '1.1.0'
-    ext.coreVersion = '1.7.0'
-    ext.fragmentVersion = '1.4.0'
-    ext.lifecycleVersion = '2.4.0'
+    ext.coreVersion = '1.8.0'
+    ext.fragmentVersion = '1.5.1'
+    ext.lifecycleVersion = '2.5.1'
     ext.loaderVersion = '1.1.0'
-    ext.mediarouterVersion = '1.2.5'
+    ext.mediarouterVersion = '1.3.1'
     ext.multidexVersion = '2.0.1'
-    ext.navigationVersion = '2.3.5'
-    ext.preferenceVersion = '1.1.1'
+    ext.navigationVersion = '2.5.1'
+    ext.preferenceVersion = '1.2.0'
     ext.recyclerviewVersion = '1.2.0'
     ext.webkitVersion = '1.4.0'
 
-    ext.slf4jVersion = '1.7.25'
+    ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
-    ext.wireVersion = '3.2.2'
+    ext.wireVersion = '4.4.1'
 
-    ext.androidBuildGradleVersion = '7.0.4'
+    ext.androidBuildGradleVersion = '7.2.1'
 
-    ext.androidBuildVersionTools = '30.0.2'
+    ext.androidBuildVersionTools = '33.0.0'
 
     ext.androidMinSdk = 14
     ext.androidTargetSdk = 29

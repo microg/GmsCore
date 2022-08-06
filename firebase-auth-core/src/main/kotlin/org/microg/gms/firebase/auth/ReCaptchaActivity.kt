@@ -33,12 +33,12 @@ class ReCaptchaActivity : AppCompatActivity() {
         get() = intent.getStringExtra(EXTRA_HOSTNAME) ?: "localhost:5000"
     private var finished = false
 
-    @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         openWebsite()
     }
 
+    @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     private fun openWebsite() {
         val apiKey = intent.getStringExtra(EXTRA_API_KEY) ?: return finishResult(Activity.RESULT_CANCELED)
         setContentView(R.layout.activity_recaptcha)
@@ -51,13 +51,7 @@ class ReCaptchaActivity : AppCompatActivity() {
         settings.cacheMode = WebSettings.LOAD_NO_CACHE
         ProfileManager.ensureInitialized(this)
         settings.userAgentString = Build.generateWebViewUserAgentString(settings.userAgentString)
-        view.addJavascriptInterface(object : Any() {
-            @JavascriptInterface
-            fun onReCaptchaToken(token: String) {
-                Log.d(TAG, "onReCaptchaToken: $token")
-                finishResult(Activity.RESULT_OK, token)
-            }
-        }, "MyCallback")
+        view.addJavascriptInterface(ReCaptchaCallback(this), "MyCallback")
         val captcha = assets.open("recaptcha.html").bufferedReader().readText().replace("%apikey%", apiKey)
         view.loadDataWithBaseURL("https://$hostname/", captcha, null, null, "https://$hostname/")
     }
@@ -79,6 +73,14 @@ class ReCaptchaActivity : AppCompatActivity() {
         const val EXTRA_API_KEY = "api_key"
         const val EXTRA_HOSTNAME = "hostname"
         const val EXTRA_RESULT_RECEIVER = "receiver"
+
+        class ReCaptchaCallback(val activity: ReCaptchaActivity) {
+            @JavascriptInterface
+            fun onReCaptchaToken(token: String) {
+                Log.d(TAG, "onReCaptchaToken: $token")
+                activity.finishResult(Activity.RESULT_OK, token)
+            }
+        }
 
         fun isSupported(context: Context): Boolean = true
 

@@ -112,7 +112,6 @@
 
     <application
         android:allowBackup="true"
-        android:extractNativeLibs="false"
         android:forceQueryable="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_core_service_app"

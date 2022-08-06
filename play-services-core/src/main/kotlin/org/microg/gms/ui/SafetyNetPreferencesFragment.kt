@@ -5,6 +5,7 @@
 
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -32,6 +33,7 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_safetynet)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         runAttest = preferenceScreen.findPreference("pref_snet_run_attest") ?: runAttest
         runReCaptcha = preferenceScreen.findPreference("pref_recaptcha_run_test") ?: runReCaptcha

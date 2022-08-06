@@ -97,81 +97,7 @@ class ReCaptchaActivity : AppCompatActivity() {
                 ProfileManager.ensureInitialized(this@ReCaptchaActivity)
                 userAgentString = Build.generateWebViewUserAgentString(userAgentString)
             }
-            addJavascriptInterface(object {
-                @JavascriptInterface
-                fun challengeReady() {
-                    Log.d(TAG, "challengeReady()")
-                    runOnUiThread { webView?.loadUrl("javascript: RecaptchaMFrame.show(${min(widthPixels / density, 400f)}, ${min(heightPixels / density, 400f)});") }
-                }
-
-                @JavascriptInterface
-                fun getClientAPIVersion() = 1
-
-                @JavascriptInterface
-                fun onChallengeExpired() {
-                    Log.d(TAG, "onChallengeExpired()")
-                }
-
-                @JavascriptInterface
-                fun onError(errorCode: Int, finish: Boolean) {
-                    Log.d(TAG, "onError($errorCode, $finish)")
-                    when (errorCode) {
-                        1 -> sendErrorResult(ERROR, "Invalid Input Argument")
-                        2 -> sendErrorResult(TIMEOUT, "Session Timeout")
-                        7 -> sendErrorResult(RECAPTCHA_INVALID_SITEKEY, "Invalid Site Key")
-                        8 -> sendErrorResult(RECAPTCHA_INVALID_KEYTYPE, "Invalid Type of Site Key")
-                        9 -> sendErrorResult(RECAPTCHA_INVALID_PACKAGE_NAME, "Invalid Package Name for App")
-                        else -> sendErrorResult(ERROR, "error")
-                    }
-                    if (finish) this@ReCaptchaActivity.finish()
-                }
-
-                @JavascriptInterface
-                fun onResize(width: Int, height: Int) {
-                    Log.d(TAG, "onResize($width, $height)")
-                    if (webView?.visibility == View.VISIBLE) {
-                        runOnUiThread { setWebViewSize(width, height, true) }
-                    } else {
-                        runOnUiThread { webView?.loadUrl("javascript: RecaptchaMFrame.shown($width, $height, true);") }
-                    }
-                }
-
-                @JavascriptInterface
-                fun onShow(visible: Boolean, width: Int, height: Int) {
-                    Log.d(TAG, "onShow($visible, $width, $height)")
-                    if (width <= 0 && height <= 0) {
-                        runOnUiThread { webView?.loadUrl("javascript: RecaptchaMFrame.shown($width, $height, $visible);") }
-                    } else {
-                        runOnUiThread {
-                            setWebViewSize(width, height, visible)
-                            loading?.visibility = if (visible) View.GONE else View.VISIBLE
-                            webView?.visibility = if (visible) View.VISIBLE else View.GONE
-                        }
-                    }
-                }
-
-                @JavascriptInterface
-                fun requestToken(s: String, b: Boolean) {
-                    Log.d(TAG, "requestToken($s, $b)")
-                    runOnUiThread {
-                        val cert = webView?.certificate?.let { Base64.encodeToString(SslCertificate.saveState(it).getByteArray("x509-certificate"), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP) }
-                                ?: ""
-                        val params = StringBuilder(params).appendUrlEncodedParam("c", s).appendUrlEncodedParam("sc", cert).appendUrlEncodedParam("mt", System.currentTimeMillis().toString()).toString()
-                        val flow = "recaptcha-android-${if (b) "verify" else "reload"}"
-                        lifecycleScope.launchWhenResumed {
-                            updateToken(flow, params)
-                        }
-                    }
-                }
-
-                @JavascriptInterface
-                fun verifyCallback(token: String) {
-                    Log.d(TAG, "verifyCallback($token)")
-                    sendResult(0) { putString("token", token) }
-                    resultSent = true
-                    finish()
-                }
-            }, "RecaptchaEmbedder")
+            addJavascriptInterface(ReCaptchaEmbedder(this@ReCaptchaActivity), "RecaptchaEmbedder")
         }
         lifecycleScope.launchWhenResumed {
             open()
@@ -233,5 +159,81 @@ class ReCaptchaActivity : AppCompatActivity() {
 
     companion object {
         private const val MFRAME_URL = "https://www.google.com/recaptcha/api2/mframe"
+
+        class ReCaptchaEmbedder(val activity: ReCaptchaActivity) {
+            @JavascriptInterface
+            fun challengeReady() {
+                Log.d(TAG, "challengeReady()")
+                activity.runOnUiThread { activity.webView?.loadUrl("javascript: RecaptchaMFrame.show(${min(activity.widthPixels / activity.density, 400f)}, ${min(activity.heightPixels / activity.density, 400f)});") }
+            }
+
+            @JavascriptInterface
+            fun getClientAPIVersion() = 1
+
+            @JavascriptInterface
+            fun onChallengeExpired() {
+                Log.d(TAG, "onChallengeExpired()")
+            }
+
+            @JavascriptInterface
+            fun onError(errorCode: Int, finish: Boolean) {
+                Log.d(TAG, "onError($errorCode, $finish)")
+                when (errorCode) {
+                    1 -> activity.sendErrorResult(ERROR, "Invalid Input Argument")
+                    2 -> activity.sendErrorResult(TIMEOUT, "Session Timeout")
+                    7 -> activity.sendErrorResult(RECAPTCHA_INVALID_SITEKEY, "Invalid Site Key")
+                    8 -> activity.sendErrorResult(RECAPTCHA_INVALID_KEYTYPE, "Invalid Type of Site Key")
+                    9 -> activity.sendErrorResult(RECAPTCHA_INVALID_PACKAGE_NAME, "Invalid Package Name for App")
+                    else -> activity.sendErrorResult(ERROR, "error")
+                }
+                if (finish) activity.finish()
+            }
+
+            @JavascriptInterface
+            fun onResize(width: Int, height: Int) {
+                Log.d(TAG, "onResize($width, $height)")
+                if (activity.webView?.visibility == View.VISIBLE) {
+                    activity.runOnUiThread { activity.setWebViewSize(width, height, true) }
+                } else {
+                    activity.runOnUiThread { activity.webView?.loadUrl("javascript: RecaptchaMFrame.shown($width, $height, true);") }
+                }
+            }
+
+            @JavascriptInterface
+            fun onShow(visible: Boolean, width: Int, height: Int) {
+                Log.d(TAG, "onShow($visible, $width, $height)")
+                if (width <= 0 && height <= 0) {
+                    activity.runOnUiThread { activity.webView?.loadUrl("javascript: RecaptchaMFrame.shown($width, $height, $visible);") }
+                } else {
+                    activity.runOnUiThread {
+                        activity.setWebViewSize(width, height, visible)
+                        activity.loading?.visibility = if (visible) View.GONE else View.VISIBLE
+                        activity.webView?.visibility = if (visible) View.VISIBLE else View.GONE
+                    }
+                }
+            }
+
+            @JavascriptInterface
+            fun requestToken(s: String, b: Boolean) {
+                Log.d(TAG, "requestToken($s, $b)")
+                activity.runOnUiThread {
+                    val cert = activity.webView?.certificate?.let { Base64.encodeToString(SslCertificate.saveState(it).getByteArray("x509-certificate"), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP) }
+                        ?: ""
+                    val params = StringBuilder(activity.params).appendUrlEncodedParam("c", s).appendUrlEncodedParam("sc", cert).appendUrlEncodedParam("mt", System.currentTimeMillis().toString()).toString()
+                    val flow = "recaptcha-android-${if (b) "verify" else "reload"}"
+                    activity.lifecycleScope.launchWhenResumed {
+                        activity.updateToken(flow, params)
+                    }
+                }
+            }
+
+            @JavascriptInterface
+            fun verifyCallback(token: String) {
+                Log.d(TAG, "verifyCallback($token)")
+                activity.sendResult(0) { putString("token", token) }
+                activity.resultSent = true
+                activity.finish()
+            }
+        }
     }
 }
