@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one">已配置 <xliff:g example="1">%1$d</xliff:g> 个后端</item>
-        <item quantity="other">已配置<xliff:g example="3">%1$d</xliff:g> 个后端</item>
+        <item quantity="other">已配置 <xliff:g example="3">%1$d</xliff:g> 个后端</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> 个应用已注册</item>
