@@ -8,20 +8,20 @@
     xmlns:tools="http://schemas.android.com/tools">
     <PreferenceCategory
         android:key="prefcat_device_profile"
-        android:title="Device profile">
+        android:title="@string/pref_device_registration_device_profile_category">
         <ListPreference
             android:key="pref_device_profile"
             android:persistent="false"
-            android:title="Select profile"
+            android:title="@string/pref_device_registration_select_profile_title"
             tools:summary="Automatic (Google Pixel 3, Android 11)" />
         <Preference
             android:key="pref_device_profile_import"
-            android:summary="Import device profile from file"
-            android:title="Import custom profile" />
+            android:summary="@string/pref_device_registration_import_custom_profile_summary"
+            android:title="@string/pref_device_registration_import_custom_profile_title" />
         <Preference
             android:enabled="false"
             android:key="pref_device_serial"
-            android:title="Serial"
+            android:title="@string/pref_device_registration_serial_title"
             tools:summary="123456" />
     </PreferenceCategory>
     <PreferenceCategory
