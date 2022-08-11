@@ -7,6 +7,7 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbInterface
 import android.hardware.usb.UsbRequest
+import android.util.Base64
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,6 +17,7 @@ import org.microg.gms.fido.core.protocol.msgs.Ctap1Request
 import org.microg.gms.fido.core.protocol.msgs.Ctap1Response
 import org.microg.gms.fido.core.transport.usb.endpoints
 import org.microg.gms.fido.core.transport.usb.usbManager
+import org.microg.gms.utils.toBase64
 import java.nio.ByteBuffer
 import kotlin.experimental.and
 
@@ -40,8 +42,10 @@ class CtapHidConnection(
         get() = capabilities and CtapHidInitResponse.CAPABILITY_WINK > 0
 
     suspend fun open(): Boolean {
+        Log.d(TAG, "Opening connection")
         connection = context.usbManager?.openDevice(device)
         if (connection?.claimInterface(iface, true) != true) {
+            Log.d(TAG, "Failed claiming interface")
             close()
             return false
         }
@@ -49,6 +53,7 @@ class CtapHidConnection(
         sendRequest(initRequest)
         val initResponse = readResponse()
         if (initResponse !is CtapHidInitResponse || !initResponse.nonce.contentEquals(initRequest.nonce)) {
+            Log.d(TAG, "Failed init procedure")
             close()
             return false
         }
@@ -73,6 +78,7 @@ class CtapHidConnection(
         for (packet in packets) {
             if (outRequest.queue(ByteBuffer.wrap(packet.bytes), packet.bytes.size)) {
                 withContext(Dispatchers.IO) { connection.requestWait() }
+                Log.d(TAG, "Sent packet ${packet.bytes.toBase64(Base64.NO_WRAP)}")
             } else {
                 throw RuntimeException("Failed queuing packet")
             }
@@ -89,7 +95,9 @@ class CtapHidConnection(
         while (true) {
             buffer.clear()
             if (inRequest.queue(buffer, inEndpoint.maxPacketSize)) {
+                Log.d(TAG, "Reading ${inEndpoint.maxPacketSize} bytes from usb")
                 withContext(Dispatchers.IO) { connection.requestWait() }
+                Log.d(TAG, "Received packet ${buffer.array().toBase64(Base64.NO_WRAP)}")
                 if (initializationPacket == null) {
                     initializationPacket = CtapHidInitializationPacket.decode(buffer.array())
                     packets.add(initializationPacket)

@@ -49,8 +49,6 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
     suspend fun getCtapHidInterface(device: UsbDevice): UsbInterface? {
         for (iface in device.interfaces) {
             if (iface.interfaceClass != USB_CLASS_HID) continue
-            if (iface.interfaceSubclass != 0) continue
-            if (iface.interfaceProtocol != 0) continue
             if (iface.endpointCount != 2) continue
             if (!iface.endpoints.all { it.type == USB_ENDPOINT_XFER_INT }) continue
             if (!iface.endpoints.any { it.direction == USB_DIR_IN }) continue
@@ -65,11 +63,14 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
                     val read = connection.controlTransfer(0x81, 0x06, 0x2200, iface.id, buf, buf.size, 5000)
                     read >= 5 && buf.slice(0 until 5) eq CTAPHID_SIGNATURE
                 } else {
+                    Log.d(TAG, "Failed claiming interface")
                     false
                 }
             } == true
             if (match) {
                 return iface
+            } else {
+                Log.d(TAG, "${device.productName} signature does not match")
             }
         }
         return null
@@ -217,6 +218,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         device: UsbDevice,
         iface: UsbInterface
     ): AuthenticatorResponse {
+        Log.d(TAG, "Trying to use ${device.productName} for ${options.type}")
         invokeStatusChanged(
             TransportHandlerCallback.STATUS_WAITING_FOR_USER,
             Bundle().apply { putParcelable(UsbManager.EXTRA_DEVICE, device) })
