@@ -10,7 +10,7 @@
     <string name="fido_welcome_privileged_info">%1$s 将充当您信任的浏览器，可将您的安全密钥用于 %2$s。</string>
     <string name="fido_welcome_privileged_check">%1$s 是我信任的浏览器，允许其将安全密钥用于第三方网站。</string>
     <string name="fido_transport_selection_title">选择如何使用您的安全密钥</string>
-    <string name="fido_transport_selection_body">安全密钥可通过蓝牙、NFC，或 USB 进行使用。请选择如何使用您的安全密钥。</string>
+    <string name="fido_transport_selection_body">安全密钥可通过蓝牙、NFC 或 USB 进行使用。请选择如何使用您的安全密钥。</string>
     <string name="fido_biometric_prompt_title">验证您的身份</string>
     <string name="fido_biometric_prompt_body">"%1$s 需要验证您的身份。"</string>
     <string name="fido_usb_title">连接您的 USB 安全密钥</string>
