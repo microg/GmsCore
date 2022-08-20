@@ -42,15 +42,15 @@ def execResult(...args) {
 }
 
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
         versionName "temp"
         versionCode 1
 
-        minSdkVersion androidMinSdk()
-        targetSdkVersion androidTargetSdk()
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"

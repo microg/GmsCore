@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one">已配置 <xliff:g example="1">%1$d</xliff:g> 个后端</item>
+        <item quantity="other">已配置 <xliff:g example="3">%1$d</xliff:g> 个后端</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> 个应用已注册</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> 个应用已注册</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">microG 服务核心缺少一项正常工作所需的权限。</item>
+        <item quantity="other">microG 服务核心缺少多项正常工作所需的权限。</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">请求缺少的一个权限</item>
+        <item quantity="other">请求缺少的多个权限</item>
+    </plurals>
+</resources>

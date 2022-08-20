@@ -22,6 +22,7 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.safetynet.AttestationData
 import com.google.android.gms.safetynet.RecaptchaResultData
+import com.google.android.gms.safetynet.SafeBrowsingData
 import com.google.android.gms.safetynet.SafetyNetStatusCodes
 import com.google.android.gms.safetynet.internal.ISafetyNetCallbacks
 import com.google.android.gms.safetynet.internal.ISafetyNetService
@@ -122,7 +123,12 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
 
                 // This shouldn't happen, but do not update the database if it didn't insert the start of the request
                 if(requestID!=-1L)db.insertRecentRequestEnd(requestID, status, null)
-                callbacks.onAttestationData(status, null)
+
+                try {
+                    callbacks.onAttestationData(status, null)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Exception while sending error", e)
+                }
             }
             db.close()
         }
@@ -137,8 +143,9 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
         callbacks.onString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
     }
 
-    override fun lookupUri(callbacks: ISafetyNetCallbacks, s1: String, threatTypes: IntArray, i: Int, s2: String) {
+    override fun lookupUri(callbacks: ISafetyNetCallbacks, apiKey: String, threatTypes: IntArray, i: Int, s2: String) {
         Log.d(TAG, "unimplemented Method: lookupUri")
+        callbacks.onSafeBrowsingData(Status.SUCCESS, SafeBrowsingData())
     }
 
     override fun init(callbacks: ISafetyNetCallbacks) {
@@ -211,13 +218,12 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
             override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
                 if (resultCode != 0) {
                     db.insertRecentRequestEnd(requestID, Status(resultData.getInt("errorCode"), resultData.getString("error")), null)
-                    db.close()
                     callbacks.onRecaptchaResult(Status(resultData.getInt("errorCode"), resultData.getString("error")), null)
                 } else {
                     db.insertRecentRequestEnd(requestID, Status.SUCCESS, resultData.getString("token"))
-                    db.close()
                     callbacks.onRecaptchaResult(Status.SUCCESS, RecaptchaResultData().apply { token = resultData.getString("token") })
                 }
+                db.close()
             }
         })
         context.startActivity(intent)

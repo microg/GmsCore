@@ -5,6 +5,8 @@
 
 package org.microg.gms.firebase.auth
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.PixelFormat
 import android.provider.Settings
@@ -32,6 +34,7 @@ class ReCaptchaOverlay(val context: Context, val apiKey: String, val hostname: S
     var finished = false
     var container: View? = null
 
+    @SuppressLint("SetJavaScriptEnabled", "AddJavascriptInterface")
     private fun show() {
         val layoutParamsType = if (android.os.Build.VERSION.SDK_INT >= 26) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -83,17 +86,7 @@ class ReCaptchaOverlay(val context: Context, val apiKey: String, val hostname: S
             settings.cacheMode = WebSettings.LOAD_NO_CACHE
             ProfileManager.ensureInitialized(context)
             settings.userAgentString = Build.generateWebViewUserAgentString(settings.userAgentString)
-            view.addJavascriptInterface(object : Any() {
-                @JavascriptInterface
-                fun onReCaptchaToken(token: String) {
-                    Log.d(TAG, "onReCaptchaToken: $token")
-                    if (!finished) {
-                        finished = true
-                        continuation.resume(token)
-                    }
-                    close()
-                }
-            }, "MyCallback")
+            view.addJavascriptInterface(ReCaptchaCallback(this), "MyCallback")
             val captcha = context.assets.open("recaptcha.html").bufferedReader().readText().replace("%apikey%", apiKey)
             view.loadDataWithBaseURL("https://$hostname/", captcha, null, null, "https://$hostname/")
             windowManager.addView(container, params)
@@ -113,6 +106,18 @@ class ReCaptchaOverlay(val context: Context, val apiKey: String, val hostname: S
     }
 
     companion object {
+        class ReCaptchaCallback(val overlay: ReCaptchaOverlay) {
+            @JavascriptInterface
+            fun onReCaptchaToken(token: String) {
+                Log.d(TAG, "onReCaptchaToken: $token")
+                if (!overlay.finished) {
+                    overlay.finished = true
+                    overlay.continuation.resume(token)
+                }
+                overlay.close()
+            }
+        }
+
         fun isSupported(context: Context): Boolean = android.os.Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context)
 
         suspend fun awaitToken(context: Context, apiKey: String, hostname: String? = null) = suspendCoroutine<String> { continuation ->

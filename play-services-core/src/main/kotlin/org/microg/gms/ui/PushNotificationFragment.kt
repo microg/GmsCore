@@ -19,6 +19,10 @@ import org.microg.gms.gcm.setGcmServiceConfiguration
 class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
     lateinit var binding: PushNotificationFragmentBinding
 
+    init {
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = PushNotificationFragmentBinding.inflate(inflater, container, false)
         binding.switchBarCallback = object : PreferenceSwitchBarCallback {
@@ -50,11 +54,6 @@ class PushNotificationFragment : Fragment(R.layout.push_notification_fragment) {
             displayServiceInfo(getGcmServiceInfo(appContext))
             binding.checkinEnabled = getCheckinServiceInfo(appContext).configuration.enabled
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

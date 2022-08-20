@@ -7,7 +7,9 @@ package org.microg.gms.maps.mapbox.model
 
 import android.os.Parcel
 import android.util.Log
+import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.internal.IPolygonDelegate
@@ -17,14 +19,19 @@ import com.mapbox.mapboxsdk.plugins.annotation.FillOptions
 import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.utils.toMapbox
+import org.microg.gms.utils.warnOnTransactionIssues
 
 class PolygonImpl(private val map: GoogleMapImpl, private val id: String, options: PolygonOptions) : IPolygonDelegate.Stub(), Markup<Fill, FillOptions> {
-    private var points = ArrayList(options.points)
-    private var holes: List<List<LatLng>> = ArrayList(options.holes.map { ArrayList(it) })
+    private var points = ArrayList(options.points.orEmpty())
+    private var holes: List<List<LatLng>> = ArrayList(options.holes.map { ArrayList(it.orEmpty()) })
     private var fillColor = options.fillColor
     private var strokeColor = options.strokeColor
     private var strokeWidth = options.strokeWidth
+    private var strokeJointType = options.strokeJointType
+    private var strokePattern = ArrayList(options.strokePattern.orEmpty())
     private var visible: Boolean = options.isVisible
+    private var clickable: Boolean = options.isClickable
+    private var tag: IObjectWrapper? = null
 
     private var strokes = (listOf(PolylineImpl(map, "$id-stroke-main", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(points)))
             + holes.mapIndexed { idx, it -> PolylineImpl(map, "$id-stroke-hole-$idx", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)) }).toMutableList()
@@ -132,6 +139,28 @@ class PolygonImpl(private val map: GoogleMapImpl, private val id: String, option
 
     override fun hashCodeRemote(): Int = hashCode()
 
+    override fun setClickable(click: Boolean) {
+        clickable = click
+    }
+
+    override fun setStrokeJointType(type: Int) {
+        strokeJointType = type
+    }
+
+    override fun getStrokeJointType(): Int = strokeJointType
+
+    override fun setStrokePattern(items: MutableList<PatternItem>?) {
+        strokePattern = ArrayList(items.orEmpty())
+    }
+
+    override fun getStrokePattern(): MutableList<PatternItem> = strokePattern
+
+    override fun setTag(obj: IObjectWrapper?) {
+        tag = obj
+    }
+
+    override fun getTag(): IObjectWrapper? = tag
+
     override fun hashCode(): Int {
         return id.hashCode()
     }
@@ -147,12 +176,7 @@ class PolygonImpl(private val map: GoogleMapImpl, private val id: String, option
         return false
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-            if (super.onTransact(code, data, reply, flags)) {
-                true
-            } else {
-                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-            }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
 
     companion object {
         private val TAG = "GmsMapPolygon"

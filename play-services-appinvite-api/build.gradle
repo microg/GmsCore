@@ -16,26 +16,16 @@
 
 apply plugin: 'com.android.library'
 
-String getMyVersionName() {
-    def stdout = new ByteArrayOutputStream()
-    if (rootProject.file("gradlew").exists())
-        exec { commandLine 'git', 'describe', '--tags', '--always', '--dirty'; standardOutput = stdout }
-    else // automatic build system, don't tag dirty
-        exec { commandLine 'git', 'describe', '--tags', '--always'; standardOutput = stdout }
-    return stdout.toString().trim().substring(1)
-}
-
 group = 'org.microg'
-version = getMyVersionName()
 
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName getMyVersionName()
-        minSdkVersion androidMinSdk()
-        targetSdkVersion androidTargetSdk()
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
     }
 
     compileOptions {

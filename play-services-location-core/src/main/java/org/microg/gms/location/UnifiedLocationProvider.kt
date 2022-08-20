@@ -129,7 +129,7 @@ class UnifiedLocationProvider(private val context: Context, private val changeLi
 
     fun dump(writer: PrintWriter) {
         writer.println("network provider (via direct client):")
-        writer.println("  last location: $lastLocation")
+        writer.println("  last location: ${lastLocation?.let { Location(it) }}")
         writer.println("  ready: $ready")
     }
 

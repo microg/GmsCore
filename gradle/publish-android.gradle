@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-task androidSourcesJar(type: Jar) {
-    archiveClassifier.set("sources")
-    from android.sourceSets.main.java.source
-}
-
-artifacts {
-    archives androidSourcesJar
+android {
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 afterEvaluate {
@@ -31,10 +31,6 @@ afterEvaluate {
                             id = 'microg'
                             name = 'microG Team'
                         }
-                        developer {
-                            id = 'mar-v-in'
-                            name = 'Marvin W.'
-                        }
                     }
                     scm {
                         url = 'https://github.com/microg/GmsCore'
@@ -44,7 +40,6 @@ afterEvaluate {
                 }
 
                 from components.release
-                artifact androidSourcesJar
             }
         }
         if (project.hasProperty('sonatype.username')) {

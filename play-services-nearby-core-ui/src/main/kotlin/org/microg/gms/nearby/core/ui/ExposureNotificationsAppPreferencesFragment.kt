@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.core.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
@@ -34,6 +35,7 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications_app)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         open = preferenceScreen.findPreference("pref_exposure_app_open") ?: open
         reportedExposures = preferenceScreen.findPreference("prefcat_exposure_app_report") ?: reportedExposures
@@ -103,15 +105,15 @@ class ExposureNotificationsAppPreferencesFragment : PreferenceFragmentCompat() {
                         val distanceString = if (nearby) getString(R.string.pref_exposure_app_report_entry_distance_close) else getString(R.string.pref_exposure_app_report_entry_distance_far)
                         val durationString = if (exposure.durationInMinutes < 5) getString(R.string.pref_exposure_app_report_entry_time_short) else getString(R.string.pref_exposure_app_report_entry_time_about, exposure.durationInMinutes)
                         val preference = object : Preference(requireContext()) {
-                            override fun onBindViewHolder(holder: PreferenceViewHolder?) {
-                                val titleView = holder!!.findViewById(android.R.id.title) as? TextView
+                            override fun onBindViewHolder(holder: PreferenceViewHolder) {
+                                val titleView = holder.findViewById(android.R.id.title) as? TextView
                                 val titleViewTextColor = titleView?.textColors
                                 super.onBindViewHolder(holder)
                                 if (titleViewTextColor != null) titleView.setTextColor(titleViewTextColor)
                             }
                         }
                         preference.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_alert)
-                        preference.title = DateUtils.formatDateRange(requireContext(), exposure.timestamp, exposure.timestamp + exposure.durationInMinutes * 60 * 1000L, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE)
+                        preference.title = DateUtils.formatDateRange(requireContext(), exposure.timestamp, exposure.timestamp + exposure.durationInMinutes * 60 * 1000L, DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY)
                         preference.summary = getString(R.string.pref_exposure_app_report_entry_combined, durationString, distanceString)
                         preference.isSelectable = false
                         reportedExposures.addPreference(preference)

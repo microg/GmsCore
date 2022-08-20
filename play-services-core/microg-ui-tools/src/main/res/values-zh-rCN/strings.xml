@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lib_name">microG UI Tools</string>
+    <string name="about_version_str">版本 %1$s</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">保留所有权利。</string>
+    <string name="prefcat_setup">设置</string>
+    <string name="self_check_title">自我检查</string>
+    <string name="self_check_desc">确认系统是否已正确配置成 microG 可正常使用的状态</string>
+    <string name="self_check_cat_permissions">已授予权限</string>
+    <string name="self_check_name_permission">%1$s的权限：</string>
+    <string name="self_check_resolution_permission">点击授予权限。不授予权限可能导致应用工作异常。</string>
+    <string name="about_root_libraries">包含的库</string>
+    <string name="about_root_summary">概要</string>
+</resources>

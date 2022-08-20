@@ -26,6 +26,7 @@ import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.gms.location.ILocationCallback;
@@ -34,6 +35,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -88,6 +90,7 @@ public class LocationRequestHelper {
 
     public boolean isActive() {
         if (!hasCoarsePermission()) return false;
+        if (locationRequest.getExpirationTime() < SystemClock.elapsedRealtime()) return false;
         if (listener != null) {
             try {
                 return listener.asBinder().isBinderAlive();
@@ -107,12 +110,19 @@ public class LocationRequestHelper {
         }
     }
 
+    public boolean locationIsValid(Location location) {
+        if (location == null) return false;
+        if (Double.isNaN(location.getLatitude()) || location.getLatitude() > 90 || location.getLatitude() < -90) return false;
+        if (Double.isNaN(location.getLongitude()) || location.getLongitude() > 180 || location.getLongitude() < -180) return false;
+        return true;
+    }
+
     /**
      * @return whether to continue sending reports to this {@link LocationRequestHelper}
      */
     public boolean report(Location location) {
-        if (location == null) return true;
         if (!isActive()) return false;
+        if (!locationIsValid(location)) return true;
         if (lastReport != null) {
             if (location.equals(lastReport)) {
                 return true;
@@ -238,5 +248,11 @@ public class LocationRequestHelper {
         result = 31 * result + (pendingIntent != null ? pendingIntent.hashCode() : 0);
         result = 31 * result + (callback != null ? callback.hashCode() : 0);
         return result;
+    }
+
+    public void dump(PrintWriter writer) {
+        writer.println("  " + id + " package=" + packageName);
+        writer.println("    request: " + locationRequest);
+        writer.println("    last location: " + lastReport);
     }
 }

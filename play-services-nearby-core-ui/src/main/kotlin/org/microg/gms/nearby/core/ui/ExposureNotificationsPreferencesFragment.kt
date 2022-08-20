@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.core.ui
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
@@ -49,6 +50,7 @@ class ExposureNotificationsPreferencesFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         exposureEnableInfo = preferenceScreen.findPreference("pref_exposure_enable_info") ?: exposureEnableInfo
         exposureBluetoothOff = preferenceScreen.findPreference("pref_exposure_error_bluetooth_off") ?: exposureBluetoothOff

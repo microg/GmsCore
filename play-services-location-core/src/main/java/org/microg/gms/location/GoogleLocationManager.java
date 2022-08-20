@@ -287,7 +287,7 @@ public class GoogleLocationManager implements LocationChangeListener {
         if (networkProvider != null) networkProvider.dump(writer);
         writer.println(currentRequests.size() + " requests:");
         for (LocationRequestHelper request : currentRequests) {
-            writer.println("  " + request.id + " package=" + request.packageName + " interval=" + request.locationRequest.getInterval() + " smallestDisplacement=" + request.locationRequest.getSmallestDisplacement());
+            request.dump(writer);
         }
     }
 }

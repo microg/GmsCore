@@ -4,6 +4,7 @@
  */
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.ListPreference
@@ -24,6 +25,7 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_gcm_advanced)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         confirmNewApps = preferenceScreen.findPreference(GcmPrefs.PREF_CONFIRM_NEW_APPS) ?: confirmNewApps
         networkMobile = preferenceScreen.findPreference(GcmPrefs.PREF_NETWORK_MOBILE) ?: networkMobile

@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.core.ui
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,8 +26,8 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
     private lateinit var exportDb: Preference
 
     override fun onCreateRecyclerView(
-        inflater: LayoutInflater?,
-        parent: ViewGroup?,
+        inflater: LayoutInflater,
+        parent: ViewGroup,
         savedInstanceState: Bundle?
     ): RecyclerView {
         return super.onCreateRecyclerView(inflater, parent, savedInstanceState).apply {
@@ -40,6 +41,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_exposure_notifications_rpis)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         histogramCategory = preferenceScreen.findPreference("prefcat_exposure_rpi_histogram") ?: histogramCategory
         histogram = preferenceScreen.findPreference("pref_exposure_rpi_histogram") ?: histogram

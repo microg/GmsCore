@@ -79,40 +79,8 @@ import okio.ByteString;
 import static android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
-import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_RECEIVE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_APP_OVERRIDE;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_COLLAPSE_KEY;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSAGE_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_MESSENGER;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_REGISTRATION_ID;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_FROM;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_SEND_TO;
-import static org.microg.gms.gcm.GcmConstants.EXTRA_TTL;
-import static org.microg.gms.gcm.McsConstants.ACTION_ACK;
-import static org.microg.gms.gcm.McsConstants.ACTION_CONNECT;
-import static org.microg.gms.gcm.McsConstants.ACTION_HEARTBEAT;
-import static org.microg.gms.gcm.McsConstants.ACTION_RECONNECT;
-import static org.microg.gms.gcm.McsConstants.ACTION_SEND;
-import static org.microg.gms.gcm.McsConstants.EXTRA_REASON;
-import static org.microg.gms.gcm.McsConstants.MCS_CLOSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_DATA_MESSAGE_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_ACK_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_HEARTBEAT_PING_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_IQ_STANZA_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_REQUEST_TAG;
-import static org.microg.gms.gcm.McsConstants.MCS_LOGIN_RESPONSE_TAG;
-import static org.microg.gms.gcm.McsConstants.MSG_ACK;
-import static org.microg.gms.gcm.McsConstants.MSG_CONNECT;
-import static org.microg.gms.gcm.McsConstants.MSG_HEARTBEAT;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_INPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_DONE;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_ERROR;
-import static org.microg.gms.gcm.McsConstants.MSG_OUTPUT_READY;
-import static org.microg.gms.gcm.McsConstants.MSG_TEARDOWN;
+import static org.microg.gms.gcm.GcmConstants.*;
+import static org.microg.gms.gcm.McsConstants.*;
 
 @ForegroundServiceInfo(value = "Cloud messaging", res = R.string.service_name_mcs)
 public class McsService extends Service implements Handler.Callback {
@@ -123,7 +91,10 @@ public class McsService extends Service implements Handler.Callback {
     public static final String FROM_FIELD = "gcm@android.com";
 
     public static final String SERVICE_HOST = "mtalk.google.com";
-    public static final int SERVICE_PORT = 5228;
+    // A few ports are available: 443, 5228-5230 but also 5222-5223
+    // See https://github.com/microg/GmsCore/issues/408
+    // Likely if the main port 5228 is blocked by a firewall, the other 52xx are blocked as well
+    public static final int[] SERVICE_PORTS = {5228, 443};
 
     private static final int WAKELOCK_TIMEOUT = 5000;
     // On bad mobile network a ping can take >60s, so we wait for an ACK for 90s
@@ -432,7 +403,7 @@ public class McsService extends Service implements Handler.Callback {
             if (!key.startsWith("google.")) {
                 Object val = extras.get(key);
                 if (val instanceof String) {
-                    appData.add(new AppData.Builder().key(key).value((String) val).build());
+                    appData.add(new AppData.Builder().key(key).value_((String) val).build());
                 }
             }
         }
@@ -460,38 +431,56 @@ public class McsService extends Service implements Handler.Callback {
         }
     }
 
+    private void connect(int port) throws Exception {
+        this.wasTornDown = false;
+
+        logd(this, "Starting MCS connection to port " + port + "...");
+        Socket socket = new Socket(SERVICE_HOST, port);
+        logd(this, "Connected to " + SERVICE_HOST + ":" + port);
+        sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, port, true);
+        logd(this, "Activated SSL with " + SERVICE_HOST + ":" + port);
+        inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
+        outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);
+        inputStream.start();
+        outputStream.start();
+
+        startTimestamp = System.currentTimeMillis();
+        lastHeartbeatPingElapsedRealtime = SystemClock.elapsedRealtime();
+        lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
+        lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
+        scheduleHeartbeat(this);
+    }
+
     private synchronized void connect() {
-        try {
-            closeAll();
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
-            activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(activeNetworkInfo);
-            if (!GcmPrefs.get(this).isEnabledFor(activeNetworkInfo)) {
+        closeAll();
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+        activeNetworkPref = GcmPrefs.get(this).getNetworkPrefForInfo(activeNetworkInfo);
+        if (!GcmPrefs.get(this).isEnabledFor(activeNetworkInfo)) {
+            if (activeNetworkInfo != null) {
                 logd(this, "Don't connect, because disabled for " + activeNetworkInfo.getTypeName());
-                scheduleReconnect(this);
-                return;
+            } else {
+                logd(this, "Don't connect, no active network");
             }
-            wasTornDown = false;
-
-            logd(this, "Starting MCS connection...");
-            Socket socket = new Socket(SERVICE_HOST, SERVICE_PORT);
-            logd(this, "Connected to " + SERVICE_HOST + ":" + SERVICE_PORT);
-            sslSocket = SSLContext.getDefault().getSocketFactory().createSocket(socket, SERVICE_HOST, SERVICE_PORT, true);
-            logd(this, "Activated SSL with " + SERVICE_HOST + ":" + SERVICE_PORT);
-            inputStream = new McsInputStream(sslSocket.getInputStream(), rootHandler);
-            outputStream = new McsOutputStream(sslSocket.getOutputStream(), rootHandler);
-            inputStream.start();
-            outputStream.start();
-
-            startTimestamp = System.currentTimeMillis();
-            lastHeartbeatPingElapsedRealtime = SystemClock.elapsedRealtime();
-            lastHeartbeatAckElapsedRealtime = SystemClock.elapsedRealtime();
-            lastIncomingNetworkRealtime = SystemClock.elapsedRealtime();
-            scheduleHeartbeat(this);
-        } catch (Exception e) {
-            Log.w(TAG, "Exception while connecting!", e);
-            rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, e));
+            scheduleReconnect(this);
+            return;
         }
+
+        Exception exception = null;
+        for (int port : SERVICE_PORTS) {
+            try {
+                connect(port);
+                return;
+            } catch (Exception e) {
+                exception = e;
+                Log.w(TAG, "Exception while connecting to " + SERVICE_HOST + ":" + port, e);
+                closeAll();
+            }
+        }
+
+        logd(this, "Unable to connect to all different ports, retrying later");
+        rootHandler.sendMessage(rootHandler.obtainMessage(MSG_TEARDOWN, exception));
     }
 
     private void handleClose(Close close) {
@@ -546,7 +535,7 @@ public class McsService extends Service implements Handler.Callback {
                 .resource(Long.toString(info.getAndroidId()))
                 .user(Long.toString(info.getAndroidId()))
                 .use_rmq2(true)
-                .setting(Collections.singletonList(new Setting.Builder().name("new_vc").value("1").build()))
+                .setting(Collections.singletonList(new Setting.Builder().name("new_vc").value_("1").build()))
                 .received_persistent_id(GcmPrefs.get(this).getLastPersistedIds())
                 .build();
     }
@@ -570,7 +559,7 @@ public class McsService extends Service implements Handler.Callback {
         }
         if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
         for (AppData appData : msg.app_data) {
-            intent.putExtra(appData.key, appData.value);
+            intent.putExtra(appData.key, appData.value_);
         }
 
         String receiverPermission = null;
@@ -645,7 +634,7 @@ public class McsService extends Service implements Handler.Callback {
                         .sent(System.currentTimeMillis() / 1000)
                         .ttl(0)
                         .category(SELF_CATEGORY)
-                        .app_data(Collections.singletonList(new AppData.Builder().key(IDLE_NOTIFICATION).value("false").build()));
+                        .app_data(Collections.singletonList(new AppData.Builder().key(IDLE_NOTIFICATION).value_("false").build()));
                 if (inputStream.newStreamIdAvailable()) {
                     msgResponse.last_stream_id_received(inputStream.getStreamId());
                 }
@@ -718,7 +707,7 @@ public class McsService extends Service implements Handler.Callback {
                     IqStanza.Builder iq = new IqStanza.Builder()
                             .type(IqStanza.IqType.SET)
                             .id("")
-                            .extension(new Extension.Builder().id(13).data(ByteString.EMPTY).build()) // StreamAck
+                            .extension(new Extension.Builder().id(13).data_(ByteString.EMPTY).build()) // StreamAck
                             .status(0L);
                     if (inputStream.newStreamIdAvailable()) {
                         iq.last_stream_id_received(inputStream.getStreamId());

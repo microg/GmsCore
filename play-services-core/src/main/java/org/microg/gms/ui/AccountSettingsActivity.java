@@ -28,13 +28,12 @@ import androidx.preference.Preference;
 import com.google.android.gms.R;
 
 import org.microg.gms.auth.AuthConstants;
-import org.microg.gms.auth.AuthManager;
 import org.microg.tools.ui.AbstractSettingsActivity;
 import org.microg.tools.ui.ResourceSettingsFragment;
 
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
-import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_NOT_VISIBLE;
-import static android.accounts.AccountManager.VISIBILITY_USER_MANAGED_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_NOT_VISIBLE;
+import static android.accounts.AccountManager.VISIBILITY_VISIBLE;
 import static org.microg.gms.auth.AuthManager.PREF_AUTH_VISIBLE;
 
 public class AccountSettingsActivity extends AbstractSettingsActivity {
@@ -61,7 +60,7 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
                         if (newValue instanceof Boolean) {
                             AccountManager am = AccountManager.get(getContext());
                             for (Account account : am.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
-                                am.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, (Boolean) newValue ? VISIBILITY_USER_MANAGED_VISIBLE : VISIBILITY_USER_MANAGED_NOT_VISIBLE);
+                                am.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, (Boolean) newValue ? VISIBILITY_VISIBLE : VISIBILITY_NOT_VISIBLE);
                             }
                         }
                         return true;

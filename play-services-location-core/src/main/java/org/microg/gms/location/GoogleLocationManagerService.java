@@ -31,7 +31,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 
 public class GoogleLocationManagerService extends BaseService {
-    private GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this, getLifecycle());
+    private final GoogleLocationManagerServiceImpl impl = new GoogleLocationManagerServiceImpl(this, getLifecycle());
 
     public GoogleLocationManagerService() {
         super("LocationManager", GmsService.LOCATION_MANAGER, GmsService.GEODATA, GmsService.PLACE_DETECTION);

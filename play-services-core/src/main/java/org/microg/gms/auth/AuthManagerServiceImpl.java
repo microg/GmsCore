@@ -38,6 +38,9 @@ import com.google.android.auth.IAuthManagerService;
 import com.google.android.gms.R;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
+import com.google.android.gms.auth.GetHubTokenInternalResponse;
+import com.google.android.gms.auth.GetHubTokenRequest;
+import com.google.android.gms.auth.HasCababilitiesRequest;
 import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
@@ -45,6 +48,7 @@ import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -202,6 +206,18 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     @Override
     public Bundle requestGoogleAccountsAccess(String packageName) throws RemoteException {
         Log.w(TAG, "Not implemented: requestGoogleAccountsAccess(" + packageName + ")");
+        return null;
+    }
+
+    @Override
+    public int hasCapabilities(HasCababilitiesRequest request) throws RemoteException {
+        Log.w(TAG, "Not implemented: hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ")");
+        return 1;
+    }
+
+    @Override
+    public GetHubTokenInternalResponse getHubToken(GetHubTokenRequest request, Bundle extras) throws RemoteException {
+        Log.w(TAG, "Not implemented: getHubToken()");
         return null;
     }
 

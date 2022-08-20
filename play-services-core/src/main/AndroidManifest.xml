@@ -112,7 +112,6 @@
 
     <application
         android:allowBackup="true"
-        android:extractNativeLibs="false"
         android:forceQueryable="true"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_core_service_app"
@@ -531,12 +530,6 @@
             android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
 
         <activity
-            android:name="org.microg.gms.ui.AboutFragment$AsActivity"
-            android:label="@string/pref_about_title"
-            android:process=":ui"
-            android:taskAffinity="org.microg.gms.settings" />
-
-        <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
             android:label="@string/gms_settings_name"
             android:process=":ui"
@@ -760,7 +753,6 @@
                 <action android:name="com.google.android.gms.enterprise.loader.service.START" />
                 <action android:name="com.google.android.gms.facs.internal.service.START" />
                 <action android:name="com.google.android.gms.fido.credentialstore.internal_service.START" />
-                <action android:name="com.google.android.gms.fido.fido2.privileged.START" />
                 <action android:name="com.google.android.gms.fido.fido2.regular.START" />
                 <action android:name="com.google.android.gms.fido.fido2.zeroparty.START" />
                 <action android:name="com.google.android.gms.fido.sourcedevice.service.START" />
@@ -781,7 +773,6 @@
                 <action android:name="com.google.android.gms.freighter.service.START" />
                 <action android:name="com.google.android.gms.gass.START" />
                 <action android:name="com.google.android.gms.growth.service.START" />
-                <action android:name="com.google.android.gms.gmscompliance.service.START" />
                 <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.identity.service.BIND" />

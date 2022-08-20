@@ -17,29 +17,45 @@
 package org.microg.gms.location;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.location.places.PlaceReport;
+import com.google.android.gms.location.reporting.OptInRequest;
 import com.google.android.gms.location.reporting.ReportingState;
+import com.google.android.gms.location.reporting.SendDataRequest;
+import com.google.android.gms.location.reporting.UlrPrivateModeRequest;
 import com.google.android.gms.location.reporting.UploadRequest;
 import com.google.android.gms.location.reporting.UploadRequestResult;
 import com.google.android.gms.location.reporting.internal.IReportingService;
 
+import org.microg.gms.common.PackageUtils;
+
 public class ReportingServiceImpl extends IReportingService.Stub {
     private static final String TAG = "GmsLocReportSvcImpl";
+    private Context context;
+
+    public ReportingServiceImpl(Context context) {
+        this.context = context;
+    }
 
     @Override
     public ReportingState getReportingState(Account account) throws RemoteException {
         Log.d(TAG, "getReportingState");
-        return new ReportingState();
+        ReportingState state = new ReportingState();
+        if (PackageUtils.callerHasExtendedAccess(context)) {
+            state.deviceTag = 0;
+        }
+        return state;
     }
 
     @Override
-    public int tryOptIn(Account account) throws RemoteException {
-        Log.d(TAG, "tryOptIn");
-        return 0;
+    public int tryOptInAccount(Account account) throws RemoteException {
+        OptInRequest request = new OptInRequest();
+        request.account = account;
+        return tryOptIn(request);
     }
 
     @Override
@@ -60,6 +76,20 @@ public class ReportingServiceImpl extends IReportingService.Stub {
         return 0;
     }
 
+    @Override
+    public int tryOptIn(OptInRequest request) throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public int sendData(SendDataRequest request) throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public int requestPrivateMode(UlrPrivateModeRequest request) throws RemoteException {
+        return 0;
+    }
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {

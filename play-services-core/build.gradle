@@ -35,6 +35,8 @@ dependencies {
     implementation project(':play-services-cronet-core')
     implementation project(':play-services-droidguard-core')
     implementation project(':play-services-droidguard-core-ui')
+    implementation project(':play-services-fido-core')
+    implementation project(':play-services-gmscompliance-core')
     implementation project(':play-services-location-core')
     withNearbyImplementation project(':play-services-nearby-core')
     withNearbyImplementation project(':play-services-nearby-core-ui')
@@ -77,7 +79,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion androidCompileSdk()
+    compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
@@ -91,7 +93,7 @@ android {
         multiDexKeepProguard file('multidex-keep.pro')
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
 
@@ -147,6 +149,9 @@ android {
 
     packagingOptions {
         exclude 'META-INF/ASL2.0'
+        jniLibs {
+            useLegacyPackaging false
+        }
     }
 }
 

@@ -190,5 +190,10 @@ This can take a couple of minutes."</string>
     <string name="snet_recent_requests">SafetyNet Recent Requests</string>
     <string name="no_recent_snet_requests">No recent SafetyNet requests !</string>
     <string name="menu_clear_recent_requests">Clear recent requests</string>
+    <string name="pref_device_registration_import_custom_profile_title">Import custom profile</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Import device profile from file</string>
+    <string name="pref_device_registration_select_profile_title">Select profile</string>
+    <string name="pref_device_registration_device_profile_category">Device profile</string>
 
 </resources>

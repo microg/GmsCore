@@ -5,6 +5,7 @@
 
 package org.microg.gms.droidguard.core.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -22,6 +23,7 @@ class DroidGuardPreferencesFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_droidguard)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         modeEmbedded = preferenceScreen.findPreference("pref_droidguard_mode_embedded") ?: modeEmbedded
         modeNetwork = preferenceScreen.findPreference("pref_droidguard_mode_network") ?: modeNetwork
