@@ -1,5 +1,6 @@
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -21,9 +22,10 @@ class SafetyNetRecentAttestationPreferencesFragment : PreferenceFragmentCompat()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_snet_recent_attestation)
-        snetSummary = arguments!!.get("summary") as SafetyNetSummary
+        snetSummary = arguments?.get("summary") as SafetyNetSummary
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         val requestType: Preference = preferenceScreen.findPreference("pref_request_type")!!
         val time : Preference = preferenceScreen.findPreference("pref_time")!!

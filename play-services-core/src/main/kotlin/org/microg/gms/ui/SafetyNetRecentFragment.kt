@@ -30,7 +30,7 @@ class SafetyNetRecentFragment : Fragment(R.layout.safety_net_recent_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val summary = arguments!!.get("summary") as SafetyNetSummary
+        val summary = arguments?.get("summary") as SafetyNetSummary
 
         if(savedInstanceState==null){
             parentFragmentManager.commit {
@@ -45,7 +45,7 @@ class SafetyNetRecentFragment : Fragment(R.layout.safety_net_recent_fragment) {
 
 
 
-        val pm = context!!.packageManager
+        val pm = requireContext().packageManager
         val appInfo = pm.getApplicationInfoIfExists(summary.packageName)
         if(appInfo==null) return Toast.makeText(context, "Application not installed", Toast.LENGTH_SHORT).show()
 

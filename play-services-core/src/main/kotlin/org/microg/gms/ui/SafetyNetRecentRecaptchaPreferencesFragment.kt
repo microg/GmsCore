@@ -1,5 +1,6 @@
 package org.microg.gms.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.format.DateUtils
 import androidx.preference.Preference
@@ -14,9 +15,10 @@ class SafetyNetRecentRecaptchaPreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_snet_recent_recaptcha)
-        snetSummary = arguments!!.get("summary") as SafetyNetSummary
+        snetSummary = arguments?.get("summary") as SafetyNetSummary
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
         val requestType: Preference = preferenceScreen.findPreference("pref_request_type")!!
         val time : Preference = preferenceScreen.findPreference("pref_time")!!
