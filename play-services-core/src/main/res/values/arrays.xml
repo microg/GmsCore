@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string-array name="network_types" translatable="false">
+        <item>mobile</item>
+        <item>wifi</item>
+        <item>roaming</item>
+        <item>other</item>
+    </string-array>
+
+    <string-array name="network_types_names" translatables="false">
+        <item>@string/network_type_mobile</item>
+        <item>@string/network_type_wifi</item>
+        <item>@string/network_type_roaming</item>
+        <item>@string/network_type_other</item>
+    </string-array>
+
+    <string-array name="gcm_network_config_values" translatables="false">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="gcm_network_config_names" translatables="false">
+        <item>@string/service_status_disabled</item>
+        <item>@string/service_status_automatic</item>
+
+        <!-- These will be automatically generated from the OS, no need to translate them -->
+        <item>Ping interval: 60 seconds</item>
+        <item>Ping interval: 2 minutes</item>
+        <item>Ping interval: 5 minutes</item>
+        <item>Ping interval: 10 minutes</item>
+        <item>Ping interval: 15 minutes</item>
+        <item>Ping interval: 20 minutes</item>
+        <item>Ping interval: 30 minutes</item>
+    </string-array>
+</resources>

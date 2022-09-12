@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="permission_service_all_label">Tous les services Google</string>
+    <string name="permission_service_all_description">Permets aux applications d\'accéder à tous les services Google par le biais de tous comptes  associés à Google</string>
+
+    <string name="permission_service_android_label">Services Android</string>
+    <string name="permission_service_android_description">Permets aux applications d\'accéder aux services Android par le biais de tous comptes associés à Google</string>
+    <string name="permission_service_adsense_label">Google AdSense - Pub</string>
+    <string name="permission_service_adsense_description">Permets aux applications d\'accéder à AdSense par le biais de tous comptes associés à Google</string>
+    <string name="permission_service_adwords_label">Google AdWords -Pub</string>
+    <string name="permission_service_adwords_description">Permets aux applications d\'accéder à AdWords par le biais de tous comptes associés à Google</string>
+    <string name="permission_service_ah_label">Google App Engine - conception et hébergement d\'applications web basée sur les serveurs de Google.</string>
+    <string name="permission_service_ah_description">Permets aux applications d\'accéder à Google App Engine le biais de tous comptes associés à Google</string>
+    <string name="permission_service_blogger_label">Google Blogger - Blogueur</string>
+    <string name="permission_service_blogger_description">Permets aux applications d\'accéder à Blogger par le biais de tous comptes associés à Google</string>
+    <string name="permission_service_cl_label">Calendrier Google</string>
+    <string name="permission_service_cl_description">Permets aux applications d\'accéder au Calendrier  par le biais de tous comptes associés à Google</string>
+    <string name="permission_service_cp_label">Google Contacts - Gérer vos contacts</string>
+    <string name="permission_service_cp_description">Permets aux applications d\'accéder aux contacts par le biais de tous comptes associés à Google</string>
+    <string name="permission_service_dodgeball_label">Dodgeball - Fournisseur de logiciels de réseaux sociaux basé sur l\'emplacement des fournisseurs de téléphonie mobile</string>
+    <string name="permission_service_dodgeball_description">Permets aux applications d\'accéder à Dodgeball  par le biais de tous comptes associés à Google</string>
+    <string name="permission_service_finance_label">Google Finance - Google Finance est un service en ligne publié par Google en 2006. Il permet de suivre le cours des actions et des devises.</string>
+    <string name="permission_service_finance_description">Permets aux applications d\'accéder à Google Finance par le biais de tous comptes associés à Google.</string>
+    <string name="permission_service_gbase_label">Google Base -  Google a mis officiellement en ligne ce service le 16 novembre 2005 et permet de mettre en ligne et de référencer tout type de contenu en termes d\'information. </string>
+    <string name="permission_service_gbase_description">Permets aux applications d\'accéder à Google Base par le biais de tous comptes associés à Google.</string>
+    </resources>

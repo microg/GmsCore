@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one">已設定<xliff:g example="1">%1$d</xliff:g>個背景伺服器</item>
+        <item quantity="other">已設定<xliff:g example="3">%1$d</xliff:g>個背景伺服器</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+	<item quantity="one">已註冊<xliff:g example="1">%1$d</xliff:g>個程式</item>
+        <item quantity="other">已註冊<xliff:g example="123">%1$d</xliff:g>個程式</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+	<item quantity="one">UnifiedNlp Service Core遺失了一個權限以至於不能正常運作。</item>
+        <item quantity="other">UnifiedNlp Service Core遺失了多個權限以至於不能正常運作。</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+	<item quantity="one">請求遺失的一個權限</item>
+        <item quantity="other">請求遺失的多個權限</item>
+    </plurals>
+</resources>

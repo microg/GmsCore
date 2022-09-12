@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+dependencies {
+    implementation "org.microg:vtm:0.9.1-mod"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+}

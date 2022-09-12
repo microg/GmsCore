@@ -1,0 +1,34 @@
+/*
+ * SPDX-FileCopyrightText: 2016 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api project(':play-services-iid-api')
+
+    // Dependencies from play-services-iid:17.0.0
+    api "androidx.collection:collection:1.0.0"
+    api "androidx.core:core:1.0.0"
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    //api project(':play-services-stats')
+    api project(':play-services-tasks')
+}

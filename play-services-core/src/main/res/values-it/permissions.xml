@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="permission_service_all_label">Tutti i servizi Google</string>
+    <string name="permission_service_all_description">Permette alle applicazioni di accedere a tutti i servizi Google mediante l\'account Google.</string>
+
+    <string name="permission_service_android_label">Servizi Android</string>
+    <string name="permission_service_android_description">Permette alle applicazioni di accedere ai servizi Android mediante l\'account Google.</string>
+    <string name="permission_service_adsense_label">Google AdSense</string>
+    <string name="permission_service_adsense_description">Permette alle applicazioni di accedere a Google AdSense mediante l\'account Google.</string>
+    <string name="permission_service_adwords_label">Google AdWords</string>
+    <string name="permission_service_adwords_description">Permette alle applicazioni di accedere a Google AdWords mediante l\'account Google.</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_ah_description">Permette alle applicazioni di accedere a Google App Engine mediante l\'account Google.</string>
+    <string name="permission_service_blogger_label">Google Blogger</string>
+    <string name="permission_service_blogger_description">Permette alle applicazioni di accedere a Google Blogger mediante l\'account Google.</string>
+    <string name="permission_service_cl_label">Calendario Google</string>
+    <string name="permission_service_cl_description">Permette alle applicazioni di accedere al calendario Google mediante l\'account Google.</string>
+    <string name="permission_service_cp_label">Contatti Google</string>
+    <string name="permission_service_cp_description">Permette alle applicazioni di accedere ai Contatti Google mediante l\'account Google.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">Permette alle applicazioni di accedere a Dodgeball mediante l\'account Google.</string>
+    <string name="permission_service_finance_label">Google Finance</string>
+    <string name="permission_service_finance_description">Permette alle applicazioni di accedere a Google Finance mediante l\'account Google.</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_gbase_description">Permette alle applicazioni di accedere a Google Base mediante l\'account Google.</string>
+    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_grandcentral_description">Permette alle applicazioni di accedere a Google Voice mediante l\'account Google.</string>
+    <string name="permission_service_groups2_label">Google Gruppi</string>
+    <string name="permission_service_groups2_description">Permette alle applicazioni di accedere Google Gruppi mediante l\'account Google.</string>
+    <string name="permission_service_health_label">Google Health</string>
+    <string name="permission_service_health_description">Permette alle applicazioni di accedere a Google Health mediante l\'account Google.</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_service_ig_description">Permette alle applicazioni di accedere ad iGoogle mediante l\'account Google.</string>
+    <string name="permission_service_jotspot_label">JotSpot</string>
+    <string name="permission_service_jotspot_description">Permette alle applicazioni di accedere a JotSpot mediante l\'account Google.</string>
+    <string name="permission_service_knol_label">Knol</string>
+    <string name="permission_service_knol_description">Permette alle applicazioni di accedere a Knol mediante l\'account Google.</string>
+    <string name="permission_service_lh2_label">Album web Picasa</string>
+    <string name="permission_service_lh2_description">Permette alle applicazioni di accedere agli album web Picasa mediante l\'account Google.</string>
+    <string name="permission_service_local_label">Mappe Google</string>
+    <string name="permission_service_local_description">Permette alle applicazioni di accedere alle mappe Google mediante l\'account Google.</string>
+    <string name="permission_service_mail_label">Google Mail</string>
+    <string name="permission_service_mail_description">Permette alle applicazioni di accedere a Google Mail mediante l\'account Google.</string>
+    <string name="permission_service_news_label">Google Notizie</string>
+    <string name="permission_service_news_description">Permette alle applicazioni di accedere a Google Notizie mediante l\'account Google.</string>
+    <string name="permission_service_notebook_label">Google Notebook</string>
+    <string name="permission_service_notebook_description">Permette alle applicazioni di accedere a Google Notebook mediante l\'account Google.</string>
+    <string name="permission_service_orkut_label">Orkut</string>
+    <string name="permission_service_orkut_description">Permette alle applicazioni di accedere a Orkut mediante l\'account Google.</string>
+    <string name="permission_service_print_label">Ricerca libri Googleh</string>
+    <string name="permission_service_print_description">Permette alle applicazioni di accedere alla ricerca libri Google mediante l\'account Google.</string>
+    <string name="permission_service_sierra_label">Account Google Chekout</string>
+    <string name="permission_service_sierra_description">Permette alle applicazioni di accedere agli account Google Checkout mediante l\'account Google.</string>
+    <string name="permission_service_sierraqa_label">Account QA Google Checkout</string>
+    <string name="permission_service_sierraqa_description">Permette alle applicazioni di accedere agli account QA Google Checkout mediante l\'account Google.</string>
+    <string name="permission_service_sierrasandbox_label">Account contenitore Google Checkout</string>
+    <string name="permission_service_sierrasandbox_description">Permette alle applicazioni di accedere agli account contenitore Google Checkout mediante l\'account Google.</string>
+    <string name="permission_service_sitemaps_label">Strumenti webmaster Google</string>
+    <string name="permission_service_sitemaps_description">Permette alle applicazioni di accedere agli strumenti webmaster Google mediante l\'account Google.</string>
+    <string name="permission_service_speech_label">Ricerca vocale</string>
+    <string name="permission_service_speech_description">Permette alle applicazioni di accedere alla ricerca vocale mediante l\'account Google.</string>
+    <string name="permission_service_speechpersonalization_label">Riconoscimento vocale eprsonalizzato</string>
+    <string name="permission_service_speechpersonalization_description">Permette alle applicazioni di accedere al riconoscimento vocale personalizzato mediante l\'account Google.</string>
+    <string name="permission_service_talk_label">Google Talk</string>
+    <string name="permission_service_talk_description">Permette alle applicazioni di accedere a Google Talk mediante l\'account Google.</string>
+    <string name="permission_service_wifi_label">Google Wi-Fi</string>
+    <string name="permission_service_wifi_description">Permette alle applicazioni di accedere a Google Wi-Fi mediante l\'account Google.</string>
+    <string name="permission_service_wise_label">Fogli Google</string>
+    <string name="permission_service_wise_description">Permette alle applicazioni di accedere ai fogli Google mediante l\'account Google.</string>
+    <string name="permission_service_writely_label">Documenti Google Docs</string>
+    <string name="permission_service_writely_description">Permette alle applicazioni di accedere ai documenti Google mediante l\'account Google.</string>
+    <string name="permission_service_youtube_label">YouTube</string>
+    <string name="permission_service_youtube_description">Permette alle applicazioni di accedere a YouTube mediante l\'account Google.</string>
+    <string name="permission_service_YouTubeUser_label">Nomi utente YouTube</string>
+    <string name="permission_service_YouTubeUser_description">Permette alle applicazioni di accedere ai nomi utente YouTube mediante l\'account Google.</string>
+
+    <string name="permission_scope_www.googleapis.com_auth_activity">Visualizza la cronologia delle attività delle tue applicazioni Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Gestisci la configurazione del tuo account Ad Echange per gli acquirenti</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Visualizza i tuoi dati Ad Exchange</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Visualizza e gestisci i tuoi dati di Ad Exchange</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsensehost">Visualizza e gestisci i tuoi dati host di AdSense e gli account associati</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">Visualizza i tuoi dati AdSense</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense">Visualizza e gestisci i tuoi dati di AdSense</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Visualizza i tuoi dati di Google Analytics</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics">Visualizza e gestisci i tuoi dati di Google Analytics</string>
+    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Accedi a Google Play Android Developer</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Ambito di amministrazione di App engine</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Leggi e scrivi gli accessi per la API Groups Migration</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Visualizza e gestisci le impostazioni di un gruppo di applicazioni Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Leggi e scrivi gli accessi per la API License Manager</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order">Leggi e scrivi gli accessi per amministratori ed utenti che eseguono test nel contenitore delle API, oppure leggi e scrivi gli accessi quando viene evocata una operazione API direttamente</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">In aggiunta all\'ambito complessivo di lettura e scrittura OAuth, utilizza l\'ambito di sola lettura OAuth quando richiedi i dati dell\'utente</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">Accedi in sola lettura per la API Admin Audit</string>
+    <string name="permission_scope_www.googleapis.com_auth_appstate">Ambito di utilizzo del servizio App State</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">Visualizza i tuoi dati di Google BigQuery</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery">Visualizza e gestisci i tuoi dati di Google BigQuery</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger">Gestisci il tuo account Blogger</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger.readonly">Visualizza il tuo account Blogger</string>
+    <string name="permission_scope_www.googleapis.com_auth_books">Gestisci i tuoi libri</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar">Gestisci i tuoi calendari</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar.readonly">Visualizza i tuoi calendari</string>
+    <string name="permission_scope_www.googleapis.com_auth_cloudprint">Visualizza e gestisci i tuoi dati di Google Cloud Print</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute.readonly">Visualizza le tue risorse del motore Google Compute</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute">Visualizza e gestisci le tue risorse del motore Google Compute</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate.readonly">Visualizza i tuoi lavori di Google Coordinate</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate">Visualizza e gestisci i tuoi lavori di Google Coordinate</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">Gestisci i tuoi dati e le autorizzazione di Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_only">Visualizza i tuoi dati di Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_write">Gestisci i tuoi dati di Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_dfareporting">Visualizza e gestisci i resoconti di DoubleClick per inserzionisti</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.appdata">Permette l\'accesso alla cartella dati dell\'applicazione</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.apps.readonly">Visualizza le tue applicazioni di Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.file">Visualizza e gestisci i file di Google Drive aperti o creati con questa applicazione</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.install">Ambito speciale utilizzato per permettere agli utenti l\'installazione di una applicazione</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.metadata.readonly">Visualizza i metadati per i file ed i documenti di Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.readonly">Visualizza i tuoi file ed i tuoi documenti di Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.scripts">Modifica il comportamento dei tuoi script di Google Apps Script</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive">Visualizza e gestisci i tuoi file ed i tuoi documenti di Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase.readonly">Visualizza il tuo account Freebase</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase">Accedi a Freebase con il tuo account</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables">Gestisci le tue tabelle di Fusion Tables</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables.readonly">Visualizza le tue tabelle di Fusion Tables</string>
+    <string name="permission_scope_www.googleapis.com_auth_games">Ambito per accedere ai dati di Google Play Giochi</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan">Gestisci i tuoi dati GAN</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Visualizza i tuoi dati GAN</string>
+    <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">Messaggistica cloud per Chrome</string>
+    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Ambito della sequenza temporale di Glass</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Crea, leggi, aggiorna, cancella bozze ed invia messaggi</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Tutte le operazioni di lettura e scrittura ad eccezione dell\'immediata e permanente cancellazione dei threads e dei messaggi, bypassando il cestino</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Visualizza tutte le risorse ed i rispettivi metadati</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.all.best">Gestisci la tua migliore posizione disponibile e la cronologia delle localizzazioni</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Gestisci la tua localizzazione a livello urbano e la cronologia delle localizzazioni</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Gestisci la tua migliore posizione disponibile</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">Gestisci la localizzazione a livello urbano</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">Visualizza e gestisci i tuoi dati del motore delle mappe Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">Visualizza i tuoi dati del motore delle mappe Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Visualizza e gestisci l\'esperienza mobile dell mappe Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_orkut">Gestisci le tue attività di Orkut</string>
+    <string name="permission_scope_www.googleapis.com_auth_orkut.readonly">Visualizza i tuoi dati di Orkut</string>
+    <string name="permission_scope_www.googleapis.com_auth_plus.login">Conoscere il tuo nome, le tue informazioni di base e la lista di persone con cui sei connesso su Google+</string>
+    <string name="permission_scope_www.googleapis.com_auth_plus.me">Conoscere chi sei su Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_prediction">Gestisci i tuoi dati per la API di Google Prediction</string>
+    <string name="permission_scope_www.googleapis.com_auth_shoppingapi">Visualizza i dati dei tuoi prodotti</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification">Gestisci la lista di siti e di domini che controlli</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Gestisci le verifiche del tuo nuovo sito con Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Leggi e scrivi gli accessi per la API Shopping Content</string>
+    <string name="permission_scope_www.googleapis.com_auth_taskqueue.consumer">Svolgi attività dalla tua coda</string>
+    <string name="permission_scope_www.googleapis.com_auth_taskqueue">Gestisci le tue attività</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks">Gestisci le tue attività</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks.readonly">Visualizza le tue attività</string>
+    <string name="permission_scope_www.googleapis.com_auth_tracks">API per le tracce delle mappe Google: questo ambito permette la lettura e scrittura nella cartella dati del tuo progetto</string>
+    <string name="permission_scope_www.googleapis.com_auth_urlshortener">Gestisci i tuoi collegamenti rapidi goo.gl</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.email">Visualizza il tuo indirizzo di posta elettronica</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.profile">Visualizza le informazioni di base sul tuo account</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube">Gestisci il tuo account Youtube</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Visualizza e gestisci le tue risorse ed i contenuti associati di YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">Visualizza il tuo account YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Gestisci i tuoi video di YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Visualizza i resoconti monetari di YouTube Analytics per i tuoi contenuti YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Visualizza i resoconti di YouTube Analytics per i tuoi contenuti YouTube</string>
+
+</resources>

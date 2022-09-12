@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="appName"
+            type="String" />
+
+        <variable
+            name="appIcon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="callbacks"
+            type="org.microg.gms.nearby.core.ui.ExposureNotificationsAppFragmentCallbacks" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:paddingStart="?attr/listPreferredItemPaddingStart"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingTop="24dp"
+            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:onClick='@{() -> callbacks.onAppClicked()}'
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:antialias="true"
+                    android:scaleType="fitCenter"
+                    android:src="@{appIcon}"
+                    tools:src="@android:mipmap/sym_def_app_icon" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="marquee"
+                    android:gravity="center"
+                    android:singleLine="false"
+                    android:text='@{appName}'
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="?android:attr/textColorPrimary"
+                    android:textSize="20sp"
+                    tools:text="@tools:sample/lorem" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/sub_preferences"
+            android:name="org.microg.gms.nearby.core.ui.ExposureNotificationsAppPreferencesFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</layout>

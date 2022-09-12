@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2019 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.microg.nlp.app">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:forceQueryable="true"
+        android:fullBackupOnly="true"
+        android:icon="@mipmap/ic_nlp_app"
+        android:label="@string/gms_app_name"
+        android:multiArch="true"
+        android:theme="@style/Theme.AppCompat.DayNight">
+
+        <library android:name="org.microg.nlp.app" />
+
+        <!-- Location -->
+
+        <activity
+            android:name="org.microg.nlp.ui.BackendSettingsActivity"
+            android:process=":ui" />
+
+         <!-- microG Settings shown in Launcher -->
+        <activity
+            android:name="org.microg.gms.ui.SettingsActivity"
+            android:icon="@mipmap/ic_nlp_settings"
+            android:label="@string/gms_settings_name"
+            android:process=":ui"
+            android:roundIcon="@mipmap/ic_nlp_settings"
+            android:taskAffinity="org.microg.gms.settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.microg.gms.ui.SettingsDashboardActivity"
+            android:icon="@mipmap/ic_nlp_settings"
+            android:label="Legacy microG Settings"
+            android:process=":ui"
+            android:roundIcon="@mipmap/ic_nlp_settings"
+            android:taskAffinity="org.microg.gms.settings" />
+
+        <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
+        <activity-alias
+            android:name="org.microg.gms.ui.SettingsActivityLink"
+            android:icon="@drawable/microg_light_color_24"
+            android:label="@string/gms_settings_name"
+            android:process=":ui"
+            android:targetActivity="org.microg.gms.ui.SettingsActivity"
+            android:taskAffinity="org.microg.gms.settings">
+            <intent-filter>
+                <action android:name="com.android.settings.action.EXTRA_SETTINGS" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.android.settings.category"
+                android:value="com.android.settings.category.device" />
+            <meta-data
+                android:name="com.android.settings.icon"
+                android:resource="@drawable/microg_light_color_24" />
+            <meta-data
+                android:name="com.android.settings.summary"
+                android:resource="@string/gms_settings_summary" />
+        </activity-alias>
+
+        <activity
+            android:name="org.microg.gms.ui.SelfCheckFragment$AsActivity"
+            android:label="@string/self_check_title"
+            android:process=":ui"
+            android:taskAffinity="org.microg.gms.settings" />
+    </application>
+
+</manifest>

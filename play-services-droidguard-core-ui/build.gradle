@@ -1,0 +1,53 @@
+/*
+ * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    implementation project(':play-services-droidguard-core')
+    implementation project(':play-services-base-core-ui')
+
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+}
+
+android {
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/kotlin']
+        }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'UI for microG service implementation for play-services-droidguard'

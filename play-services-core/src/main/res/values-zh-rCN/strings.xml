@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="auth_sign_in">登录</string>
+    <string name="auth_connecting">正在建立到 Google 服务器的连接以供您登录。
+
+这需要几秒钟时间。</string>
+    <string name="no_network_error_desc">您未连接到互联网。
+
+这可能是暂时性的问题，或者是您的 Android 设备不能使用数据服务。请在连接到移动网络或 Wi-Fi 网络后重试。</string>
+    <string name="sorry">抱歉…</string>
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
+    <string name="auth_notification_title">需要认证</string>
+    <string name="perm_c2dm_send_label">向其他应用发送 C2DM 消息</string>
+    <string name="service_name_mcs">Google 云端消息推送</string>
+    <string name="service_status_disabled">已禁用</string>
+    <string name="service_status_enabled">已启用</string>
+    <string name="service_status_automatic">自动</string>
+    <string name="service_status_manual">手动</string>
+    <string name="service_status_enabled_short">开</string>
+    <string name="service_status_disabled_short">关</string>
+    <string name="games_title">Google Play 游戏</string>
+    <string name="games_info_content">要使用 Play 游戏，您需要安装“Google Play 游戏”应用。您的应用在 Play 游戏未安装时也许能继续运行，但也可能发生异常。</string>
+    <string name="pick_place_title">选择一个地点</string>
+    <string name="pick_place_desc">现在无法选择地点。</string>
+    <string name="place_picker_select_title">选择此地点</string>
+    <string name="place_picker_nearby_places">附近的地点</string>
+    <string name="lacking_permission_toast">UnifiedNlp 服务核心：缺少<xliff:g example="have full network acccess">%1$s</xliff:g>权限</string>
+    <string name="network_type_mobile">移动网络</string>
+    <string name="network_type_roaming">漫游</string>
+    <string name="network_type_other">其他网络</string>
+    <string name="self_check_cat_fake_sig">签名伪装支持</string>
+    <string name="self_check_cat_gms_packages">已安装的应用</string>
+    <string name="self_check_cat_system">系统</string>
+    <string name="self_check_name_fake_sig_perm">系统支持签名伪装：</string>
+    <string name="self_check_resolution_fake_sig_perm">您的 ROM 并不自带签名伪装支持。您仍可以利用 Xposed 或刷入支持的 ROM 来伪装签名。请查阅文档以了解哪些 ROM 自带伪装支持，以及如何在不支持的 ROM 上继续使用 UnifiedNlp。</string>
+    <string name="self_check_name_perm_granted">系统已授予签名伪装权限：</string>
+    <string name="self_check_resolution_perm_granted">这表明您的系统极有可能支持签名伪装，但仍需要一些步骤来激活它。请查阅文档以了解后续步骤。</string>
+    <string name="self_check_pkg_gms">Play 服务 (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play 商店 (PhoneSky)</string>
+    <string name="self_check_pkg_gsf">服务框架 (GSF)</string>
+    <string name="self_check_name_battery_optimizations">已忽略电池优化：</string>
+    <string name="self_check_resolution_battery_optimizations">点击以忽略电池优化。保持电池优化可能导致应用行为异常。</string>
+    <string name="prefcat_about">关于</string>
+    <string name="prefcat_components">组件</string>
+    <string name="prefcat_configuration">配置</string>
+    <string name="prefcat_location_service">位置服务</string>
+    <string name="prefcat_services">服务</string>
+    <string name="prefcat_test">测试</string>
+    <string name="cond_gcm_bat_title">电池优化正在生效</string>
+    <string name="cond_gcm_bat_summary">您在电池优化生效的情况下启用了消息推送。为保证消息正常推送，您需要对本应用忽略电池优化。</string>
+    <string name="cond_gcm_bat_action">忽略优化</string>
+    <string name="cond_perm_title">缺少权限</string>
+    <string name="prefs_account">账号设置</string>
+    <string name="prefs_account_privacy">个人资料与隐私</string>
+    <string name="prefs_account_security">登录与安全</string>
+    <string name="pref_auth_trust_google_summary">禁用后，应用在向 Google 请求验证前需要得到您的同意。有些程序可能会因此无法使用 Google 账号。</string>
+    <string name="checkin_not_registered">未注册</string>
+    <string name="checkin_last_registration">上次注册：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
+    <string name="gms_settings_name">UnifiedNlp 设置</string>
+    <string name="gms_settings_summary">设置 UnifiedNlp 服务核心</string>
+    <string name="just_a_sec">请稍等…</string>
+    <string name="ask_permission_tos">继续则代表您同意此应用和 Google 遵循各自的服务条款和隐私政策使用您的个人信息。</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要：</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要使用：</string>
+    <string name="account_manager_title">Google 账号管理员</string>
+    <string name="auth_before_connect">"您设备上的某个应用正尝试登录一个 Google 账号。
+
+若是您有意为之，点击<b>登录</b>以连接到 Google 的登录页面；否则点击<b>取消</b>以返回到弹出此页面的应用。"</string>
+    <string name="auth_finalize">"您的设备正在与 Google 联系以将您的信息存入账号。
+
+这可能需要几分钟。"</string>
+    <string name="auth_general_error_desc">"与 Google 服务器通信时发生问题。
+
+请稍后重试。"</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> 需要您的授权以使用 Google 账号。</string>
+    <string name="perm_c2dm_receive_label">接收 C2DM 消息</string>
+    <string name="perm_status_broadcast_label">接收内部状态广播</string>
+    <string name="perm_gtalk_svc_label">从 Google 服务器交换信息并接收同步通知。</string>
+    <string name="service_name_checkin">向 Google 注册设备</string>
+    <string name="perm_provision_description">允许应用在无用户交互的情况下设置 UnifiedNlp 服务</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要使用 Play 游戏</string>
+    <string name="self_check_name_system_spoofs">系统签名伪装：</string>
+    <string name="self_check_resolution_system_spoofs">请查阅文档以了解所需步骤。</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> 已安装：</string>
+    <string name="self_check_resolution_app_installed">安装 <xliff:g example="F-Droid">%1$s</xliff:g> 或与之兼容的应用。请查阅文档以了解有哪些兼容应用。</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 包含正确签名：</string>
+    <string name="self_check_resolution_correct_sig">已安装的 <xliff:g example="F-Droid">%1$s</xliff:g> 不兼容，或者您未对其启用签名伪装。请查阅文档以了解兼容的应用或 ROM。</string>
+    <string name="pref_auth_visible_title">允许应用寻找 Google 账号</string>
+    <string name="pref_auth_visible_summary">启用后，您设备上的所有应用将可以看到与您 Google 账号关联的电子邮件地址，而无需您的许可。</string>
+    <string name="pref_checkin_enable_summary">将您的设备注册到 Google 服务，并创建唯一的设备识别码。UnifiedNlp 将去除注册信息中您 Google 账户名以外的用于识别的信息。</string>
+    <string name="checkin_enable_switch">注册设备</string>
+    <string name="pref_info_status">状态</string>
+    <string name="pref_more_settings">更多</string>
+    <string name="pref_add_account_title">账号</string>
+    <string name="pref_add_account_summary">添加 Google 账号</string>
+    <string name="pref_gcm_enable_mcs_summary">Google 云端消息推送（GCM）是由众多第三方应用选用的消息推送提供者。使用之前您需要先向 Google 注册该设备。</string>
+    <string name="pref_gcm_heartbeat_title">云端消息心跳间隔</string>
+    <string name="pref_gcm_heartbeat_summary">系统向 Google 服务器发送心跳包的间隔秒数。延长该间隔将减少电量消耗，但可能导致推送延迟。\n已废弃，将在未来版本被取代。</string>
+    <string name="pref_gcm_apps_title">正使用云端消息推送的应用</string>
+    <string name="pref_gcm_apps_summary">已经注册使用云端消息推送的应用列表。</string>
+    <string name="pref_gcm_confirm_new_apps_title">确认新应用</string>
+    <string name="pref_gcm_confirm_new_apps_summary">在应用注册使用消息推送之前询问您</string>
+    <string name="pref_gcm_ping_interval">Ping 间隔：<xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_about_title">关于 UnifiedNlp 服务核心</string>
+    <string name="pref_about_summary">版本信息与使用的库</string>
+    <string name="gcm_app_error_unregistering">取消注册时出错</string>
+    <string name="gcm_app_not_installed_anymore">已被卸载</string>
+    <string name="gcm_unregister_app">取消注册</string>
+    <string name="gcm_not_registered">未注册</string>
+    <string name="gcm_no_message_yet">尚未收到任何消息</string>
+    <string name="gcm_last_message_at">最后收到消息：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">已注册</string>
+    <string name="gcm_registered_since">自<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g>起注册</string>
+    <string name="gcm_unregister_confirm_title">取消注册 <xliff:g example="F-Droid">%1$s</xliff:g>？</string>
+    <string name="gcm_unregister_confirm_message">有些应用并不会自动重新注册，也可能不向您提供重新注册的选项。取消注册后这些应用可能出现异常。\n是否继续？</string>
+    <string name="gcm_unregister_after_deny_message">您拒绝了一个已经注册过的应用去注册接受推送通知。\n您是否想现在取消它的注册，使其今后不再接收消息推送？</string>
+    <string name="gcm_messages_counter">已接收 <xliff:g example="123">%1$d</xliff:g> 条消息 (<xliff:g example="12345">%2$d</xliff:g> 字节)</string>
+    <string name="gcm_network_state_disconnected">已断开连接</string>
+    <string name="gcm_network_state_connected">上次连接：<xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">接收通知推送</string>
+    <string name="gcm_allow_app_popup">允许 <xliff:g example="F-Droid">%1$s</xliff:g> 注册通知推送？</string>
+    <string name="pref_push_app_allow_register_title">允许注册</string>
+    <string name="pref_push_app_allow_register_summary">允许该应用注册通知推送。</string>
+    <string name="pref_push_app_wake_for_delivery_title">推送时启动应用</string>
+    <string name="pref_push_app_wake_for_delivery_summary">适时在后台唤起应用以接收推送消息。</string>
+    <string name="prefcat_push_apps_title">使用通知推送的应用</string>
+    <string name="prefcat_push_apps_registered_title">已注册的应用</string>
+    <string name="prefcat_push_apps_unregistered_title">已取消注册的应用</string>
+    <string name="prefcat_push_networks_title">接收推送时使用的网络</string>
+    <string name="snet_enable_switch">允许设备认证</string>
+    <string name="pref_recaptcha_test_title">测试 ReCAPTCHA</string>
+    <string name="pref_test_summary_passed">所有测试已通过</string>
+    <string name="pref_test_summary_failed">失败：%s</string>
+    <string name="pref_test_summary_warn">警告：%s</string>
+    <string name="pref_test_summary_running">正在运行…</string>
+    <string name="pref_droidguard_operation_mode">运作模式</string>
+    <string name="profile_name_native">本地</string>
+    <string name="profile_name_real">真实</string>
+    <string name="profile_name_user">自定义：%s</string>
+    <string name="profile_name_auto">自动：%s</string>
+    <string name="profile_name_system">系统：%s</string>
+    <string name="pref_safetynet_test_title">"测试 SafetyNet 认证 "</string>
+    <string name="snet_intro">Google SafetyNet 是一套设备认证系统，旨在确认设备具有适当安全性，并与 Android CTS 兼容。某些应用会出于安全考虑或是防篡改目的而使用 SafetyNet。
+
+UnifiedNlp GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要求 SafetyNet 请求使用其专有的 DroidGuard 系统签名。</string>
+    <string name="prefcat_google_services">Google 服务</string>
+    <string name="perm_extended_access_label">额外使用 Google 服务</string>
+
+
+    <string name="google_account_label">Google</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="perm_provision_label">预配置 UnifiedNlp 服务</string>
+    <string name="gms_app_name">UnifiedNlp 服务核心</string>
+    <string name="pref_auth_trust_google_title">允许 Google 向应用提供验证</string>
+    <string name="pref_device_registration_import_custom_profile_title">导入自定义配置信息</string>
+    <string name="pref_device_registration_serial_title">序列号</string>
+    <string name="pref_device_registration_import_custom_profile_summary">从文件导入自定义的设备配置信息</string>
+    <string name="pref_device_registration_select_profile_title">选择配置信息</string>
+    <string name="pref_device_registration_device_profile_category">设备配置信息</string>
+</resources>

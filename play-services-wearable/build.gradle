@@ -1,0 +1,38 @@
+/*
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    api project(':play-services-wearable-api')
+    api project(':play-services-wearable-proto')
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+
+    // Dependencies from play-services-wearable:17.1.0
+    implementation "androidx.core:core:1.0.0"
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+}

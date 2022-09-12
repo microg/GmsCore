@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="org.microg.gms.fido.core.transport.Transport" />
+
+        <variable
+            name="data"
+            type="org.microg.gms.fido.core.ui.AuthenticatorActivityFragmentData" />
+
+        <variable
+            name="onBluetoothClick"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onNfcClick"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onUsbClick"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onScreenLockClick"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_fido_key" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@{data.isFirst ? @string/fido_welcome_title(data.appName): @string/fido_transport_selection_title}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            tools:text="@string/fido_transport_selection_title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/fido_transport_selection_body"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:clickable="@{data.implementedTransports.contains(Transport.BLUETOOTH)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.BLUETOOTH)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.BLUETOOTH) ? 1.0f : 0.5f}"
+            android:onClick="@{onBluetoothClick}"
+            android:orientation="horizontal"
+            android:visibility="@{data.supportedTransports.contains(Transport.BLUETOOTH) ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_fido_bluetooth" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/fido_transport_selection_bluetooth"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?attr/colorPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:clickable="@{data.implementedTransports.contains(Transport.NFC)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.NFC)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.NFC) ? 1.0f : 0.5f}"
+            android:onClick="@{onNfcClick}"
+            android:orientation="horizontal"
+            android:visibility="@{data.supportedTransports.contains(Transport.NFC) ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_fido_nfc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/fido_transport_selection_nfc"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?attr/colorPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:clickable="@{data.implementedTransports.contains(Transport.USB)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.USB)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.USB) ? 1.0f : 0.5f}"
+            android:onClick="@{onUsbClick}"
+            android:orientation="horizontal"
+            android:visibility="@{data.supportedTransports.contains(Transport.USB) ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_fido_usb" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/fido_transport_selection_usb"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?attr/colorPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:clickable="@{data.implementedTransports.contains(Transport.SCREEN_LOCK)}"
+            android:focusable="@{data.implementedTransports.contains(Transport.SCREEN_LOCK)}"
+            android:alpha="@{data.implementedTransports.contains(Transport.SCREEN_LOCK) ? 1.0f : 0.5f}"
+            android:onClick="@{onScreenLockClick}"
+            android:orientation="horizontal"
+            android:visibility="@{data.supportedTransports.contains(Transport.SCREEN_LOCK) ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_fido_fingerprint" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/fido_transport_selection_biometric"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?attr/colorPrimary" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

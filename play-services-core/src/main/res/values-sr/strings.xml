@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">Језгро микроГ услуга</string>
+    <string name="gms_settings_name">Поставке микроГ</string>
+
+    <string name="just_a_sec">Само тренутак…</string>
+    <string name="google_account_label">Гугл</string>
+    <string name="ask_permission_tos">Ако наставите дозволићете овој апликацији и Гуглу да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
+    <string name="ask_scope_permission_title">%s жели да:</string>
+    <string name="ask_service_permission_title">%s жели да користи:</string>
+    <string name="account_manager_title">Менаџер Гугл налога</string>
+    <string name="sorry">Нажалост…</string>
+    <string name="no_network_error_desc">"Нисте повезани са мрежом.
+
+Ово је можда привремени проблем или ваш Андроид уређај није постављен за услуге преноса података. Покушајте поново када се повежете са мобилном мрежом, или се накачите на бежичну мрежу."</string>
+    <string name="auth_general_error_desc">"Десио се проблем приликом комуникације са Гугловим серверима.
+
+Покушајте поново касније."</string>
+    <string name="auth_finalize">"Ваш уређај контактира Гугл да би сачувао податке на ваш налог.
+
+Ово може да потраје неколико минута."</string>
+    <string name="allow">Дозволи</string>
+    <string name="deny">Одбиј</string>
+    <string name="auth_notification_title">Потребна је аутентификација</string>
+    <string name="auth_notification_content">%1$s захтева ваше овлашћење за приступ вашем Гугл налогу.</string>
+
+    <string name="perm_status_broadcast_label">слуша унутрашња емитовања стања</string>
+    <string name="perm_c2dm_receive_label">слуша C2DM поруке</string>
+    <string name="perm_c2dm_send_label">шаље C2DM поруке осталим апликацијама</string>
+    <string name="perm_gtalk_svc_label">размењује поруке и прима обавештења о синхронизацији са Гуглових сервера</string>
+    <string name="perm_extended_access_label">Проширени приступ Гугловим услугама</string>
+
+    <string name="service_name_checkin">Пријава уређаја на Гугл</string>
+    <string name="service_name_mcs">Гуглове облак поруке</string>
+
+    <string name="games_title">Гугл Плеј игре</string>
+    <string name="games_info_title">%1$s жели да користи Плеј игре</string>
+    <string name="games_info_content">Да бисте користили Плеј игре потребно је да инсталирате Гугл Плеј игре. Апликација би могла да настави без Плеј игара, али ће можда да се понаша неочекивано.</string>
+
+    <string name="pick_place_title">Бирач места</string>
+    <string name="pick_place_desc">Бирач места још није подржан.</string>
+    <string name="place_picker_select_title">Изаберите ову локацију</string>
+    <string name="place_picker_nearby_places">Оближња места</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
+    <string name="lacking_permission_toast">Језгро микроГ услуга: немам дозволу за %1$s</string>
+
+    <string name="network_type_mobile">Мобилна мрежа</string>
+    <string name="network_type_wifi">Бежична</string>
+    <string name="network_type_roaming">Роминг</string>
+    <string name="network_type_other">Остале мреже</string>
+
+    <!-- Self check -->
+
+    <string name="self_check_cat_fake_sig">Подршка за заваравање потписа</string>
+    <string name="self_check_cat_gms_packages">Инсталирани пакети</string>
+    <string name="self_check_cat_system">Систем</string>
+
+    <string name="self_check_name_fake_sig_perm">Систем има подршку заваравања потписа: </string>
+    <string name="self_check_resolution_fake_sig_perm">Ваш РОМ нема уграђену подршку за заваравање потписа. Ипак можете да користите Xposed или друге начине заваравања потписа. Погледајте документацију да видите који РОМови подржавају заваравање потписа и како да користите микроГ на РОМовима који не подржавају.</string>
+    <string name="self_check_name_perm_granted">Систем одобрава дозволу заваравања потписа: </string>
+    <string name="self_check_resolution_perm_granted">Ово је озбиљан индикатор да РОМ подржава заваравање потписа, али да захтева додатне радње за активацију. Погледајте документацију да сазнате о потребним додатним корацима.</string>
+    <string name="self_check_name_system_spoofs">Систем заварава потпис: </string>
+    <string name="self_check_resolution_system_spoofs">Погледајте документацију да сазнате о потребним додатним корацима.</string>
+
+    <string name="self_check_pkg_gms">Плеј сервиси (GmsCore)</string>
+    <string name="self_check_pkg_vending">Плеј продавница (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Радни оквири сервиса (GSF)</string>
+    <string name="self_check_name_app_installed">%1$s инсталиран: </string>
+    <string name="self_check_resolution_app_installed">Инсталирајте апликацију %1$s или одговарајућу. Погледајте документацију да сазнате које су апликације одговарајуће.</string>
+    <string name="self_check_name_correct_sig">%1$s има тачан потпис: </string>
+    <string name="self_check_resolution_correct_sig">Или инсталирана %1$s није одговарајућа или заваравање потписа није укључено за њу. Погледајте документацију да сазнате које су апликације и РОМови одговарајући.</string>
+
+    <string name="self_check_name_battery_optimizations">Игнорисана оптимизација батерије:</string>
+    <string name="self_check_resolution_battery_optimizations">Тапните овде да бисте искључили оптимизацију батерије. Ако не урадите ово апликације ће можда лоше да се понашају</string>
+
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">О програму</string>
+    <string name="prefcat_components">Компоненте</string>
+    <string name="prefcat_location_service">Услуга локације</string>
+    <string name="prefcat_services">Услуге</string>
+    <string name="cond_gcm_bat_title">Оптимизација батерије укључена</string>
+    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за Језгро микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
+    <string name="cond_gcm_bat_action">Игнориши оптимизацију</string>
+    <string name="cond_perm_title">Недостају дозволе</string>
+
+    <string name="prefs_account">Поставке налога</string>
+    <string name="prefs_account_privacy">Лични подаци и приватност</string>
+    <string name="prefs_account_security">Пријава и безбедност</string>
+
+    <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
+    <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
+
+    <string name="pref_checkin_enable_summary">Пријављује ваш уређај на Гуглове сервисе и прави јединствени идентификатор уређаја. микроГ скида идентификујуће бите са података за пријављивање осим вашег Гугл корисничког имена.</string>
+
+    <string name="pref_gcm_enable_mcs_summary">Гуглове облак поруке (Cloud Messaging) је провајдер гураних обавештења (push) којег користе многе апликације. Да бисте га користили укључите пријаву уређаја.</string>
+    <string name="pref_gcm_heartbeat_title">Интервал откуцаја облак порука</string>
+    <string name="pref_gcm_heartbeat_summary">Интервал у секундама јављања система Гугловим серверима. Повећање овог броја смањује потрошњу батерије али може да узрокује застој у испоруци порука.</string>
+    <string name="pref_gcm_apps_title">Апликације које користе Гуглове облак поруке</string>
+    <string name="pref_gcm_apps_summary">Списак апликација пријављених за Гуглове облак поруке.</string>
+    <string name="pref_about_title">О језгру микроГ услуга</string>
+    <string name="pref_about_summary">Подаци о издању и коришћеним библиотекама</string>
+
+    <string name="gcm_app_error_unregistering">Грешка одјављивања</string>
+    <string name="gcm_app_not_installed_anymore">Није више инсталирана</string>
+    <string name="gcm_unregister_app">Одјави</string>
+    <string name="gcm_not_registered">Није пријављена</string>
+    <string name="gcm_no_message_yet">Ниједна примљена порука до сад</string>
+    <string name="gcm_last_message_at">Последња порука: %1$s</string>
+    <string name="gcm_registered">Пријављена</string>
+    <string name="gcm_registered_since">Пријављена: %1$s</string>
+    <string name="gcm_unregister_confirm_title">Одјавити %1$s?</string>
+    <string name="gcm_unregister_confirm_message">Неке се апликације не пријављују поново аутоматски и/или не пружају могућност да се то уради ручно. Ове апликације можда неће радити исправно након одјављивања.\nДа наставим?</string>
+    <string name="gcm_unregister_after_deny_message">Нисте дозволили апликацији да се пријави на гурана обавештења а која је већ пријављена.\nЖелите ли да је одјавите сада тако да убудуће не прима гурана обавештења?</string>
+    <string name="gcm_messages_counter">Порука: %1$d (%2$d бајта)</string>
+
+</resources>

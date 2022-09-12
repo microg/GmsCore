@@ -1,0 +1,59 @@
+/*
+ * SPDX-FileCopyrightText: 2021, microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+dependencies {
+    api project(':play-services-droidguard-api')
+
+    implementation project(':play-services-base-core')
+    implementation project(':play-services-chimera-core')
+    implementation project(':play-services-droidguard')
+    implementation project(':play-services-droidguard-core-proto')
+    implementation project(':play-services-tasks-ktx')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "com.android.volley:volley:$volleyVersion"
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+}
+
+android {
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName "20.47.14"
+        versionCode 204714000
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+        buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
+        buildConfigField("int", "VERSION_CODE", "${defaultConfig.versionCode}")
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG service implementation for play-services-droidguard'

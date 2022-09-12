@@ -1,0 +1,270 @@
+option java_package = "org.microg.gms.checkin";
+
+option java_outer_classname = "CheckinProto";
+
+// Sample data, if provided, is fished from a Nexus 7 (2013) / flo running Android 5.0
+message CheckinRequest {
+    // unused
+    optional string imei = 1;
+
+    // Gservices["android_id"] or 0 on first-checkin
+    optional int64 androidId = 2;
+
+    // Gservices["digest"] or ""
+    optional string digest = 3;
+
+    required Checkin checkin = 4;
+    message Checkin {
+        // empty Build on pre-checkin
+        required Build build = 1;
+        message Build {
+            // Build.FINGERPRINT
+            // eg. google/razor/flo:5.0.1/LRX22C/1602158:user/release-keys
+            optional string fingerprint = 1;
+
+            // Build.HARDWARE
+            // eg. flo
+            optional string hardware = 2;
+
+            // Build.BRAND
+            // eg. google
+            optional string brand = 3;
+
+            // Build.getRadioVersion()
+            optional string radio = 4;
+
+            // Build.BOOTLOADER
+            // eg. FLO-04.04
+            optional string bootloader = 5;
+
+            // GoogleSettingsContract.Partner["client_id"]
+            // eg. android-google
+            optional string clientId = 6;
+
+            // Build.TIME / 1000L
+            // eg. 1416533192
+            optional int64 time = 7;
+
+            // PackageInfo.versionCode
+            // eg. 6188736
+            optional int32 packageVersionCode = 8;
+
+            // Build.DEVICE
+            // eg. flo
+            optional string device = 9;
+
+            // Build.VERSION.SDK_INT
+            // eg. 21
+            optional int32 sdkVersion = 10;
+
+            // Build.MODEL
+            // eg. Nexus 7
+            optional string model = 11;
+
+            // Build.MANUFACTURER
+            // eg. asus
+            optional string manufacturer = 12;
+
+            // Build.PRODUCT
+            // eg. razor
+            optional string product = 13;
+
+            // fileExists("/system/recovery-from-boot.p")
+            // eg. false
+            optional bool otaInstalled = 14;
+        }
+
+        // last checkin ms or 0 if first checkin
+        // eg. 0
+        optional int64 lastCheckinMs = 2;
+
+        // eg. ("event_log_start",~,1424612602652) on first checkin
+        repeated Event event = 3;
+        message Event {
+            optional string tag = 1;
+            optional string value = 2;
+            optional int64 timeMs = 3;
+        }
+
+        // unknown, n/a on first checkin
+        repeated Statistic stat = 4;
+        message Statistic {
+            required string tag = 1;
+            optional int32 count = 2;
+            optional float sum = 3;
+        }
+
+        // unused
+        repeated string requestedGroup = 5;
+
+        // TelephonyManager.getNetworkOperator != null|empty
+        optional string cellOperator = 6;
+
+        // TelephonyManager.getSimOperator != null|empty
+        optional string simOperator = 7;
+
+        // "WIFI::" | ("mobile" | "notmobile" | "unknown") + "-" + ("roaming" | "notroaming" | "unknown")
+        optional string roaming = 8;
+
+        // UserHandle.myUserId
+        // eg. 0
+        optional int32 userNumber = 9;
+    }
+
+    // unused
+    optional string desiredBuild = 5;
+
+    // Locale.toString
+    optional string locale = 6;
+
+    // GoogleSettingsContract.Partner["logging_id2"] (choosen randomly on first checkin)
+    // eg. 12561488293572742346
+    optional int64 loggingId = 7;
+
+    // unused
+    optional string marketCheckin = 8;
+
+    // NetworkInfo.getExtraInfo, WifiInfo.getMacAddress (12 hex-digits)
+    // eg. d850e6abcdef
+    repeated string macAddress = 9;
+
+    // TelephonyManager.getDeviceId (14 hex-digits), not set on tablets
+    optional string meid = 10;
+
+    // "[<email>]" followed by "<authToken>", empty string on first checkin
+    repeated string accountCookie = 11;
+
+    // TimeZone.getId
+    // eg. GMT
+    optional string timeZone = 12;
+
+    // security token as given on first checkin, not set on first checkin
+    optional fixed64 securityToken = 13;
+
+    // use 3
+    optional int32 version = 14;
+
+    // SHA-1 of each in /system/etc/security/otacerts.zip or "--IOException--" or "--no-output--"
+    // eg. dKXTm1QH9QShGQwBM/4rg6/lCNQ=
+    repeated string otaCert = 15;
+
+    // Build.SERIAL != "unknown"
+    // eg. 07d90b18
+    optional string serial = 16;
+
+    // TelephonyManager.getDeviceId (8 hex-digits), not set on tablets
+    optional string esn = 17;
+
+    optional DeviceConfig deviceConfiguration = 18;
+    message DeviceConfig {
+        // ConfigurationInfo.reqTouchScreen
+        // eg. 3
+        optional int32 touchScreen = 1;
+
+        // ConfigurationInfo.reqKeyboardType
+        // eg. 1
+        optional int32 keyboardType = 2;
+
+        // ConfigurationInfo.reqNavigation
+        // eg. 1
+        optional int32 navigation = 3;
+        // ConfigurationInfo.screenLayout
+        // eg. 3
+        optional int32 screenLayout = 4;
+
+        // ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_HARD_KEYBOARD
+        // eg. 0
+        optional bool hasHardKeyboard = 5;
+
+        // ConfigurationInfo.reqInputFeatures & ConfigurationInfo.INPUT_FEATURE_FIVE_WAY_NAV
+        // eg. 0
+        optional bool hasFiveWayNavigation = 6;
+
+        // DisplayMetrics.densityDpi
+        // eg. 320
+        optional int32 densityDpi = 7;
+
+        // ConfigurationInfo.reqGlEsVersion
+        // eg. 196608
+        optional int32 glEsVersion = 8;
+
+        // PackageManager.getSystemSharedLibraryNames
+        // eg. "android.test.runner", "com.android.future.usb.accessory", "com.android.location.provider",
+        //     "com.android.media.remotedisplay", "com.android.mediadrm.signer", "com.google.android.maps",
+        //     "com.google.android.media.effects", "com.google.widevine.software.drm", "javax.obex"
+        repeated string sharedLibrary = 9;
+
+        // PackageManager.getSystemAvailableFeatures
+        // eg. android.hardware.[...]
+        repeated string availableFeature = 10;
+
+        // Build.CPU_ABI and Build.CPU_ABI2 != "unknown"
+        // eg. "armeabi-v7a", "armeabi"
+        repeated string nativePlatform = 11;
+
+        // DisplayMetrics.widthPixels
+        // eg. 1200
+        optional int32 widthPixels = 12;
+
+        // DisplayMetrics.heightPixels
+        // eg. 1824
+        optional int32 heightPixels = 13;
+
+        // Context.getAssets.getLocales
+        // eg. [...], "en-US", [...]
+        repeated string locale = 14;
+
+        // GLES10.glGetString(GLES10.GL_EXTENSIONS)
+        // eg. "GL_AMD_compressed_ATC_texture", [...]
+        repeated string glExtension = 15;
+
+        // unused
+        optional int32 deviceClass = 16;
+        // unused
+        optional int32 maxApkDownloadSizeMb = 17;
+    }
+
+    // "ethernet" or "wifi"
+    repeated string macAddressType = 19;
+
+    // unknown, use 0 on pre- and first-checkin, and 1 for later checkins
+    // also present on pre-checkin
+    required int32 fragment = 20;
+
+    // unknown
+    optional string userName = 21;
+
+    // UserManager.getUserSerialNumber
+    // eg. 0
+    optional int32 userSerialNumber = 22;
+}
+
+message CheckinResponse {
+    optional bool statsOk = 1;
+    repeated Intent intent = 2;
+    message Intent {
+        optional string action = 1;
+        optional string dataUri = 2;
+        optional string mimeType = 3;
+        optional string javaClass = 4;
+        repeated Extra extra = 5;
+        message Extra {
+            optional string name = 6;
+            optional string value = 7;
+        }
+    }
+    optional int64 timeMs = 3;
+    optional string digest = 4;
+    repeated GservicesSetting setting = 5;
+    message GservicesSetting {
+        optional bytes name = 1;
+        optional bytes value = 2;
+    }
+    optional bool marketOk = 6;
+    optional fixed64 androidId = 7;
+    optional fixed64 securityToken = 8;
+    optional bool settingsDiff = 9;
+    repeated string deleteSetting = 10;
+    optional string versionInfo = 11;
+    optional string deviceDataVersionInfo = 12;
+}

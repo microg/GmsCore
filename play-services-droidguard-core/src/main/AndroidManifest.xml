@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2021, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.microg.gms.droidguard.core">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <service
+            android:name=".DroidGuardService"
+            android:enabled="true"
+            android:exported="true"
+            android:process="com.google.android.gms.unstable">
+            <intent-filter>
+                <action android:name="com.google.android.gms.droidguard.service.INIT" />
+                <action android:name="com.google.android.gms.droidguard.service.PING" />
+                <action android:name="com.google.android.gms.droidguard.service.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

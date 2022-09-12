@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="permission_service_all_label">Все сервисы Google</string>
+    <string name="permission_service_all_description">Дает приложению доступ к сервисам Google через любой связанный аккаунт Google.</string>
+
+    <string name="permission_service_android_label">Сервисы Android</string>
+    <string name="permission_service_android_description">Дает приложению доступ к сервисам Android через любую связанную учетную запись Google.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Дает приложению доступ к Adsense через любой связанный аккаунт Google.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">Дает приложению доступ к AdWords через любой связанный аккаунт Google.</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_ah_description">Дает приложению доступ к Google App Engine через любой связанный аккаунт Google.</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Дает приложению доступ к Blogger через любую связанную учетную запись Google.</string>
+    <string name="permission_service_cl_label">Google Календарь</string>
+    <string name="permission_service_cl_description">Дает приложению доступ к Google Календарю через любую связанную учетную запись Google.</string>
+    <string name="permission_service_cp_label">Контакты</string>
+    <string name="permission_service_cp_description">Дает приложению доступ к Котактам через любую связанную учетную запись Google.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">Дает приложению доступ к Dodgeball через любую связанную учетную запись Google.</string>
+    <string name="permission_service_finance_label">Google Finance</string>
+    <string name="permission_service_finance_description">Дает приложению доступ к Google Finance через любую связанную учетную запись Google.</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_gbase_description">Дает приложению доступ к Google Base через любую связанную учетную запись Google.</string>
+    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_grandcentral_description">Дает приложению доступ к Google Voice через любую связанную учетную запись Google.</string>
+    <string name="permission_service_groups2_label">Google Groups</string>
+    <string name="permission_service_groups2_description">Дает приложению доступ к Google Groups через любую связанную учетную запись Google.</string>
+    <string name="permission_service_health_label">Google Health</string>
+    <string name="permission_service_health_description">Дает приложению доступ к Google Health через любую связанную учетную запись Google.</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_service_ig_description">Дает приложению доступ к iGoogle через любую связанную учетную запись Google.</string>
+    <string name="permission_service_jotspot_label">JotSpot</string>
+    <string name="permission_service_jotspot_description">Дает приложению доступ к JotSpot через любую связанную учетную запись Google.</string>
+    <string name="permission_service_knol_label">Knol</string>
+    <string name="permission_service_knol_description">Дает приложению доступ к Knol через любую связанную учетную запись Google.</string>
+    <string name="permission_service_lh2_label">Picasa Web Albums</string>
+    <string name="permission_service_lh2_description">Дает приложению доступ к Picasa Web Albums через любую связанную учетную запись Google.</string>
+    <string name="permission_service_local_label">Google Maps</string>
+    <string name="permission_service_local_description">Дает приложению доступ к Google Maps через любую связанную учетную запись Google.</string>
+    <string name="permission_service_mail_label">Google Mail</string>
+    <string name="permission_service_mail_description">Дает приложению доступ к Google Mail через любую связанную учетную запись Google.</string>
+    <string name="permission_service_news_label">Google News</string>
+    <string name="permission_service_news_description">Дает приложению доступ к Google News через любую связанную учетную запись Google.</string>
+    <string name="permission_service_notebook_label">Google Notebook</string>
+    <string name="permission_service_notebook_description">Дает приложению доступ к Google Notebook через любую связанную учетную запись Google.</string>
+    <string name="permission_service_orkut_label">Orkut</string>
+    <string name="permission_service_orkut_description">Дает приложению доступ к Orkut через любую связанную учетную запись Google.</string>
+    <string name="permission_service_print_label">Google Book Search</string>
+    <string name="permission_service_print_description">Дает приложению доступ к Google Book Search через любую связанную учетную запись Google.</string>
+    <string name="permission_service_sierra_label">Аккаунты Google Checkout</string>
+    <string name="permission_service_sierra_description">Дает приложению доступ к аккаунтам Google Checkout через любую связанную учетную запись Google.</string>
+    <string name="permission_service_sierraqa_label">Аккаунты Google Checkout QA</string>
+    <string name="permission_service_sierraqa_description">Дает приложению доступ к аккаунтам Google Checkout QA через любую связанную учетную запись Google.</string>
+    <string name="permission_service_sierrasandbox_label">Аккаунты Google Checkout Sandbox</string>
+    <string name="permission_service_sierrasandbox_description">Дает приложению доступ к аккаунтам Google Checkout Sandbox через любую связанную учетную запись Google.</string>
+    <string name="permission_service_sitemaps_label">Google Webmaster Tools</string>
+    <string name="permission_service_sitemaps_description">Дает приложению доступ к Google Webmaster Tools через любую связанную учетную запись Google.</string>
+    <string name="permission_service_speech_label">Voice Search</string>
+    <string name="permission_service_speech_description">Дает приложению доступ к Voice Search через любую связанную учетную запись Google.</string>
+    <string name="permission_service_speechpersonalization_label">Personalized Speech Recognition</string>
+    <string name="permission_service_speechpersonalization_description">Дает приложению доступ к Personalized Speech Recognition через любую связанную учетную запись Google.</string>
+    <string name="permission_service_talk_label">Google Talk</string>
+    <string name="permission_service_talk_description">Дает приложению доступ к Google Talk через любую связанную учетную запись Google.</string>
+    <string name="permission_service_wifi_label">Google Wi-Fi</string>
+    <string name="permission_service_wifi_description">Дает приложению доступ к Google Wi-Fi через любую связанную учетную запись Google.</string>
+    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_description">Дает приложению доступ к Google Spreadsheets через любую связанную учетную запись Google.</string>
+    <string name="permission_service_writely_label">Google Docs</string>
+    <string name="permission_service_writely_description">Дает приложению доступ к Google Docs через любую связанную учетную запись Google.</string>
+    <string name="permission_service_youtube_label">YouTube</string>
+    <string name="permission_service_youtube_description">Дает приложению доступ к YouTube через любую связанную учетную запись Google.</string>
+    <string name="permission_service_YouTubeUser_label">Имена пользователей YouTube</string>
+    <string name="permission_service_YouTubeUser_description">Позволяет приложению получить доступ к имени пользователя(ей) YouTube, который связан с акаунтом Google.</string>
+
+    <string name="permission_scope_www.googleapis.com_auth_activity">Просмотреть историю активности ваших приложений Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Управление своей учетной записью покупателя Ad Exchange</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Просмотр ваших Ad Exchange данных</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Просмотр и управление вашими Ad Exchange данными</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsensehost">Просмотр и управление вашими AdSense данными хостингов и связанными аккаунтами</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">Просмотр ваших AdSense данных</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense">Просмотр и управление вашими AdSense данными</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Просмотр ваших Google Analytics данных</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics">Просмотр и управление вашими Google Analytics данными</string>
+    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Доступ к магазину Google Play для Android разработчика</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Движок приложения сферы администрирования.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Доступ на чтение и запись для Groups Migration API.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Просмотр и управление настроек Google Apps Group</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Права на чтение/запись для License Manager API.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order">"Доступ для чтения/записи администраторам и пользователям при тестировании в песочнице API или доступ для чтения/записи при обращении к API-операциям напрямую."</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">"Помимо общего чтения/записи по протоколу OAuth, следует использовать только для чтения протокол OAuth при извлечении данных клиента."</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">Доступ к API аудиту администратора только для чтения</string>
+    <string name="permission_scope_www.googleapis.com_auth_appstate">Область использования App State сервиса.</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">Просмотр своих данных в Google BigQuery</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery">Просмотр и управление своими данными в Google BigQuery</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger">Управление своей учетной записи блоггера</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger.readonly">Просмотр своей учетной записи блоггера</string>
+    <string name="permission_scope_www.googleapis.com_auth_books">Управление своими книгами</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar">Управление своими календарями</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar.readonly">Просмотр своих календарей</string>
+    <string name="permission_scope_www.googleapis.com_auth_cloudprint">Просмотр и управление своими данными Google Cloud Print</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute.readonly">Просмотр своих ресурсов Google Compute Engine</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute">Просмотр и управление своими ресурсами Google Compute Engine</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate.readonly">Просмотр своих целей Google Coordinate</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate">Просмотр и управление своими задаными координатами Google Maps</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">Управление своими данными и разрешениями в Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_only">Просмотр своих данных в Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_write">Управление своими данными в Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_dfareporting">Просмотр и управление DoubleClick отчетов рекламодателей</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.appdata">Предоставить доступ к папке Application Data</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.apps.readonly">Посмотреть свои приложения Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.file">Просмотр и управление файлами Google Drive, которые вы открыли или создали в этом приложении</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.install">Особые возможности, позволяющие пользователям одобрить установку приложения</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.metadata.readonly">Просмотр метаданных для файлов и документов Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.readonly">Просмотр файлов и документов Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.scripts">"Измениение поведения своих сценариев Google Apps Script"</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive">Просмотр и управление файлами и документами Google Drive</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase.readonly">просмотр своей учетной записи Freebase</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase">Зарегистрироваться в Freebase с вашей учетной записью</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables">Управление слиянием таблиц</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables.readonly">Просмотр таблицы Fusion</string>
+    <string name="permission_scope_www.googleapis.com_auth_games"> Доступа к данным Google Play Игры.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan">Управление данными GAN</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Просмотр данных GAN</string>
+    <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">CloudMessaging для Chrome</string>
+    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Glass timeline scope</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Создание, чтение, обновление и удаление черновиков. Отправка сообщений из черновиков.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Все операции чтения/записи происходят немедленно, кроме удаления тем и сообщений, минуящих корзину.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Чтение всех ресурсов и их метаданных, не использующих операции записи.</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.all.best">Выбрать ваше наиболее точное местоположение и их историю</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Выбрать ваш город, и историю местоположений</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Выбрать ваше самое точно местоположение</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">Выберите свой город</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">"предоставляет доступ на чтение и запись к данным Maps Engine пользователя из вашего приложения."</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">"предоставляет доступ к пользовательмкому Maps Engine только для чтения для вас"</string>
+    <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Просмотр и управление вашими Google Картами для мобильных устройств</string>
+    <string name="permission_scope_www.googleapis.com_auth_orkut">Управление своими действиями Orkut</string>
+    <string name="permission_scope_www.googleapis.com_auth_orkut.readonly">Просмотр своих данных Orkut</string>
+    <string name="permission_scope_www.googleapis.com_auth_plus.login">"Узнать ваше имя, базовую информацию, и список людей, с которыми вы общаетесь в Google+"</string>
+    <string name="permission_scope_www.googleapis.com_auth_plus.me">Узнать кто вы в Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_prediction">Управление своими данными в Google Prediction API</string>
+    <string name="permission_scope_www.googleapis.com_auth_shoppingapi">Просмотр данных продукта</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification">Управление вашим списком сайтов и доменов</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Управление верификацией ваших сайтов в Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Доступ на запись/чтение для Shopping Content API.</string>
+    <string name="permission_scope_www.googleapis.com_auth_taskqueue.consumer">Выполнение задач из вашего TaskQueue</string>
+    <string name="permission_scope_www.googleapis.com_auth_taskqueue">Управление вашими задачами</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks">Управление задачами</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks.readonly">Просмотреть свои задачи</string>
+    <string name="permission_scope_www.googleapis.com_auth_tracks">"Google Maps Tracks API, эта сфера предоставляет доступ на чтение и запись ваших проектов."</string>
+    <string name="permission_scope_www.googleapis.com_auth_urlshortener">Управление вашими короткими URL-адресами goo.gl</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.email">Посмотреть свой адрес электронной почты</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.profile">Просмотр основной информации об аккаунте</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube">Управление аккаунтом YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Просматр и управлени своими активами и контентом на YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">Просмотр своего аккаунта YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Управление вашими видео на YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Простор на YouTube аналитики валютного отчеты для вашего контента YouTube</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Простотр на YouTube аналитических отчетов для вашего контента YouTube</string>
+
+</resources>
