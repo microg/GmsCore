@@ -5,9 +5,10 @@
 
 package org.microg.gms.fido.core.protocol
 
+import com.upokecenter.cbor.CBOREncodeOptions
 import com.upokecenter.cbor.CBORObject
 
-abstract class AttestationObject(val authData: AuthenticatorData) {
+abstract class AttestationObject(val authData: ByteArray) {
     abstract val fmt: String
     abstract val attStmt: CBORObject
 
@@ -15,5 +16,7 @@ abstract class AttestationObject(val authData: AuthenticatorData) {
         set("fmt", fmt.encodeAsCbor())
         set("attStmt", attStmt)
         set("authData", authData.encodeAsCbor())
-    }.EncodeToBytes()
+    }.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical)
 }
+
+class AnyAttestationObject(authData: ByteArray, override val fmt: String, override val attStmt: CBORObject) : AttestationObject(authData)

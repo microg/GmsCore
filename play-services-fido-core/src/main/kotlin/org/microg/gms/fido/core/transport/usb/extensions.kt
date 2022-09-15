@@ -47,3 +47,23 @@ inline fun <R> UsbDeviceConnection.use(block: (UsbDeviceConnection) -> R): R {
         }
     }
 }
+
+inline fun <R> UsbRequest.initialize(connection: UsbDeviceConnection, endpoint: UsbEndpoint, block: (UsbRequest) -> R): R {
+    var exception: Throwable? = null
+    try {
+        initialize(connection, endpoint)
+        return block(this)
+    } catch (e: Throwable) {
+        exception = e
+        throw e
+    } finally {
+        when (exception) {
+            null -> close()
+            else -> try {
+                close()
+            } catch (closeException: Throwable) {
+                // cause.addSuppressed(closeException) // ignored here
+            }
+        }
+    }
+}

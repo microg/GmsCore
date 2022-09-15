@@ -8,7 +8,7 @@ package org.microg.gms.fido.core.protocol
 import com.upokecenter.cbor.CBORObject
 
 class AndroidSafetyNetAttestationObject(authData: AuthenticatorData, val ver: String, val response: ByteArray) :
-    AttestationObject(authData) {
+    AttestationObject(authData.encode()) {
     override val fmt: String
         get() = "android-safetynet"
     override val attStmt: CBORObject

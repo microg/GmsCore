@@ -8,6 +8,7 @@ package org.microg.gms.fido.core.protocol
 import com.upokecenter.cbor.CBORObject
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import kotlin.experimental.and
 import kotlin.experimental.or
 
 class AuthenticatorData(
@@ -30,8 +31,6 @@ class AuthenticatorData(
             .array()
     }
 
-    fun encodeAsCbor(): CBORObject = encode().encodeAsCbor()
-
     companion object {
         /** User Present **/
         private const val FLAG_UP: Byte = 0x01
@@ -47,5 +46,21 @@ class AuthenticatorData(
 
         private fun buildFlags(up: Boolean, uv: Boolean, at: Boolean, ed: Boolean): Byte =
             (if (up) FLAG_UP else 0) or (if (uv) FLAG_UV else 0) or (if (at) FLAG_AT else 0) or (if (ed) FLAG_ED else 0)
+
+        fun decode(byteArray: ByteArray): AuthenticatorData = ByteBuffer.wrap(byteArray).run {
+            val rpIdHash = ByteArray(32)
+            get(rpIdHash)
+            val flags = get()
+            val signCount = order(ByteOrder.BIG_ENDIAN).int
+            val attestedCredentialData = if ((flags and FLAG_AT) == FLAG_AT) AttestedCredentialData.decode(this) else null
+            val extensions = if ((flags and FLAG_ED) == FLAG_ED) {
+                val ed = ByteArray(remaining())
+                get(ed)
+                ed
+            } else {
+                null
+            }
+            return@run AuthenticatorData(rpIdHash, flags and FLAG_UP == FLAG_UP, flags and FLAG_UV == FLAG_UV, signCount, attestedCredentialData, extensions)
+        }
     }
 }

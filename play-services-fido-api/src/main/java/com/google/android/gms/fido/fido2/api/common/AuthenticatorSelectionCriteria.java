@@ -8,6 +8,7 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -38,6 +39,11 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
 
     public Boolean getRequireResidentKey() {
         return requireResidentKey;
+    }
+
+    @PublicApi(exclude = true)
+    public UserVerificationRequirement getRequireUserVerification() {
+        return requireUserVerification;
     }
 
     @Override

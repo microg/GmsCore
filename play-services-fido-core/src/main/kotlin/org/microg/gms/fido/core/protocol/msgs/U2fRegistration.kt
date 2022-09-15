@@ -19,6 +19,10 @@ class U2fRegistrationCommand(request: U2fRegistrationRequest) :
 
 class U2fRegistrationRequest(val challenge: ByteArray, val application: ByteArray) :
     Ctap1Request(0x01, data = challenge + application) {
+    init {
+        require(challenge.size == 32)
+        require(application.size == 32)
+    }
     override fun toString(): String = "U2fRegistrationRequest(challenge=${challenge.toBase64(Base64.NO_WRAP)}, " +
             "application=${application.toBase64(Base64.NO_WRAP)})"
 }

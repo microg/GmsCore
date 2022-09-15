@@ -5,16 +5,20 @@
 
 package org.microg.gms.fido.core.protocol.msgs
 
+import android.util.Base64
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialDescriptor
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
 import com.upokecenter.cbor.CBORObject
 import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialDescriptor
 import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialUserEntity
 import org.microg.gms.fido.core.protocol.encodeAsCbor
+import org.microg.gms.utils.toBase64
 
 class AuthenticatorGetAssertionCommand(request: AuthenticatorGetAssertionRequest) :
     Ctap2Command<AuthenticatorGetAssertionRequest, AuthenticatorGetAssertionResponse>(request) {
     override fun decodeResponse(obj: CBORObject) = AuthenticatorGetAssertionResponse.decodeFromCbor(obj)
+    override val timeout: Long
+        get() = 60000
 }
 
 class AuthenticatorGetAssertionRequest(
@@ -25,27 +29,30 @@ class AuthenticatorGetAssertionRequest(
     val options: Options? = null,
     val pinAuth: ByteArray? = null,
     val pinProtocol: Int? = null
-) : Ctap2Request(0x03) {
+) : Ctap2Request(0x02, CBORObject.NewMap().apply {
+    set(0x01, rpId.encodeAsCbor())
+    set(0x02, clientDataHash.encodeAsCbor())
+    if (allowList.isNotEmpty()) set(0x03, allowList.encodeAsCbor { it.encodeAsCbor() })
+    if (extensions.isNotEmpty()) set(0x04, extensions.encodeAsCbor { it })
+    if (options != null) set(0x05, options.encodeAsCbor())
+    if (pinAuth != null) set(0x06, pinAuth.encodeAsCbor())
+    if (pinProtocol != null) set(0x07, pinProtocol.encodeAsCbor())
+}) {
+    override fun toString() = "AuthenticatorGetAssertionRequest(rpId=${rpId}," +
+            "clientDataHash=0x${clientDataHash.toBase64(Base64.NO_WRAP)}, " +
+            "allowList=[${allowList.joinToString()}],extensions=[${extensions.entries.joinToString()}]," +
+            "options=$options,pinAuth=${pinAuth?.toBase64(Base64.NO_WRAP)},pinProtocol=$pinProtocol)"
+
     companion object {
         class Options(
-            val userPresence: Boolean = true,
-            val userVerification: Boolean = false
+            val userPresence: Boolean? = true,
+            val userVerification: Boolean? = false
         ) {
-            fun encodeAsCBOR(): CBORObject = CBORObject.NewMap().apply {
-                set("up", userPresence.encodeAsCbor())
-                set("uv", userVerification.encodeAsCbor())
+            fun encodeAsCbor(): CBORObject = CBORObject.NewMap().apply {
+                if (userPresence != null) set("up", userPresence.encodeAsCbor())
+                if (userVerification != null) set("uv", userVerification.encodeAsCbor())
             }
         }
-    }
-
-    fun encodeAsCBOR() = CBORObject.NewMap().apply {
-        set(0x01, rpId.encodeAsCbor())
-        set(0x02, clientDataHash.encodeAsCbor())
-        if (allowList.isNotEmpty()) set(0x03, allowList.encodeAsCbor { it.encodeAsCbor() })
-        if (extensions.isNotEmpty()) set(0x04, extensions.encodeAsCbor { it })
-        if (options != null) set(0x05, options.encodeAsCBOR())
-        if (pinAuth != null) set(0x06, pinAuth.encodeAsCbor())
-        if (pinProtocol != null) set(0x07, pinProtocol.encodeAsCbor())
     }
 }
 

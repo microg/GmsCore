@@ -33,7 +33,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
     @Field(7)
     private TokenBinding tokenBinding;
     @Field(8)
-    private UserVerificationRequirement userVerificationRequirement;
+    private UserVerificationRequirement requireUserVerification;
     @Field(9)
     private AuthenticationExtensions authenticationExtensions;
 
@@ -44,6 +44,11 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
     @Override
     public AuthenticationExtensions getAuthenticationExtensions() {
         return authenticationExtensions;
+    }
+
+    @PublicApi(exclude = true)
+    public UserVerificationRequirement getRequireUserVerification() {
+        return requireUserVerification;
     }
 
     @Override
@@ -84,13 +89,13 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         if (allowList != null ? !allowList.equals(that.allowList) : that.allowList != null) return false;
         if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) return false;
         if (tokenBinding != null ? !tokenBinding.equals(that.tokenBinding) : that.tokenBinding != null) return false;
-        if (userVerificationRequirement != that.userVerificationRequirement) return false;
+        if (requireUserVerification != that.requireUserVerification) return false;
         return authenticationExtensions != null ? authenticationExtensions.equals(that.authenticationExtensions) : that.authenticationExtensions == null;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{Arrays.hashCode(challenge), timeoutSeconds, rpId, allowList, requestId, tokenBinding, userVerificationRequirement, authenticationExtensions});
+        return Arrays.hashCode(new Object[]{Arrays.hashCode(challenge), timeoutSeconds, rpId, allowList, requestId, tokenBinding, requireUserVerification, authenticationExtensions});
     }
 
     @Override
@@ -102,7 +107,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
                 .field("allowList", allowList)
                 .field("requestId", requestId)
                 .field("tokenBinding", tokenBinding)
-                .field("userVerificationRequirement", userVerificationRequirement)
+                .field("userVerificationRequirement", requireUserVerification)
                 .field("authenticationExtensions", authenticationExtensions)
                 .end();
     }

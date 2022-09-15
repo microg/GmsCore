@@ -29,6 +29,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     implementation 'com.upokecenter:cbor:4.5.2'
+    implementation 'com.google.guava:guava:31.1-android'
 }
 
 android {

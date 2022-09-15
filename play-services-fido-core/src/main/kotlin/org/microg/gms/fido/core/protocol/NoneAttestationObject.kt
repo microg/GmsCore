@@ -7,7 +7,7 @@ package org.microg.gms.fido.core.protocol
 
 import com.upokecenter.cbor.CBORObject
 
-class NoneAttestationObject(authData: AuthenticatorData) : AttestationObject(authData) {
+class NoneAttestationObject(authData: AuthenticatorData) : AttestationObject(authData.encode()) {
     override val fmt: String
         get() = "none"
     override val attStmt: CBORObject

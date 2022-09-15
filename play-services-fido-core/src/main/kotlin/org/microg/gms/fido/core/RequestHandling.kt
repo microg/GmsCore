@@ -6,10 +6,13 @@
 package org.microg.gms.fido.core
 
 import android.content.Context
+import android.net.Uri
 import android.util.Base64
 import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
+import com.google.common.net.InternetDomainName
 import com.upokecenter.cbor.CBORObject
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import org.microg.gms.fido.core.RequestOptionsType.REGISTER
 import org.microg.gms.fido.core.RequestOptionsType.SIGN
@@ -73,6 +76,19 @@ fun RequestOptions.checkIsValid(context: Context) {
     if (type == SIGN) {
         if (signOptions.allowList.isNullOrEmpty()) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "Request doesn't have a valid list of allowed credentials.")
+        }
+    }
+    if (authenticationExtensions?.fidoAppIdExtension?.appId != null) {
+        val appId = authenticationExtensions.fidoAppIdExtension.appId
+        if (!appId.startsWith("https://")) {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "FIDO AppId must start with https://")
+        }
+        val uri = Uri.parse(appId)
+        if (uri.host.isNullOrEmpty()) {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "FIDO AppId must have a valid hostname")
+        }
+        if (InternetDomainName.from(uri.host).topDomainUnderRegistrySuffix() != InternetDomainName.from(rpId).topDomainUnderRegistrySuffix()) {
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "FIDO AppId must be same TLD+1")
         }
     }
 }

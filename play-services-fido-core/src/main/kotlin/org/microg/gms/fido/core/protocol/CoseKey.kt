@@ -6,6 +6,7 @@
 package org.microg.gms.fido.core.protocol
 
 import com.google.android.gms.fido.fido2.api.common.Algorithm
+import com.upokecenter.cbor.CBOREncodeOptions
 import com.upokecenter.cbor.CBORObject
 import java.math.BigInteger
 
@@ -24,7 +25,7 @@ class CoseKey(
         set(CRV, curveId.encodeAsCbor())
         set(X, x.encodeAsCbor())
         set(Y, y.encodeAsCbor())
-    }.EncodeToBytes()
+    }.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical)
 
     companion object {
         private const val KTY = 1

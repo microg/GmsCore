@@ -8,7 +8,7 @@ package org.microg.gms.fido.core.protocol
 import com.upokecenter.cbor.CBORObject
 
 class FidoU2fAttestationObject(authData: AuthenticatorData, val signature: ByteArray, val attestationCertificate: ByteArray) :
-    AttestationObject(authData) {
+    AttestationObject(authData.encode()) {
     override val fmt: String
         get() = "fido-u2f"
     override val attStmt: CBORObject

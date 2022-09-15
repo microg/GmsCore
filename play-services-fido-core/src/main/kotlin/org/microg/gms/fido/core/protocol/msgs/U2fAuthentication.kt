@@ -20,6 +20,10 @@ class U2fAuthenticationCommand(request: U2fAuthenticationRequest) :
 
 class U2fAuthenticationRequest(val controlByte: Byte, val challenge: ByteArray, val application: ByteArray, val keyHandle: ByteArray) :
     Ctap1Request(0x02, data = challenge + application + keyHandle.size.toByte() + keyHandle, p1 = controlByte) {
+    init {
+        require(challenge.size == 32)
+        require(application.size == 32)
+    }
     override fun toString(): String = "U2fAuthenticationRequest(controlByte=0x${controlByte.toString(16)}, " +
             "challenge=${challenge.toBase64(Base64.NO_WRAP)}, " +
             "application=${application.toBase64(Base64.NO_WRAP)}, " +
