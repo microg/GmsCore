@@ -27,6 +27,13 @@ public class FidoAppIdExtension extends AutoSafeParcelable {
     @Field(2)
     private String appId;
 
+    private FidoAppIdExtension() {
+    }
+
+    public FidoAppIdExtension(String appId) {
+        this.appId = appId;
+    }
+
     public String getAppId() {
         return appId;
     }
