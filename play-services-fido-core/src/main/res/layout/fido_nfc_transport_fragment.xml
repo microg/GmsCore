@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="org.microg.gms.fido.core.transport.Transport" />
+
+        <import type="org.microg.gms.fido.core.transport.TransportHandlerCallback" />
+
+        <variable
+            name="data"
+            type="org.microg.gms.fido.core.ui.AuthenticatorActivityFragmentData" />
+
+        <variable
+            name="status"
+            type="String" />
+
+
+        <variable
+            name="onBackClick"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_fido_key" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:text="@{data.isFirst ? @string/fido_welcome_title(data.appName) : @string/fido_nfc_title}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            tools:text="@string/fido_nfc_title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/fido_nfc_prompt_body"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@{@string/fido_welcome_body(data.appName)}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:visibility="@{data.isFirst ? View.VISIBLE : View.GONE}"
+            tools:text="@string/fido_welcome_body" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{status == TransportHandlerCallback.STATUS_WAITING_FOR_DEVICE ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:id="@+id/fido_nfc_wait_connect_animation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="240dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/fido_nfc_wait_connect" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom|start"
+            android:orientation="horizontal"
+            android:visibility="@{data.supportedTransports.size() > 1 ? View.VISIBLE : View.GONE}">
+
+            <Button
+                android:id="@android:id/button1"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:onClick="@{onBackClick}"
+                android:text="Change how to use your security key"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

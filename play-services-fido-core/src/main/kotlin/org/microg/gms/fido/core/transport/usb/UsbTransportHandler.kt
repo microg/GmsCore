@@ -25,6 +25,7 @@ import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.protocol.*
 import org.microg.gms.fido.core.protocol.msgs.*
+import org.microg.gms.fido.core.transport.CtapConnection
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
@@ -75,149 +76,14 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         return null
     }
 
-    suspend fun deviceHasCredential(
-        connection: CtapHidConnection,
-        challenge: ByteArray,
-        application: ByteArray,
-        descriptor: PublicKeyCredentialDescriptor
-    ): Boolean {
-        try {
-            connection.runCommand(U2fAuthenticationCommand(0x07, challenge, application, descriptor.id))
-            return true
-        } catch (e: CtapHidMessageStatusException) {
-            return false
-        }
-    }
-
     suspend fun register(
         options: RequestOptions,
         callerPackage: String,
         device: UsbDevice,
         iface: UsbInterface
     ): AuthenticatorAttestationResponse {
-        val (response, clientData, keyHandle) = CtapHidConnection(context, device, iface).open {
-            val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
-            if (it.hasCtap2Support) {
-                val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
-                    options.registerOptions.authenticatorSelection?.requireResidentKey,
-                    options.registerOptions.authenticatorSelection?.requireUserVerification?.let { it == UserVerificationRequirement.REQUIRED })
-                val extensions = mutableMapOf<String, CBORObject>()
-                if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
-                    extensions["appidExclude"] =
-                        options.authenticationExtensions.fidoAppIdExtension.appId.encodeAsCbor()
-                }
-                if (options.authenticationExtensions?.userVerificationMethodExtension?.uvm != null) {
-                    extensions["uvm"] =
-                        options.authenticationExtensions.userVerificationMethodExtension.uvm.encodeAsCbor()
-                }
-                val request = AuthenticatorMakeCredentialRequest(
-                    clientDataHash,
-                    options.registerOptions.rp,
-                    options.registerOptions.user,
-                    options.registerOptions.parameters,
-                    options.registerOptions.excludeList,
-                    extensions,
-                    reqOptions
-                )
-                val ctap2Response = it.runCommand(AuthenticatorMakeCredentialCommand(request))
-                val credentialId = AuthenticatorData.decode(ctap2Response.authData).attestedCredentialData?.id
-                return@open Triple(ctap2Response, clientData, credentialId)
-            }
-            if (it.hasCtap1Support) {
-                val rpIdHash = options.rpId.toByteArray().digest("SHA-256")
-                val appIdHash =
-                    options.authenticationExtensions?.fidoAppIdExtension?.appId?.toByteArray()?.digest("SHA-256")
-                if (!options.registerOptions.parameters.isNullOrEmpty() && options.registerOptions.parameters.all { it.algorithmIdAsInteger != -7 }) throw IllegalArgumentException(
-                    "Can't use CTAP1 protocol for non ES256 requests"
-                )
-                if (options.registerOptions.authenticatorSelection.requireResidentKey == true) throw IllegalArgumentException(
-                    "Can't use CTAP1 protocol when resident key required"
-                )
-                val hasCredential = options.registerOptions.excludeList.any { cred ->
-                    deviceHasCredential(it, clientDataHash, rpIdHash, cred) ||
-                            if (appIdHash != null) {
-                                deviceHasCredential(it, clientDataHash, appIdHash, cred)
-                            } else {
-                                false
-                            }
-                }
-                while (true) {
-                    try {
-                        val response = it.runCommand(U2fRegistrationCommand(clientDataHash, rpIdHash))
-                        if (hasCredential) throw RequestHandlingException(
-                            ErrorCode.NOT_ALLOWED_ERR,
-                            "An excluded credential has already been registered with the device"
-                        )
-                        require(response.userPublicKey[0] == 0x04.toByte())
-                        val coseKey = CoseKey(
-                            EC2Algorithm.ES256,
-                            response.userPublicKey.sliceArray(1 until 33),
-                            response.userPublicKey.sliceArray(33 until 65),
-                            1
-                        )
-                        val credentialData =
-                            AttestedCredentialData(ByteArray(16), response.keyHandle, coseKey.encode())
-                        val authData = AuthenticatorData(
-                            options.rpId.toByteArray().digest("SHA-256"),
-                            true,
-                            false,
-                            0,
-                            credentialData
-                        )
-                        val attestationObject =
-                            FidoU2fAttestationObject(authData, response.signature, response.attestationCertificate)
-                        val ctap2Response = AuthenticatorMakeCredentialResponse(
-                            authData.encode(),
-                            attestationObject.fmt,
-                            attestationObject.attStmt
-                        )
-                        return@open Triple(ctap2Response, clientData, response.keyHandle)
-                    } catch (e: CtapHidMessageStatusException) {
-                        if (e.status != 0x6985) {
-                            throw e
-                        }
-                    }
-                    delay(100)
-                }
-            }
-            throw IllegalStateException()
-        }
-        return AuthenticatorAttestationResponse(
-            keyHandle,
-            clientData,
-            AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode()
-        )
-    }
-
-    suspend fun ctap1sign(
-        connection: CtapHidConnection,
-        options: RequestOptions,
-        clientData: ByteArray,
-        clientDataHash: ByteArray,
-        rpIdHash: ByteArray
-    ): Triple<AuthenticatorGetAssertionResponse, ByteArray, ByteArray> {
-        val cred = options.signOptions.allowList.firstOrNull { cred ->
-            deviceHasCredential(connection, clientDataHash, rpIdHash, cred)
-        } ?: options.signOptions.allowList.first()
-
-        while (true) {
-            try {
-                val response = connection.runCommand(U2fAuthenticationCommand(0x03, clientDataHash, rpIdHash, cred.id))
-                val authData = AuthenticatorData(rpIdHash, response.userPresence, false, response.counter)
-                val ctap2Response = AuthenticatorGetAssertionResponse(
-                    cred,
-                    authData.encode(),
-                    response.signature,
-                    null,
-                    null
-                )
-                return Triple(ctap2Response, clientData, cred.id)
-            } catch (e: CtapHidMessageStatusException) {
-                if (e.status != 0x6985) {
-                    throw e
-                }
-                delay(100)
-            }
+        return CtapHidConnection(context, device, iface).open {
+            register(it, context, options, callerPackage)
         }
     }
 
@@ -227,58 +93,9 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         device: UsbDevice,
         iface: UsbInterface
     ): AuthenticatorAssertionResponse {
-        val (response, clientData, credentialId) = CtapHidConnection(context, device, iface).open {
-            val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
-            if (it.hasCtap2Support) {
-                val reqOptions = AuthenticatorGetAssertionRequest.Companion.Options(
-                    userVerification = options.signOptions.requireUserVerification?.let { it == UserVerificationRequirement.REQUIRED }
-                )
-                val extensions = mutableMapOf<String, CBORObject>()
-                if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
-                    extensions["appid"] = options.authenticationExtensions.fidoAppIdExtension.appId.encodeAsCbor()
-                }
-                if (options.authenticationExtensions?.userVerificationMethodExtension?.uvm != null) {
-                    extensions["uvm"] =
-                        options.authenticationExtensions.userVerificationMethodExtension.uvm.encodeAsCbor()
-                }
-                val request = AuthenticatorGetAssertionRequest(
-                    options.rpId,
-                    clientDataHash,
-                    options.signOptions.allowList,
-                    extensions,
-                    reqOptions
-                )
-                val ctap2Response = it.runCommand(AuthenticatorGetAssertionCommand(request))
-                Log.d(TAG, "Authenticator data: ${ctap2Response.authData.toBase64(Base64.NO_WRAP)}")
-                return@open Triple(ctap2Response, clientData, ctap2Response.credential?.id)
-            }
-            if (it.hasCtap1Support) {
-                try {
-                    val rpIdHash = options.rpId.toByteArray().digest("SHA-256")
-                    return@open ctap1sign(it, options, clientData, clientDataHash, rpIdHash)
-                } catch (e: Exception) {
-                    try {
-                        if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
-                            val appIdHash = options.authenticationExtensions.fidoAppIdExtension.appId.toByteArray()
-                                .digest("SHA-256")
-                            return@open ctap1sign(it, options, clientData, clientDataHash, appIdHash)
-                        }
-                    } catch (e2: Exception) {
-                    }
-                    // Throw original
-                    throw e
-                }
-            }
-            throw IllegalStateException()
+        return CtapHidConnection(context, device, iface).open {
+            sign(it, context, options, callerPackage)
         }
-
-        return AuthenticatorAssertionResponse(
-            credentialId,
-            clientData,
-            response.authData,
-            response.signature,
-            null
-        )
     }
 
     private suspend fun waitForNewUsbDevice(): UsbDevice {
@@ -292,7 +109,9 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         }
         context.registerReceiver(receiver, IntentFilter(UsbManager.ACTION_USB_DEVICE_ATTACHED))
         invokeStatusChanged(TransportHandlerCallback.STATUS_WAITING_FOR_DEVICE)
-        return deferred.await()
+        val device = deferred.await()
+        context.unregisterReceiver(receiver)
+        return device
     }
 
     suspend fun handle(

@@ -33,11 +33,11 @@ public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
     private PublicKeyCredentialDescriptor() {
     }
 
-    public PublicKeyCredentialDescriptor(String type, byte[] id, List<Transport> transports) throws UnsupportedPubKeyCredDescriptorException {
+    public PublicKeyCredentialDescriptor(String type, byte[] id, List<Transport> transports) {
         try {
             this.type = PublicKeyCredentialType.fromString(type);
         } catch (PublicKeyCredentialType.UnsupportedPublicKeyCredTypeException e) {
-            throw new UnsupportedPubKeyCredDescriptorException(e.getMessage(), e);
+            throw new IllegalArgumentException(e);
         }
         this.id = id;
         this.transports = transports;

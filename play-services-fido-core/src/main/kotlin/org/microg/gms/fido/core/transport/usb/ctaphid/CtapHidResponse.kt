@@ -6,6 +6,7 @@
 package org.microg.gms.fido.core.transport.usb.ctaphid
 
 import android.util.Base64
+import org.microg.gms.fido.core.protocol.msgs.decodeResponseApdu
 import org.microg.gms.utils.toBase64
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -52,10 +53,8 @@ class CtapHidMessageResponse(val statusCode: Short, val payload: ByteArray) :
 
         fun parse(message: CtapHidMessage): CtapHidMessageResponse {
             require(message.commandId == COMMAND_ID)
-            return CtapHidMessageResponse(
-                ((message.data[message.data.size - 2].toInt() and 0xff shl 8) + (message.data[message.data.size - 1].toInt() and 0xff)).toShort(),
-                message.data.sliceArray(0 until message.data.size - 2)
-            )
+            val (statusCode, payload) = decodeResponseApdu(message.data)
+            return CtapHidMessageResponse(statusCode, payload)
         }
     }
 }

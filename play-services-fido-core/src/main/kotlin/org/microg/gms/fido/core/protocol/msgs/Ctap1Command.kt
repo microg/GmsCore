@@ -24,15 +24,7 @@ abstract class Ctap1Request(
     val p2: Byte = 0,
     val data: ByteArray
 ) {
-    val apdu = byteArrayOf(
-        0,
-        commandByte,
-        p1,
-        p2,
-        0,
-        (data.size shr 8).toByte(),
-        data.size.toByte()
-    ) + data
+    val apdu = encodeCommandApdu(0, commandByte, p1, p2, data, extended = true)
 
     override fun toString(): String = "Ctap1Request(command=0x${commandByte.toString(16)}, " +
             "p1=0x${p1.toString(16)}, " +

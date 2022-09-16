@@ -16,6 +16,8 @@
     <string name="fido_biometric_prompt_body">"%1$s needs to verify it's you."</string>
     <string name="fido_usb_title">Connect your USB security key</string>
     <string name="fido_usb_prompt_body">Connect your security key to the USB port or connect it with an USB cable. If your key has a button or a gold disc, tap it now.</string>
+    <string name="fido_nfc_title">Connect your NFC security key</string>
+    <string name="fido_nfc_prompt_body">Hold your key flat against the back of your device until it stops vibrating</string>
     <string name="fido_transport_selection_bluetooth">Use security key with Bluetooth</string>
     <string name="fido_transport_selection_nfc">Use security key with NFC</string>
     <string name="fido_transport_selection_usb">Use security key with USB</string>

@@ -13,15 +13,9 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
-import androidx.fragment.app.findFragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
-import androidx.navigation.ui.NavigationUI
 import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import kotlinx.coroutines.CancellationException
@@ -30,8 +24,7 @@ import org.microg.gms.common.GmsService
 import org.microg.gms.fido.api.FidoConstants.*
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.transport.Transport
-import org.microg.gms.fido.core.transport.Transport.SCREEN_LOCK
-import org.microg.gms.fido.core.transport.Transport.USB
+import org.microg.gms.fido.core.transport.Transport.*
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
 import org.microg.gms.fido.core.transport.bluetooth.BluetoothTransportHandler
@@ -70,8 +63,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         )
     }
 
-    private lateinit var callerPackage: String
-    private lateinit var callerSignature: String
+    lateinit var callerPackage: String
+    lateinit var callerSignature: String
     private lateinit var navHostFragment: NavHostFragment
 
     private inline fun <reified T : TransportHandler> getTransportHandler(): T? =
@@ -143,11 +136,11 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                         } else {
                             for (transport in descriptor.transports) {
                                 val allowedTransport = when (transport) {
-                                    com.google.android.gms.fido.common.Transport.BLUETOOTH_CLASSIC -> Transport.BLUETOOTH
-                                    com.google.android.gms.fido.common.Transport.BLUETOOTH_LOW_ENERGY -> Transport.BLUETOOTH
-                                    com.google.android.gms.fido.common.Transport.NFC -> Transport.NFC
-                                    com.google.android.gms.fido.common.Transport.USB -> Transport.USB
-                                    com.google.android.gms.fido.common.Transport.INTERNAL -> Transport.SCREEN_LOCK
+                                    com.google.android.gms.fido.common.Transport.BLUETOOTH_CLASSIC -> BLUETOOTH
+                                    com.google.android.gms.fido.common.Transport.BLUETOOTH_LOW_ENERGY -> BLUETOOTH
+                                    com.google.android.gms.fido.common.Transport.NFC -> NFC
+                                    com.google.android.gms.fido.common.Transport.USB -> USB
+                                    com.google.android.gms.fido.common.Transport.INTERNAL -> SCREEN_LOCK
                                     else -> null
                                 }
                                 if (allowedTransport != null && allowedTransport in IMPLEMENTED_TRANSPORTS)
@@ -186,6 +179,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             Log.w(TAG, e)
             finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        (navHostFragment.childFragmentManager.primaryNavigationFragment as? AuthenticatorActivityFragment)?.onNewIntent(intent)
     }
 
     fun finishWithError(errorCode: ErrorCode, errorMessage: String) {
@@ -292,7 +289,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         const val TYPE_REGISTER = "register"
         const val TYPE_SIGN = "sign"
 
-        val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK)
+        val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK, NFC)
         val INSTANT_SUPPORTED_TRANSPORTS = setOf(SCREEN_LOCK)
     }
 }

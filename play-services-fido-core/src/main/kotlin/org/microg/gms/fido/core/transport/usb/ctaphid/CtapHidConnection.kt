@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.microg.gms.fido.core.protocol.msgs.*
+import org.microg.gms.fido.core.transport.CtapConnection
 import org.microg.gms.fido.core.transport.usb.endpoints
 import org.microg.gms.fido.core.transport.usb.initialize
 import org.microg.gms.fido.core.transport.usb.usbManager
@@ -25,17 +26,17 @@ class CtapHidConnection(
     val context: Context,
     val device: UsbDevice,
     val iface: UsbInterface,
-) {
+) : CtapConnection {
     private var connection: UsbDeviceConnection? = null
     private val inEndpoint = iface.endpoints.first { it.direction == USB_DIR_IN }
     private val outEndpoint = iface.endpoints.first { it.direction == USB_DIR_OUT }
     private var channelIdentifier = 0xffffffff.toInt()
     private var capabilities: Byte = 0
 
-    val hasCtap1Support: Boolean
+    override val hasCtap1Support: Boolean
         get() = capabilities and CtapHidInitResponse.CAPABILITY_NMSG == 0.toByte()
 
-    val hasCtap2Support: Boolean
+    override val hasCtap2Support: Boolean
         get() = capabilities and CtapHidInitResponse.CAPABILITY_CBOR > 0
 
     val hasWinkSupport: Boolean
@@ -133,7 +134,7 @@ class CtapHidConnection(
         }
     }
 
-    suspend fun <Q : Ctap1Request, S : Ctap1Response> runCommand(command: Ctap1Command<Q, S>): S {
+    override suspend fun <Q : Ctap1Request, S : Ctap1Response> runCommand(command: Ctap1Command<Q, S>): S {
         require(hasCtap1Support)
         sendRequest(CtapHidMessageRequest(command.request))
         val response = readResponse()
@@ -146,7 +147,7 @@ class CtapHidConnection(
         throw RuntimeException("Unexpected response: $response")
     }
 
-    suspend fun <Q: Ctap2Request, S: Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S {
+    override suspend fun <Q: Ctap2Request, S: Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S {
         require(hasCtap2Support)
         sendRequest(CtapHidCborRequest(command.request))
         val response = readResponse(command.timeout)

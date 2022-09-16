@@ -6,6 +6,7 @@
 package org.microg.gms.fido.core.ui
 
 import android.annotation.TargetApi
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,4 +32,5 @@ abstract class AuthenticatorActivityFragment : Fragment() {
     fun shouldStartTransportInstantly(transport: Transport) = authenticatorActivity?.shouldStartTransportInstantly(transport) == true
 
     abstract override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    open fun onNewIntent(intent: Intent?) = Unit
 }
