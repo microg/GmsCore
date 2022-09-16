@@ -135,13 +135,13 @@ public class BrowserPublicKeyCredentialCreationOptions extends BrowserRequestOpt
         /**
          * Sets the parameters to dictate the client behavior during this registration session.
          */
-        public BrowserPublicKeyCredentialCreationOptions.Builder setPublicKeyCredentialRequestOptions(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions) {
+        public BrowserPublicKeyCredentialCreationOptions.Builder setPublicKeyCredentialCreationOptions(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions) {
             this.delegate = publicKeyCredentialCreationOptions;
             return this;
         }
 
         /**
-         * Builds the {@link BrowserPublicKeyCredentialRequestOptions} object.
+         * Builds the {@link BrowserPublicKeyCredentialCreationOptions} object.
          */
         public BrowserPublicKeyCredentialCreationOptions build() {
             BrowserPublicKeyCredentialCreationOptions options = new BrowserPublicKeyCredentialCreationOptions();
