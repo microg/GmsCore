@@ -182,6 +182,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
         (navHostFragment.childFragmentManager.primaryNavigationFragment as? AuthenticatorActivityFragment)?.onNewIntent(intent)
     }
 
