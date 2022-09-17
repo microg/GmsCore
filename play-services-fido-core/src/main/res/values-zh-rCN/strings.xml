@@ -18,7 +18,9 @@
     <string name="fido_transport_selection_bluetooth">通过蓝牙使用安全密钥</string>
     <string name="fido_transport_selection_nfc">通过 NFC 使用安全密钥</string>
     <string name="fido_transport_selection_usb">通过 USB 使用安全密钥</string>
-    <string name="fido_transport_selection_biometric">使用此设备的屏幕锁定</string>
+    <string name="fido_transport_selection_biometric">将此设备的屏幕锁定用作安全密钥</string>
     <string name="fido_transport_usb_wait_connect_body">请连接您的 USB 安全密钥。</string>
     <string name="fido_transport_usb_wait_confirm_body">请点按 %1$s 上的金色圆环。</string>
+    <string name="fido_nfc_title">连接您的 NFC 安全密钥</string>
+    <string name="fido_nfc_prompt_body">将您的密钥平贴在设备背部，直到其停止振动。</string>
 </resources>
