@@ -173,8 +173,8 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="prefcat_push_apps_unregistered_title">Applicazioni non registrate</string>
     <string name="prefcat_push_networks_title">Reti da utilizzare per le notifiche push</string>
 
-    <string name="snet_intro">SafetyNet di Google è un sistema di certificazione del dispositivo che ne garantisce la sicurezza e la compatibilità con Android CTS. Alcune applicazioni utilizzano SafetyNet per ragioni di sicurezza o come prerequisito per la protezione da manomissione.\n\nUn\'implementazione libera di SafetyNet è contenuta in microG, tuttavia i server ufficiali richiedono che le richieste SafetyNet siano firmate utilizzando il sistema proprietario DroidGuard.</string>
-    <string name="snet_enable_switch">Permetti l\'attestazione del dispositivo</string>
+    <string name="safetynet_intro">SafetyNet di Google è un sistema di certificazione del dispositivo che ne garantisce la sicurezza e la compatibilità con Android CTS. Alcune applicazioni utilizzano SafetyNet per ragioni di sicurezza o come prerequisito per la protezione da manomissione.\n\nUn\'implementazione libera di SafetyNet è contenuta in microG, tuttavia i server ufficiali richiedono che le richieste SafetyNet siano firmate utilizzando il sistema proprietario DroidGuard.</string>
+    <string name="safetynet_enable_switch">Permetti l\'attestazione del dispositivo</string>
 
     <string name="pref_safetynet_test_title">Prova l\'attestazione di SafetyNet</string>
     <string name="pref_droidguard_operation_mode">Modalità operativa</string>

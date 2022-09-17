@@ -20,9 +20,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <PreferenceCategory
+        android:key="prefcat_safetynet_apps"
+        android:title="@string/prefcat_safetynet_apps_title">
+        <Preference
+            android:enabled="false"
+            android:key="pref_safetynet_apps_none"
+            android:title="@string/list_no_item_none" />
+        <Preference
+            android:icon="@drawable/ic_expand_apps"
+            android:key="pref_safetynet_apps_all"
+            android:order="5"
+            android:title="@string/list_item_see_all" />
+    </PreferenceCategory>
+    <PreferenceCategory
         android:layout="@layout/preference_category_no_label">
         <Preference
-            android:key="pref_snet_run_attest"
+            android:key="pref_safetynet_run_attest"
             android:title="@string/pref_safetynet_test_title"
             tools:icon="@drawable/ic_circle_check"
             tools:summary="@string/pref_test_summary_passed" />
@@ -31,15 +44,12 @@
             android:title="@string/pref_recaptcha_test_title"
             tools:icon="@drawable/ic_circle_check"
             tools:summary="@string/pref_test_summary_passed" />
-        <Preference
-            android:key="pref_snet_recent"
-            android:title="@string/pref_snet_recent_title" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <org.microg.gms.ui.TextPreference
             android:icon="@drawable/ic_info_outline"
-            android:key="pref_snet_summary"
+            android:key="pref_safetynet_summary"
             android:selectable="false"
-            android:summary="@string/snet_intro" />
+            android:summary="@string/safetynet_intro" />
     </PreferenceCategory>
 </PreferenceScreen>

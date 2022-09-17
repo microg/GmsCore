@@ -148,7 +148,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="gcm_network_state_disconnected">Déconnecté</string>
     <string name="gcm_network_state_connected">Connecté depuis <xliff:g example="2 hours ago">%1$s</xliff:g></string>
 
-    <string name="snet_intro">Google SafetyNet est un système de certification du terminal, assurant que celui-ci est correctement sécurisé et compatible avec Android CTS. Certaines applications utilisent SafetyNet pour des raisons de sécurité ou comme prérequis anti-altérations.\n\nmicroG GmsCore contient une implantation libre de SafetyNet, mais les serveurs officiels requièrent que les requêtes SafetyNet soient signées par le système propriétaire DroidGuard.</string>
+    <string name="safetynet_intro">Google SafetyNet est un système de certification du terminal, assurant que celui-ci est correctement sécurisé et compatible avec Android CTS. Certaines applications utilisent SafetyNet pour des raisons de sécurité ou comme prérequis anti-altérations.\n\nmicroG GmsCore contient une implantation libre de SafetyNet, mais les serveurs officiels requièrent que les requêtes SafetyNet soient signées par le système propriétaire DroidGuard.</string>
 
     <string name="pref_safetynet_test_title">Tester la certification SafetyNet</string>
     <string name="pref_droidguard_operation_mode">Mode d’opération</string>

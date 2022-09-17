@@ -19,7 +19,10 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
         if (Build.VERSION.SDK_INT >= 16) {
             setWriteAheadLoggingEnabled(true)
         }
-        clearOldRequests()
+    }
+
+    override fun onOpen(db: SQLiteDatabase) {
+        if (!db.isReadOnly) clearOldRequests(db)
     }
 
     private fun createSafetyNetSummary(cursor: Cursor): SafetyNetSummary {
@@ -41,10 +44,24 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
         return summary
     }
 
-    val recentRequests : List<SafetyNetSummary>
-    get(){
+    val recentApps: List<Pair<String, Long>>
+        get() {
+            val db = readableDatabase
+            val cursor = db.query(TABLE_RECENTS, arrayOf(FIELD_PACKAGE_NAME, "MAX($FIELD_TIMESTAMP)"), null, null, FIELD_PACKAGE_NAME, null, "MAX($FIELD_TIMESTAMP) DESC")
+            if (cursor != null) {
+                val result = ArrayList<Pair<String, Long>>()
+                while (cursor.moveToNext()) {
+                    result.add(cursor.getString(0) to cursor.getLong(1))
+                }
+                cursor.close()
+                return result
+            }
+            return emptyList()
+        }
+
+    fun getRecentRequests(packageName: String): List<SafetyNetSummary> {
         val db = readableDatabase
-        val cursor = db.query(TABLE_RECENTS, null, null, null, null, null, null)
+        val cursor = db.query(TABLE_RECENTS, null, "$FIELD_PACKAGE_NAME = ?", arrayOf(packageName), null, null, "$FIELD_TIMESTAMP DESC")
         if (cursor != null) {
             val result: MutableList<SafetyNetSummary> = ArrayList()
             while (cursor.moveToNext()) {
@@ -56,7 +73,12 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
         return emptyList()
     }
 
-    fun insertRecentRequestStart(requestType: SafetyNetRequestType, packageName: String?, nonce: ByteArray?, timestamp: Long): Long {
+    fun insertRecentRequestStart(
+        requestType: SafetyNetRequestType,
+        packageName: String?,
+        nonce: ByteArray?,
+        timestamp: Long
+    ): Long {
         val db = writableDatabase
         val cv = ContentValues()
         cv.put(FIELD_REQUEST_TYPE, requestType.name)
@@ -75,15 +97,15 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
         db.update(TABLE_RECENTS, cv, "$FIELD_ID = ?", arrayOf(id.toString()))
     }
 
-    fun clearOldRequests() {
+    fun clearOldRequests(db: SQLiteDatabase) {
         val timeout = 1000 * 60 * 60 * 24 * 14 // 14 days
         val maxRequests = 150
         var rows = 0
 
-        val db = writableDatabase
-
-        rows += db.compileStatement("DELETE FROM $TABLE_RECENTS WHERE $FIELD_ID NOT IN " +
-                "(SELECT $FIELD_ID FROM $TABLE_RECENTS ORDER BY $FIELD_TIMESTAMP LIMIT $maxRequests)").executeUpdateDelete()
+        rows += db.compileStatement(
+            "DELETE FROM $TABLE_RECENTS WHERE $FIELD_ID NOT IN " +
+                    "(SELECT $FIELD_ID FROM $TABLE_RECENTS ORDER BY $FIELD_TIMESTAMP LIMIT $maxRequests)"
+        ).executeUpdateDelete()
 
         val sqLiteStatement = db.compileStatement("DELETE FROM $TABLE_RECENTS WHERE $FIELD_TIMESTAMP + ? < ?")
         sqLiteStatement.bindLong(1, timeout.toLong())
@@ -97,7 +119,6 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
         val db = writableDatabase
         db.execSQL("DELETE FROM $TABLE_RECENTS")
     }
-
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(CREATE_TABLE_RECENTS)

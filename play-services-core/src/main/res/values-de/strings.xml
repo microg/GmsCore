@@ -179,8 +179,8 @@ Dies kann einige Minuten dauern."</string>
     <string name="prefcat_push_apps_unregistered_title">Nicht-registrierte Apps</string>
     <string name="prefcat_push_networks_title">Verwendbare Netzwerke</string>
 
-    <string name="snet_intro">Google SafetyNet ist ein System, um Geräte zu zertifizieren und so sicherzustellen, dass sie ausreichend geschützt und kompatibel mit Android sind. Einige Anwendungen benutzen SafetyNet aus Sicherheitsgründen oder um einen Kopierschutz zu erzwingen.\n\nmicroG GmsCore enthält eine freie Implementierung von SafetyNet, jedoch verlangen die Google-Server, dass die Anfragen durch das proprietäre DroidGuard signiert sind.</string>
-    <string name="snet_enable_switch">Geräte-Zertifizierung erlauben</string>
+    <string name="safetynet_intro">Google SafetyNet ist ein System, um Geräte zu zertifizieren und so sicherzustellen, dass sie ausreichend geschützt und kompatibel mit Android sind. Einige Anwendungen benutzen SafetyNet aus Sicherheitsgründen oder um einen Kopierschutz zu erzwingen.\n\nmicroG GmsCore enthält eine freie Implementierung von SafetyNet, jedoch verlangen die Google-Server, dass die Anfragen durch das proprietäre DroidGuard signiert sind.</string>
+    <string name="safetynet_enable_switch">Geräte-Zertifizierung erlauben</string>
 
     <string name="pref_safetynet_test_title">SafetyNet-Zertifizierung testen</string>
     <string name="pref_droidguard_operation_mode">Modus</string>

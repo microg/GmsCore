@@ -146,7 +146,7 @@ To zajmie kilka minut.</string>
     <string name="gcm_unregister_after_deny_message">Odmówiłeś już zarejestrowanej aplikacji zarejestrować się w usłudze powiadomień ‘push’.\nCzy chcesz ją wyrejestrować, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
 
-    <string name="snet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga by SafetyNet był podpisany przez własnościowy system DroidGuard.</string>
+    <string name="safetynet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga by SafetyNet był podpisany przez własnościowy system DroidGuard.</string>
 
     <string name="pref_safetynet_test_title">Wypróbuj działanie SafetyNet</string>
     <string name="pref_droidguard_operation_mode">Tryb działania</string>

@@ -153,7 +153,7 @@
     <string name="gcm_unregister_after_deny_message">Ви заборонили додатку push-повідомлення, який вже був прив\'язаний.\nВи бажаєте відв\'язати його зараз, аби більше не отримувати від нього push-повідомлень?</string>
     <string name="gcm_messages_counter">Повідомлень: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> байт)</string>
 
-    <string name="snet_intro">Google SafetyNet це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі додатки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.\n\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard.</string>
+    <string name="safetynet_intro">Google SafetyNet це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі додатки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.\n\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard.</string>
 
     <string name="pref_safetynet_test_title">Протестувати SafetyNet перевірку</string>
     <string name="pref_droidguard_operation_mode">Режим роботи</string>

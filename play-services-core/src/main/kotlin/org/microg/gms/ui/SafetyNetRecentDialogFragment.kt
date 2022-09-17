@@ -5,22 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager.LayoutParams
 import android.widget.ListView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.google.android.gms.R
 import com.google.android.gms.databinding.SafetyNetRecentFragmentBinding
 import org.microg.gms.safetynet.SafetyNetRequestType
+import org.microg.gms.safetynet.SafetyNetRequestType.ATTESTATION
+import org.microg.gms.safetynet.SafetyNetRequestType.RECAPTCHA
 import org.microg.gms.safetynet.SafetyNetSummary
 
-class SafetyNetRecentFragment : Fragment(R.layout.safety_net_recent_fragment) {
-
-
-    class MyListView(context: Context) : ListView(context) {
-
-    }
+class SafetyNetRecentDialogFragment : DialogFragment(R.layout.safety_net_recent_fragment) {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = SafetyNetRecentFragmentBinding.inflate(inflater, container, false)
@@ -32,28 +31,27 @@ class SafetyNetRecentFragment : Fragment(R.layout.safety_net_recent_fragment) {
 
         val summary = arguments?.get("summary") as SafetyNetSummary
 
-        if(savedInstanceState==null){
-            parentFragmentManager.commit {
+        if (savedInstanceState == null) {
+            childFragmentManager.commit {
                 setReorderingAllowed(true)
-                if(summary.requestType==SafetyNetRequestType.ATTESTATION){
-                    add<SafetyNetRecentAttestationPreferencesFragment>(R.id.sub_preferences, args=arguments)
-                }else{
-                    add<SafetyNetRecentRecaptchaPreferencesFragment>(R.id.sub_preferences, args=arguments)
+                when (summary.requestType) {
+                    ATTESTATION -> add<SafetyNetRecentAttestationPreferencesFragment>(
+                        R.id.actual_content,
+                        args = arguments
+                    )
+                    RECAPTCHA -> add<SafetyNetRecentRecaptchaPreferencesFragment>(
+                        R.id.actual_content,
+                        args = arguments
+                    )
                 }
             }
         }
 
-
-
-        val pm = requireContext().packageManager
-        val appInfo = pm.getApplicationInfoIfExists(summary.packageName)
-        if(appInfo==null) return Toast.makeText(context, "Application not installed", Toast.LENGTH_SHORT).show()
-
-
-        binding.appIcon.setImageDrawable(appInfo.loadIcon(pm))
-        binding.appName.text = appInfo.loadLabel(pm)
-        binding.packageName.text = summary.packageName
-
+        dialog?.window?.apply {
+            attributes = attributes.apply {
+                width = LayoutParams.MATCH_PARENT
+            }
+        }
     }
 
     lateinit var binding: SafetyNetRecentFragmentBinding

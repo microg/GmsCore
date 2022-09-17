@@ -13,53 +13,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="24dp"
-            android:paddingBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/app_icon"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:antialias="true"
-                    tools:src="@android:mipmap/sym_def_app_icon" />
-
-                <TextView
-                    android:id="@+id/app_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="20sp"
-                    tools:text="App name" />
-
-                <TextView
-                    android:id="@+id/package_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:ellipsize="marquee"
-                    android:gravity="center"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:textSize="18sp"
-                    tools:text="Package name" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/sub_preferences"
+            android:id="@+id/actual_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>

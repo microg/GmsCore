@@ -14,6 +14,7 @@ import com.google.android.gms.R
 import com.google.android.gms.databinding.SafetyNetFragmentBinding
 import org.microg.gms.checkin.CheckinPrefs
 import org.microg.gms.droidguard.core.DroidGuardPreferences
+import org.microg.gms.safetynet.SafetyNetDatabase
 import org.microg.gms.safetynet.SafetyNetPreferences
 
 class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
@@ -58,6 +59,7 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.add(0, MENU_ADVANCED, 0, R.string.menu_advanced)
+        menu.add(0, MENU_CLEAR_REQUESTS, 0, R.string.menu_clear_recent_requests)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -67,11 +69,19 @@ class SafetyNetFragment : Fragment(R.layout.safety_net_fragment) {
                 findNavController().navigate(requireContext(), R.id.openSafetyNetAdvancedSettings)
                 true
             }
+            MENU_CLEAR_REQUESTS -> {
+                val db = SafetyNetDatabase(requireContext())
+                db.clearAllRequests()
+                db.close()
+                (childFragmentManager.findFragmentById(R.id.sub_preferences) as? SafetyNetPreferencesFragment)?.updateContent()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     companion object {
         private const val MENU_ADVANCED = Menu.FIRST
+        private const val MENU_CLEAR_REQUESTS = Menu.FIRST + 1
     }
 }

@@ -130,7 +130,7 @@
     <string name="prefcat_push_apps_registered_title">已注册的应用</string>
     <string name="prefcat_push_apps_unregistered_title">已取消注册的应用</string>
     <string name="prefcat_push_networks_title">接收推送时使用的网络</string>
-    <string name="snet_enable_switch">允许设备认证</string>
+    <string name="safetynet_enable_switch">允许设备认证</string>
     <string name="pref_recaptcha_test_title">测试 ReCAPTCHA</string>
     <string name="pref_test_summary_passed">所有测试已通过</string>
     <string name="pref_test_summary_failed">失败：%s</string>
@@ -143,7 +143,7 @@
     <string name="profile_name_auto">自动：%s</string>
     <string name="profile_name_system">系统：%s</string>
     <string name="pref_safetynet_test_title">"测试 SafetyNet 认证 "</string>
-    <string name="snet_intro">Google SafetyNet 是一套设备认证系统，旨在确认设备具有适当安全性，并与 Android CTS 兼容。某些应用会出于安全考虑或是防篡改目的而使用 SafetyNet。
+    <string name="safetynet_intro">Google SafetyNet 是一套设备认证系统，旨在确认设备具有适当安全性，并与 Android CTS 兼容。某些应用会出于安全考虑或是防篡改目的而使用 SafetyNet。
 
 microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要求 SafetyNet 请求使用其专有的 DroidGuard 系统签名。</string>
     <string name="prefcat_google_services">Google 服务</string>

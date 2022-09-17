@@ -53,7 +53,11 @@ private fun StringBuilder.appendUrlEncodedParam(key: String, value: String?) = a
     .append("=")
     .append(value?.let { URLEncoder.encode(it, "UTF-8") } ?: "")
 
-class SafetyNetClientServiceImpl(private val context: Context, private val packageName: String, private val lifecycle: Lifecycle) : ISafetyNetService.Stub(), LifecycleOwner {
+class SafetyNetClientServiceImpl(
+    private val context: Context,
+    private val packageName: String,
+    private val lifecycle: Lifecycle
+) : ISafetyNetService.Stub(), LifecycleOwner {
     override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun attest(callbacks: ISafetyNetCallbacks, nonce: ByteArray) {
@@ -94,17 +98,22 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
 
                 val data = mapOf("contentBinding" to attestation.payloadHashBase64)
                 val dg = withContext(Dispatchers.IO) { DroidGuardResultCreator.getResult(context, "attest", data) }
-                attestation.setDroidGuardResult(Base64.encodeToString(dg, Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE))
+                attestation.setDroidGuardResult(
+                    Base64.encodeToString(
+                        dg,
+                        Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE
+                    )
+                )
                 val jwsResult = withContext(Dispatchers.IO) { attestation.attest(apiKey) }
 
 
-                val jsonData = try{
+                val jsonData = try {
                     requireNotNull(jwsResult)
                     jwsResult.split(".").let {
                         assert(it.size == 3)
                         return@let Base64.decode(it[1], Base64.URL_SAFE).decodeToString()
                     }
-                }catch(e: Exception) {
+                } catch (e: Exception) {
                     e.printStackTrace()
                     Log.w(TAG, "An exception occurred when parsing the JWS token.")
                     null
@@ -114,14 +123,14 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
                 callbacks.onAttestationData(Status.SUCCESS, AttestationData(jwsResult))
             } catch (e: Exception) {
                 Log.w(TAG, "Exception during attest: ${e.javaClass.name}", e)
-                val code = when(e) {
+                val code = when (e) {
                     is IOException -> SafetyNetStatusCodes.NETWORK_ERROR
                     else -> SafetyNetStatusCodes.ERROR
                 }
                 val status = Status(code, e.localizedMessage)
 
                 // This shouldn't happen, but do not update the database if it didn't insert the start of the request
-                if(requestID!=-1L)db.insertRecentRequestEnd(requestID, status, null)
+                if (requestID != -1L) db.insertRecentRequestEnd(requestID, status, null)
                 try {
                     callbacks.onAttestationData(Status(code, e.localizedMessage), null)
                 } catch (e: Exception) {
@@ -175,20 +184,33 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
         }
 
         val db = SafetyNetDatabase(context)
-        val requestID = db.insertRecentRequestStart(SafetyNetRequestType.RECAPTCHA, context.packageName, null, System.currentTimeMillis())
+        val requestID = db.insertRecentRequestStart(
+            SafetyNetRequestType.RECAPTCHA,
+            context.packageName,
+            null,
+            System.currentTimeMillis()
+        )
 
         val intent = Intent("org.microg.gms.safetynet.RECAPTCHA_ACTIVITY")
         intent.`package` = context.packageName
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-        val androidId = getSettings(context, getContentUri(context), arrayOf(SettingsContract.CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
+        val androidId = getSettings(
+            context,
+            getContentUri(context),
+            arrayOf(SettingsContract.CheckIn.ANDROID_ID)
+        ) { cursor: Cursor -> cursor.getLong(0) }
         val params = StringBuilder()
 
         val (packageFileDigest, packageSignatures) = try {
             Pair(
-                Base64.encodeToString(Attestation.getPackageFileDigest(context, packageName), Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING),
-                Attestation.getPackageSignatures(context, packageName).map { Base64.encodeToString(it, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING) }
+                Base64.encodeToString(
+                    Attestation.getPackageFileDigest(context, packageName),
+                    Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
+                ),
+                Attestation.getPackageSignatures(context, packageName)
+                    .map { Base64.encodeToString(it, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING) }
             )
         } catch (e: Exception) {
             db.insertRecentRequestEnd(requestID, Status(SafetyNetStatusCodes.ERROR, e.localizedMessage), null)
@@ -198,30 +220,39 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
         }
 
         params.appendUrlEncodedParam("k", siteKey)
-                .appendUrlEncodedParam("di", androidId.toString())
-                .appendUrlEncodedParam("pk", packageName)
-                .appendUrlEncodedParam("sv", SDK_INT.toString())
-                .appendUrlEncodedParam("gv", "20.47.14 (040306-{{cl}})")
-                .appendUrlEncodedParam("gm", "260")
-                .appendUrlEncodedParam("as", packageFileDigest)
+            .appendUrlEncodedParam("di", androidId.toString())
+            .appendUrlEncodedParam("pk", packageName)
+            .appendUrlEncodedParam("sv", SDK_INT.toString())
+            .appendUrlEncodedParam("gv", "20.47.14 (040306-{{cl}})")
+            .appendUrlEncodedParam("gm", "260")
+            .appendUrlEncodedParam("as", packageFileDigest)
         for (signature in packageSignatures) {
             Log.d(TAG, "Sig: $signature")
             params.appendUrlEncodedParam("ac", signature)
         }
         params.appendUrlEncodedParam("ip", "com.android.vending")
-                .appendUrlEncodedParam("av", false.toString())
-                .appendUrlEncodedParam("si", null)
+            .appendUrlEncodedParam("av", false.toString())
+            .appendUrlEncodedParam("si", null)
         intent.putExtra("params", params.toString())
         intent.putExtra("result", object : ResultReceiver(null) {
             override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
                 if (resultCode != 0) {
-                    db.insertRecentRequestEnd(requestID, Status(resultData.getInt("errorCode"), resultData.getString("error")), null)
+                    db.insertRecentRequestEnd(
+                        requestID,
+                        Status(resultData.getInt("errorCode"), resultData.getString("error")),
+                        null
+                    )
                     db.close()
-                    callbacks.onRecaptchaResult(Status(resultData.getInt("errorCode"), resultData.getString("error")), null)
+                    callbacks.onRecaptchaResult(
+                        Status(resultData.getInt("errorCode"), resultData.getString("error")),
+                        null
+                    )
                 } else {
                     db.insertRecentRequestEnd(requestID, Status.SUCCESS, resultData.getString("token"))
                     db.close()
-                    callbacks.onRecaptchaResult(Status.SUCCESS, RecaptchaResultData().apply { token = resultData.getString("token") })
+                    callbacks.onRecaptchaResult(
+                        Status.SUCCESS,
+                        RecaptchaResultData().apply { token = resultData.getString("token") })
                 }
             }
         })

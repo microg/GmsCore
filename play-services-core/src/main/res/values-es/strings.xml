@@ -178,8 +178,8 @@ Esto podría tardar algunos minutos."</string>
     <string name="prefcat_push_apps_unregistered_title">Aplicaciones no registradas</string>
     <string name="prefcat_push_networks_title">Redes a utilizar para las notificaciones push</string>
 
-    <string name="snet_intro">Google SafetyNet es un sistema de certificación de dispositivos, que garantiza que el dispositivo está correctamente asegurado y es compatible con Android CTS. Algunas aplicaciones utilizan SafetyNet por razones de seguridad o como un prerrequisito para la protección contra manipulaciones.\n\nmicroG GmsCore contiene una implementación gratuita de SafetyNet, pero el servidor oficial requiere que las solicitudes de SafetyNet sean firmadas utilizando el sistema propietario DroidGuard.</string>
-    <string name="snet_enable_switch">Permitir la certificación del dispositivo</string>
+    <string name="safetynet_intro">Google SafetyNet es un sistema de certificación de dispositivos, que garantiza que el dispositivo está correctamente asegurado y es compatible con Android CTS. Algunas aplicaciones utilizan SafetyNet por razones de seguridad o como un prerrequisito para la protección contra manipulaciones.\n\nmicroG GmsCore contiene una implementación gratuita de SafetyNet, pero el servidor oficial requiere que las solicitudes de SafetyNet sean firmadas utilizando el sistema propietario DroidGuard.</string>
+    <string name="safetynet_enable_switch">Permitir la certificación del dispositivo</string>
 
     <string name="pref_safetynet_test_title">Probar el certificado de SafetyNet</string>
     <string name="pref_droidguard_operation_mode">Modo de operación</string>

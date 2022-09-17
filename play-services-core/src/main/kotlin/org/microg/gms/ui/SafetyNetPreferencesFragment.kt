@@ -7,28 +7,32 @@ package org.microg.gms.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Base64
 import android.util.Log
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.R
-import com.google.android.gms.common.api.Status
-import com.google.android.gms.safetynet.RecaptchaResultData
 import com.google.android.gms.safetynet.SafetyNet
-import com.google.android.gms.safetynet.internal.ISafetyNetCallbacks
 import com.google.android.gms.tasks.await
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import org.microg.gms.safetynet.SafetyNetClientServiceImpl
+import org.microg.gms.safetynet.SafetyNetDatabase
+import org.microg.gms.safetynet.SafetyNetRequestType
+import org.microg.gms.safetynet.SafetyNetRequestType.ATTESTATION
+import org.microg.gms.safetynet.SafetyNetRequestType.RECAPTCHA
 import kotlin.random.Random
 
 class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var runAttest: Preference
     private lateinit var runReCaptcha: Preference
-    private lateinit var seeRecent: Preference
+    private lateinit var apps: PreferenceCategory
+    private lateinit var appsAll: Preference
+    private lateinit var appsNone: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_safetynet)
@@ -36,11 +40,12 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
 
     @SuppressLint("RestrictedApi")
     override fun onBindPreferences() {
-        runAttest = preferenceScreen.findPreference("pref_snet_run_attest") ?: runAttest
+        runAttest = preferenceScreen.findPreference("pref_safetynet_run_attest") ?: runAttest
         runReCaptcha = preferenceScreen.findPreference("pref_recaptcha_run_test") ?: runReCaptcha
-        seeRecent = preferenceScreen.findPreference("pref_snet_recent") ?: seeRecent
+        apps = preferenceScreen.findPreference("prefcat_safetynet_apps") ?: apps
+        appsAll = preferenceScreen.findPreference("pref_safetynet_apps_all") ?: appsAll
+        appsNone = preferenceScreen.findPreference("pref_safetynet_apps_none") ?: appsNone
 
-        // TODO: Use SafetyNet client library once ready
         runAttest.setOnPreferenceClickListener {
             val context = context ?: return@setOnPreferenceClickListener false
             runAttest.setIcon(R.drawable.ic_circle_pending)
@@ -48,65 +53,22 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
             lifecycleScope.launchWhenResumed {
                 val response = SafetyNet.getClient(requireActivity())
                     .attest(Random.nextBytes(32), "AIzaSyCcJO6IZiA5Or_AXw3LFdaTCmpnfL4pJ-Q").await()
-                if (response.result.status?.isSuccess == true) {
-                    if (response.jwsResult == null) {
-                        runAttest.setIcon(R.drawable.ic_circle_warn)
-                        runAttest.summary = context.getString(R.string.pref_test_summary_failed, "No result")
-                    } else {
-                        val (_, payload, _) = try {
-                            response.jwsResult.split(".")
-                        } catch (e: Exception) {
-                            runAttest.setIcon(R.drawable.ic_circle_error)
-                            runAttest.summary = context.getString(R.string.pref_test_summary_failed, "Invalid JWS")
-                            return@launchWhenResumed
-                        }
-                        val (basicIntegrity, ctsProfileMatch, advice) = try {
-                            JSONObject(Base64.decode(payload, Base64.URL_SAFE).decodeToString()).let {
-                                Triple(
-                                    it.optBoolean("basicIntegrity", false),
-                                    it.optBoolean("ctsProfileMatch", false),
-                                    it.optString("advice", "")
-                                )
-                            }
-                        } catch (e: Exception) {
-                            Log.w(TAG, e)
-                            runAttest.setIcon(R.drawable.ic_circle_error)
-                            runAttest.summary = context.getString(R.string.pref_test_summary_failed, "Invalid JSON")
-                            return@launchWhenResumed
-                        }
-                        val adviceText = if (advice == "") "" else "\n" + advice.split(",").map {
-                            when (it) {
-                                "LOCK_BOOTLOADER" -> "Bootloader is not locked"
-                                "RESTORE_TO_FACTORY_ROM" -> "ROM is not clean"
-                                else -> it
-                            }
-                        }.joinToString("\n")
-                        when {
-                            basicIntegrity && ctsProfileMatch -> {
-                                runAttest.setIcon(R.drawable.ic_circle_check)
-                                runAttest.setSummary(R.string.pref_test_summary_passed)
-                            }
-                            basicIntegrity -> {
-                                runAttest.setIcon(R.drawable.ic_circle_warn)
-                                runAttest.summary = context.getString(
-                                    R.string.pref_test_summary_warn,
-                                    "CTS profile does not match$adviceText"
-                                )
-                            }
-                            else -> {
-                                runAttest.setIcon(R.drawable.ic_circle_error)
-                                runAttest.summary = context.getString(
-                                    R.string.pref_test_summary_failed,
-                                    "integrity check failed$adviceText"
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    runAttest.setIcon(R.drawable.ic_circle_error)
-                    runAttest.summary =
-                        context.getString(R.string.pref_test_summary_failed, response.result.status?.statusMessage)
+                val (_, payload, _) = try {
+                    response.jwsResult.split(".")
+                } catch (e: Exception) {
+                    listOf(null, null, null)
                 }
+                formatSummaryForSafetyNetResult(
+                    context,
+                    Base64.decode(payload, Base64.URL_SAFE).decodeToString(),
+                    response.result.status,
+                    ATTESTATION
+                )
+                    .let { (summary, icon) ->
+                        runAttest.summary = summary
+                        runAttest.icon = icon
+                    }
+                updateContent()
             }
             true
         }
@@ -115,21 +77,65 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
             runReCaptcha.setIcon(R.drawable.ic_circle_pending)
             runReCaptcha.setSummary(R.string.pref_test_summary_running)
             lifecycleScope.launchWhenResumed {
-                val response = SafetyNet.getClient(requireActivity()).verifyWithRecaptcha("6Lc4TzgeAAAAAJnW7Jbo6UtQ0xGuTKjHAeyhINuq").await()
-                if (response.result.status?.isSuccess == true) {
-                    runReCaptcha.setIcon(R.drawable.ic_circle_check)
-                    runReCaptcha.setSummary(R.string.pref_test_summary_passed)
-                } else {
-                    runReCaptcha.setIcon(R.drawable.ic_circle_error)
-                    runReCaptcha.summary =
-                        context.getString(R.string.pref_test_summary_failed, response.result.status?.statusMessage)
-                }
+                val response = SafetyNet.getClient(requireActivity())
+                    .verifyWithRecaptcha("6Lc4TzgeAAAAAJnW7Jbo6UtQ0xGuTKjHAeyhINuq").await()
+                formatSummaryForSafetyNetResult(context, response.tokenResult, response.result.status, RECAPTCHA)
+                    .let { (summary, icon) ->
+                        runReCaptcha.summary = summary
+                        runReCaptcha.icon = icon
+                    }
+                updateContent()
             }
             true
         }
-        seeRecent.setOnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openSafetyNetRecentList)
+        appsAll.setOnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openAllSafetyNetApps)
             true
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateContent()
+    }
+
+    fun updateContent() {
+        lifecycleScope.launchWhenResumed {
+            val context = requireContext()
+            val (apps, showAll) = withContext(Dispatchers.IO) {
+                val apps = SafetyNetDatabase(requireContext()).use { it.recentApps }
+                apps.map { app ->
+                    app to context.packageManager.getApplicationInfoIfExists(app.first)
+                }.mapNotNull { (app, info) ->
+                    if (info == null) null else app to info
+                }.take(3).mapIndexed { idx, (app, applicationInfo) ->
+                    val pref = AppIconPreference(context)
+                    pref.order = idx
+                    pref.title = applicationInfo.loadLabel(context.packageManager)
+                    pref.icon = applicationInfo.loadIcon(context.packageManager)
+                    pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        findNavController().navigate(
+                            requireContext(), R.id.openSafetyNetAppDetails, bundleOf(
+                                "package" to app.first
+                            )
+                        )
+                        true
+                    }
+                    pref.key = "pref_safetynet_app_" + app.first
+                    pref
+                }.let { it to (it.size < apps.size) }
+            }
+            appsAll.isVisible = showAll
+            this@SafetyNetPreferencesFragment.apps.removeAll()
+            for (app in apps) {
+                this@SafetyNetPreferencesFragment.apps.addPreference(app)
+            }
+            if (showAll) {
+                this@SafetyNetPreferencesFragment.apps.addPreference(appsAll)
+            } else if (apps.isEmpty()) {
+                this@SafetyNetPreferencesFragment.apps.addPreference(appsNone)
+            }
+
         }
     }
 }
