@@ -62,7 +62,7 @@ class SafetyNetClientServiceImpl(private val context: Context, private val packa
 
     override fun attestWithApiKey(callbacks: ISafetyNetCallbacks, nonce: ByteArray?, apiKey: String) {
         if (nonce == null) {
-            callbacks.onAttestationData(Status(SafetyNetStatusCodes.DEVELOPER_ERROR, "ApiKey missing"), null)
+            callbacks.onAttestationData(Status(SafetyNetStatusCodes.DEVELOPER_ERROR, "Nonce missing"), null)
             return
         }
 

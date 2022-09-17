@@ -53,6 +53,9 @@ dependencies {
     implementation project(':play-services-wearable')
     implementation "org.microg:wearable:$wearableVersion"
 
+    implementation project(':play-services-safetynet')
+    implementation project(':play-services-tasks-ktx')
+
     runtimeOnly "org.microg.nlp:geocode-v1:$nlpVersion"
     runtimeOnly "org.microg.nlp:location-v2:$nlpVersion"
     runtimeOnly "org.microg.nlp:location-v3:$nlpVersion"

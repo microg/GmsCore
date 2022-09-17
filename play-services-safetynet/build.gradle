@@ -1,0 +1,37 @@
+/*
+ * SPDX-FileCopyrightText: 2022 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+android {
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-safetynet'
+
+dependencies {
+    api project(':play-services-safetynet-api')
+
+    // Dependencies from play-services-safetynet:18.0.1
+    api project(':play-services-base')
+    api project(':play-services-basement')
+    api project(':play-services-tasks')
+}
