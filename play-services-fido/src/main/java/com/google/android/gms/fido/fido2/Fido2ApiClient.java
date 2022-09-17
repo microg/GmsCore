@@ -8,7 +8,6 @@
 
 package com.google.android.gms.fido.fido2;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 

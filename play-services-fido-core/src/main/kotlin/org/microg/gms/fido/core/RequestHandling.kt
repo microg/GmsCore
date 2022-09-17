@@ -64,6 +64,9 @@ val RequestOptions.rpId: String
         SIGN -> signOptions.rpId
     }
 
+val PublicKeyCredentialCreationOptions.skipAttestation: Boolean
+    get() = attestationConveyancePreference in setOf(AttestationConveyancePreference.NONE, null)
+
 fun RequestOptions.checkIsValid(context: Context) {
     if (type == REGISTER) {
         if (registerOptions.authenticatorSelection.requireResidentKey == true) {

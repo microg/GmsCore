@@ -5,7 +5,6 @@
 
 package org.microg.gms.fido.core.protocol
 
-import com.upokecenter.cbor.CBORObject
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.experimental.and

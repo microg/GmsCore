@@ -17,8 +17,10 @@ import android.os.Parcel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.fido.fido2.api.IBooleanCallback
@@ -43,10 +45,15 @@ const val TAG = "Fido2Privileged"
 
 class Fido2PrivilegedService : BaseService(TAG, FIDO2_PRIVILEGED) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(
+        callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
             Fido2PrivilegedServiceImpl(this, lifecycle).asBinder(),
-            null
+            ConnectionInfo().apply {
+                features = arrayOf(
+                    Feature("is_user_verifying_platform_authenticator_available", 1),
+                    Feature("is_user_verifying_platform_authenticator_available_for_credential", 1)
+                )
+            }
         );
     }
 }

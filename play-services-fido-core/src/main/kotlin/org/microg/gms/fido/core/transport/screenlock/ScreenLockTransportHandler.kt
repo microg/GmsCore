@@ -7,12 +7,17 @@ package org.microg.gms.fido.core.transport.screenlock
 
 import android.app.KeyguardManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.fido.fido2.api.common.*
+import com.google.android.gms.fido.fido2.api.common.AttestationConveyancePreference.NONE
+import com.google.android.gms.safetynet.SafetyNet
+import com.google.android.gms.tasks.await
 import kotlinx.coroutines.suspendCancellableCoroutine
+import org.microg.gms.basement.BuildConfig
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.protocol.*
 import org.microg.gms.fido.core.transport.Transport
@@ -23,12 +28,13 @@ import java.security.interfaces.ECPublicKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+@RequiresApi(23)
 class ScreenLockTransportHandler(private val activity: FragmentActivity, callback: TransportHandlerCallback? = null) :
     TransportHandler(Transport.SCREEN_LOCK, callback) {
     private val store by lazy { ScreenLockCredentialStore(activity) }
 
     override val isSupported: Boolean
-        get() = Build.VERSION.SDK_INT >= 23 && activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
+        get() = activity.getSystemService<KeyguardManager>()?.isDeviceSecure == true
 
     suspend fun showBiometricPrompt(applicationName: String, signature: Signature?) {
         suspendCancellableCoroutine<BiometricPrompt.AuthenticationResult> { continuation ->
@@ -76,15 +82,15 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         return signature
     }
 
-    fun getCredentialData(credentialId: CredentialId, coseKey: CoseKey) = AttestedCredentialData(
-        ByteArray(16), // 0xb93fd961f2e6462fb12282002247de78 for SafetyNet
+    fun getCredentialData(aaguid: ByteArray, credentialId: CredentialId, coseKey: CoseKey) = AttestedCredentialData(
+        aaguid,
         credentialId.encode(),
         coseKey.encode()
     )
 
     fun getAuthenticatorData(
         rpId: String,
-        credentialData: AttestedCredentialData,
+        credentialData: AttestedCredentialData?,
         userPresent: Boolean = true,
         userVerified: Boolean = true,
         signCount: Int = 0
@@ -96,7 +102,6 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         attestedCredentialData = credentialData
     )
 
-    @RequiresApi(23)
     suspend fun register(
         options: RequestOptions,
         callerPackage: String
@@ -111,34 +116,72 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             }
         }
         val (clientData, clientDataHash) = getClientDataAndHash(activity, options, callerPackage)
-        if (options.registerOptions.attestationConveyancePreference in setOf(
-                AttestationConveyancePreference.NONE,
-                null
-            )
-        ) {
-            // No attestation needed
-        } else {
-            // TODO: SafetyNet
-            throw RequestHandlingException(ErrorCode.NOT_SUPPORTED_ERR, "SafetyNet Attestation not yet supported")
-        }
-        val keyId = store.createKey(options.rpId)
+        val aaguid = if (options.registerOptions.skipAttestation) ByteArray(16) else AAGUID
+        val keyId = store.createKey(options.rpId, clientDataHash)
         val publicKey =
             store.getPublicKey(options.rpId, keyId) ?: throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
 
         // We're ignoring the signature object as we don't need it for registration
-        getActiveSignature(options, callerPackage, keyId)
+        val signature = getActiveSignature(options, callerPackage, keyId)
 
         val (x, y) = (publicKey as ECPublicKey).w.let { it.affineX to it.affineY }
         val coseKey = CoseKey(EC2Algorithm.ES256, x, y, 1, 32)
         val credentialId = CredentialId(1, keyId, options.rpId, publicKey)
 
-        val credentialData = getCredentialData(credentialId, coseKey)
+        val credentialData = getCredentialData(aaguid, credentialId, coseKey)
         val authenticatorData = getAuthenticatorData(options.rpId, credentialData)
+
+        val attestationObject = if (options.registerOptions.skipAttestation) {
+            NoneAttestationObject(authenticatorData)
+        } else {
+            try {
+                if (Build.VERSION.SDK_INT >= 24) {
+                    createAndroidKeyAttestation(signature, authenticatorData, clientDataHash, options.rpId, keyId)
+                } else {
+                    createSafetyNetAttestation(authenticatorData, clientDataHash)
+                }
+            } catch (e: Exception) {
+                Log.w("FidoScreenLockTransport", e)
+                NoneAttestationObject(authenticatorData)
+            }
+        }
 
         return AuthenticatorAttestationResponse(
             credentialId.encode(),
             clientData,
-            NoneAttestationObject(authenticatorData).encode()
+            attestationObject.encode()
+        )
+    }
+
+    @RequiresApi(24)
+    private fun createAndroidKeyAttestation(
+        signature: Signature,
+        authenticatorData: AuthenticatorData,
+        clientDataHash: ByteArray,
+        rpId: String,
+        keyId: ByteArray
+    ): AndroidKeyAttestationObject {
+        signature.update(authenticatorData.encode() + clientDataHash)
+        val sig = signature.sign()
+        return AndroidKeyAttestationObject(
+            authenticatorData,
+            EC2Algorithm.ES256,
+            sig,
+            store.getCertificateChain(rpId, keyId).map { it.encoded })
+    }
+
+    private suspend fun createSafetyNetAttestation(
+        authenticatorData: AuthenticatorData,
+        clientDataHash: ByteArray
+    ): AndroidSafetyNetAttestationObject {
+        val response = SafetyNet.getClient(activity).attest(
+            (authenticatorData.encode() + clientDataHash).digest("SHA-256"),
+            "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA"
+        ).await()
+        return AndroidSafetyNetAttestationObject(
+            authenticatorData,
+            BuildConfig.VERSION_CODE.toString(),
+            response.jwsResult.toByteArray()
         )
     }
 
@@ -173,10 +216,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         val keyId = credentialId.data
 
         val (x, y) = (credentialId.publicKey as ECPublicKey).w.let { it.affineX to it.affineY }
-        val coseKey = CoseKey(EC2Algorithm.ES256, x, y, 1, 32)
-
-        val credentialData = getCredentialData(credentialId, coseKey)
-        val authenticatorData = getAuthenticatorData(options.rpId, credentialData)
+        val authenticatorData = getAuthenticatorData(options.rpId, null)
 
         val signature = getActiveSignature(options, callerPackage, keyId)
         signature.update(authenticatorData.encode() + clientDataHash)
@@ -191,7 +231,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         )
     }
 
-    @RequiresApi(23)
+    @RequiresApi(24)
     override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse =
         when (options.type) {
             RequestOptionsType.REGISTER -> register(options, callerPackage)
@@ -211,5 +251,12 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             }
         }
         return false
+    }
+
+    companion object {
+        private val AAGUID = byteArrayOf(
+            0xb9.toByte(), 0x3f, 0xd9.toByte(), 0x61, 0xf2.toByte(), 0xe6.toByte(), 0x46, 0x2f,
+            0xb1.toByte(), 0x22, 0x82.toByte(), 0x00, 0x22, 0x47, 0xde.toByte(), 0x78
+        )
     }
 }

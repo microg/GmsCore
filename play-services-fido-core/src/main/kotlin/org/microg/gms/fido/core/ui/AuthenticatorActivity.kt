@@ -59,7 +59,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             BluetoothTransportHandler(this, this),
             NfcTransportHandler(this, this),
             if (Build.VERSION.SDK_INT >= 21) UsbTransportHandler(this, this) else null,
-            ScreenLockTransportHandler(this, this)
+            if (Build.VERSION.SDK_INT >= 23) ScreenLockTransportHandler(this, this) else null
         )
     }
 

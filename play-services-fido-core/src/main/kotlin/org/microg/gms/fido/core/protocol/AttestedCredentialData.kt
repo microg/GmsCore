@@ -5,10 +5,7 @@
 
 package org.microg.gms.fido.core.protocol
 
-import android.util.Base64
-import android.util.Log
 import com.upokecenter.cbor.CBORObject
-import org.microg.gms.utils.toBase64
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

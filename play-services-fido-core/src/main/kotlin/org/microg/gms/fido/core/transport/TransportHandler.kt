@@ -117,8 +117,11 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                     0,
                     credentialData
                 )
-                val attestationObject =
+                val attestationObject = if (options.registerOptions.skipAttestation) {
+                    NoneAttestationObject(authData)
+                } else {
                     FidoU2fAttestationObject(authData, response.signature, response.attestationCertificate)
+                }
                 val ctap2Response = AuthenticatorMakeCredentialResponse(
                     authData.encode(),
                     attestationObject.fmt,
