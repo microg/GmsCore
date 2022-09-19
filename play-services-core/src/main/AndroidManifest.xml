@@ -592,6 +592,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+        <service
+            android:name="org.microg.gms.languageprofile.LanguageProfileService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.languageprofile.service.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
         <service android:name="org.microg.gms.mdm.NetworkQualityService">
             <intent-filter>
                 <action android:name="com.google.android.gms.mdm.services.START" />
@@ -778,7 +787,6 @@
                 <action android:name="com.google.android.gms.identity.service.BIND" />
                 <action android:name="com.google.android.gms.instantapps.START" />
                 <action android:name="com.google.android.gms.kids.service.START" />
-                <action android:name="com.google.android.gms.languageprofile.service.START" />
                 <action android:name="com.google.android.gms.learning.internal.dynamitesupport.START" />
                 <action android:name="com.google.android.gms.learning.intservice.START" />
                 <action android:name="com.google.android.gms.learning.predictor.START" />
