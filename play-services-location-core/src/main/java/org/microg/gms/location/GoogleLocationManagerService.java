@@ -42,10 +42,7 @@ public class GoogleLocationManagerService extends BaseService {
         impl.invokeOnceReady(() -> {
             try {
                 ConnectionInfo info = new ConnectionInfo();
-                info.features = new Feature[] {
-                        new Feature("get_current_location", 1),
-                        new Feature("name_sleep_segment_request", 1)
-                };
+                info.features = FEATURES;
                 callback.onPostInitCompleteWithConnectionInfo(0, impl.asBinder(), info);
             } catch (RemoteException e) {
                 Log.w(TAG, e);
@@ -57,4 +54,12 @@ public class GoogleLocationManagerService extends BaseService {
     protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
         impl.getLocationManager().dump(writer);
     }
+
+    public static final Feature[] FEATURES = new Feature[] {
+            new Feature("get_current_location", 1),
+            new Feature("support_context_feature_id", 1),
+            new Feature("name_ulr_private", 1),
+            new Feature("driving_mode", 6),
+            new Feature("name_sleep_segment_request", 1)
+    };
 }
