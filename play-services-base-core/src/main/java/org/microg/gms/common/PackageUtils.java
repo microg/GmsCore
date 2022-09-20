@@ -70,6 +70,7 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.dynamite", "519c5a17a60596e6fe5933b9cb4285e7b0e5eb7b");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.projection.gearhead", "9ca91f9e704d630ef67a23f52bf1577a92b9ca5d");
         KNOWN_GOOGLE_PACKAGES.put("com.google.stadia.android", "133aad3b3d3b580e286573c37f20549f9d3d1cce");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.kids.familylink", "88652b8464743e5ce80da0d4b890d13f9b1873df");
     }
 
     public static boolean isGooglePackage(Context context, String packageName) {
