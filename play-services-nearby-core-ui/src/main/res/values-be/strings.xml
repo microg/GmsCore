@@ -76,4 +76,8 @@
     <string name="exposure_confirm_bluetooth_description">Bluetooth павінен быць уключаны.</string>
     <string name="exposure_confirm_location_description">патрабуецца доступ да месцазнаходжання.</string>
     <string name="exposure_confirm_button">Ўключыць</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Патрабуецца дадатковы дазвол</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Націсніце, каб даць неабходныя дазволы апавяшчэнням аб рызыцы інфікавання.</string>
+    <string name="exposure_grant_background_location_description">Амаль гатова! Вам трэба будзе ўключыць фонавы доступ да месцазнаходжання, выбраўшы опцыю \'Дазволіць у любым рэжыме\' на наступным экране. Потым вярніцеся назад.</string>
+    <string name="exposure_grant_background_location_button">Абнавіць налады</string>
 </resources>
