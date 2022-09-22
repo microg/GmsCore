@@ -49,8 +49,9 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         clientDataHash: ByteArray
     ): Pair<AuthenticatorMakeCredentialResponse, ByteArray?> {
         val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
-            options.registerOptions.authenticatorSelection?.requireResidentKey,
-            options.registerOptions.authenticatorSelection?.requireUserVerification?.let { it == UserVerificationRequirement.REQUIRED })
+            options.registerOptions.authenticatorSelection?.requireResidentKey == true,
+            options.registerOptions.authenticatorSelection?.requireUserVerification == UserVerificationRequirement.REQUIRED
+        )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
             extensions["appidExclude"] =
@@ -163,7 +164,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         clientDataHash: ByteArray
     ): Pair<AuthenticatorGetAssertionResponse, ByteArray?> {
         val reqOptions = AuthenticatorGetAssertionRequest.Companion.Options(
-            userVerification = options.signOptions.requireUserVerification?.let { it == UserVerificationRequirement.REQUIRED }
+            userVerification = options.signOptions.requireUserVerification == UserVerificationRequirement.REQUIRED
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {

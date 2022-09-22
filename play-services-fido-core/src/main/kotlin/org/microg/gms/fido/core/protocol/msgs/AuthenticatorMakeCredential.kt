@@ -49,12 +49,13 @@ class AuthenticatorMakeCredentialRequest(
 
     companion object {
         class Options(
-            val residentKey: Boolean? = false,
-            val userVerification: Boolean? = false
+            val residentKey: Boolean = false,
+            val userVerification: Boolean = false
         ) {
             fun encodeAsCbor() = CBORObject.NewMap().apply {
-                if (residentKey != null) set("rk", residentKey.encodeAsCbor())
-                if (userVerification != null) set("uv", userVerification.encodeAsCbor())
+                // Only encode non-default values
+                if (residentKey) set("rk", residentKey.encodeAsCbor())
+                if (userVerification) set("uv", userVerification.encodeAsCbor())
             }
         }
     }
