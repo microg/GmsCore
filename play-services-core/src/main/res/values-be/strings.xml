@@ -1,19 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright (C) 2020 microG Project Team
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
   -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
     <string name="gms_settings_name">Налады microG</string>
@@ -170,6 +159,7 @@
     <string name="gcm_network_state_disconnected">Аадключана</string>
     <string name="gcm_network_state_connected">Падключана <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Прымаць push-паведамленні</string>
+    <string name="gcm_allow_app_popup">Дазволіць <xliff:g example="F-Droid">%1$s</xliff:g> рэгістравацца для атрымання push-паведамленняў?</string>
 
     <string name="pref_push_app_allow_register_title">Дазволіць рэгістрацыю</string>
     <string name="pref_push_app_allow_register_summary">Дазволіць прыкладанню рэгістравацца для атрымання push-паведамленняў.</string>
@@ -184,6 +174,38 @@
     <string name="safetynet_enable_switch">Дазволіць праверку статусу прылады</string>
 
     <string name="pref_safetynet_test_title">Тэст верыфікацыі SafetyNet</string>
+    <string name="pref_recaptcha_test_title">Тэст ReCAPTCHA</string>
+    <string name="pref_test_summary_passed">Пройдзены ўсе тэсты</string>
+    <string name="pref_test_summary_failed">: %s</string>
+    <string name="pref_test_summary_warn">Папярэджанне: %s</string>
+    <string name="pref_test_summary_running">Выкананне…</string>
     <string name="pref_droidguard_operation_mode">Рэжым работы</string>
+    <string name="prefcat_safetynet_apps_title">Прыкладанні якія выкарыстоўваюць SafetyNet</string>
+    <string name="safetynet_recent_requests">Нядаўнія запыты SafetyNet</string>
+    <string name="no_recent_safetynet_requests">Нядаўнія запыты SafetyNet адсутнічаюць!</string>
+    <string name="menu_clear_recent_requests">Ачысціць нядаўнія запыты</string>
+    <string name="safetynet_last_run_at">Апошняе выкарыстанне: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
+    <string name="profile_name_native">Уласны</string>
+    <string name="profile_name_real">Рэальны</string>
+    <string name="profile_name_user">Карыстальніцкі: %s</string>
+    <string name="profile_name_auto">Аўтаматычны: %s</string>
+    <string name="profile_name_system">Сістэмны: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Імпарт карыстальніцкага профілю</string>
+    <string name="pref_device_registration_serial_title">Серыйны нумар</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Імпартаваць профіль прылады з файла</string>
+    <string name="pref_device_registration_select_profile_title">Абраць профіль</string>
+    <string name="pref_device_registration_device_profile_category">Профіль прылады</string>
+    <string name="pref_safetynet_recent_copy_json">Скапіяваць дадзеныя JSON JWS</string>
+    <string name="pref_safetynet_recent_advice">Парада</string>
+    <string name="pref_safetynet_recent_eval_type">Метад праверкі</string>
+    <string name="pref_safetynet_recent_response_status">Статус адказу</string>
+    <string name="pref_safetynet_recent_cat_response">Дадзеныя адказу</string>
+    <string name="pref_safetynet_recent_cat_request">Дадзеныя запыту</string>
+    <string name="pref_safetynet_recent_nonce">Аднаразовы код (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Час запыту</string>
+    <string name="pref_safetynet_recent_request_type">Тып запыту</string>
+    <string name="pref_safetynet_recent_cat_basic">Асноўныя дадзеныя</string>
+    <string name="pref_safetynet_recent_token">Токен</string>
 
 </resources>

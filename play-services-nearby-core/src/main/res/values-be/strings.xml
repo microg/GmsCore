@@ -7,4 +7,5 @@
     <string name="exposure_notify_off_bluetooth">Bluetooth павінен быць уключаны, каб прымаць паведамленні аб рызыцы інфікавання.</string>
     <string name="exposure_notify_off_location">Доступ да месцазнаходжання абавязковы, каб прымаць паведамленні аб рызыцы інфікавання.</string>
     <string name="exposure_notify_off_bluetooth_location">Bluetooth і вызначэнне месцазнаходжання павінны быць уключаны, каб прымаць паведамленні аб рызыцы інфікавання.</string>
+    <string name="exposure_notify_off_nearby">Паведамленням аб рызыцы інфікавання для працы патрабуюцца дадатковыя дазволы</string>
 </resources>

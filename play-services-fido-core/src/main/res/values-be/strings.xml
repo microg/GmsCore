@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="fido_welcome_title">Выкарыстоўваць ваш ключ бяспекі для %1$s</string>
+    <string name="fido_welcome_body">Выкарыстанне ключа бяспекі для %1$s дапамагае абараніць вашыя асабістыя дадзеныя</string>
+    <string name="fido_welcome_button_get_started">Пачынаем працу</string>
+    <string name="fido_welcome_privileged_info">%1$s выступае ў якасці даверанага браўзэра для выкарыстання вашага ключа бяспекі з %2$s.</string>
+    <string name="fido_welcome_privileged_check">Так, %1$s мой давераны браўзэр, і яму павінна быць дазволена выкарыстоўваць ключы бяспекі на іншых вэб-сайтах.</string>
+    <string name="fido_transport_selection_title">Выберыце, як выкарыстоўваць ключ бяспекі</string>
+    <string name="fido_transport_selection_body">Ключы бяспекі працуюць з Bluetooth, NFC і USB. Выберыце, як вы хочаце выкарыстоўваць свой ключ.</string>
+    <string name="fido_biometric_prompt_title">Пацвердзіце сваю асобу</string>
+    <string name="fido_biometric_prompt_body">"%1$s павінен пацвердзіць, што гэта вы."</string>
+    <string name="fido_usb_title">Падключыце USB ключ бяспекі</string>
+    <string name="fido_usb_prompt_body">Падключыце ключ бяспекі да USB-парта або з дапамогай USB-кабеля. Калі на вашым ключы ёсць кнопка, дакраніцеся яе.</string>
+    <string name="fido_nfc_title">Падключыце свой NFC ключ бяспекі</string>
+    <string name="fido_nfc_prompt_body">Прыцісніце ключ да задняй панэлі прылады, пакуль яно не перастане вібраваць</string>
+    <string name="fido_transport_selection_bluetooth">Выкарыстоўваць ключ бяспекі з Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Выкарыстоўваць ключ бяспекі з NFC</string>
+    <string name="fido_transport_selection_usb">Выкарыстоўваць ключ бяспекі з USB</string>
+    <string name="fido_transport_selection_biometric">Выкарыстоўваць гэтую прыладу з заблакаваным экранам</string>
+    <string name="fido_transport_usb_wait_connect_body">Калі ласка, падключыце ваш USB-ключ бяспекі.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Калі ласка, краніце залатога кальца або дыска на %1$s.</string>
+</resources>
