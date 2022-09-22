@@ -45,12 +45,13 @@ class AuthenticatorGetAssertionRequest(
 
     companion object {
         class Options(
-            val userPresence: Boolean? = true,
-            val userVerification: Boolean? = false
+            val userPresence: Boolean = true,
+            val userVerification: Boolean = false
         ) {
             fun encodeAsCbor(): CBORObject = CBORObject.NewMap().apply {
-                if (userPresence != null) set("up", userPresence.encodeAsCbor())
-                if (userVerification != null) set("uv", userVerification.encodeAsCbor())
+                // Only encode non-default values
+                if (!userPresence) set("up", userPresence.encodeAsCbor())
+                if (userVerification) set("uv", userVerification.encodeAsCbor())
             }
         }
     }

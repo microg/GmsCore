@@ -9,6 +9,7 @@
 package com.google.android.gms.fido.fido2.api.common;
 
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
@@ -58,11 +59,11 @@ public class AuthenticationExtensions extends AutoSafeParcelable {
 
     @Override
     public String toString() {
-        return "AuthenticationExtensions{" +
-                "fidoAppIdExtension=" + fidoAppIdExtension +
-                ", cableAuthenticationExtension=" + cableAuthenticationExtension +
-                ", userVerificationMethodExtension=" + userVerificationMethodExtension +
-                '}';
+        return ToStringHelper.name("AuthenticationExtensions")
+                .field("fidoAppIdExtension", fidoAppIdExtension != null ? fidoAppIdExtension.getAppId() : null)
+                .field("cableAuthenticationExtension", cableAuthenticationExtension)
+                .field("userVerificationMethodExtension", userVerificationMethodExtension != null ? userVerificationMethodExtension.getUvm() : null)
+                .end();
     }
 
     /**
