@@ -30,7 +30,7 @@
     <string name="pref_exposure_app_report_entry_time_short">Менее пяти минут назад</string>
     <string name="pref_exposure_app_report_entry_time_about">Около <xliff:g example="13">%1$d</xliff:g> минут</string>
     <string name="pref_exposure_app_report_entry_distance_close">взаимодействия рядом</string>
-    <string name="pref_exposure_app_report_entry_distance_far">вдаимодействия далеко</string>
+    <string name="pref_exposure_app_report_entry_distance_far">взаимодействия далеко</string>
     <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
     <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Обработано <xliff:g example="121031">%1$d</xliff:g> диагностических ключей.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_no">Сообщения об опасных контактах отсутствуют.</string>
@@ -44,7 +44,7 @@
     <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> Идентификаторов в час</string>
     <string name="pref_exposure_rpi_delete_all_title">Удалить</string>
     <string name="pref_exposure_rpi_delete_all_summary">Удалить все собранные идентификаторы</string>
-    <string name="pref_exposure_rpi_delete_all_warning">Удаление собранных идентификаторов приведёт к невозможности информирования, в случае если у одного из ваших контактов за последние 14 дней окажется положительный диагноз.</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Удаление собранных идентификаторов приведёт к невозможности информирования в случае, если у одного из ваших контактов за последние 14 дней окажется положительный диагноз.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Всё равно удалить</string>
     <string name="pref_exposure_rpi_export_title">Экспортировать</string>
     <string name="pref_exposure_rpi_export_summary">Экспортировать собранные идентификаторы для расширенного анализа в стороннем приложении.</string>

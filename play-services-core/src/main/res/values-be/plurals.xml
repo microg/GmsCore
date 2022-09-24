@@ -17,9 +17,9 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend-праграма настроена</item>
-        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> backend-праграмы настроены</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-праграмм настроены</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> навігацыйны модуль наладжаны</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> навігацыйных модуля наладжана</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> навігацыйных модуляў наладжана</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> прывязанае прыкладанне</item>

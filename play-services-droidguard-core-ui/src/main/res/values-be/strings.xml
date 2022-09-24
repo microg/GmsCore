@@ -8,5 +8,5 @@
     <string name="pref_droidguard_mode_embedded_title">Лакальны</string>
     <string name="pref_droidguard_mode_embedded_summary">Выкарыстоўваць лакальнае асяроддзе выканання DroidGuard</string>
     <string name="pref_droidguard_mode_network_title">Выдалены</string>
-    <string name="pref_droidguard_mode_network_summary">Падлучыцца да асяроддзя выканання DroidGuard па сетцы</string>
+    <string name="pref_droidguard_mode_network_summary">Падключыцца да асяроддзя выканання DroidGuard па сетцы</string>
 </resources>
