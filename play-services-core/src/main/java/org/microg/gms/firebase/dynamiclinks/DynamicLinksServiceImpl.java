@@ -39,7 +39,7 @@ public class DynamicLinksServiceImpl extends IDynamicLinksService.Stub {
 
     @Override
     public void getInitialLink(IDynamicLinksCallbacks callback, String link) throws RemoteException {
-        callback.onStatusDynamicLinkData(Status.SUCCESS, new DynamicLinkData());
+        callback.onStatusDynamicLinkData(Status.SUCCESS, null);
     }
 
 
