@@ -60,7 +60,7 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
                 }
                 formatSummaryForSafetyNetResult(
                     context,
-                    Base64.decode(payload, Base64.URL_SAFE).decodeToString(),
+                    payload?.let { Base64.decode(it, Base64.URL_SAFE).decodeToString() },
                     response.result.status,
                     ATTESTATION
                 )
