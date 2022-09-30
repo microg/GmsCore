@@ -61,6 +61,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
                 if (connection.claimInterface(iface, true)) {
                     val buf = ByteArray(256)
                     val read = connection.controlTransfer(0x81, 0x06, 0x2200, iface.id, buf, buf.size, 5000)
+                    Log.d(TAG, "Signature: ${buf.slice(0 until read).toByteArray().toBase64(Base64.NO_WRAP)}")
                     read >= 5 && buf.slice(0 until 5) eq CTAPHID_SIGNATURE
                 } else {
                     Log.d(TAG, "Failed claiming interface")
