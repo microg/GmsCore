@@ -56,15 +56,30 @@ def execResult(...args) {
         commandLine args
         standardOutput = stdout
     }
-    return stdout.toString().trim()
+    return stdout.toString()
 }
 
 def gmsVersion = "22.33.15"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
-def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').substring(1)
-def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD"))
-def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').split(' ')[0]
-def gitDirty = execResult('git', 'status', '--porcelain').size() > 0
+def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1)
+def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim())
+def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').trim().split(' ')[0]
+def gitDirty = false
+execResult('git', 'status', '--porcelain').lines().each { stat ->
+  def status = stat.substring(0,2)
+  def file = stat.substring(3)
+  if (status == '??') {
+    if (subprojects.any { p -> file.startsWith(p.name + '/') }) {
+      logger.lifecycle('Dirty file: {} (untracked)', file)
+      gitDirty = true
+    } else {
+      logger.info('New file outside module: {} (ignored for dirty check)', file)
+    }
+  } else {
+    logger.lifecycle('Dirty file: {} (changed)', file)
+    gitDirty = true
+  }
+}
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
 def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
 def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
