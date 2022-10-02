@@ -17,7 +17,6 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.BuildConfig
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import okio.ByteString.Companion.of
@@ -40,16 +39,30 @@ import kotlin.random.Random
 class AppCertManager(private val context: Context) {
     private val queue = Volley.newRequestQueue(context)
 
+    private fun readDeviceKey() {
+        try {
+            if (context.getFileStreamPath("device_key").exists()) {
+                deviceKey = context.openFileInput("device_key").use { DeviceKey.ADAPTER.decode(it) }
+                deviceKeyCacheTime = context.getFileStreamPath("device_key").lastModified()
+            } else {
+                deviceKeyCacheTime = -1
+            }
+        } catch (e: Exception) {
+            deviceKeyCacheTime = -1
+        }
+    }
+
     suspend fun fetchDeviceKey(): Boolean {
         ProfileManager.ensureInitialized(context)
+        if (deviceKeyCacheTime == 0L) readDeviceKey()
         deviceKeyLock.withLock {
             try {
-                val elapsedRealtime = SystemClock.elapsedRealtime()
-                if (elapsedRealtime - deviceKeyCacheTime < DEVICE_KEY_TIMEOUT) {
+                val currentTime = System.currentTimeMillis()
+                if (deviceKeyCacheTime > 0 && currentTime - deviceKeyCacheTime < DEVICE_KEY_TIMEOUT) {
                     return deviceKey != null
                 }
                 Log.w(TAG, "DeviceKeys for app certifications are experimental")
-                deviceKeyCacheTime = elapsedRealtime
+                deviceKeyCacheTime = currentTime
                 val lastCheckinInfo = LastCheckinInfo.read(context)
                 val androidId = lastCheckinInfo.androidId
                 val sessionId = Random.nextLong()
@@ -60,7 +73,7 @@ class AppCertManager(private val context: Context) {
                         "dg_sdkVersion" to Build.VERSION.SDK_INT.toString()
                 )
                 val droidGuardResult = try {
-                    Base64.encodeToString(DroidGuardResultCreator.getResult(context, "devicekey", data), Base64.NO_WRAP)
+                    Base64.encodeToString(DroidGuardResultCreator.getResult(context, "devicekey", data), Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE)
                 } catch (e: Exception) {
                     null
                 }
@@ -98,6 +111,7 @@ class AppCertManager(private val context: Context) {
 
                     override fun deliverError(error: VolleyError) {
                         Log.d(TAG, "Error: ${Base64.encodeToString(error.networkResponse.data, 2)}")
+                        deviceKeyCacheTime = 0
                         deferredResponse.complete(null)
                     }
 
@@ -115,8 +129,11 @@ class AppCertManager(private val context: Context) {
                     }
                 })
                 val deviceKeyBytes = deferredResponse.await() ?: return false
+                context.openFileOutput("device_key", Context.MODE_PRIVATE).use {
+                    it.write(deviceKeyBytes)
+                }
+                context.getFileStreamPath("device_key").setLastModified(currentTime)
                 deviceKey = DeviceKey.ADAPTER.decode(deviceKeyBytes)
-                Log.d(TAG, "Response: $deviceKey")
                 return true
             } catch (e: Exception) {
                 Log.w(TAG, e)
