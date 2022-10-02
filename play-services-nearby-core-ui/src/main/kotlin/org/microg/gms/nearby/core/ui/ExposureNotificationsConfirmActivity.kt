@@ -5,11 +5,14 @@
 
 package org.microg.gms.nearby.core.ui
 
+import android.Manifest.permission.*
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo.REQUESTED_PERMISSION_NEVER_FOR_LOCATION
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
@@ -19,7 +22,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.lifecycleScope
 import org.microg.gms.nearby.exposurenotification.*
@@ -110,17 +113,26 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     private var permissionNeedsHandling: Boolean = false
     private var backgroundLocationNeedsHandling: Boolean = false
     private var permissionRequestCode = 33
-    private val permissions by lazy {
-        when {
+    private fun getRequiredPermissions(): Array<String> {
+        return when {
             Build.VERSION.SDK_INT >= 31 -> {
-                // We shouldn't be needing the LOCATION permissions on 31+ anymore, at least when
-                // apps making use of this target 31+ as well, but this needs more testing. See
+                // We only need bluetooth permission on 31+ if it's "strongly asserted" that we won't use bluetooth for
+                // location. Otherwise, we also need LOCATION permissions. See
                 // https://developer.android.com/guide/topics/connectivity/bluetooth/permissions#assert-never-for-location
+                try {
+                    val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
+                    val bluetoothScanIndex = packageInfo.requestedPermissions.indexOf(BLUETOOTH_SCAN)
+                    if (packageInfo.requestedPermissionsFlags[bluetoothScanIndex] and REQUESTED_PERMISSION_NEVER_FOR_LOCATION > 0) {
+                        return arrayOf(BLUETOOTH_ADVERTISE, BLUETOOTH_SCAN)
+                    }
+                } catch (e: Exception) {
+                    // Ignore
+                }
                 arrayOf(
-                    "android.permission.BLUETOOTH_ADVERTISE",
-                    "android.permission.BLUETOOTH_SCAN",
-                    "android.permission.ACCESS_COARSE_LOCATION",
-                    "android.permission.ACCESS_FINE_LOCATION"
+                    BLUETOOTH_ADVERTISE,
+                    BLUETOOTH_SCAN,
+                    ACCESS_COARSE_LOCATION,
+                    ACCESS_FINE_LOCATION
                 )
             }
             Build.VERSION.SDK_INT == 29 -> {
@@ -128,38 +140,31 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                 // We need it on 30 (and possibly later) as well, but it has to be requested in a two
                 // step process, see https://fosstodon.org/@utf8equalsX/104359649537615235
                 arrayOf(
-                    "android.permission.ACCESS_BACKGROUND_LOCATION",
-                    "android.permission.ACCESS_COARSE_LOCATION",
-                    "android.permission.ACCESS_FINE_LOCATION"
+                    ACCESS_BACKGROUND_LOCATION,
+                    ACCESS_COARSE_LOCATION,
+                    ACCESS_FINE_LOCATION
                 )
             }
             else -> {
                 // Below 29 or equals 30
                 arrayOf(
-                    "android.permission.ACCESS_COARSE_LOCATION",
-                    "android.permission.ACCESS_FINE_LOCATION"
+                    ACCESS_COARSE_LOCATION,
+                    ACCESS_FINE_LOCATION
                 )
             }
         }
     }
 
     private fun checkPermissions() {
+        val permissions = getRequiredPermissions()
         permissionNeedsHandling = Build.VERSION.SDK_INT >= 23 && permissions.any {
-            ContextCompat.checkSelfPermission(
-                this,
-                it
-            ) != PackageManager.PERMISSION_GRANTED
+            checkSelfPermission(this, it) != PERMISSION_GRANTED
         }
 
         backgroundLocationNeedsHandling = Build.VERSION.SDK_INT >= 30
-                && ContextCompat.checkSelfPermission(
-            this,
-            "android.permission.ACCESS_FINE_LOCATION"
-        ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-            this,
-            "android.permission.ACCESS_BACKGROUND_LOCATION"
-        ) != PackageManager.PERMISSION_GRANTED
+                && ACCESS_FINE_LOCATION in permissions
+                && checkSelfPermission(this, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
+                && checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) != PERMISSION_GRANTED
 
         findViewById<View>(R.id.grant_permission_view).visibility =
             if (permissionNeedsHandling) View.VISIBLE else View.GONE
@@ -170,13 +175,13 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
 
     private fun requestPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(permissions, ++permissionRequestCode)
+            requestPermissions(getRequiredPermissions(), ++permissionRequestCode)
         }
     }
 
     private fun requestBackgroundLocation() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            requestPermissions(arrayOf("android.permission.ACCESS_BACKGROUND_LOCATION"), ++permissionRequestCode)
+        if (Build.VERSION.SDK_INT >= 29) {
+            requestPermissions(arrayOf(ACCESS_BACKGROUND_LOCATION), ++permissionRequestCode)
         }
     }
 

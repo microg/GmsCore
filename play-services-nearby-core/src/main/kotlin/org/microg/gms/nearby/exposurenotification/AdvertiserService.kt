@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -110,6 +111,7 @@ class AdvertiserService : LifecycleService() {
     private var sendingBytes = ByteArray(0)
     private var starting = false
 
+    @SuppressLint("MissingPermission")
     private suspend fun startAdvertising() {
         val advertiser = synchronized(this) {
             if (advertising || starting) return
@@ -207,6 +209,7 @@ class AdvertiserService : LifecycleService() {
     }
 
     @Synchronized
+    @SuppressLint("MissingPermission")
     private fun stopOrRestartAdvertising() {
         if (!advertising) return
         Log.i(TAG, "Stopping advertiser")

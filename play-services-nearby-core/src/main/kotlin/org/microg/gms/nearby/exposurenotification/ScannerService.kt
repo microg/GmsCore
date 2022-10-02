@@ -116,7 +116,7 @@ class ScannerService : LifecycleService() {
         stopScan()
     }
 
-    @SuppressLint("WakelockTimeout")
+    @SuppressLint("WakelockTimeout", "MissingPermission")
     @Synchronized
     private fun startScan() {
         if (scanning) return
