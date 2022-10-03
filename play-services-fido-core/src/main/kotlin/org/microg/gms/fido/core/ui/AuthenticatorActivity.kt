@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.OnNewIntentProvider
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -151,10 +152,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 }
                 val preselectedTransport = knownRegistrationTransports.singleOrNull() ?: allowedTransports.singleOrNull()
                 if (database.wasUsed()) {
-                    if (preselectedTransport == USB) {
-                        R.id.usbFragment
-                    } else {
-                        R.id.transportSelectionFragment
+                    when (preselectedTransport) {
+                        USB -> R.id.usbFragment
+                        NFC -> R.id.nfcFragment
+                        else -> R.id.transportSelectionFragment
                     }
                 } else {
                     null
@@ -179,11 +180,6 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             Log.w(TAG, e)
             finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)
         }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        (navHostFragment.childFragmentManager.primaryNavigationFragment as? AuthenticatorActivityFragment)?.onNewIntent(intent)
     }
 
     fun finishWithError(errorCode: ErrorCode, errorMessage: String) {
@@ -228,8 +224,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         return shouldStartTransportInstantly(SCREEN_LOCK)
     }
 
-    fun startTransportHandling(transport: Transport): Job = lifecycleScope.launchWhenStarted {
-        val options = options ?: return@launchWhenStarted
+    fun startTransportHandling(transport: Transport): Job = lifecycleScope.launchWhenResumed {
+        val options = options ?: return@launchWhenResumed
         try {
             finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage), transport)
         } catch (e: CancellationException) {

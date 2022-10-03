@@ -32,5 +32,4 @@ abstract class AuthenticatorActivityFragment : Fragment() {
     fun shouldStartTransportInstantly(transport: Transport) = authenticatorActivity?.shouldStartTransportInstantly(transport) == true
 
     abstract override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-    open fun onNewIntent(intent: Intent?) = Unit
 }

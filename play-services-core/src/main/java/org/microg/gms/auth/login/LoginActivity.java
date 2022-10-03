@@ -21,12 +21,14 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -40,6 +42,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
+import androidx.core.app.OnNewIntentProvider;
 import androidx.webkit.WebViewClientCompat;
 
 import com.google.android.gms.R;
@@ -53,11 +56,14 @@ import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
+import org.microg.gms.droidguard.core.DroidGuardResultCreator;
 import org.microg.gms.people.PeopleManager;
 import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.util.Collections;
 import java.util.Locale;
 
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
@@ -88,6 +94,9 @@ public class LoginActivity extends AssistantActivity {
     private static final String GOOGLE_SUITE_URL = "https://accounts.google.com/signin/continue";
     private static final String MAGIC_USER_AGENT = " MinuteMaid";
     private static final String COOKIE_OAUTH_TOKEN = "oauth_token";
+
+    private final FidoHandler fidoHandler = new FidoHandler(this);
+    private final DroidGuardHandler dgHandler = new DroidGuardHandler(this);
 
     private WebView webView;
     private String accountType;
@@ -257,6 +266,10 @@ public class LoginActivity extends AssistantActivity {
         webView.loadUrl(buildUrl(tmpl, Utils.getLocale(this)));
     }
 
+    protected void runScript(String js) {
+        runOnUiThread(() -> webView.loadUrl("javascript:" + js));
+    }
+
     private void closeWeb(boolean programmaticAuth) {
         setMessage(R.string.auth_finalize);
         runOnUiThread(() -> webView.setVisibility(INVISIBLE));
@@ -395,9 +408,35 @@ public class LoginActivity extends AssistantActivity {
         }
 
         @JavascriptInterface
+        public final void attemptLogin(String accountName, String password) {
+            Log.d(TAG, "JSBridge: attemptLogin");
+        }
+
+        @JavascriptInterface
+        public void backupSyncOptIn(String accountName) {
+            Log.d(TAG, "JSBridge: backupSyncOptIn");
+        }
+
+        @JavascriptInterface
+        public final void cancelFido2SignRequest() {
+            Log.d(TAG, "JSBridge: cancelFido2SignRequest");
+            fidoHandler.cancel();
+        }
+
+        @JavascriptInterface
+        public void clearOldLoginAttempts() {
+            Log.d(TAG, "JSBridge: clearOldLoginAttempts");
+        }
+
+        @JavascriptInterface
         public final void closeView() {
             Log.d(TAG, "JSBridge: closeView");
             closeWeb(false);
+        }
+
+        @JavascriptInterface
+        public void fetchIIDToken(String entity) {
+            Log.d(TAG, "JSBridge: fetchIIDToken");
         }
 
         @JavascriptInterface
@@ -434,22 +473,39 @@ public class LoginActivity extends AssistantActivity {
 
         @JavascriptInterface
         public final int getAuthModuleVersionCode() {
-            return 1;
+            return GMS_VERSION_CODE;
         }
 
         @JavascriptInterface
         public final int getBuildVersionSdk() {
-            return SDK_INT;
+            return Build.VERSION.SDK_INT;
         }
 
         @JavascriptInterface
-        public final void getDroidGuardResult(String s) {
-            Log.d(TAG, "JSBridge: getDroidGuardResult");
+        public int getDeviceContactsCount() {
+            return -1;
         }
 
         @JavascriptInterface
         public final int getDeviceDataVersionInfo() {
             return 1;
+        }
+
+        @JavascriptInterface
+        public final void getDroidGuardResult(String s) {
+            Log.d(TAG, "JSBridge: getDroidGuardResult");
+            try {
+                JSONArray array = new JSONArray(s);
+                StringBuilder sb = new StringBuilder();
+                sb.append(getAndroidId()).append(":").append(getBuildVersionSdk()).append(":").append(getPlayServicesVersionCode());
+                for (int i = 0; i < array.length(); i++) {
+                    sb.append(":").append(array.getString(i));
+                }
+                String dg = Base64.encodeToString(MessageDigest.getInstance("SHA1").digest(sb.toString().getBytes()), 0);
+                dgHandler.start(dg);
+            } catch (Exception e) {
+                // Ignore
+            }
         }
 
         @JavascriptInterface
@@ -518,8 +574,19 @@ public class LoginActivity extends AssistantActivity {
         }
 
         @JavascriptInterface
-        public final void setAccountIdentifier(String accountIdentifier) {
+        public final void sendFido2SkUiEvent(String event) {
+            Log.d(TAG, "JSBridge: sendFido2SkUiEvent");
+            fidoHandler.onEvent(event);
+        }
+
+        @JavascriptInterface
+        public final void setAccountIdentifier(String accountName) {
             Log.d(TAG, "JSBridge: setAccountIdentifier");
+        }
+
+        @JavascriptInterface
+        public void setAllActionsEnabled(boolean z) {
+            Log.d(TAG, "JSBridge: setAllActionsEnabled");
         }
 
         @TargetApi(HONEYCOMB)
@@ -541,6 +608,26 @@ public class LoginActivity extends AssistantActivity {
         }
 
         @JavascriptInterface
+        public void setPrimaryActionEnabled(boolean z) {
+            Log.d(TAG, "JSBridge: setPrimaryActionEnabled");
+        }
+
+        @JavascriptInterface
+        public void setPrimaryActionLabel(String str, int i) {
+            Log.d(TAG, "JSBridge: setPrimaryActionLabel: " + str);
+        }
+
+        @JavascriptInterface
+        public void setSecondaryActionEnabled(boolean z) {
+            Log.d(TAG, "JSBridge: setSecondaryActionEnabled");
+        }
+
+        @JavascriptInterface
+        public void setSecondaryActionLabel(String str, int i) {
+            Log.d(TAG, "JSBridge: setSecondaryActionLabel: " + str);
+        }
+
+        @JavascriptInterface
         public final void showKeyboard() {
             inputMethodManager.showSoftInput(webView, SHOW_IMPLICIT);
         }
@@ -559,6 +646,12 @@ public class LoginActivity extends AssistantActivity {
         @JavascriptInterface
         public final void startAfw() {
             Log.d(TAG, "JSBridge: startAfw");
+        }
+
+        @JavascriptInterface
+        public final void startFido2SignRequest(String request) {
+            Log.d(TAG, "JSBridge: startFido2SignRequest");
+            fidoHandler.startSignRequest(request);
         }
 
     }

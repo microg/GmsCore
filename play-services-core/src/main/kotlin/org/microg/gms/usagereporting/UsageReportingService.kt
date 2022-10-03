@@ -8,8 +8,10 @@ package org.microg.gms.usagereporting
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
+import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.usagereporting.UsageReportingOptInOptions
@@ -24,7 +26,12 @@ private const val TAG = "UsageReportingService"
 
 class UsageReportingService : BaseService(TAG, GmsService.USAGE_REPORTING) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, UsageReportingServiceImpl(), Bundle())
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, UsageReportingServiceImpl(), ConnectionInfo().apply {
+            features = arrayOf(
+                Feature("usage_and_diagnostics_listener", 1),
+                Feature("usage_and_diagnostics_consents", 1)
+            )
+        })
     }
 }
 

@@ -5,28 +5,21 @@
 
 package org.microg.gms.fido.core.ui
 
-import android.content.Intent
 import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
-import android.hardware.usb.UsbDevice
-import android.hardware.usb.UsbManager
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.R
 import org.microg.gms.fido.core.databinding.FidoNfcTransportFragmentBinding
-import org.microg.gms.fido.core.databinding.FidoUsbTransportFragmentBinding
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
 
@@ -70,10 +63,6 @@ class NfcTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
     override fun onStart() {
         super.onStart()
         job = startTransportHandling(Transport.NFC)
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        authenticatorActivity?.getTransportHandler(Transport.NFC)?.onNewIntent(intent)
     }
 
     override fun onStop() {

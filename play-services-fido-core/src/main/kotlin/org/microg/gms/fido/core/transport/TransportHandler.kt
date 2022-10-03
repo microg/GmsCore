@@ -27,8 +27,6 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     fun invokeStatusChanged(status: String, extras: Bundle? = null) =
         callback?.onStatusChanged(transport, status, extras)
 
-    open fun onNewIntent(intent: Intent?) = Unit
-
     private suspend fun ctap1DeviceHasCredential(
         connection: CtapConnection,
         challenge: ByteArray,
