@@ -66,7 +66,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             options.registerOptions.rp,
             options.registerOptions.user,
             options.registerOptions.parameters,
-            options.registerOptions.excludeList,
+            options.registerOptions.excludeList.orEmpty(),
             extensions,
             reqOptions
         )
@@ -87,7 +87,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             throw IllegalArgumentException("Can't use CTAP1 protocol for non ES256 requests")
         if (options.registerOptions.authenticatorSelection.requireResidentKey == true)
             throw IllegalArgumentException("Can't use CTAP1 protocol when resident key required")
-        val hasCredential = options.registerOptions.excludeList.any { cred ->
+        val hasCredential = options.registerOptions.excludeList.orEmpty().any { cred ->
             ctap1DeviceHasCredential(connection, clientDataHash, rpIdHash, cred) ||
                     if (appIdHash != null) {
                         ctap1DeviceHasCredential(connection, clientDataHash, appIdHash, cred)
