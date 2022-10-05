@@ -13,11 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.microg.gms.fido.core.protocol.msgs.*
-import org.microg.gms.fido.core.transport.CtapConnection
+import org.microg.gms.fido.core.transport.*
 import org.microg.gms.fido.core.transport.usb.endpoints
 import org.microg.gms.fido.core.transport.usb.initialize
 import org.microg.gms.fido.core.transport.usb.usbManager
-import org.microg.gms.fido.core.transport.usb.use
 import org.microg.gms.utils.toBase64
 import java.nio.ByteBuffer
 import kotlin.experimental.and
@@ -31,16 +30,7 @@ class CtapHidConnection(
     private val inEndpoint = iface.endpoints.first { it.direction == USB_DIR_IN }
     private val outEndpoint = iface.endpoints.first { it.direction == USB_DIR_OUT }
     private var channelIdentifier = 0xffffffff.toInt()
-    private var capabilities: Byte = 0
-
-    override val hasCtap1Support: Boolean
-        get() = capabilities and CtapHidInitResponse.CAPABILITY_NMSG == 0.toByte()
-
-    override val hasCtap2Support: Boolean
-        get() = capabilities and CtapHidInitResponse.CAPABILITY_CBOR > 0
-
-    val hasWinkSupport: Boolean
-        get() = capabilities and CtapHidInitResponse.CAPABILITY_WINK > 0
+    override var capabilities: Int = 0
 
     suspend fun open(): Boolean {
         Log.d(TAG, "Opening connection")
@@ -59,7 +49,18 @@ class CtapHidConnection(
             return false
         }
         channelIdentifier = initResponse.channelId
-        capabilities = initResponse.capabilities
+        val caps = initResponse.capabilities
+        capabilities = 0 or
+                (if (caps and CtapHidInitResponse.CAPABILITY_NMSG == 0.toByte()) CAPABILITY_CTAP_1 else 0) or
+                (if (caps and CtapHidInitResponse.CAPABILITY_CBOR > 0) CAPABILITY_CTAP_2 else 0) or
+                (if (caps and CtapHidInitResponse.CAPABILITY_WINK > 0) CAPABILITY_WINK else 0)
+        if (hasCtap2Support) {
+            try {
+                fetchCapabilities()
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
+        }
         return true
     }
 
@@ -68,6 +69,14 @@ class CtapHidConnection(
         connection = null
         channelIdentifier = 0xffffffff.toInt()
         capabilities = 0
+    }
+
+    private suspend fun fetchCapabilities() {
+        val response = runCommand(AuthenticatorGetInfoCommand())
+        Log.d(TAG, "Got info: $response")
+        capabilities = capabilities or CAPABILITY_CTAP_2 or
+                (if (response.versions.contains("FIDO_2_1")) CAPABILITY_CTAP_2_1 else 0) or
+                (if (response.options.clientPin == true) CAPABILITY_CLIENT_PIN else 0)
     }
 
     suspend fun sendRequest(request: CtapHidRequest) {
@@ -155,7 +164,7 @@ class CtapHidConnection(
             if (response.statusCode == 0x00.toByte()) {
                 return command.decodeResponse(response.payload)
             }
-            throw CtapHidMessageStatusException(response.statusCode.toInt() and 0xff)
+            throw Ctap2StatusException(response.statusCode)
         }
         throw RuntimeException("Unexpected response: $response")
     }

@@ -8,6 +8,7 @@ package org.microg.gms.fido.core.protocol.msgs
 import com.upokecenter.cbor.CBORObject
 import org.microg.gms.fido.core.protocol.AsInt32Sequence
 import org.microg.gms.fido.core.protocol.AsStringSequence
+import org.microg.gms.utils.ToStringHelper
 
 class AuthenticatorGetInfoCommand : Ctap2Command<AuthenticatorGetInfoRequest, AuthenticatorGetInfoResponse>(AuthenticatorGetInfoRequest()) {
     override fun decodeResponse(obj: CBORObject) = AuthenticatorGetInfoResponse.decodeFromCbor(obj)
@@ -31,6 +32,20 @@ class AuthenticatorGetInfoResponse(
             val clientPin: Boolean?,
             val userPresence: Boolean,
             val userVerification: Boolean?,
+            val pinUvAuthToken: Boolean?,
+            val noMcGaPermissionsWithClientPin: Boolean,
+            val largeBlobs: Boolean?,
+            val enterpriseAttestation: Boolean?,
+            val bioEnroll: Boolean?,
+            val userVerificationMgmtPreview: Boolean?,
+            val uvBioEnroll: Boolean?,
+            val authenticatorConfigSupported: Boolean?,
+            val uvAcfg: Boolean?,
+            val credentialManagementSupported: Boolean?,
+            val credentialMgmtPreview: Boolean?,
+            val setMinPINLengthSupported: Boolean?,
+            val makeCredUvNotRqd: Boolean,
+            val alwaysUv: Boolean?,
         ) {
             companion object {
                 fun decodeFromCbor(map: CBORObject?) = Options(
@@ -38,12 +53,46 @@ class AuthenticatorGetInfoResponse(
                     residentKey = map?.get("rk")?.AsBoolean() == true,
                     clientPin = map?.get("clientPin")?.AsBoolean(),
                     userPresence = map?.get("up")?.AsBoolean() != false,
-                    userVerification = map?.get("uv")?.AsBoolean()
+                    userVerification = map?.get("uv")?.AsBoolean(),
+                    pinUvAuthToken = map?.get("pinUvAuthToken")?.AsBoolean(),
+                    noMcGaPermissionsWithClientPin = map?.get("noMcGaPermissionsWithClientPin")?.AsBoolean() == true,
+                    largeBlobs = map?.get("largeBlobs")?.AsBoolean(),
+                    enterpriseAttestation = map?.get("ep")?.AsBoolean(),
+                    bioEnroll = map?.get("bioEnroll")?.AsBoolean(),
+                    userVerificationMgmtPreview = map?.get("userVerificationMgmtPreview")?.AsBoolean(),
+                    uvBioEnroll = map?.get("uvBioEnroll")?.AsBoolean(),
+                    authenticatorConfigSupported = map?.get("authnrCfg")?.AsBoolean(),
+                    uvAcfg = map?.get("uvAcfg")?.AsBoolean(),
+                    credentialManagementSupported = map?.get("credMgmt")?.AsBoolean(),
+                    credentialMgmtPreview = map?.get("credentialMgmtPreview")?.AsBoolean(),
+                    setMinPINLengthSupported = map?.get("setMinPINLength")?.AsBoolean(),
+                    makeCredUvNotRqd = map?.get("makeCredUvNotRqd")?.AsBoolean() == true,
+                    alwaysUv = map?.get("alwaysUv")?.AsBoolean(),
                 )
             }
 
             override fun toString(): String {
-                return "Options(platformDevice=$platformDevice, residentKey=$residentKey, clientPin=$clientPin, userPresence=$userPresence, userVerification=$userVerification)"
+                return ToStringHelper.name("Options")
+                    .field("platformDevice", platformDevice)
+                    .field("residentKey", residentKey)
+                    .field("clientPin", clientPin)
+                    .field("userPresence", userPresence)
+                    .field("userVerification", userVerification)
+                    .field("pinUvAuthToken", pinUvAuthToken)
+                    .field("noMcGaPermissionsWithClientPin", noMcGaPermissionsWithClientPin)
+                    .field("largeBlobs", largeBlobs)
+                    .field("enterpriseAttestation", enterpriseAttestation)
+                    .field("bioEnroll", bioEnroll)
+                    .field("userVerificationMgmtPreview", userVerificationMgmtPreview)
+                    .field("uvBioEnroll", uvBioEnroll)
+                    .field("authenticatorConfigSupported", authenticatorConfigSupported)
+                    .field("uvAcfg", uvAcfg)
+                    .field("credentialManagementSupported", credentialManagementSupported)
+                    .field("credentialMgmtPreview", credentialMgmtPreview)
+                    .field("setMinPINLengthSupported", setMinPINLengthSupported)
+                    .field("makeCredUvNotRqd", makeCredUvNotRqd)
+                    .field("alwaysUv", alwaysUv)
+                    .end()
             }
         }
 

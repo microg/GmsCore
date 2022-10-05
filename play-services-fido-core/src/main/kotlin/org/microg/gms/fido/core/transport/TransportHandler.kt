@@ -8,7 +8,9 @@ package org.microg.gms.fido.core.transport
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.google.android.gms.fido.fido2.api.common.*
+import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement.REQUIRED
 import com.upokecenter.cbor.CBORObject
 import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.*
@@ -48,7 +50,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     ): Pair<AuthenticatorMakeCredentialResponse, ByteArray?> {
         val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
             options.registerOptions.authenticatorSelection?.requireResidentKey == true,
-            options.registerOptions.authenticatorSelection?.requireUserVerification == UserVerificationRequirement.REQUIRED
+            options.registerOptions.authenticatorSelection?.requireUserVerification == REQUIRED
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
@@ -144,7 +146,18 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     ): AuthenticatorAttestationResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
         val (response, keyHandle) = when {
-            connection.hasCtap2Support -> ctap2register(connection, options, clientDataHash)
+            connection.hasCtap2Support -> {
+                if (connection.hasCtap1Support &&
+                    !connection.canMakeCredentialWithoutUserVerification && connection.hasClientPin &&
+                    options.registerOptions.authenticatorSelection.requireUserVerification != REQUIRED &&
+                    !options.registerOptions.authenticatorSelection.requireResidentKey
+                ) {
+                    Log.d(TAG, "Using CTAP1/U2F for PIN-less registration")
+                    ctap1register(connection, options, clientDataHash)
+                } else {
+                    ctap2register(connection, options, clientDataHash)
+                }
+            }
             connection.hasCtap1Support -> ctap1register(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
@@ -162,7 +175,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         clientDataHash: ByteArray
     ): Pair<AuthenticatorGetAssertionResponse, ByteArray?> {
         val reqOptions = AuthenticatorGetAssertionRequest.Companion.Options(
-            userVerification = options.signOptions.requireUserVerification == UserVerificationRequirement.REQUIRED
+            userVerification = options.signOptions.requireUserVerification == REQUIRED
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
@@ -244,7 +257,27 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     ): AuthenticatorAssertionResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
         val (response, credentialId) = when {
-            connection.hasCtap2Support -> ctap2sign(connection, options, clientDataHash)
+            connection.hasCtap2Support -> {
+                try {
+                    ctap2sign(connection, options, clientDataHash)
+                } catch (e: Ctap2StatusException) {
+                    if (e.status == 0x2e.toByte() &&
+                        connection.hasCtap1Support && connection.hasClientPin &&
+                        options.signOptions.allowList.isNotEmpty() &&
+                        options.signOptions.requireUserVerification != REQUIRED
+                    ) {
+                        Log.d(TAG, "Falling back to CTAP1/U2F")
+                        try {
+                            ctap1sign(connection, options, clientDataHash)
+                        } catch (e2: Exception) {
+                            // Throw original exception
+                            throw e
+                        }
+                    } else {
+                        throw e
+                    }
+                }
+            }
             connection.hasCtap1Support -> ctap1sign(connection, options, clientDataHash)
             else -> throw IllegalStateException()
         }
@@ -255,6 +288,10 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             response.signature,
             null
         )
+    }
+
+    companion object {
+        const val TAG = "FidoTransportHandler"
     }
 }
 

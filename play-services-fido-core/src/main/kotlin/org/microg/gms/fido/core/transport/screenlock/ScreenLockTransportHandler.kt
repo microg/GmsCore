@@ -214,8 +214,6 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
 
         val credentialId = candidates.first()
         val keyId = credentialId.data
-
-        val (x, y) = (credentialId.publicKey as ECPublicKey).w.let { it.affineX to it.affineY }
         val authenticatorData = getAuthenticatorData(options.rpId, null)
 
         val signature = getActiveSignature(options, callerPackage, keyId)
