@@ -804,7 +804,6 @@
                 <action android:name="com.google.android.gms.plus.service.START" />
                 <action android:name="com.google.android.gms.pseudonymous.service.START" />
                 <action android:name="com.google.android.gms.rcs.START" />
-                <action android:name="com.google.android.gms.recaptcha.service.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />

@@ -1,0 +1,29 @@
+option java_package = "org.microg.gms.recaptcha";
+
+message RecaptchaInitRequest {
+  message Data {
+    optional string siteKey = 1;
+    optional string packageName = 2;
+    optional string version = 3;
+  }
+  optional Data data = 2;
+}
+
+message RecaptchaInitResponse {
+  optional string token = 1;
+  repeated string acceptableAdditionalArgs = 3;
+}
+
+message RecaptchaExecuteRequest {
+  optional string token = 1;
+  optional string action = 2;
+  optional uint64 timestamp = 3;
+  optional string dg = 4;
+  map<string, string> additionalArgs = 5;
+  optional string verificationHistoryToken = 6;
+//  map<int32, bytes> unknown = 7;
+}
+
+message RecaptchaExecuteResponse {
+  optional string token = 1;
+}
