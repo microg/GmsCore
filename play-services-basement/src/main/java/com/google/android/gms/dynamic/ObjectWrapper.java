@@ -34,15 +34,40 @@ public class ObjectWrapper<T> extends IObjectWrapper.Stub {
         if (obj == null) {
             return null;
         }
+
         if (obj instanceof ObjectWrapper) {
             return ((ObjectWrapper) obj).t;
         }
+
         IBinder binder = obj.asBinder();
         Field[] fields = binder.getClass().getDeclaredFields();
-        if (fields.length != 1) {
-            throw new IllegalArgumentException();
+
+        if (fields.length < 1) {
+            throw new IllegalArgumentException("No fields were found");
         }
-        Field field = fields[0];
+
+        // Ignore synthetic field(s) from JaCoCo or elsewhere
+        // https://www.jacoco.org/jacoco/trunk/doc/faq.html
+
+        @Nullable
+        Field field = null;
+
+        for (Field currentField : fields) {
+            if (currentField.isSynthetic()) {
+                continue;
+            }
+
+            if (field == null) {
+                field = currentField;
+            } else {
+                throw new IllegalArgumentException("Too many non-synthetic fields were found");
+            }
+        }
+
+        if (field == null) {
+            throw new IllegalArgumentException("No non-synthetic fields were found");
+        }
+
         if (!field.isAccessible()) {
             field.setAccessible(true);
             try {
