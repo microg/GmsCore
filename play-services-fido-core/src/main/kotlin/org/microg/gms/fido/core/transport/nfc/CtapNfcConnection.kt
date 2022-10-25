@@ -74,6 +74,7 @@ class CtapNfcConnection(
     }
 
     suspend fun open(): Boolean = withContext(Dispatchers.IO) {
+        isoDep.timeout = 5000
         isoDep.connect()
         val (statusCode, version) = select(FIDO2_AID)
         if (statusCode == 0x9000.toShort()) {
