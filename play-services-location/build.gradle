@@ -22,11 +22,8 @@ android {
 }
 
 dependencies {
-    api project(':play-services-location-api')
-
-    // Dependencies from play-services-location:19.0.1
+    // Dependencies from play-services-location:21.0.1
     api project(':play-services-base')
     api project(':play-services-basement')
-    //api project(':play-services-places-placereport')
     api project(':play-services-tasks')
 }

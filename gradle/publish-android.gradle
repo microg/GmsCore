@@ -60,4 +60,5 @@ afterEvaluate {
             sign publishing.publications
         }
     }
+    tasks.getByPath("sourceReleaseJar").duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

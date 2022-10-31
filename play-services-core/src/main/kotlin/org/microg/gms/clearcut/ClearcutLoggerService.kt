@@ -5,7 +5,6 @@
 package org.microg.gms.clearcut
 
 import android.os.Parcel
-import android.os.RemoteException
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope

@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    // Dependencies from play-services-tasks:18.0.2
     api project(':play-services-basement')
 }
 

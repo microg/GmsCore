@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<manifest package="org.microg.gms.gcm"
+<manifest package="com.google.android.gms.gcm"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Permissions required for GCM -->
