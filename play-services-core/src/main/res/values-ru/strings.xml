@@ -24,7 +24,7 @@
 Это может занять несколько секунд."</string>
     <string name="no_network_error_desc">"У вас нет подключения к сети.
 
-Это может быть временной проблемой, или ваше Android устройство не может использовать передачу данных. Попробуйте еще раз, когда появится соединение с мобильной сетью или присоединитесь к сети Wi-Fi."</string>
+Это может быть временной проблемой, или ваше Android устройство не может использовать передачу данных. Попробуйте ещё раз, когда появится соединение с мобильной сетью или присоединитесь к сети Wi-Fi."</string>
     <string name="auth_general_error_desc">"Не удается соединится с серверами Google.
 
 Попробуйте позже."</string>
@@ -148,7 +148,7 @@
     <string name="gcm_app_not_installed_anymore">Приложение больше не установлено</string>
     <string name="gcm_unregister_app">Отвязать</string>
     <string name="gcm_not_registered">Не привязано</string>
-    <string name="gcm_no_message_yet">Сообщения еще не были получены</string>
+    <string name="gcm_no_message_yet">Сообщения ещё не были получены</string>
     <string name="gcm_last_message_at">Последнее сообщение: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Привязано</string>
     <string name="gcm_registered_since">Привязано: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
