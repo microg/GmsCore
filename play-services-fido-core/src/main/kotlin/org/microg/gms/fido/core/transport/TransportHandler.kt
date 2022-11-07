@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.protocol.*
 import org.microg.gms.fido.core.protocol.msgs.*
+import org.microg.gms.fido.core.transport.nfc.CtapNfcMessageStatusException
 import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidMessageStatusException
 
 abstract class TransportHandler(val transport: Transport, val callback: TransportHandlerCallback?) {
@@ -39,7 +40,9 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.runCommand(U2fAuthenticationCommand(0x07, challenge, application, descriptor.id))
             return true
         } catch (e: CtapHidMessageStatusException) {
-            return false
+            return e.status == 0x6985;
+        } catch (e: CtapNfcMessageStatusException) {
+            return e.status == 0x6985;
         }
     }
 

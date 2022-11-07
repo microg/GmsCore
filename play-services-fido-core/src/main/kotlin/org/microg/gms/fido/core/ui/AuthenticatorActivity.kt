@@ -12,8 +12,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.OnNewIntentProvider
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -93,15 +93,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
             Log.d(TAG, "onCreate caller=$callerPackage options=$options")
 
-            options.checkIsValid(this)
-            val origin = getOrigin(this, options, callerPackage)
-            val appName = getApplicationName(this, options, callerPackage)
-            val callerName = packageManager.getApplicationLabel(callerPackage).toString()
-
             val requiresPrivilege =
                 options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
-
-            Log.d(TAG, "origin=$origin, appName=$appName")
 
             // Check if we can directly open screen lock handling
             if (!requiresPrivilege) {
@@ -110,13 +103,45 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                     window.setBackgroundDrawable(ColorDrawable(0))
                     window.statusBarColor = Color.TRANSPARENT
                     setTheme(R.style.Theme_Fido_Translucent)
-                    startTransportHandling(instantTransport.transport)
-                    return
                 }
             }
 
             setTheme(R.style.Theme_AppCompat_DayNight_NoActionBar)
             setContentView(R.layout.fido_authenticator_activity)
+
+            lifecycleScope.launchWhenCreated {
+                handleRequest(options)
+            }
+        } catch (e: RequestHandlingException) {
+            finishWithError(e.errorCode, e.message ?: e.errorCode.name)
+        } catch (e: Exception) {
+            Log.w(TAG, e)
+            finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)
+        }
+    }
+
+    @RequiresApi(24)
+    suspend fun handleRequest(options: RequestOptions) {
+        try {
+            val facetId = getFacetId(this, options, callerPackage)
+            options.checkIsValid(this, facetId, callerPackage)
+            val appName = getApplicationName(this, options, callerPackage)
+            val callerName = packageManager.getApplicationLabel(callerPackage).toString()
+
+            val requiresPrivilege =
+                options is BrowserRequestOptions && !database.isPrivileged(callerPackage, callerSignature)
+
+            Log.d(TAG, "facetId=$facetId, appName=$appName")
+
+            // Check if we can directly open screen lock handling
+            if (!requiresPrivilege) {
+                val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
+                if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
+                    startTransportHandling(instantTransport.transport)
+                    return
+                }
+            }
+
             val arguments = AuthenticatorActivityFragmentData().apply {
                 this.appName = appName
                 this.isFirst = true
