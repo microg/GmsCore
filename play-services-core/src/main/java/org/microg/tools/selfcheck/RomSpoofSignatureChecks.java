@@ -36,6 +36,7 @@ import static org.microg.tools.selfcheck.SelfCheckGroup.Result.Unknown;
 public class RomSpoofSignatureChecks implements SelfCheckGroup {
 
     public static final String FAKE_SIGNATURE_PERMISSION = "android.permission.FAKE_PACKAGE_SIGNATURE";
+    public static final String MICROG_FAKE_SIGNATURE_PERMISSION = "android.permission.MICROG_SPOOF_SIGNATURE";    // Note: it is a privileged permission (not runtime) so we cannot request it but only check
 
     @Override
     public String getGroupName(Context context) {
@@ -56,7 +57,11 @@ public class RomSpoofSignatureChecks implements SelfCheckGroup {
         try {
             context.getPackageManager().getPermissionInfo(FAKE_SIGNATURE_PERMISSION, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            knowsPermission = false;
+            try {
+                context.getPackageManager().getPermissionInfo(MICROG_FAKE_SIGNATURE_PERMISSION, 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                knowsPermission = false;
+            }
         }
         collector.addResult(context.getString(R.string.self_check_name_fake_sig_perm), knowsPermission ? Positive : Unknown,
                 context.getString(R.string.self_check_resolution_fake_sig_perm));
@@ -65,6 +70,9 @@ public class RomSpoofSignatureChecks implements SelfCheckGroup {
 
     private boolean addSystemGrantsFakeSignaturePermission(Context context, ResultCollector collector) {
         boolean grantsPermission = ContextCompat.checkSelfPermission(context, FAKE_SIGNATURE_PERMISSION) == PERMISSION_GRANTED;
+        if (!grantsPermission) {
+            grantsPermission = ContextCompat.checkSelfPermission(context, MICROG_FAKE_SIGNATURE_PERMISSION) == PERMISSION_GRANTED;
+        }
         collector.addResult(context.getString(R.string.self_check_name_perm_granted), grantsPermission ? Positive : Negative,
                 context.getString(R.string.self_check_resolution_perm_granted), new CheckResolver() {
                     @Override
