@@ -59,7 +59,7 @@ public class RomSpoofSignatureChecks implements SelfCheckGroup {
         } catch (PackageManager.NameNotFoundException e) {
             try {
                 context.getPackageManager().getPermissionInfo(MICROG_FAKE_SIGNATURE_PERMISSION, 0);
-            } catch (PackageManager.NameNotFoundException e) {
+            } catch (PackageManager.NameNotFoundException e2) {
                 knowsPermission = false;
             }
         }
