@@ -74,6 +74,7 @@
         android:protectionLevel="privileged|signature" />
 
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
+    <uses-permission android:name="android.permission.MICROG_SPOOF_SIGNATURE" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
