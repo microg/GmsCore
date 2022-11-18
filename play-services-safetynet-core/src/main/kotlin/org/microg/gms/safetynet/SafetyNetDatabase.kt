@@ -11,9 +11,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.google.android.gms.common.api.Status
 
-class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+@RequiresApi(19)
+class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION), AutoCloseable {
 
     init {
         if (Build.VERSION.SDK_INT >= 16) {
@@ -150,5 +152,9 @@ class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
         private const val FIELD_RESULT_STATUS_CODE = "result_status_code"
         private const val FIELD_RESULT_STATUS_MSG = "result_status_msg"
         private const val FIELD_RESULT_DATA = "result_data"
+    }
+
+    override fun close() {
+        super.close();
     }
 }
