@@ -103,7 +103,12 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenResumed {
             val context = requireContext()
             val (apps, showAll) = withContext(Dispatchers.IO) {
-                val apps = SafetyNetDatabase(requireContext()).use { it.recentApps }
+                val db = SafetyNetDatabase(context)
+                val apps = try {
+                    db.recentApps
+                } finally {
+                    db.close()
+                }
                 apps.map { app ->
                     app to context.packageManager.getApplicationInfoIfExists(app.first)
                 }.mapNotNull { (app, info) ->
