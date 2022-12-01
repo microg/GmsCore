@@ -96,7 +96,11 @@ public class SafetyNetClient extends GoogleApi<Api.ApiOptions.NoOptions> {
                         response.setResult(new SafetyNetApi.RecaptchaTokenResult() {
                             @Override
                             public String getTokenResult() {
-                                return recaptchaResultData.token;
+                                if (recaptchaResultData != null) {
+                                    return recaptchaResultData.token;
+                                } else {
+                                    return null;
+                                }
                             }
 
                             @Override
