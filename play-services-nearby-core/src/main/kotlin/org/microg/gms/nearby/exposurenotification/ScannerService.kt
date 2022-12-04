@@ -26,6 +26,7 @@ import org.microg.gms.common.ForegroundServiceContext
 import org.microg.gms.common.ForegroundServiceInfo
 import java.io.FileDescriptor
 import java.io.PrintWriter
+import java.nio.ByteBuffer
 import java.util.*
 
 @TargetApi(21)
@@ -91,6 +92,9 @@ class ScannerService : LifecycleService() {
         seenAdvertisements++
         lastAdvertisement = System.currentTimeMillis()
         lifecycleScope.launchWhenStarted {
+            val uuid = ByteBuffer.wrap(data).run {UUID(long, long)}
+            val metadata = data.drop(16).joinToString(separator="", transform={"%02x".format(it)})
+            Log.d(TAG, "Recording advertisement: [${result.device} ${result.rssi}dB] $uuid -- $metadata")
             ExposureDatabase.with(this@ScannerService) { database ->
                 database.noteAdvertisement(data.sliceArray(0..15), data.drop(16).toByteArray(), result.rssi)
             }
