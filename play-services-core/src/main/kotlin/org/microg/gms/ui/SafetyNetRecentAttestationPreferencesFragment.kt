@@ -14,6 +14,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.microg.gms.firebase.auth.getStringOrNull
 import org.microg.gms.safetynet.SafetyNetSummary
+import org.microg.gms.utils.toHexString
 
 
 class SafetyNetRecentAttestationPreferencesFragment : PreferenceFragmentCompat() {
