@@ -170,9 +170,11 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_safetynet_recent_response_status">响应状态</string>
     <string name="pref_safetynet_recent_cat_response">响应数据</string>
     <string name="pref_safetynet_recent_cat_request">请求数据</string>
-    <string name="pref_safetynet_recent_nonce">Nonce（十六进制）</string>
+    <string name="pref_safetynet_recent_nonce">十六进制 Nonce</string>
     <string name="pref_safetynet_recent_request_time">请求时间</string>
     <string name="pref_safetynet_recent_request_type">请求类型</string>
     <string name="pref_safetynet_recent_cat_basic">基础数据</string>
     <string name="pref_safetynet_recent_token">令牌</string>
+    <string name="pref_safetynet_recent_copy_json">复制 JSON JWS 数据</string>
+    <string name="pref_safetynet_recent_advice">建议</string>
 </resources>
