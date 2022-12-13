@@ -543,7 +543,6 @@
 
         <activity
             android:name="org.microg.gms.ui.AccountSettingsActivity"
-            android:exported="true"
             android:process=":ui"
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
