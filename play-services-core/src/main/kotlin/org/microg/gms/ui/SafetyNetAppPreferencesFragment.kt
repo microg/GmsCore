@@ -8,28 +8,10 @@ package org.microg.gms.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.util.Base64
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.core.view.ViewCompat
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.*
 import com.google.android.gms.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import org.microg.gms.gcm.GcmDatabase
-import org.microg.gms.gcm.PushRegisterManager
 import org.microg.gms.safetynet.SafetyNetDatabase
-import org.microg.gms.safetynet.SafetyNetRequestType
 import org.microg.gms.safetynet.SafetyNetRequestType.ATTESTATION
 import org.microg.gms.safetynet.SafetyNetRequestType.RECAPTCHA
 
@@ -58,8 +40,14 @@ class SafetyNetAppPreferencesFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenResumed {
             val context = requireContext()
             val summaries =
-                packageName?.let { packageName -> SafetyNetDatabase(context).use { it.getRecentRequests(packageName) } }
-                    .orEmpty()
+                packageName?.let { packageName ->
+                    val db = SafetyNetDatabase(context)
+                    try {
+                        db.getRecentRequests(packageName)
+                    } finally {
+                        db.close()
+                    }
+                }.orEmpty()
             recents.removeAll()
             recents.addPreference(recentsNone)
             recentsNone.isVisible = summaries.isEmpty()
