@@ -153,7 +153,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 if (connection.hasCtap1Support &&
                     !connection.canMakeCredentialWithoutUserVerification && connection.hasClientPin &&
                     options.registerOptions.authenticatorSelection.requireUserVerification != REQUIRED &&
-                    !options.registerOptions.authenticatorSelection.requireResidentKey
+                    options.registerOptions.authenticatorSelection.requireResidentKey != true
                 ) {
                     Log.d(TAG, "Using CTAP1/U2F for PIN-less registration")
                     ctap1register(connection, options, clientDataHash)

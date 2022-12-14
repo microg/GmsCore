@@ -167,7 +167,8 @@ suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packa
         }
         // FIXME: Standard suggests doing additional checks, but this is already sensible enough
     } else if (facetId.startsWith("android:apk-key-hash:") && packageName != null) {
-        val sha256FacetId = getAltFacetId(context, packageName, facetId)
+        val sha256FacetId = getAltFacetId(context, packageName, facetId) ?:
+            throw RequestHandlingException(NOT_ALLOWED_ERR, "Can't resolve $facetId to SHA-256 Facet")
         if (!isAssetLinked(context, rpId, sha256FacetId, packageName)) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $sha256FacetId")
         }
@@ -218,7 +219,7 @@ fun getApkKeyHashFacetId(context: Context, packageName: String): String {
     return "android:apk-key-hash:${digest.toBase64(HASH_BASE64_FLAGS)}"
 }
 
-fun getAltFacetId(context: Context, packageName: String, facetId: String): String {
+fun getAltFacetId(context: Context, packageName: String, facetId: String): String? {
     val firstSignature = context.packageManager.getSignatures(packageName).firstOrNull()
         ?: throw RequestHandlingException(NOT_ALLOWED_ERR, "Unknown package $packageName")
     return when (facetId) {
@@ -228,9 +229,7 @@ fun getAltFacetId(context: Context, packageName: String, facetId: String): Strin
         "android:apk-key-hash-sha256:${firstSignature.digest("SHA-256").toBase64(HASH_BASE64_FLAGS)}" -> {
             "android:apk-key-hash:${firstSignature.digest("SHA1").toBase64(HASH_BASE64_FLAGS)}"
         }
-        else -> {
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "Package $packageName does not match facet $facetId")
-        }
+        else -> null
     }
 }
 
