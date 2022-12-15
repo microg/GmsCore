@@ -52,9 +52,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.*
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
 import com.google.android.gms.dynamic.unwrap
-import com.mapbox.android.core.location.LocationEngineCallback
-import com.mapbox.android.core.location.LocationEngineRequest
-import com.mapbox.android.core.location.LocationEngineResult
+import com.mapbox.mapboxsdk.WellKnownTileServer
+import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
+import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
 import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MapContext
@@ -142,7 +142,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
         runOnMainLooper {
-            Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY)
+            Mapbox.getInstance(mapContext, BuildConfig.MAPBOX_KEY, WellKnownTileServer.Mapbox)
         }
 
 
@@ -372,11 +372,11 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
         // TODO: Serve map styles locally
         when (storedMapType) {
-            MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
-            MAP_TYPE_TERRAIN -> map?.setStyle(Style.OUTDOORS, update)
-            MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
+            MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
+            MAP_TYPE_TERRAIN -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/mapbox/outdoors-v12"), update)
+            MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
             //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-            else -> map?.setStyle(Style.Builder().fromUrl("mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"), update)
+            else -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"), update)
         }
 
         map?.let { BitmapDescriptorFactoryImpl.registerMap(it) }
@@ -693,9 +693,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 symbolManager.iconAllowOverlap = true
                 symbolManager.addClickListener {
                     try {
-                        markers[it.id]?.let { markerClickListener?.onMarkerClick(it) }
+                        markers[it.id]?.let { markerClickListener?.onMarkerClick(it) } == true
                     } catch (e: Exception) {
                         Log.w(TAG, e)
+                        false
                     }
                 }
                 symbolManager.addDragListener(object : OnSymbolDragListener {
