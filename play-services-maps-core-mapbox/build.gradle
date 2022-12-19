@@ -20,7 +20,7 @@ apply plugin: 'kotlin-android'
 dependencies {
     implementation project(':play-services-maps')
     implementation project(':play-services-base-core')
-    implementation("org.maplibre.gl:android-sdk:9.5.2") {
+    implementation("org.maplibre.gl:android-sdk:9.6.0") {
         exclude group: 'com.google.android.gms'
     }
     implementation("org.maplibre.gl:android-plugin-annotation-v9:1.0.0") {
