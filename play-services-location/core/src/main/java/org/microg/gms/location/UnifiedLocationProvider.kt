@@ -114,7 +114,7 @@ class UnifiedLocationProvider(private val context: Context, private val changeLi
                         client.cancelLocationRequestById(id)
                     }
                     for (request in requests.filter { it.id !in activeRequestIds }) {
-                        client.updateLocationRequest(LocationRequest(listener, request.locationRequest.interval, request.locationRequest.numUpdates, request.id), Bundle().apply {
+                        client.updateLocationRequest(LocationRequest(listener, request.locationRequest.intervalMillis, request.locationRequest.maxUpdates, request.id), Bundle().apply {
                             putString("packageName", request.packageName)
                             putString("source", "GoogleLocationManager")
                         })

@@ -55,6 +55,7 @@ public class LocationRequestHelper {
     public PendingIntent pendingIntent;
     public ILocationCallback callback;
     public String id = UUID.randomUUID().toString();
+    public final long start;
 
     private Location lastReport;
     private int numReports = 0;
@@ -64,6 +65,7 @@ public class LocationRequestHelper {
         this.locationRequest = locationRequest;
         this.packageName = packageName;
         this.uid = uid;
+        this.start = SystemClock.elapsedRealtime();
 
         this.initialHasFinePermission = context.getPackageManager().checkPermission(ACCESS_FINE_LOCATION, packageName) == PackageManager.PERMISSION_GRANTED;
         this.initialHasCoarsePermission = context.getPackageManager().checkPermission(ACCESS_COARSE_LOCATION, packageName) == PackageManager.PERMISSION_GRANTED;
@@ -82,7 +84,7 @@ public class LocationRequestHelper {
     }
 
     public LocationRequestHelper(Context context, String packageName, int uid, LocationRequestUpdateData data) {
-        this(context, data.request.request, packageName, uid);
+        this(context, data.request.getRequest(), packageName, uid);
         this.listener = data.listener;
         this.pendingIntent = data.pendingIntent;
         this.callback = data.callback;
@@ -90,7 +92,7 @@ public class LocationRequestHelper {
 
     public boolean isActive() {
         if (!hasCoarsePermission()) return false;
-        if (locationRequest.getExpirationTime() < SystemClock.elapsedRealtime()) return false;
+        if (locationRequest.getExpirationTime() < SystemClock.elapsedRealtime() || locationRequest.getDurationMillis() < (SystemClock.elapsedRealtime() - start)) return false;
         if (listener != null) {
             try {
                 return listener.asBinder().isBinderAlive();
@@ -127,10 +129,10 @@ public class LocationRequestHelper {
             if (location.equals(lastReport)) {
                 return true;
             }
-            if (location.getTime() - lastReport.getTime() < locationRequest.getFastestInterval()) {
+            if (location.getTime() - lastReport.getTime() < locationRequest.getMinUpdateIntervalMillis()) {
                 return true;
             }
-            if (location.distanceTo(lastReport) < locationRequest.getSmallestDisplacement()) {
+            if (location.distanceTo(lastReport) < locationRequest.getMinUpdateDistanceMeters()) {
                 return true;
             }
         }
@@ -157,9 +159,11 @@ public class LocationRequestHelper {
             } catch (RemoteException e) {
                 return false;
             }
+        } else {
+            return false;
         }
         numReports++;
-        return numReports < locationRequest.getNumUpdates();
+        return numReports < locationRequest.getMaxUpdates();
     }
 
     @Override
@@ -251,7 +255,11 @@ public class LocationRequestHelper {
     }
 
     public void dump(PrintWriter writer) {
-        writer.println("  " + id + " package=" + packageName);
+        String type = "unknown";
+        if (listener != null) type = "listener";
+        if (pendingIntent != null) type = "pending intent";
+        if (callback != null) type = "callback";
+        writer.println("  " + id + " package=" + packageName + " type=" + type);
         writer.println("    request: " + locationRequest);
         writer.println("    last location: " + lastReport);
     }

@@ -43,6 +43,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData;
+import com.google.android.gms.location.internal.IFusedLocationProviderCallback;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.IGoogleLocationManagerService;
 import com.google.android.gms.location.internal.ISettingsCallbacks;
@@ -155,6 +156,12 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public Location getLastLocation() throws RemoteException {
         Log.d(TAG, "getLastLocation");
         return getLocationManager().getLastLocation(PackageUtils.getCallingPackage(context));
+    }
+
+    @Override
+    public void flushLocations(IFusedLocationProviderCallback callback) throws RemoteException {
+        Log.d(TAG, "flushLocations");
+        //getLocationManager().flushLocations();
     }
 
     @Override
@@ -355,14 +362,14 @@ public class GoogleLocationManagerServiceImpl extends IGoogleLocationManagerServ
     public void requestLocationUpdatesInternalWithListener(LocationRequestInternal request,
                                                            ILocationListener listener) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesInternalWithListener: " + request);
-        getLocationManager().requestLocationUpdates(request.request, listener, PackageUtils.getCallingPackage(context));
+        getLocationManager().requestLocationUpdates(request.getRequest(), listener, PackageUtils.getCallingPackage(context));
     }
 
     @Override
     public void requestLocationUpdatesInternalWithIntent(LocationRequestInternal request,
                                                          PendingIntent callbackIntent) throws RemoteException {
         Log.d(TAG, "requestLocationUpdatesInternalWithIntent: " + request);
-        getLocationManager().requestLocationUpdates(request.request, callbackIntent, PackageUtils.packageFromPendingIntent(callbackIntent));
+        getLocationManager().requestLocationUpdates(request.getRequest(), callbackIntent, PackageUtils.packageFromPendingIntent(callbackIntent));
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.google.android.gms.common.api.internal.IStatusCallback;
 //import com.google.android.gms.location.places.AutocompleteFilter;
 //import com.google.android.gms.location.places.internal.IPlacesCallbacks;
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData;
+import com.google.android.gms.location.internal.IFusedLocationProviderCallback;
 import com.google.android.gms.location.internal.ISettingsCallbacks;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.location.internal.LocationRequestUpdateData;
@@ -59,7 +60,7 @@ interface IGoogleLocationManagerService {
     void removeLocationUpdatesWithListener(ILocationListener listener) = 9;
     void removeLocationUpdatesWithIntent(in PendingIntent callbackIntent) = 10;
     void updateLocationRequest(in LocationRequestUpdateData locationRequestUpdateData) = 58;
-//    void flushLocations(IFusedLocationProviderCallback callback) = 66;
+    void flushLocations(IFusedLocationProviderCallback callback) = 66;
 
     void setMockMode(boolean mockMode) = 11;
     void setMockLocation(in Location mockLocation) = 12;

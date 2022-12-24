@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 public class LocationClientImpl extends GoogleLocationManagerClient {
     private static final String TAG = "GmsLocationClientImpl";
@@ -108,11 +109,16 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
     }
 
     public void requestLocationUpdates(LocationRequest request, LocationListener listener, Looper looper) throws RemoteException {
+        final Handler handler = new Handler(looper);
+        requestLocationUpdates(request, handler::post, listener);
+    }
+
+    public void requestLocationUpdates(LocationRequest request, Executor executor, LocationListener listener) throws RemoteException {
         if (!listenerMap.containsKey(listener)) {
             listenerMap.put(listener, new ILocationListener.Stub() {
                 @Override
                 public void onLocationChanged(Location location) throws RemoteException {
-                    (new Handler(looper)).post(() -> listener.onLocationChanged(location));
+                    executor.execute(() -> listener.onLocationChanged(location));
                 }
             });
         }
@@ -120,11 +126,16 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
     }
 
     public void requestLocationUpdates(LocationRequest request, LocationCallback callback, Looper looper) throws RemoteException {
+        final Handler handler = new Handler(looper);
+        requestLocationUpdates(request, handler::post, callback);
+    }
+
+    public void requestLocationUpdates(LocationRequest request, Executor executor, LocationCallback callback) throws RemoteException {
         if (!callbackMap.containsKey(callback)) {
             callbackMap.put(callback, new ILocationListener.Stub() {
                 @Override
                 public void onLocationChanged(Location location) throws RemoteException {
-                    (new Handler(looper)).post(() -> callback.onLocationResult(LocationResult.create(Collections.singletonList(location))));
+                    executor.execute(() -> callback.onLocationResult(LocationResult.create(Collections.singletonList(location))));
                 }
             });
         }

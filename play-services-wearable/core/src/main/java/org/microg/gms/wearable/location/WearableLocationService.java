@@ -21,7 +21,7 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.internal.ClientIdentity;
+import com.google.android.gms.common.internal.ClientIdentity;
 import com.google.android.gms.location.internal.LocationRequestInternal;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.MessageEvent;

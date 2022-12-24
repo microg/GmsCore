@@ -126,10 +126,10 @@ public class RealLocationProvider {
             float minDistance = Float.MAX_VALUE;
             StringBuilder sb = new StringBuilder();
             for (LocationRequestHelper request : requests) {
-                minTime = Math.min(request.locationRequest.getInterval(), minTime);
-                minDistance = Math.min(request.locationRequest.getSmallestDisplacement(), minDistance);
+                minTime = Math.min(request.locationRequest.getIntervalMillis(), minTime);
+                minDistance = Math.min(request.locationRequest.getMinUpdateDistanceMeters(), minDistance);
                 if (sb.length() != 0) sb.append(", ");
-                sb.append(request.packageName).append(":").append(request.locationRequest.getInterval()).append("ms");
+                sb.append(request.packageName).append(":").append(request.locationRequest.getIntervalMillis()).append("ms");
             }
             if (minTime > MIN_GPS_TIME && name.equals("gps")) {
                 Log.d(TAG, name + ": ignoring request as " + minTime + "ms (" + sb + "), is less than " + MIN_GPS_TIME);

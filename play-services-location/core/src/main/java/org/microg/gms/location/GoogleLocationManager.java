@@ -44,8 +44,8 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.location.LocationManager.GPS_PROVIDER;
-import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
-import static com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER;
+import static com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
+import static com.google.android.gms.location.Priority.PRIORITY_PASSIVE;
 
 import androidx.lifecycle.Lifecycle;
 
@@ -159,7 +159,7 @@ public class GoogleLocationManager implements LocationChangeListener {
         } else {
             Log.w(TAG, "Not providing high accuracy location: missing permission");
         }
-        if (networkProvider != null && request.hasCoarsePermission() && request.locationRequest.getPriority() != PRIORITY_NO_POWER) {
+        if (networkProvider != null && request.hasCoarsePermission() && request.locationRequest.getPriority() != PRIORITY_PASSIVE) {
             Log.d(TAG, "Registering request with low accuracy location provider");
             networkProvider.addRequest(request);
         } else if (networkProvider != null && old != null) {
@@ -168,7 +168,13 @@ public class GoogleLocationManager implements LocationChangeListener {
         } else {
             Log.w(TAG, "Not providing low accuracy location: missing permission");
         }
-        handler.postDelayed(this::onLocationChanged, request.locationRequest.getFastestInterval());
+        Location lastLocation = getLocation(request.hasFinePermission(), request.hasCoarsePermission());
+        if (lastLocation != null && lastLocation.getTime() > System.currentTimeMillis() - request.locationRequest.getMaxUpdateAgeMillis()) {
+            Log.d(TAG, "Reporting previous location as it's newer than " + request.locationRequest.getMaxUpdateAgeMillis() + "ms");
+            request.report(lastLocation);
+        } else {
+            Log.d(TAG, "Not reporting previous location as it's older than " + request.locationRequest.getMaxUpdateAgeMillis() + "ms");
+        }
     }
 
     public void requestLocationUpdates(LocationRequest request, ILocationListener listener, String packageName) {

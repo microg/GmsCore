@@ -5,6 +5,7 @@
 
 package com.google.android.gms.location.internal;
 
+import com.google.android.gms.common.internal.ClientIdentity;
 import com.google.android.gms.location.DeviceOrientationRequest;
 
 import org.microg.safeparcel.AutoSafeParcelable;

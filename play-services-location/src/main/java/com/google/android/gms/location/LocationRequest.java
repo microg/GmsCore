@@ -1,26 +1,30 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.location;
 
+import android.Manifest;
 import android.os.SystemClock;
 
+import android.os.WorkSource;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
+import com.google.android.gms.common.internal.ClientIdentity;
+import org.microg.gms.common.PublicApi;
+import org.microg.gms.location.GranularityUtil;
+import org.microg.gms.location.PriorityUtil;
+import org.microg.gms.location.ThrottleBehaviorUtil;
+import org.microg.gms.utils.WorkSourceUtil;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A data object that contains quality of service parameters for requests to the
@@ -73,455 +77,775 @@ import java.util.Arrays;
 public class LocationRequest extends AutoSafeParcelable {
 
     /**
-     * Used with {@link #setPriority(int)} to request "block" level accuracy.
-     * <p/>
-     * Block level accuracy is considered to be about 100 meter accuracy. Using a coarse accuracy
-     * such as this often consumes less power.
+     * @deprecated Use {@link Priority#PRIORITY_BALANCED_POWER_ACCURACY} instead.
      */
+    @Deprecated
     public static final int PRIORITY_BALANCED_POWER_ACCURACY = 102;
     /**
-     * Used with {@link #setPriority(int)} to request the most accurate locations available.
-     * <p/>
-     * This will return the finest location available.
+     * @deprecated Use {@link Priority#PRIORITY_HIGH_ACCURACY} instead.
      */
+    @Deprecated
     public static final int PRIORITY_HIGH_ACCURACY = 100;
     /**
-     * Used with {@link #setPriority(int)} to request "city" level accuracy.
-     * <p/>
-     * City level accuracy is considered to be about 10km accuracy. Using a coarse accuracy such as
-     * this often consumes less power.
+     * @deprecated Use {@link Priority#PRIORITY_LOW_POWER} instead.
      */
+    @Deprecated
     public static final int PRIORITY_LOW_POWER = 104;
     /**
-     * Used with {@link #setPriority(int)} to request the best accuracy possible with zero
-     * additional power consumption.
-     * <p/>
-     * No locations will be returned unless a different client has requested location updates in
-     * which case this request will act as a passive listener to those locations.
+     * @deprecated Use {@link Priority#PRIORITY_PASSIVE} instead.
      */
+    @Deprecated
     public static final int PRIORITY_NO_POWER = 105;
 
     @Field(1000)
     private int versionCode = 1;
     @Field(1)
+    @Priority
     private int priority;
     @Field(2)
-    private long interval;
+    private long intervalMillis;
     @Field(3)
-    private long fastestInterval;
+    private long minUpdateIntervalMillis;
     @Field(4)
+    @Deprecated
     private boolean explicitFastestInterval;
     @Field(5)
+    @Deprecated
     private long expirationTime;
     @Field(6)
-    private int numUpdates;
+    private int maxUpdates;
     @Field(7)
-    private float smallestDisplacement;
+    private float minUpdateDistanceMeters;
     @Field(8)
-    private long maxWaitTime;
+    private long maxUpdateDelayMillis;
     @Field(9)
     private boolean waitForAccurateLocation;
+    @Field(10)
+    private long durationMillis;
+    @Field(11)
+    private long maxUpdateAgeMillis;
+    @Field(12)
+    @Granularity
+    private int granularity;
+    @Field(13)
+    @ThrottleBehavior
+    private int throttleBehavior;
+    @Field(14)
+    @Nullable
+    private String moduleId;
+    @Field(15)
+    private boolean bypass;
+    @Field(16)
+    @NonNull
+    private WorkSource workSource;
+    @Field(17)
+    @Nullable
+    private ClientIdentity impersonation;
 
+    @Deprecated
     public LocationRequest() {
-        this.priority = PRIORITY_BALANCED_POWER_ACCURACY;
-        this.interval = 3600000;
-        this.fastestInterval = 600000;
+        this.priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+        this.intervalMillis = 3600000;
+        this.minUpdateIntervalMillis = 600000;
+        this.maxUpdateDelayMillis = 0;
+        this.durationMillis = Long.MAX_VALUE;
+        this.maxUpdates = Integer.MAX_VALUE;
+        this.minUpdateDistanceMeters = 0;
+        this.waitForAccurateLocation = false;
+        this.maxUpdateAgeMillis = -1;
+        this.granularity = Granularity.GRANULARITY_PERMISSION_LEVEL;
+        this.throttleBehavior = ThrottleBehavior.THROTTLE_BACKGROUND;
+        this.bypass = false;
+        this.workSource = new WorkSource();
+
+        // deprecated
         this.explicitFastestInterval = false;
         this.expirationTime = Long.MAX_VALUE;
-        this.numUpdates = Integer.MAX_VALUE;
-        this.smallestDisplacement = 0;
-        this.maxWaitTime = 0;
     }
 
     /**
-     * Create a location request with default parameters.
-     * <p/>
-     * Default parameters are for a block accuracy, slowly updated location. It can then be
-     * adjusted as required by the applications before passing to the FusedLocationProviderApi.
-     *
-     * @return a new location request
+     * @deprecated Use {@link LocationRequest.Builder} instead. May be removed in a future release.
      */
+    @Deprecated
     public static LocationRequest create() {
         return new LocationRequest();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof LocationRequest)) return false;
+        LocationRequest other = (LocationRequest) o;
+
+        if (this.priority != other.priority) return false;
+        if (this.intervalMillis != other.intervalMillis && !isPassive()) return false;
+        if (this.minUpdateIntervalMillis != other.minUpdateIntervalMillis) return false;
+        if (isBatched() != other.isBatched()) return false;
+        if (this.maxUpdateDelayMillis != other.maxUpdateDelayMillis && isBatched()) return false;
+        if (this.durationMillis != other.durationMillis) return false;
+        if (this.maxUpdates != other.maxUpdates) return false;
+        if (this.minUpdateDistanceMeters != other.minUpdateDistanceMeters) return false;
+        if (this.waitForAccurateLocation != other.waitForAccurateLocation) return false;
+        if (this.granularity != other.granularity) return false;
+        if (this.throttleBehavior != other.throttleBehavior) return false;
+        if (this.workSource.equals(other.workSource)) return false;
+        if (!Objects.equals(this.moduleId, other.moduleId)) return false;
+        if (!Objects.equals(this.impersonation, other.impersonation)) return false;
+
+        return true;
+    }
+
     /**
-     * Get the request expiration time, in milliseconds since boot.
-     * <p/>
-     * This value can be compared to {@link SystemClock#elapsedRealtime()} to determine
-     * the time until expiration.
-     *
-     * @return expiration time of request, in milliseconds since boot including suspend
+     * The duration of this request. A location request will not receive any locations after it has expired, and will be removed
+     * shortly thereafter. A value of {@link Long#MAX_VALUE} implies an infinite duration.
      */
+    public long getDurationMillis() {
+        return durationMillis;
+    }
+
+    /**
+     * @deprecated Use {@link #getDurationMillis()} instead. Using this method will return the duration added to the current elapsed realtime, which
+     * may give unexpected results. May be removed in a future release.
+     */
+    @Deprecated
     public long getExpirationTime() {
         return expirationTime;
     }
 
     /**
-     * Get the fastest interval of this request, in milliseconds.
-     * <p/>
-     * The system will never provide location updates faster than the minimum of
-     * {@link #getFastestInterval()} and {@link #getInterval()}.
-     *
-     * @return fastest interval in milliseconds, exact
+     * @deprecated Use {@link #getMinUpdateIntervalMillis()} instead. May be removed in a future release.
      */
+    @Deprecated
     public long getFastestInterval() {
-        return fastestInterval;
+        return minUpdateIntervalMillis;
     }
 
     /**
-     * Get the desired interval of this request, in milliseconds.
-     *
-     * @return desired interval in milliseconds, inexact
+     * The {@link Granularity} of locations returned for this request. This controls whether fine or coarse locations may be returned.
      */
+    @Granularity
+    public int getGranularity() {
+        return granularity;
+    }
+
+    @Nullable
+    @PublicApi(exclude = true)
+    public ClientIdentity getImpersonation() {
+        return impersonation;
+    }
+
+    /**
+     * @deprecated Use {@link #getIntervalMillis()} instead. May be removed in a future release.
+     */
+    @Deprecated
     public long getInterval() {
-        return interval;
+        return intervalMillis;
     }
 
     /**
-     * Gets the maximum wait time in milliseconds for location updates. If the wait time is smaller than the interval
-     * requested with {@link #setInterval(long)}, then the interval will be used instead.
-     *
-     * @return maximum wait time in milliseconds, inexact
-     * @see #setMaxWaitTime(long)
+     * The desired interval of location updates. Location updates may arrive faster than this interval (but no faster than
+     * specified by {@link #getMinUpdateIntervalMillis()}) or slower than this interval (if the request is being throttled for
+     * example).
      */
+    public long getIntervalMillis() {
+        return intervalMillis;
+    }
+
+    /**
+     * The maximum age of an initial historical location delivered for this request. A value of 0 indicates that no initial historical
+     * location will be delivered, only freshly derived locations. A value {@link Long#MAX_VALUE} represents an effectively unbounded
+     * maximum age.
+     */
+    public long getMaxUpdateAgeMillis() {
+        return maxUpdateAgeMillis;
+    }
+
+    /**
+     * The longest a location update may be delayed. This parameter controls location batching behavior. If this is set to a value
+     * at least 2x larger than the interval specified by {@link #getIntervalMillis()}, then a device may (but is not required to) save
+     * power by delivering locations in batches. If clients do not require immediate delivery, consider setting this value as high
+     * as is reasonable to allow for additional power savings.
+     * <p>
+     * For example, if a request is made with a 2s interval and a 10s maximum update delay, this implies that the device may
+     * choose to deliver batches of 5 locations every 10s (where each location should represent a point in time ~2s after the
+     * previous).
+     * <p>
+     * Support for batching may vary by device type, so simply allowing batching via this parameter does not imply a client will
+     * receive batched results on all devices.
+     * <p>
+     * {@link FusedLocationProviderClient#flushLocations()} may be used to flush locations that have been batched, but not
+     * delivered yet.
+     */
+    public long getMaxUpdateDelayMillis() {
+        return maxUpdateDelayMillis;
+    }
+
+    /**
+     * The maximum number of updates delivered to this request. A location request will not receive any locations after the
+     * maximum number of updates has been reached, and will be removed shortly thereafter. A value of {@link Integer#MAX_VALUE}
+     * implies an unlimited number of updates.
+     */
+    public int getMaxUpdates() {
+        return maxUpdates;
+    }
+
+    /**
+     * @deprecated Use {@link #getMaxUpdateDelayMillis()} instead. May be removed in a future release.
+     */
+    @Deprecated
     public long getMaxWaitTime() {
-        return maxWaitTime;
+        return maxUpdateDelayMillis;
     }
 
     /**
-     * Get the number of updates requested.
-     * <p/>
-     * By default this is {@link java.lang.Integer#MAX_VALUE}, which indicates that locations are
-     * updated until the request is explicitly removed.
-     *
-     * @return number of updates
+     * The minimum distance required between consecutive location updates. If a derived location update is not at least the
+     * specified distance away from the previous location update delivered to the client, it will not be delivered. This may also
+     * allow additional power savings under some circumstances.
      */
+    public float getMinUpdateDistanceMeters() {
+        return minUpdateDistanceMeters;
+    }
+
+    /**
+     * The fastest allowed interval of location updates. Location updates may arrive faster than the desired interval
+     * ({@link #getIntervalMillis()}), but will never arrive faster than specified here. FLP APIs make some allowance for jitter with
+     * the minimum update interval, so clients need not worry about location updates that arrive a couple milliseconds too early
+     * being rejected.
+     */
+    public long getMinUpdateIntervalMillis() {
+        return minUpdateIntervalMillis;
+    }
+
+    @PublicApi(exclude = true)
+    @Nullable
+    public String getModuleId() {
+        return moduleId;
+    }
+
+    /**
+     * @deprecated Use {@link #getMaxUpdates()} instead. May be removed in a future release.
+     */
+    @Deprecated
     public int getNumUpdates() {
-        return numUpdates;
+        return maxUpdates;
     }
 
     /**
-     * Get the quality of the request.
-     *
-     * @return an accuracy constant
+     * The {@link Priority} of the location request.
      */
+    @Priority
     public int getPriority() {
         return priority;
     }
 
     /**
-     * Get the minimum displacement between location updates in meters
-     * <p/>
-     * By default this is 0.
-     *
-     * @return minimum displacement between location updates in meters
+     * @deprecated Use {@link #getMinUpdateDistanceMeters()} instead.
      */
+    @Deprecated
     public float getSmallestDisplacement() {
-        return smallestDisplacement;
+        return minUpdateDistanceMeters;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+    @PublicApi(exclude = true)
+    @ThrottleBehavior
+    public int getThrottleBehavior() {
+        return throttleBehavior;
+    }
 
-        LocationRequest that = (LocationRequest) o;
-
-        if (expirationTime != that.expirationTime)
-            return false;
-        if (explicitFastestInterval != that.explicitFastestInterval)
-            return false;
-        if (fastestInterval != that.fastestInterval)
-            return false;
-        if (interval != that.interval)
-            return false;
-        if (maxWaitTime != that.maxWaitTime)
-            return false;
-        if (numUpdates != that.numUpdates)
-            return false;
-        if (priority != that.priority)
-            return false;
-        if (Float.compare(that.smallestDisplacement, smallestDisplacement) != 0)
-            return false;
-
-        return true;
+    @PublicApi(exclude = true)
+    public WorkSource getWorkSource() {
+        return workSource;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(
-                new Object[]{priority, interval, fastestInterval, explicitFastestInterval,
-                        explicitFastestInterval, numUpdates, smallestDisplacement, maxWaitTime
-                });
+        return Arrays.hashCode(new Object[]{priority, intervalMillis, minUpdateIntervalMillis, workSource});
     }
 
     /**
-     * Returns whether or not the fastest interval was explicitly specified for the location request.
-     *
-     * @return True if the fastest interval was explicitly set for the location request; false otherwise
+     * True if this request allows batching (i.e. {@link #getMaxUpdateDelayMillis()} is at least 2x {@link #getIntervalMillis()}).
      */
-    public boolean isFastestIntervalExplicitlySet() {
-        return explicitFastestInterval;
+    public boolean isBatched() {
+        return maxUpdateDelayMillis > 0 && maxUpdateDelayMillis > intervalMillis * 2;
+    }
+
+    @PublicApi(exclude = true)
+    public boolean isBypass() {
+        return bypass;
     }
 
     /**
-     * Returns whether the location services will wait a few seconds initially for accurate locations, if accurate
-     * locations cannot be computed on the device for {@link #PRIORITY_HIGH_ACCURACY} requests.
+     * @deprecated Do not use. May be removed in a future release.
+     */
+    @Deprecated
+    public boolean isFastestIntervalExplicitlySet() {
+        return true;
+    }
+
+    /**
+     * True if the priority is {@link Priority#PRIORITY_PASSIVE}.
+     */
+    public boolean isPassive() {
+        return priority == Priority.PRIORITY_PASSIVE;
+    }
+
+    /**
+     * If this request is {@link Priority#PRIORITY_HIGH_ACCURACY}, this will delay delivery of initial low accuracy locations for a
+     * small amount of time in case a high accuracy location can be delivered instead.
      */
     public boolean isWaitForAccurateLocation() {
         return waitForAccurateLocation;
     }
 
     /**
-     * Set the duration of this request, in milliseconds.
-     * <p/>
-     * The duration begins immediately (and not when the request is passed to the location client),
-     * so call this method again if the request is re-used at a later time.
-     * <p/>
-     * The location client will automatically stop updates after the request expires.
-     * <p/>
-     * The duration includes suspend time. Values less than 0 are allowed, but indicate that the
-     * request has already expired.
-     *
-     * @param millis duration of request in milliseconds
-     * @return the same object, so that setters can be chained
+     * @deprecated Use {@link LocationRequest.Builder#setDurationMillis(long)} instead. May be removed in a future release.
      */
-    public LocationRequest setExpirationDuration(long millis) {
-        expirationTime = SystemClock.elapsedRealtime() + millis;
+    @Deprecated
+    @NonNull
+    public LocationRequest setExpirationDuration(long durationMillis) {
+        if (durationMillis <= 0) throw new IllegalArgumentException("durationMillis must be greater than 0");
+        this.durationMillis = durationMillis;
         return this;
     }
 
     /**
-     * Set the request expiration time, in millisecond since boot.
-     * <p/>
-     * This expiration time uses the same time base as {@link SystemClock#elapsedRealtime()}.
-     * <p/>
-     * The location client will automatically stop updates after the request expires.
-     * <p/>
-     * The duration includes suspend time. Values before {@link SystemClock#elapsedRealtime()} are
-     * allowed, but indicate that the request has already expired.
-     *
-     * @param millis expiration time of request, in milliseconds since boot including suspend
-     * @return the same object, so that setters can be chained
+     * @deprecated Use {@link LocationRequest.Builder#setDurationMillis(long)} instead. Using this method will express the expiration time in
+     * terms of duration, which may give unexpected results. May be removed in a future release.
      */
-    public LocationRequest setExpirationTime(long millis) {
-        expirationTime = millis;
+    @Deprecated
+    @NonNull
+    public LocationRequest setExpirationTime(long elapsedRealtime) {
+        this.durationMillis = Math.max(1, elapsedRealtime - SystemClock.elapsedRealtime());
         return this;
     }
 
     /**
-     * Explicitly set the fastest interval for location updates, in milliseconds.
-     * <p/>
-     * This controls the fastest rate at which your application will receive location updates,
-     * which might be faster than {@link #setInterval(long)} in some situations (for example, if
-     * other applications are triggering location updates).
-     * <p/>
-     * This allows your application to passively acquire locations at a rate faster than it
-     * actively acquires locations, saving power.
-     * <p/>
-     * Unlike {@link #setInterval(long)}, this parameter is exact. Your application will never
-     * receive updates faster than this value.
-     * <p/>
-     * If you don't call this method, a fastest interval will be selected for you. It will be a
-     * value faster than your active interval ({@link #setInterval(long)}).
-     * <p/>
-     * An interval of 0 is allowed, but not recommended, since location updates may be extremely
-     * fast on future implementations.
-     * <p/>
-     * If {@link #setFastestInterval(long)} is set slower than {@link #setInterval(long)}, then
-     * your effective fastest interval is {@link #setInterval(long)}.
-     *
-     * @param millis fastest interval for updates in milliseconds, exact
-     * @return the same object, so that setters can be chained
-     * @throws IllegalArgumentException if the interval is less than zero
+     * @deprecated Use {@link LocationRequest.Builder#setMinUpdateIntervalMillis(long)} instead. May be removed in a future release.
      */
-    public LocationRequest setFastestInterval(long millis) throws IllegalArgumentException {
-        if (millis < 0)
-            throw new IllegalArgumentException("interval must not be negative");
-        fastestInterval = millis;
-        explicitFastestInterval = true;
+    @Deprecated
+    @NonNull
+    public LocationRequest setFastestInterval(long fastestIntervalMillis) throws IllegalArgumentException {
+        if (fastestIntervalMillis < 0) throw new IllegalArgumentException("illegal fastest interval: " + fastestIntervalMillis);
+        this.minUpdateIntervalMillis = fastestIntervalMillis;
+        explicitFastestInterval = true; // FIXME: Remove
         return this;
     }
 
     /**
-     * Set the desired interval for active location updates, in milliseconds.
-     * <p/>
-     * The location client will actively try to obtain location updates for your application at
-     * this interval, so it has a direct influence on the amount of power used by your application.
-     * Choose your interval wisely.
-     * <p/>
-     * This interval is inexact. You may not receive updates at all (if no location sources are
-     * available), or you may receive them slower than requested. You may also receive them faster
-     * than requested (if other applications are requesting location at a faster interval). The
-     * fastest rate that that you will receive updates can be controlled with
-     * {@link #setFastestInterval(long)}. By default this fastest rate is 6x the interval frequency.
-     * <p/>
-     * Applications with only the coarse location permission may have their interval silently
-     * throttled.
-     * <p/>
-     * An interval of 0 is allowed, but not recommended, since location updates may be extremely
-     * fast on future implementations.
-     * <p/>
-     * {@link #setPriority(int)} and {@link #setInterval(long)} are the most important parameters
-     * on a location request.
-     *
-     * @param millis desired interval in millisecond, inexact
-     * @return the same object, so that setters can be chained
-     * @throws IllegalArgumentException if the interval is less than zero
+     * @deprecated Use {@link LocationRequest.Builder#setIntervalMillis(long)} instead. May be removed in a future release.
      */
-    public LocationRequest setInterval(long millis) throws IllegalArgumentException {
-        if (millis < 0)
-            throw new IllegalArgumentException("interval must not be negative");
-        interval = millis;
-        return this;
-    }
-
-    /**
-     * Sets the maximum wait time in milliseconds for location updates.
-     * <p>
-     * If you pass a value at least 2x larger than the interval specified with {@link #setInterval(long)}, then
-     * location delivery may be delayed and multiple locations can be delivered at once. Locations are determined at
-     * the {@link #setInterval(long)} rate, but can be delivered in batch after the interval you set in this method.
-     * This can consume less battery and give more accurate locations, depending on the device's hardware capabilities.
-     * You should set this value to be as large as possible for your needs if you don't need immediate location
-     * delivery.
-     *
-     * @param millis desired maximum wait time in millisecond, inexact
-     * @return the same object, so that setters can be chained
-     * @throws IllegalArgumentException if the interval is less than zero
-     */
-    public LocationRequest setMaxWaitTime(long millis) throws IllegalArgumentException {
-        if (millis < 0)
-            throw new IllegalArgumentException("interval must not be negative");
-        maxWaitTime = millis;
-        return this;
-    }
-
-    /**
-     * Set the number of location updates.
-     * <p/>
-     * By default locations are continuously updated until the request is explicitly removed,
-     * however you can optionally request a set number of updates. For example, if your application
-     * only needs a single fresh location, then call this method with a value of 1 before passing
-     * the request to the location client.
-     * <p/>
-     * When using this option care must be taken to either explicitly remove the request when no
-     * longer needed or to set an expiration with ({@link #setExpirationDuration(long)} or
-     * {@link #setExpirationTime(long)}. Otherwise in some cases if a location can't be computed,
-     * this request could stay active indefinitely consuming power.
-     *
-     * @param numUpdates the number of location updates requested
-     * @return the same object, so that setters can be chained
-     * @throws IllegalArgumentException if numUpdates is 0 or less
-     */
-    public LocationRequest setNumUpdates(int numUpdates) throws IllegalArgumentException {
-        if (numUpdates <= 0)
-            throw new IllegalArgumentException("numUpdates must not be 0 or negative");
-        this.numUpdates = numUpdates;
-        return this;
-    }
-
-    /**
-     * Set the priority of the request.
-     * <p/>
-     * Use with a priority constant such as {@link #PRIORITY_HIGH_ACCURACY}. No other values are
-     * accepted.
-     * <p/>
-     * The priority of the request is a strong hint to the LocationClient for which location
-     * sources to use. For example, {@link #PRIORITY_HIGH_ACCURACY} is more likely to use GPS, and
-     * {@link #PRIORITY_BALANCED_POWER_ACCURACY} is more likely to use WIFI & Cell tower
-     * positioning, but it also depends on many other factors (such as which sources are available)
-     * and is implementation dependent.
-     * <p/>
-     * {@link #setPriority(int)} and {@link #setInterval(long)} are the most important parameters
-     * on a location request.
-     *
-     * @param priority an accuracy or power constant
-     * @return the same object, so that setters can be chained
-     * @throws IllegalArgumentException if the quality constant is not valid
-     */
-    public LocationRequest setPriority(int priority) {
-        switch (priority) {
-            default:
-                throw new IllegalArgumentException("priority is not a known constant");
-            case PRIORITY_BALANCED_POWER_ACCURACY:
-            case PRIORITY_HIGH_ACCURACY:
-            case PRIORITY_LOW_POWER:
-            case PRIORITY_NO_POWER:
-                this.priority = priority;
+    @Deprecated
+    @NonNull
+    public LocationRequest setInterval(long intervalMillis) throws IllegalArgumentException {
+        if (intervalMillis < 0) throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
+        if (this.minUpdateIntervalMillis == this.intervalMillis / 6) {
+            this.minUpdateIntervalMillis = intervalMillis / 6;
         }
+        if (this.maxUpdateAgeMillis == this.intervalMillis) {
+            this.maxUpdateAgeMillis = intervalMillis;
+        }
+        this.intervalMillis = intervalMillis;
         return this;
     }
 
     /**
-     * Set the minimum displacement between location updates in meters
-     * <p/>
-     * By default this is 0.
-     *
-     * @param smallestDisplacementMeters the smallest displacement in meters the user must move
-     *                                   between location updates.
-     * @return the same object, so that setters can be chained
-     * @throws IllegalArgumentException if smallestDisplacementMeters is negative
+     * @deprecated Use {@link LocationRequest.Builder#setMaxUpdateDelayMillis(long)} instead. May be removed in a future release.
      */
+    @Deprecated
+    @NonNull
+    public LocationRequest setMaxWaitTime(long maxWaitTimeMillis) throws IllegalArgumentException {
+        if (maxWaitTimeMillis < 0) throw new IllegalArgumentException("illegal max wait time: " + maxWaitTimeMillis);
+        maxUpdateDelayMillis = maxWaitTimeMillis;
+        return this;
+    }
+
+    /**
+     * @deprecated Use {@link LocationRequest.Builder#setMaxUpdates(int)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setNumUpdates(int maxUpdates) throws IllegalArgumentException {
+        if (maxUpdates <= 0) throw new IllegalArgumentException("invalid numUpdates: " + maxUpdates);
+        this.maxUpdates = maxUpdates;
+        return this;
+    }
+
+    /**
+     * @deprecated Use {@link LocationRequest.Builder#setPriority(int)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
+    public LocationRequest setPriority(@Priority int priority) {
+        PriorityUtil.checkValidPriority(priority);
+        this.priority = priority;
+        return this;
+    }
+
+    /**
+     * @deprecated Use {@link LocationRequest.Builder#setMinUpdateDistanceMeters(float)} instead. May be removed in a future release.
+     */
+    @Deprecated
+    @NonNull
     public LocationRequest setSmallestDisplacement(float smallestDisplacementMeters) {
-        if (smallestDisplacementMeters < 0)
-            throw new IllegalArgumentException("smallestDisplacementMeters must not be negative");
-        this.smallestDisplacement = smallestDisplacementMeters;
+        if (smallestDisplacementMeters < 0) throw new IllegalArgumentException("invalid displacement: " + smallestDisplacementMeters);
+        this.minUpdateDistanceMeters = smallestDisplacementMeters;
         return this;
     }
 
     /**
-     * Sets whether the client wants the locations services to wait a few seconds for accurate locations initially,
-     * when accurate locations could not be computed on the device immediately after {@link #PRIORITY_HIGH_ACCURACY}
-     * request is made. By default the location services will wait for accurate locations.
-     * <p>
-     * Note that this only applies to clients with {@link #PRIORITY_HIGH_ACCURACY} requests.
-     * <p>
-     * Also note this only applies to the initial locations computed right after the location request is added. The
-     * following inaccurate locations may still be delivered to the clients without delay.
+     * @deprecated Use {@link LocationRequest.Builder#setWaitForAccurateLocation(boolean)} instead. May be removed in a future release.
      */
+    @Deprecated
+    @NonNull
     public LocationRequest setWaitForAccurateLocation(boolean waitForAccurateLocation) {
         this.waitForAccurateLocation = waitForAccurateLocation;
         return this;
     }
 
-    private static String priorityToString(int priority) {
-        switch (priority) {
-            case PRIORITY_HIGH_ACCURACY:
-                return "PRIORITY_HIGH_ACCURACY";
-            case PRIORITY_BALANCED_POWER_ACCURACY:
-                return "PRIORITY_BALANCED_POWER_ACCURACY";
-            case PRIORITY_LOW_POWER:
-                return "PRIORITY_LOW_POWER";
-            case PRIORITY_NO_POWER:
-                return "PRIORITY_NO_POWER";
-            default:
-                return "???";
-        }
-    }
-
     @Override
+    @NonNull
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Request[");
-        sb.append(priorityToString(priority));
-        if (priority != PRIORITY_NO_POWER)
-            sb.append(" requested=").append(interval).append("ms");
-        sb.append(" fastest=").append(fastestInterval).append("ms");
-        if (maxWaitTime > interval)
-            sb.append(" maxWait=").append(maxWaitTime).append("ms");
-        if (smallestDisplacement > 0)
-            sb.append(" smallestDisplacement=").append(smallestDisplacement).append("m");
-        if (expirationTime != Long.MAX_VALUE)
-            sb.append(" expireIn=").append(expirationTime - SystemClock.elapsedRealtime()).append("ms");
-        if (numUpdates != Integer.MAX_VALUE)
-            sb.append(" num=").append(numUpdates);
+        if (isPassive()) {
+            sb.append(PriorityUtil.priorityToString(priority));
+        } else {
+            sb.append("@");
+            sb.append(intervalMillis).append("ms");
+            if (isBatched()) {
+                sb.append("/");
+                sb.append(maxUpdateDelayMillis).append("ms");
+            }
+            sb.append(" ").append(PriorityUtil.priorityToString(priority));
+        }
+        if (isPassive() || minUpdateIntervalMillis != intervalMillis)
+            sb.append(", minUpdateInterval=").append(minUpdateIntervalMillis).append("ms");
+        if (minUpdateDistanceMeters > 0)
+            sb.append(", minUpdateDistance=").append(minUpdateDistanceMeters).append("m");
+        if (!isPassive() ? maxUpdateAgeMillis != intervalMillis : maxUpdateAgeMillis != Long.MAX_VALUE)
+            sb.append(", maxUpdateAge=").append(maxUpdateAgeMillis).append("ms");
+        if (durationMillis != Long.MAX_VALUE)
+            sb.append(", duration=").append(durationMillis).append("ms");
+        if (maxUpdates != Integer.MAX_VALUE)
+            sb.append(", maxUpdates").append(maxUpdates);
+        if (throttleBehavior != 0)
+            sb.append(", ").append(ThrottleBehaviorUtil.throttleBehaviorToString(throttleBehavior));
+        if (granularity != 0)
+            sb.append(", ").append(GranularityUtil.granularityToString(granularity));
+        if (waitForAccurateLocation)
+            sb.append(", waitForAccurateLocation");
+        if (bypass)
+            sb.append(", bypass");
+        if (moduleId != null)
+            sb.append(", moduleId=").append(moduleId);
+        if (!WorkSourceUtil.isEmpty(workSource))
+            sb.append(", ").append(workSource);
+        if (impersonation != null)
+            sb.append(", impersonation=").append(impersonation);
         sb.append("]");
         return sb.toString();
     }
+
+    /**
+     * Builder for {@link LocationRequest}.
+     */
+    public static final class Builder {
+        /**
+         * Represents a maximum update age that is the same as the interval.
+         */
+        public static final long IMPLICIT_MAX_UPDATE_AGE = -1;
+        /**
+         * Represents a minimum update interval that is the same as the interval.
+         */
+        public static final long IMPLICIT_MIN_UPDATE_INTERVAL = -1;
+
+        @Priority
+        private int priority;
+        private long intervalMillis;
+        private long minUpdateIntervalMillis;
+        private long maxUpdateDelayMillis;
+        private long durationMillis;
+        private int maxUpdates;
+        private float minUpdateDistanceMeters;
+        private boolean waitForAccurateLocation;
+        private long maxUpdateAgeMillis;
+        @Granularity
+        private int granularity;
+        @ThrottleBehavior
+        private int throttleBehavior;
+        @Nullable
+        private String moduleId;
+        private boolean bypass;
+        @Nullable
+        private WorkSource workSource;
+        @Nullable
+        private ClientIdentity impersonation;
+
+        /**
+         * Constructs a Builder with the given interval, and default values for all other fields.
+         */
+        public Builder(long intervalMillis) {
+            this(Priority.PRIORITY_BALANCED_POWER_ACCURACY, intervalMillis);
+        }
+
+        /**
+         * Constructs a Builder with the given priority and interval, and default values for all other fields.
+         */
+        public Builder(@Priority int priority, long intervalMillis) {
+            if (intervalMillis < 0) throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
+            PriorityUtil.checkValidPriority(priority);
+            this.priority = priority;
+            this.intervalMillis = intervalMillis;
+            this.minUpdateIntervalMillis = IMPLICIT_MIN_UPDATE_INTERVAL;
+            this.maxUpdateDelayMillis = 0;
+            this.durationMillis = Long.MAX_VALUE;
+            this.maxUpdates = Integer.MAX_VALUE;
+            this.minUpdateDistanceMeters = 0;
+            this.waitForAccurateLocation = true;
+            this.maxUpdateAgeMillis = IMPLICIT_MAX_UPDATE_AGE;
+            this.granularity = Granularity.GRANULARITY_PERMISSION_LEVEL;
+            this.throttleBehavior = ThrottleBehavior.THROTTLE_BACKGROUND;
+            this.moduleId = null;
+            this.bypass = false;
+            this.workSource = null;
+            this.impersonation = null;
+        }
+
+        /**
+         * Constructs a Builder with values copied from the given {@link LocationRequest}.
+         */
+        public Builder(LocationRequest request) {
+            this.priority = request.getPriority();
+            this.intervalMillis = request.getIntervalMillis();
+            this.minUpdateIntervalMillis = request.getMinUpdateIntervalMillis();
+            this.maxUpdateDelayMillis = request.getMaxUpdateDelayMillis();
+            this.durationMillis = request.getDurationMillis();
+            this.maxUpdates = request.getMaxUpdates();
+            this.minUpdateDistanceMeters = request.getMinUpdateDistanceMeters();
+            this.waitForAccurateLocation = request.isWaitForAccurateLocation();
+            this.maxUpdateAgeMillis = request.getMaxUpdateAgeMillis();
+            this.granularity = request.getGranularity();
+            this.throttleBehavior = request.getThrottleBehavior();
+            this.moduleId = request.getModuleId();
+            this.bypass = request.isBypass();
+            this.workSource = request.getWorkSource();
+            this.impersonation = request.getImpersonation();
+        }
+
+        /**
+         * Builds a new {@link LocationRequest}.
+         */
+        @NonNull
+        public LocationRequest build() {
+            LocationRequest request = new LocationRequest();
+            request.priority = priority;
+            request.intervalMillis = intervalMillis;
+            if (minUpdateIntervalMillis == IMPLICIT_MIN_UPDATE_INTERVAL) {
+                request.minUpdateIntervalMillis = intervalMillis;
+            } else {
+                request.minUpdateIntervalMillis = priority == Priority.PRIORITY_PASSIVE ? minUpdateIntervalMillis : Math.min(intervalMillis, minUpdateIntervalMillis);
+            }
+            request.maxUpdateDelayMillis = Math.max(maxUpdateDelayMillis, intervalMillis);
+            request.durationMillis = durationMillis;
+            request.maxUpdates = maxUpdates;
+            request.minUpdateDistanceMeters = minUpdateDistanceMeters;
+            request.waitForAccurateLocation = waitForAccurateLocation;
+            request.maxUpdateAgeMillis = maxUpdateAgeMillis != IMPLICIT_MAX_UPDATE_AGE ? maxUpdateAgeMillis : intervalMillis;
+            request.granularity = granularity;
+            request.throttleBehavior = throttleBehavior;
+            request.moduleId = moduleId;
+            request.bypass = bypass;
+            request.workSource = workSource;
+            request.impersonation = impersonation;
+            return request;
+        }
+
+        @NonNull
+        @PublicApi(exclude = true)
+        @RequiresPermission(anyOf = {"android.permission.WRITE_SECURE_SETTINGS", "android.permission.LOCATION_BYPASS"})
+        public Builder setBypass(boolean bypass) {
+            this.bypass = bypass;
+            return this;
+        }
+
+        /**
+         * Sets the duration of this request. A location request will not receive any locations after it has expired, and will be
+         * removed shortly thereafter. A value of {@link Long#MAX_VALUE} implies an infinite duration.
+         * <p>
+         * The default value is {@link Long#MAX_VALUE}.
+         */
+        @NonNull
+        public Builder setDurationMillis(long durationMillis) {
+            if (durationMillis <= 0) throw new IllegalArgumentException("intervalMillis must be greater than 0");
+            this.durationMillis = durationMillis;
+            return this;
+        }
+
+        /**
+         * Sets the {@link Granularity} of locations returned for this request. This controls whether fine or coarse locations may be
+         * returned.
+         * <p>
+         * The default value is {@link Granularity#GRANULARITY_PERMISSION_LEVEL}.
+         */
+        @NonNull
+        public Builder setGranularity(@Granularity int granularity) {
+            GranularityUtil.checkValidGranularity(granularity);
+            this.granularity = granularity;
+            return this;
+        }
+
+        /**
+         * Sets the desired interval of location updates. Location updates may arrive faster than this interval (but no faster than
+         * specified by {@link #setMinUpdateIntervalMillis(long)}) or slower than this interval (if the request is being throttled for
+         * example).
+         */
+        @NonNull
+        public Builder setIntervalMillis(long intervalMillis) {
+            if (intervalMillis < 0) throw new IllegalArgumentException("intervalMillis must be greater than or equal to 0");
+            this.intervalMillis = intervalMillis;
+            return this;
+        }
+
+        /**
+         * Sets the maximum age of an initial historical location delivered for this request. A value of 0 indicates that no initial
+         * historical location will be delivered, only freshly derived locations. A value {@link Long#MAX_VALUE} represents an effectively
+         * unbounded maximum age.
+         * <p>
+         * This may be set to the special value {@link #IMPLICIT_MAX_UPDATE_AGE} in which case the maximum update age will always be
+         * the same as the interval.
+         * <p>
+         * The default value is {@link #IMPLICIT_MAX_UPDATE_AGE}.
+         */
+        @NonNull
+        public Builder setMaxUpdateAgeMillis(long maxUpdateAgeMillis) {
+            if (maxUpdateAgeMillis < 0 && maxUpdateAgeMillis != IMPLICIT_MAX_UPDATE_AGE)
+                throw new IllegalArgumentException("maxUpdateAgeMillis must be greater than or equal to 0, or IMPLICIT_MAX_UPDATE_AGE");
+            this.maxUpdateAgeMillis = maxUpdateAgeMillis;
+            return this;
+        }
+
+        /**
+         * Sets the longest a location update may be delayed. This parameter controls location batching behavior. If this is set to a
+         * value at least 2x larger than the interval specified by {@link #setIntervalMillis(long)}, then a device may (but is not required
+         * to) save power by delivering locations in batches. If clients do not require immediate delivery, consider setting this value
+         * as high as is reasonable to allow for additional power savings. When the {@link LocationRequest} is built, the maximum
+         * update delay will be set to the max of the provided maximum update delay and the interval. This normalizes requests
+         * without batching to have the maximum update delay equal to the interval.
+         * <p>
+         * For example, if a request is made with a 2s interval and a 10s maximum update delay, this implies that the device may
+         * choose to deliver batches of 5 locations every 10s (where each location in a batch represents a point in time ~2s after
+         * the previous).
+         * <p>
+         * Support for batching may vary by device hardware, so simply allowing batching via this parameter does not imply a client
+         * will receive batched results on all devices.
+         * <p>
+         * {@link FusedLocationProviderClient#flushLocations()} may be used to flush locations that have been batched, but not
+         * delivered yet.
+         * <p>
+         * The default value is 0.
+         */
+        @NonNull
+        public Builder setMaxUpdateDelayMillis(long maxUpdateDelayMillis) {
+            if (maxUpdateDelayMillis < 0) throw new IllegalArgumentException("maxUpdateDelayMillis must be greater than or equal to 0");
+            this.maxUpdateDelayMillis = maxUpdateDelayMillis;
+            return this;
+        }
+
+        /**
+         * Sets the maximum number of updates delivered to this request. A location request will not receive any locations after the
+         * maximum number of updates has been reached, and will be removed shortly thereafter. A value of {@link Integer#MAX_VALUE}
+         * implies an unlimited number of updates.
+         * <p>
+         * The default value is {@link Integer#MAX_VALUE}.
+         */
+        @NonNull
+        public Builder setMaxUpdates(int maxUpdates) {
+            if (maxUpdates <= 0) throw new IllegalArgumentException("maxUpdates must be greater than 0");
+            this.maxUpdates = maxUpdates;
+            return this;
+        }
+
+        /**
+         * Sets the minimum distance required between consecutive location updates. If a derived location update is not at least
+         * the specified distance away from the previous location update delivered to the client, it will not be delivered. This may
+         * also allow additional power savings under some circumstances.
+         * <p>
+         * The default value is 0.
+         */
+        @NonNull
+        public Builder setMinUpdateDistanceMeters(float minUpdateDistanceMeters) {
+            if (minUpdateDistanceMeters < 0) throw new IllegalArgumentException("minUpdateDistanceMeters must be greater than or equal to 0");
+            this.minUpdateDistanceMeters = minUpdateDistanceMeters;
+            return this;
+        }
+
+        /**
+         * Sets the fastest allowed interval of location updates. Location updates may arrive faster than the desired interval
+         * ({@link #setIntervalMillis(long)}), but will never arrive faster than specified here.
+         * <p>
+         * This may be set to the special value {@link #IMPLICIT_MIN_UPDATE_INTERVAL} in which case the minimum update interval will
+         * be the same as the interval. {@link FusedLocationProviderClient} APIs make some allowance for jitter with the minimum
+         * update interval, so clients need not worry about location updates that arrive a couple milliseconds too early being
+         * rejected.
+         * <p>
+         * The default value is {@link #IMPLICIT_MIN_UPDATE_INTERVAL}.
+         */
+        @NonNull
+        public Builder setMinUpdateIntervalMillis(long minUpdateIntervalMillis) {
+            if (minUpdateIntervalMillis < 0 && minUpdateIntervalMillis != IMPLICIT_MIN_UPDATE_INTERVAL)
+                throw new IllegalArgumentException("minUpdateIntervalMillis must be greater than or equal to 0, or IMPLICIT_MIN_UPDATE_INTERVAL");
+            this.minUpdateIntervalMillis = minUpdateIntervalMillis;
+            return this;
+        }
+
+        @NonNull
+        @Deprecated
+        @PublicApi(exclude = true)
+        public Builder setModuleId(@Nullable String moduleId) {
+            this.moduleId = moduleId;
+            return this;
+        }
+
+        /**
+         * Sets the {@link Priority} of the location request.
+         * <p>
+         * The default value is {@link Priority#PRIORITY_BALANCED_POWER_ACCURACY}.
+         */
+        @NonNull
+        public Builder setPriority(@Priority int priority) {
+            PriorityUtil.checkValidPriority(priority);
+            this.priority = priority;
+            return this;
+        }
+
+        @NonNull
+        @PublicApi(exclude = true)
+        public Builder setThrottleBehavior(@ThrottleBehavior int throttleBehavior) {
+            ThrottleBehaviorUtil.checkValidThrottleBehavior(throttleBehavior);
+            this.throttleBehavior = throttleBehavior;
+            return this;
+        }
+
+        /**
+         * If set to true and this request is {@link Priority#PRIORITY_HIGH_ACCURACY}, this will delay delivery of initial low accuracy
+         * locations for a small amount of time in case a high accuracy location can be delivered instead.
+         * <p>
+         * The default value is true.
+         */
+        @NonNull
+        public Builder setWaitForAccurateLocation(boolean waitForAccurateLocation) {
+            this.waitForAccurateLocation = waitForAccurateLocation;
+            return this;
+        }
+
+        @NonNull
+        @PublicApi(exclude = true)
+        @RequiresPermission(Manifest.permission.UPDATE_DEVICE_STATS)
+        public Builder setWorkSource(@Nullable WorkSource workSource) {
+            this.workSource = workSource;
+            return this;
+        }
+    }
+
 
     public static final Creator<LocationRequest> CREATOR = new AutoCreator<LocationRequest>(LocationRequest.class);
 }

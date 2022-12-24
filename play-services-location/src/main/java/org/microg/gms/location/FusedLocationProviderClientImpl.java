@@ -5,22 +5,22 @@
 
 package org.microg.gms.location;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
-import android.os.RemoteException;
 
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 
-import org.microg.gms.common.api.InstantGoogleApiCall;
+import org.microg.gms.common.api.ReturningGoogleApiCall;
 import org.microg.gms.common.api.PendingGoogleApiCall;
+import org.microg.gms.common.api.VoidReturningGoogleApiCall;
+
+import java.util.concurrent.Executor;
 
 public class FusedLocationProviderClientImpl extends FusedLocationProviderClient {
     public FusedLocationProviderClientImpl(Context context) {
@@ -28,30 +28,50 @@ public class FusedLocationProviderClientImpl extends FusedLocationProviderClient
     }
 
     public Task<Void> flushLocations() {
-        return scheduleTask(new PendingGoogleApiCall<Void, LocationClientImpl>() {
-            @Override
-            public void execute(LocationClientImpl client, TaskCompletionSource<Void> completionSource) {
-                completionSource.setResult(null);
-            }
-        });
+        return scheduleTask((ReturningGoogleApiCall<Void, LocationClientImpl>) (client) -> null);
     }
 
     public Task<Location> getLastLocation() {
-        return scheduleTask((InstantGoogleApiCall<Location, LocationClientImpl>) LocationClientImpl::getLastLocation);
+        return scheduleTask((ReturningGoogleApiCall<Location, LocationClientImpl>) LocationClientImpl::getLastLocation);
+    }
+
+    @Override
+    public Task<Void> removeLocationUpdates(LocationListener listener) {
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.removeLocationUpdates(listener));
+    }
+
+    @Override
+    public Task<Void> removeLocationUpdates(PendingIntent pendingIntent) {
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.removeLocationUpdates(pendingIntent));
+    }
+
+    @Override
+    public Task<Void> requestLocationUpdates(LocationRequest request, LocationListener listener, Looper looper) {
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.requestLocationUpdates(request, listener, looper));
+    }
+
+    @Override
+    public Task<Void> requestLocationUpdates(LocationRequest request, Executor executor, LocationCallback callback) {
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.requestLocationUpdates(request, executor, callback));
+    }
+
+    @Override
+    public Task<Void> requestLocationUpdates(LocationRequest request, Executor executor, LocationListener listener) {
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.requestLocationUpdates(request, executor, listener));
     }
 
     @Override
     public Task<Void> requestLocationUpdates(LocationRequest request, LocationCallback callback, Looper looper) {
-        return scheduleTask(new PendingGoogleApiCall<Void, LocationClientImpl>() {
-            @Override
-            public void execute(LocationClientImpl client, TaskCompletionSource<Void> completionSource) {
-                try {
-                    client.requestLocationUpdates(request, callback, looper);
-                    completionSource.setResult(null);
-                } catch (RemoteException e) {
-                    completionSource.setException(e);
-                }
-            }
-        });
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.requestLocationUpdates(request, callback, looper));
+    }
+
+    @Override
+    public Task<Void> requestLocationUpdates(LocationRequest request, PendingIntent pendingIntent) {
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.requestLocationUpdates(request, pendingIntent));
+    }
+
+    @Override
+    public Task<Void> removeLocationUpdates(LocationCallback callback) {
+        return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.removeLocationUpdates(callback));
     }
 }
