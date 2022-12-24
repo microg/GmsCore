@@ -73,6 +73,7 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.projection.gearhead", "9ca91f9e704d630ef67a23f52bf1577a92b9ca5d");
         KNOWN_GOOGLE_PACKAGES.put("com.google.stadia.android", "133aad3b3d3b580e286573c37f20549f9d3d1cce");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.kids.familylink", "88652b8464743e5ce80da0d4b890d13f9b1873df");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.walletnfcrel", "82759e2db43f9ccbafce313bc674f35748fabd7a");
     }
 
     public static boolean isGooglePackage(Context context, String packageName) {
