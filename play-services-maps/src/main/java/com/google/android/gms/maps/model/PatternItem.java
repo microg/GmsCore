@@ -8,6 +8,8 @@
 
 package com.google.android.gms.maps.model;
 
+import android.os.Parcel;
+
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -19,7 +21,10 @@ public class PatternItem extends AutoSafeParcelable {
     @Field(2)
     private int type;
     @Field(3)
-    private Float length;
+    private float length;
+
+    private PatternItem() {
+    }
 
     @PublicApi(exclude = true)
     PatternItem(int type, Float length) {
@@ -32,5 +37,20 @@ public class PatternItem extends AutoSafeParcelable {
         return "[PatternItem: type=" + type + " length=" + length + "]";
     }
 
-    public static final Creator<PatternItem> CREATOR = new AutoCreator<>(PatternItem.class);
+    public static final Creator<PatternItem> CREATOR = new AutoCreator<PatternItem>(PatternItem.class) {
+        @Override
+        public PatternItem createFromParcel(Parcel parcel) {
+            PatternItem item = super.createFromParcel(parcel);
+            switch (item.type) {
+                case 0:
+                    return new Dash(item.length);
+                case 1:
+                    return new Dot();
+                case 2:
+                    return new Gap(item.length);
+                default:
+                    return item;
+            }
+        }
+    };
 }

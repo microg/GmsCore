@@ -31,11 +31,12 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.internal.IPolylineDelegate;
-import com.google.android.gms.maps.model.internal.IPolygonDelegate;
-import com.google.android.gms.maps.model.internal.IMarkerDelegate;
 import com.google.android.gms.maps.model.internal.ICircleDelegate;
 import com.google.android.gms.maps.model.internal.IGroundOverlayDelegate;
+import com.google.android.gms.maps.model.internal.IIndoorBuildingDelegate;
+import com.google.android.gms.maps.model.internal.IMarkerDelegate;
+import com.google.android.gms.maps.model.internal.IPolygonDelegate;
+import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 import com.google.android.gms.maps.model.internal.ITileOverlayDelegate;
 
 interface IGoogleMapDelegate {

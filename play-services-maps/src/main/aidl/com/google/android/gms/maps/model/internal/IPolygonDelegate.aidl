@@ -31,6 +31,7 @@ interface IPolygonDelegate {
 	boolean equalsRemote(IPolygonDelegate other) = 18;
 	int hashCodeRemote() = 19;
 	void setClickable(boolean click) = 20;
+	boolean isClickable() = 21;
 	void setStrokeJointType(int type) = 22;
 	int getStrokeJointType() = 23;
 	void setStrokePattern(in List<PatternItem> items) = 24;

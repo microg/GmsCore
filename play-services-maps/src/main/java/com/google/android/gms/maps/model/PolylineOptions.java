@@ -1,17 +1,6 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package com.google.android.gms.maps.model;
@@ -20,7 +9,6 @@ import android.graphics.Color;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +19,32 @@ import java.util.List;
  */
 @PublicApi
 public class PolylineOptions extends AutoSafeParcelable {
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
-    @SafeParceled(value = 2, subClass = LatLng.class)
+    @Field(value = 2, subClass = LatLng.class)
     private List<LatLng> points = new ArrayList<LatLng>();
-    @SafeParceled(3)
+    @Field(3)
     private float width = 10;
-    @SafeParceled(4)
+    @Field(4)
     private int color = Color.BLACK;
-    @SafeParceled(5)
+    @Field(5)
     private float zIndex = 0;
-    @SafeParceled(6)
+    @Field(6)
     private boolean visible = true;
-    @SafeParceled(7)
+    @Field(7)
     private boolean geodesic = false;
+    @Field(8)
+    private boolean clickable = false;
+    @Field(9)
+    private Cap startCap;
+    @Field(10)
+    private Cap endCap;
+    @Field(11)
+    private int jointType = JointType.DEFAULT;
+    @Field(value = 12, subClass = PatternItem.class)
+    private List<PatternItem> pattern = null;
+    @Field(value = 13, subClass = StyleSpan.class)
+    private List<StyleSpan> spans = null;
 
     public PolylineOptions() {
     }
@@ -68,6 +68,11 @@ public class PolylineOptions extends AutoSafeParcelable {
         return this;
     }
 
+    public PolylineOptions clickable(boolean clickable) {
+        this.clickable = clickable;
+        return this;
+    }
+
     public PolylineOptions color(int color) {
         this.color = color;
         return this;
@@ -80,6 +85,14 @@ public class PolylineOptions extends AutoSafeParcelable {
 
     public int getColor() {
         return color;
+    }
+
+    public int getJointType() {
+        return jointType;
+    }
+
+    public List<PatternItem> getPattern() {
+        return pattern;
     }
 
     public List<LatLng> getPoints() {
@@ -100,6 +113,10 @@ public class PolylineOptions extends AutoSafeParcelable {
 
     public boolean isVisible() {
         return visible;
+    }
+
+    public boolean isClickable() {
+        return clickable;
     }
 
     public PolylineOptions visible(boolean visible) {

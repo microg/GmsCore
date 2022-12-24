@@ -30,6 +30,7 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.collection.LongSparseArray
 import com.google.android.gms.dynamic.IObjectWrapper
+import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.internal.*
 import com.google.android.gms.maps.model.*
@@ -51,6 +52,9 @@ import com.mapbox.mapboxsdk.plugins.annotation.*
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
 import com.google.android.gms.dynamic.unwrap
+import com.mapbox.android.core.location.LocationEngineCallback
+import com.mapbox.android.core.location.LocationEngineRequest
+import com.mapbox.android.core.location.LocationEngineResult
 import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MapContext
@@ -95,6 +99,19 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var mapLongClickListener: IOnMapLongClickListener? = null
     private var markerClickListener: IOnMarkerClickListener? = null
     private var markerDragListener: IOnMarkerDragListener? = null
+    private var myLocationChangeListener: IOnMyLocationChangeListener? = null
+
+    private val locationEngineCallback = object : LocationEngineCallback<LocationEngineResult> {
+        override fun onSuccess(result: LocationEngineResult?) {
+            result?.lastLocation?.let { location ->
+                Log.d(TAG, "myLocationChanged: $location")
+                myLocationChangeListener?.onMyLocationChanged(ObjectWrapper.wrap(location))
+            }
+        }
+        override fun onFailure(e: Exception) {
+            Log.w(TAG, e)
+        }
+    }
 
     var lineManager: LineManager? = null
     val pendingLines = mutableSetOf<PolylineImpl>()
@@ -130,6 +147,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
 
         val fakeWatermark = View(mapContext)
+        fakeWatermark.tag = "GoogleWatermark"
         fakeWatermark.layoutParams = object : RelativeLayout.LayoutParams(0, 0) {
             @SuppressLint("RtlHardcoded")
             override fun addRule(verb: Int, subject: Int) {
@@ -401,6 +419,15 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             try {
                 if (locationComponent.isLocationComponentActivated) {
                     locationComponent.isLocationComponentEnabled = myLocation
+                    if (myLocation) {
+                        locationComponent.locationEngine?.requestLocationUpdates(
+                            locationComponent.locationEngineRequest,
+                            locationEngineCallback,
+                            null
+                        )
+                    } else {
+                        locationComponent.locationEngine?.removeLocationUpdates(locationEngineCallback)
+                    }
                 }
             } catch (e: SecurityException) {
                 Log.w(TAG, e)
@@ -411,8 +438,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun getMyLocation(): Location? {
-        Log.d(TAG, "unimplemented Method: getMyLocation")
-        return null
+        synchronized(mapLock) {
+            return map?.locationComponent?.lastKnownLocation
+        }
     }
 
     override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
@@ -470,8 +498,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun setOnMyLocationChangeListener(listener: IOnMyLocationChangeListener?) {
-        Log.d(TAG, "unimplemented Method: setOnMyLocationChangeListener")
-
+        myLocationChangeListener = listener
     }
 
     override fun setOnMyLocationButtonClickListener(listener: IOnMyLocationButtonClickListener?) {
@@ -715,13 +742,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                     renderMode = RenderMode.COMPASS
                 }
 
+                setMyLocationEnabled(locationEnabled)
+
                 synchronized(mapLock) {
-                    try {
-                        map.locationComponent.isLocationComponentEnabled = locationEnabled
-                    } catch (e: SecurityException) {
-                        Log.w(TAG, e)
-                        locationEnabled = false
-                    }
                     loaded = true
                     if (loadedCallback != null) {
                         Log.d(TAG, "Invoking callback delayed, as map is loaded")
