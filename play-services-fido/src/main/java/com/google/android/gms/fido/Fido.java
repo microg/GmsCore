@@ -82,14 +82,14 @@ public class Fido {
      * Creates a new instance of {@link Fido2PrivilegedApiClient} for use in a non-activity {@link Context}.
      */
     public static Fido2PrivilegedApiClient getFido2PrivilegedApiClient(Context context) {
-        throw new UnsupportedOperationException();
+        return new Fido2PrivilegedApiClient(context);
     }
 
     /**
      * Creates a new instance of {@link Fido2PrivilegedApiClient} for use in an {@link Activity}.
      */
     public static Fido2PrivilegedApiClient getFido2PrivilegedApiClient(Activity activity) {
-        throw new UnsupportedOperationException();
+        return new Fido2PrivilegedApiClient(activity);
     }
 
     /**
