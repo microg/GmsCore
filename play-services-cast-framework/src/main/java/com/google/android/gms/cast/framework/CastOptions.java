@@ -16,6 +16,7 @@
 
 package com.google.android.gms.cast.framework;
 
+import androidx.annotation.NonNull;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -51,6 +52,11 @@ public class CastOptions extends AutoSafeParcelable {
 
     public LaunchOptions getLaunchOptions() {
         return this.launchOptions;
+    }
+
+    @NonNull
+    public List<String> getSupportedNamespaces() {
+        return supportedNamespaces;
     }
 
     public static Creator<CastOptions> CREATOR = new AutoCreator<CastOptions>(CastOptions.class);

@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2013-2017 microG Project Team
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<manifest package="org.microg.gms.cast.framework"/>
+<manifest package="com.google.android.gms.cast.framework"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <queries>
+        <package android:name="com.google.android.gms.policy_cast_dynamite"/>
+    </queries>
+
+    <application>
+        <receiver
+                android:name="com.google.android.gms.cast.framework.media.MediaIntentReceiver"
+                android:exported="false"/>
+
+        <service
+                android:name="com.google.android.gms.cast.framework.media.MediaNotificationService"
+                android:exported="false"
+                android:foregroundServiceType="mediaPlayback"/>
+
+        <service
+                android:name="com.google.android.gms.cast.framework.ReconnectionService"
+                android:exported="false"/>
+    </application>
+
+</manifest>
