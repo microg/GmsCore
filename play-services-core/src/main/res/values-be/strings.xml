@@ -181,8 +181,6 @@
     <string name="pref_test_summary_running">Выкананне…</string>
     <string name="pref_droidguard_operation_mode">Рэжым работы</string>
     <string name="prefcat_safetynet_apps_title">Прыкладанні якія выкарыстоўваюць SafetyNet</string>
-    <string name="safetynet_recent_requests">Нядаўнія запыты SafetyNet</string>
-    <string name="no_recent_safetynet_requests">Нядаўнія запыты SafetyNet адсутнічаюць!</string>
     <string name="menu_clear_recent_requests">Ачысціць нядаўнія запыты</string>
     <string name="safetynet_last_run_at">Апошняе выкарыстанне: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
