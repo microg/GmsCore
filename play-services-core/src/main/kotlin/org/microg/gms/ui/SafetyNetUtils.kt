@@ -17,8 +17,14 @@ import org.microg.gms.safetynet.SafetyNetRequestType
 fun formatSummaryForSafetyNetResult(context: Context, result: String?, status: Status?, type: SafetyNetRequestType): Pair<String, Drawable?> {
     when (type) {
         SafetyNetRequestType.ATTESTATION -> {
-            if (status?.isSuccess != true) return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
-            if (result == null) return context.getString(R.string.pref_test_summary_failed, "No result") to ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            if (status?.isSuccess != true) {
+                return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
+            }
+            if (result == null) {
+                return context.getString(R.string.pref_test_summary_failed, context.getString(R.string.pref_safetynet_test_no_result)) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            }
             val (basicIntegrity, ctsProfileMatch, advice) = try {
                 JSONObject(result).let {
                     Triple(
@@ -31,7 +37,7 @@ fun formatSummaryForSafetyNetResult(context: Context, result: String?, status: S
                 Log.w(TAG, e)
                 return context.getString(
                     R.string.pref_test_summary_failed,
-                    "Invalid JSON"
+                    context.getString(R.string.pref_safetynet_test_invalid_json)
                 ) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
             }
             val adviceText = if (advice == "") "" else "\n" + advice.split(",").map {

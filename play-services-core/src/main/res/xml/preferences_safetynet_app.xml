@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <PreferenceCategory
         android:key="prefcat_safetynet_recent_list"
-        android:title="Recent uses">
+        android:title="@string/pref_safetynet_recent_uses">
         <Preference
             android:enabled="false"
             android:key="pref_safetynet_recent_none"

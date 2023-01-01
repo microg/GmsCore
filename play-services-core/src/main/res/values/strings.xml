@@ -194,6 +194,8 @@ This can take a couple of minutes."</string>
     <string name="pref_device_registration_import_custom_profile_summary">Import device profile from file</string>
     <string name="pref_device_registration_select_profile_title">Select profile</string>
     <string name="pref_device_registration_device_profile_category">Device profile</string>
+
+    <string name="pref_safetynet_recent_uses">Recent uses</string>
     <string name="pref_safetynet_recent_copy_json">Copy JSON JWS data</string>
     <string name="pref_safetynet_recent_advice">Advice</string>
     <string name="pref_safetynet_recent_eval_type">Evaluation type</string>
@@ -205,5 +207,12 @@ This can take a couple of minutes."</string>
     <string name="pref_safetynet_recent_request_type">Request type</string>
     <string name="pref_safetynet_recent_cat_basic">Basic data</string>
     <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Copied to clipboard!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integrity and CTS passed</string>
+    <string name="pref_safetynet_test_cts_failed">CTS failed</string>
+    <string name="pref_safetynet_test_integrity_failed">Integrity failed</string>
+    <string name="pref_safetynet_test_not_completed">Not completed yet</string>
+    <string name="pref_safetynet_test_no_result">No result</string>
+    <string name="pref_safetynet_test_invalid_json">Invalid JSON</string>
 
 </resources>
