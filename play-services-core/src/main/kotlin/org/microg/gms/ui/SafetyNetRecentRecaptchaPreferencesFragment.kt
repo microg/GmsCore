@@ -30,13 +30,13 @@ class SafetyNetRecentRecaptchaPreferencesFragment : PreferenceFragmentCompat() {
         time.summary = DateUtils.getRelativeDateTimeString(context, snetSummary.timestamp, DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, DateUtils.FORMAT_SHOW_TIME)
 
 
-        if(snetSummary.responseStatus==null){
-            status.summary = "Not completed yet"
-        }else{
-            status.summary = snetSummary.responseStatus!!.statusMessage
+        val snetResponseStatus = snetSummary.responseStatus
+        if (snetResponseStatus == null) {
+            status.summary = getString(R.string.pref_safetynet_test_not_completed)
+        } else {
+            status.summary = snetResponseStatus.statusMessage
             token.summary = snetSummary.responseData
         }
-
     }
 
 }
