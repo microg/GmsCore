@@ -182,8 +182,6 @@ This can take a couple of minutes."</string>
     <string name="pref_test_summary_running">Running…</string>
     <string name="pref_droidguard_operation_mode">Operation mode</string>
     <string name="prefcat_safetynet_apps_title">Apps using SafetyNet</string>
-    <string name="safetynet_recent_requests">SafetyNet Recent Requests</string>
-    <string name="no_recent_safetynet_requests">No recent SafetyNet requests !</string>
     <string name="menu_clear_recent_requests">Clear recent requests</string>
     <string name="safetynet_last_run_at">Last use: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
 
