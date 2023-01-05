@@ -67,13 +67,14 @@ class PushNotificationPreferencesFragment : PreferenceFragmentCompat() {
 
     private fun updateStatus() {
         handler.postDelayed(updateRunnable, UPDATE_INTERVAL)
+        val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenStarted {
-            val statusInfo = getGcmServiceInfo(requireContext())
-            pushStatusCategory.isVisible = statusInfo.configuration.enabled
+            val statusInfo = getGcmServiceInfo(appContext)
+            pushStatusCategory.isVisible = statusInfo != null && statusInfo.configuration.enabled
             pushStatus.summary = if (statusInfo != null && statusInfo.connected) {
-                getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
+                appContext.getString(R.string.gcm_network_state_connected, DateUtils.getRelativeTimeSpanString(statusInfo.startTimestamp, System.currentTimeMillis(), 0))
             } else {
-                getString(R.string.gcm_network_state_disconnected)
+                appContext.getString(R.string.gcm_network_state_disconnected)
             }
         }
     }
