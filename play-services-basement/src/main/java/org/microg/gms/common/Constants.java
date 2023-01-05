@@ -16,7 +16,7 @@
 
 package org.microg.gms.common;
 
-import org.microg.gms.basement.BuildConfig;
+import com.google.android.gms.common.BuildConfig;
 
 public class Constants {
     public static final int GMS_VERSION_CODE = (BuildConfig.VERSION_CODE / 1000) * 1000;

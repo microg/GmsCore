@@ -588,7 +588,7 @@ public class DataBundleUtil {
             if (value.type == NULL_TYPE_CODE) {
                 return null;
             } else if (value.type == type) {
-                return read(value.value_, assets);
+                return read(value.value, assets);
             } else {
                 throw new IllegalArgumentException();
             }
@@ -639,7 +639,7 @@ public class DataBundleUtil {
         }
 
         DataBundleTypedValue createTyped(T value, List<Asset> assets) {
-            return new DataBundleTypedValue.Builder().type(type).value_(create(value, assets)).build();
+            return new DataBundleTypedValue.Builder().type(type).value(create(value, assets)).build();
         }
 
         DataBundleValue loadAndCreate(DataMap dataMap, String key, List<Asset> assets) {

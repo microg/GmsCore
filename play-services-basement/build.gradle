@@ -17,9 +17,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply plugin: 'com.kezong.fat-aar'
 
 dependencies {
-    api "org.microg:safe-parcel:$safeParcelVersion"
+    embed "org.microg:safe-parcel:$safeParcelVersion"
 
     // Dependencies from play-services-basement:18.1.0
     api "androidx.collection:collection:1.0.0"

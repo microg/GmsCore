@@ -8,6 +8,7 @@ package org.microg.gms.maps.mapbox.model
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
+import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.PolygonOptions
@@ -143,6 +144,8 @@ class PolygonImpl(private val map: GoogleMapImpl, private val id: String, option
         clickable = click
     }
 
+    override fun isClickable(): Boolean = clickable
+
     override fun setStrokeJointType(type: Int) {
         strokeJointType = type
     }
@@ -159,7 +162,7 @@ class PolygonImpl(private val map: GoogleMapImpl, private val id: String, option
         tag = obj
     }
 
-    override fun getTag(): IObjectWrapper? = tag
+    override fun getTag(): IObjectWrapper = tag ?: ObjectWrapper.wrap(null)
 
     override fun hashCode(): Int {
         return id.hashCode()

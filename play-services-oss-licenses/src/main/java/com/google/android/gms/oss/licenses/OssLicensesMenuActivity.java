@@ -33,7 +33,6 @@ import com.google.android.gms.tasks.Tasks;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.oss.licenses.LicenseUtil;
-import org.microg.gms.oss.licenses.R;
 
 import java.util.List;
 

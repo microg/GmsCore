@@ -13,7 +13,6 @@ import com.google.android.gms.common.api.HasApiKey;
 import com.google.android.gms.tasks.Task;
 
 import org.microg.gms.common.PublicApi;
-import org.microg.gms.nearby.exposurenotification.Constants;
 
 import java.io.File;
 import java.util.List;
@@ -27,28 +26,28 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
     /**
      * Activity action which shows the exposure notification settings screen.
      */
-    String ACTION_EXPOSURE_NOTIFICATION_SETTINGS = Constants.ACTION_EXPOSURE_NOTIFICATION_SETTINGS;
+    String ACTION_EXPOSURE_NOTIFICATION_SETTINGS = "com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS";
     /**
      * Action which will be invoked via a BroadcastReceiver as a callback when matching has finished and no matches were found.
      * Also see {@link #EXTRA_TOKEN}, which will be included in this broadcast.
      */
-    String ACTION_EXPOSURE_NOT_FOUND = Constants.ACTION_EXPOSURE_NOT_FOUND;
+    String ACTION_EXPOSURE_NOT_FOUND = "com.google.android.gms.exposurenotification.ACTION_EXPOSURE_NOT_FOUND";
     /**
      * Action which will be invoked via a BroadcastReceiver as a callback when the user has an updated exposure status.
      * Also see {@link #EXTRA_EXPOSURE_SUMMARY} and {@link #EXTRA_TOKEN}, which will be included in this broadcast.
      */
-    String ACTION_EXPOSURE_STATE_UPDATED = Constants.ACTION_EXPOSURE_STATE_UPDATED;
+    String ACTION_EXPOSURE_STATE_UPDATED = "com.google.android.gms.exposurenotification.ACTION_EXPOSURE_STATE_UPDATED";
     /**
      * Action broadcast to a client application if {@link #requestPreAuthorizedTemporaryExposureKeyRelease()} has been authorized and the user has unlocked their phone, granting release of their keys after a positive diagnosis.
      *
      * This action will include an {@link java.util.ArrayList} of {@link TemporaryExposureKey}s keyed by {@link #EXTRA_TEMPORARY_EXPOSURE_KEY_LIST}.
      */
-    String ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED = Constants.ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED;
+    String ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED = "com.google.android.gms.exposurenotification.ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED";
     /**
      * Action which will be invoked via a BroadcastReceiver when the user modifies the state of exposure notifications via the Google Settings page.
      * {@link #EXTRA_SERVICE_STATE} will be included as part of this broadcast.
      */
-    String ACTION_SERVICE_STATE_UPDATED = Constants.ACTION_SERVICE_STATE_UPDATED;
+    String ACTION_SERVICE_STATE_UPDATED = "com.google.android.gms.exposurenotification.ACTION_SERVICE_STATE_UPDATED";
     /**
      * Extra attached to the {@link #ACTION_EXPOSURE_STATE_UPDATED} broadcast, giving a summary of the exposure details detected.
      * Also see {@link #getExposureSummary(String)}.
@@ -56,29 +55,29 @@ public interface ExposureNotificationClient extends HasApiKey<Api.ApiOptions.NoO
      * @deprecated {@link ExposureSummary} is no longer provided when using the {@link #getExposureWindows()} API. Instead, use {@link #getDailySummaries(DailySummariesConfig)}.
      */
     @Deprecated
-    String EXTRA_EXPOSURE_SUMMARY = Constants.EXTRA_EXPOSURE_SUMMARY;
+    String EXTRA_EXPOSURE_SUMMARY = "com.google.android.gms.exposurenotification.EXTRA_EXPOSURE_SUMMARY";
     /**
      * Boolean extra attached to the {@link #ACTION_SERVICE_STATE_UPDATED} broadcast signifying whether the service is enabled or disabled.
      */
-    String EXTRA_SERVICE_STATE = Constants.EXTRA_SERVICE_STATE;
+    String EXTRA_SERVICE_STATE = "com.google.android.gms.exposurenotification.EXTRA_SERVICE_STATE";
     /**
      * Extra included in the {@link #ACTION_PRE_AUTHORIZE_RELEASE_PHONE_UNLOCKED} broadcast, containing an {@link java.util.ArrayList} of {@link TemporaryExposureKey}s.
      */
-    String EXTRA_TEMPORARY_EXPOSURE_KEY_LIST = Constants.EXTRA_TEMPORARY_EXPOSURE_KEY_LIST;
+    String EXTRA_TEMPORARY_EXPOSURE_KEY_LIST = "com.google.android.gms.exposurenotification.EXTRA_TEMPORARY_EXPOSURE_KEY_LIST";
     /**
      * Extra attached to the {@link #ACTION_EXPOSURE_STATE_UPDATED} broadcast, providing the token associated with the {@link #provideDiagnosisKeys(DiagnosisKeyFileProvider)} request.
      *
      * @deprecated Tokens are no longer used. Instead, prefer using the tokenless versions of {@link #provideDiagnosisKeys(DiagnosisKeyFileProvider)}, {@link #getExposureWindows()}, and {@link #getDailySummaries(DailySummariesConfig)}.
      */
     @Deprecated
-    String EXTRA_TOKEN = Constants.EXTRA_TOKEN;
+    String EXTRA_TOKEN = "com.google.android.gms.exposurenotification.EXTRA_TOKEN";
     /**
      * Token to be used with ExposureWindows API. Must be used with {@link #provideDiagnosisKeys(DiagnosisKeyFileProvider) }request when later using {@link #getExposureWindows()}.
      *
      * @deprecated Tokens are no longer used. Instead, prefer using the tokenless versions of {@link #provideDiagnosisKeys(DiagnosisKeyFileProvider)}, {@link #getExposureWindows()}, and {@link #getDailySummaries(DailySummariesConfig)}.
      */
     @Deprecated
-    String TOKEN_A = Constants.TOKEN_A;
+    String TOKEN_A = "TYZWQ32170AXEUVCDW7A";
 
     /**
      * Checks whether the device supports Exposure Notification BLE scanning without requiring location to be enabled first.

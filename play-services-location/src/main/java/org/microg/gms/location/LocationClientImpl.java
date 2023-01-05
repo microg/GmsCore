@@ -19,7 +19,7 @@ package org.microg.gms.location;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.location.Location;
-import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
@@ -27,8 +27,11 @@ import android.util.Log;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.ILocationListener;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.internal.IGeofencerCallbacks;
 import com.google.android.gms.location.internal.ParcelableGeofence;
@@ -37,14 +40,16 @@ import org.microg.gms.common.api.ConnectionCallbacks;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 import org.microg.gms.common.api.OnConnectionFailedListener;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 public class LocationClientImpl extends GoogleLocationManagerClient {
     private static final String TAG = "GmsLocationClientImpl";
-    private NativeLocationClientImpl nativeLocation = null;
     private Map<LocationListener, ILocationListener> listenerMap = new HashMap<LocationListener, ILocationListener>();
+    private Map<LocationCallback, ILocationListener> callbackMap = new HashMap<LocationCallback, ILocationListener>();
 
 
     public LocationClientImpl(Context context, ConnectionCallbacks callbacks,
@@ -62,120 +67,98 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
     }
 
     public void addGeofences(GeofencingRequest request, PendingIntent pendingIntent, IGeofencerCallbacks callbacks) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.addGeofences(request, pendingIntent, callbacks);
-        } else {
-            getServiceInterface().addGeofences(request, pendingIntent, callbacks);
-        }
+        getServiceInterface().addGeofences(request, pendingIntent, callbacks);
     }
 
     public void addGeofences(List<ParcelableGeofence> request, PendingIntent pendingIntent, IGeofencerCallbacks callbacks) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.addGeofences(request, pendingIntent, callbacks);
-        } else {
-            getServiceInterface().addGeofencesList(request, pendingIntent, callbacks, getContext().getPackageName());
-        }
+        getServiceInterface().addGeofencesList(request, pendingIntent, callbacks, getContext().getPackageName());
     }
 
     public void removeGeofences(List<String> geofenceRequestIds, IGeofencerCallbacks callbacks) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.removeGeofences(geofenceRequestIds, callbacks);
-        } else {
-            getServiceInterface().removeGeofencesById(geofenceRequestIds.toArray(new String[geofenceRequestIds.size()]), callbacks, getContext().getPackageName());
-        }
+        getServiceInterface().removeGeofencesById(geofenceRequestIds.toArray(new String[geofenceRequestIds.size()]), callbacks, getContext().getPackageName());
     }
 
     public void removeGeofences(PendingIntent pendingIntent, IGeofencerCallbacks callbacks) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.removeGeofences(pendingIntent, callbacks);
-        } else {
-            getServiceInterface().removeGeofencesByIntent(pendingIntent, callbacks, getContext().getPackageName());
-        }
+        getServiceInterface().removeGeofencesByIntent(pendingIntent, callbacks, getContext().getPackageName());
     }
 
     public Location getLastLocation() throws RemoteException {
-        Log.d(TAG, "getLastLocation()");
-        if (nativeLocation != null) {
-            return nativeLocation.getLastLocation();
-        } else {
-            return getServiceInterface().getLastLocation();
-        }
+        return getServiceInterface().getLastLocationWithPackage(getContext().getPackageName());
+    }
+
+    public LocationAvailability getLocationAvailability() throws RemoteException {
+        return getServiceInterface().getLocationAvailabilityWithPackage(getContext().getPackageName());
     }
 
     public void requestLocationUpdates(LocationRequest request, final LocationListener listener)
             throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.requestLocationUpdates(request, listener);
-        } else {
-            if (!listenerMap.containsKey(listener)) {
-                listenerMap.put(listener, new ILocationListener.Stub() {
-                    @Override
-                    public void onLocationChanged(Location location) throws RemoteException {
-                        listener.onLocationChanged(location);
-                    }
-                });
-            }
-            getServiceInterface().requestLocationUpdatesWithPackage(request,
-                    listenerMap.get(listener), getContext().getPackageName());
+        if (!listenerMap.containsKey(listener)) {
+            listenerMap.put(listener, new ILocationListener.Stub() {
+                @Override
+                public void onLocationChanged(Location location) throws RemoteException {
+                    listener.onLocationChanged(location);
+                }
+            });
         }
+        getServiceInterface().requestLocationUpdatesWithPackage(request, listenerMap.get(listener), getContext().getPackageName());
     }
 
     public void requestLocationUpdates(LocationRequest request, PendingIntent pendingIntent)
             throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.requestLocationUpdates(request, pendingIntent);
-        } else {
-            getServiceInterface().requestLocationUpdatesWithIntent(request, pendingIntent);
-        }
+        getServiceInterface().requestLocationUpdatesWithIntent(request, pendingIntent);
     }
 
-    public void requestLocationUpdates(LocationRequest request, LocationListener listener,
-                                       Looper looper) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.requestLocationUpdates(request, listener, looper);
+    public void requestLocationUpdates(LocationRequest request, LocationListener listener, Looper looper) throws RemoteException {
+        final Handler handler = new Handler(looper);
+        requestLocationUpdates(request, handler::post, listener);
+    }
+
+    public void requestLocationUpdates(LocationRequest request, Executor executor, LocationListener listener) throws RemoteException {
+        if (!listenerMap.containsKey(listener)) {
+            listenerMap.put(listener, new ILocationListener.Stub() {
+                @Override
+                public void onLocationChanged(Location location) throws RemoteException {
+                    executor.execute(() -> listener.onLocationChanged(location));
+                }
+            });
         }
-        requestLocationUpdates(request, listener); // TODO
+        getServiceInterface().requestLocationUpdatesWithPackage(request, listenerMap.get(listener), getContext().getPackageName());
+    }
+
+    public void requestLocationUpdates(LocationRequest request, LocationCallback callback, Looper looper) throws RemoteException {
+        final Handler handler = new Handler(looper);
+        requestLocationUpdates(request, handler::post, callback);
+    }
+
+    public void requestLocationUpdates(LocationRequest request, Executor executor, LocationCallback callback) throws RemoteException {
+        if (!callbackMap.containsKey(callback)) {
+            callbackMap.put(callback, new ILocationListener.Stub() {
+                @Override
+                public void onLocationChanged(Location location) throws RemoteException {
+                    executor.execute(() -> callback.onLocationResult(LocationResult.create(Collections.singletonList(location))));
+                }
+            });
+        }
+        getServiceInterface().requestLocationUpdatesWithPackage(request, callbackMap.get(callback), getContext().getPackageName());
     }
 
     public void removeLocationUpdates(LocationListener listener) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.removeLocationUpdates(listener);
-        } else {
-            getServiceInterface().removeLocationUpdatesWithListener(listenerMap.get(listener));
-        }
+        getServiceInterface().removeLocationUpdatesWithListener(listenerMap.get(listener));
+    }
+
+    public void removeLocationUpdates(LocationCallback callback) throws RemoteException {
+        getServiceInterface().removeLocationUpdatesWithListener(callbackMap.get(callback));
     }
 
     public void removeLocationUpdates(PendingIntent pendingIntent) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.removeLocationUpdates(pendingIntent);
-        } else {
-            getServiceInterface().removeLocationUpdatesWithIntent(pendingIntent);
-        }
+        getServiceInterface().removeLocationUpdatesWithIntent(pendingIntent);
     }
 
     public void setMockMode(boolean isMockMode) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.setMockMode(isMockMode);
-        } else {
-            getServiceInterface().setMockMode(isMockMode);
-        }
+        getServiceInterface().setMockMode(isMockMode);
     }
 
     public void setMockLocation(Location mockLocation) throws RemoteException {
-        if (nativeLocation != null) {
-            nativeLocation.setMockLocation(mockLocation);
-        } else {
-            getServiceInterface().setMockLocation(mockLocation);
-        }
-    }
-
-    @Override
-    public void handleConnectionFailed() {
-        // DO NOT call super here, because fails are not really problems :)
-        nativeLocation = new NativeLocationClientImpl(this);
-        state = ConnectionState.PSEUDO_CONNECTED;
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("fallback_to_native_active", true);
-        callbacks.onConnected(bundle);
+        getServiceInterface().setMockLocation(mockLocation);
     }
 }

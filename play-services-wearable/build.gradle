@@ -4,6 +4,9 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.squareup.wire'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 android {
     compileSdkVersion androidCompileSdk
@@ -25,13 +28,21 @@ android {
     }
 }
 
+wire {
+    java {
+
+    }
+}
+
+apply from: '../gradle/publish-android.gradle'
+
+description = 'microG implementation of play-services-wearable'
+
 dependencies {
-    api project(':play-services-wearable-api')
-    api project(':play-services-wearable-proto')
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
 
     // Dependencies from play-services-wearable:17.1.0
-    implementation "androidx.core:core:1.0.0"
+    api "androidx.core:core:1.0.0"
     api project(':play-services-base')
     api project(':play-services-basement')
     api project(':play-services-tasks')

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="foreground_service_notification_title">Esecuzione in background</string>
-    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> è in esecuzione in background.</string>
-    <string name="foreground_service_notification_big_text">Disabilita le ottimizzazioni della batteria per <xliff:g example="microG Services Core">%1$s</xliff:g> oppure modifica le impostazioni delle notifiche per nascondere questa notifica.</string>
-</resources>

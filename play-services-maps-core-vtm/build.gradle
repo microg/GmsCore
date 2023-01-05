@@ -17,7 +17,7 @@
 apply plugin: "com.android.library"
 
 dependencies {
-    implementation project(":play-services-api")
+    implementation project(":play-services-maps")
 
     implementation "org.microg:vtm-android:0.9.1-mod"
     implementation "org.microg:vtm-android:0.9.1-mod:natives-armeabi"

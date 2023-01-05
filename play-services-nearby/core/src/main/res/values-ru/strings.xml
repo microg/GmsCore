@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Уведомления о риске инфицирования не активны</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth должен быть включён, чтобы принимать уведомления о риске инфицирования.</string>
+    <string name="exposure_notify_off_location">Доступ к местоположению обязателен, чтобы принимать уведомления о риске инфицирования.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth и определение местоположения должны быть включены, чтобы принимать уведомления о риске инфицирования</string>
+    <string name="exposure_notify_off_nearby">Уведомлениям о риске инфицирования для работы требуются дополнительные разрешения</string>
+
+    <string name="service_name_exposure">Уведомления о риске инфицирования</string>
+    <string name="pref_exposure_enable_info_summary">Чтобы включить уведомления о риске инфицирования запустите любое приложение, которое их поддерживает.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Включить Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Открыть настройки местоположения</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">К сожалению ваше устройство несовместимо с уведомлениями о риске инфицирования.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">К сожалению ваше устройство лишь частично совместимо с уведомлениями о риске инфицирования. Вы можете получать уведомления об опасных контактах, но не сможете уведомлять других.</string>
+    <string name="prefcat_exposure_apps_title">Приложения использующие уведомления о риске инфицирования</string>
+    <string name="pref_exposure_collected_rpis_title">Собранные идентификаторы</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> Количество идентификаторов за последний час</string>
+    <string name="pref_exposure_advertising_id_title">Транслируемый в настоящее время идентификатор</string>
+    <string name="prefcat_exposure_app_report_title">Сообщения о взаимодействиях</string>
+    <string name="pref_exposure_app_report_updated_title">Обновлено: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Менее пяти минут назад</string>
+    <string name="pref_exposure_app_report_entry_time_about">Около <xliff:g example="13">%1$d</xliff:g> минут</string>
+    <string name="pref_exposure_app_report_entry_distance_close">взаимодействия рядом</string>
+    <string name="pref_exposure_app_report_entry_distance_far">взаимодействия далеко</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Обработано <xliff:g example="121031">%1$d</xliff:g> диагностических ключей.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Сообщения об опасных контактах отсутствуют.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Сообщено о <xliff:g example="3">%1$d</xliff:g> опасных контактах:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, оценка риска <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Примечание: Оценка риска определяется приложением. Высокие числа могут говорить, как о низком риске так и наоборот.</string>
+    <string name="pref_exposure_app_api_usage_title">Использование API за последние 14 дней</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> запросов к <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> идентификаторов собрано</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Нет записей</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> Идентификаторов в час</string>
+    <string name="pref_exposure_rpi_delete_all_title">Удалить</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Удалить все собранные идентификаторы</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Удаление собранных идентификаторов приведёт к невозможности информирования в случае, если у одного из ваших контактов за последние 14 дней окажется положительный диагноз.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Всё равно удалить</string>
+    <string name="pref_exposure_rpi_export_title">Экспортировать</string>
+    <string name="pref_exposure_rpi_export_summary">Экспортировать собранные идентификаторы для расширенного анализа в стороннем приложении.</string>
+    <string name="pref_exposure_info_summary">"API Уведомлений о риске инфицирования (Exposure Notifications API) позволяет приложениям уведомлять вас, если вы столкнулись с кем-то, у кого был положительный диагноз.
+
+Дата, продолжительность и мощность сигнала, связанные с воздействием, будут переданы соответствующему приложению."</string>
+    <string name="pref_exposure_rpis_details_summary">"Пока API уведомлений о риске инфицирования включен, ваше устройство пассивно собирает идентификаторы (называемые скользящими идентификаторами сближения или RPI) с соседних устройств.
+
+Когда владельцы устройств сообщают о положительном диагнозе, их идентификаторы могут быть распространены. Ваше устройство проверяет, соответствует ли какой-либо из известных идентификаторов с подтверждённым диагнозом любому из собранных вами идентификаторов, и рассчитывает риск заражения."</string>
+
+    <string name="exposure_enable_switch">Использовать уведомления о риске инфицирования</string>
+    <string name="exposure_confirm_start_title">Включить уведомлений о риске инфицирования?</string>
+    <string name="exposure_confirm_start_summary">"Ваш телефон должен использовать Bluetooth для безопасного сбора и распространения идентификаторов другим телефонам, находящимся поблизости.
+
+<xliff:g example="Corona-Warn">%1$s</xliff:g> может уведомить вас, если вы пересекались с кем-то, у кого был подтверждён положительный диагноз.
+
+Дата, продолжительность и мощность сигнала, связанные с контактом, будут переданы приложению."</string>
+    <string name="exposure_confirm_start_button">Включить</string>
+    <string name="exposure_confirm_stop_title">Выключить уведомления о риске инфицирования?</string>
+    <string name="exposure_confirm_stop_summary">После отключения уведомлений вы больше не будете получать уведомления о контактах с кем-то, у кого был положительный диагноз.</string>
+    <string name="exposure_confirm_stop_button">Выключить</string>
+    <string name="exposure_confirm_keys_title">Делиться вашими идентификаторами с <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
+    <string name="exposure_confirm_keys_summary">"Ваши идентификаторы за последние 14 дней будут использоваться для уведомления других о том, что вы были вблизи потенциальной опасности.
+
+Ваша личность или результат теста не будут переданы другим людям."</string>
+    <string name="exposure_confirm_keys_button">Поделиться</string>
+    <string name="exposure_confirm_permission_description">Для <xliff:g example="microG Services Core">%1$s</xliff:g> требуются дополнительные разрешения.</string>
+    <string name="exposure_confirm_permission_button">Предоставить</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth должен быть включён.</string>
+    <string name="exposure_confirm_location_description">требуется доступ к местоположению.</string>
+    <string name="exposure_confirm_button">Включить</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Требуется дополнительное разрешение</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Нажмите, чтобы предоставить необходимые разрешения уведомлениям о риске инфицирования.</string>
+    <string name="exposure_grant_background_location_description">Почти готово! Вам нужно будет включить фоновый доступ к местоположению, выбрав опцию \'Разрешить в любом режиме\' на следующем экране. Затем вернитесь назад.</string>
+    <string name="exposure_grant_background_location_button">Обновить настройки</string>
+</resources>

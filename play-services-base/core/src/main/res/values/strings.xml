@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Active in background</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> is running in background.</string>
+    <string name="foreground_service_notification_big_text">Exclude <xliff:g example="microG Services Core">%1$s</xliff:g> from battery optimizations or change notification settings to hide this notification.</string>
+
+    <string name="menu_advanced">Advanced</string>
+
+    <string name="list_no_item_none">None</string>
+    <string name="list_item_see_all">See all</string>
+
+    <string name="open_app">Open</string>
+</resources>

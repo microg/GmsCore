@@ -444,6 +444,8 @@ public interface GoogleApiClient {
          * A suspension cause informing you that a peer device connection was lost.
          */
         int CAUSE_NETWORK_LOST = 2;
+
+        void onConnected(Bundle connectionHint);
     }
 
     /**

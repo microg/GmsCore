@@ -73,7 +73,7 @@ class AppCertManager(private val context: Context) {
                         "dg_sdkVersion" to Build.VERSION.SDK_INT.toString()
                 )
                 val droidGuardResult = try {
-                    Base64.encodeToString(DroidGuardResultCreator.getResult(context, "devicekey", data), Base64.NO_WRAP + Base64.NO_PADDING + Base64.URL_SAFE)
+                    DroidGuardResultCreator.getResults(context, "devicekey", data)
                 } catch (e: Exception) {
                     null
                 }

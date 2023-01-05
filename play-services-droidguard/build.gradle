@@ -4,7 +4,6 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -34,8 +33,6 @@ description = 'microG implementation of play-services-droidguard'
 
 dependencies {
     api project(':play-services-base')
-    api project(':play-services-droidguard-api')
 
     implementation "androidx.annotation:annotation:$annotationVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }

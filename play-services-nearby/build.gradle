@@ -28,8 +28,6 @@ apply from: '../gradle/publish-android.gradle'
 description = 'microG implementation of play-services-nearby'
 
 dependencies {
-    api project(':play-services-nearby-api')
-
     // Dependencies from play-services-nearby:18.0.2
     api "androidx.collection:collection:1.0.0"
     api "androidx.core:core:1.0.0"
