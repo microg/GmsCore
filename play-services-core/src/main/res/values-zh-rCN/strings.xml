@@ -2,12 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="auth_sign_in">登录</string>
-    <string name="auth_connecting">正在建立到 Google 服务器的连接以供您登录。
+    <string name="auth_connecting">"正在建立到 Google 服务器的连接以供您登录。
 
-这需要几秒钟时间。</string>
-    <string name="no_network_error_desc">您未连接到互联网。
+这需要几秒钟时间。"</string>
+    <string name="no_network_error_desc">"您未连接到互联网。
 
-这可能是暂时性的问题，或者是您的 Android 设备不能使用数据服务。请在连接到移动网络或 Wi-Fi 网络后重试。</string>
+这可能是暂时性的问题，或者是您的 Android 设备不能使用数据服务。请在连接到移动网络或 Wi-Fi 网络后重试。"</string>
     <string name="sorry">抱歉…</string>
     <string name="allow">允许</string>
     <string name="deny">拒绝</string>
@@ -68,7 +68,7 @@
     <string name="account_manager_title">Google 账号管理员</string>
     <string name="auth_before_connect">"您设备上的某个应用正尝试登录一个 Google 账号。
 
-若是您有意为之，点击<b>登录</b>以连接到 Google 的登录页面；否则点击<b>取消</b>以返回到弹出此页面的应用。"</string>
+若这是您有意而为，点击<b>登录</b>以连接到 Google 的登录页面；否则点击<b>取消</b>以返回到弹出此页面的应用。"</string>
     <string name="auth_finalize">"您的设备正在与 Google 联系以将您的信息存入账号。
 
 这可能需要几分钟。"</string>
@@ -142,10 +142,10 @@
     <string name="profile_name_user">自定义：%s</string>
     <string name="profile_name_auto">自动：%s</string>
     <string name="profile_name_system">系统：%s</string>
-    <string name="pref_safetynet_test_title">"测试 SafetyNet 认证 "</string>
-    <string name="safetynet_intro">Google SafetyNet 是一套设备认证系统，旨在确认设备具有适当安全性，并与 Android CTS 兼容。某些应用会出于安全考虑或是防篡改目的而使用 SafetyNet。
+    <string name="pref_safetynet_test_title">"测试 SafetyNet 认证"</string>
+    <string name="safetynet_intro">"Google SafetyNet 是一套设备认证系统，旨在确认设备具有适当安全性，并与 Android CTS 兼容。某些应用会出于安全考虑或是防篡改目的而使用 SafetyNet。
 
-microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要求 SafetyNet 请求使用其专有的 DroidGuard 系统签名。</string>
+microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要求 SafetyNet 请求使用其专有的 DroidGuard 系统签名。"</string>
     <string name="prefcat_google_services">Google 服务</string>
     <string name="perm_extended_access_label">额外使用 Google 服务</string>
 
@@ -161,4 +161,27 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_device_registration_import_custom_profile_summary">从文件导入自定义的设备配置信息</string>
     <string name="pref_device_registration_select_profile_title">选择配置信息</string>
     <string name="pref_device_registration_device_profile_category">设备配置信息</string>
+    <string name="prefcat_safetynet_apps_title">使用 SafetyNet 的应用</string>
+    <string name="menu_clear_recent_requests">清除近期的 SafetyNet 请求</string>
+    <string name="safetynet_last_run_at">最近使用于<xliff:g example="昨天 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_safetynet_recent_eval_type">评估类型</string>
+    <string name="pref_safetynet_recent_response_status">响应状态</string>
+    <string name="pref_safetynet_recent_cat_response">响应数据</string>
+    <string name="pref_safetynet_recent_cat_request">请求数据</string>
+    <string name="pref_safetynet_recent_nonce">十六进制 Nonce</string>
+    <string name="pref_safetynet_recent_request_time">请求时间</string>
+    <string name="pref_safetynet_recent_request_type">请求类型</string>
+    <string name="pref_safetynet_recent_cat_basic">基础数据</string>
+    <string name="pref_safetynet_recent_token">令牌</string>
+    <string name="pref_safetynet_recent_copy_json">复制 JSON JWS 数据</string>
+    <string name="pref_safetynet_recent_advice">建议</string>
+    <string name="pref_safetynet_test_not_completed">尚未完成</string>
+    <string name="pref_safetynet_test_no_result">无结果</string>
+    <string name="pref_safetynet_test_invalid_json">无效 JSON</string>
+    <string name="pref_safetynet_test_cts_failed">未通过 CTS 测试</string>
+    <string name="pref_recaptcha_enterprise_test_title">进行 reCAPTCHA Enterprise 测试</string>
+    <string name="pref_safetynet_recent_copied">已复制到剪贴板</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">已通过完整性和 CTS 测试</string>
+    <string name="pref_safetynet_test_integrity_failed">未通过完整性测试</string>
+    <string name="pref_safetynet_recent_uses">最近使用</string>
 </resources>
