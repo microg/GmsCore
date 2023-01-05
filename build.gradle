@@ -106,6 +106,7 @@ subprojects {
         if (project.plugins.hasPlugin('com.android.base')) {
             dependencies {
                 compileOnly "org.microg:safe-parcel:$safeParcelVersion"
+                testCompileOnly "org.microg:safe-parcel:$safeParcelVersion"
             }
         }
     }
