@@ -74,8 +74,8 @@ class SafetyNetAppPreferencesFragment : PreferenceFragmentCompat() {
                     summary.requestType
                 ).let { (text, icon) ->
                     preference.summary = when (summary.requestType) {
-                        ATTESTATION -> "Attestation: $text"
-                        RECAPTCHA -> "ReCaptcha: $text"
+                        ATTESTATION -> getString(R.string.pref_safetynet_recent_attestation_summary, text)
+                        RECAPTCHA -> getString(R.string.pref_safetynet_recent_recaptcha_summary, text)
                     }
                     preference.icon = icon
                 }
