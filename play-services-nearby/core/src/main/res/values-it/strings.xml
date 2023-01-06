@@ -7,6 +7,7 @@
     <string name="exposure_notify_off_bluetooth">Il Bluetooth dev\'essere attivato per poter ricevere le notifiche di esposizione al virus.</string>
     <string name="exposure_notify_off_location">È necessario attivare la geolocalizzazione per poter ricevere le notifiche di esposizione al virus.</string>
     <string name="exposure_notify_off_bluetooth_location">È necessario attivare il Bluetooth e la geolocalizzazione per poter ricevere le notifiche di esposizione al virus.</string>
+    <string name="exposure_notify_off_nearby">Le notifiche di esposizione al virus richiedono ulteriori permessi per funzionare</string>
 
     <string name="service_name_exposure">Notifiche di esposizione al virus</string>
     <string name="pref_exposure_enable_info_summary">Per abilitare le notifiche di esposizione al virus, apri qualsiasi applicazione che le supporti.</string>
@@ -59,4 +60,8 @@
     <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> identificativi in un\'ora</string>
     <string name="prefcat_exposure_app_report_title">Esposizioni riscontrate</string>
     <string name="pref_exposure_error_location_off_title">Apri le impostazioni di geolocalizzazione</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Sono richiesti nuovi permessi</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tocca per consentire i permessi richiesti per le notifiche di esposizione al virus</string>
+    <string name="exposure_grant_background_location_description">Ci sei quasi! Ora dovrai abilitare l\'accesso alla posizione in background selezionando l\'opzione \"Consenti sempre\" nella prossima schermata. Una volta fatto, premi il tasto Indietro.</string>
+    <string name="exposure_grant_background_location_button">Aggiorna impostazioni</string>
 </resources>
