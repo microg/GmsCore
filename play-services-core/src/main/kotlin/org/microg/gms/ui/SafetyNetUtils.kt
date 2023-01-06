@@ -67,8 +67,14 @@ fun formatSummaryForSafetyNetResult(context: Context, result: String?, status: S
             }
         }
         SafetyNetRequestType.RECAPTCHA -> {
-            if (status?.isSuccess != true) return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
-            if (result == null) return context.getString(R.string.pref_test_summary_failed, "No result") to ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            if (status?.isSuccess != true) {
+                return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
+            }
+            if (result == null) {
+                return context.getString(R.string.pref_test_summary_failed, context.getString(R.string.pref_safetynet_test_no_result)) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            }
             val (success, errorCodes) = try {
                 JSONObject(result).let {
                         it.optBoolean("success", false) to
