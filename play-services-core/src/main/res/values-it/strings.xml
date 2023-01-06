@@ -200,6 +200,8 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="pref_device_registration_device_profile_category">Profilo del dispositivo</string>
 
     <string name="pref_safetynet_recent_uses">Utilizzi recenti</string>
+    <string name="pref_safetynet_recent_attestation_summary">Attestazione: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_copy_json">Copia dati JSON JWS</string>
     <string name="pref_safetynet_recent_eval_type">Tipo di valutazione</string>
     <string name="pref_safetynet_recent_response_status">Stato della risposta</string>
