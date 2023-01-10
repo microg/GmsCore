@@ -82,13 +82,18 @@ class UnifiedLocationProvider(private val context: Context, private val changeLi
             }
         }
         requests.add(request)
-        updateConnection()
+        lifecycleScope.launchWhenStarted {
+            updateConnection()
+        }
     }
 
     fun removeRequest(request: LocationRequestHelper) {
         Log.d(TAG, "unified network: removeRequest $request")
         requests.remove(request)
-        updateConnection()
+
+        lifecycleScope.launchWhenStarted {
+            updateConnection()
+        }
     }
 
     fun getLastLocation(): Location? {
@@ -98,28 +103,25 @@ class UnifiedLocationProvider(private val context: Context, private val changeLi
         return lastLocation
     }
 
-    @Synchronized
-    private fun updateConnection() {
-        lifecycleScope.launchWhenStarted {
-            activeRequestMutex.withLock {
-                if (activeRequestIds.isNotEmpty() && requests.isEmpty()) {
-                    Log.d(TAG, "unified network: no longer requesting location update")
-                    for (id in activeRequestIds) {
-                        client.cancelLocationRequestById(id)
-                    }
-                    activeRequestIds.clear()
-                } else if (requests.isNotEmpty()) {
-                    val requests = ArrayList(requests).filter { it.isActive }
-                    for (id in activeRequestIds.filter { id -> requests.none { it.id == id } }) {
-                        client.cancelLocationRequestById(id)
-                    }
-                    for (request in requests.filter { it.id !in activeRequestIds }) {
-                        client.updateLocationRequest(LocationRequest(listener, request.locationRequest.intervalMillis, request.locationRequest.maxUpdates, request.id), Bundle().apply {
-                            putString("packageName", request.packageName)
-                            putString("source", "GoogleLocationManager")
-                        })
-                        activeRequestIds.add(request.id)
-                    }
+    private suspend fun updateConnection() {
+        activeRequestMutex.withLock {
+            if (activeRequestIds.isNotEmpty() && requests.isEmpty()) {
+                Log.d(TAG, "unified network: no longer requesting location update")
+                for (id in activeRequestIds) {
+                    client.cancelLocationRequestById(id)
+                }
+                activeRequestIds.clear()
+            } else if (requests.isNotEmpty()) {
+                val requests = ArrayList(requests).filter { it.isActive }
+                for (id in activeRequestIds.filter { id -> requests.none { it.id == id } }) {
+                    client.cancelLocationRequestById(id)
+                }
+                for (request in requests.filter { it.id !in activeRequestIds }) {
+                    client.updateLocationRequest(LocationRequest(listener, request.locationRequest.intervalMillis, request.locationRequest.maxUpdates, request.id), Bundle().apply {
+                        putString("packageName", request.packageName)
+                        putString("source", "GoogleLocationManager")
+                    })
+                    activeRequestIds.add(request.id)
                 }
             }
         }
