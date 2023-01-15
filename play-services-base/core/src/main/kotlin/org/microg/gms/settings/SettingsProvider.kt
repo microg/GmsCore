@@ -93,7 +93,7 @@ class SettingsProvider : ContentProvider() {
 
     private fun queryCheckIn(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
         when (key) {
-            CheckIn.ENABLED -> getSettingsBoolean(key, true)
+            CheckIn.ENABLED -> getSettingsBoolean(key, false)
             CheckIn.ANDROID_ID -> checkInPrefs.getLong(key, 0)
             CheckIn.DIGEST -> checkInPrefs.getString(key, CheckIn.INITIAL_DIGEST)
                 ?: CheckIn.INITIAL_DIGEST
