@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2021 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="prefcat_droidguard_mode">Tryb działania DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">Wbudowany</string>
+    <string name="pref_droidguard_mode_embedded_summary">Korzystaj z lokalnego wydania DroidGuard</string>
+    <string name="pref_droidguard_mode_network_title">Zdalny</string>
+    <string name="pref_droidguard_mode_network_summary">Połącz z wydaniem DroidGuard przez sieć</string>
+</resources>

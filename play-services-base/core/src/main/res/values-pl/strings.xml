@@ -4,8 +4,15 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+		<string name="foreground_service_notification_title">Aktywność w tle</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> działa w tle.</string>
+    <string name="foreground_service_notification_big_text">Wyłącz optymalizację baterii dla <xliff:g example="microG Services Core">%1$s</xliff:g> lub zmień ustawienia powiadomień aby ukryć to powiadomienie.</string>
+
     <string name="menu_advanced">Zaawansowane</string>
 
     <string name="list_no_item_none">Brak</string>
+    <string name="list_item_see_all">Wyświetl wszystkie</string>
+
+    <string name="open_app">Otwórz</string>
 </resources>

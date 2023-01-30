@@ -19,7 +19,7 @@
     <string name="permission_service_all_label">Wszystkie usługi Google</string>
     <string name="permission_service_all_description">Zezwala aplikacji na dostęp do wszystkich usług Google przez dowolne powiązane konto Google.</string>
 
-    <string name="permission_service_android_label">Usługi Android</string>
+    <string name="permission_service_android_label">Usługi Androida</string>
     <string name="permission_service_android_description">Zezwala aplikacji na dostęp do usług Androida przez dowolne powiązane konto Google.</string>
     <string name="permission_service_adsense_label">AdSense</string>
     <string name="permission_service_adsense_description">Zezwala aplikacji na dostęp do AdSense przez dowolne powiązane konto Google.</string>
