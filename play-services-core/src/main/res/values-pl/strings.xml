@@ -117,20 +117,20 @@ To może zająć kilka minut.</string>
 
     <string name="pref_auth_trust_google_title">Zaufaj uprawnieniom aplikacji Google</string>
     <string name="pref_auth_trust_google_summary">Po wyłączeniu, do użytkownika kierowane jest pytanie przed wysyłaniem prośby o autoryzację do Google. Niektóre aplikacje nie będą mogły skorzystać z konta Google po wyłączeniu tej opcji.</string>
-		<string name="pref_auth_visible_title">Pozwól aplikacjom na znalezienie kont</string>
+    <string name="pref_auth_visible_title">Pozwól aplikacjom na znalezienie kont</string>
     <string name="pref_auth_visible_summary">Gdy włączone, wszystkie aplikacje na tym urządzeniu będą w stanie wyświetlić adres e-mail Twoich kont Google bez jakiejkolwiek autoryzacji.</string>
 
     <string name="pref_checkin_enable_summary">Zgłaszanie urządzenia to ukryty proces, służący do wygenerowania unikalnego identyfikatora dla usług Google. Usługi microG usuwają inne dane identyfikacyjne niż nazwa Twojego konta z tego identyfikatora.</string>
-		<string name="pref_device_registration_android_id">ID Androida</string>
+    <string name="pref_device_registration_android_id">ID Androida</string>
 	
-		<string name="checkin_not_registered">Nie zarejestrowano</string>
+    <string name="checkin_not_registered">Nie zarejestrowano</string>
     <string name="checkin_last_registration">Ostatnia rejestracja: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Rejestruj urządzenie</string>
 	
-		<string name="pref_info_status">Stan</string>
+    <string name="pref_info_status">Stan</string>
     <string name="pref_more_settings">Więcej</string>
 
-		<string name="pref_add_account_title">Konto</string>
+    <string name="pref_add_account_title">Konto</string>
     <string name="pref_add_account_summary">Dodaj konto Google</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging jest systemem zapewniającym powiadomienia dla wielu aplikacji. Aby z niego korzystać, musisz uruchomić zgłaszanie urządzenia.</string>
     <string name="pref_gcm_heartbeat_title">Częstotliwość sprawdzania Cloud Messaging</string>
@@ -156,12 +156,12 @@ To może zająć kilka minut.</string>
     <string name="gcm_unregister_confirm_message">Niektóre aplikacje nie rejestrują się automatycznie ponownie lub nie posiadają opcji do zrobienia tego ręcznie. Takie aplikacje po wyrejestrowaniu mogą nie działać prawidłowo.\nCzy chcesz kontynuować?</string>
     <string name="gcm_unregister_after_deny_message">Odmówiłeś już zarejestrowanej aplikacji zarejestrować się w usłudze powiadomień ‘push’.\nCzy chcesz ją wyrejestrować, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
-		<string name="gcm_network_state_disconnected">Odłączono</string>
+    <string name="gcm_network_state_disconnected">Odłączono</string>
     <string name="gcm_network_state_connected">Połączono od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Otrzymuj powiadomienia ‘push’</string>
     <string name="gcm_allow_app_popup">Zezwolić aplikacji <xliff:g example="F-Droid">%1$s</xliff:g> na rejestrację w usłudze powiadomień ‘push’?</string>
 
-		<string name="pref_push_app_allow_register_title">Zezwalaj na rejestrację</string>
+    <string name="pref_push_app_allow_register_title">Zezwalaj na rejestrację</string>
     <string name="pref_push_app_allow_register_summary">Zezwól aplikacje na rejestrację dla powiadomień push.</string>
     <string name="pref_push_app_wake_for_delivery_title">Uruchom aplikację po otrzymaniu komunikatu push.</string>
     <string name="pref_push_app_wake_for_delivery_summary">Uruchamia w tle aplikację, aby mogła ona odebrać przychodzące komunikaty push.</string>
@@ -171,7 +171,7 @@ To może zająć kilka minut.</string>
     <string name="prefcat_push_networks_title">Sieci z powiadomieniami push</string>
 
     <string name="safetynet_intro">Google SafetyNet jest systemem certyfikacji urządzenia, który upewnia się czy urządzenie jest poprawnie zabezpieczone i kompatybilne z Android CTS. Niektóre aplikacje używają SafetyNet ze względów bezpieczeństwa lub jako przeciwśrodek do modyfikacji.\n\nUsługa microG GmsCore zawiera wolną implementację SafetyNet, ale oficjalny serwer wymaga by SafetyNet był podpisany przez własnościowy system DroidGuard.</string>
-		<string name="safetynet_enable_switch">Zezwól na walidację urządzenia</string>
+    <string name="safetynet_enable_switch">Zezwól na walidację urządzenia</string>
     
     <string name="pref_safetynet_test_title">Sprawdź walidację SafetyNet</string>
     <string name="pref_recaptcha_test_title">Sprawdź usługę ReCAPTCHA</string>
@@ -196,7 +196,7 @@ To może zająć kilka minut.</string>
     <string name="pref_device_registration_select_profile_title">Wybierz profil</string>
     <string name="pref_device_registration_device_profile_category">Profil urządzenia</string>
 
-		<string name="pref_safetynet_recent_uses">Ostatnie żądania</string>
+    <string name="pref_safetynet_recent_uses">Ostatnie żądania</string>
     <string name="pref_safetynet_recent_attestation_summary">Weryfikacja: %s</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_copy_json">Kopiuj dane JSON JWS</string>
