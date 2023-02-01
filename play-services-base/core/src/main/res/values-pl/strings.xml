@@ -5,7 +5,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-		<string name="foreground_service_notification_title">Aktywność w tle</string>
+    <string name="foreground_service_notification_title">Aktywność w tle</string>
     <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> działa w tle.</string>
     <string name="foreground_service_notification_big_text">Wyłącz optymalizację baterii dla <xliff:g example="microG Services Core">%1$s</xliff:g> lub zmień ustawienia powiadomień aby ukryć to powiadomienie.</string>
 
