@@ -41,7 +41,7 @@
     <string name="pref_exposure_rpi_delete_all_warning">Usunięcie wszystkich zebranych identyfikatorów sprawi, że niemożliwe stanie się powiadomienie Ciebie w przypadku gdy któryś z Twoich kontaktów z ostatnich 14 dni był z osobą o pozytywnej diagnozie.</string>
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Usuń mimo tego</string>
     <string name="pref_exposure_rpi_export_title">Eksportuj</string>
-    <string name="pref_exposure_rpi_export_summary">Export collected IDs for extended analysis with another app.</string>
+    <string name="pref_exposure_rpi_export_summary">Eksportuj zebrane ID dla roszerzonej analizy przez inną aplikację.</string>
     <string name="pref_exposure_info_summary">"API powiadomień o narażaniu na kontakt z COVID-19 pozwalają aplikacjom na powiadamianie Ciebie o kontakcie z osobami z pozytywną diagnozą testu na obecność wirusa.
 
 Data, okres i siła sygnału związana z narażeniem na kontakt będzie udostępniona odpowiedniej aplikacji."</string>
