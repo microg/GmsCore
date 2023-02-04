@@ -138,7 +138,7 @@ To może zająć kilka minut.</string>
     <string name="pref_gcm_apps_title">Aplikacje korzystające z Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Lista aplikacji obecnie zarejestrowanych w usłudze Cloud Messaging.</string>
     <string name="pref_gcm_confirm_new_apps_title">Potwierdź nowe aplikacje</string>
-    <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji w usłudze powiadomień ‘push’</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Zapytaj przed zarejestrowaniem nowej aplikacji w usłudze powiadomień „push”</string>
     <string name="pref_gcm_ping_interval">Częstotliwość sprawdzania: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
     <string name="pref_about_title">O usługach microG</string>
@@ -154,12 +154,12 @@ To może zająć kilka minut.</string>
     <string name="gcm_registered_since">Zarejestrowany od: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Czy wyrejestrować <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
     <string name="gcm_unregister_confirm_message">Niektóre aplikacje nie rejestrują się automatycznie ponownie lub nie posiadają opcji do zrobienia tego ręcznie. Takie aplikacje po wyrejestrowaniu mogą nie działać prawidłowo.\nCzy chcesz kontynuować?</string>
-    <string name="gcm_unregister_after_deny_message">Odmówiłeś już zarejestrowanej aplikacji zarejestrować się w usłudze powiadomień ‘push’.\nCzy chcesz ją wyrejestrować, aby nie otrzymywała powiadomień ‘push’ w przyszłości?</string>
+    <string name="gcm_unregister_after_deny_message">Odmówiłeś już zarejestrowanej aplikacji zarejestrować się w usłudze powiadomień „push”.\nCzy chcesz ją wyrejestrować, aby nie otrzymywała powiadomień „push” w przyszłości?</string>
     <string name="gcm_messages_counter">Wiadomości: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bajtów)</string>
     <string name="gcm_network_state_disconnected">Odłączono</string>
     <string name="gcm_network_state_connected">Połączono od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
-    <string name="gcm_enable_switch">Otrzymuj powiadomienia ‘push’</string>
-    <string name="gcm_allow_app_popup">Zezwolić aplikacji <xliff:g example="F-Droid">%1$s</xliff:g> na rejestrację w usłudze powiadomień ‘push’?</string>
+    <string name="gcm_enable_switch">Otrzymuj powiadomienia „push”</string>
+    <string name="gcm_allow_app_popup">Zezwolić aplikacji <xliff:g example="F-Droid">%1$s</xliff:g> na rejestrację w usłudze powiadomień „push”?</string>
 
     <string name="pref_push_app_allow_register_title">Zezwalaj na rejestrację</string>
     <string name="pref_push_app_allow_register_summary">Zezwól aplikacje na rejestrację dla powiadomień push.</string>
