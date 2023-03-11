@@ -8,9 +8,9 @@ import com.google.firebase.auth.api.internal.GetTokenResponse;
 import com.google.firebase.auth.api.internal.ResetPasswordResponse;
 
 interface IFirebaseAuthCallbacks {
-    oneway void onGetTokenResponse(in GetTokenResponse response) = 0;
+    oneway void onGetTokenResponse(in GetTokenResponse response) = 1;
     oneway void onGetTokenResponseAndUser(in GetTokenResponse response, in GetAccountInfoUser user) = 1;
-    oneway void onCreateAuthUriResponse(in CreateAuthUriResponse response) = 2;
+    oneway void onCreateAuthUriResponse(in CreateAuthUriResponse response) = 1;
     oneway void onResetPasswordResponse(in ResetPasswordResponse response) = 3;
     oneway void onFailure(in Status status) = 4;
     oneway void onDeleteAccountResponse() = 5;
