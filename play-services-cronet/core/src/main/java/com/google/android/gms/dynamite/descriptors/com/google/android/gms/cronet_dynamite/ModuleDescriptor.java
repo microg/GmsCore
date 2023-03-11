@@ -14,11 +14,7 @@ public class ModuleDescriptor {
     public static final List<String> MERGED_CLASSES = Arrays.asList(
             "org.chromium.net.ApiVersion",
             "org.chromium.net.BidirectionalStream",
-            "org.chromium.net.CallbackException",
-            "org.chromium.net.CronetEngine",
-            "org.chromium.net.CronetException",
-            "org.chromium.net.CronetProvider",
-            "org.chromium.net.ExperimentalBidirectionalStream",
+            "org.chromium.net.PrivateIPaddress",
             "org.chromium.net.ExperimentalCronetEngine",
             "org.chromium.net.ExperimentalUrlRequest",
             "org.chromium.net.ICronetEngineBuilder",
