@@ -16,8 +16,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.BuildConfig
 import com.google.android.gms.R
 import com.google.android.gms.recaptcha.Recaptcha
 import com.google.android.gms.recaptcha.RecaptchaAction
@@ -28,8 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import org.microg.gms.safetynet.SafetyNetDatabase
-import org.microg.gms.safetynet.SafetyNetRequestType.ATTESTATION
-import org.microg.gms.safetynet.SafetyNetRequestType.RECAPTCHA
+import org.microg.gms.safetynet.SafetyNetRequestType.*
 import java.net.URLEncoder
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -62,109 +63,144 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
         runReCaptcha.isVisible = RECAPTCHA_SITE_KEY != null
         runReCaptchaEnterprise.isVisible = RECAPTCHA_ENTERPRISE_SITE_KEY != null
 
-        runAttest.setOnPreferenceClickListener {
-            val context = context ?: return@setOnPreferenceClickListener false
-            runAttest.setIcon(R.drawable.ic_circle_pending)
-            runAttest.setSummary(R.string.pref_test_summary_running)
-            lifecycleScope.launchWhenResumed {
-                try {
-                    val response = SafetyNet.getClient(requireActivity())
-                        .attest(Random.nextBytes(32), SAFETYNET_API_KEY).await()
-                    val (_, payload, _) = try {
-                        response.jwsResult.split(".")
-                    } catch (e: Exception) {
-                        listOf(null, null, null)
-                    }
-                    formatSummaryForSafetyNetResult(
-                        context,
-                        payload?.let { Base64.decode(it, Base64.URL_SAFE).decodeToString() },
-                        response.result.status,
-                        ATTESTATION
-                    )
-                        .let { (summary, icon) ->
-                            runAttest.summary = summary
-                            runAttest.icon = icon
-                        }
+        runAttest.setOnPreferenceClickListener { runSafetyNetAttest(); true }
+        runReCaptcha.setOnPreferenceClickListener { runReCaptchaAttest(); true }
+        runReCaptchaEnterprise.setOnPreferenceClickListener { runReCaptchaEnterpriseAttest();true }
+        appsAll.setOnPreferenceClickListener { findNavController().navigate(requireContext(), R.id.openAllSafetyNetApps);true }
+    }
+
+    private fun runSafetyNetAttest() {
+        val context = context ?: return
+        runAttest.setIcon(R.drawable.ic_circle_pending)
+        runAttest.setSummary(R.string.pref_test_summary_running)
+        lifecycleScope.launchWhenResumed {
+            try {
+                val response = SafetyNet.getClient(requireActivity())
+                    .attest(Random.nextBytes(32), SAFETYNET_API_KEY).await()
+                val (_, payload, _) = try {
+                    response.jwsResult.split(".")
                 } catch (e: Exception) {
-                    runAttest.summary = getString(R.string.pref_test_summary_failed, e.message)
-                    runAttest.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+                    listOf(null, null, null)
                 }
-                updateContent()
+                formatSummaryForSafetyNetResult(
+                    context,
+                    payload?.let { Base64.decode(it, Base64.URL_SAFE).decodeToString() },
+                    response.result.status,
+                    ATTESTATION
+                )
+                    .let { (summary, icon) ->
+                        runAttest.summary = summary
+                        runAttest.icon = icon
+                    }
+            } catch (e: Exception) {
+                runAttest.summary = getString(R.string.pref_test_summary_failed, e.message)
+                runAttest.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
             }
-            true
+            updateContent()
         }
-        runReCaptcha.setOnPreferenceClickListener {
-            val context = context ?: return@setOnPreferenceClickListener false
-            runReCaptcha.setIcon(R.drawable.ic_circle_pending)
-            runReCaptcha.setSummary(R.string.pref_test_summary_running)
-            lifecycleScope.launchWhenResumed {
-                try {
-                    val response = SafetyNet.getClient(requireActivity())
-                        .verifyWithRecaptcha(RECAPTCHA_SITE_KEY).await()
-                    val result = if (response.tokenResult != null) {
-                        val queue = Volley.newRequestQueue(context)
-                        val json =
-                            if (RECAPTCHA_SECRET != null) {
-                                suspendCoroutine { continuation ->
-                                    queue.add(object : JsonObjectRequest(
-                                        Method.POST,
-                                        "https://www.google.com/recaptcha/api/siteverify",
-                                        null,
-                                        { continuation.resume(it) },
-                                        { continuation.resumeWithException(it) }
-                                    ) {
-                                        override fun getBodyContentType(): String = "application/x-www-form-urlencoded; charset=UTF-8"
-                                        override fun getBody(): ByteArray =
-                                            "secret=$RECAPTCHA_SECRET&response=${URLEncoder.encode(response.tokenResult, "UTF-8")}".encodeToByteArray()
-                                    })
-                                }
-                            } else {
-                                // Can't properly verify, everything becomes a success
-                                JSONObject(mapOf("success" to true))
+    }
+
+    private fun runReCaptchaAttest() {
+        val context = context ?: return
+        runReCaptcha.setIcon(R.drawable.ic_circle_pending)
+        runReCaptcha.setSummary(R.string.pref_test_summary_running)
+        lifecycleScope.launchWhenResumed {
+            try {
+                val response = SafetyNet.getClient(requireActivity())
+                    .verifyWithRecaptcha(RECAPTCHA_SITE_KEY).await()
+                val result = if (response.tokenResult != null) {
+                    val queue = Volley.newRequestQueue(context)
+                    val json =
+                        if (RECAPTCHA_SECRET != null) {
+                            suspendCoroutine { continuation ->
+                                queue.add(object : JsonObjectRequest(
+                                    Method.POST,
+                                    "https://www.google.com/recaptcha/api/siteverify",
+                                    null,
+                                    { continuation.resume(it) },
+                                    { continuation.resumeWithException(it) }
+                                ) {
+                                    override fun getBodyContentType(): String = "application/x-www-form-urlencoded; charset=UTF-8"
+                                    override fun getBody(): ByteArray =
+                                        "secret=$RECAPTCHA_SECRET&response=${URLEncoder.encode(response.tokenResult, "UTF-8")}".encodeToByteArray()
+                                })
                             }
-                        Log.d(TAG, "Result: $json")
-                        json.toString()
-                    } else {
-                        null
-                    }
-                    formatSummaryForSafetyNetResult(context, result, response.result.status, RECAPTCHA)
-                        .let { (summary, icon) ->
-                            runReCaptcha.summary = summary
-                            runReCaptcha.icon = icon
+                        } else {
+                            // Can't properly verify, everything becomes a success
+                            JSONObject(mapOf("success" to true))
                         }
-                } catch (e: Exception) {
-                    runReCaptcha.summary = getString(R.string.pref_test_summary_failed, e.message)
-                    runReCaptcha.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+                    Log.d(TAG, "Result: $json")
+                    json.toString()
+                } else {
+                    null
                 }
-                updateContent()
+                formatSummaryForSafetyNetResult(context, result, response.result.status, RECAPTCHA)
+                    .let { (summary, icon) ->
+                        runReCaptcha.summary = summary
+                        runReCaptcha.icon = icon
+                    }
+            } catch (e: Exception) {
+                runReCaptcha.summary = getString(R.string.pref_test_summary_failed, e.message)
+                runReCaptcha.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
             }
-            true
+            updateContent()
         }
-        runReCaptchaEnterprise.setOnPreferenceClickListener {
-            val context = context ?: return@setOnPreferenceClickListener false
-            runReCaptchaEnterprise.setIcon(R.drawable.ic_circle_pending)
-            runReCaptchaEnterprise.setSummary(R.string.pref_test_summary_running)
-            lifecycleScope.launchWhenResumed {
-                try {
-                    val client = Recaptcha.getClient(requireActivity())
-                    val handle = client.init(RECAPTCHA_ENTERPRISE_SITE_KEY).await()
-                    val result =
-                        client.execute(handle, RecaptchaAction(RecaptchaActionType(RecaptchaActionType.SIGNUP))).await()
-                    Log.d(TAG, "Recaptcha Token: " + result.tokenResult)
-                    client.close(handle).await()
-                    runReCaptchaEnterprise.summary = getString(R.string.pref_test_summary_warn, "Incomplete Test")
-                    runReCaptchaEnterprise.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
-                } catch (e: Exception) {
-                    runReCaptchaEnterprise.summary = getString(R.string.pref_test_summary_failed, e.message)
-                    runReCaptchaEnterprise.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+    }
+
+    private fun runReCaptchaEnterpriseAttest() {
+        val context = context ?: return
+        runReCaptchaEnterprise.setIcon(R.drawable.ic_circle_pending)
+        runReCaptchaEnterprise.setSummary(R.string.pref_test_summary_running)
+        lifecycleScope.launchWhenResumed {
+            try {
+                val client = Recaptcha.getClient(requireActivity())
+                val handle = client.init(RECAPTCHA_ENTERPRISE_SITE_KEY).await()
+                val actionType = RecaptchaActionType.SIGNUP
+                val response =
+                    client.execute(handle, RecaptchaAction(RecaptchaActionType(actionType))).await()
+                Log.d(TAG, "Recaptcha Token: " + response.tokenResult)
+                client.close(handle).await()
+                val result = if (response.tokenResult != null) {
+                    val queue = Volley.newRequestQueue(context)
+                    val json = if (RECAPTCHA_ENTERPRISE_API_KEY != null) {
+                        suspendCoroutine { continuation ->
+                            queue.add(JsonObjectRequest(
+                                Request.Method.POST,
+                                "https://recaptchaenterprise.googleapis.com/v1/projects/$RECAPTCHA_ENTERPRISE_PROJECT_ID/assessments?key=$RECAPTCHA_ENTERPRISE_API_KEY",
+                                JSONObject(
+                                    mapOf(
+                                        "event" to JSONObject(
+                                            mapOf(
+                                                "token" to response.tokenResult,
+                                                "siteKey" to RECAPTCHA_ENTERPRISE_SITE_KEY,
+                                                "expectedAction" to actionType
+                                            )
+                                        )
+                                    )
+                                ),
+                                { continuation.resume(it) },
+                                { continuation.resumeWithException(it) }
+                            ))
+                        }
+                    } else {
+                        // Can't properly verify, everything becomes a success
+                        JSONObject(mapOf("tokenProperties" to JSONObject(mapOf("valid" to true)), "riskAnalysis" to JSONObject(mapOf("score" to "unknown"))))
+                    }
+                    Log.d(TAG, "Result: $json")
+                    json.toString()
+                } else {
+                    null
                 }
-                updateContent()
+                formatSummaryForSafetyNetResult(context, result, null, RECAPTCHA_ENTERPRISE)
+                    .let { (summary, icon) ->
+                        runReCaptchaEnterprise.summary = summary
+                        runReCaptchaEnterprise.icon = icon
+                    }
+            } catch (e: Exception) {
+                runReCaptchaEnterprise.summary = getString(R.string.pref_test_summary_failed, e.message)
+                runReCaptchaEnterprise.icon = ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
             }
-            true
-        }
-        appsAll.setOnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openAllSafetyNetApps)
-            true
+            updateContent()
         }
     }
 
@@ -219,9 +255,11 @@ class SafetyNetPreferencesFragment : PreferenceFragmentCompat() {
     }
 
     companion object {
-        private val SAFETYNET_API_KEY: String? = "AIzaSyCcJO6IZiA5Or_AXw3LFdaTCmpnfL4pJ-Q"
-        private val RECAPTCHA_SITE_KEY: String? = "6Lc4TzgeAAAAAJnW7Jbo6UtQ0xGuTKjHAeyhINuq"
-        private val RECAPTCHA_SECRET: String? = "6Lc4TzgeAAA${"AAAjwSDqU-uG"}_Lcu2f23URMI8fq0I"
-        private val RECAPTCHA_ENTERPRISE_SITE_KEY: String? = null
+        private val SAFETYNET_API_KEY: String? = BuildConfig.SAFETYNET_KEY.takeIf { it.isNotBlank() }
+        private val RECAPTCHA_SITE_KEY: String? = BuildConfig.RECAPTCHA_SITE_KEY.takeIf { it.isNotBlank() }
+        private val RECAPTCHA_SECRET: String? = BuildConfig.RECAPTCHA_SECRET.takeIf { it.isNotBlank() }
+        private val RECAPTCHA_ENTERPRISE_PROJECT_ID: String? = BuildConfig.RECAPTCHA_ENTERPRISE_PROJECT_ID.takeIf { it.isNotBlank() }
+        private val RECAPTCHA_ENTERPRISE_SITE_KEY: String? = BuildConfig.RECAPTCHA_ENTERPRISE_SITE_KEY.takeIf { it.isNotBlank() }
+        private val RECAPTCHA_ENTERPRISE_API_KEY: String? = BuildConfig.RECAPTCHA_ENTERPRISE_API_KEY.takeIf { it.isNotBlank() }
     }
 }

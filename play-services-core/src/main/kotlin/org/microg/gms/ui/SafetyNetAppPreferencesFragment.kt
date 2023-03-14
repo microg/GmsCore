@@ -12,8 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.*
 import com.google.android.gms.R
 import org.microg.gms.safetynet.SafetyNetDatabase
-import org.microg.gms.safetynet.SafetyNetRequestType.ATTESTATION
-import org.microg.gms.safetynet.SafetyNetRequestType.RECAPTCHA
+import org.microg.gms.safetynet.SafetyNetRequestType.*
 
 class SafetyNetAppPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var recents: PreferenceCategory
@@ -76,6 +75,7 @@ class SafetyNetAppPreferencesFragment : PreferenceFragmentCompat() {
                     preference.summary = when (summary.requestType) {
                         ATTESTATION -> getString(R.string.pref_safetynet_recent_attestation_summary, text)
                         RECAPTCHA -> getString(R.string.pref_safetynet_recent_recaptcha_summary, text)
+                        RECAPTCHA_ENTERPRISE -> getString(R.string.pref_safetynet_recent_recaptcha_enterprise_summary, text)
                     }
                     preference.icon = icon
                 }

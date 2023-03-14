@@ -102,5 +102,38 @@ fun formatSummaryForSafetyNetResult(context: Context, result: String?, status: S
                 }
             }
         }
+        SafetyNetRequestType.RECAPTCHA_ENTERPRISE -> {
+            if (result == null) {
+                return context.getString(R.string.pref_test_summary_failed, context.getString(R.string.pref_safetynet_test_no_result)) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            }
+            val (valid, score, invalidReason) = try {
+                JSONObject(result).let {
+                    Triple(it.optJSONObject("tokenProperties")?.optBoolean("valid", false) ?: false,
+                            it.optJSONObject("riskAnalysis")?.optString("score", "unknown") ?: "unknown",
+                            it.optJSONObject("tokenProperties")?.optString("invalidReason"))
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+                Triple(true, "unknown", null)
+            }
+            return when {
+                valid && (score == "unknown" || score.toDoubleOrNull()?.let { it > 0.5 } == true)  -> {
+                    context.getString(R.string.pref_test_summary_passed) to ContextCompat.getDrawable(context, R.drawable.ic_circle_check)
+                }
+                valid && score.toDoubleOrNull()?.let { it > 0.1 } == true -> {
+                    context.getString(
+                        R.string.pref_test_summary_warn,
+                        "score = $score"
+                    ) to ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+                }
+                else -> {
+                    context.getString(
+                        R.string.pref_test_summary_failed,
+                        invalidReason ?: "score = $score"
+                    ) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
+                }
+            }
+        }
     }
 }

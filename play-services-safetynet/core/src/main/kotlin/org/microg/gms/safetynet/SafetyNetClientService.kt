@@ -66,19 +66,19 @@ class SafetyNetClientServiceImpl(
 
     override fun attestWithApiKey(callbacks: ISafetyNetCallbacks, nonce: ByteArray?, apiKey: String) {
         if (nonce == null) {
-            callbacks.onAttestationData(Status(SafetyNetStatusCodes.DEVELOPER_ERROR, "Nonce missing"), null)
+            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.DEVELOPER_ERROR, "Nonce missing"), null)
             return
         }
 
         if (!SafetyNetPreferences.isEnabled(context)) {
             Log.d(TAG, "ignoring SafetyNet request, SafetyNet is disabled")
-            callbacks.onAttestationData(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
+            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
             return
         }
 
         if (!DroidGuardPreferences.isEnabled(context)) {
             Log.d(TAG, "ignoring SafetyNet request, DroidGuard is disabled")
-            callbacks.onAttestationData(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
+            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
             return
         }
 
@@ -115,7 +115,7 @@ class SafetyNetClientServiceImpl(
                 }
 
                 db.insertRecentRequestEnd(requestID, Status.SUCCESS, jsonData)
-                callbacks.onAttestationData(Status.SUCCESS, AttestationData(jwsResult))
+                callbacks.onAttestationResult(Status.SUCCESS, AttestationData(jwsResult))
             } catch (e: Exception) {
                 Log.w(TAG, "Exception during attest: ${e.javaClass.name}", e)
                 val code = when (e) {
@@ -127,7 +127,7 @@ class SafetyNetClientServiceImpl(
                 // This shouldn't happen, but do not update the database if it didn't insert the start of the request
                 if (requestID != -1L) db.insertRecentRequestEnd(requestID, status, null)
                 try {
-                    callbacks.onAttestationData(Status(code, e.localizedMessage), null)
+                    callbacks.onAttestationResult(Status(code, e.localizedMessage), null)
                 } catch (e: Exception) {
                     Log.w(TAG, "Exception while sending error", e)
                 }
@@ -150,19 +150,19 @@ class SafetyNetClientServiceImpl(
         callbacks.onSafeBrowsingData(Status.SUCCESS, SafeBrowsingData())
     }
 
-    override fun init(callbacks: ISafetyNetCallbacks) {
-        Log.d(TAG, "dummy Method: init")
-        callbacks.onBoolean(Status.SUCCESS, true)
+    override fun enableVerifyApps(callbacks: ISafetyNetCallbacks) {
+        Log.d(TAG, "dummy Method: enableVerifyApps")
+        callbacks.onVerifyAppsUserResult(Status.SUCCESS, true)
     }
 
-    override fun getHarmfulAppsList(callbacks: ISafetyNetCallbacks) {
+    override fun listHarmfulApps(callbacks: ISafetyNetCallbacks) {
         Log.d(TAG, "dummy Method: unknown4")
         callbacks.onHarmfulAppsData(Status.SUCCESS, ArrayList())
     }
 
     override fun verifyWithRecaptcha(callbacks: ISafetyNetCallbacks, siteKey: String?) {
         if (siteKey == null) {
-            callbacks.onAttestationData(Status(SafetyNetStatusCodes.RECAPTCHA_INVALID_SITEKEY, "SiteKey missing"), null)
+            callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.RECAPTCHA_INVALID_SITEKEY, "SiteKey missing"), null)
             return
         }
 
@@ -252,6 +252,20 @@ class SafetyNetClientServiceImpl(
             }
         })
         context.startActivity(intent)
+    }
+
+    override fun initSafeBrowsing(callbacks: ISafetyNetCallbacks) {
+        Log.d(TAG, "dummy: initSafeBrowsing")
+        callbacks.onInitSafeBrowsingResult(Status.SUCCESS)
+    }
+
+    override fun shutdownSafeBrowsing() {
+        Log.d(TAG, "dummy: shutdownSafeBrowsing")
+    }
+
+    override fun isVerifyAppsEnabled(callbacks: ISafetyNetCallbacks) {
+        Log.d(TAG, "dummy: isVerifyAppsEnabled")
+        callbacks.onVerifyAppsUserResult(Status.SUCCESS, true)
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {

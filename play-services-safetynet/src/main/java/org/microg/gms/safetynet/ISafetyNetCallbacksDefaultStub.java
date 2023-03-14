@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ISafetyNetCallbacksDefaultStub extends ISafetyNetCallbacks.Stub {
     @Override
-    public void onAttestationData(Status status, AttestationData attestationData) throws RemoteException {
+    public void onAttestationResult(Status status, AttestationData attestationData) throws RemoteException {
     }
 
     @Override
@@ -32,7 +32,8 @@ public class ISafetyNetCallbacksDefaultStub extends ISafetyNetCallbacks.Stub {
     }
 
     @Override
-    public void onBoolean(Status status, boolean b) throws RemoteException {
+    public void onVerifyAppsUserResult(Status status, boolean enabled) throws RemoteException {
+
     }
 
     @Override
@@ -45,6 +46,10 @@ public class ISafetyNetCallbacksDefaultStub extends ISafetyNetCallbacks.Stub {
 
     @Override
     public void onHarmfulAppsInfo(Status status, HarmfulAppsInfo harmfulAppsInfo) throws RemoteException {
+    }
+
+    @Override
+    public void onInitSafeBrowsingResult(Status status) throws RemoteException {
     }
 
     @Override

@@ -110,7 +110,11 @@ class AppCertManager(private val context: Context) {
                     }
 
                     override fun deliverError(error: VolleyError) {
-                        Log.d(TAG, "Error: ${Base64.encodeToString(error.networkResponse.data, 2)}")
+                        if (error.networkResponse != null) {
+                            Log.d(TAG, "Error: ${Base64.encodeToString(error.networkResponse.data, 2)}")
+                        } else {
+                            Log.d(TAG, "Error: ${error.message}")
+                        }
                         deviceKeyCacheTime = 0
                         deferredResponse.complete(null)
                     }
@@ -163,11 +167,12 @@ class AppCertManager(private val context: Context) {
             )
         } else {
             Log.d(TAG, "Using fallback spatula header based on Android ID")
-            val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID, CheckIn.SECURITY_TOKEN)) { cursor: Cursor -> cursor.getLong(0) }
+            val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
             SpatulaHeaderProto(
                     packageInfo = SpatulaHeaderProto.PackageInfo(packageName, packageCertificateHash),
                     deviceId = androidId
             )
+            return null // TODO
         }
         Log.d(TAG, "Spatula Header: $proto")
         return Base64.encodeToString(proto.encode(), Base64.NO_WRAP)

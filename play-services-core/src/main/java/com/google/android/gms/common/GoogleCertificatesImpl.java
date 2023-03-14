@@ -17,10 +17,12 @@
 package com.google.android.gms.common;
 
 import android.content.pm.PackageManager;
+import android.os.IBinder;
 import android.os.RemoteException;
 import androidx.annotation.Keep;
 import android.util.Log;
 
+import com.google.android.gms.common.internal.CertData;
 import com.google.android.gms.common.internal.GoogleCertificatesQuery;
 import com.google.android.gms.common.internal.IGoogleCertificatesApi;
 import com.google.android.gms.dynamic.IObjectWrapper;
@@ -28,20 +30,25 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 
 import org.microg.gms.common.PackageUtils;
 
+import java.util.Collections;
+import java.util.Set;
+
 @Keep
 public class GoogleCertificatesImpl extends IGoogleCertificatesApi.Stub  {
     private static final String TAG = "GmsCertImpl";
+    private Set<CertData> googleCertificates = Collections.emptySet();
+    private Set<CertData> googleReleaseCertificates = Collections.emptySet();
 
     @Override
-    public IObjectWrapper getGoogleCertficates() throws RemoteException {
-        Log.d(TAG, "unimplemented Method: getGoogleCertficates");
-        return null;
+    public IObjectWrapper getGoogleCertificates() throws RemoteException {
+        Log.d(TAG, "unimplemented Method: getGoogleCertificates");
+        return ObjectWrapper.wrap(googleCertificates.toArray(new IBinder[0]));
     }
 
     @Override
     public IObjectWrapper getGoogleReleaseCertificates() throws RemoteException {
         Log.d(TAG, "unimplemented Method: getGoogleReleaseCertificates");
-        return null;
+        return ObjectWrapper.wrap(googleReleaseCertificates.toArray(new IBinder[0]));
     }
 
     @Override

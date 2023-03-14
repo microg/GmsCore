@@ -66,6 +66,15 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
         }
     }
 
+    public void markHandleClosed() {
+        if (openHandles == 0) {
+            Log.w(TAG, "Can't mark handle closed if none is open");
+            return;
+        }
+        openHandles--;
+        if (openHandles == 0) disconnect();
+    }
+
     public void runOnHandler(Runnable runnable) {
         if (Looper.myLooper() == handler.getLooper()) {
             runnable.run();

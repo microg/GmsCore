@@ -5,12 +5,14 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.microg.gms.recaptcha.core">
+          package="org.microg.gms.recaptcha.core">
 
     <application>
-        <service android:name="org.microg.gms.recaptcha.RecaptchaService">
+        <!-- This service is in :ui process because it may spawn a web view. See https://crbug.com/558377 -->
+        <service android:name="org.microg.gms.recaptcha.RecaptchaService"
+                 android:process=":ui">
             <intent-filter>
-                <action android:name="com.google.android.gms.recaptcha.service.START" />
+                <action android:name="com.google.android.gms.recaptcha.service.START"/>
             </intent-filter>
         </service>
     </application>

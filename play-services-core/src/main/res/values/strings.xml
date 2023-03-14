@@ -199,6 +199,7 @@ This can take a couple of minutes."</string>
     <string name="pref_safetynet_recent_uses">Recent uses</string>
     <string name="pref_safetynet_recent_attestation_summary">Attestation: %s</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
     <string name="pref_safetynet_recent_copy_json">Copy JSON JWS data</string>
     <string name="pref_safetynet_recent_advice">Advice</string>
     <string name="pref_safetynet_recent_eval_type">Evaluation type</string>

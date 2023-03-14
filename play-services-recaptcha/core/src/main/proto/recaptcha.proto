@@ -1,3 +1,5 @@
+syntax = "proto3";
+
 option java_package = "org.microg.gms.recaptcha";
 
 message RecaptchaInitRequest {
@@ -26,4 +28,63 @@ message RecaptchaExecuteRequest {
 
 message RecaptchaExecuteResponse {
   optional string token = 1;
+}
+
+message RecaptchaWebEncryptedCallback {
+  optional string data = 1;
+  repeated int32 key = 2;
+}
+
+message RecaptchaWebInvokeMultiParameter {
+  repeated string args = 1;
+}
+
+message RecaptchaWebStatusCode {
+  optional int32 code = 1;
+}
+
+message RecaptchaWebResult {
+  optional string requestToken = 1;
+  optional string token = 2;
+  optional int32 code = 3;
+}
+
+message RecaptchaWebList {
+  message Value {
+    oneof typed {
+      bool bol = 1;
+      bytes bt = 2;
+      string chr = 3;
+      sint32 sht = 4;
+      sint32 i = 5;
+      sint64 l = 7;
+      float flt = 9;
+      double dbl = 10;
+      string str = 11;
+    }
+  }
+  repeated Value values = 1;
+}
+
+message RecaptchaWebCode {
+  message Arg {
+    oneof typed {
+      int32 index = 1;
+      bool bol = 2;
+      bytes bt = 3;
+      string chr = 4;
+      sint32 sht = 5;
+      sint32 i = 6;
+      sint64 l = 8;
+      float flt = 10;
+      double dbl = 11;
+      string str = 12;
+    }
+  }
+  message Op {
+    optional int32 code = 1;
+    optional int32 arg1 = 2;
+    repeated Arg args = 3;
+  }
+  repeated Op ops = 1;
 }

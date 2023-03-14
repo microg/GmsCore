@@ -10,9 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import org.microg.gms.common.Constants;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class DroidGuardResultsRequest extends AutoSafeParcelable {
@@ -87,6 +89,16 @@ public class DroidGuardResultsRequest extends AutoSafeParcelable {
     public DroidGuardResultsRequest setNetworkToUse(Network networkToUse) {
         bundle.putParcelable(KEY_NETWORK_TO_USE, networkToUse);
         return this;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        ToStringHelper helper = ToStringHelper.name("DroidGuardResultsRequest");
+        for (String key : bundle.keySet()) {
+            helper.field(key, bundle.get(key));
+        }
+        return helper.end();
     }
 
     public static final Creator<DroidGuardResultsRequest> CREATOR = new AutoCreator<>(DroidGuardResultsRequest.class);
