@@ -21,7 +21,7 @@ public class PatternItem extends AutoSafeParcelable {
     @Field(2)
     private int type;
     @Field(3)
-    private float length;
+    private Float length;
 
     private PatternItem() {
     }

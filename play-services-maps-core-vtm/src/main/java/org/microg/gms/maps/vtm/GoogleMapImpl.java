@@ -44,7 +44,10 @@ import com.google.android.gms.maps.internal.IOnCameraIdleListener;
 import com.google.android.gms.maps.internal.IOnCameraMoveCanceledListener;
 import com.google.android.gms.maps.internal.IOnCameraMoveListener;
 import com.google.android.gms.maps.internal.IOnCameraMoveStartedListener;
+import com.google.android.gms.maps.internal.IOnCircleClickListener;
 import com.google.android.gms.maps.internal.IOnInfoWindowClickListener;
+import com.google.android.gms.maps.internal.IOnInfoWindowCloseListener;
+import com.google.android.gms.maps.internal.IOnInfoWindowLongClickListener;
 import com.google.android.gms.maps.internal.IOnMapClickListener;
 import com.google.android.gms.maps.internal.IOnMapLoadedCallback;
 import com.google.android.gms.maps.internal.IOnMapLongClickListener;
@@ -210,6 +213,11 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     public void onExitAmbient() throws RemoteException {
         Log.d(TAG, "unimplemented Method: onExitAmbient");
 
+    }
+
+    @Override
+    public void setCircleClickListener(IOnCircleClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setCircleClickListener");
     }
 
     @Override
@@ -659,6 +667,16 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     public void setCameraIdleListener(IOnCameraIdleListener listener) throws RemoteException {
         Log.d(TAG, "unimplemented Method: setCameraIdleListener");
 
+    }
+
+    @Override
+    public void setInfoWindowLongClickListener(IOnInfoWindowLongClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setInfoWindowLongClickListener");
+    }
+
+    @Override
+    public void setInfoWindowCloseListener(IOnInfoWindowCloseListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setInfoWindowCloseListener");
     }
 
     @Override

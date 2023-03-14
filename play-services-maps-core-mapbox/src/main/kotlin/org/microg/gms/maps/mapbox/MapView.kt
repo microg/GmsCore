@@ -30,12 +30,17 @@ import com.google.android.gms.maps.internal.IOnMapReadyCallback
 class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IMapViewDelegate.Stub() {
 
     private val options: GoogleMapOptions = options ?: GoogleMapOptions()
-    private var map: GoogleMapImpl? = null
+    private var map: IGoogleMapDelegate? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: ${options?.camera?.target}")
-        map = GoogleMapImpl(context, options)
-        map!!.onCreate(savedInstanceState)
+        map = if (options.liteMode) {
+            LiteGoogleMapImpl(context, options)
+        } else {
+            GoogleMapImpl(context, options)
+        }.apply {
+            this.onCreate(savedInstanceState)
+        }
     }
 
     override fun getMap(): IGoogleMapDelegate? = map
@@ -52,8 +57,23 @@ class MapViewImpl(private val context: Context, options: GoogleMapOptions?) : IM
 
     override fun onLowMemory() = map?.onLowMemory() ?: Unit
     override fun onSaveInstanceState(outState: Bundle) = map?.onSaveInstanceState(outState) ?: Unit
-    override fun getView(): IObjectWrapper = ObjectWrapper.wrap(map?.view)
-    override fun getMapAsync(callback: IOnMapReadyCallback) = map?.getMapAsync(callback) ?: Unit
+    override fun getView(): IObjectWrapper = ObjectWrapper.wrap(
+        map?.let {
+            when (it) {
+                is GoogleMapImpl -> it.view
+                is LiteGoogleMapImpl -> it.view
+                else -> null
+            }
+        }
+    )
+
+    override fun getMapAsync(callback: IOnMapReadyCallback) = map?.let {
+        when (it) {
+            is GoogleMapImpl -> it.getMapAsync(callback)
+            is LiteGoogleMapImpl -> it.getMapAsync(callback)
+            else -> null
+        }
+    } ?: Unit
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
             if (super.onTransact(code, data, reply, flags)) {

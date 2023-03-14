@@ -46,7 +46,7 @@ public final class GoogleMapOptions extends AutoSafeParcelable {
     @SafeParceled(11)
     private boolean rotateGesturesEnabled = true;
     @SafeParceled(12)
-    private boolean liteMode = false;
+    private int liteMode = 0;
     @SafeParceled(14)
     private boolean mapToobarEnabled = false;
     @SafeParceled(15)
@@ -79,8 +79,9 @@ public final class GoogleMapOptions extends AutoSafeParcelable {
         return boundsForCamera;
     }
 
-    public Boolean getLiteMode() {
-        return liteMode;
+    public boolean getLiteMode() {
+        // Is encoded as `-1` if null, `0` if false, `1` if true. The default is false.
+        return liteMode == 1;
     }
 
     public Boolean getMapToolbarEnabled() {

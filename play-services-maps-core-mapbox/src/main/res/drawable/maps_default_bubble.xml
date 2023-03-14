@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Based on https://stackoverflow.com/a/27607600/20044811 by TTransmit, CC BY-SA 3.0 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <item
+        android:bottom="8dp"
+        tools:width="100dp"
+        tools:height="50dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#ffffff"/>
+            <corners
+                android:topLeftRadius="2dp"
+                android:topRightRadius="2dp"
+                android:bottomRightRadius="2dp"
+                android:bottomLeftRadius="2dp"/>
+        </shape>
+    </item>
+
+    <item
+        android:gravity="bottom|center_horizontal">
+        <vector
+            android:width="8dp"
+            android:height="8dp"
+            android:viewportWidth="50.0"
+            android:viewportHeight="50.0">
+            <path
+                android:pathData="M25,50 50,0 0,0z"
+                android:fillColor="#ffffff"/>
+        </vector>
+    </item>
+
+</layer-list>

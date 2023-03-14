@@ -22,6 +22,10 @@ import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Defines options for a Circle.
  */
@@ -43,6 +47,10 @@ public class CircleOptions extends AutoSafeParcelable {
     private float zIndex = 0;
     @SafeParceled(8)
     private boolean visible = true;
+    @SafeParceled(9)
+    private boolean clickable = false;
+    @SafeParceled(10)
+    private List<PatternItem> strokePattern = null;
 
     /**
      * Creates circle options.
@@ -145,6 +153,15 @@ public class CircleOptions extends AutoSafeParcelable {
     }
 
     /**
+     * Gets the clickability setting for the circle.
+     *
+     * @return {@code true} if the circle is clickable; {@code false} if it is not.
+     */
+    public boolean isClickable() {
+        return clickable;
+    }
+
+    /**
      * Sets the radius in meters.
      * <p/>
      * The radius must be zero or greater. The default radius is zero.
@@ -215,6 +232,36 @@ public class CircleOptions extends AutoSafeParcelable {
     public CircleOptions zIndex(float zIndex) {
         this.zIndex = zIndex;
         return this;
+    }
+
+    /**
+     * Specifies whether this circle is clickable. The default setting is {@code false}.
+     *
+     * @param clickable
+     * @return this {@code CircleOptions} object with a new clickability setting.
+     */
+    public CircleOptions clickable(boolean clickable) {
+        this.clickable = clickable;
+        return this;
+    }
+
+    /**
+     * Specifies a stroke pattern for the circle's outline. The default stroke pattern is solid, represented by {@code null}.
+     *
+     * @return this {@link CircleOptions} object with a new stroke pattern set.
+     */
+    public CircleOptions strokePattern(List<PatternItem> pattern) {
+        this.strokePattern = pattern;
+        return this;
+    }
+
+    /**
+     * Gets the stroke pattern set in this {@link CircleOptions} object for the circle's outline.
+     *
+     * @return the stroke pattern of the circle's outline.
+     */
+    public List<PatternItem> getStrokePattern() {
+        return strokePattern;
     }
 
     public static Creator<CircleOptions> CREATOR = new AutoCreator<CircleOptions>(CircleOptions.class);

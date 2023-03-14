@@ -22,9 +22,11 @@ import android.util.Log
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_TOP_LEFT
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.utils.ColorUtils
 
-open class BitmapDescriptorImpl(private val id: String, private val size: FloatArray) {
+open class BitmapDescriptorImpl(private val id: String, internal val size: FloatArray) {
     open fun applyTo(options: SymbolOptions, anchor: FloatArray, dpiFactor: Float): SymbolOptions {
         return options.withIconImage(id).withIconAnchor(ICON_ANCHOR_TOP_LEFT).withIconOffset(arrayOf(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor))
     }
@@ -33,6 +35,14 @@ open class BitmapDescriptorImpl(private val id: String, private val size: FloatA
         symbol.iconAnchor = ICON_ANCHOR_TOP_LEFT
         symbol.iconOffset = PointF(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor)
         symbol.iconImage = id
+    }
+
+    open fun applyTo(symbolLayer: SymbolLayer, anchor: FloatArray, dpiFactor: Float) {
+        symbolLayer.withProperties(
+            PropertyFactory.iconAnchor(ICON_ANCHOR_TOP_LEFT),
+            PropertyFactory.iconOffset(arrayOf(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor)),
+            PropertyFactory.iconImage(id)
+        )
     }
 }
 

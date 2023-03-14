@@ -18,11 +18,11 @@ package org.microg.gms.maps.mapbox
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.location.Location
 import android.os.*
 import androidx.annotation.IdRes
 import androidx.annotation.Keep
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -53,11 +53,14 @@ import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
 import com.google.android.gms.dynamic.unwrap
 import com.mapbox.mapboxsdk.WellKnownTileServer
+import org.microg.gms.maps.mapbox.model.InfoWindow
+import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
 import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
 import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.model.*
-import org.microg.gms.maps.mapbox.utils.MapContext
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
@@ -74,13 +77,11 @@ fun runOnMainLooper(method: () -> Unit) {
     }
 }
 
-class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions) : IGoogleMapDelegate.Stub() {
+class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractGoogleMap(context) {
 
     val view: FrameLayout
     var map: MapboxMap? = null
         private set
-    val dpiFactor: Float
-        get() = context.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT
 
     private var mapView: MapView? = null
     private var created = false
@@ -88,16 +89,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var loaded = false
     private val mapLock = Object()
 
-    private val initializedCallbackList = mutableListOf<IOnMapReadyCallback>()
+    private val initializedCallbackList = mutableListOf<OnMapReadyCallback>()
     private var loadedCallback: IOnMapLoadedCallback? = null
     private var cameraChangeListener: IOnCameraChangeListener? = null
     private var cameraMoveListener: IOnCameraMoveListener? = null
     private var cameraMoveCanceledListener: IOnCameraMoveCanceledListener? = null
     private var cameraMoveStartedListener: IOnCameraMoveStartedListener? = null
     private var cameraIdleListener: IOnCameraIdleListener? = null
-    private var mapClickListener: IOnMapClickListener? = null
-    private var mapLongClickListener: IOnMapLongClickListener? = null
-    private var markerClickListener: IOnMarkerClickListener? = null
     private var markerDragListener: IOnMarkerDragListener? = null
     private var myLocationChangeListener: IOnMyLocationChangeListener? = null
 
@@ -114,31 +112,30 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     var lineManager: LineManager? = null
-    val pendingLines = mutableSetOf<PolylineImpl>()
+    val pendingLines = mutableSetOf<Markup<Line, LineOptions>>()
     var lineId = 0L
 
     var fillManager: FillManager? = null
-    val pendingFills = mutableSetOf<PolygonImpl>()
+    val pendingFills = mutableSetOf<Markup<Fill, FillOptions>>()
+    val circles = mutableMapOf<Long, CircleImpl>()
     var fillId = 0L
-
-    var circleManager: CircleManager? = null
-    val pendingCircles = mutableSetOf<CircleImpl>()
-    var circleId = 0L
 
     var symbolManager: SymbolManager? = null
     val pendingMarkers = mutableSetOf<MarkerImpl>()
     val markers = mutableMapOf<Long, MarkerImpl>()
     var markerId = 0L
 
+    val pendingBitmaps = mutableMapOf<String, Bitmap>()
+
     var groundId = 0L
     var tileId = 0L
 
     var storedMapType: Int = options.mapType
+    var mapStyle: MapStyleOptions? = null
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
     var locationEnabled: Boolean = false
 
     init {
-        val mapContext = MapContext(context)
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
         runOnMainLooper {
@@ -184,7 +181,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun getCameraPosition(): CameraPosition? = map?.cameraPosition?.toGms()
+    override fun getCameraPosition(): CameraPosition =
+        map?.cameraPosition?.toGms() ?: CameraPosition(LatLng(0.0, 0.0), 0f, 0f, 0f)
+
     override fun getMaxZoomLevel(): Float = (map?.maxZoomLevel?.toFloat() ?: 20f) + 1f
     override fun getMinZoomLevel(): Float = (map?.minZoomLevel?.toFloat() ?: 0f) + 1f
 
@@ -210,14 +209,16 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    fun afterInitialized(runnable: () -> Unit) {
-        initializedCallbackList.add(object : IOnMapReadyCallback {
-            override fun onMapReady(map: IGoogleMapDelegate?) {
-                runnable()
+    fun afterInitialize(runnable: (MapboxMap) -> Unit) {
+        synchronized(mapLock) {
+            if (initialized) {
+                runnable(map!!)
+            } else {
+                initializedCallbackList.add(OnMapReadyCallback {
+                    runnable(it)
+                })
             }
-
-            override fun asBinder(): IBinder? = null
-        })
+        }
     }
 
     override fun animateCameraWithCallback(cameraUpdate: IObjectWrapper?, callback: ICancelableCallback?) {
@@ -227,7 +228,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 this.map?.animateCamera(update, callback?.toMapbox())
             } else {
                 waitingCameraUpdates.add(update)
-                afterInitialized { callback?.onFinish() }
+                afterInitialize { callback?.onFinish() }
             }
         }
     }
@@ -239,7 +240,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 this.map?.animateCamera(update, duration, callback?.toMapbox())
             } else {
                 waitingCameraUpdates.add(update)
-                afterInitialized { callback?.onFinish() }
+                afterInitialize { callback?.onFinish() }
             }
         }
     }
@@ -248,24 +249,25 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setMapStyle(options: MapStyleOptions?): Boolean {
         Log.d(TAG, "setMapStyle options: " + options?.getJson())
+        mapStyle = options
         return true
     }
 
-    override fun setMinZoomPreference(minZoom: Float) {
-        map?.setMinZoomPreference(minZoom.toDouble() - 1)
+    override fun setMinZoomPreference(minZoom: Float) = afterInitialize {
+        it.setMinZoomPreference(minZoom.toDouble() - 1)
     }
 
-    override fun setMaxZoomPreference(maxZoom: Float) {
-        map?.setMaxZoomPreference(maxZoom.toDouble() - 1)
+    override fun setMaxZoomPreference(maxZoom: Float) = afterInitialize {
+        it.setMaxZoomPreference(maxZoom.toDouble() - 1)
     }
 
-    override fun resetMinMaxZoomPreference() {
-        map?.setMinZoomPreference(MapboxConstants.MINIMUM_ZOOM.toDouble())
-        map?.setMaxZoomPreference(MapboxConstants.MAXIMUM_ZOOM.toDouble())
+    override fun resetMinMaxZoomPreference() = afterInitialize {
+        it.setMinZoomPreference(MapboxConstants.MINIMUM_ZOOM.toDouble())
+        it.setMaxZoomPreference(MapboxConstants.MAXIMUM_ZOOM.toDouble())
     }
 
-    override fun setLatLngBoundsForCameraTarget(bounds: LatLngBounds?) {
-        map?.setLatLngBoundsForCameraTarget(bounds?.toMapbox())
+    override fun setLatLngBoundsForCameraTarget(bounds: LatLngBounds?) = afterInitialize {
+        it.setLatLngBoundsForCameraTarget(bounds?.toMapbox())
     }
 
     override fun addPolyline(options: PolylineOptions): IPolylineDelegate? {
@@ -290,6 +292,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 pendingFills.add(fill)
             } else {
                 fill.update(fillManager)
+            }
+
+            val lineManager = lineManager
+            if (lineManager == null) {
+                pendingLines.addAll(fill.strokes)
+            } else {
+                for (stroke in fill.strokes) stroke.update(lineManager)
             }
         }
         return fill
@@ -318,21 +327,32 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return TileOverlayImpl(this, "t${tileId++}", options)
     }
 
-    override fun addCircle(options: CircleOptions): ICircleDelegate? {
-        val circle = CircleImpl(this, "c${circleId++}", options)
+    override fun addCircle(options: CircleOptions): ICircleDelegate {
+        val circle = CircleImpl(this, "c${fillId++}", options)
         synchronized(this) {
-            val circleManager = circleManager
-            if (circleManager == null) {
-                pendingCircles.add(circle)
+            val fillManager = fillManager
+            if (fillManager == null) {
+                pendingFills.add(circle)
             } else {
-                circle.update(circleManager)
+                circle.update(fillManager)
+            }
+            val lineManager = lineManager
+            if (lineManager == null) {
+                pendingLines.add(circle.line)
+            } else {
+                circle.line.update(lineManager)
+            }
+            circle.strokePattern?.let {
+                addBitmap(
+                    it.getName(circle.strokeColor, circle.strokeWidth),
+                    it.makeBitmap(circle.strokeColor, circle.strokeWidth)
+                )
             }
         }
         return circle
     }
 
     override fun clear() {
-        circleManager?.let { clear(it) }
         lineManager?.let { clear(it) }
         fillManager?.let { clear(it) }
         symbolManager?.let { clear(it) }
@@ -355,56 +375,30 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun setMapType(type: Int) {
         storedMapType = type
-        applyMapType()
+        applyMapStyle()
     }
 
-    fun applyMapType() {
-        val circles = circleManager?.annotations?.values()
+    fun applyMapStyle() {
         val lines = lineManager?.annotations?.values()
         val fills = fillManager?.annotations?.values()
         val symbols = symbolManager?.annotations?.values()
         val update: (Style) -> Unit = {
-            circles?.let { runCatching { circleManager?.update(it) } }
             lines?.let { runCatching { lineManager?.update(it) } }
             fills?.let { runCatching { fillManager?.update(it) } }
             symbols?.let { runCatching { symbolManager?.update(it) } }
         }
 
-        // TODO: Serve map styles locally
-        when (storedMapType) {
-            MAP_TYPE_SATELLITE -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
-            MAP_TYPE_TERRAIN -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/mapbox/outdoors-v12"), update)
-            MAP_TYPE_HYBRID -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"), update)
-            //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-            else -> map?.setStyle(Style.Builder().fromUri("mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"), update)
-        }
+        map?.setStyle(
+            getStyle(mapContext, storedMapType, mapStyle),
+            update
+        )
 
         map?.let { BitmapDescriptorFactoryImpl.registerMap(it) }
 
     }
 
-    override fun setWatermarkEnabled(watermark: Boolean) {
-        map?.uiSettings?.isLogoEnabled = watermark
-    }
-
-    override fun isTrafficEnabled(): Boolean {
-        Log.d(TAG, "unimplemented Method: isTrafficEnabled")
-        return false
-    }
-
-    override fun setTrafficEnabled(traffic: Boolean) {
-        Log.d(TAG, "unimplemented Method: setTrafficEnabled")
-
-    }
-
-    override fun isIndoorEnabled(): Boolean {
-        Log.d(TAG, "unimplemented Method: isIndoorEnabled")
-        return false
-    }
-
-    override fun setIndoorEnabled(indoor: Boolean) {
-        Log.d(TAG, "unimplemented Method: setIndoorEnabled")
-
+    override fun setWatermarkEnabled(watermark: Boolean) = afterInitialize {
+        it.uiSettings.isLogoEnabled = watermark
     }
 
     override fun isMyLocationEnabled(): Boolean {
@@ -433,7 +427,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 Log.w(TAG, e)
                 locationEnabled = false
             }
-            Unit
         }
     }
 
@@ -443,96 +436,59 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
-        Log.d(TAG, "unimplemented Method: setLocationSource")
-    }
-
     override fun setContentDescription(desc: String?) {
         mapView?.contentDescription = desc
     }
 
-    override fun getUiSettings(): IUiSettingsDelegate? = map?.uiSettings?.let { UiSettingsImpl(it) }
+    override fun getUiSettings(): IUiSettingsDelegate =
+        map?.uiSettings?.let { UiSettingsImpl(it) } ?: UiSettingsCache().also {
+            // Apply cached UI settings after map is initialized
+            initializedCallbackList.add(it.getMapReadyCallback())
+        }
 
-    override fun getProjection(): IProjectionDelegate? = map?.projection?.let {
+    override fun getProjection(): IProjectionDelegate = map?.projection?.let {
         val experiment = try {
             map?.cameraPosition?.tilt == 0.0 && map?.cameraPosition?.bearing == 0.0
         } catch (e: Exception) {
             Log.w(TAG, e); false
         }
         ProjectionImpl(it, experiment)
-    }
+    } ?: DummyProjection()
 
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) {
         cameraChangeListener = listener
-    }
-
-    override fun setOnMapClickListener(listener: IOnMapClickListener?) {
-        mapClickListener = listener
-    }
-
-    override fun setOnMapLongClickListener(listener: IOnMapLongClickListener?) {
-        mapLongClickListener = listener
-    }
-
-    override fun setOnMarkerClickListener(listener: IOnMarkerClickListener?) {
-        markerClickListener = listener
     }
 
     override fun setOnMarkerDragListener(listener: IOnMarkerDragListener?) {
         markerDragListener = listener
     }
 
-    override fun setOnInfoWindowClickListener(listener: IOnInfoWindowClickListener?) {
-        Log.d(TAG, "unimplemented Method: setOnInfoWindowClickListener")
-
-    }
-
-    override fun setInfoWindowAdapter(adapter: IInfoWindowAdapter?) {
-        Log.d(TAG, "unimplemented Method: setInfoWindowAdapter")
-
-    }
-
-    override fun getTestingHelper(): IObjectWrapper? {
-        Log.d(TAG, "unimplemented Method: getTestingHelper")
-        return null
-    }
-
-    override fun setOnMyLocationChangeListener(listener: IOnMyLocationChangeListener?) {
-        myLocationChangeListener = listener
-    }
-
-    override fun setOnMyLocationButtonClickListener(listener: IOnMyLocationButtonClickListener?) {
-        Log.d(TAG, "unimplemented Method: setOnMyLocationButtonClickListener")
-
-    }
-
     override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) {
-        Log.d(TAG, "unimplemented Method: snapshot")
-
-    }
-
-    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        Log.d(TAG, "setPadding: $left $top $right $bottom")
-        map?.let { map ->
-            map.setPadding(left, top, right, bottom)
-            val fourDp = mapView?.context?.resources?.getDimension(R.dimen.mapbox_four_dp)?.toInt()
-                    ?: 0
-            val ninetyTwoDp = mapView?.context?.resources?.getDimension(R.dimen.mapbox_ninety_two_dp)?.toInt()
-                    ?: 0
-            map.uiSettings.setLogoMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
-            map.uiSettings.setCompassMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
-            map.uiSettings.setAttributionMargins(left + ninetyTwoDp, top + fourDp, right + fourDp, bottom + fourDp)
+        val map = map
+        if (map == null) {
+            // Snapshot cannot be taken
+            runOnMainLooper { callback.onBitmapWrappedReady(ObjectWrapper.wrap(null)) }
+        } else {
+            map.snapshot {
+                runOnMainLooper {
+                    callback.onBitmapWrappedReady(ObjectWrapper.wrap(it))
+                }
+            }
         }
     }
 
-    override fun isBuildingsEnabled(): Boolean {
-        Log.d(TAG, "unimplemented Method: isBuildingsEnabled")
-        return false
-    }
+    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) = afterInitialize { map ->
+        Log.d(TAG, "setPadding: $left $top $right $bottom")
+        CameraUpdateFactory.paddingTo(left.toDouble(), top.toDouble(), right.toDouble(), bottom.toDouble())
+            .let { map.moveCamera(it) }
 
-    override fun setBuildingsEnabled(buildings: Boolean) {
-        Log.d(TAG, "unimplemented Method: setBuildingsEnabled")
-
+        val fourDp = mapView?.context?.resources?.getDimension(R.dimen.maplibre_four_dp)?.toInt()
+                ?: 0
+        val ninetyTwoDp = mapView?.context?.resources?.getDimension(R.dimen.maplibre_ninety_two_dp)?.toInt()
+                ?: 0
+        map.uiSettings.setLogoMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
+        map.uiSettings.setCompassMargins(left + fourDp, top + fourDp, right + fourDp, bottom + fourDp)
+        map.uiSettings.setAttributionMargins(left + ninetyTwoDp, top + fourDp, right + fourDp, bottom + fourDp)
     }
 
     override fun setOnMapLoadedCallback(callback: IOnMapLoadedCallback?) {
@@ -574,7 +530,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!created) {
             Log.d(TAG, "create");
-            val mapView = MapView(MapContext(context))
+            val mapView = MapView(mapContext)
             this.mapView = mapView
             view.addView(mapView)
             mapView.onCreate(savedInstanceState?.toMapbox())
@@ -611,6 +567,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         map.addOnCameraMoveListener {
             try {
                 cameraMoveListener?.onCameraMove()
+                currentInfoWindow?.update()
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -631,7 +588,11 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
         map.addOnMapClickListener { latlng ->
             try {
-                mapClickListener?.let { if (!hasSymbolAt(latlng)) it.onMapClick(latlng.toGms()); }
+                if (!hasSymbolAt(latlng)) {
+                    mapClickListener?.onMapClick(latlng.toGms())
+                    currentInfoWindow?.close()
+                    currentInfoWindow = null
+                }
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -646,7 +607,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             false
         }
 
-        applyMapType()
+        applyMapStyle()
         options.minZoomPreference?.let { if (it != 0f) map.setMinZoomPreference(it.toDouble()) }
         options.maxZoomPreference?.let { if (it != 0f) map.setMaxZoomPreference(it.toDouble()) }
         options.latLngBoundsForCameraTarget?.let { map.setLatLngBoundsForCameraTarget(it.toMapbox()) }
@@ -662,11 +623,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             val initializedCallbackList = ArrayList(initializedCallbackList)
             Log.d(TAG, "Invoking ${initializedCallbackList.size} callbacks delayed, as map is initialized")
             for (callback in initializedCallbackList) {
-                try {
-                    callback.onMapReady(this)
-                } catch (e: Exception) {
-                    Log.w(TAG, e)
-                }
+                callback.onMapReady(map)
             }
         }
 
@@ -675,11 +632,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 if (loaded) return@let
                 val symbolManager: SymbolManager
                 val lineManager: LineManager
-                val circleManager: CircleManager
                 val fillManager: FillManager
 
                 synchronized(mapLock) {
-                    circleManager = CircleManager(view, map, it)
                     fillManager = FillManager(view, map, it)
                     symbolManager = SymbolManager(view, map, it)
                     lineManager = LineManager(view, map, it)
@@ -687,17 +642,21 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
                     this.symbolManager = symbolManager
                     this.lineManager = lineManager
-                    this.circleManager = circleManager
                     this.fillManager = fillManager
                 }
                 symbolManager.iconAllowOverlap = true
                 symbolManager.addClickListener {
+                    val marker = markers[it.id]
                     try {
-                        markers[it.id]?.let { markerClickListener?.onMarkerClick(it) } == true
+                        if (markers[it.id]?.let { markerClickListener?.onMarkerClick(it) } == true) {
+                            return@addClickListener true
+                        }
                     } catch (e: Exception) {
                         Log.w(TAG, e)
-                        false
+                        return@addClickListener false
                     }
+
+                    marker?.let { showInfoWindow(it) } == true
                 }
                 symbolManager.addDragListener(object : OnSymbolDragListener {
                     override fun onAnnotationDragStarted(annotation: Symbol?) {
@@ -710,22 +669,42 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
                     override fun onAnnotationDrag(annotation: Symbol?) {
                         try {
-                            markers[annotation?.id]?.let { markerDragListener?.onMarkerDrag(it) }
+                            annotation?.let { symbol ->
+                                markers[symbol.id]?.let { marker ->
+                                    marker.setPositionWhileDragging(symbol.latLng.toGms())
+                                    markerDragListener?.onMarkerDrag(marker)
+                                }
+                            }
                         } catch (e: Exception) {
                             Log.w(TAG, e)
                         }
                     }
 
                     override fun onAnnotationDragFinished(annotation: Symbol?) {
+                        mapView?.post {
                         try {
                             markers[annotation?.id]?.let { markerDragListener?.onMarkerDragEnd(it) }
                         } catch (e: Exception) {
                             Log.w(TAG, e)
                         }
+                        }
                     }
                 })
-                pendingCircles.forEach { it.update(circleManager) }
-                pendingCircles.clear()
+                fillManager.addClickListener { fill ->
+                    try {
+                        circles[fill.id]?.let { circle ->
+                            if (circle.isClickable) {
+                                circleClickListener?.let {
+                                    it.onCircleClick(circle)
+                                    return@addClickListener true
+                                }
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                    }
+                    false
+                }
                 pendingFills.forEach { it.update(fillManager) }
                 pendingFills.clear()
                 pendingLines.forEach { it.update(lineManager) }
@@ -733,7 +712,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 pendingMarkers.forEach { it.update(symbolManager) }
                 pendingMarkers.clear()
 
-                val mapContext = MapContext(context)
+                pendingBitmaps.forEach { map -> it.addImage(map.key, map.value) }
+                pendingBitmaps.clear()
+
                 map.locationComponent.apply {
                     activateLocationComponent(LocationComponentActivationOptions.builder(mapContext, it)
                             .useSpecializedLocationLayer(true)
@@ -756,23 +737,40 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun useViewLifecycleWhenInFragment(): Boolean {
-        Log.d(TAG, "unimplemented Method: useViewLifecycleWhenInFragment")
+    override fun showInfoWindow(marker: AbstractMarker): Boolean {
+        infoWindowAdapter.getInfoWindowViewFor(marker, mapContext)?.let { infoView ->
+            currentInfoWindow?.close()
+            currentInfoWindow = InfoWindow(infoView, this, marker).also { infoWindow ->
+                mapView?.let { infoWindow.open(it) }
+            }
+            return true
+        }
         return false
+    }
+
+    internal fun addBitmap(name: String, bitmap: Bitmap) {
+        val map = map
+        if (map != null) {
+            map.getStyle {
+                it.addImage(name, bitmap)
+            }
+        } else {
+            pendingBitmaps[name] = bitmap
+        }
     }
 
     override fun onResume() = mapView?.onResume() ?: Unit
     override fun onPause() = mapView?.onPause() ?: Unit
     override fun onDestroy() {
         Log.d(TAG, "destroy");
-        circleManager?.onDestroy()
-        circleManager = null
         lineManager?.onDestroy()
         lineManager = null
         fillManager?.onDestroy()
         fillManager = null
+        circles.clear()
         symbolManager?.onDestroy()
         symbolManager = null
+        currentInfoWindow?.close()
         pendingMarkers.clear()
         markers.clear()
         BitmapDescriptorFactoryImpl.unregisterMap(map)
@@ -781,8 +779,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         mapView?.onDestroy()
         mapView = null
 
-        // Don't make it null; this object is not deleted immediately, and it may want to access map.* stuff
-        //map = null
+        map = null
 
         created = false
         initialized = false
@@ -797,15 +794,8 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         mapView?.onStop()
     }
 
-    override fun onEnterAmbient(bundle: Bundle?) {
-        Log.d(TAG, "unimplemented Method: onEnterAmbient")
-    }
-
-    override fun onExitAmbient() {
-        Log.d(TAG, "unimplemented Method: onExitAmbient")
-    }
-
     override fun onLowMemory() = mapView?.onLowMemory() ?: Unit
+
     override fun onSaveInstanceState(outState: Bundle) {
         val newBundle = Bundle()
         mapView?.onSaveInstanceState(newBundle)
@@ -814,16 +804,25 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     fun getMapAsync(callback: IOnMapReadyCallback) {
         synchronized(mapLock) {
-            if (initialized) {
-                Log.d(TAG, "Invoking callback instantly, as map is initialized")
+
+            val runCallback = {
                 try {
                     callback.onMapReady(this)
                 } catch (e: Exception) {
                     Log.w(TAG, e)
                 }
+            }
+
+            if (initialized) {
+                Log.d(TAG, "Invoking callback instantly, as map is initialized")
+                runCallback()
+            } else if (mapView?.isShown != true) {
+                // If map is not shown, an app (e.g. Dott) may expect it to initialize anyway – before showing it
+                Log.d(TAG, "Invoking callback instantly: map cannot be initialized because it is not shown (yet)")
+                runCallback()
             } else {
                 Log.d(TAG, "Delay callback invocation, as map is not yet initialized")
-                initializedCallbackList.add(callback)
+                initializedCallbackList.add { runCallback() }
             }
         }
     }

@@ -20,12 +20,12 @@ apply plugin: 'kotlin-android'
 dependencies {
     implementation project(':play-services-maps')
     implementation project(':play-services-base-core')
-    implementation("org.maplibre.gl:android-sdk:9.6.0") {
-        exclude group: 'com.google.android.gms'
-    }
+    implementation("org.maplibre.gl:android-sdk:10.0.0")
     implementation("org.maplibre.gl:android-plugin-annotation-v9:1.0.0") {
         exclude group: 'com.google.android.gms'
     }
+    implementation 'org.maplibre.gl:android-sdk-turf:5.9.0'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
@@ -46,7 +46,7 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-        buildConfigField "String", "MAPBOX_KEY", "\"${localProperties.getProperty("mapbox.key", "")}\""
+        buildConfigField "String", "MAPBOX_KEY", "\"${localProperties.getProperty("mapbox.key", System.getenv('MAPBOX_VECTOR_TILES_KEY') ?: "")}\""
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"

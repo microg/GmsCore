@@ -17,26 +17,48 @@
 package org.microg.gms.maps.mapbox
 
 import android.util.Log
+import com.google.android.gms.maps.internal.IGoogleMapDelegate
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.camera.CameraUpdate
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.maps.MapboxMap
 import java.util.*
 
-internal class CameraBoundsWithSizeUpdate(val bounds: LatLngBounds, val width: Int, val height: Int, val padding: IntArray) : CameraUpdate {
+internal class CameraBoundsWithSizeUpdate(val bounds: LatLngBounds, val width: Int, val height: Int, val padding: IntArray) : LiteModeCameraUpdate, CameraUpdate {
 
     constructor(bounds: LatLngBounds, width: Int, height: Int, paddingLeft: Int, paddingTop: Int = paddingLeft, paddingRight: Int = paddingLeft, paddingBottom: Int = paddingTop) : this(bounds, width, height, intArrayOf(paddingLeft, paddingTop, paddingRight, paddingBottom)) {}
 
+    override fun getLiteModeCameraPosition(map: IGoogleMapDelegate) = null
+
+    override fun getLiteModeCameraBounds() = bounds
+
     override fun getCameraPosition(map: MapboxMap): CameraPosition? {
         val padding = this.padding.clone()
-        val widthPad = ((map.width + map.padding[0] + map.padding[2] - width) / 2).toInt()
-        val heightPad = ((map.height + map.padding[1] + map.padding[3] - height) / 2).toInt()
-        padding[0] += widthPad
-        padding[1] += heightPad
-        padding[2] += widthPad
-        padding[3] += heightPad
-        Log.d(TAG, "map ${map.width} ${map.height}, set $width $height -> ${padding.map { it.toString() }.reduce { a, b -> "$a,$b"}}")
-        return map.getCameraForLatLngBounds(bounds, padding)
+
+        val mapPadding = map.cameraPosition.padding
+        mapPadding?.let {
+            for (i in 0..3) {
+                padding[i] += it[i].toInt()
+            }
+        }
+
+        val widthPadding = ((map.width - width) / 2).toInt()
+        val heightPadding = ((map.height - height) / 2).toInt()
+        padding[0] += widthPadding
+        padding[1] += heightPadding
+        padding[2] += widthPadding
+        padding[3] += heightPadding
+
+        Log.d(TAG, "map ${map.width} ${map.height}, set $width $height -> ${Arrays.toString(padding)}")
+        return map.getCameraForLatLngBounds(bounds, padding)?.let {
+            CameraPosition.Builder(it)
+                .apply {
+                    mapPadding?.let {
+                        padding(it)
+                    }
+                }.build()
+        }
+
     }
 
     override fun equals(other: Any?): Boolean {

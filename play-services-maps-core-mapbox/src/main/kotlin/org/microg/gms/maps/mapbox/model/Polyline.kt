@@ -27,55 +27,48 @@ import com.mapbox.mapboxsdk.plugins.annotation.Line
 import com.mapbox.mapboxsdk.plugins.annotation.LineOptions
 import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
+import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
 import org.microg.gms.maps.mapbox.utils.toMapbox
 import com.google.android.gms.maps.model.PolylineOptions as GmsLineOptions
 
-class PolylineImpl(private val map: GoogleMapImpl, private val id: String, options: GmsLineOptions) : IPolylineDelegate.Stub(), Markup<Line, LineOptions> {
-    private var points = ArrayList(options.points)
-    private var width = options.width
-    private var jointType = options.jointType
-    private var pattern = ArrayList(options.pattern.orEmpty())
-    private var color = options.color
-    private var visible: Boolean = options.isVisible
-    private var clickable: Boolean = options.isClickable
-    private var tag: IObjectWrapper? = null
+abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOptions, private val dpiFactor: Function0<Float>) : IPolylineDelegate.Stub() {
+    internal var points: List<LatLng> = ArrayList(options.points)
+    internal var width = options.width
+    internal var jointType = options.jointType
+    internal var pattern = ArrayList(options.pattern.orEmpty())
+    internal var color = options.color
+    internal var visible: Boolean = options.isVisible
+    internal var clickable: Boolean = options.isClickable
+    internal var tag: IObjectWrapper? = null
 
-    override var annotation: Line? = null
-    override var removed: Boolean = false
-    override val annotationOptions: LineOptions
+    val annotationOptions: LineOptions
         get() = LineOptions()
-                .withLatLngs(points.map { it.toMapbox() })
-                .withLineWidth(width / map.dpiFactor)
-                .withLineColor(ColorUtils.colorToRgbaString(color))
-                .withLineOpacity(if (visible) 1f else 0f)
+            .withLatLngs(points.map { it.toMapbox() })
+            .withLineWidth(width / dpiFactor.invoke())
+            .withLineColor(ColorUtils.colorToRgbaString(color))
+            .withLineOpacity(if (visible) 1f else 0f)
 
-    override fun remove() {
-        removed = true
-        map.lineManager?.let { update(it) }
-    }
+    internal abstract fun update()
 
     override fun getId(): String = id
 
     override fun setPoints(points: List<LatLng>) {
         this.points = ArrayList(points)
-        annotation?.latLngs = points.map { it.toMapbox() }
-        map.lineManager?.let { update(it) }
+        update()
     }
 
     override fun getPoints(): List<LatLng> = points
 
     override fun setWidth(width: Float) {
         this.width = width
-        annotation?.lineWidth = width / map.dpiFactor
-        map.lineManager?.let { update(it) }
+        update()
     }
 
     override fun getWidth(): Float = width
 
     override fun setColor(color: Int) {
         this.color = color
-        annotation?.setLineColor(color)
-        map.lineManager?.let { update(it) }
+        update()
     }
 
     override fun getColor(): Int = color
@@ -91,8 +84,7 @@ class PolylineImpl(private val map: GoogleMapImpl, private val id: String, optio
 
     override fun setVisible(visible: Boolean) {
         this.visible = visible
-        annotation?.lineOpacity = if (visible) 1f else 0f
-        map.lineManager?.let { update(it) }
+        update()
     }
 
     override fun isVisible(): Boolean = visible
@@ -138,25 +130,63 @@ class PolylineImpl(private val map: GoogleMapImpl, private val id: String, optio
         return id.hashCode()
     }
 
-    override fun toString(): String {
-        return id
-    }
-
     override fun equals(other: Any?): Boolean {
-        if (other is PolylineImpl) {
+        if (other is AbstractPolylineImpl) {
             return other.id == id
         }
         return false
     }
 
+    override fun toString(): String {
+        return id
+    }
+
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-            if (super.onTransact(code, data, reply, flags)) {
-                true
-            } else {
-                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-            }
+        if (super.onTransact(code, data, reply, flags)) {
+            true
+        } else {
+            Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
+        }
+
+    companion object {
+        const val TAG = "GmsPolylineAbstract"
+    }
+}
+
+class PolylineImpl(private val map: GoogleMapImpl, id: String, options: GmsLineOptions) :
+    AbstractPolylineImpl(id, options, { map.dpiFactor }), Markup<Line, LineOptions> {
+
+    override var annotation: Line? = null
+    override var removed: Boolean = false
+
+    override fun remove() {
+        removed = true
+        map.lineManager?.let { update(it) }
+    }
+
+    override fun update() {
+        annotation?.apply {
+            latLngs = points.map { it.toMapbox() }
+            lineWidth = width / map.dpiFactor
+            setLineColor(color)
+            lineOpacity = if (visible) 1f else 0f
+        }
+        map.lineManager?.let { update(it) }
+    }
 
     companion object {
         private val TAG = "GmsMapPolyline"
+    }
+}
+
+class LitePolylineImpl(private val map: LiteGoogleMapImpl, id: String, options: GmsLineOptions) :
+    AbstractPolylineImpl(id, options, { map.dpiFactor }) {
+    override fun remove() {
+        map.polylines.remove(this)
+        map.postUpdateSnapshot()
+    }
+
+    override fun update() {
+        map.postUpdateSnapshot()
     }
 }

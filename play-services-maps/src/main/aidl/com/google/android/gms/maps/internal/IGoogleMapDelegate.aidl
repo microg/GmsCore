@@ -13,11 +13,14 @@ import com.google.android.gms.maps.internal.IOnCameraIdleListener;
 import com.google.android.gms.maps.internal.IOnCameraMoveCanceledListener;
 import com.google.android.gms.maps.internal.IOnCameraMoveListener;
 import com.google.android.gms.maps.internal.IOnCameraMoveStartedListener;
+import com.google.android.gms.maps.internal.IOnCircleClickListener;
 import com.google.android.gms.maps.internal.IOnMapClickListener;
 import com.google.android.gms.maps.internal.IOnMapLongClickListener;
 import com.google.android.gms.maps.internal.IOnMarkerClickListener;
 import com.google.android.gms.maps.internal.IOnMarkerDragListener;
 import com.google.android.gms.maps.internal.IOnInfoWindowClickListener;
+import com.google.android.gms.maps.internal.IOnInfoWindowCloseListener;
+import com.google.android.gms.maps.internal.IOnInfoWindowLongClickListener;
 import com.google.android.gms.maps.internal.IInfoWindowAdapter;
 import com.google.android.gms.maps.internal.IOnMapLoadedCallback;
 import com.google.android.gms.maps.internal.IOnMyLocationChangeListener;
@@ -121,11 +124,11 @@ interface IGoogleMapDelegate {
     void onExitAmbient() = 81;
 
     //void setOnGroundOverlayClickListener(IOnGroundOverlayClickListener listener) = 82;
-    //void setInfoWindowLongClickListener(IOnInfoWindowLongClickListener listener) = 83;
+    void setInfoWindowLongClickListener(IOnInfoWindowLongClickListener listener) = 83;
     //void setPolygonClickListener(IOnPolygonClickListener listener) = 84;
-    //void setInfoWindowCloseListener(IOnInfoWindowCloseListener listener) = 85;
+    void setInfoWindowCloseListener(IOnInfoWindowCloseListener listener) = 85;
     //void setPolylineClickListener(IOnPolylineClickListener listener) = 86;
-    //void setCircleClickListener(IOnCircleClickListener listener) = 88;
+    void setCircleClickListener(IOnCircleClickListener listener) = 88;
 
     boolean setMapStyle(in MapStyleOptions options) = 90;
     void setMinZoomPreference(float minZoom) = 91;

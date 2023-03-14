@@ -18,14 +18,13 @@ package org.microg.gms.maps.mapbox.model
 
 import android.content.res.Resources
 import android.graphics.*
-import android.os.Handler
-import android.os.Looper
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import com.mapbox.mapboxsdk.maps.Style
 import org.microg.gms.maps.mapbox.R
 import org.microg.gms.maps.mapbox.runOnMainLooper
 
@@ -55,6 +54,14 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
     fun unregisterMap(map: MapboxMap?) {
         maps.remove(map)
         // TODO: cleanup bitmaps?
+    }
+
+    fun put(style: Style.Builder) {
+        synchronized(bitmaps) {
+            for (bitmap in bitmaps) {
+                style.withImage(bitmap.key, bitmap.value)
+            }
+        }
     }
 
     fun bitmapSize(id: String): FloatArray =
