@@ -250,8 +250,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
         val pixelWidth = map.width
         val pixelHeight = map.height
 
-        val styleBuilder = Style.Builder().fromUri(getStyleUriByMapType(mapType))
-        // TODO should be getStyle(mapContext, mapType, mapStyle)
+        val styleBuilder = getStyle(mapContext, mapType, mapStyle, styleFromFileWorkaround = true)
 
         // Add visible polygons (before polylines, so that they are drawn below their strokes)
         for (polygon in polygons.filter { it.isVisible }) {
@@ -672,11 +671,3 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
     }
 }
 
-// TODO custom colors
-fun getStyleUriByMapType(mapType: Int) = when (mapType) {
-    MapsConstants.MAP_TYPE_SATELLITE -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
-    MapsConstants.MAP_TYPE_TERRAIN -> "mapbox://styles/mapbox/outdoors-v12"
-    MapsConstants.MAP_TYPE_HYBRID -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
-    //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-    else -> "mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"
-}

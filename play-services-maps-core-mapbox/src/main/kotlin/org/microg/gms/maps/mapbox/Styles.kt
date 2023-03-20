@@ -14,6 +14,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.maps.MapsConstants
 import org.microg.gms.maps.mapbox.utils.MapContext
+import java.io.File
+import java.io.IOException
 import java.lang.NumberFormatException
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -29,13 +31,14 @@ const val KEY_LAYER_METADATA = "metadata"
 const val KEY_LAYER_PAINT = "paint"
 
 
-
-fun getStyle(context: MapContext, storedMapType: Int, styleOptions: MapStyleOptions?): Style.Builder {
+fun getStyle(
+    context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
+): Style.Builder {
 
     // TODO: Serve map style resources locally
     val styleJson = JSONObject(
         context.assets.open(
-            when (storedMapType) {
+            when (mapType) {
                 MapsConstants.MAP_TYPE_SATELLITE, MapsConstants.MAP_TYPE_HYBRID -> "style-microg-satellite.json"
                 MapsConstants.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
@@ -46,7 +49,35 @@ fun getStyle(context: MapContext, storedMapType: Int, styleOptions: MapStyleOpti
 
     styleOptions?.apply(styleJson)
 
-    return Style.Builder().fromJson(styleJson.toString())
+    return if (styleFromFileWorkaround) {
+        val temporaryFile = File(context.cacheDir, styleJson.hashCode().toString())
+
+        if (!temporaryFile.exists()) {
+            temporaryFile.createNewFile()
+        }
+
+        try {
+            temporaryFile.bufferedWriter().use {
+                it.write(styleJson.toString())
+            }
+            Log.d(TAG, "file:/${temporaryFile.absolutePath}")
+            Style.Builder().fromUri("file:/${temporaryFile.absolutePath}")
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Style.Builder().fromUri(getFallbackStyleOnlineUri(mapType))
+        }
+    } else {
+        Style.Builder().fromJson(styleJson.toString())
+    }
+}
+
+
+fun getFallbackStyleOnlineUri(mapType: Int) = when (mapType) {
+    MapsConstants.MAP_TYPE_SATELLITE -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    MapsConstants.MAP_TYPE_TERRAIN -> "mapbox://styles/mapbox/outdoors-v12"
+    MapsConstants.MAP_TYPE_HYBRID -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
+    else -> "mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"
 }
 
 fun MapStyleOptions.apply(style: JSONObject) {
