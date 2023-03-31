@@ -36,14 +36,14 @@ val ZERO_LAT_LNG = com.mapbox.mapboxsdk.geometry.LatLng(0.0, 0.0)
 // TODO: Do calculations using backed up locations instead of live (which requires UI thread)
 class ProjectionImpl(private val projection: Projection, private val withoutTiltOrBearing: Boolean) : IProjectionDelegate.Stub() {
     private val visibleRegion = projection.getVisibleRegion(false)
-    private val farLeft = projection.toScreenLocation(visibleRegion.farLeft?: ZERO_LAT_LNG)
-    private val farRight = projection.toScreenLocation(visibleRegion.farRight?: ZERO_LAT_LNG)
-    private val nearLeft = projection.toScreenLocation(visibleRegion.nearLeft?: ZERO_LAT_LNG)
-    private val nearRight = projection.toScreenLocation(visibleRegion.nearRight?: ZERO_LAT_LNG)
+    private val farLeft = visibleRegion.farLeft?.let { projection.toScreenLocation(it) }
+    private val farRight = visibleRegion.farRight?.let { projection.toScreenLocation(it) }
+    private val nearLeft = visibleRegion.nearLeft?.let { projection.toScreenLocation(it) }
+    private val nearRight = visibleRegion.nearRight?.let { projection.toScreenLocation(it) }
 
     override fun fromScreenLocation(obj: IObjectWrapper?): LatLng? = try {
         obj.unwrap<Point>()?.let {
-            if (withoutTiltOrBearing) {
+            if (withoutTiltOrBearing && farLeft != null && farRight != null && nearLeft != null) {
                 val xPercent = (it.x.toFloat() - farLeft.x) / (farRight.x - farLeft.x)
                 val yPercent = (it.y.toFloat() - farLeft.y) / (nearLeft.y - farLeft.y)
                 val lon = (visibleRegion.farLeft?.longitude ?: 0.0) + xPercent *
@@ -62,14 +62,14 @@ class ProjectionImpl(private val projection: Projection, private val withoutTilt
 
     override fun toScreenLocation(latLng: LatLng?): IObjectWrapper = try {
         ObjectWrapper.wrap(latLng?.toMapbox()?.let {
-            if (withoutTiltOrBearing) {
+            if (withoutTiltOrBearing && farLeft != null && farRight != null && nearLeft != null) {
                 val xPercent = (it.longitude - (visibleRegion.farLeft?.longitude ?: 0.0)) /
                             ((visibleRegion.farRight?.longitude ?: 0.0) - (visibleRegion.farLeft?.longitude ?: 0.0))
-                val yPercent = (it.latitude - (visibleRegion.farLeft?.longitude ?: 0.0)) /
-                        ((visibleRegion.nearLeft?.longitude ?: 0.0) - (visibleRegion.farLeft?.longitude ?: 0.0))
+                val yPercent = (it.latitude - (visibleRegion.farLeft?.latitude ?: 0.0)) /
+                        ((visibleRegion.nearLeft?.latitude ?: 0.0) - (visibleRegion.farLeft?.latitude ?: 0.0))
                 val x = farLeft.x + xPercent * (farRight.x - farLeft.x)
                 val y = farLeft.y + yPercent * (nearLeft.y - farLeft.y)
-                Point(x.roundToInt(), y.roundToInt())
+                Point(x.roundToInt(), y.roundToInt()).also { p -> Log.d(TAG, "$p vs.\n${projection.toScreenLocation(it).let { Point(it.x.roundToInt(), it.y.roundToInt()) }}") }
             } else {
                 projection.toScreenLocation(it).let { Point(it.x.roundToInt(), it.y.roundToInt()) }
             }
