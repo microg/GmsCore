@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.internal.*
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.WellKnownTileServer
 import com.mapbox.mapboxsdk.location.engine.*
-import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshot
 import com.mapbox.mapboxsdk.snapshotter.MapSnapshotter
@@ -37,7 +36,6 @@ import com.mapbox.mapboxsdk.style.layers.*
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource
 import com.mapbox.turf.TurfConstants.UNIT_METERS
 import com.mapbox.turf.TurfMeasurement
-import org.microg.gms.maps.MapsConstants
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
@@ -92,17 +90,6 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
     private var myLocationEnabled = false
     private var myLocation: Location? = null
     private var locationEngineProvider: LocationEngine = LocationEngineDefault.getDefaultLocationEngine(mapContext)
-    private val locationListener = object : LocationEngineCallback<LocationEngineResult> {
-        override fun onSuccess(result: LocationEngineResult?) {
-            this@LiteGoogleMapImpl.myLocation = result?.lastLocation
-            postUpdateSnapshot()
-        }
-
-        override fun onFailure(exception: Exception) {
-            // same behavior as MapLibre's LocationComponent
-            Log.e(TAG, "Failed to obtain location update", exception)
-        }
-    }
 
     internal val markers: MutableList<LiteMarkerImpl> = mutableListOf()
     internal val polygons: MutableList<LitePolygonImpl> = mutableListOf()
@@ -502,7 +489,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
                 LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
                     .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
                     .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                    .build(), locationListener, Looper.getMainLooper()
+                    .build(), locationEngineCallback, Looper.getMainLooper()
             )
 
         } else {
@@ -511,7 +498,12 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
     }
 
     private fun deactivateLocationProvider() {
-        locationEngineProvider.removeLocationUpdates(locationListener)
+        locationEngineProvider.removeLocationUpdates(locationEngineCallback)
+    }
+
+    override fun onLocationUpdate(location: Location) {
+        this@LiteGoogleMapImpl.myLocation = location
+        postUpdateSnapshot()
     }
 
     override fun getUiSettings(): IUiSettingsDelegate {

@@ -57,8 +57,6 @@ import org.microg.gms.maps.mapbox.model.InfoWindow
 import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
-import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
 import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
@@ -97,19 +95,6 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     private var cameraMoveStartedListener: IOnCameraMoveStartedListener? = null
     private var cameraIdleListener: IOnCameraIdleListener? = null
     private var markerDragListener: IOnMarkerDragListener? = null
-    private var myLocationChangeListener: IOnMyLocationChangeListener? = null
-
-    private val locationEngineCallback = object : LocationEngineCallback<LocationEngineResult> {
-        override fun onSuccess(result: LocationEngineResult?) {
-            result?.lastLocation?.let { location ->
-                Log.d(TAG, "myLocationChanged: $location")
-                myLocationChangeListener?.onMyLocationChanged(ObjectWrapper.wrap(location))
-            }
-        }
-        override fun onFailure(e: Exception) {
-            Log.w(TAG, e)
-        }
-    }
 
     var lineManager: LineManager? = null
     val pendingLines = mutableSetOf<Markup<Line, LineOptions>>()
@@ -434,6 +419,10 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         synchronized(mapLock) {
             return map?.locationComponent?.lastKnownLocation
         }
+    }
+
+    override fun onLocationUpdate(location: Location) {
+        // no action necessary, as the location component will automatically place a marker on the map
     }
 
     override fun setContentDescription(desc: String?) {

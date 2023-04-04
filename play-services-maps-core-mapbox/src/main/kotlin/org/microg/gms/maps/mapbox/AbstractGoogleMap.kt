@@ -8,6 +8,8 @@ import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.internal.*
+import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
+import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
 import org.microg.gms.maps.MapsConstants
 import org.microg.gms.maps.mapbox.model.AbstractMarker
 import org.microg.gms.maps.mapbox.model.DefaultInfoWindowAdapter
@@ -32,8 +34,26 @@ abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
     internal var markerClickListener: IOnMarkerClickListener? = null
     internal var circleClickListener: IOnCircleClickListener? = null
 
+    internal var myLocationChangeListener: IOnMyLocationChangeListener? = null
+
+    internal val locationEngineCallback = object : LocationEngineCallback<LocationEngineResult> {
+        override fun onSuccess(result: LocationEngineResult?) {
+            result?.lastLocation?.let { location ->
+                Log.d(TAG, "myLocationChanged: $location")
+                myLocationChangeListener?.onMyLocationChanged(ObjectWrapper.wrap(location))
+
+                onLocationUpdate(location)
+            }
+        }
+        override fun onFailure(e: Exception) {
+            Log.e(TAG, "Failed to obtain location update", e)
+        }
+    }
+
 
     internal abstract fun showInfoWindow(marker: AbstractMarker): Boolean
+
+    internal abstract fun onLocationUpdate(location: Location)
 
     override fun setOnInfoWindowClickListener(listener: IOnInfoWindowClickListener?) {
         onInfoWindowClickListener = listener
@@ -77,7 +97,7 @@ abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
     }
 
     override fun setOnMyLocationChangeListener(listener: IOnMyLocationChangeListener?) {
-        Log.d(TAG, "unimplemented Method: setOnMyLocationChangeListener")
+        myLocationChangeListener = listener
     }
 
     override fun setOnMyLocationButtonClickListener(listener: IOnMyLocationButtonClickListener?) {
