@@ -367,7 +367,7 @@
 
         <activity
             android:name="org.microg.gms.auth.login.LoginActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:exported="true"
             android:process=":ui"
             android:theme="@style/Theme.LoginBlue">
@@ -444,14 +444,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <!-- Cast -->
-
-        <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
-            <intent-filter>
-                <action android:name="android.media.MediaRouteProviderService" />
-            </intent-filter>
-        </service>
 
         <!-- Chimera -->
         <provider
@@ -592,6 +584,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+        <service
+            android:name="org.microg.gms.languageprofile.LanguageProfileService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.languageprofile.service.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
         <service android:name="org.microg.gms.mdm.NetworkQualityService">
             <intent-filter>
                 <action android:name="com.google.android.gms.mdm.services.START" />
@@ -672,12 +673,6 @@
         <service android:name="org.microg.gms.wallet.PaymentService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wallet.service.BIND" />
-            </intent-filter>
-        </service>
-
-        <service android:name="org.microg.gms.cast.CastDeviceControllerService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE" />
             </intent-filter>
         </service>
 
@@ -778,7 +773,6 @@
                 <action android:name="com.google.android.gms.identity.service.BIND" />
                 <action android:name="com.google.android.gms.instantapps.START" />
                 <action android:name="com.google.android.gms.kids.service.START" />
-                <action android:name="com.google.android.gms.languageprofile.service.START" />
                 <action android:name="com.google.android.gms.learning.internal.dynamitesupport.START" />
                 <action android:name="com.google.android.gms.learning.intservice.START" />
                 <action android:name="com.google.android.gms.learning.predictor.START" />
@@ -810,7 +804,6 @@
                 <action android:name="com.google.android.gms.plus.service.START" />
                 <action android:name="com.google.android.gms.pseudonymous.service.START" />
                 <action android:name="com.google.android.gms.rcs.START" />
-                <action android:name="com.google.android.gms.recaptcha.service.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />

@@ -33,11 +33,5 @@ android {
 }
 
 dependencies {
-    api project(':play-services-basement')
-    api project(':play-services-appinvite-api')
-    api project(':play-services-cast-api')
-    api project(':play-services-cast-framework-api')
-    api project(':play-services-iid-api')
-    api project(':play-services-location-api')
-    api project(':play-services-wearable-api')
+    api project(':play-services-base')
 }

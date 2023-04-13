@@ -5,6 +5,8 @@
     android:id="@+id/nav_settings"
     app:startDestination="@id/settingsFragment">
 
+    <!-- Start -->
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="org.microg.gms.ui.SettingsFragment"
@@ -35,15 +37,23 @@
             app:destination="@id/aboutFragment" />
     </fragment>
 
+    <!-- Self-Check -->
+
     <fragment
         android:id="@+id/selfcheckFragment"
         android:name="org.microg.gms.ui.SelfCheckFragment"
         android:label="@string/self_check_title" />
+
+    <!-- Device registration -->
+
     <fragment
         android:id="@+id/checkinFragment"
         android:name="org.microg.gms.ui.DeviceRegistrationFragment"
         android:label="@string/service_name_checkin"
         tools:layout="@layout/device_registration_fragment" />
+
+    <!-- Push Notifications -->
+
     <fragment
         android:id="@+id/gcmFragment"
         android:name="org.microg.gms.ui.PushNotificationFragment"
@@ -59,6 +69,7 @@
             android:id="@+id/openGcmAdvancedSettings"
             app:destination="@id/gcmAdvancedFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/gcmAllAppsFragment"
         android:name="org.microg.gms.ui.PushNotificationAllAppsFragment"
@@ -67,6 +78,7 @@
             android:id="@+id/openGcmAppDetailsFromAll"
             app:destination="@id/gcmAppFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/gcmAppFragment"
         android:name="org.microg.gms.ui.PushNotificationAppFragment"
@@ -76,35 +88,72 @@
             android:name="package"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/gcmAdvancedFragment"
         android:name="org.microg.gms.ui.PushNotificationAdvancedFragment"
         android:label="@string/service_name_mcs" />
+
+    <!-- Device Attestation -->
+
     <fragment
         android:id="@+id/safetyNetFragment"
         android:name="org.microg.gms.ui.SafetyNetFragment"
         android:label="@string/service_name_snet"
         tools:layout="@layout/safety_net_fragment">
         <action
+            android:id="@+id/openSafetyNetAppDetails"
+            app:destination="@id/safetyNetAppFragment" />
+        <action
+            android:id="@+id/openAllSafetyNetApps"
+            app:destination="@id/safetyNetAllAppsFragment" />
+        <action
             android:id="@+id/openSafetyNetAdvancedSettings"
             app:destination="@id/safetyNetAdvancedFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/safetyNetAdvancedFragment"
         android:name="org.microg.gms.ui.SafetyNetAdvancedFragment"
-        android:label="@string/service_name_snet" />
+        android:label="@string/service_name_snet"
+        tools:layout="@layout/safety_net_advanced_fragment" />
+
+    <fragment
+        android:id="@+id/safetyNetAllAppsFragment"
+        android:name="org.microg.gms.ui.SafetyNetAllAppsFragment"
+        android:label="@string/prefcat_safetynet_apps_title">
+        <action
+            android:id="@+id/openSafetyNetAppDetailsFromAll"
+            app:destination="@id/safetyNetAppFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/safetyNetAppFragment"
+        android:name="org.microg.gms.ui.SafetyNetAppFragment"
+        android:label="@string/service_name_snet"
+        tools:layout="@layout/safety_net_app_fragment">
+        <argument
+            android:name="package"
+            app:argType="string" />
+    </fragment>
+
+    <!-- More -->
 
     <fragment
         android:id="@+id/googleMoreFragment"
         android:name="org.microg.gms.ui.GoogleMoreFragment"
         android:label="@string/gms_settings_name" />
 
-    <include app:graph="@navigation/nav_unlp" />
-    <include app:graph="@navigation/nav_nearby" />
+    <!-- About -->
 
     <fragment
         android:id="@+id/aboutFragment"
         android:name="org.microg.gms.ui.AboutFragment"
         android:label="@string/prefcat_about"
         tools:layout="@layout/about_root" />
+
+    <!-- Included -->
+
+    <include app:graph="@navigation/nav_unlp" />
+    <include app:graph="@navigation/nav_nearby" />
 </navigation>

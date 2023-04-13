@@ -21,6 +21,7 @@ import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -58,17 +59,73 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
     public static final String EXTRA_CONSENT_DATA = "consent_data";
 
     private static final String TAG = "GmsAuthAskPermission";
-    private Account account;
-    private String packageName;
-    private String service;
     private AuthManager authManager;
-    private ConsentData consentData;
-    private boolean fromAccountManager = false;
+    private IntentData data;
+
+    private static class IntentData {
+        private String accountName;
+        private String accountType;
+        private Account account;
+
+        private String packageName;
+        private String service;
+
+        private int callerUid;
+        private int callerPid;
+
+        private ConsentData consentData;
+        private boolean fromAccountManager = false;
+
+        private CharSequence appLabel;
+        private Drawable appIcon;
+
+        private IntentData(Intent intent) {
+            if (intent != null) {
+                accountName = intent.getStringExtra(KEY_ACCOUNT_NAME);
+                accountType = intent.getStringExtra(KEY_ACCOUNT_TYPE);
+                packageName = intent.getStringExtra(KEY_ANDROID_PACKAGE_NAME);
+                service = intent.getStringExtra(KEY_AUTHTOKEN);
+                callerUid = intent.getIntExtra(KEY_CALLER_UID, 0);
+                callerPid = intent.getIntExtra(KEY_CALLER_PID, 0);
+                fromAccountManager = intent.hasExtra(EXTRA_FROM_ACCOUNT_MANAGER);
+                if (intent.hasExtra(EXTRA_CONSENT_DATA)) {
+                    try {
+                        consentData = ConsentData.ADAPTER.decode(intent.getByteArrayExtra(EXTRA_CONSENT_DATA));
+                    } catch (Exception e) {
+                        // Ignore
+                    }
+                }
+            }
+            if (accountName != null && accountType != null) {
+                account = new Account(accountName, accountType);
+            }
+        }
+
+        private void verify(Context context) throws Exception {
+            if (accountName == null || accountType == null || account == null) throw new IllegalArgumentException("Required account information missing");
+            if (packageName == null || service == null) throw new IllegalArgumentException("Required request information missing");
+            if (callerUid == 0) throw new IllegalArgumentException("Required caller information missing");
+            PackageUtils.getAndCheckPackage(context, packageName, callerUid, callerPid);
+
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, 0);
+            appLabel = packageManager.getApplicationLabel(applicationInfo);
+            appIcon = packageManager.getApplicationIcon(applicationInfo);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ask_permission);
+        data = new IntentData(getIntent());
+        try {
+            data.verify(this);
+        } catch (Exception e) {
+            Log.w(TAG, "Verification failed", e);
+            finish();
+            return;
+        }
 
         // This makes the dialog take up the full width
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -77,57 +134,28 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(lp);
 
-        account = new Account(getIntent().getStringExtra(KEY_ACCOUNT_NAME),
-                getIntent().getStringExtra(KEY_ACCOUNT_TYPE));
-        packageName = getIntent().getStringExtra(KEY_ANDROID_PACKAGE_NAME);
-        service = getIntent().getStringExtra(KEY_AUTHTOKEN);
-        if (getIntent().hasExtra(EXTRA_CONSENT_DATA)) {
-            try {
-                consentData = ConsentData.ADAPTER.decode(getIntent().getByteArrayExtra(EXTRA_CONSENT_DATA));
-            } catch (Exception e) {
-                Log.w(TAG, e);
-            }
-        } else {
-            Log.d(TAG, "No Consent details attached");
-        }
-
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        nm.cancel(packageName.hashCode());
+        nm.cancel(data.packageName.hashCode());
 
-        if (getIntent().hasExtra(EXTRA_FROM_ACCOUNT_MANAGER)) fromAccountManager = true;
-        int callerUid = getIntent().getIntExtra(KEY_CALLER_UID, 0);
-        packageName = PackageUtils.getAndCheckPackage(this, packageName, getIntent().getIntExtra(KEY_CALLER_UID, 0), getIntent().getIntExtra(KEY_CALLER_PID, 0));
-        authManager = new AuthManager(this, account.name, packageName, service);
+        authManager = new AuthManager(this, data.accountName, data.packageName, data.service);
 
-        // receive package info
-        PackageManager packageManager = getPackageManager();
-        ApplicationInfo applicationInfo;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.w(TAG, "Failed to find package " + packageName, e);
-            finish();
-            return;
-        }
-        CharSequence appLabel = packageManager.getApplicationLabel(applicationInfo);
-        Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
-        Bitmap profileIcon = PeopleManager.getOwnerAvatarBitmap(this, account.name, false);
+        Bitmap profileIcon = PeopleManager.getOwnerAvatarBitmap(this, data.accountName, false);
 
         // receive profile icon
         if (profileIcon != null) {
             ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(profileIcon);
         } else {
             new Thread(() -> {
-                final Bitmap profileIcon1 = PeopleManager.getOwnerAvatarBitmap(AskPermissionActivity.this, account.name, true);
+                final Bitmap profileIcon1 = PeopleManager.getOwnerAvatarBitmap(AskPermissionActivity.this, data.accountName, true);
                 runOnUiThread(() -> ((ImageView) findViewById(R.id.account_photo)).setImageBitmap(profileIcon1));
             }).start();
         }
 
-        ((ImageView) findViewById(R.id.app_icon)).setImageDrawable(appIcon);
+        ((ImageView) findViewById(R.id.app_icon)).setImageDrawable(data.appIcon);
         if (isOAuth()) {
-            ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_scope_permission_title, appLabel));
+            ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_scope_permission_title, data.appLabel));
         } else {
-            ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_service_permission_title, appLabel));
+            ((TextView) findViewById(R.id.title)).setText(getString(R.string.ask_service_permission_title, data.appLabel));
         }
         findViewById(android.R.id.button1).setOnClickListener(v -> onAllow());
         findViewById(android.R.id.button2).setOnClickListener(v -> onDeny());
@@ -142,12 +170,12 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         findViewById(R.id.no_progress_bar).setVisibility(GONE);
         new Thread(() -> {
             try {
-                AuthResponse response = authManager.requestAuth(fromAccountManager);
+                AuthResponse response = authManager.requestAuth(data.fromAccountManager);
                 Bundle result = new Bundle();
                 result.putString(KEY_AUTHTOKEN, response.auth);
-                result.putString(KEY_ACCOUNT_NAME, account.name);
-                result.putString(KEY_ACCOUNT_TYPE, account.type);
-                result.putString(KEY_ANDROID_PACKAGE_NAME, packageName);
+                result.putString(KEY_ACCOUNT_NAME, data.accountName);
+                result.putString(KEY_ACCOUNT_TYPE, data.accountType);
+                result.putString(KEY_ANDROID_PACKAGE_NAME, data.packageName);
                 result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
                 setAccountAuthenticatorResult(result);
             } catch (IOException e) {
@@ -164,20 +192,20 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
 
     @Override
     public void finish() {
-        if (packageName != null) {
+        if (data.packageName != null) {
             NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.cancel(packageName.hashCode());
+            nm.cancel(data.packageName.hashCode());
         }
         super.finish();
     }
 
     private boolean isOAuth() {
-        return service.startsWith("oauth2:") || service.startsWith("oauth:");
+        return data.service.startsWith("oauth2:") || data.service.startsWith("oauth:");
     }
 
     private String getScopeLabel(String scope) {
-        if (consentData != null) {
-            for (ConsentData.ScopeDetails scopeDetails : consentData.scopes) {
+        if (data.consentData != null) {
+            for (ConsentData.ScopeDetails scopeDetails : data.consentData.scopes) {
                 if (scope.equals(scopeDetails.id)) {
                     return scopeDetails.title;
                 }
@@ -198,8 +226,8 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
     }
 
     private String getScopeDescription(String scope) {
-        if (consentData != null) {
-            for (ConsentData.ScopeDetails scopeDetails : consentData.scopes) {
+        if (data.consentData != null) {
+            for (ConsentData.ScopeDetails scopeDetails : data.consentData.scopes) {
                 if (scope.equals(scopeDetails.id)) {
                     return scopeDetails.description;
                 }
@@ -221,7 +249,7 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         @Override
         public int getCount() {
             if (isOAuth()) {
-                return service.split(" ").length;
+                return data.service.split(" ").length;
             }
             return 1;
         }
@@ -229,10 +257,10 @@ public class AskPermissionActivity extends AccountAuthenticatorActivity {
         @Override
         public String getItem(int position) {
             if (isOAuth()) {
-                String tokens = service.split(":", 2)[1];
+                String tokens = data.service.split(":", 2)[1];
                 return tokens.split(" ")[position];
             }
-            return service;
+            return data.service;
         }
 
         @Override

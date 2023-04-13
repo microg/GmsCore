@@ -6,11 +6,11 @@ message DeviceKeyRequest {
     optional uint64 androidId = 2;
     optional uint64 sessionId = 3;
     message VersionInfo {
-        optional uint32 sdkVersion = 1;
-        optional uint32 gmsVersion = 2;
+        optional fixed32 sdkVersion = 1;
+        optional fixed32 gmsVersion = 2;
     }
     optional VersionInfo versionInfo = 4;
-    optional string token = 5;
+    optional string token = 6;
 }
 
 message DeviceKey {

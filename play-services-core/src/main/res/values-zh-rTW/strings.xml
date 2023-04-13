@@ -136,7 +136,7 @@
 您是否想取消註冊讓它未來不再收到推送通知？</string>
     <string name="gcm_messages_counter">已接收訊息：<xliff:g example="123">%1$d</xliff:g>個（<xliff:g example="12345">%2$d</xliff:g>位元組〉</string>
 
-    <string name="snet_intro">Google SafetyNet是一個確認手機被確實保護和相容於Android CTS的驗證系統。一些程式基於安全因素使用SafetyNet，一些則是以必須通過的形式來防止篡改。
+    <string name="safetynet_intro">Google SafetyNet是一個確認手機被確實保護和相容於Android CTS的驗證系統。一些程式基於安全因素使用SafetyNet，一些則是以必須通過的形式來防止篡改。
     	
     	microG GmsCore包含了SafetyNet的自由執行，但官方伺服器需要SafetyNet請求經非自由軟體性質的DroidGuard系統簽名。</string>
 

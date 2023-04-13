@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Notificaciones de Exposición inactivas</string>
+    <string name="exposure_notify_off_bluetooth">El Bluetooth debe estar habilitado para recibir Notificaciones de Exposición.</string>
+    <string name="exposure_notify_off_location">El acceso a la ubicación es necesario para recibir las Notificaciones de Exposición.</string>
+    <string name="exposure_notify_off_bluetooth_location">El acceso al Bluetooth y a la localización debe estar habilitado para recibir Notificaciones de Exposición.</string>
+
+    <string name="service_name_exposure">Notificaciones de Exposición</string>
+    <string name="pref_exposure_enable_info_summary">Para habilitar las Notificaciones de Exposición, abre cualquier aplicación que lo soporte.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Habilitar el Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Abrir Configuración de la ubicación</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Desafortunadamente, su dispositivo no es compatible con las Notificaciones de Exposición.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Desafortunadamente, su dispositivo sólo es parcialmente compatible con las Notificaciones de Exposición. Puedes ser notificado para contactos de riesgo pero no podrás notificar a otros.</string>
+    <string name="prefcat_exposure_apps_title">Aplicaciones que utilizan Notificaciones de Exposición</string>
+    <string name="pref_exposure_collected_rpis_title">Identificaciones recogidas</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> identificaciones en la última hora</string>
+    <string name="pref_exposure_advertising_id_title">Identificación actualmente emitida</string>
+    <string name="prefcat_exposure_app_report_title">Exposiciones reportadas</string>
+    <string name="pref_exposure_app_report_updated_title">Actualizado: <xliff:g example="Hoy, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Menos de 5 minutos</string>
+    <string name="pref_exposure_app_report_entry_distance_close">exposición cercana</string>
+    <string name="pref_exposure_app_report_entry_distance_far">exposición lejana</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="Alrededor de 12 minutes">%1$s</xliff:g>, <xliff:g example="de exposición a distancia">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_about">Alrededor de <xliff:g example="13">%1$d</xliff:g> minutos</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Procesadas <xliff:g example="121031">%1$d</xliff:g> claves de diagnóstico.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">No se ha informado de ningún encuentro de exposición.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Reportados <xliff:g example="3">%1$d</xliff:g> encuentros de exposición:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Ayer, 12:00 - 14:00">%1$s</xliff:g>, puntuación de riesgo <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Nota: La puntuación de riesgo está definida por la aplicación. Los números altos pueden referirse a un riesgo bajo o viceversa.</string>
+    <string name="pref_exposure_app_api_usage_title">El uso de la API en los últimos 14 días</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> peticiones a <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> identificaciones recogidas</string>
+    <string name="pref_exposure_rpi_delete_all_title">Eliminar</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Eliminar todas las identificaciones recogidas</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Eliminar las identificaciones recogidas hará imposible notificarle en caso de que alguno de sus contactos de los últimos 14 días sea diagnosticado.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Eliminar de todas formas</string>
+    <string name="pref_exposure_rpi_export_title">Exportar</string>
+    <string name="pref_exposure_rpi_export_summary">Exportar identificaciones recogidas para su análisis ampliado con otra aplicación.</string>
+    <string name="pref_exposure_info_summary">La API de Notificaciones de Exposición permite que las aplicaciones le notifiquen si estuvo expuesto a alguien que informó haber sido diagnosticado como positivo.
+
+La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación correspondiente.</string>
+    <string name="pref_exposure_rpis_details_summary">Mientras la API de Notificación de Exposición está activada, el dispositivo recoge pasivamente identificaciones (llamadas identificadores de proximidad rodante o RPI) de los dispositivos cercanos.
+
+Cuando los propietarios de los dispositivos informan que el diagnóstico es positivo, se pueden compartir sus identificaciones. Su dispositivo comprueba si alguna de las identificaciones diagnosticadas conocidas coincide con alguna de las identificaciones recogidas y calcula su riesgo de infección.</string>
+
+    <string name="exposure_enable_switch">Usar Notificaciones de Exposición</string>
+    <string name="exposure_confirm_start_title">¿Encender las Notificaciones de Exposición?</string>
+    <string name="exposure_confirm_start_summary">El teléfono debe usar el Bluetooth para recopilar y compartir de manera segura las identificaciones con otros teléfonos que estén cerca.
+
+<xliff:g example="Corona-Warn">%1$s</xliff:g> puede notificarte si estuviste expuesto a alguien que informó ser diagnosticado como positivo.
+
+La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación.</string>
+    <string name="exposure_confirm_start_button">Encender</string>
+    <string name="exposure_confirm_stop_title">¿Apagar las Notificaciones de Exposición?</string>
+    <string name="exposure_confirm_stop_summary">Después de desactivar las Notificaciones de Exposición, ya no se le notificará cuando haya estado expuesto a alguien que haya informado de que ha sido diagnosticado como positivo.</string>
+    <string name="exposure_confirm_stop_button">Apagar</string>
+    <string name="exposure_confirm_keys_title">Comparte tus identificaciones con <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
+    <string name="exposure_confirm_keys_summary">Sus identificaciones de los últimos 14 días se usarán para ayudar a notificar a otros que usted ha estado cerca de una posible exposición.
+
+Su identidad o el resultado de la prueba no será compartida con otras personas.</string>
+    <string name="exposure_confirm_keys_button">Compartir</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> necesita permisos adicionales.</string>
+    <string name="exposure_confirm_permission_button">Conceder</string>
+    <string name="exposure_confirm_bluetooth_description">El Bluetooth debe estar activado.</string>
+    <string name="exposure_confirm_location_description">Se requiere acceso a la ubicación.</string>
+    <string name="exposure_confirm_button">Habilitar</string>
+</resources>

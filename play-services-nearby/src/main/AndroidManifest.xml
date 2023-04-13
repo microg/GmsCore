@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<manifest package="org.microg.gms.nearby"/>
+<manifest package="com.google.android.gms.nearby"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <service
+                android:name="com.google.android.gms.nearby.exposurenotification.WakeUpService"
+                android:exported="true"
+                android:permission="com.google.android.gms.nearby.exposurenotification.EXPOSURE_CALLBACK"/>
+    </application>
+</manifest>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_fido_authenticator"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="org.microg.gms.fido.core.ui.WelcomeFragment"
+        tools:layout="@layout/fido_welcome_fragment">
+        <argument
+            android:name="appName"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/openTransportSelectionFragment"
+            app:destination="@id/transportSelectionFragment" />
+        <action
+            android:id="@+id/openBluetoothFragmentDirect"
+            app:destination="@id/bluetoothFragment" />
+        <action
+            android:id="@+id/openNfcFragmentDirect"
+            app:destination="@id/nfcFragment" />
+        <action
+            android:id="@+id/openUsbFragmentDirect"
+            app:destination="@id/usbFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transportSelectionFragment"
+        android:name="org.microg.gms.fido.core.ui.TransportSelectionFragment"
+        tools:layout="@layout/fido_transport_selection_fragment">
+        <argument
+            android:name="appName"
+            app:argType="string" />
+        <argument
+            android:name="isFirst"
+            app:argType="boolean" />
+
+        <action
+            android:id="@+id/openBluetoothFragment"
+            app:destination="@id/bluetoothFragment" />
+        <action
+            android:id="@+id/openNfcFragment"
+            app:destination="@id/nfcFragment" />
+        <action
+            android:id="@+id/openUsbFragment"
+            app:destination="@id/usbFragment" />
+    </fragment>
+
+    <fragment android:id="@+id/bluetoothFragment" />
+    <fragment
+        android:id="@+id/nfcFragment"
+        android:name="org.microg.gms.fido.core.ui.NfcTransportFragment"
+        tools:layout="@layout/fido_nfc_transport_fragment" />
+    <fragment
+        android:id="@+id/usbFragment"
+        android:name="org.microg.gms.fido.core.ui.UsbTransportFragment"
+        tools:layout="@layout/fido_usb_transport_fragment" />
+
+</navigation>

@@ -95,7 +95,7 @@ public class AccountContentProvider extends ContentProvider {
             result.putParcelableArray(PROVIDER_EXTRA_ACCOUNTS, accounts);
             Log.d(TAG, "get_accounts returns: " + Arrays.toString(accounts));
             return result;
-        } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method)) {
+        } else if (PROVIDER_METHOD_CLEAR_PASSWORD.equals(method) && PackageUtils.callerHasExtendedAccess(getContext())) {
             Account a = extras.getParcelable(PROVIDER_EXTRA_CLEAR_PASSWORD);
             AccountManager.get(getContext()).clearPassword(a);
             return null;

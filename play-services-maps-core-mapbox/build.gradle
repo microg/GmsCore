@@ -18,13 +18,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 dependencies {
-    implementation project(':play-services-api')
+    implementation project(':play-services-maps')
     implementation project(':play-services-base-core')
-    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1") {
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-accounts'
+    implementation("org.maplibre.gl:android-sdk:9.6.0") {
+        exclude group: 'com.google.android.gms'
     }
-    implementation("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0") {
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-accounts'
+    implementation("org.maplibre.gl:android-plugin-annotation-v9:1.0.0") {
+        exclude group: 'com.google.android.gms'
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }

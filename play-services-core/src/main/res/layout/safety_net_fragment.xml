@@ -32,7 +32,7 @@
             layout="@layout/preference_switch_bar"
             app:callback="@{switchBarCallback}"
             app:checked="@{safetynetEnabled}"
-            app:description='@{@string/snet_enable_switch}'
+            app:description='@{@string/safetynet_enable_switch}'
             app:enabled="@{checkinEnabled}" />
 
         <androidx.fragment.app.FragmentContainerView

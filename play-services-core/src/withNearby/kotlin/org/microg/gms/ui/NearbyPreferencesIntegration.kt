@@ -11,9 +11,8 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import com.google.android.gms.R
-import org.microg.gms.nearby.exposurenotification.Constants
+import com.google.android.gms.nearby.exposurenotification.ExposureNotificationClient
 import org.microg.gms.nearby.exposurenotification.ExposurePreferences
-import org.microg.gms.nearby.exposurenotification.getExposureNotificationsServiceInfo
 
 interface NearbyPreferencesIntegration {
     companion object {
@@ -24,7 +23,7 @@ interface NearbyPreferencesIntegration {
         }
 
         fun preProcessSettingsIntent(intent: Intent) {
-            if (Constants.ACTION_EXPOSURE_NOTIFICATION_SETTINGS == intent.action && intent.data == null) {
+            if (ExposureNotificationClient.ACTION_EXPOSURE_NOTIFICATION_SETTINGS == intent.action && intent.data == null) {
                 intent.data = Uri.parse("x-gms-settings://exposure-notifications")
             }
         }

@@ -19,15 +19,11 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fido.fido2.api.IBooleanCallback;
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialCreationOptions;
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialRequestOptions;
-import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialCreationOptions;
-import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions;
 import com.google.android.gms.fido.fido2.internal.privileged.IFido2PrivilegedCallbacks;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 
 import org.microg.gms.common.PublicApi;
-import org.microg.gms.common.api.ApiClient;
 import org.microg.gms.common.api.PendingGoogleApiCall;
 import org.microg.gms.fido.fido2.Fido2PendingIntentImpl;
 import org.microg.gms.fido.fido2.Fido2PrivilegedGmsClient;

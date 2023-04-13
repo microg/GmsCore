@@ -22,8 +22,6 @@ android {
 }
 
 dependencies {
-    api project(':play-services-iid-api')
-
     // Dependencies from play-services-iid:17.0.0
     api "androidx.collection:collection:1.0.0"
     api "androidx.core:core:1.0.0"

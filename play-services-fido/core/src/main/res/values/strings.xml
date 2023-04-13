@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="fido_welcome_title">Use your security key with %1$s</string>
+    <string name="fido_welcome_body">Using your security key with %1$s helps protect your private data.</string>
+    <string name="fido_welcome_button_get_started">Get started</string>
+    <string name="fido_welcome_privileged_info">%1$s acts as a trusted browser to use your security key with %2$s.</string>
+    <string name="fido_welcome_privileged_check">Yes, %1$s is my trusted browser and should be allowed to use security keys with third-party websites.</string>
+    <string name="fido_transport_selection_title">Choose how to use your security key</string>
+    <string name="fido_transport_selection_body">Security keys work with Bluetooth, NFC, and USB. Choose how you want to use your key.</string>
+    <string name="fido_biometric_prompt_title">Verify your identity</string>
+    <string name="fido_biometric_prompt_body">"%1$s needs to verify it's you."</string>
+    <string name="fido_usb_title">Connect your USB security key</string>
+    <string name="fido_usb_prompt_body">Connect your security key to the USB port or connect it with an USB cable. If your key has a button or a gold disc, tap it now.</string>
+    <string name="fido_nfc_title">Connect your NFC security key</string>
+    <string name="fido_nfc_prompt_body">Hold your key flat against the back of your device until it stops vibrating</string>
+    <string name="fido_transport_selection_bluetooth">Use security key with Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Use security key with NFC</string>
+    <string name="fido_transport_selection_usb">Use security key with USB</string>
+    <string name="fido_transport_selection_biometric">Use this device with screen lock</string>
+    <string name="fido_transport_usb_wait_connect_body">Please connect your USB security key.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Please tap the golden ring or disc on %1$s.</string>
+</resources>

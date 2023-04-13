@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <PreferenceCategory
+        android:title="@string/pref_safetynet_recent_cat_basic">
+        <Preference
+            android:key="pref_request_type"
+            android:title="@string/pref_safetynet_recent_request_type"
+            tools:summary="RECAPTCHA" />
+
+        <Preference
+            android:key="pref_time"
+            android:title="@string/pref_safetynet_recent_request_time"
+            tools:summary="1970/01/01 1:00 AM" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_safetynet_recent_cat_response">
+        <Preference
+            android:key="pref_status"
+            android:title="@string/pref_safetynet_recent_response_status"
+            tools:summary="Success" />
+
+        <Preference
+            android:key="pref_token"
+            android:title="@string/pref_safetynet_recent_token"
+            tools:summary="Success" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

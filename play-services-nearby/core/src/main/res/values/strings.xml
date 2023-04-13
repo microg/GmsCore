@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Exposure Notifications inactive</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth needs to be enabled to receive Exposure Notifications.</string>
+    <string name="exposure_notify_off_location">Location access is required to receive Exposure Notifications.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth and Location access need to be enabled to receive Exposure Notifications.</string>
+    <string name="exposure_notify_off_nearby">Exposure Notifications require additional permissions to work</string>
+
+    <string name="service_name_exposure">Exposure Notifications</string>
+    <string name="pref_exposure_enable_info_summary">To enable Exposure Notifications, open any app supporting it.</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Enable Bluetooth</string>
+    <string name="pref_exposure_error_location_off_title">Open Location settings</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Unfortunately, your device is not compatible with Exposure Notifications.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Unfortunately, your device is only partially compatible with Exposure Notifications. You can be notified for risk contacts but won\'t be able to notify others.</string>
+    <string name="prefcat_exposure_apps_title">Apps using Exposure Notifications</string>
+    <string name="pref_exposure_collected_rpis_title">Collected IDs</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in last hour</string>
+    <string name="pref_exposure_advertising_id_title">Currently broadcasted ID</string>
+    <string name="prefcat_exposure_app_report_title">Reported exposures</string>
+    <string name="pref_exposure_app_report_updated_title">Updated: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Less than 5 minutes</string>
+    <string name="pref_exposure_app_report_entry_time_about">About <xliff:g example="13">%1$d</xliff:g> minutes</string>
+    <string name="pref_exposure_app_report_entry_distance_close">nearby exposure</string>
+    <string name="pref_exposure_app_report_entry_distance_far">distant exposure</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Processed <xliff:g example="121031">%1$d</xliff:g> diagnosis keys.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">No exposure encounters reported.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Reported <xliff:g example="3">%1$d</xliff:g> exposure encounters:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, risk score <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Note: The risk score is defined by the app. High numbers can refer to low risk or vice-versa.</string>
+    <string name="pref_exposure_app_api_usage_title">API usage in the last 14 days</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> calls to <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> IDs collected</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">No records</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs per hour</string>
+    <string name="pref_exposure_rpi_delete_all_title">Delete</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Delete all collected IDs</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Deleting collected IDs will make it impossible to notify you in case any of your contacts of the last 14 days is diagnosed.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Delete anyways</string>
+    <string name="pref_exposure_rpi_export_title">Export</string>
+    <string name="pref_exposure_rpi_export_summary">Export collected IDs for extended analysis with another app.</string>
+    <string name="pref_exposure_info_summary">"Exposure Notifications API allows apps to notify you if you were exposed to someone who reported to be diagnosed positive.
+
+The date, duration, and signal strength associated with an exposure will be shared with the corresponding app."</string>
+    <string name="pref_exposure_rpis_details_summary">"While Exposure Notification API is enabled, your device passively collects IDs (called Rolling Proximity Identifiers, or RPIs) from nearby devices.
+
+When device owners report to be diagnosed positive, their IDs can be shared. Your device checks if any of the known diagnosed IDs matches any of the collected IDs and calculates your infection risk."</string>
+
+    <string name="exposure_enable_switch">Use Exposure Notifications</string>
+    <string name="exposure_confirm_start_title">Turn on Exposure Notifications?</string>
+    <string name="exposure_confirm_start_summary">"Your phone needs to use Bluetooth to securely collect and share IDs with other phones that are nearby.
+
+<xliff:g example="Corona-Warn">%1$s</xliff:g> can notify you if you were exposed to someone who reported to be diagnosed positive.
+
+The date, duration, and signal strength associated with an exposure will be shared with the app."</string>
+    <string name="exposure_confirm_start_button">Turn on</string>
+    <string name="exposure_confirm_stop_title">Turn off Exposure Notifications?</string>
+    <string name="exposure_confirm_stop_summary">After disabling Exposure Notifications, you will no longer be notified when you were exposed to someone who reported to be diagnosed positive.</string>
+    <string name="exposure_confirm_stop_button">Turn off</string>
+    <string name="exposure_confirm_keys_title">Share your IDs with <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
+    <string name="exposure_confirm_keys_summary">"Your IDs from the last 14 days will be used to help notify others that you&apos;ve been near about potential exposure.
+
+Your identity or test result won&apos;t be shared with other people."</string>
+    <string name="exposure_confirm_keys_button">Share</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> needs additional permissions.</string>
+    <string name="exposure_confirm_permission_button">Grant</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth needs to be enabled.</string>
+    <string name="exposure_confirm_location_description">Location access is required.</string>
+    <string name="exposure_confirm_button">Enable</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">New Permissions required</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tap to grant required permissions to Exposure Notifications</string>
+    <string name="exposure_grant_background_location_description">Almost there! You will need to enable background location access by selecting the \'Allow all the time\' option on the next screen. Then press back.</string>
+    <string name="exposure_grant_background_location_button">Update Settings</string>
+</resources>

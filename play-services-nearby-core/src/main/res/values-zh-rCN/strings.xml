@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="exposure_notify_off_title">接触史通知未启用</string>
-    <string name="exposure_notify_off_bluetooth">需要启用蓝牙以接收接触史通知。</string>
-    <string name="exposure_notify_off_location">需要位置访问权限以接收接触史通知。</string>
-    <string name="exposure_notify_off_bluetooth_location">需要启用蓝牙和位置访问权限以接收接触史通知。</string>
-    <string name="exposure_notify_off_nearby">接触史通知需要额外权限来运作</string>
-</resources>

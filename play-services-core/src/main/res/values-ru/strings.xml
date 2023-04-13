@@ -1,25 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright (C) 2013-2020 microG Project Team
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
   -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services Core</string>
     <string name="gms_settings_name">Настройки microG</string>
-    <string name="gms_settings_summary">Конфигурирование сервисов microG</string>
+    <string name="gms_settings_summary">Настройка сервисов microG</string>
 
-    <string name="just_a_sec">Пожалуйста, подождите...</string>
+    <string name="just_a_sec">Пожалуйста, подождите…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Продолжая, вы позволяете этому приложению и Google использовать свою информацию в соответствии с их соответствующими условиями предоставления услуг и политиками конфиденциальности.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> хотел бы:</string>
@@ -170,6 +159,7 @@
     <string name="gcm_network_state_disconnected">Отключено</string>
     <string name="gcm_network_state_connected">Подключено <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_enable_switch">Принимать push-уведомления</string>
+    <string name="gcm_allow_app_popup">Разрешить <xliff:g example="F-Droid">%1$s</xliff:g> регистрироваться для получения push-уведомлений?</string>
 
     <string name="pref_push_app_allow_register_title">Разрешить регистрацию</string>
     <string name="pref_push_app_allow_register_summary">Разрешить приложению регистрироваться для получения push-уведомлений.</string>
@@ -180,11 +170,40 @@
     <string name="prefcat_push_apps_unregistered_title">Незарегистрированные приложения</string>
     <string name="prefcat_push_networks_title">Сети для приёма push-уведомлений</string>
 
-    <string name="snet_intro">Google SafetyNet это система сертификации устройства, гарантирующая, что устройство корректно защищено и совместимо с Android CTS. Некоторые приложения используют SafetyNet из соображений безопасности или в качестве предварительной системы защиты от взлома.\n\nmicroG GmsCore содержит свободную реализацию SafetyNet, но официальный сервер требует, чтобы запросы были подписаны с помощью проприетарной системы DroidGuard.</string>
-    <string name="snet_enable_switch">Разрешить проверку статуса устройства</string>
+    <string name="safetynet_intro">Google SafetyNet это система сертификации устройства, гарантирующая, что устройство корректно защищено и совместимо с Android CTS. Некоторые приложения используют SafetyNet из соображений безопасности или в качестве предварительной системы защиты от взлома.\n\nmicroG GmsCore содержит свободную реализацию SafetyNet, но официальный сервер требует, чтобы запросы были подписаны с помощью проприетарной системы DroidGuard.</string>
+    <string name="safetynet_enable_switch">Разрешить проверку статуса устройства</string>
 
-    <string name="pref_safetynet_test_title">Тест верификации SafetyNet</string>
+    <string name="pref_safetynet_test_title">Проверка аттестации SafetyNet</string>
+    <string name="pref_recaptcha_test_title">Тест ReCAPTCHA</string>
+    <string name="pref_test_summary_passed">Все проверки пройдены</string>
+    <string name="pref_test_summary_failed">Ошибка: %s</string>
+    <string name="pref_test_summary_warn">Предупреждение: %s</string>
+    <string name="pref_test_summary_running">Выполнение…</string>
     <string name="pref_droidguard_operation_mode">Режим работы</string>
+    <string name="prefcat_safetynet_apps_title">Приложения использующие SafetyNet</string>
+    <string name="menu_clear_recent_requests">Очистить недавние запросы</string>
+    <string name="safetynet_last_run_at">Последнее использование: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
+    <string name="profile_name_native">Устройство</string>
+    <string name="profile_name_real">Реальный</string>
+    <string name="profile_name_user">Пользовательский: %s</string>
+    <string name="profile_name_auto">Автоматический: %s</string>
+    <string name="profile_name_system">Системный: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Импорт пользовательского профиля</string>
+    <string name="pref_device_registration_serial_title">Серийный номер</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Импортировать профиль устройства из файла</string>
+    <string name="pref_device_registration_select_profile_title">Выбрать профиль</string>
+    <string name="pref_device_registration_device_profile_category">Профиль устройства</string>
+    <string name="pref_safetynet_recent_copy_json">Скопировать данные JSON JWS</string>
+    <string name="pref_safetynet_recent_advice">Совет</string>
+    <string name="pref_safetynet_recent_eval_type">Метод проверки</string>
+    <string name="pref_safetynet_recent_response_status">Статус ответа</string>
+    <string name="pref_safetynet_recent_cat_response">Данные ответа</string>
+    <string name="pref_safetynet_recent_cat_request">Данные запроса</string>
+    <string name="pref_safetynet_recent_nonce">Одноразовый код (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Время запроса</string>
+    <string name="pref_safetynet_recent_request_type">Тип запроса</string>
+    <string name="pref_safetynet_recent_cat_basic">Основные данные</string>
+    <string name="pref_safetynet_recent_token">Токен</string>
 
 </resources>
-

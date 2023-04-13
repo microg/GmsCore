@@ -22,7 +22,7 @@ import org.microg.gms.common.api.OnConnectionFailedListener;
 
 public class Fido2PrivilegedGmsClient extends GmsClient<IFido2PrivilegedService> {
     public Fido2PrivilegedGmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.OSS_LICENSES.ACTION);
+        super(context, callbacks, connectionFailedListener, GmsService.FIDO2_PRIVILEGED.ACTION);
         serviceId = GmsService.FIDO2_PRIVILEGED.SERVICE_ID;
     }
 

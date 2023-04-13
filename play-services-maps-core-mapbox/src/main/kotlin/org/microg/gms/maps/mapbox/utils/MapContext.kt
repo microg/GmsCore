@@ -24,7 +24,7 @@ import android.view.LayoutInflater
 import org.microg.gms.common.Constants
 import java.io.File
 
-class MapContext(private val context: Context) : ContextWrapper(context.createPackageContext(Constants.GMS_PACKAGE_NAME, Context.CONTEXT_INCLUDE_CODE and Context.CONTEXT_IGNORE_SECURITY)) {
+class MapContext(private val context: Context) : ContextWrapper(context.createPackageContext(Constants.GMS_PACKAGE_NAME, Context.CONTEXT_INCLUDE_CODE or Context.CONTEXT_IGNORE_SECURITY)) {
     private var layoutInflater: LayoutInflater? = null
     private val appContext: Context
         get() = context.applicationContext ?: context

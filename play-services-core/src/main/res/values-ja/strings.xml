@@ -168,10 +168,10 @@
     <string name="prefcat_push_apps_unregistered_title">未登録のアプリ</string>
     <string name="prefcat_push_networks_title">プッシュ通知に使用するためのネットワーク</string>
 
-    <string name="snet_intro">Google SafetyNetはデバイス認証システムであり、デバイスが適切に保護され、Android CTSと互換性があることを保証します。 一部のアプリケーションは、セキュリティ上の理由または改ざん防止の前提条件としてSafetyNetを使用します。
+    <string name="safetynet_intro">Google SafetyNetはデバイス認証システムであり、デバイスが適切に保護され、Android CTSと互換性があることを保証します。 一部のアプリケーションは、セキュリティ上の理由または改ざん防止の前提条件としてSafetyNetを使用します。
     
     microG GmsCoreにはSafetyNetのオープンソースな実装が含まれていますが、公式サーバーでは、プロプライエタリなDroidGuardシステムを使用してSafetyNetリクエストに署名する必要があります。</string>
-    <string name="snet_enable_switch">デバイスの認証を許可</string>
+    <string name="safetynet_enable_switch">デバイスの認証を許可</string>
 
     <string name="pref_safetynet_test_title">SafetyNetテストの実行</string>
     <string name="pref_droidguard_operation_mode">動作モード</string>

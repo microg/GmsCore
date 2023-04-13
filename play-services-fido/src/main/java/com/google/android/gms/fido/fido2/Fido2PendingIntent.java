@@ -33,5 +33,5 @@ public interface Fido2PendingIntent {
      * @throws IntentSender.SendIntentException If the resolution intent has been canceled or is no longer able to
      *                                          execute the request.
      */
-    void launchPendingIntent(Activity activity, int requestCode);
+    void launchPendingIntent(Activity activity, int requestCode) throws IntentSender.SendIntentException;
 }

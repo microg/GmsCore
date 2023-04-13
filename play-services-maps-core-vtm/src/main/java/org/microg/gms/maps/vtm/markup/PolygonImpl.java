@@ -206,6 +206,11 @@ public class PolygonImpl extends IPolygonDelegate.Stub implements DrawableMarkup
     }
 
     @Override
+    public boolean isClickable() throws RemoteException {
+        return false;
+    }
+
+    @Override
     public void setStrokeJointType(int type) throws RemoteException {
 
     }

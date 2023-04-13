@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2021 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.microg.gms.safetynet.core">
+
+    <application>
+        <service android:name="org.microg.gms.safetynet.SafetyNetClientService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.safetynet.service.START" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name="org.microg.gms.safetynet.ReCaptchaActivity"
+            android:autoRemoveFromRecents="true"
+            android:icon="@drawable/ic_recaptcha"
+            android:process=":ui"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.NoActionBar">
+            <intent-filter>
+                <action android:name="org.microg.gms.safetynet.RECAPTCHA_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

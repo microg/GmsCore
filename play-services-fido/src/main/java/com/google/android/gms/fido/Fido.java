@@ -21,10 +21,8 @@ import com.google.android.gms.fido.fido2.Fido2PendingIntent;
 import com.google.android.gms.fido.fido2.Fido2PrivilegedApiClient;
 import com.google.android.gms.fido.sourcedevice.SourceDirectTransferClient;
 import com.google.android.gms.fido.u2f.U2fApiClient;
-import com.google.android.gms.fido.u2f.U2fPendingIntent;
 
 import org.microg.gms.common.PublicApi;
-import org.microg.gms.fido.api.FidoConstants;
 
 /**
  * Entry point for Fido APIs.
@@ -37,7 +35,7 @@ public class Fido {
      * The key used by the calling {@link Activity} to retrieve {@link PublicKeyCredential} from the Intent received by
      * {@link Activity#onActivityResult(int, int, Intent)} after launching {@link Fido2PendingIntent}.
      */
-    public static final String FIDO2_KEY_CREDENTIAL_EXTRA = FidoConstants.FIDO2_KEY_CREDENTIAL_EXTRA;
+    public static final String FIDO2_KEY_CREDENTIAL_EXTRA = "FIDO2_CREDENTIAL_EXTRA";
 
     /**
      * The key used by the calling {@link Activity} to retrieve {@link AuthenticatorErrorResponse} from the Intent received by
@@ -47,7 +45,7 @@ public class Fido {
      * {@link PublicKeyCredential} contains an {@link AuthenticatorErrorResponse}.
      */
     @Deprecated
-    public static final String FIDO2_KEY_ERROR_EXTRA = FidoConstants.FIDO2_KEY_ERROR_EXTRA;
+    public static final String FIDO2_KEY_ERROR_EXTRA = "FIDO2_ERROR_EXTRA";
 
     /**
      * The key used by the calling {@link Activity} to retrieve {@link AuthenticatorAttestationResponse} or
@@ -58,13 +56,13 @@ public class Fido {
      * {@link PublicKeyCredential} contains an {@link AuthenticatorAttestationResponse} or an {@link AuthenticatorAssertionResponse}.
      */
     @Deprecated
-    public static final String FIDO2_KEY_RESPONSE_EXTRA = FidoConstants.FIDO2_KEY_RESPONSE_EXTRA;
+    public static final String FIDO2_KEY_RESPONSE_EXTRA = "FIDO2_RESPONSE_EXTRA";
 
     /**
      * The key used by the calling {@link Activity} to retrieve {@link ResponseData} from the Intent received by
      * {@link Activity#onActivityResult(int, int, Intent)} after launching {@link Fido2PendingIntent}.
      */
-    public static final String KEY_RESPONSE_EXTRA = FidoConstants.KEY_RESPONSE_EXTRA;
+    public static final String KEY_RESPONSE_EXTRA = "RESPONSE_EXTRA";
 
     /**
      * Creates a new instance of {@link Fido2ApiClient} for use in a non-activity {@link Context}.
@@ -84,14 +82,14 @@ public class Fido {
      * Creates a new instance of {@link Fido2PrivilegedApiClient} for use in a non-activity {@link Context}.
      */
     public static Fido2PrivilegedApiClient getFido2PrivilegedApiClient(Context context) {
-        throw new UnsupportedOperationException();
+        return new Fido2PrivilegedApiClient(context);
     }
 
     /**
      * Creates a new instance of {@link Fido2PrivilegedApiClient} for use in an {@link Activity}.
      */
     public static Fido2PrivilegedApiClient getFido2PrivilegedApiClient(Activity activity) {
-        throw new UnsupportedOperationException();
+        return new Fido2PrivilegedApiClient(activity);
     }
 
     /**
