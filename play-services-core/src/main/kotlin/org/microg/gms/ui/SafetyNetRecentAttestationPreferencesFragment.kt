@@ -49,9 +49,10 @@ class SafetyNetRecentAttestationPreferencesFragment : PreferenceFragmentCompat()
             }
         }
 
-        if(snetSummary.responseStatus==null){
-            status.summary = "Not completed yet"
-        }else if(snetSummary.responseStatus!!.isSuccess) {
+        val snetResponseStatus = snetSummary.responseStatus
+        if (snetResponseStatus == null) {
+            status.summary = getString(R.string.pref_safetynet_test_not_completed)
+        } else if (snetResponseStatus.isSuccess) {
             try {
                 val json = JSONObject(snetSummary.responseData!!)
                 evalType.summary = json.getString("evaluationType")
@@ -60,24 +61,17 @@ class SafetyNetRecentAttestationPreferencesFragment : PreferenceFragmentCompat()
                 val basicIntegrity = json.getBoolean("basicIntegrity")
                 val ctsProfileMatch = json.getBoolean("ctsProfileMatch")
 
-                status.summary = when{
-                    basicIntegrity && ctsProfileMatch -> {
-                        "Integrity and CTS passed"
-                    }
-                    basicIntegrity -> {
-                        "CTS failed"
-                    }
-                    else -> {
-                        "Integrity failed"
-                    }
+                status.summary = when {
+                    basicIntegrity && ctsProfileMatch -> getString(R.string.pref_safetynet_test_integrity_cts_passed)
+                    basicIntegrity -> getString(R.string.pref_safetynet_test_cts_failed)
+                    else -> getString(R.string.pref_safetynet_test_integrity_failed)
                 }
-
             } catch (e: JSONException) {
                 e.printStackTrace()
-                status.summary = "Invalid JSON"
+                status.summary = getString(R.string.pref_safetynet_test_invalid_json)
             }
-        }else{
-            status.summary = snetSummary.responseStatus!!.statusMessage
+        } else {
+            status.summary = snetResponseStatus.statusMessage
         }
 
         copyResult.setOnPreferenceClickListener {
@@ -85,7 +79,7 @@ class SafetyNetRecentAttestationPreferencesFragment : PreferenceFragmentCompat()
             val clip = ClipData.newPlainText("JSON JWS data", snetSummary.responseData)
             clipboard.setPrimaryClip(clip)
 
-            Toast.makeText(context, "Copied to clipboard !", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.pref_safetynet_recent_copied, Toast.LENGTH_SHORT).show()
 
             true
         }

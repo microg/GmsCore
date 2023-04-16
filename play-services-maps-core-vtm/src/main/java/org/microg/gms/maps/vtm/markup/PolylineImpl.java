@@ -19,7 +19,9 @@ package org.microg.gms.maps.vtm.markup;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.internal.IPolylineDelegate;
 
@@ -155,6 +157,47 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     public int hashCodeRemote() {
         Log.d(TAG, "hashcodeRemote");
         return id.hashCode();
+    }
+
+    // Not implemented
+    @Override
+    public void setClickable(boolean clickable) throws RemoteException {
+
+    }
+
+    @Override
+    public boolean isClickable() throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public void setJointType(int jointType) throws RemoteException {
+
+    }
+
+    @Override
+    public int getJointType() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public void setPattern(List<PatternItem> pattern) throws RemoteException {
+
+    }
+
+    @Override
+    public List<PatternItem> getPattern() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void setTag(IObjectWrapper tag) throws RemoteException {
+
+    }
+
+    @Override
+    public IObjectWrapper getTag() throws RemoteException {
+        return null;
     }
 
     @Override

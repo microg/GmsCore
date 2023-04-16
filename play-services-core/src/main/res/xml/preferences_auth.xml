@@ -18,16 +18,22 @@
     <PreferenceScreen
         android:key="k2"
         android:title="@string/prefs_account_security">
-        <intent android:action="com.google.android.gms.accountsettings.SECURITY_SETTINGS"/>
+        <intent
+            android:action="com.google.android.gms.accountsettings.SECURITY_SETTINGS"
+            android:targetPackage="com.google.android.gms" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="k3"
         android:title="@string/prefs_account_privacy">
-        <intent android:action="com.google.android.gms.accountsettings.PRIVACY_SETTINGS"/>
+        <intent
+            android:action="com.google.android.gms.accountsettings.PRIVACY_SETTINGS"
+            android:targetPackage="com.google.android.gms" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="k4"
         android:title="@string/prefs_account">
-        <intent android:action="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"/>
+        <intent
+            android:action="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
+            android:targetPackage="com.google.android.gms" />
     </PreferenceScreen>
 </PreferenceScreen>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2017 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest package="com.google.android.gms.cast.framework"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <queries>
+        <package android:name="com.google.android.gms.policy_cast_dynamite"/>
+    </queries>
+
+    <application>
+        <receiver
+                android:name="com.google.android.gms.cast.framework.media.MediaIntentReceiver"
+                android:exported="false"/>
+
+        <service
+                android:name="com.google.android.gms.cast.framework.media.MediaNotificationService"
+                android:exported="false"
+                android:foregroundServiceType="mediaPlayback"/>
+
+        <service
+                android:name="com.google.android.gms.cast.framework.ReconnectionService"
+                android:exported="false"/>
+    </application>
+
+</manifest>

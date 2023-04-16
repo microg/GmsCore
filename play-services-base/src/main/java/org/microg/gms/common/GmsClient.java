@@ -46,17 +46,23 @@ public abstract class GmsClient<I extends IInterface> implements ApiClient {
     protected ConnectionState state = ConnectionState.NOT_CONNECTED;
     private ServiceConnection serviceConnection;
     private I serviceInterface;
-    private String actionString;
+    private final String actionString;
+    private final boolean requireMicrog;
 
     protected int serviceId = -1;
     protected Account account = null;
     protected Bundle extras = new Bundle();
 
     public GmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener, String actionString) {
+        this(context, callbacks, connectionFailedListener, actionString, false);
+    }
+
+    public GmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener, String actionString, boolean requireMicrog) {
         this.context = context;
         this.callbacks = callbacks;
         this.connectionFailedListener = connectionFailedListener;
         this.actionString = actionString;
+        this.requireMicrog = requireMicrog;
     }
 
     protected void onConnectedToBroker(IGmsServiceBroker broker, GmsCallbacks callbacks) throws RemoteException {
@@ -84,7 +90,7 @@ public abstract class GmsClient<I extends IInterface> implements ApiClient {
             MultiConnectionKeeper.getInstance(context).unbind(actionString, serviceConnection);
         }
         serviceConnection = new GmsServiceConnection();
-        if (!MultiConnectionKeeper.getInstance(context).bind(actionString, serviceConnection)) {
+        if (!MultiConnectionKeeper.getInstance(context).bind(actionString, serviceConnection, requireMicrog)) {
             state = ConnectionState.ERROR;
             handleConnectionFailed();
         }

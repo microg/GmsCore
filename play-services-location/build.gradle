@@ -4,6 +4,8 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 android {
     compileSdkVersion androidCompileSdk
@@ -21,12 +23,13 @@ android {
     }
 }
 
-dependencies {
-    api project(':play-services-location-api')
+apply from: '../gradle/publish-android.gradle'
 
-    // Dependencies from play-services-location:19.0.1
+description = 'microG implementation of play-services-location'
+
+dependencies {
+    // Dependencies from play-services-location:21.0.1
     api project(':play-services-base')
     api project(':play-services-basement')
-    //api project(':play-services-places-placereport')
     api project(':play-services-tasks')
 }

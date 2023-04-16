@@ -177,6 +177,48 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="safetynet_enable_switch">Permetti l\'attestazione del dispositivo</string>
 
     <string name="pref_safetynet_test_title">Prova l\'attestazione di SafetyNet</string>
+    <string name="pref_recaptcha_test_title">Prova ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Prova ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Tutti i test superati</string>
+    <string name="pref_test_summary_failed">Fallito: %s</string>
+    <string name="pref_test_summary_warn">Attenzione: %s</string>
+    <string name="pref_test_summary_running">In esecuzione…</string>
     <string name="pref_droidguard_operation_mode">Modalità operativa</string>
+    <string name="prefcat_safetynet_apps_title">Applicazioni che utilizzano SafetyNet</string>
+    <string name="menu_clear_recent_requests">Rimuovi richieste recenti</string>
+    <string name="safetynet_last_run_at">Ultimo utilizzo: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+
+    <string name="profile_name_native">Nativo</string>
+    <string name="profile_name_real">Reale</string>
+    <string name="profile_name_user">Personalizzato: %s</string>
+    <string name="profile_name_auto">Automatico: %s</string>
+    <string name="profile_name_system">Sistema: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importa profilo personalizzato</string>
+    <string name="pref_device_registration_serial_title">Seriale</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importa un profilo del dispositivo da un file</string>
+    <string name="pref_device_registration_select_profile_title">Seleziona profilo</string>
+    <string name="pref_device_registration_device_profile_category">Profilo del dispositivo</string>
+
+    <string name="pref_safetynet_recent_uses">Utilizzi recenti</string>
+    <string name="pref_safetynet_recent_attestation_summary">Attestazione: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Copia dati JSON JWS</string>
+    <string name="pref_safetynet_recent_eval_type">Tipo di valutazione</string>
+    <string name="pref_safetynet_recent_response_status">Stato della risposta</string>
+    <string name="pref_safetynet_recent_cat_response">Dati della risposta</string>
+    <string name="pref_safetynet_recent_cat_request">Dati della richiesta</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (esadecimale)</string>
+    <string name="pref_safetynet_recent_request_time">Data e ora della richiesta</string>
+    <string name="pref_safetynet_recent_cat_basic">Dati di base</string>
+    <string name="pref_safetynet_recent_request_type">Tipo di richiesta</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Copiato negli appunti!</string>
+    <string name="pref_safetynet_test_not_completed">Non ancora completato</string>
+    <string name="pref_safetynet_test_no_result">Nessun risultato</string>
+    <string name="pref_safetynet_test_invalid_json">JSON non valido</string>
+    <string name="pref_safetynet_recent_advice">Suggerimento</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integrità e CTS superati</string>
+    <string name="pref_safetynet_test_cts_failed">CTS non superato</string>
+    <string name="pref_safetynet_test_integrity_failed">Integrità non superata</string>
 
 </resources>

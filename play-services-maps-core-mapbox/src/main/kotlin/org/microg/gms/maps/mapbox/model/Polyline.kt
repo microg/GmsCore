@@ -18,7 +18,10 @@ package org.microg.gms.maps.mapbox.model
 
 import android.os.Parcel
 import android.util.Log
+import com.google.android.gms.dynamic.IObjectWrapper
+import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.internal.IPolylineDelegate
 import com.mapbox.mapboxsdk.plugins.annotation.Line
 import com.mapbox.mapboxsdk.plugins.annotation.LineOptions
@@ -30,8 +33,12 @@ import com.google.android.gms.maps.model.PolylineOptions as GmsLineOptions
 class PolylineImpl(private val map: GoogleMapImpl, private val id: String, options: GmsLineOptions) : IPolylineDelegate.Stub(), Markup<Line, LineOptions> {
     private var points = ArrayList(options.points)
     private var width = options.width
+    private var jointType = options.jointType
+    private var pattern = ArrayList(options.pattern.orEmpty())
     private var color = options.color
     private var visible: Boolean = options.isVisible
+    private var clickable: Boolean = options.isClickable
+    private var tag: IObjectWrapper? = null
 
     override var annotation: Line? = null
     override var removed: Boolean = false
@@ -102,6 +109,30 @@ class PolylineImpl(private val map: GoogleMapImpl, private val id: String, optio
     override fun equalsRemote(other: IPolylineDelegate?): Boolean = equals(other)
 
     override fun hashCodeRemote(): Int = hashCode()
+
+    override fun setClickable(clickable: Boolean) {
+        this.clickable = clickable
+    }
+
+    override fun isClickable(): Boolean = clickable
+
+    override fun setJointType(jointType: Int) {
+        this.jointType = jointType
+    }
+
+    override fun getJointType(): Int = jointType
+
+    override fun setPattern(pattern: MutableList<PatternItem>?) {
+        this.pattern = ArrayList(pattern.orEmpty())
+    }
+
+    override fun getPattern(): MutableList<PatternItem> = pattern
+
+    override fun setTag(tag: IObjectWrapper?) {
+        this.tag = tag
+    }
+
+    override fun getTag(): IObjectWrapper = tag ?: ObjectWrapper.wrap(null)
 
     override fun hashCode(): Int {
         return id.hashCode()

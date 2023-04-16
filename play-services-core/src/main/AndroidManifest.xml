@@ -445,14 +445,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Cast -->
-
-        <service android:name="com.google.android.gms.cast.media.CastMediaRouteProviderService">
-            <intent-filter>
-                <action android:name="android.media.MediaRouteProviderService" />
-            </intent-filter>
-        </service>
-
         <!-- Chimera -->
         <provider
             android:name="org.microg.gms.chimera.ServiceProvider"
@@ -684,12 +676,6 @@
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.cast.CastDeviceControllerService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE" />
-            </intent-filter>
-        </service>
-
         <service android:name="org.microg.gms.appinvite.AppInviteService">
             <intent-filter>
                 <action android:name="com.google.android.gms.appinvite.service.START" />
@@ -818,7 +804,6 @@
                 <action android:name="com.google.android.gms.plus.service.START" />
                 <action android:name="com.google.android.gms.pseudonymous.service.START" />
                 <action android:name="com.google.android.gms.rcs.START" />
-                <action android:name="com.google.android.gms.recaptcha.service.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest package="com.google.android.gms.maps"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Include required permissions for Google Maps API to run. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+
+    <queries>
+        <package android:name="com.google.android.apps.maps"/>
+    </queries>
+
+    <application>
+        <uses-library android:name="org.apache.http.legacy"
+                      android:required="false"/>
+    </application>
+</manifest>

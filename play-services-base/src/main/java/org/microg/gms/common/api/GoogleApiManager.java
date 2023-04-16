@@ -51,7 +51,11 @@ public class GoogleApiManager {
         boolean connecting = client.isConnecting();
         boolean connected = client.isConnected();
         if (connected) {
-            apiCall.execute(client, completionSource);
+            try {
+                apiCall.execute(client, completionSource);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
         } else {
             waitingApiCallMap.get(new ApiInstance(api)).add(new WaitingApiCall<R>((PendingGoogleApiCall<R, ApiClient>) apiCall, completionSource));
             if (!connecting) {
@@ -63,7 +67,11 @@ public class GoogleApiManager {
     private synchronized void onInstanceConnected(ApiInstance apiInstance, Bundle connectionHint) {
         List<WaitingApiCall<?>> waitingApiCalls = waitingApiCallMap.get(apiInstance);
         for (WaitingApiCall<?> waitingApiCall : waitingApiCalls) {
-            waitingApiCall.execute(clientMap.get(apiInstance));
+            try {
+                waitingApiCall.execute(clientMap.get(apiInstance));
+            } catch (Exception e) {
+                waitingApiCall.failed(e);
+            }
         }
         waitingApiCalls.clear();
     }
@@ -120,7 +128,7 @@ public class GoogleApiManager {
             this.completionSource = completionSource;
         }
 
-        public void execute(ApiClient client) {
+        public void execute(ApiClient client) throws Exception {
             apiCall.execute(client, completionSource);
         }
 

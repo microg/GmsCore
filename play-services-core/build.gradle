@@ -17,49 +17,55 @@ configurations {
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "de.hdodenhof:circleimageview:1.3.0"
-    // TODO: Switch to upstream once raw requests are merged
-    // https://github.com/vitalidze/chromecast-java-api-v2/pull/99
-    // implementation "su.litvak.chromecast:api-v2:0.10.4"
-    implementation "info.armills.chromecast-java-api-v2:api-v2-raw-request:0.10.4-raw-request-1"
-
-    // Specified manually due to
-    // https://github.com/vitalidze/chromecast-java-api-v2/issues/91
-    api "org.slf4j:slf4j-api:1.7.25"
-    api "uk.uuid.slf4j:slf4j-android:1.7.25-1"
 
     implementation project(':firebase-dynamic-links-api')
     implementation project(':firebase-auth-core')
     implementation project(':play-services-base-core')
-    implementation project(':play-services-base-core-ui')
+    implementation project(':play-services-cast-core')
+    implementation project(':play-services-cast-framework-core')
     implementation project(':play-services-conscrypt-provider-core')
     implementation project(':play-services-cronet-core')
     implementation project(':play-services-droidguard-core')
-    implementation project(':play-services-droidguard-core-ui')
     implementation project(':play-services-fido-core')
     implementation project(':play-services-gmscompliance-core')
     implementation project(':play-services-location-core')
     withNearbyImplementation project(':play-services-nearby-core')
-    withNearbyImplementation project(':play-services-nearby-core-ui')
-    implementation project(':play-services-safetynet-core')
     implementation project(':play-services-oss-licenses-core')
-    implementation project(':play-services-safetynet-core-ui')
+    implementation project(':play-services-recaptcha-core')
+    implementation project(':play-services-safetynet-core')
     implementation project(':play-services-tapandpay-core')
     implementation project(':play-services-vision-core')
+    implementation project(':play-services-wearable-core')
 
     implementation project(':play-services-core-proto')
+
     implementation project(':play-services-core:microg-ui-tools') // deprecated
     implementation project(':play-services-api')
-    implementation project(':play-services-cast-api')
-    implementation project(':play-services-wearable')
-    implementation "org.microg:wearable:$wearableVersion"
 
+    implementation project(':play-services-appinvite')
+    implementation project(':play-services-auth-base')
+    implementation project(':play-services-auth')
+    implementation project(':play-services-clearcut')
+    implementation project(':play-services-drive')
+    implementation project(':play-services-maps')
+    implementation project(':play-services-measurement-base')
+    implementation project(':play-services-places')
+    implementation project(':play-services-recaptcha')
     implementation project(':play-services-safetynet')
     implementation project(':play-services-tasks-ktx')
 
-    runtimeOnly "org.microg.nlp:geocode-v1:$nlpVersion"
-    runtimeOnly "org.microg.nlp:location-v2:$nlpVersion"
-    runtimeOnly "org.microg.nlp:location-v3:$nlpVersion"
-    implementation "org.microg.nlp:ui:$nlpVersion"
+    runtimeOnly("org.microg.nlp:geocode-v1:$nlpVersion") {
+        exclude group: 'org.microg', module: 'safe-parcel'
+    }
+    runtimeOnly("org.microg.nlp:location-v2:$nlpVersion") {
+        exclude group: 'org.microg', module: 'safe-parcel'
+    }
+    runtimeOnly("org.microg.nlp:location-v3:$nlpVersion") {
+        exclude group: 'org.microg', module: 'safe-parcel'
+    }
+    implementation("org.microg.nlp:ui:$nlpVersion") {
+        exclude group: 'org.microg', module: 'safe-parcel'
+    }
 
     withMapboxImplementation project(':play-services-maps-core-mapbox')
     withVtmImplementation project(':play-services-maps-core-vtm')

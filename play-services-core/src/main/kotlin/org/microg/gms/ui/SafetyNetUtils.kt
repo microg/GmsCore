@@ -12,13 +12,20 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.R
 import com.google.android.gms.common.api.Status
 import org.json.JSONObject
+import org.microg.gms.fido.core.map
 import org.microg.gms.safetynet.SafetyNetRequestType
 
 fun formatSummaryForSafetyNetResult(context: Context, result: String?, status: Status?, type: SafetyNetRequestType): Pair<String, Drawable?> {
     when (type) {
         SafetyNetRequestType.ATTESTATION -> {
-            if (status?.isSuccess != true) return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
-            if (result == null) return context.getString(R.string.pref_test_summary_failed, "No result") to ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            if (status?.isSuccess != true) {
+                return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
+            }
+            if (result == null) {
+                return context.getString(R.string.pref_test_summary_failed, context.getString(R.string.pref_safetynet_test_no_result)) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            }
             val (basicIntegrity, ctsProfileMatch, advice) = try {
                 JSONObject(result).let {
                     Triple(
@@ -31,7 +38,7 @@ fun formatSummaryForSafetyNetResult(context: Context, result: String?, status: S
                 Log.w(TAG, e)
                 return context.getString(
                     R.string.pref_test_summary_failed,
-                    "Invalid JSON"
+                    context.getString(R.string.pref_safetynet_test_invalid_json)
                 ) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
             }
             val adviceText = if (advice == "") "" else "\n" + advice.split(",").map {
@@ -60,10 +67,39 @@ fun formatSummaryForSafetyNetResult(context: Context, result: String?, status: S
             }
         }
         SafetyNetRequestType.RECAPTCHA -> {
-            if (result != null || status?.isSuccess == true) {
-                return context.getString(R.string.pref_test_summary_passed) to ContextCompat.getDrawable(context, R.drawable.ic_circle_check)
-            } else {
-                return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
+            if (status?.isSuccess != true) {
+                return context.getString(R.string.pref_test_summary_failed, status?.statusMessage) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
+            }
+            if (result == null) {
+                return context.getString(R.string.pref_test_summary_failed, context.getString(R.string.pref_safetynet_test_no_result)) to
+                        ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+            }
+            val (success, errorCodes) = try {
+                JSONObject(result).let {
+                        it.optBoolean("success", false) to
+                        it.optJSONArray("error-codes")?.map { getString(it) }.orEmpty()
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+                true to emptyList()
+            }
+            return when {
+                success && errorCodes.isEmpty() -> {
+                    context.getString(R.string.pref_test_summary_passed) to ContextCompat.getDrawable(context, R.drawable.ic_circle_check)
+                }
+                success -> {
+                    context.getString(
+                        R.string.pref_test_summary_warn,
+                        errorCodes.joinToString()
+                    ) to ContextCompat.getDrawable(context, R.drawable.ic_circle_warn)
+                }
+                else -> {
+                    context.getString(
+                        R.string.pref_test_summary_failed,
+                        errorCodes.joinToString()
+                    ) to ContextCompat.getDrawable(context, R.drawable.ic_circle_error)
+                }
             }
         }
     }
