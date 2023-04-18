@@ -5,10 +5,13 @@
 
 package com.google.android.gms.location;
 
+import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
+@Hide
 public class DeviceOrientation extends AutoSafeParcelable {
     @Field(1)
     private float[] attitude = new float[4];
@@ -21,97 +24,108 @@ public class DeviceOrientation extends AutoSafeParcelable {
     @Field(5)
     private float headingErrorDegrees = Float.NaN;
     @Field(6)
-    private long elapsedRealtimeNanos = 0;
+    public long elapsedRealtimeNanos = 0;
     @Field(7)
-    private byte flags = 0;
+    private byte fieldsMask = 0;
     @Field(8)
     private float conservativeHeadingErrorVonMisesKappa = Float.NaN;
 
     public float[] getAttitude() {
-        if ((flags & 0x10) != 0) return attitude;
+        if (hasAttitude()) return attitude;
         return new float[4];
     }
 
     public void setAttitude(float[] attitude) {
         if (attitude.length != 4) throw new IllegalArgumentException();
         this.attitude = attitude;
-        flags = (byte) (flags | 0x10);
+        fieldsMask = (byte) (fieldsMask | 0x10);
     }
 
     public int getAttitudeConfidence() {
-        if ((flags & 0x1) != 0) return attitudeConfidence;
+        if (hasAttitudeConfidence()) return attitudeConfidence;
         return -1;
     }
 
     public void setAttitudeConfidence(int attitudeConfidence) {
         this.attitudeConfidence = attitudeConfidence;
-        flags = (byte) (flags | 0x1);
+        fieldsMask = (byte) (fieldsMask | 0x1);
     }
 
     public int getMagConfidence() {
-        if ((flags & 0x2) != 0) return magConfidence;
+        if (hasMagConfidence()) return magConfidence;
         return -1;
     }
 
     public void setMagConfidence(int magConfidence) {
         this.magConfidence = magConfidence;
-        flags = (byte) (flags | 0x2);
+        fieldsMask = (byte) (fieldsMask | 0x2);
     }
 
     public float getHeadingDegrees() {
-        if ((flags & 0x4) != 0) return headingDegrees;
+        if (hasHeadingDegrees()) return headingDegrees;
         return Float.NaN;
     }
 
     public void setHeadingDegrees(float headingDegrees) {
         this.headingDegrees = headingDegrees;
-        flags = (byte) (flags | 0x4);
+        fieldsMask = (byte) (fieldsMask | 0x4);
     }
 
     public float getHeadingErrorDegrees() {
-        if ((flags & 0x8) != 0) return headingErrorDegrees;
+        if (hasHeadingErrorDegrees()) return headingErrorDegrees;
         return Float.NaN;
     }
 
     public void setHeadingErrorDegrees(float headingErrorDegrees) {
         this.headingErrorDegrees = headingErrorDegrees;
-        flags = (byte) (flags | 0x8);
+        fieldsMask = (byte) (fieldsMask | 0x8);
     }
 
     public float getConservativeHeadingErrorVonMisesKappa() {
-        if ((flags & 0x20) != 0) return conservativeHeadingErrorVonMisesKappa;
+        if (hasConservativeHeadingErrorVonMisesKappa()) return conservativeHeadingErrorVonMisesKappa;
         return Float.NaN;
     }
 
     public void setConservativeHeadingErrorVonMisesKappa(float conservativeHeadingErrorVonMisesKappa) {
         this.conservativeHeadingErrorVonMisesKappa = conservativeHeadingErrorVonMisesKappa;
-        flags = (byte) (flags | 0x20);
+        fieldsMask = (byte) (fieldsMask | 0x20);
+    }
+
+    public final boolean hasAttitude() {
+        return (fieldsMask & 0x10) != 0;
+    }
+
+    public final boolean hasAttitudeConfidence() {
+        return (fieldsMask & 0x1) != 0;
+    }
+
+    public final boolean hasConservativeHeadingErrorVonMisesKappa() {
+        return (fieldsMask & 0x20) != 0;
+    }
+
+    public final boolean hasHeadingDegrees() {
+        return (fieldsMask & 0x4) != 0;
+    }
+
+    public final boolean hasHeadingErrorDegrees() {
+        return (fieldsMask & 0x8) != 0;
+    }
+
+    public final boolean hasMagConfidence() {
+        return (fieldsMask & 0x2) != 0;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("DeviceOrientation{");
-        if ((flags & 0x10) != 0)
-            sb.append("attitude=").append(Arrays.toString(attitude));
-        if ((flags & 0x1) != 0)
-            sb.append(", attitudeConfidence=").append(attitudeConfidence);
-        if ((flags & 0x2) != 0)
-            sb.append(", magConfidence=").append(magConfidence);
-        if ((flags & 0x4) != 0)
-            sb.append(", headingDegrees=").append(headingDegrees);
-        if ((flags & 0x8) != 0)
-            sb.append(", headingErrorDegrees=").append(headingErrorDegrees);
-        return "DeviceOrientation{" +
-                "attitude=" + Arrays.toString(attitude) +
-                ", attitudeConfidence=" + attitudeConfidence +
-                ", magConfidence=" + magConfidence +
-                ", headingDegrees=" + headingDegrees +
-                ", headingErrorDegrees=" + headingErrorDegrees +
-                ", elapsedRealtimeNanos=" + elapsedRealtimeNanos +
-                ", flags=" + flags +
-                ", conservativeHeadingErrorVonMisesKappa=" + conservativeHeadingErrorVonMisesKappa +
-                '}';
+        ToStringHelper helper = ToStringHelper.name("DeviceOrientation");
+        if (hasAttitude()) helper.field("attitude", Arrays.toString(attitude));
+        if (hasAttitudeConfidence()) helper.field("attitudeConfidence", attitudeConfidence);
+        if (hasMagConfidence()) helper.field("magConfidence", magConfidence);
+        if (hasHeadingDegrees()) helper.field("headingDegrees", headingDegrees);
+        if (hasHeadingErrorDegrees()) helper.field("headingErrorDegrees", headingErrorDegrees);
+        if (hasConservativeHeadingErrorVonMisesKappa()) helper.field("conservativeHeadingErrorVonMisesKappa", conservativeHeadingErrorVonMisesKappa);
+        helper.field("elapsedRealtimeNanos", elapsedRealtimeNanos);
+        return helper.end();
     }
 
     public static final Creator<DeviceOrientation> CREATOR = new AutoCreator<DeviceOrientation>(DeviceOrientation.class);

@@ -1,28 +1,21 @@
 /*
- * Copyright (C) 2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2017 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.location;
 
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 /**
- * The detected activity of the device with an an associated confidence. See ActivityRecognitionApi
- * for details on how to obtain a DetectedActivity.
+ * The detected activity of the device with an associated confidence. See {@link ActivityRecognitionApi}
+ * for details on how to obtain a {@link DetectedActivity}.
  */
 @PublicApi
 public class DetectedActivity extends AutoSafeParcelable {
@@ -68,13 +61,13 @@ public class DetectedActivity extends AutoSafeParcelable {
      */
     public static final int WALKING = 7;
 
-    @SafeParceled(1000)
+    @Field(1000)
     private int versionCode = 1;
 
-    @SafeParceled(1)
+    @Field(1)
     private int type;
 
-    @SafeParceled(2)
+    @Field(2)
     private int confidence;
 
     private DetectedActivity() {
@@ -89,13 +82,6 @@ public class DetectedActivity extends AutoSafeParcelable {
      */
     public DetectedActivity(int activityType, int confidence) {
         this.type = activityType;
-        this.confidence = confidence;
-    }
-
-    @PublicApi(exclude = true)
-    public DetectedActivity(int versionCode, int type, int confidence) {
-        this.versionCode = versionCode;
-        this.type = type;
         this.confidence = confidence;
     }
 
@@ -127,17 +113,12 @@ public class DetectedActivity extends AutoSafeParcelable {
         return type;
     }
 
-    @PublicApi(exclude = true)
-    public int getVersionCode() {
-        return versionCode;
-    }
-
     @Override
     public String toString() {
         return "DetectedActivity [type=" + typeToString(getType()) + ", confidence=" + getConfidence() + "]";
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static String typeToString(int type) {
         switch (type) {
             case 0:

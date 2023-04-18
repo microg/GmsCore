@@ -17,12 +17,15 @@
 package com.google.android.gms.location;
 
 import android.app.PendingIntent;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresPermission;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 
 import java.util.List;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
  * The main entry point for interacting with the geofencing APIs.
@@ -38,12 +41,18 @@ import java.util.List;
  */
 @Deprecated
 public interface GeofencingApi {
+    @NonNull
+    @RequiresPermission(ACCESS_FINE_LOCATION)
     PendingResult<Status> addGeofences(GoogleApiClient client, GeofencingRequest geofencingRequest, PendingIntent pendingIntent);
 
     @Deprecated
+    @NonNull
+    @RequiresPermission(ACCESS_FINE_LOCATION)
     PendingResult<Status> addGeofences(GoogleApiClient client, List<Geofence> geofences, PendingIntent pendingIntent);
 
+    @NonNull
     PendingResult<Status> removeGeofences(GoogleApiClient client, List<String> geofenceRequestIds);
 
+    @NonNull
     PendingResult<Status> removeGeofences(GoogleApiClient client, PendingIntent pendingIntent);
 }

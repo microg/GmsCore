@@ -6,6 +6,7 @@
 package com.google.android.gms.location;
 
 import androidx.annotation.IntDef;
+import org.microg.gms.common.Hide;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,6 +16,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE_USE})
 @Retention(RetentionPolicy.SOURCE)
 @IntDef({ThrottleBehavior.THROTTLE_BACKGROUND, ThrottleBehavior.THROTTLE_ALWAYS, ThrottleBehavior.THROTTLE_NEVER})
+@Hide
 public @interface ThrottleBehavior {
     int THROTTLE_BACKGROUND = 0;
     int THROTTLE_ALWAYS = 1;

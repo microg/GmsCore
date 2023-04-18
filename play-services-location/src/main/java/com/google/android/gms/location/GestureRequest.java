@@ -16,8 +16,10 @@
 
 package com.google.android.gms.location;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 
+@Hide
 public class GestureRequest extends AutoSafeParcelable {
     public static final Creator<GestureRequest> CREATOR = new AutoCreator<GestureRequest>(GestureRequest.class);
 }

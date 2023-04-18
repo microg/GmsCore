@@ -3,5 +3,6 @@ package com.google.android.gms.location;
 import android.location.Location;
 
 interface ILocationListener {
-    void onLocationChanged(in Location location);
+    oneway void onLocationChanged(in Location location) = 0;
+    oneway void cancel() = 1;
 }

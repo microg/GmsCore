@@ -10,10 +10,9 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
+import androidx.annotation.NonNull;
+import com.google.android.gms.location.*;
+import com.google.android.gms.tasks.CancellationToken;
 import com.google.android.gms.tasks.Task;
 
 import org.microg.gms.common.api.ReturningGoogleApiCall;
@@ -31,8 +30,32 @@ public class FusedLocationProviderClientImpl extends FusedLocationProviderClient
         return scheduleTask((ReturningGoogleApiCall<Void, LocationClientImpl>) (client) -> null);
     }
 
+    @NonNull
+    @Override
+    public Task<Location> getCurrentLocation(int priority, CancellationToken cancellationToken) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Task<Location> getCurrentLocation(CurrentLocationRequest request, CancellationToken cancellationToken) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Task<Location> getLastLocation(LastLocationRequest request) {
+        return null;
+    }
+
     public Task<Location> getLastLocation() {
         return scheduleTask((ReturningGoogleApiCall<Location, LocationClientImpl>) LocationClientImpl::getLastLocation);
+    }
+
+    @NonNull
+    @Override
+    public Task<LocationAvailability> getLocationAvailability() {
+        return null;
     }
 
     @Override
@@ -68,6 +91,16 @@ public class FusedLocationProviderClientImpl extends FusedLocationProviderClient
     @Override
     public Task<Void> requestLocationUpdates(LocationRequest request, PendingIntent pendingIntent) {
         return scheduleTask((VoidReturningGoogleApiCall<LocationClientImpl>) (client) -> client.requestLocationUpdates(request, pendingIntent));
+    }
+
+    @Override
+    public Task<Void> setMockLocation(Location location) {
+        return null;
+    }
+
+    @Override
+    public Task<Void> setMockMode(boolean mockMode) {
+        return null;
     }
 
     @Override

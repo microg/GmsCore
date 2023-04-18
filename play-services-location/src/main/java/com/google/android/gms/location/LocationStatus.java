@@ -16,11 +16,13 @@
 
 package com.google.android.gms.location;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
 import java.util.Arrays;
 
+@Hide
 public class LocationStatus extends AutoSafeParcelable {
     public static final int STATUS_SUCCESSFUL = 0;
     public static final int STATUS_UNKNOWN = 1;

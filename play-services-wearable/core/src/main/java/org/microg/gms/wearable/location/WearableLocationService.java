@@ -104,24 +104,25 @@ public class WearableLocationService extends WearableListenerService {
     }
 
     private static LocationRequestInternal readLocationRequest(DataMap dataMap, Context context) {
-        LocationRequestInternal request = new LocationRequestInternal();
+        LocationRequest locationRequest = new LocationRequest();
+        LocationRequestInternal request = new LocationRequestInternal(locationRequest);
         request.triggerUpdate = true;
-        request.request = new LocationRequest();
         request.clients = Collections.emptyList();
 
         if (dataMap.containsKey("PRIORITY"))
-            request.request.setPriority(dataMap.getInt("PRIORITY", 0));
+            locationRequest.setPriority(dataMap.getInt("PRIORITY", 0));
         if (dataMap.containsKey("INTERVAL_MS"))
-            request.request.setInterval(dataMap.getLong("INTERVAL_MS", 0));
+            locationRequest.setInterval(dataMap.getLong("INTERVAL_MS", 0));
         if (dataMap.containsKey("FASTEST_INTERVAL_MS"))
-            request.request.setFastestInterval(dataMap.getLong("FASTEST_INTERVAL_MS", 0));
-        //if (dataMap.containsKey("MAX_WAIT_TIME_MS"))
+            locationRequest.setFastestInterval(dataMap.getLong("FASTEST_INTERVAL_MS", 0));
+        if (dataMap.containsKey("MAX_WAIT_TIME_MS"))
+            locationRequest.setMaxWaitTime(dataMap.getLong("MAX_WAIT_TIME_MS", 0));
         if (dataMap.containsKey("SMALLEST_DISPLACEMENT_METERS"))
-            request.request.setSmallestDisplacement(dataMap.getFloat("SMALLEST_DISPLACEMENT_METERS", 0));
+            locationRequest.setSmallestDisplacement(dataMap.getFloat("SMALLEST_DISPLACEMENT_METERS", 0));
         if (dataMap.containsKey("NUM_UPDATES"))
-            request.request.setNumUpdates(dataMap.getInt("NUM_UPDATES", 0));
+            locationRequest.setNumUpdates(dataMap.getInt("NUM_UPDATES", 0));
         if (dataMap.containsKey("EXPIRATION_DURATION_MS"))
-            request.request.setExpirationDuration(dataMap.getLong("EXPIRATION_DURATION_MS", 0));
+            locationRequest.setExpirationDuration(dataMap.getLong("EXPIRATION_DURATION_MS", 0));
         if (dataMap.containsKey("TAG"))
             request.tag = dataMap.getString("TAG");
         if (dataMap.containsKey("CLIENTS_PACKAGE_ARRAY")) {

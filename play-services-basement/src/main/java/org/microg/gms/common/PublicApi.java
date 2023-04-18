@@ -43,6 +43,8 @@ public @interface PublicApi {
      * marked as public api.
      *
      * @return true if the method or field is not part of the public api
+     * @deprecated use {@link Hide} instead
      */
+    @Deprecated
     boolean exclude() default false;
 }

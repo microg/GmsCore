@@ -21,18 +21,24 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
 
+import androidx.annotation.RequiresPermission;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 
 import org.microg.gms.common.ForwardConnectionCallbacks;
 import org.microg.gms.common.ForwardConnectionFailedListener;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.api.AbstractPlayServicesClient;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 /**
  * This class is deprecated as of play services 6.5, do not use it in production systems,
  * it's just a forwarder for the {@link FusedLocationProviderApi}.
  */
 @Deprecated
+@Hide
 public class LocationClient extends AbstractPlayServicesClient {
     public static final String KEY_LOCATION_CHANGED = "com.google.android.location.LOCATION";
 
@@ -46,11 +52,13 @@ public class LocationClient extends AbstractPlayServicesClient {
                 .build());
     }
 
+    @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public Location getLastLocation() {
         assertConnected();
         return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
 
+    @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void requestLocationUpdates(LocationRequest request,
             LocationListener listener) {
         assertConnected();
@@ -58,6 +66,7 @@ public class LocationClient extends AbstractPlayServicesClient {
                 listener).await();
     }
 
+    @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void requestLocationUpdates(LocationRequest request,
             LocationListener listener, Looper looper) {
         assertConnected();
@@ -65,6 +74,7 @@ public class LocationClient extends AbstractPlayServicesClient {
                 listener, looper).await();
     }
 
+    @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void requestLocationUpdates(LocationRequest request,
             PendingIntent callbackIntent) {
         assertConnected();

@@ -16,6 +16,8 @@ import com.google.android.gms.common.api.PendingResult;
  * <p>
  * This API makes it easy for an app to ensure that the device's system settings are properly
  * configured for the app's location needs.
+ *
+ * @deprecated Use GoogleApi-based API {@link SettingsClient} instead.
  */
 @Deprecated
 public interface SettingsApi {

@@ -12,18 +12,20 @@ import com.google.android.gms.location.Granularity;
 import com.google.android.gms.location.LocationRequest;
 
 import com.google.android.gms.location.ThrottleBehavior;
+import org.microg.gms.common.Hide;
 import org.microg.gms.utils.WorkSourceUtil;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.List;
 
+@Hide
 public class LocationRequestInternal extends AutoSafeParcelable {
 
     @Field(1000)
     private int versionCode = 1;
 
     @Field(1)
-    public LocationRequest request;
+    private LocationRequest request;
 
     @Field(2)
     @Deprecated
@@ -94,6 +96,13 @@ public class LocationRequestInternal extends AutoSafeParcelable {
                 ", inaccurateLocationsDelayed=" + waitForAccurateLocation +
                 ", contextAttributeTag=" + contextAttributeTag +
                 '}';
+    }
+
+    public LocationRequestInternal() {
+    }
+
+    public LocationRequestInternal(LocationRequest request) {
+        this.request = request;
     }
 
     @SuppressLint("MissingPermission")

@@ -32,7 +32,7 @@ import java.util.Arrays;
 
 public class GetServiceRequest extends AutoSafeParcelable {
     @Field(1)
-    private int versionCode = 4;
+    private int versionCode = 6;
     @Field(2)
     public final int serviceId;
     @Field(3)
@@ -48,6 +48,7 @@ public class GetServiceRequest extends AutoSafeParcelable {
     @Field(8)
     public Account account;
     @Field(9)
+    @Deprecated
     private long field9;
     @Field(10)
     public Feature[] defaultFeatures;
@@ -60,7 +61,7 @@ public class GetServiceRequest extends AutoSafeParcelable {
     @Field(14)
     private boolean field14;
     @Field(15)
-    private String field15;
+    private String attributionTag;
 
     private GetServiceRequest() {
         serviceId = -1;

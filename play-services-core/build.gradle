@@ -54,19 +54,6 @@ dependencies {
     implementation project(':play-services-safetynet')
     implementation project(':play-services-tasks-ktx')
 
-    runtimeOnly("org.microg.nlp:geocode-v1:$nlpVersion") {
-        exclude group: 'org.microg', module: 'safe-parcel'
-    }
-    runtimeOnly("org.microg.nlp:location-v2:$nlpVersion") {
-        exclude group: 'org.microg', module: 'safe-parcel'
-    }
-    runtimeOnly("org.microg.nlp:location-v3:$nlpVersion") {
-        exclude group: 'org.microg', module: 'safe-parcel'
-    }
-    implementation("org.microg.nlp:ui:$nlpVersion") {
-        exclude group: 'org.microg', module: 'safe-parcel'
-    }
-
     withMapboxImplementation project(':play-services-maps-core-mapbox')
     withVtmImplementation project(':play-services-maps-core-vtm')
 
