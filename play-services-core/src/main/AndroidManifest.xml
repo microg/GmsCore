@@ -135,10 +135,6 @@
         <!-- Location -->
 
         <activity
-            android:name="org.microg.nlp.ui.BackendSettingsActivity"
-            android:process=":ui" />
-
-        <activity
             android:name="org.microg.gms.ui.PlacePickerActivity"
             android:exported="true"
             android:label="@string/pick_place_title"

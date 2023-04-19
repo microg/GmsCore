@@ -8,6 +8,7 @@
 
 package com.google.android.gms.location;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 
@@ -48,15 +49,14 @@ public class GeofencingEvent {
      * @param intent the intent to extract the geofencing event data from
      * @return a {@link GeofencingEvent} object or {@code null} if the given intent is {@code null}
      */
+
     public static GeofencingEvent fromIntent(Intent intent) {
         if (intent == null) {
             return null;
         }
         GeofencingEvent event = new GeofencingEvent();
         event.errorCode = intent.getIntExtra(EXTRA_ERROR_CODE, -1);
-        event.geofenceTransition = intent.getIntExtra(EXTRA_TRANSITION, -1);
-        if (event.geofenceTransition != 1 && event.geofenceTransition != 2 && event.geofenceTransition != 4)
-            event.geofenceTransition = -1;
+        event.geofenceTransition = validate(intent.getIntExtra(EXTRA_TRANSITION, -1));
         ArrayList<byte[]> parceledGeofences = (ArrayList<byte[]>) intent.getSerializableExtra(EXTRA_GEOFENCE_LIST);
         if (parceledGeofences != null) {
             event.triggeringGeofences = new ArrayList<Geofence>();
@@ -66,6 +66,14 @@ public class GeofencingEvent {
         }
         event.triggeringLocation = intent.getParcelableExtra(EXTRA_TRIGGERING_LOCATION);
         return event;
+    }
+
+    @SuppressLint("WrongConstant")
+    private static @Geofence.GeofenceTransition int validate(@Geofence.GeofenceTransition int geofenceTransition) {
+        if (geofenceTransition != Geofence.GEOFENCE_TRANSITION_ENTER && geofenceTransition != Geofence.GEOFENCE_TRANSITION_EXIT && geofenceTransition != Geofence.GEOFENCE_TRANSITION_DWELL) {
+            return -1;
+        }
+        return geofenceTransition;
     }
 
     /**

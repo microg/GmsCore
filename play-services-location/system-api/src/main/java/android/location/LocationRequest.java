@@ -72,6 +72,7 @@ import android.os.WorkSource;
  *
  * @hide
  */
+@SuppressWarnings("WrongConstant")
 public final class LocationRequest implements Parcelable {
     /**
      * Used with {@link #setQuality} to request the most accurate locations available.

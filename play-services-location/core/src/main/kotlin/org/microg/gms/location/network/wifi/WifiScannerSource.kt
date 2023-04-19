@@ -5,6 +5,7 @@
 
 package org.microg.gms.location.network.wifi
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiScanner
@@ -12,6 +13,7 @@ import android.os.WorkSource
 import android.util.Log
 import org.microg.gms.location.network.TAG
 
+@SuppressLint("WrongConstant")
 class WifiScannerSource(private val context: Context, private val callback: WifiDetailsCallback) : WifiDetailsSource {
     override fun startScan(workSource: WorkSource?) {
         val scanner = context.getSystemService("wifiscanner") as WifiScanner
