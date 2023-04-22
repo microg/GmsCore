@@ -21,7 +21,7 @@ public final class Dot extends PatternItem {
      * Constructs a {@code Dot}.
      */
     public Dot() {
-        super(1, null);
+        super(1, 0.0f);
     }
 
     @NonNull
