@@ -122,7 +122,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    suspend fun handleRequest(options: RequestOptions) {
+    suspend fun handleRequest(options: RequestOptions, allowInstant: Boolean = true) {
         try {
             val facetId = getFacetId(this, options, callerPackage)
             options.checkIsValid(this, facetId, callerPackage)
@@ -135,10 +135,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             Log.d(TAG, "facetId=$facetId, appName=$appName")
 
             // Check if we can directly open screen lock handling
-            if (!requiresPrivilege) {
+            if (!requiresPrivilege && allowInstant) {
                 val instantTransport = transportHandlers.firstOrNull { it.isSupported && it.shouldBeUsedInstantly(options) }
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
-                    startTransportHandling(instantTransport.transport)
+                    startTransportHandling(instantTransport.transport, true)
                     return
                 }
             }
@@ -250,10 +250,18 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         return shouldStartTransportInstantly(SCREEN_LOCK)
     }
 
-    fun startTransportHandling(transport: Transport): Job = lifecycleScope.launchWhenResumed {
+    @RequiresApi(24)
+    fun startTransportHandling(transport: Transport, instant: Boolean = false): Job = lifecycleScope.launchWhenResumed {
         val options = options ?: return@launchWhenResumed
         try {
             finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage), transport)
+        } catch (e: SecurityException) {
+            Log.w(TAG, e)
+            if (instant) {
+                handleRequest(options, false)
+            } else {
+                finishWithError(SECURITY_ERR, e.message ?: e.javaClass.simpleName)
+            }
         } catch (e: CancellationException) {
             Log.w(TAG, e)
             // Ignoring cancellation here

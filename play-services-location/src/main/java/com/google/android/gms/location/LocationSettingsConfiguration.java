@@ -5,8 +5,10 @@
 
 package com.google.android.gms.location;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 
+@Hide
 public class LocationSettingsConfiguration extends AutoSafeParcelable {
     @Field(1)
     public String justificationText;

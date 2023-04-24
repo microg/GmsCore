@@ -18,9 +18,11 @@ package com.google.android.gms.location.internal;
 
 import com.google.android.gms.common.api.Status;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+@Hide
 public class FusedLocationProviderResult extends AutoSafeParcelable {
     public static final FusedLocationProviderResult SUCCESS = FusedLocationProviderResult.create(Status.SUCCESS);
 

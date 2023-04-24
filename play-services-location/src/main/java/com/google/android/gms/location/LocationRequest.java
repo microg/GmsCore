@@ -15,7 +15,7 @@ import android.os.WorkSource;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
-import com.google.android.gms.common.internal.ClientIdentity;
+import com.google.android.gms.location.internal.ClientIdentity;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.location.GranularityUtil;
 import org.microg.gms.location.PriorityUtil;

@@ -1,24 +1,24 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2017 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.location;
 
 import android.os.SystemClock;
 
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntDef;
+import androidx.annotation.IntRange;
 import com.google.android.gms.location.internal.ParcelableGeofence;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Represents a geographical region, also known as a geofence. Geofences can be monitored by
@@ -44,12 +44,49 @@ public interface Geofence {
     long NEVER_EXPIRE = -1L;
 
     /**
+     * Returns the expiration elapsed realtime of geofence in milliseconds, or {@link #NEVER_EXPIRE} if there's no expiration. When positive, this geofence will
+     * be removed automatically after that time.
+     */
+    long getExpirationTime();
+
+    /**
+     * Returns latitude in degrees, between -90 and +90 inclusive.
+     */
+    double getLatitude();
+
+    /**
+     * Returns the delay between {@link #GEOFENCE_TRANSITION_ENTER} and {@link #GEOFENCE_TRANSITION_DWELL} in milliseconds.
+     */
+    int getLoiteringDelay();
+
+    /**
+     * Returns longitude in degrees, between -180 and +180 inclusive.
+     */
+    double getLongitude();
+
+    /**
+     * Returns the best-effort description of how soon should the callback be called when the transition associated with the geofence is triggered,
+     * in milliseconds.
+     */
+    int getNotificationResponsiveness();
+
+    /**
+     * Returns radius in meters.
+     */
+    float getRadius();
+
+    /**
      * Returns the request ID of this geofence. The request ID is a string to identify this geofence
      * inside your application. When two geofences with the same requestId are monitored, the new
      * one will replace the old one regardless the geographical region these two geofences
      * represent.
      */
     String getRequestId();
+
+    /**
+     * Returns the transition types of interest as a bitwise-OR of {@code GEOFENCE_TRANSITION_} flags.
+     */
+    @TransitionTypes int getTransitionTypes();
 
     /**
      * A builder that builds {@link Geofence}.
@@ -63,7 +100,7 @@ public interface Geofence {
         private int loiteringDelay = -1;
         private int notificationResponsiveness;
         private String requestId;
-        private int transitionTypes;
+        private @TransitionTypes int transitionTypes;
 
         /**
          * Creates a geofence object.
@@ -95,7 +132,7 @@ public interface Geofence {
          * @param longitude longitude in degrees, between -180 and +180 inclusive
          * @param radius    radius in meters
          */
-        public Builder setCircularRegion(double latitude, double longitude, float radius) {
+        public Builder setCircularRegion(@FloatRange(from = -90.0d, to = 90.0d) double latitude, @FloatRange(from = -180.0d, to = 180.0d) double longitude, @FloatRange(from = 0.0d, fromInclusive = false) float radius) {
             this.regionType = 1;
             this.latitude = latitude;
             this.longitude = longitude;
@@ -139,7 +176,7 @@ public interface Geofence {
          *                                     to 300000 milliseconds the callback will be called 5
          *                                     minutes within entering or exiting the geofence.
          */
-        public Builder setNotificationResponsiveness(int notificationResponsivenessMs) {
+        public Builder setNotificationResponsiveness(@IntRange(from = 0) int notificationResponsivenessMs) {
             this.notificationResponsiveness = notificationResponsivenessMs;
             return this;
         }
@@ -164,9 +201,29 @@ public interface Geofence {
          * @param transitionTypes geofence transition types of interest, as a bitwise-OR of
          *                        GEOFENCE_TRANSITION_ flags.
          */
-        public Builder setTransitionTypes(int transitionTypes) {
+        public Builder setTransitionTypes(@TransitionTypes int transitionTypes) {
             this.transitionTypes = transitionTypes;
             return this;
         }
+    }
+
+    /**
+     * Geofence transition event.
+     */
+    @Target({ElementType.TYPE_USE})
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({GEOFENCE_TRANSITION_ENTER, GEOFENCE_TRANSITION_EXIT, GEOFENCE_TRANSITION_DWELL})
+    @interface GeofenceTransition {
+
+    }
+
+    /**
+     * Geofence transition types of interest, as either 0 or a bitwise-OR of {@code GEOFENCE_TRANSITION_} flags.
+     */
+    @Target({ElementType.TYPE_USE})
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef(value = {GEOFENCE_TRANSITION_ENTER, GEOFENCE_TRANSITION_EXIT, GEOFENCE_TRANSITION_DWELL}, flag = true)
+    @interface TransitionTypes {
+
     }
 }

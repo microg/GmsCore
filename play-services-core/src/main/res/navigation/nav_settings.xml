@@ -12,9 +12,6 @@
         android:name="org.microg.gms.ui.SettingsFragment"
         android:label="@string/gms_settings_name">
         <action
-            android:id="@+id/openUnifiedNlpSettings"
-            app:destination="@id/nav_unlp" />
-        <action
             android:id="@+id/openSelfcheck"
             app:destination="@id/selfcheckFragment" />
         <action
@@ -154,6 +151,5 @@
 
     <!-- Included -->
 
-    <include app:graph="@navigation/nav_unlp" />
     <include app:graph="@navigation/nav_nearby" />
 </navigation>

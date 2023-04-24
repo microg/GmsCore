@@ -30,6 +30,7 @@ public class ActivityRecognition {
      *
      * @deprecated Use {@link ActivityRecognitionClient} instead.
      */
+    @Deprecated
     public static final Api<Api.ApiOptions.NoOptions> API = new Api<Api.ApiOptions.NoOptions>(new ActivityRecognitionApiClientBuilder());
 
     /**
@@ -37,6 +38,7 @@ public class ActivityRecognition {
      *
      * @deprecated Use {@link ActivityRecognitionClient} instead.
      */
+    @Deprecated
     public static final ActivityRecognitionApi ActivityRecognitionApi = new ActivityRecognitionApiImpl();
 
     /**

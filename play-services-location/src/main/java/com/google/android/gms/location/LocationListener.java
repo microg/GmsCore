@@ -17,6 +17,7 @@
 package com.google.android.gms.location;
 
 import android.location.Location;
+import androidx.annotation.NonNull;
 
 /**
  * Used for receiving notifications from the {@link FusedLocationProviderApi} when the location has
@@ -30,5 +31,5 @@ public interface LocationListener {
      *
      * @param location The updated location.
      */
-    public void onLocationChanged(Location location);
+    public void onLocationChanged(@NonNull Location location);
 }

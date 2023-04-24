@@ -8,20 +8,18 @@ apply plugin: 'kotlin-android'
 
 dependencies {
     api project(':play-services-location')
+    compileOnly project(':play-services-location-system-api')
     implementation project(':play-services-base-core')
-
-    runtimeOnly("org.microg.nlp:service:$nlpVersion") {
-        exclude group: 'org.microg', module: 'safe-parcel'
-    }
-    api("org.microg.nlp:client:$nlpVersion") {
-        exclude group: 'org.microg', module: 'safe-parcel'
-    }
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+
+    implementation "com.android.volley:volley:$volleyVersion"
+
+    implementation 'org.microg:address-formatter:0.3.1'
 }
 
 android {
@@ -32,6 +30,10 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
     }
 
     compileOptions {

@@ -1,26 +1,20 @@
 /*
- * Copyright (C) 2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2017 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.location;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 
 import com.google.android.gms.location.internal.ParcelableGeofence;
 
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.SafeParcelUtil;
 
@@ -35,17 +29,17 @@ import java.util.List;
  */
 @PublicApi
 public class GeofencingEvent {
-    @PublicApi(exclude = true)
+    @Hide
     public static final String EXTRA_ERROR_CODE = "gms_error_code";
-    @PublicApi(exclude = true)
+    @Hide
     public static final String EXTRA_TRIGGERING_LOCATION = "com.google.android.location.intent.extra.triggering_location";
-    @PublicApi(exclude = true)
+    @Hide
     public static final String EXTRA_TRANSITION = "com.google.android.location.intent.extra.transition";
-    @PublicApi(exclude = true)
+    @Hide
     public static final String EXTRA_GEOFENCE_LIST = "com.google.android.location.intent.extra.geofence_list";
 
     private int errorCode;
-    private int geofenceTransition;
+    private @Geofence.GeofenceTransition int geofenceTransition;
     private List<Geofence> triggeringGeofences;
     private Location triggeringLocation;
 
@@ -55,15 +49,14 @@ public class GeofencingEvent {
      * @param intent the intent to extract the geofencing event data from
      * @return a {@link GeofencingEvent} object or {@code null} if the given intent is {@code null}
      */
+
     public static GeofencingEvent fromIntent(Intent intent) {
         if (intent == null) {
             return null;
         }
         GeofencingEvent event = new GeofencingEvent();
         event.errorCode = intent.getIntExtra(EXTRA_ERROR_CODE, -1);
-        event.geofenceTransition = intent.getIntExtra(EXTRA_TRANSITION, -1);
-        if (event.geofenceTransition != 1 && event.geofenceTransition != 2 && event.geofenceTransition != 4)
-            event.geofenceTransition = -1;
+        event.geofenceTransition = validate(intent.getIntExtra(EXTRA_TRANSITION, -1));
         ArrayList<byte[]> parceledGeofences = (ArrayList<byte[]>) intent.getSerializableExtra(EXTRA_GEOFENCE_LIST);
         if (parceledGeofences != null) {
             event.triggeringGeofences = new ArrayList<Geofence>();
@@ -73,6 +66,14 @@ public class GeofencingEvent {
         }
         event.triggeringLocation = intent.getParcelableExtra(EXTRA_TRIGGERING_LOCATION);
         return event;
+    }
+
+    @SuppressLint("WrongConstant")
+    private static @Geofence.GeofenceTransition int validate(@Geofence.GeofenceTransition int geofenceTransition) {
+        if (geofenceTransition != Geofence.GEOFENCE_TRANSITION_ENTER && geofenceTransition != Geofence.GEOFENCE_TRANSITION_EXIT && geofenceTransition != Geofence.GEOFENCE_TRANSITION_DWELL) {
+            return -1;
+        }
+        return geofenceTransition;
     }
 
     /**
@@ -93,7 +94,7 @@ public class GeofencingEvent {
      * transition alert; Otherwise returns the GEOFENCE_TRANSITION_ flags value defined in
      * {@link Geofence}.
      */
-    public int getGeofenceTransition() {
+    public @Geofence.GeofenceTransition int getGeofenceTransition() {
         return geofenceTransition;
     }
 

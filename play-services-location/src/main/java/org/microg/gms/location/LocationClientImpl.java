@@ -98,6 +98,11 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
                 public void onLocationChanged(Location location) throws RemoteException {
                     listener.onLocationChanged(location);
                 }
+
+                @Override
+                public void cancel() throws RemoteException {
+
+                }
             });
         }
         getServiceInterface().requestLocationUpdatesWithPackage(request, listenerMap.get(listener), getContext().getPackageName());
@@ -120,6 +125,11 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
                 public void onLocationChanged(Location location) throws RemoteException {
                     executor.execute(() -> listener.onLocationChanged(location));
                 }
+
+                @Override
+                public void cancel() throws RemoteException {
+
+                }
             });
         }
         getServiceInterface().requestLocationUpdatesWithPackage(request, listenerMap.get(listener), getContext().getPackageName());
@@ -136,6 +146,11 @@ public class LocationClientImpl extends GoogleLocationManagerClient {
                 @Override
                 public void onLocationChanged(Location location) throws RemoteException {
                     executor.execute(() -> callback.onLocationResult(LocationResult.create(Collections.singletonList(location))));
+                }
+
+                @Override
+                public void cancel() throws RemoteException {
+
                 }
             });
         }

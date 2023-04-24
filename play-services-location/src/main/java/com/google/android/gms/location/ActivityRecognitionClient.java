@@ -64,24 +64,42 @@ public interface ActivityRecognitionClient extends HasApiKey<Api.ApiOptions.NoOp
     Task<Void> removeSleepSegmentUpdates(PendingIntent callbackIntent);
 
     /**
-     * @param activityTransitionRequest
-     * @param pendingIntent
+     * Activity Recognition Transition API provides an ability for apps to subscribe to activity transitional conditions (enter, exit). For example, a
+     * messaging app that wants to build a distraction free driving experiences can ask -- tell me when user has entered the vehicle or exited the vehicle. It
+     * doesn't have to worry about user being {@link DetectedActivity#STILL} at the traffic signal, or any other transient activities while in vehicle
+     * ({@link DetectedActivity#IN_VEHICLE}), that is, the API will fence around the activity boundaries using Activity Recognition Filtering.
+     *
+     * @param activityTransitionRequest the interested activity transitions
+     * @param pendingIntent             the {@link PendingIntent} used to generate the callback intent when one of the interested transition has happened
      * @return a {@link Task} for apps to check the status of the call. If the task fails, the status code for the
      * failure can be found by examining {@link ApiException#getStatusCode()}.
      */
     Task<Void> requestActivityTransitionUpdates(ActivityTransitionRequest activityTransitionRequest, PendingIntent pendingIntent);
 
     /**
-     * @param detectionIntervalMillis
-     * @param callbackIntent
+     * Register for activity recognition updates.
+     * <p>
+     * The activities are detected by periodically waking up the device and reading short bursts of sensor data. It only makes use of low power sensors in order
+     * to keep the power usage to a minimum. For example, it can detect if the user is currently on foot, in a car, on a bicycle or still. See
+     * {@link DetectedActivity} for more details.
+     *
+     * @param detectionIntervalMillis the desired time between activity detections. Larger values will result in fewer activity detections while improving
+     *                                battery life. A value of 0 will result in activity detections at the fastest possible rate. Note that a fast rate can
+     *                                result in excessive device wakelocks and power consumption.
+     * @param callbackIntent          a PendingIntent to be sent for each activity detection.
      * @return a {@link Task} for apps to check the status of the call. If the task fails, the status code for the
      * failure can be found by examining {@link ApiException#getStatusCode()}.
      */
     Task<Void> requestActivityUpdates(long detectionIntervalMillis, PendingIntent callbackIntent);
 
     /**
-     * @param callbackIntent
-     * @param sleepSegmentRequest
+     * Registers for detected user sleep time ({@code SleepSegmentEvent}) and/or periodic sleep activity classification results ({@code SleepClassifyEvent})
+     * based on the data type specified in {@link SleepSegmentRequest}. It is advised to the apps to re-register after device reboot or app upgrade, from a
+     * receiver that handles {@code android.intent.action.BOOT_COMPLETED} and {@code android.intent.action.MY_PACKAGE_REPLACED} events.
+     *
+     * @param callbackIntent      a PendingIntent to be sent for each sleep segment or classification result
+     * @param sleepSegmentRequest a {@link SleepSegmentRequest} that specifies whether to receive both {@code SleepSegmentEvent}s and
+     *                            {@code SleepClassifyEvent}s, or {@code SleepSegmentEvent}s only, or {@code SleepClassifyEvent}s only.
      * @return a {@link Task} for apps to check the status of the call. If the task fails, the status code for the
      * failure can be found by examining {@link ApiException#getStatusCode()}.
      */

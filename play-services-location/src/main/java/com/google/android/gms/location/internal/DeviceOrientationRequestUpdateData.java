@@ -7,8 +7,10 @@ package com.google.android.gms.location.internal;
 
 import com.google.android.gms.location.IDeviceOrientationListener;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 
+@Hide
 public class DeviceOrientationRequestUpdateData extends AutoSafeParcelable {
     public static final int REQUEST_UPDATES = 1;
     public static final int REMOVE_UPDATES = 2;

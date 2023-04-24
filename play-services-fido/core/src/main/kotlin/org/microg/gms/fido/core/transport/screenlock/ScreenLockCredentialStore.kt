@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import android.util.Log
@@ -20,6 +21,7 @@ import java.security.cert.Certificate
 import java.security.spec.ECGenParameterSpec
 import kotlin.random.Random
 
+@RequiresApi(23)
 class ScreenLockCredentialStore(val context: Context) {
     private val keyStore by lazy { KeyStore.getInstance("AndroidKeyStore").apply { load(null) } }
 
@@ -51,10 +53,15 @@ class ScreenLockCredentialStore(val context: Context) {
         keyStore.getCertificateChain(getAlias(rpId, keyId))
 
     fun getSignature(rpId: String, keyId: ByteArray): Signature? {
-        val privateKey = getPrivateKey(rpId, keyId) ?: return null
-        val signature = Signature.getInstance("SHA256withECDSA")
-        signature.initSign(privateKey)
-        return signature
+        try {
+            val privateKey = getPrivateKey(rpId, keyId) ?: return null
+            val signature = Signature.getInstance("SHA256withECDSA")
+            signature.initSign(privateKey)
+            return signature
+        } catch (e: KeyPermanentlyInvalidatedException) {
+            keyStore.deleteEntry(getAlias(rpId, keyId))
+            throw e
+        }
     }
 
     fun containsKey(rpId: String, keyId: ByteArray): Boolean = keyStore.containsAlias(getAlias(rpId, keyId))
