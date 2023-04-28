@@ -13,7 +13,6 @@ public class ModuleDescriptor {
     public static final int MODULE_VERSION = 2;
     public static final List<String> MERGED_CLASSES = Arrays.asList(
             "org.chromium.net.ApiVersion",
-            "org.chromium.net.BidirectionalStream",
             "org.chromium.net.CallbackException",
             "org.chromium.net.CronetEngine",
             "org.chromium.net.CronetException",
@@ -24,8 +23,7 @@ public class ModuleDescriptor {
             "org.chromium.net.ICronetEngineBuilder",
             "org.chromium.net.InlineExecutionProhibitedException",
             "org.chromium.net.NetworkException",
-            "org.chromium.net.NetworkQualityRttListener",
-            "org.chromium.net.NetworkQualityThroughputListener",
+            
             "org.chromium.net.QuicException",
             "org.chromium.net.RequestFinishedInfo",
             "org.chromium.net.UploadDataProvider",
@@ -33,5 +31,5 @@ public class ModuleDescriptor {
             "org.chromium.net.UploadDataSink",
             "org.chromium.net.UrlRequest",
             "org.chromium.net.UrlResponseInfo"
-    );
+  
 }
