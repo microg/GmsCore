@@ -808,10 +808,17 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             if (initialized) {
                 Log.d(TAG, "Invoking callback instantly, as map is initialized")
                 runCallback()
-            } else if (mapView?.isShown != true) {
-                // If map is not shown, an app (e.g. Dott) may expect it to initialize anyway – before showing it
-                Log.d(TAG, "Invoking callback instantly: map cannot be initialized because it is not shown (yet)")
-                runCallback()
+            } else if (mapView?.isShown == false) {
+                /* If map is hidden, an app (e.g. Dott) may expect it to initialize anyway and
+                 * will not show the map until it is initialized. However, we should not call
+                 * the callback before onCreate is started (we know this is the case if mapView is
+                 * null), otherwise that results in other problems (e.g. Gas Now app not
+                 * initializing).
+                 */
+                mapView?.post {
+                    Log.d(TAG, "Invoking callback now: map cannot be initialized because it is not shown (yet)")
+                    runCallback()
+                }
             } else {
                 Log.d(TAG, "Delay callback invocation, as map is not yet initialized")
                 initializedCallbackList.add { runCallback() }
