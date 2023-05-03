@@ -456,10 +456,13 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         val map = map
         if (map == null) {
             // Snapshot cannot be taken
+            Log.e(TAG, "snapshot could not be taken because map is null")
             runOnMainLooper { callback.onBitmapWrappedReady(ObjectWrapper.wrap(null)) }
         } else {
+            Log.d(TAG, "taking snapshot")
             map.snapshot {
                 runOnMainLooper {
+                    Log.d(TAG, "snapshot ready, providing to application")
                     callback.onBitmapWrappedReady(ObjectWrapper.wrap(it))
                 }
             }

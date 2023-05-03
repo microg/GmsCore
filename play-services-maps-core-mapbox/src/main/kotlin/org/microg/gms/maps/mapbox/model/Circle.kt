@@ -285,7 +285,7 @@ class CircleImpl(private val map: GoogleMapImpl, private val id: String, options
 
             it.lineWidth = strokeWidth / map.dpiFactor
 
-            (strokePattern ?: listOf(Dash(1f))).let { pattern ->
+            (strokePattern ?: emptyList()).let { pattern ->
                 val bitmapName = pattern.getName(strokeColor, strokeWidth)
                 map.addBitmap(bitmapName, pattern.makeBitmap(strokeColor, strokeWidth))
                 line.annotation?.linePattern = bitmapName

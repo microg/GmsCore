@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.Dash
 import com.google.android.gms.maps.model.Dot
 import com.google.android.gms.maps.model.Gap
 import com.google.android.gms.maps.model.PatternItem
+import kotlin.math.max
 
 fun PatternItem.getName(): String = when (this) {
     is Dash -> "dash${this.length}"
@@ -18,9 +19,12 @@ fun PatternItem.getName(): String = when (this) {
 /**
  * Name of pattern, to identify it after it is added to map
  */
-fun List<PatternItem>.getName(color: Int, strokeWidth: Float, skew: Float = 1f) = joinToString("-") {
-    it.getName()
-} + "-${color}-width${strokeWidth}-skew${skew}"
+fun List<PatternItem>.getName(color: Int, strokeWidth: Float, skew: Float = 1f) = if (isEmpty()) {
+    "solid-${color}"
+} else {joinToString("-") {
+        it.getName()
+    } + "-${color}-width${strokeWidth}-skew${skew}"
+}
 
 /**
  * Gets width that a bitmap for this pattern item would have if the pattern's bitmap
@@ -50,6 +54,14 @@ fun List<PatternItem>.makeBitmap(paint: Paint, strokeWidth: Float, skew: Float):
     // Pattern aspect ratio is not respected by renderer
     val width = getWidth(strokeWidth, skew).toInt()
     val height = (strokeWidth * skew).toInt() // avoids squished image bugs
+
+    // For empty list or nonsensical input (zero-width items)
+    if (width == 0 || height == 0) {
+        val nonZeroHeight = max(1f, strokeWidth)
+        return Bitmap.createBitmap(1, nonZeroHeight.toInt(), Bitmap.Config.ARGB_8888).also {
+            Canvas(it).drawRect(0f, 0f, nonZeroHeight, nonZeroHeight, paint)
+        }
+    }
 
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)

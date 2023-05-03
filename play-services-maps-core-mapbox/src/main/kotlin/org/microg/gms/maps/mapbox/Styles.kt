@@ -128,7 +128,7 @@ class Styler(
     @SerializedName("invert_lightness") val invertLightness: Boolean?,
     val visibility: String?,
     val color: String?,
-    val weight: Int?
+    //val weight: Int?
 )
 
 /**
