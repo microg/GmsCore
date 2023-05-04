@@ -120,6 +120,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
     var locationEnabled: Boolean = false
 
+    var isStarted = false
+
     init {
         BitmapDescriptorFactoryImpl.initialize(mapContext.resources, context.resources)
         LibraryLoader.setLibraryLoader(MultiArchLoader(mapContext, context))
@@ -459,7 +461,15 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             Log.e(TAG, "snapshot could not be taken because map is null")
             runOnMainLooper { callback.onBitmapWrappedReady(ObjectWrapper.wrap(null)) }
         } else {
-            Log.d(TAG, "taking snapshot")
+            if (!isStarted) {
+                Log.w(TAG, "Caller did not call onStart() before taking snapshot. Calling onStart() now, for snapshot not to fail.")
+                // Snapshots fail silently if onStart had not been called. This is the case with Signal.
+                onStart()
+                isStarted = true
+            }
+
+            Log.d(TAG, "taking snapshot now")
+
             map.snapshot {
                 runOnMainLooper {
                     Log.d(TAG, "snapshot ready, providing to application")
@@ -779,10 +789,12 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     }
 
     override fun onStart() {
+        isStarted = true
         mapView?.onStart()
     }
 
     override fun onStop() {
+        isStarted = false
         mapView?.onStop()
     }
 
