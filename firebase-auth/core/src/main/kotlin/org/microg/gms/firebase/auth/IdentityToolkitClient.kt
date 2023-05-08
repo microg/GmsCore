@@ -39,7 +39,7 @@ class IdentityToolkitClient(context: Context, private val apiKey: String) {
         queue.add(JsonObjectRequest(POST, buildRelyingPartyUrl(method), data, {
             continuation.resume(it)
         }, {
-            Log.d(TAG, String(it.networkResponse.data))
+            Log.d(TAG, "Error: ${it.networkResponse?.data?.decodeToString() ?: it.message}")
             continuation.resumeWithException(RuntimeException(it))
         }))
     }
