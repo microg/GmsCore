@@ -37,6 +37,14 @@ buildscript {
     ext.androidTargetSdk = 29
     ext.androidCompileSdk = 33
 
+    ext.localProperties = new Properties()
+
+    try {
+        ext.localProperties.load(rootProject.file('local.properties').newDataInputStream())
+    } catch (ignored) {
+        // Ignore
+    }
+
     repositories {
         mavenCentral()
         google()

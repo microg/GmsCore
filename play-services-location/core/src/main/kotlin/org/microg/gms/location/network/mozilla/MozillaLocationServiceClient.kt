@@ -7,11 +7,13 @@ package org.microg.gms.location.network.mozilla
 
 import android.content.Context
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import com.android.volley.Request.Method
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import org.microg.gms.location.core.BuildConfig
 import org.microg.gms.location.network.NetworkLocationService
 import org.microg.gms.location.network.cell.CellDetails
 import org.microg.gms.location.network.precision
@@ -66,7 +68,9 @@ class MozillaLocationServiceClient(context: Context) {
     }
 
     private suspend fun rawGeoLocate(request: GeolocateRequest): GeolocateResponse = suspendCoroutine { continuation ->
-        queue.add(JsonObjectRequest(Method.POST, GEOLOCATE_URL.format(API_KEY), request.toJson(), {
+        queue.add(JsonObjectRequest(Method.POST, Uri.parse(GEOLOCATE_URL).buildUpon().apply {
+            if (API_KEY != null) appendQueryParameter("key", API_KEY)
+        }.build().toString(), request.toJson(), {
             continuation.resume(it.toGeolocateResponse())
         }, {
             continuation.resumeWithException(it)
@@ -75,11 +79,11 @@ class MozillaLocationServiceClient(context: Context) {
 
     companion object {
         private const val TAG = "MozillaLocation"
-        private const val GEOLOCATE_URL = "https://location.services.mozilla.com/v1/geolocate?key=%s"
-        private const val API_KEY = "068ab754-c06b-473d-a1e5-60e7b1a2eb77"
+        private const val GEOLOCATE_URL = "https://location.services.mozilla.com/v1/geolocate"
         private const val WIFI_BASE_PRECISION_COUNT = 8.0
         private const val CELL_DEFAULT_PRECISION = 1.0
         private const val CELL_FALLBACK_PRECISION = 0.5
+        private val API_KEY: String? = BuildConfig.ICHNAEA_KEY.takeIf { it.isNotBlank() }
         const val LOCATION_EXTRA_FALLBACK = "fallback"
     }
 

@@ -38,16 +38,6 @@ def execResult(...args) {
     return stdout.toString().trim()
 }
 
-def mapboxKey() {
-    Properties properties = new Properties()
-    try {
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    } catch (ignored) {
-        // Ignore
-    }
-    return properties.getProperty("mapbox.key", "invalid")
-}
-
 android {
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
@@ -56,7 +46,7 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-        buildConfigField "String", "MAPBOX_KEY", "\"${mapboxKey()}\""
+        buildConfigField "String", "MAPBOX_KEY", "\"${localProperties.getProperty("mapbox.key", "")}\""
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
