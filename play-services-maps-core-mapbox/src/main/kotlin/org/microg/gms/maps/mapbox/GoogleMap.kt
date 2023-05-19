@@ -65,8 +65,8 @@ import org.microg.gms.maps.mapbox.utils.toMapbox
 
 private fun <T : Any> LongSparseArray<T>.values() = (0 until size()).mapNotNull { valueAt(it) }
 
-fun runOnMainLooper(method: () -> Unit) {
-    if (Looper.myLooper() == Looper.getMainLooper()) {
+fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
+    if (!forceQueue && Looper.myLooper() == Looper.getMainLooper()) {
         method()
     } else {
         Handler(Looper.getMainLooper()).post {
@@ -827,7 +827,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                  * null), otherwise that results in other problems (e.g. Gas Now app not
                  * initializing).
                  */
-                mapView?.post {
+                runOnMainLooper(forceQueue = true) {
                     Log.d(TAG, "Invoking callback now: map cannot be initialized because it is not shown (yet)")
                     runCallback()
                 }
