@@ -73,6 +73,14 @@ data class GcmPrefs(
             gcmPrefs.setEnabled(context, config.enabled)
         }
 
+        fun setEnabled(context: Context, enabled: Boolean) {
+            val prefs = get(context)
+            setSettings(context, Gcm.getContentUri(context)) {
+                put(Gcm.ENABLE_GCM, enabled)
+            }
+            prefs.setEnabled(context, enabled)
+        }
+
         @JvmStatic
         fun clearLastPersistedId(context: Context) {
             setSettings(context, Gcm.getContentUri(context)) {

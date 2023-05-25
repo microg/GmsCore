@@ -15,12 +15,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import org.microg.gms.checkin.CheckinPrefs
+import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.checkin.CheckinService
 import org.microg.gms.checkin.LastCheckinInfo
 import org.microg.gms.common.ForegroundServiceContext
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.common.Utils
 import org.microg.gms.gcm.GcmConstants.*
 import org.microg.gms.ui.AskPushPermission
 import java.util.concurrent.atomic.AtomicBoolean
@@ -30,7 +29,7 @@ import kotlin.coroutines.suspendCoroutine
 private const val TAG = "GmsGcmRegister"
 
 private suspend fun ensureCheckinIsUpToDate(context: Context) {
-    if (!CheckinPrefs.isEnabled(context)) throw RuntimeException("Checkin disabled")
+    if (!CheckinPreferences.isEnabled(context)) throw RuntimeException("Checkin disabled")
     val lastCheckin = LastCheckinInfo.read(context).lastCheckin
     if (lastCheckin < System.currentTimeMillis() - CheckinService.MAX_VALID_CHECKIN_AGE) {
         val resultData: Bundle = suspendCoroutine { continuation ->

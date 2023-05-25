@@ -8,6 +8,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/exposure_enable_switch"
+        android:key="pref_exposure_enabled"
+        android:persistent="false" />
+
     <Preference
         android:key="pref_exposure_enable_info"
         android:selectable="false"
