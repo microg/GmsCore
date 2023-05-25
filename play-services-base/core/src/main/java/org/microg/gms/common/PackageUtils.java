@@ -211,7 +211,7 @@ public class PackageUtils {
         if (suggestedCallerPid > 0 && suggestedCallerPid != callingPid) {
             throw new SecurityException("suggested PID [" + suggestedCallerPid + "] and real calling PID [" + callingPid + "] mismatch!");
         }
-        return getAndCheckPackage(context, suggestedPackageName, callingUid, Binder.getCallingPid());
+        return getAndCheckPackage(context, suggestedPackageName, callingUid, callingPid);
     }
 
     @Nullable

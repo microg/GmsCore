@@ -11,8 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.google.android.gms.R
-import org.microg.gms.checkin.CheckinPrefs
+import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.gcm.GcmDatabase
+import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.gms.safetynet.SafetyNetPreferences
 import org.microg.tools.ui.ResourceSettingsFragment
@@ -34,7 +35,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             true
         }
         findPreference<Preference>(PREF_LOCATION)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            // TODO
+            findNavController().navigate(requireContext(), R.id.openLocationSettings)
             true
         }
         findPreference<Preference>(PREF_EXPOSURE)?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -51,14 +52,7 @@ class SettingsFragment : ResourceSettingsFragment() {
     override fun onResume() {
         super.onResume()
         val context = requireContext()
-        lifecycleScope.launchWhenResumed {
-            updateDetails(context)
-        }
-    }
-
-    private suspend fun updateDetails(context: Context) {
-        val gcmServiceInfo = getGcmServiceInfo(context)
-        if (gcmServiceInfo.configuration.enabled) {
+        if (GcmPrefs.get(requireContext()).isEnabled) {
             val database = GcmDatabase(context)
             val regCount = database.registrationList.size
             database.close()
@@ -67,11 +61,11 @@ class SettingsFragment : ResourceSettingsFragment() {
             findPreference<Preference>(PREF_GCM)!!.setSummary(R.string.service_status_disabled_short)
         }
 
-        findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPrefs.isEnabled(context)) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
-        findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(context)) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPreferences.isEnabled(requireContext())) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
+        findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(requireContext())) R.string.service_status_enabled_short else R.string.service_status_disabled_short)
 
         findPreference<Preference>(PREF_EXPOSURE)?.isVisible = NearbyPreferencesIntegration.isAvailable
-        findPreference<Preference>(PREF_EXPOSURE)?.icon = NearbyPreferencesIntegration.getIcon(context)
+        findPreference<Preference>(PREF_EXPOSURE)?.icon = NearbyPreferencesIntegration.getIcon(requireContext())
         findPreference<Preference>(PREF_EXPOSURE)?.summary = NearbyPreferencesIntegration.getExposurePreferenceSummary(context)
     }
 

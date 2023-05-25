@@ -162,6 +162,7 @@ public enum GmsService {
     LOCATION_SHARING_REPORTER(277, "com.google.android.gms.locationsharingreporter.service.START"),
     OCR(279, "com.google.android.gms.ocr.service.START"),
     OCR_INTERNAL(281, "com.google.android.gms.ocr.service.internal.START"),
+    IN_APP_REACH(315, "com.google.android.gms.inappreach.service.START")
     ;
 
     public int SERVICE_ID;

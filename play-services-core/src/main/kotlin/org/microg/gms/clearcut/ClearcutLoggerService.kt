@@ -75,5 +75,5 @@ class ClearcutLoggerServiceImpl(private val lifecycle: Lifecycle) : IClearcutLog
 
     override fun getLifecycle(): Lifecycle = lifecycle
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

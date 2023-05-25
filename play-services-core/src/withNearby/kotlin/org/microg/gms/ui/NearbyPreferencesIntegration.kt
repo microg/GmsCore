@@ -16,7 +16,7 @@ import org.microg.gms.nearby.exposurenotification.ExposurePreferences
 
 interface NearbyPreferencesIntegration {
     companion object {
-        suspend fun getExposurePreferenceSummary(context: Context): String = if (isAvailable && ExposurePreferences(context).enabled) {
+        fun getExposurePreferenceSummary(context: Context): String = if (isAvailable && ExposurePreferences(context).enabled) {
             context.getString(R.string.service_status_enabled_short)
         } else {
             context.getString(R.string.service_status_disabled_short)

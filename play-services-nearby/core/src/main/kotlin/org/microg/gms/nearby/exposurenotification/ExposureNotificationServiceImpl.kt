@@ -791,7 +791,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
         }
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 
     companion object {
         private val tempGrantedPermissions: MutableSet<Pair<String, String>> = hashSetOf()

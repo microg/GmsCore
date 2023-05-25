@@ -65,13 +65,19 @@ public class LogEventParcelable extends AutoSafeParcelable {
     @Field(11)
     public final LogVerifierResultParcelable logVerifierResult;
 
+    @Field(12)
+    private String[] mendelPackagesToFilter;
+
+    @Field(13)
+    public int eventCode;
+
     private LogEventParcelable() {
         context = null;
         bytes = null;
         testCodes = experimentIds = null;
         mendelPackages = null;
         experimentTokens = null;
-        addPhenotypeExperimentTokens = false;
+        addPhenotypeExperimentTokens = true;
         experimentTokenParcelables = null;
         genericDimensions = null;
         logVerifierResult = null;

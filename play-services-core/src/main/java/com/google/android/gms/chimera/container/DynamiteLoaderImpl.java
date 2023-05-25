@@ -36,14 +36,19 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
     @Override
     public IObjectWrapper createModuleContext(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
         // We don't have crash utils, so just forward
-        return createModuleContextNoCrashUtils(wrappedContext, moduleId, minVersion);
+        return createModuleContextV2(wrappedContext, moduleId, minVersion);
     }
 
     @Override
-    public IObjectWrapper createModuleContextNoCrashUtils(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
+    public IObjectWrapper createModuleContextV2(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
         Log.d(TAG, "createModuleContext for " + moduleId + " at version " + minVersion);
         final Context originalContext = (Context) ObjectWrapper.unwrap(wrappedContext);
         return ObjectWrapper.wrap(DynamiteContext.create(moduleId, originalContext));
+    }
+
+    @Override
+    public IObjectWrapper createModuleContextV3(IObjectWrapper wrappedContext, String moduleId, int minVersion, IObjectWrapper wrappedCursor) throws RemoteException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -59,11 +64,11 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
     @Override
     public int getModuleVersion2(IObjectWrapper wrappedContext, String moduleId, boolean updateConfigIfRequired) throws RemoteException {
         // We don't have crash utils, so just forward
-        return getModuleVersion2NoCrashUtils(wrappedContext, moduleId, updateConfigIfRequired);
+        return getModuleVersionV2(wrappedContext, moduleId, updateConfigIfRequired);
     }
 
     @Override
-    public int getModuleVersion2NoCrashUtils(IObjectWrapper wrappedContext, String moduleId, boolean updateConfigIfRequired) throws RemoteException {
+    public int getModuleVersionV2(IObjectWrapper wrappedContext, String moduleId, boolean updateConfigIfRequired) throws RemoteException {
         final Context context = (Context) ObjectWrapper.unwrap(wrappedContext);
         if (context == null) {
             Log.w(TAG, "Invalid client context");
@@ -95,5 +100,10 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
 
         Log.d(TAG, "unimplemented Method: getModuleVersion for " + moduleId);
         return 0;
+    }
+
+    @Override
+    public IObjectWrapper getModuleVersionV3(IObjectWrapper wrappedContext, String moduleId, boolean updateConfigIfRequired, long requestStartTime) throws RemoteException {
+        throw new UnsupportedOperationException();
     }
 }

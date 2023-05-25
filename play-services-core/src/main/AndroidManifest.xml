@@ -790,7 +790,6 @@
                 <action android:name="com.google.android.gms.ocr.service.internal.START" />
                 <action android:name="com.google.android.gms.ocr.service.START" />
                 <action android:name="com.google.android.gms.panorama.service.START" />
-                <action android:name="com.google.android.gms.pay.service.BIND" />
                 <action android:name="com.google.android.gms.payse.service.BIND" />
                 <action android:name="com.google.android.gms.people.contactssync.service.START" />
                 <action android:name="com.google.android.gms.photos.autobackup.service.START" />

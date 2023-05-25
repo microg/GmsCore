@@ -140,5 +140,5 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

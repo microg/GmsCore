@@ -25,7 +25,7 @@ import android.util.Log;
 
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import org.microg.gms.checkin.CheckinPrefs;
+import org.microg.gms.checkin.CheckinPreferences;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.ForegroundServiceContext;
 
@@ -68,7 +68,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
 
             if (LastCheckinInfo.read(context).getAndroidId() == 0) {
                 Log.d(TAG, "Ignoring " + intent + ": need to checkin first.");
-                if (CheckinPrefs.isEnabled(context)) {
+                if (CheckinPreferences.isEnabled(context)) {
                     // Do a check-in if we are not actually checked in,
                     // but should be, e.g. cleared app data
                     Log.d(TAG, "Requesting check-in...");
