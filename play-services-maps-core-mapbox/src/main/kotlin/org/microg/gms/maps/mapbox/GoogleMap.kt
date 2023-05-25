@@ -52,12 +52,12 @@ import com.mapbox.mapboxsdk.plugins.annotation.*
 import com.mapbox.mapboxsdk.plugins.annotation.Annotation
 import com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND
 import com.google.android.gms.dynamic.unwrap
+import com.google.android.gms.maps.GoogleMap
 import com.mapbox.mapboxsdk.WellKnownTileServer
 import org.microg.gms.maps.mapbox.model.InfoWindow
 import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
-import org.microg.gms.maps.MapsConstants.*
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
 import org.microg.gms.maps.mapbox.utils.toGms
@@ -481,8 +481,12 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) = afterInitialize { map ->
         Log.d(TAG, "setPadding: $left $top $right $bottom")
-        CameraUpdateFactory.paddingTo(left.toDouble(), top.toDouble(), right.toDouble(), bottom.toDouble())
-            .let { map.moveCamera(it) }
+        val padding = map.cameraPosition.padding
+        if (padding == null || padding[0] != left.toDouble() || padding[1] != top.toDouble() || padding[2] != right.toDouble() || padding[3] != bottom.toDouble()) {
+            // Don't send camera update if we already got these paddings
+            CameraUpdateFactory.paddingTo(left.toDouble(), top.toDouble(), right.toDouble(), bottom.toDouble())
+                .let { map.moveCamera(it) }
+        }
 
         val fourDp = mapView?.context?.resources?.getDimension(R.dimen.maplibre_four_dp)?.toInt()
                 ?: 0
@@ -558,8 +562,6 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
-        }
-        map.addOnCameraIdleListener {
             try {
                 cameraIdleListener?.onCameraIdle()
             } catch (e: Exception) {
@@ -569,14 +571,20 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         map.addOnCameraMoveListener {
             try {
                 cameraMoveListener?.onCameraMove()
-                currentInfoWindow?.update()
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
+            currentInfoWindow?.update()
         }
         map.addOnCameraMoveStartedListener {
             try {
-                cameraMoveStartedListener?.onCameraMoveStarted(it)
+                val reason = when (it) {
+                    MapboxMap.OnCameraMoveStartedListener.REASON_API_GESTURE -> GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE
+                    MapboxMap.OnCameraMoveStartedListener.REASON_API_ANIMATION -> GoogleMap.OnCameraMoveStartedListener.REASON_API_ANIMATION
+                    MapboxMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION -> GoogleMap.OnCameraMoveStartedListener.REASON_DEVELOPER_ANIMATION
+                    else -> 0
+                }
+                cameraMoveStartedListener?.onCameraMoveStarted(reason)
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }

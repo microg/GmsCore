@@ -10,7 +10,6 @@ import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.internal.*
 import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
 import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
-import org.microg.gms.maps.MapsConstants
 import org.microg.gms.maps.mapbox.model.AbstractMarker
 import org.microg.gms.maps.mapbox.model.DefaultInfoWindowAdapter
 import org.microg.gms.maps.mapbox.model.InfoWindow

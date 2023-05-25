@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.core.graphics.ColorUtils
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -12,7 +13,6 @@ import com.google.gson.annotations.SerializedName
 import com.mapbox.mapboxsdk.maps.Style
 import org.json.JSONArray
 import org.json.JSONObject
-import org.microg.gms.maps.MapsConstants
 import org.microg.gms.maps.mapbox.utils.MapContext
 import java.io.File
 import java.io.IOException
@@ -39,8 +39,8 @@ fun getStyle(
     val styleJson = JSONObject(
         context.assets.open(
             when (mapType) {
-                MapsConstants.MAP_TYPE_SATELLITE, MapsConstants.MAP_TYPE_HYBRID -> "style-microg-satellite.json"
-                MapsConstants.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
+                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite.json"
+                GoogleMap.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
                 else -> "style-microg-normal.json"
             }
@@ -73,9 +73,9 @@ fun getStyle(
 
 
 fun getFallbackStyleOnlineUri(mapType: Int) = when (mapType) {
-    MapsConstants.MAP_TYPE_SATELLITE -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
-    MapsConstants.MAP_TYPE_TERRAIN -> "mapbox://styles/mapbox/outdoors-v12"
-    MapsConstants.MAP_TYPE_HYBRID -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    GoogleMap.MAP_TYPE_SATELLITE -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
+    GoogleMap.MAP_TYPE_TERRAIN -> "mapbox://styles/mapbox/outdoors-v12"
+    GoogleMap.MAP_TYPE_HYBRID -> "mapbox://styles/microg/cjxgloted25ap1ct4uex7m6hi"
     //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
     else -> "mapbox://styles/microg/cjui4020201oo1fmca7yuwbor"
 }

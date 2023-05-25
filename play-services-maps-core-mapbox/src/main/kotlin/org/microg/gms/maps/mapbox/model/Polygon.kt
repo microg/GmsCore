@@ -120,7 +120,7 @@ abstract class AbstractPolygon(private val id: String, options: PolygonOptions) 
     }
 
     override fun setVisible(visible: Boolean) {
-        isVisible = visible
+        this.visible = visible
         update()
     }
 
