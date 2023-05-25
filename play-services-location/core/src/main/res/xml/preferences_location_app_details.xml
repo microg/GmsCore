@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <org.microg.gms.ui.AppHeadingPreference
+        android:key="pref_location_app_heading"
+        tools:icon="@android:mipmap/sym_def_app_icon"
+        tools:title="@tools:sample/lorem" />
+    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+        <SwitchPreferenceCompat
+            android:key="pref_location_app_force_coarse"
+            android:title="@string/pref_location_app_force_coarse_title"
+            android:summary="@string/pref_location_app_force_coarse_summary"
+            android:persistent="false" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_location_app_last_location"
+        android:title="Last reported location">
+        <Preference
+            android:key="pref_location_app_last_location"
+            tools:title="Yesterday, 00:30:23"
+            tools:summary="Pl. Charles de Gaulle, 75008 Paris, France"
+            android:persistent="false"/>
+        <org.microg.gms.location.ui.LocationMapPreference
+            android:key="pref_location_app_last_location_map"
+            android:selectable="false"
+            android:persistent="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

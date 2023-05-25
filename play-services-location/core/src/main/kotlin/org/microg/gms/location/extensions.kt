@@ -6,6 +6,8 @@
 package org.microg.gms.location
 
 import android.location.Location
+import android.os.SystemClock
+import android.text.format.DateUtils
 import androidx.core.location.LocationCompat
 import com.google.android.gms.common.Feature
 
@@ -30,3 +32,27 @@ internal val FEATURES = arrayOf(
 
     Feature("use_safe_parcelable_in_intents", 1)
 )
+
+internal fun Long.formatRealtime(): CharSequence = DateUtils.getRelativeTimeSpanString((SystemClock.elapsedRealtime() - this) + System.currentTimeMillis())
+internal fun Long.formatDuration(): CharSequence {
+    if (this == 0L) return "0ms"
+    if (this > 315360000000L /* ten years */) return "\u221e"
+    val interval = listOf(1000, 60, 60, 24, Long.MAX_VALUE)
+    val intervalName = listOf("ms", "s", "m", "h", "d")
+    var ret = ""
+    var rem = this
+    for (i in 0..interval.size) {
+        val mod = rem % interval[i]
+        if (mod != 0L) {
+            ret = "$mod${intervalName[i]}$ret"
+        }
+        rem /= interval[i]
+        if (mod == 0L && rem == 1L) {
+            ret = "${interval[i]}${intervalName[i]}$ret"
+            break
+        } else if (rem == 0L) {
+            break
+        }
+    }
+    return ret
+}

@@ -23,7 +23,6 @@ import android.os.WorkSource
 import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationCompat
 import androidx.lifecycle.Lifecycle
@@ -36,6 +35,7 @@ import com.google.android.gms.location.internal.ClientIdentity
 import com.google.android.gms.location.internal.DeviceOrientationRequestInternal
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.microg.gms.location.formatDuration
 import org.microg.gms.utils.WorkSourceUtil
 import java.io.PrintWriter
 import kotlin.math.*
@@ -259,7 +259,7 @@ class DeviceOrientationManager(private val context: Context, private val lifecyc
     fun dump(writer: PrintWriter) {
         writer.println("Current device orientation request (started=$started)")
         for (request in requests.values.toList()) {
-            writer.println("- ${request.workSource} (pending: ${request.updatesPending} ${request.timePendingMillis}ms)")
+            writer.println("- ${request.workSource} (pending: ${request.updatesPending.let { if (it == Int.MAX_VALUE) "\u221e" else "$it" }} ${request.timePendingMillis.formatDuration()})")
         }
     }
 
@@ -305,7 +305,7 @@ class DeviceOrientationManager(private val context: Context, private val lifecyc
                 if (lastOrientation != null && abs(lastOrientation!!.headingDegrees - deviceOrientation.headingDegrees) < Math.toDegrees(request.smallestAngleChangeRadians.toDouble())) return
                 if (lastOrientation == deviceOrientation) return
                 listener.onDeviceOrientationChanged(deviceOrientation)
-                updates++
+                if (request.numUpdates != Int.MAX_VALUE) updates++
                 if (updatesPending <= 0) throw RuntimeException("max updates reached")
             }
         }

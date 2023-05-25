@@ -68,11 +68,15 @@ class LastLocationCapsule(private val context: Context) {
     }
 
     fun updateCoarseLocation(location: Location) {
-        if (lastCoarseLocation != null && lastCoarseLocation!!.elapsedMillis > location.elapsedMillis + 30_000L && (!location.hasBearing() || !location.hasSpeed())) {
-            location.bearing = lastCoarseLocation!!.bearingTo(location)
-            LocationCompat.setBearingAccuracyDegrees(location, 180.0f)
-            location.speed = lastCoarseLocation!!.distanceTo(location) / ((location.elapsedMillis - lastCoarseLocation!!.elapsedMillis) / 1000)
-            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed)
+        if (lastCoarseLocation != null && lastCoarseLocation!!.elapsedMillis + EXTENSION_CLIFF > location.elapsedMillis) {
+            if (!location.hasSpeed()) {
+                location.speed = lastCoarseLocation!!.distanceTo(location) / ((location.elapsedMillis - lastCoarseLocation!!.elapsedMillis) / 1000)
+                LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed)
+            }
+            if (!location.hasBearing() && location.speed > 0.5f) {
+                location.bearing = lastCoarseLocation!!.bearingTo(location)
+                LocationCompat.setBearingAccuracyDegrees(location, 180.0f)
+            }
         }
         lastCoarseLocation = newest(lastCoarseLocation, location)
         lastCoarseLocationTimeCoarsed = newest(lastCoarseLocationTimeCoarsed, location, TIME_COARSE_CLIFF)
@@ -92,13 +96,18 @@ class LastLocationCapsule(private val context: Context) {
     }
 
     fun start() {
+        fun Location.adjustRealtime() = apply {
+            if (SDK_INT >= 17) {
+                elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos() - TimeUnit.MILLISECONDS.toNanos((System.currentTimeMillis() - time))
+            }
+        }
         try {
             if (file.exists()) {
                 val capsule = SafeParcelUtil.fromByteArray(file.readBytes(), LastLocationCapsuleParcelable.CREATOR)
-                lastFineLocation = capsule.lastFineLocation
-                lastCoarseLocation = capsule.lastCoarseLocation
-                lastFineLocationTimeCoarsed = capsule.lastFineLocationTimeCoarsed
-                lastCoarseLocationTimeCoarsed = capsule.lastCoarseLocationTimeCoarsed
+                lastFineLocation = capsule.lastFineLocation?.adjustRealtime()
+                lastCoarseLocation = capsule.lastCoarseLocation?.adjustRealtime()
+                lastFineLocationTimeCoarsed = capsule.lastFineLocationTimeCoarsed?.adjustRealtime()
+                lastCoarseLocationTimeCoarsed = capsule.lastCoarseLocationTimeCoarsed?.adjustRealtime()
             }
         } catch (e: Exception) {
             Log.w(TAG, e)
@@ -126,6 +135,7 @@ class LastLocationCapsule(private val context: Context) {
     companion object {
         private const val FILE_NAME = "last_location_capsule"
         private const val TIME_COARSE_CLIFF = 60_000L
+        private const val EXTENSION_CLIFF = 30_000L
 
         private class LastLocationCapsuleParcelable(
             @Field(1) @JvmField val lastFineLocation: Location?,

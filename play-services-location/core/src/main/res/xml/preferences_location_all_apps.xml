@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <Preference
+        android:key="pref_location_apps_all_progress"
+        android:layout="@layout/preference_progress_bar"
+        app:allowDividerBelow="false" />
+    <PreferenceCategory
+        android:key="prefcat_location_apps"
+        android:layout="@layout/preference_category_no_label"
+        app:isPreferenceVisible="false"
+        tools:isPreferenceVisible="true" />
+
+</PreferenceScreen>

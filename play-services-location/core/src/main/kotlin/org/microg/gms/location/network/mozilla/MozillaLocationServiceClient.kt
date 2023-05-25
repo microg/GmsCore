@@ -18,6 +18,7 @@ import org.microg.gms.location.network.NetworkLocationService
 import org.microg.gms.location.network.cell.CellDetails
 import org.microg.gms.location.network.precision
 import org.microg.gms.location.network.wifi.WifiDetails
+import org.microg.gms.location.network.wifi.isMoving
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -30,7 +31,7 @@ class MozillaLocationServiceClient(context: Context) {
     suspend fun retrieveMultiWifiLocation(wifis: List<WifiDetails>): Location = geoLocate(
         GeolocateRequest(
             considerIp = false,
-            wifiAccessPoints = wifis.filter { it.ssid?.endsWith("_nomap") != true }.map(WifiDetails::toWifiAccessPoint),
+            wifiAccessPoints = wifis.filter { it.ssid?.endsWith("_nomap") != true && !it.isMoving }.map(WifiDetails::toWifiAccessPoint),
             fallbacks = Fallback(lacf = false, ipf = false)
         )
     ).apply {

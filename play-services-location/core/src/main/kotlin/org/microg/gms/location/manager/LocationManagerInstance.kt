@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.os.Parcel
 import android.os.SystemClock
 import android.util.Log
+import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -151,8 +152,16 @@ class LocationManagerInstance(
 
     override fun requestLocationSettingsDialog(settingsRequest: LocationSettingsRequest?, callback: ISettingsCallbacks?, packageName: String?) {
         Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName}")
+        checkHasAnyLocationPermission()
         Log.d(TAG, "Not yet implemented: requestLocationSettingsDialog")
-        callback?.onLocationSettingsResult(LocationSettingsResult(Status.SUCCESS))
+        lifecycleScope.launchWhenStarted {
+            val locationManager = context.getSystemService<android.location.LocationManager>()
+            val gpsPresent = locationManager?.allProviders?.contains(android.location.LocationManager.GPS_PROVIDER) == true
+            val networkPresent = locationManager?.allProviders?.contains(android.location.LocationManager.NETWORK_PROVIDER) == true
+            val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) == true
+            val networkUsable = networkPresent && locationManager?.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER) == true
+            callback?.onLocationSettingsResult(LocationSettingsResult(LocationSettingsStates(gpsUsable, networkUsable, false, gpsPresent, networkPresent, true), Status.SUCCESS))
+        }
     }
 
     // region Mock locations
@@ -314,5 +323,5 @@ class LocationManagerInstance(
     override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

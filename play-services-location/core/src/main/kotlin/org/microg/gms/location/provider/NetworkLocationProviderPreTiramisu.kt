@@ -110,7 +110,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
         }
     }
 
-    override fun reportLocation(location: Location) {
+    override fun reportLocationToSystem(location: Location) {
         location.provider = "network"
         location.extras?.remove(LOCATION_EXTRA_PRECISION)
         lastReportedLocation = location

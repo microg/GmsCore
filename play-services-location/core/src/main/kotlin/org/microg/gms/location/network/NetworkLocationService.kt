@@ -9,17 +9,24 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.location.Location
+import android.net.wifi.WifiManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.SystemClock
 import android.os.WorkSource
 import android.util.Log
+import androidx.collection.LruCache
+import androidx.core.content.getSystemService
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.android.volley.VolleyError
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import org.microg.gms.location.LocationSettings
 import org.microg.gms.location.elapsedMillis
+import org.microg.gms.location.formatDuration
+import org.microg.gms.location.formatRealtime
 import org.microg.gms.location.network.LocationCacheDatabase.Companion.NEGATIVE_CACHE_ENTRY
 import org.microg.gms.location.network.cell.CellDetails
 import org.microg.gms.location.network.cell.CellDetailsCallback
@@ -41,6 +48,9 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private val cellDetailsSource by lazy { CellDetailsSource.create(this, this) }
     private val mozilla by lazy { MozillaLocationServiceClient(this) }
     private val cache by lazy { LocationCacheDatabase(this) }
+    private val movingWifiHelper by lazy { MovingWifiHelper(this) }
+    private val settings by lazy { LocationSettings(this) }
+    private val wifiScanCache = LruCache<String?, Location>(100)
 
     private var lastHighPowerScanRealtime = 0L
     private var lastLowPowerScanRealtime = 0L
@@ -152,33 +162,70 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         super.onDestroy()
     }
 
+    suspend fun requestLocation(requestableWifis: List<WifiDetails>, currentLocalMovingWifi: WifiDetails?): Location? {
+        var candidate: Location? = null
+        if (currentLocalMovingWifi != null && settings.wifiMoving) {
+            try {
+                withTimeout(5000L) {
+                    candidate = movingWifiHelper.retrieveMovingLocation(currentLocalMovingWifi)
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed retrieving location for current moving wifi ${currentLocalMovingWifi.ssid}", e)
+            }
+        }
+        if ((candidate?.accuracy ?: Float.MAX_VALUE) <= 50f) return candidate
+        if (requestableWifis.size >= 3) {
+            try {
+                candidate = when (val cacheLocation = requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] }
+                    ?.takeIf { it.time > System.currentTimeMillis() - MAX_WIFI_SCAN_CACHE_AGE }) {
+                    NEGATIVE_CACHE_ENTRY -> null
+                    null -> {
+                        if (settings.wifiMls) {
+                            val location = mozilla.retrieveMultiWifiLocation(requestableWifis)
+                            location.time = System.currentTimeMillis()
+                            requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] = location }
+                            location
+                        } else {
+                            null
+                        }
+                    }
+
+                    else -> cacheLocation
+                }?.takeIf { candidate == null || it.accuracy < candidate?.accuracy!! } ?: candidate
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed retrieving location for ${requestableWifis.size} wifi networks", e)
+                if (e is ServiceException && e.error.code == 404 || e is VolleyError && e.networkResponse?.statusCode == 404) {
+                    requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] = NEGATIVE_CACHE_ENTRY }
+                }
+            }
+        }
+        return candidate
+    }
+
     override fun onWifiDetailsAvailable(wifis: List<WifiDetails>) {
+        if (wifis.isEmpty()) return
         val scanResultTimestamp = min(wifis.maxOf { it.timestamp ?: Long.MAX_VALUE }, System.currentTimeMillis())
         val scanResultRealtimeMillis =
             if (SDK_INT >= 17) SystemClock.elapsedRealtime() - (System.currentTimeMillis() - scanResultTimestamp) else scanResultTimestamp
-        if (scanResultRealtimeMillis < lastWifiDetailsRealtimeMillis + interval / 2) {
+        if (scanResultRealtimeMillis < lastWifiDetailsRealtimeMillis + interval / 2 && lastWifiDetailsRealtimeMillis != 0L) {
             Log.d(TAG, "Ignoring wifi details, similar age as last ($scanResultRealtimeMillis < $lastWifiDetailsRealtimeMillis + $interval / 2)")
             return
         }
-        if (wifis.size < 3) return
+        @Suppress("DEPRECATION")
+        val currentLocalMovingWifi = getSystemService<WifiManager>()?.connectionInfo
+            ?.let { wifiInfo -> wifis.filter { it.macAddress == wifiInfo.bssid && it.isMoving } }
+            ?.filter { movingWifiHelper.isLocallyRetrievable(it) }
+            ?.singleOrNull()
+        val requestableWifis = wifis.filter(WifiDetails::isRequestable)
+        if (requestableWifis.size < 3 && currentLocalMovingWifi == null) return
+        val previousLastRealtimeMillis = lastWifiDetailsRealtimeMillis
         lastWifiDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
-            val location = try {
-                when (val cacheLocation = cache.getWifiScanLocation(wifis)) {
-                    NEGATIVE_CACHE_ENTRY -> null
-                    null -> mozilla.retrieveMultiWifiLocation(wifis).also {
-                        it.time = System.currentTimeMillis()
-                        cache.putWifiScanLocation(wifis, it)
-                    }
-                    else -> cacheLocation
-                }
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed retrieving location for ${wifis.size} wifi networks", e)
-                if (e is ServiceException && e.error.code == 404 || e is VolleyError && e.networkResponse?.statusCode == 404) {
-                    cache.putWifiScanLocation(wifis, NEGATIVE_CACHE_ENTRY)
-                }
-                null
-            } ?: return@launch
+            val location = requestLocation(requestableWifis, currentLocalMovingWifi)
+            if (location == null) {
+                lastWifiDetailsRealtimeMillis = previousLastRealtimeMillis
+                return@launch
+            }
             location.time = scanResultTimestamp
             if (SDK_INT >= 17) location.elapsedRealtimeNanos = scanResultRealtimeMillis * 1_000_000L
             synchronized(locationLock) {
@@ -192,20 +239,27 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         val scanResultTimestamp = min(cells.maxOf { it.timestamp ?: Long.MAX_VALUE }, System.currentTimeMillis())
         val scanResultRealtimeMillis =
             if (SDK_INT >= 17) SystemClock.elapsedRealtime() - (System.currentTimeMillis() - scanResultTimestamp) else scanResultTimestamp
-        if (scanResultRealtimeMillis < lastCellDetailsRealtimeMillis + interval/2) {
+        if (scanResultRealtimeMillis < lastCellDetailsRealtimeMillis + interval / 2) {
             Log.d(TAG, "Ignoring cell details, similar age as last")
             return
         }
         lastCellDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
-            val singleCell = cells.filter { it.location != NEGATIVE_CACHE_ENTRY }.maxByOrNull { it.timestamp ?: it.signalStrength?.toLong() ?: 0L } ?: return@launch
+            val singleCell =
+                cells.filter { it.location != NEGATIVE_CACHE_ENTRY }.maxByOrNull { it.timestamp ?: it.signalStrength?.toLong() ?: 0L } ?: return@launch
             val location = singleCell.location ?: try {
                 when (val cacheLocation = cache.getCellLocation(singleCell)) {
                     NEGATIVE_CACHE_ENTRY -> null
-                    null -> mozilla.retrieveSingleCellLocation(singleCell).also {
-                        it.time = System.currentTimeMillis()
-                        cache.putCellLocation(singleCell, it)
+
+                    null -> if (settings.cellMls) {
+                        mozilla.retrieveSingleCellLocation(singleCell).also {
+                            it.time = System.currentTimeMillis()
+                            cache.putCellLocation(singleCell, it)
+                        }
+                    } else {
+                        null
                     }
+
                     else -> cacheLocation
                 }
             } catch (e: Exception) {
@@ -216,7 +270,9 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 null
             } ?: return@launch
             location.time = singleCell.timestamp ?: scanResultTimestamp
-            if (SDK_INT >= 17) location.elapsedRealtimeNanos = singleCell.timestamp?.let { SystemClock.elapsedRealtimeNanos() - (System.currentTimeMillis() - it) * 1_000_000L } ?: (scanResultRealtimeMillis * 1_000_000L)
+            if (SDK_INT >= 17) location.elapsedRealtimeNanos =
+                singleCell.timestamp?.let { SystemClock.elapsedRealtimeNanos() - (System.currentTimeMillis() - it) * 1_000_000L }
+                    ?: (scanResultRealtimeMillis * 1_000_000L)
             synchronized(locationLock) {
                 lastCellLocation = location
             }
@@ -235,7 +291,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 lastCellLocation!!.elapsedMillis > lastWifiLocation!!.elapsedMillis + LOCATION_TIME_CLIFF_MS -> lastCellLocation
                 lastWifiLocation!!.elapsedMillis > lastCellLocation!!.elapsedMillis + LOCATION_TIME_CLIFF_MS -> lastWifiLocation
                 // Wifi out of cell range with higher precision
-                lastCellLocation!!.precision > lastWifiLocation!!.precision && lastWifiLocation!!.distanceTo(lastCellLocation!!) > 2*lastCellLocation!!.accuracy -> lastCellLocation
+                lastCellLocation!!.precision > lastWifiLocation!!.precision && lastWifiLocation!!.distanceTo(lastCellLocation!!) > 2 * lastCellLocation!!.accuracy -> lastCellLocation
                 else -> lastWifiLocation
             }
         } ?: return
@@ -260,16 +316,18 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     }
 
     override fun dump(fd: FileDescriptor?, writer: PrintWriter, args: Array<out String>?) {
-        writer.println("Last scan elapsed realtime: high-power: $lastHighPowerScanRealtime, low-power: $lastLowPowerScanRealtime")
-        writer.println("Last scan result time: wifi: $lastWifiDetailsRealtimeMillis, cells: $lastCellDetailsRealtimeMillis")
-        writer.println("Interval: high-power: ${highPowerIntervalMillis}ms, low-power: ${lowPowerIntervalMillis}ms")
+        writer.println("Last scan elapsed realtime: high-power: ${lastHighPowerScanRealtime.formatRealtime()}, low-power: ${lastLowPowerScanRealtime.formatRealtime()}")
+        writer.println("Last scan result time: wifi: ${lastWifiDetailsRealtimeMillis.formatRealtime()}, cells: ${lastCellDetailsRealtimeMillis.formatRealtime()}")
+        writer.println("Interval: high-power: ${highPowerIntervalMillis.formatDuration()}, low-power: ${lowPowerIntervalMillis.formatDuration()}")
         writer.println("Last wifi location: $lastWifiLocation${if (lastWifiLocation == lastLocation) " (active)" else ""}")
         writer.println("Last cell location: $lastCellLocation${if (lastCellLocation == lastLocation) " (active)" else ""}")
+        writer.println("Settings: Wi-Fi MLS=${settings.wifiMls} moving=${settings.wifiMoving} Cell MLS=${settings.cellMls}")
+        writer.println("Wifi scan cache size=${wifiScanCache.size()} hits=${wifiScanCache.hitCount()} miss=${wifiScanCache.missCount()} puts=${wifiScanCache.putCount()} evicts=${wifiScanCache.evictionCount()}")
         synchronized(activeRequests) {
             if (activeRequests.isNotEmpty()) {
                 writer.println("Active requests:")
                 for (request in activeRequests) {
-                    writer.println("- ${request.workSource} ${request.intervalMillis}ms (low power: ${request.lowPower}, bypass: ${request.bypass})")
+                    writer.println("- ${request.workSource} ${request.intervalMillis.formatDuration()} (low power: ${request.lowPower}, bypass: ${request.bypass})")
                 }
             }
         }
@@ -287,5 +345,10 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         const val EXTRA_LOCATION = "location"
         const val LOCATION_TIME_CLIFF_MS = 30000L
         const val DEBOUNCE_DELAY_MS = 5000L
+        const val MAX_WIFI_SCAN_CACHE_AGE = 1000L * 60 * 60 * 24 // 1 day
     }
+}
+
+private operator fun <K, V> LruCache<K, V>.set(key: K, value: V) {
+    put(key, value)
 }

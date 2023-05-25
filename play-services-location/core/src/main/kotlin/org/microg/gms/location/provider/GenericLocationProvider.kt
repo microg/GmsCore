@@ -14,5 +14,5 @@ interface GenericLocationProvider {
     fun enable()
     fun disable()
     fun dump(writer: PrintWriter)
-    fun reportLocation(location: Location)
+    fun reportLocationToSystem(location: Location)
 }

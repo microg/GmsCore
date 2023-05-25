@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/locationPreferencesFragment"
+    android:id="@+id/nav_location">
+
+    <fragment
+        android:id="@+id/locationPreferencesFragment"
+        android:name="org.microg.gms.location.ui.LocationPreferencesFragment"
+        android:label="@string/service_name_location">
+        <action
+            android:id="@+id/openAllLocationApps"
+            app:destination="@id/locationAllAppsPreferencesFragment" />
+        <action
+            android:id="@+id/openLocationAppDetails"
+            app:destination="@id/locationAppFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/locationAllAppsPreferencesFragment"
+        android:name="org.microg.gms.location.ui.LocationAllAppsFragment"
+        android:label="@string/fragment_location_apps_title">
+        <action
+            android:id="@+id/openLocationAppDetailsFromAll"
+            app:destination="@id/locationAppFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/locationAppFragment"
+        android:name="org.microg.gms.location.ui.LocationAppFragment"
+        android:label="@string/fragment_location_apps_title">
+        <argument
+            android:name="package"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <PreferenceCategory
+        android:key="prefcat_location_apps"
+        android:title="@string/prefcat_location_apps_title">
+        <Preference
+            android:enabled="false"
+            android:key="pref_location_apps_none"
+            android:title="@string/list_no_item_none" />
+        <Preference
+            android:icon="@drawable/ic_expand_apps"
+            android:key="pref_location_apps_all"
+            android:order="5"
+            android:title="@string/list_item_see_all" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_location_wifi"
+        android:title="@string/prefcat_location_wifi_title">
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_location_wifi_mls_enabled"
+            android:title="@string/pref_location_wifi_mls_enabled_title"
+            android:summary="@string/pref_location_wifi_mls_enabled_summary" />
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_location_wifi_moving_enabled"
+            android:title="@string/pref_location_wifi_moving_enabled_title"
+            android:summary="@string/pref_location_wifi_moving_enabled_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_location_cells"
+        android:title="@string/prefcat_location_cell_title">
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_location_cell_mls_enabled"
+            android:title="@string/pref_location_cell_mls_enabled_title"
+            android:summary="@string/pref_location_cell_mls_enabled_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>

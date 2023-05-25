@@ -6,6 +6,7 @@
 package org.microg.gms.location.network.wifi
 
 import android.net.wifi.ScanResult
+import android.net.wifi.WifiInfo
 import android.os.Build
 import android.os.SystemClock
 
@@ -15,7 +16,8 @@ internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
     timestamp = if (Build.VERSION.SDK_INT >= 19) System.currentTimeMillis() - (SystemClock.elapsedRealtime() - (timestamp / 1000)) else null,
     frequency = frequency,
     channel = frequencyToChannel(frequency),
-    signalStrength = level
+    signalStrength = level,
+    open = setOf("WEP", "WPA", "PSK", "EAP", "IEEE8021X", "PEAP", "TLS", "TTLS").none { capabilities.contains(it) }
 )
 
 private const val BAND_24_GHZ_FIRST_CH_NUM = 1
@@ -57,3 +59,12 @@ internal fun frequencyToChannel(freq: Int): Int? {
         else -> null
     }
 }
+
+val WifiDetails.isNomap: Boolean
+    get() = ssid?.endsWith("_nomap") == true
+
+val WifiDetails.isHidden: Boolean
+    get() = ssid == ""
+
+val WifiDetails.isRequestable: Boolean
+    get() = !isNomap && !isHidden && !isMoving

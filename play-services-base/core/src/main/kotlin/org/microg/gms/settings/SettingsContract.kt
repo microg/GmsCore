@@ -145,6 +145,22 @@ object SettingsContract {
         )
     }
 
+    object Location {
+        private const val id = "location"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+
+        const val WIFI_MLS = "location_wifi_mls"
+        const val WIFI_MOVING = "location_wifi_moving"
+        const val CELL_MLS = "location_cell_mls"
+
+        val PROJECTION = arrayOf(
+            WIFI_MLS,
+            WIFI_MOVING,
+            CELL_MLS
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {

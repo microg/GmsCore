@@ -11,5 +11,6 @@ data class WifiDetails(
     val timestamp: Long? = null,
     val frequency: Int? = null,
     val channel: Int? = null,
-    val signalStrength: Int? = null
+    val signalStrength: Int? = null,
+    val open: Boolean = false
 )

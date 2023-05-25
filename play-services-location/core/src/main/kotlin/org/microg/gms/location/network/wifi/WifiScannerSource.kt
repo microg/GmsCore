@@ -5,12 +5,17 @@
 
 package org.microg.gms.location.network.wifi
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiScanner
+import android.os.Build.VERSION.SDK_INT
 import android.os.WorkSource
 import android.util.Log
+import androidx.core.content.ContextCompat
 import org.microg.gms.location.network.TAG
 
 @SuppressLint("WrongConstant")
@@ -23,7 +28,7 @@ class WifiScannerSource(private val context: Context, private val callback: Wifi
             }
 
             override fun onFailure(reason: Int, description: String?) {
-                Log.d(TAG, "Not yet implemented: onFailure")
+                Log.d(TAG, "Not yet implemented: onFailure ${reason} ${description}")
             }
 
             override fun onPeriodChanged(periodInMs: Int) {
@@ -42,7 +47,7 @@ class WifiScannerSource(private val context: Context, private val callback: Wifi
 
     companion object {
         fun isSupported(context: Context): Boolean {
-            return (context.getSystemService("wifiscanner") as? WifiScanner) != null
+            return SDK_INT >= 26 && (context.getSystemService("wifiscanner") as? WifiScanner) != null && ContextCompat.checkSelfPermission(context, Manifest.permission.LOCATION_HARDWARE) == PERMISSION_GRANTED
         }
     }
 }

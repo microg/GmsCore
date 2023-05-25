@@ -33,7 +33,7 @@ class NetworkLocationProviderService : Service() {
             handler.post {
                 val location = intent.getParcelableExtra<Location>(EXTRA_LOCATION)
                 if (location != null) {
-                    provider?.reportLocation(location)
+                    provider?.reportLocationToSystem(location)
                 }
             }
         }
