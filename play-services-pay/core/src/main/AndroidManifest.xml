@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.microg.gms.pay.core">
+
+    <application>
+        <activity-alias
+                android:name="com.google.android.gms.pay.main.PayActivity"
+                android:targetActivity="org.microg.gms.pay.PayActivity"
+                android:exported="true"
+                android:process=":ui">
+            <intent-filter>
+                <action android:name="com.google.android.gms.pay.PAY"/>
+                <action android:name="com.google.android.gms.pay.PAY_OPTIONAL"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-alias>
+        <activity android:name="org.microg.gms.pay.PayActivity"
+                  android:exported="true"
+                  android:process=":ui"/>
+        <service android:name="org.microg.gms.pay.PayService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.pay.service.BIND" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
