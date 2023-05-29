@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.view.ViewManager
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.internal.IInfoWindowAdapter
@@ -44,9 +46,9 @@ fun IInfoWindowAdapter.getInfoWindowViewFor(marker: IMarkerDelegate, mapContext:
         view.parent?.let { (it as ViewManager).removeView(view) }
 
         return FrameLayout(view.context).apply {
-            background = mapContext.getDrawable(R.drawable.maps_default_bubble)
+            ViewCompat.setBackground(this, ContextCompat.getDrawable(mapContext, R.drawable.maps_default_bubble))
             val fourDp = Utils.dpToPx(4f)
-            elevation = fourDp
+            ViewCompat.setElevation(this, fourDp)
             setPadding(fourDp.toInt(), fourDp.toInt(), fourDp.toInt(), fourDp.toInt() * 3)
             addView(view)
         }

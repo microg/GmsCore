@@ -19,6 +19,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.UiThread
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
@@ -297,7 +298,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
 
         // Add location overlay
         if (myLocationEnabled) myLocation?.let {
-            val indicator = mapContext.getDrawable(R.drawable.location_dot)!!
+            val indicator = ContextCompat.getDrawable(mapContext, R.drawable.location_dot)!!
             styleBuilder.withImage("locationIndicator", indicator)
             val layer = SymbolLayer("location", "locationSource").withProperties(
                 PropertyFactory.iconAllowOverlap(true),

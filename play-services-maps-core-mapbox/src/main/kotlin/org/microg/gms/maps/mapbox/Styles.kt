@@ -1,6 +1,7 @@
 package org.microg.gms.maps.mapbox
 
 import android.graphics.Color
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
@@ -100,7 +101,7 @@ fun MapStyleOptions.apply(style: JSONObject) {
 
                             if (layer.layerShouldBeRemoved(operation)) {
                                 Log.v(TAG, "removing $layer")
-                                layerArray.remove(i)
+                                layerArray.removeCompat(i)
                             } else {
                                 layer.applyOperation(operation)
                             }
@@ -393,3 +394,15 @@ fun Styler.applyTextOutline(paint: JSONObject) {
         is String -> paint.put("text-halo-color", applyColorChanges(textOutline.parseColor()).colorToString())
     }
 }
+
+fun JSONArray.removeCompat(index: Int) =
+    if (SDK_INT >= 19) {
+        remove(index)
+        this
+    } else {
+        val field = JSONArray::class.java.getDeclaredField("values")
+        field.isAccessible = true
+        val list = field.get(this) as MutableList<*>
+        list.removeAt(index)
+        this
+    }

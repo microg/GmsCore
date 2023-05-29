@@ -3,6 +3,7 @@ package org.microg.gms.maps.mapbox
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.RectF
 import com.google.android.gms.maps.model.Dash
 import com.google.android.gms.maps.model.Dot
 import com.google.android.gms.maps.model.Gap
@@ -68,24 +69,16 @@ fun List<PatternItem>.makeBitmap(paint: Paint, strokeWidth: Float, skew: Float):
 
     var drawCursor = 0f
     for (item in this) {
+        val rect = RectF(
+            drawCursor,
+            0f,
+            drawCursor + item.getWidth(strokeWidth, skew),
+            strokeWidth * skew
+        )
         when (item) {
-            is Dash -> canvas.drawRect(
-                drawCursor,
-                0f,
-                drawCursor + item.getWidth(strokeWidth, skew),
-                strokeWidth * skew,
-                paint
-            )
-
+            is Dash -> canvas.drawRect(rect, paint)
             // is Gap -> do nothing, only move cursor
-
-            is Dot -> canvas.drawOval(
-                drawCursor,
-                0f,
-                drawCursor + item.getWidth(strokeWidth, skew),
-                strokeWidth * skew,
-                paint
-            )
+            is Dot -> canvas.drawOval(rect, paint)
         }
 
         drawCursor += item.getWidth(strokeWidth, skew)

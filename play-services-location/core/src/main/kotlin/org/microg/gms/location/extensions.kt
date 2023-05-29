@@ -41,7 +41,7 @@ internal fun Long.formatDuration(): CharSequence {
     val intervalName = listOf("ms", "s", "m", "h", "d")
     var ret = ""
     var rem = this
-    for (i in 0..interval.size) {
+    for (i in 0 until interval.size) {
         val mod = rem % interval[i]
         if (mod != 0L) {
             ret = "$mod${intervalName[i]}$ret"
