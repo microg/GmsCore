@@ -121,7 +121,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
     var locationEnabled: Boolean = false
 
-    var locationEngine: LocationEngine? = null
+    val defaultLocationEngine = GoogleLocationEngine(context)
+    var locationEngine: LocationEngine = defaultLocationEngine
 
     var isStarted = false
 
@@ -427,14 +428,10 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
         synchronized(mapLock) {
             updateLocationEngineListener(false)
-            locationEngine = locationSource?.let { SourceLocationEngine(it) }
+            locationEngine = locationSource?.let { SourceLocationEngine(it) } ?: defaultLocationEngine
             if (!loaded) return
             if (map?.locationComponent?.isLocationComponentActivated == true) {
-                if (locationEngine != null) {
-                    map?.locationComponent?.locationEngine = locationEngine
-                } else {
-                    map?.locationComponent?.locationEngine = LocationEngineDefault.getDefaultLocationEngine(mapContext)
-                }
+                map?.locationComponent?.locationEngine = locationEngine
             }
             updateLocationEngineListener(locationEnabled)
         }
@@ -754,7 +751,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                             .useSpecializedLocationLayer(true)
                             .locationComponentOptions(LocationComponentOptions.builder(mapContext).pulseEnabled(true).build())
                             .build())
-                    cameraMode = CameraMode.TRACKING
+                    cameraMode = CameraMode.NONE
                     renderMode = RenderMode.COMPASS
                 }
 

@@ -90,7 +90,8 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
 
     private var myLocationEnabled = false
     private var myLocation: Location? = null
-    private var locationEngine: LocationEngine = LocationEngineDefault.getDefaultLocationEngine(mapContext)
+    private val defaultLocationEngine = GoogleLocationEngine(context)
+    private var locationEngine: LocationEngine = defaultLocationEngine
 
     internal val markers: MutableList<LiteMarkerImpl> = mutableListOf()
     internal val polygons: MutableList<LitePolygonImpl> = mutableListOf()
@@ -504,7 +505,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
 
     override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
         if (myLocationEnabled) deactivateLocationProvider()
-        locationEngine = locationSource?.let { SourceLocationEngine(it) } ?: LocationEngineDefault.getDefaultLocationEngine(mapContext)
+        locationEngine = locationSource?.let { SourceLocationEngine(it) } ?: defaultLocationEngine
         if (myLocationEnabled) activateLocationProvider()
     }
 
