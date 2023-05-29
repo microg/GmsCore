@@ -61,11 +61,16 @@ class LocationRequestManager(private val context: Context, private val lifecycle
         }
     }
 
-    suspend fun add(binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest) {
+    suspend fun add(binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest, lastLocationCapsule: LastLocationCapsule) {
         lock.withLock {
             val holder = LocationRequestHolder(context, clientIdentity, request, callback, null)
             try {
-                holder.start()
+                holder.start().also {
+                    var effectiveGranularity = it.effectiveGranularity
+                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+                    val lastLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
+                    if (lastLocation != null) it.processNewLocation(lastLocation)
+                }
                 binderRequests[binder] = holder
                 binder.linkToDeath(this, 0)
             } catch (e: Exception) {
@@ -76,12 +81,17 @@ class LocationRequestManager(private val context: Context, private val lifecycle
         notifyRequestDetailsUpdated()
     }
 
-    suspend fun update(oldBinder: IBinder, binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest) {
+    suspend fun update(oldBinder: IBinder, binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest, lastLocationCapsule: LastLocationCapsule) {
         lock.withLock {
             oldBinder.unlinkToDeath(this, 0)
             val holder = binderRequests.remove(oldBinder)
             try {
-                val startedHolder = holder?.update(callback, request) ?: LocationRequestHolder(context, clientIdentity, request, callback, null).start()
+                val startedHolder = holder?.update(callback, request) ?: LocationRequestHolder(context, clientIdentity, request, callback, null).start().also {
+                    var effectiveGranularity = it.effectiveGranularity
+                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+                    val lastLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
+                    if (lastLocation != null) it.processNewLocation(lastLocation)
+                }
                 binderRequests[binder] = startedHolder
                 binder.linkToDeath(this, 0)
             } catch (e: Exception) {
@@ -100,11 +110,15 @@ class LocationRequestManager(private val context: Context, private val lifecycle
         notifyRequestDetailsUpdated()
     }
 
-    suspend fun add(pendingIntent: PendingIntent, clientIdentity: ClientIdentity, request: LocationRequest) {
+    suspend fun add(pendingIntent: PendingIntent, clientIdentity: ClientIdentity, request: LocationRequest, lastLocationCapsule: LastLocationCapsule) {
         lock.withLock {
             try {
                 pendingIntentRequests[pendingIntent] = LocationRequestHolder(context, clientIdentity, request, null, pendingIntent).start().also {
                     cacheManager.add(it.asParcelable()) { it.pendingIntent == pendingIntent }
+                    var effectiveGranularity = it.effectiveGranularity
+                    if (effectiveGranularity == GRANULARITY_FINE && database.getForceCoarse(it.clientIdentity.packageName)) effectiveGranularity = GRANULARITY_COARSE
+                    val lastLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
+                    if (lastLocation != null) it.processNewLocation(lastLocation)
                 }
             } catch (e: Exception) {
                 // Ignore

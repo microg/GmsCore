@@ -102,7 +102,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
 
     suspend fun addBinderRequest(clientIdentity: ClientIdentity, binder: IBinder, callback: ILocationCallback, request: LocationRequest) {
         request.verify(context, clientIdentity)
-        requestManager.add(binder, clientIdentity, callback, request)
+        requestManager.add(binder, clientIdentity, callback, request, lastLocationCapsule)
     }
 
     suspend fun updateBinderRequest(
@@ -113,7 +113,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
         request: LocationRequest
     ) {
         request.verify(context, clientIdentity)
-        requestManager.update(oldBinder, binder, clientIdentity, callback, request)
+        requestManager.update(oldBinder, binder, clientIdentity, callback, request, lastLocationCapsule)
     }
 
     suspend fun removeBinderRequest(binder: IBinder) {
@@ -122,7 +122,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
 
     suspend fun addIntentRequest(clientIdentity: ClientIdentity, pendingIntent: PendingIntent, request: LocationRequest) {
         request.verify(context, clientIdentity)
-        requestManager.add(pendingIntent, clientIdentity, request)
+        requestManager.add(pendingIntent, clientIdentity, request, lastLocationCapsule)
     }
 
     suspend fun removeIntentRequest(pendingIntent: PendingIntent) {

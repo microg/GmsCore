@@ -33,7 +33,7 @@ internal val FEATURES = arrayOf(
     Feature("use_safe_parcelable_in_intents", 1)
 )
 
-internal fun Long.formatRealtime(): CharSequence = DateUtils.getRelativeTimeSpanString((SystemClock.elapsedRealtime() - this) + System.currentTimeMillis())
+internal fun Long.formatRealtime(): CharSequence = DateUtils.getRelativeTimeSpanString((this - SystemClock.elapsedRealtime()) + System.currentTimeMillis(), System.currentTimeMillis(), 0)
 internal fun Long.formatDuration(): CharSequence {
     if (this == 0L) return "0ms"
     if (this > 315360000000L /* ten years */) return "\u221e"
