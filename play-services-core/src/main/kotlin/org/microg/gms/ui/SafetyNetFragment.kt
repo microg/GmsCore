@@ -289,7 +289,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
                 val db = SafetyNetDatabase(requireContext())
                 db.clearAllRequests()
                 db.close()
-                (childFragmentManager.findFragmentById(R.id.sub_preferences) as? SafetyNetFragment)?.updateContent()
+                updateContent()
                 true
             }
             else -> super.onOptionsItemSelected(item)
