@@ -734,8 +734,6 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                     renderMode = RenderMode.COMPASS
                 }
 
-                setMyLocationEnabled(locationEnabled)
-
                 synchronized(mapLock) {
                     loaded = true
                     if (loadedCallback != null) {
@@ -743,6 +741,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                         loadedCallback?.onMapLoaded()
                     }
                 }
+
+                isMyLocationEnabled = locationEnabled
             }
         }
     }
