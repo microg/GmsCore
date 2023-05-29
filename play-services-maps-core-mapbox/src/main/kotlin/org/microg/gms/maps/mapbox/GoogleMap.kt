@@ -57,6 +57,7 @@ import com.mapbox.mapboxsdk.WellKnownTileServer
 import org.microg.gms.maps.mapbox.model.InfoWindow
 import org.microg.gms.maps.mapbox.model.getInfoWindowViewFor
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory
+import com.mapbox.mapboxsdk.location.engine.*
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
@@ -119,6 +120,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     var mapStyle: MapStyleOptions? = null
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
     var locationEnabled: Boolean = false
+
+    var locationEngine: LocationEngine? = null
 
     var isStarted = false
 
@@ -396,24 +399,44 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         synchronized(mapLock) {
             locationEnabled = myLocation
             if (!loaded) return
-            val locationComponent = map?.locationComponent ?: return
             try {
-                if (locationComponent.isLocationComponentActivated) {
-                    locationComponent.isLocationComponentEnabled = myLocation
-                    if (myLocation) {
-                        locationComponent.locationEngine?.requestLocationUpdates(
-                            locationComponent.locationEngineRequest,
-                            locationEngineCallback,
-                            null
-                        )
-                    } else {
-                        locationComponent.locationEngine?.removeLocationUpdates(locationEngineCallback)
-                    }
-                }
+                updateLocationEngineListener(myLocation)
             } catch (e: SecurityException) {
                 Log.w(TAG, e)
                 locationEnabled = false
             }
+        }
+    }
+
+    private fun updateLocationEngineListener(myLocation: Boolean) {
+        val locationComponent = map?.locationComponent ?: return
+        if (locationComponent.isLocationComponentActivated) {
+            locationComponent.isLocationComponentEnabled = myLocation
+            if (myLocation) {
+                locationComponent.locationEngine?.requestLocationUpdates(
+                    locationComponent.locationEngineRequest,
+                    locationEngineCallback,
+                    null
+                )
+            } else {
+                locationComponent.locationEngine?.removeLocationUpdates(locationEngineCallback)
+            }
+        }
+    }
+
+    override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
+        synchronized(mapLock) {
+            updateLocationEngineListener(false)
+            locationEngine = locationSource?.let { SourceLocationEngine(it) }
+            if (!loaded) return
+            if (map?.locationComponent?.isLocationComponentActivated == true) {
+                if (locationEngine != null) {
+                    map?.locationComponent?.locationEngine = locationEngine
+                } else {
+                    map?.locationComponent?.locationEngine = LocationEngineDefault.getDefaultLocationEngine(mapContext)
+                }
+            }
+            updateLocationEngineListener(locationEnabled)
         }
     }
 
@@ -727,6 +750,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
                 map.locationComponent.apply {
                     activateLocationComponent(LocationComponentActivationOptions.builder(mapContext, it)
+                            .locationEngine(this@GoogleMapImpl.locationEngine)
                             .useSpecializedLocationLayer(true)
                             .locationComponentOptions(LocationComponentOptions.builder(mapContext).pulseEnabled(true).build())
                             .build())

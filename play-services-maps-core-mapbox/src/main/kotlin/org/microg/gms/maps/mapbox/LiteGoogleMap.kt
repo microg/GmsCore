@@ -90,7 +90,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
 
     private var myLocationEnabled = false
     private var myLocation: Location? = null
-    private var locationEngineProvider: LocationEngine = LocationEngineDefault.getDefaultLocationEngine(mapContext)
+    private var locationEngine: LocationEngine = LocationEngineDefault.getDefaultLocationEngine(mapContext)
 
     internal val markers: MutableList<LiteMarkerImpl> = mutableListOf()
     internal val polygons: MutableList<LitePolygonImpl> = mutableListOf()
@@ -486,7 +486,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
                 mapContext, Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            locationEngineProvider.requestLocationUpdates(
+            locationEngine.requestLocationUpdates(
                 LocationEngineRequest.Builder(DEFAULT_INTERVAL_MILLIS)
                     .setFastestInterval(DEFAULT_FASTEST_INTERVAL_MILLIS)
                     .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
@@ -499,7 +499,13 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
     }
 
     private fun deactivateLocationProvider() {
-        locationEngineProvider.removeLocationUpdates(locationEngineCallback)
+        locationEngine.removeLocationUpdates(locationEngineCallback)
+    }
+
+    override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
+        if (myLocationEnabled) deactivateLocationProvider()
+        locationEngine = locationSource?.let { SourceLocationEngine(it) } ?: LocationEngineDefault.getDefaultLocationEngine(mapContext)
+        if (myLocationEnabled) activateLocationProvider()
     }
 
     override fun onLocationUpdate(location: Location) {
