@@ -10,6 +10,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
+import android.location.LocationManager.GPS_PROVIDER
+import android.location.LocationManager.NETWORK_PROVIDER
 import android.os.IBinder
 import android.os.Parcel
 import android.os.SystemClock
@@ -152,14 +154,15 @@ class LocationManagerInstance(
 
     override fun requestLocationSettingsDialog(settingsRequest: LocationSettingsRequest?, callback: ISettingsCallbacks?, packageName: String?) {
         Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName}")
-        checkHasAnyLocationPermission()
-        Log.d(TAG, "Not yet implemented: requestLocationSettingsDialog")
+        val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
             val locationManager = context.getSystemService<android.location.LocationManager>()
-            val gpsPresent = locationManager?.allProviders?.contains(android.location.LocationManager.GPS_PROVIDER) == true
-            val networkPresent = locationManager?.allProviders?.contains(android.location.LocationManager.NETWORK_PROVIDER) == true
-            val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER) == true
-            val networkUsable = networkPresent && locationManager?.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER) == true
+            val gpsPresent = locationManager?.allProviders?.contains(GPS_PROVIDER) == true
+            val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true
+            val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
+                    context.packageManager.checkPermission(ACCESS_FINE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
+            val networkUsable = networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&
+                    context.packageManager.checkPermission(ACCESS_COARSE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
             callback?.onLocationSettingsResult(LocationSettingsResult(LocationSettingsStates(gpsUsable, networkUsable, false, gpsPresent, networkPresent, true), Status.SUCCESS))
         }
     }
