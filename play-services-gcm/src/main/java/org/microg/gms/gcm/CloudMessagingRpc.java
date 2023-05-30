@@ -117,7 +117,7 @@ public class CloudMessagingRpc {
         if (selfAuthIntent == null) {
             Intent intent = new Intent();
             intent.setPackage("com.google.example.invalidpackage");
-            selfAuthIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            selfAuthIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         }
         return selfAuthIntent;
     }

@@ -259,7 +259,7 @@ public class InstanceIdRpc {
         if (selfAuthToken == null) {
             Intent intent = new Intent();
             intent.setPackage("com.google.example.invalidpackage");
-            selfAuthToken = PendingIntent.getBroadcast(context, 0, intent, 0);
+            selfAuthToken = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE);
         }
         return selfAuthToken;
     }

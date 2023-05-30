@@ -158,7 +158,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 if (notify) {
                     NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                     nm.notify(packageName.hashCode(), new NotificationCompat.Builder(context)
-                            .setContentIntent(PendingIntent.getActivity(context, 0, i, 0))
+                            .setContentIntent(PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_IMMUTABLE))
                             .setContentTitle(context.getString(R.string.auth_notification_title))
                             .setContentText(context.getString(R.string.auth_notification_content, getPackageLabel(packageName, context.getPackageManager())))
                             .setSmallIcon(android.R.drawable.stat_notify_error)
