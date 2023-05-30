@@ -8,21 +8,26 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
+    namespace 'com.google.android.gms.cast'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
-    aidlPackageWhiteList "com/google/android/gms/cast/ApplicationMetadata.aidl"
-    aidlPackageWhiteList "com/google/android/gms/cast/LaunchOptions.aidl"
+    aidlPackagedList "com/google/android/gms/cast/ApplicationMetadata.aidl"
+    aidlPackagedList "com/google/android/gms/cast/LaunchOptions.aidl"
+
+    buildFeatures {
+        aidl = true
+    }
 
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 

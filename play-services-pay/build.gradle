@@ -8,8 +8,14 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
+    namespace 'com.google.android.gms.pay'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
 
     defaultConfig {
         versionName version
@@ -18,8 +24,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 17
+        targetCompatibility = 17
     }
 }
 

@@ -76,8 +76,14 @@ dependencies {
 }
 
 android {
+    namespace 'com.google.android.gms'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName version
@@ -117,9 +123,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag'
-    }
 
     buildTypes {
         release {
@@ -147,15 +150,20 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     packagingOptions {
-        exclude 'META-INF/ASL2.0'
         jniLibs {
             useLegacyPackaging false
         }
+        resources {
+            excludes += ['META-INF/ASL2.0']
+        }
+    }
+    lint {
+        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag'
     }
 }
 

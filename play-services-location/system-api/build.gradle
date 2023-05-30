@@ -10,6 +10,8 @@ dependencies {
 }
 
 android {
+    namespace 'org.microg.gms.location.sysapi'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

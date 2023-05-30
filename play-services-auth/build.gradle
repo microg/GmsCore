@@ -8,18 +8,23 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
+    namespace 'com.google.android.gms.auth.api'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
+    buildFeatures {
+        aidl = true
+    }
+
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 17
+        targetCompatibility = 17
     }
 }
 

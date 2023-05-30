@@ -9,23 +9,28 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
+    namespace 'org.microg.gms.wearable'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
+    buildFeatures {
+        aidl = true
+    }
+
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 17
+        targetCompatibility = 17
     }
-
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
     }
+
 }
 
 wire {

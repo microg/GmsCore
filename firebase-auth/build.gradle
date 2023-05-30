@@ -6,18 +6,23 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'org.microg.gms.firebase.auth.api'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
+    buildFeatures {
+        aidl = true
+    }
+
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 17
+        targetCompatibility = 17
     }
 }
 

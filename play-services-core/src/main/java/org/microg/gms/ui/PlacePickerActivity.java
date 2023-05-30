@@ -17,8 +17,6 @@
 package org.microg.gms.ui;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -43,7 +41,6 @@ import com.google.android.gms.R;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.internal.PlaceImpl;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.microg.gms.location.LocationConstants;
@@ -54,7 +51,6 @@ import org.microg.safeparcel.SafeParcelUtil;
 //import org.oscim.event.Event;
 //import org.oscim.map.Map;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -83,7 +79,7 @@ PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ 
 
         setContentView(R.layout.pick_place);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(org.microg.tools.ui.R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

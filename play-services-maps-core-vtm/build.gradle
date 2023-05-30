@@ -42,12 +42,12 @@ def execResult(...args) {
 }
 
 android {
+    namespace 'org.microg.gms.maps.vtm'
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName "temp"
-        versionCode 1
 
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
@@ -57,9 +57,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable "MissingTranslation", "InvalidPackage", "BatteryLife", "ImpliedQuantity", "MissingQuantity"
-    }
 
     buildTypes {
         release {
@@ -69,8 +66,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    lint {
+        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity'
     }
 }
 

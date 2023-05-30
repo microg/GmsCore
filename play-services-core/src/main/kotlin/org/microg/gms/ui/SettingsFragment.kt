@@ -46,7 +46,7 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openAbout)
             true
         }
-        findPreference<Preference>(PREF_ABOUT)!!.summary = getString(R.string.about_version_str, AboutFragment.getSelfVersion(context))
+        findPreference<Preference>(PREF_ABOUT)!!.summary = getString(org.microg.tools.ui.R.string.about_version_str, AboutFragment.getSelfVersion(context))
     }
 
     override fun onResume() {
