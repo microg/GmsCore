@@ -37,7 +37,7 @@ import kotlin.math.max
 import kotlin.math.min
 import android.location.LocationManager as SystemLocationManager
 
-class LocationManager(private val context: Context, private val lifecycle: Lifecycle) : LifecycleOwner {
+class LocationManager(private val context: Context, override val lifecycle: Lifecycle) : LifecycleOwner {
     private var coarsePendingIntent: PendingIntent? = null
     private val postProcessor by lazy { LocationPostProcessor() }
     private val lastLocationCapsule by lazy { LastLocationCapsule(context) }
@@ -46,8 +46,6 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
     private val gpsLocationListener by lazy { LocationListenerCompat { updateGpsLocation(it) } }
 
     val deviceOrientationManager = DeviceOrientationManager(context, lifecycle)
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     var started: Boolean = false
         private set

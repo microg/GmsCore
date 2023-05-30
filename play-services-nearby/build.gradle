@@ -34,8 +34,8 @@ description = 'microG implementation of play-services-nearby'
 
 dependencies {
     // Dependencies from play-services-nearby:18.0.2
-    api "androidx.collection:collection:1.0.0"
-    api "androidx.core:core:1.0.0"
+    api "androidx.collection:collection:$collectionVersion"
+    api "androidx.core:core:$coreVersion"
     api project(':play-services-base')
     api project(':play-services-basement')
     api project(':play-services-tasks')

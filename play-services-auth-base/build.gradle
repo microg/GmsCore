@@ -34,7 +34,7 @@ description = 'microG implementation of play-services-auth-base'
 
 dependencies {
     // Dependencies from play-services-auth-base:18.0.6
-    api "androidx.collection:collection:1.0.0"
+    api "androidx.collection:collection:$collectionVersion"
     api project(':play-services-basement')
     api project(':play-services-base')
     api project(':play-services-tasks')

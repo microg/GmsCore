@@ -47,7 +47,7 @@ dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
 
     // Dependencies from play-services-wearable:17.1.0
-    api "androidx.core:core:1.0.0"
+    api "androidx.core:core:$coreVersion"
     api project(':play-services-base')
     api project(':play-services-basement')
     api project(':play-services-tasks')

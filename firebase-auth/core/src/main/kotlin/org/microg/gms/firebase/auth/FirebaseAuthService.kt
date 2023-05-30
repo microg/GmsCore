@@ -82,7 +82,7 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
     }
 }
 
-class FirebaseAuthServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
+class FirebaseAuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
     private val client = IdentityToolkitClient(context, apiKey)
     private var authorizedDomain: String? = null
 
@@ -150,8 +150,6 @@ class FirebaseAuthServiceImpl(private val context: Context, private val lifecycl
             signInMethods.add(getJSONArray("signinMethods").getString(i))
         }
     }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun applyActionCode(request: ApplyActionCodeAidlRequest, callbacks: IFirebaseAuthCallbacks) {
         Log.d(TAG, "Not yet implemented: applyActionCode")

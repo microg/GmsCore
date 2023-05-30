@@ -34,8 +34,8 @@ description = 'microG implementation of play-services-auth-base'
 
 dependencies {
     // Dependencies from play-services-auth:20.4.0
-    api "androidx.fragment:fragment:1.0.0"
-    api "androidx.loader:loader:1.0.0"
+    api "androidx.fragment:fragment:$fragmentVersion"
+    api "androidx.loader:loader:$loaderVersion"
 //    api project(':play-services-auth-api-phone')
     api project(':play-services-auth-base')
     api project(':play-services-base')

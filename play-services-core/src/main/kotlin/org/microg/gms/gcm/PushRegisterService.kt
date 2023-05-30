@@ -205,8 +205,8 @@ class PushRegisterService : LifecycleService() {
     }
 }
 
-internal class PushRegisterHandler(private val context: Context, private val database: GcmDatabase, private val lifecycle: Lifecycle) : Handler(), LifecycleOwner {
-    override fun getLifecycle(): Lifecycle = lifecycle
+internal class PushRegisterHandler(private val context: Context, private val database: GcmDatabase, override val lifecycle: Lifecycle) : Handler(), LifecycleOwner {
+
 
     private var callingUid = 0
     override fun sendMessageAtTime(msg: Message, uptimeMillis: Long): Boolean {

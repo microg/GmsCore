@@ -36,7 +36,7 @@ dependencies {
     implementation project(':play-services-api')
 
     // Dependencies from play-services-clearcut:17.0.0
-    api "androidx.core:core:1.0.0"
+    api "androidx.core:core:$coreVersion"
     api project(':play-services-base')
     api project(':play-services-basement')
 //    api project(':play-services-phenotype')

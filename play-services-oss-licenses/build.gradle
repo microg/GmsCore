@@ -34,9 +34,9 @@ description = 'microG implementation of play-services-oss-licenses'
 
 dependencies {
     // Dependencies from play-services-oss-licenses:17.0.0
-    api "androidx.loader:loader:1.0.0"
+    api "androidx.loader:loader:$loaderVersion"
     api project(':play-services-base')
     api project(':play-services-basement')
     api project(':play-services-tasks')
-    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
 }

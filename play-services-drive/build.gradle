@@ -34,7 +34,7 @@ description = 'microG implementation of play-services-drive'
 
 dependencies {
     // Dependencies from play-services-drive:17.0.0
-    api "androidx.collection:collection:1.0.0"
+    api "androidx.collection:collection:$collectionVersion"
     api project(':play-services-base')
     api project(':play-services-basement')
     api project(':play-services-tasks')
