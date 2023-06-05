@@ -28,19 +28,23 @@ class CellDetailsSource(private val context: Context, private val callback: Cell
                     if (details.isNotEmpty()) callback.onCellDetailsAvailable(details)
                 }
             })
+            return
         } else if (SDK_INT >= 17) {
-            val details = telephonyManager.allCellInfo.map(CellInfo::toCellDetails).map { it.repair(context) }.filter(CellDetails::isValid)
-            if (details.isNotEmpty()) callback.onCellDetailsAvailable(details)
-        } else {
-            val networkOperator = telephonyManager.networkOperator
-            var mcc: Int? = null
-            var mnc: Int? = null
-            if (networkOperator != null && networkOperator.length > 4) {
-                mcc = networkOperator.substring(0, 3).toIntOrNull()
-                mnc = networkOperator.substring(3).toIntOrNull()
+            val allCellInfo = telephonyManager.allCellInfo
+            if (allCellInfo != null) {
+                val details = allCellInfo.map(CellInfo::toCellDetails).map { it.repair(context) }.filter(CellDetails::isValid)
+                if (details.isNotEmpty()) {
+                    callback.onCellDetailsAvailable(details)
+                    return
+                }
             }
-            val detail = telephonyManager.cellLocation.toCellDetails(mcc, mnc)
-            if (detail.isValid) callback.onCellDetailsAvailable(listOf(detail))
+        }
+        val networkOperator = telephonyManager.networkOperator
+        if (networkOperator != null && networkOperator.length > 4) {
+            val mcc = networkOperator.substring(0, 3).toIntOrNull()
+            val mnc = networkOperator.substring(3).toIntOrNull()
+            val detail = telephonyManager.cellLocation?.toCellDetails(mcc, mnc)
+            if (detail?.isValid == true) callback.onCellDetailsAvailable(listOf(detail))
         }
     }
 

@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -23,6 +24,7 @@ import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.LocationAppsDatabase
 import org.microg.gms.ui.AppHeadingPreference
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class LocationAppFragment : PreferenceFragmentCompat() {
@@ -86,14 +88,23 @@ class LocationAppFragment : PreferenceFragmentCompat() {
                 lastLocation.title = DateUtils.getRelativeTimeSpanString(location.time)
                 lastLocation.intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${location.latitude},${location.longitude}"))
                 lastLocationMap.location = location
-                val address = if (SDK_INT > 33) {
-                    suspendCoroutine { continuation ->
-                        Geocoder(context).getFromLocation(location.latitude, location.longitude, 1) {
-                            continuation.resume(it.firstOrNull())
+                val address = try {
+                    if (SDK_INT > 33) {
+                        suspendCoroutine { continuation ->
+                            try {
+                                Geocoder(context).getFromLocation(location.latitude, location.longitude, 1) {
+                                    continuation.resume(it.firstOrNull())
+                                }
+                            } catch (e: Exception) {
+                                continuation.resumeWithException(e)
+                            }
                         }
+                    } else {
+                        withContext(Dispatchers.IO) { Geocoder(context).getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull() }
                     }
-                } else {
-                    withContext(Dispatchers.IO) { Geocoder(context).getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull() }
+                } catch (e: Exception) {
+                    Log.w(TAG, e)
+                    null
                 }
                 if (address != null) {
                     val addressLine = StringBuilder()
