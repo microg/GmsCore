@@ -11,7 +11,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application>
-        <service android:name="org.microg.gms.firebase.auth.FirebaseAuthService">
+        <service android:name="org.microg.gms.firebase.auth.FirebaseAuthService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.auth.api.gms.service.START" />
             </intent-filter>

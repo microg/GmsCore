@@ -8,7 +8,8 @@
     package="org.microg.gms.safetynet.core">
 
     <application>
-        <service android:name="org.microg.gms.safetynet.SafetyNetClientService">
+        <service android:name="org.microg.gms.safetynet.SafetyNetClientService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.safetynet.service.START" />
             </intent-filter>

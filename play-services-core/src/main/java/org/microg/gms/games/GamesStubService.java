@@ -28,6 +28,7 @@ import com.google.android.gms.common.internal.IGmsCallbacks;
 import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.games.UpgradeActivity.ACTION_PLAY_GAMES_UPGRADE;
@@ -52,7 +53,7 @@ public class GamesStubService extends BaseService {
         intent.setPackage(GMS_PACKAGE_NAME);
         intent.putExtra(EXTRA_GAME_PACACKE_NAME, packageName);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("pendingIntent", PendingIntent.getActivity(this, packageName.hashCode(), intent, FLAG_UPDATE_CURRENT));
+        bundle.putParcelable("pendingIntent", PendingIntent.getActivity(this, packageName.hashCode(), intent, FLAG_UPDATE_CURRENT | FLAG_IMMUTABLE));
         callback.onPostInitComplete(CommonStatusCodes.RESOLUTION_REQUIRED, null, bundle);
     }
 }

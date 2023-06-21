@@ -262,7 +262,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
         private get() {
             val intent = Intent()
             intent.setPackage("com.google.example.invalidpackage")
-            return PendingIntent.getBroadcast(context, 0, intent, 0)
+            return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
 
     override fun handleMessage(msg: Message) {

@@ -8,7 +8,8 @@
     package="org.microg.gms.gmscompliance.core">
 
     <application>
-        <service android:name="org.microg.gms.gmscompliance.GmsDeviceComplianceService">
+        <service android:name="org.microg.gms.gmscompliance.GmsDeviceComplianceService"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.gmscompliance.service.START" />
             </intent-filter>

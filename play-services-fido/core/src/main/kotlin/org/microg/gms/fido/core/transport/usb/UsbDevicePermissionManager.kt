@@ -74,7 +74,12 @@ class UsbDevicePermissionManager(private val context: Context) {
         val res = CompletableDeferred<Boolean>()
         if (receiver.addDeferred(device, res)) {
             receiver.register(context)
-            val intent = PendingIntent.getBroadcast(context, 0, Intent(context.usbPermissionCallbackAction), 0)
+            val intent = PendingIntent.getBroadcast(
+                context,
+                0,
+                Intent(context.usbPermissionCallbackAction),
+                PendingIntent.FLAG_IMMUTABLE
+            )
             context.usbManager?.requestPermission(device, intent)
         }
         return res.await()

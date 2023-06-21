@@ -10,7 +10,8 @@
     <application>
         <!-- This service is in :ui process because it may spawn a web view. See https://crbug.com/558377 -->
         <service android:name="org.microg.gms.recaptcha.RecaptchaService"
-                 android:process=":ui">
+                 android:process=":ui"
+                 android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.recaptcha.service.START"/>
             </intent-filter>

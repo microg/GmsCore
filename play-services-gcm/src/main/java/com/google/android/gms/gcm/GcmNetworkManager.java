@@ -214,7 +214,7 @@ public class GcmNetworkManager {
         if (!packageExists(GMS_PACKAGE_NAME)) return null;
         Intent scheduleIntent = new Intent(ACTION_SCHEDULE);
         scheduleIntent.setPackage(GMS_PACKAGE_NAME);
-        scheduleIntent.putExtra("app", PendingIntent.getBroadcast(context, 0, new Intent(), 0));
+        scheduleIntent.putExtra("app", PendingIntent.getBroadcast(context, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE));
         return scheduleIntent;
     }
 
