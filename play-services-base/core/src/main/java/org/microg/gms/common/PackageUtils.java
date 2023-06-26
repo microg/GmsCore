@@ -75,6 +75,7 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.kids.familylink", "88652b8464743e5ce80da0d4b890d13f9b1873df");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.walletnfcrel", "82759e2db43f9ccbafce313bc674f35748fabd7a");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.recorder", "394d84cd2cf89d3453702c663f98ec6554afc3cd");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.messaging", "0980a12be993528c19107bc21ad811478c63cefc");
     }
 
     public static boolean isGooglePackage(Context context, String packageName) {
