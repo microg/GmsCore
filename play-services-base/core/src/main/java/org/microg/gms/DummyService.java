@@ -18,6 +18,7 @@ package org.microg.gms;
 
 import android.os.RemoteException;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -31,6 +32,6 @@ public class DummyService extends BaseService {
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(CommonStatusCodes.ERROR, null, null);
+        callback.onPostInitComplete(ConnectionResult.API_DISABLED, null, null);
     }
 }

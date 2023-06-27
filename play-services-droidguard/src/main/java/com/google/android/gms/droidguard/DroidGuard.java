@@ -13,4 +13,7 @@ public class DroidGuard {
     public static DroidGuardClient getClient(Context context) {
         return new DroidGuardClientImpl(context);
     }
+    public static DroidGuardClient getClient(Context context, String packageName) {
+        return new DroidGuardClientImpl(context, packageName);
+    }
 }

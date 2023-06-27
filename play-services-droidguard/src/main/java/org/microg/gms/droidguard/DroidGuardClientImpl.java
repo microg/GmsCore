@@ -18,11 +18,18 @@ import org.microg.gms.common.api.ReturningGoogleApiCall;
 
 import java.util.Map;
 
-public class DroidGuardClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements DroidGuardClient {
-    private static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new DroidGuardApiClient(context, callbacks, connectionFailedListener));
+public class DroidGuardClientImpl extends GoogleApi<DroidGuardClientImpl.Options> implements DroidGuardClient {
+    private static final Api<Options> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> {
+        DroidGuardApiClient client = new DroidGuardApiClient(context, callbacks, connectionFailedListener);
+        if (options != null && options.packageName != null) client.setPackageName(options.packageName);
+        return client;
+    });
 
     public DroidGuardClientImpl(Context context) {
         super(context, API);
+    }
+    public DroidGuardClientImpl(Context context, String packageName) {
+        super(context, API, new Options(packageName));
     }
 
     @Override
@@ -40,5 +47,13 @@ public class DroidGuardClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> im
             handle.close();
             return results;
         });
+    }
+
+    public static class Options implements Api.ApiOptions.Optional {
+        public final String packageName;
+
+        public Options(String packageName) {
+            this.packageName = packageName;
+        }
     }
 }
