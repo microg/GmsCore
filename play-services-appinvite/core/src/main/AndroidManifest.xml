@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest package="org.microg.gms.appinvite"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <service
+            android:name="org.microg.gms.appinivite.AppInviteService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.appinvite.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        <activity
+            android:process=":ui"
+            android:name="org.microg.gms.appinivite.AppInviteActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity-alias
+            android:name="com.google.android.gms.appinvite.AppInviteAcceptInvitationActivity"
+            android:targetActivity="org.microg.gms.appinivite.AppInviteActivity"
+            android:exported="true">
+            <intent-filter
+                android:priority="900"
+                android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:host="*.app.goo.gl" />
+                <data android:pathPrefix="/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.firebase.dynamiclinks.VIEW_DYNAMIC_LINK" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+            </intent-filter>
+        </activity-alias>
+    </application>
+</manifest>

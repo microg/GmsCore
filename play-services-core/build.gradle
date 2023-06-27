@@ -20,6 +20,10 @@ dependencies {
 
     implementation project(':firebase-dynamic-links-api')
     implementation project(':firebase-auth-core')
+    implementation project(':play-services-ads-core')
+    implementation project(':play-services-ads-identifier-core')
+    implementation project(':play-services-ads-lite-core')
+    implementation project(':play-services-appinvite-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
     implementation project(':play-services-cast-framework-core')
