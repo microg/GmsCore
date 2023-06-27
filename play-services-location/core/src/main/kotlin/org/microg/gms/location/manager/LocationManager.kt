@@ -197,7 +197,13 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
             }
         } else {
             try {
-                LocationManagerCompat.removeUpdates(locationManager, gpsLocationListener)
+                LocationManagerCompat.requestLocationUpdates(
+                    locationManager,
+                    SystemLocationManager.GPS_PROVIDER,
+                    LocationRequestCompat.Builder(LocationRequestCompat.PASSIVE_INTERVAL).setMinUpdateIntervalMillis(MAX_FINE_UPDATE_INTERVAL).build(),
+                    gpsLocationListener,
+                    context.mainLooper
+                )
             } catch (e: SecurityException) {
                 // Ignore
             }

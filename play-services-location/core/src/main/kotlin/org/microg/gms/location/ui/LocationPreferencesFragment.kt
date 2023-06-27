@@ -6,6 +6,7 @@
 package org.microg.gms.location.ui
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -18,8 +19,10 @@ import androidx.preference.TwoStatePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.location.LocationSettings
+import org.microg.gms.location.core.BuildConfig
 import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.LocationAppsDatabase
+import org.microg.gms.location.network.mozilla.MozillaLocationServiceClient
 import org.microg.gms.ui.AppIconPreference
 import org.microg.gms.ui.getApplicationInfoIfExists
 import org.microg.gms.ui.navigate
@@ -30,7 +33,9 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var locationAppsNone: Preference
     private lateinit var wifiMls: TwoStatePreference
     private lateinit var wifiMoving: TwoStatePreference
+    private lateinit var wifiLearning: TwoStatePreference
     private lateinit var cellMls: TwoStatePreference
+    private lateinit var cellLearning: TwoStatePreference
     private lateinit var database: LocationAppsDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +54,9 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         locationAppsNone = preferenceScreen.findPreference("pref_location_apps_none") ?: locationAppsNone
         wifiMls = preferenceScreen.findPreference("pref_location_wifi_mls_enabled") ?: wifiMls
         wifiMoving = preferenceScreen.findPreference("pref_location_wifi_moving_enabled") ?: wifiMoving
+        wifiLearning = preferenceScreen.findPreference("pref_location_wifi_learning_enabled") ?: wifiLearning
         cellMls = preferenceScreen.findPreference("pref_location_cell_mls_enabled") ?: cellMls
+        cellLearning = preferenceScreen.findPreference("pref_location_cell_learning_enabled") ?: cellLearning
 
         locationAppsAll.setOnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openAllLocationApps)
@@ -63,10 +70,23 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             LocationSettings(requireContext()).wifiMoving = newValue as Boolean
             true
         }
+        wifiLearning.setOnPreferenceChangeListener { _, newValue ->
+            LocationSettings(requireContext()).wifiLearning = newValue as Boolean
+            true
+        }
         cellMls.setOnPreferenceChangeListener { _, newValue ->
             LocationSettings(requireContext()).cellMls = newValue as Boolean
             true
         }
+        cellLearning.setOnPreferenceChangeListener { _, newValue ->
+            LocationSettings(requireContext()).cellLearning = newValue as Boolean
+            true
+        }
+
+        wifiMls.isVisible = MozillaLocationServiceClient.API_KEY != null
+        cellMls.isVisible = MozillaLocationServiceClient.API_KEY != null
+        wifiLearning.isVisible = Build.VERSION.SDK_INT >= 17
+        cellLearning.isVisible = Build.VERSION.SDK_INT >= 17
     }
 
     override fun onResume() {
@@ -84,7 +104,9 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             val context = requireContext()
             wifiMls.isChecked = LocationSettings(context).wifiMls
             wifiMoving.isChecked = LocationSettings(context).wifiMoving
+            wifiLearning.isChecked = LocationSettings(context).wifiLearning
             cellMls.isChecked = LocationSettings(context).cellMls
+            cellLearning.isChecked = LocationSettings(context).cellLearning
             val (apps, showAll) = withContext(Dispatchers.IO) {
                 val apps = database.listAppsByAccessTime()
                 val res = apps.map { app ->

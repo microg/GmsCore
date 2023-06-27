@@ -25,11 +25,27 @@ class LocationSettings(private val context: Context) {
             SettingsContract.setSettings(context, SettingsContract.Location.getContentUri(context)) { put(SettingsContract.Location.WIFI_MOVING, value)}
         }
 
+    var wifiLearning: Boolean
+        get() = SettingsContract.getSettings(context, SettingsContract.Location.getContentUri(context), arrayOf(SettingsContract.Location.WIFI_LEARNING)) { c ->
+            c.getInt(0) != 0
+        }
+        set(value) {
+            SettingsContract.setSettings(context, SettingsContract.Location.getContentUri(context)) { put(SettingsContract.Location.WIFI_LEARNING, value)}
+        }
+
     var cellMls : Boolean
         get() = SettingsContract.getSettings(context, SettingsContract.Location.getContentUri(context), arrayOf(SettingsContract.Location.CELL_MLS)) { c ->
             c.getInt(0) != 0
         }
         set(value) {
             SettingsContract.setSettings(context, SettingsContract.Location.getContentUri(context)) { put(SettingsContract.Location.CELL_MLS, value)}
+        }
+
+    var cellLearning: Boolean
+        get() = SettingsContract.getSettings(context, SettingsContract.Location.getContentUri(context), arrayOf(SettingsContract.Location.CELL_LEARNING)) { c ->
+            c.getInt(0) != 0
+        }
+        set(value) {
+            SettingsContract.setSettings(context, SettingsContract.Location.getContentUri(context)) { put(SettingsContract.Location.CELL_LEARNING, value)}
         }
 }

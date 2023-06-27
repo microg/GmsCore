@@ -35,7 +35,7 @@ class MozillaLocationServiceClient(context: Context) {
             fallbacks = Fallback(lacf = false, ipf = false)
         )
     ).apply {
-        precision = WIFI_BASE_PRECISION_COUNT/wifis.size.toDouble()
+        precision = wifis.size.toDouble()/WIFI_BASE_PRECISION_COUNT
     }
 
     suspend fun retrieveSingleCellLocation(cell: CellDetails): Location = geoLocate(
@@ -81,10 +81,10 @@ class MozillaLocationServiceClient(context: Context) {
     companion object {
         private const val TAG = "MozillaLocation"
         private const val GEOLOCATE_URL = "https://location.services.mozilla.com/v1/geolocate"
-        private const val WIFI_BASE_PRECISION_COUNT = 8.0
+        private const val WIFI_BASE_PRECISION_COUNT = 4.0
         private const val CELL_DEFAULT_PRECISION = 1.0
         private const val CELL_FALLBACK_PRECISION = 0.5
-        private val API_KEY: String? = BuildConfig.ICHNAEA_KEY.takeIf { it.isNotBlank() }
+        val API_KEY: String? = BuildConfig.ICHNAEA_KEY.takeIf { it.isNotBlank() }
         const val LOCATION_EXTRA_FALLBACK = "fallback"
     }
 

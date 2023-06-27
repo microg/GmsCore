@@ -68,3 +68,18 @@ val WifiDetails.isHidden: Boolean
 
 val WifiDetails.isRequestable: Boolean
     get() = !isNomap && !isHidden && !isMoving
+
+val WifiDetails.macBytes: ByteArray
+    get() {
+        val mac = macClean
+        return byteArrayOf(
+            mac.substring(0, 2).toInt(16).toByte(),
+            mac.substring(2, 4).toInt(16).toByte(),
+            mac.substring(4, 6).toInt(16).toByte(),
+            mac.substring(6, 8).toInt(16).toByte(),
+            mac.substring(8, 10).toInt(16).toByte(),
+            mac.substring(10, 12).toInt(16).toByte()
+        )
+    }
+val WifiDetails.macClean: String
+    get() = macAddress.lowercase().replace(":", "")

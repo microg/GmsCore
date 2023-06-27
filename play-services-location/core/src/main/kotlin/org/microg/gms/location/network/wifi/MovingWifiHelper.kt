@@ -15,10 +15,13 @@ import androidx.core.content.getSystemService
 import androidx.core.location.LocationCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.location.network.TAG
 import java.net.HttpURLConnection
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 
 private val MOVING_WIFI_HOTSPOTS = setOf(
     // Austria
@@ -44,6 +47,8 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "FlyNet",
     "Telekom_FlyNet",
     "Vestische WLAN",
+    // Greece
+    "AegeanWiFi",
     // Hungary
     "MAVSTART-WIFI",
     // Netherlands
@@ -148,12 +153,31 @@ class MovingWifiHelper(private val context: Context) {
         return location
     }
 
+    private fun parseDisplayUgo(location: Location, data: ByteArray): Location {
+        val json = JSONArray(data.decodeToString()).getJSONObject(0)
+        location.accuracy = 100f
+        location.latitude = json.getDouble("latitude")
+        location.longitude = json.getDouble("longitude")
+        runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("created_at"))?.time }.getOrNull()?.let { location.time = it }
+        json.optDouble("speed_kilometers_per_hour").takeIf { !it.isNaN() }?.let {
+            location.speed = (it / 3.6).toFloat()
+            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+        }
+        json.optDouble("altitude_meters").takeIf { !it.isNaN() }?.let { location.altitude = it }
+        json.optDouble("bearing_in_degree").takeIf { !it.isNaN() }?.let {
+            location.bearing = it.toFloat()
+            LocationCompat.setBearingAccuracyDegrees(location, 90f)
+        }
+        return location
+    }
+
     private fun parseInput(ssid: String, data: ByteArray): Location {
         val location = Location(ssid)
         return when (ssid) {
             "WIFIonICE" -> parseWifiOnIce(location, data)
             "FlixBus Wi-Fi" -> parseFlixbus(location, data)
             "MAVSTART-WIFI" -> parsePassengera(location, data)
+            "AegeanWiFi" -> parseDisplayUgo(location, data)
             else -> throw UnsupportedOperationException()
         }
     }
@@ -165,7 +189,8 @@ class MovingWifiHelper(private val context: Context) {
         private val MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE = mapOf(
             "WIFIonICE" to "https://iceportal.de/api1/rs/status",
             "FlixBus Wi-Fi" to "https://media.flixbus.com/services/pis/v1/position",
-            "MAVSTART-WIFI" to "http://portal.mav.hu/portal/api/vehicle/realtime"
+            "MAVSTART-WIFI" to "http://portal.mav.hu/portal/api/vehicle/realtime",
+            "AegeanWiFi" to "https://api.ife.ugo.aero/navigation/positions"
         )
     }
 }

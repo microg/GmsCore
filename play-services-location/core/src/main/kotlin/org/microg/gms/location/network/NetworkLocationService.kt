@@ -9,6 +9,7 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.location.Location
+import android.location.LocationManager
 import android.net.wifi.WifiManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
@@ -16,8 +17,12 @@ import android.os.HandlerThread
 import android.os.SystemClock
 import android.os.WorkSource
 import android.util.Log
+import androidx.annotation.GuardedBy
 import androidx.collection.LruCache
 import androidx.core.content.getSystemService
+import androidx.core.location.LocationListenerCompat
+import androidx.core.location.LocationManagerCompat
+import androidx.core.location.LocationRequestCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.android.volley.VolleyError
@@ -36,11 +41,16 @@ import org.microg.gms.location.network.mozilla.ServiceException
 import org.microg.gms.location.network.wifi.*
 import java.io.FileDescriptor
 import java.io.PrintWriter
+import java.lang.Math.pow
+import java.nio.ByteBuffer
+import java.util.LinkedList
 import kotlin.math.min
 
 class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDetailsCallback {
     private lateinit var handlerThread: HandlerThread
     private lateinit var handler: Handler
+
+    @GuardedBy("activeRequests")
     private val activeRequests = HashSet<NetworkLocationRequest>()
     private val highPowerScanRunnable = Runnable { this.scan(false) }
     private val lowPowerScanRunnable = Runnable { this.scan(true) }
@@ -65,6 +75,11 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private var lastCellLocation: Location? = null
     private var lastLocation: Location? = null
 
+    private val gpsLocationListener by lazy { LocationListenerCompat { onNewGpsLocation(it) } }
+
+    @GuardedBy("gpsLocationBuffer")
+    private val gpsLocationBuffer = LinkedList<Location>()
+
     private val interval: Long
         get() = min(highPowerIntervalMillis, lowPowerIntervalMillis)
 
@@ -75,6 +90,19 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         handler = Handler(handlerThread.looper)
         wifiDetailsSource.enable()
         cellDetailsSource.enable()
+        try {
+            getSystemService<LocationManager>()?.let { locationManager ->
+                LocationManagerCompat.requestLocationUpdates(
+                    locationManager,
+                    LocationManager.GPS_PROVIDER,
+                    LocationRequestCompat.Builder(LocationRequestCompat.PASSIVE_INTERVAL).setMinUpdateIntervalMillis(GPS_PASSIVE_INTERVAL).build(),
+                    gpsLocationListener,
+                    handlerThread.looper
+                )
+            }
+        } catch (e: SecurityException) {
+            Log.d(TAG, "GPS location retriever not initialized", e)
+        }
     }
 
     @SuppressLint("WrongConstant")
@@ -162,7 +190,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         super.onDestroy()
     }
 
-    suspend fun requestLocation(requestableWifis: List<WifiDetails>, currentLocalMovingWifi: WifiDetails?): Location? {
+    suspend fun requestWifiLocation(requestableWifis: List<WifiDetails>, currentLocalMovingWifi: WifiDetails?): Location? {
         var candidate: Location? = null
         if (currentLocalMovingWifi != null && settings.wifiMoving) {
             try {
@@ -199,7 +227,28 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 }
             }
         }
+        if ((candidate?.accuracy ?: Float.MAX_VALUE) <= 50f) return candidate
+        if (requestableWifis.isNotEmpty() && settings.wifiLearning) {
+            val wifiLocations = requestableWifis.mapNotNull { wifi -> cache.getWifiLocation(wifi)?.let { wifi to it } }
+            if (wifiLocations.size == 1 && (candidate == null || wifiLocations.single().second.accuracy < candidate!!.accuracy)) {
+                return wifiLocations.single().second
+            } else if (wifiLocations.isNotEmpty()) {
+                val location = Location(LocationCacheDatabase.PROVIDER_CACHE).apply {
+                    latitude = wifiLocations.weightedAverage { it.second.latitude to pow(10.0, it.first.signalStrength?.toDouble() ?: 1.0) }
+                    longitude = wifiLocations.weightedAverage { it.second.longitude to pow(10.0, it.first.signalStrength?.toDouble() ?: 1.0) }
+                    precision = wifiLocations.size.toDouble() / 4.0
+                }
+                location.accuracy = wifiLocations.maxOf { it.second.accuracy } - wifiLocations.minOf { it.second.distanceTo(location) } / 2
+                return location
+            }
+
+        }
         return candidate
+    }
+
+    fun <T> List<T>.weightedAverage(f: (T) -> Pair<Double, Double>): Double {
+        val valuesAndWeights = map { f(it) }
+        return valuesAndWeights.sumOf { it.first * it.second } / valuesAndWeights.sumOf { it.second }
     }
 
     override fun onWifiDetailsAvailable(wifis: List<WifiDetails>) {
@@ -217,11 +266,19 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             ?.filter { movingWifiHelper.isLocallyRetrievable(it) }
             ?.singleOrNull()
         val requestableWifis = wifis.filter(WifiDetails::isRequestable)
-        if (requestableWifis.size < 3 && currentLocalMovingWifi == null) return
+        if (SDK_INT >= 17 && settings.wifiLearning) {
+            for (wifi in requestableWifis.filter { it.timestamp != null }) {
+                val wifiElapsedMillis = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - wifi.timestamp!!)
+                getGpsLocation(wifiElapsedMillis)?.let {
+                    cache.learnWifiLocation(wifi, it)
+                }
+            }
+        }
+        if (requestableWifis.isEmpty() && currentLocalMovingWifi == null) return
         val previousLastRealtimeMillis = lastWifiDetailsRealtimeMillis
         lastWifiDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
-            val location = requestLocation(requestableWifis, currentLocalMovingWifi)
+            val location = requestWifiLocation(requestableWifis, currentLocalMovingWifi)
             if (location == null) {
                 lastWifiDetailsRealtimeMillis = previousLastRealtimeMillis
                 return@launch
@@ -243,12 +300,20 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             Log.d(TAG, "Ignoring cell details, similar age as last")
             return
         }
+        if (SDK_INT >= 17 && settings.cellLearning) {
+            for (cell in cells.filter { it.timestamp != null && it.location == null }) {
+                val cellElapsedMillis = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - cell.timestamp!!)
+                getGpsLocation(cellElapsedMillis)?.let {
+                    cache.learnCellLocation(cell, it)
+                }
+            }
+        }
         lastCellDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
             val singleCell =
                 cells.filter { it.location != NEGATIVE_CACHE_ENTRY }.maxByOrNull { it.timestamp ?: it.signalStrength?.toLong() ?: 0L } ?: return@launch
             val location = singleCell.location ?: try {
-                when (val cacheLocation = cache.getCellLocation(singleCell)) {
+                when (val cacheLocation = cache.getCellLocation(singleCell, allowLearned = settings.cellLearning)) {
                     NEGATIVE_CACHE_ENTRY -> null
 
                     null -> if (settings.cellMls) {
@@ -315,14 +380,40 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         }
     }
 
+    private fun onNewGpsLocation(location: Location) {
+        if (location.accuracy > GPS_PASSIVE_MIN_ACCURACY) return
+        synchronized(gpsLocationBuffer) {
+            if (gpsLocationBuffer.isNotEmpty() && gpsLocationBuffer.last.elapsedMillis < SystemClock.elapsedRealtime() - GPS_BUFFER_SIZE * GPS_PASSIVE_INTERVAL) {
+                gpsLocationBuffer.clear()
+            } else  if (gpsLocationBuffer.size >= GPS_BUFFER_SIZE) {
+                gpsLocationBuffer.remove()
+            }
+            gpsLocationBuffer.offer(location)
+        }
+    }
+
+    private fun getGpsLocation(elapsedMillis: Long): Location? {
+        if (elapsedMillis + GPS_BUFFER_SIZE * GPS_PASSIVE_INTERVAL < SystemClock.elapsedRealtime()) return null
+        synchronized(gpsLocationBuffer) {
+            if (gpsLocationBuffer.isEmpty()) return null
+            for (location in gpsLocationBuffer.descendingIterator()) {
+                if (location.elapsedMillis in (elapsedMillis - GPS_PASSIVE_INTERVAL)..(elapsedMillis + GPS_PASSIVE_INTERVAL)) return location
+                if (location.elapsedMillis < elapsedMillis) return null
+            }
+        }
+        return null
+    }
+
     override fun dump(fd: FileDescriptor?, writer: PrintWriter, args: Array<out String>?) {
         writer.println("Last scan elapsed realtime: high-power: ${lastHighPowerScanRealtime.formatRealtime()}, low-power: ${lastLowPowerScanRealtime.formatRealtime()}")
         writer.println("Last scan result time: wifi: ${lastWifiDetailsRealtimeMillis.formatRealtime()}, cells: ${lastCellDetailsRealtimeMillis.formatRealtime()}")
         writer.println("Interval: high-power: ${highPowerIntervalMillis.formatDuration()}, low-power: ${lowPowerIntervalMillis.formatDuration()}")
         writer.println("Last wifi location: $lastWifiLocation${if (lastWifiLocation == lastLocation) " (active)" else ""}")
         writer.println("Last cell location: $lastCellLocation${if (lastCellLocation == lastLocation) " (active)" else ""}")
-        writer.println("Settings: Wi-Fi MLS=${settings.wifiMls} moving=${settings.wifiMoving} Cell MLS=${settings.cellMls}")
+        writer.println("Settings: Wi-Fi MLS=${settings.wifiMls} moving=${settings.wifiMoving} learn=${settings.wifiLearning} Cell MLS=${settings.cellMls} learn=${settings.cellLearning}")
         writer.println("Wifi scan cache size=${wifiScanCache.size()} hits=${wifiScanCache.hitCount()} miss=${wifiScanCache.missCount()} puts=${wifiScanCache.putCount()} evicts=${wifiScanCache.evictionCount()}")
+        writer.println("GPS location buffer size=${gpsLocationBuffer.size} first=${gpsLocationBuffer.firstOrNull()?.elapsedMillis?.formatRealtime()} last=${gpsLocationBuffer.lastOrNull()?.elapsedMillis?.formatRealtime()}")
+        cache.dump(writer)
         synchronized(activeRequests) {
             if (activeRequests.isNotEmpty()) {
                 writer.println("Active requests:")
@@ -343,6 +434,9 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         const val EXTRA_WORK_SOURCE = "work_source"
         const val EXTRA_BYPASS = "bypass"
         const val EXTRA_LOCATION = "location"
+        const val GPS_BUFFER_SIZE = 60
+        const val GPS_PASSIVE_INTERVAL = 1000L
+        const val GPS_PASSIVE_MIN_ACCURACY = 25f
         const val LOCATION_TIME_CLIFF_MS = 30000L
         const val DEBOUNCE_DELAY_MS = 5000L
         const val MAX_WIFI_SCAN_CACHE_AGE = 1000L * 60 * 60 * 24 // 1 day
@@ -351,4 +445,24 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
 
 private operator fun <K, V> LruCache<K, V>.set(key: K, value: V) {
     put(key, value)
+}
+
+fun List<WifiDetails>.hash(): ByteArray? {
+    val filtered = sortedBy { it.macClean }
+        .filter { it.timestamp == null || it.timestamp > System.currentTimeMillis() - 60000 }
+        .filter { it.signalStrength == null || it.signalStrength > -90 }
+    if (filtered.size < 3) return null
+    val maxTimestamp = maxOf { it.timestamp ?: 0L }
+    fun WifiDetails.hashBytes(): ByteArray {
+        return macBytes + byteArrayOf(
+            ((maxTimestamp - (timestamp ?: 0L)) / (60 * 1000)).toByte(), // timestamp
+            ((signalStrength ?: 0) / 10).toByte() // signal strength
+        )
+    }
+
+    val buffer = ByteBuffer.allocate(filtered.size * 8)
+    for (wifi in filtered) {
+        buffer.put(wifi.hashBytes())
+    }
+    return buffer.array().digest("SHA-256")
 }

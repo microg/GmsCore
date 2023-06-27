@@ -152,12 +152,16 @@ object SettingsContract {
 
         const val WIFI_MLS = "location_wifi_mls"
         const val WIFI_MOVING = "location_wifi_moving"
+        const val WIFI_LEARNING = "location_wifi_learning"
         const val CELL_MLS = "location_cell_mls"
+        const val CELL_LEARNING = "location_cell_learning"
 
         val PROJECTION = arrayOf(
             WIFI_MLS,
             WIFI_MOVING,
-            CELL_MLS
+            WIFI_LEARNING,
+            CELL_MLS,
+            CELL_LEARNING,
         )
     }
 

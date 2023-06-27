@@ -295,7 +295,9 @@ class SettingsProvider : ContentProvider() {
         when (key) {
             Location.WIFI_MLS -> getSettingsBoolean(key, true)
             Location.WIFI_MOVING -> getSettingsBoolean(key, true)
+            Location.WIFI_LEARNING -> getSettingsBoolean(key, true)
             Location.CELL_MLS -> getSettingsBoolean(key, true)
+            Location.CELL_LEARNING -> getSettingsBoolean(key, true)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -307,7 +309,9 @@ class SettingsProvider : ContentProvider() {
             when (key) {
                 Location.WIFI_MLS -> editor.putBoolean(key, value as Boolean)
                 Location.WIFI_MOVING -> editor.putBoolean(key, value as Boolean)
+                Location.WIFI_LEARNING -> editor.putBoolean(key, value as Boolean)
                 Location.CELL_MLS -> editor.putBoolean(key, value as Boolean)
+                Location.CELL_LEARNING -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
