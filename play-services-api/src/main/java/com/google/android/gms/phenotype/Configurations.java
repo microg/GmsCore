@@ -9,9 +9,9 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class Configurations extends AutoSafeParcelable {
     @Field(2)
-    public String field2;
+    public String snapshotToken;
     @Field(3)
-    public String field3;
+    public String serverToken;
     @Field(4)
     public Configuration[] field4;
     @Field(5)
@@ -19,7 +19,7 @@ public class Configurations extends AutoSafeParcelable {
     @Field(6)
     public byte[] field6;
     @Field(7)
-    public long field7;
+    public long version;
 
     public static final Creator<Configurations> CREATOR = new AutoCreator<>(Configurations.class);
 }
