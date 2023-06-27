@@ -16,6 +16,7 @@
 package org.microg.gms.auth.signin
 
 import android.os.Bundle
+import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.internal.ISignInCallbacks
@@ -23,17 +24,16 @@ import com.google.android.gms.auth.api.signin.internal.ISignInService
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
-import org.microg.gms.auth.credentials.FEATURES
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.utils.warnOnTransactionIssues
 
-private const val TAG = "SignInService"
+private const val TAG = "AuthSignInService"
 
-class SignInService : BaseService(TAG, GmsService.SIGN_IN) {
+class AuthSignInService : BaseService(TAG, GmsService.AUTH_SIGN_IN) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
@@ -58,4 +58,5 @@ class SignInServiceImpl(private val packageName: String, private val scopes: Lis
         callbacks?.onRevokeAccess(Status.INTERNAL_ERROR)
     }
 
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }
