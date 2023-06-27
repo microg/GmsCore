@@ -38,6 +38,7 @@ import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -549,15 +550,17 @@ public class McsService extends Service implements Handler.Callback {
         intent.setAction(ACTION_C2DM_RECEIVE);
         intent.putExtra(EXTRA_FROM, msg.from);
         intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
-        if (msg.persistent_id != null) {
-            intent.putExtra(EXTRA_MESSAGE_ID, msg.persistent_id);
+        if (msg.persistent_id != null) intent.putExtra(EXTRA_MESSAGE_ID, msg.persistent_id);
+        if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
+        if (msg.raw_data != null) {
+            intent.putExtra(EXTRA_RAWDATA_BASE64, Base64.encodeToString(msg.raw_data.toByteArray(), Base64.DEFAULT));
+            intent.putExtra(EXTRA_RAWDATA, msg.raw_data.toByteArray());
         }
         if (app.wakeForDelivery) {
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         } else {
             intent.addFlags(Intent.FLAG_EXCLUDE_STOPPED_PACKAGES);
         }
-        if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
         for (AppData appData : msg.app_data) {
             intent.putExtra(appData.key, appData.value_);
         }

@@ -19,6 +19,7 @@
 
     <SwitchPreference
         android:defaultValue="false"
+        android:persistent="false"
         android:key="gcm_confirm_new_apps"
         android:summary="@string/pref_gcm_confirm_new_apps_summary"
         android:title="@string/pref_gcm_confirm_new_apps_title"/>
@@ -29,6 +30,7 @@
 
         <ListPreference
             android:defaultValue="0"
+            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_mobile"
@@ -37,6 +39,7 @@
 
         <ListPreference
             android:defaultValue="0"
+            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_wifi"
@@ -45,6 +48,7 @@
 
         <ListPreference
             android:defaultValue="0"
+            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_roaming"
@@ -53,6 +57,7 @@
 
         <ListPreference
             android:defaultValue="0"
+            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_other"
