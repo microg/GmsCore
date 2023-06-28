@@ -88,7 +88,8 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     private var loaded = false
     private val mapLock = Object()
 
-    private val initializedCallbackList = mutableListOf<OnMapReadyCallback>()
+    private val internalOnInitializedCallbackList = mutableListOf<OnMapReadyCallback>()
+    private val userOnInitializedCallbackList = mutableListOf<IOnMapReadyCallback>()
     private var loadedCallback: IOnMapLoadedCallback? = null
     private var cameraChangeListener: IOnCameraChangeListener? = null
     private var cameraMoveListener: IOnCameraMoveListener? = null
@@ -205,7 +206,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             if (initialized) {
                 runnable(map!!)
             } else {
-                initializedCallbackList.add(OnMapReadyCallback {
+                internalOnInitializedCallbackList.add(OnMapReadyCallback {
                     runnable(it)
                 })
             }
@@ -454,7 +455,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun getUiSettings(): IUiSettingsDelegate =
         map?.uiSettings?.let { UiSettingsImpl(it) } ?: UiSettingsCache().also {
             // Apply cached UI settings after map is initialized
-            initializedCallbackList.add(it.getMapReadyCallback())
+            internalOnInitializedCallbackList.add(it.getMapReadyCallback())
         }
 
     override fun getProjection(): IProjectionDelegate = map?.projection?.let {
@@ -566,6 +567,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             mapView.onCreate(savedInstanceState?.toMapbox())
             mapView.getMapAsync(this::initMap)
             created = true
+            runOnMainLooper(forceQueue = true) { tryRunUserInitializedCallbacks("onCreate") }
         }
     }
 
@@ -654,12 +656,15 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         synchronized(mapLock) {
             initialized = true
             waitingCameraUpdates.forEach { map.moveCamera(it) }
-            val initializedCallbackList = ArrayList(initializedCallbackList)
-            Log.d(TAG, "Invoking ${initializedCallbackList.size} callbacks delayed, as map is initialized")
+            val initializedCallbackList = ArrayList(internalOnInitializedCallbackList)
+            Log.d(TAG, "Invoking ${initializedCallbackList.size} internal callbacks now that the true map is initialized")
             for (callback in initializedCallbackList) {
                 callback.onMapReady(map)
             }
         }
+
+        // No effect if no initialized callbacks are present.
+        tryRunUserInitializedCallbacks(tag = "initMap")
 
         map.getStyle {
             mapView?.let { view ->
@@ -842,33 +847,50 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
     fun getMapAsync(callback: IOnMapReadyCallback) {
         synchronized(mapLock) {
+            userOnInitializedCallbackList.add(callback)
+        }
+        tryRunUserInitializedCallbacks("getMapAsync")
+    }
 
-            val runCallback = {
-                try {
-                    callback.onMapReady(this)
-                } catch (e: Exception) {
-                    Log.w(TAG, e)
+    fun tryRunUserInitializedCallbacks(tag: String = "") {
+
+        synchronized(mapLock) {
+            if (userOnInitializedCallbackList.isEmpty()) return
+        }
+
+        val runCallbacks = {
+            synchronized(mapLock) {
+                userOnInitializedCallbackList.forEach {
+                    try {
+                        it.onMapReady(this)
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                    }
+                }.also {
+                    userOnInitializedCallbackList.clear()
                 }
             }
+        }
 
-            if (initialized) {
-                Log.d(TAG, "Invoking callback instantly, as map is initialized")
-                runCallback()
-            } else if (mapView?.isShown == false) {
-                /* If map is hidden, an app (e.g. Dott) may expect it to initialize anyway and
-                 * will not show the map until it is initialized. However, we should not call
-                 * the callback before onCreate is started (we know this is the case if mapView is
-                 * null), otherwise that results in other problems (e.g. Gas Now app not
-                 * initializing).
-                 */
-                runOnMainLooper(forceQueue = true) {
-                    Log.d(TAG, "Invoking callback now: map cannot be initialized because it is not shown (yet)")
-                    runCallback()
-                }
-            } else {
-                Log.d(TAG, "Delay callback invocation, as map is not yet initialized")
-                initializedCallbackList.add { runCallback() }
+        val map = map
+        if (initialized && map != null) {
+            // Call all callbacks immediately, as map is ready
+            Log.d("$TAG:$tag", "Invoking callback instantly, as map is initialized")
+            runCallbacks()
+        } else if (mapView?.isShown == false) {
+            /* If map is hidden, an app (e.g. Dott) may expect it to initialize anyway and
+             * will not show the map until it is initialized. However, we should not call
+             * the callback before onCreate is started (we know this is the case if mapView is
+             * null), otherwise that results in other problems (e.g. Gas Now app not
+             * initializing).
+             */
+            runOnMainLooper(forceQueue = true) {
+                Log.d("$TAG:$tag", "Invoking callback now: map cannot be initialized because it is not shown (yet)")
+                runCallbacks()
             }
+        } else {
+            Log.d("$TAG:$tag", "Initialized callbacks could not be run at this point, as the map view has not been created yet.")
+            // Will be retried after initialization.
         }
     }
 
