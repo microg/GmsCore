@@ -1,17 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.maps.model;
@@ -22,7 +14,6 @@ import com.google.android.gms.dynamic.ObjectWrapper;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a ground overlay.
@@ -34,31 +25,33 @@ public class GroundOverlayOptions extends AutoSafeParcelable {
      */
     public static final float NO_DIMENSION = -1;
 
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode;
-    @SafeParceled(2)
+    @Field(2)
     private IBinder image;
     private BitmapDescriptor imageDescriptor;
-    @SafeParceled(3)
+    @Field(3)
     private LatLng location;
-    @SafeParceled(4)
+    @Field(4)
     private float width;
-    @SafeParceled(5)
+    @Field(5)
     private float height;
-    @SafeParceled(6)
+    @Field(6)
     private LatLngBounds bounds;
-    @SafeParceled(7)
+    @Field(7)
     private float bearing;
-    @SafeParceled(8)
+    @Field(8)
     private float zIndex;
-    @SafeParceled(9)
-    private boolean visible;
-    @SafeParceled(10)
-    private float transparency = 0;
-    @SafeParceled(11)
-    private float anchorU;
-    @SafeParceled(12)
-    private float anchorV;
+    @Field(9)
+    private boolean visible = true;
+    @Field(10)
+    private float transparency = 0.0f;
+    @Field(11)
+    private float anchorU = 0.5f;
+    @Field(12)
+    private float anchorV = 0.5f;
+    @Field(13)
+    private boolean clickable = false;
 
     /**
      * Creates a new set of ground overlay options.
@@ -99,6 +92,17 @@ public class GroundOverlayOptions extends AutoSafeParcelable {
      */
     public GroundOverlayOptions bearing(float bearing) {
         this.bearing = bearing;
+        return this;
+    }
+
+    /**
+     * Specifies whether the ground overlay is clickable. The default clickability is {@code false}.
+     *
+     * @param clickable The new clickability setting.
+     * @return this {@link GroundOverlayOptions} object with a new clickability setting.
+     */
+    public GroundOverlayOptions clickable(boolean clickable) {
+        this.clickable = clickable;
         return this;
     }
 
@@ -214,6 +218,15 @@ public class GroundOverlayOptions extends AutoSafeParcelable {
         this.imageDescriptor = image;
         this.image = imageDescriptor.getRemoteObject().asBinder();
         return this;
+    }
+
+    /**
+     * Gets the clickability setting for this {@link GroundOverlayOptions} object.
+     *
+     * @return {@code true} if the ground overlay is clickable; {@code false} if it is not.
+     */
+    public boolean isClickable() {
+        return clickable;
     }
 
     /**

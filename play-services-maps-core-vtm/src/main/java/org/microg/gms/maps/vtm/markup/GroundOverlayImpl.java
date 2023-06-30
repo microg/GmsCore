@@ -139,7 +139,27 @@ public class GroundOverlayImpl extends IGroundOverlayDelegate.Stub {
     }
 
     @Override
-    public void todo(IObjectWrapper obj) throws RemoteException {
+    public void setImage(IObjectWrapper img) throws RemoteException {
 
+    }
+
+    @Override
+    public void setClickable(boolean clickable) throws RemoteException {
+
+    }
+
+    @Override
+    public boolean isClickable() throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public void setTag(IObjectWrapper obj) throws RemoteException {
+
+    }
+
+    @Override
+    public IObjectWrapper getTag() throws RemoteException {
+        return null;
     }
 }

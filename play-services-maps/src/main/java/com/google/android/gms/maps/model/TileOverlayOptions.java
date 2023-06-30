@@ -1,17 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.maps.model;
@@ -19,11 +11,11 @@ package com.google.android.gms.maps.model;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import androidx.annotation.NonNull;
 import com.google.android.gms.maps.model.internal.ITileProviderDelegate;
 
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 /**
  * Defines options for a TileOverlay.
@@ -31,20 +23,22 @@ import org.microg.safeparcel.SafeParceled;
 @PublicApi
 public class TileOverlayOptions extends AutoSafeParcelable {
 
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
     /**
      * This is a IBinder to the {@link #tileProvider}, built using {@link ITileProviderDelegate}.
      */
-    @SafeParceled(2)
+    @Field(2)
     private IBinder tileProviderBinder;
     private TileProvider tileProvider;
-    @SafeParceled(3)
+    @Field(3)
     private boolean visible = true;
-    @SafeParceled(4)
+    @Field(4)
     private float zIndex;
-    @SafeParceled(5)
+    @Field(5)
     private boolean fadeIn = true;
+    @Field(6)
+    private float transparency = 0.0f;
 
     /**
      * Creates a new set of tile overlay options.
@@ -81,6 +75,15 @@ public class TileOverlayOptions extends AutoSafeParcelable {
     }
 
     /**
+     * Gets the transparency set for this {@link TileOverlayOptions} object.
+     *
+     * @return the transparency of the tile overlay.
+     */
+    public float getTransparency() {
+        return transparency;
+    }
+
+    /**
      * Gets the zIndex set for this {@link TileOverlayOptions} object.
      *
      * @return the zIndex of the tile overlay.
@@ -104,7 +107,7 @@ public class TileOverlayOptions extends AutoSafeParcelable {
      * @param tileProvider the {@link TileProvider} to use for this tile overlay.
      * @return the object for which the method was called, with the new tile provider set.
      */
-    public TileOverlayOptions tileProvider(final TileProvider tileProvider) {
+    public TileOverlayOptions tileProvider(@NonNull final TileProvider tileProvider) {
         this.tileProvider = tileProvider;
         this.tileProviderBinder = new ITileProviderDelegate.Stub() {
             @Override
@@ -112,6 +115,19 @@ public class TileOverlayOptions extends AutoSafeParcelable {
                 return tileProvider.getTile(x, y, zoom);
             }
         };
+        return this;
+    }
+
+    /**
+     * Specifies the transparency of the tile overlay. The default transparency is {@code 0} (opaque).
+     *
+     * @param transparency a float in the range {@code [0..1]} where {@code 0} means that the tile overlay is opaque and {@code 1} means that the tile overlay is transparent.
+     * @return this {@link TileOverlayOptions} object with a new transparency setting.
+     * @throws IllegalArgumentException if the transparency is outside the range [0..1].
+     */
+    public TileOverlayOptions transparency(float transparency) {
+        if (transparency < 0.0f || transparency > 1.0f) throw new IllegalArgumentException("Transparency must be in the range [0..1]");
+        this.transparency = transparency;
         return this;
     }
 

@@ -499,6 +499,10 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         }
     }
 
+    override fun snapshotForTest(callback: ISnapshotReadyCallback?) {
+        Log.d(TAG, "Not yet implemented: snapshotForTest")
+    }
+
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) = afterInitialize { map ->
         Log.d(TAG, "setPadding: $left $top $right $bottom")
         val padding = map.cameraPosition.padding

@@ -31,25 +31,25 @@ import java.util.List;
  */
 @PublicApi
 public class CircleOptions extends AutoSafeParcelable {
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode;
-    @SafeParceled(2)
+    @Field(2)
     private LatLng center;
-    @SafeParceled(3)
-    private double radius = 0;
-    @SafeParceled(4)
-    private float strokeWidth = 10;
-    @SafeParceled(5)
+    @Field(3)
+    private double radius = 0.0d;
+    @Field(4)
+    private float strokeWidth = 10.0f;
+    @Field(5)
     private int strokeColor = Color.BLACK;
-    @SafeParceled(6)
+    @Field(6)
     private int fillColor = Color.TRANSPARENT;
-    @SafeParceled(7)
-    private float zIndex = 0;
-    @SafeParceled(8)
+    @Field(7)
+    private float zIndex = 0.0f;
+    @Field(8)
     private boolean visible = true;
-    @SafeParceled(9)
+    @Field(9)
     private boolean clickable = false;
-    @SafeParceled(10)
+    @Field(10)
     private List<PatternItem> strokePattern = null;
 
     /**

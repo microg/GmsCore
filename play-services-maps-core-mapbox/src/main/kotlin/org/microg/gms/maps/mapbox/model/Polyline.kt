@@ -1,25 +1,14 @@
 /*
- * Copyright (C) 2019 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2019 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.microg.gms.maps.mapbox.model
 
 import android.os.Parcel
-import android.util.Log
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
+import com.google.android.gms.maps.model.Cap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PatternItem
 import com.google.android.gms.maps.model.internal.IPolylineDelegate
@@ -29,6 +18,7 @@ import com.mapbox.mapboxsdk.utils.ColorUtils
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
 import org.microg.gms.maps.mapbox.utils.toMapbox
+import org.microg.gms.utils.warnOnTransactionIssues
 import com.google.android.gms.maps.model.PolylineOptions as GmsLineOptions
 
 abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOptions, private val dpiFactor: Function0<Float>) : IPolylineDelegate.Stub() {
@@ -40,6 +30,10 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
     internal var visible: Boolean = options.isVisible
     internal var clickable: Boolean = options.isClickable
     internal var tag: IObjectWrapper? = null
+    internal var startCap: Cap = options.startCap
+    internal var endCap: Cap = options.endCap
+    internal var geodesic = options.isGeodesic
+    internal var zIndex = options.zIndex
 
     val annotationOptions: LineOptions
         get() = LineOptions()
@@ -74,13 +68,10 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
     override fun getColor(): Int = color
 
     override fun setZIndex(zIndex: Float) {
-        Log.d(TAG, "unimplemented Method: setZIndex")
+        this.zIndex = zIndex
     }
 
-    override fun getZIndex(): Float {
-        Log.d(TAG, "unimplemented Method: getZIndex")
-        return 0f
-    }
+    override fun getZIndex(): Float = zIndex
 
     override fun setVisible(visible: Boolean) {
         this.visible = visible
@@ -90,13 +81,22 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
     override fun isVisible(): Boolean = visible
 
     override fun setGeodesic(geod: Boolean) {
-        Log.d(TAG, "unimplemented Method: setGeodesic")
+        this.geodesic = geod
     }
 
-    override fun isGeodesic(): Boolean {
-        Log.d(TAG, "unimplemented Method: isGeodesic")
-        return false
+    override fun isGeodesic(): Boolean = geodesic
+
+    override fun setStartCap(startCap: Cap) {
+        this.startCap = startCap
     }
+
+    override fun getStartCap(): Cap = startCap
+
+    override fun setEndCap(endCap: Cap) {
+        this.endCap = endCap
+    }
+
+    override fun getEndCap(): Cap = endCap
 
     override fun equalsRemote(other: IPolylineDelegate?): Boolean = equals(other)
 
@@ -141,12 +141,7 @@ abstract class AbstractPolylineImpl(private val id: String, options: GmsLineOpti
         return id
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        if (super.onTransact(code, data, reply, flags)) {
-            true
-        } else {
-            Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-        }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 
     companion object {
         const val TAG = "GmsPolylineAbstract"
