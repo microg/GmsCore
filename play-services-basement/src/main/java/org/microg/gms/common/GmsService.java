@@ -106,6 +106,7 @@ public enum GmsService {
     INSTANT_APPS(121, "com.google.android.gms.instantapps.START"),
     CAST_FIRSTPATY(122, "com.google.android.gms.cast.firstparty.START"),
     AD_CACHE(123, "com.google.android.gms.ads.service.CACHE"),
+    SMS_RETRIEVER(126, "com.google.android.gms.auth.api.phone.service.SmsRetrieverApiService.START"),
     CRYPT_AUTH(129, "com.google.android.gms.auth.cryptauth.cryptauthservice.START"),
     DYNAMIC_LINKS(131, "com.google.firebase.dynamiclinks.service.START"),
     FONTS(132, "com.google.android.gms.fonts.service.START"),
