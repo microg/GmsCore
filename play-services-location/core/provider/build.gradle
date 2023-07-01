@@ -8,14 +8,12 @@ apply plugin: 'kotlin-android'
 
 dependencies {
     api project(':play-services-location')
+    compileOnly project(':play-services-location-core-system-api')
     implementation project(':play-services-base-core')
     implementation project(':play-services-location-core-base')
 
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
-    implementation "androidx.preference:preference-ktx:$preferenceVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
@@ -23,7 +21,7 @@ dependencies {
 
     implementation "com.android.volley:volley:$volleyVersion"
 
-    compileOnly project(':play-services-maps')
+    implementation 'org.microg:address-formatter:0.3.1'
 }
 
 android {

@@ -13,32 +13,28 @@ import android.util.Log
 import com.android.volley.Request.Method
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import org.microg.gms.location.core.BuildConfig
-import org.microg.gms.location.network.NetworkLocationService
-import org.microg.gms.location.network.cell.CellDetails
+import org.microg.gms.location.provider.BuildConfig
 import org.microg.gms.location.network.precision
 import org.microg.gms.location.network.wifi.WifiDetails
 import org.microg.gms.location.network.wifi.isMoving
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlin.math.log10
-import kotlin.math.log2
 
 class MozillaLocationServiceClient(context: Context) {
     private val queue = Volley.newRequestQueue(context)
 
-    suspend fun retrieveMultiWifiLocation(wifis: List<WifiDetails>): Location = geoLocate(
+    suspend fun retrieveMultiWifiLocation(wifis: List<org.microg.gms.location.network.wifi.WifiDetails>): Location = geoLocate(
         GeolocateRequest(
             considerIp = false,
             wifiAccessPoints = wifis.filter { it.ssid?.endsWith("_nomap") != true && !it.isMoving }.map(WifiDetails::toWifiAccessPoint),
             fallbacks = Fallback(lacf = false, ipf = false)
         )
     ).apply {
-        precision = wifis.size.toDouble()/WIFI_BASE_PRECISION_COUNT
+        precision = wifis.size.toDouble()/ WIFI_BASE_PRECISION_COUNT
     }
 
-    suspend fun retrieveSingleCellLocation(cell: CellDetails): Location = geoLocate(
+    suspend fun retrieveSingleCellLocation(cell: org.microg.gms.location.network.cell.CellDetails): Location = geoLocate(
         GeolocateRequest(
             considerIp = false,
             cellTowers = listOf(cell.toCellTower()),
@@ -84,6 +80,7 @@ class MozillaLocationServiceClient(context: Context) {
         private const val WIFI_BASE_PRECISION_COUNT = 4.0
         private const val CELL_DEFAULT_PRECISION = 1.0
         private const val CELL_FALLBACK_PRECISION = 0.5
+        @JvmField
         val API_KEY: String? = BuildConfig.ICHNAEA_KEY.takeIf { it.isNotBlank() }
         const val LOCATION_EXTRA_FALLBACK = "fallback"
     }

@@ -10,18 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.BODY_SENSORS"/>
 
-    <uses-permission android:name="android.permission.LOCATION_HARDWARE"
-                     tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.INSTALL_LOCATION_PROVIDER"
-                     tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.NETWORK_SCAN"
-                     tools:ignore="ProtectedPermissions"/>
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"
-                     tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.UPDATE_DEVICE_STATS"
                      tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.UPDATE_APP_OPS_STATS"
@@ -30,8 +20,6 @@
                      tools:ignore="ProtectedPermissions"/>
 
     <application>
-        <uses-library android:name="com.android.location.provider" />
-
         <service
                 android:name="org.microg.gms.location.manager.LocationManagerService"
                 android:exported="true">
@@ -47,29 +35,6 @@
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-        </service>
-        <service
-                android:name="org.microg.gms.location.network.NetworkLocationService"
-                android:exported="false"/>
-        <service
-                android:name="org.microg.gms.location.provider.NetworkLocationProviderService"
-                android:exported="true"
-                android:permission="android.permission.WRITE_SECURE_SETTINGS">
-            <intent-filter>
-                <action android:name="com.android.location.service.v2.NetworkLocationProvider"/>
-                <action android:name="com.android.location.service.v3.NetworkLocationProvider"/>
-            </intent-filter>
-            <meta-data android:name="serviceVersion" android:value="2"/>
-        </service>
-        <service
-                android:name="org.microg.gms.location.provider.GeocodeProviderService"
-                android:exported="true"
-                android:permission="android.permission.WRITE_SECURE_SETTINGS">
-            <intent-filter>
-                <action android:name="com.android.location.service.GeocodeProvider"/>
-                <action android:name="com.google.android.location.GeocodeProvider"/>
-            </intent-filter>
-            <meta-data android:name="serviceVersion" android:value="2"/>
         </service>
     </application>
 </manifest>

@@ -12,7 +12,6 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.location.Location
-import android.util.Log
 import androidx.core.content.contentValuesOf
 import androidx.core.os.bundleOf
 import org.microg.gms.location.network.cell.CellDetails
@@ -133,22 +132,25 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
         ).use { cursor ->
             if (cursor.moveToNext()) {
                 val midLocation = cursor.getMidLocation(Long.MAX_VALUE, 0f)
-                (midLocation != null) to (midLocation?.let { it.distanceTo(location) > LEARN_BAD_SIZE_CELL} == true)
+                (midLocation != null) to (midLocation?.let { it.distanceTo(location) > LEARN_BAD_SIZE_CELL } == true)
             } else {
                 false to false
             }
         }
         if (exists && isBad) {
-            writableDatabase.update(TABLE_CELLS_LEARN, contentValuesOf(
+            writableDatabase.update(
+                TABLE_CELLS_LEARN, contentValuesOf(
                 FIELD_LATITUDE_HIGH to location.latitude,
                 FIELD_LATITUDE_LOW to location.latitude,
                 FIELD_LONGITUDE_HIGH to location.longitude,
                 FIELD_LONGITUDE_LOW to location.longitude,
                 FIELD_TIME to location.time,
                 FIELD_BAD_TIME to location.time
-            ), CELLS_SELECTION, getCellSelectionArgs(cell))
+            ), CELLS_SELECTION, getCellSelectionArgs(cell)
+            )
         } else if (!exists) {
-            writableDatabase.insertWithOnConflict(TABLE_CELLS_LEARN, null, contentValuesOf(
+            writableDatabase.insertWithOnConflict(
+                TABLE_CELLS_LEARN, null, contentValuesOf(
                 FIELD_MCC to cell.mcc,
                 FIELD_MNC to cell.mnc,
                 FIELD_LAC_TAC to (cell.lac ?: cell.tac ?: 0),
@@ -180,13 +182,14 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
         ).use { cursor ->
             if (cursor.moveToNext()) {
                 val midLocation = cursor.getMidLocation(Long.MAX_VALUE, 0f)
-                (midLocation != null) to (midLocation?.let { it.distanceTo(location) > LEARN_BAD_SIZE_WIFI} == true)
+                (midLocation != null) to (midLocation?.let { it.distanceTo(location) > LEARN_BAD_SIZE_WIFI } == true)
             } else {
                 false to false
             }
         }
         if (exists && isBad) {
-            writableDatabase.update(TABLE_WIFI_LEARN, contentValuesOf(
+            writableDatabase.update(
+                TABLE_WIFI_LEARN, contentValuesOf(
                 FIELD_LATITUDE_HIGH to location.latitude,
                 FIELD_LATITUDE_LOW to location.latitude,
                 FIELD_LONGITUDE_HIGH to location.longitude,
@@ -195,7 +198,8 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
                 FIELD_BAD_TIME to location.time
             ), getWifiSelection(wifi), null)
         } else if (!exists) {
-            writableDatabase.insertWithOnConflict(TABLE_WIFI_LEARN, null, contentValuesOf(
+            writableDatabase.insertWithOnConflict(
+                TABLE_WIFI_LEARN, null, contentValuesOf(
                 FIELD_MAC to wifi.macBytes,
                 FIELD_LATITUDE_HIGH to location.latitude,
                 FIELD_LATITUDE_LOW to location.latitude,
@@ -225,7 +229,7 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
         db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_WIFIS}_time_index ON $TABLE_WIFIS($FIELD_TIME);")
         db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_CELLS_LEARN}_time_index ON $TABLE_CELLS_LEARN($FIELD_TIME);")
         db.execSQL("CREATE INDEX IF NOT EXISTS ${TABLE_WIFI_LEARN}_time_index ON $TABLE_WIFI_LEARN($FIELD_TIME);")
-        db.execSQL("DROP TABLE IF EXISTS ${TABLE_WIFI_SCANS};")
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_WIFI_SCANS;")
     }
 
     fun cleanup(db: SQLiteDatabase) {

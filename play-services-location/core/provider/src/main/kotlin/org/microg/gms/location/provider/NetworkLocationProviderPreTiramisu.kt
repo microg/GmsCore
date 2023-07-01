@@ -14,13 +14,13 @@ import android.location.Criteria
 import android.location.Location
 import android.os.Build.VERSION.SDK_INT
 import android.os.WorkSource
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.android.location.provider.ProviderPropertiesUnbundled
 import com.android.location.provider.ProviderRequestUnbundled
+import org.microg.gms.location.*
 import org.microg.gms.location.network.LOCATION_EXTRA_PRECISION
 import org.microg.gms.location.network.NetworkLocationService
-import org.microg.gms.location.network.NetworkLocationService.Companion.ACTION_REPORT_LOCATION
+import org.microg.gms.location.provider.NetworkLocationProviderService.Companion.ACTION_REPORT_LOCATION
 import java.io.PrintWriter
 import kotlin.math.max
 
@@ -53,16 +53,16 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
                 intervalMillis = Long.MAX_VALUE
             }
             val intent = Intent(context, NetworkLocationService::class.java)
-            intent.putExtra(NetworkLocationService.EXTRA_PENDING_INTENT, pendingIntent)
-            intent.putExtra(NetworkLocationService.EXTRA_ENABLE, true)
-            intent.putExtra(NetworkLocationService.EXTRA_INTERVAL_MILLIS, intervalMillis)
-            intent.putExtra(NetworkLocationService.EXTRA_FORCE_NOW, forceNow)
+            intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)
+            intent.putExtra(EXTRA_ENABLE, true)
+            intent.putExtra(EXTRA_INTERVAL_MILLIS, intervalMillis)
+            intent.putExtra(EXTRA_FORCE_NOW, forceNow)
             if (SDK_INT >= 31) {
-                intent.putExtra(NetworkLocationService.EXTRA_LOW_POWER, currentRequest?.isLowPower ?: false)
-                intent.putExtra(NetworkLocationService.EXTRA_WORK_SOURCE, currentRequest?.workSource)
+                intent.putExtra(EXTRA_LOW_POWER, currentRequest?.isLowPower ?: false)
+                intent.putExtra(EXTRA_WORK_SOURCE, currentRequest?.workSource)
             }
             if (SDK_INT >= 29) {
-                intent.putExtra(NetworkLocationService.EXTRA_BYPASS, currentRequest?.isLocationSettingsIgnored ?: false)
+                intent.putExtra(EXTRA_BYPASS, currentRequest?.isLocationSettingsIgnored ?: false)
             }
             context.startService(intent)
         }
@@ -100,8 +100,8 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
         synchronized(this) {
             if (!enabled) throw IllegalStateException()
             val intent = Intent(context, NetworkLocationService::class.java)
-            intent.putExtra(NetworkLocationService.EXTRA_PENDING_INTENT, pendingIntent)
-            intent.putExtra(NetworkLocationService.EXTRA_ENABLE, false)
+            intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)
+            intent.putExtra(EXTRA_ENABLE, false)
             context.startService(intent)
             pendingIntent?.cancel()
             pendingIntent = null

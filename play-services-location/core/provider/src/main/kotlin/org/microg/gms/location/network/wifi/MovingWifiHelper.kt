@@ -17,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
-import org.microg.gms.location.network.TAG
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -92,7 +91,7 @@ class MovingWifiHelper(private val context: Context) {
                 @Suppress("DEPRECATION")
                 (connectivityManager.allNetworks.singleOrNull {
                     val networkInfo = connectivityManager.getNetworkInfo(it)
-                    Log.d(TAG, "Network info: $networkInfo")
+                    Log.d(org.microg.gms.location.network.TAG, "Network info: $networkInfo")
                     networkInfo?.type == TYPE_WIFI && networkInfo.isConnected
                 })
             } else {

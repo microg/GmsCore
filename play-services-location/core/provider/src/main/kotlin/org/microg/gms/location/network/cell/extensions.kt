@@ -26,10 +26,8 @@ import android.telephony.CellLocation
 import android.telephony.TelephonyManager
 import android.telephony.cdma.CdmaCellLocation
 import android.telephony.gsm.GsmCellLocation
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
-import org.microg.gms.location.network.TAG
 
 private fun locationFromCdma(latitude: Int, longitude: Int) = if (latitude == Int.MAX_VALUE || longitude == Int.MAX_VALUE) null else Location("cdma").also {
     it.latitude = latitude.toDouble() / 14400.0

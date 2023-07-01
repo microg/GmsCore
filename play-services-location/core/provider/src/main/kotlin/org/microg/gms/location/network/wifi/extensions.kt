@@ -6,7 +6,6 @@
 package org.microg.gms.location.network.wifi
 
 import android.net.wifi.ScanResult
-import android.net.wifi.WifiInfo
 import android.os.Build
 import android.os.SystemClock
 

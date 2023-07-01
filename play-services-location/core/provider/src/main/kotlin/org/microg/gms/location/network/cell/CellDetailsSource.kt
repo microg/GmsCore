@@ -12,7 +12,6 @@ import android.os.WorkSource
 import android.telephony.CellInfo
 import android.telephony.TelephonyManager
 import androidx.core.content.getSystemService
-import org.microg.gms.location.network.LocationCacheDatabase
 
 class CellDetailsSource(private val context: Context, private val callback: CellDetailsCallback) {
     fun enable() = Unit

@@ -9,8 +9,6 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
-import android.os.Parcel
-import android.os.Parcelable
 import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.getSystemService

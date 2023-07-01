@@ -28,10 +28,7 @@ import androidx.lifecycle.lifecycleScope
 import com.android.volley.VolleyError
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
-import org.microg.gms.location.LocationSettings
-import org.microg.gms.location.elapsedMillis
-import org.microg.gms.location.formatDuration
-import org.microg.gms.location.formatRealtime
+import org.microg.gms.location.*
 import org.microg.gms.location.network.LocationCacheDatabase.Companion.NEGATIVE_CACHE_ENTRY
 import org.microg.gms.location.network.cell.CellDetails
 import org.microg.gms.location.network.cell.CellDetailsCallback
@@ -425,15 +422,6 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     }
 
     companion object {
-        const val ACTION_REPORT_LOCATION = "org.microg.gms.location.network.ACTION_REPORT_LOCATION"
-        const val EXTRA_PENDING_INTENT = "pending_intent"
-        const val EXTRA_ENABLE = "enable"
-        const val EXTRA_INTERVAL_MILLIS = "interval"
-        const val EXTRA_FORCE_NOW = "force_now"
-        const val EXTRA_LOW_POWER = "low_power"
-        const val EXTRA_WORK_SOURCE = "work_source"
-        const val EXTRA_BYPASS = "bypass"
-        const val EXTRA_LOCATION = "location"
         const val GPS_BUFFER_SIZE = 60
         const val GPS_PASSIVE_INTERVAL = 1000L
         const val GPS_PASSIVE_MIN_ACCURACY = 25f
@@ -449,8 +437,8 @@ private operator fun <K, V> LruCache<K, V>.set(key: K, value: V) {
 
 fun List<WifiDetails>.hash(): ByteArray? {
     val filtered = sortedBy { it.macClean }
-        .filter { it.timestamp == null || it.timestamp > System.currentTimeMillis() - 60000 }
-        .filter { it.signalStrength == null || it.signalStrength > -90 }
+        .filter { it.timestamp == null || it.timestamp!! > System.currentTimeMillis() - 60000 }
+        .filter { it.signalStrength == null || it.signalStrength!! > -90 }
     if (filtered.size < 3) return null
     val maxTimestamp = maxOf { it.timestamp ?: 0L }
     fun WifiDetails.hashBytes(): ByteArray {

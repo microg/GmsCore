@@ -54,10 +54,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_safetynet)
-    }
 
-    @SuppressLint("RestrictedApi")
-    override fun onBindPreferences() {
         switchBarPreference = preferenceScreen.findPreference("pref_safetynet_enabled") ?: switchBarPreference
         runAttest = preferenceScreen.findPreference("pref_safetynet_run_attest") ?: runAttest
         runReCaptcha = preferenceScreen.findPreference("pref_recaptcha_run_test") ?: runReCaptcha

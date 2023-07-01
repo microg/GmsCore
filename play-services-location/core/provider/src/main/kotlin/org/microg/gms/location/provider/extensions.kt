@@ -6,11 +6,9 @@
 package org.microg.gms.location.provider
 
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.GeocoderParams
 import android.os.Build.VERSION.SDK_INT
 import com.google.android.gms.location.internal.ClientIdentity
-import org.microg.gms.utils.getApplicationLabel
 
 const val TAG = "LocationProvider"
 

@@ -9,7 +9,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
@@ -19,10 +18,10 @@ import androidx.preference.TwoStatePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.location.LocationSettings
-import org.microg.gms.location.core.BuildConfig
 import org.microg.gms.location.core.R
+import org.microg.gms.location.hasMozillaLocationServiceSupport
+import org.microg.gms.location.hasNetworkLocationServiceBuiltIn
 import org.microg.gms.location.manager.LocationAppsDatabase
-import org.microg.gms.location.network.mozilla.MozillaLocationServiceClient
 import org.microg.gms.ui.AppIconPreference
 import org.microg.gms.ui.getApplicationInfoIfExists
 import org.microg.gms.ui.navigate
@@ -31,6 +30,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var locationApps: PreferenceCategory
     private lateinit var locationAppsAll: Preference
     private lateinit var locationAppsNone: Preference
+    private lateinit var networkProviderCategory: PreferenceCategory
     private lateinit var wifiMls: TwoStatePreference
     private lateinit var wifiMoving: TwoStatePreference
     private lateinit var wifiLearning: TwoStatePreference
@@ -45,13 +45,11 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_location)
-    }
 
-    @SuppressLint("RestrictedApi")
-    override fun onBindPreferences() {
         locationApps = preferenceScreen.findPreference("prefcat_location_apps") ?: locationApps
         locationAppsAll = preferenceScreen.findPreference("pref_location_apps_all") ?: locationAppsAll
         locationAppsNone = preferenceScreen.findPreference("pref_location_apps_none") ?: locationAppsNone
+        networkProviderCategory = preferenceScreen.findPreference("prefcat_location_network_provider") ?: networkProviderCategory
         wifiMls = preferenceScreen.findPreference("pref_location_wifi_mls_enabled") ?: wifiMls
         wifiMoving = preferenceScreen.findPreference("pref_location_wifi_moving_enabled") ?: wifiMoving
         wifiLearning = preferenceScreen.findPreference("pref_location_wifi_learning_enabled") ?: wifiLearning
@@ -83,8 +81,9 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             true
         }
 
-        wifiMls.isVisible = MozillaLocationServiceClient.API_KEY != null
-        cellMls.isVisible = MozillaLocationServiceClient.API_KEY != null
+        networkProviderCategory.isVisible = requireContext().hasNetworkLocationServiceBuiltIn()
+        wifiMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
+        cellMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
         wifiLearning.isVisible = Build.VERSION.SDK_INT >= 17
         cellLearning.isVisible = Build.VERSION.SDK_INT >= 17
     }

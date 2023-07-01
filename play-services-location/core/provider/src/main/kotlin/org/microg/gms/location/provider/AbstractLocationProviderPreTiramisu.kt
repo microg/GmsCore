@@ -6,7 +6,6 @@
 package org.microg.gms.location.provider
 
 import android.content.Context
-import android.location.Location
 import android.location.LocationProvider
 import android.os.Bundle
 import android.os.SystemClock

@@ -7,11 +7,10 @@ package org.microg.gms.location.network
 
 import android.location.Location
 import android.os.Bundle
-import androidx.core.location.LocationCompat
 import java.security.MessageDigest
 
 const val TAG = "NetworkLocation"
-internal const val LOCATION_EXTRA_PRECISION = "precision"
+const val LOCATION_EXTRA_PRECISION = "precision"
 
 internal var Location.precision: Double
     get() = extras?.getDouble(LOCATION_EXTRA_PRECISION, 1.0) ?: 1.0

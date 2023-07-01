@@ -10,8 +10,7 @@ import android.content.Intent
 import android.location.Location
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
-import org.microg.gms.location.network.NetworkLocationService.Companion.ACTION_REPORT_LOCATION
-import org.microg.gms.location.network.NetworkLocationService.Companion.EXTRA_LOCATION
+import org.microg.gms.location.EXTRA_LOCATION
 import java.io.FileDescriptor
 import java.io.PrintWriter
 
@@ -51,7 +50,7 @@ class NetworkLocationProviderService : Service() {
 
                 else ->
                     @Suppress("DEPRECATION")
-                    NetworkLocationProviderPreTiramisu(this, Unit)
+                    (NetworkLocationProviderPreTiramisu(this, Unit))
             }
             provider?.enable()
         }
@@ -70,5 +69,9 @@ class NetworkLocationProviderService : Service() {
         provider = null
         bound = false
         super.onDestroy()
+    }
+
+    companion object {
+        const val ACTION_REPORT_LOCATION = "org.microg.gms.location.provider.ACTION_REPORT_LOCATION"
     }
 }
