@@ -804,6 +804,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun onPause() = mapView?.onPause() ?: Unit
     override fun onDestroy() {
         Log.d(TAG, "destroy");
+        userOnInitializedCallbackList.clear()
         lineManager?.onDestroy()
         lineManager = null
         fillManager?.onDestroy()
