@@ -53,7 +53,7 @@
         <Preference
             app:isPreferenceVisible="false"
             tools:isPreferenceVisible="true"
-            android:icon="@drawable/ic_alert"
+            android:icon="@drawable/ic_circle_warn"
             android:key="pref_droidguard_unsupported"
             android:selectable="false"
             android:summary="@string/pref_droidguard_unsupported_summary" />
