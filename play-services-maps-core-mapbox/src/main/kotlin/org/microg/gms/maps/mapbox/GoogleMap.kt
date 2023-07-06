@@ -757,6 +757,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                             .build())
                     cameraMode = CameraMode.NONE
                     renderMode = RenderMode.COMPASS
+                    setMaxAnimationFps(2)
                 }
 
                 synchronized(mapLock) {
