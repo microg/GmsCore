@@ -4,11 +4,13 @@
         <Preference
             android:icon="@drawable/ic_radio_unchecked"
             android:key="pref_droidguard_mode_embedded"
+            android:persistent="false"
             android:summary="@string/pref_droidguard_mode_embedded_summary"
             android:title="@string/pref_droidguard_mode_embedded_title" />
         <org.microg.gms.droidguard.core.ui.ContainedEditTextPreference
             android:icon="@drawable/ic_radio_unchecked"
             android:key="pref_droidguard_mode_network"
+            android:persistent="false"
             android:summary="@string/pref_droidguard_mode_network_summary"
             android:title="@string/pref_droidguard_mode_network_title" />
     </PreferenceCategory>

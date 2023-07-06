@@ -18,6 +18,8 @@ import com.android.volley.toolbox.Volley
 import com.google.android.gms.location.internal.ClientIdentity
 import org.json.JSONObject
 import org.microg.address.Formatter
+import org.microg.gms.location.LocationSettings
+import java.io.PrintWriter
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -28,10 +30,12 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
     private val queue = Volley.newRequestQueue(context)
     private val formatter = runCatching { Formatter() }.getOrNull()
     private val addressCache = LruCache<CacheKey, Address>(CACHE_SIZE)
+    private val settings by lazy { LocationSettings(context) }
 
     override fun onGetFromLocation(latitude: Double, longitude: Double, maxResults: Int, params: GeocoderParams, addresses: MutableList<Address>): String? {
         val clientIdentity = params.clientIdentity ?: return "null client package"
         val locale = params.locale ?: return "null locale"
+        if (!settings.geocoderNominatim) return "disabled"
         val cacheKey = CacheKey(clientIdentity, locale, latitude, longitude)
         addressCache[cacheKey]?.let {address ->
             addresses.add(address)
@@ -79,6 +83,7 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
     ): String? {
         val clientIdentity = params.clientIdentity ?: return "null client package"
         val locale = params.locale ?: return "null locale"
+        if (!settings.geocoderNominatim) return "disabled"
         val uri = Uri.Builder()
             .scheme("https").authority(NOMINATIM_SERVER).path("/search")
             .appendQueryParameter("format", "json")
@@ -147,6 +152,11 @@ class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : Geoc
             address.featureName = formatter.guessName(components)
         }
         return address
+    }
+
+    fun dump(writer: PrintWriter?) {
+        writer?.println("Enabled: ${settings.geocoderNominatim}")
+        writer?.println("Address cache: size=${addressCache.size()} hits=${addressCache.hitCount()} miss=${addressCache.missCount()} puts=${addressCache.putCount()} evicts=${addressCache.evictionCount()}")
     }
 
     companion object {

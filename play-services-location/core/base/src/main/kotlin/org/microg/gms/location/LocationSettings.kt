@@ -48,4 +48,12 @@ class LocationSettings(private val context: Context) {
         set(value) {
             SettingsContract.setSettings(context, SettingsContract.Location.getContentUri(context)) { put(SettingsContract.Location.CELL_LEARNING, value)}
         }
+
+    var geocoderNominatim: Boolean
+        get() = SettingsContract.getSettings(context, SettingsContract.Location.getContentUri(context), arrayOf(SettingsContract.Location.GEOCODER_NOMINATIM)) { c ->
+            c.getInt(0) != 0
+        }
+        set(value) {
+            SettingsContract.setSettings(context, SettingsContract.Location.getContentUri(context)) { put(SettingsContract.Location.GEOCODER_NOMINATIM, value)}
+        }
 }

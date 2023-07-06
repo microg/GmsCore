@@ -76,9 +76,9 @@ class SafetyNetClientServiceImpl(
             return
         }
 
-        if (!DroidGuardPreferences.isEnabled(context)) {
+        if (!DroidGuardPreferences.isAvailable(context)) {
             Log.d(TAG, "ignoring SafetyNet request, DroidGuard is disabled")
-            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
+            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Unsupported"), null)
             return
         }
 
@@ -168,12 +168,6 @@ class SafetyNetClientServiceImpl(
 
         if (!SafetyNetPreferences.isEnabled(context)) {
             Log.d(TAG, "ignoring SafetyNet request, SafetyNet is disabled")
-            callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
-            return
-        }
-
-        if (!DroidGuardPreferences.isEnabled(context)) {
-            Log.d(TAG, "ignoring SafetyNet request, DroidGuard is disabled")
             callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
             return
         }

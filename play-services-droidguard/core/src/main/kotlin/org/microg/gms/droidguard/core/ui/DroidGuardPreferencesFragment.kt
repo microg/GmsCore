@@ -42,6 +42,7 @@ class DroidGuardPreferencesFragment : PreferenceFragmentCompat() {
         modeNetwork.textChangedListener = {
             DroidGuardPreferences.setNetworkServerUrl(requireContext(), it)
         }
+        modeEmbedded.isEnabled = !DroidGuardPreferences.isForcedLocalDisabled(requireContext())
         updateConfiguration()
     }
 

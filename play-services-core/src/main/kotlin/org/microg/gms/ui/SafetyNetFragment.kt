@@ -51,6 +51,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
     private lateinit var apps: PreferenceCategory
     private lateinit var appsAll: Preference
     private lateinit var appsNone: Preference
+    private lateinit var droidguardUnsupported: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_safetynet)
@@ -62,6 +63,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
         apps = preferenceScreen.findPreference("prefcat_safetynet_apps") ?: apps
         appsAll = preferenceScreen.findPreference("pref_safetynet_apps_all") ?: appsAll
         appsNone = preferenceScreen.findPreference("pref_safetynet_apps_none") ?: appsNone
+        droidguardUnsupported = preferenceScreen.findPreference("pref_droidguard_unsupported") ?: droidguardUnsupported
 
         runAttest.isVisible = SAFETYNET_API_KEY != null
         runReCaptcha.isVisible = RECAPTCHA_SITE_KEY != null
@@ -75,6 +77,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
             val newStatus = newValue as Boolean
             SafetyNetPreferences.setEnabled(requireContext(), newStatus)
             DroidGuardPreferences.setEnabled(requireContext(), newStatus)
+            droidguardUnsupported.isVisible = switchBarPreference.isChecked && !DroidGuardPreferences.isAvailable(requireContext())
             true
         }
     }
@@ -218,6 +221,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
 
         switchBarPreference.isEnabled = CheckinPreferences.isEnabled(requireContext())
         switchBarPreference.isChecked = SafetyNetPreferences.isEnabled(requireContext()) && DroidGuardPreferences.isEnabled(requireContext())
+        droidguardUnsupported.isVisible = switchBarPreference.isChecked && !DroidGuardPreferences.isAvailable(requireContext())
 
         updateContent()
     }

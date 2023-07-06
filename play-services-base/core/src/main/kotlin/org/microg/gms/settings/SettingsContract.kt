@@ -123,11 +123,13 @@ object SettingsContract {
         const val ENABLED = "droidguard_enabled"
         const val MODE = "droidguard_mode"
         const val NETWORK_SERVER_URL = "droidguard_network_server_url"
+        const val FORCE_LOCAL_DISABLED = "droidguard_force_local_disabled"
 
         val PROJECTION = arrayOf(
             ENABLED,
             MODE,
-            NETWORK_SERVER_URL
+            NETWORK_SERVER_URL,
+            FORCE_LOCAL_DISABLED,
         )
     }
 
@@ -155,6 +157,7 @@ object SettingsContract {
         const val WIFI_LEARNING = "location_wifi_learning"
         const val CELL_MLS = "location_cell_mls"
         const val CELL_LEARNING = "location_cell_learning"
+        const val GEOCODER_NOMINATIM = "location_geocoder_nominatim"
 
         val PROJECTION = arrayOf(
             WIFI_MLS,
@@ -162,6 +165,7 @@ object SettingsContract {
             WIFI_LEARNING,
             CELL_MLS,
             CELL_LEARNING,
+            GEOCODER_NOMINATIM,
         )
     }
 

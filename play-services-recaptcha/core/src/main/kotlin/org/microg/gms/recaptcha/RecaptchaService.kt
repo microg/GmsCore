@@ -33,7 +33,7 @@ private const val TAG = "RecaptchaService"
 class RecaptchaService : BaseService(TAG, GmsService.RECAPTCHA) {
     private fun getRecaptchaImpl(packageName: String) = when {
         SafetyNetPreferences.isEnabled(this) && SDK_INT >= 19 -> RecaptchaWebImpl(this, packageName, lifecycle)
-        DroidGuardPreferences.isEnabled(this) -> RecaptchaGuardImpl(this, packageName)
+        DroidGuardPreferences.isAvailable(this) -> RecaptchaGuardImpl(this, packageName)
         else -> RecaptchaImpl.Unsupported
     }
 

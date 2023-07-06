@@ -36,6 +36,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var wifiLearning: TwoStatePreference
     private lateinit var cellMls: TwoStatePreference
     private lateinit var cellLearning: TwoStatePreference
+    private lateinit var nominatim: TwoStatePreference
     private lateinit var database: LocationAppsDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +56,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         wifiLearning = preferenceScreen.findPreference("pref_location_wifi_learning_enabled") ?: wifiLearning
         cellMls = preferenceScreen.findPreference("pref_location_cell_mls_enabled") ?: cellMls
         cellLearning = preferenceScreen.findPreference("pref_location_cell_learning_enabled") ?: cellLearning
+        nominatim = preferenceScreen.findPreference("pref_geocoder_nominatim_enabled") ?: nominatim
 
         locationAppsAll.setOnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.openAllLocationApps)
@@ -78,6 +80,10 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         }
         cellLearning.setOnPreferenceChangeListener { _, newValue ->
             LocationSettings(requireContext()).cellLearning = newValue as Boolean
+            true
+        }
+        nominatim.setOnPreferenceChangeListener { _, newValue ->
+            LocationSettings(requireContext()).geocoderNominatim = newValue as Boolean
             true
         }
 
@@ -106,6 +112,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             wifiLearning.isChecked = LocationSettings(context).wifiLearning
             cellMls.isChecked = LocationSettings(context).cellMls
             cellLearning.isChecked = LocationSettings(context).cellLearning
+            nominatim.isChecked = LocationSettings(context).geocoderNominatim
             val (apps, showAll) = withContext(Dispatchers.IO) {
                 val apps = database.listAppsByAccessTime()
                 val res = apps.map { app ->

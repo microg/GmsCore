@@ -59,5 +59,15 @@
                 android:title="@string/pref_location_cell_learning_enabled_title"
                 android:summary="@string/pref_location_cell_learning_enabled_summary" />
         </PreferenceCategory>
+        <PreferenceCategory
+            android:key="prefcat_geocoder"
+            android:title="@string/prefcat_geocoder_title">
+            <SwitchPreferenceCompat
+                android:defaultValue="true"
+                android:persistent="false"
+                android:key="pref_geocoder_nominatim_enabled"
+                android:title="@string/pref_geocoder_nominatim_enabled_title"
+                android:summary="@string/pref_geocoder_nominatim_enabled_summary" />
+        </PreferenceCategory>
     </PreferenceCategory>
 </PreferenceScreen>
