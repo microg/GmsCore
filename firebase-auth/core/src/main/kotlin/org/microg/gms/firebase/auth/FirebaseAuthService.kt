@@ -83,7 +83,7 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
 }
 
 class FirebaseAuthServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
-    private val client = IdentityToolkitClient(context, apiKey)
+    private val client by lazy { IdentityToolkitClient(context, apiKey, packageName, PackageUtils.firstSignatureDigestBytes(context, packageName)) }
     private var authorizedDomain: String? = null
 
     private suspend fun getAuthorizedDomain(): String {
