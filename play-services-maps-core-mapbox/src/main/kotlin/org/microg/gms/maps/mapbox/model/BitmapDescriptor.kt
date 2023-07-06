@@ -26,7 +26,7 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer
 import com.mapbox.mapboxsdk.utils.ColorUtils
 
-open class BitmapDescriptorImpl(private val id: String, internal val size: FloatArray) {
+open class BitmapDescriptorImpl(val id: String, internal val size: FloatArray) {
     open fun applyTo(options: SymbolOptions, anchor: FloatArray, dpiFactor: Float): SymbolOptions {
         return options.withIconImage(id).withIconAnchor(ICON_ANCHOR_TOP_LEFT).withIconOffset(arrayOf(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor))
     }
@@ -43,6 +43,14 @@ open class BitmapDescriptorImpl(private val id: String, internal val size: Float
             PropertyFactory.iconOffset(arrayOf(-anchor[0] * size[0] / dpiFactor, -anchor[1] * size[1] / dpiFactor)),
             PropertyFactory.iconImage(id)
         )
+    }
+
+    protected fun finalize() {
+        BitmapDescriptorFactoryImpl.disposeDescriptor(id)
+    }
+
+    override fun toString(): String {
+        return "[BitmapDescriptor $id]"
     }
 }
 
