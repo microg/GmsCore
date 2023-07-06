@@ -27,7 +27,8 @@ const val KEY_METADATA_ELEMENT_TYPE = "microg:gms-type-element"
 
 const val SELECTOR_ALL = "all"
 const val SELECTOR_ELEMENT_LABEL_TEXT_FILL = "labels.text.fill"
-const val SELECTOR_ELEMENT_LABEL_TEXT_OUTLINE = "labels.text.outline"
+const val SELECTOR_ELEMENT_LABEL_TEXT_STROKE = "labels.text.stroke"
+const val SELECTOR_ELEMENT_GEOMETRY_STROKE = "geometry.stroke"
 const val KEY_LAYER_METADATA = "metadata"
 const val KEY_LAYER_PAINT = "paint"
 
@@ -89,6 +90,12 @@ fun MapStyleOptions.apply(style: JSONObject) {
 
             // Apply operations in order
             operations@ for (operation in styleOperations.map { it.toNonNull() }) {
+                if (!operation.isValid()) {
+                    Log.w(TAG, "Operating is invalid: $operation")
+                    continue
+                }
+
+                var applied = 0
 
                 // Reverse direction allows removing hidden layers
                 layers@ for (i in layerArray.length() - 1 downTo 0) {
@@ -97,10 +104,9 @@ fun MapStyleOptions.apply(style: JSONObject) {
                     if (layer.layerHasRequiredFields()) {
 
                         if (operation.isValid() && layer.matchesOperation(operation)) {
-                            Log.v(TAG, "applying ${Gson().toJson(operation)} to $layer")
+                            applied++
 
                             if (layer.layerShouldBeRemoved(operation)) {
-                                Log.v(TAG, "removing $layer")
                                 layerArray.removeCompat(i)
                             } else {
                                 layer.applyOperation(operation)
@@ -108,6 +114,8 @@ fun MapStyleOptions.apply(style: JSONObject) {
                         }
                     }
                 }
+
+                Log.v(TAG, "Operation applied to $applied layers: ${Gson().toJson(operation)}")
             }
         }
 
@@ -160,6 +168,8 @@ fun JSONObject.matchesOperation(operation: NonNullStyleOperation) =
     (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_FEATURE_TYPE).startsWith(operation.featureType)
             || operation.featureType == "all")
     && (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE).startsWith(operation.elementType)
+            || getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE) == "labels.text"  && operation.elementType == SELECTOR_ELEMENT_LABEL_TEXT_FILL
+            || getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE) == "labels.text"  && operation.elementType == SELECTOR_ELEMENT_LABEL_TEXT_STROKE
             || operation.elementType == "all")
 
 
@@ -171,31 +181,36 @@ fun JSONObject.layerHasRequiredFields() = has(KEY_LAYER_PAINT) && has(KEY_LAYER_
 
 /**
  * True iff the layer represented by the JSON object should be removed according to the provided style operation.
- *
- * Interpretation of visibility "simplified": hide labels, display geometry.
  */
 fun JSONObject.layerShouldBeRemoved(operation: NonNullStyleOperation) =
     // A styler sets the layer to be invisible
     operation.stylers.any { it.visibility == "off" } ||
         // A styler sets the layer to simplified and we are working with a label
-        (getJSONObject("metadata").getString(KEY_METADATA_ELEMENT_TYPE)
-                .startsWith("labels") && operation.stylers.any { it.visibility == "simplified" })
+        (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE) == SELECTOR_ELEMENT_GEOMETRY_STROKE && operation.stylers.any { it.visibility == "simplified" })
 
 /**
  * Applies the provided style operation to the layer represented by the JSON object.
  */
 fun JSONObject.applyOperation(operation: NonNullStyleOperation) = operation.stylers.forEach { styler ->
-    when (operation.elementType) {
-        SELECTOR_ELEMENT_LABEL_TEXT_FILL -> styler.applyTextFill(getJSONObject(KEY_LAYER_PAINT))
-        SELECTOR_ELEMENT_LABEL_TEXT_OUTLINE -> styler.applyTextOutline(getJSONObject(KEY_LAYER_PAINT))
-        else -> styler.traverse(getJSONObject(KEY_LAYER_PAINT))
+    val paintJson = getJSONObject(KEY_LAYER_PAINT)
+    val metadataJson = getJSONObject(KEY_LAYER_METADATA)
+    if (styler.isColorChange()) {
+        when (operation.elementType) {
+            SELECTOR_ELEMENT_LABEL_TEXT_FILL -> styler.applyTextFill(paintJson)
+            SELECTOR_ELEMENT_LABEL_TEXT_STROKE -> styler.applyTextOutline(paintJson)
+            else -> styler.traverse(paintJson)
+        }
+    }
+    if (styler.visibility == "simplified" && metadataJson.getString(KEY_METADATA_ELEMENT_TYPE) == "labels.text") {
+        paintJson.remove("text-halo-blur")
+        paintJson.remove("text-halo-color")
     }
 }
 
 /**
  * Returns true if string is likely to contain a color.
  */
-fun String.isColor() = startsWith("hsl(") || startsWith("hsla(") || startsWith("#") || startsWith("rgba(")
+fun String.isColor() = ((startsWith("hsl(") || startsWith("hsla(")  || startsWith("rgba(")) && endsWith(")")) || startsWith("#")
 
 /**
  * Can parse colors in the format '#rrggbb', '#aarrggbb', 'hsl(h, s, l)', and 'rgba(r, g, b, a)'
@@ -343,6 +358,8 @@ fun Styler.applyColorChanges(color: Int): Int {
     Log.w(TAG, "No applicable operation")
     return color
 }
+
+fun Styler.isColorChange(): Boolean = hue != null || lightness!= null || saturation != null || gamma != null || invertLightness != null || color != null
 
 /**
  * Traverse JSON object and replace any color strings according to styler
