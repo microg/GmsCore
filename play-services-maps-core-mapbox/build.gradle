@@ -21,8 +21,8 @@ dependencies {
     implementation project(':play-services-maps')
     implementation project(':play-services-base-core')
     implementation project(':play-services-location')
-    implementation("org.maplibre.gl:android-sdk:10.0.0")
-    implementation("org.maplibre.gl:android-plugin-annotation-v9:1.0.0") {
+    implementation("org.maplibre.gl:android-sdk:10.2.0")
+    implementation("org.maplibre.gl:android-plugin-annotation-v9:2.0.0") {
         exclude group: 'com.google.android.gms'
     }
     implementation 'org.maplibre.gl:android-sdk-turf:5.9.0'
