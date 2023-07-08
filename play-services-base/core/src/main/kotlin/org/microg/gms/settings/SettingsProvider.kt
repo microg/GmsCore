@@ -321,6 +321,7 @@ class SettingsProvider : ContentProvider() {
                 Location.WIFI_LEARNING -> editor.putBoolean(key, value as Boolean)
                 Location.CELL_MLS -> editor.putBoolean(key, value as Boolean)
                 Location.CELL_LEARNING -> editor.putBoolean(key, value as Boolean)
+                Location.GEOCODER_NOMINATIM -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }
