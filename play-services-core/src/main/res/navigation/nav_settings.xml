@@ -27,9 +27,6 @@
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
         <action
-            android:id="@+id/openExposureNotificationSettings"
-            app:destination="@id/nav_nearby" />
-        <action
             android:id="@+id/openLocationSettings"
             app:destination="@id/nav_location" />
         <action
@@ -154,6 +151,5 @@
 
     <!-- Included -->
 
-    <include app:graph="@navigation/nav_nearby" />
     <include app:graph="@navigation/nav_location" />
 </navigation>

@@ -8,4 +8,9 @@
     <string name="menu_advanced">Додатково</string>
 
     <string name="list_no_item_none">Порожньо</string>
+
+    <string name="service_status_disabled">Вимкнуто</string>
+    <string name="service_status_enabled">Увімкнуто</string>
+    <string name="service_status_automatic">Автоматично</string>
+    <string name="service_status_manual">Вручну</string>
 </resources>

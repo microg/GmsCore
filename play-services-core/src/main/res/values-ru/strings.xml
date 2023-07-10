@@ -48,13 +48,6 @@
     <string name="service_name_mcs">Облачный обмен сообщениями</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
-    <string name="service_status_disabled">Выключено</string>
-    <string name="service_status_enabled">Включено</string>
-    <string name="service_status_automatic">Автоматически</string>
-    <string name="service_status_manual">Вручную</string>
-    <string name="service_status_enabled_short">Вкл.</string>
-    <string name="service_status_disabled_short">Выкл.</string>
-
     <string name="games_title">Google Play Игры</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> хочет использовать Play Игры</string>
     <string name="games_info_content">Чтобы использовать возможности Play Игры, нужно установить приложение Google Play Игры . Приложение может работать и без него, но возможны проблемы в его работе.</string>

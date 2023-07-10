@@ -11,4 +11,11 @@
     <string name="list_item_see_all">Ver todo</string>
 
     <string name="open_app">Abrir</string>
+
+    <string name="service_status_disabled">Desactivado</string>
+    <string name="service_status_enabled">Activado</string>
+    <string name="service_status_automatic">Automático</string>
+    <string name="service_status_manual">Manual</string>
+    <string name="service_status_enabled_short">Encendido</string>
+    <string name="service_status_disabled_short">Apagado</string>
 </resources>

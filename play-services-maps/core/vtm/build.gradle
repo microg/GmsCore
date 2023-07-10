@@ -27,7 +27,7 @@ dependencies {
     implementation "org.microg:vtm-android:0.9.1-mod:natives-x86_64"
     implementation "org.microg:vtm-extras:0.9.1-mod"
     implementation "org.microg:vtm-jts:0.9.1-mod"
-    implementation project(":play-services-maps-core-vtm:vtm-microg-theme")
+    implementation project(":play-services-maps-core-vtm-microg-theme")
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
 }
@@ -48,8 +48,7 @@ android {
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
-        versionName "temp"
-        versionCode 1
+        versionName version
 
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
@@ -66,7 +65,6 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
 
