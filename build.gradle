@@ -39,9 +39,15 @@ buildscript {
     ext.localProperties = new Properties()
 
     try {
-        ext.localProperties.load(rootProject.file('local.properties').newDataInputStream())
+        var stream = rootProject.file('local.properties').newDataInputStream()
+        ext.localProperties.load(stream)
+        stream.close()
     } catch (ignored) {
         // Ignore
+    }
+
+    ext.hasModule = (String name, boolean enabledByDefault) -> {
+        return ext.localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
     }
 
     repositories {
@@ -111,6 +117,7 @@ subprojects {
     repositories {
         mavenCentral()
         google()
+        if (hasModule("hms", false)) maven {url 'https://developer.huawei.com/repo/'}
     }
 }
 
