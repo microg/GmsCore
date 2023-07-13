@@ -89,12 +89,12 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
 
         for (map in maps) {
             map.getStyle {
-                try {
-                    runOnMainLooper {
+                runOnMainLooper {
+                    try {
                         it.removeImage(id)
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
                     }
-                } catch (e: Exception) {
-                    Log.w(TAG, e)
                 }
             }
         }
