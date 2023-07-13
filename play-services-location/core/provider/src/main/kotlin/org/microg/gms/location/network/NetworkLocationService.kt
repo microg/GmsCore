@@ -51,8 +51,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private val activeRequests = HashSet<NetworkLocationRequest>()
     private val highPowerScanRunnable = Runnable { this.scan(false) }
     private val lowPowerScanRunnable = Runnable { this.scan(true) }
-    private val wifiDetailsSource by lazy { WifiDetailsSource.create(this, this) }
-    private val cellDetailsSource by lazy { CellDetailsSource.create(this, this) }
+    private var wifiDetailsSource: WifiDetailsSource? = null
+    private var cellDetailsSource: CellDetailsSource? = null
     private val mozilla by lazy { MozillaLocationServiceClient(this) }
     private val cache by lazy { LocationCacheDatabase(this) }
     private val movingWifiHelper by lazy { MovingWifiHelper(this) }
@@ -85,8 +85,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         handlerThread = HandlerThread(NetworkLocationService::class.java.simpleName)
         handlerThread.start()
         handler = Handler(handlerThread.looper)
-        wifiDetailsSource.enable()
-        cellDetailsSource.enable()
+        wifiDetailsSource = WifiDetailsSource.create(this, this).apply { enable() }
+        cellDetailsSource = CellDetailsSource.create(this, this).apply { enable() }
         try {
             getSystemService<LocationManager>()?.let { locationManager ->
                 LocationManagerCompat.requestLocationUpdates(
@@ -107,8 +107,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         if (!lowPower) lastHighPowerScanRealtime = SystemClock.elapsedRealtime()
         lastLowPowerScanRealtime = SystemClock.elapsedRealtime()
         val workSource = synchronized(activeRequests) { activeRequests.minByOrNull { it.intervalMillis }?.workSource }
-        wifiDetailsSource.startScan(workSource)
-        cellDetailsSource.startScan(workSource)
+        wifiDetailsSource?.startScan(workSource)
+        cellDetailsSource?.startScan(workSource)
         updateRequests()
     }
 
@@ -182,8 +182,10 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
 
     override fun onDestroy() {
         handlerThread.stop()
-        wifiDetailsSource.disable()
-        cellDetailsSource.disable()
+        wifiDetailsSource?.disable()
+        wifiDetailsSource = null
+        cellDetailsSource?.disable()
+        cellDetailsSource = null
         super.onDestroy()
     }
 
@@ -287,6 +289,12 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             }
             sendLocationUpdate()
         }
+    }
+
+    override fun onWifiSourceFailed() {
+        // Wifi source failed, create a new one
+        wifiDetailsSource?.disable()
+        wifiDetailsSource = WifiDetailsSource.create(this, this).apply { enable() }
     }
 
     override fun onCellDetailsAvailable(cells: List<CellDetails>) {
