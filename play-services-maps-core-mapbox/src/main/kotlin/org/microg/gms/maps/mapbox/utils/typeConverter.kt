@@ -17,6 +17,7 @@
 package org.microg.gms.maps.mapbox.utils
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.gms.maps.internal.ICancelableCallback
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.camera.CameraPosition
@@ -24,6 +25,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.geometry.VisibleRegion
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import org.microg.gms.maps.mapbox.TAG
 import com.google.android.gms.maps.model.CameraPosition as GmsCameraPosition
 import com.google.android.gms.maps.model.LatLng as GmsLatLng
 import com.google.android.gms.maps.model.LatLngBounds as GmsLatLngBounds
@@ -35,7 +37,7 @@ fun GmsLatLng.toMapbox(): LatLng =
 fun GmsLatLng.toPoint() = Point.fromLngLat(latitude, longitude)
 
 fun GmsLatLngBounds.toMapbox(): LatLngBounds =
-        LatLngBounds.from(this.northeast.latitude, this.northeast.longitude, this.southwest.latitude, this.southwest.longitude)
+    LatLngBounds.from(this.northeast.latitude, this.northeast.longitude + if (this.northeast.longitude < this.southwest.longitude) 360.0 else 0.0, this.southwest.latitude, this.southwest.longitude)
 
 fun GmsCameraPosition.toMapbox(): CameraPosition =
         CameraPosition.Builder()
