@@ -9,13 +9,13 @@ import org.microg.safeparcel.AutoSafeParcelable;
 
 public class HarmfulAppsInfo extends AutoSafeParcelable {
     @Field(2)
-    public long field2;
+    public long lastScanTime;
     @Field(3)
-    public HarmfulAppsData[] data;
+    public HarmfulAppsData[] harmfulApps = new HarmfulAppsData[0];
     @Field(4)
-    public int field4;
+    public int hoursSinceLastScanWithHarmfulApp = -1;
     @Field(5)
-    public boolean field5;
+    public boolean harmfulAppInOtherProfile = false;
 
     public static final Creator<HarmfulAppsInfo> CREATOR = new AutoCreator<HarmfulAppsInfo>(HarmfulAppsInfo.class);
 }
