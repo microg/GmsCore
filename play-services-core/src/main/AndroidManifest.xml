@@ -422,6 +422,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.credential.CredentialManagerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.credential.manager.service.firstparty.START" />
+            </intent-filter>
+        </service>
+
         <!-- Games -->
 
         <service android:name="org.microg.gms.games.GamesStubService">
