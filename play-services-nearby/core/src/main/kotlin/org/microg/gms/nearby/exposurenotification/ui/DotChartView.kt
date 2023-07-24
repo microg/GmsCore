@@ -9,7 +9,7 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.*
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.util.AttributeSet
@@ -194,7 +194,7 @@ class DotChartView : View {
             canvas.drawText(strRecords, (subLeft + (perWidth + innerPadding) * 4 + 16 * d + fontTempRect.width() + perWidth).toFloat(), (subTop + perHeight / 2.0 + fontTempRect.height() / 2.0).toFloat(), fontPaint)
         }
 
-        if (focusHour != -1 && Build.VERSION.SDK_INT >= 23) {
+        if (focusHour != -1 && SDK_INT >= 23) {
             val floatingColor = context.resolveColor(androidx.appcompat.R.attr.colorBackgroundFloating) ?: 0
             val line1 = "${displayData[focusDay]?.first}, $focusHour:00"
             val line2 = displayData[focusDay]?.second?.get(focusHour)?.let { context.getString(R.string.pref_exposure_rpis_histogram_legend_records, it.toString()) }

@@ -6,13 +6,13 @@
 package org.microg.gms.location.network.wifi
 
 import android.net.wifi.ScanResult
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.SystemClock
 
 internal fun ScanResult.toWifiDetails(): WifiDetails = WifiDetails(
     macAddress = BSSID,
     ssid = SSID,
-    timestamp = if (Build.VERSION.SDK_INT >= 19) System.currentTimeMillis() - (SystemClock.elapsedRealtime() - (timestamp / 1000)) else null,
+    timestamp = if (SDK_INT >= 19) System.currentTimeMillis() - (SystemClock.elapsedRealtime() - (timestamp / 1000)) else null,
     frequency = frequency,
     channel = frequencyToChannel(frequency),
     signalStrength = level,

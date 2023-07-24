@@ -19,7 +19,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -142,7 +142,7 @@ class AdvertiserService : LifecycleService() {
             }
             val data = AdvertiseData.Builder().addServiceUuid(SERVICE_UUID).addServiceData(SERVICE_UUID, payload).build()
             Log.i(TAG, "Starting advertiser")
-            if (Build.VERSION.SDK_INT >= 26) {
+            if (SDK_INT >= 26) {
                 setCallback = SetCallback()
                 val params = AdvertisingSetParameters.Builder()
                         .setInterval(AdvertisingSetParameters.INTERVAL_MEDIUM)
@@ -201,7 +201,7 @@ class AdvertiserService : LifecycleService() {
         val intent = Intent(this, AdvertiserService::class.java).apply { action = ACTION_RESTART_ADVERTISING }
         val pendingIntent = PendingIntent.getService(this, ACTION_RESTART_ADVERTISING.hashCode(), intent, FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
         when {
-            Build.VERSION.SDK_INT >= 23 ->
+            SDK_INT >= 23 ->
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextSend, pendingIntent)
             else ->
                 alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + nextSend, pendingIntent)
@@ -214,7 +214,7 @@ class AdvertiserService : LifecycleService() {
         if (!advertising) return
         Log.i(TAG, "Stopping advertiser")
         advertising = false
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (SDK_INT >= 26) {
             wantStartAdvertising = true
             try {
                 advertiser?.stopAdvertisingSet(setCallback as AdvertisingSetCallback)
@@ -259,7 +259,7 @@ class AdvertiserService : LifecycleService() {
             val adapter = getDefaultAdapter()
             return when {
                 adapter == null -> false
-                Build.VERSION.SDK_INT >= 26 && (adapter.isLeExtendedAdvertisingSupported || adapter.isLePeriodicAdvertisingSupported) -> true
+                SDK_INT >= 26 && (adapter.isLeExtendedAdvertisingSupported || adapter.isLePeriodicAdvertisingSupported) -> true
                 adapter.state != STATE_ON -> null
                 adapter.bluetoothLeAdvertiser != null -> true
                 else -> false

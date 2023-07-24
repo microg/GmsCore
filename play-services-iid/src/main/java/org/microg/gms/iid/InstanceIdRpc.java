@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.ConditionVariable;
 import android.os.Handler;
@@ -51,6 +50,7 @@ import java.util.Map;
 import java.util.Random;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.os.Build.VERSION.SDK_INT;
 import static com.google.android.gms.iid.InstanceID.ERROR_BACKOFF;
 import static com.google.android.gms.iid.InstanceID.ERROR_MISSING_INSTANCEID_SERVICE;
 import static com.google.android.gms.iid.InstanceID.ERROR_SERVICE_NOT_AVAILABLE;
@@ -281,7 +281,7 @@ public class InstanceIdRpc {
         Intent intent = new Intent(ACTION_C2DM_REGISTER);
         intent.setPackage(iidPackageName);
         data.putString(EXTRA_GMS_VERSION, Integer.toString(getGmsVersionCode(context)));
-        data.putString(EXTRA_OS_VERSION, Integer.toString(Build.VERSION.SDK_INT));
+        data.putString(EXTRA_OS_VERSION, Integer.toString(SDK_INT));
         data.putString(EXTRA_APP_VERSION_CODE, Integer.toString(getSelfVersionCode(context)));
         data.putString(EXTRA_APP_VERSION_NAME, getSelfVersionName(context));
         data.putString(EXTRA_CLIENT_VERSION, "iid-" + GMS_VERSION_CODE);

@@ -26,14 +26,13 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 public class MessengerCompat implements Parcelable {
     private Messenger messenger;
     private IMessengerCompat messengerCompat;
 
     public MessengerCompat(IBinder binder) {
-        if (SDK_INT >= LOLLIPOP) {
+        if (SDK_INT >= 21) {
             messenger = new Messenger(binder);
         } else {
             messengerCompat = IMessengerCompat.Stub.asInterface(binder);
@@ -41,7 +40,7 @@ public class MessengerCompat implements Parcelable {
     }
 
     public MessengerCompat(Handler handler) {
-        if (SDK_INT >= LOLLIPOP) {
+        if (SDK_INT >= 21) {
             messenger = new Messenger(handler);
         } else {
             messengerCompat = new IMessengerCompatImpl(handler);

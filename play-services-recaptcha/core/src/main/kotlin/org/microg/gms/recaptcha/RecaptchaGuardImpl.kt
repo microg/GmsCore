@@ -6,7 +6,7 @@
 package org.microg.gms.recaptcha
 
 import android.content.Context
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.LocaleList
 import android.util.Log
 import com.android.volley.*
@@ -94,7 +94,7 @@ class ProtobufPostRequest<I : Message<I, *>, O>(url: String, private val i: I, p
 
     override fun getHeaders(): Map<String, String> {
         val headers = HashMap(super.getHeaders())
-        headers["Accept-Language"] = if (Build.VERSION.SDK_INT >= 24) LocaleList.getDefault().toLanguageTags() else Locale.getDefault().language
+        headers["Accept-Language"] = if (SDK_INT >= 24) LocaleList.getDefault().toLanguageTags() else Locale.getDefault().language
         return headers
     }
 

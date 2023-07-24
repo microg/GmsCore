@@ -8,7 +8,7 @@ package org.microg.gms.fido.core.transport.screenlock
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
@@ -40,7 +40,7 @@ class ScreenLockCredentialStore(val context: Context) {
             .setDigests(KeyProperties.DIGEST_SHA256)
             .setAlgorithmParameterSpec(ECGenParameterSpec("secp256r1"))
             .setUserAuthenticationRequired(true)
-        if (Build.VERSION.SDK_INT >= 24) builder.setAttestationChallenge(challenge)
+        if (SDK_INT >= 24) builder.setAttestationChallenge(challenge)
         generator.initialize(builder.build())
         generator.generateKeyPair()
         return keyId

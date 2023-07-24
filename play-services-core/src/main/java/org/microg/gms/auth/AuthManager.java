@@ -20,7 +20,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.util.Log;
 
 import org.microg.gms.common.PackageUtils;
@@ -30,6 +29,7 @@ import java.io.IOException;
 
 import static android.content.pm.ApplicationInfo.FLAG_SYSTEM;
 import static android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AuthPrefs.isTrustGooglePermitted;
 
 public class AuthManager {
@@ -93,7 +93,7 @@ public class AuthManager {
 
     public void setPermitted(boolean value) {
         setUserData(buildPermKey(), value ? "1" : "0");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && value && packageName != null) {
+        if (SDK_INT >= 26 && value && packageName != null) {
             // Make account persistently visible as we already granted access
             accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
         }
@@ -161,7 +161,7 @@ public class AuthManager {
 
     public void setAuthToken(String service, String auth) {
         getAccountManager().setAuthToken(getAccount(), buildTokenKey(service), auth);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && packageName != null && auth != null) {
+        if (SDK_INT >= 26 && packageName != null && auth != null) {
             // Make account persistently visible as we already granted access
             accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
         }

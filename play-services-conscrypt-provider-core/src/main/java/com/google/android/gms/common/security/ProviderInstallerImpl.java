@@ -7,7 +7,6 @@ package com.google.android.gms.common.security;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
@@ -38,6 +37,7 @@ import java.util.zip.ZipFile;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 
+import static android.os.Build.VERSION.SDK_INT;
 import static com.google.android.gms.security.ProviderInstaller.PROVIDER_NAME;
 
 @Keep
@@ -58,7 +58,7 @@ public class ProviderInstallerImpl {
         } catch (Exception e) {
 
         }
-        if (Build.VERSION.SDK_INT >= 29) {
+        if (SDK_INT >= 29) {
             return context.getOpPackageName();
         }
         Context applicationContext = context.getApplicationContext();

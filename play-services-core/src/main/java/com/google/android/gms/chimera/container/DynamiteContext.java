@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 
@@ -20,6 +19,11 @@ import org.microg.gms.common.Constants;
 import java.io.File;
 
 import dalvik.system.PathClassLoader;
+
+import static android.os.Build.CPU_ABI;
+import static android.os.Build.SUPPORTED_32_BIT_ABIS;
+import static android.os.Build.SUPPORTED_64_BIT_ABIS;
+import static android.os.Build.VERSION.SDK_INT;
 
 public class DynamiteContext extends ContextWrapper {
     private static final String TAG = "DynamiteContext";
@@ -42,16 +46,16 @@ public class DynamiteContext extends ContextWrapper {
     public ClassLoader getClassLoader() {
         if (classLoader == null) {
             StringBuilder nativeLoaderDirs = new StringBuilder(gmsContext.getApplicationInfo().nativeLibraryDir);
-            if (Build.VERSION.SDK_INT >= 23 && Process.is64Bit()) {
-                for (String abi : Build.SUPPORTED_64_BIT_ABIS) {
+            if (SDK_INT >= 23 && Process.is64Bit()) {
+                for (String abi : SUPPORTED_64_BIT_ABIS) {
                     nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(abi);
                 }
-            } else if (Build.VERSION.SDK_INT >= 21) {
-                for (String abi : Build.SUPPORTED_32_BIT_ABIS) {
+            } else if (SDK_INT >= 21) {
+                for (String abi : SUPPORTED_32_BIT_ABIS) {
                     nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(abi);
                 }
             } else {
-                nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(Build.CPU_ABI);
+                nativeLoaderDirs.append(File.pathSeparator).append(gmsContext.getApplicationInfo().sourceDir).append("!/lib/").append(CPU_ABI);
             }
             classLoader = new PathClassLoader(gmsContext.getApplicationInfo().sourceDir, nativeLoaderDirs.toString(), new FilteredClassLoader(originalContext.getClassLoader(), moduleInfo.getMergedClasses(), moduleInfo.getMergedPackages()));
         }
