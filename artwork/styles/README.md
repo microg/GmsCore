@@ -3,7 +3,7 @@
 * `style-microg-normal-openmaptiles.json` is a pure OpenMapTiles schema version of microG's custom style. The sources are set to Stadia but could be modified to be used with another schema-compliant vendor, e.g. MapTiler.
 * `style-microg-normal-stadia.json` is a variant with Stadia custom layers.
 * `style-microg-normal-mapbox.json` is a historic, unmaintained variant for use with Mapbox.
-* `style-microg-sattelite-*.json` is the same, but with a sattelite layer (no openmaptiles variant, because openmaptiles does not specify a sattelite layer). **TODO: create these.**
+* `style-microg-satellite-*.json` is the same, but with a satellite layer (no openmaptiles variant, because openmaptiles does not specify a satellite layer). **TODO: create these.**
 
 * `sprite_sources` files can be generated to a single sprite file as found in the app's assets using `spreet` (see below).
 * PBF files for fonts can be generated using `build_pbf_glyphs` from the `fonts` folder.
