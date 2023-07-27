@@ -63,7 +63,7 @@
         }
     },
     "sprite": "asset://sprites",
-    "glyphs": "mapbox://fonts/microg/{fontstack}/{range}.pbf",
+    "glyphs": "asset://{fontstack}/{range}.pbf",
     "layers": [
         {
             "id": "background",

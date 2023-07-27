@@ -6,7 +6,7 @@
 * `style-microg-sattelite-*.json` is the same, but with a sattelite layer (no openmaptiles variant, because openmaptiles does not specify a sattelite layer). **TODO: create these.**
 
 * `sprite_sources` files can be generated to a single sprite file as found in the app's assets using `spreet` (see below).
-* **TODO: remove references to mapbox for fonts.**
+* PBF files for fonts can be generated using `build_pbf_glyphs` from the `fonts` folder.
 
 ## Resources
 
