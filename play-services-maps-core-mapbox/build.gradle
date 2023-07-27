@@ -54,6 +54,7 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "String", "MAPBOX_KEY", "\"${localProperties.getProperty("mapbox.key", System.getenv('MAPBOX_VECTOR_TILES_KEY') ?: "")}\""
+        buildConfigField "String", "STADIA_KEY", "\"${localProperties.getProperty("stadia.key", System.getenv('STADIA_API_KEY') ?: "")}\""
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
