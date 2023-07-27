@@ -49,6 +49,23 @@ fun getStyle(
         ).bufferedReader().readText()
     )
 
+    // Inject API key
+    if (BuildConfig.STADIA_KEY.isNotEmpty()) {
+        val sourceArray = styleJson.getJSONObject("sources")
+        for (i in sourceArray.keys()) {
+            val sourceObject = sourceArray.getJSONObject(i)
+            if (sourceObject.has("url")) {
+                sourceObject.put("url", "${sourceObject["url"]}?api_key=${BuildConfig.STADIA_KEY}")
+            }
+            if (sourceObject.has("tiles")) {
+                val tilesArray = sourceObject.getJSONArray("tiles")
+                for (j in 0 until tilesArray.length()) {
+                    tilesArray.put(j, "${tilesArray.getString(j)}?api_key=${BuildConfig.STADIA_KEY}")
+                }
+            }
+        }
+    }
+
     styleOptions?.apply(styleJson)
 
     return if (styleFromFileWorkaround) {
