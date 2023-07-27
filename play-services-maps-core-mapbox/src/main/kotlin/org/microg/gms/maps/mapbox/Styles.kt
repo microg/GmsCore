@@ -37,14 +37,15 @@ fun getStyle(
     context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
 ): Style.Builder {
 
-    // TODO: Serve map style resources locally
     val styleJson = JSONObject(
         context.assets.open(
-            when (mapType) {
+            if (BuildConfig.STADIA_KEY.isNotEmpty()) {
+                "style-microg-normal-stadia.json"
+            } else when (mapType) {
                 GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite.json"
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-                else -> "style-microg-normal.json"
+                else -> "style-microg-normal-mapbox.json"
             }
         ).bufferedReader().readText()
     )
