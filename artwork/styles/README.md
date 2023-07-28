@@ -3,7 +3,7 @@
 * `style-microg-normal-openmaptiles.json` is a pure OpenMapTiles schema version of microG's custom style. The sources are set to Stadia but could be modified to be used with another schema-compliant vendor, e.g. MapTiler.
 * `style-microg-normal-stadia.json` is a variant with Stadia custom layers.
 * `style-microg-normal-mapbox.json` is a historic, unmaintained variant for use with Mapbox.
-* `style-microg-satellite-*.json` is the same, but with a satellite layer (no openmaptiles variant, because openmaptiles does not specify a satellite layer). **TODO: create these.**
+* `style-microg-satellite-*.json` is the same, but with a satellite layer (the stadia variant is almost pure openmaptiles, but openmaptiles does not specify a satellite layer).
 
 * `sprite_sources` files can be generated to a single sprite file as found in the app's assets using `spreet` (see below).
 * PBF files for fonts can be generated using `build_pbf_glyphs` from the `fonts` folder.
@@ -36,6 +36,13 @@ Commands:
 $ spreet sprite_sources/ ../../play-services-maps-core-mapbox/src/main/assets/sprites
 $ spreet --retina sprite_sources/ ../../play-services-maps-core-mapbox/src/main/assets/sprites@2x
 $ build_pbf_glyphs fonts/ ../../play-services-maps-core-mapbox/src/main/assets/
+```
+
+The assets are referenced using `asset://` in the style. For using Maputnik, it may be convenient to set the glyphs and sprites source to these Mapbox-hosted sources:
+
+```
+    "sprite": "mapbox://sprites/microg/cjui4020201oo1fmca7yuwbor/8fkcj5fgn4mftlzuak3guz1f9",
+    "glyphs": "mapbox://fonts/microg/{fontstack}/{range}.pbf",
 ```
 
 ## Legal
