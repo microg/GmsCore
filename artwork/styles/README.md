@@ -4,6 +4,7 @@
 * `style-microg-normal-stadia.json` is a variant with Stadia custom layers.
 * `style-microg-normal-mapbox.json` is a historic, unmaintained variant for use with Mapbox.
 * `style-microg-satellite-*.json` is the same, but with a satellite layer (the stadia variant is almost pure openmaptiles, but openmaptiles does not specify a satellite layer).
+* `style-stadia-outdoors.json` is identical to Stadia's Outdoors style, but with added microG metadata.
 
 * `sprite_sources` files can be generated to a single sprite file as found in the app's assets using `spreet` (see below).
 * PBF files for fonts can be generated using `build_pbf_glyphs` from the `fonts` folder.
@@ -47,7 +48,7 @@ The assets are referenced using `asset://` in the style. For using Maputnik, it 
 
 ## Legal
 
-* based on Mapbox Basic, part of the Mapbox Open Styles, licensed under
+* normal and satellite microG styles based on Mapbox Basic, part of the Mapbox Open Styles, licensed under
     * Style code: BSD license
     * Style virtual features / design: CC BY 3.0
     * Reference: https://github.com/mapbox/mapbox-gl-styles/blob/master/LICENSE.md
@@ -58,3 +59,8 @@ The assets are referenced using `asset://` in the style. For using Maputnik, it 
 	* Style design: CC-BY 4.0
 	* Reference: https://stadiamaps.com/attribution/
 * fonts: Roboto family, licensed Apache 2.0, https://fonts.google.com/specimen/Roboto/about
+
+* outdoor style based on https://docs.stadiamaps.com/map-styles/outdoors/#__tabbed_1_2
+    * Style code: BSD 3-Clause License
+	* Style design: CC-BY 4.0
+	* Reference: https://stadiamaps.com
