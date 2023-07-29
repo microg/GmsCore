@@ -41,7 +41,7 @@ fun getStyle(
         context.assets.open(
             if (BuildConfig.STADIA_KEY.isNotEmpty()) when (mapType) {
                 GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-stadia.json"
-                // TODO GoogleMap.MAP_TYPE_TERRAIN -> …
+                GoogleMap.MAP_TYPE_TERRAIN -> "style-stadia-outdoors.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
                 else -> "style-microg-normal-stadia.json"
             } else when (mapType) {
