@@ -159,7 +159,7 @@ android {
     packagingOptions {
         exclude 'META-INF/ASL2.0'
         jniLibs {
-            useLegacyPackaging false
+            useLegacyPackaging true
         }
     }
 }
