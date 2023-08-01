@@ -31,13 +31,18 @@
 * https://github.com/flother/spreet
 * https://github.com/stadiamaps/sdf_font_tools/tree/main/build_pbf_glyphs
 
+
 Commands:
 
 ```
 $ spreet sprite_sources/ ../../play-services-maps-core-mapbox/src/main/assets/sprites
 $ spreet --retina sprite_sources/ ../../play-services-maps-core-mapbox/src/main/assets/sprites@2x
-$ build_pbf_glyphs fonts/ ../../play-services-maps-core-mapbox/src/main/assets/
+$ build_pbf_glyphs --overwrite -c fonts/combinations.json fonts/ ../../play-services-maps-core-mapbox/src/main/assets
+$ rm -r ../../play-services-maps-core-mapbox/src/main/assets/OpenSans\ Regular # remove temporary files
 ```
+
+* We combine Open Sans Regular with Roboto Regular so that no glyphs are missing.
+* A symbolic link in the assets folder points from the font stack specification "Open Sans Regular,Arial Unicode MS Regular" to "Roboto Regular". It is unclear why MapLibre sometimes tries to access this font and fails rendering entire tiles if it is not present.
 
 The assets are referenced using `asset://` in the style. For using Maputnik, it may be convenient to set the glyphs and sprites source to these Mapbox-hosted sources:
 
@@ -64,3 +69,4 @@ The assets are referenced using `asset://` in the style. For using Maputnik, it 
     * Style code: BSD 3-Clause License
 	* Style design: CC-BY 4.0
 	* Reference: https://stadiamaps.com
+
