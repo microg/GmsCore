@@ -25,12 +25,18 @@ const val TAG = "GmsMapStyles"
 const val KEY_METADATA_FEATURE_TYPE = "microg:gms-type-feature"
 const val KEY_METADATA_ELEMENT_TYPE = "microg:gms-type-element"
 
+const val KEY_SOURCES = "sources"
+const val KEY_LAYERS = "layers"
+
 const val SELECTOR_ALL = "all"
 const val SELECTOR_ELEMENT_LABEL_TEXT_FILL = "labels.text.fill"
 const val SELECTOR_ELEMENT_LABEL_TEXT_STROKE = "labels.text.stroke"
 const val SELECTOR_ELEMENT_GEOMETRY_STROKE = "geometry.stroke"
 const val KEY_LAYER_METADATA = "metadata"
 const val KEY_LAYER_PAINT = "paint"
+
+const val KEY_SOURCE_URL = "url"
+const val KEY_SOURCE_TILES = "tiles"
 
 
 fun getStyle(
@@ -55,16 +61,16 @@ fun getStyle(
 
     // Inject API key
     if (BuildConfig.STADIA_KEY.isNotEmpty()) {
-        val sourceArray = styleJson.getJSONObject("sources")
-        for (i in sourceArray.keys()) {
-            val sourceObject = sourceArray.getJSONObject(i)
-            if (sourceObject.has("url")) {
-                sourceObject.put("url", "${sourceObject["url"]}?api_key=${BuildConfig.STADIA_KEY}")
+        val sourceArray = styleJson.getJSONObject(KEY_SOURCES)
+        for (key in sourceArray.keys()) {
+            val sourceObject = sourceArray.getJSONObject(key)
+            if (sourceObject.has(KEY_SOURCE_URL)) {
+                sourceObject.put(KEY_SOURCE_URL, "${sourceObject[KEY_SOURCE_URL]}?api_key=${BuildConfig.STADIA_KEY}")
             }
-            if (sourceObject.has("tiles")) {
-                val tilesArray = sourceObject.getJSONArray("tiles")
-                for (j in 0 until tilesArray.length()) {
-                    tilesArray.put(j, "${tilesArray.getString(j)}?api_key=${BuildConfig.STADIA_KEY}")
+            if (sourceObject.has(KEY_SOURCE_TILES)) {
+                val tilesArray = sourceObject.getJSONArray(KEY_SOURCE_TILES)
+                for (i in 0 until tilesArray.length()) {
+                    tilesArray.put(i, "${tilesArray.getString(i)}?api_key=${BuildConfig.STADIA_KEY}")
                 }
             }
         }
@@ -107,7 +113,7 @@ fun MapStyleOptions.apply(style: JSONObject) {
     try {
         Gson().fromJson(json, Array<StyleOperation>::class.java).let { styleOperations ->
 
-            val layerArray = style.getJSONArray("layers")
+            val layerArray = style.getJSONArray(KEY_LAYERS)
 
             // Apply operations in order
             operations@ for (operation in styleOperations.map { it.toNonNull() }) {
