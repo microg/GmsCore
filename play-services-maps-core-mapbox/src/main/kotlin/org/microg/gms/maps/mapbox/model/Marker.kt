@@ -27,6 +27,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.google.android.gms.dynamic.unwrap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import org.microg.gms.maps.mapbox.AbstractGoogleMap
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
@@ -40,7 +41,9 @@ abstract class AbstractMarker(
     internal var visible: Boolean = options.isVisible
     internal var anchor: FloatArray = floatArrayOf(options.anchorU, options.anchorV)
     internal var infoWindowAnchor: FloatArray = floatArrayOf(0.5f, 1f)
-    internal var icon: BitmapDescriptorImpl? = options.icon?.remoteObject.unwrap()
+    internal var icon: BitmapDescriptorImpl =
+        options.icon?.remoteObject.unwrap() ?:
+        BitmapDescriptorFactoryImpl.defaultMarker().unwrap<BitmapDescriptorImpl>()!!
     internal var alpha: Float = options.alpha
     internal var title: String? = options.title
     internal var snippet: String? = options.snippet
@@ -73,10 +76,8 @@ abstract class AbstractMarker(
     override fun getPosition(): LatLng = position
 
     override fun setIcon(obj: IObjectWrapper?) {
-        obj.unwrap<BitmapDescriptorImpl>()?.let { icon ->
-            this.icon = icon
-            update()
-        }
+        this.icon = obj?.unwrap<BitmapDescriptorImpl>() ?: BitmapDescriptorFactoryImpl.defaultMarker().unwrap()!!
+        update()
     }
 
     override fun setVisible(visible: Boolean) {
