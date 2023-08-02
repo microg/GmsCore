@@ -328,7 +328,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         // Apply hue to layer color
         ColorUtils.colorToHSL(color, hslResult)
         hslResult[0] = hueDegree
-        return ColorUtils.HSLToColor(hslResult)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hslResult), Color.alpha(color))
     }
 
     lightness?.let { lightness ->
@@ -342,7 +342,7 @@ fun Styler.applyColorChanges(color: Int): Int {
             // Increase brightness. Percentage amount = relative reduction of difference between is-lightness and 1.0.
             hsl[2] + (lightness / 100) * (1 - hsl[2])
         }
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     saturation?.let { saturation ->
@@ -357,7 +357,7 @@ fun Styler.applyColorChanges(color: Int): Int {
             hsl[1] + (saturation / 100) * (1 - hsl[1])
         }
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     gamma?.let { gamma ->
@@ -366,7 +366,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] = hsl[2].toDouble().pow(gamma.toDouble()).toFloat()
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     if (invertLightness == true) {
@@ -375,7 +375,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] = 1 - hsl[2]
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     this.color?.let {
