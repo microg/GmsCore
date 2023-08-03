@@ -35,6 +35,7 @@
 Commands:
 
 ```
+$ cp style-microg-{satellite,normal}-{mapbox,stadia}.json style-stadia-outdoors.json style-mapbox-outdoors-v12.json ../../play-services-maps-core-mapbox/src/main/assets/
 $ spreet sprite_sources/ ../../play-services-maps-core-mapbox/src/main/assets/sprites
 $ spreet --retina sprite_sources/ ../../play-services-maps-core-mapbox/src/main/assets/sprites@2x
 $ build_pbf_glyphs --overwrite -c fonts/combinations.json fonts/ ../../play-services-maps-core-mapbox/src/main/assets
