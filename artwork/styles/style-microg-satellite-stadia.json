@@ -1063,7 +1063,7 @@
                     "<=",
                     [
                         "get",
-                        "filterrank"
+                        "rank"
                     ],
                     [
                         "*",
@@ -1353,7 +1353,7 @@
                     "step",
                     [
                         "get",
-                        "symbolrank"
+                        "rank"
                     ],
                     [
                         "literal",
@@ -1650,7 +1650,7 @@
                     ],
                     [
                         "get",
-                        "symbolrank"
+                        "rank"
                     ],
                     0,
                     0,
@@ -2321,7 +2321,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
@@ -2630,7 +2630,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
@@ -2939,7 +2939,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
@@ -3269,7 +3269,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
