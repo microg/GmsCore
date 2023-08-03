@@ -68,6 +68,7 @@
             ],
             "minzoom": 0,
             "maxzoom": 12,
+            "tileSize": 256,
             "encoding": "terrarium"
         },
         "global": {
