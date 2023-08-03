@@ -2036,7 +2036,7 @@
                     "<=",
                     [
                         "get",
-                        "filterrank"
+                        "rank"
                     ],
                     [
                         "*",
@@ -2187,7 +2187,7 @@
                                 "*",
                                 [
                                     "get",
-                                    "symbolrank"
+                                    "rank"
                                 ],
                                 2
                             ],
@@ -2203,7 +2203,7 @@
                             "+",
                             [
                                 "get",
-                                "symbolrank"
+                                "rank"
                             ],
                             25
                         ],
@@ -2318,7 +2318,7 @@
                     "step",
                     [
                         "get",
-                        "symbolrank"
+                        "rank"
                     ],
                     [
                         "literal",
@@ -2383,7 +2383,7 @@
                                 "*",
                                 [
                                     "get",
-                                    "symbolrank"
+                                    "rank"
                                 ],
                                 2
                             ],
@@ -2399,7 +2399,7 @@
                             "+",
                             [
                                 "get",
-                                "symbolrank"
+                                "rank"
                             ],
                             25
                         ],
@@ -2607,7 +2607,7 @@
                     ],
                     [
                         "get",
-                        "symbolrank"
+                        "rank"
                     ],
                     0,
                     0,
@@ -3270,7 +3270,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
@@ -3579,7 +3579,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
@@ -3888,7 +3888,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
@@ -4218,7 +4218,7 @@
                             "<=",
                             [
                                 "get",
-                                "sizerank"
+                                "rank"
                             ],
                             250
                         ]
