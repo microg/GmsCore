@@ -202,7 +202,20 @@
                 "visibility": "visible"
             },
             "paint": {
-                "fill-color": "hsl(106, 58%, 85%)"
+                "fill-color": "hsl(106, 58%, 85%)",
+                "fill-opacity": [
+                    "interpolate",
+                    [
+                        "linear"
+                    ],
+                    [
+                        "zoom"
+                    ],
+                    9,
+                    1,
+                    11.5,
+                    0
+                ]
             }
         },
         {
