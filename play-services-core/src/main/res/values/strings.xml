@@ -220,4 +220,9 @@ This can take a couple of minutes."</string>
     <string name="pref_safetynet_test_no_result">No result</string>
     <string name="pref_safetynet_test_invalid_json">Invalid JSON</string>
 
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / Automatic: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s seconds</string>
+    <string name="push_notifications_summary_values_minutes">%s minutes</string>
 </resources>
