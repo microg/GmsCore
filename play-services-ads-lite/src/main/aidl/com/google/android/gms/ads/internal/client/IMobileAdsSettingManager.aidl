@@ -14,6 +14,7 @@ interface IMobileAdsSettingManager {
     void fetchAppSettings(String appId, IObjectWrapper runnable) = 5;
     float getAdVolume() = 6;
     boolean isAdMuted() = 7;
+    String getVersionString() = 8;
     void registerRtbAdapter(String className) = 9;
     void addInitializationCallback(IInitializationCallback callback) = 11;
     List<AdapterStatusParcel> getAdapterStatus() = 12;
