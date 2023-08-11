@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<network-security-config>
+    <!-- We need to allow cleartext access to certain domains for local wifi location -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">portal.mav.hu</domain>
+    </domain-config>
+</network-security-config>

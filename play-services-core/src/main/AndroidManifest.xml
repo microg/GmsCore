@@ -117,6 +117,7 @@
         android:icon="@mipmap/ic_core_service_app"
         android:label="@string/gms_app_name"
         android:multiArch="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.AppCompat.DayNight">
 
         <library android:name="com.google.android.gms" />
