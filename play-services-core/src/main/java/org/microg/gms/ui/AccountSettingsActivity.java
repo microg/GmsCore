@@ -18,7 +18,6 @@ package org.microg.gms.ui;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -34,6 +33,7 @@ import org.microg.tools.ui.ResourceSettingsFragment;
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_NOT_VISIBLE;
 import static android.accounts.AccountManager.VISIBILITY_VISIBLE;
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AuthManager.PREF_AUTH_VISIBLE;
 
 public class AccountSettingsActivity extends AbstractSettingsActivity {
@@ -53,7 +53,7 @@ public class AccountSettingsActivity extends AbstractSettingsActivity {
             super.onCreatePreferences(savedInstanceState, rootKey);
             Preference pref = findPreference(PREF_AUTH_VISIBLE);
             if (pref != null) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                if (SDK_INT < 26) {
                     pref.setVisible(false);
                 } else {
                     pref.setOnPreferenceChangeListener((preference, newValue) -> {

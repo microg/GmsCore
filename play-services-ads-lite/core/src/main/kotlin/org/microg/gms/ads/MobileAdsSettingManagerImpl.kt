@@ -49,6 +49,10 @@ class MobileAdsSettingManagerImpl(private val context: Context?) : IMobileAdsSet
         return true
     }
 
+    override fun getVersionString(): String {
+        return ""
+    }
+
     override fun registerRtbAdapter(className: String?) {
         Log.d(TAG, "registerRtbAdapter($className)")
     }

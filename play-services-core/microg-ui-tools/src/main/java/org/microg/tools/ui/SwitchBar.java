@@ -18,7 +18,6 @@
 package org.microg.tools.ui;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableStringBuilder;
@@ -70,7 +69,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
         LayoutInflater.from(context).inflate(R.layout.switch_bar, this);
 
         mTextView = (TextView) findViewById(R.id.switch_text);
-        if (SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
+        if (SDK_INT > 16) {
             mTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         }
         mLabel = getResources().getString(R.string.abc_capital_off);
@@ -81,7 +80,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
         // Prevent onSaveInstanceState() to be called as we are managing the state of the Switch
         // on our own
         mSwitch.setSaveEnabled(false);
-        if (SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (SDK_INT >= 16) {
             mSwitch.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         }
 

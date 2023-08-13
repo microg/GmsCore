@@ -90,6 +90,9 @@ object Build {
 
         @JvmField
         var SECURITY_PATCH: String? = null
+
+        @JvmField
+        var DEVICE_INITIAL_SDK_INT: Int = 0
     }
 
     fun generateWebViewUserAgentString(original: String): String {

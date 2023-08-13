@@ -24,7 +24,7 @@ public class ISafetyNetCallbacksDefaultStub extends ISafetyNetCallbacks.Stub {
     }
 
     @Override
-    public void onString(String s) throws RemoteException {
+    public void onSharedUuid(String s) throws RemoteException {
     }
 
     @Override

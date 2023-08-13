@@ -11,7 +11,7 @@ import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
@@ -144,7 +144,7 @@ class ExposureNotificationsFragment : PreferenceFragmentCompat() {
 
             val nearbyPermissions = arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
             // Expresses implication (API 31+ → all new permissions granted) ≡ (¬API 31+ | all new permissions granted)
-            val nearbyPermissionsGranted = Build.VERSION.SDK_INT < 31 || nearbyPermissions.all {
+            val nearbyPermissionsGranted = SDK_INT < 31 || nearbyPermissions.all {
                 ContextCompat.checkSelfPermission(appContext, it) == PackageManager.PERMISSION_GRANTED
             }
             exposureNearbyNotGranted.isVisible = enabled && !nearbyPermissionsGranted

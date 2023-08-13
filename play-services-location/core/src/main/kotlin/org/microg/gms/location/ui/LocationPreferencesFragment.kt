@@ -6,7 +6,7 @@
 package org.microg.gms.location.ui
 
 import android.annotation.SuppressLint
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
@@ -90,8 +90,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         networkProviderCategory.isVisible = requireContext().hasNetworkLocationServiceBuiltIn()
         wifiMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
         cellMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
-        wifiLearning.isVisible = Build.VERSION.SDK_INT >= 17
-        cellLearning.isVisible = Build.VERSION.SDK_INT >= 17
+        wifiLearning.isVisible = SDK_INT >= 17
+        cellLearning.isVisible = SDK_INT >= 17
     }
 
     override fun onResume() {

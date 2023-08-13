@@ -7,13 +7,14 @@ package org.microg.gms.droidguard;
 
 import android.content.Context;
 import android.media.MediaDrm;
-import android.os.Build;
 import android.util.Log;
 
 import org.microg.gms.droidguard.core.FallbackCreator;
 import org.microg.gms.settings.SettingsContract;
 
 import java.util.HashMap;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 /**
  * Callbacks invoked from the DroidGuard VM
@@ -60,7 +61,7 @@ public class GuardCallback {
     public final void d(final Object mediaDrm, final byte[] sessionId) {
         Log.d(TAG, "d[closeMediaDrmSession](" + mediaDrm + ", " + sessionId + ")");
         synchronized (MediaDrmLock.LOCK) {
-            if (Build.VERSION.SDK_INT >= 18) {
+            if (SDK_INT >= 18) {
                 ((MediaDrm) mediaDrm).closeSession(sessionId);
             }
         }

@@ -10,7 +10,7 @@ import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,7 +42,7 @@ class UsbTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
                     navOptions { popUpTo(R.id.usbFragment) { inclusive = true } })
             }
         }
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (SDK_INT >= 23) {
             for (imageView in listOfNotNull(binding.fidoUsbWaitConnectAnimation, binding.fidoUsbWaitConfirmAnimation)) {
                 (imageView.drawable as? AnimatedVectorDrawable)?.registerAnimationCallback(object : Animatable2.AnimationCallback() {
                     override fun onAnimationEnd(drawable: Drawable?) {
@@ -63,7 +63,7 @@ class UsbTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
     override fun onStatusChanged(transport: Transport, status: String, extras: Bundle?) {
         if (transport != Transport.USB) return
         binding.status = status
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (SDK_INT >= 21) {
             binding.deviceName =
                 extras?.getParcelable<UsbDevice>(UsbManager.EXTRA_DEVICE)?.productName ?: "your security key"
         } else {

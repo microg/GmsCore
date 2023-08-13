@@ -35,6 +35,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     // France
     "_SNCF_WIFI_INOUI",
     "_SNCF_WIFI_INTERCITES",
+    "_WIFI_LYRIA",
     "OUIFI",
     "NormandieTrainConnecte",
     // Germany
@@ -42,16 +43,24 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "WIFI@DB",
     "WiFi@DB",
     "RRX Hotspot",
+    "FlixBux",
     "FlixBus Wi-Fi",
+    "FlixTrain Wi-Fi",
     "FlyNet",
     "Telekom_FlyNet",
     "Vestische WLAN",
     // Greece
     "AegeanWiFi",
+    // Hong Kong
+    "Cathay Pacific",
     // Hungary
     "MAVSTART-WIFI",
     // Netherlands
     "KEOLIS Nederland",
+    // Sweden
+    "SJ",
+    // Switzerland
+    "SBB-Free",
     // United Kingdom
     "CrossCountryWiFi",
     "GWR WiFi",
@@ -170,13 +179,52 @@ class MovingWifiHelper(private val context: Context) {
         return location
     }
 
+    private fun parsePanasonic(location: Location, data: ByteArray): Location {
+        val json = JSONObject(data.decodeToString())
+        location.accuracy = 100f
+        location.latitude = json.getJSONObject("current_coordinates").getDouble("latitude")
+        location.longitude = json.getJSONObject("current_coordinates").getDouble("longitude")
+        json.optDouble("ground_speed_knots").takeIf { !it.isNaN() }?.let {
+            location.speed = (it * 0.5144).toFloat()
+            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+        }
+        json.optDouble("altitude_feet").takeIf { !it.isNaN() }?.let { location.altitude = it * 0.3048 }
+        json.optDouble("true_heading_degree").takeIf { !it.isNaN() }?.let {
+            location.bearing = it.toFloat()
+            LocationCompat.setBearingAccuracyDegrees(location, 90f)
+        }
+        return location
+    }
+
+    private fun parseBoardConnect(location: Location, data: ByteArray): Location {
+        val json = JSONObject(data.decodeToString())
+        location.accuracy = 100f
+        location.latitude = json.getDouble("lat")
+        location.longitude = json.getDouble("lon")
+        runCatching { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US).parse(json.getString("utc"))?.time }.getOrNull()?.let { location.time = it }
+        json.optDouble("groundSpeed").takeIf { !it.isNaN() }?.let {
+            location.speed = (it * 0.5144).toFloat()
+            LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+        }
+        json.optDouble("altitude").takeIf { !it.isNaN() }?.let { location.altitude = it * 0.3048 }
+        json.optDouble("heading").takeIf { !it.isNaN() }?.let {
+            location.bearing = it.toFloat()
+            LocationCompat.setBearingAccuracyDegrees(location, 90f)
+        }
+        return location
+    }
+
     private fun parseInput(ssid: String, data: ByteArray): Location {
         val location = Location(ssid)
         return when (ssid) {
             "WIFIonICE" -> parseWifiOnIce(location, data)
+            "FlixBus" -> parseFlixbus(location, data)
             "FlixBus Wi-Fi" -> parseFlixbus(location, data)
+            "FlixTrain Wi-Fi" -> parseFlixbus(location, data)
             "MAVSTART-WIFI" -> parsePassengera(location, data)
             "AegeanWiFi" -> parseDisplayUgo(location, data)
+            "Telekom_FlyNet" -> parsePanasonic(location, data)
+            "FlyNet" -> parseBoardConnect(location, data)
             else -> throw UnsupportedOperationException()
         }
     }
@@ -187,9 +235,14 @@ class MovingWifiHelper(private val context: Context) {
     companion object {
         private val MOVING_WIFI_HOTSPOTS_LOCALLY_RETRIEVABLE = mapOf(
             "WIFIonICE" to "https://iceportal.de/api1/rs/status",
+            "FlixBus" to "https://media.flixbus.com/services/pis/v1/position",
             "FlixBus Wi-Fi" to "https://media.flixbus.com/services/pis/v1/position",
+            "FlixTrain Wi-Fi" to "https://media.flixbus.com/services/pis/v1/position",
             "MAVSTART-WIFI" to "http://portal.mav.hu/portal/api/vehicle/realtime",
-            "AegeanWiFi" to "https://api.ife.ugo.aero/navigation/positions"
+            "AegeanWiFi" to "https://api.ife.ugo.aero/navigation/positions",
+            "Telekom_FlyNet" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
+            "Cathay Pacific" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
+            "FlyNet" to "https://ww2.lufthansa-flynet.com/map/api/flightData",
         )
     }
 }

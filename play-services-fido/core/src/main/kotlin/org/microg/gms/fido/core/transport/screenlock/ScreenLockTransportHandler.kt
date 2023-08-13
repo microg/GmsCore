@@ -6,7 +6,7 @@
 package org.microg.gms.fido.core.transport.screenlock
 
 import android.app.KeyguardManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
@@ -134,7 +134,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
             NoneAttestationObject(authenticatorData)
         } else {
             try {
-                if (Build.VERSION.SDK_INT >= 24) {
+                if (SDK_INT >= 24) {
                     createAndroidKeyAttestation(signature, authenticatorData, clientDataHash, options.rpId, keyId)
                 } else {
                     createSafetyNetAttestation(authenticatorData, clientDataHash)

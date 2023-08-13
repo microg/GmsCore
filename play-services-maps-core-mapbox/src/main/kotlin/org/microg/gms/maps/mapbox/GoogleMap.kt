@@ -63,6 +63,7 @@ import org.microg.gms.maps.mapbox.model.*
 import org.microg.gms.maps.mapbox.utils.MultiArchLoader
 import org.microg.gms.maps.mapbox.utils.toGms
 import org.microg.gms.maps.mapbox.utils.toMapbox
+import java.util.concurrent.atomic.AtomicBoolean
 
 private fun <T : Any> LongSparseArray<T>.values() = (0 until size()).mapNotNull { valueAt(it) }
 
@@ -853,6 +854,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         tryRunUserInitializedCallbacks("getMapAsync")
     }
 
+    private var isInvokingInitializedCallbacks = AtomicBoolean(false)
     fun tryRunUserInitializedCallbacks(tag: String = "") {
 
         synchronized(mapLock) {
@@ -876,8 +878,12 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         val map = map
         if (initialized && map != null) {
             // Call all callbacks immediately, as map is ready
-            Log.d("$TAG:$tag", "Invoking callback instantly, as map is initialized")
-            runCallbacks()
+            Log.d("$TAG:$tag", "Invoking callback now, as map is initialized")
+            val wasCallbackActive = isInvokingInitializedCallbacks.getAndSet(true)
+            runOnMainLooper(forceQueue = wasCallbackActive) {
+                runCallbacks()
+            }
+            if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
         } else if (mapView?.isShown == false) {
             /* If map is hidden, an app (e.g. Dott) may expect it to initialize anyway and
              * will not show the map until it is initialized. However, we should not call
