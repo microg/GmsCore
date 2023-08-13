@@ -37,6 +37,14 @@ buildscript {
     ext.androidTargetSdk = 29
     ext.androidCompileSdk = 33
 
+    ext.localProperties = new Properties()
+
+    try {
+        ext.localProperties.load(rootProject.file('local.properties').newDataInputStream())
+    } catch (ignored) {
+        // Ignore
+    }
+
     repositories {
         mavenCentral()
         google()
@@ -59,7 +67,7 @@ def execResult(...args) {
     return stdout.toString()
 }
 
-def gmsVersion = "22.36.16"
+def gmsVersion = "23.16.57"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim())

@@ -5,7 +5,14 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/checkin_enable_switch"
+        android:key="pref_checkin_enabled"
+        android:persistent="false" />
+
     <PreferenceCategory
         android:key="prefcat_device_profile"
         android:title="@string/pref_device_registration_device_profile_category">

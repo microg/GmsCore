@@ -17,7 +17,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import android.util.TypedValue
 import androidx.core.app.NotificationCompat
@@ -45,7 +45,7 @@ class NotifyService : LifecycleService() {
         channel.setSound(null, null)
         channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         channel.setShowBadge(true)
-        if (Build.VERSION.SDK_INT >= 29) {
+        if (SDK_INT >= 29) {
             channel.setAllowBubbles(false)
         }
         channel.vibrationPattern = longArrayOf(0)
@@ -58,7 +58,7 @@ class NotifyService : LifecycleService() {
         val location = !LocationManagerCompat.isLocationEnabled(getSystemService(Context.LOCATION_SERVICE) as LocationManager)
         val bluetooth = BluetoothAdapter.getDefaultAdapter()?.state.let { it != BluetoothAdapter.STATE_ON && it != BluetoothAdapter.STATE_TURNING_ON }
         val nearbyPermissions = arrayOf("android.permission.BLUETOOTH_ADVERTISE", "android.permission.BLUETOOTH_SCAN")
-        val permissionNeedsHandling = Build.VERSION.SDK_INT >= 31 && nearbyPermissions.any {
+        val permissionNeedsHandling = SDK_INT >= 31 && nearbyPermissions.any {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
         Log.d( TAG,"notify: location: $location, bluetooth: $bluetooth, permissionNeedsHandling: $permissionNeedsHandling")
@@ -74,7 +74,7 @@ class NotifyService : LifecycleService() {
             }
         }
 
-        if (Build.VERSION.SDK_INT >= 26) {
+        if (SDK_INT >= 26) {
             NotificationCompat.Builder(this, createNotificationChannel())
         } else {
             NotificationCompat.Builder(this)
@@ -82,13 +82,13 @@ class NotifyService : LifecycleService() {
             val typedValue = TypedValue()
             try {
                 var resolved = theme.resolveAttribute(androidx.appcompat.R.attr.colorError, typedValue, true)
-                if (!resolved && Build.VERSION.SDK_INT >= 26) resolved = theme.resolveAttribute(android.R.attr.colorError, typedValue, true)
+                if (!resolved && SDK_INT >= 26) resolved = theme.resolveAttribute(android.R.attr.colorError, typedValue, true)
                 color = if (resolved) {
                     ContextCompat.getColor(this@NotifyService, typedValue.resourceId)
                 } else {
                     Color.RED
                 }
-                if (Build.VERSION.SDK_INT >= 26) setColorized(true)
+                if (SDK_INT >= 26) setColorized(true)
             } catch (e: Exception) {
                 // Ignore
             }
@@ -112,7 +112,7 @@ class NotifyService : LifecycleService() {
         super.onCreate()
         registerReceiver(trigger, IntentFilter().apply {
             addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
-            if (Build.VERSION.SDK_INT >= 19) addAction(LocationManager.MODE_CHANGED_ACTION)
+            if (SDK_INT >= 19) addAction(LocationManager.MODE_CHANGED_ACTION)
             addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
             addAction(NOTIFICATION_UPDATE_ACTION)
         })

@@ -61,34 +61,34 @@ abstract class ServiceProxy(private val loader: ServiceLoader) : android.app.Ser
         }
     }
 
-    override fun onRebind(intent: Intent) {
+    override fun onRebind(intent: Intent?) {
         if (actualService != null) {
-            if (intent != null) intent.setExtrasClassLoader(actualService!!.classLoader)
+            intent?.setExtrasClassLoader(actualService!!.classLoader)
             actualService!!.onRebind(intent)
         }
     }
 
-    override fun onStart(intent: Intent, startId: Int) {
+    override fun onStart(intent: Intent?, startId: Int) {
         if (actualService != null) {
-            if (intent != null) intent.setExtrasClassLoader(actualService!!.classLoader)
+            intent?.setExtrasClassLoader(actualService!!.classLoader)
             actualService!!.onStart(intent, startId)
         } else {
             stopSelf(startId)
         }
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return if (actualService != null) {
-            if (intent != null) intent.setExtrasClassLoader(actualService!!.classLoader)
+            intent?.setExtrasClassLoader(actualService!!.classLoader)
             actualService!!.onStartCommand(intent, flags, startId)
         } else {
             super.onStartCommand(intent, flags, startId)
         }
     }
 
-    override fun onTaskRemoved(rootIntent: Intent) {
+    override fun onTaskRemoved(rootIntent: Intent?) {
         if (actualService != null) {
-            if (rootIntent != null) rootIntent.setExtrasClassLoader(actualService!!.classLoader)
+            rootIntent?.setExtrasClassLoader(actualService!!.classLoader)
             actualService!!.onTaskRemoved(rootIntent)
         }
     }
@@ -99,9 +99,9 @@ abstract class ServiceProxy(private val loader: ServiceLoader) : android.app.Ser
         }
     }
 
-    override fun onUnbind(intent: Intent): Boolean {
+    override fun onUnbind(intent: Intent?): Boolean {
         return if (actualService != null) {
-            if (intent != null) intent.setExtrasClassLoader(actualService!!.classLoader)
+            intent?.setExtrasClassLoader(actualService!!.classLoader)
             actualService!!.onUnbind(intent)
         } else {
             false

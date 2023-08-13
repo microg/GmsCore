@@ -56,16 +56,12 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
         lifecycleScope.launchWhenResumed {
             val apps = withContext(Dispatchers.IO) {
                 val res = database.appList.map { app ->
-                    app to context.packageManager.getApplicationInfoIfExists(app.packageName)
-                }.map { (app, applicationInfo) ->
                     val pref = AppIconPreference(context)
-                    pref.title = applicationInfo?.loadLabel(context.packageManager) ?: app.packageName
+                    pref.packageName = app.packageName
                     pref.summary = when {
                         app.lastMessageTimestamp > 0 -> getString(R.string.gcm_last_message_at, DateUtils.getRelativeTimeSpanString(app.lastMessageTimestamp))
                         else -> null
                     }
-                    pref.icon = applicationInfo?.loadIcon(context.packageManager)
-                            ?: AppCompatResources.getDrawable(context, android.R.mipmap.sym_def_app_icon)
                     pref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         findNavController().navigate(requireContext(), R.id.openGcmAppDetailsFromAll, bundleOf(
                                 "package" to app.packageName

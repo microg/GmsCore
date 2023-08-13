@@ -15,8 +15,7 @@ import androidx.fragment.app.commit
 import com.google.android.gms.R
 import com.google.android.gms.databinding.SafetyNetRecentFragmentBinding
 import org.microg.gms.safetynet.SafetyNetRequestType
-import org.microg.gms.safetynet.SafetyNetRequestType.ATTESTATION
-import org.microg.gms.safetynet.SafetyNetRequestType.RECAPTCHA
+import org.microg.gms.safetynet.SafetyNetRequestType.*
 import org.microg.gms.safetynet.SafetyNetSummary
 
 class SafetyNetRecentDialogFragment : DialogFragment(R.layout.safety_net_recent_fragment) {
@@ -40,6 +39,10 @@ class SafetyNetRecentDialogFragment : DialogFragment(R.layout.safety_net_recent_
                         args = arguments
                     )
                     RECAPTCHA -> add<SafetyNetRecentRecaptchaPreferencesFragment>(
+                        R.id.actual_content,
+                        args = arguments
+                    )
+                    RECAPTCHA_ENTERPRISE -> add<SafetyNetRecentRecaptchaPreferencesFragment>(
                         R.id.actual_content,
                         args = arguments
                     )

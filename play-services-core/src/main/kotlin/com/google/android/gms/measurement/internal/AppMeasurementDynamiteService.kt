@@ -5,13 +5,17 @@
 package com.google.android.gms.measurement.internal
 
 import android.os.Bundle
+import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import androidx.annotation.Keep
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.measurement.api.internal.*
+import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "AppMeasurementService"
 
+@Keep
 class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
     override fun initialize(context: IObjectWrapper?, params: InitializationParams?, timestamp: Long) {
         Log.d(TAG, "Not yet implemented: initialize")
@@ -79,10 +83,12 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun getCurrentScreenName(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getCurrentScreenName")
+        receiver?.onBundle(Bundle().apply { putString("r", null) })
     }
 
     override fun getCurrentScreenClass(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getCurrentScreenClass")
+        receiver?.onBundle(Bundle().apply { putString("r", null) })
     }
 
     override fun setInstanceIdProvider(provider: IStringProvider?) {
@@ -91,18 +97,22 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun getCachedAppInstanceId(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getCachedAppInstanceId")
+        receiver?.onBundle(Bundle().apply { putString("r", null) })
     }
 
     override fun getAppInstanceId(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getAppInstanceId")
+        receiver?.onBundle(Bundle().apply { putString("r", null) })
     }
 
     override fun getGmpAppId(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getGmpAppId")
+        receiver?.onBundle(Bundle().apply { putString("r", null) })
     }
 
     override fun generateEventId(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: generateEventId")
+        receiver?.onBundle(Bundle().apply { putLong("r", 1L) })
     }
 
     override fun beginAdUnitExposure(str: String?, j: Long) {
@@ -144,6 +154,7 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun performAction(bundle: Bundle?, receiver: IBundleReceiver?, j: Long) {
         Log.d(TAG, "Not yet implemented: performAction")
+        receiver?.onBundle(null)
     }
 
     override fun logHealthData(i: Int, str: String?, obj: IObjectWrapper?, obj2: IObjectWrapper?, obj3: IObjectWrapper?) {
@@ -168,6 +179,13 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun getTestFlag(receiver: IBundleReceiver?, i: Int) {
         Log.d(TAG, "Not yet implemented: getTestFlag")
+        when(i) {
+            0 -> receiver?.onBundle(Bundle().apply { putString("r", "---") })
+            1 -> receiver?.onBundle(Bundle().apply { putLong("r", -1L) })
+            2 -> receiver?.onBundle(Bundle().apply { putDouble("r", -3.0) })
+            3 -> receiver?.onBundle(Bundle().apply { putInt("r", -2) })
+            4 -> receiver?.onBundle(Bundle().apply { putBoolean("r", false) })
+        }
     }
 
     override fun setDataCollectionEnabled(z: Boolean) {
@@ -195,4 +213,5 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
         Log.d(TAG, "Not yet implemented: clearMeasurementEnabled")
     }
 
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

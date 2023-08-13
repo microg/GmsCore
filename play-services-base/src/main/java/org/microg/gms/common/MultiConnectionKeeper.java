@@ -51,7 +51,7 @@ public class MultiConnectionKeeper {
 
     public synchronized static MultiConnectionKeeper getInstance(Context context) {
         if (INSTANCE == null)
-            INSTANCE = new MultiConnectionKeeper(context);
+            INSTANCE = new MultiConnectionKeeper(context.getApplicationContext());
         return INSTANCE;
     }
 
@@ -60,8 +60,8 @@ public class MultiConnectionKeeper {
     }
 
     public synchronized boolean bind(String action, ServiceConnection connection, boolean requireMicrog) {
-        Log.d(TAG, "bind(" + action + ", " + connection + ", " + requireMicrog + ")");
         Connection con = connections.get(action);
+        Log.d(TAG, "bind(" + action + ", " + connection + ", " + requireMicrog + ") has=" + (con != null));
         if (con != null) {
             if (!con.forwardsConnection(connection)) {
                 con.addConnectionForward(connection);
@@ -74,6 +74,7 @@ public class MultiConnectionKeeper {
             con.bind();
             connections.put(action, con);
         }
+        Log.d(TAG, "bind() : bound=" + con.isBound());
         return con.isBound();
     }
 
@@ -82,9 +83,13 @@ public class MultiConnectionKeeper {
         Connection con = connections.get(action);
         if (con != null) {
             con.removeConnectionForward(connection);
-            if (!con.hasForwards() && con.isBound()) {
-                con.unbind();
-                connections.remove(action);
+            if (con.isBound()) {
+                if (!con.hasForwards()) {
+                    con.unbind();
+                    connections.remove(action);
+                } else {
+                    Log.d(TAG, "Not unbinding for " + connection + ": has pending other bindings on action " + action);
+                }
             }
         }
     }
@@ -159,11 +164,12 @@ public class MultiConnectionKeeper {
             } else {
                 intent = gmsIntent;
             }
-            int flags = Context.BIND_AUTO_CREATE;
+            int flags = Context.BIND_AUTO_CREATE | Context.BIND_DEBUG_UNBIND;
             if (SDK_INT >= ICE_CREAM_SANDWICH) {
                 flags |= Context.BIND_ADJUST_WITH_ACTIVITY;
             }
             bound = context.bindService(intent, serviceConnection, flags);
+            Log.d(TAG, "Connection(" + actionString + ") :  bind() : bindService=" + bound);
             if (!bound) {
                 context.unbindService(serviceConnection);
             }

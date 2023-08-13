@@ -80,7 +80,7 @@ public class CheckinService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         try {
             ForegroundServiceContext.completeForegroundService(this, intent, TAG);
-            if (CheckinPrefs.isEnabled(this)) {
+            if (CheckinPreferences.isEnabled(this)) {
                 LastCheckinInfo info = CheckinManager.checkin(this, intent.getBooleanExtra(EXTRA_FORCE_CHECKIN, false));
                 if (info != null) {
                     Log.d(TAG, "Checked in as " + Long.toHexString(info.getAndroidId()));

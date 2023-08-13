@@ -20,7 +20,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.preference.PreferenceManager;
 
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthRequest;
@@ -41,7 +40,7 @@ public class CheckinManager {
         LastCheckinInfo info = LastCheckinInfo.read(context);
         if (!force && info.getLastCheckin() > System.currentTimeMillis() - MIN_CHECKIN_INTERVAL)
             return null;
-        if (!CheckinPrefs.isEnabled(context))
+        if (!CheckinPreferences.isEnabled(context))
             return null;
         List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
         AccountManager accountManager = AccountManager.get(context);

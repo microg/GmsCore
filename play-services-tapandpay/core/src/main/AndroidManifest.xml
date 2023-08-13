@@ -4,12 +4,13 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.microg.gms.tapandpay.core">
+          package="org.microg.gms.tapandpay.core">
 
     <application>
-        <service android:name="org.microg.gms.tapandpay.TapAndPayService">
+        <service android:name="org.microg.gms.tapandpay.TapAndPayService"
+                 android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.tapandpay.service.BIND" />
+                <action android:name="com.google.android.gms.tapandpay.service.BIND"/>
             </intent-filter>
         </service>
     </application>

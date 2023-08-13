@@ -23,11 +23,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.gcm.GcmConstants.ACTION_C2DM_REGISTRATION;
 import static org.microg.gms.gcm.GcmConstants.ACTION_INSTANCE_ID;
 import static org.microg.gms.gcm.GcmConstants.EXTRA_FROM;
@@ -69,7 +69,7 @@ public class GcmReceiver extends WakefulBroadcastReceiver {
     private void sanitizeIntent(Context context, Intent intent) {
         intent.setComponent(null);
         intent.setPackage(context.getPackageName());
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (SDK_INT < 19) {
             intent.removeCategory(context.getPackageName());
         }
         String from = intent.getStringExtra(EXTRA_FROM);

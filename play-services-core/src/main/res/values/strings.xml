@@ -181,6 +181,7 @@ This can take a couple of minutes."</string>
     <string name="pref_test_summary_warn">Warning: %s</string>
     <string name="pref_test_summary_running">Running…</string>
     <string name="pref_droidguard_operation_mode">Operation mode</string>
+    <string name="pref_droidguard_unsupported_summary">DroidGuard execution is unsupported on this device. SafetyNet services may misbehave.</string>
     <string name="prefcat_safetynet_apps_title">Apps using SafetyNet</string>
     <string name="menu_clear_recent_requests">Clear recent requests</string>
     <string name="safetynet_last_run_at">Last use: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
@@ -199,6 +200,7 @@ This can take a couple of minutes."</string>
     <string name="pref_safetynet_recent_uses">Recent uses</string>
     <string name="pref_safetynet_recent_attestation_summary">Attestation: %s</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
     <string name="pref_safetynet_recent_copy_json">Copy JSON JWS data</string>
     <string name="pref_safetynet_recent_advice">Advice</string>
     <string name="pref_safetynet_recent_eval_type">Evaluation type</string>

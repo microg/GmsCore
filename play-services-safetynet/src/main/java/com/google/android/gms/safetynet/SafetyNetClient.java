@@ -56,7 +56,7 @@ public class SafetyNetClient extends GoogleApi<Api.ApiOptions.NoOptions> {
             try {
                 client.attest(new ISafetyNetCallbacksDefaultStub() {
                     @Override
-                    public void onAttestationData(Status status, AttestationData attestationData) throws RemoteException {
+                    public void onAttestationResult(Status status, AttestationData attestationData) throws RemoteException {
                         SafetyNetApi.AttestationResponse response = new SafetyNetApi.AttestationResponse();
                         response.setResult(new SafetyNetApi.AttestationResult() {
                             @Override

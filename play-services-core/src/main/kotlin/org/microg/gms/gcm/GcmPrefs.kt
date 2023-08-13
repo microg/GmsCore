@@ -39,7 +39,7 @@ data class GcmPrefs(
         const val PREF_NETWORK_OTHER = Gcm.NETWORK_OTHER
 
         private const val MIN_INTERVAL = 5 * 60 * 1000 // 5 minutes
-        private const val MAX_INTERVAL = 30 * 60 * 1000 // 30 minutes
+        private const val MAX_INTERVAL = 15 * 60 * 1000 // 15 minutes
 
         @JvmStatic
         fun get(context: Context): GcmPrefs {
@@ -71,6 +71,14 @@ data class GcmPrefs(
                 put(Gcm.NETWORK_OTHER, config.other)
             }
             gcmPrefs.setEnabled(context, config.enabled)
+        }
+
+        fun setEnabled(context: Context, enabled: Boolean) {
+            val prefs = get(context)
+            setSettings(context, Gcm.getContentUri(context)) {
+                put(Gcm.ENABLE_GCM, enabled)
+            }
+            prefs.setEnabled(context, enabled)
         }
 
         @JvmStatic

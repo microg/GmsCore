@@ -23,8 +23,9 @@ import android.content.pm.FeatureInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.opengl.GLES10;
-import android.os.Build;
 import android.util.DisplayMetrics;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +57,7 @@ public class DeviceConfiguration {
     public int widthPixels;
 
     public DeviceConfiguration(Context context) {
+        ProfileManager.ensureInitialized(context);
         ConfigurationInfo configurationInfo = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getDeviceConfigurationInfo();
         touchScreen = configurationInfo.reqTouchScreen;
         keyboardType = configurationInfo.reqKeyboardType;
@@ -101,7 +103,7 @@ public class DeviceConfiguration {
     @SuppressWarnings({"deprecation", "InlinedApi"})
     private static List<String> getNativePlatforms() {
         List<String> nativePlatforms;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= 21) {
             return Arrays.asList(Build.SUPPORTED_ABIS);
         } else {
             nativePlatforms = new ArrayList<String>();

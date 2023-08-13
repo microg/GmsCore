@@ -24,7 +24,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.Options
 interface Markup<T : Annotation<*>, S : Options<T>> {
     var annotation: T?
     val annotationOptions: S
-    val removed: Boolean
+    var removed: Boolean
 
     fun update(manager: AnnotationManager<*, T, S, *, *, *>) {
         synchronized(this) {

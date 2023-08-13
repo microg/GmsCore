@@ -9,7 +9,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Handler
 import android.os.Parcel
 import android.provider.Telephony
@@ -62,7 +62,7 @@ private val UserProfileChangeRequest.deleteAttributeList: List<String>
     }
 
 private fun Intent.getSmsMessages(): Array<SmsMessage> {
-    return if (Build.VERSION.SDK_INT >= 19) {
+    return if (SDK_INT >= 19) {
         Telephony.Sms.Intents.getMessagesFromIntent(this)
     } else {
         (getSerializableExtra("pdus") as? Array<ByteArray>)?.map { SmsMessage.createFromPdu(it) }.orEmpty().toTypedArray()
@@ -83,7 +83,7 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
 }
 
 class FirebaseAuthServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
-    private val client = IdentityToolkitClient(context, apiKey)
+    private val client by lazy { IdentityToolkitClient(context, apiKey, packageName, PackageUtils.firstSignatureDigestBytes(context, packageName)) }
     private var authorizedDomain: String? = null
 
     private suspend fun getAuthorizedDomain(): String {

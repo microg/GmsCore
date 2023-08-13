@@ -16,7 +16,72 @@
 
 package org.microg.gms.maps.vtm.markup;
 
+import android.os.RemoteException;
 import com.google.android.gms.maps.model.internal.ITileOverlayDelegate;
 
 public class TileOverlayImpl extends ITileOverlayDelegate.Stub {
+    @Override
+    public void remove() throws RemoteException {
+
+    }
+
+    @Override
+    public void clearTileCache() throws RemoteException {
+
+    }
+
+    @Override
+    public String getId() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void setZIndex(float zIndex) throws RemoteException {
+
+    }
+
+    @Override
+    public float getZIndex() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public void setVisible(boolean visible) throws RemoteException {
+
+    }
+
+    @Override
+    public boolean isVisible() throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public boolean equalsRemote(ITileOverlayDelegate other) throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public int hashCodeRemote() throws RemoteException {
+        return 0;
+    }
+
+    @Override
+    public void setFadeIn(boolean fadeIn) throws RemoteException {
+
+    }
+
+    @Override
+    public boolean getFadeIn() throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public void setTransparency(float transparency) throws RemoteException {
+
+    }
+
+    @Override
+    public float getTransparency() throws RemoteException {
+        return 0;
+    }
 }

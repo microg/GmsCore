@@ -40,6 +40,10 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
         handler = new Handler(thread.getLooper());
     }
 
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
     public DroidGuardHandle openHandle(String flow, DroidGuardResultsRequest request) {
         try {
             IDroidGuardHandle handle = getServiceInterface().getHandle();
@@ -64,6 +68,15 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
         } catch (Exception e) {
             return new DroidGuardHandleImpl(this, request, "Initialization failed: " + e);
         }
+    }
+
+    public void markHandleClosed() {
+        if (openHandles == 0) {
+            Log.w(TAG, "Can't mark handle closed if none is open");
+            return;
+        }
+        openHandles--;
+        if (openHandles == 0) disconnect();
     }
 
     public void runOnHandler(Runnable runnable) {

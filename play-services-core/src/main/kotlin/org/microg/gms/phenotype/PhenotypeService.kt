@@ -8,6 +8,7 @@ package org.microg.gms.phenotype
 import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.phenotype.*
@@ -139,6 +140,14 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
         callbacks.onExperimentTokens(Status.SUCCESS, ExperimentTokens())
     }
 
+    override fun syncAfterOperation2(callbacks: IPhenotypeCallbacks?, p1: Long) {
+        Log.d(TAG, "Not yet implemented: syncAfterOperation2")
+    }
+
+    override fun setRuntimeProperties(callbacks: IStatusCallback?, p1: String?, p2: ByteArray?) {
+        Log.d(TAG, "Not yet implemented: setRuntimeProperties")
+    }
+
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

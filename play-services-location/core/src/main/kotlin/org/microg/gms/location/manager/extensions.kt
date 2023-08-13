@@ -10,7 +10,6 @@ import android.app.AppOpsManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Binder
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Process
 import android.os.WorkSource
@@ -18,6 +17,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.AppOpsManagerCompat
 import androidx.core.content.getSystemService
+import com.google.android.gms.common.Feature
 import com.google.android.gms.location.*
 import com.google.android.gms.location.internal.ClientIdentity
 import com.google.android.gms.location.internal.IFusedLocationProviderCallback
@@ -26,6 +26,25 @@ import org.microg.gms.location.GranularityUtil
 import org.microg.gms.utils.WorkSourceUtil
 
 const val TAG = "LocationManager"
+
+internal val FEATURES = arrayOf(
+    Feature("name_ulr_private", 1),
+    Feature("driving_mode", 6),
+    Feature("name_sleep_segment_request", 1),
+    Feature("support_context_feature_id", 1),
+    Feature("get_current_location", 2),
+    Feature("get_last_activity_feature_id", 1),
+    Feature("get_last_location_with_request", 1),
+    Feature("set_mock_mode_with_callback", 1),
+    Feature("set_mock_location_with_callback", 1),
+    Feature("inject_location_with_callback", 1),
+    Feature("location_updates_with_callback", 1),
+    Feature("user_service_developer_features", 1),
+    Feature("user_service_location_accuracy", 1),
+    Feature("user_service_safety_and_emergency", 1),
+
+    Feature("use_safe_parcelable_in_intents", 1)
+)
 
 fun ILocationListener.asCallback(): ILocationCallback {
     return object : ILocationCallback.Stub() {

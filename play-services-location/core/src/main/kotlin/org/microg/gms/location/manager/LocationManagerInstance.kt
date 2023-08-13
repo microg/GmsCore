@@ -10,10 +10,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
+import android.location.LocationManager.GPS_PROVIDER
+import android.location.LocationManager.NETWORK_PROVIDER
 import android.os.IBinder
 import android.os.Parcel
 import android.os.SystemClock
 import android.util.Log
+import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -151,8 +154,17 @@ class LocationManagerInstance(
 
     override fun requestLocationSettingsDialog(settingsRequest: LocationSettingsRequest?, callback: ISettingsCallbacks?, packageName: String?) {
         Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName}")
-        Log.d(TAG, "Not yet implemented: requestLocationSettingsDialog")
-        callback?.onLocationSettingsResult(LocationSettingsResult(Status.SUCCESS))
+        val clientIdentity = getClientIdentity()
+        lifecycleScope.launchWhenStarted {
+            val locationManager = context.getSystemService<android.location.LocationManager>()
+            val gpsPresent = locationManager?.allProviders?.contains(GPS_PROVIDER) == true
+            val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true
+            val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
+                    context.packageManager.checkPermission(ACCESS_FINE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
+            val networkUsable = networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&
+                    context.packageManager.checkPermission(ACCESS_COARSE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
+            callback?.onLocationSettingsResult(LocationSettingsResult(LocationSettingsStates(gpsUsable, networkUsable, false, gpsPresent, networkPresent, true), Status.SUCCESS))
+        }
     }
 
     // region Mock locations
@@ -314,5 +326,5 @@ class LocationManagerInstance(
     override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-        warnOnTransactionIssues(code, reply, flags) { super.onTransact(code, data, reply, flags) }
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

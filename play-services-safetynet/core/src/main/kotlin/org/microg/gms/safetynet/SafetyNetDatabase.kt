@@ -9,14 +9,14 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import com.google.android.gms.common.api.Status
 
 class SafetyNetDatabase(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
     init {
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (SDK_INT >= 16) {
             setWriteAheadLoggingEnabled(true)
         }
     }

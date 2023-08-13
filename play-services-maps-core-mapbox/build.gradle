@@ -20,12 +20,13 @@ apply plugin: 'kotlin-android'
 dependencies {
     implementation project(':play-services-maps')
     implementation project(':play-services-base-core')
-    implementation("org.maplibre.gl:android-sdk:9.6.0") {
+    implementation project(':play-services-location')
+    implementation("org.maplibre.gl:android-sdk:10.2.0")
+    implementation("org.maplibre.gl:android-plugin-annotation-v9:2.0.0") {
         exclude group: 'com.google.android.gms'
     }
-    implementation("org.maplibre.gl:android-plugin-annotation-v9:1.0.0") {
-        exclude group: 'com.google.android.gms'
-    }
+    implementation 'org.maplibre.gl:android-sdk-turf:5.9.0'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 
@@ -38,16 +39,6 @@ def execResult(...args) {
     return stdout.toString().trim()
 }
 
-def mapboxKey() {
-    Properties properties = new Properties()
-    try {
-        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    } catch (ignored) {
-        // Ignore
-    }
-    return properties.getProperty("mapbox.key", "invalid")
-}
-
 android {
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
@@ -56,7 +47,7 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-        buildConfigField "String", "MAPBOX_KEY", "\"${mapboxKey()}\""
+        buildConfigField "String", "MAPBOX_KEY", "\"${localProperties.getProperty("mapbox.key", System.getenv('MAPBOX_VECTOR_TILES_KEY') ?: "")}\""
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"

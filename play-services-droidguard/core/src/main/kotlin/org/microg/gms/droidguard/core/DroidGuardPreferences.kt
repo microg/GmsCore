@@ -11,6 +11,7 @@ import android.database.Cursor
 import androidx.core.database.getStringOrNull
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.DroidGuard.ENABLED
+import org.microg.gms.settings.SettingsContract.DroidGuard.FORCE_LOCAL_DISABLED
 import org.microg.gms.settings.SettingsContract.DroidGuard.MODE
 import org.microg.gms.settings.SettingsContract.DroidGuard.NETWORK_SERVER_URL
 
@@ -28,7 +29,16 @@ object DroidGuardPreferences {
             SettingsContract.setSettings(context, SettingsContract.DroidGuard.getContentUri(context), f)
 
     @JvmStatic
+    fun isForcedLocalDisabled(context: Context): Boolean = getSettings(context, FORCE_LOCAL_DISABLED, false) { it.getInt(0) != 0 }
+
+    @JvmStatic
     fun isEnabled(context: Context): Boolean = getSettings(context, ENABLED, false) { it.getInt(0) != 0 }
+
+    @JvmStatic
+    fun isAvailable(context: Context): Boolean = isEnabled(context) && (!isForcedLocalDisabled(context) || getMode(context) != Mode.Embedded)
+
+    @JvmStatic
+    fun isLocalAvailable(context: Context): Boolean = isEnabled(context) && !isForcedLocalDisabled(context)
 
     @JvmStatic
     fun setEnabled(context: Context, enabled: Boolean) = setSettings(context) { put(ENABLED, enabled) }

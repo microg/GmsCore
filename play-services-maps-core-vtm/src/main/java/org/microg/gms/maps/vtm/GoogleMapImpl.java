@@ -35,26 +35,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
-import com.google.android.gms.maps.internal.ICancelableCallback;
-import com.google.android.gms.maps.internal.IGoogleMapDelegate;
-import com.google.android.gms.maps.internal.IInfoWindowAdapter;
-import com.google.android.gms.maps.internal.ILocationSourceDelegate;
-import com.google.android.gms.maps.internal.IOnCameraChangeListener;
-import com.google.android.gms.maps.internal.IOnCameraIdleListener;
-import com.google.android.gms.maps.internal.IOnCameraMoveCanceledListener;
-import com.google.android.gms.maps.internal.IOnCameraMoveListener;
-import com.google.android.gms.maps.internal.IOnCameraMoveStartedListener;
-import com.google.android.gms.maps.internal.IOnInfoWindowClickListener;
-import com.google.android.gms.maps.internal.IOnMapClickListener;
-import com.google.android.gms.maps.internal.IOnMapLoadedCallback;
-import com.google.android.gms.maps.internal.IOnMapLongClickListener;
-import com.google.android.gms.maps.internal.IOnMarkerClickListener;
-import com.google.android.gms.maps.internal.IOnMarkerDragListener;
-import com.google.android.gms.maps.internal.IOnMyLocationButtonClickListener;
-import com.google.android.gms.maps.internal.IOnMyLocationChangeListener;
-import com.google.android.gms.maps.internal.IProjectionDelegate;
-import com.google.android.gms.maps.internal.ISnapshotReadyCallback;
-import com.google.android.gms.maps.internal.IUiSettingsDelegate;
+import com.google.android.gms.maps.internal.*;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
@@ -201,6 +182,11 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     }
 
     @Override
+    public void snapshotForTest(ISnapshotReadyCallback callback) throws RemoteException {
+
+    }
+
+    @Override
     public void onEnterAmbient(Bundle bundle) throws RemoteException {
         Log.d(TAG, "unimplemented Method: onEnterAmbient");
 
@@ -210,6 +196,26 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     public void onExitAmbient() throws RemoteException {
         Log.d(TAG, "unimplemented Method: onExitAmbient");
 
+    }
+
+    @Override
+    public void setOnGroundOverlayClickListener(IOnGroundOverlayClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setOnGroundOverlayClickListener");
+    }
+
+    @Override
+    public void setOnPolygonClickListener(IOnPolygonClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setOnPolygonClickListener");
+    }
+
+    @Override
+    public void setOnPolylineClickListener(IOnPolylineClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setOnPolylineClickListener");
+    }
+
+    @Override
+    public void setOnCircleClickListener(IOnCircleClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setCircleClickListener");
     }
 
     @Override
@@ -662,6 +668,16 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     }
 
     @Override
+    public void setOnInfoWindowLongClickListener(IOnInfoWindowLongClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setOnInfoWindowLongClickListener");
+    }
+
+    @Override
+    public void setOnInfoWindowCloseListener(IOnInfoWindowCloseListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setOnInfoWindowCloseListener");
+    }
+
+    @Override
     public void onStart() throws RemoteException {
         Log.d(TAG, "unimplemented Method: onStart");
 
@@ -671,6 +687,11 @@ public class GoogleMapImpl extends IGoogleMapDelegate.Stub
     public void onStop() throws RemoteException {
         Log.d(TAG, "unimplemented Method: onStop");
 
+    }
+
+    @Override
+    public void setOnMyLocationClickListener(IOnMyLocationClickListener listener) throws RemoteException {
+        Log.d(TAG, "unimplemented Method: setOnMyLocationClickListener");
     }
     
     /*

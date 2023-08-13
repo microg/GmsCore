@@ -35,8 +35,9 @@ import org.microg.gms.common.api.OnConnectionFailedListener;
 
 public class ExposureNotificationApiClient extends GmsClient<INearbyExposureNotificationService> {
     public ExposureNotificationApiClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
-        super(context, callbacks, connectionFailedListener, GmsService.NEARBY_EXPOSURE.ACTION, true);
+        super(context, callbacks, connectionFailedListener, GmsService.NEARBY_EXPOSURE.ACTION);
         serviceId = GmsService.NEARBY_EXPOSURE.SERVICE_ID;
+        requireMicrog = true;
     }
 
     @Override

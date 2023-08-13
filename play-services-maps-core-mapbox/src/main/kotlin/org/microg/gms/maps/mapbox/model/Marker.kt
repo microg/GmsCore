@@ -27,41 +27,164 @@ import com.mapbox.mapboxsdk.plugins.annotation.AnnotationManager
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.google.android.gms.dynamic.unwrap
+import org.microg.gms.maps.mapbox.AbstractGoogleMap
 import org.microg.gms.maps.mapbox.GoogleMapImpl
+import org.microg.gms.maps.mapbox.LiteGoogleMapImpl
 import org.microg.gms.maps.mapbox.utils.toMapbox
 
-class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options: MarkerOptions) : IMarkerDelegate.Stub(), Markup<Symbol, SymbolOptions> {
-    private var position: LatLng = options.position
-    private var visible: Boolean = options.isVisible
-    private var rotation: Float = options.rotation
-    private var anchor: FloatArray = floatArrayOf(options.anchorU, options.anchorV)
-    private var icon: BitmapDescriptorImpl? = options.icon?.remoteObject.unwrap()
-    private var alpha: Float = options.alpha
-    private var title: String? = options.title
-    private var snippet: String? = options.snippet
-    private var zIndex: Float = options.zIndex
-    private var draggable: Boolean = options.isDraggable
-    private var tag: IObjectWrapper? = null
+abstract class AbstractMarker(
+    private val id: String, options: MarkerOptions, private val map: AbstractGoogleMap
+) : IMarkerDelegate.Stub() {
 
-    private var infoWindowShown = false
+    internal var position: LatLng = options.position
+    internal var visible: Boolean = options.isVisible
+    internal var anchor: FloatArray = floatArrayOf(options.anchorU, options.anchorV)
+    internal var infoWindowAnchor: FloatArray = floatArrayOf(0.5f, 1f)
+    internal var icon: BitmapDescriptorImpl? = options.icon?.remoteObject.unwrap()
+    internal var alpha: Float = options.alpha
+    internal var title: String? = options.title
+    internal var snippet: String? = options.snippet
+    internal var zIndex: Float = options.zIndex
+    internal var tag: IObjectWrapper? = null
+    internal open var draggable = false
 
-    override var annotation: Symbol? = null
-    override var removed: Boolean = false
-    override val annotationOptions: SymbolOptions
+    val annotationOptions: SymbolOptions
         get() {
             val symbolOptions = SymbolOptions()
-                    .withIconOpacity(if (visible) alpha else 0f)
-                    .withIconRotate(rotation)
-                    .withSymbolSortKey(zIndex)
-                    .withDraggable(draggable)
+                .withIconOpacity(if (visible) alpha else 0f)
+                .withIconRotate(rotation)
+                .withSymbolSortKey(zIndex)
+                .withDraggable(draggable)
 
             position.let { symbolOptions.withLatLng(it.toMapbox()) }
             icon?.applyTo(symbolOptions, anchor, map.dpiFactor)
             return symbolOptions
         }
 
+    internal abstract fun update()
+
+    override fun getId(): String = id
+
+    override fun setPosition(position: LatLng?) {
+        this.position = position ?: return
+        update()
+    }
+
+    override fun getPosition(): LatLng = position
+
+    override fun setIcon(obj: IObjectWrapper?) {
+        obj.unwrap<BitmapDescriptorImpl>()?.let { icon ->
+            this.icon = icon
+            update()
+        }
+    }
+
+    override fun setVisible(visible: Boolean) {
+        this.visible = visible
+        update()
+    }
+
+    override fun setTitle(title: String?) {
+        this.title = title
+        update()
+    }
+
+    override fun getTitle(): String? = title
+
+    override fun getSnippet(): String? = snippet
+
+    override fun isVisible(): Boolean = visible
+
+    override fun setAnchor(x: Float, y: Float) {
+        anchor = floatArrayOf(x, y)
+        update()
+    }
+
+    override fun setAlpha(alpha: Float) {
+        this.alpha = alpha
+        update()
+    }
+
+    override fun getAlpha(): Float = alpha
+
+    override fun setZIndex(zIndex: Float) {
+        this.zIndex = zIndex
+        update()
+    }
+
+    override fun getZIndex(): Float = zIndex
+
+    fun getIconDimensions(): FloatArray? {
+        return icon?.size
+    }
+
+    override fun showInfoWindow() {
+        if (isInfoWindowShown) {
+            // Per docs, don't call `onWindowClose` if info window is re-opened programmatically
+            map.currentInfoWindow?.close(silent = true)
+        }
+        map.showInfoWindow(this)
+    }
+
+    override fun hideInfoWindow() {
+        if (isInfoWindowShown) {
+            map.currentInfoWindow?.close()
+            map.currentInfoWindow = null
+        }
+    }
+
+    override fun isInfoWindowShown(): Boolean {
+        return map.currentInfoWindow?.marker == this
+    }
+
+    override fun setTag(obj: IObjectWrapper?) {
+        this.tag = obj
+    }
+
+    override fun getTag(): IObjectWrapper? = tag ?: ObjectWrapper.wrap(null)
+
+    override fun setSnippet(snippet: String?) {
+        this.snippet = snippet
+    }
+
+    override fun equalsRemote(other: IMarkerDelegate?): Boolean = equals(other)
+
+    override fun hashCodeRemote(): Int = hashCode()
+
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        if (super.onTransact(code, data, reply, flags)) {
+            true
+        } else {
+            Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
+        }
+
+    companion object {
+        private val TAG = "GmsMapAbstractMarker"
+    }
+}
+
+class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options: MarkerOptions) :
+    AbstractMarker(id, options, map), Markup<Symbol, SymbolOptions> {
+
+    internal var rotation: Float = options.rotation
+    override var draggable: Boolean = options.isDraggable
+
+    override var annotation: Symbol? = null
+    override var removed: Boolean = false
+
     override fun remove() {
         removed = true
+        map.symbolManager?.let { update(it) }
+    }
+
+    override fun update() {
+        annotation?.let {
+            it.latLng = position.toMapbox()
+            it.isDraggable = draggable
+            it.iconOpacity = if (visible) alpha else 0f
+            it.symbolSortKey = zIndex
+            icon?.applyTo(it, anchor, map.dpiFactor)
+        }
         map.symbolManager?.let { update(it) }
     }
 
@@ -79,66 +202,46 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
         }
     }
 
-    override fun getId(): String = id
-
     override fun setPosition(position: LatLng?) {
-        this.position = position ?: return
-        annotation?.latLng = position.toMapbox()
-        map.symbolManager?.let { update(it) }
+        super.setPosition(position)
+        map.currentInfoWindow?.update()
     }
 
-    override fun getPosition(): LatLng = position
+    /**
+     * New position is already reflected on map while if drag is in progress. Calling
+     * `symbolManager.update` would interrupt the drag.
+     */
+    internal fun setPositionWhileDragging(position: LatLng) {
+        this.position = position
+        map.currentInfoWindow?.update()
+    }
 
     override fun setTitle(title: String?) {
-        this.title = title
+        super.setTitle(title)
+        map.currentInfoWindow?.let {
+            if (it.marker == this) it.close()
+        }
     }
-
-    override fun getTitle(): String? = title
 
     override fun setSnippet(snippet: String?) {
-        this.snippet = snippet
+        super.setSnippet(snippet)
+        map.currentInfoWindow?.let {
+            if (it.marker == this) it.close()
+        }
     }
-
-    override fun getSnippet(): String? = snippet
 
     override fun setDraggable(draggable: Boolean) {
         this.draggable = draggable
-        annotation?.isDraggable = draggable
         map.symbolManager?.let { update(it) }
     }
 
     override fun isDraggable(): Boolean = draggable
-
-    override fun showInfoWindow() {
-        Log.d(TAG, "unimplemented Method: showInfoWindow")
-        infoWindowShown = true
-    }
-
-    override fun hideInfoWindow() {
-        Log.d(TAG, "unimplemented Method: hideInfoWindow")
-        infoWindowShown = false
-    }
-
-    override fun isInfoWindowShown(): Boolean {
-        Log.d(TAG, "unimplemented Method: isInfoWindowShow")
-        return infoWindowShown
-    }
-
-    override fun setVisible(visible: Boolean) {
-        this.visible = visible
-        annotation?.iconOpacity = if (visible) alpha else 0f
-        map.symbolManager?.let { update(it) }
-    }
-
-    override fun isVisible(): Boolean = visible
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other is IMarkerDelegate) return other.id == id
         return false
     }
-
-    override fun equalsRemote(other: IMarkerDelegate?): Boolean = equals(other)
 
     override fun hashCode(): Int {
         return id.hashCode()
@@ -148,20 +251,9 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
         return "$id ($title)"
     }
 
-    override fun hashCodeRemote(): Int = hashCode()
-
-    override fun setIcon(obj: IObjectWrapper?) {
-        obj.unwrap<BitmapDescriptorImpl>()?.let { icon ->
-            this.icon = icon
-            annotation?.let { icon.applyTo(it, anchor, map.dpiFactor) }
-        }
-        map.symbolManager?.let { update(it) }
-    }
-
     override fun setAnchor(x: Float, y: Float) {
-        anchor = floatArrayOf(x, y)
-        annotation?.let { icon?.applyTo(it, anchor, map.dpiFactor) }
-        map.symbolManager?.let { update(it) }
+        super.setAnchor(x, y)
+        map.currentInfoWindow?.update()
     }
 
     override fun setFlat(flat: Boolean) {
@@ -177,44 +269,65 @@ class MarkerImpl(private val map: GoogleMapImpl, private val id: String, options
         this.rotation = rotation
         annotation?.iconRotate = rotation
         map.symbolManager?.let { update(it) }
+        map.currentInfoWindow?.update()
     }
 
     override fun getRotation(): Float = rotation
 
     override fun setInfoWindowAnchor(x: Float, y: Float) {
-        Log.d(TAG, "unimplemented Method: setInfoWindowAnchor")
+        infoWindowAnchor = floatArrayOf(x, y)
+        map.currentInfoWindow?.update()
     }
-
-    override fun setAlpha(alpha: Float) {
-        this.alpha = alpha
-        annotation?.iconOpacity = if (visible) alpha else 0f
-        map.symbolManager?.let { update(it) }
-    }
-
-    override fun getAlpha(): Float = alpha
-
-    override fun setZIndex(zIndex: Float) {
-        this.zIndex = zIndex
-        annotation?.symbolSortKey = zIndex
-        map.symbolManager?.let { update(it) }
-    }
-
-    override fun getZIndex(): Float = zIndex
-
-    override fun setTag(obj: IObjectWrapper?) {
-        this.tag = obj
-    }
-
-    override fun getTag(): IObjectWrapper = tag ?: ObjectWrapper.wrap(null)
-
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-            if (super.onTransact(code, data, reply, flags)) {
-                true
-            } else {
-                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-            }
 
     companion object {
         private val TAG = "GmsMapMarker"
+    }
+}
+
+class LiteMarkerImpl(id: String, options: MarkerOptions, private val map: LiteGoogleMapImpl) :
+    AbstractMarker(id, options, map) {
+    override fun remove() {
+        map.markers.remove(this)
+        map.postUpdateSnapshot()
+    }
+
+    override fun update() {
+        map.postUpdateSnapshot()
+    }
+
+    override fun setDraggable(drag: Boolean) {
+        Log.d(TAG, "setDraggable: not available in lite mode")
+    }
+
+    override fun isDraggable(): Boolean {
+        Log.d(TAG, "isDraggable: markers are never draggable in lite mode")
+        return false
+    }
+
+    override fun setFlat(flat: Boolean) {
+        Log.d(TAG, "setFlat: not available in lite mode")
+    }
+
+    override fun isFlat(): Boolean {
+        Log.d(TAG, "isFlat: markers in lite mode can never be flat")
+        return false
+    }
+
+    override fun setRotation(rotation: Float) {
+        Log.d(TAG, "setRotation: not available in lite mode")
+    }
+
+    override fun getRotation(): Float {
+        Log.d(TAG, "setRotation: markers in lite mode can never be rotated")
+        return 0f
+    }
+
+    override fun setInfoWindowAnchor(x: Float, y: Float) {
+        infoWindowAnchor = floatArrayOf(x, y)
+        map.currentInfoWindow?.update()
+    }
+
+    companion object {
+        private val TAG = "GmsMapMarkerLite"
     }
 }

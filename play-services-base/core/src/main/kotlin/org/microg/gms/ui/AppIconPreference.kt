@@ -6,13 +6,15 @@
 package org.microg.gms.ui
 
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 
-class AppIconPreference : Preference {
+class AppIconPreference : AppPreference {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)

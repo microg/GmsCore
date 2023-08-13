@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
@@ -8,6 +7,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:title="Push notifications">
+
+    <org.microg.gms.ui.SwitchBarPreference
+        android:title="@string/gcm_enable_switch"
+        android:key="pref_push_enabled"
+        android:persistent="false" />
+
     <PreferenceCategory
         android:key="prefcat_push_apps"
         android:title="@string/prefcat_push_apps_title">

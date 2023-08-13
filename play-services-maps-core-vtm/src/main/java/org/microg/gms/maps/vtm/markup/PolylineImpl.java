@@ -20,6 +20,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -168,6 +169,26 @@ public class PolylineImpl extends IPolylineDelegate.Stub implements DrawableMark
     @Override
     public boolean isClickable() throws RemoteException {
         return false;
+    }
+
+    @Override
+    public void setStartCap(Cap startCap) throws RemoteException {
+
+    }
+
+    @Override
+    public Cap getStartCap() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void setEndCap(Cap endCap) throws RemoteException {
+
+    }
+
+    @Override
+    public Cap getEndCap() throws RemoteException {
+        return null;
     }
 
     @Override

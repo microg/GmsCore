@@ -52,11 +52,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.accounts.AccountManager.KEY_ACCOUNTS;
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
-import static android.accounts.AccountManager.KEY_AUTHTOKEN;
-import static android.accounts.AccountManager.KEY_CALLER_PID;
+import static android.accounts.AccountManager.*;
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AskPermissionActivity.EXTRA_CONSENT_DATA;
 
 public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
@@ -205,7 +202,17 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle requestGoogleAccountsAccess(String packageName) throws RemoteException {
-        Log.w(TAG, "Not implemented: requestGoogleAccountsAccess(" + packageName + ")");
+        PackageUtils.assertExtendedAccess(context);
+        if (SDK_INT >= 26) {
+            for (Account account : get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
+                AccountManager.get(context).setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);
+            }
+            Bundle res = new Bundle();
+            res.putString("Error", "Ok");
+            return res;
+        } else {
+            Log.w(TAG, "Not implemented: requestGoogleAccountsAccess(" + packageName + ")");
+        }
         return null;
     }
 

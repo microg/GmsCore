@@ -8,6 +8,7 @@ package org.microg.gms.recaptcha;
 import android.content.Context;
 import android.os.RemoteException;
 
+import android.util.Log;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.Status;
@@ -32,6 +33,8 @@ import org.microg.gms.common.api.PendingGoogleApiCall;
 import org.microg.gms.tasks.TaskImpl;
 
 public class RecaptchaClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> implements RecaptchaClient {
+    private int openHandles = 0;
+
     public RecaptchaClientImpl(Context context) {
         super(context, new Api<>((options, c, looper, clientSettings, callbacks, connectionFailedListener) -> new RecaptchaGmsClient(c, callbacks, connectionFailedListener)));
     }
@@ -52,6 +55,12 @@ public class RecaptchaClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> imp
                     } else {
                         completionSource.trySetException(new RuntimeException(status.getStatusMessage()));
                     }
+                    if (openHandles == 0) {
+                        Log.w("RecaptchaClient", "Can't mark handle closed if none is open");
+                        return;
+                    }
+                    openHandles--;
+                    if (openHandles == 0) client.disconnect();
                 }
             }, handle);
         });
@@ -63,7 +72,7 @@ public class RecaptchaClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> imp
             ExecuteParams params = new ExecuteParams();
             params.handle = handle;
             params.action = action;
-            params.version = "17.0.1";
+            params.version = "18.1.1";
             client.execute(new IExecuteCallback.Stub() {
                 @Override
                 public void onData(Status status, RecaptchaResultData data) throws RemoteException {
@@ -88,10 +97,11 @@ public class RecaptchaClientImpl extends GoogleApi<Api.ApiOptions.NoOptions> imp
 
     @Override
     public Task<RecaptchaHandle> init(String siteKey) {
+        openHandles++;
         return scheduleTask((PendingGoogleApiCall<RecaptchaHandle, RecaptchaGmsClient>) (client, completionSource) -> {
             InitParams params = new InitParams();
             params.siteKey = siteKey;
-            params.version = "17.0.1";
+            params.version = "18.1.1";
             client.init(new IInitCallback.Stub() {
                 @Override
                 public void onHandle(Status status, RecaptchaHandle handle) throws RemoteException {

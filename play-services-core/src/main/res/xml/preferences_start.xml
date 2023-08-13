@@ -61,9 +61,7 @@
         <Preference
             android:icon="@drawable/ic_map_marker"
             android:key="pref_location"
-            android:title="@string/prefcat_location_service"
-            android:enabled="false"
-            app:isPreferenceVisible="false"/>
+            android:title="@string/service_name_location"/>
         <Preference
             android:key="pref_exposure"
             android:title="@string/service_name_exposure"

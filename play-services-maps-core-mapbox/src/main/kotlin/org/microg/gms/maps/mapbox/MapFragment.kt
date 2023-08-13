@@ -32,12 +32,18 @@ import com.google.android.gms.maps.internal.IOnMapReadyCallback
 
 class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stub() {
 
-    private var map: GoogleMapImpl? = null
+    private var map: IGoogleMapDelegate? = null
     private var options: GoogleMapOptions? = null
 
     override fun onInflate(activity: IObjectWrapper, options: GoogleMapOptions, savedInstanceState: Bundle?) {
         this.options = options
-        map?.options = options
+        map?.apply {
+            if (this is GoogleMapImpl) {
+                this.options = options
+            } else if (this is LiteGoogleMapImpl) {
+                this.options = options
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +53,11 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         if (options == null) {
             options = GoogleMapOptions()
         }
-        map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
+        if (options?.liteMode == true) {
+            map = LiteGoogleMapImpl(activity, options ?: GoogleMapOptions())
+        } else {
+            map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
+        }
     }
 
     override fun onCreateView(layoutInflater: IObjectWrapper, container: IObjectWrapper, savedInstanceState: Bundle?): IObjectWrapper {
@@ -56,13 +66,25 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
         }
         Log.d(TAG, "onCreateView: ${options?.camera?.target}")
         if (map == null) {
-            map = GoogleMapImpl(activity, options ?: GoogleMapOptions())
+            map = if (options?.liteMode == true) {
+                LiteGoogleMapImpl(activity, options ?: GoogleMapOptions())
+            } else {
+                GoogleMapImpl(activity, options ?: GoogleMapOptions())
+            }
         }
-        map!!.onCreate(savedInstanceState)
-        val view = map!!.view
-        val parent = view.parent as ViewGroup?
-        parent?.removeView(view)
-        return ObjectWrapper.wrap(view)
+        map!!.apply {
+            onCreate(savedInstanceState)
+
+            val view = when (this) {
+                is GoogleMapImpl -> this.view
+                is LiteGoogleMapImpl -> this.view
+                else -> null
+            }
+
+            val parent = view?.parent as ViewGroup?
+            parent?.removeView(view)
+            return ObjectWrapper.wrap(view)
+        }
     }
 
     override fun getMap(): IGoogleMapDelegate? = map
@@ -74,7 +96,10 @@ class MapFragmentImpl(private val activity: Activity) : IMapFragmentDelegate.Stu
     override fun onPause() = map?.onPause() ?: Unit
     override fun onLowMemory() = map?.onLowMemory() ?: Unit
     override fun isReady(): Boolean = this.map != null
-    override fun getMapAsync(callback: IOnMapReadyCallback) = map?.getMapAsync(callback) ?: Unit
+    override fun getMapAsync(callback: IOnMapReadyCallback) = map?.let {
+        if (it is GoogleMapImpl) it.getMapAsync(callback)
+        else if (it is LiteGoogleMapImpl) it.getMapAsync(callback)
+    } ?: Unit
 
     override fun onDestroyView() {
         map?.onDestroy()

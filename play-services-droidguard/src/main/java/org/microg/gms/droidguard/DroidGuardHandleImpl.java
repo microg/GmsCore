@@ -81,6 +81,7 @@ public class DroidGuardHandleImpl implements DroidGuardHandle {
                 } catch (Exception e) {
                     Log.w(TAG, "Error while closing handle.");
                 }
+                apiClient.markHandleClosed();
                 handle = null;
             }
         });

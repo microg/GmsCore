@@ -1,15 +1,19 @@
 package com.google.android.gms.tapandpay.internal;
 
 import com.google.android.gms.tapandpay.internal.ITapAndPayServiceCallbacks;
+import com.google.android.gms.tapandpay.internal.firstparty.GetActiveAccountRequest;
+import com.google.android.gms.tapandpay.internal.firstparty.GetAllCardsRequest;
+import com.google.android.gms.tapandpay.internal.firstparty.RefreshSeCardsRequest;
+import com.google.android.gms.tapandpay.internal.firstparty.SetActiveAccountRequest;
 
 interface ITapAndPayService {
 //    void setSelectedToken(in SetSelectedTokenRequest request, ITapAndPayServiceCallbacks callbacks) = 0;
-//    void getAllCards(in GetAllCardsRequest request, ITapAndPayServiceCallbacks callbacks) = 1;
+    void getAllCards(in GetAllCardsRequest request, ITapAndPayServiceCallbacks callbacks) = 1;
 //    void deleteToken(in DeleteTokenRequest request, ITapAndPayServiceCallbacks callbacks) = 2;
 //    void firstPartyTokenizePan(in FirstPartyTokenizePanRequest request, ITapAndPayServiceCallbacks callbacks) = 3;
-//    void setActiveAccount(in SetActiveAccountRequest request, ITapAndPayServiceCallbacks callbacks) = 4;
+    void setActiveAccount(in SetActiveAccountRequest request, ITapAndPayServiceCallbacks callbacks) = 4;
 //    void showSecurityPrompt(in ShowSecurityPromptRequest request, ITapAndPayServiceCallbacks callbacks) = 7;
-//    void getActiveAccount(in GetActiveAccountRequest request, ITapAndPayServiceCallbacks callbacks) = 8;
+    void getActiveAccount(in GetActiveAccountRequest request, ITapAndPayServiceCallbacks callbacks) = 8;
     void registerDataChangedListener(ITapAndPayServiceCallbacks callbacks) = 9;
 //    void isDeviceUnlockedForPayment(in IsDeviceUnlockedForPaymentRequest request, ITapAndPayServiceCallbacks callbacks) = 10;
 //    void promptDeviceUnlockForPayment(in PromptDeviceUnlockForPaymentRequest request, ITapAndPayServiceCallbacks callbacks) = 11;
@@ -32,8 +36,15 @@ interface ITapAndPayService {
 //    void getEnvironment(ITapAndPayServiceCallbacks callbacks) = 30;
 //    void enablePayOnWear(in EnablePayOnWearRequest request, ITapAndPayServiceCallbacks callbacks) = 31;
 //    void isPayPalAvailable(ITapAndPayServiceCallbacks callbacks) = 32;
-//    void unknown34(ITapAndPayServiceCallbacks callbacks) = 33;
 //    void getSecurityParams(ITapAndPayServiceCallbacks callbacks) = 34;
 //    void getNotificationSettings(in GetNotificationSettingsRequest request, ITapAndPayServiceCallbacks callbacks) = 36;
 //    void setNotificationSettings(in SetNotificationSettingsRequest request, ITapAndPayServiceCallbacks callbacks) = 37;
+//    void addOtherPaymentOption(in AddOtherPaymentOptionRequest request, ITapAndPayServiceCallbacks callbacks) = 38;
+//    void getAvailableOtherPaymentMethods(in GetAvailableOtherPaymentMethodsRequest request, ITapAndPayServiceCallbacks callbacks) = 39;
+//    Status enableNfc() = 42;
+//    void getSeChipTransactions(in GetSeChipTransactionsRequest request, ITapAndPayServiceCallbacks callbacks) = 48;
+//    void disableSelectedToken(in DisableSelectedTokenRequest request, ITapAndPayServiceCallbacks callbacks) = 52;
+    void refreshSeCards(in RefreshSeCardsRequest request, ITapAndPayServiceCallbacks callbacks) = 56;
+//    void tokenizeAccount(in TokenizeAccountRequest request, ITapAndPayServiceCallbacks callbacks) = 57;
+//    void syncDeviceInfo(in SyncDeviceInfoRequest request, ITapAndPayServiceCallbacks callbacks) = 64;
 }

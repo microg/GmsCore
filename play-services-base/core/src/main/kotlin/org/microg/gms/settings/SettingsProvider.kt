@@ -13,6 +13,7 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
 import android.preference.PreferenceManager
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
 import org.microg.gms.settings.SettingsContract.Auth
@@ -20,6 +21,7 @@ import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.Gcm
+import org.microg.gms.settings.SettingsContract.Location
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
 import org.microg.gms.settings.SettingsContract.getAuthority
@@ -36,6 +38,9 @@ class SettingsProvider : ContentProvider() {
     }
     private val checkInPrefs by lazy {
         context!!.getSharedPreferences(CheckIn.PREFERENCES_NAME, MODE_PRIVATE)
+    }
+    private val unifiedNlpPreferences by lazy {
+        context!!.getSharedPreferences("unified_nlp", MODE_PRIVATE)
     }
     private val systemDefaultPreferences: SharedPreferences? by lazy {
         try {
@@ -67,6 +72,7 @@ class SettingsProvider : ContentProvider() {
         SafetyNet.getContentUri(context!!) -> querySafetyNet(projection ?: SafetyNet.PROJECTION)
         DroidGuard.getContentUri(context!!) -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
         Profile.getContentUri(context!!) -> queryProfile(projection ?: Profile.PROJECTION)
+        Location.getContentUri(context!!) -> queryLocation(projection ?: Location.PROJECTION)
         else -> null
     }
 
@@ -86,6 +92,7 @@ class SettingsProvider : ContentProvider() {
             SafetyNet.getContentUri(context!!) -> updateSafetyNet(values)
             DroidGuard.getContentUri(context!!) -> updateDroidGuard(values)
             Profile.getContentUri(context!!) -> updateProfile(values)
+            Location.getContentUri(context!!) -> updateLocation(values)
             else -> return 0
         }
         return 1
@@ -249,6 +256,7 @@ class SettingsProvider : ContentProvider() {
             DroidGuard.ENABLED -> getSettingsBoolean(key, false)
             DroidGuard.MODE -> getSettingsString(key)
             DroidGuard.NETWORK_SERVER_URL -> getSettingsString(key)
+            DroidGuard.FORCE_LOCAL_DISABLED -> systemDefaultPreferences?.getBoolean(key, false) ?: false
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -288,6 +296,38 @@ class SettingsProvider : ContentProvider() {
         editor.apply()
     }
 
+    private fun queryLocation(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+        when (key) {
+            Location.WIFI_MLS -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
+            Location.WIFI_MOVING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("de.sorunome.unifiednlp.trains"))
+            Location.WIFI_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
+            Location.CELL_MLS -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
+            Location.CELL_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
+            Location.GEOCODER_NOMINATIM -> getSettingsBoolean(key, hasUnifiedNlpGeocoderBackend("org.microg.nlp.backend.nominatim") )
+            else -> throw IllegalArgumentException("Unknown key: $key")
+        }
+    }
+    private fun hasUnifiedNlpPrefixInStringSet(key: String, vararg prefixes: String) = getUnifiedNlpSettingsStringSetCompat(key, emptySet()).any { entry -> prefixes.any { prefix -> entry.startsWith(prefix)}}
+    private fun hasUnifiedNlpLocationBackend(vararg packageNames: String) = hasUnifiedNlpPrefixInStringSet("location_backends", *packageNames.map { "$it/" }.toTypedArray())
+    private fun hasUnifiedNlpGeocoderBackend(vararg packageNames: String) = hasUnifiedNlpPrefixInStringSet("geocoder_backends", *packageNames.map { "$it/" }.toTypedArray())
+
+    private fun updateLocation(values: ContentValues) {
+        if (values.size() == 0) return
+        val editor = preferences.edit()
+        values.valueSet().forEach { (key, value) ->
+            when (key) {
+                Location.WIFI_MLS -> editor.putBoolean(key, value as Boolean)
+                Location.WIFI_MOVING -> editor.putBoolean(key, value as Boolean)
+                Location.WIFI_LEARNING -> editor.putBoolean(key, value as Boolean)
+                Location.CELL_MLS -> editor.putBoolean(key, value as Boolean)
+                Location.CELL_LEARNING -> editor.putBoolean(key, value as Boolean)
+                Location.GEOCODER_NOMINATIM -> editor.putBoolean(key, value as Boolean)
+                else -> throw IllegalArgumentException("Unknown key: $key")
+            }
+        }
+        editor.apply()
+    }
+
     private fun MatrixCursor.addRow(
         p: Array<out String>,
         valueGetter: (String) -> Any?
@@ -321,7 +361,27 @@ class SettingsProvider : ContentProvider() {
     private fun getSettingsString(key: String, def: String? = null): String? = listOf(preferences, systemDefaultPreferences).getString(key, def)
     private fun getSettingsInt(key: String, def: Int): Int = listOf(preferences, systemDefaultPreferences).getInt(key, def)
     private fun getSettingsLong(key: String, def: Long): Long = listOf(preferences, systemDefaultPreferences).getLong(key, def)
+    private fun getUnifiedNlpSettingsStringSetCompat(key: String, def: Set<String>): Set<String> = listOf(unifiedNlpPreferences, preferences, systemDefaultPreferences).getStringSetCompat(key, def)
 
+    private fun SharedPreferences.getStringSetCompat(key: String, def: Set<String>): Set<String> {
+        if (SDK_INT >= 11) {
+            try {
+                val res = getStringSet(key, null)
+                if (res != null) return res.filter { it.isNotEmpty() }.toSet()
+            } catch (ignored: Exception) {
+                // Ignore
+            }
+        }
+        try {
+            val str = getString(key, null)
+            if (str != null) return str.split("\\|".toRegex()).filter { it.isNotEmpty() }.toSet()
+        } catch (ignored: Exception) {
+            // Ignore
+        }
+        return def
+    }
+
+    private fun List<SharedPreferences?>.getStringSetCompat(key: String, def: Set<String>): Set<String> = foldRight(def) { preferences, defValue -> preferences?.getStringSetCompat(key, defValue) ?: defValue }
     private fun List<SharedPreferences?>.getString(key: String, def: String?): String? = foldRight(def) { preferences, defValue -> preferences?.getString(key, defValue) ?: defValue }
     private fun List<SharedPreferences?>.getInt(key: String, def: Int): Int = foldRight(def) { preferences, defValue -> preferences?.getInt(key, defValue) ?: defValue }
     private fun List<SharedPreferences?>.getLong(key: String, def: Long): Long = foldRight(def) { preferences, defValue -> preferences?.getLong(key, defValue) ?: defValue }

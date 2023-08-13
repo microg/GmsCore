@@ -117,6 +117,7 @@
         android:icon="@mipmap/ic_core_service_app"
         android:label="@string/gms_app_name"
         android:multiArch="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.AppCompat.DayNight">
 
         <library android:name="com.google.android.gms" />
@@ -422,6 +423,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.credential.CredentialManagerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.credential.manager.service.firstparty.START" />
+            </intent-filter>
+        </service>
+
         <!-- Games -->
 
         <service android:name="org.microg.gms.games.GamesStubService">
@@ -632,12 +639,6 @@
                 <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
             </intent-filter>
         </service>
-        <service android:name="org.microg.gms.ads.AdvertisingIdService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.ads.identifier.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
@@ -653,9 +654,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-        <service android:name="org.microg.gms.auth.SignInService">
+        <service android:name="org.microg.gms.signin.SignInService">
             <intent-filter>
                 <action android:name="com.google.android.gms.signin.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.auth.signin.AuthSignInService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.signin.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -669,12 +676,6 @@
         <service android:name="org.microg.gms.wallet.PaymentService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wallet.service.BIND" />
-            </intent-filter>
-        </service>
-
-        <service android:name="org.microg.gms.appinvite.AppInviteService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.appinvite.service.START" />
             </intent-filter>
         </service>
 
@@ -704,7 +705,6 @@
                 <action android:name="com.google.android.gms.ads.service.CACHE" />
                 <action android:name="com.google.android.gms.ads.service.CONSENT_LOOKUP" />
                 <action android:name="com.google.android.gms.ads.service.HTTP" />
-                <action android:name="com.google.android.gms.ads.service.START" />
                 <action android:name="com.google.android.gms.appstate.service.START" />
                 <action android:name="com.google.android.gms.appusage.service.START" />
                 <action android:name="com.google.android.gms.asterism.service.START" />
@@ -790,7 +790,6 @@
                 <action android:name="com.google.android.gms.ocr.service.internal.START" />
                 <action android:name="com.google.android.gms.ocr.service.START" />
                 <action android:name="com.google.android.gms.panorama.service.START" />
-                <action android:name="com.google.android.gms.pay.service.BIND" />
                 <action android:name="com.google.android.gms.payse.service.BIND" />
                 <action android:name="com.google.android.gms.people.contactssync.service.START" />
                 <action android:name="com.google.android.gms.photos.autobackup.service.START" />

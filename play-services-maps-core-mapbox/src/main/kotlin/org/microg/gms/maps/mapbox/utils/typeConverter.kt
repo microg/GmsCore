@@ -17,12 +17,15 @@
 package org.microg.gms.maps.mapbox.utils
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.gms.maps.internal.ICancelableCallback
+import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.geometry.LatLngBounds
 import com.mapbox.mapboxsdk.geometry.VisibleRegion
 import com.mapbox.mapboxsdk.maps.MapboxMap
+import org.microg.gms.maps.mapbox.TAG
 import com.google.android.gms.maps.model.CameraPosition as GmsCameraPosition
 import com.google.android.gms.maps.model.LatLng as GmsLatLng
 import com.google.android.gms.maps.model.LatLngBounds as GmsLatLngBounds
@@ -31,8 +34,10 @@ import com.google.android.gms.maps.model.VisibleRegion as GmsVisibleRegion
 fun GmsLatLng.toMapbox(): LatLng =
         LatLng(latitude, longitude)
 
+fun GmsLatLng.toPoint() = Point.fromLngLat(latitude, longitude)
+
 fun GmsLatLngBounds.toMapbox(): LatLngBounds =
-        LatLngBounds.from(this.northeast.latitude, this.northeast.longitude, this.southwest.latitude, this.southwest.longitude)
+    LatLngBounds.from(this.northeast.latitude, this.northeast.longitude + if (this.northeast.longitude < this.southwest.longitude) 360.0 else 0.0, this.southwest.latitude, this.southwest.longitude)
 
 fun GmsCameraPosition.toMapbox(): CameraPosition =
         CameraPosition.Builder()
@@ -68,10 +73,12 @@ fun Bundle.toMapbox(): Bundle {
 
 fun LatLng.toGms(): GmsLatLng = GmsLatLng(latitude, longitude)
 
+fun LatLng.toPoint(): Point = Point.fromLngLat(latitude, longitude)
+
 fun LatLngBounds.toGms(): GmsLatLngBounds = GmsLatLngBounds(southWest.toGms(), northEast.toGms())
 
 fun CameraPosition.toGms(): GmsCameraPosition =
-        GmsCameraPosition(target.toGms(), zoom.toFloat() + 1.0f, tilt.toFloat(), bearing.toFloat())
+        GmsCameraPosition(target?.toGms(), zoom.toFloat() + 1.0f, tilt.toFloat(), bearing.toFloat())
 
 fun Bundle.toGms(): Bundle {
     val newBundle = Bundle(this)
@@ -91,4 +98,4 @@ fun Bundle.toGms(): Bundle {
 }
 
 fun VisibleRegion.toGms(): GmsVisibleRegion =
-        GmsVisibleRegion(nearLeft.toGms(), nearRight.toGms(), farLeft.toGms(), farRight.toGms(), latLngBounds.toGms())
+        GmsVisibleRegion(nearLeft?.toGms(), nearRight?.toGms(), farLeft?.toGms(), farRight?.toGms(), latLngBounds.toGms())

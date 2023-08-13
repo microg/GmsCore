@@ -202,6 +202,7 @@ object ProfileManager {
         return serial
     }
 
+    @SuppressLint("BlockedPrivateApi")
     private fun getRealData(): Map<String, String> = mutableMapOf(
             "Build.BOARD" to android.os.Build.BOARD,
             "Build.BOOTLOADER" to android.os.Build.BOOTLOADER,
@@ -235,6 +236,12 @@ object ProfileManager {
         if (android.os.Build.VERSION.SDK_INT >= 23) {
             put("Build.VERSION.SECURITY_PATCH", android.os.Build.VERSION.SECURITY_PATCH)
         }
+        try {
+            val field = android.os.Build.VERSION::class.java.getDeclaredField("DEVICE_INITIAL_SDK_INT")
+            field.isAccessible = true
+            put("Build.VERSION.DEVICE_INITIAL_SDK_INT", field.getInt(null).toString())
+        } catch (ignored: Exception) {
+        }
     }
 
     private fun applyProfileData(profileData: Map<String, String>) {
@@ -267,6 +274,7 @@ object ProfileManager {
         applyStringField("Build.VERSION.RELEASE") { Build.VERSION.RELEASE = it }
         applyStringField("Build.VERSION.SDK") { Build.VERSION.SDK = it }
         applyIntField("Build.VERSION.SDK_INT") { Build.VERSION.SDK_INT = it }
+        applyIntField("Build.VERSION.DEVICE_INITIAL_SDK_INT") { Build.VERSION.DEVICE_INITIAL_SDK_INT = it }
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Build.SUPPORTED_ABIS = profileData["Build.SUPPORTED_ABIS"]?.split(",")?.toTypedArray() ?: emptyArray()
         } else {

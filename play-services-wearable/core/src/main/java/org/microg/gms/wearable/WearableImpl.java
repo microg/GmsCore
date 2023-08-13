@@ -69,6 +69,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import okio.ByteString;
 
@@ -89,6 +90,7 @@ public class WearableImpl {
     private ConnectionConfiguration[] configurations;
     private boolean configurationsUpdated = false;
     private ClockworkNodePreferences clockworkNodePreferences;
+    private CountDownLatch networkHandlerLock = new CountDownLatch(1);
     public Handler networkHandler;
 
     public WearableImpl(Context context, NodeDatabaseHelper nodeDatabase, ConfigurationDatabaseHelper configDatabase) {
@@ -100,6 +102,7 @@ public class WearableImpl {
         new Thread(() -> {
             Looper.prepare();
             networkHandler = new Handler(Looper.myLooper());
+            networkHandlerLock.countDown();
             Looper.loop();
         }).start();
     }
@@ -619,7 +622,12 @@ public class WearableImpl {
     }
 
     public void stop() {
-        this.networkHandler.getLooper().quit();
+        try {
+            this.networkHandlerLock.await();
+            this.networkHandler.getLooper().quit();
+        } catch (InterruptedException e) {
+            Log.w(TAG, e);
+        }
     }
 
     private class ListenerInfo {

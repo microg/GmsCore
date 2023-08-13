@@ -43,7 +43,7 @@ public class TriggerReceiver extends WakefulBroadcastReceiver {
         try {
             boolean force = "android.provider.Telephony.SECRET_CODE".equals(intent.getAction());
 
-            if (CheckinPrefs.isEnabled(context) || force) {
+            if (CheckinPreferences.isEnabled(context) || force) {
                 if (LastCheckinInfo.read(context).getLastCheckin() > System.currentTimeMillis() - REGULAR_CHECKIN_INTERVAL && !force) {
                     CheckinService.schedule(context);
                     return;

@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import org.microg.gms.utils.toHexString
 import java.io.UnsupportedEncodingException
 import java.lang.RuntimeException
 import java.nio.charset.Charset
@@ -29,19 +30,26 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "GmsFirebaseAuthClient"
 
-class IdentityToolkitClient(context: Context, private val apiKey: String) {
+class IdentityToolkitClient(context: Context, private val apiKey: String, private val packageName: String? = null, private val certSha1Hash: ByteArray? = null) {
     private val queue = Volley.newRequestQueue(context)
 
     private fun buildRelyingPartyUrl(method: String) = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/$method?key=$apiKey"
     private fun buildStsUrl(method: String) = "https://securetoken.googleapis.com/v1/$method?key=$apiKey"
 
+    private fun getRequestHeaders(): Map<String, String> = hashMapOf<String, String>().apply {
+        if (packageName != null) put("X-Android-Package", packageName)
+        if (certSha1Hash != null) put("X-Android-Cert", certSha1Hash.toHexString().uppercase())
+    }
+
     private suspend fun request(method: String, data: JSONObject): JSONObject = suspendCoroutine { continuation ->
-        queue.add(JsonObjectRequest(POST, buildRelyingPartyUrl(method), data, {
+        queue.add(object : JsonObjectRequest(POST, buildRelyingPartyUrl(method), data, {
             continuation.resume(it)
         }, {
-            Log.d(TAG, String(it.networkResponse.data))
+            Log.d(TAG, "Error: ${it.networkResponse?.data?.decodeToString() ?: it.message}")
             continuation.resumeWithException(RuntimeException(it))
-        }))
+        }) {
+            override fun getHeaders(): Map<String, String> = getRequestHeaders()
+        })
     }
 
     suspend fun createAuthUri(identifier: String? = null, tenantId: String? = null, continueUri: String? = "http://localhost"): JSONObject =
@@ -117,23 +125,23 @@ class IdentityToolkitClient(context: Context, private val apiKey: String) {
                     .put("sessionInfo", sessionInfo))
 
     suspend fun getTokenByRefreshToken(refreshToken: String): JSONObject = suspendCoroutine { continuation ->
-        queue.add(StsRequest(POST, buildStsUrl("token"), "grant_type=refresh_token&refresh_token=$refreshToken", { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }))
-    }
-}
+        queue.add(object : JsonRequest<JSONObject>(POST, buildStsUrl("token"), "grant_type=refresh_token&refresh_token=$refreshToken", { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }) {
+            override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+                return try {
+                    val jsonString = String(response!!.data, Charset.forName(HttpHeaderParser.parseCharset(response!!.headers, PROTOCOL_CHARSET)))
+                    Response.success(JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response))
+                } catch (e: UnsupportedEncodingException) {
+                    Response.error(ParseError(e))
+                } catch (je: JSONException) {
+                    Response.error(ParseError(je))
+                }
+            }
 
-private class StsRequest(method: Int, url: String, request: String?, listener: (JSONObject) -> Unit, errorListener: (VolleyError) -> Unit) : JsonRequest<JSONObject>(method, url, request, listener, errorListener) {
-    override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
-        return try {
-            val jsonString = String(response!!.data, Charset.forName(HttpHeaderParser.parseCharset(response!!.headers, PROTOCOL_CHARSET)))
-            Response.success(JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response))
-        } catch (e: UnsupportedEncodingException) {
-            Response.error(ParseError(e))
-        } catch (je: JSONException) {
-            Response.error(ParseError(je))
-        }
-    }
+            override fun getBodyContentType(): String {
+                return "application/x-www-form-urlencoded"
+            }
 
-    override fun getBodyContentType(): String {
-        return "application/x-www-form-urlencoded"
+            override fun getHeaders(): Map<String, String> = getRequestHeaders()
+        })
     }
 }

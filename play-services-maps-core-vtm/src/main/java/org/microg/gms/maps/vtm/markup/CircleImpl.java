@@ -18,8 +18,12 @@ package org.microg.gms.maps.vtm.markup;
 
 import android.os.RemoteException;
 
+import android.util.Log;
+import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.internal.ICircleDelegate;
 
 import org.microg.gms.maps.vtm.GmsMapsTypeHelper;
@@ -28,7 +32,11 @@ import org.oscim.layers.vector.geometries.Drawable;
 import org.oscim.layers.vector.geometries.Style;
 import org.oscim.map.Map;
 
+import java.util.List;
+
 public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
+
+    private static final String TAG = "GmsMapCircle";
 
     private final String id;
     private final CircleOptions options;
@@ -137,6 +145,38 @@ public class CircleImpl extends ICircleDelegate.Stub implements DrawableMarkup {
     @Override
     public int hashCodeRemote() throws RemoteException {
         return id.hashCode();
+    }
+
+    @Override
+    public void setClickable(boolean clickable) throws RemoteException {
+        Log.d(TAG, "unimplemented method: setClickable");
+    }
+
+    @Override
+    public boolean isClickable() throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public void setStrokePattern(List<PatternItem> object) throws RemoteException {
+        Log.d(TAG, "unimplemented method: setStrokePattern");
+    }
+
+    @Override
+    public List<PatternItem> getStrokePattern() throws RemoteException {
+        Log.d(TAG, "unimplemented method: getStrokePattern");
+        return null;
+    }
+
+    @Override
+    public void setTag(IObjectWrapper object) throws RemoteException {
+        Log.d(TAG, "unimplemented method: setTag");
+    }
+
+    @Override
+    public IObjectWrapper getTag() throws RemoteException {
+        Log.d(TAG, "unimplemented method: getTag");
+        return ObjectWrapper.wrap(null);
     }
 
     @Override
