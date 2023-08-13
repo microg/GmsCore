@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.View;
@@ -74,7 +73,7 @@ public class Conditions {
                 @Override
                 public boolean isActive(Context context) {
                     count = 0;
-                    if (SDK_INT >= Build.VERSION_CODES.M) {
+                    if (SDK_INT >= 23) {
                         for (String permission : REQUIRED_PERMISSIONS) {
                             if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED)
                                 count++;

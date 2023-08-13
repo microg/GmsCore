@@ -21,7 +21,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -60,6 +59,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR_DARK;
 //import static org.microg.gms.maps.vtm.GmsMapsTypeHelper.fromLatLngBounds;
@@ -90,7 +90,7 @@ PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ 
 
         if (getIntent().hasExtra(EXTRA_PRIMARY_COLOR)) {
             toolbar.setBackgroundColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR, 0));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            if (SDK_INT >= 21)
                 getWindow().setStatusBarColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
             ((TextView) findViewById(R.id.place_picker_title)).setTextColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
         }

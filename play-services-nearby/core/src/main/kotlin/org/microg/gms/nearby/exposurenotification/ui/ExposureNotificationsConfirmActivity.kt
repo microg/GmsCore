@@ -14,7 +14,7 @@ import android.content.pm.PackageInfo.REQUESTED_PERMISSION_NEVER_FOR_LOCATION
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.LocationManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.ResultReceiver
 import android.provider.Settings
@@ -116,7 +116,7 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     private var permissionRequestCode = 33
     private fun getRequiredPermissions(): Array<String> {
         return when {
-            Build.VERSION.SDK_INT >= 31 -> {
+            SDK_INT >= 31 -> {
                 // We only need bluetooth permission on 31+ if it's "strongly asserted" that we won't use bluetooth for
                 // location. Otherwise, we also need LOCATION permissions. See
                 // https://developer.android.com/guide/topics/connectivity/bluetooth/permissions#assert-never-for-location
@@ -136,7 +136,7 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
                     ACCESS_FINE_LOCATION
                 )
             }
-            Build.VERSION.SDK_INT == 29 -> {
+            SDK_INT == 29 -> {
                 // We only can directly request background location permission on 29.
                 // We need it on 30 (and possibly later) as well, but it has to be requested in a two
                 // step process, see https://fosstodon.org/@utf8equalsX/104359649537615235
@@ -158,11 +158,11 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
 
     private fun checkPermissions() {
         val permissions = getRequiredPermissions()
-        permissionNeedsHandling = Build.VERSION.SDK_INT >= 23 && permissions.any {
+        permissionNeedsHandling = SDK_INT >= 23 && permissions.any {
             checkSelfPermission(this, it) != PERMISSION_GRANTED
         }
 
-        backgroundLocationNeedsHandling = Build.VERSION.SDK_INT >= 30
+        backgroundLocationNeedsHandling = SDK_INT >= 30
                 && ACCESS_FINE_LOCATION in permissions
                 && checkSelfPermission(this, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
                 && checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) != PERMISSION_GRANTED
@@ -175,13 +175,13 @@ class ExposureNotificationsConfirmActivity : AppCompatActivity() {
     }
 
     private fun requestPermissions() {
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (SDK_INT >= 23) {
             requestPermissions(getRequiredPermissions(), ++permissionRequestCode)
         }
     }
 
     private fun requestBackgroundLocation() {
-        if (Build.VERSION.SDK_INT >= 29) {
+        if (SDK_INT >= 29) {
             requestPermissions(arrayOf(ACCESS_BACKGROUND_LOCATION), ++permissionRequestCode)
         }
     }

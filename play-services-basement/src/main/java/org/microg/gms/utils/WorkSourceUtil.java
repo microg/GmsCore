@@ -5,7 +5,6 @@
 
 package org.microg.gms.utils;
 
-import android.os.Build;
 import android.os.WorkSource;
 import android.util.Log;
 

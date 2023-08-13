@@ -17,6 +17,7 @@ import org.microg.gms.checkin.setCheckinServiceConfiguration
 import org.microg.gms.droidguard.core.DroidGuardPreferences
 import org.microg.gms.gcm.getGcmServiceInfo
 import org.microg.gms.gcm.setGcmServiceConfiguration
+import org.microg.gms.location.LocationSettings
 import org.microg.gms.safetynet.SafetyNetPreferences
 
 class ProvisionService : LifecycleService() {
@@ -37,6 +38,16 @@ class ProvisionService : LifecycleService() {
             intent?.extras?.getBooleanOrNull("safetynet_enabled")?.let {
                 SafetyNetPreferences.setEnabled(this@ProvisionService, it)
                 DroidGuardPreferences.setEnabled(this@ProvisionService, it)
+            }
+            LocationSettings(this@ProvisionService).apply {
+                intent?.extras?.getBooleanOrNull("wifi_mls")?.let { wifiMls = it }
+                intent?.extras?.getBooleanOrNull("cell_mls")?.let { cellMls = it }
+                intent?.extras?.getBooleanOrNull("wifi_learning")?.let { wifiLearning = it }
+                intent?.extras?.getBooleanOrNull("cell_learning")?.let { cellLearning = it }
+                intent?.extras?.getBooleanOrNull("wifi_moving")?.let { wifiMoving = it }
+                intent?.extras?.getBooleanOrNull("nominatim_enabled")?.let {
+                    geocoderNominatim = it
+                }
             }
             // What else?
 

@@ -22,7 +22,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,7 +95,7 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
                 }
             });
         }
-        if (SDK_INT >= Build.VERSION_CODES.M) {
+        if (SDK_INT >= 23) {
             checks.add(new SystemChecks());
         }
 //        checks.add(new NlpOsCompatChecks());

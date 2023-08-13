@@ -10,12 +10,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 public class GcmDatabase extends SQLiteOpenHelper {
     private static final String TAG = GcmDatabase.class.getSimpleName();
@@ -55,7 +56,7 @@ public class GcmDatabase extends SQLiteOpenHelper {
     public GcmDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
-        if (Build.VERSION.SDK_INT >= 16) {
+        if (SDK_INT >= 16) {
             this.setWriteAheadLoggingEnabled(true);
         }
     }

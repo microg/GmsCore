@@ -27,7 +27,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -37,6 +36,7 @@ import org.microg.gms.common.PackageUtils;
 
 import java.util.Arrays;
 
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE;
 import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_ACCOUNTS;
 import static org.microg.gms.auth.AuthConstants.PROVIDER_EXTRA_CLEAR_PASSWORD;
@@ -55,7 +55,7 @@ public class AccountContentProvider extends ContentProvider {
     @Override
     public Bundle call(String method, String arg, Bundle extras) {
         String suggestedPackageName = null;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+        if (SDK_INT > 19) {
             suggestedPackageName = getCallingPackage();
         }
         String packageName = PackageUtils.getAndCheckCallingPackage(getContext(), suggestedPackageName);
@@ -73,13 +73,13 @@ public class AccountContentProvider extends ContentProvider {
             Account[] accounts = null;
             if (arg != null && (arg.equals(DEFAULT_ACCOUNT_TYPE) || arg.startsWith(DEFAULT_ACCOUNT_TYPE + "."))) {
                 AccountManager am = AccountManager.get(getContext());
-                if (Build.VERSION.SDK_INT >= 18) {
+                if (SDK_INT >= 18) {
                     accounts = am.getAccountsByTypeForPackage(arg, packageName);
                 }
                 if (accounts == null || accounts.length == 0) {
                     accounts = am.getAccountsByType(arg);
                 }
-                if (Build.VERSION.SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
+                if (SDK_INT >= 26 && accounts != null && arg.equals(DEFAULT_ACCOUNT_TYPE)) {
                     for (Account account : accounts) {
                         if (am.getAccountVisibility(account, packageName) == AccountManager.VISIBILITY_UNDEFINED) {
                             Log.d(TAG, "Make account " + account + " visible to " + packageName);

@@ -18,17 +18,16 @@ public class SafeBrowsingData extends AutoSafeParcelable {
     @Field(1)
     public int versionCode = 1;
     @Field(2)
-    public String status;
+    public String metadata;
     @Field(3)
     public DataHolder data;
     @Field(4)
     public ParcelFileDescriptor fileDescriptor;
-    public File file;
     public byte[] fileContents;
     @Field(5)
-    public long field5;
+    public long lastUpdateTime;
     @Field(6)
-    public byte[] field6;
+    public byte[] state;
 
     public static final Creator<SafeBrowsingData> CREATOR = new AutoCreator<SafeBrowsingData>(SafeBrowsingData.class);
 }

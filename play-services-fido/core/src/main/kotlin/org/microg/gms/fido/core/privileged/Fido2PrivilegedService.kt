@@ -12,7 +12,7 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Parcel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -90,7 +90,7 @@ class Fido2PrivilegedServiceImpl(private val context: Context, private val lifec
 
     override fun isUserVerifyingPlatformAuthenticatorAvailable(callbacks: IBooleanCallback) {
         lifecycleScope.launchWhenStarted {
-            if (Build.VERSION.SDK_INT < 24) {
+            if (SDK_INT < 24) {
                 callbacks.onBoolean(false)
             } else {
                 val keyguardManager = context.getSystemService(KEYGUARD_SERVICE) as? KeyguardManager?

@@ -6,7 +6,6 @@
 package com.google.android.gms.droidguard.internal;
 
 import android.net.Network;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 
