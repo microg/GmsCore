@@ -4,11 +4,7 @@ def sublude(name) {
   project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
 }
 
-include ':play-services-basement'
-
-include ':play-services-tasks'
-
-include ':play-services-api'
+include ':safe-parcel-processor'
 
 include ':play-services-ads'
 include ':play-services-ads-base'
@@ -19,6 +15,7 @@ include ':play-services-auth'
 include ':play-services-auth-api-phone'
 include ':play-services-auth-base'
 include ':play-services-base'
+include ':play-services-basement'
 include ':play-services-cast'
 include ':play-services-cast-framework'
 include ':play-services-clearcut'
@@ -39,10 +36,12 @@ include ':play-services-places-placereport'
 include ':play-services-recaptcha'
 include ':play-services-safetynet'
 include ':play-services-tapandpay'
+include ':play-services-tasks'
 include ':play-services-vision'
 include ':play-services-vision-common'
 include ':play-services-wearable'
 
+include ':play-services-api'
 include ':play-services'
 
 include ':firebase-auth'

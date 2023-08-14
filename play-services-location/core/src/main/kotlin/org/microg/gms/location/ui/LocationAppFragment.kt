@@ -55,7 +55,7 @@ class LocationAppFragment : PreferenceFragmentCompat() {
         lastLocationMap = preferenceScreen.findPreference("pref_location_app_last_location_map") ?: lastLocationMap
         forceCoarse = preferenceScreen.findPreference("pref_location_app_force_coarse") ?: forceCoarse
         forceCoarse.setOnPreferenceChangeListener { _, newValue ->
-            packageName?.let { database.setForceCoarse(it, newValue as Boolean); true} == true
+            packageName?.let { database.setForceCoarse(it, newValue as Boolean); true } == true
         }
     }
 
@@ -86,7 +86,12 @@ class LocationAppFragment : PreferenceFragmentCompat() {
             if (location != null) {
                 lastLocationCategory.isVisible = true
                 lastLocation.title = DateUtils.getRelativeTimeSpanString(location.time)
-                lastLocation.intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${location.latitude},${location.longitude}"))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${location.latitude},${location.longitude}"))
+                if (context.packageManager.queryIntentActivities(intent, 0).isNotEmpty()) {
+                    lastLocation.intent = intent
+                } else {
+                    lastLocation.isSelectable = false
+                }
                 lastLocationMap.location = location
                 val address = try {
                     if (SDK_INT > 33) {
@@ -117,7 +122,7 @@ class LocationAppFragment : PreferenceFragmentCompat() {
                     }
                     lastLocation.summary = addressLine.toString()
                 } else {
-                    lastLocation.summary =  "${location.latitude.toStringWithDigits(6)}, ${location.longitude.toStringWithDigits(6)}"
+                    lastLocation.summary = "${location.latitude.toStringWithDigits(6)}, ${location.longitude.toStringWithDigits(6)}"
                 }
             } else {
                 lastLocationCategory.isVisible = false

@@ -12,11 +12,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import com.google.android.gms.location.internal.ParcelableGeofence;
 
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class GeofencingEvent {
         if (parceledGeofences != null) {
             event.triggeringGeofences = new ArrayList<Geofence>();
             for (byte[] parceledGeofence : parceledGeofences) {
-                event.triggeringGeofences.add(SafeParcelUtil.fromByteArray(parceledGeofence, ParcelableGeofence.CREATOR));
+                event.triggeringGeofences.add(SafeParcelableSerializer.deserializeFromBytes(parceledGeofence, ParcelableGeofence.CREATOR));
             }
         }
         event.triggeringLocation = intent.getParcelableExtra(EXTRA_TRIGGERING_LOCATION);

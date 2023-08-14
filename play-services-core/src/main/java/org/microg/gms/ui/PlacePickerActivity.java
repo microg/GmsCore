@@ -41,6 +41,7 @@ import androidx.core.view.MenuItemCompat;
 import com.google.android.gms.R;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import com.google.android.gms.location.places.internal.PlaceImpl;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -48,7 +49,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import org.microg.gms.location.LocationConstants;
 //import org.microg.gms.maps.vtm.BackendMapView;
 //import org.microg.gms.maps.vtm.GmsMapsTypeHelper;
-import org.microg.safeparcel.SafeParcelUtil;
 //import org.oscim.core.MapPosition;
 //import org.oscim.event.Event;
 //import org.oscim.map.Map;
@@ -117,9 +117,9 @@ PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ 
         findViewById(R.id.place_picker_select).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resultIntent.putExtra(LocationConstants.EXTRA_STATUS, SafeParcelUtil.asByteArray(new Status(CommonStatusCodes.SUCCESS)));
-                resultIntent.putExtra(LocationConstants.EXTRA_PLACE, SafeParcelUtil.asByteArray(place));
-                resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, SafeParcelUtil.asByteArray(place.viewport));
+                resultIntent.putExtra(LocationConstants.EXTRA_STATUS, SafeParcelableSerializer.serializeToBytes(new Status(CommonStatusCodes.SUCCESS)));
+                resultIntent.putExtra(LocationConstants.EXTRA_PLACE, SafeParcelableSerializer.serializeToBytes(place));
+                resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, SafeParcelableSerializer.serializeToBytes(place.viewport));
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
