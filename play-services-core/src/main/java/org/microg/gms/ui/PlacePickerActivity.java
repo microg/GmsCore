@@ -83,7 +83,7 @@ PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ 
 
         setContentView(R.layout.pick_place);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(org.microg.tools.ui.R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);

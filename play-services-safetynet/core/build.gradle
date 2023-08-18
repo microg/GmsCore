@@ -37,6 +37,8 @@ wire {
 }
 
 android {
+    namespace "org.microg.gms.safetynet.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

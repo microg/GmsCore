@@ -31,8 +31,14 @@ wire {
 }
 
 android {
+    namespace "org.microg.gms.droidguard.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName "20.47.14"

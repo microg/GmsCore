@@ -44,7 +44,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import com.google.android.gms.R;
 import com.squareup.wire.Message;
 
 import org.microg.gms.checkin.LastCheckinInfo;
@@ -82,7 +81,7 @@ import static org.microg.gms.common.PackageUtils.warnIfNotPersistentProcess;
 import static org.microg.gms.gcm.GcmConstants.*;
 import static org.microg.gms.gcm.McsConstants.*;
 
-@ForegroundServiceInfo(value = "Cloud messaging", res = R.string.service_name_mcs)
+@ForegroundServiceInfo(value = "Cloud messaging", resName = "service_name_mcs", resPackage = "com.google.android.gms")
 public class McsService extends Service implements Handler.Callback {
     private static final String TAG = "GmsGcmMcsSvc";
 

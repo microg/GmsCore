@@ -8,8 +8,14 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
+    namespace "org.microg.gms.gmscompliance.api"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
 
     defaultConfig {
         versionName version

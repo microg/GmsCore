@@ -36,7 +36,7 @@ public class RadioButtonPreference extends CheckBoxPreference {
 
     @SuppressLint("RestrictedApi")
     public RadioButtonPreference(Context context, AttributeSet attrs) {
-        this(context, attrs, TypedArrayUtils.getAttr(context, R.attr.checkBoxPreferenceStyle,
+        this(context, attrs, TypedArrayUtils.getAttr(context, androidx.preference.R.attr.checkBoxPreferenceStyle,
                 android.R.attr.checkBoxPreferenceStyle));
     }
 

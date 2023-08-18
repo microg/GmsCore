@@ -180,10 +180,13 @@ object SettingsContract {
 
     @JvmStatic
     fun <T> getSettings(context: Context, uri: Uri, projection: Array<out String>?, f: (Cursor) -> T): T = withoutCallingIdentity {
-        context.contentResolver.query(uri, projection, null, null, null).use { c ->
+        val c = context.contentResolver.query(uri, projection, null, null, null)
+        try {
             require(c != null) { "Cursor for query $uri ${projection?.toList()} was null" }
             if (!c.moveToFirst()) error("Cursor for query $uri ${projection?.toList()} was empty")
             f.invoke(c)
+        } finally {
+            c?.close()
         }
     }
 

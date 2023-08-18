@@ -32,6 +32,6 @@ interface NearbyPreferencesIntegration {
 
         val isAvailable: Boolean = android.os.Build.VERSION.SDK_INT >= 21
 
-        const val exposureNotificationNavigationId: Int = R.id.openExposureNotificationSettings
+        val exposureNotificationNavigationId: Int = R.id.openExposureNotificationSettings
     }
 }

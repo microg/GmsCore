@@ -16,6 +16,8 @@ dependencies {
 }
 
 android {
+    namespace "org.microg.gms.tasks.ktx"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

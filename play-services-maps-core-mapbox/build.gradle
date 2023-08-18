@@ -40,8 +40,14 @@ def execResult(...args) {
 }
 
 android {
+    namespace "org.microg.gms.maps.mapbox"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName version
@@ -62,16 +68,13 @@ android {
         disable 'GradleCompatible'
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 }
 

@@ -25,7 +25,7 @@ import kotlin.math.max
 
 internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(context, "geocache.db", null, 3) {
     fun getCellLocation(cell: CellDetails, allowLearned: Boolean = true): Location? {
-        val cellLocation = readableDatabase.query(
+        var cursor = readableDatabase.query(
             TABLE_CELLS,
             arrayOf(FIELD_LATITUDE, FIELD_LONGITUDE, FIELD_ACCURACY, FIELD_TIME, FIELD_PRECISION),
             CELLS_SELECTION,
@@ -33,16 +33,19 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
             null,
             null,
             null
-        ).use { cursor ->
+        )
+        val cellLocation = try {
             if (cursor.moveToNext()) {
                 cursor.getLocation(MAX_CACHE_AGE)
             } else {
                 null
             }
+        } finally {
+            cursor.close()
         }
         if (cellLocation?.precision?.let { it >= 1f } == true) return cellLocation
         if (allowLearned) {
-            readableDatabase.query(
+            cursor = readableDatabase.query(
                 TABLE_CELLS_LEARN,
                 arrayOf(FIELD_LATITUDE_HIGH, FIELD_LATITUDE_LOW, FIELD_LONGITUDE_HIGH, FIELD_LONGITUDE_LOW, FIELD_TIME, FIELD_BAD_TIME),
                 CELLS_SELECTION,
@@ -50,28 +53,35 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
                 null,
                 null,
                 null
-            ).use { cursor ->
+            )
+            try {
                 if (cursor.moveToNext()) {
                     val badTime = cursor.getLong(5)
                     val time = cursor.getLong(4)
-                    if (badTime > time - LEARN_BAD_CUTOFF) return@use
-                    cursor.getMidLocation(MAX_CACHE_AGE, LEARN_BASE_ACCURACY_CELL)?.let { return it }
+                    if (badTime < time - LEARN_BAD_CUTOFF) {
+                        cursor.getMidLocation(MAX_CACHE_AGE, LEARN_BASE_ACCURACY_CELL)?.let { return it }
+                    }
                 }
+            } finally {
+                cursor.close()
             }
         }
         if (cellLocation != null) return cellLocation
-        readableDatabase.query(TABLE_CELLS_PRE, arrayOf(FIELD_TIME), CELLS_PRE_SELECTION, getCellPreSelectionArgs(cell), null, null, null).use { cursor ->
+        cursor = readableDatabase.query(TABLE_CELLS_PRE, arrayOf(FIELD_TIME), CELLS_PRE_SELECTION, getCellPreSelectionArgs(cell), null, null, null)
+        try {
             if (cursor.moveToNext()) {
                 if (cursor.getLong(1) > System.currentTimeMillis() - MAX_CACHE_AGE) {
                     return NEGATIVE_CACHE_ENTRY
                 }
             }
+        } finally {
+            cursor.close()
         }
         return null
     }
 
     fun getWifiLocation(wifi: WifiDetails): Location? {
-        val wifiLocation = readableDatabase.query(
+        var cursor = readableDatabase.query(
             TABLE_WIFIS,
             arrayOf(FIELD_LATITUDE, FIELD_LONGITUDE, FIELD_ACCURACY, FIELD_TIME, FIELD_PRECISION),
             getWifiSelection(wifi),
@@ -79,15 +89,18 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
             null,
             null,
             null
-        ).use { cursor ->
+        )
+        val wifiLocation = try {
             if (cursor.moveToNext()) {
                 cursor.getLocation(MAX_CACHE_AGE)
             } else {
                 null
             }
+        } finally {
+            cursor.close()
         }
         if (wifiLocation?.precision?.let { it >= 1f } == true) return wifiLocation
-        readableDatabase.query(
+        cursor = readableDatabase.query(
             TABLE_WIFI_LEARN,
             arrayOf(FIELD_LATITUDE_HIGH, FIELD_LATITUDE_LOW, FIELD_LONGITUDE_HIGH, FIELD_LONGITUDE_LOW, FIELD_TIME, FIELD_BAD_TIME),
             getWifiSelection(wifi),
@@ -95,13 +108,17 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
             null,
             null,
             null
-        ).use { cursor ->
+        )
+        try {
             if (cursor.moveToNext()) {
                 val badTime = cursor.getLong(5)
                 val time = cursor.getLong(4)
-                if (badTime > time - LEARN_BAD_CUTOFF) return@use
-                cursor.getMidLocation(MAX_CACHE_AGE, LEARN_BASE_ACCURACY_WIFI, 0.5)?.let { return it }
+                if (badTime < time - LEARN_BAD_CUTOFF) {
+                    cursor.getMidLocation(MAX_CACHE_AGE, LEARN_BASE_ACCURACY_WIFI, 0.5)?.let { return it }
+                }
             }
+        } finally {
+            cursor.close()
         }
         return wifiLocation
     }
@@ -121,7 +138,7 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
 
     fun learnCellLocation(cell: CellDetails, location: Location) {
         if (!cell.isValid) return
-        val (exists, isBad) = readableDatabase.query(
+        val cursor = readableDatabase.query(
             TABLE_CELLS_LEARN,
             arrayOf(FIELD_LATITUDE_HIGH, FIELD_LATITUDE_LOW, FIELD_LONGITUDE_HIGH, FIELD_LONGITUDE_LOW, FIELD_TIME),
             CELLS_SELECTION,
@@ -129,13 +146,16 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
             null,
             null,
             null
-        ).use { cursor ->
+        )
+        val (exists, isBad) = try {
             if (cursor.moveToNext()) {
                 val midLocation = cursor.getMidLocation(Long.MAX_VALUE, 0f)
                 (midLocation != null) to (midLocation?.let { it.distanceTo(location) > LEARN_BAD_SIZE_CELL } == true)
             } else {
                 false to false
             }
+        } finally {
+            cursor.close()
         }
         if (exists && isBad) {
             writableDatabase.update(
@@ -171,7 +191,7 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
 
     fun learnWifiLocation(wifi: WifiDetails, location: Location) {
         if (!wifi.isRequestable) return
-        val (exists, isBad) = readableDatabase.query(
+        val cursor = readableDatabase.query(
             TABLE_WIFI_LEARN,
             arrayOf(FIELD_LATITUDE_HIGH, FIELD_LATITUDE_LOW, FIELD_LONGITUDE_HIGH, FIELD_LONGITUDE_LOW, FIELD_TIME),
             getWifiSelection(wifi),
@@ -179,13 +199,16 @@ internal class LocationCacheDatabase(context: Context?) : SQLiteOpenHelper(conte
             null,
             null,
             null
-        ).use { cursor ->
+        )
+        val (exists, isBad) = try {
             if (cursor.moveToNext()) {
                 val midLocation = cursor.getMidLocation(Long.MAX_VALUE, 0f)
                 (midLocation != null) to (midLocation?.let { it.distanceTo(location) > LEARN_BAD_SIZE_WIFI } == true)
             } else {
                 false to false
             }
+        } finally {
+            cursor.close()
         }
         if (exists && isBad) {
             writableDatabase.update(

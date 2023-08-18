@@ -26,14 +26,21 @@ dependencies {
 }
 
 android {
+    namespace "com.google.android.gms.common"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
-    aidlPackageWhiteList "com/google/android/gms/common/api/Status.aidl"
-    aidlPackageWhiteList "com/google/android/gms/common/internal/IAccountAccessor.aidl"
-    aidlPackageWhiteList "com/google/android/gms/common/internal/ICancelToken.aidl"
-    aidlPackageWhiteList "com/google/android/gms/common/server/FavaDiagnosticsEntity.aidl"
-    aidlPackageWhiteList "com/google/android/gms/dynamic/IObjectWrapper.aidl"
+    aidlPackagedList "com/google/android/gms/common/api/Status.aidl"
+    aidlPackagedList "com/google/android/gms/common/internal/IAccountAccessor.aidl"
+    aidlPackagedList "com/google/android/gms/common/internal/ICancelToken.aidl"
+    aidlPackagedList "com/google/android/gms/common/server/FavaDiagnosticsEntity.aidl"
+    aidlPackagedList "com/google/android/gms/dynamic/IObjectWrapper.aidl"
+
+    buildFeatures {
+        aidl = true
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName version

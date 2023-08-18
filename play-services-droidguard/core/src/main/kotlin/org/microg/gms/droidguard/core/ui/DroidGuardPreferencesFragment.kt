@@ -13,8 +13,8 @@ import org.microg.gms.droidguard.core.DroidGuardPreferences
 import org.microg.gms.droidguard.core.DroidGuardPreferences.Mode.Embedded
 import org.microg.gms.droidguard.core.DroidGuardPreferences.Mode.Network
 import org.microg.gms.droidguard.core.R
-import org.microg.gms.droidguard.core.R.drawable.ic_radio_checked
-import org.microg.gms.droidguard.core.R.drawable.ic_radio_unchecked
+import org.microg.gms.base.core.R.drawable.ic_radio_checked
+import org.microg.gms.base.core.R.drawable.ic_radio_unchecked
 
 class DroidGuardPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var modeEmbedded: Preference

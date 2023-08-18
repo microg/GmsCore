@@ -35,12 +35,15 @@ class DgDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "dg.db", nu
      */
     fun get(id: String): Triple<String, ByteArray, ByteArray>? = readableDatabase.use { db ->
         val time = System.currentTimeMillis() / 1000
-        db.query("main", arrayOf("f", "d", "e", "c", "g"), "a = ? AND b <= $time AND $time < (b + c)", arrayOf(id), null, null, "b DESC", "1").use {
+        val it = db.query("main", arrayOf("f", "d", "e", "c", "g"), "a = ? AND b <= $time AND $time < (b + c)", arrayOf(id), null, null, "b DESC", "1")
+        try {
             if (it.moveToNext()) {
                 Triple(it.getString(1), it.getBlob(0), it.getBlob(4))
             } else {
                 null
             }
+        } finally {
+            it.close()
         }
     }
 
