@@ -8,9 +8,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -217,7 +217,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
      * @return The deserialized {@link PublicKeyCredentialRequestOptions}.
      */
     public static PublicKeyCredentialRequestOptions deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+        return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
     @PublicApi(exclude = true)

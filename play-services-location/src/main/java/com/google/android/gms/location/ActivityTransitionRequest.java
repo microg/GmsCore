@@ -11,9 +11,9 @@ package com.google.android.gms.location;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.google.android.gms.common.internal.ClientIdentity;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.*;
 
@@ -72,7 +72,7 @@ public class ActivityTransitionRequest extends AutoSafeParcelable {
      * @param intent the intent to serailize this object to
      */
     public void serializeToIntentExtra(Intent intent) {
-        intent.putExtra(EXTRA, SafeParcelUtil.asByteArray(this));
+        intent.putExtra(EXTRA, SafeParcelableSerializer.serializeToBytes(this));
     }
 
     @Override

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2019 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,6 +57,17 @@
         android:description="@string/permission_service_writely_description"
         android:label="@string/permission_service_writely_label"
         android:protectionLevel="dangerous" />
+
+    <permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        android:label="@string/perm_ad_id_label"
+        android:description="@string/perm_ad_id_description"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.google.android.gms.permission.AD_ID_NOTIFICATION"
+        android:label="@string/perm_ad_id_notification_label"
+        android:description="@string/perm_ad_id_notification_description"
+        android:protectionLevel="normal" />
 
     <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
@@ -161,8 +171,7 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name="org.microg.gms.wearable.location.WearableLocationService">
+        <service android:name="org.microg.gms.wearable.location.WearableLocationService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data
@@ -575,6 +584,32 @@
                 <action android:name="com.google.android.gms.phenotype.service.START" />
             </intent-filter>
         </service>
+
+        <!-- Help -->
+
+        <service
+            android:name="org.microg.gms.googlehelp.GoogleHelpService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.gms.googlehelp.ui.GoogleHelpRedirectActivity"
+            android:process=":ui"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.googlehelp.HELP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
 
         <!-- Other -->
 

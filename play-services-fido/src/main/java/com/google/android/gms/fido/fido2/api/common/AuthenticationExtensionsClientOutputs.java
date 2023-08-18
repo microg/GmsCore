@@ -8,9 +8,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.Arrays;
 
@@ -31,7 +31,7 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
      * Use {@link #deserializeFromBytes(byte[])} to deserialize.
      */
     public byte[] serializeToBytes() {
-        return SafeParcelUtil.asByteArray(this);
+        return SafeParcelableSerializer.serializeToBytes(this);
     }
 
     /**
@@ -40,7 +40,7 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
      * @return The deserialized {@link AuthenticationExtensionsClientOutputs}
      */
     public static AuthenticationExtensionsClientOutputs deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+        return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
     @Override
