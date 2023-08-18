@@ -8,7 +8,7 @@
 
 package com.google.android.gms.recaptcha;
 
-import org.microg.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 /**
  * Stores the information required to verify an account.

@@ -19,6 +19,8 @@ dependencies {
 }
 
 android {
+    namespace "org.microg.gms.tapandpay.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
@@ -41,6 +43,10 @@ android {
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 }
 

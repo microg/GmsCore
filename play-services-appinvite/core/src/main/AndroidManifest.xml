@@ -3,8 +3,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<manifest package="org.microg.gms.appinvite"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <application>

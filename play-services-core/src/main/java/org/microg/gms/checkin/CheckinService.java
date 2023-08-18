@@ -41,7 +41,7 @@ import org.microg.gms.common.ForegroundServiceContext;
 import org.microg.gms.gcm.McsService;
 import org.microg.gms.people.PeopleManager;
 
-@ForegroundServiceInfo(value = "Google device registration", res = R.string.service_name_checkin)
+@ForegroundServiceInfo(value = "Google device registration", resName = "service_name_checkin", resPackage = "com.google.android.gms")
 public class CheckinService extends IntentService {
     private static final String TAG = "GmsCheckinSvc";
     public static final long MAX_VALID_CHECKIN_AGE = 24 * 60 * 60 * 1000; // 12 hours

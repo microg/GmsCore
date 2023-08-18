@@ -58,8 +58,7 @@ public final class SafeParcelReflectionUtil {
 
     public static <T extends AutoSafeParcelable> void writeObject(T object, Parcel parcel, int flags, ClassDescriptor<?> descriptor) {
         int start = SafeParcelWriter.writeObjectHeader(parcel);
-        for (int i = 0; i < descriptor.fields.size(); i++) {
-            ClassDescriptor.FieldDescriptor fieldDescriptor = descriptor.fields.valueAt(i);
+        for (ClassDescriptor.FieldDescriptor fieldDescriptor : descriptor.fields.values()) {
             try {
                 writeField(object, parcel, flags, fieldDescriptor);
             } catch (Exception e) {
@@ -393,7 +392,7 @@ public final class SafeParcelReflectionUtil {
     public static class ClassDescriptor<T> {
         Class<T> tClass;
         Constructor<T> constructor;
-        SparseArray<FieldDescriptor> fields = new SparseArray<>();
+        Map<Integer, FieldDescriptor> fields = new HashMap<>();
 
         public ClassDescriptor(Class<T> tClass) {
             this.tClass = tClass;
@@ -408,7 +407,7 @@ public final class SafeParcelReflectionUtil {
                 for (Field field : clazz.getDeclaredFields()) {
                     if (isSafeParceledField(field)) {
                         FieldDescriptor fieldDescriptor = new FieldDescriptor(field);
-                        fields.set(fieldDescriptor.id, fieldDescriptor);
+                        fields.put(fieldDescriptor.id, fieldDescriptor);
                     }
                 }
                 clazz = clazz.getSuperclass();

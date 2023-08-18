@@ -237,7 +237,11 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
         Log.d(TAG, "clearToken: token:" + token + " extras:" + extras);
         AccountManager.get(context).invalidateAuthToken(AuthConstants.DEFAULT_ACCOUNT_TYPE, token);
-        return null;
+
+        Bundle res = new Bundle();
+        res.putString("Error", "Ok");
+        res.putBoolean("booleanResult", true);
+        return res;
     }
 
     @Override

@@ -95,7 +95,7 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
                     .put("password", password)
                     .put("displayName", displayName)
                     .put("photoUrl", photoUrl)
-                    .put("deleteAttribute", JSONArray().apply { deleteAttribute.forEach { put(it) } }))
+                    .put("deleteAttribute", JSONArray().apply { deleteAttribute.map { put(it) } }))
 
     suspend fun signupNewUser(email: String? = null, password: String? = null, tenantId: String? = null): JSONObject =
             request("signupNewUser", JSONObject()

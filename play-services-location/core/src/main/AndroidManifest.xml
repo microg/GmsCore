@@ -4,7 +4,6 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <manifest xmlns:tools="http://schemas.android.com/tools"
-          package="org.microg.gms.location.core"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>

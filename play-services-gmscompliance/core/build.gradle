@@ -26,6 +26,8 @@ dependencies {
 }
 
 android {
+    namespace "org.microg.gms.gmscompliance.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

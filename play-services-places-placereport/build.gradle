@@ -8,6 +8,8 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
+    namespace "com.google.android.gms.places_placereport"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

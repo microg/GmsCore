@@ -5,7 +5,6 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 
 configurations {
     withMapboxImplementation
@@ -18,7 +17,7 @@ dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "de.hdodenhof:circleimageview:1.3.0"
 
-    implementation project(':firebase-dynamic-links-api')
+    implementation project(':firebase-dynamic-links')
     implementation project(':firebase-auth-core')
     implementation project(':play-services-ads-core')
     implementation project(':play-services-ads-identifier-core')
@@ -82,8 +81,14 @@ dependencies {
 }
 
 android {
+    namespace "com.google.android.gms"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName version
@@ -155,6 +160,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 
     packagingOptions {

@@ -107,7 +107,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 }
             }
 
-            setTheme(R.style.Theme_AppCompat_DayNight_NoActionBar)
+            setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_NoActionBar)
             setContentView(R.layout.fido_authenticator_activity)
 
             lifecycleScope.launchWhenCreated {

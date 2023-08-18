@@ -6,7 +6,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.squareup.wire'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -32,6 +31,8 @@ dependencies {
 }
 
 android {
+    namespace "org.microg.gms.nearby.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
@@ -58,6 +59,10 @@ android {
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 }
 

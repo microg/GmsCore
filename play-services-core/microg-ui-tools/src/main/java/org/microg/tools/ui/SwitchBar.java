@@ -72,7 +72,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
         if (SDK_INT > 16) {
             mTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         }
-        mLabel = getResources().getString(R.string.abc_capital_off);
+        mLabel = getResources().getString(androidx.appcompat.R.string.abc_capital_off);
         mSummarySpan = new TextAppearanceSpan(context, androidx.appcompat.R.style.TextAppearance_AppCompat_Widget_Switch);
         updateText();
 
@@ -99,7 +99,7 @@ public class SwitchBar extends LinearLayout implements CompoundButton.OnCheckedC
 
     public void setTextViewLabel(boolean isChecked) {
         mLabel = getResources()
-                .getString(isChecked ? R.string.abc_capital_on : R.string.abc_capital_off);
+                .getString(isChecked ? androidx.appcompat.R.string.abc_capital_on : androidx.appcompat.R.string.abc_capital_off);
         updateText();
     }
 

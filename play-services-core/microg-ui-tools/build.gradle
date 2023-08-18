@@ -17,6 +17,8 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace "org.microg.tools.ui"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

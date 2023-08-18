@@ -4,7 +4,6 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<manifest package="com.google.android.gms.ads.impl"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:tools="http://schemas.android.com/tools">
     <uses-sdk tools:overrideLibrary="androidx.browser" />
 </manifest>

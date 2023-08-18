@@ -45,7 +45,7 @@ include ':play-services-api'
 include ':play-services'
 
 include ':firebase-auth'
-include ':firebase-dynamic-links-api'
+include ':firebase-dynamic-links'
 
 // core only
 

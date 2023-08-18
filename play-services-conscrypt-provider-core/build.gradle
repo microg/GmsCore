@@ -12,6 +12,8 @@ dependencies {
 }
 
 android {
+    namespace "org.microg.gms.core.conscrypt"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 
