@@ -11,9 +11,9 @@ package com.google.android.gms.location;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +62,7 @@ public class ActivityTransitionResult extends AutoSafeParcelable {
      */
     public static ActivityTransitionResult extractResult(Intent intent) {
         if (!hasResult(intent)) return null;
-        return SafeParcelUtil.fromByteArray(intent.getByteArrayExtra(EXTRA), CREATOR);
+        return SafeParcelableSerializer.deserializeFromBytes(intent.getByteArrayExtra(EXTRA), CREATOR);
     }
 
     /**

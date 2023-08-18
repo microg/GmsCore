@@ -29,4 +29,8 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
 }

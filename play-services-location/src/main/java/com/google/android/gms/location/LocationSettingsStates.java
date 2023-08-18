@@ -10,10 +10,9 @@ package com.google.android.gms.location;
 
 import android.app.Activity;
 import android.content.Intent;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParcelUtil;
-import org.microg.safeparcel.SafeParceled;
 
 /**
  * Stores the current states of all location-related settings.
@@ -118,7 +117,7 @@ public class LocationSettingsStates extends AutoSafeParcelable {
     public static LocationSettingsStates fromIntent(Intent intent) {
         byte[] bytes = intent.getByteArrayExtra(EXTRA_NAME);
         if (bytes == null) return null;
-        return SafeParcelUtil.fromByteArray(bytes, CREATOR);
+        return SafeParcelableSerializer.deserializeFromBytes(bytes, CREATOR);
     }
 
     public static final Creator<LocationSettingsStates> CREATOR = new AutoCreator<LocationSettingsStates>(LocationSettingsStates.class);

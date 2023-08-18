@@ -8,9 +8,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.Arrays;
 
@@ -54,7 +54,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
     @Override
     public byte[] serializeToBytes() {
-        return SafeParcelUtil.asByteArray(this);
+        return SafeParcelableSerializer.serializeToBytes(this);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     }
 
     public static AuthenticatorAttestationResponse deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+        return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
     public static final Creator<AuthenticatorAttestationResponse> CREATOR = new AutoCreator<>(AuthenticatorAttestationResponse.class);

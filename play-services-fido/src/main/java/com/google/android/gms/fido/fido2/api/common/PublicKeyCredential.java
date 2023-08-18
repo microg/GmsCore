@@ -8,9 +8,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.Arrays;
 
@@ -160,7 +160,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
      * @return the serialized byte array.
      */
     public byte[] serializeToBytes() {
-        return SafeParcelUtil.asByteArray(this);
+        return SafeParcelableSerializer.serializeToBytes(this);
     }
 
     /**
@@ -170,7 +170,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
      * @return The deserialized {@link PublicKeyCredential}.
      */
     public static PublicKeyCredential deserializeFromBytes(byte[] serializedBytes) {
-        return SafeParcelUtil.fromByteArray(serializedBytes, CREATOR);
+        return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
     @PublicApi(exclude = true)

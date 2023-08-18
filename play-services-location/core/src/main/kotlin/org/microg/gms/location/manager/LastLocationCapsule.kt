@@ -13,14 +13,14 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationCompat
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable.Field
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.Granularity.GRANULARITY_COARSE
 import com.google.android.gms.location.Granularity.GRANULARITY_FINE
 import com.google.android.gms.location.LocationAvailability
 import org.microg.gms.location.elapsedMillis
 import org.microg.safeparcel.AutoSafeParcelable
-import org.microg.safeparcel.SafeParcelUtil
-import org.microg.safeparcel.SafeParcelable.Field
 import java.io.File
 import java.lang.Long.max
 import java.util.concurrent.TimeUnit
@@ -101,7 +101,7 @@ class LastLocationCapsule(private val context: Context) {
         }
         try {
             if (file.exists()) {
-                val capsule = SafeParcelUtil.fromByteArray(file.readBytes(), LastLocationCapsuleParcelable.CREATOR)
+                val capsule = SafeParcelableSerializer.deserializeFromBytes(file.readBytes(), LastLocationCapsuleParcelable.CREATOR)
                 lastFineLocation = capsule.lastFineLocation?.adjustRealtime()
                 lastCoarseLocation = capsule.lastCoarseLocation?.adjustRealtime()
                 lastFineLocationTimeCoarsed = capsule.lastFineLocationTimeCoarsed?.adjustRealtime()
@@ -123,7 +123,7 @@ class LastLocationCapsule(private val context: Context) {
     fun stop() {
         try {
             if (file.exists()) file.delete()
-            file.writeBytes(SafeParcelUtil.asByteArray(LastLocationCapsuleParcelable(lastFineLocation, lastCoarseLocation, lastFineLocationTimeCoarsed, lastCoarseLocationTimeCoarsed)))
+            file.writeBytes(SafeParcelableSerializer.serializeToBytes(LastLocationCapsuleParcelable(lastFineLocation, lastCoarseLocation, lastFineLocationTimeCoarsed, lastCoarseLocationTimeCoarsed)))
         } catch (e: Exception) {
             Log.w(TAG, e)
             // Ignore
