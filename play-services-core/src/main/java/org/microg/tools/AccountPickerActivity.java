@@ -16,18 +16,15 @@
 
 package org.microg.tools;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This is just an activity that forwards to the systems native account picker
  */
-public class AccountPickerActivity extends Activity {
-    private static final int REQUEST_CODE = AccountPickerActivity.class.hashCode();
-
+public class AccountPickerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +34,8 @@ public class AccountPickerActivity extends Activity {
                 ComponentName.unflattenFromString("android/.accounts.ChooseTypeAndAccountActivity");
         intent.setClassName(componentName.getPackageName(), componentName.getClassName());
         intent.putExtras(extras);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            setResult(resultCode, data);
-            finish();
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+        startActivity(intent);
+        finish();
     }
 }

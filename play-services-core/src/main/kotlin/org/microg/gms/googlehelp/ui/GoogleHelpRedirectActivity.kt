@@ -16,7 +16,7 @@ private const val TAG = "GoogleHelpRedirect"
 class GoogleHelpRedirectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val callingPackage = callingPackage ?: return finish()
+        val callingPackage = callingActivity?.packageName ?: return finish()
         val intent = intent ?: return finish()
         val googleHelp = intent.getParcelableExtra<GoogleHelp>(EXTRA_GOOGLE_HELP) ?: return finish()
         Log.d(TAG, "Using GoogleHelp: $googleHelp")

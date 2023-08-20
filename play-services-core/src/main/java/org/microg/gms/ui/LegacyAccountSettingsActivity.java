@@ -36,7 +36,7 @@ import static android.accounts.AccountManager.VISIBILITY_VISIBLE;
 import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.auth.AuthManager.PREF_AUTH_VISIBLE;
 
-public class AccountSettingsActivity extends AbstractSettingsActivity {
+public class LegacyAccountSettingsActivity extends AbstractSettingsActivity {
 
     @Override
     protected Fragment getFragment() {
