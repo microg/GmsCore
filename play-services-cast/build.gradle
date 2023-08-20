@@ -44,4 +44,6 @@ dependencies {
     api project(':play-services-basement')
     //api project(':play-services-flags')
     api project(':play-services-tasks')
+
+    annotationProcessor project(':safe-parcel-processor')
 }

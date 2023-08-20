@@ -93,7 +93,7 @@ public final class SafeParcelReflectionUtil {
                 try {
                     readField(object, parcel, header, fieldDescriptor);
                 } catch (Exception e) {
-                    Log.w(TAG, String.format("Error reading field: %d in %s, skipping.", fieldId, descriptor.tClass.getName()), e);
+                    Log.w(TAG, String.format("Error reading field: %d of type %s in %s, skipping.", fieldId, fieldDescriptor.type, descriptor.tClass.getName()), e);
                     SafeParcelReader.skip(parcel, header);
                 }
             }
@@ -182,7 +182,9 @@ public final class SafeParcelReflectionUtil {
                 SafeParcelWriter.write(parcel, descriptor.id, (IBinder) descriptor.field.get(object), descriptor.mayNull);
                 break;
             case Interface:
-                SafeParcelWriter.write(parcel, descriptor.id, ((IInterface) descriptor.field.get(object)).asBinder(), descriptor.mayNull);
+                IInterface iInterface = ((IInterface) descriptor.field.get(object));
+                IBinder iBinder = iInterface != null ? iInterface.asBinder() : null;
+                SafeParcelWriter.write(parcel, descriptor.id, iBinder, descriptor.mayNull);
                 break;
             case StringList:
                 SafeParcelWriter.writeStringList(parcel, descriptor.id, ((List<String>) descriptor.field.get(object)), descriptor.mayNull);
@@ -492,7 +494,7 @@ public final class SafeParcelReflectionUtil {
                     return SafeParcelType.Interface;
                 if (clazz == List.class || clazz == ArrayList.class) {
                     listItemClass = getListItemClass(field);
-                    if (listItemClass == String.class && useValueParcel) return SafeParcelType.StringList;
+                    if (listItemClass == String.class && !useValueParcel) return SafeParcelType.StringList;
                     if (listItemClass == Integer.class && annotation.useDirectList()) return SafeParcelType.IntegerList;
                     if (listItemClass == Boolean.class && annotation.useDirectList()) return SafeParcelType.BooleanList;
                     if (listItemClass == Long.class && annotation.useDirectList()) return SafeParcelType.LongList;

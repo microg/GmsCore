@@ -64,6 +64,12 @@ public class AppMetadata extends AutoSafeParcelable {
     private boolean sgtmUploadEnabled;
     @Field(29)
     private long targetOsVersion;
+    @Field(30)
+    private int consentSource;
+    @Field(31)
+    private String dmaConsent;
+    @Field(32)
+    private int adServicesVersion;
 
     public String toString() {
         return "AppMetadata[" + packageName + "]";

@@ -29,6 +29,7 @@ public class SleepSegmentRequest extends AutoSafeParcelable {
 
     public static final Creator<SleepSegmentRequest> CREATOR = new AutoCreator<>(SleepSegmentRequest.class);
 
+    @Field(2)
     private int requestedDataType;
 
     private SleepSegmentRequest() {

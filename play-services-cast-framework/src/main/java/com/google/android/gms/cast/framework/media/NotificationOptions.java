@@ -1,96 +1,125 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2018 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.cast.framework.media;
 
 import java.util.List;
 
-import com.google.android.gms.cast.framework.media.INotificationActionsProvider;
-
+import android.app.Activity;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
+/**
+ * Configuration parameters for building the media notification. The {@link NotificationOptions.Builder} is used to create an
+ * instance of {@link NotificationOptions}, and so contains the corresponding setter methods.
+ */
 public class NotificationOptions extends AutoSafeParcelable {
+    /**
+     * Constant for notification skip step, ten seconds in milliseconds.
+     */
+    public static final long SKIP_STEP_TEN_SECONDS_IN_MS = 10000;
+    /**
+     * Constant for notification skip step, thirty seconds in milliseconds.
+     */
+    public static final long SKIP_STEP_THIRTY_SECONDS_IN_MS = 30000;
 
     @Field(1)
     private int versionCode = 1;
     @Field(2)
-    public List<String> actions;
+    private List<String> actions;
     @Field(3)
-    public int[] compatActionIndices;
+    private int[] compatActionIndices;
     @Field(4)
-    public long skipStepMs;
+    private long skipStepMs;
     @Field(5)
-    public String targetActivityClassName;
+    private String targetActivityClassName;
     @Field(6)
-    public int getSmallIconDrawableResId;
+    private int getSmallIconDrawableResId;
     @Field(7)
-    public int getStopLiveStreamDrawableResId;
+    private int getStopLiveStreamDrawableResId;
     @Field(8)
-    public int getPauseDrawableResId;
+    private int getPauseDrawableResId;
     @Field(9)
-    public int getPlayDrawableResId;
+    private int getPlayDrawableResId;
     @Field(10)
-    public int getSkipNextDrawableResId;
+    private int getSkipNextDrawableResId;
     @Field(11)
-    public int getSkipPrevDrawableResId;
+    private int getSkipPrevDrawableResId;
     @Field(12)
-    public int getForwardDrawableResId;
+    private int getForwardDrawableResId;
     @Field(13)
-    public int getForward10DrawableResId;
+    private int getForward10DrawableResId;
     @Field(14)
-    public int getForward30DrawableResId;
+    private int getForward30DrawableResId;
     @Field(15)
-    public int getRewindDrawableResId;
+    private int getRewindDrawableResId;
     @Field(16)
-    public int getRewind10DrawableResId;
+    private int getRewind10DrawableResId;
     @Field(17)
-    public int getRewind30DrawableResId;
+    private int getRewind30DrawableResId;
     @Field(18)
-    public int getDisconnectDrawableResId;
+    private int getDisconnectDrawableResId;
     @Field(19)
-    public int intvar19;
+    private int imageSizeDimenResId;
     @Field(20)
-    public int getCastingToDeviceStringResId;
+    private int getCastingToDeviceStringResId;
     @Field(21)
-    public int getStopLiveStreamTitleResId;
+    private int getStopLiveStreamTitleResId;
     @Field(22)
-    public int intvar22;
+    private int pauseTitleResId;
     @Field(23)
-    public int intvar23;
+    private int playTitleResId;
     @Field(24)
-    public int intvar24;
+    private int skipNextTitleResId;
     @Field(25)
-    public int intvar25;
+    private int skipPrevTitleResId;
     @Field(26)
-    public int intvar26;
+    private int forwardTitleResId;
     @Field(27)
-    public int intvar27;
+    private int forward10TitleResId;
     @Field(28)
-    public int intvar28;
+    private int forward30TitleResId;
     @Field(29)
-    public int intvar29;
+    private int rewindTitleResId;
     @Field(30)
-    public int intvar30;
+    private int rewind10TitleResId;
     @Field(31)
-    public int intvar31;
+    private int rewind30TitleResId;
     @Field(32)
-    public int intvar32;
+    private int disconnectTitleResId;
     @Field(33)
-    public INotificationActionsProvider notificationActionsProvider;
+    private INotificationActionsProvider notificationActionsProvider;
+    @Field(34)
+    private boolean skipToPrevSlotReserved;
+    @Field(35)
+    private boolean skipToNextSlotReserved;
+
+    /**
+     * Returns the list of actions to show in the notification.
+     */
+    public List<String> getActions() {
+        return actions;
+    }
+
+    /**
+     * Returns the amount to jump if {@link MediaIntentReceiver#ACTION_FORWARD} or {@link MediaIntentReceiver#ACTION_REWIND}
+     * are included in the notification actions. Any tap on those actions will result in moving the media position forward or
+     * backward by {@code skipStepMs} milliseconds. The default value is {@link #SKIP_STEP_TEN_SECONDS_IN_MS}.
+     */
+    public long getSkipStepMs() {
+        return skipStepMs;
+    }
+
+    /**
+     * Returns the name of the {@link Activity} that will be launched when user taps on the content area of the notification.
+     */
+    public String getTargetActivityClassName() {
+        return targetActivityClassName;
+    }
 
     public static Creator<NotificationOptions> CREATOR = new AutoCreator<NotificationOptions>(NotificationOptions.class);
 }

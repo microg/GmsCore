@@ -82,7 +82,7 @@ class ClassInfo(val classElement: Element) {
             note("Using reflection to construct $fullName from parcel. Consider providing a suitable package-visible constructor for improved performance.")
         }
         for (field in fields) {
-            if (field.type !in listOf("int", "long", "float", "double")) {
+            if (field.type !in listOf("int", "byte", "short", "boolean", "long", "float", "double", "java.lang.String")) {
                 error("Field ${field.name} in $fullName has unsupported type.")
                 return false
             }
@@ -108,6 +108,7 @@ class ClassInfo(val classElement: Element) {
 
                 //@javax.annotation.processing.Generated // Not supported by Android
                 @androidx.annotation.Keep
+                @org.microg.gms.common.Hide
                 public class $creatorName implements $SafeParcelableCreatorAndWriter<$fullName> {
                     @Override
                     public $fullName createFromParcel($Parcel parcel) {
@@ -198,8 +199,17 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
             .first { it.annotationType.toString() == "$SafeParcelable.Field" }
             .elementValues
             .filter { it.key.simpleName.toString() == "value" }
-            .firstNotNullOfOrNull { it.value }
+            .firstNotNullOfOrNull { it.value.value }
             .toString()
+    }
+    val mayNull by lazy {
+        fieldElement.annotationMirrors
+            .first { it.annotationType.toString() == "$SafeParcelable.Field" }
+            .elementValues
+            .filter { it.key.simpleName.toString() == "mayNull" }
+            .firstNotNullOfOrNull { it.value.value }
+            ?.toString()
+            ?.toBoolean() == true
     }
 
     val variableName by lazy { "_$name\$000" }
@@ -216,14 +226,26 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
     val readVariableFromParcel by lazy {
         when (type) {
             "int" -> "$variableName = $SafeParcelReader.readInt(parcel, header)"
+            "byte" -> "$variableName = $SafeParcelReader.readByte(parcel, header)"
+            "short" -> "$variableName = $SafeParcelReader.readShort(parcel, header)"
+            "boolean" -> "$variableName = $SafeParcelReader.readBool(parcel, header)"
             "long" -> "$variableName = $SafeParcelReader.readLong(parcel, header)"
             "float" -> "$variableName = $SafeParcelReader.readFloat(parcel, header)"
             "double" -> "$variableName = $SafeParcelReader.readDouble(parcel, header)"
+            "java.lang.String" -> "$variableName = $SafeParcelReader.readString(parcel, header)"
             else -> "$SafeParcelReader.skip(parcel, header)"
         }
     }
     val readVariableFromParcelCase by lazy { "case $id: $readVariableFromParcel; break;" }
-    val writeVariableToParcel by lazy { "$SafeParcelWriter.write(parcel, $id, $variableName);" }
+    val writeVariableToParcel by lazy {
+        when (type) {
+            "boolean", "byte", "char", "short", "int", "long", "float", "double",
+            "java.lang.Boolean", "java.lang.Byte", "java.lang.Char", "java.lang.Short", "java.lang.Integer", "java.lang.Long", "java.lang.Float", "java.lang.Double" ->
+                "$SafeParcelWriter.write(parcel, $id, $variableName);"
+
+            else -> "$SafeParcelWriter.write(parcel, $id, $variableName, $mayNull);"
+        }
+    }
 
     val reflectionFieldName by lazy { "_${name}\$field" }
     val reflectionFieldGetter by lazy {

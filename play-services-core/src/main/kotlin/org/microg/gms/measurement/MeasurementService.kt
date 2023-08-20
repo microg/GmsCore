@@ -25,33 +25,70 @@ class MeasurementService : BaseService(TAG, GmsService.MEASUREMENT) {
 }
 
 class MeasurementServiceImpl : IMeasurementService.Stub() {
-    override fun f1(event: EventParcel, app: AppMetadata) {
-        Log.d(TAG, "f1($event) for $app")
+    override fun sendEvent(event: EventParcel, app: AppMetadata) {
+        Log.d(TAG, "sendEvent($event) for $app")
     }
 
-    override fun f2(attribute: UserAttributeParcel?, app: AppMetadata) {
-        Log.d(TAG, "f2($attribute) for $app")
+    override fun sendUserProperty(attribute: UserAttributeParcel?, app: AppMetadata) {
+        Log.d(TAG, "sendUserProperty($attribute) for $app")
     }
 
-    override fun f4(app: AppMetadata) {
-        Log.d(TAG, "f4() for $app")
+    override fun sendAppLaunch(app: AppMetadata?) {
+        Log.d(TAG, "sendAppLaunch() for $app")
     }
 
-    override fun f10(p0: Long, p1: String?, p2: String?, p3: String?) {
-        Log.d(TAG, "f10($p0, $p1, $p2, $p3)")
+    override fun sendMeasurementEnabled(app: AppMetadata) {
+        Log.d(TAG, "sendMeasurementEnabled() for $app")
     }
 
-    override fun f11(app: AppMetadata): String? {
-        Log.d(TAG, "f11() for $app")
+    override fun getAllUserProperties(app: AppMetadata?, includeInternal: Boolean): List<UserAttributeParcel> {
+        Log.d(TAG, "getAllUserProperties($includeInternal) for $app")
+        return emptyList()
+    }
+
+    override fun sendCurrentScreen(id: Long, name: String?, referrer: String?, packageName: String?) {
+        Log.d(TAG, "sendCurrentScreen($id, $name, $referrer, $packageName)")
+    }
+
+    override fun getAppInstanceId(app: AppMetadata): String? {
+        Log.d(TAG, "getAppInstanceId() for $app")
         return null
     }
 
-    override fun f12(property: ConditionalUserPropertyParcel, app: AppMetadata) {
-        Log.d(TAG, "f12($property) for $app")
+    override fun sendConditionalUserProperty(property: ConditionalUserPropertyParcel, app: AppMetadata) {
+        Log.d(TAG, "sendConditionalUserProperty($property) for $app")
     }
 
-    override fun setDefaultEventParameters(params: Bundle, app: AppMetadata) {
-        Log.d(TAG, "setDefaultEventParameters($params) for $app")
+    override fun getUserProperties(origin: String?, propertyNamePrefix: String?, includeInternal: Boolean, app: AppMetadata?): List<UserAttributeParcel> {
+        Log.d(TAG, "getUserProperties($origin, $propertyNamePrefix, $includeInternal) for $app")
+        return emptyList()
+    }
+
+    override fun getUserPropertiesAs(packageName: String?, origin: String?, propertyNamePrefix: String?, includeInternal: Boolean): List<UserAttributeParcel> {
+        Log.d(TAG, "getUserPropertiesAs($packageName, $origin, $propertyNamePrefix, $includeInternal)")
+        return emptyList()
+    }
+
+    override fun getConditionalUserProperties(origin: String?, propertyNamePrefix: String?, app: AppMetadata?): List<ConditionalUserPropertyParcel> {
+        Log.d(TAG, "getConditionalUserProperties($origin, $propertyNamePrefix) for $app")
+        return emptyList()
+    }
+
+    override fun getConditionalUserPropertiesAs(packageName: String?, origin: String?, propertyNamePrefix: String?): List<ConditionalUserPropertyParcel> {
+        Log.d(TAG, "getConditionalUserPropertiesAs($packageName, $origin, $propertyNamePrefix)")
+        return emptyList()
+    }
+
+    override fun reset(app: AppMetadata) {
+        Log.d(TAG, "reset() for $app")
+    }
+
+    override fun sendDefaultEventParameters(params: Bundle, app: AppMetadata) {
+        Log.d(TAG, "sendDefaultEventParameters($params) for $app")
+    }
+
+    override fun sendConsentSettings(app: AppMetadata) {
+        Log.d(TAG, "sendConsentSettings() for $app")
     }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
