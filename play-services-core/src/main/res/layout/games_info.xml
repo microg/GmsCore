@@ -16,9 +16,10 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -68,7 +69,7 @@
                 android:id="@+id/app_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_core_service_app"/>
+                tools:src="@mipmap/ic_app"/>
         </FrameLayout>
     </LinearLayout>
 
