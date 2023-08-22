@@ -23,6 +23,7 @@ dependencies {
     implementation project(':play-services-ads-identifier-core')
     implementation project(':play-services-ads-lite-core')
     implementation project(':play-services-appinvite-core')
+    implementation project(':play-services-auth-api-phone-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
     implementation project(':play-services-cast-framework-core')
@@ -129,7 +130,7 @@ android {
     }
 
     lintOptions {
-        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag'
+        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
     }
 
     buildTypes {

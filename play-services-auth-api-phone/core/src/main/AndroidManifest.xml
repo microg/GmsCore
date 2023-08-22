@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <application>
+
+        <activity
+            android:name="org.microg.gms.auth.phone.UserConsentPromptActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
+
+        <activity
+            android:name="org.microg.gms.auth.phone.AskPermissionActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
+
+        <service
+            android:name="org.microg.gms.auth.phone.SmsRetrieverService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.service.SmsRetrieverApiService.START" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>
