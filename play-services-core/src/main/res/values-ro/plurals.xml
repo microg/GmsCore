@@ -16,4 +16,20 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    </resources>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurat</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backend-uri configurate</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicație înregistrată</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicații înregistrate</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">O permisiune necesară pentru funcționarea corectă a microG Services nu este acordată.</item>
+        <item quantity="other">Permisiunile necesare pentru funcționarea corectă a microG Services nu sunt acordate.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Solicită permisiunea lipsă</item>
+        <item quantity="other">Solicită permisiunile lipsă</item>
+    </plurals>
+</resources>
