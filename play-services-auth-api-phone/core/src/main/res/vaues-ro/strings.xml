@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="sms_user_consent_title">Permiți <b>%s</b> să citească mesajul de mai jos și să introducă codul?</string>
+    <string name="sms_user_consent_allow">Permite</string>
+    <string name="sms_user_consent_deny">Refuză</string>
+</resources>
