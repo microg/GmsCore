@@ -7,14 +7,13 @@ package org.microg.gms.appinivite
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.LocaleList
 import android.util.Log
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.bundleOf
@@ -146,7 +145,7 @@ class ProtobufPostRequest<I : Message<I, *>, O>(url: String, private val i: I, p
 
     override fun getHeaders(): Map<String, String> {
         val headers = HashMap(super.getHeaders())
-        headers["Accept-Language"] = if (Build.VERSION.SDK_INT >= 24) LocaleList.getDefault().toLanguageTags() else Locale.getDefault().language
+        headers["Accept-Language"] = if (SDK_INT >= 24) LocaleList.getDefault().toLanguageTags() else Locale.getDefault().language
         headers["X-Android-Package"] = Constants.GMS_PACKAGE_NAME
         headers["X-Android-Cert"] = Constants.GMS_PACKAGE_SIGNATURE_SHA1
         return headers
