@@ -27,9 +27,9 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> додатки зареєстровано</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Не надано дозвіл, якій необхідний для нормальної роботи microG Service Core</item>
-        <item quantity="few">Не надано дозволи, які необхідні для нормальної роботи microG Service Core</item>
-        <item quantity="other">Не надано дозволи, які необхідні для нормальної роботи microG Service Core</item>
+        <item quantity="one">Не надано дозвіл, якій необхідний для нормальної роботи microG Services</item>
+        <item quantity="few">Не надано дозволи, які необхідні для нормальної роботи microG Services</item>
+        <item quantity="other">Не надано дозволи, які необхідні для нормальної роботи microG Services</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Запитати відсутній дозвіл</item>

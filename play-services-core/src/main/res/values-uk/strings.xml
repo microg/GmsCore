@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Налаштування microG</string>
 
     <string name="just_a_sec">Зачекайте трохи...</string>
@@ -71,7 +71,7 @@
     <string name="place_picker_nearby_places">Найближчі місця</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: Відсутній дозвіл на <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">microG Services: Відсутній дозвіл на <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Мобільні мережі</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -113,7 +113,7 @@
     <string name="prefcat_test">Тест</string>
 
     <string name="cond_gcm_bat_title">Увімкнута оптимізація енергоспоживання</string>
-    <string name="cond_gcm_bat_summary">Ви увімкнули Cloud Messaging але лиши оптимізацію енергоспоживання активним для microG Services Core. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
+    <string name="cond_gcm_bat_summary">Ви увімкнули Cloud Messaging але лиши оптимізацію енергоспоживання активним для microG Services. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
     <string name="cond_gcm_bat_action">Ігнорувати оптимізацію</string>
     <string name="cond_perm_title">Відсутній дозвіл</string>
 
@@ -137,7 +137,7 @@
     <string name="pref_gcm_confirm_new_apps_summary">Запитувати перед реєстрацією нового додатку для отримання push-повідомлень</string>
     <string name="pref_gcm_ping_interval">Інтервал опитування: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
-    <string name="pref_about_title">Про microG Services Core</string>
+    <string name="pref_about_title">Про microG Services</string>
     <string name="pref_about_summary">Версія та використані бібліотеки</string>
 
     <string name="gcm_app_error_unregistering">Помилка відв\'язування</string>

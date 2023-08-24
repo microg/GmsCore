@@ -15,9 +15,9 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">Servicios de microG Core</string>
+    <string name="gms_app_name">Servicios de microG</string>
     <string name="gms_settings_name">Ajustes de microG</string>
-    <string name="gms_settings_summary">Configurar los servicios de microG Core.</string>
+    <string name="gms_settings_summary">Configurar los servicios de microG.</string>
 
     <string name="just_a_sec">Un momento…</string>
     <string name="google_account_label">Google</string>
@@ -74,7 +74,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="place_picker_nearby_places">Lugares cercanos</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">Servicios de microG Core: Sin permiso para <xliff:g example="acceso completo a la red">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">Servicios de microG: Sin permiso para <xliff:g example="acceso completo a la red">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Red móvil</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -116,7 +116,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="prefcat_test">Prueba</string>
 
     <string name="cond_gcm_bat_title">Optimizaciones de la batería activadas</string>
-    <string name="cond_gcm_bat_summary">Has habilitado Cloud Messaging pero tienes las optimizaciones de la batería activas para el núcleo de servicios de microG. Para que las notificaciones push lleguen, debes ignorar las optimizaciones de la batería.</string>
+    <string name="cond_gcm_bat_summary">Has habilitado Cloud Messaging pero tienes las optimizaciones de la batería activas para los servicios de microG. Para que las notificaciones push lleguen, debes ignorar las optimizaciones de la batería.</string>
     <string name="cond_gcm_bat_action">Ignorar optimizaciones</string>
     <string name="cond_perm_title">Falta el permiso</string>
 
@@ -150,7 +150,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Preguntar antes de registrar una nueva aplicación para recibir notificaciones push</string>
     <string name="pref_gcm_ping_interval">Intervalo de ping: <xliff:g example="10 minutos">%1$s</xliff:g></string>
 
-    <string name="pref_about_title">Acerca de los Servicios de microG Core</string>
+    <string name="pref_about_title">Acerca de los Servicios de microG</string>
     <string name="pref_about_summary">Información de la versión y librerías usadas</string>
 
     <string name="gcm_app_error_unregistering">Error al cancelar el registro</string>

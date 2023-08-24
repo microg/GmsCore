@@ -62,7 +62,7 @@ La fecha, la duración y la intensidad de la señal asociadas a una exposición 
 
 Su identidad o el resultado de la prueba no será compartida con otras personas.</string>
     <string name="exposure_confirm_keys_button">Compartir</string>
-    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> necesita permisos adicionales.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> necesita permisos adicionales.</string>
     <string name="exposure_confirm_permission_button">Conceder</string>
     <string name="exposure_confirm_bluetooth_description">El Bluetooth debe estar activado.</string>
     <string name="exposure_confirm_location_description">Se requiere acceso a la ubicación.</string>

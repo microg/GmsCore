@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">microG設定</string>
 
     <string name="just_a_sec">請稍等...</string>
@@ -58,7 +58,7 @@
     <string name="place_picker_nearby_places">附近的地點</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: 缺少<xliff:g example="have full network acccess">%1$s</xliff:g>的權限</string>
+    <string name="lacking_permission_toast">microG Services: 缺少<xliff:g example="have full network acccess">%1$s</xliff:g>的權限</string>
 
     <string name="network_type_mobile">行動數據</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -99,7 +99,7 @@
     <string name="prefcat_test">測試</string>
 
     <string name="cond_gcm_bat_title">已開啟電池優化</string>
-    <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在microG Services Core上。 為了能收到推送通知您應該取消電池優化。</string>
+    <string name="cond_gcm_bat_summary">您已啟用GCM但依舊套用了電池優化在microG Services上。 為了能收到推送通知您應該取消電池優化。</string>
     <string name="cond_gcm_bat_action">取消優化</string>
     <string name="cond_perm_title">遺失權限</string>
 
@@ -118,7 +118,7 @@
 已不重要，將會在未來的版本中被取代。</string>
     <string name="pref_gcm_apps_title">使用GCM的程式</string>
     <string name="pref_gcm_apps_summary">表所列為現在註冊使用GCM的程式。</string>
-    <string name="pref_about_title">關於microG Services Core</string>
+    <string name="pref_about_title">關於microG Services</string>
     <string name="pref_about_summary">版本資訊和使用的程式庫</string>
 
     <string name="gcm_app_error_unregistering">註冊錯誤</string>

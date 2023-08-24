@@ -64,7 +64,7 @@ To zajmie kilka minut.</string>
     <string name="place_picker_nearby_places">Pobliskie miejsca</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">rdzeń usług microG: brakuje pozwolenia na <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">usług microG: brakuje pozwolenia na <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Sieć komórkowa</string>
     <string name="network_type_wifi">Wi-Fi</string>

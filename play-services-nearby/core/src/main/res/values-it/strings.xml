@@ -38,7 +38,7 @@
     <string name="exposure_confirm_keys_title">Vuoi condividere i tuoi identificativi univoci con <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
     <string name="exposure_confirm_keys_summary">I tuoi identificativi univoci degli ultimi 14 giorni saranno utilizzati per aiutare a notificare altri se sei stato potenzialmente esposto al virus.\n\nLa tua identità o il risultato del test non saranno condivisi con altre persone.</string>
     <string name="exposure_confirm_keys_button">Condividi</string>
-    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> richiede ulteriori permessi.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> richiede ulteriori permessi.</string>
     <string name="exposure_confirm_permission_button">Consenti</string>
     <string name="pref_exposure_rpi_delete_all_summary">Elimina tutti gli identificativi univoci raccolti</string>
     <string name="pref_exposure_rpi_delete_all_title">Elimina</string>

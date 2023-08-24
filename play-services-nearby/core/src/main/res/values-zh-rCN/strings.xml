@@ -49,7 +49,7 @@
     <string name="exposure_confirm_stop_title">关闭接触史通知？</string>
     <string name="pref_exposure_app_report_entry_distance_close">近距离接触</string>
     <string name="pref_exposure_app_report_entry_distance_far">远距离接触</string>
-    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> 需要额外权限。</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> 需要额外权限。</string>
     <string name="exposure_confirm_permission_button">授予权限</string>
     <string name="exposure_confirm_bluetooth_description">需要打开蓝牙。</string>
     <string name="exposure_confirm_location_description">需要位置访问权限。</string>

@@ -25,8 +25,8 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> アプリが登録されました</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">microG ServiceCoreの適切な機能に必要な権限が付与されていません。</item>
-        <item quantity="other">microG ServiceCoreの適切な機能に必要な権限が付与されていません。</item>
+        <item quantity="one">microG Servicesの適切な機能に必要な権限が付与されていません。</item>
+        <item quantity="other">microG Servicesの適切な機能に必要な権限が付与されていません。</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">不足している権限をリクエスト</item>

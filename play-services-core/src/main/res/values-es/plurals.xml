@@ -25,8 +25,8 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicaciones registradas</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">No se concede el permiso necesario para el correcto funcionamiento del núcleo de servicio de microG.</item>
-        <item quantity="other">No se conceden los permisos necesarios para el correcto funcionamiento del núcleo de servicio de microG.</item>
+        <item quantity="one">No se concede el permiso necesario para el correcto funcionamiento de los servicios de microG.</item>
+        <item quantity="other">No se conceden los permisos necesarios para el correcto funcionamiento de los de servicios de microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Solicitar el permiso que falta</item>

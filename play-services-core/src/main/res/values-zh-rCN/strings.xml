@@ -26,7 +26,7 @@
     <string name="pick_place_desc">现在无法选择地点。</string>
     <string name="place_picker_select_title">选择此地点</string>
     <string name="place_picker_nearby_places">附近的地点</string>
-    <string name="lacking_permission_toast">microG 服务核心：缺少<xliff:g example="have full network acccess">%1$s</xliff:g>权限</string>
+    <string name="lacking_permission_toast">microG 服务：缺少<xliff:g example="have full network acccess">%1$s</xliff:g>权限</string>
     <string name="network_type_mobile">移动网络</string>
     <string name="network_type_roaming">漫游</string>
     <string name="network_type_other">其他网络</string>
@@ -104,7 +104,7 @@
     <string name="pref_gcm_confirm_new_apps_title">确认新应用</string>
     <string name="pref_gcm_confirm_new_apps_summary">在应用注册使用消息推送之前询问您</string>
     <string name="pref_gcm_ping_interval">Ping 间隔：<xliff:g example="10 minutes">%1$s</xliff:g></string>
-    <string name="pref_about_title">关于 microG 服务核心</string>
+    <string name="pref_about_title">关于 microG 服务</string>
     <string name="pref_about_summary">版本信息与使用的库</string>
     <string name="gcm_app_error_unregistering">取消注册时出错</string>
     <string name="gcm_app_not_installed_anymore">已被卸载</string>
@@ -154,7 +154,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
     <string name="perm_provision_label">预配置 microG 服务</string>
-    <string name="gms_app_name">microG 服务核心</string>
+    <string name="gms_app_name">microG 服务</string>
     <string name="pref_auth_trust_google_title">允许 Google 向应用提供验证</string>
     <string name="pref_device_registration_import_custom_profile_title">导入自定义配置信息</string>
     <string name="pref_device_registration_serial_title">序列号</string>

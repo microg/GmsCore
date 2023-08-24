@@ -20,7 +20,7 @@
         <item quantity="other">%1$d пријављених апликација</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="other">Једна или више дозвола потребних за исправно функционисање Језгра микроГ услуга недостају.</item>
+        <item quantity="other">Једна или више дозвола потребних за исправно функционисање микроГ услуга недостају.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="other">Захтевај недостајуће дозволе</item>

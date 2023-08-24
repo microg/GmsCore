@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Налады microG</string>
     <string name="gms_settings_summary">Налады сэрвісаў microG</string>
 
@@ -65,7 +65,7 @@
     <string name="place_picker_nearby_places">Бліжэйшыя месцы</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: Адсутнічае дазвол для <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">microG Services: Адсутнічае дазвол для <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Мабільная сетка</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -107,7 +107,7 @@
     <string name="prefcat_test">Тэст</string>
 
     <string name="cond_gcm_bat_title">Актыўная аптымізацыя энергаспажывання</string>
-    <string name="cond_gcm_bat_summary">Вы ўключылі воблачны абмен паведамленнямі, але ў вас актыўная аптымізацыя энергаспажывання для microG Services Core. Каб атрымліваць push-паведамленні вам неабходна дазволіць прыкладанню працаваць у фонавым рэжыме.</string>
+    <string name="cond_gcm_bat_summary">Вы ўключылі воблачны абмен паведамленнямі, але ў вас актыўная аптымізацыя энергаспажывання для microG Services. Каб атрымліваць push-паведамленні вам неабходна дазволіць прыкладанню працаваць у фонавым рэжыме.</string>
     <string name="cond_gcm_bat_action">Дазволіць работу ў фоне</string>
     <string name="cond_perm_title">Адсутнічаюць дазволы</string>
 
@@ -141,7 +141,7 @@
     <string name="pref_gcm_confirm_new_apps_summary">Пытаць дазвол перад прывязкай новых прыкладанняў для атрымання push-паведамленняў</string>
     <string name="pref_gcm_ping_interval">Інтэрвал праверкі: <xliff:g example="10 минут">%1$s</xliff:g></string>
 	
-    <string name="pref_about_title">Аб сэрвісах microG Services Core</string>
+    <string name="pref_about_title">Аб сэрвісах microG Services</string>
     <string name="pref_about_summary">Інфармацыя аб версіі і выкарыстоўваныя бібліятэкі</string>
 
     <string name="gcm_app_error_unregistering">Не атрымалася адвязаць</string>
