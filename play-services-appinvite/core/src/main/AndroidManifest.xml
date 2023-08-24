@@ -15,14 +15,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
         <activity
-            android:process=":ui"
             android:name="org.microg.gms.appinivite.AppInviteActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity-alias
-            android:name="com.google.android.gms.appinvite.AppInviteAcceptInvitationActivity"
-            android:targetActivity="org.microg.gms.appinivite.AppInviteActivity"
-            android:exported="true">
+            android:excludeFromRecents="true"
+            android:process=":ui"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.NoActionBar">
             <intent-filter
                 android:priority="900"
                 android:autoVerify="true">
@@ -46,6 +45,6 @@
                 <data android:scheme="https" />
                 <data android:scheme="http" />
             </intent-filter>
-        </activity-alias>
+        </activity>
     </application>
 </manifest>

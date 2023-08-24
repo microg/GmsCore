@@ -4,6 +4,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'com.squareup.wire'
 apply plugin: 'kotlin-android'
 
 dependencies {
@@ -11,6 +12,9 @@ dependencies {
     implementation project(':play-services-base-core')
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
+
+    implementation "com.android.volley:volley:$volleyVersion"
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
 }
 
 android {
@@ -37,4 +41,8 @@ android {
     kotlinOptions {
         jvmTarget = 1.8
     }
+}
+
+wire {
+    kotlin {}
 }
