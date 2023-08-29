@@ -189,4 +189,9 @@ Acest lucru poate dura câteva minute."</string>
     <string name="pref_safetynet_test_not_completed">Încă neterminat</string>
     <string name="pref_safetynet_test_no_result">Niciun rezultat</string>
     <string name="pref_safetynet_test_invalid_json">JSON nevalid</string>
+    <string name="push_notifications_summary_off">OPRIT</string>
+    <string name="push_notifications_summary_automatic">PORNIT / Automat: %s</string>
+    <string name="push_notifications_summary_manual">PORNIT / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s secunde</string>
+    <string name="push_notifications_summary_values_minutes">%s minute</string>
 </resources>
