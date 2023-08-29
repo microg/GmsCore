@@ -191,11 +191,15 @@ class PolygonImpl(private val map: GoogleMapImpl, id: String, options: PolygonOp
 
     override val strokes = (listOf(
         PolylineImpl(
-            map, "$id-stroke-main", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(points)
+            map, "$id-stroke-main", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(
+                (points + points.firstOrNull()).filterNotNull()
+            )
         )
-    ) + holes.mapIndexed { idx, it ->
+    ) + holes.mapIndexed { idx, holePoints ->
         PolylineImpl(
-            map, "$id-stroke-hole-$idx", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)
+            map, "$id-stroke-hole-$idx", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(
+                (holePoints + holePoints.firstOrNull()).filterNotNull()
+            )
         )
     }).toMutableList()
 
@@ -233,11 +237,15 @@ class LitePolygonImpl(id: String, options: PolygonOptions, private val map: Lite
 
     override val strokes: MutableList<AbstractPolylineImpl> = (listOf(
         LitePolylineImpl(
-            map, "$id-stroke-main", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(points)
+            map, "$id-stroke-main", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(
+                (points + points.firstOrNull()).filterNotNull()
+            )
         )
-    ) + holes.mapIndexed { idx, it ->
+    ) + holes.mapIndexed { idx, holePoints ->
         LitePolylineImpl(
-            map, "$id-stroke-hole-$idx", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(it)
+            map, "$id-stroke-hole-$idx", PolylineOptions().color(strokeColor).width(strokeWidth).addAll(
+                (holePoints + holePoints.firstOrNull()).filterNotNull()
+            )
         )
     }).toMutableList()
 

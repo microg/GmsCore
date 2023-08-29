@@ -25,6 +25,9 @@ const val TAG = "GmsMapStyles"
 const val KEY_METADATA_FEATURE_TYPE = "microg:gms-type-feature"
 const val KEY_METADATA_ELEMENT_TYPE = "microg:gms-type-element"
 
+const val KEY_SOURCES = "sources"
+const val KEY_LAYERS = "layers"
+
 const val SELECTOR_ALL = "all"
 const val SELECTOR_ELEMENT_LABEL_TEXT_FILL = "labels.text.fill"
 const val SELECTOR_ELEMENT_LABEL_TEXT_STROKE = "labels.text.stroke"
@@ -32,22 +35,46 @@ const val SELECTOR_ELEMENT_GEOMETRY_STROKE = "geometry.stroke"
 const val KEY_LAYER_METADATA = "metadata"
 const val KEY_LAYER_PAINT = "paint"
 
+const val KEY_SOURCE_URL = "url"
+const val KEY_SOURCE_TILES = "tiles"
+
 
 fun getStyle(
     context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
 ): Style.Builder {
 
-    // TODO: Serve map style resources locally
     val styleJson = JSONObject(
         context.assets.open(
-            when (mapType) {
-                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite.json"
+            if (BuildConfig.STADIA_KEY.isNotEmpty()) when (mapType) {
+                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-stadia.json"
+                GoogleMap.MAP_TYPE_TERRAIN -> "style-stadia-outdoors.json"
+                //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
+                else -> "style-microg-normal-stadia.json"
+            } else when (mapType) {
+                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-mapbox.json"
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-                else -> "style-microg-normal.json"
+                else -> "style-microg-normal-mapbox.json"
             }
         ).bufferedReader().readText()
     )
+
+    // Inject API key
+    if (BuildConfig.STADIA_KEY.isNotEmpty()) {
+        val sourceArray = styleJson.getJSONObject(KEY_SOURCES)
+        for (key in sourceArray.keys()) {
+            val sourceObject = sourceArray.getJSONObject(key)
+            if (sourceObject.has(KEY_SOURCE_URL)) {
+                sourceObject.put(KEY_SOURCE_URL, "${sourceObject[KEY_SOURCE_URL]}?api_key=${BuildConfig.STADIA_KEY}")
+            }
+            if (sourceObject.has(KEY_SOURCE_TILES)) {
+                val tilesArray = sourceObject.getJSONArray(KEY_SOURCE_TILES)
+                for (i in 0 until tilesArray.length()) {
+                    tilesArray.put(i, "${tilesArray.getString(i)}?api_key=${BuildConfig.STADIA_KEY}")
+                }
+            }
+        }
+    }
 
     styleOptions?.apply(styleJson)
 
@@ -86,7 +113,7 @@ fun MapStyleOptions.apply(style: JSONObject) {
     try {
         Gson().fromJson(json, Array<StyleOperation>::class.java).let { styleOperations ->
 
-            val layerArray = style.getJSONArray("layers")
+            val layerArray = style.getJSONArray(KEY_LAYERS)
 
             // Apply operations in order
             operations@ for (operation in styleOperations.map { it.toNonNull() }) {
@@ -301,7 +328,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         // Apply hue to layer color
         ColorUtils.colorToHSL(color, hslResult)
         hslResult[0] = hueDegree
-        return ColorUtils.HSLToColor(hslResult)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hslResult), Color.alpha(color))
     }
 
     lightness?.let { lightness ->
@@ -315,7 +342,7 @@ fun Styler.applyColorChanges(color: Int): Int {
             // Increase brightness. Percentage amount = relative reduction of difference between is-lightness and 1.0.
             hsl[2] + (lightness / 100) * (1 - hsl[2])
         }
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     saturation?.let { saturation ->
@@ -330,7 +357,7 @@ fun Styler.applyColorChanges(color: Int): Int {
             hsl[1] + (saturation / 100) * (1 - hsl[1])
         }
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     gamma?.let { gamma ->
@@ -339,7 +366,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] = hsl[2].toDouble().pow(gamma.toDouble()).toFloat()
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     if (invertLightness == true) {
@@ -348,7 +375,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] = 1 - hsl[2]
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     this.color?.let {

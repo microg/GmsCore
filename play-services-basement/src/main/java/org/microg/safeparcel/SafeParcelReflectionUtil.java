@@ -243,6 +243,9 @@ public final class SafeParcelReflectionUtil {
             case Long:
                 SafeParcelWriter.write(parcel, descriptor.id, (Long) descriptor.field.get(object));
                 break;
+            case Short:
+                SafeParcelWriter.write(parcel, descriptor.id, (Short) descriptor.field.get(object));
+                break;
             case Boolean:
                 SafeParcelWriter.write(parcel, descriptor.id, (Boolean) descriptor.field.get(object));
                 break;
@@ -364,6 +367,14 @@ public final class SafeParcelReflectionUtil {
                 descriptor.field.set(object, l);
                 break;
             }
+            case Short: {
+                short i = SafeParcelReader.readShort(parcel, header);
+                if (descriptor.versionCode != -1 && i > descriptor.versionCode) {
+                    Log.d(TAG, String.format("Version code of %s (%d) is older than object read (%d).", descriptor.field.getDeclaringClass().getName(), descriptor.versionCode, i));
+                }
+                descriptor.field.set(object, i);
+                break;
+            }
             case Boolean:
                 descriptor.field.set(object, SafeParcelReader.readBool(parcel, header));
                 break;
@@ -388,7 +399,7 @@ public final class SafeParcelReflectionUtil {
         Parcelable, Binder, Interface, Bundle,
         StringList, IntegerList, BooleanList, LongList, FloatList, DoubleList, List, Map,
         ParcelableArray, StringArray, ByteArray, ByteArrayArray, FloatArray, IntArray,
-        Integer, Long, Boolean, Float, Double, String, Byte;
+        Integer, Long, Short, Boolean, Float, Double, String, Byte;
     }
 
     public static class ClassDescriptor<T> {
@@ -506,6 +517,8 @@ public final class SafeParcelReflectionUtil {
                     return SafeParcelType.Map;
                 if (clazz == int.class || clazz == Integer.class)
                     return SafeParcelType.Integer;
+                if (clazz == short.class || clazz == Short.class)
+                    return SafeParcelType.Short;
                 if (clazz == boolean.class || clazz == Boolean.class)
                     return SafeParcelType.Boolean;
                 if (clazz == long.class || clazz == Long.class)
