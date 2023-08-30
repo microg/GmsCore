@@ -210,6 +210,8 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
             }
         } catch (e: SecurityException) {
             // Ignore
+        } catch (e: Exception) {
+            // Ignore
         }
     }
 

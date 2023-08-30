@@ -29,6 +29,7 @@ import com.google.android.gms.location.internal.*
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REMOVE_UPDATES
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REQUEST_UPDATES
 import org.microg.gms.common.NonCancelToken
+import org.microg.gms.location.hasNetworkLocationServiceBuiltIn
 import org.microg.gms.utils.warnOnTransactionIssues
 
 class LocationManagerInstance(
@@ -158,7 +159,7 @@ class LocationManagerInstance(
         lifecycleScope.launchWhenStarted {
             val locationManager = context.getSystemService<android.location.LocationManager>()
             val gpsPresent = locationManager?.allProviders?.contains(GPS_PROVIDER) == true
-            val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true
+            val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true || context.hasNetworkLocationServiceBuiltIn()
             val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
                     context.packageManager.checkPermission(ACCESS_FINE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
             val networkUsable = networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&
