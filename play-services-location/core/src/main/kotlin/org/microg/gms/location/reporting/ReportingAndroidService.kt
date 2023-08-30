@@ -12,7 +12,7 @@ import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.location.FEATURES
+import org.microg.gms.location.manager.FEATURES
 
 class ReportingAndroidService : BaseService("GmsLocReportingSvc", GmsService.LOCATION_REPORTING) {
     @Throws(RemoteException::class)

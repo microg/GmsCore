@@ -173,7 +173,7 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
 
     companion object {
         private const val MWV_URL = "https://www.recaptcha.net/recaptcha/api3/mwv"
-        private const val DEBUG = true
+        private const val DEBUG = false
         object FakeApplication : Application() {
             var context: Context
                 get() = baseContext
@@ -302,6 +302,8 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 cls == FakeApplication.javaClass && name == "registerReceiver" -> cls.getMethod(name, *params)
                 cls == PackageManager::class.java && name == "checkPermission" -> cls.getMethod(name, *params)
                 cls == Context::class.java && name == "checkSelfPermission" -> cls.getMethod(name, *params)
+                cls == Context::class.java && name == "getPackageManager" -> cls.getMethod(name, *params)
+                cls == Context::class.java && name == "getPackageName" -> cls.getMethod(name, *params)
                 cls == AudioManager::class.java && name == "getStreamVolume" -> cls.getMethod(name, *params)
                 cls == Settings.System::class.java && name == "getInt" -> cls.getMethod(name, *params)
                 cls == DateFormat::class.java -> cls.getMethod(name, *params)

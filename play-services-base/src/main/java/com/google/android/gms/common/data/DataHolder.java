@@ -23,7 +23,6 @@ import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.database.CursorWindow;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 
@@ -37,6 +36,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 /**
  * Class for accessing collections of data, organized into columns. This provides the backing
@@ -155,7 +156,7 @@ public class DataHolder extends AutoSafeParcelable implements Closeable {
     @SuppressWarnings("deprecation")
     @SuppressLint({"NewApi", "ObsoleteSdkInt"})
     static int getCursorType(Cursor cursor, int i) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (SDK_INT >= 11) {
             return cursor.getType(i);
         }
         if (cursor instanceof AbstractWindowedCursor) {

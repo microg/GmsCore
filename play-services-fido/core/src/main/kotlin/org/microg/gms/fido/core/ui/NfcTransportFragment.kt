@@ -8,7 +8,7 @@ package org.microg.gms.fido.core.ui
 import android.graphics.drawable.Animatable2
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +38,7 @@ class NfcTransportFragment : AuthenticatorActivityFragment(), TransportHandlerCa
                     navOptions { popUpTo(R.id.usbFragment) { inclusive = true } })
             }
         }
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (SDK_INT >= 23) {
             (binding.fidoNfcWaitConnectAnimation.drawable as? AnimatedVectorDrawable)?.registerAnimationCallback(object :
                 Animatable2.AnimationCallback() {
                 override fun onAnimationEnd(drawable: Drawable?) {

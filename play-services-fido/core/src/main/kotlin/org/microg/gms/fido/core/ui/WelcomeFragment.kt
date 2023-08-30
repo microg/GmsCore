@@ -5,7 +5,6 @@
 
 package org.microg.gms.fido.core.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

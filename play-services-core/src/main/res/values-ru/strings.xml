@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Настройки microG</string>
     <string name="gms_settings_summary">Настройка сервисов microG</string>
 
@@ -65,7 +65,7 @@
     <string name="place_picker_nearby_places">Ближайшие места</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: Отсутствует разрешение для <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">microG Services: Отсутствует разрешение для <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Мобильная сеть</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -107,7 +107,7 @@
     <string name="prefcat_test">Тест</string>
 
     <string name="cond_gcm_bat_title">Активна оптимизация энергопотребления</string>
-    <string name="cond_gcm_bat_summary">Вы включили облачный обмен сообщениями, но у вас активна оптимизация энергопотребления для microG Services Core. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
+    <string name="cond_gcm_bat_summary">Вы включили облачный обмен сообщениями, но у вас активна оптимизация энергопотребления для microG Services. Чтобы получать push-уведомления вам необходимо разрешить приложению работать в фоновом режиме.</string>
     <string name="cond_gcm_bat_action">Разрешить работу в фоне</string>
     <string name="cond_perm_title">Отсутствуют разрешения</string>
 
@@ -141,7 +141,7 @@
     <string name="pref_gcm_confirm_new_apps_summary">Спрашивать разрешение перед привязкой новых приложений для получения push-уведомлений</string>
     <string name="pref_gcm_ping_interval">Интервал проверки: <xliff:g example="10 минут">%1$s</xliff:g></string>
 	
-    <string name="pref_about_title">О сервисах microG Services Core</string>
+    <string name="pref_about_title">О сервисах microG Services</string>
     <string name="pref_about_summary">Информация о версии и используемые библиотеки</string>
 
     <string name="gcm_app_error_unregistering">Не удалось отвязать</string>

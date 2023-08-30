@@ -21,7 +21,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -42,6 +41,7 @@ import androidx.core.view.MenuItemCompat;
 import com.google.android.gms.R;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import com.google.android.gms.location.places.internal.PlaceImpl;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -49,7 +49,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import org.microg.gms.location.LocationConstants;
 //import org.microg.gms.maps.vtm.BackendMapView;
 //import org.microg.gms.maps.vtm.GmsMapsTypeHelper;
-import org.microg.safeparcel.SafeParcelUtil;
 //import org.oscim.core.MapPosition;
 //import org.oscim.event.Event;
 //import org.oscim.map.Map;
@@ -60,6 +59,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.os.Build.VERSION.SDK_INT;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR;
 import static org.microg.gms.location.LocationConstants.EXTRA_PRIMARY_COLOR_DARK;
 //import static org.microg.gms.maps.vtm.GmsMapsTypeHelper.fromLatLngBounds;
@@ -83,14 +83,14 @@ PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ 
 
         setContentView(R.layout.pick_place);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(org.microg.tools.ui.R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if (getIntent().hasExtra(EXTRA_PRIMARY_COLOR)) {
             toolbar.setBackgroundColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR, 0));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            if (SDK_INT >= 21)
                 getWindow().setStatusBarColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
             ((TextView) findViewById(R.id.place_picker_title)).setTextColor(getIntent().getIntExtra(EXTRA_PRIMARY_COLOR_DARK, 0));
         }
@@ -117,9 +117,9 @@ PlacePickerActivity extends AppCompatActivity /*implements Map.UpdateListener*/ 
         findViewById(R.id.place_picker_select).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resultIntent.putExtra(LocationConstants.EXTRA_STATUS, SafeParcelUtil.asByteArray(new Status(CommonStatusCodes.SUCCESS)));
-                resultIntent.putExtra(LocationConstants.EXTRA_PLACE, SafeParcelUtil.asByteArray(place));
-                resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, SafeParcelUtil.asByteArray(place.viewport));
+                resultIntent.putExtra(LocationConstants.EXTRA_STATUS, SafeParcelableSerializer.serializeToBytes(new Status(CommonStatusCodes.SUCCESS)));
+                resultIntent.putExtra(LocationConstants.EXTRA_PLACE, SafeParcelableSerializer.serializeToBytes(place));
+                resultIntent.putExtra(LocationConstants.EXTRA_FINAL_BOUNDS, SafeParcelableSerializer.serializeToBytes(place.viewport));
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }

@@ -13,9 +13,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParcelUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -100,7 +100,7 @@ public class ActivityRecognitionResult extends AutoSafeParcelable {
             if (res instanceof ActivityRecognitionResult)
                 return (ActivityRecognitionResult) res;
             if (res instanceof byte[])
-                return SafeParcelUtil.fromByteArray((byte[]) res, CREATOR);
+                return SafeParcelableSerializer.deserializeFromBytes((byte[]) res, CREATOR);
         }
         return null;
     }

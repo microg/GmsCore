@@ -8,8 +8,14 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 android {
+    namespace "com.google.android.gms.maps"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
 
     defaultConfig {
         versionName version
@@ -32,4 +38,6 @@ dependencies {
     api "androidx.fragment:fragment:1.0.0"
     api project(":play-services-base")
     api project(":play-services-basement")
+
+    annotationProcessor project(":safe-parcel-processor")
 }

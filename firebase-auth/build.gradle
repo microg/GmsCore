@@ -6,8 +6,13 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'com.google.firebase.auth'
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
 
     defaultConfig {
         versionName version

@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">Језгро микроГ услуга</string>
+    <string name="gms_app_name">микроГ услуга</string>
     <string name="gms_settings_name">Поставке микроГ</string>
 
     <string name="just_a_sec">Само тренутак…</string>
@@ -58,7 +58,7 @@
     <string name="place_picker_nearby_places">Оближња места</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">Језгро микроГ услуга: немам дозволу за %1$s</string>
+    <string name="lacking_permission_toast">микроГ услуга: немам дозволу за %1$s</string>
 
     <string name="network_type_mobile">Мобилна мрежа</string>
     <string name="network_type_wifi">Бежична</string>
@@ -96,7 +96,7 @@
     <string name="prefcat_location_service">Услуга локације</string>
     <string name="prefcat_services">Услуге</string>
     <string name="cond_gcm_bat_title">Оптимизација батерије укључена</string>
-    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за Језгро микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
+    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
     <string name="cond_gcm_bat_action">Игнориши оптимизацију</string>
     <string name="cond_perm_title">Недостају дозволе</string>
 
@@ -114,7 +114,7 @@
     <string name="pref_gcm_heartbeat_summary">Интервал у секундама јављања система Гугловим серверима. Повећање овог броја смањује потрошњу батерије али може да узрокује застој у испоруци порука.</string>
     <string name="pref_gcm_apps_title">Апликације које користе Гуглове облак поруке</string>
     <string name="pref_gcm_apps_summary">Списак апликација пријављених за Гуглове облак поруке.</string>
-    <string name="pref_about_title">О језгру микроГ услуга</string>
+    <string name="pref_about_title">О микроГ услуга</string>
     <string name="pref_about_summary">Подаци о издању и коришћеним библиотекама</string>
 
     <string name="gcm_app_error_unregistering">Грешка одјављивања</string>

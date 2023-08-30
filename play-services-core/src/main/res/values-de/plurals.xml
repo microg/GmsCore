@@ -25,7 +25,7 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registrierte Apps</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Eine Berechtigung, die für die ordnungsgemäße Funktionalität von microG Services Core benötigt wird, ist nicht erteilt.</item>
+        <item quantity="one">Eine Berechtigung, die für die ordnungsgemäße Funktionalität von microG Services benötigt wird, ist nicht erteilt.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Fehlende Berechtigung anfragen</item>

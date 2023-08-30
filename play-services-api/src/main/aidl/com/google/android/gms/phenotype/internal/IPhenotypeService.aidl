@@ -1,5 +1,6 @@
 package com.google.android.gms.phenotype.internal;
 
+import com.google.android.gms.common.api.internal.IStatusCallback;
 import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks;
 import com.google.android.gms.phenotype.Flag;
 import com.google.android.gms.phenotype.RegistrationInfo;
@@ -28,4 +29,7 @@ interface IPhenotypeService {
 
     oneway void getServingVersion(IPhenotypeCallbacks callbacks) = 21; // returns via callbacks.onServingVersion()
     oneway void getExperimentTokens2(IPhenotypeCallbacks callbacks, String p1, String p2, String p3, String p4) = 22; // returns via callbacks.onExperimentTokens()
+    oneway void syncAfterOperation2(IPhenotypeCallbacks callbacks, long p1) = 23; // returns via callbacks.onSyncFinished()
+    oneway void setRuntimeProperties(IStatusCallback callbacks, String p1, in byte[] p2) = 24;
+//    oneway void setExternalExperiments(IStatusCallback callbacks, String p1, in List<byte[]> p2) = 25;
 }

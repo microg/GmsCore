@@ -54,7 +54,6 @@ class LocationAppsDatabase(context: Context) : SQLiteOpenHelper(context, "geoapp
 
     fun noteAppLocation(packageName: String, location: Location?) {
         noteAppUsage(packageName)
-        Log.d(TAG, "Note app $packageName @ $location")
         if (location == null) return
         val values = contentValuesOf(
             FIELD_PACKAGE to packageName,

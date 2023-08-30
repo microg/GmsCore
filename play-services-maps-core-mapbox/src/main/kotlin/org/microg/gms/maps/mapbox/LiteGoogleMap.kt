@@ -549,6 +549,10 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
         }
     }
 
+    override fun snapshotForTest(callback: ISnapshotReadyCallback?) {
+        Log.d(TAG, "Not yet implemented: snapshotForTest")
+    }
+
     override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
         view.setPadding(left, top, right, bottom)
         postUpdateSnapshot()

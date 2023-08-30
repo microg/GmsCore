@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -23,6 +24,7 @@ import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.LocationAppsDatabase
 import org.microg.gms.ui.AppHeadingPreference
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class LocationAppFragment : PreferenceFragmentCompat() {
@@ -53,7 +55,7 @@ class LocationAppFragment : PreferenceFragmentCompat() {
         lastLocationMap = preferenceScreen.findPreference("pref_location_app_last_location_map") ?: lastLocationMap
         forceCoarse = preferenceScreen.findPreference("pref_location_app_force_coarse") ?: forceCoarse
         forceCoarse.setOnPreferenceChangeListener { _, newValue ->
-            packageName?.let { database.setForceCoarse(it, newValue as Boolean); true} == true
+            packageName?.let { database.setForceCoarse(it, newValue as Boolean); true } == true
         }
     }
 
@@ -84,16 +86,30 @@ class LocationAppFragment : PreferenceFragmentCompat() {
             if (location != null) {
                 lastLocationCategory.isVisible = true
                 lastLocation.title = DateUtils.getRelativeTimeSpanString(location.time)
-                lastLocation.intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${location.latitude},${location.longitude}"))
-                lastLocationMap.location = location
-                val address = if (SDK_INT > 33) {
-                    suspendCoroutine { continuation ->
-                        Geocoder(context).getFromLocation(location.latitude, location.longitude, 1) {
-                            continuation.resume(it.firstOrNull())
-                        }
-                    }
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:${location.latitude},${location.longitude}"))
+                if (context.packageManager.queryIntentActivities(intent, 0).isNotEmpty()) {
+                    lastLocation.intent = intent
                 } else {
-                    withContext(Dispatchers.IO) { Geocoder(context).getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull() }
+                    lastLocation.isSelectable = false
+                }
+                lastLocationMap.location = location
+                val address = try {
+                    if (SDK_INT > 33) {
+                        suspendCoroutine { continuation ->
+                            try {
+                                Geocoder(context).getFromLocation(location.latitude, location.longitude, 1) {
+                                    continuation.resume(it.firstOrNull())
+                                }
+                            } catch (e: Exception) {
+                                continuation.resumeWithException(e)
+                            }
+                        }
+                    } else {
+                        withContext(Dispatchers.IO) { Geocoder(context).getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull() }
+                    }
+                } catch (e: Exception) {
+                    Log.w(TAG, e)
+                    null
                 }
                 if (address != null) {
                     val addressLine = StringBuilder()
@@ -106,7 +122,7 @@ class LocationAppFragment : PreferenceFragmentCompat() {
                     }
                     lastLocation.summary = addressLine.toString()
                 } else {
-                    lastLocation.summary =  "${location.latitude.toStringWithDigits(6)}, ${location.longitude.toStringWithDigits(6)}"
+                    lastLocation.summary = "${location.latitude.toStringWithDigits(6)}, ${location.longitude.toStringWithDigits(6)}"
                 }
             } else {
                 lastLocationCategory.isVisible = false

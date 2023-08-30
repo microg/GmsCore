@@ -8,13 +8,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import org.microg.gms.base.core.R;
+
+import static android.os.Build.VERSION.SDK_INT;
 
 public class ForegroundServiceContext extends ContextWrapper {
     private static final String TAG = "ForegroundService";
@@ -26,7 +27,7 @@ public class ForegroundServiceContext extends ContextWrapper {
 
     @Override
     public ComponentName startService(Intent service) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isIgnoringBatteryOptimizations()) {
+        if (SDK_INT >= 26 && !isIgnoringBatteryOptimizations()) {
             Log.d(TAG, "Starting in foreground mode.");
             service.putExtra(EXTRA_FOREGROUND, true);
             return super.startForegroundService(service);
@@ -34,7 +35,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         return super.startService(service);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @RequiresApi(23)
     private boolean isIgnoringBatteryOptimizations() {
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         return powerManager.isIgnoringBatteryOptimizations(getPackageName());
@@ -45,14 +46,18 @@ public class ForegroundServiceContext extends ContextWrapper {
         try {
             ForegroundServiceInfo annotation = service.getClass().getAnnotation(ForegroundServiceInfo.class);
             if (annotation != null) {
+                serviceName = annotation.value();
                 if (annotation.res() != 0) {
                     try {
                         serviceName = service.getString(annotation.res());
                     } catch (Exception ignored) {
                     }
                 }
-                if (serviceName == null) {
-                    serviceName = annotation.value();
+                if (!annotation.resName().isEmpty() && !annotation.resPackage().isEmpty()) {
+                    try {
+                        serviceName = service.getString(service.getResources().getIdentifier(annotation.resName(), "string", annotation.resPackage()));
+                    } catch (Exception ignored) {
+                    }
                 }
             }
         } catch (Exception ignored) {
@@ -64,7 +69,7 @@ public class ForegroundServiceContext extends ContextWrapper {
     }
 
     public static void completeForegroundService(Service service, Intent intent, String tag) {
-        if (intent != null && intent.getBooleanExtra(EXTRA_FOREGROUND, false) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (intent != null && intent.getBooleanExtra(EXTRA_FOREGROUND, false) && SDK_INT >= 26) {
             String serviceName = getServiceName(service);
             Log.d(tag, "Started " + serviceName + " in foreground mode.");
             try {
@@ -77,7 +82,7 @@ public class ForegroundServiceContext extends ContextWrapper {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(26)
     private static Notification buildForegroundNotification(Context context, String serviceName) {
         NotificationChannel channel = new NotificationChannel("foreground-service", "Foreground Service", NotificationManager.IMPORTANCE_NONE);
         channel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);

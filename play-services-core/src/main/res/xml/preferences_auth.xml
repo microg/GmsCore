@@ -36,4 +36,11 @@
             android:action="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
             android:targetPackage="com.google.android.gms" />
     </PreferenceScreen>
+    <PreferenceScreen
+        android:key="legacy"
+        android:title="Legacy settings">
+        <intent
+            android:targetClass="org.microg.gms.ui.LegacyAccountSettingsActivity"
+            android:targetPackage="com.google.android.gms" />
+    </PreferenceScreen>
 </PreferenceScreen>

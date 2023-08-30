@@ -19,8 +19,14 @@ apply plugin: 'com.android.library'
 group = 'org.microg'
 
 android {
+    namespace "com.google.android.gms.appinvite"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        aidl = true
+    }
 
     defaultConfig {
         versionName version

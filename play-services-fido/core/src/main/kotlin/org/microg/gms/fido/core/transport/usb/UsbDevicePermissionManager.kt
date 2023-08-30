@@ -12,12 +12,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
+import android.os.Build.VERSION.SDK_INT
 import kotlinx.coroutines.CompletableDeferred
 
 private val Context.usbPermissionCallbackAction
     get() = "$packageName.USB_PERMISSION_CALLBACK"
 
-private val receiver = object : BroadcastReceiver() {
+private object UsbDevicePermissionReceiver : BroadcastReceiver() {
     private var registered = false
     private val pendingRequests = hashMapOf<UsbDevice, MutableList<CompletableDeferred<Boolean>>>()
 
@@ -72,9 +73,9 @@ class UsbDevicePermissionManager(private val context: Context) {
     suspend fun awaitPermission(device: UsbDevice): Boolean {
         if (context.usbManager?.hasPermission(device) == true) return true
         val res = CompletableDeferred<Boolean>()
-        if (receiver.addDeferred(device, res)) {
-            receiver.register(context)
-            val intent = PendingIntent.getBroadcast(context, 0, Intent(context.usbPermissionCallbackAction), 0)
+        if (UsbDevicePermissionReceiver.addDeferred(device, res)) {
+            UsbDevicePermissionReceiver.register(context)
+            val intent = PendingIntent.getBroadcast(context, 0, Intent(context.usbPermissionCallbackAction).apply { `package` = context.packageName }, if (SDK_INT >= 31) PendingIntent.FLAG_MUTABLE else 0)
             context.usbManager?.requestPermission(device, intent)
         }
         return res.await()

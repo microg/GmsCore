@@ -5,7 +5,6 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 
 configurations {
     withMapboxImplementation
@@ -18,8 +17,13 @@ dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "de.hdodenhof:circleimageview:1.3.0"
 
-    implementation project(':firebase-dynamic-links-api')
+    implementation project(':firebase-dynamic-links')
     implementation project(':firebase-auth-core')
+    implementation project(':play-services-ads-core')
+    implementation project(':play-services-ads-identifier-core')
+    implementation project(':play-services-ads-lite-core')
+    implementation project(':play-services-appinvite-core')
+    implementation project(':play-services-auth-api-phone-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
     implementation project(':play-services-cast-framework-core')
@@ -29,6 +33,8 @@ dependencies {
     implementation project(':play-services-fido-core')
     implementation project(':play-services-gmscompliance-core')
     implementation project(':play-services-location-core')
+    implementation project(':play-services-location-core-base')
+    implementation project(':play-services-location-core-provider')
     withNearbyImplementation project(':play-services-nearby-core')
     implementation project(':play-services-oss-licenses-core')
     implementation project(':play-services-pay-core')
@@ -76,8 +82,14 @@ dependencies {
 }
 
 android {
+    namespace "com.google.android.gms"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName version
@@ -118,7 +130,7 @@ android {
     }
 
     lintOptions {
-        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag'
+        disable 'MissingTranslation', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
     }
 
     buildTypes {
@@ -151,10 +163,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+
     packagingOptions {
         exclude 'META-INF/ASL2.0'
         jniLibs {
-            useLegacyPackaging false
+            useLegacyPackaging true
         }
     }
 }

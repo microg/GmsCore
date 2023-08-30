@@ -1,0 +1,5912 @@
+{
+    "bearing": 0,
+    "center": [
+        8.542,
+        47.372
+    ],
+    "glyphs": "https://tiles.stadiamaps.com/fonts/{fontstack}/{range}.pbf",
+    "layers": [
+        {
+            "id": "background",
+            "paint": {
+                "background-color": "#f9f3ea"
+            },
+            "type": "background",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "subclass",
+                "glacier"
+            ],
+            "id": "landcover-glacier",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "fill-color": "#fff",
+                "fill-opacity": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            0,
+                            0.9
+                        ],
+                        [
+                            10,
+                            0.3
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "$type",
+                "Polygon"
+            ],
+            "id": "park",
+            "paint": {
+                "fill-color": "#d8e8c8",
+                "fill-opacity": {
+                    "base": 1.8,
+                    "stops": [
+                        [
+                            6,
+                            0.5
+                        ],
+                        [
+                            12,
+                            0.2
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "park",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "cemetery"
+            ],
+            "id": "landuse-cemetery",
+            "paint": {
+                "fill-color": "#e0e4dd"
+            },
+            "source": "openmaptiles",
+            "source-layer": "landuse",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.man_made",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "railway"
+            ],
+            "id": "landuse-railway",
+            "paint": {
+                "fill-color": "hsla(30, 19%, 90%, 0.4)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "landuse",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.man_made",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "in",
+                "class",
+                "public_park",
+                "national_park",
+                "nature_reserve"
+            ],
+            "id": "landcover-grass-park",
+            "paint": {
+                "fill-antialias": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            0,
+                            false
+                        ],
+                        [
+                            9,
+                            true
+                        ]
+                    ]
+                },
+                "fill-color": "#d5e8c2",
+                "fill-outline-color": "hsla(0, 0%, 0%, 0.1)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "park",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "poi.park",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "class",
+                    "rock"
+                ]
+            ],
+            "id": "landcover-rock",
+            "paint": {
+                "fill-color": "hsla(0, 0%, 85%, 1)",
+                "fill-opacity": 1,
+                "fill-outline-color": "hsla(0, 0%, 0%, 0.1)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "class",
+                    "sand"
+                ]
+            ],
+            "id": "landcover-sand",
+            "paint": {
+                "fill-color": "hsla(44, 70%, 87%, 1)",
+                "fill-opacity": 1,
+                "fill-outline-color": "hsla(0, 0%, 0%, 0.1)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "wetland"
+            ],
+            "id": "landcover-wetland",
+            "paint": {
+                "fill-antialias": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            0,
+                            false
+                        ],
+                        [
+                            9,
+                            true
+                        ]
+                    ]
+                },
+                "fill-color": "#3D85C6",
+                "fill-opacity": 0.075,
+                "fill-outline-color": "hsla(0, 0%, 0%, 0.03)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "wood"
+            ],
+            "id": "landcover-wood",
+            "paint": {
+                "fill-antialias": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            0,
+                            false
+                        ],
+                        [
+                            9,
+                            true
+                        ]
+                    ]
+                },
+                "fill-color": "#90d86c",
+                "fill-opacity": 0.15,
+                "fill-outline-color": "hsla(0, 0%, 0%, 0.2)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "grass"
+            ],
+            "id": "landcover-grass",
+            "paint": {
+                "fill-color": "#d8e8c8",
+                "fill-opacity": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "!in",
+                "class",
+                "canal",
+                "river",
+                "stream"
+            ],
+            "id": "waterway-other",
+            "layout": {
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#a0c8f0",
+                "line-width": {
+                    "base": 1.3,
+                    "stops": [
+                        [
+                            13,
+                            0.5
+                        ],
+                        [
+                            20,
+                            2
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "waterway",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "in",
+                "class",
+                "canal",
+                "stream"
+            ],
+            "id": "waterway-stream-canal",
+            "layout": {
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#a0c8f0",
+                "line-width": {
+                    "base": 1.3,
+                    "stops": [
+                        [
+                            13,
+                            0.5
+                        ],
+                        [
+                            20,
+                            6
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "waterway",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "river"
+            ],
+            "id": "waterway-river",
+            "layout": {
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#a0c8f0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            10,
+                            0.8
+                        ],
+                        [
+                            20,
+                            6
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "waterway",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "in",
+                    "admin_level",
+                    4
+                ],
+                [
+                    "!=",
+                    "maritime",
+                    1
+                ]
+            ],
+            "id": "boundary-land-level-4",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#9e9cab",
+                "line-dasharray": [
+                    4,
+                    2,
+                    2,
+                    2
+                ],
+                "line-opacity": 0.5,
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            4,
+                            0.4
+                        ],
+                        [
+                            5,
+                            0.8
+                        ],
+                        [
+                            12,
+                            2.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "boundary",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.province",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "admin_level",
+                    2
+                ],
+                [
+                    "!=",
+                    "maritime",
+                    1
+                ],
+                [
+                    "!=",
+                    "disputed",
+                    1
+                ]
+            ],
+            "id": "boundary-land-level-2",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "hsl(248, 7%, 66%)",
+                "line-width": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            0,
+                            0.6
+                        ],
+                        [
+                            4,
+                            1.4
+                        ],
+                        [
+                            5,
+                            2
+                        ],
+                        [
+                            12,
+                            4
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "boundary",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.country",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!=",
+                    "maritime",
+                    1
+                ],
+                [
+                    "==",
+                    "disputed",
+                    1
+                ]
+            ],
+            "id": "boundary-land-disputed",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "hsl(248, 7%, 70%)",
+                "line-dasharray": [
+                    1,
+                    3
+                ],
+                "line-width": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            0,
+                            0.6
+                        ],
+                        [
+                            4,
+                            1.4
+                        ],
+                        [
+                            5,
+                            2
+                        ],
+                        [
+                            12,
+                            4
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "boundary",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.country",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "$type",
+                "Polygon"
+            ],
+            "id": "water-offset",
+            "layout": {
+                "visibility": "visible"
+            },
+            "maxzoom": 8,
+            "minzoom": 6,
+            "paint": {
+                "fill-color": "#a0c8f0",
+                "fill-opacity": 1,
+                "fill-translate": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            6,
+                            [
+                                2,
+                                0
+                            ]
+                        ],
+                        [
+                            8,
+                            [
+                                0,
+                                0
+                            ]
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "water",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "id": "water",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "fill-color": "hsl(210, 60%, 80%)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "water",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "$type",
+                "Polygon"
+            ],
+            "id": "park-outline",
+            "layout": {},
+            "minzoom": 6,
+            "paint": {
+                "line-color": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            6,
+                            "hsla(96, 40%, 49%, 0.36)"
+                        ],
+                        [
+                            8,
+                            "hsla(96, 40%, 49%, 0.66)"
+                        ]
+                    ]
+                },
+                "line-dasharray": [
+                    3,
+                    3
+                ]
+            },
+            "source": "openmaptiles",
+            "source-layer": "park",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "poi.park",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "subclass",
+                "ice_shelf"
+            ],
+            "id": "landcover-ice-shelf",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "fill-color": "#fff",
+                "fill-opacity": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            0,
+                            0.9
+                        ],
+                        [
+                            10,
+                            0.3
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "landcover",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "id": "building",
+            "paint": {
+                "fill-antialias": true,
+                "fill-color": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            15.5,
+                            "#f2eae2"
+                        ],
+                        [
+                            16,
+                            "#dfdbd7"
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "building",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.man_made",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "id": "building-top",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "fill-color": "#f2eae2",
+                "fill-opacity": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            13,
+                            0
+                        ],
+                        [
+                            16,
+                            1
+                        ]
+                    ]
+                },
+                "fill-outline-color": "#dfdbd7",
+                "fill-translate": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            14,
+                            [
+                                0,
+                                0
+                            ]
+                        ],
+                        [
+                            16,
+                            [
+                                -2,
+                                -2
+                            ]
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "building",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.man_made",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "service",
+                    "track"
+                ]
+            ],
+            "id": "tunnel-service-track-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#cfcdca",
+                "line-dasharray": [
+                    0.5,
+                    0.25
+                ],
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            15,
+                            1
+                        ],
+                        [
+                            16,
+                            4
+                        ],
+                        [
+                            20,
+                            11
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "minor"
+                ]
+            ],
+            "id": "tunnel-minor-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#cfcdca",
+                "line-opacity": {
+                    "stops": [
+                        [
+                            12,
+                            0
+                        ],
+                        [
+                            12.5,
+                            1
+                        ]
+                    ]
+                },
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12,
+                            0.5
+                        ],
+                        [
+                            13,
+                            1
+                        ],
+                        [
+                            14,
+                            4
+                        ],
+                        [
+                            20,
+                            15
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "secondary",
+                    "tertiary"
+                ]
+            ],
+            "id": "tunnel-secondary-tertiary-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            8,
+                            1.5
+                        ],
+                        [
+                            20,
+                            17
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary",
+                    "trunk"
+                ]
+            ],
+            "id": "tunnel-trunk-primary-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            5,
+                            0.4
+                        ],
+                        [
+                            6,
+                            0.6
+                        ],
+                        [
+                            7,
+                            1.5
+                        ],
+                        [
+                            20,
+                            22
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway"
+                ]
+            ],
+            "id": "tunnel-motorway-casing",
+            "layout": {
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-dasharray": [
+                    0.5,
+                    0.25
+                ],
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            5,
+                            0.4
+                        ],
+                        [
+                            6,
+                            0.6
+                        ],
+                        [
+                            7,
+                            1.5
+                        ],
+                        [
+                            20,
+                            22
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        "brunnel",
+                        "tunnel"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "path",
+                        "footway"
+                    ]
+                ]
+            ],
+            "id": "tunnel-path",
+            "paint": {
+                "line-color": "#cba",
+                "line-dasharray": [
+                    1.5,
+                    0.75
+                ],
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            15,
+                            1.2
+                        ],
+                        [
+                            20,
+                            4
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "service",
+                    "track"
+                ]
+            ],
+            "id": "tunnel-service-track",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#fff",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            15.5,
+                            0
+                        ],
+                        [
+                            16,
+                            2
+                        ],
+                        [
+                            20,
+                            7.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "minor_road"
+                ]
+            ],
+            "id": "tunnel-minor",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#fff",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            13.5,
+                            0
+                        ],
+                        [
+                            14,
+                            2.5
+                        ],
+                        [
+                            20,
+                            11.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "secondary",
+                    "tertiary"
+                ]
+            ],
+            "id": "tunnel-secondary-tertiary",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#fff4c6",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            10
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary",
+                    "trunk"
+                ]
+            ],
+            "id": "tunnel-trunk-primary",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#fff4c6",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway"
+                ]
+            ],
+            "id": "tunnel-motorway",
+            "layout": {
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "#ffdaa6",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "rail"
+                ]
+            ],
+            "id": "tunnel-railway",
+            "paint": {
+                "line-color": "#bbb",
+                "line-dasharray": [
+                    2,
+                    2
+                ],
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14,
+                            0.4
+                        ],
+                        [
+                            15,
+                            0.75
+                        ],
+                        [
+                            20,
+                            2
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "in",
+                    "class",
+                    "ferry"
+                ]
+            ],
+            "id": "ferry",
+            "layout": {
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "rgba(108, 159, 182, 1)",
+                "line-dasharray": [
+                    2,
+                    2
+                ],
+                "line-width": 1.1
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "in",
+                    "class",
+                    "taxiway"
+                ]
+            ],
+            "id": "aeroway-taxiway-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 12,
+            "paint": {
+                "line-color": "rgba(153, 153, 153, 1)",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.5,
+                    "stops": [
+                        [
+                            11,
+                            2
+                        ],
+                        [
+                            17,
+                            12
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "aeroway",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "in",
+                    "class",
+                    "runway"
+                ]
+            ],
+            "id": "aeroway-runway-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 12,
+            "paint": {
+                "line-color": "rgba(153, 153, 153, 1)",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.5,
+                    "stops": [
+                        [
+                            11,
+                            5
+                        ],
+                        [
+                            17,
+                            55
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "aeroway",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.station.airport",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Polygon"
+                ],
+                [
+                    "in",
+                    "class",
+                    "runway",
+                    "taxiway"
+                ]
+            ],
+            "id": "aeroway-area",
+            "layout": {
+                "visibility": "visible"
+            },
+            "minzoom": 4,
+            "paint": {
+                "fill-color": "rgba(255, 255, 255, 1)",
+                "fill-opacity": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            13,
+                            0
+                        ],
+                        [
+                            14,
+                            1
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "aeroway",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "transit.station.airport",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "in",
+                    "class",
+                    "taxiway"
+                ],
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ]
+            ],
+            "id": "aeroway-taxiway",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 4,
+            "paint": {
+                "line-color": "rgba(255, 255, 255, 1)",
+                "line-opacity": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            11,
+                            0
+                        ],
+                        [
+                            12,
+                            1
+                        ]
+                    ]
+                },
+                "line-width": {
+                    "base": 1.5,
+                    "stops": [
+                        [
+                            11,
+                            1
+                        ],
+                        [
+                            17,
+                            10
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "aeroway",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "in",
+                    "class",
+                    "runway"
+                ],
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ]
+            ],
+            "id": "aeroway-runway",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 4,
+            "paint": {
+                "line-color": "rgba(255, 255, 255, 1)",
+                "line-opacity": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            11,
+                            0
+                        ],
+                        [
+                            12,
+                            1
+                        ]
+                    ]
+                },
+                "line-width": {
+                    "base": 1.5,
+                    "stops": [
+                        [
+                            11,
+                            4
+                        ],
+                        [
+                            17,
+                            50
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "aeroway",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.station.airport",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "$type",
+                "Polygon"
+            ],
+            "id": "highway-area",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "fill-antialias": false,
+                "fill-color": "hsla(0, 0%, 89%, 0.56)",
+                "fill-opacity": 0.9,
+                "fill-outline-color": "#cfcdca"
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "fill",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway_link"
+                ]
+            ],
+            "id": "highway-motorway-link-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "minzoom": 12,
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12,
+                            1
+                        ],
+                        [
+                            13,
+                            3
+                        ],
+                        [
+                            14,
+                            4
+                        ],
+                        [
+                            20,
+                            15
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary_link",
+                    "secondary_link",
+                    "tertiary_link",
+                    "trunk_link"
+                ]
+            ],
+            "id": "highway-link-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 13,
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12,
+                            1
+                        ],
+                        [
+                            13,
+                            3
+                        ],
+                        [
+                            14,
+                            4
+                        ],
+                        [
+                            20,
+                            15
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!=",
+                        "brunnel",
+                        "tunnel"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "minor",
+                        "service",
+                        "track"
+                    ]
+                ]
+            ],
+            "id": "highway-minor-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#cfcdca",
+                "line-opacity": {
+                    "stops": [
+                        [
+                            12,
+                            0
+                        ],
+                        [
+                            12.5,
+                            1
+                        ]
+                    ]
+                },
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12,
+                            0.5
+                        ],
+                        [
+                            13,
+                            1
+                        ],
+                        [
+                            14,
+                            4
+                        ],
+                        [
+                            20,
+                            15
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "secondary",
+                    "tertiary"
+                ]
+            ],
+            "id": "highway-secondary-tertiary-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6,
+                            1.5
+                        ],
+                        [
+                            20,
+                            17
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary"
+                ]
+            ],
+            "id": "highway-primary-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 5,
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            5,
+                            0.5
+                        ],
+                        [
+                            8,
+                            0.6
+                        ],
+                        [
+                            9,
+                            1.5
+                        ],
+                        [
+                            20,
+                            22
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "trunk"
+                ]
+            ],
+            "id": "highway-trunk-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 5,
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": {
+                    "stops": [
+                        [
+                            5,
+                            0
+                        ],
+                        [
+                            6,
+                            1
+                        ]
+                    ]
+                },
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            5,
+                            0
+                        ],
+                        [
+                            6,
+                            0.6
+                        ],
+                        [
+                            7,
+                            1.5
+                        ],
+                        [
+                            20,
+                            22
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway"
+                ]
+            ],
+            "id": "highway-motorway-casing",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 4,
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": {
+                    "stops": [
+                        [
+                            4,
+                            0
+                        ],
+                        [
+                            5,
+                            1
+                        ]
+                    ]
+                },
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            4,
+                            0
+                        ],
+                        [
+                            5,
+                            0.4
+                        ],
+                        [
+                            6,
+                            0.6
+                        ],
+                        [
+                            7,
+                            1.5
+                        ],
+                        [
+                            20,
+                            22
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!in",
+                        "brunnel",
+                        "bridge",
+                        "tunnel"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "path",
+                        "footway"
+                    ]
+                ]
+            ],
+            "id": "highway-path",
+            "paint": {
+                "line-color": "#cba",
+                "line-dasharray": {
+                    "stops": [
+                        [
+                            13,
+                            [
+                                1,
+                                0.5
+                            ]
+                        ],
+                        [
+                            14,
+                            [
+                                2,
+                                1
+                            ]
+                        ],
+                        [
+                            20,
+                            [
+                                3,
+                                1
+                            ]
+                        ]
+                    ]
+                },
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            13,
+                            1
+                        ],
+                        [
+                            14,
+                            2
+                        ],
+                        [
+                            20,
+                            4
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway_link"
+                ]
+            ],
+            "id": "highway-motorway-link",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "minzoom": 12,
+            "paint": {
+                "line-color": "#e5b87e",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12.5,
+                            0
+                        ],
+                        [
+                            13,
+                            1.5
+                        ],
+                        [
+                            14,
+                            2.5
+                        ],
+                        [
+                            20,
+                            11.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary_link",
+                    "secondary_link",
+                    "tertiary_link",
+                    "trunk_link"
+                ]
+            ],
+            "id": "highway-link",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 13,
+            "paint": {
+                "line-color": "#e5d7a0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12.5,
+                            0
+                        ],
+                        [
+                            13,
+                            1.5
+                        ],
+                        [
+                            14,
+                            2.5
+                        ],
+                        [
+                            20,
+                            11.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "in",
+                    "class",
+                    "downhill",
+                    "nordic"
+                ],
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ]
+            ],
+            "id": "ski-slopes-line",
+            "minzoom": 11,
+            "paint": {
+                "line-blur": 0.5,
+                "line-color": "rgba(75, 122, 195, 1)",
+                "line-dasharray": [
+                    3,
+                    2
+                ],
+                "line-width": {
+                    "stops": [
+                        [
+                            10,
+                            1
+                        ],
+                        [
+                            13,
+                            1.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "piste",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "poi.sports_complex",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!=",
+                        "brunnel",
+                        "tunnel"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "minor",
+                        "service",
+                        "track"
+                    ]
+                ]
+            ],
+            "id": "highway-minor",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#fff",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            13.5,
+                            0
+                        ],
+                        [
+                            14,
+                            2.5
+                        ],
+                        [
+                            20,
+                            11.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!in",
+                    "brunnel",
+                    "bridge",
+                    "tunnel"
+                ],
+                [
+                    "in",
+                    "class",
+                    "secondary",
+                    "tertiary"
+                ]
+            ],
+            "id": "highway-secondary-tertiary",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "#e5d7a0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            8,
+                            0.5
+                        ],
+                        [
+                            20,
+                            13
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!in",
+                        "brunnel",
+                        "bridge",
+                        "tunnel"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "primary"
+                    ]
+                ]
+            ],
+            "id": "highway-primary",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "#e5d7a0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            5,
+                            0.1
+                        ],
+                        [
+                            9,
+                            0.5
+                        ],
+                        [
+                            20,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!in",
+                        "brunnel",
+                        "bridge",
+                        "tunnel"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "trunk"
+                    ]
+                ]
+            ],
+            "id": "highway-trunk",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "#e5d7a0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!in",
+                        "brunnel",
+                        "bridge",
+                        "tunnel"
+                    ],
+                    [
+                        "==",
+                        "class",
+                        "motorway"
+                    ]
+                ]
+            ],
+            "id": "highway-motorway",
+            "layout": {
+                "line-cap": "round",
+                "line-join": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 5,
+            "paint": {
+                "line-color": "#e5b87e",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            10
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        "class",
+                        "transit"
+                    ],
+                    [
+                        "!in",
+                        "brunnel",
+                        "tunnel"
+                    ]
+                ]
+            ],
+            "id": "railway-transit",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "hsla(0, 0%, 73%, 0.77)",
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14,
+                            0.4
+                        ],
+                        [
+                            20,
+                            1
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        "class",
+                        "transit"
+                    ],
+                    [
+                        "!in",
+                        "brunnel",
+                        "tunnel"
+                    ]
+                ]
+            ],
+            "id": "railway-transit-hatching",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "hsla(0, 0%, 73%, 0.68)",
+                "line-dasharray": [
+                    0.2,
+                    8
+                ],
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14.5,
+                            0
+                        ],
+                        [
+                            15,
+                            2
+                        ],
+                        [
+                            20,
+                            6
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        "class",
+                        "rail"
+                    ],
+                    [
+                        "has",
+                        "service"
+                    ]
+                ]
+            ],
+            "id": "railway-service",
+            "paint": {
+                "line-color": "hsla(0, 0%, 73%, 0.77)",
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14,
+                            0.4
+                        ],
+                        [
+                            20,
+                            1
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        "class",
+                        "rail"
+                    ],
+                    [
+                        "has",
+                        "service"
+                    ]
+                ]
+            ],
+            "id": "railway-service-hatching",
+            "layout": {
+                "visibility": "visible"
+            },
+            "paint": {
+                "line-color": "hsla(0, 0%, 73%, 0.68)",
+                "line-dasharray": [
+                    0.2,
+                    8
+                ],
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14.5,
+                            0
+                        ],
+                        [
+                            15,
+                            2
+                        ],
+                        [
+                            20,
+                            6
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!has",
+                        "service"
+                    ],
+                    [
+                        "!in",
+                        "brunnel",
+                        "bridge",
+                        "tunnel"
+                    ],
+                    [
+                        "==",
+                        "class",
+                        "rail"
+                    ]
+                ]
+            ],
+            "id": "railway",
+            "paint": {
+                "line-color": "#bbb",
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14,
+                            0.4
+                        ],
+                        [
+                            15,
+                            0.75
+                        ],
+                        [
+                            20,
+                            2
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "!has",
+                        "service"
+                    ],
+                    [
+                        "!in",
+                        "brunnel",
+                        "bridge",
+                        "tunnel"
+                    ],
+                    [
+                        "==",
+                        "class",
+                        "rail"
+                    ]
+                ]
+            ],
+            "id": "railway-hatching",
+            "paint": {
+                "line-color": "#bbb",
+                "line-dasharray": [
+                    0.2,
+                    8
+                ],
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14.5,
+                            0
+                        ],
+                        [
+                            15,
+                            3
+                        ],
+                        [
+                            20,
+                            8
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway_link"
+                ]
+            ],
+            "id": "bridge-motorway-link-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12,
+                            1
+                        ],
+                        [
+                            13,
+                            3
+                        ],
+                        [
+                            14,
+                            4
+                        ],
+                        [
+                            20,
+                            15
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary_link",
+                    "secondary_link",
+                    "tertiary_link",
+                    "trunk_link"
+                ]
+            ],
+            "id": "bridge-link-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12,
+                            1
+                        ],
+                        [
+                            13,
+                            3
+                        ],
+                        [
+                            14,
+                            4
+                        ],
+                        [
+                            20,
+                            15
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "in",
+                    "class",
+                    "secondary",
+                    "tertiary"
+                ]
+            ],
+            "id": "bridge-secondary-tertiary-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-opacity": 1,
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            8,
+                            1.5
+                        ],
+                        [
+                            20,
+                            28
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary",
+                    "trunk"
+                ]
+            ],
+            "id": "bridge-trunk-primary-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "hsl(28, 76%, 67%)",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            5,
+                            0.4
+                        ],
+                        [
+                            6,
+                            0.6
+                        ],
+                        [
+                            7,
+                            1.5
+                        ],
+                        [
+                            20,
+                            26
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway"
+                ]
+            ],
+            "id": "bridge-motorway-casing",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e9ac77",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            5,
+                            0.4
+                        ],
+                        [
+                            6,
+                            0.6
+                        ],
+                        [
+                            7,
+                            1.5
+                        ],
+                        [
+                            20,
+                            22
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        "brunnel",
+                        "bridge"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "path",
+                        "footway"
+                    ]
+                ]
+            ],
+            "id": "bridge-path-casing",
+            "paint": {
+                "line-color": "#f8f4f0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            15,
+                            1.2
+                        ],
+                        [
+                            20,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.stroke"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "all",
+                    [
+                        "==",
+                        "brunnel",
+                        "bridge"
+                    ],
+                    [
+                        "in",
+                        "class",
+                        "path",
+                        "footway"
+                    ]
+                ]
+            ],
+            "id": "bridge-path",
+            "paint": {
+                "line-color": "#cba",
+                "line-dasharray": [
+                    1.5,
+                    0.75
+                ],
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            15,
+                            1.2
+                        ],
+                        [
+                            20,
+                            4
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway_link"
+                ]
+            ],
+            "id": "bridge-motorway-link",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e5b87e",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12.5,
+                            0
+                        ],
+                        [
+                            13,
+                            1.5
+                        ],
+                        [
+                            14,
+                            2.5
+                        ],
+                        [
+                            20,
+                            11.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary_link",
+                    "secondary_link",
+                    "tertiary_link",
+                    "trunk_link"
+                ]
+            ],
+            "id": "bridge-link",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e5d7a0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12.5,
+                            0
+                        ],
+                        [
+                            13,
+                            1.5
+                        ],
+                        [
+                            14,
+                            2.5
+                        ],
+                        [
+                            20,
+                            11.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "in",
+                    "class",
+                    "secondary",
+                    "tertiary"
+                ]
+            ],
+            "id": "bridge-secondary-tertiary",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e5d7a0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            20
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "in",
+                    "class",
+                    "primary",
+                    "trunk"
+                ]
+            ],
+            "id": "bridge-trunk-primary",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e5d7a0",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "==",
+                    "class",
+                    "motorway"
+                ]
+            ],
+            "id": "bridge-motorway",
+            "layout": {
+                "line-join": "round"
+            },
+            "paint": {
+                "line-color": "#e5b87e",
+                "line-width": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6.5,
+                            0
+                        ],
+                        [
+                            7,
+                            0.5
+                        ],
+                        [
+                            20,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "road.arterial",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "==",
+                    "class",
+                    "rail"
+                ]
+            ],
+            "id": "bridge-railway",
+            "paint": {
+                "line-color": "#bbb",
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14,
+                            0.4
+                        ],
+                        [
+                            15,
+                            0.75
+                        ],
+                        [
+                            20,
+                            2
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.man_made",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "brunnel",
+                    "bridge"
+                ],
+                [
+                    "==",
+                    "class",
+                    "rail"
+                ]
+            ],
+            "id": "bridge-railway-hatching",
+            "paint": {
+                "line-color": "#bbb",
+                "line-dasharray": [
+                    0.2,
+                    8
+                ],
+                "line-width": {
+                    "base": 1.4,
+                    "stops": [
+                        [
+                            14.5,
+                            0
+                        ],
+                        [
+                            15,
+                            3
+                        ],
+                        [
+                            20,
+                            8
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.man_made",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "cable_car"
+            ],
+            "id": "cablecar",
+            "layout": {
+                "line-cap": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 11,
+            "paint": {
+                "line-color": "hsl(0, 0%, 70%)",
+                "line-width": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            11,
+                            1
+                        ],
+                        [
+                            19,
+                            2.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "cable_car"
+            ],
+            "id": "cablecar-dash",
+            "layout": {
+                "line-cap": "round",
+                "visibility": "visible"
+            },
+            "minzoom": 11,
+            "paint": {
+                "line-color": "hsl(0, 0%, 70%)",
+                "line-dasharray": [
+                    2,
+                    3
+                ],
+                "line-width": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            11,
+                            3
+                        ],
+                        [
+                            19,
+                            5.5
+                        ]
+                    ]
+                }
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation",
+            "type": "line",
+            "metadata": {
+                "microg:gms-type-feature": "transit.line",
+                "microg:gms-type-element": "geometry.fill"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "has",
+                    "name"
+                ],
+                [
+                    "!=",
+                    "name",
+                    ""
+                ]
+            ],
+            "id": "waterway-name",
+            "layout": {
+                "symbol-placement": "line",
+                "symbol-spacing": 350,
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            " ",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Italic"
+                ],
+                "text-letter-spacing": 0.2,
+                "text-max-width": 5,
+                "text-pitch-alignment": "viewport",
+                "text-rotation-alignment": "map",
+                "text-size": 14
+            },
+            "minzoom": 13,
+            "paint": {
+                "text-color": "#115AA7"
+            },
+            "source": "openmaptiles",
+            "source-layer": "waterway",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    "!in",
+                    "class",
+                    "ocean"
+                ]
+            ],
+            "id": "water-name-other",
+            "layout": {
+                "symbol-placement": "point",
+                "symbol-spacing": 150,
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Italic"
+                ],
+                "text-letter-spacing": 0.2,
+                "text-line-height": 1.55,
+                "text-max-width": 5,
+                "text-size": {
+                    "stops": [
+                        [
+                            0,
+                            10
+                        ],
+                        [
+                            6,
+                            14
+                        ]
+                    ]
+                },
+                "visibility": "visible"
+            },
+            "minzoom": 1,
+            "paint": {
+                "text-color": "#115AA7"
+            },
+            "source": "openmaptiles",
+            "source-layer": "water_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    "==",
+                    "class",
+                    "ocean"
+                ]
+            ],
+            "id": "water-name-ocean",
+            "layout": {
+                "symbol-avoid-edges": true,
+                "symbol-placement": "point",
+                "symbol-spacing": 350,
+                "text-field": "{name:latin}",
+                "text-font": [
+                    "Stadia Italic"
+                ],
+                "text-letter-spacing": 0.2,
+                "text-max-width": 5,
+                "text-size": 14
+            },
+            "paint": {
+                "text-color": "#115AA7"
+            },
+            "source": "openmaptiles",
+            "source-layer": "water_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    ">=",
+                    "rank",
+                    25
+                ]
+            ],
+            "id": "poi-level-3",
+            "layout": {
+                "icon-image": "{class}_11",
+                "symbol-avoid-edges": true,
+                "text-anchor": "top",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-offset": [
+                    0,
+                    0.6
+                ],
+                "text-padding": 2,
+                "text-size": 12
+            },
+            "minzoom": 16,
+            "paint": {
+                "text-color": "#666",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "poi",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "poi",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    "<=",
+                    "rank",
+                    24
+                ],
+                [
+                    ">=",
+                    "rank",
+                    15
+                ]
+            ],
+            "id": "poi-level-2",
+            "layout": {
+                "icon-image": "{class}_11",
+                "symbol-avoid-edges": true,
+                "text-anchor": "top",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-offset": [
+                    0,
+                    0.6
+                ],
+                "text-padding": 2,
+                "text-size": 12
+            },
+            "minzoom": 15,
+            "paint": {
+                "text-color": "#666",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "poi",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "poi",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    "<=",
+                    "rank",
+                    14
+                ],
+                [
+                    "has",
+                    "name"
+                ],
+                [
+                    "!=",
+                    "name",
+                    ""
+                ]
+            ],
+            "id": "poi-level-1",
+            "layout": {
+                "icon-image": "{class}_11",
+                "symbol-avoid-edges": true,
+                "text-anchor": "top",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-offset": [
+                    0,
+                    0.6
+                ],
+                "text-padding": 2,
+                "text-size": 12
+            },
+            "minzoom": 14,
+            "paint": {
+                "text-color": "#666",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "poi",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "poi",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    "has",
+                    "name"
+                ],
+                [
+                    "!=",
+                    "name",
+                    ""
+                ],
+                [
+                    "==",
+                    "class",
+                    "railway"
+                ],
+                [
+                    "==",
+                    "subclass",
+                    "station"
+                ]
+            ],
+            "id": "poi-railway",
+            "layout": {
+                "icon-allow-overlap": false,
+                "icon-ignore-placement": false,
+                "icon-image": "{class}_11",
+                "icon-optional": false,
+                "symbol-avoid-edges": true,
+                "text-allow-overlap": false,
+                "text-anchor": "top",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-ignore-placement": false,
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-offset": [
+                    0,
+                    0.6
+                ],
+                "text-optional": true,
+                "text-padding": 2,
+                "text-size": 12
+            },
+            "minzoom": 13,
+            "paint": {
+                "text-color": "#666",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "poi",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "transit.station",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "in",
+                "class",
+                "path",
+                "footway"
+            ],
+            "id": "highway-name-path",
+            "layout": {
+                "symbol-placement": "line",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            " ",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-pitch-alignment": "viewport",
+                "text-rotation-alignment": "map",
+                "text-size": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            13,
+                            12
+                        ],
+                        [
+                            14,
+                            13
+                        ]
+                    ]
+                }
+            },
+            "minzoom": 15.5,
+            "paint": {
+                "text-color": "hsl(30, 23%, 62%)",
+                "text-halo-color": "#f8f4f0",
+                "text-halo-width": 0.5
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "id": "ski-slopes-label",
+            "layout": {
+                "icon-pitch-alignment": "auto",
+                "symbol-placement": "line-center",
+                "text-anchor": "bottom",
+                "text-field": "{name}",
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-keep-upright": true,
+                "text-size": 12
+            },
+            "minzoom": 13,
+            "paint": {
+                "text-color": "rgba(75, 122, 195, 1)",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "rgba(255, 255, 255, 1)",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "piste",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "poi.sports_complex",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "in",
+                    "class",
+                    "minor",
+                    "service",
+                    "track"
+                ]
+            ],
+            "id": "highway-name-minor",
+            "layout": {
+                "symbol-placement": "line",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            " ",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-pitch-alignment": "viewport",
+                "text-rotation-alignment": "map",
+                "text-size": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            13,
+                            12
+                        ],
+                        [
+                            14,
+                            13
+                        ]
+                    ]
+                }
+            },
+            "minzoom": 15,
+            "paint": {
+                "text-color": "#765",
+                "text-halo-blur": 0.5,
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "road.local",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "in",
+                "class",
+                "primary",
+                "secondary",
+                "tertiary",
+                "trunk"
+            ],
+            "id": "highway-name-major",
+            "layout": {
+                "symbol-placement": "line",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            " ",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-pitch-alignment": "viewport",
+                "text-rotation-alignment": "map",
+                "text-size": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            13,
+                            12
+                        ],
+                        [
+                            14,
+                            13
+                        ]
+                    ]
+                }
+            },
+            "minzoom": 12.2,
+            "paint": {
+                "text-color": "#765",
+                "text-halo-blur": 0.5,
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "<=",
+                    "ref_length",
+                    6
+                ],
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "!in",
+                    "network",
+                    "us-interstate",
+                    "us-highway",
+                    "us-state"
+                ]
+            ],
+            "id": "highway-shield-other",
+            "layout": {
+                "icon-image": "road_{ref_length}",
+                "icon-rotation-alignment": "viewport",
+                "icon-size": 1,
+                "symbol-avoid-edges": true,
+                "symbol-placement": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            10,
+                            "point"
+                        ],
+                        [
+                            11,
+                            "line"
+                        ]
+                    ]
+                },
+                "text-field": "{ref}",
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-rotation-alignment": "viewport",
+                "text-size": 10
+            },
+            "minzoom": 8,
+            "paint": {},
+            "source": "openmaptiles",
+            "source-layer": "transportation_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "labels.icon"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "<=",
+                    "ref_length",
+                    6
+                ],
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "in",
+                    "network",
+                    "us-interstate"
+                ]
+            ],
+            "id": "highway-shield-us-interstate",
+            "layout": {
+                "icon-image": "{network}_{ref_length}",
+                "icon-rotation-alignment": "viewport",
+                "icon-size": 1,
+                "symbol-avoid-edges": true,
+                "symbol-placement": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            7,
+                            "point"
+                        ],
+                        [
+                            7,
+                            "line"
+                        ],
+                        [
+                            8,
+                            "line"
+                        ]
+                    ]
+                },
+                "text-field": "{ref}",
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-rotation-alignment": "viewport",
+                "text-size": 10
+            },
+            "minzoom": 7,
+            "paint": {
+                "text-color": "rgba(0, 0, 0, 1)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "labels.icon"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "<=",
+                    "ref_length",
+                    6
+                ],
+                [
+                    "==",
+                    "$type",
+                    "LineString"
+                ],
+                [
+                    "in",
+                    "network",
+                    "us-highway",
+                    "us-state"
+                ]
+            ],
+            "id": "highway-shield-us-other",
+            "layout": {
+                "icon-image": "{network}_{ref_length}",
+                "icon-rotation-alignment": "viewport",
+                "icon-size": 1,
+                "symbol-avoid-edges": true,
+                "symbol-placement": {
+                    "base": 1,
+                    "stops": [
+                        [
+                            10,
+                            "point"
+                        ],
+                        [
+                            11,
+                            "line"
+                        ]
+                    ]
+                },
+                "text-field": "{ref}",
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-rotation-alignment": "viewport",
+                "text-size": 10
+            },
+            "minzoom": 9,
+            "paint": {
+                "text-color": "rgba(0, 0, 0, 1)"
+            },
+            "source": "openmaptiles",
+            "source-layer": "transportation_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "road.highway",
+                "microg:gms-type-element": "labels.icon"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "has",
+                    "iata"
+                ]
+            ],
+            "id": "airport-label-major",
+            "layout": {
+                "icon-image": "airport_11",
+                "icon-size": 1,
+                "text-anchor": "top",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-offset": [
+                    0,
+                    0.6
+                ],
+                "text-optional": true,
+                "text-padding": 2,
+                "text-size": 12,
+                "visibility": "visible"
+            },
+            "minzoom": 10,
+            "paint": {
+                "text-color": "#666",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "aerodrome_label",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "transit.station.airport",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "!in",
+                "class",
+                "city",
+                "town",
+                "village",
+                "country",
+                "continent"
+            ],
+            "id": "place-other",
+            "layout": {
+                "symbol-avoid-edges": true,
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-letter-spacing": 0.1,
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            12,
+                            10
+                        ],
+                        [
+                            15,
+                            14
+                        ]
+                    ]
+                },
+                "text-transform": "uppercase",
+                "visibility": "visible"
+            },
+            "minzoom": 12,
+            "paint": {
+                "text-color": "#633",
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 1.2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.neighborhood",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "village"
+            ],
+            "id": "place-village",
+            "layout": {
+                "symbol-avoid-edges": true,
+                "symbol-spacing": 350,
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 8,
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            10,
+                            12
+                        ],
+                        [
+                            15,
+                            22
+                        ]
+                    ]
+                },
+                "visibility": "visible"
+            },
+            "minzoom": 11,
+            "paint": {
+                "text-color": "#333",
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 1.2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.neighborhood",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    "<=",
+                    "rank",
+                    2
+                ],
+                [
+                    "has",
+                    "name"
+                ],
+                [
+                    "!=",
+                    "name",
+                    ""
+                ]
+            ],
+            "id": "mountain-peaks",
+            "layout": {
+                "icon-image": "mountain_11",
+                "symbol-avoid-edges": true,
+                "text-anchor": "top",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ],
+                    "\n",
+                    [
+                        "to-string",
+                        [
+                            "get",
+                            "ele"
+                        ]
+                    ],
+                    " m"
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-offset": [
+                    0,
+                    0.6
+                ],
+                "text-padding": 2,
+                "text-size": 12
+            },
+            "minzoom": 9,
+            "paint": {
+                "text-color": "#666",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "mountain_peak",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    ">=",
+                    "ele",
+                    2500
+                ],
+                [
+                    "has",
+                    "name"
+                ],
+                [
+                    "!=",
+                    "name",
+                    ""
+                ],
+                [
+                    "<=",
+                    "rank",
+                    1
+                ]
+            ],
+            "id": "mountain-peaks-important",
+            "layout": {
+                "icon-image": "mountain_11",
+                "symbol-avoid-edges": true,
+                "text-anchor": "top",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ],
+                    "\n",
+                    [
+                        "to-string",
+                        [
+                            "get",
+                            "ele"
+                        ]
+                    ],
+                    " m"
+                ],
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 9,
+                "text-offset": [
+                    0,
+                    0.6
+                ],
+                "text-padding": 2,
+                "text-size": 12
+            },
+            "maxzoom": 9,
+            "minzoom": 7,
+            "paint": {
+                "text-color": "#666",
+                "text-halo-blur": 0.5,
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "mountain_peak",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "landscape.natural.landcover",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "town"
+            ],
+            "id": "place-town",
+            "layout": {
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Regular"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 8,
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            10,
+                            14
+                        ],
+                        [
+                            15,
+                            22
+                        ]
+                    ]
+                },
+                "visibility": "visible"
+            },
+            "paint": {
+                "text-color": "#333",
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 1.2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.locality",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "match",
+                    [
+                        "get",
+                        "class"
+                    ],
+                    [
+                        "nature_reserve",
+                        "protected_area"
+                    ],
+                    true,
+                    false
+                ],
+                [
+                    "==",
+                    [
+                        "geometry-type"
+                    ],
+                    "Point"
+                ],
+                [
+                    "==",
+                    [
+                        "get",
+                        "rank"
+                    ],
+                    1
+                ],
+                [
+                    "!",
+                    [
+                        "any",
+                        [
+                            "in",
+                            "Open Access Land",
+                            [
+                                "get",
+                                "name"
+                            ]
+                        ],
+                        [
+                            "in",
+                            "State Game Land",
+                            [
+                                "get",
+                                "name"
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            "id": "park-reserve",
+            "layout": {
+                "symbol-avoid-edges": true,
+                "symbol-placement": "point",
+                "text-anchor": "center",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Italic"
+                ],
+                "text-justify": "center",
+                "text-line-height": 1.55,
+                "text-max-width": 10,
+                "text-padding": 2,
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            8,
+                            12
+                        ],
+                        [
+                            13,
+                            14
+                        ]
+                    ]
+                },
+                "visibility": "visible"
+            },
+            "minzoom": 8,
+            "paint": {
+                "text-color": "rgba(102, 51, 1, 1)",
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "park",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "poi.park",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "class",
+                    "national_park"
+                ],
+                [
+                    "==",
+                    "$type",
+                    "Point"
+                ],
+                [
+                    "==",
+                    "rank",
+                    1
+                ]
+            ],
+            "id": "park-national",
+            "layout": {
+                "symbol-avoid-edges": true,
+                "symbol-placement": "point",
+                "text-anchor": "center",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Italic"
+                ],
+                "text-justify": "center",
+                "text-line-height": 1.55,
+                "text-max-width": 10,
+                "text-padding": 2,
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            6,
+                            12
+                        ],
+                        [
+                            8,
+                            14
+                        ],
+                        [
+                            12,
+                            16
+                        ]
+                    ]
+                },
+                "visibility": "visible"
+            },
+            "minzoom": 6,
+            "paint": {
+                "text-color": "rgba(102, 51, 1, 1)",
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 1
+            },
+            "source": "openmaptiles",
+            "source-layer": "park",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "poi.park",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "$type",
+                "LineString"
+            ],
+            "id": "water-name-lakeline",
+            "layout": {
+                "symbol-placement": "line",
+                "symbol-spacing": 250,
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            " ",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Italic"
+                ],
+                "text-letter-spacing": 0.2,
+                "text-line-height": 1.55,
+                "text-max-width": 5,
+                "text-pitch-alignment": "viewport",
+                "text-rotation-alignment": "map",
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            0,
+                            10
+                        ],
+                        [
+                            14,
+                            14
+                        ]
+                    ]
+                }
+            },
+            "paint": {
+                "text-color": "#115AA7"
+            },
+            "source": "openmaptiles",
+            "source-layer": "water_name",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "water",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "!=",
+                    "capital",
+                    2
+                ],
+                [
+                    "==",
+                    "class",
+                    "city"
+                ]
+            ],
+            "id": "place-city",
+            "layout": {
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 8,
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            7,
+                            14
+                        ],
+                        [
+                            11,
+                            24
+                        ]
+                    ]
+                },
+                "visibility": "visible"
+            },
+            "paint": {
+                "text-color": "#333",
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 1.2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.locality",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "capital",
+                    2
+                ],
+                [
+                    "==",
+                    "class",
+                    "city"
+                ]
+            ],
+            "id": "place-city-capital",
+            "layout": {
+                "icon-image": "star_11",
+                "icon-size": 0.8,
+                "text-anchor": "left",
+                "text-field": [
+                    "concat",
+                    [
+                        "get",
+                        "name:latin"
+                    ],
+                    [
+                        "case",
+                        [
+                            "all",
+                            [
+                                "has",
+                                "name:nonlatin"
+                            ],
+                            [
+                                "is-supported-script",
+                                [
+                                    "get",
+                                    "name:nonlatin"
+                                ]
+                            ]
+                        ],
+                        [
+                            "concat",
+                            "\n",
+                            [
+                                "get",
+                                "name:nonlatin"
+                            ]
+                        ],
+                        ""
+                    ]
+                ],
+                "text-font": [
+                    "Stadia Semibold"
+                ],
+                "text-line-height": 1.55,
+                "text-max-width": 8,
+                "text-offset": [
+                    0.4,
+                    0
+                ],
+                "text-size": {
+                    "base": 1.2,
+                    "stops": [
+                        [
+                            7,
+                            14
+                        ],
+                        [
+                            11,
+                            24
+                        ]
+                    ]
+                },
+                "visibility": "visible"
+            },
+            "paint": {
+                "text-color": "#333",
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 1.2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.locality",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "class",
+                    "country"
+                ],
+                [
+                    ">=",
+                    "rank",
+                    3
+                ],
+                [
+                    "!has",
+                    "iso_a2"
+                ]
+            ],
+            "id": "place-country-other",
+            "layout": {
+                "symbol-avoid-edges": true,
+                "text-field": "{name:latin}",
+                "text-font": [
+                    "Stadia Italic"
+                ],
+                "text-max-width": 6.25,
+                "text-size": {
+                    "stops": [
+                        [
+                            3,
+                            11
+                        ],
+                        [
+                            7,
+                            17
+                        ]
+                    ]
+                },
+                "text-transform": "uppercase",
+                "visibility": "visible"
+            },
+            "minzoom": 1,
+            "paint": {
+                "text-color": "#334",
+                "text-halo-blur": 1,
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.province",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "class",
+                    "country"
+                ],
+                [
+                    ">=",
+                    "rank",
+                    3
+                ],
+                [
+                    "has",
+                    "iso_a2"
+                ]
+            ],
+            "id": "place-country-3",
+            "layout": {
+                "text-field": "{name:latin}",
+                "text-font": [
+                    "Stadia Bold"
+                ],
+                "text-max-width": 6.25,
+                "text-size": {
+                    "stops": [
+                        [
+                            3,
+                            11
+                        ],
+                        [
+                            7,
+                            17
+                        ]
+                    ]
+                },
+                "text-transform": "uppercase",
+                "visibility": "visible"
+            },
+            "minzoom": 1,
+            "paint": {
+                "text-color": "#334",
+                "text-halo-blur": 1,
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.province",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "class",
+                    "country"
+                ],
+                [
+                    "==",
+                    "rank",
+                    2
+                ],
+                [
+                    "has",
+                    "iso_a2"
+                ]
+            ],
+            "id": "place-country-2",
+            "layout": {
+                "text-field": "{name:latin}",
+                "text-font": [
+                    "Stadia Bold"
+                ],
+                "text-max-width": 6.25,
+                "text-size": {
+                    "stops": [
+                        [
+                            2,
+                            11
+                        ],
+                        [
+                            5,
+                            17
+                        ]
+                    ]
+                },
+                "text-transform": "uppercase",
+                "visibility": "visible"
+            },
+            "minzoom": 1,
+            "paint": {
+                "text-color": "#334",
+                "text-halo-blur": 1,
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.province",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "all",
+                [
+                    "==",
+                    "class",
+                    "country"
+                ],
+                [
+                    "==",
+                    "rank",
+                    1
+                ],
+                [
+                    "has",
+                    "iso_a2"
+                ]
+            ],
+            "id": "place-country-1",
+            "layout": {
+                "text-field": "{name:latin}",
+                "text-font": [
+                    "Stadia Bold"
+                ],
+                "text-max-width": 6.25,
+                "text-size": {
+                    "stops": [
+                        [
+                            1,
+                            11
+                        ],
+                        [
+                            4,
+                            17
+                        ]
+                    ]
+                },
+                "text-transform": "uppercase",
+                "visibility": "visible"
+            },
+            "minzoom": 1,
+            "paint": {
+                "text-color": "#334",
+                "text-halo-blur": 1,
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.country",
+                "microg:gms-type-element": "labels.text"
+            }
+        },
+        {
+            "filter": [
+                "==",
+                "class",
+                "continent"
+            ],
+            "id": "place-continent",
+            "layout": {
+                "text-field": "{name:latin}",
+                "text-font": [
+                    "Stadia Bold"
+                ],
+                "text-max-width": 6.25,
+                "text-size": 14,
+                "text-transform": "uppercase",
+                "visibility": "visible"
+            },
+            "maxzoom": 1,
+            "paint": {
+                "text-color": "#334",
+                "text-halo-blur": 1,
+                "text-halo-color": "rgba(255,255,255,0.8)",
+                "text-halo-width": 2
+            },
+            "source": "openmaptiles",
+            "source-layer": "place",
+            "type": "symbol",
+            "metadata": {
+                "microg:gms-type-feature": "administrative.land_parcel",
+                "microg:gms-type-element": "labels.text"
+            }
+        }
+    ],
+    "metadata": {
+        "mapbox:autocomposite": false,
+        "openmaptiles:version": "3.x"
+    },
+    "name": "Outdoors",
+    "pitch": 0,
+    "sources": {
+        "openmaptiles": {
+            "type": "vector",
+            "url": "https://tiles.stadiamaps.com/data/openmaptiles.json"
+        }
+    },
+    "sprite": "https://tiles.stadiamaps.com/styles/outdoors/sprite",
+    "version": 8,
+    "zoom": 11.6
+}

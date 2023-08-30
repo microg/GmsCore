@@ -58,11 +58,11 @@ abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
         onInfoWindowClickListener = listener
     }
 
-    override fun setInfoWindowLongClickListener(listener: IOnInfoWindowLongClickListener) {
+    override fun setOnInfoWindowLongClickListener(listener: IOnInfoWindowLongClickListener) {
         onInfoWindowLongClickListener = listener
     }
 
-    override fun setInfoWindowCloseListener(listener: IOnInfoWindowCloseListener) {
+    override fun setOnInfoWindowCloseListener(listener: IOnInfoWindowCloseListener) {
         onInfoWindowCloseListener = listener
     }
 
@@ -82,8 +82,24 @@ abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
         markerClickListener = listener
     }
 
-    override fun setCircleClickListener(listener: IOnCircleClickListener?) {
+    override fun setOnCircleClickListener(listener: IOnCircleClickListener?) {
         circleClickListener = listener
+    }
+
+    override fun setOnPolygonClickListener(listener: IOnPolygonClickListener?) {
+        Log.d(TAG, "Not yet implemented: setOnPolygonClickListener")
+    }
+
+    override fun setOnPolylineClickListener(listener: IOnPolylineClickListener?) {
+        Log.d(TAG, "Not yet implemented: setOnPolylineClickListener")
+    }
+
+    override fun setOnGroundOverlayClickListener(listener: IOnGroundOverlayClickListener?) {
+        Log.d(TAG, "Not yet implemented: setOnGroundOverlayClickListener")
+    }
+
+    override fun setOnMyLocationClickListener(listener: IOnMyLocationClickListener?) {
+        Log.d(TAG, "Not yet implemented: setOnMyLocationClickListener")
     }
 
     override fun getMyLocation(): Location? {

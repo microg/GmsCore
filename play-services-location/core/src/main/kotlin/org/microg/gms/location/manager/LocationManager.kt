@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.IBinder
 import android.util.Log
@@ -28,9 +29,7 @@ import com.google.android.gms.location.Granularity.GRANULARITY_COARSE
 import com.google.android.gms.location.Granularity.GRANULARITY_FINE
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.internal.ClientIdentity
-import org.microg.gms.location.GranularityUtil
-import org.microg.gms.location.elapsedMillis
-import org.microg.gms.location.network.NetworkLocationService
+import org.microg.gms.location.*
 import org.microg.gms.utils.IntentCacheManager
 import java.io.PrintWriter
 import kotlin.math.max
@@ -44,6 +43,8 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
     val database by lazy { LocationAppsDatabase(context) }
     private val requestManager by lazy { LocationRequestManager(context, lifecycle, postProcessor, database) { onRequestManagerUpdated() } }
     private val gpsLocationListener by lazy { LocationListenerCompat { updateGpsLocation(it) } }
+    private val networkLocationListener by lazy { LocationListenerCompat { updateNetworkLocation(it) } }
+    private var boundToSystemNetworkLocation: Boolean = false
 
     val deviceOrientationManager = DeviceOrientationManager(context, lifecycle)
 
@@ -135,7 +136,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
             started = true
         }
         val intent = Intent(context, LocationManagerService::class.java)
-        intent.action = NetworkLocationService.ACTION_REPORT_LOCATION
+        intent.action = LocationManagerService.ACTION_REPORT_LOCATION
         coarsePendingIntent = PendingIntent.getService(context, 0, intent, (if (SDK_INT >= 31) FLAG_MUTABLE else 0) or FLAG_UPDATE_CURRENT)
         lastLocationCapsule.start()
         requestManager.start()
@@ -150,13 +151,20 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
         lastLocationCapsule.stop()
         deviceOrientationManager.stop()
 
-        val intent = Intent(context, NetworkLocationService::class.java)
-        intent.putExtra(NetworkLocationService.EXTRA_PENDING_INTENT, coarsePendingIntent)
-        intent.putExtra(NetworkLocationService.EXTRA_ENABLE, false)
-        context.startService(intent)
+        if (context.hasNetworkLocationServiceBuiltIn()) {
+            val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
+            intent.`package` = context.packageName
+            intent.putExtra(EXTRA_PENDING_INTENT, coarsePendingIntent)
+            intent.putExtra(EXTRA_ENABLE, false)
+            context.startService(intent)
+        }
 
         val locationManager = context.getSystemService<SystemLocationManager>() ?: return
         try {
+            if (boundToSystemNetworkLocation) {
+                LocationManagerCompat.removeUpdates(locationManager, networkLocationListener)
+                boundToSystemNetworkLocation = false
+            }
             LocationManagerCompat.removeUpdates(locationManager, gpsLocationListener)
         } catch (e: SecurityException) {
             // Ignore
@@ -174,33 +182,34 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
             else -> Long.MAX_VALUE
         }
 
-        val intent = Intent(context, NetworkLocationService::class.java)
-        intent.putExtra(NetworkLocationService.EXTRA_PENDING_INTENT, coarsePendingIntent)
-        intent.putExtra(NetworkLocationService.EXTRA_ENABLE, true)
-        intent.putExtra(NetworkLocationService.EXTRA_INTERVAL_MILLIS, networkInterval)
-        intent.putExtra(NetworkLocationService.EXTRA_LOW_POWER, requestManager.granularity <= GRANULARITY_COARSE)
-        intent.putExtra(NetworkLocationService.EXTRA_WORK_SOURCE, requestManager.workSource)
-        context.startService(intent)
+        if (context.hasNetworkLocationServiceBuiltIn()) {
+            val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
+            intent.`package` = context.packageName
+            intent.putExtra(EXTRA_PENDING_INTENT, coarsePendingIntent)
+            intent.putExtra(EXTRA_ENABLE, true)
+            intent.putExtra(EXTRA_INTERVAL_MILLIS, networkInterval)
+            intent.putExtra(EXTRA_LOW_POWER, requestManager.granularity <= GRANULARITY_COARSE)
+            intent.putExtra(EXTRA_WORK_SOURCE, requestManager.workSource)
+            context.startService(intent)
+        }
 
         val locationManager = context.getSystemService<SystemLocationManager>() ?: return
-        if (gpsInterval != Long.MAX_VALUE) {
-            try {
-                LocationManagerCompat.requestLocationUpdates(
-                    locationManager,
-                    SystemLocationManager.GPS_PROVIDER,
-                    LocationRequestCompat.Builder(gpsInterval).build(),
-                    gpsLocationListener,
-                    context.mainLooper
-                )
-            } catch (e: SecurityException) {
-                // Ignore
+        locationManager.requestSystemProviderUpdates(SystemLocationManager.GPS_PROVIDER, gpsInterval, gpsLocationListener)
+        if (!context.hasNetworkLocationServiceBuiltIn() && LocationManagerCompat.hasProvider(locationManager, SystemLocationManager.NETWORK_PROVIDER)) {
+            boundToSystemNetworkLocation = true
+            locationManager.requestSystemProviderUpdates(SystemLocationManager.NETWORK_PROVIDER, networkInterval, networkLocationListener)
+        }
+    }
+
+    private fun SystemLocationManager.requestSystemProviderUpdates(provider: String, interval: Long, listener: LocationListenerCompat) {
+        try {
+            if (interval != Long.MAX_VALUE) {
+                LocationManagerCompat.requestLocationUpdates(this, provider, LocationRequestCompat.Builder(interval).build(), listener, context.mainLooper)
+            } else {
+                LocationManagerCompat.requestLocationUpdates(this, provider, LocationRequestCompat.Builder(LocationRequestCompat.PASSIVE_INTERVAL).setMinUpdateIntervalMillis(MAX_FINE_UPDATE_INTERVAL).build(), listener, context.mainLooper)
             }
-        } else {
-            try {
-                LocationManagerCompat.removeUpdates(locationManager, gpsLocationListener)
-            } catch (e: SecurityException) {
-                // Ignore
-            }
+        } catch (e: SecurityException) {
+            // Ignore
         }
     }
 
@@ -234,24 +243,9 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
 
     fun dump(writer: PrintWriter) {
         writer.println("Location availability: ${lastLocationCapsule.locationAvailability}")
-        writer.println(
-            "Last coarse location: ${
-                postProcessor.process(
-                    lastLocationCapsule.getLocation(GRANULARITY_COARSE, Long.MAX_VALUE),
-                    GRANULARITY_COARSE,
-                    true
-                )
-            }"
-        )
-        writer.println(
-            "Last fine location: ${
-                postProcessor.process(
-                    lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE),
-                    GRANULARITY_FINE,
-                    true
-                )
-            }"
-        )
+        writer.println("Last coarse location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_COARSE, Long.MAX_VALUE), GRANULARITY_COARSE, true)}")
+        writer.println("Last fine location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE), GRANULARITY_FINE, true)}")
+        writer.println("Network location: built-in=${context.hasNetworkLocationServiceBuiltIn()} system=$boundToSystemNetworkLocation")
         requestManager.dump(writer)
         deviceOrientationManager.dump(writer)
     }

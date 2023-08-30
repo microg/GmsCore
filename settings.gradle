@@ -4,16 +4,18 @@ def sublude(name) {
   project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
 }
 
-include ':play-services-basement'
+include ':safe-parcel-processor'
 
-include ':play-services-tasks'
-
-include ':play-services-api'
-
+include ':play-services-ads'
+include ':play-services-ads-base'
+include ':play-services-ads-identifier'
+include ':play-services-ads-lite'
 include ':play-services-appinvite'
 include ':play-services-auth'
+include ':play-services-auth-api-phone'
 include ':play-services-auth-base'
 include ':play-services-base'
+include ':play-services-basement'
 include ':play-services-cast'
 include ':play-services-cast-framework'
 include ':play-services-clearcut'
@@ -34,14 +36,16 @@ include ':play-services-places-placereport'
 include ':play-services-recaptcha'
 include ':play-services-safetynet'
 include ':play-services-tapandpay'
+include ':play-services-tasks'
 include ':play-services-vision'
 include ':play-services-vision-common'
 include ':play-services-wearable'
 
+include ':play-services-api'
 include ':play-services'
 
 include ':firebase-auth'
-include ':firebase-dynamic-links-api'
+include ':firebase-dynamic-links'
 
 // core only
 
@@ -50,6 +54,11 @@ include ':play-services-core-proto'
 sublude ':play-services-basement:ktx'
 sublude ':play-services-tasks:ktx'
 
+sublude ':play-services-ads:core'
+sublude ':play-services-ads-identifier:core'
+sublude ':play-services-ads-lite:core'
+sublude ':play-services-appinvite:core'
+sublude ':play-services-auth-api-phone:core'
 sublude ':play-services-base:core'
 sublude ':play-services-cast:core'
 sublude ':play-services-cast-framework:core'
@@ -60,7 +69,9 @@ sublude ':play-services-droidguard:core'
 sublude ':play-services-fido:core'
 sublude ':play-services-gmscompliance:core'
 sublude ':play-services-location:core'
-sublude ':play-services-location:system-api'
+sublude ':play-services-location:core:base'
+sublude ':play-services-location:core:provider'
+sublude ':play-services-location:core:system-api'
 include ':play-services-maps-core-mapbox'
 include ':play-services-maps-core-vtm'
 include ':play-services-maps-core-vtm:vtm-microg-theme'

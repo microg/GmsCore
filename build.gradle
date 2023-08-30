@@ -5,10 +5,9 @@
 
 buildscript {
     ext.cronetVersion = '102.5005.125'
-    ext.safeParcelVersion = '1.7.1'
     ext.wearableVersion = '0.1.1'
 
-    ext.kotlinVersion = '1.7.10'
+    ext.kotlinVersion = '1.7.22'
     ext.coroutineVersion = '1.6.4'
 
     ext.annotationVersion = '1.5.0'
@@ -27,11 +26,11 @@ buildscript {
 
     ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
-    ext.wireVersion = '4.4.1'
+    ext.wireVersion = '4.8.0'
 
-    ext.androidBuildGradleVersion = '7.2.1'
+    ext.androidBuildGradleVersion = '8.0.2'
 
-    ext.androidBuildVersionTools = '33.0.0'
+    ext.androidBuildVersionTools = '33.0.1'
 
     ext.androidMinSdk = 14
     ext.androidTargetSdk = 29
@@ -54,7 +53,6 @@ buildscript {
         classpath "com.android.tools.build:gradle:$androidBuildGradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "com.squareup.wire:wire-gradle-plugin:$wireVersion"
-        classpath "com.github.kezong:fat-aar:1.3.8"
     }
 }
 
@@ -67,7 +65,7 @@ def execResult(...args) {
     return stdout.toString()
 }
 
-def gmsVersion = "23.16.57"
+def gmsVersion = "23.30.13"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim())
@@ -107,15 +105,6 @@ subprojects {
     repositories {
         mavenCentral()
         google()
-    }
-    afterEvaluate {
-        // Temporary hack for Android Studio
-        if (project.plugins.hasPlugin('com.android.base')) {
-            dependencies {
-                compileOnly "org.microg:safe-parcel:$safeParcelVersion"
-                testCompileOnly "org.microg:safe-parcel:$safeParcelVersion"
-            }
-        }
     }
 }
 

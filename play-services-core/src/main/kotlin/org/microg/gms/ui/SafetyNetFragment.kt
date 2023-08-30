@@ -51,13 +51,11 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
     private lateinit var apps: PreferenceCategory
     private lateinit var appsAll: Preference
     private lateinit var appsNone: Preference
+    private lateinit var droidguardUnsupported: Preference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_safetynet)
-    }
 
-    @SuppressLint("RestrictedApi")
-    override fun onBindPreferences() {
         switchBarPreference = preferenceScreen.findPreference("pref_safetynet_enabled") ?: switchBarPreference
         runAttest = preferenceScreen.findPreference("pref_safetynet_run_attest") ?: runAttest
         runReCaptcha = preferenceScreen.findPreference("pref_recaptcha_run_test") ?: runReCaptcha
@@ -65,6 +63,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
         apps = preferenceScreen.findPreference("prefcat_safetynet_apps") ?: apps
         appsAll = preferenceScreen.findPreference("pref_safetynet_apps_all") ?: appsAll
         appsNone = preferenceScreen.findPreference("pref_safetynet_apps_none") ?: appsNone
+        droidguardUnsupported = preferenceScreen.findPreference("pref_droidguard_unsupported") ?: droidguardUnsupported
 
         runAttest.isVisible = SAFETYNET_API_KEY != null
         runReCaptcha.isVisible = RECAPTCHA_SITE_KEY != null
@@ -78,6 +77,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
             val newStatus = newValue as Boolean
             SafetyNetPreferences.setEnabled(requireContext(), newStatus)
             DroidGuardPreferences.setEnabled(requireContext(), newStatus)
+            droidguardUnsupported.isVisible = switchBarPreference.isChecked && !DroidGuardPreferences.isAvailable(requireContext())
             true
         }
     }
@@ -221,6 +221,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
 
         switchBarPreference.isEnabled = CheckinPreferences.isEnabled(requireContext())
         switchBarPreference.isChecked = SafetyNetPreferences.isEnabled(requireContext()) && DroidGuardPreferences.isEnabled(requireContext())
+        droidguardUnsupported.isVisible = switchBarPreference.isChecked && !DroidGuardPreferences.isAvailable(requireContext())
 
         updateContent()
     }
@@ -274,7 +275,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.add(0, MENU_ADVANCED, 0, R.string.menu_advanced)
+        menu.add(0, MENU_ADVANCED, 0, org.microg.gms.base.core.R.string.menu_advanced)
         menu.add(0, MENU_CLEAR_REQUESTS, 0, R.string.menu_clear_recent_requests)
         super.onCreateOptionsMenu(menu, inflater)
     }

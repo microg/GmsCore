@@ -16,26 +16,29 @@
 
 package com.google.android.gms.maps.model;
 
+import android.os.Parcel;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 /**
  * An immutable class representing a pair of latitude and longitude coordinates, stored as degrees.
  */
 @PublicApi
-public final class LatLng extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
+@SafeParcelable.Class
+public final class LatLng extends AbstractSafeParcelable {
+    @Field(1)
+    int versionCode = 1;
     /**
      * Latitude, in degrees. This value is in the range [-90, 90].
      */
-    @SafeParceled(2)
+    @Field(2)
     public final double latitude;
     /**
      * Longitude, in degrees. This value is in the range [-180, 180).
      */
-    @SafeParceled(3)
+    @Field(3)
     public final double longitude;
 
     /**
@@ -44,6 +47,13 @@ public final class LatLng extends AutoSafeParcelable {
      */
     private LatLng() {
         latitude = longitude = 0;
+    }
+
+    @Constructor
+    LatLng(@Param(1) int versionCode, @Param(2) double latitude, @Param(3) double longitude) {
+        this.versionCode = versionCode;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     /**
@@ -99,6 +109,11 @@ public final class LatLng extends AutoSafeParcelable {
     public String toString() {
         return "lat/lng: (" + latitude + "," + longitude + ")";
     }
-    
-    public static Creator<LatLng> CREATOR = new AutoCreator<LatLng>(LatLng.class);
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        CREATOR.writeToParcel(this, out, flags);
+    }
+
+    public static SafeParcelableCreatorAndWriter<LatLng> CREATOR = findCreator(LatLng.class);
 }

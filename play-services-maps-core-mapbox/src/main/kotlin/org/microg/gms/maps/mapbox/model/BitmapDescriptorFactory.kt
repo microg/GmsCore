@@ -35,6 +35,7 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
     private var mapResources: Resources? = null
     private val maps = hashSetOf<MapboxMap>()
     private val bitmaps = hashMapOf<String, Bitmap>()
+    private val refCount = hashMapOf<String, Int>()
 
     fun initialize(mapResources: Resources?, resources: Resources?) {
         BitmapDescriptorFactoryImpl.mapResources = mapResources ?: resources
@@ -53,7 +54,6 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
 
     fun unregisterMap(map: MapboxMap?) {
         maps.remove(map)
-        // TODO: cleanup bitmaps?
     }
 
     fun put(style: Style.Builder) {
@@ -65,61 +65,94 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
     }
 
     fun bitmapSize(id: String): FloatArray =
-            bitmaps[id]?.let { floatArrayOf(it.width.toFloat(), it.height.toFloat()) }
-                    ?: floatArrayOf(0f, 0f)
+        bitmaps[id]?.let { floatArrayOf(it.width.toFloat(), it.height.toFloat()) }
+            ?: floatArrayOf(0f, 0f)
 
-    private fun registerBitmap(id: String, bitmapCreator: () -> Bitmap?) {
-        val bitmap: Bitmap = synchronized(bitmaps) {
-            if (bitmaps.contains(id)) return
+    fun disposeDescriptor(id: String) {
+        synchronized(refCount) {
+            if (refCount.containsKey(id)) {
+                val old = refCount[id]!!
+                if (old > 1) {
+                    refCount[id] = old - 1;
+                    return
+                }
+            }
+        }
+        unregisterBitmap(id)
+    }
+
+    private fun unregisterBitmap(id: String) {
+        synchronized(bitmaps) {
+            if (!bitmaps.containsKey(id)) return
+            bitmaps.remove(id)
+        }
+
+        for (map in maps) {
+            map.getStyle {
+                runOnMainLooper {
+                    try {
+                        it.removeImage(id)
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                    }
+                }
+            }
+        }
+
+        refCount.remove(id)
+    }
+
+    private fun registerBitmap(id: String, descriptorCreator: (id: String, size: FloatArray) -> BitmapDescriptorImpl = { id, size -> BitmapDescriptorImpl(id, size) }, bitmapCreator: () -> Bitmap?): IObjectWrapper {
+        val bitmap: Bitmap? = synchronized(bitmaps) {
+            if (bitmaps.contains(id)) return@synchronized null
             val bitmap = bitmapCreator()
             if (bitmap == null) {
                 Log.w(TAG, "Failed to register bitmap $id, creator returned null")
-                return
+                return@synchronized null
             }
             bitmaps[id] = bitmap
             bitmap
         }
-        for (map in maps) {
-            map.getStyle {
-                runOnMainLooper {
-                    it.addImage(id, bitmap)
+
+        if (bitmap != null) {
+            for (map in maps) {
+                map.getStyle {
+                    runOnMainLooper {
+                        it.addImage(id, bitmap)
+                    }
                 }
             }
         }
-    }
 
-    override fun fromResource(resourceId: Int): IObjectWrapper? {
-        val id = "resource-$resourceId"
-        registerBitmap(id) {
-            val bitmap = BitmapFactory.decodeResource(resources, resourceId)
-            if (bitmap == null) {
-                try {
-                    Log.d(TAG, "Resource $resourceId not found in $resources (${resources?.getResourceName(resourceId)})")
-                } catch (e: Resources.NotFoundException) {
-                    Log.d(TAG, "Resource $resourceId not found in $resources")
-                }
-            }
-            bitmap
+        synchronized(refCount) {
+            refCount[id] = (refCount[id] ?: 0) + 1
         }
-        return ObjectWrapper.wrap(BitmapDescriptorImpl(id, bitmapSize(id)))
+
+        return ObjectWrapper.wrap(descriptorCreator(id, bitmapSize(id)))
     }
 
-    override fun fromAsset(assetName: String): IObjectWrapper? {
-        val id = "asset-$assetName"
-        registerBitmap(id) { resources?.assets?.open(assetName)?.let { BitmapFactory.decodeStream(it) } }
-        return ObjectWrapper.wrap(BitmapDescriptorImpl(id, bitmapSize(id)))
+    override fun fromResource(resourceId: Int): IObjectWrapper = registerBitmap("resource-$resourceId") {
+        val bitmap = BitmapFactory.decodeResource(resources, resourceId)
+        if (bitmap == null) {
+            try {
+                Log.d(TAG, "Resource $resourceId not found in $resources (${resources?.getResourceName(resourceId)})")
+            } catch (e: Resources.NotFoundException) {
+                Log.d(TAG, "Resource $resourceId not found in $resources")
+            }
+        }
+        bitmap
     }
 
-    override fun fromFile(fileName: String): IObjectWrapper? {
-        val id = "file-$fileName"
-        registerBitmap(id) { BitmapFactory.decodeFile(fileName) }
-        return ObjectWrapper.wrap(BitmapDescriptorImpl(id, bitmapSize(id)))
+    override fun fromAsset(assetName: String): IObjectWrapper = registerBitmap("asset-$assetName") {
+        resources?.assets?.open(assetName)?.let { BitmapFactory.decodeStream(it) }
     }
 
-    override fun defaultMarker(): IObjectWrapper? {
-        val id = "marker"
-        registerBitmap(id) { BitmapFactory.decodeResource(mapResources, R.drawable.maps_default_marker) }
-        return ObjectWrapper.wrap(BitmapDescriptorImpl(id, bitmapSize(id)))
+    override fun fromFile(fileName: String): IObjectWrapper = registerBitmap("file-$fileName") {
+        BitmapFactory.decodeFile(fileName)
+    }
+
+    override fun defaultMarker(): IObjectWrapper = registerBitmap("marker") {
+        BitmapFactory.decodeResource(mapResources, R.drawable.maps_default_marker)
     }
 
     private fun adjustHue(cm: ColorMatrix, value: Float) {
@@ -142,8 +175,7 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
     }
 
     override fun defaultMarkerWithHue(hue: Float): IObjectWrapper? {
-        val id = "marker-${hue.toInt()}"
-        registerBitmap(id) {
+        return registerBitmap("marker-${hue.toInt()}", { id, size -> ColorBitmapDescriptorImpl(id, size, hue) }) {
             val bitmap = BitmapFactory.decodeResource(mapResources, R.drawable.maps_default_marker).copy(Bitmap.Config.ARGB_8888, true)
             val paint = Paint()
             val matrix = ColorMatrix()
@@ -155,25 +187,16 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
             canvas.drawBitmap(bitmap, 0f, 0f, paint)
             bitmap
         }
-        return ObjectWrapper.wrap(ColorBitmapDescriptorImpl(id, bitmapSize(id), hue))
     }
 
-    override fun fromBitmap(bitmap: Bitmap): IObjectWrapper? {
-        val id = "bitmap-${bitmap.hashCode()}"
-        registerBitmap(id) { bitmap }
-        return ObjectWrapper.wrap(BitmapDescriptorImpl(id, bitmapSize(id)))
-    }
+    override fun fromBitmap(bitmap: Bitmap): IObjectWrapper = registerBitmap("bitmap-${bitmap.hashCode()}") { bitmap }
 
-    override fun fromPath(absolutePath: String): IObjectWrapper? {
-        val id = "path-$absolutePath"
-        registerBitmap(id) { BitmapFactory.decodeFile(absolutePath) }
-        return ObjectWrapper.wrap(BitmapDescriptorImpl(id, bitmapSize(id)))
-    }
+    override fun fromPath(absolutePath: String): IObjectWrapper = registerBitmap("path-$absolutePath") { BitmapFactory.decodeFile(absolutePath) }
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
-            if (super.onTransact(code, data, reply, flags)) {
-                true
-            } else {
-                Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
-            }
+        if (super.onTransact(code, data, reply, flags)) {
+            true
+        } else {
+            Log.d(TAG, "onTransact [unknown]: $code, $data, $flags"); false
+        }
 }

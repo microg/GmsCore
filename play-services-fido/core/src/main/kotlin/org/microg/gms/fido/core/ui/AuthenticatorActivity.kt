@@ -8,7 +8,7 @@ package org.microg.gms.fido.core.ui
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -60,8 +60,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         setOfNotNull(
             BluetoothTransportHandler(this, this),
             NfcTransportHandler(this, this),
-            if (Build.VERSION.SDK_INT >= 21) UsbTransportHandler(this, this) else null,
-            if (Build.VERSION.SDK_INT >= 23) ScreenLockTransportHandler(this, this) else null
+            if (SDK_INT >= 21) UsbTransportHandler(this, this) else null,
+            if (SDK_INT >= 23) ScreenLockTransportHandler(this, this) else null
         )
     }
 
@@ -84,7 +84,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             if (!intent.extras?.keySet().orEmpty().containsAll(REQUIRED_EXTRAS)) {
                 return finishWithError(UNKNOWN_ERR, "Extra missing from request")
             }
-            if (Build.VERSION.SDK_INT < 24) {
+            if (SDK_INT < 24) {
                 return finishWithError(NOT_SUPPORTED_ERR, "FIDO2 API is not supported on devices below N")
             }
             val options = options ?: return finishWithError(DATA_ERR, "The request options are not valid")
@@ -107,7 +107,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 }
             }
 
-            setTheme(R.style.Theme_AppCompat_DayNight_NoActionBar)
+            setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_NoActionBar)
             setContentView(R.layout.fido_authenticator_activity)
 
             lifecycleScope.launchWhenCreated {

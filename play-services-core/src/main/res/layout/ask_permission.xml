@@ -15,6 +15,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -75,7 +76,7 @@
             android:padding="10dp">
 
             <ImageView
-                android:src="@mipmap/ic_core_service_app"
+                tools:src="@mipmap/ic_app"
                 android:id="@+id/app_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

@@ -25,28 +25,56 @@ const val TAG = "GmsMapStyles"
 const val KEY_METADATA_FEATURE_TYPE = "microg:gms-type-feature"
 const val KEY_METADATA_ELEMENT_TYPE = "microg:gms-type-element"
 
+const val KEY_SOURCES = "sources"
+const val KEY_LAYERS = "layers"
+
 const val SELECTOR_ALL = "all"
 const val SELECTOR_ELEMENT_LABEL_TEXT_FILL = "labels.text.fill"
-const val SELECTOR_ELEMENT_LABEL_TEXT_OUTLINE = "labels.text.outline"
+const val SELECTOR_ELEMENT_LABEL_TEXT_STROKE = "labels.text.stroke"
+const val SELECTOR_ELEMENT_GEOMETRY_STROKE = "geometry.stroke"
 const val KEY_LAYER_METADATA = "metadata"
 const val KEY_LAYER_PAINT = "paint"
+
+const val KEY_SOURCE_URL = "url"
+const val KEY_SOURCE_TILES = "tiles"
 
 
 fun getStyle(
     context: MapContext, mapType: Int, styleOptions: MapStyleOptions?, styleFromFileWorkaround: Boolean = false
 ): Style.Builder {
 
-    // TODO: Serve map style resources locally
     val styleJson = JSONObject(
         context.assets.open(
-            when (mapType) {
-                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite.json"
+            if (BuildConfig.STADIA_KEY.isNotEmpty()) when (mapType) {
+                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-stadia.json"
+                GoogleMap.MAP_TYPE_TERRAIN -> "style-stadia-outdoors.json"
+                //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
+                else -> "style-microg-normal-stadia.json"
+            } else when (mapType) {
+                GoogleMap.MAP_TYPE_SATELLITE, GoogleMap.MAP_TYPE_HYBRID -> "style-microg-satellite-mapbox.json"
                 GoogleMap.MAP_TYPE_TERRAIN -> "style-mapbox-outdoors-v12.json"
                 //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
-                else -> "style-microg-normal.json"
+                else -> "style-microg-normal-mapbox.json"
             }
         ).bufferedReader().readText()
     )
+
+    // Inject API key
+    if (BuildConfig.STADIA_KEY.isNotEmpty()) {
+        val sourceArray = styleJson.getJSONObject(KEY_SOURCES)
+        for (key in sourceArray.keys()) {
+            val sourceObject = sourceArray.getJSONObject(key)
+            if (sourceObject.has(KEY_SOURCE_URL)) {
+                sourceObject.put(KEY_SOURCE_URL, "${sourceObject[KEY_SOURCE_URL]}?api_key=${BuildConfig.STADIA_KEY}")
+            }
+            if (sourceObject.has(KEY_SOURCE_TILES)) {
+                val tilesArray = sourceObject.getJSONArray(KEY_SOURCE_TILES)
+                for (i in 0 until tilesArray.length()) {
+                    tilesArray.put(i, "${tilesArray.getString(i)}?api_key=${BuildConfig.STADIA_KEY}")
+                }
+            }
+        }
+    }
 
     styleOptions?.apply(styleJson)
 
@@ -85,10 +113,16 @@ fun MapStyleOptions.apply(style: JSONObject) {
     try {
         Gson().fromJson(json, Array<StyleOperation>::class.java).let { styleOperations ->
 
-            val layerArray = style.getJSONArray("layers")
+            val layerArray = style.getJSONArray(KEY_LAYERS)
 
             // Apply operations in order
             operations@ for (operation in styleOperations.map { it.toNonNull() }) {
+                if (!operation.isValid()) {
+                    Log.w(TAG, "Operating is invalid: $operation")
+                    continue
+                }
+
+                var applied = 0
 
                 // Reverse direction allows removing hidden layers
                 layers@ for (i in layerArray.length() - 1 downTo 0) {
@@ -97,10 +131,9 @@ fun MapStyleOptions.apply(style: JSONObject) {
                     if (layer.layerHasRequiredFields()) {
 
                         if (operation.isValid() && layer.matchesOperation(operation)) {
-                            Log.v(TAG, "applying ${Gson().toJson(operation)} to $layer")
+                            applied++
 
                             if (layer.layerShouldBeRemoved(operation)) {
-                                Log.v(TAG, "removing $layer")
                                 layerArray.removeCompat(i)
                             } else {
                                 layer.applyOperation(operation)
@@ -108,6 +141,8 @@ fun MapStyleOptions.apply(style: JSONObject) {
                         }
                     }
                 }
+
+                Log.v(TAG, "Operation applied to $applied layers: ${Gson().toJson(operation)}")
             }
         }
 
@@ -160,6 +195,8 @@ fun JSONObject.matchesOperation(operation: NonNullStyleOperation) =
     (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_FEATURE_TYPE).startsWith(operation.featureType)
             || operation.featureType == "all")
     && (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE).startsWith(operation.elementType)
+            || getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE) == "labels.text"  && operation.elementType == SELECTOR_ELEMENT_LABEL_TEXT_FILL
+            || getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE) == "labels.text"  && operation.elementType == SELECTOR_ELEMENT_LABEL_TEXT_STROKE
             || operation.elementType == "all")
 
 
@@ -171,31 +208,36 @@ fun JSONObject.layerHasRequiredFields() = has(KEY_LAYER_PAINT) && has(KEY_LAYER_
 
 /**
  * True iff the layer represented by the JSON object should be removed according to the provided style operation.
- *
- * Interpretation of visibility "simplified": hide labels, display geometry.
  */
 fun JSONObject.layerShouldBeRemoved(operation: NonNullStyleOperation) =
     // A styler sets the layer to be invisible
     operation.stylers.any { it.visibility == "off" } ||
         // A styler sets the layer to simplified and we are working with a label
-        (getJSONObject("metadata").getString(KEY_METADATA_ELEMENT_TYPE)
-                .startsWith("labels") && operation.stylers.any { it.visibility == "simplified" })
+        (getJSONObject(KEY_LAYER_METADATA).getString(KEY_METADATA_ELEMENT_TYPE) == SELECTOR_ELEMENT_GEOMETRY_STROKE && operation.stylers.any { it.visibility == "simplified" })
 
 /**
  * Applies the provided style operation to the layer represented by the JSON object.
  */
 fun JSONObject.applyOperation(operation: NonNullStyleOperation) = operation.stylers.forEach { styler ->
-    when (operation.elementType) {
-        SELECTOR_ELEMENT_LABEL_TEXT_FILL -> styler.applyTextFill(getJSONObject(KEY_LAYER_PAINT))
-        SELECTOR_ELEMENT_LABEL_TEXT_OUTLINE -> styler.applyTextOutline(getJSONObject(KEY_LAYER_PAINT))
-        else -> styler.traverse(getJSONObject(KEY_LAYER_PAINT))
+    val paintJson = getJSONObject(KEY_LAYER_PAINT)
+    val metadataJson = getJSONObject(KEY_LAYER_METADATA)
+    if (styler.isColorChange()) {
+        when (operation.elementType) {
+            SELECTOR_ELEMENT_LABEL_TEXT_FILL -> styler.applyTextFill(paintJson)
+            SELECTOR_ELEMENT_LABEL_TEXT_STROKE -> styler.applyTextOutline(paintJson)
+            else -> styler.traverse(paintJson)
+        }
+    }
+    if (styler.visibility == "simplified" && metadataJson.getString(KEY_METADATA_ELEMENT_TYPE) == "labels.text") {
+        paintJson.remove("text-halo-blur")
+        paintJson.remove("text-halo-color")
     }
 }
 
 /**
  * Returns true if string is likely to contain a color.
  */
-fun String.isColor() = startsWith("hsl(") || startsWith("hsla(") || startsWith("#") || startsWith("rgba(")
+fun String.isColor() = ((startsWith("hsl(") || startsWith("hsla(")  || startsWith("rgba(")) && endsWith(")")) || startsWith("#")
 
 /**
  * Can parse colors in the format '#rrggbb', '#aarrggbb', 'hsl(h, s, l)', and 'rgba(r, g, b, a)'
@@ -286,7 +328,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         // Apply hue to layer color
         ColorUtils.colorToHSL(color, hslResult)
         hslResult[0] = hueDegree
-        return ColorUtils.HSLToColor(hslResult)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hslResult), Color.alpha(color))
     }
 
     lightness?.let { lightness ->
@@ -300,7 +342,7 @@ fun Styler.applyColorChanges(color: Int): Int {
             // Increase brightness. Percentage amount = relative reduction of difference between is-lightness and 1.0.
             hsl[2] + (lightness / 100) * (1 - hsl[2])
         }
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     saturation?.let { saturation ->
@@ -315,7 +357,7 @@ fun Styler.applyColorChanges(color: Int): Int {
             hsl[1] + (saturation / 100) * (1 - hsl[1])
         }
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     gamma?.let { gamma ->
@@ -324,7 +366,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] = hsl[2].toDouble().pow(gamma.toDouble()).toFloat()
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     if (invertLightness == true) {
@@ -333,7 +375,7 @@ fun Styler.applyColorChanges(color: Int): Int {
         ColorUtils.colorToHSL(color, hsl)
         hsl[2] = 1 - hsl[2]
 
-        return ColorUtils.HSLToColor(hsl)
+        return ColorUtils.setAlphaComponent(ColorUtils.HSLToColor(hsl), Color.alpha(color))
     }
 
     this.color?.let {
@@ -343,6 +385,8 @@ fun Styler.applyColorChanges(color: Int): Int {
     Log.w(TAG, "No applicable operation")
     return color
 }
+
+fun Styler.isColorChange(): Boolean = hue != null || lightness!= null || saturation != null || gamma != null || invertLightness != null || color != null
 
 /**
  * Traverse JSON object and replace any color strings according to styler

@@ -40,6 +40,10 @@ public class DroidGuardApiClient extends GmsClient<IDroidGuardService> {
         handler = new Handler(thread.getLooper());
     }
 
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
     public DroidGuardHandle openHandle(String flow, DroidGuardResultsRequest request) {
         try {
             IDroidGuardHandle handle = getServiceInterface().getHandle();

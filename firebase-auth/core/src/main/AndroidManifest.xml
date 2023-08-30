@@ -3,8 +3,7 @@
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.microg.gms.firebase.auth.core">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />

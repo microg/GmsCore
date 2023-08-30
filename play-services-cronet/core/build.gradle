@@ -18,6 +18,8 @@ dependencies {
 }
 
 android {
+    namespace "org.microg.gms.net.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

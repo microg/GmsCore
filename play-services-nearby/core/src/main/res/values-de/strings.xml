@@ -64,7 +64,7 @@ Das Datum, die Zeitdauer und die Signalstärke, die einem Kontakt zugeordnet wur
 
 Deine Identität oder das Testergebnis werden nicht geteilt."</string>
     <string name="exposure_confirm_keys_button">Teilen</string>
-    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services Core">%1$s</xliff:g> benötigt zusätzliche Berechtigungen.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> benötigt zusätzliche Berechtigungen.</string>
     <string name="exposure_confirm_permission_button">Erteilen</string>
     <string name="exposure_confirm_bluetooth_description">Bluetooth muss eingeschaltet sein.</string>
     <string name="exposure_confirm_location_description">Standortzugriff muss eingeschaltet sein.</string>

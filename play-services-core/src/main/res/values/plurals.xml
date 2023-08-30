@@ -25,8 +25,8 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">A permission required for proper functionality of microG Service Core is not granted.</item>
-        <item quantity="other">Permissions required for proper functionality of microG Service Core are not granted.</item>
+        <item quantity="one">A permission required for proper functionality of microG Services is not granted.</item>
+        <item quantity="other">Permissions required for proper functionality of microG Services are not granted.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Request missing permission</item>

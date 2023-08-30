@@ -81,7 +81,7 @@ class DroidGuardHandleImpl(private val context: Context, private val packageName
     }
 
     override fun snapshot(map: MutableMap<Any?, Any?>): ByteArray {
-        Log.d(TAG, "snapshot()")
+        Log.d(TAG, "snapshot($map)")
         condition.block()
         handleInitError?.let { return FallbackCreator.create(flow, context, map, it) }
         val handleProxy = this.handleProxy ?: return FallbackCreator.create(flow, context, map, IllegalStateException())

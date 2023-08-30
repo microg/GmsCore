@@ -14,5 +14,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ForegroundServiceInfo {
     String value();
+    @Deprecated
     int res() default 0;
+    String resName() default "";
+    String resPackage() default "";
 }

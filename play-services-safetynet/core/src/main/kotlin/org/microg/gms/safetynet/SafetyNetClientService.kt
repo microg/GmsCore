@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.safetynet.AttestationData
+import com.google.android.gms.safetynet.HarmfulAppsInfo
 import com.google.android.gms.safetynet.RecaptchaResultData
 import com.google.android.gms.safetynet.SafeBrowsingData
 import com.google.android.gms.safetynet.SafetyNetStatusCodes
@@ -35,6 +36,7 @@ import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.CheckIn.getContentUri
 import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.utils.warnOnTransactionIssues
 import java.io.IOException
 import java.net.URLEncoder
 import java.util.*
@@ -76,9 +78,9 @@ class SafetyNetClientServiceImpl(
             return
         }
 
-        if (!DroidGuardPreferences.isEnabled(context)) {
+        if (!DroidGuardPreferences.isAvailable(context)) {
             Log.d(TAG, "ignoring SafetyNet request, DroidGuard is disabled")
-            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
+            callbacks.onAttestationResult(Status(SafetyNetStatusCodes.ERROR, "Unsupported"), null)
             return
         }
 
@@ -142,7 +144,7 @@ class SafetyNetClientServiceImpl(
 
         // TODO
         Log.d(TAG, "dummy Method: getSharedUuid")
-        callbacks.onString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
+        callbacks.onSharedUuid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa")
     }
 
     override fun lookupUri(callbacks: ISafetyNetCallbacks, apiKey: String, threatTypes: IntArray, i: Int, s2: String) {
@@ -156,8 +158,10 @@ class SafetyNetClientServiceImpl(
     }
 
     override fun listHarmfulApps(callbacks: ISafetyNetCallbacks) {
-        Log.d(TAG, "dummy Method: unknown4")
-        callbacks.onHarmfulAppsData(Status.SUCCESS, ArrayList())
+        Log.d(TAG, "dummy Method: listHarmfulApps")
+        callbacks.onHarmfulAppsInfo(Status.SUCCESS, HarmfulAppsInfo().apply {
+            lastScanTime = ((System.currentTimeMillis() - VERIFY_APPS_LAST_SCAN_DELAY) / VERIFY_APPS_LAST_SCAN_TIME_ROUNDING) * VERIFY_APPS_LAST_SCAN_TIME_ROUNDING + VERIFY_APPS_LAST_SCAN_OFFSET
+        })
     }
 
     override fun verifyWithRecaptcha(callbacks: ISafetyNetCallbacks, siteKey: String?) {
@@ -168,12 +172,6 @@ class SafetyNetClientServiceImpl(
 
         if (!SafetyNetPreferences.isEnabled(context)) {
             Log.d(TAG, "ignoring SafetyNet request, SafetyNet is disabled")
-            callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
-            return
-        }
-
-        if (!DroidGuardPreferences.isEnabled(context)) {
-            Log.d(TAG, "ignoring SafetyNet request, DroidGuard is disabled")
             callbacks.onRecaptchaResult(Status(SafetyNetStatusCodes.ERROR, "Disabled"), null)
             return
         }
@@ -268,9 +266,12 @@ class SafetyNetClientServiceImpl(
         callbacks.onVerifyAppsUserResult(Status.SUCCESS, true)
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-        if (super.onTransact(code, data, reply, flags)) return true
-        Log.d(TAG, "onTransact [unknown]: $code, $data, $flags")
-        return false
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+
+    companion object {
+        // We simulate one scan every day, which will happen at 03:12:02.121 and will be available 32 seconds later
+        const val VERIFY_APPS_LAST_SCAN_DELAY = 32 * 1000L
+        const val VERIFY_APPS_LAST_SCAN_OFFSET = ((3 * 60 + 12) * 60 + 2) * 1000L + 121
+        const val VERIFY_APPS_LAST_SCAN_TIME_ROUNDING = 24 * 60 * 60 * 1000L
     }
 }

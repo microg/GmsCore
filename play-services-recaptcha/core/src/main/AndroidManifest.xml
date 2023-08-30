@@ -4,8 +4,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.microg.gms.recaptcha.core">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <!-- This service is in :ui process because it may spawn a web view. See https://crbug.com/558377 -->

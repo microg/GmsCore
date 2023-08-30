@@ -19,26 +19,55 @@
             android:title="@string/list_item_see_all" />
     </PreferenceCategory>
     <PreferenceCategory
-        android:key="prefcat_location_wifi"
-        android:title="@string/prefcat_location_wifi_title">
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="pref_location_wifi_mls_enabled"
-            android:title="@string/pref_location_wifi_mls_enabled_title"
-            android:summary="@string/pref_location_wifi_mls_enabled_summary" />
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="pref_location_wifi_moving_enabled"
-            android:title="@string/pref_location_wifi_moving_enabled_title"
-            android:summary="@string/pref_location_wifi_moving_enabled_summary" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:key="prefcat_location_cells"
-        android:title="@string/prefcat_location_cell_title">
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="pref_location_cell_mls_enabled"
-            android:title="@string/pref_location_cell_mls_enabled_title"
-            android:summary="@string/pref_location_cell_mls_enabled_summary" />
+        android:key="prefcat_location_network_provider"
+        android:layout="@layout/preference_category_no_label">
+        <PreferenceCategory
+            android:key="prefcat_location_wifi"
+            android:title="@string/prefcat_location_wifi_title">
+            <SwitchPreferenceCompat
+                android:defaultValue="true"
+                android:persistent="false"
+                android:key="pref_location_wifi_mls_enabled"
+                android:title="@string/pref_location_wifi_mls_enabled_title"
+                android:summary="@string/pref_location_wifi_mls_enabled_summary" />
+            <SwitchPreferenceCompat
+                android:defaultValue="true"
+                android:persistent="false"
+                android:key="pref_location_wifi_moving_enabled"
+                android:title="@string/pref_location_wifi_moving_enabled_title"
+                android:summary="@string/pref_location_wifi_moving_enabled_summary" />
+            <SwitchPreferenceCompat
+                android:defaultValue="true"
+                android:persistent="false"
+                android:key="pref_location_wifi_learning_enabled"
+                android:title="@string/pref_location_wifi_learning_enabled_title"
+                android:summary="@string/pref_location_wifi_learning_enabled_summary" />
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:key="prefcat_location_cells"
+            android:title="@string/prefcat_location_cell_title">
+            <SwitchPreferenceCompat
+                android:defaultValue="true"
+                android:persistent="false"
+                android:key="pref_location_cell_mls_enabled"
+                android:title="@string/pref_location_cell_mls_enabled_title"
+                android:summary="@string/pref_location_cell_mls_enabled_summary" />
+            <SwitchPreferenceCompat
+                android:defaultValue="true"
+                android:persistent="false"
+                android:key="pref_location_cell_learning_enabled"
+                android:title="@string/pref_location_cell_learning_enabled_title"
+                android:summary="@string/pref_location_cell_learning_enabled_summary" />
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:key="prefcat_geocoder"
+            android:title="@string/prefcat_geocoder_title">
+            <SwitchPreferenceCompat
+                android:defaultValue="true"
+                android:persistent="false"
+                android:key="pref_geocoder_nominatim_enabled"
+                android:title="@string/pref_geocoder_nominatim_enabled_title"
+                android:summary="@string/pref_geocoder_nominatim_enabled_summary" />
+        </PreferenceCategory>
     </PreferenceCategory>
 </PreferenceScreen>

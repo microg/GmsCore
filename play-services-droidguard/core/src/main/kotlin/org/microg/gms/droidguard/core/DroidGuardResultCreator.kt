@@ -21,7 +21,7 @@ interface DroidGuardResultCreator {
 
     companion object {
         fun getInstance(context: Context): DroidGuardResultCreator =
-                if (DroidGuardPreferences.isEnabled(context)) {
+                if (DroidGuardPreferences.isAvailable(context)) {
                     when (DroidGuardPreferences.getMode(context)) {
                         DroidGuardPreferences.Mode.Embedded -> EmbeddedDroidGuardResultCreator(context)
                         DroidGuardPreferences.Mode.Network -> NetworkDroidGuardResultCreator(context)

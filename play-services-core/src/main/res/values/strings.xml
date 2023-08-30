@@ -4,9 +4,9 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">microG Settings</string>
-    <string name="gms_settings_summary">Setup microG services Core.</string>
+    <string name="gms_settings_summary">Setup microG services.</string>
 
     <string name="just_a_sec">Just a sec…</string>
     <string name="google_account_label">Google</string>
@@ -65,7 +65,7 @@ This can take a couple of minutes."</string>
     <string name="place_picker_nearby_places">Nearby places</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: Lacking permission to <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">microG Services: Lacking permission to <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Mobile network</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -107,7 +107,7 @@ This can take a couple of minutes."</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
-    <string name="cond_gcm_bat_summary">You enabled Cloud Messaging but have battery optimizations active for microG Services Core. For push notifications to arrive you should ignore battery optimizations.</string>
+    <string name="cond_gcm_bat_summary">You enabled Cloud Messaging but have battery optimizations active for microG Services. For push notifications to arrive you should ignore battery optimizations.</string>
     <string name="cond_gcm_bat_action">Ignore optimizations</string>
     <string name="cond_perm_title">Permission missing</string>
 
@@ -141,7 +141,7 @@ This can take a couple of minutes."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
     <string name="pref_gcm_ping_interval">Ping interval: <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
-    <string name="pref_about_title">About microG Services Core</string>
+    <string name="pref_about_title">About microG Services</string>
     <string name="pref_about_summary">Version information and used libraries</string>
 
     <string name="gcm_app_error_unregistering">Error unregistering</string>
@@ -181,6 +181,7 @@ This can take a couple of minutes."</string>
     <string name="pref_test_summary_warn">Warning: %s</string>
     <string name="pref_test_summary_running">Running…</string>
     <string name="pref_droidguard_operation_mode">Operation mode</string>
+    <string name="pref_droidguard_unsupported_summary">DroidGuard execution is unsupported on this device. SafetyNet services may misbehave.</string>
     <string name="prefcat_safetynet_apps_title">Apps using SafetyNet</string>
     <string name="menu_clear_recent_requests">Clear recent requests</string>
     <string name="safetynet_last_run_at">Last use: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
@@ -219,4 +220,9 @@ This can take a couple of minutes."</string>
     <string name="pref_safetynet_test_no_result">No result</string>
     <string name="pref_safetynet_test_invalid_json">Invalid JSON</string>
 
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="push_notifications_summary_automatic">ON / Automatic: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s seconds</string>
+    <string name="push_notifications_summary_values_minutes">%s minutes</string>
 </resources>

@@ -8,9 +8,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParcelUtil;
 
 /**
  * An abstract class representing FIDO2 request options.
@@ -27,6 +27,6 @@ public abstract class RequestOptions extends AutoSafeParcelable {
      * Serializes the {@link RequestOptions} to bytes. Use deserializeFromBytes(byte[]) to deserialize.
      */
     public byte[] serializeToBytes() {
-        return SafeParcelUtil.asByteArray(this);
+        return SafeParcelableSerializer.serializeToBytes(this);
     }
 }

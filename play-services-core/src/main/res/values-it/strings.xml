@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Impostazioni di microG</string>
     <string name="gms_settings_summary">Configurazione di microG</string>
 

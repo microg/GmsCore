@@ -5,7 +5,7 @@
 
 package org.microg.gms.auth.login
 
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -34,8 +34,8 @@ class FidoHandler(private val activity: LoginActivity) : TransportHandlerCallbac
         setOfNotNull(
             BluetoothTransportHandler(activity, this),
             NfcTransportHandler(activity, this),
-            if (Build.VERSION.SDK_INT >= 21) UsbTransportHandler(activity, this) else null,
-            if (Build.VERSION.SDK_INT >= 23) ScreenLockTransportHandler(activity, this) else null
+            if (SDK_INT >= 21) UsbTransportHandler(activity, this) else null,
+            if (SDK_INT >= 23) ScreenLockTransportHandler(activity, this) else null
         )
     }
 

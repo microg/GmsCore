@@ -103,12 +103,16 @@ public class GoogleMap {
             getDelegate().animateCameraWithCallback(update.wrapped, new ICancelableCallback.Stub() {
                 @Override
                 public void onFinish() throws RemoteException {
-                    callback.onFinish();
+                    if (callback != null) {
+                        callback.onFinish();
+                    }
                 }
 
                 @Override
                 public void onCancel() throws RemoteException {
-                    callback.onCancel();
+                    if (callback != null) {
+                        callback.onCancel();
+                    }
                 }
             });
         } catch (RemoteException e) {

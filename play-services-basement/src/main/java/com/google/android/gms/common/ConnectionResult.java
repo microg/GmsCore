@@ -1,17 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2016 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.common;
@@ -21,6 +13,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.text.TextUtils;
+import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -28,7 +21,7 @@ import java.util.Arrays;
  * Contains all possible error codes for when a client fails to connect to Google Play services.
  * These error codes are used by {@link GoogleApiClient.OnConnectionFailedListener}.
  */
-public class ConnectionResult {
+public class ConnectionResult extends AutoSafeParcelable {
     /**
      * The connection was successful.
      */
@@ -115,11 +108,41 @@ public class ConnectionResult {
      * Using the API on the device should be avoided.
      */
     public static final int API_UNAVAILABLE = 16;
-    
+    /**
+     * The client attempted to connect to the service but the user is not signed in. An error may have occurred when signing in the user and the error can not
+     * be recovered with any user interaction. Alternately, the API may have been requested with {@link GoogleApiClient.Builder#addApiIfAvailable(Api, Scope...)}
+     * and it may be the case that no required APIs needed authentication, so authentication did not occur.
+     * <p>
+     * When seeing this error code, there is no resolution for the sign-in failure.
+     */
+    public static final int SIGN_IN_FAILED = 17;
+    /**
+     * Google Play service is currently being updated on this device.
+     */
+    public static final int SERVICE_UPDATING = 18;
+
     /**
      * Service doesn't have one or more required permissions.
      */
     public static final int SERVICE_MISSING_PERMISSION = 19;
+    /**
+     * The current user profile is restricted and cannot use authenticated features. (Jelly Bean MR2+ Restricted Profiles for Android tablets)
+     */
+    public static final int RESTRICTED_PROFILE = 20;
+    /**
+     * There was a user-resolvable issue connecting to Google Play services, but when attempting to start the resolution, the activity was not found.
+     * <p>
+     * This can occur when attempting to resolve issues connecting to Google Play services on emulators with Google APIs but not Google Play Store.
+     */
+    public static final int RESOLUTION_ACTIVITY_NOT_FOUND = 22;
+    /**
+     * The API being requested is disabled on this device for this application. Trying again at a later time may succeed.
+     */
+    public static final int API_DISABLED = 23;
+    /**
+     * The API being requested is disabled for this connection attempt, but may work for other connections.
+     */
+    public static final int API_DISABLED_FOR_CONNECTION = 24;
 
     /**
      * The Drive API requires external storage (such as an SD card), but no external storage is
@@ -134,9 +157,17 @@ public class ConnectionResult {
     @Deprecated
     public static final int DRIVE_EXTERNAL_STORAGE_REQUIRED = 1500;
 
-    private final int statusCode;
-    private final PendingIntent pendingIntent;
-    private final String message;
+    @Field(1)
+    private final int versionCode = 1;
+    @Field(2)
+    private int statusCode;
+    @Field(3)
+    private PendingIntent resolution;
+    @Field(4)
+    private String message;
+
+    private ConnectionResult() {
+    }
 
     /**
      * Creates a connection result.
@@ -150,23 +181,23 @@ public class ConnectionResult {
     /**
      * Creates a connection result.
      *
-     * @param statusCode    The status code.
-     * @param pendingIntent A pending intent that will resolve the issue when started, or null.
+     * @param statusCode The status code.
+     * @param resolution A pending intent that will resolve the issue when started, or null.
      */
-    public ConnectionResult(int statusCode, PendingIntent pendingIntent) {
-        this(statusCode, pendingIntent, getStatusString(statusCode));
+    public ConnectionResult(int statusCode, PendingIntent resolution) {
+        this(statusCode, resolution, getStatusString(statusCode));
     }
 
     /**
      * Creates a connection result.
      *
-     * @param statusCode    The status code.
-     * @param pendingIntent A pending intent that will resolve the issue when started, or null.
-     * @param message       An additional error message for the connection result, or null.
+     * @param statusCode The status code.
+     * @param resolution A pending intent that will resolve the issue when started, or null.
+     * @param message    An additional error message for the connection result, or null.
      */
-    public ConnectionResult(int statusCode, PendingIntent pendingIntent, String message) {
+    public ConnectionResult(int statusCode, PendingIntent resolution, String message) {
         this.statusCode = statusCode;
-        this.pendingIntent = pendingIntent;
+        this.resolution = resolution;
         this.message = message;
     }
 
@@ -234,8 +265,8 @@ public class ConnectionResult {
         } else if (!(o instanceof ConnectionResult)) {
             return false;
         } else {
-            ConnectionResult r = (ConnectionResult)o;
-            return statusCode == r.statusCode && pendingIntent == null ? r.pendingIntent == null : pendingIntent.equals(r.pendingIntent) && TextUtils.equals(message, r.message);
+            ConnectionResult r = (ConnectionResult) o;
+            return statusCode == r.statusCode && resolution == null ? r.resolution == null : resolution.equals(r.resolution) && TextUtils.equals(message, r.message);
         }
     }
 
@@ -265,12 +296,12 @@ public class ConnectionResult {
      * @return The pending intent to resolve the connection failure.
      */
     public PendingIntent getResolution() {
-        return pendingIntent;
+        return resolution;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{statusCode, pendingIntent, message});
+        return Arrays.hashCode(new Object[]{statusCode, resolution, message});
     }
 
     /**
@@ -280,7 +311,7 @@ public class ConnectionResult {
      * @return {@code true} if there is a resolution that can be started.
      */
     public boolean hasResolution() {
-        return statusCode != 0 && pendingIntent != null;
+        return statusCode != 0 && resolution != null;
     }
 
     /**
@@ -307,7 +338,9 @@ public class ConnectionResult {
     public void startResolutionForResult(Activity activity, int requestCode) throws
             IntentSender.SendIntentException {
         if (hasResolution()) {
-            activity.startIntentSenderForResult(pendingIntent.getIntentSender(), requestCode, null, 0, 0, 0);
+            activity.startIntentSenderForResult(resolution.getIntentSender(), requestCode, null, 0, 0, 0);
         }
     }
+
+    public static final Creator<ConnectionResult> CREATOR = new AutoCreator<>(ConnectionResult.class);
 }

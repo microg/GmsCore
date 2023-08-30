@@ -6,7 +6,7 @@
 package org.microg.gms.nearby.exposurenotification
 
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -33,7 +33,7 @@ class ExposureNotificationService : BaseService(TAG, GmsService.NEARBY_EXPOSURE)
             checkPermission("android.permission.BLUETOOTH") ?: return
         }
 
-        if (Build.VERSION.SDK_INT < 21) {
+        if (SDK_INT < 21) {
             callback.onPostInitComplete(FAILED_NOT_SUPPORTED, null, null)
             return
         }

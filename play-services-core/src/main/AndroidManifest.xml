@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2013-2019 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +14,7 @@
   ~ limitations under the License.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.google.android.gms">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <permission
         android:name="com.google.android.c2dm.permission.RECEIVE"
@@ -60,6 +58,20 @@
         android:protectionLevel="dangerous" />
 
     <permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        android:label="@string/perm_ad_id_label"
+        android:description="@string/perm_ad_id_description"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.google.android.gms.permission.AD_ID_NOTIFICATION"
+        android:label="@string/perm_ad_id_notification_label"
+        android:description="@string/perm_ad_id_notification_description"
+        android:protectionLevel="normal" />
+
+
+    <permission android:name="com.google.android.gms.auth.api.phone.permission.SEND" android:protectionLevel="signature"/>
+
+    <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
         android:protectionLevel="normal" />
@@ -90,6 +102,7 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -97,6 +110,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.c2dm.permission.SEND" />
     <uses-permission android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE" />
+    <uses-permission android:name="com.google.android.gms.auth.api.phone.permission.SEND" />
 
     <uses-permission android:name="org.microg.gms.STATUS_BROADCAST" />
 
@@ -114,9 +128,11 @@
         android:allowBackup="true"
         android:forceQueryable="true"
         android:fullBackupOnly="true"
-        android:icon="@mipmap/ic_core_service_app"
+        android:icon="@mipmap/ic_app"
+        android:roundIcon="@mipmap/ic_app"
         android:label="@string/gms_app_name"
         android:multiArch="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.AppCompat.DayNight">
 
         <library android:name="com.google.android.gms" />
@@ -160,8 +176,7 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name="org.microg.gms.wearable.location.WearableLocationService">
+        <service android:name="org.microg.gms.wearable.location.WearableLocationService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data
@@ -353,7 +368,8 @@
             android:name="org.microg.tools.AccountPickerActivity"
             android:excludeFromRecents="true"
             android:exported="true"
-            android:process=":ui">
+            android:process=":ui"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
 
@@ -422,6 +438,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.credential.CredentialManagerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.credential.manager.service.firstparty.START" />
+            </intent-filter>
+        </service>
+
         <!-- Games -->
 
         <service android:name="org.microg.gms.games.GamesStubService">
@@ -456,10 +478,10 @@
         <!-- microG Settings shown in Launcher -->
         <activity
             android:name="org.microg.gms.ui.SettingsActivity"
-            android:icon="@mipmap/ic_microg_settings"
+            android:icon="@mipmap/ic_app_settings"
             android:label="@string/gms_settings_name"
             android:process=":ui"
-            android:roundIcon="@mipmap/ic_microg_settings"
+            android:roundIcon="@mipmap/ic_app_settings"
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -482,16 +504,16 @@
 
         <activity
             android:name="org.microg.gms.ui.SettingsDashboardActivity"
-            android:icon="@mipmap/ic_microg_settings"
+            android:icon="@mipmap/ic_app_settings"
             android:label="Legacy microG Settings"
             android:process=":ui"
-            android:roundIcon="@mipmap/ic_microg_settings"
+            android:roundIcon="@mipmap/ic_app_settings"
             android:taskAffinity="org.microg.gms.settings" />
 
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
-            android:icon="@drawable/microg_light_color_24"
+            android:icon="@drawable/ic_app_settings_foreground_mono"
             android:label="@string/gms_settings_name"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.SettingsActivity"
@@ -505,7 +527,7 @@
                 android:value="com.android.settings.category.device" />
             <meta-data
                 android:name="com.android.settings.icon"
-                android:resource="@drawable/microg_light_color_24" />
+                android:resource="@drawable/ic_app_settings_foreground_mono" />
             <meta-data
                 android:name="com.android.settings.summary"
                 android:resource="@string/gms_settings_summary" />
@@ -530,16 +552,41 @@
             android:taskAffinity="org.microg.gms.settings" />
 
         <activity
-            android:name="org.microg.gms.ui.AccountSettingsActivity"
+            android:name="org.microg.gms.ui.LegacyAccountSettingsActivity"
             android:process=":ui"
-            android:taskAffinity="org.microg.gms.settings">
+            android:taskAffinity="org.microg.gms.settings"></activity>
+
+        <activity
+            android:name="org.microg.gms.accountsettings.ui.MainActivity"
+            android:process=":ui"
+            android:exported="false"
+            android:taskAffinity="org.microg.gms.settings"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
+                <action android:name="com.google.android.gms.accountsettings.MY_ACCOUNT" />
                 <action android:name="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS" />
                 <action android:name="com.google.android.gms.accountsettings.PRIVACY_SETTINGS" />
                 <action android:name="com.google.android.gms.accountsettings.SECURITY_SETTINGS" />
-                <action android:name="com.google.android.gms.accountsettings.action.VIEW_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="org.microg.gms.accountsettings.ui.LoaderActivity"
+            android:process=":ui"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+            <intent-filter>
+                <action android:name="com.google.android.gms.accountsettings.action.VIEW_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.accountsettings.action.BROWSE_SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
 
@@ -568,6 +615,32 @@
                 <action android:name="com.google.android.gms.phenotype.service.START" />
             </intent-filter>
         </service>
+
+        <!-- Help -->
+
+        <service
+            android:name="org.microg.gms.googlehelp.GoogleHelpService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.gms.googlehelp.ui.GoogleHelpRedirectActivity"
+            android:process=":ui"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.googlehelp.HELP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
 
         <!-- Other -->
 
@@ -632,12 +705,6 @@
                 <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
             </intent-filter>
         </service>
-        <service android:name="org.microg.gms.ads.AdvertisingIdService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.ads.identifier.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
@@ -653,9 +720,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-        <service android:name="org.microg.gms.auth.SignInService">
+        <service android:name="org.microg.gms.signin.SignInService">
             <intent-filter>
                 <action android:name="com.google.android.gms.signin.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        <service android:name="org.microg.gms.auth.signin.AuthSignInService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.signin.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -669,12 +742,6 @@
         <service android:name="org.microg.gms.wallet.PaymentService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wallet.service.BIND" />
-            </intent-filter>
-        </service>
-
-        <service android:name="org.microg.gms.appinvite.AppInviteService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.appinvite.service.START" />
             </intent-filter>
         </service>
 
@@ -704,7 +771,6 @@
                 <action android:name="com.google.android.gms.ads.service.CACHE" />
                 <action android:name="com.google.android.gms.ads.service.CONSENT_LOOKUP" />
                 <action android:name="com.google.android.gms.ads.service.HTTP" />
-                <action android:name="com.google.android.gms.ads.service.START" />
                 <action android:name="com.google.android.gms.appstate.service.START" />
                 <action android:name="com.google.android.gms.appusage.service.START" />
                 <action android:name="com.google.android.gms.asterism.service.START" />

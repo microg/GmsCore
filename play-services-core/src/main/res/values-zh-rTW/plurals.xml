@@ -25,8 +25,8 @@
         <item quantity="other">已註冊<xliff:g example="123">%1$d</xliff:g>個程式</item>
     </plurals>
     <plurals name="cond_perm_summary">
-	<item quantity="one">microG Service Core遺失了一個權限以至於不能正常運作。</item>
-        <item quantity="other">microG Service Core遺失了多個權限以至於不能正常運作。</item>
+	<item quantity="one">microG Service遺失了一個權限以至於不能正常運作。</item>
+        <item quantity="other">microG Service遺失了多個權限以至於不能正常運作。</item>
     </plurals>
     <plurals name="cond_perm_action">
 	<item quantity="one">請求遺失的一個權限</item>

@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Paramètres de microG</string>
 
     <string name="just_a_sec">Juste une seconde…</string>
@@ -64,7 +64,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="place_picker_nearby_places">Lieux environnants.</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: La permission <xliff:g example="have full network acccess">%1$s</xliff:g> est manquante.</string>
+    <string name="lacking_permission_toast">microG Services: La permission <xliff:g example="have full network acccess">%1$s</xliff:g> est manquante.</string>
 
     <string name="network_type_mobile">Réseau mobile</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -106,7 +106,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="prefcat_test">Test</string>
 
     <string name="cond_gcm_bat_title">Optimisations de la batterie activées</string>
-    <string name="cond_gcm_bat_summary">Vous avez activé Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services Core. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
+    <string name="cond_gcm_bat_summary">Vous avez activé Cloud Messaging mais l’optimisation de la batterie est activée pour microG Services. Afin de recevoir les notifications push vous devriez désactiver les optimisations de la batterie.</string>
     <string name="cond_gcm_bat_action">Désactiver les optimisations de la batterie</string>
     <string name="cond_perm_title">Autorisations manquantes</string>
 
@@ -130,7 +130,7 @@ Ceci peut prendre plusieurs minutes."</string>
     <string name="pref_gcm_confirm_new_apps_summary">Demander avant d’enregistrer une nouvelle application auprès de Cloud Messaging</string>
     <string name="pref_gcm_ping_interval">Intervalle de ping : <xliff:g example="10 minutes">%1$s</xliff:g></string>
 
-    <string name="pref_about_title">À propos de microG Services Core</string>
+    <string name="pref_about_title">À propos de microG Services</string>
     <string name="pref_about_summary">Informations de version et librairies utilisées</string>
 
     <string name="gcm_app_error_unregistering">Erreur lors du désenregistrement</string>

@@ -8,7 +8,7 @@ package org.microg.gms.ui
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -47,7 +47,7 @@ val Context.systemAnimationsEnabled: Boolean
     get() {
         val duration: Float
         val transition: Float
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (SDK_INT >= 17) {
             duration = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f)
             transition = Settings.Global.getFloat(contentResolver, Settings.Global.TRANSITION_ANIMATION_SCALE, 1f)
         } else {

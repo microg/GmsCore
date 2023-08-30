@@ -33,6 +33,8 @@ wire {
 }
 
 android {
+    namespace "org.microg.gms.recaptcha.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
 

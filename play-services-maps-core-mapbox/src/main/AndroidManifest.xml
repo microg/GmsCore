@@ -14,8 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<manifest package="org.microg.gms.maps.mapbox"
-          xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -29,7 +28,7 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <uses-sdk tools:overrideLibrary="com.mapbox.mapboxsdk" />
+    <uses-sdk tools:overrideLibrary="com.mapbox.mapboxsdk, com.mapbox.mapboxsdk.plugins.annotation" />
 
     <application />
 

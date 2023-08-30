@@ -23,8 +23,11 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
     fun wasUsed(): Boolean = readableDatabase.use { it.count(TABLE_KNOWN_REGISTRATIONS) > 0 }
 
     fun getKnownRegistrationTransport(rpId: String, credentialId: String) = readableDatabase.use {
-        it.query(TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_TRANSPORT), "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId), null, null, null).use {
-            if (it.moveToFirst()) Transport.valueOf(it.getString(0)) else null
+        val c = it.query(TABLE_KNOWN_REGISTRATIONS, arrayOf(COLUMN_TRANSPORT), "$COLUMN_RP_ID = ? AND $COLUMN_CREDENTIAL_ID = ?", arrayOf(rpId, credentialId), null, null, null)
+        try {
+            if (c.moveToFirst()) Transport.valueOf(c.getString(0)) else null
+        } finally {
+            c.close()
         }
     }
 
@@ -71,15 +74,19 @@ class Database(context: Context) : SQLiteOpenHelper(context, "fido.db", null, VE
     }
 }
 
-fun SQLiteDatabase.count(table: String, selection: String? = null, vararg selectionArgs: String) =
-    if (selection == null) {
+fun SQLiteDatabase.count(table: String, selection: String? = null, vararg selectionArgs: String): Long {
+    val it = if (selection == null) {
         rawQuery("SELECT COUNT(*) FROM $table", null)
     } else {
         rawQuery("SELECT COUNT(*) FROM $table WHERE $selection", selectionArgs)
-    }.use {
+    }
+    return try {
         if (it.moveToFirst()) {
             it.getLongOrNull(0) ?: 0
         } else {
             0
         }
+    } finally {
+        it.close()
     }
+}

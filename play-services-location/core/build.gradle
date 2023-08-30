@@ -8,8 +8,8 @@ apply plugin: 'kotlin-android'
 
 dependencies {
     api project(':play-services-location')
-    compileOnly project(':play-services-location-system-api')
     implementation project(':play-services-base-core')
+    implementation project(':play-services-location-core-base')
 
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
@@ -23,13 +23,18 @@ dependencies {
 
     implementation "com.android.volley:volley:$volleyVersion"
 
-    implementation 'org.microg:address-formatter:0.3.1'
     compileOnly project(':play-services-maps')
 }
 
 android {
+    namespace "org.microg.gms.location.core"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName version
@@ -45,5 +50,9 @@ android {
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 }

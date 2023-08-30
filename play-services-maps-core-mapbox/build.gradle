@@ -21,8 +21,8 @@ dependencies {
     implementation project(':play-services-maps')
     implementation project(':play-services-base-core')
     implementation project(':play-services-location')
-    implementation("org.maplibre.gl:android-sdk:10.0.0")
-    implementation("org.maplibre.gl:android-plugin-annotation-v9:1.0.0") {
+    implementation("org.maplibre.gl:android-sdk:10.2.0")
+    implementation("org.maplibre.gl:android-plugin-annotation-v9:2.0.1") {
         exclude group: 'com.google.android.gms'
     }
     implementation 'org.maplibre.gl:android-sdk-turf:5.9.0'
@@ -40,14 +40,21 @@ def execResult(...args) {
 }
 
 android {
+    namespace "org.microg.gms.maps.mapbox"
+
     compileSdkVersion androidCompileSdk
     buildToolsVersion "$androidBuildVersionTools"
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "String", "MAPBOX_KEY", "\"${localProperties.getProperty("mapbox.key", System.getenv('MAPBOX_VECTOR_TILES_KEY') ?: "")}\""
+        buildConfigField "String", "STADIA_KEY", "\"${localProperties.getProperty("stadia.key", System.getenv('STADIA_API_KEY') ?: "")}\""
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
@@ -62,16 +69,13 @@ android {
         disable 'GradleCompatible'
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 }
 

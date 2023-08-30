@@ -1,0 +1,93 @@
+syntax = "proto2";
+option java_package = "org.microg.gms.appinvite";
+
+message ClientIdInfo {
+    optional string packageName = 3; // e.g. com.google.android.gms
+    optional string signature = 4; // Signing certificate sha-1 base64 with padding, e.g. WOHEEz90Qew9LCcCcKFIAtpHug4=
+    optional string language = 6; // e.g. en
+}
+
+message LinkInfo {
+    optional string empty = 1; // e.g. ""
+    optional string uri = 2;
+}
+
+message SystemInfo {
+    message GmsInfo {
+        optional uint32 versionCode = 1; // 212423054
+    }
+    optional GmsInfo gms = 1;
+}
+
+message MutateAppInviteLinkRequest {
+    optional ClientIdInfo client = 1;
+    optional LinkInfo link = 4;
+    optional SystemInfo system = 5;
+}
+
+message MutateDataRequest {
+    oneof request {
+        MutateAppInviteLinkRequest appInviteLink = 84453462;
+    }
+}
+
+message AppInviteLinkInfo {
+    optional int32 type = 1;
+    optional string url = 2;
+    optional string name = 3;
+}
+
+message AppInviteAppData {
+    optional string packageName = 1; // apn
+    optional uint64 minAppVersion = 2; // amv
+    optional string altPackageName = 3; //apn
+}
+
+message AppInviteLinkData {
+    optional string fallbackUrl = 1; // afl
+    optional string packageName = 2; // apn
+    optional string intentData = 3; // link
+    optional AppInviteAppData app = 6;
+}
+
+message AppInviteLinkMetadata {
+    optional string source = 2; // utm_source
+    optional string medium = 3; // utm_medium
+    optional string campaign = 4; // utm_campaign
+    optional string id = 5;
+    optional string appCode = 6;
+    optional AppInviteLinkInfo info = 8;
+    optional string sessionId = 9;
+    optional string domainUriPrefix = 10;
+    optional string content = 11; // utm_content
+    optional string term = 12; // utm_term
+}
+
+message MutateAppInviteLinkResponse {
+    optional AppInviteLinkData data = 1;
+    optional AppInviteLinkMetadata metadata = 4;
+}
+
+message MutateDataResponse {
+    oneof response {
+        MutateAppInviteLinkResponse appInviteLink = 84453462;
+    }
+}
+
+enum MutateOperationId {
+    AppInviteLink = 84453462;
+}
+
+message MutateOperation {
+    optional MutateOperationId id = 1; // 84453462
+    optional MutateDataRequest mutateRequest = 2;
+}
+
+message StatusProto {
+    optional int32 code = 1;
+}
+
+message MutateDataResponseWithError {
+    optional MutateDataResponse dataResponse = 1;
+    optional StatusProto errorStatus = 2;
+}

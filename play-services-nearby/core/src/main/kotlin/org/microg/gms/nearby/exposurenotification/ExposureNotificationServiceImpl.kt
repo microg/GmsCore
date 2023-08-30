@@ -5,6 +5,7 @@
 
 package org.microg.gms.nearby.exposurenotification
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.app.PendingIntent
 import android.bluetooth.BluetoothAdapter
@@ -50,6 +51,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+@TargetApi(21)
 class ExposureNotificationServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String) : INearbyExposureNotificationService.Stub(), LifecycleOwner {
 
     // Table of back-end public keys, used to verify the signature of the diagnosed TEKs.

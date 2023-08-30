@@ -14,6 +14,7 @@ import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @PublicApi
@@ -26,6 +27,10 @@ public class LocationResult extends AutoSafeParcelable {
 
     @Field(value = 1, subClass = Location.class)
     public final List<Location> locations;
+
+    private LocationResult() {
+        this.locations = new ArrayList<>();
+    }
 
     private LocationResult(List<Location> locations) {
         this.locations = locations;

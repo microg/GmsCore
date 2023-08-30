@@ -8,7 +8,9 @@
 
 package org.microg.gms.nearby.exposurenotification
 
-import android.os.Build
+import android.os.Build.DEVICE
+import android.os.Build.MANUFACTURER
+import android.os.Build.MODEL
 import android.util.Log
 import com.google.android.gms.nearby.exposurenotification.CalibrationConfidence
 import kotlin.math.roundToInt
@@ -25,10 +27,10 @@ val currentDeviceInfo: DeviceInfo
         var deviceInfo = knownDeviceInfo
         if (deviceInfo == null) {
             // Note: Custom ROMs sometimes have slightly different model information, so we have some flexibility for those
-            val byOem = allDeviceInfos.filter { it.oem.equalsIgnoreCase(Build.MANUFACTURER) }
-            val byDevice = allDeviceInfos.filter { it.device.equalsIgnoreCase(Build.DEVICE) }
-            val byModel = allDeviceInfos.filter { it.model.equalsIgnoreCase(Build.MODEL) }
-            val exactMatch = byOem.find { it.device.equalsIgnoreCase(Build.DEVICE) && it.model.equalsIgnoreCase(Build.MODEL) }
+            val byOem = allDeviceInfos.filter { it.oem.equalsIgnoreCase(MANUFACTURER) }
+            val byDevice = allDeviceInfos.filter { it.device.equalsIgnoreCase(DEVICE) }
+            val byModel = allDeviceInfos.filter { it.model.equalsIgnoreCase(MODEL) }
+            val exactMatch = byOem.find { it.device.equalsIgnoreCase(DEVICE) && it.model.equalsIgnoreCase(MODEL) }
             deviceInfo = when {
                 exactMatch != null -> {
                     // Exact match, use provided confidence
@@ -36,15 +38,15 @@ val currentDeviceInfo: DeviceInfo
                 }
                 byModel.isNotEmpty() || byDevice.isNotEmpty() -> {
                     // We have data from "sister devices", that's way better than taking the OEM average
-                    averageCurrentDeviceInfo(Build.MANUFACTURER, Build.DEVICE, Build.MODEL, (byDevice + byModel).distinct(), CalibrationConfidence.MEDIUM)
+                    averageCurrentDeviceInfo(MANUFACTURER, DEVICE, MODEL, (byDevice + byModel).distinct(), CalibrationConfidence.MEDIUM)
                 }
                 byOem.isNotEmpty() -> {
                     // Fallback to OEM average
-                    averageCurrentDeviceInfo(Build.MANUFACTURER, Build.DEVICE, Build.MODEL, byOem, CalibrationConfidence.LOW)
+                    averageCurrentDeviceInfo(MANUFACTURER, DEVICE, MODEL, byOem, CalibrationConfidence.LOW)
                 }
                 else -> {
                     // Fallback to all device average
-                    averageCurrentDeviceInfo(Build.MANUFACTURER, Build.DEVICE, Build.MODEL, allDeviceInfos, CalibrationConfidence.LOWEST)
+                    averageCurrentDeviceInfo(MANUFACTURER, DEVICE, MODEL, allDeviceInfos, CalibrationConfidence.LOWEST)
                 }
             }
             Log.i(TAG, "Selected $deviceInfo")
@@ -54,7 +56,7 @@ val currentDeviceInfo: DeviceInfo
     }
 
 val averageDeviceInfo: DeviceInfo
-    get() = averageCurrentDeviceInfo(Build.MANUFACTURER, Build.DEVICE, Build.MODEL, allDeviceInfos, CalibrationConfidence.LOWEST)
+    get() = averageCurrentDeviceInfo(MANUFACTURER, DEVICE, MODEL, allDeviceInfos, CalibrationConfidence.LOWEST)
 
 @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 private fun String.equalsIgnoreCase(other: String): Boolean = (this as java.lang.String).equalsIgnoreCase(other)

@@ -1,0 +1,23 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.library'
+
+dependencies {
+    implementation "androidx.annotation:annotation:$annotationVersion"
+}
+
+android {
+    namespace "org.microg.gms.location.sysapi"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+}

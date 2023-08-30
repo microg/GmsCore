@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services Core</string>
+    <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">Configurações microG</string>
 
     <string name="just_a_sec">Aguarde um momento…</string>
@@ -58,7 +58,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="place_picker_nearby_places">Locais próximos</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
 
-    <string name="lacking_permission_toast">microG Services Core: Sem permissão para <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="lacking_permission_toast">microG Services: Sem permissão para <xliff:g example="have full network acccess">%1$s</xliff:g></string>
 
     <string name="network_type_mobile">Rede móvel</string>
     <string name="network_type_wifi">Wi-Fi</string>
@@ -96,7 +96,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="prefcat_location_service">Servico de localização</string>
     <string name="prefcat_services">Serviços</string>
     <string name="cond_gcm_bat_title">Otimização de bateria ativada</string>
-    <string name="cond_gcm_bat_summary">Você ativou o Cloud Messaging, mas possui otimizações de bateria ativas para o MicroG Services Core. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
+    <string name="cond_gcm_bat_summary">Você ativou o Cloud Messaging, mas possui otimizações de bateria ativas para o microG Services. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
     <string name="cond_gcm_bat_action">Ignorar otimização</string>
     <string name="cond_perm_title">Permissão ausente</string>
 
@@ -114,7 +114,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_gcm_heartbeat_summary">O intervalo em segundos para o sistema a pulsar os servidores do Google. Aumentar esse número reduzirá o consumo da bateria, mas poderá causar atrasos nas mensagens push.\nDesativado, será substituído em versão futura.</string>
     <string name="pref_gcm_apps_title">Aplicativos que usam o Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados no Cloud Messaging.</string>
-    <string name="pref_about_title">Sobre microG Services Core</string>
+    <string name="pref_about_title">Sobre microG Services</string>
     <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
 
     <string name="gcm_app_error_unregistering">Erro ao cancelar o registro</string>

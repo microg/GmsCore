@@ -107,15 +107,15 @@ class PushNotificationAdvancedFragment : PreferenceFragmentCompat() {
     }
 
     private fun getSummaryString(value: Int, learnt: Int): String = when (value) {
-        -1 -> "OFF"
-        0 -> "ON / Automatic: " + getHeartbeatString(learnt)
-        else -> "ON / Manual: " + getHeartbeatString(value * 60000)
+        -1 -> getString(R.string.push_notifications_summary_off)
+        0 -> getString(R.string.push_notifications_summary_automatic, getHeartbeatString(learnt))
+        else -> getString(R.string.push_notifications_summary_manual, getHeartbeatString(value * 60000))
     }
 
     private fun getHeartbeatString(heartbeatMs: Int): String {
         return if (heartbeatMs < 120000) {
-            (heartbeatMs / 1000).toString() + " seconds"
-        } else (heartbeatMs / 60000).toString() + " minutes"
+            getString(R.string.push_notifications_summary_values_seconds, (heartbeatMs / 1000).toString())
+        } else getString(R.string.push_notifications_summary_values_minutes, (heartbeatMs / 60000).toString())
     }
 
     companion object {

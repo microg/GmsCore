@@ -24,7 +24,11 @@ import com.google.android.gms.maps.internal.IOnInfoWindowLongClickListener;
 import com.google.android.gms.maps.internal.IInfoWindowAdapter;
 import com.google.android.gms.maps.internal.IOnMapLoadedCallback;
 import com.google.android.gms.maps.internal.IOnMyLocationChangeListener;
+import com.google.android.gms.maps.internal.IOnMyLocationClickListener;
 import com.google.android.gms.maps.internal.IOnMyLocationButtonClickListener;
+import com.google.android.gms.maps.internal.IOnGroundOverlayClickListener;
+import com.google.android.gms.maps.internal.IOnPolygonClickListener;
+import com.google.android.gms.maps.internal.IOnPolylineClickListener;
 import com.google.android.gms.maps.internal.ISnapshotReadyCallback;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
@@ -117,18 +121,18 @@ interface IGoogleMapDelegate {
 
     void setContentDescription(String desc) = 60;
 
-    //void snapshotForTest(ISnapshotReadyCallback callback) = 70;
+    void snapshotForTest(ISnapshotReadyCallback callback) = 70;
 
     //void setPoiClickListener(IOnPoiClickListener listener) = 79;
     void onEnterAmbient(in Bundle bundle) = 80;
     void onExitAmbient() = 81;
 
-    //void setOnGroundOverlayClickListener(IOnGroundOverlayClickListener listener) = 82;
-    void setInfoWindowLongClickListener(IOnInfoWindowLongClickListener listener) = 83;
-    //void setPolygonClickListener(IOnPolygonClickListener listener) = 84;
-    void setInfoWindowCloseListener(IOnInfoWindowCloseListener listener) = 85;
-    //void setPolylineClickListener(IOnPolylineClickListener listener) = 86;
-    void setCircleClickListener(IOnCircleClickListener listener) = 88;
+    void setOnGroundOverlayClickListener(IOnGroundOverlayClickListener listener) = 82;
+    void setOnInfoWindowLongClickListener(IOnInfoWindowLongClickListener listener) = 83;
+    void setOnPolygonClickListener(IOnPolygonClickListener listener) = 84;
+    void setOnInfoWindowCloseListener(IOnInfoWindowCloseListener listener) = 85;
+    void setOnPolylineClickListener(IOnPolylineClickListener listener) = 86;
+    void setOnCircleClickListener(IOnCircleClickListener listener) = 88;
 
     boolean setMapStyle(in MapStyleOptions options) = 90;
     void setMinZoomPreference(float minZoom) = 91;
@@ -144,5 +148,5 @@ interface IGoogleMapDelegate {
     void onStart() = 100;
     void onStop() = 101;
 
-    //void setOnMyLocationClickListener(IOnMyLocationClickListener listener) = 106;
+    void setOnMyLocationClickListener(IOnMyLocationClickListener listener) = 106;
 }
