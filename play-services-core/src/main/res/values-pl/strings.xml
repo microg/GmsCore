@@ -181,6 +181,7 @@ To może zająć kilka minut.</string>
     <string name="pref_test_summary_warn">Ostrzeżenie: %s</string>
     <string name="pref_test_summary_running">Uruchamiam…</string>
     <string name="pref_droidguard_operation_mode">Tryb działania</string>
+    <string name="pref_droidguard_unsupported_summary">Wykonywanie DroidGuard jest niewspierane na tym urządzeniu. Usługi SafetyNet mogą działać nieprawidłowo.</string>
     <string name="prefcat_safetynet_apps_title">Aplikacje korzystające z SafetyNet</string>
     <string name="menu_clear_recent_requests">Wyczyść historię żądań</string>
     <string name="safetynet_last_run_at">Ostatnie użycie: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
@@ -218,4 +219,9 @@ To może zająć kilka minut.</string>
     <string name="pref_safetynet_test_no_result">Brak wyniku</string>
     <string name="pref_safetynet_test_invalid_json">Nieprawidłowy format JSON</string>
 
+    <string name="push_notifications_summary_off">Wył.</string>
+    <string name="push_notifications_summary_automatic">Wł. / Automatycznie: co %s</string>
+    <string name="push_notifications_summary_manual">Wł. / Ręcznie: co %s</string>
+    <string name="push_notifications_summary_values_seconds">%s sekund</string>
+    <string name="push_notifications_summary_values_minutes">%s minut</string>
 </resources>
