@@ -18,8 +18,6 @@ package org.microg.gms.auth;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -40,7 +38,7 @@ import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.AccountChangeEventsResponse;
 import com.google.android.gms.auth.GetHubTokenInternalResponse;
 import com.google.android.gms.auth.GetHubTokenRequest;
-import com.google.android.gms.auth.HasCababilitiesRequest;
+import com.google.android.gms.auth.HasCapabilitiesRequest;
 import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
@@ -70,6 +68,8 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String KEY_REQUEST_VISIBLE_ACTIVITIES = "request_visible_actions";
     public static final String KEY_SUPPRESS_PROGRESS_SCREEN = "suppressProgressScreen";
     public static final String KEY_SYNC_EXTRAS = "sync_extras";
+    public static final String KEY_DELEGATION_TYPE = "delegation_type";
+    public static final String KEY_DELEGATEE_USER_ID = "delegatee_user_id";
 
     public static final String KEY_ERROR = "Error";
     public static final String KEY_USER_RECOVERY_INTENT = "userRecoveryIntent";
@@ -116,7 +116,8 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
         boolean notify = extras.getBoolean(KEY_HANDLE_NOTIFICATION, false);
 
-        Log.d(TAG, "getToken: account:" + account.name + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
+        if (!AuthConstants.SCOPE_GET_ACCOUNT_ID.equals(scope))
+            Log.d(TAG, "getToken: account:" + account.name + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
 
         /*
          * TODO: This scope seems to be invalid (according to https://developers.google.com/oauthplayground/),
@@ -125,6 +126,10 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         scope = scope.replace("https://www.googleapis.com/auth/identity.plus.page.impersonation ", "");
 
         AuthManager authManager = new AuthManager(context, account.name, packageName, scope);
+        if (extras.containsKey(KEY_DELEGATION_TYPE) && extras.getInt(KEY_DELEGATION_TYPE) != 0 ) {
+            authManager.setDelegation(extras.getInt(KEY_DELEGATION_TYPE), extras.getString("delegatee_user_id"));
+        }
+        authManager.setOauth2Foreground(notify ? "0" : "1");
         Bundle result = new Bundle();
         result.putString(KEY_ACCOUNT_NAME, account.name);
         result.putString(KEY_ACCOUNT_TYPE, authManager.getAccountType());
@@ -135,10 +140,11 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         try {
             AuthResponse res = authManager.requestAuth(false);
             if (res.auth != null) {
-                Log.d(TAG, "getToken: " + res);
+                if (!AuthConstants.SCOPE_GET_ACCOUNT_ID.equals(scope))
+                    Log.d(TAG, "getToken: " + res);
                 result.putString(KEY_AUTHTOKEN, res.auth);
                 Bundle details = new Bundle();
-                details.putParcelable("TokenData", new TokenData(res.auth, res.expiry, scope.startsWith("oauth2:"), getScopes(scope)));
+                details.putParcelable("TokenData", new TokenData(res.auth, res.expiry, scope.startsWith("oauth2:"), getScopes(res.grantedScopes != null ? res.grantedScopes : scope)));
                 result.putBundle("tokenDetails", details);
                 result.putString(KEY_ERROR, "OK");
             } else {
@@ -217,7 +223,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     }
 
     @Override
-    public int hasCapabilities(HasCababilitiesRequest request) throws RemoteException {
+    public int hasCapabilities(HasCapabilitiesRequest request) throws RemoteException {
         Log.w(TAG, "Not implemented: hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ")");
         return 1;
     }

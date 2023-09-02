@@ -342,8 +342,8 @@ public class LoginActivity extends AssistantActivity {
                 .service(authManager.getService())
                 .email(account.name)
                 .token(AccountManager.get(this).getPassword(account))
-                .systemPartition()
-                .hasPermission()
+                .systemPartition(true)
+                .hasPermission(true)
                 .addAccount()
                 .getAccountId()
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {

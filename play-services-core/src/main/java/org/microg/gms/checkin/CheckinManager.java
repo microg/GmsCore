@@ -48,7 +48,7 @@ public class CheckinManager {
         for (Account account : accountManager.getAccountsByType(accountType)) {
             String token = new AuthRequest()
                     .email(account.name).token(accountManager.getPassword(account))
-                    .hasPermission().service("ac2dm")
+                    .hasPermission(true).service("ac2dm")
                     .app("com.google.android.gsf", Constants.GMS_PACKAGE_SIGNATURE_SHA1)
                     .getResponse().LSid;
             if (token != null) {

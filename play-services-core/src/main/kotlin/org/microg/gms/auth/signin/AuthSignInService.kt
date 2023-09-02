@@ -15,9 +15,16 @@
  */
 package org.microg.gms.auth.signin
 
+import android.accounts.Account
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.internal.ISignInCallbacks
 import com.google.android.gms.auth.api.signin.internal.ISignInService
@@ -30,6 +37,9 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "AuthSignInService"
 
@@ -37,26 +47,90 @@ class AuthSignInService : BaseService(TAG, GmsService.AUTH_SIGN_IN) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
-        val binder = SignInServiceImpl(packageName, request.scopes.asList(), request.extras).asBinder()
+        val binder = AuthSignInServiceImpl(this, lifecycle, packageName, request.account, request.scopes.asList(), request.extras).asBinder()
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS, binder, Bundle())
     }
 }
 
-class SignInServiceImpl(private val packageName: String, private val scopes: List<Scope>, private val extras: Bundle) : ISignInService.Stub() {
-    override fun silentSignIn(callbacks: ISignInCallbacks?, options: GoogleSignInOptions?) {
-        Log.d(TAG, "Not yet implemented: signIn: $options")
-        callbacks?.onSignIn(null, Status.INTERNAL_ERROR)
+class AuthSignInServiceImpl(
+    private val context: Context,
+    private val lifecycle: Lifecycle,
+    private val packageName: String,
+    private val account: Account?,
+    private val scopes: List<Scope>,
+    private val extras: Bundle
+) : ISignInService.Stub(), LifecycleOwner {
+    private val queue = Volley.newRequestQueue(context)
+    override fun getLifecycle(): Lifecycle = lifecycle
+
+    override fun silentSignIn(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {
+        lifecycleScope.launchWhenStarted {
+            try {
+                val account = account ?: options?.account ?: SignInDefaultService.getDefaultAccount(context, packageName)
+                if (account != null && getOAuthManager(context, packageName, options, account).isPermitted && options?.isForceCodeForRefreshToken != true) {
+                    val googleSignInAccount = performSignIn(context, packageName, options, account)
+                    if (googleSignInAccount != null) {
+                        runCatching { callbacks.onSignIn(googleSignInAccount, Status(CommonStatusCodes.SUCCESS)) }
+                    } else {
+                        runCatching { callbacks.onSignIn(null, Status(CommonStatusCodes.DEVELOPER_ERROR)) }
+                    }
+                } else {
+                    runCatching { callbacks.onSignIn(null, Status(CommonStatusCodes.SIGN_IN_REQUIRED)) }
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+                runCatching { callbacks.onSignIn(null, Status.INTERNAL_ERROR) }
+            }
+        }
     }
 
-    override fun signOut(callbacks: ISignInCallbacks?, options: GoogleSignInOptions?) {
-        Log.d(TAG, "Not yet implemented: signOut: $options")
-        callbacks?.onSignOut(Status.INTERNAL_ERROR)
+    override fun signOut(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {
+        lifecycleScope.launchWhenStarted {
+            try {
+                SignInDefaultService.setDefaultAccount(context, packageName, null)
+                runCatching { callbacks.onSignOut(Status.SUCCESS) }
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+                runCatching { callbacks.onSignIn(null, Status.INTERNAL_ERROR) }
+            }
+        }
     }
 
-    override fun revokeAccess(callbacks: ISignInCallbacks?, options: GoogleSignInOptions?) {
-        Log.d(TAG, "Not yet implemented: revokeAccess: $options")
-        callbacks?.onRevokeAccess(Status.INTERNAL_ERROR)
+    override fun revokeAccess(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {
+        lifecycleScope.launchWhenStarted {
+            val account = account ?: options?.account ?: SignInDefaultService.getDefaultAccount(context, packageName)
+            if (account != null) {
+                try {
+                    val authManager = getOAuthManager(context, packageName, options, account)
+                    val token = authManager.peekAuthToken()
+                    if (token != null) {
+                        suspendCoroutine { continuation ->
+                            queue.add(object : JsonObjectRequest(
+                                "https://accounts.google.com/o/oauth2/revoke?token=$token",
+                                { continuation.resume(it) },
+                                { continuation.resumeWithException(it) }) {
+                                override fun getHeaders(): MutableMap<String, String> {
+                                    return hashMapOf(
+                                        "Authorization" to "OAuth $token"
+                                    )
+                                }
+                            })
+                        }
+                        authManager.invalidateAuthToken(token)
+                        authManager.isPermitted = false
+                    }
+                    SignInDefaultService.setDefaultAccount(context, packageName, account)
+                    runCatching { callbacks.onRevokeAccess(Status.SUCCESS) }
+                } catch (e: Exception) {
+                    Log.w(TAG, e)
+                    runCatching { callbacks.onRevokeAccess(Status.INTERNAL_ERROR) }
+                }
+            } else {
+                runCatching { callbacks.onRevokeAccess(Status.SUCCESS) }
+            }
+        }
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

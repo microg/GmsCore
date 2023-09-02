@@ -28,6 +28,12 @@ const val Field = "java.lang.reflect.Field"
 const val Log = "android.util.Log"
 const val Parcel = "android.os.Parcel"
 
+val NATIVE_SUPPORTED_TYPES = setOf(
+    "int", "byte", "short", "boolean", "long", "float", "double",
+    "java.lang.Boolean", "java.lang.Byte", "java.lang.Char", "java.lang.Short", "java.lang.Integer", "java.lang.Long", "java.lang.Float", "java.lang.Double",
+    "java.lang.String", "android.os.Bundle"
+)
+
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("$SafeParcelable.Class")
 class SafeParcelProcessor : AbstractProcessor() {
@@ -82,7 +88,7 @@ class ClassInfo(val classElement: Element) {
             note("Using reflection to construct $fullName from parcel. Consider providing a suitable package-visible constructor for improved performance.")
         }
         for (field in fields) {
-            if (field.type !in listOf("int", "byte", "short", "boolean", "long", "float", "double", "java.lang.String")) {
+            if (field.type !in NATIVE_SUPPORTED_TYPES) {
                 error("Field ${field.name} in $fullName has unsupported type.")
                 return false
             }
@@ -233,6 +239,7 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
             "float" -> "$variableName = $SafeParcelReader.readFloat(parcel, header)"
             "double" -> "$variableName = $SafeParcelReader.readDouble(parcel, header)"
             "java.lang.String" -> "$variableName = $SafeParcelReader.readString(parcel, header)"
+            "android.os.Bundle" -> "$variableName = $SafeParcelReader.readBundle(parcel, header, ${clazz.fullName}.class.getClassLoader())"
             else -> "$SafeParcelReader.skip(parcel, header)"
         }
     }

@@ -69,7 +69,9 @@
         android:protectionLevel="normal" />
 
 
-    <permission android:name="com.google.android.gms.auth.api.phone.permission.SEND" android:protectionLevel="signature"/>
+    <permission
+        android:name="com.google.android.gms.auth.api.phone.permission.SEND"
+        android:protectionLevel="signature" />
 
     <permission
         android:name="org.microg.gms.STATUS_BROADCAST"
@@ -444,6 +446,35 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name="org.microg.gms.auth.signin.AuthSignInActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar"
+            android:process=":ui"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.GOOGLE_SIGN_IN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="org.microg.gms.signin.SignInService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.signin.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.auth.signin.AuthSignInService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.signin.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.auth.signin.SignInDefaultService"
+            android:exported="false" />
+
         <!-- Games -->
 
         <service android:name="org.microg.gms.games.GamesStubService">
@@ -492,6 +523,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -718,18 +750,6 @@
                 <action android:name="com.google.android.gms.drive.ApiService.STOP" />
                 <action android:name="com.google.android.gms.drive.ApiService.RESET_AFTER_BOOT" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-        <service android:name="org.microg.gms.signin.SignInService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.signin.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-        <service android:name="org.microg.gms.auth.signin.AuthSignInService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.signin.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

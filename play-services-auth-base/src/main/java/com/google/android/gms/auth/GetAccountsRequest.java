@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.microg.gms.common.api;
+package com.google.android.gms.auth;
 
-public interface ApiClient {
-    void connect();
+import org.microg.gms.common.Hide;
+import org.microg.safeparcel.AutoSafeParcelable;
 
-    void disconnect();
-
-    boolean isConnected();
-
-    boolean isConnecting();
+@Hide
+public class GetAccountsRequest extends AutoSafeParcelable {
+    public static Creator<GetAccountsRequest> CREATOR = findCreator(GetAccountsRequest.class);
 }

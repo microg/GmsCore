@@ -18,26 +18,29 @@ package com.google.android.gms.auth;
 
 import com.google.android.gms.common.api.Scope;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Hide
 public class TokenData extends AutoSafeParcelable {
-    @SafeParceled(1)
+    @Field(value = 1, versionCode = 1)
     private int versionCode = 1;
 
-    @SafeParceled(2)
+    @Field(2)
     public final String token;
 
-    @SafeParceled(3)
+    @Field(3)
     public final Long expiry;
 
-    @SafeParceled(5)
+    @Field(5)
     public final boolean isOAuth;
 
-    @SafeParceled(value = 6, subClass = Scope.class)
-    public final List<Scope> scopes;
+    @Field(6)
+    public final List<String> scopes;
 
     public TokenData() {
         token = null;
@@ -50,7 +53,12 @@ public class TokenData extends AutoSafeParcelable {
         this.token = token;
         this.expiry = expiry;
         this.isOAuth = isOAuth;
-        this.scopes = scopes;
+        this.scopes = new ArrayList<>();
+        if (scopes != null) {
+            for (Scope scope : scopes) {
+                this.scopes.add(scope.getScopeUri());
+            }
+        }
     }
 
     public TokenData(String token, Long expiry) {

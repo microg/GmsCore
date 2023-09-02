@@ -36,6 +36,16 @@ This can take a couple of minutes."</string>
     <string name="auth_notification_title">Authentication required</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> requires your authorization to access your Google account.</string>
 
+    <string name="signin_picker_title">Choose an account</string>
+    <string name="signin_picker_subtitle">to continue to <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Add another account</string>
+    <string name="signin_confirm_title">Allow to sign you in to <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Allow and share</string>
+    <string name="signin_subtext_sharing">To continue, microG will share name, email address and profile picture of your Google Account with <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="signin_subtext_policy">Before using this app, review its %1$s and %2$s.</string>
+    <string name="signin_subtext_policy_privacy">privacy policy</string>
+    <string name="signin_subtext_policy_terms">terms of service</string>
+
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
     <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
