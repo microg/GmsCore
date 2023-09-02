@@ -27,6 +27,9 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import org.microg.gms.maps.mapbox.R
 import org.microg.gms.maps.mapbox.runOnMainLooper
+import org.microg.gms.utils.toHexString
+import java.nio.ByteBuffer
+import java.security.MessageDigest
 
 
 object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
@@ -189,7 +192,13 @@ object BitmapDescriptorFactoryImpl : IBitmapDescriptorFactoryDelegate.Stub() {
         }
     }
 
-    override fun fromBitmap(bitmap: Bitmap): IObjectWrapper = registerBitmap("bitmap-${bitmap.hashCode()}") { bitmap }
+    private fun Bitmap.sha256(): String {
+        val bytes = ByteArray(rowBytes * height)
+        copyPixelsToBuffer(ByteBuffer.wrap(bytes))
+        return MessageDigest.getInstance("SHA-256").digest(bytes).toHexString()
+    }
+
+    override fun fromBitmap(bitmap: Bitmap): IObjectWrapper = registerBitmap("bitmap-${bitmap.sha256()}") { bitmap }
 
     override fun fromPath(absolutePath: String): IObjectWrapper = registerBitmap("path-$absolutePath") { BitmapFactory.decodeFile(absolutePath) }
 
