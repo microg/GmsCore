@@ -40,4 +40,5 @@ android {
 
 dependencies {
     api project(':play-services-base')
+    api project(':play-services-phenotype')
 }

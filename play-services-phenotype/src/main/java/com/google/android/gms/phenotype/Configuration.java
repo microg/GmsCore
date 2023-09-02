@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-FileCopyrightText: 2020 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,5 +14,6 @@ public class Configuration extends AutoSafeParcelable {
     public Flag[] flags;
     @Field(4)
     public String[] removeNames;
-    public static final Creator<Configuration> CREATOR = new AutoCreator<>(Configuration.class);
+
+    public static final Creator<Configuration> CREATOR = findCreator(Configuration.class);
 }

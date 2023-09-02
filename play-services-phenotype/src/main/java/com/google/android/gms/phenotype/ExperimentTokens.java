@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-FileCopyrightText: 2020 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -26,5 +26,6 @@ public class ExperimentTokens extends AutoSafeParcelable {
     public byte[][] directs;
     @Field(10)
     public int[] genericDimensions;
-    public static final Creator<ExperimentTokens> CREATOR = new AutoCreator<>(ExperimentTokens.class);
+
+    public static final Creator<ExperimentTokens> CREATOR = findCreator(ExperimentTokens.class);
 }
