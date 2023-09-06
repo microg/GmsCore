@@ -34,6 +34,15 @@ public class PublicKeyCredential extends AutoSafeParcelable {
     private AuthenticatorErrorResponse errorResponse;
     @Field(7)
     private AuthenticationExtensionsClientOutputs clientExtensionResults;
+    @Field(8)
+    private String authenticatorAttachment;
+
+    /**
+     * Returns the authenticator attachment of this credential.
+     */
+    public String getAuthenticatorAttachment() {
+        return authenticatorAttachment;
+    }
 
     public AuthenticationExtensionsClientOutputs getClientExtensionResults() {
         return clientExtensionResults;
@@ -66,6 +75,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         private byte[] rawId;
         private AuthenticatorResponse response;
         private AuthenticationExtensionsClientOutputs extensionsClientOutputs;
+        private String authenticatorAttachment;
 
         /**
          * The constructor of {@link PublicKeyCredential.Builder}.
@@ -76,8 +86,16 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         /**
          * Sets the output produced by the client's processing of the extensions requested by the relying party.
          */
-        public PublicKeyCredential.Builder setAuthenticationExtensionsClientOutputs(AuthenticationExtensionsClientOutputs extensionsClientOutputs) {
+        public Builder setAuthenticationExtensionsClientOutputs(AuthenticationExtensionsClientOutputs extensionsClientOutputs) {
             this.extensionsClientOutputs = extensionsClientOutputs;
+            return this;
+        }
+
+        /**
+         * Sets the authenticator attachment of the credential.
+         */
+        public Builder setAuthenticatorAttachment(String authenticatorAttachment) {
+            this.authenticatorAttachment = authenticatorAttachment;
             return this;
         }
 
@@ -120,6 +138,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
             credential.type = PublicKeyCredentialType.PUBLIC_KEY.toString();
             credential.rawId = rawId;
             credential.clientExtensionResults = extensionsClientOutputs;
+            credential.authenticatorAttachment = authenticatorAttachment;
             if (response instanceof AuthenticatorAttestationResponse) {
                 credential.registerResponse = (AuthenticatorAttestationResponse) response;
             } else if (response instanceof AuthenticatorAssertionResponse) {
@@ -141,17 +160,18 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (!Arrays.equals(rawId, that.rawId)) return false;
-        if (registerResponse != null ? !registerResponse.equals(that.registerResponse) : that.registerResponse != null)
-            return false;
+        if (registerResponse != null ? !registerResponse.equals(that.registerResponse) : that.registerResponse != null) return false;
         if (signResponse != null ? !signResponse.equals(that.signResponse) : that.signResponse != null) return false;
-        if (errorResponse != null ? !errorResponse.equals(that.errorResponse) : that.errorResponse != null)
+        if (errorResponse != null ? !errorResponse.equals(that.errorResponse) : that.errorResponse != null) return false;
+        if (clientExtensionResults != null ? !clientExtensionResults.equals(that.clientExtensionResults) : that.clientExtensionResults != null) return false;
+        if (authenticatorAttachment != null ? !authenticatorAttachment.equals(that.authenticatorAttachment) : that.authenticatorAttachment != null)
             return false;
-        return clientExtensionResults != null ? clientExtensionResults.equals(that.clientExtensionResults) : that.clientExtensionResults == null;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{id, type, rawId, signResponse, registerResponse, errorResponse, clientExtensionResults});
+        return Arrays.hashCode(new Object[]{id, type, rawId, signResponse, registerResponse, errorResponse, clientExtensionResults, authenticatorAttachment});
     }
 
     /**

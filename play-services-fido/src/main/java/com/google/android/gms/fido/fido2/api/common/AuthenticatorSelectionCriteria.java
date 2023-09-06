@@ -8,6 +8,7 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.Nullable;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -25,20 +26,34 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
     private Boolean requireResidentKey;
     @Field(4)
     private UserVerificationRequirement requireUserVerification;
+    @Field(5)
+    private ResidentKeyRequirement residentKeyRequirement;
 
+    @Nullable
     public Attachment getAttachment() {
         return attachment;
     }
 
+    @Nullable
     public String getAttachmentAsString() {
-        if (this.attachment == null) {
-            return null;
-        }
+        if (attachment == null) return null;
         return attachment.toString();
     }
 
+    @Nullable
     public Boolean getRequireResidentKey() {
         return requireResidentKey;
+    }
+
+    @Nullable
+    public ResidentKeyRequirement getResidentKeyRequirement() {
+        return residentKeyRequirement;
+    }
+
+    @Nullable
+    public String getResidentKeyRequirementAsString() {
+        if (residentKeyRequirement == null) return null;
+        return residentKeyRequirement.toString();
     }
 
     @PublicApi(exclude = true)
@@ -54,9 +69,10 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
         AuthenticatorSelectionCriteria that = (AuthenticatorSelectionCriteria) o;
 
         if (attachment != that.attachment) return false;
-        if (requireResidentKey != null ? !requireResidentKey.equals(that.requireResidentKey) : that.requireResidentKey != null)
-            return false;
-        return requireUserVerification == that.requireUserVerification;
+        if (requireResidentKey != null ? !requireResidentKey.equals(that.requireResidentKey) : that.requireResidentKey != null) return false;
+        if (requireUserVerification != that.requireUserVerification) return false;
+        if (residentKeyRequirement != that.residentKeyRequirement) return false;
+        return true;
     }
 
     @Override
@@ -70,6 +86,7 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
                 .field("attachment", attachment)
                 .field("requireResidentKey", requireResidentKey)
                 .field("requireUserVerification", requireUserVerification)
+                .field("residentKeyRequirement", residentKeyRequirement)
                 .end();
     }
 
@@ -79,6 +96,7 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
     public static class Builder {
         private Attachment attachment;
         private Boolean requireResidentKey;
+        private ResidentKeyRequirement residentKeyRequirement;
 
         /**
          * Sets the attachment to use for this session.
@@ -96,10 +114,19 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
             return this;
         }
 
+        /**
+         * Sets residentKeyRequirement
+         */
+        public Builder setResidentKeyRequirement(ResidentKeyRequirement residentKeyRequirement) {
+            this.residentKeyRequirement = residentKeyRequirement;
+            return this;
+        }
+
         public AuthenticatorSelectionCriteria build() {
             AuthenticatorSelectionCriteria criteria = new AuthenticatorSelectionCriteria();
             criteria.attachment = attachment;
             criteria.requireResidentKey = requireResidentKey;
+            criteria.residentKeyRequirement = residentKeyRequirement;
             return criteria;
         }
     }

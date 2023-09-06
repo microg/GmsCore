@@ -23,6 +23,8 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
     private ErrorCode errorCode;
     @Field(3)
     private String errorMessage;
+    @Field(4)
+    private int internalErrorCode;
 
     private AuthenticatorErrorResponse() {
     }
@@ -63,12 +65,14 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
         AuthenticatorErrorResponse that = (AuthenticatorErrorResponse) o;
 
         if (errorCode != null ? !errorCode.equals(that.errorCode) : that.errorCode != null) return false;
-        return errorMessage != null ? errorMessage.equals(that.errorMessage) : that.errorMessage == null;
+        if (errorMessage != null ? !errorMessage.equals(that.errorMessage) : that.errorMessage != null) return false;
+        if (internalErrorCode != that.internalErrorCode) return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{errorCode, errorMessage});
+        return Arrays.hashCode(new Object[]{errorCode, errorMessage, internalErrorCode});
     }
 
     @Override

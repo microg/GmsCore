@@ -25,14 +25,17 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     private byte[] clientDataJSON;
     @Field(4)
     private byte[] attestationObject;
+    @Field(5)
+    private String[] transports;
 
     private AuthenticatorAttestationResponse() {}
 
     @PublicApi(exclude = true)
-    public AuthenticatorAttestationResponse(byte[] keyHandle, byte[] clientDataJSON, byte[] attestationObject) {
+    public AuthenticatorAttestationResponse(byte[] keyHandle, byte[] clientDataJSON, byte[] attestationObject, String[] transports) {
         this.keyHandle = keyHandle;
         this.clientDataJSON = clientDataJSON;
         this.attestationObject = attestationObject;
+        this.transports = transports;
     }
 
     public byte[] getAttestationObject() {
@@ -52,6 +55,10 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         return keyHandle;
     }
 
+    public String[] getTransports() {
+        return transports;
+    }
+
     @Override
     public byte[] serializeToBytes() {
         return SafeParcelableSerializer.serializeToBytes(this);
@@ -66,12 +73,14 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
         if (!Arrays.equals(keyHandle, that.keyHandle)) return false;
         if (!Arrays.equals(clientDataJSON, that.clientDataJSON)) return false;
-        return Arrays.equals(attestationObject, that.attestationObject);
+        if (!Arrays.equals(attestationObject, that.attestationObject)) return false;
+        if (!Arrays.equals(transports, that.transports)) return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new Object[]{Arrays.hashCode(keyHandle), Arrays.hashCode(clientDataJSON), Arrays.hashCode(attestationObject)});
+        return Arrays.hashCode(new Object[]{Arrays.hashCode(keyHandle), Arrays.hashCode(clientDataJSON), Arrays.hashCode(attestationObject), Arrays.hashCode(transports)});
     }
 
     @Override
@@ -80,6 +89,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
                 .field("keyHandle", keyHandle)
                 .field("clientDataJSON", clientDataJSON)
                 .field("attestationObject", attestationObject)
+                .field("transports", transports)
                 .end();
     }
 

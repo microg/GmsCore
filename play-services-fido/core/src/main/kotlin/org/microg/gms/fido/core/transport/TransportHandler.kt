@@ -10,7 +10,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.fido.fido2.api.common.*
-import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement.REQUIRED
+import com.google.android.gms.fido.fido2.api.common.ResidentKeyRequirement.*
+import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement.*
 import com.upokecenter.cbor.CBORObject
 import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.*
@@ -51,9 +52,19 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         options: RequestOptions,
         clientDataHash: ByteArray
     ): Pair<AuthenticatorMakeCredentialResponse, ByteArray?> {
+        connection.capabilities
         val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
-            options.registerOptions.authenticatorSelection?.requireResidentKey == true,
-            options.registerOptions.authenticatorSelection?.requireUserVerification == REQUIRED
+            when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
+                RESIDENT_KEY_REQUIRED -> true
+                RESIDENT_KEY_PREFERRED -> connection.hasResidentKey
+                RESIDENT_KEY_DISCOURAGED -> false
+                else -> options.registerOptions.authenticatorSelection?.requireResidentKey == true
+            },
+            when (options.registerOptions.authenticatorSelection?.requireUserVerification) {
+                REQUIRED -> true
+                DISCOURAGED -> false
+                else -> connection.hasUserVerificationSupport
+            }
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
@@ -167,7 +178,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         return AuthenticatorAttestationResponse(
             keyHandle,
             clientData,
-            AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode()
+            AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode(),
+            connection.transports.toTypedArray()
         )
     }
 

@@ -148,7 +148,8 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         return AuthenticatorAttestationResponse(
             credentialId.encode(),
             clientData,
-            attestationObject.encode()
+            attestationObject.encode(),
+            arrayOf("internal")
         )
     }
 

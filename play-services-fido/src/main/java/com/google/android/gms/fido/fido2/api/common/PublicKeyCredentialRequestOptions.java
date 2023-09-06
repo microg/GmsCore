@@ -36,6 +36,8 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
     private UserVerificationRequirement requireUserVerification;
     @Field(9)
     private AuthenticationExtensions authenticationExtensions;
+    @Field(10)
+    private Long longRequestId;
 
     public List<PublicKeyCredentialDescriptor> getAllowList() {
         return allowList;

@@ -226,7 +226,13 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         }
         val id = rawId?.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING)
         if (rpId != null && id != null) database.insertKnownRegistration(rpId, id, transport)
-        finishWithCredential(PublicKeyCredential.Builder().setResponse(response).setRawId(rawId).setId(id).build())
+        finishWithCredential(PublicKeyCredential.Builder()
+            .setResponse(response)
+            .setRawId(rawId)
+            .setId(id)
+            .setAuthenticatorAttachment(if (transport == SCREEN_LOCK) "platform" else "cross-platform")
+            .build()
+        )
     }
 
     private fun finishWithCredential(publicKeyCredential: PublicKeyCredential) {
