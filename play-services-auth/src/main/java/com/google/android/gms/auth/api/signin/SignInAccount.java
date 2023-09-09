@@ -5,7 +5,9 @@
 
 package com.google.android.gms.auth.api.signin;
 
+import androidx.annotation.NonNull;
 import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 @Hide
@@ -16,6 +18,12 @@ public class SignInAccount extends AutoSafeParcelable {
     public GoogleSignInAccount googleSignInAccount;
     @Field(8)
     public String userId;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("SignInAccount").field("email", email).field("account", googleSignInAccount).field("userId", userId).end();
+    }
 
     public static final Creator<SignInAccount> CREATOR = findCreator(SignInAccount.class);
 }

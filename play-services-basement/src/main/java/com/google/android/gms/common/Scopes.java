@@ -60,6 +60,8 @@ public class Scopes {
     public static final String GAMES = "https://www.googleapis.com/auth/games";
     @Hide
     public static final String GAMES_LITE = "https://www.googleapis.com/auth/games_lite";
+    @Hide
+    public static final String GAMES_FIRSTPARTY = "https://www.googleapis.com/auth/games.firstparty";
     /**
      * Scope for using the CloudSave service.
      */

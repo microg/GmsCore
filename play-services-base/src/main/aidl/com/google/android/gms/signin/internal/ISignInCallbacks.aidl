@@ -13,5 +13,5 @@ interface ISignInCallbacks {
     void onRecordConsent(in Status status) = 5;
     void onCurrentAccount(in Status status, in GoogleSignInAccount account) = 6;
     void onSignIn(in SignInResponse response) = 7;
-    void onRecrodConsentByConsent(in RecordConsentByConsentResultResponse response) = 8;
+    void onRecordConsentByConsent(in RecordConsentByConsentResultResponse response) = 8;
 }

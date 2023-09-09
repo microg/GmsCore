@@ -10,6 +10,7 @@ import android.accounts.AccountManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -22,6 +23,7 @@ import com.google.android.gms.R
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.databinding.SigninConfirmBinding
@@ -35,8 +37,10 @@ import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
-const val REQUEST_CODE_SIGN_IN = 100
-const val REQUEST_CODE_PICK_ACCOUNT = 101
+private const val TAG = "AuthSignInActivity"
+private const val REQUEST_CODE_ADD_ACCOUNT = 100
+
+private val ACCEPTABLE_SCOPES = setOf(Scopes.OPENID, Scopes.EMAIL, Scopes.PROFILE, Scopes.USERINFO_EMAIL, Scopes.USERINFO_PROFILE, Scopes.GAMES_LITE)
 
 /**
  * TODO: Get privacy policy / terms of service links via
@@ -52,9 +56,17 @@ class AuthSignInActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setResult(CommonStatusCodes.CANCELED)
+
+        Log.d(TAG, "Request: $config")
+
         val packageName = config?.packageName
-        if (packageName == null || packageName != callingActivity?.packageName) return finishResult(CommonStatusCodes.DEVELOPER_ERROR)
-        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.DEVELOPER_ERROR)
+        if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != packageName))
+            return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
+        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
+
+        val unacceptableScopes = config?.options?.scopes.orEmpty().filter { it.scopeUri !in ACCEPTABLE_SCOPES }
+        if (unacceptableScopes.isNotEmpty()) return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "Unacceptable scopes: $unacceptableScopes")
 
         val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         if (accounts.isNotEmpty()) {
@@ -74,7 +86,7 @@ class AuthSignInActivity : AppCompatActivity() {
     }
 
     private fun openAddAccount() {
-        startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE_SIGN_IN)
+        startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE_ADD_ACCOUNT)
     }
 
     private fun getDisplayName(account: Account): String? {
@@ -165,52 +177,38 @@ class AuthSignInActivity : AppCompatActivity() {
     private suspend fun signIn(account: Account) {
         val googleSignInAccount = performSignIn(this, config?.packageName!!, config?.options, account, true)
         if (googleSignInAccount != null) {
-            finishResult(CommonStatusCodes.SUCCESS, googleSignInAccount)
+            finishResult(CommonStatusCodes.SUCCESS, account = account, googleSignInAccount = googleSignInAccount)
         } else {
-            finishResult(CommonStatusCodes.CANCELED)
+            finishResult(CommonStatusCodes.INTERNAL_ERROR, "Sign in failed")
         }
     }
 
-    private fun finishResult(statusCode: Int? = null, account: GoogleSignInAccount? = null) {
+    private fun finishResult(statusCode: Int, message: String? = null, account: Account? = null, googleSignInAccount: GoogleSignInAccount? = null) {
         val data = Intent()
-        data.putExtra("googleSignInStatus", statusCode?.let { Status(it) })
-        data.putExtra("googleSignInAccount", account)
-        if (account != null) {
+        if (statusCode != CommonStatusCodes.SUCCESS) data.putExtra("errorCode", statusCode)
+        data.putExtra("googleSignInStatus", Status(statusCode, message))
+        data.putExtra("googleSignInAccount", googleSignInAccount)
+        if (googleSignInAccount != null) {
             data.putExtra("signInAccount", SignInAccount().apply {
-                email = account.email
-                googleSignInAccount = account
-                userId = account.id
+                email = googleSignInAccount.email ?: account?.name
+                this.googleSignInAccount = googleSignInAccount
+                userId = googleSignInAccount.id ?: getSystemService<AccountManager>()?.getUserData(account, "GoogleUserId")
             })
         }
-        setResult(RESULT_OK, data)
-        val extras = data.extras
-        extras?.keySet()
+        Log.d(TAG, "Result: ${data.extras?.also { it.keySet() }}")
+        setResult(statusCode, data)
         finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_CODE_SIGN_IN -> {
-                val accountManager = getSystemService<AccountManager>() ?: return finish()
-                val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
-                if (accounts.isNotEmpty()) {
-                    openAccountPicker(config?.packageName!!)
-                } else {
-                    finishResult(CommonStatusCodes.CANCELED)
-                }
-            }
-
-            REQUEST_CODE_PICK_ACCOUNT -> {
-                val accountName = data?.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                if (resultCode == RESULT_OK && accountName != null) {
-                    val account = Account(accountName, DEFAULT_ACCOUNT_TYPE)
-                    lifecycleScope.launchWhenStarted {
-                        signIn(account)
-                    }
-                } else {
-                    finishResult(CommonStatusCodes.CANCELED)
-                }
+        if (requestCode == REQUEST_CODE_ADD_ACCOUNT) {
+            val accountManager = getSystemService<AccountManager>() ?: return finish()
+            val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
+            if (accounts.isNotEmpty()) {
+                openAccountPicker(config?.packageName!!)
+            } else {
+                finishResult(CommonStatusCodes.CANCELED, "No account and creation cancelled")
             }
         }
     }

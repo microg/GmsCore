@@ -55,7 +55,7 @@ public class GetServiceRequest extends AutoSafeParcelable {
     @Field(11)
     public Feature[] apiFeatures;
     @Field(12)
-    private boolean field12;
+    private boolean supportsConnectionInfo;
     @Field(13)
     private int field13;
     @Field(14)
@@ -71,7 +71,7 @@ public class GetServiceRequest extends AutoSafeParcelable {
     public GetServiceRequest(int serviceId) {
         this.serviceId = serviceId;
         this.gmsVersion = Constants.GMS_VERSION_CODE;
-        this.field12 = true;
+        this.supportsConnectionInfo = true;
     }
 
     @Override

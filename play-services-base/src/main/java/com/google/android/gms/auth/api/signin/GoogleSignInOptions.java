@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.*;
@@ -355,6 +356,20 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("GoogleSignInOptions")
+                .field("scopes", scopes)
+                .field("account", account)
+                .field("idTokenRequested", idTokenRequested)
+                .field("forceCodeForRefreshToken", forceCodeForRefreshToken)
+                .field("serverAuthCodeRequested", serverAuthCodeRequested)
+                .field("serverClientId", serverClientId)
+                .field("hostedDomain", hostedDomain)
+                .end();
     }
 
     public static final Creator<GoogleSignInOptions> CREATOR = findCreator(GoogleSignInOptions.class);

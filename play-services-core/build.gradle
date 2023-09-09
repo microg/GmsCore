@@ -54,6 +54,7 @@ dependencies {
     implementation project(':play-services-auth')
     implementation project(':play-services-clearcut')
     implementation project(':play-services-drive')
+    implementation project(':play-services-games')
     implementation project(':play-services-maps')
     implementation project(':play-services-measurement-base')
     implementation project(':play-services-places')

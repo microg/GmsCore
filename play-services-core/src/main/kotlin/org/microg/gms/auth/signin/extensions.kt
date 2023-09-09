@@ -24,21 +24,21 @@ import kotlin.math.min
 private fun Long?.orMaxIfNegative() = this?.takeIf { it >= 0L } ?: Long.MAX_VALUE
 
 fun getOAuthManager(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): AuthManager {
-    val scopes = options?.scopes.orEmpty()
+    val scopes = options?.scopes.orEmpty().sortedBy { it.scopeUri }
     return AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
 }
 
 suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false): GoogleSignInAccount? {
     val authManager = getOAuthManager(context, packageName, options, account)
+    if (permitted) authManager.isPermitted = true
     val authResponse = withContext(Dispatchers.IO) {
-        if (permitted) authManager.isPermitted = true
         authManager.requestAuth(true)
     }
     if (authResponse.auth == null) return null
 
-    val scopes = options?.scopes.orEmpty()
-    val includeId = scopes.any { it.scopeUri == Scopes.OPENID }
-    val includeEmail = scopes.any { it.scopeUri == Scopes.EMAIL }
+    val scopes = options?.scopes.orEmpty().sortedBy { it.scopeUri }
+    val includeId = scopes.any { it.scopeUri == Scopes.OPENID } || scopes.any { it.scopeUri == Scopes.GAMES_LITE }
+    val includeEmail = scopes.any { it.scopeUri == Scopes.EMAIL } || scopes.any { it.scopeUri == Scopes.GAMES_LITE }
     val includeProfile = scopes.any { it.scopeUri == Scopes.PROFILE }
     Log.d("AuthSignIn", "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}")
     val idTokenResponse = if (options?.isIdTokenRequested == true && options.serverClientId != null) withContext(Dispatchers.IO) {
@@ -60,7 +60,6 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     val googleUserId = authManager.getUserData("GoogleUserId")
     val id = if (includeId) googleUserId else null
     val tokenId = if (options?.isIdTokenRequested == true) idTokenResponse?.auth else null
-    val email = if (includeEmail) account.name else null
     val serverAuthCode: String? = if (options?.isServerAuthCodeRequested == true) serverAuthTokenResponse?.auth else null
     val expirationTime = min(authResponse.expiry.orMaxIfNegative(), idTokenResponse?.expiry.orMaxIfNegative())
     val obfuscatedIdentifier: String = MessageDigest.getInstance("MD5").digest("$googleUserId:$packageName".encodeToByteArray()).toHexString().uppercase()
@@ -80,11 +79,11 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
             cursor.close()
         }
     } else listOf(null, null, null, null)
-    SignInDefaultService.setDefaultAccount(context, packageName, account)
+    SignInConfigurationService.setDefaultAccount(context, packageName, account)
     return GoogleSignInAccount(
         id,
         tokenId,
-        email,
+        account.name,
         displayName,
         photoUrl?.let { Uri.parse(it) },
         serverAuthCode,

@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.ArrayList;
@@ -258,6 +259,23 @@ public class GoogleSignInAccount extends AutoSafeParcelable {
     @Override
     public int hashCode() {
         return (obfuscatedIdentifier.hashCode() + 527) * 31 + getGrantedScopes().hashCode();
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("GoogleSignInAccount")
+                .field("id", id)
+                .field("tokenId", tokenId)
+                .field("email", email)
+                .field("displayName", displayName)
+                .field("givenName", givenName)
+                .field("familyName", familyName)
+                .field("photoUrl", photoUrl)
+                .field("serverAuthCode", serverAuthCode)
+                .field("expirationTime", expirationTime)
+                .field("obfuscatedIdentifier", obfuscatedIdentifier)
+                .end();
     }
 
     public static final Creator<GoogleSignInAccount> CREATOR = new AutoCreator<>(GoogleSignInAccount.class);

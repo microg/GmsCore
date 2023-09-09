@@ -25,15 +25,19 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.internal.ISignInCallbacks
 import com.google.android.gms.auth.api.signin.internal.ISignInService
+import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
+import org.microg.gms.auth.AuthPrefs
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
@@ -48,7 +52,9 @@ class AuthSignInService : BaseService(TAG, GmsService.AUTH_SIGN_IN) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
         val binder = AuthSignInServiceImpl(this, lifecycle, packageName, request.account, request.scopes.asList(), request.extras).asBinder()
-        callback.onPostInitComplete(CommonStatusCodes.SUCCESS, binder, Bundle())
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, binder, ConnectionInfo().apply {
+            features = arrayOf(Feature("user_service_account_management", 1))
+        })
     }
 }
 
@@ -64,30 +70,40 @@ class AuthSignInServiceImpl(
     override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun silentSignIn(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {
+        Log.d(TAG, "$packageName:silentSignIn($options)")
+        fun sendResult(account: GoogleSignInAccount?, status: Status) {
+            Log.d(TAG, "Result[$status]: $account")
+            runCatching { callbacks.onSignIn(account, status) }
+        }
         lifecycleScope.launchWhenStarted {
             try {
-                val account = account ?: options?.account ?: SignInDefaultService.getDefaultAccount(context, packageName)
-                if (account != null && getOAuthManager(context, packageName, options, account).isPermitted && options?.isForceCodeForRefreshToken != true) {
-                    val googleSignInAccount = performSignIn(context, packageName, options, account)
-                    if (googleSignInAccount != null) {
-                        runCatching { callbacks.onSignIn(googleSignInAccount, Status(CommonStatusCodes.SUCCESS)) }
+                val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
+                if (account != null && options?.isForceCodeForRefreshToken != true) {
+                    if (getOAuthManager(context, packageName, options, account).isPermitted || AuthPrefs.isTrustGooglePermitted(context)) {
+                        val googleSignInAccount = performSignIn(context, packageName, options, account)
+                        if (googleSignInAccount != null) {
+                            sendResult(googleSignInAccount, Status(CommonStatusCodes.SUCCESS))
+                        } else {
+                            sendResult(null, Status(CommonStatusCodes.DEVELOPER_ERROR))
+                        }
                     } else {
-                        runCatching { callbacks.onSignIn(null, Status(CommonStatusCodes.DEVELOPER_ERROR)) }
+                        sendResult(null, Status(CommonStatusCodes.SIGN_IN_REQUIRED))
                     }
                 } else {
-                    runCatching { callbacks.onSignIn(null, Status(CommonStatusCodes.SIGN_IN_REQUIRED)) }
+                    sendResult(null, Status(CommonStatusCodes.SIGN_IN_REQUIRED))
                 }
             } catch (e: Exception) {
                 Log.w(TAG, e)
-                runCatching { callbacks.onSignIn(null, Status.INTERNAL_ERROR) }
+                sendResult(null, Status.INTERNAL_ERROR)
             }
         }
     }
 
     override fun signOut(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {
+        Log.d(TAG, "$packageName:signOut($options)")
         lifecycleScope.launchWhenStarted {
             try {
-                SignInDefaultService.setDefaultAccount(context, packageName, null)
+                SignInConfigurationService.setDefaultAccount(context, packageName, null)
                 runCatching { callbacks.onSignOut(Status.SUCCESS) }
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -97,8 +113,9 @@ class AuthSignInServiceImpl(
     }
 
     override fun revokeAccess(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {
+        Log.d(TAG, "$packageName:revokeAccess($options)")
         lifecycleScope.launchWhenStarted {
-            val account = account ?: options?.account ?: SignInDefaultService.getDefaultAccount(context, packageName)
+            val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
             if (account != null) {
                 try {
                     val authManager = getOAuthManager(context, packageName, options, account)
@@ -119,7 +136,7 @@ class AuthSignInServiceImpl(
                         authManager.invalidateAuthToken(token)
                         authManager.isPermitted = false
                     }
-                    SignInDefaultService.setDefaultAccount(context, packageName, account)
+                    SignInConfigurationService.setDefaultAccount(context, packageName, account)
                     runCatching { callbacks.onRevokeAccess(Status.SUCCESS) }
                 } catch (e: Exception) {
                     Log.w(TAG, e)

@@ -22,7 +22,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
 
+import androidx.annotation.NonNull;
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -174,6 +176,12 @@ public final class Status extends AutoSafeParcelable implements Result {
         if (hasResolution()) {
             activity.startIntentSenderForResult(resolution.getIntentSender(), requestCode, null, 0, 0, 0);
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("Status").field("code", statusCode).field("message", statusMessage).field("resolution", resolution).end();
     }
 
     public static final Creator<Status> CREATOR = new AutoCreator<Status>(Status.class);

@@ -472,17 +472,10 @@
         </service>
 
         <service
-            android:name="org.microg.gms.auth.signin.SignInDefaultService"
+            android:name="org.microg.gms.auth.signin.SignInConfigurationService"
             android:exported="false" />
 
         <!-- Games -->
-
-        <service android:name="org.microg.gms.games.GamesStubService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.games.service.START" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
 
         <activity
             android:name="org.microg.gms.games.UpgradeActivity"

@@ -9,13 +9,11 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Service
 import android.content.*
-import android.content.Context.BIND_ABOVE_CLIENT
-import android.content.Context.BIND_AUTO_CREATE
 import android.os.*
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import org.microg.gms.auth.AuthConstants
-import kotlin.coroutines.Continuation
+import org.microg.gms.common.PackageUtils
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -29,7 +27,7 @@ private const val MSG_SET_DEFAULT_ACCOUNT = 2
 private const val MSG_DATA_PACKAGE_NAME = "package_name"
 private const val MSG_DATA_ACCOUNT = "account"
 
-class SignInDefaultService : Service() {
+class SignInConfigurationService : Service() {
     private val preferences: SharedPreferences
         get() = getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     private val accountManager: AccountManager
@@ -68,8 +66,12 @@ class SignInDefaultService : Service() {
         }).binder
     }
 
+    private fun getPackageNameSuffix(packageName: String): String {
+        return packageName + ":" + PackageUtils.firstSignatureDigest(this, packageName)
+    }
+
     private fun getDefaultAccount(packageName: String): Account? {
-        val name = preferences.getString(DEFAULT_ACCOUNT_PREFIX + packageName, null)
+        val name = preferences.getString(DEFAULT_ACCOUNT_PREFIX + getPackageNameSuffix(packageName), null)
         if (name.isNullOrBlank()) return null
         val accounts: Array<Account> = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
         for (account in accounts) {
@@ -81,9 +83,9 @@ class SignInDefaultService : Service() {
     private fun setDefaultAccount(packageName: String, account: Account?) {
         val editor: SharedPreferences.Editor = preferences.edit()
         if (account == null || account.name == AuthConstants.DEFAULT_ACCOUNT) {
-            editor.remove(DEFAULT_ACCOUNT_PREFIX + packageName)
+            editor.remove(DEFAULT_ACCOUNT_PREFIX + getPackageNameSuffix(packageName))
         } else {
-            editor.putString(DEFAULT_ACCOUNT_PREFIX + packageName, account.name)
+            editor.putString(DEFAULT_ACCOUNT_PREFIX + getPackageNameSuffix(packageName), account.name)
         }
         editor.apply()
     }
@@ -112,7 +114,7 @@ class SignInDefaultService : Service() {
                     runCatching { continuation.resumeWithException(RuntimeException("Disconnected")) }
                 }
             }
-            val connected = context.bindService(Intent(context, SignInDefaultService::class.java), connection, BIND_AUTO_CREATE or BIND_ABOVE_CLIENT)
+            val connected = context.bindService(Intent(context, SignInConfigurationService::class.java), connection, BIND_AUTO_CREATE or BIND_ABOVE_CLIENT)
             if (!connected) {
                 runCatching { continuation.resumeWithException(RuntimeException("Connection failed")) }
                 runCatching { context.unbindService(connection) }
