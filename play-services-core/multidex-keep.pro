@@ -4,6 +4,9 @@
 -keep class com.mapbox.** { *; }
 -keep class org.oscim.** { *; }
 
-# Make sure these classes are in the primary dex file otherwise Conscrypt will error out on legacy Android versions
+# Keep Dynamite Loader in the primary dex file otherwise it will error out on legacy Android versions
+-keep class com.google.android.gms.chimera.container.DynamiteLoaderImpl { *; }
+
+# Keep Conscrypt in the primary dex file otherwise it will error out on legacy Android versions
 -keep class com.google.android.gms.common.security.ProviderInstallerImpl { *; }
 -keep class com.google.android.gms.org.conscrypt.** { *; }
