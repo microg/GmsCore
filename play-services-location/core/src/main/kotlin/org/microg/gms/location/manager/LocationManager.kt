@@ -6,6 +6,7 @@
 package org.microg.gms.location.manager
 
 import android.Manifest
+import android.app.Activity
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_MUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -13,10 +14,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
+import android.os.*
 import android.os.Build.VERSION.SDK_INT
-import android.os.IBinder
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
@@ -29,6 +30,10 @@ import com.google.android.gms.location.Granularity.GRANULARITY_COARSE
 import com.google.android.gms.location.Granularity.GRANULARITY_FINE
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.internal.ClientIdentity
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.microg.gms.location.*
 import org.microg.gms.utils.IntentCacheManager
 import java.io.PrintWriter
@@ -45,6 +50,8 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
     private val gpsLocationListener by lazy { LocationListenerCompat { updateGpsLocation(it) } }
     private val networkLocationListener by lazy { LocationListenerCompat { updateNetworkLocation(it) } }
     private var boundToSystemNetworkLocation: Boolean = false
+    private val activePermissionRequestLock = Mutex()
+    private var activePermissionRequest: Deferred<Boolean>? = null
 
     val deviceOrientationManager = DeviceOrientationManager(context, lifecycle)
 
@@ -72,6 +79,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
             // No last location available at requested granularity due to lack of permission
             null
         } else {
+            ensurePermissions()
             val preLocation = lastLocationCapsule.getLocation(effectiveGranularity, request.maxUpdateAgeMillis)
             val processedLocation = postProcessor.process(preLocation, effectiveGranularity, clientIdentity.isGoogle(context))
             if (!context.noteAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) {
@@ -103,6 +111,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
 
     suspend fun addBinderRequest(clientIdentity: ClientIdentity, binder: IBinder, callback: ILocationCallback, request: LocationRequest) {
         request.verify(context, clientIdentity)
+        ensurePermissions()
         requestManager.add(binder, clientIdentity, callback, request, lastLocationCapsule)
     }
 
@@ -123,6 +132,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
 
     suspend fun addIntentRequest(clientIdentity: ClientIdentity, pendingIntent: PendingIntent, request: LocationRequest) {
         request.verify(context, clientIdentity)
+        ensurePermissions()
         requestManager.add(pendingIntent, clientIdentity, request, lastLocationCapsule)
     }
 
@@ -241,6 +251,46 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
             requestManager.processNewLocation(lastLocationCapsule)
         }
         lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE)?.let { deviceOrientationManager.onLocationChanged(it) }
+    }
+
+    private suspend fun ensurePermissions(): Boolean {
+        if (SDK_INT < 23)
+            return true
+
+        val permissions = mutableListOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (SDK_INT >= 29) permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+
+        if (permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED })
+            return true
+
+        val (completable, deferred) = activePermissionRequestLock.withLock {
+            if (activePermissionRequest == null) {
+                val completable = CompletableDeferred<Boolean>()
+                activePermissionRequest = completable
+                completable to activePermissionRequest!!
+            } else {
+                null to activePermissionRequest!!
+            }
+        }
+        if (completable != null) {
+            val intent = Intent(context, AskPermissionActivity::class.java)
+            intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
+                override fun handleMessage(msg: Message) {
+                    if (msg.what == Activity.RESULT_OK) {
+                        lastLocationCapsule.fetchFromSystem()
+                        onRequestManagerUpdated()
+                        val grantResults = msg.data?.getIntArray(EXTRA_GRANT_RESULTS) ?: IntArray(0)
+                        completable.complete(grantResults.size == permissions.size && grantResults.all { it == PackageManager.PERMISSION_GRANTED })
+                    } else {
+                        completable.complete(false)
+                    }
+                }
+            }))
+            intent.putExtra(EXTRA_PERMISSIONS, permissions.toTypedArray())
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        }
+        return deferred.await()
     }
 
     fun dump(writer: PrintWriter) {

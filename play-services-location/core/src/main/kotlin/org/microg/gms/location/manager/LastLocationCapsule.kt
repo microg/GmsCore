@@ -111,6 +111,10 @@ class LastLocationCapsule(private val context: Context) {
             Log.w(TAG, e)
             // Ignore
         }
+        fetchFromSystem()
+    }
+
+    fun fetchFromSystem() {
         val locationManager = context.getSystemService<LocationManager>() ?: return
         try {
             locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)?.let { updateCoarseLocation(it) }

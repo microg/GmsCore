@@ -135,7 +135,7 @@ class AuthenticatorGetInfoResponse(
             uvModality = obj.get(18)?.AsInt32Value(),
             certifications = obj.get(19)?.entries?.mapNotNull { runCatching { it.key.AsString() to it.value.AsInt32Value() }.getOrNull() }?.toMap(),
             remainingDiscoverableCredentials = obj.get(20)?.AsInt32Value(),
-            vendorPrototypeConfigCommands = obj.get(20)?.AsInt32Sequence()?.toList(),
+            vendorPrototypeConfigCommands = obj.get(21)?.AsInt32Sequence()?.toList(),
         )
     }
 

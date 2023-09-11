@@ -103,7 +103,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 if (instantTransport != null && instantTransport.transport in INSTANT_SUPPORTED_TRANSPORTS) {
                     window.setBackgroundDrawable(ColorDrawable(0))
                     window.statusBarColor = Color.TRANSPARENT
-                    setTheme(R.style.Theme_Fido_Translucent)
+                    setTheme(org.microg.gms.base.core.R.style.Theme_Translucent)
                 }
             }
 
