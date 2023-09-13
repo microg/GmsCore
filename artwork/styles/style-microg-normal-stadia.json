@@ -1288,16 +1288,32 @@
             "filter": [
                 "all",
                 [
-                    "match",
+                    "any",
                     [
-                        "get",
-                        "class"
+                        "match",
+                        [
+                            "get",
+                            "class"
+                        ],
+                        [
+                            "rail"
+                        ],
+                        true,
+                        false
                     ],
                     [
-                        "rail"
-                    ],
-                    true,
-                    false
+                        "match",
+                        [
+                            "get",
+                            "subclass"
+                        ],
+                        [
+                            "light_rail",
+                            "tram"
+                        ],
+                        true,
+                        false
+                    ]
                 ],
                 [
                     "match",
@@ -3507,7 +3523,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -3556,6 +3574,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -3629,7 +3648,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -3671,6 +3692,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",
@@ -3823,7 +3845,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -3872,6 +3896,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -3945,7 +3970,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -3987,6 +4014,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",
@@ -4138,7 +4166,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -4187,6 +4217,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -4282,7 +4313,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -4324,6 +4357,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",
@@ -4475,7 +4509,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -4524,6 +4560,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -4619,7 +4656,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -4661,6 +4700,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",
