@@ -346,8 +346,9 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
             )
             map.setImageBitmap(it.bitmap)
 
-            for (callback in afterNextDrawCallback) callback()
-            afterNextDrawCallback.clear()
+            ArrayList(afterNextDrawCallback)
+                .also { afterNextDrawCallback.clear() }
+                .forEach { it() }
 
             if (cameraPositionChanged) {
                 // Notify apps that new projection is now available
