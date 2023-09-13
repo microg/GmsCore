@@ -398,7 +398,7 @@
                         "class"
                     ],
                     [
-                        "track"
+                        "rail"
                     ],
                     true,
                     false
@@ -2301,27 +2301,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
@@ -2607,27 +2617,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
@@ -2913,27 +2933,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
@@ -3240,27 +3270,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
