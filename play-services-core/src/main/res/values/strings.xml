@@ -47,6 +47,7 @@ This can take a couple of minutes."</string>
     <string name="signin_subtext_policy_terms">terms of service</string>
 
     <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
+    <string name="perm_gsf_read_gservices_label">read Google service configuration</string>
     <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
     <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
     <string name="perm_gtalk_svc_label">exchange messages and receive sync notifications from Google servers</string>
