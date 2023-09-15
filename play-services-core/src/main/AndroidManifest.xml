@@ -87,8 +87,6 @@
         android:label="@string/perm_provision_label"
         android:protectionLevel="privileged|signature" />
 
-    <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -138,10 +136,6 @@
         android:theme="@style/Theme.AppCompat.DayNight">
 
         <library android:name="com.google.android.gms" />
-
-        <meta-data
-            android:name="fake-signature"
-            android:value="@string/fake_signature" />
 
         <!-- Provision -->
 

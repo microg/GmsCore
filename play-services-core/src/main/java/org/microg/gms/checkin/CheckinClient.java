@@ -140,7 +140,7 @@ public class CheckinClient {
                 .loggingId(new Random().nextLong()) // TODO: static
                 .meid(deviceIdent.meid)
                 .otaCert(Collections.singletonList("71Q6Rn2DDZl1zPDVaaeEHItd"))
-                .serial(Build.SERIAL)
+                .serial(Build.SERIAL != null && !Build.SERIAL.isEmpty() ? Build.SERIAL : null)
                 .timeZone(TimeZone.getDefault().getID())
                 .userName((String) TODO)
                 .userSerialNumber((Integer) TODO)
