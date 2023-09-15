@@ -8,6 +8,7 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -24,8 +25,10 @@ import java.util.Arrays;
 @PublicApi
 public class UserVerificationMethodExtension extends AutoSafeParcelable {
     @Field(1)
+    @NonNull
     private boolean uvm;
 
+    @NonNull
     public boolean getUvm() {
         return uvm;
     }

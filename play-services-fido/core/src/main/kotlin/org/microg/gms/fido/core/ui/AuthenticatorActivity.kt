@@ -154,14 +154,14 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 val knownRegistrationTransports = mutableSetOf<Transport>()
                 val allowedTransports = mutableSetOf<Transport>()
                 if (options.type == RequestOptionsType.SIGN) {
-                    for (descriptor in options.signOptions.allowList) {
+                    for (descriptor in options.signOptions.allowList.orEmpty()) {
                         val knownTransport = database.getKnownRegistrationTransport(options.rpId, descriptor.id.toBase64(Base64.URL_SAFE, Base64.NO_WRAP, Base64.NO_PADDING))
                         if (knownTransport != null && knownTransport in IMPLEMENTED_TRANSPORTS)
                             knownRegistrationTransports.add(knownTransport)
                         if (descriptor.transports.isNullOrEmpty()) {
                             allowedTransports.addAll(Transport.values())
                         } else {
-                            for (transport in descriptor.transports) {
+                            for (transport in descriptor.transports.orEmpty()) {
                                 val allowedTransport = when (transport) {
                                     com.google.android.gms.fido.common.Transport.BLUETOOTH_CLASSIC -> BLUETOOTH
                                     com.google.android.gms.fido.common.Transport.BLUETOOTH_LOW_ENERGY -> BLUETOOTH
@@ -228,8 +228,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         if (rpId != null && id != null) database.insertKnownRegistration(rpId, id, transport)
         finishWithCredential(PublicKeyCredential.Builder()
             .setResponse(response)
-            .setRawId(rawId)
-            .setId(id)
+            .setRawId(rawId ?: ByteArray(0).also { Log.w(TAG, "rawId was null") })
+            .setId(id ?: "".also { Log.w(TAG, "id was null") })
             .setAuthenticatorAttachment(if (transport == SCREEN_LOCK) "platform" else "cross-platform")
             .build()
         )

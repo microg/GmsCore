@@ -8,13 +8,16 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 /**
  * Authenticators respond to relying party requests by returning an object derived from this interface.
  */
 public abstract class AuthenticatorResponse extends AutoSafeParcelable {
+    @NonNull
     public abstract byte[] getClientDataJSON();
 
+    @NonNull
     public abstract byte[] serializeToBytes();
 }

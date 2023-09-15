@@ -8,7 +8,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -21,12 +23,16 @@ import java.util.Arrays;
  */
 public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
     @Field(2)
+    @Nullable
     private Attachment attachment;
     @Field(3)
+    @Nullable
     private Boolean requireResidentKey;
     @Field(4)
+    @Nullable
     private UserVerificationRequirement requireUserVerification;
     @Field(5)
+    @Nullable
     private ResidentKeyRequirement residentKeyRequirement;
 
     @Nullable
@@ -56,7 +62,8 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
         return residentKeyRequirement.toString();
     }
 
-    @PublicApi(exclude = true)
+    @Hide
+    @Nullable
     public UserVerificationRequirement getRequireUserVerification() {
         return requireUserVerification;
     }
@@ -81,6 +88,7 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("AuthenticatorSelectionCriteria")
                 .field("attachment", attachment)
@@ -94,14 +102,17 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
      * Builder for {@link AuthenticatorSelectionCriteria}.
      */
     public static class Builder {
+        @Nullable
         private Attachment attachment;
+        @Nullable
         private Boolean requireResidentKey;
+        @Nullable
         private ResidentKeyRequirement residentKeyRequirement;
 
         /**
          * Sets the attachment to use for this session.
          */
-        public Builder setAttachment(Attachment attachment) {
+        public Builder setAttachment(@Nullable Attachment attachment) {
             this.attachment = attachment;
             return this;
         }
@@ -109,7 +120,7 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
         /**
          * Sets whether the key created will be a resident key.
          */
-        public Builder setRequireResidentKey(Boolean requireResidentKey) {
+        public Builder setRequireResidentKey(@Nullable Boolean requireResidentKey) {
             this.requireResidentKey = requireResidentKey;
             return this;
         }
@@ -117,11 +128,12 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
         /**
          * Sets residentKeyRequirement
          */
-        public Builder setResidentKeyRequirement(ResidentKeyRequirement residentKeyRequirement) {
+        public Builder setResidentKeyRequirement(@Nullable ResidentKeyRequirement residentKeyRequirement) {
             this.residentKeyRequirement = residentKeyRequirement;
             return this;
         }
 
+        @NonNull
         public AuthenticatorSelectionCriteria build() {
             AuthenticatorSelectionCriteria criteria = new AuthenticatorSelectionCriteria();
             criteria.attachment = attachment;

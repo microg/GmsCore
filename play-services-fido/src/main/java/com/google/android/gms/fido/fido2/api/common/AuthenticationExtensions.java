@@ -8,6 +8,8 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -24,16 +26,21 @@ import java.util.Arrays;
 @PublicApi
 public class AuthenticationExtensions extends AutoSafeParcelable {
     @Field(2)
+    @Nullable
     private FidoAppIdExtension fidoAppIdExtension;
     @Field(3)
+    @Nullable
     private CableAuthenticationExtension cableAuthenticationExtension;
     @Field(4)
+    @Nullable
     private UserVerificationMethodExtension userVerificationMethodExtension;
 
+    @Nullable
     public FidoAppIdExtension getFidoAppIdExtension() {
         return fidoAppIdExtension;
     }
 
+    @Nullable
     public UserVerificationMethodExtension getUserVerificationMethodExtension() {
         return userVerificationMethodExtension;
     }
@@ -70,7 +77,9 @@ public class AuthenticationExtensions extends AutoSafeParcelable {
      * Builder for {@link AuthenticationExtensions}.
      */
     public static class Builder {
+        @Nullable
         private FidoAppIdExtension fidoAppIdExtension;
+        @Nullable
         private UserVerificationMethodExtension userVerificationMethodExtension;
 
         /**
@@ -83,7 +92,7 @@ public class AuthenticationExtensions extends AutoSafeParcelable {
          * Sets the App ID extension, which allows for authentication of U2F authenticators previously registered
          * under the supplied App ID.
          */
-        public Builder setFido2Extension(FidoAppIdExtension appIdExtension) {
+        public Builder setFido2Extension(@Nullable FidoAppIdExtension appIdExtension) {
             this.fidoAppIdExtension = appIdExtension;
             return this;
         }
@@ -92,7 +101,7 @@ public class AuthenticationExtensions extends AutoSafeParcelable {
          * Sets the User Verification Method extension, which allows the relying party to ascertain up to three
          * authentication methods that were used.
          */
-        public Builder setUserVerificationMethodExtension(UserVerificationMethodExtension userVerificationMethodExtension) {
+        public Builder setUserVerificationMethodExtension(@Nullable UserVerificationMethodExtension userVerificationMethodExtension) {
             this.userVerificationMethodExtension = userVerificationMethodExtension;
             return this;
         }
@@ -100,6 +109,7 @@ public class AuthenticationExtensions extends AutoSafeParcelable {
         /**
          * Builds the {@link AuthenticationExtensions} object.
          */
+        @NonNull
         public AuthenticationExtensions build() {
             AuthenticationExtensions extensions = new AuthenticationExtensions();
             extensions.fidoAppIdExtension = fidoAppIdExtension;

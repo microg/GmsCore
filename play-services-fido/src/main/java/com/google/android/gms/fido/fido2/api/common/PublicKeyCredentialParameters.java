@@ -8,6 +8,8 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -20,14 +22,16 @@ import java.util.Arrays;
 @PublicApi
 public class PublicKeyCredentialParameters extends AutoSafeParcelable {
     @Field(2)
+    @NonNull
     private PublicKeyCredentialType type;
     @Field(3)
+    @NonNull
     private COSEAlgorithmIdentifier algorithm;
 
     private PublicKeyCredentialParameters() {
     }
 
-    public PublicKeyCredentialParameters(String type, int algorithm) {
+    public PublicKeyCredentialParameters(@NonNull String type, int algorithm) {
         try {
             this.type = PublicKeyCredentialType.fromString(type);
         } catch (PublicKeyCredentialType.UnsupportedPublicKeyCredTypeException e) {
@@ -40,6 +44,7 @@ public class PublicKeyCredentialParameters extends AutoSafeParcelable {
         }
     }
 
+    @NonNull
     public COSEAlgorithmIdentifier getAlgorithm() {
         return algorithm;
     }
@@ -48,10 +53,12 @@ public class PublicKeyCredentialParameters extends AutoSafeParcelable {
         return algorithm.toCoseValue();
     }
 
+    @NonNull
     public PublicKeyCredentialType getType() {
         return type;
     }
 
+    @NonNull
     public String getTypeAsString() {
         return type.toString();
     }
@@ -73,6 +80,7 @@ public class PublicKeyCredentialParameters extends AutoSafeParcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("PublicKeyCredentialParameters")
                 .field("type", type)
@@ -80,6 +88,6 @@ public class PublicKeyCredentialParameters extends AutoSafeParcelable {
                 .end();
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static final Creator<PublicKeyCredentialParameters> CREATOR = new AutoCreator<>(PublicKeyCredentialParameters.class);
 }

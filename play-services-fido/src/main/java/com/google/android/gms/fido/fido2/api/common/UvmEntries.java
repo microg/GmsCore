@@ -8,6 +8,8 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -22,8 +24,10 @@ import java.util.List;
 @PublicApi
 public class UvmEntries extends AutoSafeParcelable {
     @Field(1)
+    @Nullable
     private List<UvmEntry> uvmEntryList;
 
+    @Nullable
     public List<UvmEntry> getUvmEntryList() {
         return uvmEntryList;
     }
@@ -57,18 +61,19 @@ public class UvmEntries extends AutoSafeParcelable {
         public Builder() {
         }
 
-        public Builder addAll(List<UvmEntry> uvmEntryList) {
+        public Builder addAll(@NonNull List<UvmEntry> uvmEntryList) {
             if (this.uvmEntryList.size() + uvmEntryList.size() > 3) throw new IllegalStateException();
             this.uvmEntryList.addAll(uvmEntryList);
             return this;
         }
 
-        public Builder addUvmEntry(UvmEntry uvmEntry) {
+        public Builder addUvmEntry(@Nullable UvmEntry uvmEntry) {
             if (uvmEntryList.size() >= 3) throw new IllegalStateException();
             uvmEntryList.add(uvmEntry);
             return this;
         }
 
+        @NonNull
         public UvmEntries build() {
             UvmEntries uvmEntries = new UvmEntries();
             uvmEntries.uvmEntryList = new ArrayList<>(uvmEntryList);

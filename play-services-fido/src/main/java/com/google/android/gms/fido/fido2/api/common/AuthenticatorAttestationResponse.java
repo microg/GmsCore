@@ -8,7 +8,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 
@@ -20,29 +22,35 @@ import java.util.Arrays;
 @PublicApi
 public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     @Field(2)
+    @NonNull
     private byte[] keyHandle;
     @Field(3)
+    @NonNull
     private byte[] clientDataJSON;
     @Field(4)
+    @NonNull
     private byte[] attestationObject;
     @Field(5)
+    @NonNull
     private String[] transports;
 
     private AuthenticatorAttestationResponse() {}
 
-    @PublicApi(exclude = true)
-    public AuthenticatorAttestationResponse(byte[] keyHandle, byte[] clientDataJSON, byte[] attestationObject, String[] transports) {
+    @Hide
+    public AuthenticatorAttestationResponse(@NonNull byte[] keyHandle, @NonNull byte[] clientDataJSON, @NonNull byte[] attestationObject, @NonNull String[] transports) {
         this.keyHandle = keyHandle;
         this.clientDataJSON = clientDataJSON;
         this.attestationObject = attestationObject;
         this.transports = transports;
     }
 
+    @NonNull
     public byte[] getAttestationObject() {
         return attestationObject;
     }
 
     @Override
+    @NonNull
     public byte[] getClientDataJSON() {
         return clientDataJSON;
     }
@@ -51,15 +59,18 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      * @deprecated use {@link PublicKeyCredential#getRawId()} instead
      */
     @Deprecated
+    @NonNull
     public byte[] getKeyHandle() {
         return keyHandle;
     }
 
+    @NonNull
     public String[] getTransports() {
         return transports;
     }
 
     @Override
+    @NonNull
     public byte[] serializeToBytes() {
         return SafeParcelableSerializer.serializeToBytes(this);
     }
@@ -84,6 +95,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("AuthenticatorAttestationResponse")
                 .field("keyHandle", keyHandle)
@@ -93,6 +105,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
                 .end();
     }
 
+    @NonNull
     public static AuthenticatorAttestationResponse deserializeFromBytes(byte[] serializedBytes) {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }

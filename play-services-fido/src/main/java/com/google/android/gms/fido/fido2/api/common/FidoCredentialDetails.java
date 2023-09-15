@@ -23,12 +23,16 @@ import java.util.Objects;
  */
 public class FidoCredentialDetails extends AutoSafeParcelable {
     @Field(1)
+    @Nullable
     private String userName;
     @Field(2)
+    @Nullable
     private String userDisplayName;
     @Field(3)
+    @Nullable
     private byte[] userId;
     @Field(4)
+    @NonNull
     private byte[] credentialId;
     @Field(5)
     private boolean discoverable;
