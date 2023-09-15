@@ -8,6 +8,8 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -20,8 +22,10 @@ import java.util.Arrays;
 @PublicApi
 public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
     @Field(1)
+    @Nullable
     private UvmEntries uvmEntries;
 
+    @Nullable
     public UvmEntries getUvmEntries() {
         return uvmEntries;
     }
@@ -30,6 +34,7 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
      * Serializes the {@link AuthenticationExtensionsClientOutputs} to bytes.
      * Use {@link #deserializeFromBytes(byte[])} to deserialize.
      */
+    @NonNull
     public byte[] serializeToBytes() {
         return SafeParcelableSerializer.serializeToBytes(this);
     }
@@ -39,6 +44,7 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
      *
      * @return The deserialized {@link AuthenticationExtensionsClientOutputs}
      */
+    @NonNull
     public static AuthenticationExtensionsClientOutputs deserializeFromBytes(byte[] serializedBytes) {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
@@ -62,6 +68,7 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
      * Builder for {@link AuthenticationExtensionsClientOutputs}.
      */
     public static class Builder {
+        @Nullable
         private UvmEntries uvmEntries;
 
         /**
@@ -74,7 +81,7 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
          * Sets the User Verification Method extension, which allows the relying party to ascertain up to three
          * authentication methods that were used.
          */
-        public Builder setUserVerificationMethodEntries(UvmEntries uvmEntries) {
+        public Builder setUserVerificationMethodEntries(@Nullable UvmEntries uvmEntries) {
             this.uvmEntries = uvmEntries;
             return this;
         }
@@ -82,6 +89,7 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
         /**
          * Builds the {@link AuthenticationExtensionsClientOutputs} object.
          */
+        @NonNull
         public AuthenticationExtensionsClientOutputs build() {
             AuthenticationExtensionsClientOutputs extensions = new AuthenticationExtensionsClientOutputs();
             extensions.uvmEntries = uvmEntries;

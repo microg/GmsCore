@@ -5,6 +5,9 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -17,29 +20,35 @@ import java.util.Arrays;
 @PublicApi
 public class PublicKeyCredentialRpEntity extends AutoSafeParcelable {
     @Field(2)
+    @NonNull
     private String id;
     @Field(3)
+    @NonNull
     private String name;
     @Field(4)
+    @Nullable
     private String icon;
 
     private PublicKeyCredentialRpEntity() {
     }
 
-    public PublicKeyCredentialRpEntity(String id, String name, String icon) {
+    public PublicKeyCredentialRpEntity(@NonNull String id, @NonNull String name, @Nullable String icon) {
         this.id = id;
         this.name = name;
         this.icon = icon;
     }
 
+    @Nullable
     public String getIcon() {
         return icon;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
@@ -62,6 +71,7 @@ public class PublicKeyCredentialRpEntity extends AutoSafeParcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("PublicKeyCredentialRpEntity")
                 .value(id)
@@ -70,6 +80,6 @@ public class PublicKeyCredentialRpEntity extends AutoSafeParcelable {
                 .end();
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static final Creator<PublicKeyCredentialRpEntity> CREATOR = new AutoCreator<>(PublicKeyCredentialRpEntity.class);
 }

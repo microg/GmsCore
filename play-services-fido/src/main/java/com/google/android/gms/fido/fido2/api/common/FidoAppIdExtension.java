@@ -8,6 +8,7 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -25,15 +26,17 @@ import java.util.Arrays;
 @PublicApi
 public class FidoAppIdExtension extends AutoSafeParcelable {
     @Field(2)
+    @NonNull
     private String appId;
 
     private FidoAppIdExtension() {
     }
 
-    public FidoAppIdExtension(String appId) {
+    public FidoAppIdExtension(@NonNull String appId) {
         this.appId = appId;
     }
 
+    @NonNull
     public String getAppId() {
         return appId;
     }

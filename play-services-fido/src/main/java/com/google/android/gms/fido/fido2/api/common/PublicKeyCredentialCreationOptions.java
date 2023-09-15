@@ -5,7 +5,10 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 
@@ -18,77 +21,101 @@ import java.util.List;
 @PublicApi
 public class PublicKeyCredentialCreationOptions extends RequestOptions {
     @Field(2)
+    @NonNull
     private PublicKeyCredentialRpEntity rp;
     @Field(3)
+    @NonNull
     private PublicKeyCredentialUserEntity user;
     @Field(4)
+    @NonNull
     private byte[] challenge;
     @Field(5)
+    @NonNull
     private List<PublicKeyCredentialParameters> parameters;
     @Field(6)
+    @Nullable
     private Double timeoutSeconds;
     @Field(7)
+    @Nullable
     private List<PublicKeyCredentialDescriptor> excludeList;
     @Field(8)
+    @Nullable
     private AuthenticatorSelectionCriteria authenticatorSelection;
     @Field(9)
+    @Nullable
     private Integer requestId;
     @Field(10)
+    @Nullable
     private TokenBinding tokenBinding;
     @Field(11)
+    @Nullable
     private AttestationConveyancePreference attestationConveyancePreference;
     @Field(12)
+    @Nullable
     private AuthenticationExtensions authenticationExtensions;
 
+    @Nullable
     public AttestationConveyancePreference getAttestationConveyancePreference() {
         return attestationConveyancePreference;
     }
 
+    @Nullable
     public String getAttestationConveyancePreferenceAsString() {
+        if (attestationConveyancePreference == null) return null;
         return attestationConveyancePreference.toString();
     }
 
+    @Nullable
     @Override
     public AuthenticationExtensions getAuthenticationExtensions() {
         return authenticationExtensions;
     }
 
+    @Nullable
     public AuthenticatorSelectionCriteria getAuthenticatorSelection() {
         return authenticatorSelection;
     }
 
+    @NonNull
     @Override
     public byte[] getChallenge() {
         return challenge;
     }
 
+    @Nullable
     public List<PublicKeyCredentialDescriptor> getExcludeList() {
         return excludeList;
     }
 
+    @NonNull
     public List<PublicKeyCredentialParameters> getParameters() {
         return parameters;
     }
 
+    @Nullable
     @Override
     public Integer getRequestId() {
         return requestId;
     }
 
+    @NonNull
     public PublicKeyCredentialRpEntity getRp() {
         return rp;
     }
 
+    @Nullable
     @Override
     public Double getTimeoutSeconds() {
         return timeoutSeconds;
     }
 
+    @Nullable
     @Override
     public TokenBinding getTokenBinding() {
         return tokenBinding;
     }
 
+    @NonNull
     public PublicKeyCredentialUserEntity getUser() {
         return user;
     }
@@ -141,16 +168,27 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
      * Builder for {@link PublicKeyCredentialCreationOptions}.
      */
     public static class Builder {
+        @NonNull
         private PublicKeyCredentialRpEntity rp;
+        @NonNull
         private PublicKeyCredentialUserEntity user;
+        @NonNull
         private byte[] challenge;
+        @NonNull
         private List<PublicKeyCredentialParameters> parameters;
+        @Nullable
         private Double timeoutSeconds;
+        @Nullable
         private List<PublicKeyCredentialDescriptor> excludeList;
+        @Nullable
         private AuthenticatorSelectionCriteria authenticatorSelection;
+        @Nullable
         private Integer requestId;
+        @Nullable
         private TokenBinding tokenBinding;
+        @Nullable
         private AttestationConveyancePreference attestationConveyancePreference;
+        @Nullable
         private AuthenticationExtensions authenticationExtensions;
 
         /**
@@ -162,7 +200,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         /**
          * Sets the preference for obfuscation level of the returned attestation data.
          */
-        public Builder setAttestationConveyancePreference(AttestationConveyancePreference attestationConveyancePreference) {
+        public Builder setAttestationConveyancePreference(@Nullable AttestationConveyancePreference attestationConveyancePreference) {
             this.attestationConveyancePreference = attestationConveyancePreference;
             return this;
         }
@@ -171,7 +209,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
          * Sets additional extensions that may dictate some client behavior during an exchange with a connected
          * authenticator.
          */
-        public Builder setAuthenticationExtensions(AuthenticationExtensions authenticationExtensions) {
+        public Builder setAuthenticationExtensions(@Nullable AuthenticationExtensions authenticationExtensions) {
             this.authenticationExtensions = authenticationExtensions;
             return this;
         }
@@ -179,7 +217,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         /**
          * Sets constraints on the type of authenticator that is acceptable for this session.
          */
-        public Builder setAuthenticatorSelection(AuthenticatorSelectionCriteria authenticatorSelection) {
+        public Builder setAuthenticatorSelection(@Nullable AuthenticatorSelectionCriteria authenticatorSelection) {
             this.authenticatorSelection = authenticatorSelection;
             return this;
         }
@@ -187,7 +225,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         /**
          * Sets the challenge to sign when generating the attestation for this request.
          */
-        public Builder setChallenge(byte[] challenge) {
+        public Builder setChallenge(@NonNull byte[] challenge) {
             this.challenge = challenge;
             return this;
         }
@@ -197,7 +235,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
          * authenticator with the relying party. This is often set to prevent re-registration of authenticators that
          * the relying party has already registered on behalf of the user.
          */
-        public Builder setExcludeList(List<PublicKeyCredentialDescriptor> excludeList) {
+        public Builder setExcludeList(@Nullable List<PublicKeyCredentialDescriptor> excludeList) {
             this.excludeList = excludeList;
             return this;
         }
@@ -205,7 +243,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         /**
          * Sets the {@link PublicKeyCredentialParameters} that constrain the type of credential to generate.
          */
-        public Builder setParameters(List<PublicKeyCredentialParameters> parameters) {
+        public Builder setParameters(@NonNull List<PublicKeyCredentialParameters> parameters) {
             this.parameters = parameters;
             return this;
         }
@@ -214,7 +252,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
          * Sets the request id in order to link together events into a single session (the span of events between the
          * time that the server initiates a single FIDO2 request to the client and receives reply) on a single device.
          */
-        public Builder setRequestId(Integer requestId) {
+        public Builder setRequestId(@Nullable Integer requestId) {
             this.requestId = requestId;
             return this;
         }
@@ -226,7 +264,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
          * context (aka https connection). Apps-facing API needs to check the package signature against Digital Asset
          * Links, whose resource is the RP ID with prepended "//". Privileged (browser) API doesn't need the check.
          */
-        public Builder setRp(PublicKeyCredentialRpEntity rp) {
+        public Builder setRp(@NonNull PublicKeyCredentialRpEntity rp) {
             this.rp = rp;
             return this;
         }
@@ -234,7 +272,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         /**
          * Sets a timeout that limits the duration of the registration session provided to the user.
          */
-        public Builder setTimeoutSeconds(Double timeoutSeconds) {
+        public Builder setTimeoutSeconds(@Nullable Double timeoutSeconds) {
             this.timeoutSeconds = timeoutSeconds;
             return this;
         }
@@ -242,7 +280,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         /**
          * Sets the {@link TokenBinding} associated with the calling origin.
          */
-        public Builder setTokenBinding(TokenBinding tokenBinding) {
+        public Builder setTokenBinding(@Nullable TokenBinding tokenBinding) {
             this.tokenBinding = tokenBinding;
             return this;
         }
@@ -250,7 +288,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         /**
          * Sets information about the user on whose behalf the relying party is registering a credential.
          */
-        public Builder setUser(PublicKeyCredentialUserEntity user) {
+        public Builder setUser(@NonNull PublicKeyCredentialUserEntity user) {
             this.user = user;
             return this;
         }
@@ -260,10 +298,16 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
          */
         public PublicKeyCredentialCreationOptions build() {
             PublicKeyCredentialCreationOptions options = new PublicKeyCredentialCreationOptions();
+            options.rp = rp;
+            options.user = user;
             options.challenge = challenge;
+            options.parameters = parameters;
             options.timeoutSeconds = timeoutSeconds;
+            options.excludeList = excludeList;
+            options.authenticatorSelection = authenticatorSelection;
             options.requestId = requestId;
             options.tokenBinding = tokenBinding;
+            options.attestationConveyancePreference = attestationConveyancePreference;
             options.authenticationExtensions = authenticationExtensions;
             return options;
         }
@@ -275,10 +319,11 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
      * @param serializedBytes The serialized bytes.
      * @return The deserialized {@link PublicKeyCredentialCreationOptions}.
      */
+    @NonNull
     public static PublicKeyCredentialCreationOptions deserializeFromBytes(byte[] serializedBytes) {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static final Creator<PublicKeyCredentialCreationOptions> CREATOR = new AutoCreator<>(PublicKeyCredentialCreationOptions.class);
 }

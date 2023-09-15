@@ -210,7 +210,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
 
             if (savedInstanceState?.containsKey(BUNDLE_CAMERA_POSITION) == true) {
                 cameraPosition = savedInstanceState.getParcelable(BUNDLE_CAMERA_POSITION)!!
-                cameraBounds = savedInstanceState.getParcelable(BUNDLE_CAMERA_BOUNDS)
+                cameraBounds = (savedInstanceState.getParcelable(BUNDLE_CAMERA_BOUNDS) as LatLngBounds?)?.toMapbox()
             }
 
             postUpdateSnapshot()
@@ -346,8 +346,9 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
             )
             map.setImageBitmap(it.bitmap)
 
-            for (callback in afterNextDrawCallback) callback()
-            afterNextDrawCallback.clear()
+            ArrayList(afterNextDrawCallback)
+                .also { afterNextDrawCallback.clear() }
+                .forEach { it() }
 
             if (cameraPositionChanged) {
                 // Notify apps that new projection is now available
@@ -615,7 +616,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelable(BUNDLE_CAMERA_POSITION, cameraPosition)
-        outState.putParcelable(BUNDLE_CAMERA_BOUNDS, cameraBounds)
+        outState.putParcelable(BUNDLE_CAMERA_BOUNDS, cameraBounds?.toGms())
     }
 
     override fun setContentDescription(desc: String?) {

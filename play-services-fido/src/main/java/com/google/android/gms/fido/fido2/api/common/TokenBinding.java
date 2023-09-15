@@ -11,8 +11,11 @@ package com.google.android.gms.fido.fido2.api.common;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -27,15 +30,19 @@ public class TokenBinding extends AutoSafeParcelable {
     /**
      * A singleton instance representing that token binding is not supported by the client.
      */
+    @NonNull
     public static final TokenBinding NOT_SUPPORTED = new TokenBinding(TokenBindingStatus.NOT_SUPPORTED, null);
     /**
      * A singleton instance representing that token binding is supported by the client, but unused by the relying party.
      */
+    @NonNull
     public static final TokenBinding SUPPORTED = new TokenBinding(TokenBindingStatus.SUPPORTED, null);
 
     @Field(2)
+    @NonNull
     private TokenBindingStatus status;
     @Field(3)
+    @Nullable
     private String tokenBindingId;
 
     private TokenBinding() {
@@ -44,12 +51,12 @@ public class TokenBinding extends AutoSafeParcelable {
     /**
      * Constructs an instance of a {@link TokenBinding} for a provided token binding id.
      */
-    public TokenBinding(String tokenBindingId) {
+    public TokenBinding(@Nullable String tokenBindingId) {
         status = TokenBindingStatus.PRESENT;
         this.tokenBindingId = tokenBindingId;
     }
 
-    private TokenBinding(TokenBindingStatus status, String tokenBindingId) {
+    private TokenBinding(@NonNull TokenBindingStatus status, @Nullable String tokenBindingId) {
         this.status = status;
         this.tokenBindingId = tokenBindingId;
     }
@@ -57,6 +64,7 @@ public class TokenBinding extends AutoSafeParcelable {
     /**
      * Returns the token binding ID if the token binding status is {@code PRESENT}, otherwise returns null.
      */
+    @Nullable
     public String getTokenBindingId() {
         return tokenBindingId;
     }
@@ -64,6 +72,7 @@ public class TokenBinding extends AutoSafeParcelable {
     /**
      * Returns the stringified {@link TokenBinding.TokenBindingStatus} associated with this instance.
      */
+    @NonNull
     public String getTokenBindingStatusAsString() {
         return status.toString();
     }
@@ -96,6 +105,7 @@ public class TokenBinding extends AutoSafeParcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("TokenBinding")
                 .value(tokenBindingId)
@@ -119,13 +129,15 @@ public class TokenBinding extends AutoSafeParcelable {
          * The client does not support token binding.
          */
         NOT_SUPPORTED("not-supported");
-        private String value;
 
-        TokenBindingStatus(String value) {
+        @NonNull
+        private final String value;
+
+        TokenBindingStatus(@NonNull String value) {
             this.value = value;
         }
 
-        @PublicApi(exclude = true)
+        @Hide
         public static TokenBindingStatus fromString(String str) throws UnsupportedTokenBindingStatusException {
             for (TokenBindingStatus value : values()) {
                 if (value.value.equals(str)) return value;
@@ -160,6 +172,7 @@ public class TokenBinding extends AutoSafeParcelable {
         };
 
         @Override
+        @NonNull
         public String toString() {
             return value;
         }
@@ -174,6 +187,6 @@ public class TokenBinding extends AutoSafeParcelable {
         }
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static final Creator<TokenBinding> CREATOR = new AutoCreator<>(TokenBinding.class);
 }

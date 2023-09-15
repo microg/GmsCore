@@ -8,6 +8,8 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.fido.common.Transport;
 
 import org.microg.gms.common.PublicApi;
@@ -24,16 +26,19 @@ import java.util.List;
 @PublicApi
 public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
     @Field(2)
+    @NonNull
     private PublicKeyCredentialType type;
     @Field(3)
+    @NonNull
     private byte[] id;
     @Field(4)
+    @Nullable
     private List<Transport> transports;
 
     private PublicKeyCredentialDescriptor() {
     }
 
-    public PublicKeyCredentialDescriptor(String type, byte[] id, List<Transport> transports) {
+    public PublicKeyCredentialDescriptor(@NonNull String type, @NonNull byte[] id, @Nullable List<Transport> transports) {
         try {
             this.type = PublicKeyCredentialType.fromString(type);
         } catch (PublicKeyCredentialType.UnsupportedPublicKeyCredTypeException e) {
@@ -43,18 +48,22 @@ public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
         this.transports = transports;
     }
 
+    @NonNull
     public byte[] getId() {
         return id;
     }
 
+    @Nullable
     public List<Transport> getTransports() {
         return transports;
     }
 
+    @NonNull
     public PublicKeyCredentialType getType() {
         return type;
     }
 
+    @NonNull
     public String getTypeAsString() {
         return type.toString();
     }
@@ -77,6 +86,7 @@ public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("PublicKeyCredentialDescriptor")
                 .value(id)

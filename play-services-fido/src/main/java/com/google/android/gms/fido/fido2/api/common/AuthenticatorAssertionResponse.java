@@ -8,6 +8,8 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
@@ -21,19 +23,24 @@ import java.util.Arrays;
 @PublicApi
 public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     @Field(2)
+    @NonNull
     private byte[] keyHandle;
     @Field(3)
+    @NonNull
     private byte[] clientDataJSON;
     @Field(4)
+    @NonNull
     private byte[] authenticatorData;
     @Field(5)
+    @NonNull
     private byte[] signature;
     @Field(6)
+    @Nullable
     private byte[] userHandle;
 
     private AuthenticatorAssertionResponse() {}
 
-    public AuthenticatorAssertionResponse(byte[] keyHandle, byte[] clientDataJSON, byte[] authenticatorData, byte[] signature, byte[] userHandle) {
+    public AuthenticatorAssertionResponse(@NonNull byte[] keyHandle, @NonNull byte[] clientDataJSON, @NonNull byte[] authenticatorData, @NonNull byte[] signature, @Nullable byte[] userHandle) {
         this.keyHandle = keyHandle;
         this.clientDataJSON = clientDataJSON;
         this.authenticatorData = authenticatorData;
@@ -41,11 +48,13 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         this.userHandle = userHandle;
     }
 
+    @NonNull
     public byte[] getAuthenticatorData() {
         return authenticatorData;
     }
 
     @Override
+    @NonNull
     public byte[] getClientDataJSON() {
         return clientDataJSON;
     }
@@ -54,19 +63,23 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
      * @deprecated use {@link PublicKeyCredential#getRawId()} instead
      */
     @Deprecated
+    @NonNull
     public byte[] getKeyHandle() {
         return keyHandle;
     }
 
+    @NonNull
     public byte[] getSignature() {
         return signature;
     }
 
+    @Nullable
     public byte[] getUserHandle() {
         return userHandle;
     }
 
     @Override
+    @NonNull
     public byte[] serializeToBytes() {
         return SafeParcelableSerializer.serializeToBytes(this);
     }
@@ -91,6 +104,7 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("AuthenticatorAssertionResponse")
                 .field("keyHandle", keyHandle)
@@ -101,6 +115,7 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
                 .end();
     }
 
+    @NonNull
     public static AuthenticatorAssertionResponse deserializeFromBytes(byte[] serializedBytes) {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }

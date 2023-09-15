@@ -8,6 +8,8 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
@@ -20,36 +22,44 @@ import java.util.Arrays;
 @PublicApi
 public class PublicKeyCredentialUserEntity extends AutoSafeParcelable {
     @Field(2)
+    @NonNull
     private byte[] id;
     @Field(3)
+    @NonNull
     private String name;
     @Field(4)
+    @Nullable
     private String icon;
     @Field(5)
+    @NonNull
     private String displayName;
 
     private PublicKeyCredentialUserEntity() {
     }
 
-    public PublicKeyCredentialUserEntity(byte[] id, String name, String icon, String displayName) {
+    public PublicKeyCredentialUserEntity(@NonNull byte[] id, @NonNull String name, @Nullable String icon, @NonNull String displayName) {
         this.id = id;
         this.name = name;
         this.icon = icon;
         this.displayName = displayName;
     }
 
+    @NonNull
     public String getDisplayName() {
         return displayName;
     }
 
+    @Nullable
     public String getIcon() {
         return icon;
     }
 
+    @NonNull
     public byte[] getId() {
         return id;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
@@ -73,6 +83,7 @@ public class PublicKeyCredentialUserEntity extends AutoSafeParcelable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("PublicKeyCredentialUserEntity")
                 .value(id)

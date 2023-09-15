@@ -8,7 +8,10 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.safeparcel.AutoSafeParcelable;
 
@@ -21,37 +24,49 @@ import java.util.Arrays;
 @PublicApi
 public class PublicKeyCredential extends AutoSafeParcelable {
     @Field(1)
+    @NonNull
     private String id;
     @Field(2)
+    @NonNull
     private String type;
     @Field(3)
+    @NonNull
     private byte[] rawId;
     @Field(4)
+    @Nullable
     private AuthenticatorAttestationResponse registerResponse;
     @Field(5)
+    @Nullable
     private AuthenticatorAssertionResponse signResponse;
     @Field(6)
+    @Nullable
     private AuthenticatorErrorResponse errorResponse;
     @Field(7)
+    @Nullable
     private AuthenticationExtensionsClientOutputs clientExtensionResults;
     @Field(8)
+    @Nullable
     private String authenticatorAttachment;
 
     /**
      * Returns the authenticator attachment of this credential.
      */
+    @Nullable
     public String getAuthenticatorAttachment() {
         return authenticatorAttachment;
     }
 
+    @Nullable
     public AuthenticationExtensionsClientOutputs getClientExtensionResults() {
         return clientExtensionResults;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
 
+    @Nullable
     public byte[] getRawId() {
         return rawId;
     }
@@ -63,6 +78,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         throw new IllegalStateException("No response set.");
     }
 
+    @NonNull
     public String getType() {
         return type;
     }
@@ -71,10 +87,14 @@ public class PublicKeyCredential extends AutoSafeParcelable {
      * Builder for {@link PublicKeyCredential}.
      */
     public static class Builder {
+        @NonNull
         private String id;
+        @NonNull
         private byte[] rawId;
         private AuthenticatorResponse response;
+        @Nullable
         private AuthenticationExtensionsClientOutputs extensionsClientOutputs;
+        @Nullable
         private String authenticatorAttachment;
 
         /**
@@ -86,7 +106,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         /**
          * Sets the output produced by the client's processing of the extensions requested by the relying party.
          */
-        public Builder setAuthenticationExtensionsClientOutputs(AuthenticationExtensionsClientOutputs extensionsClientOutputs) {
+        public Builder setAuthenticationExtensionsClientOutputs(@Nullable AuthenticationExtensionsClientOutputs extensionsClientOutputs) {
             this.extensionsClientOutputs = extensionsClientOutputs;
             return this;
         }
@@ -94,7 +114,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         /**
          * Sets the authenticator attachment of the credential.
          */
-        public Builder setAuthenticatorAttachment(String authenticatorAttachment) {
+        public Builder setAuthenticatorAttachment(@NonNull String authenticatorAttachment) {
             this.authenticatorAttachment = authenticatorAttachment;
             return this;
         }
@@ -102,7 +122,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         /**
          * Sets the base64url encoding of the credential identifier.
          */
-        public Builder setId(String id) {
+        public Builder setId(@NonNull String id) {
             this.id = id;
             return this;
         }
@@ -110,7 +130,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
         /**
          * Sets the raw value of the credential identifier.
          */
-        public Builder setRawId(byte[] rawId) {
+        public Builder setRawId(@NonNull byte[] rawId) {
             this.rawId = rawId;
             return this;
         }
@@ -124,7 +144,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
          * otherwise, the {@link PublicKeyCredential} was created in response to a sign request, and this attribute’s
          * value will be an {@link AuthenticatorAssertionResponse}.
          */
-        public Builder setResponse(AuthenticatorResponse response) {
+        public Builder setResponse(@NonNull AuthenticatorResponse response) {
             this.response = response;
             return this;
         }
@@ -179,6 +199,7 @@ public class PublicKeyCredential extends AutoSafeParcelable {
      *
      * @return the serialized byte array.
      */
+    @NonNull
     public byte[] serializeToBytes() {
         return SafeParcelableSerializer.serializeToBytes(this);
     }
@@ -189,10 +210,11 @@ public class PublicKeyCredential extends AutoSafeParcelable {
      * @param serializedBytes The serialized bytes.
      * @return The deserialized {@link PublicKeyCredential}.
      */
+    @NonNull
     public static PublicKeyCredential deserializeFromBytes(byte[] serializedBytes) {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static final Creator<PublicKeyCredential> CREATOR = new AutoCreator<>(PublicKeyCredential.class);
 }
