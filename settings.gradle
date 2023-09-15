@@ -4,6 +4,7 @@ def sublude(name) {
   project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
 }
 
+include ':fake-signature'
 include ':safe-parcel-processor'
 
 include ':play-services-ads'
