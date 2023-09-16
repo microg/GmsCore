@@ -27,6 +27,8 @@ import org.microg.gms.settings.SettingsContract.SafetyNet
 import org.microg.gms.settings.SettingsContract.getAuthority
 import java.io.File
 
+private const val SETTINGS_PREFIX = "org.microg.gms.settings."
+
 /**
  * All settings access should go through this [ContentProvider],
  * because it provides safe access from different processes which normal [SharedPreferences] don't.
@@ -52,6 +54,9 @@ class SettingsProvider : ContentProvider() {
         } catch (ignored: Exception) {
             null
         }
+    }
+    private val metaDataPreferences: SharedPreferences by lazy {
+        MetaDataPreferences(context!!, SETTINGS_PREFIX)
     }
 
     override fun onCreate(): Boolean {
@@ -355,12 +360,12 @@ class SettingsProvider : ContentProvider() {
      * @return the current setting as [Int], because [ContentProvider] does not support [Boolean].
      */
     private fun getSettingsBoolean(key: String, def: Boolean): Int {
-        return listOf(preferences, systemDefaultPreferences).getBooleanAsInt(key, def)
+        return listOf(preferences, systemDefaultPreferences, metaDataPreferences).getBooleanAsInt(key, def)
     }
 
-    private fun getSettingsString(key: String, def: String? = null): String? = listOf(preferences, systemDefaultPreferences).getString(key, def)
-    private fun getSettingsInt(key: String, def: Int): Int = listOf(preferences, systemDefaultPreferences).getInt(key, def)
-    private fun getSettingsLong(key: String, def: Long): Long = listOf(preferences, systemDefaultPreferences).getLong(key, def)
+    private fun getSettingsString(key: String, def: String? = null): String? = listOf(preferences, systemDefaultPreferences, metaDataPreferences).getString(key, def)
+    private fun getSettingsInt(key: String, def: Int): Int = listOf(preferences, systemDefaultPreferences, metaDataPreferences).getInt(key, def)
+    private fun getSettingsLong(key: String, def: Long): Long = listOf(preferences, systemDefaultPreferences, metaDataPreferences).getLong(key, def)
     private fun getUnifiedNlpSettingsStringSetCompat(key: String, def: Set<String>): Set<String> = listOf(unifiedNlpPreferences, preferences, systemDefaultPreferences).getStringSetCompat(key, def)
 
     private fun SharedPreferences.getStringSetCompat(key: String, def: Set<String>): Set<String> {
