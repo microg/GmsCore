@@ -7,8 +7,11 @@ package com.google.android.gms.fido.fido2.api.common;
 
 import android.net.Uri;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
@@ -19,16 +22,24 @@ import java.util.Arrays;
  * Parameters for a signature request from a Web Browser.
  */
 @PublicApi
+@SafeParcelable.Class
 public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOptions {
-    @Field(2)
+    @Field(value = 2, getterName = "getPublicKeyCredentialRequestOptions")
     @NonNull
     private PublicKeyCredentialRequestOptions delegate;
-    @Field(3)
+    @Field(value = 3, getterName = "getOrigin")
     @NonNull
     private Uri origin;
-    @Field(4)
+    @Field(value = 4, getterName = "getClientDataHash")
     @Nullable
     private byte[] clientDataHash;
+
+    @Constructor
+    BrowserPublicKeyCredentialRequestOptions(@Param(2) @NonNull PublicKeyCredentialRequestOptions delegate, @Param(3) @NonNull Uri origin, @Param(4) @Nullable byte[] clientDataHash) {
+        this.delegate = delegate;
+        this.origin = origin;
+        this.clientDataHash = clientDataHash;
+    }
 
     @Override
     @Nullable
@@ -158,11 +169,7 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
          */
         @NonNull
         public BrowserPublicKeyCredentialRequestOptions build() {
-            BrowserPublicKeyCredentialRequestOptions options = new BrowserPublicKeyCredentialRequestOptions();
-            options.delegate = delegate;
-            options.origin = origin;
-            options.clientDataHash = clientDataHash;
-            return options;
+            return new BrowserPublicKeyCredentialRequestOptions(delegate, origin, clientDataHash);
         }
     }
 
@@ -170,5 +177,10 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
-    public static final Creator<BrowserPublicKeyCredentialRequestOptions> CREATOR = new AutoCreator<>(BrowserPublicKeyCredentialRequestOptions.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<BrowserPublicKeyCredentialRequestOptions> CREATOR = findCreator(BrowserPublicKeyCredentialRequestOptions.class);
 }

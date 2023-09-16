@@ -12,6 +12,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 
 /**
@@ -42,7 +43,7 @@ public enum PublicKeyCredentialType implements Parcelable {
         dest.writeString(toString());
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static PublicKeyCredentialType fromString(String type) throws UnsupportedPublicKeyCredTypeException {
         for (PublicKeyCredentialType value : values()) {
             if (value.value.equals(type)) return value;

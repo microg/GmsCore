@@ -50,6 +50,7 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "int", "VERSION_CODE", "$appVersionCode"
+        consumerProguardFile 'consumer-rules.pro'
     }
 
     compileOptions {

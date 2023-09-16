@@ -8,11 +8,15 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -20,24 +24,26 @@ import java.util.Arrays;
  * This class is used to supply additional parameters about the user account when creating a new Credential.
  */
 @PublicApi
-public class PublicKeyCredentialUserEntity extends AutoSafeParcelable {
-    @Field(2)
+@SafeParcelable.Class
+public class PublicKeyCredentialUserEntity extends AbstractSafeParcelable {
+    @Field(value = 2, getterName = "getId")
     @NonNull
     private byte[] id;
-    @Field(3)
+    @Field(value = 3, getterName = "getName")
     @NonNull
     private String name;
-    @Field(4)
+    @Field(value = 4, getterName = "getIcon")
     @Nullable
     private String icon;
-    @Field(5)
+    @Field(value = 5, getterName = "getDisplayName")
     @NonNull
     private String displayName;
 
     private PublicKeyCredentialUserEntity() {
     }
 
-    public PublicKeyCredentialUserEntity(@NonNull byte[] id, @NonNull String name, @Nullable String icon, @NonNull String displayName) {
+    @Constructor
+    public PublicKeyCredentialUserEntity(@Param(2) @NonNull byte[] id, @Param(3) @NonNull String name, @Param(4) @Nullable String icon, @Param(5) @NonNull String displayName) {
         this.id = id;
         this.name = name;
         this.icon = icon;
@@ -93,6 +99,11 @@ public class PublicKeyCredentialUserEntity extends AutoSafeParcelable {
                 .end();
     }
 
-    @PublicApi(exclude = true)
-    public static final Creator<PublicKeyCredentialUserEntity> CREATOR = new AutoCreator<>(PublicKeyCredentialUserEntity.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    @Hide
+    public static final SafeParcelableCreatorAndWriter<PublicKeyCredentialUserEntity> CREATOR = findCreator(PublicKeyCredentialUserEntity.class);
 }

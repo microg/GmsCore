@@ -11,9 +11,10 @@ package com.google.android.gms.fido.fido2.api.common;
 import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Objects;
 
@@ -21,22 +22,23 @@ import java.util.Objects;
  * Contains the attributes of a single FIDO credential that are returned to the caller in response to a
  * {@link Fido2PrivilegedApiClient#getCredentialList(String)} call.
  */
-public class FidoCredentialDetails extends AutoSafeParcelable {
-    @Field(1)
+@SafeParcelable.Class
+public class FidoCredentialDetails extends AbstractSafeParcelable {
+    @Field(value = 1, getterName = "getUserName")
     @Nullable
     private String userName;
-    @Field(2)
+    @Field(value = 2, getterName = "getUserDisplayName")
     @Nullable
     private String userDisplayName;
-    @Field(3)
+    @Field(value = 3, getterName = "getUserId")
     @Nullable
     private byte[] userId;
-    @Field(4)
+    @Field(value = 4, getterName = "getCredentialId")
     @NonNull
     private byte[] credentialId;
-    @Field(5)
+    @Field(value = 5, getterName = "getIsDiscoverable")
     private boolean discoverable;
-    @Field(6)
+    @Field(value = 6, getterName = "getIsPaymentCredential")
     private boolean paymentCredential;
 
     private FidoCredentialDetails() {

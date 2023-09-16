@@ -23,8 +23,8 @@ import java.util.Objects;
  */
 @SafeParcelable.Class
 public class AuthenticationExtensionsCredPropsOutputs extends AbstractSafeParcelable {
-    @Field(1)
-    boolean rk;
+    @Field(value = 1, getterName = "getIsDiscoverableCredential")
+    private boolean rk;
 
     @Constructor
     public AuthenticationExtensionsCredPropsOutputs(@Param(1) boolean rk) {

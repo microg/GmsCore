@@ -8,8 +8,11 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
@@ -21,26 +24,29 @@ import java.util.Arrays;
  * of a private key as well as evidence of user consent to a specific transaction.
  */
 @PublicApi
+@SafeParcelable.Class
 public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
-    @Field(2)
+    @Field(value = 2, getterName = "getKeyHandle")
     @NonNull
     private byte[] keyHandle;
-    @Field(3)
+    @Field(value = 3, getterName = "getClientDataJSON")
     @NonNull
     private byte[] clientDataJSON;
-    @Field(4)
+    @Field(value = 4, getterName = "getAuthenticatorData")
     @NonNull
     private byte[] authenticatorData;
-    @Field(5)
+    @Field(value = 5, getterName = "getSignature")
     @NonNull
     private byte[] signature;
-    @Field(6)
+    @Field(value = 6, getterName = "getUserHandle")
     @Nullable
     private byte[] userHandle;
 
-    private AuthenticatorAssertionResponse() {}
+    private AuthenticatorAssertionResponse() {
+    }
 
-    public AuthenticatorAssertionResponse(@NonNull byte[] keyHandle, @NonNull byte[] clientDataJSON, @NonNull byte[] authenticatorData, @NonNull byte[] signature, @Nullable byte[] userHandle) {
+    @Constructor
+    public AuthenticatorAssertionResponse(@Param(2) @NonNull byte[] keyHandle, @Param(3) @NonNull byte[] clientDataJSON, @Param(4) @NonNull byte[] authenticatorData, @Param(5) @NonNull byte[] signature, @Param(6) @Nullable byte[] userHandle) {
         this.keyHandle = keyHandle;
         this.clientDataJSON = clientDataJSON;
         this.authenticatorData = authenticatorData;
@@ -120,5 +126,10 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
-    public static final Creator<AuthenticatorAssertionResponse> CREATOR = new AutoCreator<>(AuthenticatorAssertionResponse.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<AuthenticatorAssertionResponse> CREATOR = findCreator(AuthenticatorAssertionResponse.class);
 }

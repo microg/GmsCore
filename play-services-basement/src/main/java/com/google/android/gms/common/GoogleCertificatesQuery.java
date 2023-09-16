@@ -6,27 +6,30 @@
 package com.google.android.gms.common;
 
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.RemoteException;
-
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.internal.CertData;
 import com.google.android.gms.common.internal.ICertData;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
-
 import org.microg.gms.common.Hide;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 @Hide
-public class GoogleCertificatesQuery extends AutoSafeParcelable {
-    @Field(1)
-    private String callingPackage;
+@SafeParcelable.Class
+public class GoogleCertificatesQuery extends AbstractSafeParcelable {
+    @Field(value = 1, getterName = "getCallingPackage")
+    String callingPackage;
     @Field(2)
-    private IBinder certDataBinder;
+    IBinder certDataBinder;
     private CertData certData;
     @Field(3)
-    private boolean allowTestKeys;
+    boolean allowTestKeys;
     @Field(4)
-    private boolean ignoreTestKeysOverride;
+    boolean ignoreTestKeysOverride;
 
     public String getCallingPackage() {
         return callingPackage;
@@ -65,5 +68,10 @@ public class GoogleCertificatesQuery extends AutoSafeParcelable {
         return certData;
     }
 
-    public static final Creator<GoogleCertificatesQuery> CREATOR = new AutoCreator<GoogleCertificatesQuery>(GoogleCertificatesQuery.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<GoogleCertificatesQuery> CREATOR = findCreator(GoogleCertificatesQuery.class);
 }

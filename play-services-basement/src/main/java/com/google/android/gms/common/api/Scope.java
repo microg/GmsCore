@@ -16,19 +16,23 @@
 
 package com.google.android.gms.common.api;
 
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 /**
  * Describes an OAuth 2.0 scope to request. This has security implications for the user, and
  * requesting additional scopes will result in authorization dialogs.
  */
 @PublicApi
-public class Scope extends AutoSafeParcelable {
-    @SafeParceled(1)
-    private int versionCode = 1;
-    @SafeParceled(2)
+@SafeParcelable.Class
+public class Scope extends AbstractSafeParcelable {
+    @Field(1)
+    int versionCode = 1;
+    @Field(value = 2, getterName = "getScopeUri")
     private final String scopeUri;
 
     private Scope() {
@@ -38,7 +42,8 @@ public class Scope extends AutoSafeParcelable {
     /**
      * Creates a new scope with the given URI.
      */
-    public Scope(String scopeUri) {
+    @Constructor
+    public Scope(@Param(2) String scopeUri) {
         this.scopeUri = scopeUri;
     }
 
@@ -61,5 +66,10 @@ public class Scope extends AutoSafeParcelable {
         return scopeUri;
     }
 
-    public static final Creator<Scope> CREATOR = new AutoCreator<Scope>(Scope.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<Scope> CREATOR = findCreator(Scope.class);
 }
