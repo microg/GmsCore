@@ -8,12 +8,15 @@
 
 package com.google.android.gms.fido.sourcedevice;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 /**
  * Customized options to start direct transfer.
  */
-public class SourceStartDirectTransferOptions extends AutoSafeParcelable {
+public class SourceStartDirectTransferOptions extends AbstractSafeParcelable {
     /**
      * Value of the callerType if the caller is unknown.
      */
@@ -23,7 +26,7 @@ public class SourceStartDirectTransferOptions extends AutoSafeParcelable {
      */
     public static final int CALLER_TYPE_BROWSER = 2;
 
-    @Field(1)
+    @Field(value = 1, getterName = "getCallerType")
     private int callerType;
 
     private SourceStartDirectTransferOptions() {
@@ -32,9 +35,18 @@ public class SourceStartDirectTransferOptions extends AutoSafeParcelable {
     /**
      * Constructor for the {@link SourceStartDirectTransferOptions}.
      */
-    public SourceStartDirectTransferOptions(int callerType) {
+    public SourceStartDirectTransferOptions(@Param(1) int callerType) {
         this.callerType = callerType;
     }
 
-    public static final Creator<SourceStartDirectTransferOptions> CREATOR = new AutoCreator<>(SourceStartDirectTransferOptions.class);
+    public int getCallerType() {
+        return callerType;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<SourceStartDirectTransferOptions> CREATOR = findCreator(SourceStartDirectTransferOptions.class);
 }

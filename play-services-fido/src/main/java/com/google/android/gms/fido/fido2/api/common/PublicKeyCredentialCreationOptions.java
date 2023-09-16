@@ -5,8 +5,11 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
@@ -19,40 +22,56 @@ import java.util.List;
  * This class is used to supply options when creating a new credential.
  */
 @PublicApi
+@SafeParcelable.Class
 public class PublicKeyCredentialCreationOptions extends RequestOptions {
-    @Field(2)
+    @Field(value = 2, getterName = "getRp")
     @NonNull
     private PublicKeyCredentialRpEntity rp;
-    @Field(3)
+    @Field(value = 3, getterName = "getUser")
     @NonNull
     private PublicKeyCredentialUserEntity user;
-    @Field(4)
+    @Field(value = 4, getterName = "getChallenge")
     @NonNull
     private byte[] challenge;
-    @Field(5)
+    @Field(value = 5, getterName = "getParameters")
     @NonNull
     private List<PublicKeyCredentialParameters> parameters;
-    @Field(6)
+    @Field(value = 6, getterName = "getTimeoutSeconds")
     @Nullable
     private Double timeoutSeconds;
-    @Field(7)
+    @Field(value = 7, getterName = "getExcludeList")
     @Nullable
     private List<PublicKeyCredentialDescriptor> excludeList;
-    @Field(8)
+    @Field(value = 8, getterName = "getAuthenticatorSelection")
     @Nullable
     private AuthenticatorSelectionCriteria authenticatorSelection;
-    @Field(9)
+    @Field(value = 9, getterName = "getRequestId")
     @Nullable
     private Integer requestId;
-    @Field(10)
+    @Field(value = 10, getterName = "getTokenBinding")
     @Nullable
     private TokenBinding tokenBinding;
-    @Field(11)
+    @Field(value = 11, getterName = "getAttestationConveyancePreference")
     @Nullable
     private AttestationConveyancePreference attestationConveyancePreference;
-    @Field(12)
+    @Field(value = 12, getterName = "getAuthenticationExtensions")
     @Nullable
     private AuthenticationExtensions authenticationExtensions;
+
+    @Constructor
+    PublicKeyCredentialCreationOptions(@Param(2) @NonNull PublicKeyCredentialRpEntity rp, @Param(3) @NonNull PublicKeyCredentialUserEntity user, @Param(4) @NonNull byte[] challenge, @Param(5) @NonNull List<PublicKeyCredentialParameters> parameters, @Param(6) @Nullable Double timeoutSeconds, @Param(7) @Nullable List<PublicKeyCredentialDescriptor> excludeList, @Param(8) @Nullable AuthenticatorSelectionCriteria authenticatorSelection, @Param(9) @Nullable Integer requestId, @Param(10) @Nullable TokenBinding tokenBinding, @Param(11) @Nullable AttestationConveyancePreference attestationConveyancePreference, @Param(12) @Nullable AuthenticationExtensions authenticationExtensions) {
+        this.rp = rp;
+        this.user = user;
+        this.challenge = challenge;
+        this.parameters = parameters;
+        this.timeoutSeconds = timeoutSeconds;
+        this.excludeList = excludeList;
+        this.authenticatorSelection = authenticatorSelection;
+        this.requestId = requestId;
+        this.tokenBinding = tokenBinding;
+        this.attestationConveyancePreference = attestationConveyancePreference;
+        this.authenticationExtensions = authenticationExtensions;
+    }
 
     @Nullable
     public AttestationConveyancePreference getAttestationConveyancePreference() {
@@ -297,19 +316,7 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
          * Builds the {@link PublicKeyCredentialCreationOptions} object.
          */
         public PublicKeyCredentialCreationOptions build() {
-            PublicKeyCredentialCreationOptions options = new PublicKeyCredentialCreationOptions();
-            options.rp = rp;
-            options.user = user;
-            options.challenge = challenge;
-            options.parameters = parameters;
-            options.timeoutSeconds = timeoutSeconds;
-            options.excludeList = excludeList;
-            options.authenticatorSelection = authenticatorSelection;
-            options.requestId = requestId;
-            options.tokenBinding = tokenBinding;
-            options.attestationConveyancePreference = attestationConveyancePreference;
-            options.authenticationExtensions = authenticationExtensions;
-            return options;
+            return new PublicKeyCredentialCreationOptions(rp, user, challenge, parameters, timeoutSeconds, excludeList, authenticatorSelection, requestId, tokenBinding, attestationConveyancePreference, authenticationExtensions);
         }
     }
 
@@ -324,6 +331,11 @@ public class PublicKeyCredentialCreationOptions extends RequestOptions {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
     @Hide
-    public static final Creator<PublicKeyCredentialCreationOptions> CREATOR = new AutoCreator<>(PublicKeyCredentialCreationOptions.class);
+    public static final SafeParcelableCreatorAndWriter<PublicKeyCredentialCreationOptions> CREATOR = findCreator(PublicKeyCredentialCreationOptions.class);
 }

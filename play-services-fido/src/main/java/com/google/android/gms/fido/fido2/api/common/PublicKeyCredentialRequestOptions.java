@@ -8,8 +8,11 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
@@ -22,34 +25,47 @@ import java.util.List;
  * This class is used to supply an authentication request with the data it needs to generate an assertion.
  */
 @PublicApi
+@SafeParcelable.Class
 public class PublicKeyCredentialRequestOptions extends RequestOptions {
-    @Field(2)
+    @Field(value = 2, getterName = "getChallenge")
     @NonNull
     private byte[] challenge;
-    @Field(3)
+    @Field(value = 3, getterName = "getTimeoutSeconds")
     @Nullable
     private Double timeoutSeconds;
-    @Field(4)
+    @Field(value = 4, getterName = "getRpId")
     @NonNull
     private String rpId;
-    @Field(5)
+    @Field(value = 5, getterName = "getAllowList")
     @Nullable
     private List<PublicKeyCredentialDescriptor> allowList;
-    @Field(6)
+    @Field(value = 6, getterName = "getRequestId")
     @Nullable
     private Integer requestId;
-    @Field(7)
+    @Field(value = 7, getterName = "getTokenBinding")
     @Nullable
     private TokenBinding tokenBinding;
-    @Field(8)
+    @Field(value = 8, getterName = "getRequireUserVerification")
     @Nullable
     private UserVerificationRequirement requireUserVerification;
-    @Field(9)
+    @Field(value = 9, getterName = "getAuthenticationExtensions")
     @Nullable
     private AuthenticationExtensions authenticationExtensions;
     @Field(10)
     @Nullable
-    private Long longRequestId;
+    Long longRequestId;
+
+    @Constructor
+    public PublicKeyCredentialRequestOptions(@Param(2)@NonNull byte[] challenge,@Param(3) @Nullable Double timeoutSeconds, @Param(4)@NonNull String rpId, @Param(5)@Nullable List<PublicKeyCredentialDescriptor> allowList,@Param(6) @Nullable Integer requestId,@Param(7) @Nullable TokenBinding tokenBinding,@Param(8) @Nullable UserVerificationRequirement requireUserVerification, @Param(9)@Nullable AuthenticationExtensions authenticationExtensions) {
+        this.challenge = challenge;
+        this.timeoutSeconds = timeoutSeconds;
+        this.rpId = rpId;
+        this.allowList = allowList;
+        this.requestId = requestId;
+        this.tokenBinding = tokenBinding;
+        this.requireUserVerification = requireUserVerification;
+        this.authenticationExtensions = authenticationExtensions;
+    }
 
     @Nullable
     public List<PublicKeyCredentialDescriptor> getAllowList() {
@@ -228,15 +244,7 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
          * Builds the {@link PublicKeyCredentialRequestOptions} object.
          */
         public PublicKeyCredentialRequestOptions build() {
-            PublicKeyCredentialRequestOptions options = new PublicKeyCredentialRequestOptions();
-            options.challenge = challenge;
-            options.timeoutSeconds = timeoutSeconds;
-            options.rpId = rpId;
-            options.allowList = allowList;
-            options.requestId = requestId;
-            options.tokenBinding = tokenBinding;
-            options.authenticationExtensions = authenticationExtensions;
-            return options;
+            return new PublicKeyCredentialRequestOptions(challenge, timeoutSeconds, rpId, allowList, requestId, tokenBinding, null, authenticationExtensions);
         }
     }
 
@@ -251,6 +259,11 @@ public class PublicKeyCredentialRequestOptions extends RequestOptions {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
     @Hide
-    public static final Creator<PublicKeyCredentialRequestOptions> CREATOR = new AutoCreator<>(PublicKeyCredentialRequestOptions.class);
+    public static final SafeParcelableCreatorAndWriter<PublicKeyCredentialRequestOptions> CREATOR = findCreator(PublicKeyCredentialRequestOptions.class);
 }

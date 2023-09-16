@@ -8,8 +8,11 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
@@ -21,14 +24,15 @@ import java.util.Arrays;
  * The response after an error occurred.
  */
 @PublicApi
+@SafeParcelable.Class
 public class AuthenticatorErrorResponse extends AuthenticatorResponse {
-    @Field(2)
+    @Field(value = 2, getterName = "getErrorCode")
     @NonNull
     private ErrorCode errorCode;
-    @Field(3)
+    @Field(value = 3, getterName = "getErrorMessage")
     @Nullable
     private String errorMessage;
-    @Field(4)
+    @Field(value = 4, getterName = "getInternalErrorCode")
     private int internalErrorCode;
 
     private AuthenticatorErrorResponse() {
@@ -38,6 +42,13 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
     public AuthenticatorErrorResponse(@NonNull ErrorCode errorCode, @Nullable String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
+    }
+
+    @Constructor
+    AuthenticatorErrorResponse(@Param(2) @NonNull ErrorCode errorCode, @Param(3) @Nullable String errorMessage, @Param(4) int internalErrorCode) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.internalErrorCode = internalErrorCode;
     }
 
     @Override
@@ -58,6 +69,11 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
     @Nullable
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    @Hide
+    public int getInternalErrorCode() {
+        return internalErrorCode;
     }
 
     @Override
@@ -98,5 +114,10 @@ public class AuthenticatorErrorResponse extends AuthenticatorResponse {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
-    public static final Creator<AuthenticatorErrorResponse> CREATOR = new AutoCreator<>(AuthenticatorErrorResponse.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<AuthenticatorErrorResponse> CREATOR = findCreator(AuthenticatorErrorResponse.class);
 }

@@ -5,12 +5,15 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -18,21 +21,23 @@ import java.util.Arrays;
  * Represents the information about a relying party with which a credential is associated.
  */
 @PublicApi
-public class PublicKeyCredentialRpEntity extends AutoSafeParcelable {
-    @Field(2)
+@SafeParcelable.Class
+public class PublicKeyCredentialRpEntity extends AbstractSafeParcelable {
+    @Field(value = 2, getterName = "getId")
     @NonNull
     private String id;
-    @Field(3)
+    @Field(value = 3, getterName = "getName")
     @NonNull
     private String name;
-    @Field(4)
+    @Field(value = 4, getterName = "getIcon")
     @Nullable
     private String icon;
 
     private PublicKeyCredentialRpEntity() {
     }
 
-    public PublicKeyCredentialRpEntity(@NonNull String id, @NonNull String name, @Nullable String icon) {
+    @Constructor
+    public PublicKeyCredentialRpEntity(@Param(2)@NonNull String id, @Param(3)@NonNull String name, @Param(4)@Nullable String icon) {
         this.id = id;
         this.name = name;
         this.icon = icon;
@@ -80,6 +85,11 @@ public class PublicKeyCredentialRpEntity extends AutoSafeParcelable {
                 .end();
     }
 
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
     @Hide
-    public static final Creator<PublicKeyCredentialRpEntity> CREATOR = new AutoCreator<>(PublicKeyCredentialRpEntity.class);
+    public static final SafeParcelableCreatorAndWriter<PublicKeyCredentialRpEntity> CREATOR = findCreator(PublicKeyCredentialRpEntity.class);
 }

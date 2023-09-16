@@ -23,11 +23,11 @@ import org.microg.gms.common.Hide;
  */
 @SafeParcelable.Class
 public class PlayerLevel extends AbstractSafeParcelable {
-    @Field(1)
+    @Field(value = 1, getterName = "getLevelNumber")
     private final int levelNumber;
-    @Field(2)
+    @Field(value = 2, getterName = "getMinXp")
     private final long minXp;
-    @Field(3)
+    @Field(value = 3, getterName = "getMaxXp")
     private final long maxXp;
 
     @Constructor

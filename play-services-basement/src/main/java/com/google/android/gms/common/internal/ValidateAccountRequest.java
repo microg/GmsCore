@@ -16,8 +16,18 @@
 
 package com.google.android.gms.common.internal;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
-public class ValidateAccountRequest extends AutoSafeParcelable {
-    public static Creator<ValidateAccountRequest> CREATOR = new AutoCreator<ValidateAccountRequest>(ValidateAccountRequest.class);
+@SafeParcelable.Class
+public class ValidateAccountRequest extends AbstractSafeParcelable {
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static SafeParcelableCreatorAndWriter<ValidateAccountRequest> CREATOR = findCreator(ValidateAccountRequest.class);
 }

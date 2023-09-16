@@ -10,15 +10,16 @@ package com.google.android.gms.fido.fido2.api.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -26,7 +27,8 @@ import java.util.Arrays;
  * Represents the Token binding information provided by the relying party.
  */
 @PublicApi
-public class TokenBinding extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class TokenBinding extends AbstractSafeParcelable {
     /**
      * A singleton instance representing that token binding is not supported by the client.
      */
@@ -38,10 +40,10 @@ public class TokenBinding extends AutoSafeParcelable {
     @NonNull
     public static final TokenBinding SUPPORTED = new TokenBinding(TokenBindingStatus.SUPPORTED, null);
 
-    @Field(2)
+    @Field(value = 2, getterName = "getTokenBindingStatus")
     @NonNull
     private TokenBindingStatus status;
-    @Field(3)
+    @Field(value = 3, getterName = "getTokenBindingId")
     @Nullable
     private String tokenBindingId;
 
@@ -56,7 +58,8 @@ public class TokenBinding extends AutoSafeParcelable {
         this.tokenBindingId = tokenBindingId;
     }
 
-    private TokenBinding(@NonNull TokenBindingStatus status, @Nullable String tokenBindingId) {
+    @Constructor
+    TokenBinding(@Param(2) @NonNull TokenBindingStatus status, @Param(3) @Nullable String tokenBindingId) {
         this.status = status;
         this.tokenBindingId = tokenBindingId;
     }
@@ -67,6 +70,12 @@ public class TokenBinding extends AutoSafeParcelable {
     @Nullable
     public String getTokenBindingId() {
         return tokenBindingId;
+    }
+
+    @Hide
+    @NonNull
+    public TokenBindingStatus getTokenBindingStatus() {
+        return status;
     }
 
     /**
@@ -187,6 +196,11 @@ public class TokenBinding extends AutoSafeParcelable {
         }
     }
 
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
     @Hide
-    public static final Creator<TokenBinding> CREATOR = new AutoCreator<>(TokenBinding.class);
+    public static final SafeParcelableCreatorAndWriter<TokenBinding> CREATOR = findCreator(TokenBinding.class);
 }

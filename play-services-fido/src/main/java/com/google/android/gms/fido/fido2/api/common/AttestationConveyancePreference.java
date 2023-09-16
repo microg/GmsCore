@@ -10,9 +10,8 @@ package com.google.android.gms.fido.fido2.api.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
-import org.microg.gms.common.PublicApi;
+import org.microg.gms.common.Hide;
 
 /**
  * An enum describing the relying party's preference for attestation conveyance.
@@ -44,7 +43,7 @@ public enum AttestationConveyancePreference implements Parcelable {
         dest.writeString(toString());
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     @NonNull
     public static AttestationConveyancePreference fromString(String attachment) throws UnsupportedAttestationConveyancePreferenceException {
         for (AttestationConveyancePreference value : values()) {

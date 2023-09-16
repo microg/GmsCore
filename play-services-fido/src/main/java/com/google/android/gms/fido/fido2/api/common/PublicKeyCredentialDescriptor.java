@@ -8,13 +8,15 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.fido.common.Transport;
-
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,14 +26,15 @@ import java.util.List;
  * parameter to the registration or authentication method.
  */
 @PublicApi
-public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
-    @Field(2)
+@SafeParcelable.Class
+public class PublicKeyCredentialDescriptor extends AbstractSafeParcelable {
+    @Field(value = 2, getterName = "getType")
     @NonNull
     private PublicKeyCredentialType type;
-    @Field(3)
+    @Field(value = 3, getterName = "getId")
     @NonNull
     private byte[] id;
-    @Field(4)
+    @Field(value = 4, getterName = "getTransports")
     @Nullable
     private List<Transport> transports;
 
@@ -44,6 +47,13 @@ public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
         } catch (PublicKeyCredentialType.UnsupportedPublicKeyCredTypeException e) {
             throw new IllegalArgumentException(e);
         }
+        this.id = id;
+        this.transports = transports;
+    }
+
+    @Constructor
+    PublicKeyCredentialDescriptor(@Param(2) @NonNull PublicKeyCredentialType type, @Param(3) @NonNull byte[] id, @Param(4) @Nullable List<Transport> transports) {
+        this.type = type;
         this.id = id;
         this.transports = transports;
     }
@@ -108,5 +118,10 @@ public class PublicKeyCredentialDescriptor extends AutoSafeParcelable {
         }
     }
 
-    public static final Creator<PublicKeyCredentialDescriptor> CREATOR = new AutoCreator<>(PublicKeyCredentialDescriptor.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<PublicKeyCredentialDescriptor> CREATOR = findCreator(PublicKeyCredentialDescriptor.class);
 }

@@ -8,7 +8,10 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
@@ -20,24 +23,27 @@ import java.util.Arrays;
  * Represents a newly-created scoped credential, aka the response from a registration request.
  */
 @PublicApi
+@SafeParcelable.Class
 public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
-    @Field(2)
+    @Field(value = 2, getterName = "getKeyHandle")
     @NonNull
     private byte[] keyHandle;
-    @Field(3)
+    @Field(value = 3, getterName = "getClientDataJSON")
     @NonNull
     private byte[] clientDataJSON;
-    @Field(4)
+    @Field(value = 4, getterName = "getAttestationObject")
     @NonNull
     private byte[] attestationObject;
-    @Field(5)
+    @Field(value = 5, getterName = "getTransports")
     @NonNull
     private String[] transports;
 
-    private AuthenticatorAttestationResponse() {}
+    private AuthenticatorAttestationResponse() {
+    }
 
     @Hide
-    public AuthenticatorAttestationResponse(@NonNull byte[] keyHandle, @NonNull byte[] clientDataJSON, @NonNull byte[] attestationObject, @NonNull String[] transports) {
+    @Constructor
+    public AuthenticatorAttestationResponse(@Param(2) @NonNull byte[] keyHandle, @Param(3) @NonNull byte[] clientDataJSON, @Param(4) @NonNull byte[] attestationObject, @Param(5) @NonNull String[] transports) {
         this.keyHandle = keyHandle;
         this.clientDataJSON = clientDataJSON;
         this.attestationObject = attestationObject;
@@ -110,5 +116,10 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
-    public static final Creator<AuthenticatorAttestationResponse> CREATOR = new AutoCreator<>(AuthenticatorAttestationResponse.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<AuthenticatorAttestationResponse> CREATOR = findCreator(AuthenticatorAttestationResponse.class);
 }

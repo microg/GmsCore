@@ -8,12 +8,14 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.Hide;
-import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -21,19 +23,28 @@ import java.util.Arrays;
  * Relying Parties may use {@link AuthenticatorSelectionCriteria} to specify their requirements regarding authenticator
  * attributes.
  */
-public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
-    @Field(2)
+@SafeParcelable.Class
+public class AuthenticatorSelectionCriteria extends AbstractSafeParcelable {
+    @Field(value = 2, getterName = "getAttachment")
     @Nullable
     private Attachment attachment;
-    @Field(3)
+    @Field(value = 3, getterName = "getRequireResidentKey")
     @Nullable
     private Boolean requireResidentKey;
-    @Field(4)
+    @Field(value = 4, getterName = "getRequireUserVerification")
     @Nullable
     private UserVerificationRequirement requireUserVerification;
-    @Field(5)
+    @Field(value = 5, getterName = "getResidentKeyRequirement")
     @Nullable
     private ResidentKeyRequirement residentKeyRequirement;
+
+    @Constructor
+    AuthenticatorSelectionCriteria(@Param(2) @Nullable Attachment attachment, @Param(3) @Nullable Boolean requireResidentKey, @Param(4) @Nullable UserVerificationRequirement requireUserVerification, @Param(5) @Nullable ResidentKeyRequirement residentKeyRequirement) {
+        this.attachment = attachment;
+        this.requireResidentKey = requireResidentKey;
+        this.requireUserVerification = requireUserVerification;
+        this.residentKeyRequirement = residentKeyRequirement;
+    }
 
     @Nullable
     public Attachment getAttachment() {
@@ -135,13 +146,14 @@ public class AuthenticatorSelectionCriteria extends AutoSafeParcelable {
 
         @NonNull
         public AuthenticatorSelectionCriteria build() {
-            AuthenticatorSelectionCriteria criteria = new AuthenticatorSelectionCriteria();
-            criteria.attachment = attachment;
-            criteria.requireResidentKey = requireResidentKey;
-            criteria.residentKeyRequirement = residentKeyRequirement;
-            return criteria;
+            return new AuthenticatorSelectionCriteria(attachment, requireResidentKey, null, residentKeyRequirement);
         }
     }
 
-    public static final Creator<AuthenticatorSelectionCriteria> CREATOR = new AutoCreator<>(AuthenticatorSelectionCriteria.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<AuthenticatorSelectionCriteria> CREATOR = findCreator(AuthenticatorSelectionCriteria.class);
 }

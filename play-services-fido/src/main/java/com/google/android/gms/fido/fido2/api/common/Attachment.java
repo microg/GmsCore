@@ -7,8 +7,7 @@ package com.google.android.gms.fido.fido2.api.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import org.microg.gms.common.PublicApi;
+import org.microg.gms.common.Hide;
 
 /**
  * Clients may communicate with authenticators using a variety of mechanisms. We define authenticators that are
@@ -41,7 +40,7 @@ public enum Attachment implements Parcelable {
         dest.writeString(toString());
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public static Attachment fromString(String attachment) throws UnsupportedAttachmentException {
         for (Attachment value : values()) {
             if (value.value.equals(attachment)) return value;

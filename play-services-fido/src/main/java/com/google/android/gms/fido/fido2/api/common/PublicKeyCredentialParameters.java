@@ -8,11 +8,14 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -20,11 +23,12 @@ import java.util.Arrays;
  * This class supplies additional parameters when creating a new credential.
  */
 @PublicApi
-public class PublicKeyCredentialParameters extends AutoSafeParcelable {
-    @Field(2)
+@SafeParcelable.Class
+public class PublicKeyCredentialParameters extends AbstractSafeParcelable {
+    @Field(value = 2, getterName = "getType")
     @NonNull
     private PublicKeyCredentialType type;
-    @Field(3)
+    @Field(value = 3, getterName = "getAlgorithm")
     @NonNull
     private COSEAlgorithmIdentifier algorithm;
 
@@ -42,6 +46,12 @@ public class PublicKeyCredentialParameters extends AutoSafeParcelable {
         } catch (COSEAlgorithmIdentifier.UnsupportedAlgorithmIdentifierException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    @Constructor
+    PublicKeyCredentialParameters(@Param(2) @NonNull PublicKeyCredentialType type, @Param(3) @NonNull COSEAlgorithmIdentifier algorithm) {
+        this.type = type;
+        this.algorithm = algorithm;
     }
 
     @NonNull
@@ -88,6 +98,11 @@ public class PublicKeyCredentialParameters extends AutoSafeParcelable {
                 .end();
     }
 
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
     @Hide
-    public static final Creator<PublicKeyCredentialParameters> CREATOR = new AutoCreator<>(PublicKeyCredentialParameters.class);
+    public static final SafeParcelableCreatorAndWriter<PublicKeyCredentialParameters> CREATOR = findCreator(PublicKeyCredentialParameters.class);
 }

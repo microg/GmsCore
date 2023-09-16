@@ -75,7 +75,7 @@ public enum ErrorCode implements Parcelable {
         this.code = code;
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public int getCode() {
         return code;
     }

@@ -8,11 +8,14 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -20,10 +23,16 @@ import java.util.Arrays;
  * This container class represents client output for extensions that can be passed into FIDO2 APIs.
  */
 @PublicApi
-public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
-    @Field(1)
+@SafeParcelable.Class
+public class AuthenticationExtensionsClientOutputs extends AbstractSafeParcelable {
+    @Field(value = 1, getterName = "getUvmEntries")
     @Nullable
     private UvmEntries uvmEntries;
+
+    @Constructor
+    AuthenticationExtensionsClientOutputs(@Param(1)@Nullable UvmEntries uvmEntries) {
+        this.uvmEntries = uvmEntries;
+    }
 
     @Nullable
     public UvmEntries getUvmEntries() {
@@ -91,11 +100,14 @@ public class AuthenticationExtensionsClientOutputs extends AutoSafeParcelable {
          */
         @NonNull
         public AuthenticationExtensionsClientOutputs build() {
-            AuthenticationExtensionsClientOutputs extensions = new AuthenticationExtensionsClientOutputs();
-            extensions.uvmEntries = uvmEntries;
-            return extensions;
+            return new AuthenticationExtensionsClientOutputs(uvmEntries);
         }
     }
 
-    public static final Creator<AuthenticationExtensionsClientOutputs> CREATOR = new AutoCreator<>(AuthenticationExtensionsClientOutputs.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<AuthenticationExtensionsClientOutputs> CREATOR = findCreator(AuthenticationExtensionsClientOutputs.class);
 }
