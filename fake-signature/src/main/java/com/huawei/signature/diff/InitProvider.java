@@ -23,7 +23,10 @@ public class InitProvider extends ContentProvider {
         Log.d(TAG, "onCreate");
         if (!isServiceRunning(getContext(), getContext().getPackageName(), SignatureService.class.getName())) {
             Intent intent = new Intent(getContext(), SignatureService.class);
-            getContext().startService(intent);
+            try {
+                getContext().startService(intent);
+            } catch (Exception ignored) {
+            }
         }
         return false;
     }
