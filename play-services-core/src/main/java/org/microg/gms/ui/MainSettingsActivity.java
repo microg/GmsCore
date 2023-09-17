@@ -15,7 +15,7 @@ import org.microg.gms.ui.settings.SettingsProvider;
 
 import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProviders;
 
-public class SettingsActivity extends AppCompatActivity {
+public class MainSettingsActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
 
     private NavController getNavController() {
