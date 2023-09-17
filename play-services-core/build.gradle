@@ -145,6 +145,10 @@ android {
         "default" {
             dimension 'target'
         }
+        "huawei" {
+            dimension 'target'
+            versionNameSuffix "-hw"
+        }
         "mapbox" {
             dimension 'maps'
         }

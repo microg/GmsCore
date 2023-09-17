@@ -6,6 +6,7 @@ def sublude(name) {
 
 include ':fake-signature'
 include ':safe-parcel-processor'
+include ':vending-app'
 
 include ':play-services-ads'
 include ':play-services-ads-base'

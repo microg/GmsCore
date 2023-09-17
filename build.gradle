@@ -67,6 +67,8 @@ def execResult(...args) {
 
 def gmsVersion = "23.30.13"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
+def vendingVersion = "37.5.24"
+def vendingVersionCode = Integer.parseInt(vendingVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim())
 def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').trim().split(' ')[0]
@@ -88,16 +90,20 @@ execResult('git', 'status', '--porcelain').lines().each { stat ->
 }
 def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
 def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
-def ourVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
-def ourVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
-logger.lifecycle('Starting build for version {} ({})...', ourVersionName, ourVersionCode)
+def ourGmsVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
+def ourGmsVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
+def ourVendingVersionCode = 80000000 + vendingVersionCode * 100 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
+def ourVendingVersionName = "$ourVersionBase.$vendingVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
+logger.lifecycle('Starting build for GMS version {} ({})...', ourGmsVersionName, ourGmsVersionCode)
 
 allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = ourVersionName
-    ext.appVersionCode = ourVersionCode
+    version = ourGmsVersionName
+    ext.vendingAppVersionName = ourVendingVersionName
+    ext.vendingAppVersionCode = ourVendingVersionCode
+    ext.appVersionCode = ourGmsVersionCode
     ext.isReleaseVersion = false
 }
 

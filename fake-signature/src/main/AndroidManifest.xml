@@ -6,7 +6,6 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" />
 
     <application>
@@ -1155,36 +1154,6 @@
             android:name="NAVI100"
             android:value="4763384BBF445EDB8D3112C15413D96FB1415218F6403DB026699968EDA84491-7712B5F255F2C85B8B164519116AC4381BB9A3582DCDD2B73AC06EE7464913AE" />
 
-        <receiver
-            android:name="com.huawei.signature.diff.InitReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </receiver>
-
-        <provider
-            android:name="com.huawei.signature.diff.InitProvider"
-            android:authorities="${applicationId}.signature.diff.init"
-            android:enabled="true"
-            android:exported="false"
-            android:initOrder="1000"/>
-
-        <service
-            android:name="com.huawei.signature.diff.SignatureService"
-            android:process=":signature"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.huawei.signature.diff"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>
