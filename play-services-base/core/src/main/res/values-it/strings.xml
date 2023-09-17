@@ -9,4 +9,11 @@
     <string name="list_no_item_none">Nessuna</string>
     <string name="list_item_see_all">Mostra tutte</string>
     <string name="open_app">Apri</string>
+
+    <string name="service_status_disabled">Disabilitato</string>
+    <string name="service_status_enabled">Abilitato</string>
+    <string name="service_status_automatic">Automatico</string>
+    <string name="service_status_manual">Manuale</string>
+    <string name="service_status_enabled_short">Abilitato</string>
+    <string name="service_status_disabled_short">Disabilitato</string>
 </resources>

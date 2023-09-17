@@ -58,13 +58,6 @@ This can take a couple of minutes."</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
-    <string name="service_status_disabled">Disabled</string>
-    <string name="service_status_enabled">Enabled</string>
-    <string name="service_status_automatic">Automatic</string>
-    <string name="service_status_manual">Manual</string>
-    <string name="service_status_enabled_short">On</string>
-    <string name="service_status_disabled_short">Off</string>
-
     <string name="games_title">Google Play Games</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> would like to use Play Games</string>
     <string name="games_info_content">To use Play Games it is required to install the Google Play Games app. The application might continue without Play Games, but it is possible that it will behave unexpectedly.</string>

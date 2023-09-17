@@ -15,4 +15,11 @@
     <string name="list_item_see_all">Показать всё</string>
 
     <string name="open_app">Открыть</string>
+
+    <string name="service_status_disabled">Выключено</string>
+    <string name="service_status_enabled">Включено</string>
+    <string name="service_status_automatic">Автоматически</string>
+    <string name="service_status_manual">Вручную</string>
+    <string name="service_status_enabled_short">Вкл.</string>
+    <string name="service_status_disabled_short">Выкл.</string>
 </resources>

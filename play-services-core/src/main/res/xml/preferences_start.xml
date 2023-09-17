@@ -16,7 +16,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_header">
         <Preference
             android:icon="@drawable/self_check"
             android:summary="@string/self_check_desc"
@@ -26,7 +26,7 @@
                 android:targetPackage="com.google.android.gms" />
         </Preference>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefcat_google_services">
+    <PreferenceCategory android:title="@string/prefcat_google_services" android:key="prefcat_google_services">
         <Preference
             android:icon="@drawable/ic_add_account"
             android:summary="@string/pref_add_account_summary"
@@ -57,17 +57,13 @@
                 android:targetPackage="com.google.android.gms" />
         </Preference>
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_other_services">
         <Preference
             android:icon="@drawable/ic_map_marker"
             android:key="pref_location"
             android:title="@string/service_name_location"/>
-        <Preference
-            android:key="pref_exposure"
-            android:title="@string/service_name_exposure"
-            app:isPreferenceVisible="false" />
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_footer">
         <Preference
             android:icon="@drawable/ic_info_outline"
             android:key="pref_about"
