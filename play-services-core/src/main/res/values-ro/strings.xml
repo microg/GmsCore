@@ -44,7 +44,6 @@ Acest lucru poate dura câteva minute."</string>
     <string name="service_name_checkin">Înregistrare dispozitiv Google</string>
     <string name="service_name_mcs">Mesagerie Cloud</string>
     <string name="service_name_snet">Google SafetyNet</string>
-    <string name="service_status_disabled">Dezactivat</string>
     <string name="service_status_enabled">Activat</string>
     <string name="service_status_automatic">Automat</string>
     <string name="service_status_manual">Manual</string>
