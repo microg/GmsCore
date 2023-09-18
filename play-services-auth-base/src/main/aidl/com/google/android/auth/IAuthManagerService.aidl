@@ -7,7 +7,7 @@ import com.google.android.gms.auth.AccountChangeEventsResponse;
 import com.google.android.gms.auth.AccountChangeEventsRequest;
 import com.google.android.gms.auth.GetHubTokenRequest;
 import com.google.android.gms.auth.GetHubTokenInternalResponse;
-import com.google.android.gms.auth.HasCababilitiesRequest;
+import com.google.android.gms.auth.HasCapabilitiesRequest;
 
 interface IAuthManagerService {
     Bundle getToken(String accountName, String scope, in Bundle extras) = 0;
@@ -18,6 +18,6 @@ interface IAuthManagerService {
     Bundle getAccounts(in Bundle extras) = 5;
     Bundle removeAccount(in Account account) = 6;
     Bundle requestGoogleAccountsAccess(String packageName) = 7;
-    int hasCapabilities(in HasCababilitiesRequest request) = 8;
+    int hasCapabilities(in HasCapabilitiesRequest request) = 8;
     GetHubTokenInternalResponse getHubToken(in GetHubTokenRequest request, in Bundle extras) = 9;
 }

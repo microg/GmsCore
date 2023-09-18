@@ -21,16 +21,20 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
-
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
+import org.microg.gms.utils.ToStringHelper;
 
 /**
  * Represents the results of work.
  */
 @PublicApi
-public final class Status extends AutoSafeParcelable implements Result {
+@SafeParcelable.Class
+public final class Status extends AbstractSafeParcelable implements Result {
     @PublicApi(exclude = true)
     public static final Status INTERNAL_ERROR = new Status(CommonStatusCodes.INTERNAL_ERROR, "Internal error");
     @PublicApi(exclude = true)
@@ -38,16 +42,16 @@ public final class Status extends AutoSafeParcelable implements Result {
     @PublicApi(exclude = true)
     public static final Status SUCCESS = new Status(CommonStatusCodes.SUCCESS, "Success");
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
+    @Field(1000)
+    int versionCode = 1;
 
-    @SafeParceled(1)
+    @Field(value = 1, getterName = "getStatusCode")
     private final int statusCode;
 
-    @SafeParceled(2)
+    @Field(value = 2, getterName = "getStatusMessage")
     private final String statusMessage;
 
-    @SafeParceled(3)
+    @Field(value = 3, getterName = "getResolution")
     private final PendingIntent resolution;
 
     private Status() {
@@ -82,7 +86,8 @@ public final class Status extends AutoSafeParcelable implements Result {
      * @param statusMessage The message associated with this status, or null.
      * @param resolution    A pending intent that will resolve the issue when started, or null.
      */
-    public Status(int statusCode, String statusMessage, PendingIntent resolution) {
+    @Constructor
+    public Status(@Param(1) int statusCode, @Param(2) String statusMessage, @Param(3) PendingIntent resolution) {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.resolution = resolution;
@@ -176,5 +181,16 @@ public final class Status extends AutoSafeParcelable implements Result {
         }
     }
 
-    public static final Creator<Status> CREATOR = new AutoCreator<Status>(Status.class);
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("Status").field("code", statusCode).field("message", statusMessage).field("resolution", resolution).end();
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<Status> CREATOR = findCreator(Status.class);
 }

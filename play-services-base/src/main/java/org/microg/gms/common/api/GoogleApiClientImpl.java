@@ -19,7 +19,6 @@ package org.microg.gms.common.api;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Looper;
-import android.os.Message;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -44,7 +43,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
     private final Looper looper;
     private final ApiClientSettings clientSettings;
     private final Map<Api, Api.ApiOptions> apis = new HashMap<Api, Api.ApiOptions>();
-    private final Map<Api, ApiClient> apiConnections = new HashMap<Api, ApiClient>();
+    private final Map<Api, Api.Client> apiConnections = new HashMap<Api, Api.Client>();
     private final Set<ConnectionCallbacks> connectionCallbacks = new HashSet<ConnectionCallbacks>();
     private final Set<OnConnectionFailedListener> connectionFailedListeners = new HashSet<OnConnectionFailedListener>();
     private final int clientId;
@@ -90,6 +89,10 @@ public class GoogleApiClientImpl implements GoogleApiClient {
         this.connectionFailedListeners.addAll(connectionFailedListeners);
         this.clientId = clientId;
 
+        if (this.clientSettings.sessionId == null) {
+            this.clientSettings.sessionId = hashCode();
+        }
+
         for (Api api : apis.keySet()) {
             apiConnections.put(api, api.getBuilder().build(apis.get(api), context, looper, clientSettings, baseConnectionCallbacks, baseConnectionFailedListener));
         }
@@ -108,7 +111,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
         return looper;
     }
 
-    public ApiClient getApiConnection(Api api) {
+    public Api.Client getApiConnection(Api api) {
         return apiConnections.get(api);
     }
 
@@ -138,7 +141,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
             Log.d(TAG, "Already connected/connecting, nothing to do");
             return;
         }
-        for (ApiClient connection : apiConnections.values()) {
+        for (Api.Client connection : apiConnections.values()) {
             if (!connection.isConnected()) {
                 connection.connect();
             }
@@ -151,7 +154,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
             shouldDisconnect = true;
         } else {
             Log.d(TAG, "disconnect()");
-            for (ApiClient connection : apiConnections.values()) {
+            for (Api.Client connection : apiConnections.values()) {
                 if (connection.isConnected()) {
                     connection.disconnect();
                 }
@@ -161,7 +164,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public synchronized boolean isConnected() {
-        for (ApiClient connection : apiConnections.values()) {
+        for (Api.Client connection : apiConnections.values()) {
             if (!connection.isConnected()) return false;
         }
         return true;
@@ -169,7 +172,7 @@ public class GoogleApiClientImpl implements GoogleApiClient {
 
     @Override
     public synchronized boolean isConnecting() {
-        for (ApiClient connection : apiConnections.values()) {
+        for (Api.Client connection : apiConnections.values()) {
             if (connection.isConnecting()) return true;
         }
         return false;

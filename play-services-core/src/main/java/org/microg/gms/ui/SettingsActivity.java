@@ -11,6 +11,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.gms.R;
+import org.microg.gms.ui.settings.SettingsProvider;
+
+import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProviders;
 
 public class SettingsActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
@@ -24,9 +27,15 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        NearbyPreferencesIntegration.Companion.preProcessSettingsIntent(intent);
+        for (SettingsProvider settingsProvider : getAllSettingsProviders(this)) {
+            settingsProvider.preProcessSettingsIntent(intent);
+        }
 
         setContentView(R.layout.settings_root_activity);
+
+        for (SettingsProvider settingsProvider : getAllSettingsProviders(this)) {
+            settingsProvider.extendNavigation(getNavController());
+        }
 
         appBarConfiguration = new AppBarConfiguration.Builder(getNavController().getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, getNavController(), appBarConfiguration);

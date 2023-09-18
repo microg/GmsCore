@@ -22,6 +22,7 @@ class CtapNfcConnection(
 ) : CtapConnection {
     private val isoDep = IsoDep.get(tag)
     override var capabilities: Int = 0
+    override var transports: List<String> = listOf("nfc")
 
     override suspend fun <Q : Ctap1Request, S : Ctap1Response> runCommand(command: Ctap1Command<Q, S>): S {
         require(hasCtap1Support)
@@ -70,7 +71,10 @@ class CtapNfcConnection(
         Log.d(TAG, "Got info: $response")
         capabilities = capabilities or CAPABILITY_CTAP_2 or
                 (if (response.versions.contains("FIDO_2_1")) CAPABILITY_CTAP_2_1 else 0) or
-                (if (response.options.clientPin == true) CAPABILITY_CLIENT_PIN else 0)
+                (if (response.options.clientPin == true) CAPABILITY_CLIENT_PIN else 0) or
+                (if (response.options.userVerification == true) CAPABILITY_USER_VERIFICATION else 0) or
+                (if (response.options.residentKey == true) CAPABILITY_RESIDENT_KEY else 0)
+        if (response.transports != null) transports = response.transports
     }
 
     suspend fun open(): Boolean = withContext(Dispatchers.IO) {

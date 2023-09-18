@@ -7,8 +7,10 @@ package com.google.android.gms.auth.api.proxy;
 
 import android.os.Bundle;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 
+@Hide
 public class ProxyRequest extends AutoSafeParcelable {
     public static final int HTTP_METHOD_GET = 0;
     public static final int HTTP_METHOD_POST = 1;

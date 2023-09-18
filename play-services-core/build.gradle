@@ -6,17 +6,21 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+def hasModule(String name, boolean enabledByDefault) {
+    return localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
+}
+
 configurations {
-    withMapboxImplementation
-    withVtmImplementation
-    withNearbyImplementation
-    withoutNearbyImplementation
+    mapboxRuntimeOnly
+    vtmRuntimeOnly
+    defaultRuntimeOnly
 }
 
 dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "de.hdodenhof:circleimageview:1.3.0"
 
+    implementation project(':fake-signature')
     implementation project(':firebase-dynamic-links')
     implementation project(':firebase-auth-core')
     implementation project(':play-services-ads-core')
@@ -34,8 +38,6 @@ dependencies {
     implementation project(':play-services-gmscompliance-core')
     implementation project(':play-services-location-core')
     implementation project(':play-services-location-core-base')
-    implementation project(':play-services-location-core-provider')
-    withNearbyImplementation project(':play-services-nearby-core')
     implementation project(':play-services-oss-licenses-core')
     implementation project(':play-services-pay-core')
     implementation project(':play-services-recaptcha-core')
@@ -54,6 +56,7 @@ dependencies {
     implementation project(':play-services-auth')
     implementation project(':play-services-clearcut')
     implementation project(':play-services-drive')
+    implementation project(':play-services-games')
     implementation project(':play-services-maps')
     implementation project(':play-services-measurement-base')
     implementation project(':play-services-places')
@@ -61,8 +64,11 @@ dependencies {
     implementation project(':play-services-safetynet')
     implementation project(':play-services-tasks-ktx')
 
-    withMapboxImplementation project(':play-services-maps-core-mapbox')
-    withVtmImplementation project(':play-services-maps-core-vtm')
+    mapboxRuntimeOnly project(':play-services-maps-core-mapbox')
+    vtmRuntimeOnly project(':play-services-maps-core-vtm')
+    defaultRuntimeOnly project(':play-services-location-core-provider')
+
+    if (hasModule("nearby", true)) runtimeOnly project(':play-services-nearby-core-package')
 
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"
@@ -121,12 +127,6 @@ android {
         main {
             java.srcDirs += 'src/main/kotlin'
         }
-        withNearby {
-            java.srcDirs += 'src/withNearby/kotlin'
-        }
-        withoutNearby {
-            java.srcDirs += 'src/withoutNearby/kotlin'
-        }
     }
 
     lintOptions {
@@ -140,21 +140,16 @@ android {
         }
     }
 
-    flavorDimensions 'maps', 'nearby'
+    flavorDimensions = ['maps', 'target']
     productFlavors {
-        withMapbox {
+        "default" {
+            dimension 'target'
+        }
+        "mapbox" {
             dimension 'maps'
         }
-        withVtm {
+        "vtm" {
             dimension 'maps'
-            versionNameSuffix '-vtm'
-        }
-        withNearby {
-            dimension 'nearby'
-        }
-        withoutNearby {
-            dimension 'nearby'
-            versionNameSuffix '-noen'
         }
     }
 

@@ -19,7 +19,7 @@ package com.google.android.gms.clearcut;
 import android.util.Base64;
 
 import com.google.android.gms.clearcut.internal.LogVerifierResultParcelable;
-import com.google.android.gms.phenotype.ExperimentToken;
+import com.google.android.gms.phenotype.ExperimentTokens;
 import com.google.android.gms.phenotype.GenericDimension;
 import com.google.android.gms.clearcut.internal.PlayLoggerContext;
 
@@ -57,7 +57,7 @@ public class LogEventParcelable extends AutoSafeParcelable {
     public final boolean addPhenotypeExperimentTokens;
 
     @Field(9)
-    public final ExperimentToken[] experimentTokenParcelables;
+    public final ExperimentTokens[] experimentTokenParcelables;
 
     @Field(10)
     public final GenericDimension[] genericDimensions;

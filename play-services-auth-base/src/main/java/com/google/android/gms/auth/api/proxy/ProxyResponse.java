@@ -8,8 +8,10 @@ package com.google.android.gms.auth.api.proxy;
 import android.app.PendingIntent;
 import android.os.Bundle;
 
+import org.microg.gms.common.Hide;
 import org.microg.safeparcel.AutoSafeParcelable;
 
+@Hide
 public class ProxyResponse extends AutoSafeParcelable {
     public static final int STATUS_CODE_NO_CONNECTION = -1;
 

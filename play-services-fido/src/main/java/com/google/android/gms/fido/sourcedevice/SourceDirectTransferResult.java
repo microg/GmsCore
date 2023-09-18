@@ -10,24 +10,28 @@ package com.google.android.gms.fido.sourcedevice;
 
 import android.app.Activity;
 import android.content.Intent;
-
+import android.os.Parcel;
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.Status;
-
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 /**
  * Result returned from the UI activity in {@link Activity#onActivityResult(int, int, Intent)} after the direct transfer finishes.
  */
 @PublicApi
-public class SourceDirectTransferResult extends AutoSafeParcelable {
-    @Field(1)
+@SafeParcelable.Class
+public class SourceDirectTransferResult extends AbstractSafeParcelable {
+    @Field(value = 1, getterName = "getStatus")
     private Status status;
 
     private SourceDirectTransferResult() {
     }
 
-    public SourceDirectTransferResult(Status status) {
+    @Constructor
+    public SourceDirectTransferResult(@Param(1) Status status) {
         this.status = status;
     }
 
@@ -38,5 +42,10 @@ public class SourceDirectTransferResult extends AutoSafeParcelable {
         return status;
     }
 
-    public static final Creator<SourceDirectTransferResult> CREATOR = new AutoCreator<>(SourceDirectTransferResult.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<SourceDirectTransferResult> CREATOR = findCreator(SourceDirectTransferResult.class);
 }

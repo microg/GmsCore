@@ -60,6 +60,8 @@ public class Scopes {
     public static final String GAMES = "https://www.googleapis.com/auth/games";
     @Hide
     public static final String GAMES_LITE = "https://www.googleapis.com/auth/games_lite";
+    @Hide
+    public static final String GAMES_FIRSTPARTY = "https://www.googleapis.com/auth/games.firstparty";
     /**
      * Scope for using the CloudSave service.
      */
@@ -88,4 +90,8 @@ public class Scopes {
     public static final String FITNESS_BODY_READ = "https://www.googleapis.com/auth/fitness.body.read";
     @Hide
     public static final String FITNESS_BODY_READ_WRITE = "https://www.googleapis.com/auth/fitness.body.write";
+    @Hide
+    public static final String USERINFO_EMAIL = "https://www.googleapis.com/auth/userinfo.email";
+    @Hide
+    public static final String USERINFO_PROFILE = "https://www.googleapis.com/auth/userinfo.profile";
 }

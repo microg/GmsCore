@@ -54,13 +54,6 @@
     <string name="service_name_checkin">Googleデバイス登録</string>
     <string name="service_name_mcs">Cloud Messaging</string>
 
-    <string name="service_status_disabled">無効</string>
-    <string name="service_status_enabled">有効</string>
-    <string name="service_status_automatic">自動</string>
-    <string name="service_status_manual">手動</string>
-    <string name="service_status_enabled_short">On</string>
-    <string name="service_status_disabled_short">Off</string>
-
     <string name="games_title">Google Play ゲーム</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> が Play Gamesの使用を要求しています。</string>
     <string name="games_info_content">Play Gamesを使用するには、Google Play ゲーム アプリが必要です。 Google Playゲームアプリ無しでも続行できますが、予期しない動作をする可能性があります。</string>

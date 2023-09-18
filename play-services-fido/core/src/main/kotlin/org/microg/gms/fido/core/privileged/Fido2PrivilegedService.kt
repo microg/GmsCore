@@ -24,6 +24,7 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.fido.fido2.api.IBooleanCallback
+import com.google.android.gms.fido.fido2.api.ICredentialListCallback
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialCreationOptions
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialRequestOptions
 import com.google.android.gms.fido.fido2.internal.privileged.IFido2PrivilegedCallbacks
@@ -60,7 +61,7 @@ class Fido2PrivilegedService : BaseService(TAG, FIDO2_PRIVILEGED) {
 
 class Fido2PrivilegedServiceImpl(private val context: Context, private val lifecycle: Lifecycle) :
     IFido2PrivilegedService.Stub(), LifecycleOwner {
-    override fun register(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialCreationOptions) {
+    override fun getRegisterPendingIntent(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialCreationOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
                 .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED.SERVICE_ID)
@@ -74,7 +75,7 @@ class Fido2PrivilegedServiceImpl(private val context: Context, private val lifec
         }
     }
 
-    override fun sign(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialRequestOptions) {
+    override fun getSignPendingIntent(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialRequestOptions) {
         lifecycleScope.launchWhenStarted {
             val intent = Intent(context, AuthenticatorActivity::class.java)
                 .putExtra(KEY_SERVICE, FIDO2_PRIVILEGED.SERVICE_ID)
@@ -96,6 +97,12 @@ class Fido2PrivilegedServiceImpl(private val context: Context, private val lifec
                 val keyguardManager = context.getSystemService(KEYGUARD_SERVICE) as? KeyguardManager?
                 callbacks.onBoolean(keyguardManager?.isDeviceSecure == true)
             }
+        }
+    }
+
+    override fun getCredentialList(callbacks: ICredentialListCallback, rpId: String) {
+        lifecycleScope.launchWhenStarted {
+            runCatching { callbacks.onCredentialList(emptyList()) }
         }
     }
 

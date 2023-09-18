@@ -1,27 +1,19 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 package org.microg.gms.auth;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.RequiresPermission;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.settings.SettingsContract;
 
@@ -47,6 +39,16 @@ public class AuthManager {
     private Account account;
     private String packageSignature;
     private String accountType;
+
+
+    private int delegationType;
+    private String delegateeUserId;
+    private String oauth2Foreground;
+    private String oauth2Prompt;
+    private String itCaveatTypes;
+    private String tokenRequestOptions;
+    public String includeEmail;
+    public String includeProfile;
 
     public AuthManager(Context context, String accountName, String packageName, String service) {
         this.context = context;
@@ -80,7 +82,15 @@ public class AuthManager {
     }
 
     public String buildTokenKey(String service) {
-        return packageName + ":" + getPackageSignature() + ":" + service;
+        Uri.Builder builder = Uri.EMPTY.buildUpon();
+        if (delegationType != 0 && delegateeUserId != null)
+            builder.appendQueryParameter("delegation_type", Integer.toString(delegationType))
+                    .appendQueryParameter("delegatee_user_id", delegateeUserId);
+        if (tokenRequestOptions != null) builder.appendQueryParameter("token_request_options", tokenRequestOptions);
+        if (includeEmail != null) builder.appendQueryParameter("include_email", includeEmail);
+        if (includeProfile != null) builder.appendQueryParameter("include_profile", includeEmail);
+        String query = builder.build().getEncodedQuery();
+        return packageName + ":" + getPackageSignature() + ":" + service + (query != null ? ("?" + query) : "");
     }
 
     public String buildTokenKey() {
@@ -124,6 +134,32 @@ public class AuthManager {
         getAccountManager().setUserData(getAccount(), key, value);
     }
 
+    public void setDelegation(int delegationType, String delegateeUserId) {
+        if (delegationType != 0 && delegateeUserId != null) {
+            this.delegationType = delegationType;
+            this.delegateeUserId = delegateeUserId;
+        } else {
+            this.delegationType = 0;
+            this.delegateeUserId = null;
+        }
+    }
+
+    public void setOauth2Foreground(String oauth2Foreground) {
+        this.oauth2Foreground = oauth2Foreground;
+    }
+
+    public void setOauth2Prompt(String oauth2Prompt) {
+        this.oauth2Prompt = oauth2Prompt;
+    }
+
+    public void setItCaveatTypes(String itCaveatTypes) {
+        this.itCaveatTypes = itCaveatTypes;
+    }
+
+    public void setTokenRequestOptions(String tokenRequestOptions) {
+        this.tokenRequestOptions = tokenRequestOptions;
+    }
+
     public boolean accountExists() {
         for (Account refAccount : getAccountManager().getAccountsByType(accountType)) {
             if (refAccount.name.equalsIgnoreCase(accountName)) return true;
@@ -138,7 +174,7 @@ public class AuthManager {
 
     public String getAuthToken() {
         if (service.startsWith("weblogin:")) return null;
-        if (getExpiry() < System.currentTimeMillis() / 1000L) {
+        if (System.currentTimeMillis() / 1000L >= getExpiry() - 300L) {
             Log.d(TAG, "token present, but expired");
             return null;
         }
@@ -165,6 +201,16 @@ public class AuthManager {
             // Make account persistently visible as we already granted access
             accountManager.setAccountVisibility(getAccount(), packageName, AccountManager.VISIBILITY_VISIBLE);
         }
+    }
+
+    public void invalidateAuthToken() {
+        String authToken = peekAuthToken();
+        invalidateAuthToken(authToken);
+    }
+
+    @SuppressLint("MissingPermission")
+    public void invalidateAuthToken(String auth) {
+        getAccountManager().invalidateAuthToken(accountType, auth);
     }
 
     public void storeResponse(AuthResponse response) {
@@ -206,6 +252,10 @@ public class AuthManager {
                 AuthResponse response = new AuthResponse();
                 response.issueAdvice = "stored";
                 response.auth = token;
+                if (service.startsWith("oauth2:")) {
+                    response.grantedScopes = service.substring(7);
+                }
+                response.expiry = getExpiry();
                 return response;
             }
         }
@@ -214,9 +264,16 @@ public class AuthManager {
                 .app(packageName, getPackageSignature())
                 .email(accountName)
                 .token(getAccountManager().getPassword(account))
-                .service(service);
-        if (isSystemApp()) request.systemPartition();
-        if (isPermitted()) request.hasPermission();
+                .service(service)
+                .delegation(delegationType, delegateeUserId)
+                .oauth2Foreground(oauth2Foreground)
+                .oauth2Prompt(oauth2Prompt)
+                .oauth2IncludeProfile(includeProfile)
+                .oauth2IncludeEmail(includeEmail)
+                .itCaveatTypes(itCaveatTypes)
+                .tokenRequestOptions(tokenRequestOptions)
+                .systemPartition(isSystemApp())
+                .hasPermission(isPermitted());
         if (legacy) {
             request.callerIsGms().calledFromAccountManager();
         } else {

@@ -113,6 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void putOwner(ContentValues contentValues) {
         getWritableDatabase().insertWithOnConflict(OWNERS_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        close();
     }
 
     public Cursor getOwner(String accountName) {

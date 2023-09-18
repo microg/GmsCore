@@ -19,8 +19,8 @@ package com.google.android.gms.maps.model;
 import android.os.Parcel;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
-import org.microg.gms.common.PublicApi;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.PublicApi;
 
 /**
  * An immutable class representing a pair of latitude and longitude coordinates, stored as degrees.

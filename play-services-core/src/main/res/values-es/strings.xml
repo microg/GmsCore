@@ -57,13 +57,6 @@ Esto podría tardar algunos minutos."</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
-    <string name="service_status_disabled">Desactivado</string>
-    <string name="service_status_enabled">Activado</string>
-    <string name="service_status_automatic">Automático</string>
-    <string name="service_status_manual">Manual</string>
-    <string name="service_status_enabled_short">Encendido</string>
-    <string name="service_status_disabled_short">Apagado</string>
-
     <string name="games_title">Google Play Juegos</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> quiere usar Play Juegos</string>
     <string name="games_info_content">Para usar Play Juegos es necesario instalar la aplicación Google Play Juegos. La aplicación puede continuar sin Play Juegos, pero es posible que funcione inesperadamente.</string>

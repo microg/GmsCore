@@ -49,11 +49,6 @@ To zajmie kilka minut.</string>
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
-    <string name="service_status_disabled">Nieaktywny</string>
-    <string name="service_status_enabled">Aktywny</string>
-    <string name="service_status_automatic">Automatyczny</string>
-    <string name="service_status_manual">Ręczny</string>
-
     <string name="games_title">Gry Google Play</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> chce wykorzystać Gry Google Play</string>
     <string name="games_info_content">Aby korzystać z gier Google Play wymagana jest instalacja aplikacji Gry Google Play . Aplikacja może dalej działać bez Gry Google Play, ale możliwe, że nie będzie działać prawidłowo.</string>

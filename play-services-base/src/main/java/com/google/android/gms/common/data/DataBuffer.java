@@ -1,17 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.common.data;
@@ -23,67 +15,43 @@ import org.microg.gms.common.PublicApi;
 import java.util.Iterator;
 
 /**
- * TODO
+ * Interface for a buffer of typed data.
  */
-@PublicApi
-public abstract class DataBuffer<T> implements Releasable, Iterable<T> {
-
-    private DataHolder dataHolder;
-
-    @PublicApi(exclude = true)
-    public DataBuffer(DataHolder dataHolder) {
-        this.dataHolder = dataHolder;
-    }
+public interface DataBuffer<T> extends Releasable, Iterable<T> {
 
     /**
-     * @deprecated use {@link #release()} instead
+     * Releases the data buffer, for use in try-with-resources.
+     * <p>
+     * Both close and release shall have identical semantics, and are idempotent.
      */
-    @Deprecated
-    public final void close() {
-        release();
-    }
+    void close();
 
     /**
-     * Get the item at the specified position. Note that the objects returned from subsequent
-     * invocations of this method for the same position may not be identical objects, but will be
-     * equal in value.
-     *
-     * @param position The position of the item to retrieve.
-     * @return the item at {@code position} in this buffer.
+     * Returns an element on specified position.
      */
-    public abstract T get(int position);
+    T get(int position);
 
-    public int getCount() {
-        return dataHolder == null ? 0 : dataHolder.getCount();
-    }
+    int getCount();
 
     /**
      * @deprecated {@link #release()} is idempotent, and so is safe to call multiple times
      */
     @Deprecated
-    public boolean isClosed() {
-        return false;
-    }
+    boolean isClosed();
 
     @Override
-    public Iterator<T> iterator() {
-        return null;
-    }
+    Iterator<T> iterator();
 
     /**
      * Releases resources used by the buffer. This method is idempotent.
      */
     @Override
-    public void release() {
-
-    }
+    void release();
 
     /**
      * In order to use this one should correctly override setDataRow(int) in his DataBufferRef
      * implementation. Be careful: there will be single DataBufferRef while iterating.
      * If you are not sure - DO NOT USE this iterator.
      */
-    public Iterator<T> singleRefIterator() {
-        return null;
-    }
+    Iterator<T> singleRefIterator();
 }

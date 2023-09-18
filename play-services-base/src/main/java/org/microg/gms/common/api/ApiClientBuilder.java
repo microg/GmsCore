@@ -22,5 +22,5 @@ import android.os.Looper;
 import com.google.android.gms.common.api.Api;
 
 public interface ApiClientBuilder<O extends Api.ApiOptions> {
-    ApiClient build(O options, Context context, Looper looper, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener);
+    Api.Client build(O options, Context context, Looper looper, ApiClientSettings clientSettings, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener);
 }

@@ -56,11 +56,6 @@
     <string name="service_name_mcs">Cloud Messaging</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
-    <string name="service_status_disabled">Вимкнуто</string>
-    <string name="service_status_enabled">Увімкнуто</string>
-    <string name="service_status_automatic">Автоматично</string>
-    <string name="service_status_manual">Вручну</string>
-
     <string name="games_title">Ігри Google Play</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажає використовувати Play ігри</string>
     <string name="games_info_content">Для використання можливостей Play Games, необхідно встановити додаток Google Play Games. Додаток може працювати і без нього, але можливі проблеми під час роботи.</string>

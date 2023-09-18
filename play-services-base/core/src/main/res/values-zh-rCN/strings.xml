@@ -8,4 +8,11 @@
     <string name="list_no_item_none">无</string>
     <string name="list_item_see_all">全部显示</string>
     <string name="open_app">打开</string>
+
+    <string name="service_status_disabled">已禁用</string>
+    <string name="service_status_enabled">已启用</string>
+    <string name="service_status_automatic">自动</string>
+    <string name="service_status_manual">手动</string>
+    <string name="service_status_enabled_short">开</string>
+    <string name="service_status_disabled_short">关</string>
 </resources>

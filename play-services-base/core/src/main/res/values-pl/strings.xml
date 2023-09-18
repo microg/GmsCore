@@ -8,4 +8,9 @@
     <string name="menu_advanced">Zaawansowane</string>
 
     <string name="list_no_item_none">Brak</string>
+
+    <string name="service_status_disabled">Nieaktywny</string>
+    <string name="service_status_enabled">Aktywny</string>
+    <string name="service_status_automatic">Automatyczny</string>
+    <string name="service_status_manual">Ręczny</string>
 </resources>
