@@ -33,7 +33,7 @@ public class SignatureService extends Service {
     public void onCreate() {
         super.onCreate();
         this.openHelper = new AppListDatabaseOpenHelper(this);
-        this.database = openHelper.getReadableDatabase();
+        this.database = openHelper.getWritableDatabase();
         this.start = System.currentTimeMillis();
     }
 
