@@ -6,13 +6,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def hasModule(String name, boolean enabledByDefault) {
-    return localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
-}
-
 configurations {
     mapboxRuntimeOnly
     vtmRuntimeOnly
+    if (hasModule("hms", true)) hmsRuntimeOnly
     defaultRuntimeOnly
 }
 
@@ -69,6 +66,7 @@ dependencies {
     defaultRuntimeOnly project(':play-services-location-core-provider')
 
     if (hasModule("nearby", true)) runtimeOnly project(':play-services-nearby-core-package')
+    if (hasModule("hms", false)) hmsRuntimeOnly project(':play-services-maps-core-hms')
 
     // AndroidX UI
     implementation "androidx.multidex:multidex:$multidexVersion"
@@ -144,6 +142,13 @@ android {
     productFlavors {
         "default" {
             dimension 'target'
+        }
+        "huawei" {
+            dimension 'target'
+            versionNameSuffix "-hw"
+        }
+        "hms" {
+            dimension 'maps'
         }
         "mapbox" {
             dimension 'maps'

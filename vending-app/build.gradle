@@ -1,0 +1,47 @@
+/*
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.android.vending"
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName vendingAppVersionName
+        versionCode vendingAppVersionCode
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    flavorDimensions = ['target']
+    productFlavors {
+        "default" {
+            dimension 'target'
+        }
+        "huawei" {
+            dimension 'target'
+            versionNameSuffix "-hw"
+        }
+    }
+
+    buildFeatures {
+        aidl = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(':fake-signature')
+}
+
+if (file('user.gradle').exists()) {
+    apply from: 'user.gradle'
+}

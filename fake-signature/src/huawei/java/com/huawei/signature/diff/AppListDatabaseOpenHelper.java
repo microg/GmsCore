@@ -42,7 +42,9 @@ public class AppListDatabaseOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        initData(db);
+        if (!db.isReadOnly()) {
+            initData(db);
+        }
     }
 
     private void initData(SQLiteDatabase db) {
@@ -52,10 +54,10 @@ public class AppListDatabaseOpenHelper extends SQLiteOpenHelper {
             return;
         }
         for (String app : wantFakeApps) {
-            db.insertWithOnConflict(TABLE_APPLIST, null, generateValues(app, true), SQLiteDatabase.CONFLICT_IGNORE);
+            db.insertWithOnConflict(TABLE_APPLIST, null, generateValues(app, true), SQLiteDatabase.CONFLICT_REPLACE);
         }
         for (String app : neverFakeApps) {
-            db.insertWithOnConflict(TABLE_APPLIST, null, generateValues(app, false), SQLiteDatabase.CONFLICT_IGNORE);
+            db.insertWithOnConflict(TABLE_APPLIST, null, generateValues(app, false), SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
 

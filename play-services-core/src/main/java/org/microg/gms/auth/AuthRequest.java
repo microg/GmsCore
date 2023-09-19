@@ -125,7 +125,9 @@ public class AuthRequest extends HttpFormClient.Request {
     public AuthRequest fromContext(Context context) {
         build(context);
         locale(Utils.getLocale(context));
-        androidIdHex = Long.toHexString(LastCheckinInfo.read(context).getAndroidId());
+        if (AuthPrefs.shouldIncludeAndroidId(context)) {
+            androidIdHex = Long.toHexString(LastCheckinInfo.read(context).getAndroidId());
+        }
         return this;
     }
 
