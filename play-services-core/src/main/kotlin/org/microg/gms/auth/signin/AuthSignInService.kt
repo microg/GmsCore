@@ -103,6 +103,8 @@ class AuthSignInServiceImpl(
         Log.d(TAG, "$packageName:signOut($options)")
         lifecycleScope.launchWhenStarted {
             try {
+                val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
+                if (account != null) performSignOut(context, packageName, options, account)
                 SignInConfigurationService.setDefaultAccount(context, packageName, null)
                 runCatching { callbacks.onSignOut(Status.SUCCESS) }
             } catch (e: Exception) {

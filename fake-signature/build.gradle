@@ -14,6 +14,16 @@ android {
         targetSdk androidTargetSdk
     }
 
+    flavorDimensions = ['target']
+    productFlavors {
+        "default" {
+            dimension 'target'
+        }
+        "huawei" {
+            dimension 'target'
+        }
+    }
+
     buildFeatures {
         aidl = true
     }

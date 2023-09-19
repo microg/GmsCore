@@ -4,8 +4,21 @@ def sublude(name) {
   project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
 }
 
+def localProperties = new Properties()
+try {
+  var stream = new File(rootDir, 'local.properties').newDataInputStream()
+  localProperties.load(stream)
+  stream.close()
+} catch (ignored) {
+  // Ignore
+}
+def hasModule = (String name, boolean enabledByDefault) -> {
+  return localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
+}
+
 include ':fake-signature'
 include ':safe-parcel-processor'
+include ':vending-app'
 
 include ':play-services-ads'
 include ':play-services-ads-base'
@@ -75,11 +88,12 @@ sublude ':play-services-location:core'
 sublude ':play-services-location:core:base'
 sublude ':play-services-location:core:provider'
 sublude ':play-services-location:core:system-api'
+if (hasModule("hms", false)) sublude ':play-services-maps:core:hms'
 sublude ':play-services-maps:core:mapbox'
 sublude ':play-services-maps:core:vtm'
 sublude ':play-services-maps:core:vtm:microg-theme'
-sublude ':play-services-nearby:core'
-sublude ':play-services-nearby:core:package'
+if (hasModule("nearby", true)) sublude ':play-services-nearby:core'
+if (hasModule("nearby", true)) sublude ':play-services-nearby:core:package'
 sublude ':play-services-oss-licenses:core'
 sublude ':play-services-pay:core'
 sublude ':play-services-safetynet:core'

@@ -19,7 +19,7 @@ package org.microg.gms.common;
 public enum GmsService {
     UNKNOWN(-2),
     ANY(-1),
-    GAMES(1, "com.google.android.gms.games.service.START"),
+    GAMES(1, "com.google.android.gms.games.service.START", "com.google.android.gms.games.internal.connect.service.START"),
     PLUS(2, "com.google.android.gms.plus.service.START", "com.google.android.gms.plus.service.internal.START"),
     PANORAMA(3, "com.google.android.gms.panorama.service.START"),
     WALLET(4, "com.google.android.gms.wallet.service.BIND"),
