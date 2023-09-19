@@ -481,6 +481,28 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name="org.microg.gms.games.GamesService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.games.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.games.GamesConnectService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.games.internal.connect.service.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="org.microg.gms.games.GamesConfigurationService"
+            android:exported="false" />
+
         <!-- Chimera -->
         <provider
             android:name="org.microg.gms.chimera.ServiceProvider"
