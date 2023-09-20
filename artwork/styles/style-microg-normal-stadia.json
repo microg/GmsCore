@@ -3400,6 +3400,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
@@ -3722,6 +3723,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
@@ -4044,6 +4046,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
@@ -4387,6 +4390,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
