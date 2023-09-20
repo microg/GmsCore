@@ -16,7 +16,7 @@ import android.util.Log;
 import java.util.List;
 
 public class InitProvider extends ContentProvider {
-    private static final String TAG = InitProvider.class.getSimpleName();
+    private static final String TAG = "InitProvider";
 
     @Override
     public boolean onCreate() {

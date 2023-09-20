@@ -9,14 +9,21 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * This is to make sure the process is initialized at boot.
  */
 public class InitReceiver extends BroadcastReceiver {
+    private static final String TAG = "InitReceiver";
+
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
-        // We don't need to do anything, the process is already started.
+        Log.d(TAG, "onReceive");
+        try {
+            context.startService(new Intent(context, SignatureService.class));
+        } catch (Exception ignored) {
+        }
     }
 }
