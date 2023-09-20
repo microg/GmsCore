@@ -752,7 +752,7 @@
                         1
                     ],
                     "hsl(0, 24%, 48%)",
-                    "#787a7b"
+                    "hsl(200, 0%, 80%)"
                 ]
             }
         },
@@ -805,7 +805,7 @@
                         1
                     ],
                     "hsl(0, 24%, 48%)",
-                    "#787a7b"
+                    "hsl(200, 0%, 80%)"
                 ],
                 "line-dasharray": [
                     1,
@@ -2543,7 +2543,7 @@
                         "pitch",
                         "cemetery"
                     ],
-                    "hsl(117, 53%, 31%)",
+                    "hsl(117, 53%, 65%)",
                     [
                         "bank",
                         "atm",
@@ -2551,7 +2551,7 @@
                         "toilets",
                         "garages"
                     ],
-                    "#737b9b",
+                    "hsl(228, 17%, 65%)",
                     [
                         "bar",
                         "cafe",
@@ -2560,7 +2560,7 @@
                         "restaurant",
                         "ice_cream"
                     ],
-                    "#c77d57",
+                    "hsl(20, 50%, 65%)",
                     [
                         "museum",
                         "theatre",
@@ -2572,12 +2572,12 @@
                         "music_venue",
                         "monument"
                     ],
-                    "hsl(186, 78%, 44%)",
+                    "hsl(186, 78%, 65%)",
                     [
                         "hospital",
                         "doctors"
                     ],
-                    "#a47172",
+                    "hsl(359, 22%, 65%)",
                     [
                         "match",
                         [
@@ -2593,8 +2593,8 @@
                             "clothing_store",
                             "shop"
                         ],
-                        "hsl(213, 40%, 48%)",
-                        "#67747b"
+                        "hsl(213, 40%, 65%)",
+                        "hsl(201, 9%, 80%)"
                     ]
                 ],
                 "text-halo-color": "#000000",
@@ -2866,7 +2866,7 @@
                         "pitch",
                         "cemetery"
                     ],
-                    "hsl(117, 53%, 31%)",
+                    "hsl(117, 53%, 65%)",
                     [
                         "bank",
                         "atm",
@@ -2874,7 +2874,7 @@
                         "toilets",
                         "garages"
                     ],
-                    "#737b9b",
+                    "hsl(228, 17%, 65%)",
                     [
                         "bar",
                         "cafe",
@@ -2883,7 +2883,7 @@
                         "restaurant",
                         "ice_cream"
                     ],
-                    "#c77d57",
+                    "hsl(20, 50%, 65%)",
                     [
                         "museum",
                         "theatre",
@@ -2895,12 +2895,12 @@
                         "music_venue",
                         "monument"
                     ],
-                    "hsl(186, 78%, 44%)",
+                    "hsl(186, 78%, 65%)",
                     [
                         "hospital",
                         "doctors"
                     ],
-                    "#a47172",
+                    "hsl(359, 22%, 65%)",
                     [
                         "match",
                         [
@@ -2916,8 +2916,8 @@
                             "clothing_store",
                             "shop"
                         ],
-                        "hsl(213, 40%, 48%)",
-                        "#67747b"
+                        "hsl(213, 40%, 65%)",
+                        "hsl(201, 9%, 80%)"
                     ]
                 ],
                 "text-halo-color": "#000000",
@@ -3210,7 +3210,7 @@
                         "pitch",
                         "cemetery"
                     ],
-                    "hsl(117, 53%, 31%)",
+                    "hsl(117, 53%, 65%)",
                     [
                         "bank",
                         "atm",
@@ -3218,7 +3218,7 @@
                         "toilets",
                         "garages"
                     ],
-                    "#737b9b",
+                    "hsl(228, 17%, 65%)",
                     [
                         "bar",
                         "cafe",
@@ -3227,7 +3227,7 @@
                         "restaurant",
                         "ice_cream"
                     ],
-                    "#c77d57",
+                    "hsl(20, 50%, 65%)",
                     [
                         "museum",
                         "theatre",
@@ -3239,12 +3239,12 @@
                         "music_venue",
                         "monument"
                     ],
-                    "hsl(186, 78%, 44%)",
+                    "hsl(186, 78%, 65%)",
                     [
                         "hospital",
                         "doctors"
                     ],
-                    "#a47172",
+                    "hsl(359, 22%, 65%)",
                     [
                         "match",
                         [
@@ -3260,8 +3260,8 @@
                             "clothing_store",
                             "shop"
                         ],
-                        "hsl(213, 40%, 48%)",
-                        "#67747b"
+                        "hsl(213, 40%, 65%)",
+                        "hsl(201, 9%, 80%)"
                     ]
                 ],
                 "text-halo-color": "#000000",
@@ -3554,7 +3554,7 @@
                         "pitch",
                         "cemetery"
                     ],
-                    "hsl(117, 53%, 31%)",
+                    "hsl(117, 53%, 65%)",
                     [
                         "bank",
                         "atm",
@@ -3562,7 +3562,7 @@
                         "toilets",
                         "garages"
                     ],
-                    "#737b9b",
+                    "hsl(228, 17%, 65%)",
                     [
                         "bar",
                         "cafe",
@@ -3571,7 +3571,7 @@
                         "restaurant",
                         "ice_cream"
                     ],
-                    "#c77d57",
+                    "hsl(20, 50%, 65%)",
                     [
                         "museum",
                         "theatre",
@@ -3583,12 +3583,12 @@
                         "music_venue",
                         "monument"
                     ],
-                    "hsl(186, 78%, 44%)",
+                    "hsl(186, 78%, 65%)",
                     [
                         "hospital",
                         "doctors"
                     ],
-                    "#a47172",
+                    "hsl(359, 22%, 65%)",
                     [
                         "match",
                         [
@@ -3604,8 +3604,8 @@
                             "clothing_store",
                             "shop"
                         ],
-                        "hsl(213, 40%, 48%)",
-                        "#67747b"
+                        "hsl(213, 40%, 65%)",
+                        "hsl(201, 9%, 80%)"
                     ]
                 ],
                 "text-halo-color": "#000000",
