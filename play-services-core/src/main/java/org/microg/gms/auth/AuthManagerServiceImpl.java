@@ -155,6 +155,8 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
                 i.putExtra(KEY_ACCOUNT_TYPE, authManager.getAccountType());
                 i.putExtra(KEY_ACCOUNT_NAME, account.name);
                 i.putExtra(KEY_AUTHTOKEN, scope);
+                i.putExtra(KEY_CALLER_UID, getCallingUid());
+                i.putExtra(KEY_CALLER_PID, getCallingPid());
                 try {
                     if (res.consentDataBase64 != null)
                         i.putExtra(EXTRA_CONSENT_DATA, Base64.decode(res.consentDataBase64, Base64.URL_SAFE));

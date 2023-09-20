@@ -7,6 +7,7 @@
     <string-array name="signature_want_fake">
         <item>com.google.android.gms</item>
         <item>com.android.vending</item>
+        <item>com.spotify.music</item>
     </string-array>
     <string-array name="signature_never_fake">
         <item>com.truecaller</item>
