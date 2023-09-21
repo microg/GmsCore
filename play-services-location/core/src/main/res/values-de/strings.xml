@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prefcat_location_cell_title">Funkzellen-basierte Ortung</string>
+    <string name="service_name_location">Standort</string>
+    <string name="prefcat_location_apps_title">Neueste Standortzugriffe</string>
+    <string name="prefcat_location_wifi_title">WLAN-basierte Ortung</string>
+    <string name="prefcat_geocoder_title">Adressauflösung</string>
+</resources>
