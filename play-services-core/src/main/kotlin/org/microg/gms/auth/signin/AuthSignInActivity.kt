@@ -90,13 +90,15 @@ class AuthSignInActivity : AppCompatActivity() {
     }
 
     private fun getDisplayName(account: Account): String? {
-        val cursor = DatabaseHelper(this).getOwner(account.name)
+        val databaseHelper = DatabaseHelper(this)
+        val cursor = databaseHelper.getOwner(account.name)
         return try {
             if (cursor.moveToNext()) {
                 cursor.getColumnIndex("display_name").takeIf { it >= 0 }?.let { cursor.getString(it) }.takeIf { !it.isNullOrBlank() }
             } else null
         } finally {
             cursor.close()
+            databaseHelper.close()
         }
     }
 

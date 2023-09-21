@@ -89,7 +89,8 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     val obfuscatedIdentifier: String = MessageDigest.getInstance("MD5").digest("$googleUserId:$packageName".encodeToByteArray()).toHexString().uppercase()
     val grantedScopes = authResponse.grantedScopes?.split(" ").orEmpty().map { Scope(it) }.toSet()
     val (givenName, familyName, displayName, photoUrl) = if (includeProfile) {
-        val cursor = DatabaseHelper(context).getOwner(account.name)
+        val databaseHelper = DatabaseHelper(context)
+        val cursor = databaseHelper.getOwner(account.name)
         try {
             if (cursor.moveToNext()) {
                 listOf(
@@ -101,6 +102,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
             } else listOf(null, null, null, null)
         } finally {
             cursor.close()
+            databaseHelper.close()
         }
     } else listOf(null, null, null, null)
     SignInConfigurationService.setDefaultAccount(context, packageName, account)
