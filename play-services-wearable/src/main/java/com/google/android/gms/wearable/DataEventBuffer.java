@@ -18,6 +18,7 @@ package com.google.android.gms.wearable;
 
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.data.AbstractDataBuffer;
 import com.google.android.gms.common.data.DataBuffer;
 import com.google.android.gms.common.data.DataHolder;
 
@@ -27,7 +28,7 @@ import org.microg.gms.common.PublicApi;
  * Data structure holding references to a set of events.
  */
 @PublicApi
-public class DataEventBuffer extends DataBuffer<DataEvent> implements Result {
+public class DataEventBuffer extends AbstractDataBuffer<DataEvent> implements Result {
     private Status status;
 
     @PublicApi(exclude = true)

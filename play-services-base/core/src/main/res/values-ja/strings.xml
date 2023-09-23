@@ -11,4 +11,11 @@
     <string name="list_item_see_all">全て表示</string>
 
     <string name="open_app">開く</string>
+
+    <string name="service_status_disabled">無効</string>
+    <string name="service_status_enabled">有効</string>
+    <string name="service_status_automatic">自動</string>
+    <string name="service_status_manual">手動</string>
+    <string name="service_status_enabled_short">On</string>
+    <string name="service_status_disabled_short">Off</string>
 </resources>

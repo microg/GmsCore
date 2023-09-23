@@ -1140,7 +1140,7 @@
                         "class"
                     ],
                     [
-                        "track"
+                        "rail"
                     ],
                     true,
                     false
@@ -3230,6 +3230,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
@@ -3250,27 +3251,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
@@ -3343,7 +3354,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -3392,6 +3405,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -3465,7 +3479,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -3507,6 +3523,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",
@@ -3536,6 +3553,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
@@ -3556,27 +3574,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
@@ -3649,7 +3677,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -3698,6 +3728,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -3771,7 +3802,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -3813,6 +3846,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",
@@ -3842,6 +3876,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
@@ -3862,27 +3897,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
@@ -3954,7 +3999,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -4003,6 +4050,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -4098,7 +4146,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -4140,6 +4190,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",
@@ -4169,6 +4220,7 @@
             },
             "source": "openmaptiles",
             "source-layer": "poi",
+            "minzoom": 14,
             "filter": [
                 "all",
                 [
@@ -4189,27 +4241,37 @@
                     true
                 ],
                 [
-                    "!=",
+                    "any",
                     [
-                        "match",
+                        "!=",
                         [
-                            "get",
-                            "class"
+                            "match",
+                            [
+                                "get",
+                                "class"
+                            ],
+                            [
+                                "park",
+                                "cemetery"
+                            ],
+                            true,
+                            false
                         ],
                         [
-                            "park",
-                            "cemetery"
-                        ],
-                        true,
-                        false
+                            "<=",
+                            [
+                                "get",
+                                "rank"
+                            ],
+                            250
+                        ]
                     ],
                     [
-                        "<=",
+                        ">=",
                         [
-                            "get",
-                            "rank"
+                            "zoom"
                         ],
-                        250
+                        16
                     ]
                 ]
             ],
@@ -4281,7 +4343,9 @@
                     "poi_generic_green",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "poi_generic_purple",
@@ -4330,6 +4394,7 @@
                             ]
                         ],
                         [
+                            "clothing_store",
                             "shop"
                         ],
                         "poi_generic_blue",
@@ -4425,7 +4490,9 @@
                     "hsl(117, 53%, 31%)",
                     [
                         "bank",
+                        "atm",
                         "parking",
+                        "toilets",
                         "garages"
                     ],
                     "#737b9b",
@@ -4467,6 +4534,7 @@
                         "#df7db1",
                         [
                             "grocery",
+                            "clothing_store",
                             "shop"
                         ],
                         "hsl(213, 40%, 48%)",

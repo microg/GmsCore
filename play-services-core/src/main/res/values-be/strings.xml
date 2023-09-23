@@ -48,13 +48,6 @@
     <string name="service_name_mcs">Воблачны абмен паведамленнямі</string>
     <string name="service_name_snet">Google SafetyNet</string>
 
-    <string name="service_status_disabled">Выключана</string>
-    <string name="service_status_enabled">Уключана</string>
-    <string name="service_status_automatic">Аўтаматычна</string>
-    <string name="service_status_manual">Уручную</string>
-    <string name="service_status_enabled_short">Укл.</string>
-    <string name="service_status_disabled_short">Выкл.</string>
-
     <string name="games_title">Google Play Гульні</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> хоча выкарыстоўваць Play Гульні</string>
     <string name="games_info_content">Каб выкарыстоўваць магчымасці Play Гульні, трэба ўсталяваць прыкладанне Google Play Гульні. Прыкладанне можа працаваць і без яго, але магчымыя праблемы у яго рабоце.</string>

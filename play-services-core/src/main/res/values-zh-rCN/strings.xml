@@ -14,12 +14,6 @@
     <string name="auth_notification_title">需要认证</string>
     <string name="perm_c2dm_send_label">向其他应用发送 C2DM 消息</string>
     <string name="service_name_mcs">Google 云端消息推送</string>
-    <string name="service_status_disabled">已禁用</string>
-    <string name="service_status_enabled">已启用</string>
-    <string name="service_status_automatic">自动</string>
-    <string name="service_status_manual">手动</string>
-    <string name="service_status_enabled_short">开</string>
-    <string name="service_status_disabled_short">关</string>
     <string name="games_title">Google Play 游戏</string>
     <string name="games_info_content">要使用 Play 游戏，您需要安装“Google Play 游戏”应用。您的应用在 Play 游戏未安装时也许能继续运行，但也可能发生异常。</string>
     <string name="pick_place_title">选择一个地点</string>

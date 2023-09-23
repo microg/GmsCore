@@ -6,12 +6,15 @@
 package com.google.android.gms.common.internal;
 
 import android.os.Bundle;
-
+import android.os.Parcel;
+import androidx.annotation.NonNull;
 import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
-import org.microg.safeparcel.AutoSafeParcelable;
-
-public class ConnectionInfo extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class ConnectionInfo extends AbstractSafeParcelable {
     @Field(1)
     public Bundle params;
     @Field(2)
@@ -19,5 +22,10 @@ public class ConnectionInfo extends AutoSafeParcelable {
     @Field(3)
     public int unknown3;
 
-    public static final Creator<ConnectionInfo> CREATOR = new AutoSafeParcelable.AutoCreator<>(ConnectionInfo.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<ConnectionInfo> CREATOR = findCreator(ConnectionInfo.class);
 }

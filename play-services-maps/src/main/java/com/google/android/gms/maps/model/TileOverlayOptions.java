@@ -71,6 +71,19 @@ public class TileOverlayOptions extends AutoSafeParcelable {
      * @return the {@link TileProvider} of the tile overlay.
      */
     public TileProvider getTileProvider() {
+        if (tileProvider == null && tileProviderBinder != null) {
+            ITileProviderDelegate delegate = ITileProviderDelegate.Stub.asInterface(tileProviderBinder);
+            this.tileProvider = new TileProvider() {
+                @Override
+                public Tile getTile(int x, int y, int zoom) {
+                    try {
+                        return delegate.getTile(x, y, zoom);
+                    } catch (RemoteException e) {
+                        return null;
+                    }
+                }
+            };
+        }
         return tileProvider;
     }
 

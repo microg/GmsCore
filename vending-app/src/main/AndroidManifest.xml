@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2014 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <permission
+        android:name="com.android.vending.CHECK_LICENSE"
+        android:protectionLevel="normal" />
+
+    <application
+        android:forceQueryable="true"
+        android:icon="@mipmap/ic_app"
+        android:roundIcon="@mipmap/ic_app_round"
+        android:label="@string/app_name">
+
+        <activity
+            android:name=".GrantFakeSignaturePermissionActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Dialog.NoActionBar" />
+
+        <service
+            android:name="com.android.vending.billing.InAppBillingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.android.vending.licensing.LicensingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.licensing.ILicensingService" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.google.android.finsky.externalreferrer.GetInstallReferrerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.finsky.BIND_GET_INSTALL_REFERRER_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.vending.ui.MainActivity"
+            android:theme="@style/Theme.Dialog.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.INFO" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

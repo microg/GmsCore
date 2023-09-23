@@ -19,7 +19,7 @@ package org.microg.gms.common;
 public enum GmsService {
     UNKNOWN(-2),
     ANY(-1),
-    GAMES(1, "com.google.android.gms.games.service.START"),
+    GAMES(1, "com.google.android.gms.games.service.START", "com.google.android.gms.games.internal.connect.service.START"),
     PLUS(2, "com.google.android.gms.plus.service.START", "com.google.android.gms.plus.service.internal.START"),
     PANORAMA(3, "com.google.android.gms.panorama.service.START"),
     WALLET(4, "com.google.android.gms.wallet.service.BIND"),
@@ -165,8 +165,10 @@ public enum GmsService {
     SECOND_DEVICE_AUTH(275, "com.google.android.gms.setup.auth.SecondDeviceAuth.START"),
     LOCATION_SHARING_REPORTER(277, "com.google.android.gms.locationsharingreporter.service.START"),
     OCR(279, "com.google.android.gms.ocr.service.START"),
+    POTOKENS(285, "com.google.android.gms.potokens.service.START"),
     OCR_INTERNAL(281, "com.google.android.gms.ocr.service.internal.START"),
-    IN_APP_REACH(315, "com.google.android.gms.inappreach.service.START")
+    IN_APP_REACH(315, "com.google.android.gms.inappreach.service.START"),
+    APP_ERRORS(334, "com.google.android.gms.apperrors.service.START_APP_ERROR"),
     ;
 
     public int SERVICE_ID;

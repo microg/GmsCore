@@ -14,7 +14,7 @@ import org.microg.gms.common.PublicApi;
  * Algorithm names and COSE identifiers for RSA (public) keys.
  */
 @PublicApi
-public enum RSAAlgorithm implements Algorithm{
+public enum RSAAlgorithm implements Algorithm {
     /**
      * RSASSA-PKCS1-v1_5 w/ SHA-256
      */
@@ -29,6 +29,7 @@ public enum RSAAlgorithm implements Algorithm{
     RS512(-259),
     /**
      * The legacy value for "RSASSA-PKCS1-v1_5 w/ SHA-1"
+     *
      * @deprecated please use {@link #RS1} instead.
      */
     @Deprecated

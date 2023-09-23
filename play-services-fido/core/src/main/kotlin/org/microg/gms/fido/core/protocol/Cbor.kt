@@ -4,12 +4,15 @@
  */
 package org.microg.gms.fido.core.protocol
 
+import android.util.Log
 import com.google.android.gms.fido.common.Transport
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialDescriptor
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialParameters
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRpEntity
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
 import com.upokecenter.cbor.CBORObject
+
+private const val TAG = "FidoCbor"
 
 fun CBORObject.AsStringSequence(): Iterable<String> = Iterable {
     object : Iterator<String> {
@@ -34,22 +37,22 @@ fun Boolean.encodeAsCbor() = CBORObject.FromObject(this)
 
 fun PublicKeyCredentialRpEntity.encodeAsCbor() = CBORObject.NewMap().apply {
     set("id", id.encodeAsCbor())
-    if (name != null) set("name", name.encodeAsCbor())
-    if (icon != null) set("icon", icon.encodeAsCbor())
+    if (!name.isNullOrBlank()) set("name", name.encodeAsCbor())
+    if (!icon.isNullOrBlank()) set("icon", icon!!.encodeAsCbor())
 }
 
 fun PublicKeyCredentialUserEntity.encodeAsCbor() = CBORObject.NewMap().apply {
     set("id", id.encodeAsCbor())
-    if (name != null) set("name", name.encodeAsCbor())
-    if (icon != null) set("icon", icon.encodeAsCbor())
-    if (displayName != null) set("displayName", displayName.encodeAsCbor())
+    if (!name.isNullOrBlank()) set("name", name.encodeAsCbor())
+    if (!icon.isNullOrBlank()) set("icon", icon!!.encodeAsCbor())
+    if (!displayName.isNullOrBlank()) set("displayName", displayName.encodeAsCbor())
 }
 
 fun CBORObject.decodeAsPublicKeyCredentialUserEntity() = PublicKeyCredentialUserEntity(
-    get("id")?.GetByteString(),
-    get("name")?.AsString(),
+    get("id")?.GetByteString() ?: ByteArray(0).also { Log.w(TAG, "id was not present") },
+    get("name")?.AsString() ?: "".also { Log.w(TAG, "name was not present") },
     get("icon")?.AsString(),
-    get("displayName")?.AsString()
+    get("displayName")?.AsString() ?: "".also { Log.w(TAG, "displayName was not present") }
 )
 
 fun PublicKeyCredentialParameters.encodeAsCbor() = CBORObject.NewMap().apply {
@@ -57,15 +60,20 @@ fun PublicKeyCredentialParameters.encodeAsCbor() = CBORObject.NewMap().apply {
     set("type", typeAsString.encodeAsCbor())
 }
 
+fun CBORObject.decodeAsPublicKeyCredentialParameters() = PublicKeyCredentialParameters(
+    get("type").AsString(),
+    get("alg").AsInt32Value()
+)
+
 fun PublicKeyCredentialDescriptor.encodeAsCbor() = CBORObject.NewMap().apply {
     set("type", typeAsString.encodeAsCbor())
     set("id", id.encodeAsCbor())
-    set("transports", transports.encodeAsCbor { it.toString().encodeAsCbor() })
+    set("transports", transports.orEmpty().encodeAsCbor { it.toString().encodeAsCbor() })
 }
 
 fun CBORObject.decodeAsPublicKeyCredentialDescriptor() = PublicKeyCredentialDescriptor(
-    get("type")?.AsString(),
-    get("id")?.GetByteString(),
+    get("type")?.AsString() ?: "".also { Log.w(TAG, "type was not present") },
+    get("id")?.GetByteString() ?: ByteArray(0).also { Log.w(TAG, "id was not present") },
     get("transports")?.AsStringSequence()?.map { Transport.fromString(it) }
 )
 

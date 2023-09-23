@@ -5,9 +5,10 @@
 
 package org.microg.gms.common.api;
 
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
-public interface VoidReturningGoogleApiCall<A extends ApiClient> extends PendingGoogleApiCall<Void, A>{
+public interface VoidReturningGoogleApiCall<A extends Api.Client> extends PendingGoogleApiCall<Void, A>{
     void execute(A client) throws Exception;
 
     @Override

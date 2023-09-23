@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2014 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_installed">microG Companion cannot be used standalone. Opened microG Services settings instead.</string>
+    <string name="toast_not_installed">microG Companion cannot be used standalone. Please install microG Services to use microG.</string>
+</resources>

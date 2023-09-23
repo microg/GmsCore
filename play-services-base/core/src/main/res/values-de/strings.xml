@@ -15,4 +15,11 @@
     <string name="list_item_see_all">Alle anzeigen</string>
 
     <string name="open_app">Öffnen</string>
+
+    <string name="service_status_disabled">Deaktiviert</string>
+    <string name="service_status_enabled">Aktiviert</string>
+    <string name="service_status_automatic">Automatisch</string>
+    <string name="service_status_manual">Manuell</string>
+    <string name="service_status_enabled_short">Ein</string>
+    <string name="service_status_disabled_short">Aus</string>
 </resources>

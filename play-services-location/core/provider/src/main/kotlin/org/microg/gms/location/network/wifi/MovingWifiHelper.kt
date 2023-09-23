@@ -218,12 +218,10 @@ class MovingWifiHelper(private val context: Context) {
         val location = Location(ssid)
         return when (ssid) {
             "WIFIonICE" -> parseWifiOnIce(location, data)
-            "FlixBus" -> parseFlixbus(location, data)
-            "FlixBus Wi-Fi" -> parseFlixbus(location, data)
-            "FlixTrain Wi-Fi" -> parseFlixbus(location, data)
-            "MAVSTART-WIFI" -> parsePassengera(location, data)
+            "FlixBus", "FlixBus Wi-Fi", "FlixTrain Wi-Fi" -> parseFlixbus(location, data)
+            "CDWiFi", "MAVSTART-WIFI" -> parsePassengera(location, data)
             "AegeanWiFi" -> parseDisplayUgo(location, data)
-            "Telekom_FlyNet" -> parsePanasonic(location, data)
+            "Cathay Pacific", "Telekom_FlyNet" -> parsePanasonic(location, data)
             "FlyNet" -> parseBoardConnect(location, data)
             else -> throw UnsupportedOperationException()
         }
@@ -243,6 +241,7 @@ class MovingWifiHelper(private val context: Context) {
             "Telekom_FlyNet" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
             "Cathay Pacific" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
             "FlyNet" to "https://ww2.lufthansa-flynet.com/map/api/flightData",
+            "CDWiFi" to "http://cdwifi.cz/portal/api/vehicle/realtime",
         )
     }
 }

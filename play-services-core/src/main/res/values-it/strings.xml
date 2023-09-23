@@ -51,13 +51,6 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="service_name_mcs">Messaggistica cloud</string>
     <string name="service_name_snet">SafetyNet</string>
 
-    <string name="service_status_disabled">Disabilitato</string>
-    <string name="service_status_enabled">Abilitato</string>
-    <string name="service_status_automatic">Automatico</string>
-    <string name="service_status_manual">Manuale</string>
-    <string name="service_status_enabled_short">Abilitato</string>
-    <string name="service_status_disabled_short">Disabilitato</string>
-
     <string name="games_title">Google Play Giochi</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare Play Giochi</string>
     <string name="games_info_content">Per usare Play Giochi è necessario installare l\'applicazione Google Play Giochi. L\'applicazione può continuare ad essere utilizzata senza Play Giochi, ma è possibile che funzioni in modo anomalo.</string>

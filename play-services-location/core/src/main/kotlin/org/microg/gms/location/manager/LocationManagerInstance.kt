@@ -12,6 +12,7 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.location.LocationManager.GPS_PROVIDER
 import android.location.LocationManager.NETWORK_PROVIDER
+import android.os.Binder
 import android.os.IBinder
 import android.os.Parcel
 import android.os.SystemClock
@@ -28,7 +29,9 @@ import com.google.android.gms.location.*
 import com.google.android.gms.location.internal.*
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REMOVE_UPDATES
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REQUEST_UPDATES
+import kotlinx.coroutines.*
 import org.microg.gms.common.NonCancelToken
+import org.microg.gms.location.hasNetworkLocationServiceBuiltIn
 import org.microg.gms.utils.warnOnTransactionIssues
 
 class LocationManagerInstance(
@@ -130,8 +133,61 @@ class LocationManagerInstance(
     override fun getCurrentLocationWithReceiver(request: CurrentLocationRequest, receiver: LocationReceiver): ICancelToken {
         Log.d(TAG, "getCurrentLocationWithReceiver by ${getClientIdentity().packageName}")
         checkHasAnyLocationPermission()
-        Log.d(TAG, "Not yet implemented: getCurrentLocationWithReceiver")
-        return NonCancelToken()
+        var returned = false
+        val callback = receiver.statusCallback
+        val clientIdentity = getClientIdentity()
+        val binderIdentity = Binder()
+        val job = lifecycleScope.launchWhenStarted {
+            try {
+                val scope = this
+                val callbackForRequest = object : ILocationCallback.Stub() {
+                    override fun onLocationResult(result: LocationResult?) {
+                        if (!returned) runCatching { callback.onLocationStatus(Status.SUCCESS, result?.lastLocation) }
+                        returned = true
+                        scope.cancel()
+                    }
+
+                    override fun onLocationAvailability(availability: LocationAvailability?) {
+                        // Ignore
+                    }
+
+                    override fun cancel() {
+                        if (!returned) runCatching { callback.onLocationStatus(Status.SUCCESS, null) }
+                        returned = true
+                        scope.cancel()
+                    }
+                }
+                val currentLocationRequest = LocationRequest.Builder(request.priority, 1000)
+                    .setGranularity(request.granularity)
+                    .setMaxUpdateAgeMillis(request.maxUpdateAgeMillis)
+                    .setDurationMillis(request.durationMillis)
+                    .setPriority(request.priority)
+                    .setWorkSource(request.workSource)
+                    .setThrottleBehavior(request.throttleBehavior)
+                    .build()
+                locationManager.addBinderRequest(clientIdentity, binderIdentity, callbackForRequest, currentLocationRequest)
+                awaitCancellation()
+            } catch (e: CancellationException) {
+                // Don't send result. Either this was cancelled from the CancelToken or because a location was retrieved.
+                // Both cases send the result themselves.
+            } catch (e: Exception) {
+                try {
+                    if (!returned) callback.onLocationStatus(Status(CommonStatusCodes.ERROR, e.message), null)
+                    returned = true
+                } catch (e2: Exception) {
+                    Log.w(TAG, "Failed", e)
+                }
+            } finally {
+                runCatching { locationManager.removeBinderRequest(binderIdentity) }
+            }
+        }
+        return object : ICancelToken.Stub() {
+            override fun cancel() {
+                if (!returned) runCatching { callback.onLocationStatus(Status.CANCELED, null) }
+                returned = true
+                job.cancel()
+            }
+        }
     }
 
     override fun getLastLocationWithReceiver(request: LastLocationRequest, receiver: LocationReceiver) {
@@ -158,7 +214,7 @@ class LocationManagerInstance(
         lifecycleScope.launchWhenStarted {
             val locationManager = context.getSystemService<android.location.LocationManager>()
             val gpsPresent = locationManager?.allProviders?.contains(GPS_PROVIDER) == true
-            val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true
+            val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true || context.hasNetworkLocationServiceBuiltIn()
             val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
                     context.packageManager.checkPermission(ACCESS_FINE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
             val networkUsable = networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&

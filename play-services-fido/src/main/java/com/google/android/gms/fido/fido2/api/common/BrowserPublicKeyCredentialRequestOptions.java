@@ -7,6 +7,11 @@ package com.google.android.gms.fido.fido2.api.common;
 
 import android.net.Uri;
 
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.utils.ToStringHelper;
@@ -17,49 +22,68 @@ import java.util.Arrays;
  * Parameters for a signature request from a Web Browser.
  */
 @PublicApi
+@SafeParcelable.Class
 public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOptions {
-    @Field(2)
+    @Field(value = 2, getterName = "getPublicKeyCredentialRequestOptions")
+    @NonNull
     private PublicKeyCredentialRequestOptions delegate;
-    @Field(3)
+    @Field(value = 3, getterName = "getOrigin")
+    @NonNull
     private Uri origin;
-    @Field(4)
+    @Field(value = 4, getterName = "getClientDataHash")
+    @Nullable
     private byte[] clientDataHash;
 
+    @Constructor
+    BrowserPublicKeyCredentialRequestOptions(@Param(2) @NonNull PublicKeyCredentialRequestOptions delegate, @Param(3) @NonNull Uri origin, @Param(4) @Nullable byte[] clientDataHash) {
+        this.delegate = delegate;
+        this.origin = origin;
+        this.clientDataHash = clientDataHash;
+    }
+
     @Override
+    @Nullable
     public AuthenticationExtensions getAuthenticationExtensions() {
         return delegate.getAuthenticationExtensions();
     }
 
     @Override
+    @NonNull
     public byte[] getChallenge() {
         return delegate.getChallenge();
     }
 
     @Override
+    @Nullable
     public byte[] getClientDataHash() {
         return clientDataHash;
     }
 
     @Override
+    @NonNull
     public Uri getOrigin() {
         return origin;
     }
 
+    @NonNull
     public PublicKeyCredentialRequestOptions getPublicKeyCredentialRequestOptions() {
         return delegate;
     }
 
     @Override
+    @Nullable
     public Integer getRequestId() {
         return delegate.getRequestId();
     }
 
     @Override
+    @Nullable
     public Double getTimeoutSeconds() {
         return delegate.getTimeoutSeconds();
     }
 
     @Override
+    @Nullable
     public TokenBinding getTokenBinding() {
         return delegate.getTokenBinding();
     }
@@ -82,6 +106,7 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
     }
 
     @Override
+    @NonNull
     public String toString() {
         return ToStringHelper.name("BrowserPublicKeyCredentialRequestOptions")
                 .value(delegate)
@@ -94,8 +119,11 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
      * Builder for {@link BrowserPublicKeyCredentialRequestOptions}.
      */
     public static class Builder {
+        @NonNull
         private PublicKeyCredentialRequestOptions delegate;
+        @NonNull
         private Uri origin;
+        @Nullable
         private byte[] clientDataHash;
 
         /**
@@ -115,7 +143,7 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
          *
          * @return
          */
-        public Builder setClientDataHash(byte[] clientDataHash) {
+        public Builder setClientDataHash(@NonNull byte[] clientDataHash) {
             this.clientDataHash = clientDataHash;
             return this;
         }
@@ -123,7 +151,7 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
         /**
          * Sets the origin on whose behalf the calling browser is requesting an authentication operation.
          */
-        public Builder setOrigin(Uri origin) {
+        public Builder setOrigin(@NonNull Uri origin) {
             this.origin = origin;
             return this;
         }
@@ -131,7 +159,7 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
         /**
          * Sets the parameters to dictate client behavior during this authentication session.
          */
-        public Builder setPublicKeyCredentialRequestOptions(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions) {
+        public Builder setPublicKeyCredentialRequestOptions(@NonNull PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions) {
             this.delegate = publicKeyCredentialRequestOptions;
             return this;
         }
@@ -139,12 +167,9 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
         /**
          * Builds the {@link BrowserPublicKeyCredentialRequestOptions} object.
          */
+        @NonNull
         public BrowserPublicKeyCredentialRequestOptions build() {
-            BrowserPublicKeyCredentialRequestOptions options = new BrowserPublicKeyCredentialRequestOptions();
-            options.delegate = delegate;
-            options.origin = origin;
-            options.clientDataHash = clientDataHash;
-            return options;
+            return new BrowserPublicKeyCredentialRequestOptions(delegate, origin, clientDataHash);
         }
     }
 
@@ -152,5 +177,10 @@ public class BrowserPublicKeyCredentialRequestOptions extends BrowserRequestOpti
         return SafeParcelableSerializer.deserializeFromBytes(serializedBytes, CREATOR);
     }
 
-    public static final Creator<BrowserPublicKeyCredentialRequestOptions> CREATOR = new AutoCreator<>(BrowserPublicKeyCredentialRequestOptions.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<BrowserPublicKeyCredentialRequestOptions> CREATOR = findCreator(BrowserPublicKeyCredentialRequestOptions.class);
 }

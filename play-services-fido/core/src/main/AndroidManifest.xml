@@ -28,6 +28,6 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:exported="false"
             android:process=":ui"
-            android:theme="@style/Theme.Fido.Translucent" />
+            android:theme="@style/Theme.Translucent" />
     </application>
 </manifest>

@@ -27,10 +27,9 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 
 import org.microg.gms.common.api.AbstractPendingResult;
-import org.microg.gms.common.api.ApiClient;
 import org.microg.gms.common.api.GoogleApiClientImpl;
 
-public class GmsConnector<C extends ApiClient, R extends Result> {
+public class GmsConnector<C extends Api.Client, R extends Result> {
     private static final String TAG = "GmsConnector";
 
     private final GoogleApiClientImpl apiClient;
@@ -43,7 +42,7 @@ public class GmsConnector<C extends ApiClient, R extends Result> {
         this.callback = callback;
     }
 
-    public static <C extends ApiClient, R extends Result> PendingResult<R> call(GoogleApiClient client, Api api, GmsConnector.Callback<C, R> callback) {
+    public static <C extends Api.Client, R extends Result> PendingResult<R> call(GoogleApiClient client, Api api, GmsConnector.Callback<C, R> callback) {
         return new GmsConnector<C, R>(client, api, callback).connect();
     }
 

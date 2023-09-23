@@ -23,6 +23,8 @@ dependencies {
     api "androidx.collection:collection:1.0.0"
     api "androidx.core:core:1.2.0"
     api "androidx.fragment:fragment:1.0.0"
+
+    annotationProcessor project(':safe-parcel-processor')
 }
 
 android {
@@ -32,6 +34,7 @@ android {
     buildToolsVersion "$androidBuildVersionTools"
 
     aidlPackagedList "com/google/android/gms/common/api/Status.aidl"
+    aidlPackagedList "com/google/android/gms/common/ConnectionResult.aidl"
     aidlPackagedList "com/google/android/gms/common/internal/IAccountAccessor.aidl"
     aidlPackagedList "com/google/android/gms/common/internal/ICancelToken.aidl"
     aidlPackagedList "com/google/android/gms/common/server/FavaDiagnosticsEntity.aidl"
@@ -47,6 +50,7 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "int", "VERSION_CODE", "$appVersionCode"
+        consumerProguardFile 'consumer-rules.pro'
     }
 
     compileOptions {

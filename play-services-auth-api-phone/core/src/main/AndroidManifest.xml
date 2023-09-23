@@ -20,7 +20,7 @@
             android:name="org.microg.gms.auth.phone.AskPermissionActivity"
             android:exported="false"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
+            android:theme="@style/Theme.Translucent" />
 
         <service
             android:name="org.microg.gms.auth.phone.SmsRetrieverService"

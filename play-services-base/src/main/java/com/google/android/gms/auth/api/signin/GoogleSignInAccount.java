@@ -13,8 +13,12 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.common.api.Scope;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.ArrayList;
@@ -61,11 +65,18 @@ public class GoogleSignInAccount extends AutoSafeParcelable {
     }
 
     @Hide
-    public GoogleSignInAccount(Account account, Set<Scope> grantedScopes) {
-        this.email = account.name;
-        this.obfuscatedIdentifier = account.name;
-        this.expirationTime = 0;
+    public GoogleSignInAccount(@Nullable String id, @Nullable String tokenId, @Nullable String email, @Nullable String displayName, @Nullable Uri photoUrl, String serverAuthCode, long expirationTime, String obfuscatedIdentifier, Set<Scope> grantedScopes, @Nullable String givenName, @Nullable String familyName) {
+        this.id = id;
+        this.tokenId = tokenId;
+        this.email = email;
+        this.displayName = displayName;
+        this.photoUrl = photoUrl;
+        this.serverAuthCode = serverAuthCode;
+        this.expirationTime = expirationTime;
+        this.obfuscatedIdentifier = obfuscatedIdentifier;
         this.grantedScopes = new ArrayList<>(grantedScopes);
+        this.givenName = givenName;
+        this.familyName = familyName;
     }
 
     /**
@@ -179,9 +190,92 @@ public class GoogleSignInAccount extends AutoSafeParcelable {
         return ((GoogleSignInAccount) obj).obfuscatedIdentifier.equals(obfuscatedIdentifier) && ((GoogleSignInAccount) obj).getGrantedScopes().equals(getGrantedScopes());
     }
 
+    @Hide
+    public String getObfuscatedIdentifier() {
+        return obfuscatedIdentifier;
+    }
+
+    private static final String JSON_ID = "id";
+    private static final String JSON_TOKEN_ID = "tokenId";
+    private static final String JSON_EMAIL = "email";
+    private static final String JSON_DISPLAY_NAME = "displayName";
+    private static final String JSON_GIVEN_NAME = "givenName";
+    private static final String JSON_FAMILY_NAME = "familyName";
+    private static final String JSON_PHOTO_URL = "photoUrl";
+    private static final String JSON_SERVER_AUTH_CODE = "serverAuthCode";
+    private static final String JSON_EXPIRATION_TIME = "expirationTime";
+    private static final String JSON_OBFUSCATED_IDENTIFIER = "obfuscatedIdentifier";
+    private static final String JSON_GRANTED_SCOPES = "grantedScopes";
+
+    @Hide
+    public static GoogleSignInAccount fromJson(@Nullable String jsonString) throws JSONException {
+        if (jsonString == null) return null;
+        JSONObject json = new JSONObject(jsonString);
+        GoogleSignInAccount account = new GoogleSignInAccount();
+        account.id = json.optString(JSON_ID);
+        account.tokenId = json.has(JSON_TOKEN_ID) ? json.optString(JSON_TOKEN_ID) : null;
+        account.email = json.has(JSON_EMAIL) ? json.optString(JSON_EMAIL) : null;
+        account.displayName = json.has(JSON_DISPLAY_NAME) ? json.optString(JSON_DISPLAY_NAME) : null;
+        account.givenName = json.has(JSON_GIVEN_NAME) ? json.optString(JSON_GIVEN_NAME) : null;
+        account.familyName = json.has(JSON_FAMILY_NAME) ? json.optString(JSON_FAMILY_NAME) : null;
+        account.photoUrl = json.has(JSON_PHOTO_URL) ? Uri.parse(json.optString(JSON_PHOTO_URL)) : null;
+        account.serverAuthCode = json.has(JSON_SERVER_AUTH_CODE) ? json.optString(JSON_SERVER_AUTH_CODE) : null;
+        account.expirationTime = Long.parseLong(json.getString(JSON_EXPIRATION_TIME));
+        account.obfuscatedIdentifier = json.getString(JSON_OBFUSCATED_IDENTIFIER);
+        account.grantedScopes = new ArrayList<>();
+        JSONArray jsonGrantedScopes = json.getJSONArray(JSON_GRANTED_SCOPES);
+        for (int i = 0; i < jsonGrantedScopes.length(); i++) {
+            account.grantedScopes.add(new Scope(jsonGrantedScopes.getString(i)));
+        }
+        return account;
+    }
+
+    @Hide
+    @NonNull
+    public String toJson() {
+        JSONObject json = new JSONObject();
+        try {
+            if (id != null) json.put(JSON_ID, id);
+            if (tokenId != null) json.put(JSON_TOKEN_ID, tokenId);
+            if (email != null) json.put(JSON_EMAIL, email);
+            if (displayName != null) json.put(JSON_DISPLAY_NAME, displayName);
+            if (givenName != null) json.put(JSON_GIVEN_NAME, givenName);
+            if (familyName != null) json.put(JSON_FAMILY_NAME, familyName);
+            if (photoUrl != null) json.put(JSON_PHOTO_URL, photoUrl.toString());
+            if (serverAuthCode != null) json.put(JSON_SERVER_AUTH_CODE, serverAuthCode);
+            json.put(JSON_EXPIRATION_TIME, expirationTime);
+            json.put(JSON_OBFUSCATED_IDENTIFIER, obfuscatedIdentifier);
+            JSONArray jsonGrantedScopes = new JSONArray();
+            for (Scope grantedScope : grantedScopes) {
+                jsonGrantedScopes.put(grantedScope.getScopeUri());
+            }
+            json.put(JSON_GRANTED_SCOPES, jsonGrantedScopes);
+            return json.toString();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public int hashCode() {
         return (obfuscatedIdentifier.hashCode() + 527) * 31 + getGrantedScopes().hashCode();
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("GoogleSignInAccount")
+                .field("id", id)
+                .field("tokenId", tokenId)
+                .field("email", email)
+                .field("displayName", displayName)
+                .field("givenName", givenName)
+                .field("familyName", familyName)
+                .field("photoUrl", photoUrl)
+                .field("serverAuthCode", serverAuthCode)
+                .field("expirationTime", expirationTime)
+                .field("obfuscatedIdentifier", obfuscatedIdentifier)
+                .end();
     }
 
     public static final Creator<GoogleSignInAccount> CREATOR = new AutoCreator<>(GoogleSignInAccount.class);
