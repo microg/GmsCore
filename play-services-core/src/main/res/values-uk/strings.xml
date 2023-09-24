@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,80 +13,67 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">Служби microG</string>
     <string name="gms_settings_name">Налаштування microG</string>
-
-    <string name="just_a_sec">Зачекайте трохи...</string>
+    <string name="just_a_sec">Зачекайте трохи…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Продовжуючи, ви дозволяєте даному додатку та Google використовувати ваші дані згідно з їх відповідними умовами надання послуг та політикою конфіденційності.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би використовувати:</string>
     <string name="account_manager_title">Google Account Manager</string>
-    <string name="sorry">Вибачте...</string>
-    <string name="auth_before_connect">Додаток на Вашому пристрої намагається увійти до облікового запису Google.
-
-Якщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для підключення до сторінки авторизації Google, інакше натисніть  <b>Скасувати</b>, аби перейти назад до додатку, що викликало це вікно.</string>
+    <string name="sorry">Вибачте…</string>
+    <string name="auth_before_connect">Застосунок на Вашому пристрої намагається увійти до облікового запису Google.
+\n
+\nЯкщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для підключення до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
     <string name="auth_sign_in">Увійти</string>
     <string name="auth_connecting">Ваш пристрій встановлює зв\'язок із серверами Google для авторизації.
-
-Це може зайняти кілька секунд.</string>
+\n
+\nЦе може зайняти кілька секунд.</string>
     <string name="no_network_error_desc">Відсутнє з\'єднання із мережею.
-
-Це може бути як тимчасова проблема, так і проблемою із послугою передачі даних на Вашому пристрої Anddroid. Спробуйте ще раз, коли з\'єднаєтесь із мобільної мережею, або до мережі Wi-Fi.</string>
+\n
+\nЦе може бути як тимчасова проблема, так і проблемою із послугою передачі даних на Вашому пристрої Anddroid. Спробуйте ще раз, коли з\'єднаєтесь із мобільної мережею, або до мережі Wi-Fi.</string>
     <string name="auth_general_error_desc">Не вдалося з\'єднатися із сервісами Google.
-
-Спробуйте пізніше.</string>
+\n
+\nСпробуйте пізніше.</string>
     <string name="auth_finalize">Ваш пристрій з\'єднається із Google, аби зберегти інформацію до вашого облікового запису.
-
-Це може тривати кілька хвилин.</string>
+\n
+\nЦе може тривати кілька хвилин.</string>
     <string name="allow">Дозволено</string>
     <string name="deny">Відмовлено</string>
     <string name="auth_notification_title">Потрібна аутентифікація</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> потребує авторизації для отримання доступу до Вашого облікового запису Google.</string>
-
     <string name="perm_status_broadcast_label">слухати внутрішній статус трансляцій</string>
     <string name="perm_c2dm_receive_label">слухати C2DM повідомлення</string>
     <string name="perm_c2dm_send_label">надсилати C2DM повідомлення до інших додатків</string>
     <string name="perm_gtalk_svc_label">обмінюватись повідомленнями та отримувати запити на синхронізацію від сервісів Google</string>
     <string name="perm_extended_access_label">Розширений доступ до сервісів Google</string>
-
     <string name="service_name_checkin">Реєстрація пристрою в Google</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Хмарні повідомлення</string>
     <string name="service_name_snet">Google SafetyNet</string>
-
     <string name="games_title">Ігри Google Play</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажає використовувати Play ігри</string>
     <string name="games_info_content">Для використання можливостей Play Games, необхідно встановити додаток Google Play Games. Додаток може працювати і без нього, але можливі проблеми під час роботи.</string>
-
     <string name="pick_place_title">Оберіть місце</string>
     <string name="pick_place_desc">Засіб вибору місця ще не доступний.</string>
     <string name="place_picker_select_title">Оберіть місце-розташування</string>
     <string name="place_picker_nearby_places">Найближчі місця</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-
     <string name="lacking_permission_toast">microG Services: Відсутній дозвіл на <xliff:g example="have full network acccess">%1$s</xliff:g></string>
-
     <string name="network_type_mobile">Мобільні мережі</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Роумінг</string>
     <string name="network_type_other">Інші мережі</string>
-
     <!-- Self check -->
-
     <string name="self_check_cat_fake_sig">Підтримка підміни підпису</string>
     <string name="self_check_cat_gms_packages">Встановлені додатки</string>
     <string name="self_check_cat_system">Система</string>
-
     <string name="self_check_name_fake_sig_perm">Підтримка системою підміни підпису:</string>
     <string name="self_check_resolution_fake_sig_perm">Поточне програмне забезпечення пристрою не підтримує підміну підпису. Ви можете використовувати Xposed або інші методи підтримки підміни підпису. Будь ласка, перевірте документацію, де вказано яка система підтримує підміну підпису і як використовувати microG, якщо немає такої підтримки.</string>
     <string name="self_check_name_perm_granted">Надання системою дозволу на підміну підпису:</string>
     <string name="self_check_resolution_perm_granted">Ваше програмне забезпечення пристрою підтримує підміну підпису, але потребує додаткової дії для її активації. Будь ласка, перевірте документацію, де вказано як це зробити.</string>
     <string name="self_check_name_system_spoofs">Підміна підпису системою:</string>
     <string name="self_check_resolution_system_spoofs">Будь ласка, перевірте документацію, де вказано як це зробити.</string>
-
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
     <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
@@ -93,12 +81,9 @@
     <string name="self_check_resolution_app_installed">Встановіть додаток <xliff:g example="F-Droid">%1$s</xliff:g> або сумісний. Будь ласка, перевірте документацію, де вказано сумісні додатки.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> має вірний підпис: </string>
     <string name="self_check_resolution_correct_sig">Або встановлений додаток <xliff:g example="F-Droid">%1$s</xliff:g> не сумісний чи має невірний підпис, або підміна підпису не активована для нього. Будь ласка, перевірте документацію, де вказано сумісні додатки чи програмне забезпечення пристрою.</string>
-
     <string name="self_check_name_battery_optimizations">Ігнорування оптимізації енергоспоживання:</string>
     <string name="self_check_resolution_battery_optimizations">Торкніться тут, аби вимкнути оптимізацію енергоспоживання. Якщо цього не зробити, додаток працюватиме не коректно в фоновому режимі.</string>
-
     <!-- Settings strings -->
-
     <string name="prefcat_about">Про</string>
     <string name="prefcat_components">Компоненти</string>
     <string name="prefcat_configuration">Конфігурація</string>
@@ -106,23 +91,17 @@
     <string name="prefcat_location_service">Сервіси позиціювання</string>
     <string name="prefcat_services">Сервіси</string>
     <string name="prefcat_test">Тест</string>
-
     <string name="cond_gcm_bat_title">Увімкнута оптимізація енергоспоживання</string>
     <string name="cond_gcm_bat_summary">Ви увімкнули Cloud Messaging але лиши оптимізацію енергоспоживання активним для microG Services. Аби отримувати push-сповіщення необхідно вимкнути оптимізацію енергоспоживання.</string>
     <string name="cond_gcm_bat_action">Ігнорувати оптимізацію</string>
     <string name="cond_perm_title">Відсутній дозвіл</string>
-
     <string name="prefs_account">Налаштування облікового запису</string>
     <string name="prefs_account_privacy">Персональна інформація та приватність</string>
     <string name="prefs_account_security">Авторизація та безпека</string>
-
     <string name="pref_auth_trust_google_title">Довіряти дозволам Google в додатках</string>
     <string name="pref_auth_trust_google_summary">Коли вимкнено, у користувача запитується дозвіл на авторизацію Google. Деякі додатки не можуть використовувати обліковий запис Google, без даної можливості.</string>
-
     <string name="pref_checkin_enable_summary">Реєструє Ваш пристрій в сервісах Google та створює унікальний ідентифікатор. MicroG видаляє всі біти ідентифікації, окрім імені Вашого облікового запису Google.</string>
-
     <string name="pref_more_settings">Додатково</string>
-
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging надає push-сповіщення, які використовуються в багатьох сторонніх додатках. Аби використовувати їх, ви повинні увімкнути реєстрацію пристрою.</string>
     <string name="pref_gcm_heartbeat_title">Інтервал з\'єднання Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">Інтервал в секундах для опитування серверів Google. Збільшення даного значення скоротить споживання батареї, але може призвести до затримок push-повідомлень.\nЗастаріло, буде змінено в наступних випусках.</string>
@@ -131,10 +110,8 @@
     <string name="pref_gcm_confirm_new_apps_title">Підтверджувати нові додатки</string>
     <string name="pref_gcm_confirm_new_apps_summary">Запитувати перед реєстрацією нового додатку для отримання push-повідомлень</string>
     <string name="pref_gcm_ping_interval">Інтервал опитування: <xliff:g example="10 minutes">%1$s</xliff:g></string>
-
     <string name="pref_about_title">Про microG Services</string>
     <string name="pref_about_summary">Версія та використані бібліотеки</string>
-
     <string name="gcm_app_error_unregistering">Помилка відв\'язування</string>
     <string name="gcm_app_not_installed_anymore">Додаток вже не встановлено</string>
     <string name="gcm_unregister_app">Відв\'язати</string>
@@ -147,9 +124,91 @@
     <string name="gcm_unregister_confirm_message">Деякі додатки автоматично не прив\'язуються або/та не дозволяють зробити це вручну. Такі додатки можуть робити некоректно після відв\'язування.\nПродовжити?</string>
     <string name="gcm_unregister_after_deny_message">Ви заборонили додатку push-повідомлення, який вже був прив\'язаний.\nВи бажаєте відв\'язати його зараз, аби більше не отримувати від нього push-повідомлень?</string>
     <string name="gcm_messages_counter">Повідомлень: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> байт)</string>
-
     <string name="safetynet_intro">Google SafetyNet це система сертифікації пристрою, яка гарантує, що пристрій коректно захищено та сумісне із Android CTS. Деякі додатки використовують SafetyNet для безпеки або в якості попередньої системи захисту від злому.\n\nmicroG GmsCore містить вільну реалізацію SafetyNet, але офіційний сервер вимагає, аби запити були підписані за допомогою закритої програмної системи DroidGuard.</string>
-
     <string name="pref_safetynet_test_title">Протестувати SafetyNet перевірку</string>
     <string name="pref_droidguard_operation_mode">Режим роботи</string>
+    <string name="pref_device_registration_import_custom_profile_title">Імпортувати користувацький профіль</string>
+    <string name="pref_safetynet_recent_request_type">Тип запиту</string>
+    <string name="pref_recaptcha_enterprise_test_title">Тест ReCAPTCHA Enterprise</string>
+    <string name="checkin_last_registration">Остання реєстрація: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="signin_subtext_policy_privacy">політика приватності</string>
+    <string name="pref_safetynet_test_no_result">Немає результату</string>
+    <string name="perm_gsf_read_gservices_label">читати конфігурацію служби Google</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Імпортувати профіль пристрою з файла</string>
+    <string name="pref_safetynet_recent_copy_json">Копіювати дані JSON JWS</string>
+    <string name="pref_test_summary_failed">Не вдалося: %s</string>
+    <string name="pref_auth_visible_summary">При включенні всі застосунки на цьому пристрої зможуть бачити адресу пошти ваших облікових записів Google без попередньої авторизації.</string>
+    <string name="pref_safetynet_recent_advice">Порада</string>
+    <string name="push_notifications_summary_values_seconds">%s с</string>
+    <string name="pref_safetynet_test_invalid_json">Недійсний JSON</string>
+    <string name="menu_clear_recent_requests">Очистити нещодавні запити</string>
+    <string name="signin_picker_title">Оберіть обліковий запис</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_cat_request">Надіслати запит на дані</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Запускати застосунок у фоновому режимі, щоб отримувати вхідні push-повідомлення.</string>
+    <string name="pref_safetynet_recent_attestation_summary">Підтвердження: %s</string>
+    <string name="prefcat_safetynet_apps_title">Застосунки, що використовують SafetyNet</string>
+    <string name="safetynet_enable_switch">Дозволити підтвердження пристрою</string>
+    <string name="pref_safetynet_test_integrity_failed">Помилка цілісності</string>
+    <string name="push_notifications_summary_automatic">ВВІМК / Автоматично: %s</string>
+    <string name="pref_device_registration_serial_title">Серійний</string>
+    <string name="checkin_enable_switch">Зареєструвати пристрій</string>
+    <string name="pref_safetynet_test_cts_failed">Помилка CTS</string>
+    <string name="push_notifications_summary_manual">ВВІМК / Вручну: %s</string>
+    <string name="profile_name_auto">Автоматичний: %s</string>
+    <string name="push_notifications_summary_values_minutes">%s хв</string>
+    <string name="perm_provision_label">надання послуг microG</string>
+    <string name="gcm_network_state_connected">З\'єднано з <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="pref_auth_include_android_id_summary">Якщо вимкнено, запити на автентифікацію не будуть пов\'язані з реєстрацією пристрою, що дозволяє несанкціонованим пристроям входити в обліковий запис, але може мати непередбачені наслідки.</string>
+    <string name="signin_picker_subtitle">, щоб продовжити в <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Цілісність та CTS пройдено</string>
+    <string name="pref_safetynet_recent_uses">Нещодавнє використання</string>
+    <string name="pref_droidguard_unsupported_summary">Виконання DroidGuard на цьому пристрої не підтримується. Служби SafetyNet можуть поводитися неправильно.</string>
+    <string name="signin_confirm_title">Дозволити вам увійти в <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="pref_safetynet_recent_nonce">Одноразовий код (Hex)</string>
+    <string name="safetynet_last_run_at">Останнє використання: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_push_app_wake_for_delivery_title">Запустити застосунок при push-повідомленнях</string>
+    <string name="perm_provision_description">Дозволяє застосунку налаштовувати служби microG без взаємодії з користувачем</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="gcm_enable_switch">Отримувати push-сповіщення</string>
+    <string name="pref_test_summary_passed">Пройдено всі тести</string>
+    <string name="push_notifications_summary_off">ВИМК</string>
+    <string name="pref_info_status">Стан</string>
+    <string name="gcm_allow_app_popup">Дозволити <xliff:g example="F-Droid">%1$s</xliff:g> зареєструватися для push-сповіщень\?</string>
+    <string name="pref_safetynet_recent_response_status">Статус відповіді</string>
+    <string name="pref_auth_visible_title">Дозволити застосункам знаходити облікові записи</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="gcm_network_state_disconnected">Від\'єднано</string>
+    <string name="signin_picker_add_account_label">Додати інший обліковий запис</string>
+    <string name="pref_device_registration_select_profile_title">Виберіть профіль</string>
+    <string name="signin_confirm_button_text">Дозволити та поділитися</string>
+    <string name="pref_test_summary_warn">Попередження: %s</string>
+    <string name="checkin_not_registered">Не зареєстровано</string>
+    <string name="profile_name_real">Реальний</string>
+    <string name="prefcat_push_apps_unregistered_title">Незареєстровані застосунки</string>
+    <string name="pref_add_account_title">Обліковий запис</string>
+    <string name="signin_subtext_policy">Перш ніж використовувати цей застосунок, перегляньте його %1$s і %2$s.</string>
+    <string name="pref_safetynet_recent_copied">Скопійовано до буфера обміну!</string>
+    <string name="prefcat_push_apps_title">Застосунки, що використовують push-сповіщення</string>
+    <string name="profile_name_user">Власний: %s</string>
+    <string name="pref_recaptcha_test_title">Тест ReCAPTCHA</string>
+    <string name="signin_subtext_sharing">Щоб продовжити, microG буде ділитися ім\'ям, адресою пошти та зображенням профілю вашого облікового запису Google з <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="pref_auth_include_android_id_title">Автентифікація за допомогою реєстрації пристрою</string>
+    <string name="pref_push_app_allow_register_title">Дозволити реєстрацію</string>
+    <string name="profile_name_native">Нативний</string>
+    <string name="pref_test_summary_running">Запуск…</string>
+    <string name="pref_safetynet_recent_cat_basic">Основні дані</string>
+    <string name="gms_settings_summary">Налаштування служб microG.</string>
+    <string name="pref_add_account_summary">Додати обліковий запис Google</string>
+    <string name="profile_name_system">Системний: %s</string>
+    <string name="pref_safetynet_recent_cat_response">Дані відповіді</string>
+    <string name="pref_push_app_allow_register_summary">Дозволити застосунку реєструватися для push-сповіщень.</string>
+    <string name="pref_safetynet_recent_token">Токен</string>
+    <string name="pref_safetynet_test_not_completed">Ще не завершено</string>
+    <string name="pref_safetynet_recent_request_time">Час запиту</string>
+    <string name="signin_subtext_policy_terms">умови надання послуг</string>
+    <string name="prefcat_push_apps_registered_title">Зареєстровані застосунки</string>
+    <string name="pref_device_registration_device_profile_category">Профіль пристрою</string>
+    <string name="prefcat_push_networks_title">Мережі, які слід використовувати для push-сповіщень</string>
+    <string name="pref_safetynet_recent_eval_type">Тип оцінки</string>
 </resources>

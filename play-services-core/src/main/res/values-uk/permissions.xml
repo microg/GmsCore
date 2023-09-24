@@ -13,12 +13,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources>
+  --><resources>
     <string name="permission_service_all_label">Всі сервіси Google</string>
     <string name="permission_service_all_description">Надає доступ додатку до всіх сервісів Google через будьякий прив\'язаний обліковий запис Google.</string>
-
     <string name="permission_service_android_label">Сервіси Android</string>
     <string name="permission_service_android_description">Надає доступ додатку до сервісів Android через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_adsense_label">AdSense</string>
@@ -26,7 +23,7 @@
     <string name="permission_service_adwords_label">AdWords</string>
     <string name="permission_service_adwords_description">Надає доступ додатку до AdWords через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_ah_label">Google App Engine</string>
-    <string name="permission_service_ah_description">Надає доступ додатку до Google App Engine через будь-який прив\'язаний обліковий запис Google.</string>
+    <string name="permission_service_ah_description">Надає доступ застосунку до Google App Engine через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_blogger_label">Blogger</string>
     <string name="permission_service_blogger_description">Надає доступ додатку до Blogger через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_cl_label">Google Календар</string>
@@ -41,9 +38,9 @@
     <string name="permission_service_gbase_description">Надає доступ додатку до Google Base через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_grandcentral_label">Google Voice</string>
     <string name="permission_service_grandcentral_description">Надає доступ додатку до Google Voice через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_groups2_label">Google Groups</string>
+    <string name="permission_service_groups2_label">Google Групи</string>
     <string name="permission_service_groups2_description">Надає доступ додатку до Google Groups через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_health_label">Google Health</string>
+    <string name="permission_service_health_label">Google Здоров\'я</string>
     <string name="permission_service_health_description">Надає доступ додатку до Google Health через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_ig_label">iGoogle</string>
     <string name="permission_service_ig_description">Надає доступ додатку до iGoogle через будь-який прив\'язаний обліковий запис Google.</string>
@@ -59,23 +56,23 @@
     <string name="permission_service_mail_description">Надає доступ додатку до Google Пошти через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_news_label">Google Новини</string>
     <string name="permission_service_news_description">Надає доступ додатку до Google Новин через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_notebook_label">Google Notebook</string>
+    <string name="permission_service_notebook_label">Google Нотатник</string>
     <string name="permission_service_notebook_description">Надає доступ додатку до Google Notebook через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_orkut_label">Orkut</string>
     <string name="permission_service_orkut_description">Надає доступ додатку до Orkut через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_print_label">Google Book Search</string>
+    <string name="permission_service_print_label">Google Книги</string>
     <string name="permission_service_print_description">Надає доступ додатку до Google Book Search через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_sierra_label">Google Checkout accounts</string>
+    <string name="permission_service_sierra_label">Облікові записи Google Checkout</string>
     <string name="permission_service_sierra_description">Надає доступ додатку до Google Checkout через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_sierraqa_label">Google Checkout QA accounts</string>
+    <string name="permission_service_sierraqa_label">Облікові записи Google Checkout QA</string>
     <string name="permission_service_sierraqa_description">Надає доступ додатку до Google Checkout QA accounts через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_sierrasandbox_label">Google Checkout Sandbox accounts</string>
+    <string name="permission_service_sierrasandbox_label">Облікові записи Google Checkout Sandbox</string>
     <string name="permission_service_sierrasandbox_description">Надає доступ додатку до Google Checkout Sandbox accounts через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_sitemaps_label">Google Webmaster Tools</string>
+    <string name="permission_service_sitemaps_label">Інструменти Google Webmaster</string>
     <string name="permission_service_sitemaps_description">Надає доступ додатку до Google Webmaster Tools через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_speech_label">Voice Search</string>
+    <string name="permission_service_speech_label">Голосовий пошук</string>
     <string name="permission_service_speech_description">Надає доступ додатку до Voice Search через будь-який прив\'язаний обліковий запис Google.</string>
-    <string name="permission_service_speechpersonalization_label">Personalized Speech Recognition</string>
+    <string name="permission_service_speechpersonalization_label">Персоналізоване розпізнавання мови</string>
     <string name="permission_service_speechpersonalization_description">Надає доступ додатку до Personalized Speech Recognition через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_talk_label">Google Talk</string>
     <string name="permission_service_talk_description">Надає доступ додатку до Google Talk через будь-який прив\'язаний обліковий запис Google.</string>
@@ -89,8 +86,7 @@
     <string name="permission_service_youtube_description">Надає доступ додатку до YouTube через будь-який прив\'язаний обліковий запис Google.</string>
     <string name="permission_service_YouTubeUser_label">Імена користувачів YouTube</string>
     <string name="permission_service_YouTubeUser_description">Надає доступ додатку до Імен користувача(ів) YouTube через будь-який прив\'язаний обліковий запис Google.</string>
-
-    <string name="permission_scope_www.googleapis.com_auth_activity">Переглянути історію активності Ваших додатків Google</string>
+    <string name="permission_scope_www.googleapis.com_auth_activity">Переглянути історію активності Ваших застосунків Google</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Керування Вашим обліковим записом покупця Ad Exchange</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Перегляд Ваших Ad Exchange даних</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Перегляд та керування Вашими Ad Exchange даними</string>
@@ -100,7 +96,7 @@
     <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Перегляд Ваших Google Analytics даних</string>
     <string name="permission_scope_www.googleapis.com_auth_analytics">Перегляд та керування Вашими Google Analytics даними</string>
     <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Доступ Android розробникам до Google Play</string>
-    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Рушій додатку сфери адміністрування.</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Рушій застосунку сфери адміністрування.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Доступ на запис та читання до Groups Migration API.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Перегляд та керування налаштуваннями до Google Apps Group</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Доступ на запис та читання до License Manager API.</string>
@@ -140,7 +136,7 @@
     <string name="permission_scope_www.googleapis.com_auth_gan">Керування своїми GAN даними</string>
     <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Перегляд своїх GAN даних</string>
     <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">CloudMessaging для chrome</string>
-    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Glass timeline scope</string>
+    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Скляна шкала часу</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Створювати, читати, оновлювати та видаляти чернетки. Відправляти повідомлення та чернетки.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Всі операції читання/запису виконуються одразу ж, окрім видалення тем та повідомлень повз кошик.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Читання всіх ресурсів та метаданих, які не потребують операцій запису.</string>
@@ -174,5 +170,4 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Керування Вашими відеороликами YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Перегляд валютних звітів аналітики YouTube для свого YouTube контенту</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Перегляд звітів аналітики YouTube для свого YouTube контенту</string>
-
 </resources>

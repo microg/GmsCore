@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_exposure_error_bluetooth_off_title">Ввімкнути Bluetooth</string>
+    <string name="exposure_notify_off_bluetooth_location">Щоб отримувати сповіщення про вплив, потрібно увімкнути Bluetooth і доступ до розташування.</string>
+    <string name="exposure_notify_off_title">Сповіщення про вплив неактивні</string>
+    <string name="pref_exposure_error_location_off_title">Відкрити параметри розташування</string>
+    <string name="pref_exposure_enable_info_summary">Щоб увімкнути сповіщення про вплив, відкрийте будь-який застосунок, що підтримує цю функцію.</string>
+    <string name="service_name_exposure">Сповіщення про вплив</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth повинен бути включений для отримання повідомлень про експозицію.</string>
+    <string name="exposure_notify_off_location">Для отримання сповіщень про експозицію необхідний доступ до місця розташування.</string>
+    <string name="exposure_notify_off_nearby">Сповіщення про вплив вимагають додаткових дозволів на роботу</string>
+</resources>

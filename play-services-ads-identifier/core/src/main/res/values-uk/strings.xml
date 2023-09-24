@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Дозволяє програмі отримувати сповіщення, коли рекламний ідентифікатор або обмеження налаштувань відстеження реклами користувача оновлюється.</string>
+    <string name="perm_ad_id_notification_label">Сповіщення рекламного ідентифікатора</string>
+    <string name="perm_ad_id_description">Дозволяє застосунку видавця отримувати доступ до дійсного рекламного ідентифікатор прямо або опосередковано.</string>
+    <string name="perm_ad_id_label">Дозвіл на рекламний ідентифікатор</string>
+</resources>

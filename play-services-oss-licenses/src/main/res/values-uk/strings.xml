@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Під час отримання ліцензії сталася помилка.</string>
+    <string name="oss_license_title">Ліцензії з відкритим кодом</string>
+    <string name="preferences_license_summary">Ліцензійні дані для відкритого програмного забезпечення</string>
+    <string name="no_licenses_available">Цей застосунок не має ніяких ліцензій з відкритим кодом.</string>
+    <string name="license_list_is_loading">Список ліцензій завантажується.</string>
+    <string name="license_is_loading">Інформація про ліцензію завантажується.</string>
+</resources>

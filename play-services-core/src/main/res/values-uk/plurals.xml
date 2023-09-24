@@ -13,27 +13,29 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> сервер сконфігуровано</item>
         <item quantity="few"><xliff:g example="3">%1$d</xliff:g> сервера сконфігуровано</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> серверів сконфігуровано</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> серверів сконфігуровано</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> додаток зареєстровано</item>
-        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> додатка зареєстровано</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> додатки зареєстровано</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> застосунок зареєстровано</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> зачтосунки зареєстровано</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> застосунків зареєстровано</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> застосунків зареєстровано</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Не надано дозвіл, якій необхідний для нормальної роботи microG Services</item>
-        <item quantity="few">Не надано дозволи, які необхідні для нормальної роботи microG Services</item>
-        <item quantity="other">Не надано дозволи, які необхідні для нормальної роботи microG Services</item>
+        <item quantity="one">Не надано дозвіл, якій необхідний для нормальної роботи microG Services.</item>
+        <item quantity="few">Не надано дозволи, які необхідні для нормальної роботи microG Services.</item>
+        <item quantity="many">Не надано дозволів, які необхідні для нормальної роботи microG Services.</item>
+        <item quantity="other">Не надано дозволів, які необхідні для нормальної роботи microG Services.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Запитати відсутній дозвіл</item>
         <item quantity="few">Запитати відсутні дозволи</item>
-        <item quantity="other">Запитати відсутні дозволи</item>
+        <item quantity="many">Запитати відсутніх дозволів</item>
+        <item quantity="other">Запитати відсутніх дозволів</item>
     </plurals>
 </resources>

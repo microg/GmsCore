@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_droidguard_mode_network_summary">Під\'єднатися до середовища виконання DroidGuard через мережу</string>
+    <string name="prefcat_droidguard_mode">Режим роботи DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_summary">Використовувати локальне середовище виконання DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">Вбудований</string>
+    <string name="pref_droidguard_mode_network_title">Віддалений</string>
+</resources>

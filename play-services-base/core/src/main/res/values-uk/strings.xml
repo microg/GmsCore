@@ -2,15 +2,18 @@
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
-    <string name="menu_advanced">Додатково</string>
-
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="menu_advanced">Розширені</string>
     <string name="list_no_item_none">Порожньо</string>
-
     <string name="service_status_disabled">Вимкнуто</string>
     <string name="service_status_enabled">Увімкнуто</string>
     <string name="service_status_automatic">Автоматично</string>
     <string name="service_status_manual">Вручну</string>
+    <string name="foreground_service_notification_title">Активний у фоновому режимі</string>
+    <string name="service_status_enabled_short">Ввімк</string>
+    <string name="open_app">Відкрити</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> працює у фоновому режимі.</string>
+    <string name="foreground_service_notification_big_text">Виключити <xliff:g example="microG Services">%1$s</xliff:g> з оптимізації батареї або змінити налаштування сповіщень, щоб приховати це сповіщення.</string>
+    <string name="list_item_see_all">Показати все</string>
+    <string name="service_status_disabled_short">Вимк</string>
 </resources>
