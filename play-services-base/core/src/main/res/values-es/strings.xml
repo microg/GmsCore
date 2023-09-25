@@ -2,20 +2,18 @@
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">Avanzado</string>
-
     <string name="list_no_item_none">Ninguno</string>
     <string name="list_item_see_all">Ver todo</string>
-
     <string name="open_app">Abrir</string>
-
     <string name="service_status_disabled">Desactivado</string>
     <string name="service_status_enabled">Activado</string>
     <string name="service_status_automatic">Automático</string>
     <string name="service_status_manual">Manual</string>
     <string name="service_status_enabled_short">Encendido</string>
     <string name="service_status_disabled_short">Apagado</string>
+    <string name="foreground_service_notification_title">Activo en segundo plano</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> se está ejecutando en segundo plano.</string>
+    <string name="foreground_service_notification_big_text">Excluye <xliff:g example="microG Services">%1$s</xliff:g> de las optimizaciones de la batería o cambia la configuración de las notificaciones para ocultar esta notificación.</string>
 </resources>
