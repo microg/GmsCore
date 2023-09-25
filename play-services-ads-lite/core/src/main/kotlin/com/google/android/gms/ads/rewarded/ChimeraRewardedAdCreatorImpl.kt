@@ -8,7 +8,7 @@ import android.content.Context
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.Keep
-import com.google.android.gms.ads.internal.meditation.client.IAdapterCreator
+import com.google.android.gms.ads.internal.mediation.client.IAdapterCreator
 import com.google.android.gms.ads.internal.rewarded.client.IRewardedAdCreator
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper

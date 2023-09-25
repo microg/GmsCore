@@ -9,7 +9,7 @@ import android.os.Parcel
 import android.util.Log
 import androidx.annotation.Keep
 import com.google.android.gms.ads.internal.client.IAdLoaderBuilderCreator
-import com.google.android.gms.ads.internal.meditation.client.IAdapterCreator
+import com.google.android.gms.ads.internal.mediation.client.IAdapterCreator
 import com.google.android.gms.dynamic.IObjectWrapper
 import org.microg.gms.utils.warnOnTransactionIssues
 

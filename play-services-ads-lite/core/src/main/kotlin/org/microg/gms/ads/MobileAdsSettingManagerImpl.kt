@@ -15,38 +15,53 @@ import com.google.android.gms.ads.internal.RequestConfigurationParcel
 import com.google.android.gms.ads.internal.client.IMobileAdsSettingManager
 import com.google.android.gms.ads.internal.client.IOnAdInspectorClosedListener
 import com.google.android.gms.ads.internal.initialization.IInitializationCallback
+import com.google.android.gms.ads.internal.mediation.client.IAdapterCreator
 import com.google.android.gms.dynamic.IObjectWrapper
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "AdsSettingManager"
 
 class MobileAdsSettingManagerImpl(private val context: Context?) : IMobileAdsSettingManager.Stub() {
+    private var initialized = false
+    private val initializationCallbacks = mutableListOf<IInitializationCallback>()
+    private var muted = false
+    private var volume = 1.0f
+
     override fun initialize() {
         Log.d(TAG, "initialize")
+        if (initialized) return
+        initialized = true
+        for (callback in initializationCallbacks) {
+            runCatching { callback.onInitialized(emptyList()) }
+        }
     }
 
     override fun setAppVolume(volume: Float) {
-        Log.d(TAG, "setAppVolume")
+        this.volume = volume
+    }
+
+    override fun fetchAppSettings(appId: String?) {
+        fetchAppSettingsV2(appId, null)
     }
 
     override fun setAppMuted(muted: Boolean) {
-        Log.d(TAG, "setAppMuted")
+        this.muted = muted
     }
 
     override fun openDebugMenu(context: IObjectWrapper?, adUnitId: String?) {
         Log.d(TAG, "openDebugMenu($adUnitId)")
     }
 
-    override fun fetchAppSettings(appId: String?, runnable: IObjectWrapper?) {
+    override fun fetchAppSettingsV2(appId: String?, runnable: IObjectWrapper?) {
         Log.d(TAG, "fetchAppSettings($appId)")
     }
 
     override fun getAdVolume(): Float {
-        return 0f
+        return volume
     }
 
     override fun isAdMuted(): Boolean {
-        return true
+        return muted
     }
 
     override fun getVersionString(): String {
@@ -57,15 +72,13 @@ class MobileAdsSettingManagerImpl(private val context: Context?) : IMobileAdsSet
         Log.d(TAG, "registerRtbAdapter($className)")
     }
 
+    override fun setAdapterCreator(iAdapterCreator: IAdapterCreator?) {
+        Log.d(TAG, "Not yet implemented: setAdapterCreator")
+    }
+
     override fun addInitializationCallback(callback: IInitializationCallback?) {
         Log.d(TAG, "addInitializationCallback")
-        Handler(Looper.getMainLooper()).post(Runnable {
-            try {
-                callback?.onInitialized(adapterStatus)
-            } catch (e: RemoteException) {
-                Log.w(TAG, e)
-            }
-        })
+        callback?.let { initializationCallbacks.add(it) }
     }
 
     override fun getAdapterStatus(): List<AdapterStatusParcel> {

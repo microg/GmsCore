@@ -17,7 +17,7 @@ import com.google.android.gms.ads.internal.ServerSideVerificationOptionsParcel
 import com.google.android.gms.ads.internal.client.IOnAdMetadataChangedListener
 import com.google.android.gms.ads.internal.client.IOnPaidEventListener
 import com.google.android.gms.ads.internal.client.IResponseInfo
-import com.google.android.gms.ads.internal.meditation.client.IAdapterCreator
+import com.google.android.gms.ads.internal.mediation.client.IAdapterCreator
 import com.google.android.gms.ads.internal.rewarded.client.*
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.dynamic.IObjectWrapper
