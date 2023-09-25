@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import com.google.android.gms.fido.fido2.api.IBooleanCallback;
+import com.google.android.gms.fido.fido2.api.ICredentialListCallback;
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialCreationOptions;
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialRequestOptions;
 import com.google.android.gms.fido.fido2.internal.privileged.IFido2PrivilegedCallbacks;
@@ -26,16 +27,20 @@ public class Fido2PrivilegedGmsClient extends GmsClient<IFido2PrivilegedService>
         serviceId = GmsService.FIDO2_PRIVILEGED.SERVICE_ID;
     }
 
-    public void register(IFido2PrivilegedCallbacks callbacks, BrowserPublicKeyCredentialCreationOptions options) throws RemoteException {
-        getServiceInterface().register(callbacks, options);
+    public void getRegisterPendingIntent(IFido2PrivilegedCallbacks callbacks, BrowserPublicKeyCredentialCreationOptions options) throws RemoteException {
+        getServiceInterface().getRegisterPendingIntent(callbacks, options);
     }
 
-    public void sign(IFido2PrivilegedCallbacks callbacks, BrowserPublicKeyCredentialRequestOptions options) throws RemoteException {
-        getServiceInterface().sign(callbacks, options);
+    public void getSignPendingIntent(IFido2PrivilegedCallbacks callbacks, BrowserPublicKeyCredentialRequestOptions options) throws RemoteException {
+        getServiceInterface().getSignPendingIntent(callbacks, options);
     }
 
     public void isUserVerifyingPlatformAuthenticatorAvailable(IBooleanCallback callback) throws RemoteException {
         getServiceInterface().isUserVerifyingPlatformAuthenticatorAvailable(callback);
+    }
+
+    public void getCredentialList(ICredentialListCallback callbacks, String rpId) throws RemoteException {
+        getServiceInterface().getCredentialList(callbacks, rpId);
     }
 
     @Override

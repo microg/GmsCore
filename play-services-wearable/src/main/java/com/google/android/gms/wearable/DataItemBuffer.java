@@ -18,13 +18,14 @@ package com.google.android.gms.wearable;
 
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.data.AbstractDataBuffer;
 import com.google.android.gms.common.data.DataBuffer;
 import com.google.android.gms.common.data.DataHolder;
 
 import org.microg.gms.common.PublicApi;
 
 @PublicApi
-public class DataItemBuffer extends DataBuffer<DataItem> implements Result {
+public class DataItemBuffer extends AbstractDataBuffer<DataItem> implements Result {
     private Status status;
 
     @PublicApi(exclude = true)

@@ -5,8 +5,9 @@
 
 package org.microg.gms.common.api;
 
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
-public interface PendingGoogleApiCall<R, A extends ApiClient> {
+public interface PendingGoogleApiCall<R, A extends Api.Client> {
     void execute(A client, TaskCompletionSource<R> completionSource) throws Exception;
 }

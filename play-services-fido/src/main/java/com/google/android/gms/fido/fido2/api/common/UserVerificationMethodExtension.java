@@ -8,8 +8,12 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -22,10 +26,18 @@ import java.util.Arrays;
  * Note that this extension can be used in only sign calls.
  */
 @PublicApi
-public class UserVerificationMethodExtension extends AutoSafeParcelable {
-    @Field(1)
+@SafeParcelable.Class
+public class UserVerificationMethodExtension extends AbstractSafeParcelable {
+    @Field(value = 1, getterName = "getUvm")
+    @NonNull
     private boolean uvm;
 
+    @Constructor
+    UserVerificationMethodExtension(@Param(1) boolean uvm) {
+        this.uvm = uvm;
+    }
+
+    @NonNull
     public boolean getUvm() {
         return uvm;
     }
@@ -45,5 +57,10 @@ public class UserVerificationMethodExtension extends AutoSafeParcelable {
         return Arrays.hashCode(new Object[]{uvm});
     }
 
-    public static final Creator<UserVerificationMethodExtension> CREATOR = new AutoCreator<>(UserVerificationMethodExtension.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<UserVerificationMethodExtension> CREATOR = findCreator(UserVerificationMethodExtension.class);
 }

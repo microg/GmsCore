@@ -8,8 +8,13 @@
 
 package com.google.android.gms.fido.fido2.api.common;
 
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 import java.util.Arrays;
 
@@ -17,13 +22,21 @@ import java.util.Arrays;
  * Represents a single User Verification Method Entry
  */
 @PublicApi
-public class UvmEntry extends AutoSafeParcelable {
-    @Field(1)
+@SafeParcelable.Class
+public class UvmEntry extends AbstractSafeParcelable {
+    @Field(value = 1, getterName = "getUserVerificationMethod")
     private int userVerificationMethod;
-    @Field(2)
+    @Field(value = 2, getterName = "getKeyProtectionType")
     private short keyProtectionType;
-    @Field(3)
+    @Field(value = 3, getterName = "getMatcherProtectionType")
     private short matcherProtectionType;
+
+    @Constructor
+    UvmEntry(@Param(1) int userVerificationMethod, @Param(2) short keyProtectionType, @Param(3) short matcherProtectionType) {
+        this.userVerificationMethod = userVerificationMethod;
+        this.keyProtectionType = keyProtectionType;
+        this.matcherProtectionType = matcherProtectionType;
+    }
 
     public int getUserVerificationMethod() {
         return userVerificationMethod;
@@ -78,14 +91,15 @@ public class UvmEntry extends AutoSafeParcelable {
         }
 
         public UvmEntry build() {
-            UvmEntry entry = new UvmEntry();
-            entry.userVerificationMethod = userVerificationMethod;
-            entry.keyProtectionType = keyProtectionType;
-            entry.matcherProtectionType = matcherProtectionType;
-            return entry;
+            return new UvmEntry(userVerificationMethod, keyProtectionType, matcherProtectionType);
         }
     }
 
-    @PublicApi(exclude = true)
-    public static final Creator<UvmEntry> CREATOR = new AutoCreator<>(UvmEntry.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    @Hide
+    public static final SafeParcelableCreatorAndWriter<UvmEntry> CREATOR = findCreator(UvmEntry.class);
 }

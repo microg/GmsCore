@@ -17,8 +17,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fido.fido2.api.IBooleanCallback;
+import com.google.android.gms.fido.fido2.api.ICredentialListCallback;
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialCreationOptions;
 import com.google.android.gms.fido.fido2.api.common.BrowserPublicKeyCredentialRequestOptions;
+import com.google.android.gms.fido.fido2.api.common.FidoCredentialDetails;
 import com.google.android.gms.fido.fido2.internal.privileged.IFido2PrivilegedCallbacks;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -27,6 +29,8 @@ import org.microg.gms.common.PublicApi;
 import org.microg.gms.common.api.PendingGoogleApiCall;
 import org.microg.gms.fido.fido2.Fido2PendingIntentImpl;
 import org.microg.gms.fido.fido2.Fido2PrivilegedGmsClient;
+
+import java.util.List;
 
 /**
  * The entry point for interacting with the privileged FIDO2 APIs.
@@ -38,6 +42,33 @@ public class Fido2PrivilegedApiClient extends GoogleApi<Api.ApiOptions.NoOptions
     @PublicApi(exclude = true)
     public Fido2PrivilegedApiClient(Context context) {
         super(context, API);
+    }
+
+    /**
+     * Creates a Task with a list of {@link FidoCredentialDetails} which, when started, will retrieve a list of credentials associated
+     * with the given relying party ID.
+     *
+     * @param rpId indicating the relying party for which we want to list credentials
+     * @return PendingResult with PendingIntent to retrieve the credential list
+     */
+    public Task<List<FidoCredentialDetails>> getCredentialList(String rpId) {
+        return scheduleTask((PendingGoogleApiCall<List<FidoCredentialDetails>, Fido2PrivilegedGmsClient>) (client, completionSource) -> {
+            try {
+                client.getCredentialList(new ICredentialListCallback.Stub() {
+                    @Override
+                    public void onCredentialList(List<FidoCredentialDetails> value) throws RemoteException {
+                        completionSource.setResult(value);
+                    }
+
+                    @Override
+                    public void onError(Status status) throws RemoteException {
+                        completionSource.setException(new ApiException(status));
+                    }
+                }, rpId);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
     }
 
     /**
@@ -61,7 +92,7 @@ public class Fido2PrivilegedApiClient extends GoogleApi<Api.ApiOptions.NoOptions
     public Task<PendingIntent> getRegisterPendingIntent(BrowserPublicKeyCredentialCreationOptions requestOptions) {
         return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2PrivilegedGmsClient>) (client, completionSource) -> {
             try {
-                client.register(new IFido2PrivilegedCallbacks.Stub() {
+                client.getRegisterPendingIntent(new IFido2PrivilegedCallbacks.Stub() {
                     @Override
                     public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
                         if (status.isSuccess()) {
@@ -98,7 +129,7 @@ public class Fido2PrivilegedApiClient extends GoogleApi<Api.ApiOptions.NoOptions
     public Task<PendingIntent> getSignPendingIntent(BrowserPublicKeyCredentialRequestOptions requestOptions) {
         return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2PrivilegedGmsClient>) (client, completionSource) -> {
             try {
-                client.sign(new IFido2PrivilegedCallbacks.Stub() {
+                client.getSignPendingIntent(new IFido2PrivilegedCallbacks.Stub() {
                     @Override
                     public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
                         if (status.isSuccess()) {

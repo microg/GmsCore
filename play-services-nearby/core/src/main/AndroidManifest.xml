@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">

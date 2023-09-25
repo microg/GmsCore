@@ -149,7 +149,7 @@ private suspend fun isAppIdAllowed(context: Context, appId: String, facetId: Str
 
 suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packageName: String?) {
     if (type == REGISTER) {
-        if (registerOptions.authenticatorSelection.requireResidentKey == true) {
+        if (registerOptions.authenticatorSelection?.requireResidentKey == true) {
             throw RequestHandlingException(
                 NOT_SUPPORTED_ERR,
                 "Resident credentials or empty 'allowCredentials' lists are not supported  at this time."

@@ -21,7 +21,6 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,7 +41,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.core.app.OnNewIntentProvider;
 import androidx.webkit.WebViewClientCompat;
 
 import com.google.android.gms.R;
@@ -56,14 +54,12 @@ import org.microg.gms.checkin.CheckinManager;
 import org.microg.gms.checkin.LastCheckinInfo;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
-import org.microg.gms.droidguard.core.DroidGuardResultCreator;
 import org.microg.gms.people.PeopleManager;
 import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.util.Collections;
 import java.util.Locale;
 
 import static android.accounts.AccountManager.PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE;
@@ -342,8 +338,8 @@ public class LoginActivity extends AssistantActivity {
                 .service(authManager.getService())
                 .email(account.name)
                 .token(AccountManager.get(this).getPassword(account))
-                .systemPartition()
-                .hasPermission()
+                .systemPartition(true)
+                .hasPermission(true)
                 .addAccount()
                 .getAccountId()
                 .getResponseAsync(new HttpFormClient.Callback<AuthResponse>() {

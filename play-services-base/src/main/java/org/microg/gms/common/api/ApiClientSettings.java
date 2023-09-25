@@ -5,5 +5,15 @@
 
 package org.microg.gms.common.api;
 
+import android.view.View;
+
+import java.util.Set;
+
 public class ApiClientSettings {
+    public String accountName;
+    public String packageName;
+    public Integer sessionId;
+    public Set<String> scopes;
+    public int gravityForPopups;
+    public View viewForPopups;
 }

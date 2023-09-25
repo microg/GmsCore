@@ -140,7 +140,6 @@ class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
-        Log.d(TAG, "hasFeatures: " + account + ", " + Arrays.toString(features));
         AccountManager accountManager = AccountManager.get(context);
         String services = accountManager.getUserData(account, "services");
         boolean res = true;

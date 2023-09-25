@@ -20,6 +20,7 @@ import android.accounts.Account;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 import org.microg.gms.common.api.ApiClientBuilder;
 
@@ -100,4 +101,14 @@ public final class Api<O extends Api.ApiOptions> {
         }
     }
 
+    @Hide
+    public interface Client {
+        void connect();
+
+        void disconnect();
+
+        boolean isConnected();
+
+        boolean isConnecting();
+    }
 }

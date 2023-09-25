@@ -57,7 +57,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private val cache by lazy { LocationCacheDatabase(this) }
     private val movingWifiHelper by lazy { MovingWifiHelper(this) }
     private val settings by lazy { LocationSettings(this) }
-    private val wifiScanCache = LruCache<String?, Location>(100)
+    private val wifiScanCache = LruCache<String, Location>(100)
 
     private var lastHighPowerScanRealtime = 0L
     private var lastLowPowerScanRealtime = 0L
@@ -98,6 +98,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 )
             }
         } catch (e: SecurityException) {
+            Log.d(TAG, "GPS location retriever not initialized due to lack of permission")
+        } catch (e: Exception) {
             Log.d(TAG, "GPS location retriever not initialized", e)
         }
     }
@@ -439,7 +441,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     }
 }
 
-private operator fun <K, V> LruCache<K, V>.set(key: K, value: V) {
+private operator fun <K : Any, V : Any> LruCache<K, V>.set(key: K, value: V) {
     put(key, value)
 }
 

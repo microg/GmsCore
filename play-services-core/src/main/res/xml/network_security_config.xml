@@ -7,5 +7,6 @@
     <!-- We need to allow cleartext access to certain domains for local wifi location -->
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">portal.mav.hu</domain>
+        <domain includeSubdomains="true">cdwifi.cz</domain>
     </domain-config>
 </network-security-config>

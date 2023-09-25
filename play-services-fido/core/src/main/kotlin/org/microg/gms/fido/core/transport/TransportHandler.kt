@@ -10,7 +10,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.fido.fido2.api.common.*
-import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement.REQUIRED
+import com.google.android.gms.fido.fido2.api.common.ResidentKeyRequirement.*
+import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement.*
 import com.upokecenter.cbor.CBORObject
 import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.*
@@ -51,18 +52,28 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         options: RequestOptions,
         clientDataHash: ByteArray
     ): Pair<AuthenticatorMakeCredentialResponse, ByteArray?> {
+        connection.capabilities
         val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
-            options.registerOptions.authenticatorSelection?.requireResidentKey == true,
-            options.registerOptions.authenticatorSelection?.requireUserVerification == REQUIRED
+            when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
+                RESIDENT_KEY_REQUIRED -> true
+                RESIDENT_KEY_PREFERRED -> connection.hasResidentKey
+                RESIDENT_KEY_DISCOURAGED -> false
+                else -> options.registerOptions.authenticatorSelection?.requireResidentKey == true
+            },
+            when (options.registerOptions.authenticatorSelection?.requireUserVerification) {
+                REQUIRED -> true
+                DISCOURAGED -> false
+                else -> connection.hasUserVerificationSupport
+            }
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
             extensions["appidExclude"] =
-                options.authenticationExtensions.fidoAppIdExtension.appId.encodeAsCbor()
+                options.authenticationExtensions!!.fidoAppIdExtension!!.appId.encodeAsCbor()
         }
         if (options.authenticationExtensions?.userVerificationMethodExtension?.uvm != null) {
             extensions["uvm"] =
-                options.authenticationExtensions.userVerificationMethodExtension.uvm.encodeAsCbor()
+                options.authenticationExtensions!!.userVerificationMethodExtension!!.uvm.encodeAsCbor()
         }
         val request = AuthenticatorMakeCredentialRequest(
             clientDataHash,
@@ -88,7 +99,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             options.authenticationExtensions?.fidoAppIdExtension?.appId?.toByteArray()?.digest("SHA-256")
         if (!options.registerOptions.parameters.isNullOrEmpty() && options.registerOptions.parameters.all { it.algorithmIdAsInteger != -7 })
             throw IllegalArgumentException("Can't use CTAP1 protocol for non ES256 requests")
-        if (options.registerOptions.authenticatorSelection.requireResidentKey == true)
+        if (options.registerOptions.authenticatorSelection?.requireResidentKey == true)
             throw IllegalArgumentException("Can't use CTAP1 protocol when resident key required")
         val hasCredential = options.registerOptions.excludeList.orEmpty().any { cred ->
             ctap1DeviceHasCredential(connection, clientDataHash, rpIdHash, cred) ||
@@ -152,8 +163,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap2Support -> {
                 if (connection.hasCtap1Support &&
                     !connection.canMakeCredentialWithoutUserVerification && connection.hasClientPin &&
-                    options.registerOptions.authenticatorSelection.requireUserVerification != REQUIRED &&
-                    options.registerOptions.authenticatorSelection.requireResidentKey != true
+                    options.registerOptions.authenticatorSelection?.requireUserVerification != REQUIRED &&
+                    options.registerOptions.authenticatorSelection?.requireResidentKey != true
                 ) {
                     Log.d(TAG, "Using CTAP1/U2F for PIN-less registration")
                     ctap1register(connection, options, clientDataHash)
@@ -165,9 +176,10 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             else -> throw IllegalStateException()
         }
         return AuthenticatorAttestationResponse(
-            keyHandle,
+            keyHandle ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
             clientData,
-            AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode()
+            AnyAttestationObject(response.authData, response.fmt, response.attStmt).encode(),
+            connection.transports.toTypedArray()
         )
     }
 
@@ -182,16 +194,16 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
-            extensions["appid"] = options.authenticationExtensions.fidoAppIdExtension.appId.encodeAsCbor()
+            extensions["appid"] = options.authenticationExtensions!!.fidoAppIdExtension!!.appId.encodeAsCbor()
         }
         if (options.authenticationExtensions?.userVerificationMethodExtension?.uvm != null) {
             extensions["uvm"] =
-                options.authenticationExtensions.userVerificationMethodExtension.uvm.encodeAsCbor()
+                options.authenticationExtensions!!.userVerificationMethodExtension!!.uvm.encodeAsCbor()
         }
         val request = AuthenticatorGetAssertionRequest(
             options.rpId,
             clientDataHash,
-            options.signOptions.allowList,
+            options.signOptions.allowList.orEmpty(),
             extensions,
             reqOptions
         )
@@ -205,9 +217,9 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         clientDataHash: ByteArray,
         rpIdHash: ByteArray
     ): Pair<AuthenticatorGetAssertionResponse, ByteArray> {
-        val cred = options.signOptions.allowList.firstOrNull { cred ->
+        val cred = options.signOptions.allowList.orEmpty().firstOrNull { cred ->
             ctap1DeviceHasCredential(connection, clientDataHash, rpIdHash, cred)
-        } ?: options.signOptions.allowList.first()
+        } ?: options.signOptions.allowList!!.first()
 
         while (true) {
             try {
@@ -241,7 +253,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         } catch (e: Exception) {
             try {
                 if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
-                    val appIdHash = options.authenticationExtensions.fidoAppIdExtension.appId.toByteArray()
+                    val appIdHash = options.authenticationExtensions!!.fidoAppIdExtension!!.appId.toByteArray()
                         .digest("SHA-256")
                     return ctap1sign(connection, options, clientDataHash, appIdHash)
                 }
@@ -266,7 +278,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 } catch (e: Ctap2StatusException) {
                     if (e.status == 0x2e.toByte() &&
                         connection.hasCtap1Support && connection.hasClientPin &&
-                        options.signOptions.allowList.isNotEmpty() &&
+                        options.signOptions.allowList.orEmpty().isNotEmpty() &&
                         options.signOptions.requireUserVerification != REQUIRED
                     ) {
                         Log.d(TAG, "Falling back to CTAP1/U2F")
@@ -285,7 +297,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             else -> throw IllegalStateException()
         }
         return AuthenticatorAssertionResponse(
-            credentialId,
+            credentialId ?: ByteArray(0).also { Log.w(TAG, "keyHandle was null") },
             clientData,
             response.authData,
             response.signature,

@@ -63,6 +63,14 @@ public class AuthResponse {
     public String scopeConsentDetails;
     @ResponseField("ConsentDataBase64")
     public String consentDataBase64;
+    @ResponseField("grantedScopes")
+    public String grantedScopes;
+    @ResponseField("itMetadata")
+    public String itMetadata;
+    @ResponseField("ResolutionDataBase64")
+    public String resolutionDataBase64;
+    @ResponseField("it")
+    public String auths;
 
     public static AuthResponse parse(String result) {
         AuthResponse response = new AuthResponse();
@@ -115,6 +123,7 @@ public class AuthResponse {
         if (permission != null) sb.append(", permission='").append(permission).append('\'');
         if (scopeConsentDetails != null) sb.append(", scopeConsentDetails='").append(scopeConsentDetails).append('\'');
         if (consentDataBase64 != null) sb.append(", consentDataBase64='").append(consentDataBase64).append('\'');
+        if (auths != null) sb.append(", auths='").append(auths).append('\'');
         sb.append('}');
         return sb.toString();
     }

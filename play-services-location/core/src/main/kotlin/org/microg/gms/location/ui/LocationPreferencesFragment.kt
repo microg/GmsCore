@@ -5,9 +5,10 @@
 
 package org.microg.gms.location.ui
 
-import android.annotation.SuppressLint
+import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -90,8 +91,10 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         networkProviderCategory.isVisible = requireContext().hasNetworkLocationServiceBuiltIn()
         wifiMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
         cellMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
-        wifiLearning.isVisible = SDK_INT >= 17
-        cellLearning.isVisible = SDK_INT >= 17
+        wifiLearning.isVisible =
+            SDK_INT >= 17 && requireContext().getSystemService<LocationManager>()?.allProviders.orEmpty().contains(LocationManager.GPS_PROVIDER)
+        cellLearning.isVisible =
+            SDK_INT >= 17 && requireContext().getSystemService<LocationManager>()?.allProviders.orEmpty().contains(LocationManager.GPS_PROVIDER)
     }
 
     override fun onResume() {

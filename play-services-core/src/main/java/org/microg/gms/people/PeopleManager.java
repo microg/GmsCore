@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.google.android.gms.common.Scopes;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.microg.gms.auth.AuthManager;
@@ -41,7 +42,7 @@ import java.net.URLConnection;
 
 public class PeopleManager {
     private static final String TAG = "GmsPeopleManager";
-    public static final String USERINFO_SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
+    public static final String USERINFO_SCOPE = "oauth2:" + Scopes.USERINFO_PROFILE;
     public static final String USERINFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
     public static final String REGEX_SEARCH_USER_PHOTO = "https?\\:\\/\\/lh([0-9]*)\\.googleusercontent\\.com/";
 

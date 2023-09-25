@@ -5,9 +5,11 @@
 
 package org.microg.gms.fido.core.protocol.msgs
 
+import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialParameters
 import com.upokecenter.cbor.CBORObject
 import org.microg.gms.fido.core.protocol.AsInt32Sequence
 import org.microg.gms.fido.core.protocol.AsStringSequence
+import org.microg.gms.fido.core.protocol.decodeAsPublicKeyCredentialParameters
 import org.microg.gms.utils.ToStringHelper
 
 class AuthenticatorGetInfoCommand : Ctap2Command<AuthenticatorGetInfoRequest, AuthenticatorGetInfoResponse>(AuthenticatorGetInfoRequest()) {
@@ -22,7 +24,22 @@ class AuthenticatorGetInfoResponse(
     val aaguid: ByteArray,
     val options: Options,
     val maxMsgSize: Int?,
-    val pinProtocols: List<Int>
+    val pinUvAuthProtocols: List<Int>,
+    val maxCredentialCountInList: Int?,
+    val maxCredentialIdLength: Int?,
+    val transports: List<String>?,
+    val algorithms: List<PublicKeyCredentialParameters>?,
+    val maxSerializedLargeBlobArray: Int?,
+    val forcePINChange: Boolean,
+    val minPINLength: Int?,
+    val firmwareVersion: Int?,
+    val maxCredBlobLength: Int?,
+    val maxRPIDsForSetMinPINLength: Int?,
+    val preferredPlatformUvAttempts: Int?,
+    val uvModality: Int?,
+    val certifications: Map<String, Int>?,
+    val remainingDiscoverableCredentials: Int?,
+    val vendorPrototypeConfigCommands: List<Int>?,
 ) : Ctap2Response {
 
     companion object {
@@ -103,11 +120,48 @@ class AuthenticatorGetInfoResponse(
                 ?: throw IllegalArgumentException("Not a valid response for authenticatorGetInfo"),
             options = Options.decodeFromCbor(obj.get(4)),
             maxMsgSize = obj.get(5)?.AsInt32Value(),
-            pinProtocols = obj.get(6)?.AsInt32Sequence()?.toList().orEmpty()
+            pinUvAuthProtocols = obj.get(6)?.AsInt32Sequence()?.toList().orEmpty(),
+            maxCredentialCountInList = obj.get(7)?.AsInt32Value(),
+            maxCredentialIdLength = obj.get(8)?.AsInt32Value(),
+            transports = obj.get(9)?.AsStringSequence()?.toList(),
+            algorithms = runCatching { obj.get(10)?.values?.map { it.decodeAsPublicKeyCredentialParameters() } }.getOrNull(),
+            maxSerializedLargeBlobArray = obj.get(11)?.AsInt32Value(),
+            forcePINChange = obj.get(12)?.AsBoolean() == true,
+            minPINLength = obj.get(13)?.AsInt32Value(),
+            firmwareVersion = obj.get(14)?.AsInt32Value(),
+            maxCredBlobLength = obj.get(15)?.AsInt32Value(),
+            maxRPIDsForSetMinPINLength = obj.get(16)?.AsInt32Value(),
+            preferredPlatformUvAttempts = obj.get(17)?.AsInt32Value(),
+            uvModality = obj.get(18)?.AsInt32Value(),
+            certifications = obj.get(19)?.entries?.mapNotNull { runCatching { it.key.AsString() to it.value.AsInt32Value() }.getOrNull() }?.toMap(),
+            remainingDiscoverableCredentials = obj.get(20)?.AsInt32Value(),
+            vendorPrototypeConfigCommands = obj.get(21)?.AsInt32Sequence()?.toList(),
         )
     }
 
     override fun toString(): String {
-        return "AuthenticatorGetInfoResponse(versions=$versions, extensions=$extensions, aaguid=${aaguid.contentToString()}, options=$options, maxMsgSize=$maxMsgSize, pinProtocols=$pinProtocols)"
+        return ToStringHelper.name("AuthenticatorGetInfoResponse")
+            .field("versions", versions)
+            .field("extensions", extensions)
+            .field("aaguid", aaguid)
+            .field("options", options)
+            .field("maxMsgSize", maxMsgSize)
+            .field("pinUvAuthProtocols", pinUvAuthProtocols)
+            .field("maxCredentialCountInList", maxCredentialCountInList)
+            .field("maxCredentialIdLength", maxCredentialIdLength)
+            .field("transports", transports)
+            .field("algorithms", algorithms)
+            .field("maxSerializedLargeBlobArray", maxSerializedLargeBlobArray)
+            .field("forcePINChange", forcePINChange)
+            .field("minPINLength", minPINLength)
+            .field("firmwareVersion", firmwareVersion)
+            .field("maxCredBlobLength", maxCredBlobLength)
+            .field("maxRPIDsForSetMinPINLength", maxRPIDsForSetMinPINLength)
+            .field("preferredPlatformUvAttempts", preferredPlatformUvAttempts)
+            .field("uvModality", uvModality)
+            .field("certifications", certifications)
+            .field("remainingDiscoverableCredentials", remainingDiscoverableCredentials)
+            .field("vendorPrototypeConfigCommands", vendorPrototypeConfigCommands)
+            .end()
     }
 }

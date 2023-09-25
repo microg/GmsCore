@@ -12,8 +12,12 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.Parcel;
 import android.text.TextUtils;
-import org.microg.safeparcel.AutoSafeParcelable;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 import java.util.Arrays;
 
@@ -21,7 +25,8 @@ import java.util.Arrays;
  * Contains all possible error codes for when a client fails to connect to Google Play services.
  * These error codes are used by {@link GoogleApiClient.OnConnectionFailedListener}.
  */
-public class ConnectionResult extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class ConnectionResult extends AbstractSafeParcelable {
     /**
      * The connection was successful.
      */
@@ -158,12 +163,12 @@ public class ConnectionResult extends AutoSafeParcelable {
     public static final int DRIVE_EXTERNAL_STORAGE_REQUIRED = 1500;
 
     @Field(1)
-    private final int versionCode = 1;
-    @Field(2)
+    int versionCode = 1;
+    @Field(value = 2, getterName = "getErrorCode")
     private int statusCode;
-    @Field(3)
+    @Field(value = 3, getterName = "getResolution")
     private PendingIntent resolution;
-    @Field(4)
+    @Field(value = 4, getterName = "getErrorMessage")
     private String message;
 
     private ConnectionResult() {
@@ -195,7 +200,8 @@ public class ConnectionResult extends AutoSafeParcelable {
      * @param resolution A pending intent that will resolve the issue when started, or null.
      * @param message    An additional error message for the connection result, or null.
      */
-    public ConnectionResult(int statusCode, PendingIntent resolution, String message) {
+    @Constructor
+    public ConnectionResult(@Param(2) int statusCode, @Param(3) PendingIntent resolution, @Param(4) String message) {
         this.statusCode = statusCode;
         this.resolution = resolution;
         this.message = message;
@@ -342,5 +348,10 @@ public class ConnectionResult extends AutoSafeParcelable {
         }
     }
 
-    public static final Creator<ConnectionResult> CREATOR = new AutoCreator<>(ConnectionResult.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<ConnectionResult> CREATOR = findCreator(ConnectionResult.class);
 }

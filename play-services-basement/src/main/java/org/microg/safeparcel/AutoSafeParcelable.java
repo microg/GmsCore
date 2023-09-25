@@ -16,13 +16,13 @@ public abstract class AutoSafeParcelable extends AbstractSafeParcelable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void writeToParcel(Parcel out, int flags) {
+    public void writeToParcel(Parcel dest, int flags) {
         Creator<Parcelable> creator = SafeParcelReflectionUtil.getCreator(this.getClass());
         if (creator instanceof SafeParcelableCreatorAndWriter) {
-            ((SafeParcelableCreatorAndWriter<AutoSafeParcelable>) (SafeParcelableCreatorAndWriter<?>) creator).writeToParcel(this, out, flags);
+            ((SafeParcelableCreatorAndWriter<AutoSafeParcelable>) (SafeParcelableCreatorAndWriter<?>) creator).writeToParcel(this, dest, flags);
         } else {
             Log.w(TAG, "AutoSafeParcelable is not using SafeParcelableCreatorAndWriter");
-            SafeParcelReflectionUtil.writeObject(this, out, flags);
+            SafeParcelReflectionUtil.writeObject(this, dest, flags);
         }
     }
 

@@ -9,10 +9,12 @@ import android.annotation.TargetApi
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CONFLICT_IGNORE
 import android.database.sqlite.SQLiteOpenHelper
+import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
@@ -153,6 +155,9 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
         if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
         val appLogEntries = delete(TABLE_APP_LOG, "timestamp < ?", longArrayOf(rollingStartTime))
         Log.d(TAG, "Deleted on daily cleanup: $appLogEntries applogs")
+        if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
+        val tokens = delete(TABLE_TOKENS, "timestamp < ?", longArrayOf(rollingStartTime))
+        Log.d(TAG, "Deleted on daily cleanup: $tokens tokens")
         if (start + MAX_DELETE_TIME < System.currentTimeMillis()) return@run false
         val temporaryExposureKeys = delete(TABLE_TEK, "(rollingStartNumber + rollingPeriod) < ?", longArrayOf(rollingStartTime / ROLLING_WINDOW_LENGTH_MS))
         Log.d(TAG, "Deleted on daily cleanup: $temporaryExposureKeys teks")
@@ -733,6 +738,15 @@ class ExposureDatabase private constructor(private val context: Context) : SQLit
                 }
                 list
             }
+        }
+
+    val isEmpty: Boolean
+        get() = readableDatabase.run {
+            Log.d(TAG, "${DatabaseUtils.queryNumEntries(this, TABLE_ADVERTISEMENTS)}, ${DatabaseUtils.queryNumEntries(this, TABLE_APP_LOG)}, ${DatabaseUtils.queryNumEntries(this, TABLE_TEK)}, ${DatabaseUtils.queryNumEntries(this, TABLE_TOKENS)}")
+            DatabaseUtils.queryNumEntries(this, TABLE_ADVERTISEMENTS) == 0L &&
+                    DatabaseUtils.queryNumEntries(this, TABLE_APP_LOG) == 0L &&
+                    DatabaseUtils.queryNumEntries(this, TABLE_TEK) == 0L &&
+                    DatabaseUtils.queryNumEntries(this, TABLE_TOKENS) == 0L
         }
 
     fun countMethodCalls(packageName: String, method: String): Int = readableDatabase.run {

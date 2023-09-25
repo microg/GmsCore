@@ -7,11 +7,11 @@ package org.microg.gms.common.api;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.DeadObjectException;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class GoogleApiManager {
     private static GoogleApiManager instance;
     private Context context;
-    private Map<ApiInstance, ApiClient> clientMap = new HashMap<>();
+    private Map<ApiInstance, Api.Client> clientMap = new HashMap<>();
     private Map<ApiInstance, List<WaitingApiCall<?>>> waitingApiCallMap = new HashMap<>();
 
     private GoogleApiManager(Context context) {
@@ -34,19 +34,19 @@ public class GoogleApiManager {
         return instance;
     }
 
-    private synchronized <O extends Api.ApiOptions, A extends ApiClient> A clientForApi(GoogleApi<O> api) {
+    private synchronized <O extends Api.ApiOptions, A extends Api.Client> A clientForApi(GoogleApi<O> api) {
         ApiInstance apiInstance = new ApiInstance(api);
         if (clientMap.containsKey(apiInstance)) {
             return (A) clientMap.get(apiInstance);
         } else {
-            ApiClient client = api.api.getBuilder().build(api.getOptions(), context, context.getMainLooper(), null, new ConnectionCallback(apiInstance), new ConnectionFailedListener(apiInstance));
+            Api.Client client = api.api.getBuilder().build(api.getOptions(), context, context.getMainLooper(), null, new ConnectionCallback(apiInstance), new ConnectionFailedListener(apiInstance));
             clientMap.put(apiInstance, client);
             waitingApiCallMap.put(apiInstance, new ArrayList<>());
             return (A) client;
         }
     }
 
-    public synchronized <O extends Api.ApiOptions, R, A extends ApiClient> void scheduleTask(GoogleApi<O> api, PendingGoogleApiCall<R, A> apiCall, TaskCompletionSource<R> completionSource) {
+    public synchronized <O extends Api.ApiOptions, R, A extends Api.Client> void scheduleTask(GoogleApi<O> api, PendingGoogleApiCall<R, A> apiCall, TaskCompletionSource<R> completionSource) {
         A client = clientForApi(api);
         boolean connecting = client.isConnecting();
         boolean connected = client.isConnected();
@@ -57,7 +57,7 @@ public class GoogleApiManager {
                 completionSource.setException(e);
             }
         } else {
-            waitingApiCallMap.get(new ApiInstance(api)).add(new WaitingApiCall<R>((PendingGoogleApiCall<R, ApiClient>) apiCall, completionSource));
+            waitingApiCallMap.get(new ApiInstance(api)).add(new WaitingApiCall<R>((PendingGoogleApiCall<R, Api.Client>) apiCall, completionSource));
             if (!connecting) {
                 client.connect();
             }
@@ -120,15 +120,15 @@ public class GoogleApiManager {
     }
 
     private static class WaitingApiCall<R> {
-        private PendingGoogleApiCall<R, ApiClient> apiCall;
+        private PendingGoogleApiCall<R, Api.Client> apiCall;
         private TaskCompletionSource<R> completionSource;
 
-        public WaitingApiCall(PendingGoogleApiCall<R, ApiClient> apiCall, TaskCompletionSource<R> completionSource) {
+        public WaitingApiCall(PendingGoogleApiCall<R, Api.Client> apiCall, TaskCompletionSource<R> completionSource) {
             this.apiCall = apiCall;
             this.completionSource = completionSource;
         }
 
-        public void execute(ApiClient client) throws Exception {
+        public void execute(Api.Client client) throws Exception {
             apiCall.execute(client, completionSource);
         }
 

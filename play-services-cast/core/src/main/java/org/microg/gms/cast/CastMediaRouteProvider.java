@@ -183,7 +183,7 @@ public class CastMediaRouteProvider extends MediaRouteProvider {
             return;
         }
 
-        mNsdManager = (NsdManager)context.getSystemService(Context.NSD_SERVICE);
+        mNsdManager = (NsdManager)context.getApplicationContext().getSystemService(Context.NSD_SERVICE);
 
         mDiscoveryListener = new NsdManager.DiscoveryListener() {
 

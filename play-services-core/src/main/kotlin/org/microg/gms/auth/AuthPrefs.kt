@@ -20,4 +20,11 @@ object AuthPrefs {
         }
     }
 
+    @JvmStatic
+    fun shouldIncludeAndroidId(context: Context): Boolean {
+        return SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(Auth.INCLUDE_ANDROID_ID)) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
 }

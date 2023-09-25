@@ -15,9 +15,12 @@ const val CAPABILITY_CTAP_2_1 = 1 shl 2
 const val CAPABILITY_CLIENT_PIN = 1 shl 3
 const val CAPABILITY_WINK = 1 shl 4
 const val CAPABILITY_MAKE_CRED_WITHOUT_UV = 1 shl 5
+const val CAPABILITY_USER_VERIFICATION = 1 shl 6
+const val CAPABILITY_RESIDENT_KEY = 1 shl 7
 
 interface CtapConnection {
     val capabilities: Int
+    val transports: List<String>
 
     val hasCtap1Support: Boolean
         get() = capabilities and CAPABILITY_CTAP_1 > 0
@@ -31,6 +34,10 @@ interface CtapConnection {
         get() = capabilities and CAPABILITY_WINK > 0
     val canMakeCredentialWithoutUserVerification: Boolean
         get() = capabilities and CAPABILITY_MAKE_CRED_WITHOUT_UV > 0
+    val hasUserVerificationSupport: Boolean
+        get() = capabilities and CAPABILITY_USER_VERIFICATION > 0
+    val hasResidentKey: Boolean
+        get() = capabilities and CAPABILITY_RESIDENT_KEY > 0
 
     suspend fun <Q : Ctap1Request, S : Ctap1Response> runCommand(command: Ctap1Command<Q, S>): S
     suspend fun <Q : Ctap2Request, S : Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S

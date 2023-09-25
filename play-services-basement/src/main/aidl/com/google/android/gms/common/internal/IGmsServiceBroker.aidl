@@ -17,20 +17,20 @@ interface IGmsServiceBroker {
     void getGoogleLocationManagerService(IGmsCallbacks callback, int code, String str, in Bundle params) = 7;
     void getGamesService(IGmsCallbacks callback, int code, String packageName, String accountName, in String[] scopes, String gamePackageName, IBinder popupWindowToken, String desiredLocale, in Bundle params) = 8;
     void getAppStateService(IGmsCallbacks callback, int code, String packageName, String accountName, in String[] scopes) = 9;
-    void getPlayLogService(IGmsCallbacks callback, int code, String str, in Bundle params) = 10;
-    void getAdMobService(IGmsCallbacks callback, int code, String str, in Bundle params) = 11;
-    void getDroidGuardService(IGmsCallbacks callback, int code, String str, in Bundle params) = 12;
-    void getLockboxService(IGmsCallbacks callback, int code, String str, in Bundle params) = 13;
-    void getCastMirroringService(IGmsCallbacks callback, int code, String str, in Bundle params) = 14;
-    void getNetworkQualityService(IGmsCallbacks callback, int code, String str, in Bundle params) = 15;
-    void getGoogleIdentityService(IGmsCallbacks callback, int code, String str, in Bundle params) = 16;
-    void getGoogleFeedbackService(IGmsCallbacks callback, int code, String str, in Bundle params) = 17;
-    void getCastService(IGmsCallbacks callback, int code, String str, IBinder binder, in Bundle params) = 18;
-    void getDriveService(IGmsCallbacks callback, int code, String str1, in String[] args, String str2, in Bundle params) = 19;
-    void getLightweightAppDataSearchService(IGmsCallbacks callback, int code, String str) = 20;
-    void getSearchAdministrationService(IGmsCallbacks callback, int code, String str) = 21;
-    void getAutoBackupService(IGmsCallbacks callback, int code, String str, in Bundle params) = 22;
-    void getAddressService(IGmsCallbacks callback, int code, String str) = 23;
+    void getPlayLogService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 10;
+    void getAdMobService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 11;
+    void getDroidGuardService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 12;
+    void getLockboxService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 13;
+    void getCastMirroringService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 14;
+    void getNetworkQualityService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 15;
+    void getGoogleIdentityService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 16;
+    void getGoogleFeedbackService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 17;
+    void getCastService(IGmsCallbacks callback, int code, String packageName, IBinder binder, in Bundle params) = 18;
+    void getDriveService(IGmsCallbacks callback, int code, String packageName, in String[] args, String str2, in Bundle params) = 19;
+    void getLightweightAppDataSearchService(IGmsCallbacks callback, int code, String packageName) = 20;
+    void getSearchAdministrationService(IGmsCallbacks callback, int code, String packageName) = 21;
+    void getAutoBackupService(IGmsCallbacks callback, int code, String packageName, in Bundle params) = 22;
+    void getAddressService(IGmsCallbacks callback, int code, String packageName) = 23;
 
     void getWalletServiceWithPackageName(IGmsCallbacks callback, int code, String packageName) = 41;
 
