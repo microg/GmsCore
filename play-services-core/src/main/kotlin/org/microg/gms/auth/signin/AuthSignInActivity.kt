@@ -151,7 +151,12 @@ class AuthSignInActivity : AppCompatActivity() {
                 openAddAccount()
             } else {
                 lifecycleScope.launchWhenStarted {
-                    signIn(accounts[position])
+                    try {
+                        signIn(accounts[position])
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                        finishResult(CommonStatusCodes.INTERNAL_ERROR)
+                    }
                 }
             }
         }
@@ -170,7 +175,12 @@ class AuthSignInActivity : AppCompatActivity() {
             binding.button1.isEnabled = false
             binding.button2.isEnabled = false
             lifecycleScope.launchWhenStarted {
-                signIn(account)
+                try {
+                    signIn(account)
+                } catch (e: Exception) {
+                    Log.w(TAG, e)
+                    finishResult(CommonStatusCodes.INTERNAL_ERROR)
+                }
             }
         }
         setContentView(binding.root)
