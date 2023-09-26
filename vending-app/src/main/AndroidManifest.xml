@@ -5,6 +5,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <permission
         android:name="com.android.vending.CHECK_LICENSE"
         android:protectionLevel="normal" />

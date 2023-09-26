@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+option java_package = "com.android.vending";
+option java_multiple_files = true;
+
+message LicenseResult {
+  optional LicenseInformation information = 1;
+}
+
+message LicenseInformation {
+  optional V1Container v1 = 76;
+  optional V2Container v2 = 173;
+}
+
+message V1Container {
+  optional uint32 result = 1;
+  optional string signedData = 2;
+  optional string signature = 3;
+
+}
+
+message V2Container {
+  optional AppLicense license = 1;
+}
+
+message AppLicense {
+  optional string jwt = 1;
+}
