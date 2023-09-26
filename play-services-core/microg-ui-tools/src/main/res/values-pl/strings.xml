@@ -37,5 +37,8 @@
     <string name="about_root_version">Wersja v0.1.0</string>
     <string name="about_root_libraries">Użyte biblioteki</string>
 
+    <string name="about_android_support_v4">v4 Support Library</string>
+    <string name="about_android_support_v7_appcompat">v7 appcompat Support Library</string>
+    <string name="about_android_support_v7_preference">v7 preference Support Library</string>
     <string name="about_android_support_license">Licencja Apache 2.0, The Android Open Source Project</string>
 </resources>
