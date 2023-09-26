@@ -36,7 +36,18 @@ To może zająć kilka minut.</string>
     <string name="auth_notification_title">Wymagana autoryzacja</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> wymaga Twojej autoryzacji, aby skorzystać z konta Google.</string>
 
+    <string name="signin_picker_title">Wybierz konto</string>
+    <string name="signin_picker_subtitle">aby kontynuować do <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_picker_add_account_label">Dodaj kolejne konto</string>
+    <string name="signin_confirm_title">Zezwalaj na logowanie się w <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Zezwól i udostępnij</string>
+    <string name="signin_subtext_sharing">Aby kontynuować, microG udostępni nazwę, adres email i zdjęcie profilowe Twojego konta Google aplikacji <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="signin_subtext_policy">Przed korzystaniem z tej aplikacji, sprawdź jej %1$s i %2$s.</string>
+    <string name="signin_subtext_policy_privacy">politykę prywatności</string>
+    <string name="signin_subtext_policy_terms">warunki korzystania z usługi</string>
+
     <string name="perm_status_broadcast_label">sprawdzaj wewnętrzne powiadomienia stanu</string>
+    <string name="perm_gsf_read_gservices_label">odczytuj konfigurację usług Google</string>
     <string name="perm_c2dm_receive_label">sprawdzaj wiadomości C2DM</string>
     <string name="perm_c2dm_send_label">wysyłaj wiadomości C2DM do innych aplikacji</string>
     <string name="perm_gtalk_svc_label">wymieniaj wiadomości i odbieraj powiadomienia synchronizacji z serwerów Google</string>
@@ -112,6 +123,8 @@ To może zająć kilka minut.</string>
     <string name="pref_auth_trust_google_summary">Po wyłączeniu, do użytkownika kierowane jest pytanie przed wysyłaniem prośby o autoryzację do Google. Niektóre aplikacje nie będą mogły skorzystać z konta Google po wyłączeniu tej opcji.</string>
     <string name="pref_auth_visible_title">Pozwól aplikacjom na znalezienie kont</string>
     <string name="pref_auth_visible_summary">Gdy włączone, wszystkie aplikacje na tym urządzeniu będą w stanie wyświetlić adres e-mail Twoich kont Google bez jakiejkolwiek autoryzacji.</string>
+    <string name="pref_auth_include_android_id_title">Uwierzytelnij przez rejestrację urządzenia</string>
+    <string name="pref_auth_include_android_id_summary">Gdy wyłączone, żądania uwierzytelnienia nie będą zależne od rejestracji urządzenia, co pozwala nieuwierzytelnionym urządzeniom na zalogowanie się, lecz może spowodować nieprzewidzane skutki.</string>
 
     <string name="pref_checkin_enable_summary">Zgłaszanie urządzenia to ukryty proces, służący do wygenerowania unikalnego identyfikatora dla usług Google. Usługi microG usuwają inne dane identyfikacyjne niż nazwa Twojego konta z tego identyfikatora.</string>
     <string name="pref_device_registration_android_id">ID Androida</string>
@@ -193,6 +206,7 @@ To może zająć kilka minut.</string>
     <string name="pref_safetynet_recent_uses">Ostatnie żądania</string>
     <string name="pref_safetynet_recent_attestation_summary">Weryfikacja: %s</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
     <string name="pref_safetynet_recent_copy_json">Kopiuj dane JSON JWS</string>
     <string name="pref_safetynet_recent_advice">Rada</string>
     <string name="pref_safetynet_recent_eval_type">Typ sprawdzania</string>
