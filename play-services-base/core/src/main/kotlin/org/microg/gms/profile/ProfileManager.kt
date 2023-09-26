@@ -339,7 +339,7 @@ object ProfileManager {
         val profileName = getProfileName { FileXmlResourceParser(file) } ?: return false
         try {
             Log.d(TAG, "Importing user profile '$profileName'")
-            file.copyTo(getUserProfileFile(context))
+            file.copyTo(getUserProfileFile(context), overwrite = true)
             if (activeProfile == PROFILE_USER) applyProfile(context, PROFILE_USER)
             return true
         } catch (e: Exception) {
