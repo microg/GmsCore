@@ -8,7 +8,7 @@
     <string name="prefcat_location_apps_title">Ostatni dostęp</string>
     <string name="prefcat_location_wifi_title">Lokalizacja oparta na Wi-Fi</string>
     <string name="prefcat_location_cell_title">Lokalizacja oparta o sieć mobilną</string>
-    <string name="prefcat_geocoder_title">Address resolver</string>
+    <string name="prefcat_geocoder_title">Rozwiązywanie adresów</string>
     <string name="pref_location_wifi_mls_enabled_title">Żądaj od usług Mozilli</string>
     <string name="pref_location_wifi_mls_enabled_summary">Uzyskaj lokalizację opartą o Wi-Fi poprzez usługę lokalizacji Mozilli.</string>
     <string name="pref_location_wifi_moving_enabled_title">Żądaj od punktów dostępowych</string>
