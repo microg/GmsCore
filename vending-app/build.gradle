@@ -61,6 +61,7 @@ android {
 
 dependencies {
     implementation project(':fake-signature')
+    implementation project(':play-services-auth')
 
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "com.android.volley:volley:$volleyVersion"

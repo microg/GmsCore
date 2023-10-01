@@ -41,6 +41,7 @@ import okio.ByteString;
 public abstract class LicenseRequest<T> extends Request<T> {
 
     private final String xPsRh;
+    private final String auth;
     private static final String TAG = "FakeLicenseRequest";
 
     private static final int BASE64_FLAGS = Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING;
@@ -49,8 +50,9 @@ public abstract class LicenseRequest<T> extends Request<T> {
     private final Response.Listener<T> successListener;
 
 
-    protected LicenseRequest(String url, Response.Listener<T> successListener, Response.ErrorListener errorListener) {
+    protected LicenseRequest(String url, String auth, Response.Listener<T> successListener, Response.ErrorListener errorListener) {
         super(GET, url, errorListener);
+        this.auth = auth;
 
         this.successListener = successListener;
 
@@ -143,7 +145,7 @@ public abstract class LicenseRequest<T> extends Request<T> {
     public Map<String, String> getHeaders() {
         return Map.of(
             "X-PS-RH", xPsRh,
-            "Authorization", "Bearer ya29.[…]]",
+            "Authorization", "Bearer " + auth,
             "Connection", "Keep-Alive"
         );
     }
@@ -162,9 +164,9 @@ public abstract class LicenseRequest<T> extends Request<T> {
 
     public static class V1 extends LicenseRequest<V1Container> {
 
-        public V1(String packageName, int versionCode, long nonce, Response.Listener<V1Container> successListener, Response.ErrorListener errorListener) {
+        public V1(String packageName, String auth, int versionCode, long nonce, Response.Listener<V1Container> successListener, Response.ErrorListener errorListener) {
             super("https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=" + packageName + "&vc=" + versionCode + "&nnc=" + nonce,
-                successListener, errorListener
+                auth, successListener, errorListener
             );
         }
 
@@ -187,11 +189,11 @@ public abstract class LicenseRequest<T> extends Request<T> {
     }
 
     public static class V2 extends LicenseRequest<String> {
-        public V2(String packageName, int versionCode, Response.Listener<String> successListener,
+        public V2(String packageName, String auth, int versionCode, Response.Listener<String> successListener,
                   Response.ErrorListener errorListener) {
             super(
                 "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=" + packageName + "&vc=" + versionCode,
-                successListener, errorListener
+                auth, successListener, errorListener
             );
         }
 
