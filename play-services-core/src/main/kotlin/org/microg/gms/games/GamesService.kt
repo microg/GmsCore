@@ -71,7 +71,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
 
         lifecycleScope.launchWhenStarted {
             try {
-                val account = request.account.takeIf { it.name != AuthConstants.DEFAULT_ACCOUNT }
+                val account = request.account?.takeIf { it.name != AuthConstants.DEFAULT_ACCOUNT }
                     ?: GamesConfigurationService.getDefaultAccount(this@GamesService, packageName)
                     ?: return@launchWhenStarted sendSignInRequired()
 
