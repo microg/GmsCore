@@ -166,6 +166,10 @@ public class LicensingService extends Service {
                 // Verify caller identity
                 if (packageInfo.applicationInfo.uid != getCallingUid()) {
                     Log.e(TAG, "an app illegally tried to request v2 licenses for another app (caller: " + getCallingUid() + ")");
+                    /* This negative result is provided even if users are not signed in; we expect apps
+                     * will usually behave correctly in practise so this will not prevent users from
+                     * using the app.
+                     */
                     listener.verifyLicense(ERROR_NON_MATCHING_UID, new Bundle());
                 } else {
                     Account[] accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE);
@@ -188,21 +192,32 @@ public class LicensingService extends Service {
                                     Bundle bundle = new Bundle();
                                     bundle.putString(KEY_V2_RESULT_JWT, jwt);
                                     try {
-                                        listener.verifyLicense(jwt == null ? NOT_LICENSED : LICENSED, bundle);
+                                        if (jwt == null) {
+                                            /*
+                                             * Suppress failures on V2. V2 is commonly used by free apps whose checker
+                                             * will not throw users out of the app if it never receives a response.
+                                             *
+                                             * This means that users who are signed in to a Google account will not
+                                             * get a worse experience in these apps than users that are not signed in.
+                                             */
+                                            Log.i(TAG, "Suppressed negative result for package " + packageName);
+                                        } else {
+                                            listener.verifyLicense(jwt == null ? NOT_LICENSED : LICENSED, bundle);
+                                        }
                                     } catch (RemoteException e) {
                                         Log.e(TAG, "After returning licenseV2 result, remote threw an Exception.");
                                         e.printStackTrace();
                                     }
                                 }, error -> {
                                     Log.e(TAG, "licenseV2 request failed with " + error.toString());
-                                    sendError(listener, ERROR_CONTACTING_SERVER);
+                                    //sendError(listener, ERROR_CONTACTING_SERVER); – see above
                                 });
 
                                 request.setShouldCache(false);
                                 queue.add(request);
 
                             } catch (AuthenticatorException | IOException | OperationCanceledException e) {
-                                sendError(listener, ERROR_CONTACTING_SERVER);
+                                //sendError(listener, ERROR_CONTACTING_SERVER); – see above
                                 e.printStackTrace();
                             }
                         }, null
