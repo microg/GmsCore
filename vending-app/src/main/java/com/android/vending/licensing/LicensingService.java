@@ -33,6 +33,7 @@ public class LicensingService extends Service {
     private static final String TAG = "FakeLicenseService";
     private RequestQueue queue;
     private AccountManager accountManager;
+    private LicenseServiceNotificationRunnable notificationRunnable;
 
     private static final String KEY_V2_RESULT_JWT = "LICENSE_DATA";
 
@@ -89,7 +90,8 @@ public class LicensingService extends Service {
         public void checkLicense(long nonce, String packageName, ILicenseResultListener listener) throws RemoteException {
             Log.v(TAG, "checkLicense(" + nonce + ", " + packageName + ")");
             try {
-                PackageInfo packageInfo = getPackageManager().getPackageInfo(packageName, 0);
+                PackageManager packageManager = getPackageManager();
+                PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
                 int versionCode = packageInfo.versionCode;
 
                 // Verify caller identity
@@ -102,6 +104,10 @@ public class LicensingService extends Service {
 
                     if (accounts.length == 0) {
                         Log.e(TAG, "not checking license, as user is not signed in");
+                        notificationRunnable.callerPackageName = packageName;
+                        notificationRunnable.callerUid = packageInfo.applicationInfo.uid;
+                        notificationRunnable.callerAppName = packageManager.getApplicationLabel(packageInfo.applicationInfo);
+                        notificationRunnable.run();
                     } else accountManager.getAuthToken(
                         accounts[0], AUTH_TOKEN_SCOPE, false,
                         future -> {
@@ -153,7 +159,8 @@ public class LicensingService extends Service {
             Log.v(TAG, "checkLicenseV2(" + packageName + ", " + extraParams + ")");
 
             try {
-                PackageInfo packageInfo = getPackageManager().getPackageInfo(packageName, 0);
+                PackageManager packageManager = getPackageManager();
+                PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
                 int versionCode = packageInfo.versionCode;
 
                 // Verify caller identity
@@ -165,6 +172,10 @@ public class LicensingService extends Service {
 
                     if (accounts.length == 0) {
                         Log.e(TAG, "not checking license, as user is not signed in");
+                        notificationRunnable.callerPackageName = packageName;
+                        notificationRunnable.callerUid = packageInfo.applicationInfo.uid;
+                        notificationRunnable.callerAppName = packageManager.getApplicationLabel(packageInfo.applicationInfo);
+                        notificationRunnable.run();
                     } else accountManager.getAuthToken(
                         accounts[0], AUTH_TOKEN_SCOPE, false,
                         future -> {
@@ -224,6 +235,7 @@ public class LicensingService extends Service {
     public IBinder onBind(Intent intent) {
         queue = Volley.newRequestQueue(this);
         accountManager = AccountManager.get(this);
+        notificationRunnable = new LicenseServiceNotificationRunnable(this);
 
         return mLicenseService;
     }
