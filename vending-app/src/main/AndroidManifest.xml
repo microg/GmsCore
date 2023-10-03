@@ -10,6 +10,7 @@
         android:protectionLevel="normal" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS"
@@ -64,5 +65,11 @@
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
+
+        <receiver android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$IgnoreReceiver"
+            android:exported="false" />
+        <receiver android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$SignInReceiver"
+            android:exported="false" />
+
     </application>
 </manifest>
