@@ -74,7 +74,8 @@ public class LicenseServiceNotificationRunnable implements Runnable {
         );
 
         Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_app_foreground)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setSound(null)
             .setContentTitle(context.getString(R.string.license_notification_title, callerAppName))
             .setContentText(context.getString(R.string.license_notification_body))
             .addAction(
@@ -103,6 +104,7 @@ public class LicenseServiceNotificationRunnable implements Runnable {
                 NotificationManager.IMPORTANCE_HIGH
             );
             channel.setDescription(context.getString(R.string.license_notification_channel_description));
+            channel.setSound(null, null);
 
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
