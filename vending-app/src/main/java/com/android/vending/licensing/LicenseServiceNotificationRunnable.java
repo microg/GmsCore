@@ -112,22 +112,14 @@ public class LicenseServiceNotificationRunnable implements Runnable {
 
     }
 
-    private static class Receiver extends BroadcastReceiver {
+    public static final class IgnoreReceiver extends BroadcastReceiver {
 
         @Override
-        @CallSuper
         public void onReceive(Context context, Intent intent) {
-            // Dismiss notification
+
+            // Dismiss ignored notification
             NotificationManagerCompat.from(context)
                 .cancel(intent.getIntExtra(INTENT_KEY_NOTIFICATION_ID, -1));
-        }
-    }
-
-    public static final class IgnoreReceiver extends Receiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            super.onReceive(context, intent);
 
             SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 
@@ -143,10 +135,12 @@ public class LicenseServiceNotificationRunnable implements Runnable {
         }
     }
 
-    public static final class SignInReceiver extends Receiver {
+    public static final class SignInReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            super.onReceive(context, intent);
+
+            // Dismiss all notifications
+            NotificationManagerCompat.from(context).cancelAll();
 
             Log.d(TAG, "Starting sign in activity");
             Intent authIntent = new Intent(GMS_AUTH_INTENT_ACTION);
