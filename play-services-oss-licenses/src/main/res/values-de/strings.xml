@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">Beim Abrufen der Lizenz ist ein Fehler aufgetreten.</string>
+    <string name="oss_license_title">Open-Source-Lizenzen</string>
+    <string name="no_licenses_available">Diese App hat keine Open-Source-Lizenzen.</string>
+</resources>
