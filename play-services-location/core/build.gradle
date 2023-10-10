@@ -47,6 +47,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
