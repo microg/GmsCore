@@ -93,7 +93,7 @@ object ProfileManager {
         }
     }.getOrDefault(false)
 
-    internal fun getActiveProfileData(context: Context): Map<String, String> =
+    fun getActiveProfileData(context: Context): Map<String, String> =
         getProfileData(context, getProfile(context), getRealData())
 
     private fun getProfileData(context: Context, profile: String, realData: Map<String, String>): Map<String, String> {
