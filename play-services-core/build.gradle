@@ -46,6 +46,7 @@ dependencies {
     implementation project(':play-services-core-proto')
 
     implementation project(':play-services-core:microg-ui-tools') // deprecated
+    implementation project(':play-services-core-package')
     implementation project(':play-services-api')
 
     implementation project(':play-services-appinvite')
