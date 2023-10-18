@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_button_get_started">Să începem</string>
+    <string name="fido_usb_prompt_body">Conectează cheia de securitate la portul USB sau printr-un cablu USB. Dacă cheia are un buton sau un disc auriu, atinge-l acum.</string>
+    <string name="fido_transport_usb_wait_connect_body">Conectează cheia de securitate USB.</string>
+    <string name="fido_nfc_prompt_body">Ține cheia pe partea din spate a dispozitivului până când nu mai vibrează</string>
+    <string name="fido_welcome_body">Folosirea cheii de securitate cu %1$s te ajută să protejezi datele private.</string>
+    <string name="fido_welcome_title">Utilizează cheia de securitate pentru %1$s</string>
+    <string name="fido_transport_selection_biometric">Utilizează acest dispozitiv cu blocarea ecranului</string>
+    <string name="fido_welcome_privileged_check">Da, %1$s este browser-ul meu de încredere și ar trebui să aibă permisiunea de a utiliza chei de securitate cu site-uri web terțe.</string>
+    <string name="fido_biometric_prompt_body">%1$s trebuie să verifice dacă ești tu.</string>
+    <string name="fido_transport_selection_usb">Utilizează cheia de securitate cu USB</string>
+    <string name="fido_transport_selection_title">Alege cum să utilizezi cheia de securitate</string>
+    <string name="fido_biometric_prompt_title">Verifică-ți identitatea</string>
+    <string name="fido_usb_title">Conectează cheia de securitate USB</string>
+    <string name="fido_transport_usb_wait_confirm_body">Atinge inelul sau discul de aur de pe %1$s.</string>
+    <string name="fido_welcome_privileged_info">%1$s acționează ca un browser de încredere pentru a-ți folosi cheia de securitate %2$s.</string>
+    <string name="fido_nfc_title">Conectează cheia de securitate NFC</string>
+    <string name="fido_transport_selection_bluetooth">Utilizează cheia de securitate cu Bluetooth</string>
+    <string name="fido_transport_selection_body">Cheile de securitate funcționează cu Bluetooth, NFC și USB. Alege cum dorești să utilizezi cheia.</string>
+    <string name="fido_transport_selection_nfc">Utilizează cheia de securitate cu NFC</string>
+</resources>

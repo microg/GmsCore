@@ -13,7 +13,25 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    </resources>
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicație înregistrată</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> aplicații înregistrate</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicații înregistrate</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Solicită permisiunea lipsă</item>
+        <item quantity="few">Solicită permisiunile lipsă</item>
+        <item quantity="other">Solicită permisiunile lipsă</item>
+    </plurals>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> modul de navigație configurat</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> module de navigație configurate</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> module de navigație configurate</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Nu este acordată permisiunea necesară pentru funcționarea corectă a Serviciilor microG.</item>
+        <item quantity="few">Nu sunt acordate permisiunile necesare pentru funcționarea corectă a Serviciilor microG.</item>
+        <item quantity="other">Nu sunt acordate permisiunile necesare pentru funcționarea corectă a Serviciilor microG.</item>
+    </plurals>
+</resources>

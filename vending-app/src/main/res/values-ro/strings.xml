@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="toast_installed">Companionul microG nu poate fi utilizat independent. În schimb, deschide setările microG Services.</string>
+    <string name="toast_not_installed">Companionul microG nu poate fi utilizat independent. Instalează serviciile microG pentru a utiliza microG.</string>
+    <string name="app_name">Companion microG</string>
+</resources>

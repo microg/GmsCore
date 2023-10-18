@@ -1,2 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="exposure_notify_off_bluetooth_location">Accesul la Bluetooth și la locație trebuie să fie activat pentru a primi notificări de expunere.</string>
+    <string name="pref_exposure_advertising_id_title">ID difuzat în prezent</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Din păcate, dispozitivul nu este compatibil cu notificări de expunere.</string>
+    <string name="pref_exposure_collected_rpis_title">ID-uri colectate</string>
+    <string name="pref_exposure_app_report_entry_time_short">Mai puțin de 5 minute</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Nu au fost raportate întâlniri de expunere.</string>
+    <string name="pref_exposure_app_report_entry_distance_far">expunere la distanță</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Au fost procesate <xliff:g example="121031">%1$d</xliff:g> chei de diagnosticare.</string>
+    <string name="exposure_notify_off_title">Notificări de expunere dezactivate</string>
+    <string name="pref_exposure_app_report_updated_title">Actualizat: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_error_location_off_title">Deschide setările pentru locație</string>
+    <string name="pref_exposure_enable_info_summary">Pentru a activa notificările de expunere, deschide orice aplicație care o acceptă.</string>
+    <string name="service_name_exposure">Notificări de expunere</string>
+    <string name="pref_exposure_app_report_entry_distance_close">expunere în apropiere</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth trebuie să fie activat pentru a primi notificări de expunere.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Din păcate, dispozitivul este doar parțial compatibil cu notificările de expunere. Poți fi notificat pentru contacte cu risc, dar nu vei putea notifica pe alții.</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID-uri în ultima oră</string>
+    <string name="exposure_notify_off_location">Accesul la locație este necesar pentru a primi notificări de expunere.</string>
+    <string name="prefcat_exposure_apps_title">Aplicații care utilizează notificări de expunere</string>
+    <string name="prefcat_exposure_app_report_title">Expunerile raportate</string>
+    <string name="exposure_notify_off_nearby">Notificările de expunere necesită permisiuni suplimentare pentru a funcționa</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Activează Bluetooth</string>
+    <string name="pref_exposure_app_report_entry_time_about">Aproximativ <xliff:g example="13">%1$d</xliff:g> minute</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Au fost raportate <xliff:g example="3">%1$d</xliff:g> întâlniri de expunere:</string>
+    <string name="pref_exposure_app_api_usage_title">Utilizarea API-ului în ultimele 14 zile</string>
+    <string name="pref_exposure_rpi_export_summary">Exportă ID-urile colectate pentru o analiză extinsă cu o altă aplicație.</string>
+    <string name="pref_exposure_rpi_export_title">Export</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID-uri pe oră</string>
+    <string name="pref_exposure_info_summary">Exposure Notifications API permite aplicațiilor să te anunțe dacă ai fost expus la cineva care a raportat că a fost diagnosticat pozitiv.
+\n
+\nData, durata și puterea semnalului asociate cu o expunere vor fi partajate cu aplicația corespunzătoare.</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> apeluri la <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_rpi_delete_all_summary">Șterge toate ID-urile colectate</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Șterge oricum</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Notă: scorul de risc este definit de aplicație. Cifrele mari se pot referi la un risc scăzut sau invers.</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID-uri colectate</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, scor de risc <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Nicio înregistrare</string>
+    <string name="pref_exposure_rpi_delete_all_title">Șterge</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Ștergerea ID-urilor colectate va face imposibilă anunțarea în cazul în care vreunul dintre contacte din ultimele 14 zile este diagnosticat.</string>
+</resources>
