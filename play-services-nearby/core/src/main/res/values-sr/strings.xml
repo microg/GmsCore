@@ -1,2 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Пријављено <xliff:g example="3"> %1$d</xliff:g> случајева изложености:</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_api_usage_title">Употреба API-ја у последњих 14 дана</string>
+    <string name="pref_exposure_rpi_export_summary">Извезите прикупљене ID-ове за проширену анализу помоћу друге апликације.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth и приступ локацији морају бити омогућени да бисте примали обавештења о изложености.</string>
+    <string name="exposure_confirm_stop_button">Искључи</string>
+    <string name="pref_exposure_advertising_id_title">Тренутно емитовани ID</string>
+    <string name="exposure_confirm_start_title">Укључити обавештења о изложености\?</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Нажалост, ваш уређај није компатибилан са обавештењима о изложености.</string>
+    <string name="pref_exposure_collected_rpis_title">Прикупљени ID-ови</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Додирните да бисте дали потребне дозволе за обавештења о изложености</string>
+    <string name="pref_exposure_app_report_entry_time_short">Мање од 5 минута</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Нема пријављених случајева изложености.</string>
+    <string name="pref_exposure_app_report_entry_distance_far">удаљена изложеност</string>
+    <string name="exposure_confirm_keys_title">Делити ваш ID са <xliff:g example="Corona-Warn"> %1$s</xliff:g>\?</string>
+    <string name="exposure_enable_switch">Користи обавештења о изложености</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Обрађено <xliff:g example="121031"> %1$d</xliff:g> кључева за дијагнозу.</string>
+    <string name="pref_exposure_rpi_export_title">Извоз</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID-ова по сату</string>
+    <string name="exposure_notify_off_title">Обавештења о изложености су неактивна</string>
+    <string name="pref_exposure_app_report_updated_title">Ажурирано: <xliff:g example="Today, 14:02"> %1$s</xliff:g></string>
+    <string name="exposure_grant_background_location_button">Ажурирај подешавања</string>
+    <string name="pref_exposure_error_location_off_title">Отвори подешавања локације</string>
+    <string name="pref_exposure_rpis_details_summary">Док је API за обавештења о изложености омогућен, ваш уређај пасивно прикупља ID-ове (који се називају Rolling Proximity Identifiers или RPI) са оближњих уређаја.
+\n
+\nКада власници уређаја пријаве да су позитивни, њихови ID-ови могу да се деле. Ваш уређај проверава да ли се неки од познатих дијагностикованих ID-ова поклапа са било којим од прикупљених ID-ова и израчунава ризик од инфекције.</string>
+    <string name="pref_exposure_info_summary">API за обавештења о изложености (Exposure Notifications API) омогућава апликацијама да вас обавесте ако сте били изложени некоме ко је пријавио да је позитиван.
+\n
+\nДатум, трајање и јачина сигнала повезани са изложеношћу ће се делити са одговарајућом апликацијом.</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> позива на <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_enable_info_summary">Да бисте омогућили обавештења о изложености, отворите било коју апликацију која то подржава.</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Избришите све прикупљене ID-ове</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> треба додатне дозволе.</string>
+    <string name="service_name_exposure">Обавештења о изложености</string>
+    <string name="pref_exposure_app_report_entry_distance_close">оближња изложеност</string>
+    <string name="exposure_confirm_permission_button">Дај</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth треба да буде омогућен да бисте примали обавештења о изложености.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Избриши свакако</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Напомена: Оцену ризика дефинише апликација. Високи бројеви могу се односити на низак ризик или обрнуто.</string>
+    <string name="exposure_confirm_location_description">Приступ локацији је неопходан.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Нажалост, ваш уређај је само делимично компатибилан са обавештењима о изложености. Можете бити обавештени за ризичне контакте, али нећете моћи да обавестите друге.</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth треба да буде омогућен.</string>
+    <string name="exposure_confirm_start_button">Укључи</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID-ова прикупљено</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID-ова у последњем сату</string>
+    <string name="exposure_notify_off_location">Приступ локацији је неопходан да бисте примали обавештења о изложености.</string>
+    <string name="prefcat_exposure_apps_title">Апликације које користе обавештења о изложености</string>
+    <string name="exposure_confirm_stop_summary">Након што онемогућите обавештења о изложености, више нећете бити обавештени када сте били изложени некоме ко је пријавио да је позитиван.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, оцена ризика <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="exposure_confirm_stop_title">Искључити обавештења о изложености\?</string>
+    <string name="exposure_confirm_keys_summary">Ваши ID-ови из последњих 14 дана ће се користити за обавештавање других да сте били у близини о потенцијалној изложености.
+\n
+\nВаш идентитет или резултат теста се неће делити са другим људима.</string>
+    <string name="exposure_confirm_start_summary">Ваш телефон мора да користи Bluetooth за безбедно прикупљање и дељење ID-ова са другим телефонима који су у близини.<xliff:g example="Corona-Warn"> %1$s</xliff:g> може да вас обавести ако сте били изложени некоме ко је пријавио да је позитиван. Датум, трајање и јачина сигнала повезани са изложеношћу ће се делити са апликацијом.</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Нема записа</string>
+    <string name="pref_exposure_rpi_delete_all_title">Избриши</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Нове дозволе су неопходне</string>
+    <string name="prefcat_exposure_app_report_title">Пријављене изложености</string>
+    <string name="exposure_notify_off_nearby">Обавештења о изложености захтевају додатне дозволе за рад</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Брисањем прикупљених ID-ова биће немогуће да вас обавестимо у случају да се дијагностикује било који од ваших контаката у последњих 14 дана.</string>
+    <string name="exposure_confirm_keys_button">Дели</string>
+    <string name="exposure_grant_background_location_description">Скоро готово! Мораћете да омогућите приступ локацији у позадини тако што ћете на следећем екрану изабрати опцију „Дозволи све време“. Затим притисните назад.</string>
+    <string name="exposure_confirm_button">Омогући</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Омогући Bluetooth</string>
+    <string name="pref_exposure_app_report_entry_time_about">Око <xliff:g example="13"> %1$d</xliff:g> минута</string>
+</resources>

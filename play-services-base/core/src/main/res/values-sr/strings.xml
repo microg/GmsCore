@@ -2,10 +2,18 @@
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">Напредно</string>
-
-    <string name="list_no_item_none">Ништа</string>
+    <string name="list_no_item_none">Ниједно</string>
+    <string name="foreground_service_notification_title">Активно у позадини</string>
+    <string name="service_status_disabled">Онемогућено</string>
+    <string name="service_status_enabled_short">Укључено</string>
+    <string name="service_status_automatic">Аутоматски</string>
+    <string name="service_status_enabled">Омогућено</string>
+    <string name="open_app">Отвори</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> ради у позадини.</string>
+    <string name="foreground_service_notification_big_text">Искључите <xliff:g example="microG Services"> %1$s</xliff:g> из оптимизације батерије или промените подешавања обавештења да бисте сакрили ово обавештење.</string>
+    <string name="list_item_see_all">Види све</string>
+    <string name="service_status_disabled_short">Искључено</string>
+    <string name="service_status_manual">Ручно</string>
 </resources>

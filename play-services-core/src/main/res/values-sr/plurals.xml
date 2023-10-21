@@ -13,16 +13,25 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="other">%1$d пријављених апликација</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> регистрована апликација</item>
+        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> регистроване апликације</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> регистрованих апликација</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="other">Једна или више дозвола потребних за исправно функционисање микроГ услуга недостају.</item>
+        <item quantity="one">Дозвола потребна за исправну функционалност microG услуга није дата.</item>
+        <item quantity="few">Дозволе потребне за исправну функционалност microG услуга нису дате.</item>
+        <item quantity="other">Дозволе потребне за исправну функционалност microG услуга нису дате.</item>
     </plurals>
     <plurals name="cond_perm_action">
+        <item quantity="one">Захтевај недостајућу дозволу</item>
+        <item quantity="few">Захтевај недостајуће дозволе</item>
         <item quantity="other">Захтевај недостајуће дозволе</item>
+    </plurals>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> бекенд конфигурисан</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> бекенда конфигурисана</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> бекендова конфигурисано</item>
     </plurals>
 </resources>

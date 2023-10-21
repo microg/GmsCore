@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="toast_installed">microG пратилац се не може користити самостално. Уместо тога, отворена су подешавања microG услуга.</string>
+    <string name="toast_not_installed">microG пратилац се не може користити самостално. Инсталирајте microG услуге да бисте користили microG.</string>
+    <string name="app_name">microG пратилац</string>
+</resources>

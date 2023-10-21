@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,122 +13,207 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">микроГ услуга</string>
-    <string name="gms_settings_name">Поставке микроГ</string>
-
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">microG услуге</string>
+    <string name="gms_settings_name">Подешавања microG</string>
     <string name="just_a_sec">Само тренутак…</string>
-    <string name="google_account_label">Гугл</string>
-    <string name="ask_permission_tos">Ако наставите дозволићете овој апликацији и Гуглу да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
-    <string name="ask_scope_permission_title">%s жели да:</string>
-    <string name="ask_service_permission_title">%s жели да користи:</string>
-    <string name="account_manager_title">Менаџер Гугл налога</string>
-    <string name="sorry">Нажалост…</string>
-    <string name="no_network_error_desc">"Нисте повезани са мрежом.
-
-Ово је можда привремени проблем или ваш Андроид уређај није постављен за услуге преноса података. Покушајте поново када се повежете са мобилном мрежом, или се накачите на бежичну мрежу."</string>
-    <string name="auth_general_error_desc">"Десио се проблем приликом комуникације са Гугловим серверима.
-
-Покушајте поново касније."</string>
-    <string name="auth_finalize">"Ваш уређај контактира Гугл да би сачувао податке на ваш налог.
-
-Ово може да потраје неколико минута."</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Ако наставите, дозволићете овој апликацији и Google-у да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> жели да:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> жели да користи:</string>
+    <string name="account_manager_title">Менаџер Google налога</string>
+    <string name="sorry">Извините…</string>
+    <string name="no_network_error_desc">Нисте повезани на мрежу.
+\n
+\nОво може бити привремени проблем или ваш Android уређај можда није обезбеђен за услуге преноса података. Покушајте поново када се повежете на мобилну мрежу или на Wi-Fi мрежу.</string>
+    <string name="auth_general_error_desc">Дошло је до грешке приликом комуникације са Google серверима.
+\n
+\nПокушајте поново касније.</string>
+    <string name="auth_finalize">Ваш уређај контактира Google да би сачувао податке на ваш налог.
+\n
+\nОво може да потраје неколико минута.</string>
     <string name="allow">Дозволи</string>
     <string name="deny">Одбиј</string>
     <string name="auth_notification_title">Потребна је аутентификација</string>
-    <string name="auth_notification_content">%1$s захтева ваше овлашћење за приступ вашем Гугл налогу.</string>
-
-    <string name="perm_status_broadcast_label">слуша унутрашња емитовања стања</string>
-    <string name="perm_c2dm_receive_label">слуша C2DM поруке</string>
-    <string name="perm_c2dm_send_label">шаље C2DM поруке осталим апликацијама</string>
-    <string name="perm_gtalk_svc_label">размењује поруке и прима обавештења о синхронизацији са Гуглових сервера</string>
-    <string name="perm_extended_access_label">Проширени приступ Гугловим услугама</string>
-
-    <string name="service_name_checkin">Пријава уређаја на Гугл</string>
-    <string name="service_name_mcs">Гуглове облак поруке</string>
-
-    <string name="games_title">Гугл Плеј игре</string>
-    <string name="games_info_title">%1$s жели да користи Плеј игре</string>
-    <string name="games_info_content">Да бисте користили Плеј игре потребно је да инсталирате Гугл Плеј игре. Апликација би могла да настави без Плеј игара, али ће можда да се понаша неочекивано.</string>
-
-    <string name="pick_place_title">Бирач места</string>
-    <string name="pick_place_desc">Бирач места још није подржан.</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> захтева вашу аутентификацију за приступ вашем Google налогу.</string>
+    <string name="perm_status_broadcast_label">слушање унутрашњих статусних емитовања</string>
+    <string name="perm_c2dm_receive_label">слушање C2DM порука</string>
+    <string name="perm_c2dm_send_label">слање C2DM порука другим апликацијама</string>
+    <string name="perm_gtalk_svc_label">размена порука и примање обавештења о синхронизацији са Google серверима</string>
+    <string name="perm_extended_access_label">Проширени приступ Google услугама</string>
+    <string name="service_name_checkin">Регистрација уређаја на Google</string>
+    <string name="service_name_mcs">Размена порука у облаку</string>
+    <string name="games_title">Google Play игре</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> жели да користи Play игре</string>
+    <string name="games_info_content">Да бисте користили Play игре, потребно је да инсталирате Google Play игре. Апликација би могла да настави и без тога, али ће можда да се понаша неочекивано.</string>
+    <string name="pick_place_title">Изаберите место</string>
+    <string name="pick_place_desc">Бирач места још није доступан.</string>
     <string name="place_picker_select_title">Изаберите ову локацију</string>
     <string name="place_picker_nearby_places">Оближња места</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-
-    <string name="lacking_permission_toast">микроГ услуга: немам дозволу за %1$s</string>
-
+    <string name="lacking_permission_toast">microG услуге: недостаје дозвола за <xliff:g example="have full network acccess"> %1$s</xliff:g></string>
     <string name="network_type_mobile">Мобилна мрежа</string>
-    <string name="network_type_wifi">Бежична</string>
+    <string name="network_type_wifi">Wi-Fi мрежа</string>
     <string name="network_type_roaming">Роминг</string>
     <string name="network_type_other">Остале мреже</string>
-
     <!-- Self check -->
-
-    <string name="self_check_cat_fake_sig">Подршка за заваравање потписа</string>
+    <string name="self_check_cat_fake_sig">Подршка за лажирање потписа</string>
     <string name="self_check_cat_gms_packages">Инсталирани пакети</string>
     <string name="self_check_cat_system">Систем</string>
-
-    <string name="self_check_name_fake_sig_perm">Систем има подршку заваравања потписа: </string>
-    <string name="self_check_resolution_fake_sig_perm">Ваш РОМ нема уграђену подршку за заваравање потписа. Ипак можете да користите Xposed или друге начине заваравања потписа. Погледајте документацију да видите који РОМови подржавају заваравање потписа и како да користите микроГ на РОМовима који не подржавају.</string>
-    <string name="self_check_name_perm_granted">Систем одобрава дозволу заваравања потписа: </string>
-    <string name="self_check_resolution_perm_granted">Ово је озбиљан индикатор да РОМ подржава заваравање потписа, али да захтева додатне радње за активацију. Погледајте документацију да сазнате о потребним додатним корацима.</string>
-    <string name="self_check_name_system_spoofs">Систем заварава потпис: </string>
-    <string name="self_check_resolution_system_spoofs">Погледајте документацију да сазнате о потребним додатним корацима.</string>
-
-    <string name="self_check_pkg_gms">Плеј сервиси (GmsCore)</string>
-    <string name="self_check_pkg_vending">Плеј продавница (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Радни оквири сервиса (GSF)</string>
-    <string name="self_check_name_app_installed">%1$s инсталиран: </string>
-    <string name="self_check_resolution_app_installed">Инсталирајте апликацију %1$s или одговарајућу. Погледајте документацију да сазнате које су апликације одговарајуће.</string>
-    <string name="self_check_name_correct_sig">%1$s има тачан потпис: </string>
-    <string name="self_check_resolution_correct_sig">Или инсталирана %1$s није одговарајућа или заваравање потписа није укључено за њу. Погледајте документацију да сазнате које су апликације и РОМови одговарајући.</string>
-
-    <string name="self_check_name_battery_optimizations">Игнорисана оптимизација батерије:</string>
-    <string name="self_check_resolution_battery_optimizations">Тапните овде да бисте искључили оптимизацију батерије. Ако не урадите ово апликације ће можда лоше да се понашају</string>
-
+    <string name="self_check_name_fake_sig_perm">Систем има подршку лажирања потписа:</string>
+    <string name="self_check_resolution_fake_sig_perm">Ваш ROM нема уграђену подршку за лажирање потписа. Свакако, можете да користите Xposed или друге системе лажирања потписа. Погледајте документацију да бисте видели који ROM-ови подржавају лажирање потписа и како да користите microG на ROM-овима који не подржавају.</string>
+    <string name="self_check_name_perm_granted">Систем одобрава дозволу лажирања потписа:</string>
+    <string name="self_check_resolution_perm_granted">Ово је озбиљан индикатор да ROM подржава лажирање потписа, али да захтева додатне радње за активацију. Погледајте документацију да бисте видели потребне кораке.</string>
+    <string name="self_check_name_system_spoofs">Систем лажира потпис:</string>
+    <string name="self_check_resolution_system_spoofs">Погледајте документацију да бисте видели потребне кораке.</string>
+    <string name="self_check_pkg_gms">Play услуге (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play продавница (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Радни оквир услуга (GSF)</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> инсталирано: </string>
+    <string name="self_check_resolution_app_installed">Инсталирајте апликацију <xliff:g example="F-Droid"> %1$s</xliff:g> или компатибилну апликацију. Погледајте документацију да бисте видели које апликације су компатибилне.</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> има тачан потпис: </string>
+    <string name="self_check_resolution_correct_sig">Или инсталирана <xliff:g example="F-Droid"> %1$s</xliff:g> није компатибилна апликација или лажирање потписа није активно за њу. Погледајте документацију да бисте видели које апликације и ROM-ови су компатибилни.</string>
+    <string name="self_check_name_battery_optimizations">Игнорисане оптимизације батерије:</string>
+    <string name="self_check_resolution_battery_optimizations">Додирните овде да бисте онемогућили оптимизацију батерије. Ако ово не урадите, може доћи до лошег понашања апликација.</string>
     <!-- Settings strings -->
-
     <string name="prefcat_about">О програму</string>
     <string name="prefcat_components">Компоненте</string>
     <string name="prefcat_location_service">Услуга локације</string>
     <string name="prefcat_services">Услуге</string>
-    <string name="cond_gcm_bat_title">Оптимизација батерије укључена</string>
-    <string name="cond_gcm_bat_summary">Укључили сте Гуглове облак поруке али имате активну оптимизацију батерије за микроГ услуга. Да би гурана обавештења стизала морате да игноришете оптимизацију батерије.</string>
-    <string name="cond_gcm_bat_action">Игнориши оптимизацију</string>
+    <string name="cond_gcm_bat_title">Оптимизације батерије омогућене</string>
+    <string name="cond_gcm_bat_summary">Омогућили сте размену порука у облаку, али имате активне оптимизације батерије за microG услуге. Да би стигла push-обавештења, игноришите оптимизације батерије.</string>
+    <string name="cond_gcm_bat_action">Игнориши оптимизације</string>
     <string name="cond_perm_title">Недостају дозволе</string>
-
-    <string name="prefs_account">Поставке налога</string>
+    <string name="prefs_account">Подешавања налога</string>
     <string name="prefs_account_privacy">Лични подаци и приватност</string>
     <string name="prefs_account_security">Пријава и безбедност</string>
-
-    <string name="pref_auth_trust_google_title">Поуздај се у Гугл за дозволе апликација</string>
-    <string name="pref_auth_trust_google_summary">Ако је искључено корисник ће бити упитан пре него се захтев за овлашћењем апликација пошаље Гуглу. Неке апликације неће моћи да користе Гуглов налог ако је ово искључено.</string>
-
-    <string name="pref_checkin_enable_summary">Пријављује ваш уређај на Гуглове сервисе и прави јединствени идентификатор уређаја. микроГ скида идентификујуће бите са података за пријављивање осим вашег Гугл корисничког имена.</string>
-
-    <string name="pref_gcm_enable_mcs_summary">Гуглове облак поруке (Cloud Messaging) је провајдер гураних обавештења (push) којег користе многе апликације. Да бисте га користили укључите пријаву уређаја.</string>
-    <string name="pref_gcm_heartbeat_title">Интервал откуцаја облак порука</string>
-    <string name="pref_gcm_heartbeat_summary">Интервал у секундама јављања система Гугловим серверима. Повећање овог броја смањује потрошњу батерије али може да узрокује застој у испоруци порука.</string>
-    <string name="pref_gcm_apps_title">Апликације које користе Гуглове облак поруке</string>
-    <string name="pref_gcm_apps_summary">Списак апликација пријављених за Гуглове облак поруке.</string>
-    <string name="pref_about_title">О микроГ услуга</string>
-    <string name="pref_about_summary">Подаци о издању и коришћеним библиотекама</string>
-
-    <string name="gcm_app_error_unregistering">Грешка одјављивања</string>
-    <string name="gcm_app_not_installed_anymore">Није више инсталирана</string>
-    <string name="gcm_unregister_app">Одјави</string>
-    <string name="gcm_not_registered">Није пријављена</string>
-    <string name="gcm_no_message_yet">Ниједна примљена порука до сад</string>
-    <string name="gcm_last_message_at">Последња порука: %1$s</string>
-    <string name="gcm_registered">Пријављена</string>
-    <string name="gcm_registered_since">Пријављена: %1$s</string>
-    <string name="gcm_unregister_confirm_title">Одјавити %1$s?</string>
-    <string name="gcm_unregister_confirm_message">Неке се апликације не пријављују поново аутоматски и/или не пружају могућност да се то уради ручно. Ове апликације можда неће радити исправно након одјављивања.\nДа наставим?</string>
-    <string name="gcm_unregister_after_deny_message">Нисте дозволили апликацији да се пријави на гурана обавештења а која је већ пријављена.\nЖелите ли да је одјавите сада тако да убудуће не прима гурана обавештења?</string>
-    <string name="gcm_messages_counter">Порука: %1$d (%2$d бајта)</string>
-
+    <string name="pref_auth_trust_google_title">Веруј Google-у за дозволе за апликације</string>
+    <string name="pref_auth_trust_google_summary">Када је онемогућено, корисник ће бити упитан пре него што се Google-у пошаље захтев за овлашћење апликације. Неке апликације неће моћи да користе Google налог ако је ово онемогућено.</string>
+    <string name="pref_checkin_enable_summary">Региструје ваш уређај на Google услуге и прави јединствени идентификатор уређаја. microG траке идентификују битове, осим имена вашег Google налога из података о регистрацији.</string>
+    <string name="pref_gcm_enable_mcs_summary">Размена порука у облаку је пружалац push-обавештења који користе многе апликације трећих страна. Да бисте га користили, морате омогућити регистрацију уређаја.</string>
+    <string name="pref_gcm_heartbeat_title">Интервал откуцаја размене порука у облаку</string>
+    <string name="pref_gcm_heartbeat_summary">Интервал у секундама за који систем треба да откуца Google сервере. Повећање овог броја ће смањити потрошњу батерије, али може довести до кашњења push-обавештења.
+\nЗастарело, биће замењено у будућем издању.</string>
+    <string name="pref_gcm_apps_title">Апликације које користе размену порука у облаку</string>
+    <string name="pref_gcm_apps_summary">Листа апликација које су тренутно регистроване за размену порука у облаку.</string>
+    <string name="pref_about_title">О microG услугама</string>
+    <string name="pref_about_summary">Информације о издању и коришћеним збиркама</string>
+    <string name="gcm_app_error_unregistering">Грешка при опозивању регистрације</string>
+    <string name="gcm_app_not_installed_anymore">Апликација више није инсталирана</string>
+    <string name="gcm_unregister_app">Опозови регистрацију</string>
+    <string name="gcm_not_registered">Није регистровано</string>
+    <string name="gcm_no_message_yet">До сада није примљена ниједна порука</string>
+    <string name="gcm_last_message_at">Последња порука: <xliff:g example="Yesterday, 02:20 PM"> %1$s</xliff:g></string>
+    <string name="gcm_registered">Регистровано</string>
+    <string name="gcm_registered_since">Регистровано од: <xliff:g example="Yesterday, 02:20 PM"> %1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Опозвати регистрацију <xliff:g example="F-Droid"> %1$s</xliff:g>\?</string>
+    <string name="gcm_unregister_confirm_message">Неке апликације се не региструју аутоматски и/или не пружају опцију да се то уради ручно. Ове апликације можда неће радити исправно након опозивања регистрације.
+\nНаставити\?</string>
+    <string name="gcm_unregister_after_deny_message">Одбили сте апликацији да се региструје за push-обавештења, која је већ регистрована.
+\nЖелите ли да опозовете регистрацију сада, да не бисте примали push-обавештења у будућности\?</string>
+    <string name="gcm_messages_counter">Обавештења: <xliff:g example="123"> %1$d</xliff:g> (<xliff:g example="12345"> %2$d</xliff:g> бајтова)</string>
+    <string name="pref_device_registration_import_custom_profile_title">Увези прилагођени профил</string>
+    <string name="pref_safetynet_recent_request_type">Тип захтева</string>
+    <string name="pref_recaptcha_enterprise_test_title">Тестирај ReCAPTCHA Enterprise</string>
+    <string name="pref_gcm_confirm_new_apps_title">Потврди нове апликације</string>
+    <string name="pref_safetynet_test_title">Тестирај SafetyNet проверу статуса</string>
+    <string name="checkin_last_registration">Последња регистрација: <xliff:g example="Yesterday, 02:20 PM"> %1$s</xliff:g></string>
+    <string name="signin_subtext_policy_privacy">политика приватности</string>
+    <string name="pref_safetynet_test_no_result">Нема резултата</string>
+    <string name="safetynet_intro">Google SafetyNet је систем сертификације уређаја, који осигурава да је уређај правилно обезбеђен и компатибилан са Android CTS. Неке апликације користе SafetyNet из безбедносних разлога или као предуслов за заштиту од неовлашћеног приступа.
+\n
+\nmicroG GmsCore садржи бесплатну имплементацију SafetyNet-а, али званични сервер захтева да SafetyNet захтеви буду потписани коришћењем власничког система DroidGuard.</string>
+    <string name="perm_gsf_read_gservices_label">читање конфигурације Google услуге</string>
+    <string name="auth_sign_in">Пријави се</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Увезите профил уређаја из фајла</string>
+    <string name="pref_safetynet_recent_copy_json">Копирај JSON JWS податке</string>
+    <string name="pref_test_summary_failed">Неуспешно: %s</string>
+    <string name="pref_auth_visible_summary">Када је омогућено, све апликације на овом уређају ће моћи да виде имејл адресу ваших Google налога без претходног овлашћења.</string>
+    <string name="pref_safetynet_recent_advice">Савет</string>
+    <string name="push_notifications_summary_values_seconds">%s секунди</string>
+    <string name="prefcat_configuration">Конфигурација</string>
+    <string name="prefcat_google_services">Google услуге</string>
+    <string name="pref_safetynet_test_invalid_json">Неважећи JSON</string>
+    <string name="menu_clear_recent_requests">Очисти недавне захтеве</string>
+    <string name="signin_picker_title">Изаберите налог</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_cat_request">Захтевај податке</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Покретање апликације док је у позадини да бисте примали долазна push-обавештења.</string>
+    <string name="pref_safetynet_recent_attestation_summary">Провера статуса: %s</string>
+    <string name="prefcat_safetynet_apps_title">Апликације које користе SafetyNet</string>
+    <string name="safetynet_enable_switch">Дозволи проверу статуса уређаја</string>
+    <string name="pref_safetynet_test_integrity_failed">Интегритет није успео</string>
+    <string name="push_notifications_summary_automatic">УКЉУЧЕНО / Аутоматски: %s</string>
+    <string name="pref_device_registration_serial_title">Серијски</string>
+    <string name="checkin_enable_switch">Региструј уређај</string>
+    <string name="pref_safetynet_test_cts_failed">CTS није успео</string>
+    <string name="push_notifications_summary_manual">УКЉУЧЕНО / Ручно: %s</string>
+    <string name="profile_name_auto">Аутоматски: %s</string>
+    <string name="push_notifications_summary_values_minutes">%s минута</string>
+    <string name="perm_provision_label">пружање microG услуга</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="prefcat_test">Тест</string>
+    <string name="gcm_network_state_connected">Повезано <xliff:g example="2 hours ago"> %1$s</xliff:g></string>
+    <string name="pref_more_settings">Више</string>
+    <string name="pref_auth_include_android_id_summary">Када је онемогућено, захтеви за аутентификацију неће бити повезани са регистрацијом уређаја, што омогућава неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
+    <string name="signin_picker_subtitle">настави на <xliff:g example="F-Droid"> %1$s</xliff:g></string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Интегритет и CTS су прошли</string>
+    <string name="pref_safetynet_recent_uses">Недавне употребе</string>
+    <string name="pref_droidguard_unsupported_summary">Извршење DroidGuard није подржано на овом уређају. SafetyNet услуге се могу лоше понашати.</string>
+    <string name="signin_confirm_title">Дозволите пријаву на <xliff:g example="F-Droid"> %1$s</xliff:g></string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="safetynet_last_run_at">Последња употреба: <xliff:g example="Yesterday, 02:20 PM"> %1$s</xliff:g></string>
+    <string name="pref_gcm_confirm_new_apps_summary">Будите упитани пре регистровања нове апликације да бисте примали push-обавештења</string>
+    <string name="pref_push_app_wake_for_delivery_title">Покрени апликацију при push-обавештењу</string>
+    <string name="perm_provision_description">Дозвољава апликацији да конфигурише microG услуге без интеракције корисника</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="gcm_enable_switch">Примај push-обавештења</string>
+    <string name="pref_test_summary_passed">Прођени сви тестови</string>
+    <string name="push_notifications_summary_off">ИСКЉУЧЕНО</string>
+    <string name="pref_info_status">Статус</string>
+    <string name="gcm_allow_app_popup">Дозволити <xliff:g example="F-Droid"> %1$s</xliff:g> да се региструје за push-обавештења\?</string>
+    <string name="pref_safetynet_recent_response_status">Статус одговора</string>
+    <string name="pref_auth_visible_title">Дозволи апликацијама да пронађу налоге</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="gcm_network_state_disconnected">Прекинута веза</string>
+    <string name="signin_picker_add_account_label">Додај други налог</string>
+    <string name="pref_device_registration_select_profile_title">Изаберите профил</string>
+    <string name="auth_connecting">Ваш уређај успоставља везу са Google серверима да бисте се пријавили.
+\n
+\nОво може да потраје неколико секунди.</string>
+    <string name="signin_confirm_button_text">Дозволи и дели</string>
+    <string name="pref_test_summary_warn">Упозорење: %s</string>
+    <string name="checkin_not_registered">Није регистровано</string>
+    <string name="pref_droidguard_operation_mode">Режим рада</string>
+    <string name="profile_name_real">Реални</string>
+    <string name="prefcat_push_apps_unregistered_title">Нерегистроване апликације</string>
+    <string name="pref_add_account_title">Налог</string>
+    <string name="signin_subtext_policy">Пре употребе ове апликације, прегледајте: %1$s и %2$s.</string>
+    <string name="pref_safetynet_recent_copied">Копирано у привремену меморију!</string>
+    <string name="prefcat_push_apps_title">Апликације које користе push-обавештења</string>
+    <string name="profile_name_user">Прилагођено: %s</string>
+    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог.
+\n
+\nАко је ово било намерно, користите дугме <b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
+    <string name="pref_recaptcha_test_title">Тестирај ReCAPTCHA</string>
+    <string name="signin_subtext_sharing">Да бисте наставили, microG ће делити име, имејл адресу и слику профила вашег Google налога са <xliff:g example="F-Droid"> %1$s</xliff:g> .</string>
+    <string name="pref_auth_include_android_id_title">Аутентификуј регистрацијом уређаја</string>
+    <string name="pref_push_app_allow_register_title">Дозволи регистрацију</string>
+    <string name="profile_name_native">Изворни</string>
+    <string name="pref_gcm_ping_interval">Пинг интервал: <xliff:g example="10 minutes"> %1$s</xliff:g></string>
+    <string name="pref_test_summary_running">Ради…</string>
+    <string name="pref_safetynet_recent_cat_basic">Основни подаци</string>
+    <string name="gms_settings_summary">Подесите microG услуге.</string>
+    <string name="pref_add_account_summary">Додајте Google налог</string>
+    <string name="profile_name_system">Системски: %s</string>
+    <string name="pref_safetynet_recent_cat_response">Подаци одговора</string>
+    <string name="pref_push_app_allow_register_summary">Дозволите апликацији да се региструје за push-обавештења.</string>
+    <string name="pref_safetynet_recent_token">Токен</string>
+    <string name="pref_safetynet_test_not_completed">Још није завршено</string>
+    <string name="pref_safetynet_recent_request_time">Време захтева</string>
+    <string name="signin_subtext_policy_terms">услови коришћења</string>
+    <string name="prefcat_push_apps_registered_title">Регистроване апликације</string>
+    <string name="pref_device_registration_device_profile_category">Профил уређаја</string>
+    <string name="prefcat_push_networks_title">Мреже за коришћење за push-обавештења</string>
+    <string name="pref_safetynet_recent_eval_type">Тип провере</string>
 </resources>

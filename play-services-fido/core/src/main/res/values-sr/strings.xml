@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_button_get_started">Започни</string>
+    <string name="fido_usb_prompt_body">Повежите свој безбедносни кључ са USB портом или га повежите помоћу USB кабла. Ако ваш кључ има дугме или златни диск, додирните га сада.</string>
+    <string name="fido_transport_usb_wait_connect_body">Повежите свој USB безбедносни кључ.</string>
+    <string name="fido_nfc_prompt_body">Држите кључ равно уз полеђину уређаја док не престане да вибрира</string>
+    <string name="fido_welcome_body">Коришћење безбедносног кључа са %1$s помаже у заштити ваших приватних података.</string>
+    <string name="fido_welcome_title">Користите свој безбедносни кључ са %1$s</string>
+    <string name="fido_transport_selection_biometric">Користите овај уређај са закључавањем екрана</string>
+    <string name="fido_welcome_privileged_check">Да, %1$s је мој поуздани прегледач и требало би да ми буде дозвољено да користим безбедносне кључеве са веб-сајтовима трећих страна.</string>
+    <string name="fido_biometric_prompt_body">%1$s треба да потврди да сте то ви.</string>
+    <string name="fido_transport_selection_usb">Користите безбедносни кључ са USB-ом</string>
+    <string name="fido_transport_selection_title">Изаберите како ћете да користите свој безбедносни кључ</string>
+    <string name="fido_biometric_prompt_title">Потврдите свој идентитет</string>
+    <string name="fido_usb_title">Повежите свој USB безбедносни кључ</string>
+    <string name="fido_transport_usb_wait_confirm_body">Додирните златни прстен или диск на %1$s.</string>
+    <string name="fido_welcome_privileged_info">%1$s делује као поуздан прегледач који користи ваш безбедносни кључ са %2$s.</string>
+    <string name="fido_nfc_title">Повежите свој NFC безбедносни кључ</string>
+    <string name="fido_transport_selection_bluetooth">Користите безбедносни кључ са Bluetooth-ом</string>
+    <string name="fido_transport_selection_body">Безбедносни кључеви раде са Bluetooth-ом, NFC-ом и USB-ом. Изаберите како желите да користите свој кључ.</string>
+    <string name="fido_transport_selection_nfc">Користите безбедносни кључ са NFC-ом</string>
+</resources>
