@@ -48,6 +48,10 @@
             android:key="pref_snet"
             android:title="@string/service_name_snet" />
         <Preference
+            android:icon="@drawable/ic_shop"
+            android:key="pref_play"
+            android:title="@string/service_name_play" />
+        <Preference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
             android:title="@string/pref_more_settings"

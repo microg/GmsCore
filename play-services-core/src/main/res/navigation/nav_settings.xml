@@ -24,6 +24,9 @@
             android:id="@+id/openSafetyNetSettings"
             app:destination="@id/safetyNetFragment" />
         <action
+            android:id="@+id/openPlaySettings"
+            app:destination="@id/playFragment" />
+        <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
         <action
@@ -133,6 +136,13 @@
             android:name="package"
             app:argType="string" />
     </fragment>
+
+    <!-- Play Store services -->
+
+    <fragment
+        android:id="@+id/playFragment"
+        android:name="org.microg.gms.ui.PlayFragment"
+        android:label="@string/service_name_play" />
 
     <!-- More -->
 

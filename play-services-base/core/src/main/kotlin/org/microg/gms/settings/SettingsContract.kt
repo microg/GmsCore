@@ -171,6 +171,18 @@ object SettingsContract {
         )
     }
 
+    object Play {
+        private const val id = "play"
+        fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
+        fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
+
+        const val LICENSING = "play_licensing"
+
+        val PROJECTION = arrayOf(
+            LICENSING
+        )
+    }
+
     private fun <T> withoutCallingIdentity(f: () -> T): T {
         val identity = Binder.clearCallingIdentity()
         try {
