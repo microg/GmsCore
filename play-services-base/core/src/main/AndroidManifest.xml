@@ -5,10 +5,17 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <permission android:name="org.microg.gms.permission.READ_SETTINGS"
+        android:protectionLevel="signature" />
+    <permission android:name="org.microg.gms.permission.WRITE_SETTINGS"
+        android:protectionLevel="signature" />
+
     <application>
         <provider
             android:name="org.microg.gms.settings.SettingsProvider"
             android:authorities="${applicationId}.microg.settings"
-            android:exported="false" />
+            android:exported="true"
+            android:readPermission="org.microg.gms.permission.READ_SETTINGS"
+            android:writePermission="org.microg.gms.permission.WRITE_SETTINGS" />
     </application>
 </manifest>
