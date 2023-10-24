@@ -13,9 +13,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.net.Uri;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -37,13 +39,46 @@ public class LicensingService extends Service {
 
     private static final String KEY_V2_RESULT_JWT = "LICENSE_DATA";
 
+    private static final Uri SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/play");
+
+    private static final String PREFERENCE_LICENSING_ENABLED = "play_licensing";
+
+    private String androidId;
 
     private final ILicensingService.Stub mLicenseService = new ILicensingService.Stub() {
+
+        private boolean shouldCheckLicense() {
+
+            Cursor cursor = null;
+            try {
+                cursor = getContentResolver().query(
+                    SETTINGS_PROVIDER, new String[]{PREFERENCE_LICENSING_ENABLED}, null, null, null
+                );
+
+                if (cursor == null || cursor.getColumnCount() != 1) {
+                    Log.e(TAG, "settings provider not available");
+                    return false;
+                } else {
+                    cursor.moveToNext();
+                    return cursor.getInt(0) != 0;
+                }
+
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
 
 
         @Override
         public void checkLicense(long nonce, String packageName, ILicenseResultListener listener) throws RemoteException {
             Log.v(TAG, "checkLicense(" + nonce + ", " + packageName + ")");
+
+            if (!shouldCheckLicense()) {
+                Log.d(TAG, "not checking license, as it is disabled by user");
+                return;
+            }
 
             Account[] accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE);
             PackageManager packageManager = getPackageManager();
@@ -73,6 +108,11 @@ public class LicensingService extends Service {
         @Override
         public void checkLicenseV2(String packageName, ILicenseV2ResultListener listener, Bundle extraParams) throws RemoteException {
             Log.v(TAG, "checkLicenseV2(" + packageName + ", " + extraParams + ")");
+
+            if (!shouldCheckLicense()) {
+                Log.d(TAG, "not checking license, as it is disabled by user");
+                return;
+            }
 
             Account[] accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE);
             PackageManager packageManager = getPackageManager();
