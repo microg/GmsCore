@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: CC-BY-SA-4.0
+  -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="225.27"
+    android:viewportHeight="225.27">
+    <group>
+        <path
+            android:pathData="m151.55,151.53a55,55 0,0 1,-66.39 8.74"
+            android:strokeAlpha="0.8"
+            android:strokeWidth="36"
+            android:fillColor="#00ffffff"
+            android:strokeColor="#ffffff"
+            android:fillAlpha="0.9"
+            android:strokeLineCap="butt" />
+        <path
+            android:pathData="M85.16,160.27A55,55 0,0 1,59.53 98.4"
+            android:strokeAlpha="0.6"
+            android:strokeWidth="36"
+            android:fillColor="#00ffffff"
+            android:strokeColor="#ffffff"
+            android:fillAlpha="0.7"
+            android:strokeLineCap="butt" />
+        <path
+            android:pathData="m59.53,98.4a55,55 0,0 1,25.63 -33.4"
+            android:strokeAlpha="0.5"
+            android:strokeWidth="36"
+            android:fillColor="#00ffffff"
+            android:strokeColor="#ffffff"
+            android:fillAlpha="0.6"
+            android:strokeLineCap="butt" />
+        <path
+            android:pathData="m85.16,65.01a55,55 0,0 1,66.39 8.74"
+            android:strokeAlpha="0.7"
+            android:strokeWidth="36"
+            android:fillColor="#00ffffff"
+            android:strokeColor="#ffffff"
+            android:fillAlpha="0.8"
+            android:strokeLineCap="butt" />
+    </group>
+</vector>

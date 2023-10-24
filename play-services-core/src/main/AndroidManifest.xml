@@ -574,7 +574,7 @@
         <!-- microG Settings embedded in System Settings on SDK 23 and newer -->
         <activity-alias
             android:name="org.microg.gms.ui.SettingsActivityLink"
-            android:icon="@drawable/ic_app_settings_foreground_mono"
+            android:icon="@mipmap/ic_app_settings"
             android:label="@string/gms_settings_name"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
@@ -588,7 +588,7 @@
                 android:value="com.android.settings.category.device" />
             <meta-data
                 android:name="com.android.settings.icon"
-                android:resource="@drawable/ic_app_settings_foreground_mono" />
+                android:resource="@drawable/ic_app_settings_system" />
             <meta-data
                 android:name="com.android.settings.summary"
                 android:resource="@string/gms_settings_summary" />
