@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <uses-permission android:name="org.microg.gms.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
 
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"

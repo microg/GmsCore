@@ -28,7 +28,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import org.microg.gms.auth.AuthConstants;
-import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.util.Arrays;
@@ -52,9 +51,9 @@ public class LicensingService extends Service {
 
     private static final Uri CHECKIN_SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/check-in");
 
-    private static final Uri SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/play");
+    private static final Uri SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/vending");
 
-    private static final String PREFERENCE_LICENSING_ENABLED = "play_licensing";
+    private static final String PREFERENCE_LICENSING_ENABLED = "vending_licensing";
 
     private final ILicensingService.Stub mLicenseService = new ILicensingService.Stub() {
 
