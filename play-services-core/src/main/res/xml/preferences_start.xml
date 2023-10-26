@@ -49,8 +49,8 @@
             android:title="@string/service_name_snet" />
         <Preference
             android:icon="@drawable/ic_shop"
-            android:key="pref_play"
-            android:title="@string/service_name_play" />
+            android:key="pref_vending"
+            android:title="@string/service_name_vending" />
         <Preference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"

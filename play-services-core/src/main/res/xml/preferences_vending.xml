@@ -7,14 +7,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <org.microg.gms.ui.SwitchBarPreference
-        android:title="@string/pref_play_licensing_enable_switch"
-        android:key="play_licensing"
+        android:title="@string/pref_vending_licensing_enable_switch"
+        android:key="vending_licensing"
         android:persistent="false" />
 
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
         <org.microg.gms.ui.TextPreference
             android:icon="@drawable/ic_info_outline"
             android:selectable="false"
-            android:summary="@string/pref_play_license_enable_summary" />
+            android:summary="@string/pref_vending_license_enable_summary" />
     </PreferenceCategory>
 </PreferenceScreen>

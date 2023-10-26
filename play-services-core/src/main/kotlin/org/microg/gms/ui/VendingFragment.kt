@@ -12,13 +12,13 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
 import com.google.android.gms.R
-import org.microg.gms.play.PlayPreferences
+import org.microg.gms.vending.VendingPreferences
 
-class PlayFragment : PreferenceFragmentCompat() {
+class VendingFragment : PreferenceFragmentCompat() {
     private lateinit var licensingEnabled: TwoStatePreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.preferences_play)
+        addPreferencesFromResource(R.xml.preferences_vending)
     }
 
     @SuppressLint("RestrictedApi")
@@ -28,7 +28,7 @@ class PlayFragment : PreferenceFragmentCompat() {
             val appContext = requireContext().applicationContext
             lifecycleScope.launchWhenResumed {
                 if (newValue is Boolean) {
-                    PlayPreferences.setLicensingEnabled(appContext, newValue)
+                    VendingPreferences.setLicensingEnabled(appContext, newValue)
                 }
                 updateContent()
             }
@@ -44,11 +44,11 @@ class PlayFragment : PreferenceFragmentCompat() {
     private fun updateContent() {
         val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
-            licensingEnabled.isChecked = PlayPreferences.isLicensingEnabled(appContext)
+            licensingEnabled.isChecked = VendingPreferences.isLicensingEnabled(appContext)
         }
     }
 
     companion object {
-        const val PREF_LICENSING_ENABLED = "play_licensing"
+        const val PREF_LICENSING_ENABLED = "vending_licensing"
     }
 }
