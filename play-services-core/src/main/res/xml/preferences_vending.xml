@@ -6,7 +6,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <org.microg.gms.ui.SwitchBarPreference
+    <SwitchPreference
         android:title="@string/pref_vending_licensing_enable_switch"
         android:key="vending_licensing"
         android:persistent="false" />
