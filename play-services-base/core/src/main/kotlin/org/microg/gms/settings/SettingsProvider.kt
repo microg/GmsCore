@@ -22,7 +22,7 @@ import org.microg.gms.settings.SettingsContract.DroidGuard
 import org.microg.gms.settings.SettingsContract.Exposure
 import org.microg.gms.settings.SettingsContract.Gcm
 import org.microg.gms.settings.SettingsContract.Location
-import org.microg.gms.settings.SettingsContract.Play
+import org.microg.gms.settings.SettingsContract.Vending
 import org.microg.gms.settings.SettingsContract.Profile
 import org.microg.gms.settings.SettingsContract.SafetyNet
 import org.microg.gms.settings.SettingsContract.getAuthority
@@ -79,7 +79,7 @@ class SettingsProvider : ContentProvider() {
         DroidGuard.getContentUri(context!!) -> queryDroidGuard(projection ?: DroidGuard.PROJECTION)
         Profile.getContentUri(context!!) -> queryProfile(projection ?: Profile.PROJECTION)
         Location.getContentUri(context!!) -> queryLocation(projection ?: Location.PROJECTION)
-        Play.getContentUri(context!!) -> queryPlay(projection ?: Play.PROJECTION)
+        Vending.getContentUri(context!!) -> queryVending(projection ?: Vending.PROJECTION)
         else -> null
     }
 
@@ -100,7 +100,7 @@ class SettingsProvider : ContentProvider() {
             DroidGuard.getContentUri(context!!) -> updateDroidGuard(values)
             Profile.getContentUri(context!!) -> updateProfile(values)
             Location.getContentUri(context!!) -> updateLocation(values)
-            Play.getContentUri(context!!) -> updatePlay(values)
+            Vending.getContentUri(context!!) -> updateVending(values)
             else -> return 0
         }
         return 1
@@ -338,19 +338,19 @@ class SettingsProvider : ContentProvider() {
         editor.apply()
     }
 
-    private fun queryPlay(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
+    private fun queryVending(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
         when (key) {
-            Play.LICENSING -> getSettingsBoolean(key, false)
+            Vending.LICENSING -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
 
-    private fun updatePlay(values: ContentValues) {
+    private fun updateVending(values: ContentValues) {
         if (values.size() == 0) return
         val editor = preferences.edit()
         values.valueSet().forEach { (key, value) ->
             when (key) {
-                Play.LICENSING -> editor.putBoolean(key, value as Boolean)
+                Vending.LICENSING -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

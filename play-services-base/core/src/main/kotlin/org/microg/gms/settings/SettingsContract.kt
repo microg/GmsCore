@@ -171,12 +171,12 @@ object SettingsContract {
         )
     }
 
-    object Play {
-        private const val id = "play"
+    object Vending {
+        private const val id = "vending"
         fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
-        const val LICENSING = "play_licensing"
+        const val LICENSING = "vending_licensing"
 
         val PROJECTION = arrayOf(
             LICENSING

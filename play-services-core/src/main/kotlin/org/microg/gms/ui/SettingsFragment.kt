@@ -15,7 +15,7 @@ import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
-import org.microg.gms.play.PlayPreferences
+import org.microg.gms.vending.VendingPreferences
 import org.microg.gms.safetynet.SafetyNetPreferences
 import org.microg.gms.ui.settings.SettingsProvider
 import org.microg.gms.ui.settings.getAllSettingsProviders
@@ -43,8 +43,8 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openLocationSettings)
             true
         }
-        findPreference<Preference>(PREF_PLAY)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openPlaySettings)
+        findPreference<Preference>(PREF_VENDING)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            findNavController().navigate(requireContext(), R.id.openVendingSettings)
             true
         }
 
@@ -109,7 +109,7 @@ class SettingsFragment : ResourceSettingsFragment() {
 
         findPreference<Preference>(PREF_CHECKIN)!!.setSummary(if (CheckinPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
         findPreference<Preference>(PREF_SNET)!!.setSummary(if (SafetyNetPreferences.isEnabled(requireContext())) org.microg.gms.base.core.R.string.service_status_enabled_short else org.microg.gms.base.core.R.string.service_status_disabled_short)
-        findPreference<Preference>(PREF_PLAY)!!.setSummary(if (PlayPreferences.isLicensingEnabled(requireContext())) R.string.pref_play_summary_licensing_on else R.string.pref_play_summary_licensing_off)
+        findPreference<Preference>(PREF_VENDING)!!.setSummary(if (VendingPreferences.isLicensingEnabled(requireContext())) R.string.pref_vending_summary_licensing_on else R.string.pref_vending_summary_licensing_off)
 
         lifecycleScope.launchWhenResumed {
             val entries = getAllSettingsProviders(requireContext()).flatMap { it.getEntriesDynamic(requireContext()) }
@@ -130,7 +130,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_SNET = "pref_snet"
         const val PREF_LOCATION = "pref_location"
         const val PREF_CHECKIN = "pref_checkin"
-        const val PREF_PLAY = "pref_play"
+        const val PREF_VENDING = "pref_vending"
     }
 
     init {
