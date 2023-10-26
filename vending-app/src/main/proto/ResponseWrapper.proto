@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+import "integrity/IntegrityResponse.proto";
+
+option java_package = "com.google.android.finsky";
+option java_multiple_files = true;
+
+message ResponseWrapper {
+  optional Payload payload = 1;
+  optional ServerCommands commands = 2;
+}
+
+message ServerCommands {
+  optional bool clearCache = 1;
+  optional string displayErrorMessage = 2;
+  optional string logErrorStacktrace = 3;
+}
+
+message Payload {
+  optional IntegrityResponse integrityResponse = 186;
+}

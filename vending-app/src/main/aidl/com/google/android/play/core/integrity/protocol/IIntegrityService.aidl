@@ -1,0 +1,12 @@
+/*
+ * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package com.google.android.play.core.integrity.protocol;
+
+import com.google.android.play.core.integrity.protocol.IIntegrityServiceCallback;
+
+interface IIntegrityService {
+    void requestIntegrityToken(in Bundle request, IIntegrityServiceCallback callback) = 1;
+}

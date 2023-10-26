@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.google.android.finsky.integrityservice";
+option java_multiple_files = true;
+
+message IntegrityRequest {
+  message Details {
+    message PackageNameWrapper {
+      optional string value = 1;
+    }
+
+    message VersionCodeWrapper {
+      optional int32 value = 1;
+    }
+
+    optional PackageNameWrapper packageName = 1;
+    optional VersionCodeWrapper versionCode = 2;
+    optional string nonce = 3;
+    repeated string certificateSha256Digests = 4;
+    optional google.protobuf.Timestamp timestampAtRequest = 5;
+    optional int64 cloudProjectNumber = 6;
+  }
+
+  optional Details details = 1;
+  optional string flowName = 3;
+  oneof droidGuardToken {
+    string droidGuardTokenBase64 = 2;
+    bytes droidGuardTokenRaw = 5;
+  }
+  optional PlayCoreVersion playCoreVersion = 6;
+  optional PlayProtectDetails playProtectDetails = 7;
+}
+
+message PlayCoreVersion {
+  optional int32 major = 1;
+  optional int32 minor = 2;
+  optional int32 patch = 3;
+}
+
+message PlayProtectDetails {
+  optional PlayProtectState state = 1;
+}
+
+enum PlayProtectState {
+  PLAY_PROTECT_STATE_UNKNOWN_PHA_STATE = 0;
+  PLAY_PROTECT_STATE_NONE = 1;
+  PLAY_PROTECT_STATE_NO_PROBLEMS = 2;
+  PLAY_PROTECT_STATE_WARNING = 3;
+  PLAY_PROTECT_STATE_DANGER = 4;
+  PLAY_PROTECT_STATE_OFF = 5;
+}

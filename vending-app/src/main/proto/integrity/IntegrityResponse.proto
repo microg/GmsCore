@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+option java_package = "com.google.android.finsky.integrityservice";
+option java_multiple_files = true;
+
+message IntegrityResponse {
+  optional string token = 1;
+}

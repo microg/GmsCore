@@ -4,6 +4,8 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.squareup.wire'
 
 android {
     namespace "com.android.vending"
@@ -11,6 +13,7 @@ android {
     buildToolsVersion "$androidBuildVersionTools"
 
     defaultConfig {
+        multiDexEnabled = true
         versionName vendingAppVersionName
         versionCode vendingAppVersionCode
         minSdkVersion androidMinSdk
@@ -33,13 +36,36 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
     }
 }
 
 dependencies {
     implementation project(':fake-signature')
+
+    implementation project(':play-services-droidguard')
+    implementation project(':play-services-tasks-ktx')
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    implementation "androidx.annotation:annotation:$annotationVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
+
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation("io.ktor:ktor-client-android:2.3.5")
+}
+
+wire {
+    kotlin {
+        javaInterop = true
+    }
 }
 
 if (file('user.gradle').exists()) {
