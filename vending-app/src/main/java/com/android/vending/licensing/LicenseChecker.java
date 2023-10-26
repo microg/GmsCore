@@ -79,6 +79,9 @@ public abstract class LicenseChecker<D, R> {
 
     static final String AUTH_TOKEN_SCOPE = "oauth2:https://www.googleapis.com/auth/googleplay";
 
+    public abstract Request<?> createRequest(String packageName, String auth, int versionCode, D data,
+                                             BiConsumer<Integer, R> then, Response.ErrorListener errorListener);
+
     public void checkLicense(Account account, AccountManager accountManager,
                              String packageName, PackageManager packageManager,
                              RequestQueue queue, D queryData,
@@ -95,25 +98,28 @@ public abstract class LicenseChecker<D, R> {
                 onResult.accept(ERROR_NON_MATCHING_UID, null);
             } else {
 
+                BiConsumer<Integer, R> onRequestFinished = (Integer integer, R r) -> {
+                    try {
+                        onResult.accept(integer, r);
+                    } catch (RemoteException e) {
+                        Log.e(TAG,
+                            "After telling it the license check result, remote threw an Exception.");
+                        e.printStackTrace();
+                    }
+                };
+
+                Response.ErrorListener onRequestError = error -> {
+                    Log.e(TAG, "license request failed with " + error.toString());
+                    safeSendResult(onResult, ERROR_CONTACTING_SERVER, null);
+                };
+
                 accountManager.getAuthToken(
                     account, AUTH_TOKEN_SCOPE, false,
                     future -> {
                         try {
                             String auth = future.getResult().getString(KEY_AUTHTOKEN);
                             Request<?> request = createRequest(packageName, auth,
-                                versionCode, queryData, (Integer integer, R r) -> {
-
-                                    try {
-                                        onResult.accept(integer, r);
-                                    } catch (RemoteException e) {
-                                        Log.e(TAG,
-                                            "After telling it the license check result, remote threw an Exception.");
-                                        e.printStackTrace();
-                                    }
-                                }, error -> {
-                                    Log.e(TAG, "license request failed with " + error.toString());
-                                    safeSendResult(onResult, ERROR_CONTACTING_SERVER, null);
-                                });
+                                versionCode, queryData, onRequestFinished, onRequestError);
                             request.setShouldCache(false);
                             queue.add(request);
                         } catch (AuthenticatorException | IOException | OperationCanceledException e) {
@@ -138,7 +144,45 @@ public abstract class LicenseChecker<D, R> {
         }
     }
 
-    public abstract Request<?> createRequest(String packageName, String auth, int versionCode, D data, BiConsumer<Integer, R> then, Response.ErrorListener errorListener);
+    // Implementations
+
+    public static class V1 extends LicenseChecker<Long, Tuple<String, String>> {
+
+        @Override
+        public Request<V1Container> createRequest(String packageName, String auth, int versionCode, Long nonce, BiConsumer<Integer, Tuple<String, String>> then,
+                                                  Response.ErrorListener errorListener) {
+            return new LicenseRequest.V1(
+                packageName, auth, versionCode, nonce, response -> {
+                if (response != null) {
+                    Log.v(TAG, "licenseV1 result was " + response.result + " with signed data " +
+                        response.signedData);
+
+                    if (response.result != null) {
+                        then.accept(response.result, new Tuple<>(response.signedData, response.signature));
+                    } else {
+                        then.accept(LICENSED, new Tuple<>(response.signedData, response.signature));
+                    }
+                }
+            }, errorListener
+            );
+        }
+    }
+
+    public static class V2 extends LicenseChecker<Unit, String> {
+        @Override
+        public Request<String> createRequest(String packageName, String auth, int versionCode, Unit data,
+                                             BiConsumer<Integer, String> then, Response.ErrorListener errorListener) {
+            return new LicenseRequest.V2(
+                packageName, auth, versionCode, response -> {
+                if (response != null) {
+                    then.accept(LICENSED, response);
+                } else {
+                    then.accept(NOT_LICENSED, null);
+                }
+            }, errorListener
+            );
+        }
+    }
 
     // Functional interfaces
 
@@ -157,46 +201,6 @@ public abstract class LicenseChecker<D, R> {
         public Tuple(A a, B b) {
             this.a = a;
             this.b = b;
-        }
-    }
-
-    // Implementations
-
-    public static class V1 extends LicenseChecker<Long, Tuple<String, String>> {
-
-        @Override
-        public Request<V1Container> createRequest(String packageName, String auth, int versionCode, Long nonce, BiConsumer<Integer, Tuple<String, String>> then,
-                                                  Response.ErrorListener errorListener) {
-            return new LicenseRequest.V1(
-                packageName, auth, versionCode, nonce, response -> {
-                    if (response != null) {
-                        Log.v(TAG, "licenseV1 result was " + response.result + " with signed data " +
-                            response.signedData);
-
-                        if (response.result != null) {
-                            then.accept(response.result, new Tuple<>(response.signedData, response.signature));
-                        } else {
-                            then.accept(LICENSED, new Tuple<>(response.signedData, response.signature));
-                        }
-                    }
-                }, errorListener
-            );
-        }
-    }
-
-    public static class V2 extends LicenseChecker<Unit, String> {
-        @Override
-        public Request<String> createRequest(String packageName, String auth, int versionCode, Unit data,
-                                             BiConsumer<Integer, String> then, Response.ErrorListener errorListener) {
-            return new LicenseRequest.V2(
-                packageName, auth, versionCode, response -> {
-                    if (response != null) {
-                        then.accept(LICENSED, response);
-                    } else {
-                        then.accept(NOT_LICENSED, null);
-                    }
-                }, errorListener
-            );
         }
     }
 }
