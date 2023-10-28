@@ -178,3 +178,9 @@ android {
 if (file('user.gradle').exists()) {
     apply from: 'user.gradle'
 }
+
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        output.outputFileName = variant.applicationId + "-" + variant.versionCode + variant.versionName.substring(version.length()) + ".apk"
+    }
+}
