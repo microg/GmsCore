@@ -1,2 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Wykryto <xliff:g example="3">%1$d</xliff:g> narażeń na kontakt:</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_api_usage_title">Użycie API w ciągu ostatnich 14 dni</string>
+    <string name="pref_exposure_rpi_export_summary">Eksportuj zebrane ID dla roszerzonej analizy przez inną aplikację.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth i dostęp do lokalizacji muszą być włączone, aby otrzymywać powiadomienia o narażaniu na kontakt.</string>
+    <string name="exposure_confirm_stop_button">Wyłącz</string>
+    <string name="pref_exposure_advertising_id_title">Obecnie nadawany ID</string>
+    <string name="exposure_confirm_start_title">Włączyć powiadomienia o narażaniu na kontakt\?</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Niestety twoje urządzenie nie jest kompatybilne z powiadomieniami o narażaniu na kontakt.</string>
+    <string name="pref_exposure_collected_rpis_title">Zebrane ID</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Stuknij, aby udzielić wymaganych uprawnień dla powiadomień o narażaniu</string>
+    <string name="pref_exposure_app_report_entry_time_short">Poniżej 5 minut temu</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Nie wykryto żadnych narażeń na kontakt.</string>
+    <string name="pref_exposure_app_report_entry_distance_far">daleki kontakt</string>
+    <string name="exposure_confirm_keys_title">Udostępniać Twoje ID aplikacji <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_enable_switch">Używaj powiadomień o narażaniu na kontakt</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Przetworzono <xliff:g example="121031">%1$d</xliff:g> kluczy diagnostycznych.</string>
+    <string name="pref_exposure_rpi_export_title">Eksportuj</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID na godzinę</string>
+    <string name="exposure_notify_off_title">Powiadomienia o narażaniu na kontakt nieaktywne</string>
+    <string name="pref_exposure_app_report_updated_title">Aktualizacja: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="exposure_grant_background_location_button">Zmienianie ustawień</string>
+    <string name="pref_exposure_error_location_off_title">Otwórz ustawienia lokalizacji</string>
+    <string name="pref_exposure_rpis_details_summary">W czasie, gdy API powiadomień o narażaniu na kontakt z COVID-19 jest aktywne, twoje urządzenie stale gromadzi identyfikatory (nazywane RPI, ang. „Rolling Proximity Identifiers”) z pobliskich urządzeń.
+\n
+\nJeżeli właściciele urządzeń zgłoszą pozytywną diagnozę testu, ich ID mogą być udostępniane. Twoje urządzenie sprawdza, czy żaden z znanych ID z pozytywną diagnozą testu nie znajduje się w zebranych ID i wylicza Twoje ryzyko zakażenia.</string>
+    <string name="pref_exposure_info_summary">API powiadomień o narażaniu na kontakt z COVID-19 pozwalają aplikacjom na powiadamianie Ciebie o kontakcie z osobami z pozytywną diagnozą testu na obecność wirusa.
+\n
+\nData, okres i siła sygnału związana z narażeniem na kontakt będzie udostępniona odpowiedniej aplikacji.</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> rozgłoszeń do <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_enable_info_summary">Aby włączyć funkcję powiadomień o narażaniu na kontakt, otwórz dowolną aplikację wspierającą ją.</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Usuń wszystkie zebrane ID</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> potrzebuje dodatkowych uprawnień.</string>
+    <string name="service_name_exposure">Powiadomienia o narażaniu na kontakt</string>
+    <string name="pref_exposure_app_report_entry_distance_close">&gt;bliski kontakt</string>
+    <string name="exposure_confirm_permission_button">Udziel</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth musi być włączony aby otrzymywać powiadomienia o narażaniu na kontakt.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Usuń mimo tego</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Informacja: Poziom ryzyka jest ustalany przez aplikację. Wysokie liczby mogą oznaczać niskie ryzyko i vice versa.</string>
+    <string name="exposure_confirm_location_description">Dostęp do lokalizacji jest wymagany.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">iestety twoje urządzenie jest tylko częściowo kompatybilne z powiadomieniami o narażaniu na kontakt. Możesz być powiadamiany o ryzyku kontaktu, ale nie będziesz w stanie powiadomić innych.</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth musi być włączony.</string>
+    <string name="exposure_confirm_start_button">Włącz</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> zebranych ID</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID w ciągu ostatniej godziny</string>
+    <string name="exposure_notify_off_location">Dostęp do lokalizacji jest wymagany, aby otrzymywać powiadomienia o narażaniu na kontakt.</string>
+    <string name="prefcat_exposure_apps_title">Aplikacje korzystające z powiadomień o narażaniu na kontakt</string>
+    <string name="exposure_confirm_stop_summary">Po wyłączeniu powiadomień o narażeniu, przestaniesz być powiadamiany gdy zostałeś narażony na kontakt z osobą o pozytywnej diagnozie.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, poziom ryzyka: <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="exposure_confirm_stop_title">Wyłączyć powiadomienia o narażaniu\?</string>
+    <string name="exposure_confirm_keys_summary">Twoje identyfikatory w ciągu ostatnich 14 dni zostaną wykorzystane, aby pomóc powiadamiać innych o możliwym wystąpieniu narażenia na kontakt z wirusem.
+\n
+\nZarówno Twoja tożsamość jak i wynik testu nie zostanie udostępniona innym osobom.</string>
+    <string name="exposure_confirm_start_summary">Twój telefon musi korzystać z Bluetooth aby bezpiecznie zbierać i udostępniać identyfikatory do innych telefonów w pobliżu. „<xliff:g example="Corona-Warn">%1$s</xliff:g>” może powiadomić Ciebie o możliwym narażeniu na kontakt z osobami, których wynik testu na obecność wirusa był pozytywny. Data, okres i siła sygnału związana z narażeniem na kontakt zostanie udostępniona tej aplikacji.</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Brak rekordów</string>
+    <string name="pref_exposure_rpi_delete_all_title">Usuń</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Wymagane nowe uprawnienia</string>
+    <string name="prefcat_exposure_app_report_title">Wykryte narażenia</string>
+    <string name="exposure_notify_off_nearby">Powiadomienia o narażaniu na kontakt wymagają dodatkowych uprawnień dla działania</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Usunięcie wszystkich zebranych identyfikatorów sprawi, że niemożliwe stanie się powiadomienie Ciebie w przypadku gdy któryś z Twoich kontaktów z ostatnich 14 dni był z osobą o pozytywnej diagnozie.</string>
+    <string name="exposure_confirm_keys_button">Udostępnij</string>
+    <string name="exposure_grant_background_location_description">Prawie gotowe! Musisz teraz udzielić dostępu do lokalizacji w tle poprzez wybranie opcji „Zawsze zezwalaj” na następnym ekranie. Potem naciśnij na wstecz.</string>
+    <string name="exposure_confirm_button">Włącz</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Włącz Bluetooth</string>
+    <string name="pref_exposure_app_report_entry_time_about">Około <xliff:g example="13">%1$d</xliff:g> minut temu</string>
+</resources>
