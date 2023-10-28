@@ -13,20 +13,21 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> fornitore configurato</item>
+        <item quantity="many"><xliff:g example="1000000">%1$d</xliff:g> di fornitori configurati</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> fornitori configurati</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> applicazione registrata</item>
+        <item quantity="many"><xliff:g example="1000000">%1$d</xliff:g> di applicazioni registrate</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> applicazioni registrate</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Un permesso necessario al corretto funzionamento di microG non è stato concesso</item>
-        <item quantity="other">Più permessi necessari al corretto funzionamento di microG non sono stati concessi</item>
+        <item quantity="one">Non è stato concesso un permesso necessario al corretto funzionamento di microG.</item>
+        <item quantity="many"></item>
+        <item quantity="other">Non sono stati concessi alcuni permessi necessari al corretto funzionamento di microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Richiedi il permesso mancante</item>

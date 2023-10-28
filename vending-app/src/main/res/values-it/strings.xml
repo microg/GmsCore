@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="toast_installed">L\'app microG Companion non può essere usata da sola. Sono state aperte le impostazioni di microG.</string>
+    <string name="toast_not_installed">L\'app microG Companion non può essere usata da sola. Installa l\'app microG Services per utilizzare microG.</string>
+    <string name="app_name">microG Companion</string>
+</resources>

@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="exposure_notify_off_title">Notifiche di esposizione al virus non attive</string>
     <string name="exposure_notify_off_bluetooth">Il Bluetooth dev\'essere attivato per poter ricevere le notifiche di esposizione al virus.</string>
     <string name="exposure_notify_off_location">È necessario attivare la geolocalizzazione per poter ricevere le notifiche di esposizione al virus.</string>
     <string name="exposure_notify_off_bluetooth_location">È necessario attivare il Bluetooth e la geolocalizzazione per poter ricevere le notifiche di esposizione al virus.</string>
     <string name="exposure_notify_off_nearby">Le notifiche di esposizione al virus richiedono ulteriori permessi per funzionare</string>
-
     <string name="service_name_exposure">Notifiche di esposizione al virus</string>
     <string name="pref_exposure_enable_info_summary">Per abilitare le notifiche di esposizione al virus, apri qualsiasi applicazione che le supporti.</string>
     <string name="prefcat_exposure_apps_title">Applicazioni che utilizzano le notifiche di esposizione al virus</string>
@@ -27,10 +26,9 @@
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Elimina comunque</string>
     <string name="pref_exposure_info_summary">L\'API per le notifiche di esposizione al virus permette alle applicazioni di notificarti nel caso in cui tu sia stato esposto a qualcuno che ha riportato di essere stato diagnosticato positivo al virus.\n\nData, durata e potenza del segnale associati a una esposizione verranno condivisi con l\'applicazione relativa.</string>
     <string name="pref_exposure_rpis_details_summary">Quando l\'API per le notifiche di esposizione al virus è abilitata, il tuo dispositivo raccoglie passivamente degli identificativi univoci (chiamati Identificatori di Prossimità a Rotazione, o RPI) dai dispositivi vicini.\n\nQuando i possessori dei dispositivi riportano di essere stati diagnosticati positivi al virus, i loro identificativi univoci possono essere condivisi. Il tuo dispositivo verifica se tra gli identificativi univoci diagnosticati positivi al virus vi sono corrispondenze con quelli raccolti e calcola il tuo punteggio di rischio.</string>
-
     <string name="exposure_enable_switch">Utilizza le notifiche di esposizione al virus</string>
     <string name="exposure_confirm_start_title">Abilitare le notifiche di esposizione al virus?</string>
-    <string name="exposure_confirm_start_summary">Il tuo dispositivo richiede l\'utilizzo del Bluetooth per raccogliere e condividere in modo sicuro gli identificativi univoci con altri dispositivi vicini.\n\n<xliff:g example="Corona-Warn">%1$s</xliff:g> può notificarti nel caso in cui tu sia stato esposto a qualcuno che ha riportato di essere stato diagnosticato positivo al virus.\n\nData, durata e potenza del segnale associati a una esposizione al virus verranno condivisi con l\'applicazione.</string>
+    <string name="exposure_confirm_start_summary">Il tuo dispositivo richiede l\'utilizzo del Bluetooth per raccogliere e condividere in modo sicuro gli identificativi univoci con altri dispositivi vicini. <xliff:g example="Corona-Warn">%1$s</xliff:g> può notificarti nel caso in cui tu sia stato esposto a qualcuno che ha riportato di essere stato diagnosticato positivo al virus. Data, durata e potenza del segnale associati a una esposizione al virus verranno condivisi con l\'applicazione.</string>
     <string name="exposure_confirm_start_button">Abilita</string>
     <string name="exposure_confirm_stop_title">Disabilitare le notifiche di esposizione al virus?</string>
     <string name="exposure_confirm_stop_summary">Dopo aver disabilitato le notifiche di esposizione al virus, non verrai più notificato nel caso in cui tu sia stato esposto a qualcuno che ha riportato di essere stato diagnosticato positivo.</string>

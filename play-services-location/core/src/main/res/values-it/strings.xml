@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Geolocalizzazione</string>
+    <string name="prefcat_location_apps_title">Accessi recenti</string>
+    <string name="location_app_last_access_at">Ultimo accesso: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="fragment_location_apps_title">App con accesso alla posizione</string>
+    <string name="pref_location_app_force_coarse_summary">Fornisci sempre la posizione approssimativa a quest\'app, ignorando il suo livello di autorizzazione.</string>
+    <string name="pref_location_app_force_coarse_title">Forza l\'uso della posizione approssimativa</string>
+</resources>
