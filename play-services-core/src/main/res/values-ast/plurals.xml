@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one">Rexistróse <xliff:g example="1">%1$d</xliff:g> aplicación</item>
+        <item quantity="other">Rexistráronse <xliff:g example="1">%1$d</xliff:g> aplicaciones</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Solicitar el permisu que falta</item>
+        <item quantity="other">Solicitar los permisos que falten</item>
+    </plurals>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one">Configuróse <xliff:g example="1">%1$d</xliff:g> backend</item>
+        <item quantity="other">Configuráronse <xliff:g example="1">%1$d</xliff:g> backends</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Nun se concedió un permisu riquíu pal funcionamientu correutu de los servicios de microG.</item>
+        <item quantity="other">Nun se concedieron los permisos riquíos pal funcionamientu correutu de los servicios de microG.</item>
+    </plurals>
+</resources>

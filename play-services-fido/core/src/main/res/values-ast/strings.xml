@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_button_get_started">Comenzar</string>
+    <string name="fido_usb_prompt_body">Conecta la llave de seguranza al puertu USB o conéctala con un cable USB. Si la llave tien un botón o una aniella dorada, tócalos yá.</string>
+    <string name="fido_transport_usb_wait_connect_body">Conecta la to llave USB de seguranza.</string>
+    <string name="fido_nfc_prompt_body">Ten arimada la llave a la parte trasera del preséu hasta qu\'esti dexe de vibrar</string>
+    <string name="fido_welcome_body">Usar la to llave de seguranza con «%1$s» ayuda a protexer los tos datos privaos.</string>
+    <string name="fido_welcome_title">Usu de llaves de seguranza con «%1$s»</string>
+    <string name="fido_transport_selection_biometric">Usar esti preséu col bloquéu de pantalla</string>
+    <string name="fido_welcome_privileged_check">Sí, «%1$s» ye\'l mio restolador d\'enfotu y habría tener permisu pa usar llaves de seguranza con sitios web de terceros.</string>
+    <string name="fido_biometric_prompt_body">«%1$s» tien de verificar que yes tu.</string>
+    <string name="fido_transport_selection_usb">Usar la llave col USB</string>
+    <string name="fido_transport_selection_title">Cómo usar la llave de seguranza</string>
+    <string name="fido_biometric_prompt_title">Verificación de la identidá</string>
+    <string name="fido_usb_title">Conexón per USB</string>
+    <string name="fido_transport_usb_wait_confirm_body">Toca l\'aniella dorada o\'l discu de: %1$s.</string>
+    <string name="fido_welcome_privileged_info">«%1$s» actúa como un restolador d\'enfotu pa usar la to llave de seguranza con «%2$s».</string>
+    <string name="fido_nfc_title">Conexón per NFC</string>
+    <string name="fido_transport_selection_bluetooth">Usar la llave col bluetooth</string>
+    <string name="fido_transport_selection_body">Les llaves de seguranza funcionen con bluetooth, NFC y USB. Escueyi cómo quies usar la to llave.</string>
+    <string name="fido_transport_selection_nfc">Usar la llave col NFC</string>
+</resources>

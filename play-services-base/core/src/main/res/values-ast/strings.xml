@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="menu_advanced">Configuración avanzada</string>
+    <string name="service_status_enabled_short">Sí</string>
+    <string name="open_app">Abrir</string>
+    <string name="foreground_service_notification_text">«<xliff:g example="Exposure Notification">%1$s</xliff:g>» ta executándose en segundu planu.</string>
+    <string name="foreground_service_notification_big_text">Esclúi a <xliff:g example="microG Services">%1$s</xliff:g> de les optimizaciones d\'enerxía o camuda la configuración de los avisos p\'anubrir esti avisu.</string>
+    <string name="list_item_see_all">Ver too</string>
+    <string name="service_status_disabled_short">Non</string>
+    <string name="list_no_item_none">Nada</string>
+    <string name="service_status_manual">Manual</string>
+</resources>
