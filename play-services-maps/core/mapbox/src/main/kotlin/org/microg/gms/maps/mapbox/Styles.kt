@@ -111,7 +111,7 @@ fun getFallbackStyleOnlineUri(mapType: Int) = when (mapType) {
 
 fun MapStyleOptions.apply(style: JSONObject) {
     try {
-        Gson().fromJson(json, Array<StyleOperation>::class.java).let { styleOperations ->
+        Gson().fromJson(json, Array<StyleOperation>::class.java)?.let { styleOperations ->
 
             val layerArray = style.getJSONArray(KEY_LAYERS)
 
