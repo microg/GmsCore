@@ -40,7 +40,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="perm_c2dm_receive_label">ascolto di messaggi C2DM</string>
     <string name="perm_c2dm_send_label">invio di messaggi C2DM ad altre applicazioni</string>
     <string name="perm_gtalk_svc_label">scambio di messaggi e ricezione di notifiche di sincronizzazione dai server Google</string>
-    <string name="perm_extended_access_label">accesso esteso ai servizi Google</string>
+    <string name="perm_extended_access_label">Accesso esteso ai servizi Google</string>
     <string name="perm_provision_label">configurazione dei servizi microG</string>
     <string name="perm_provision_description">Permette all\'applicazione di configurare i servizi microG senza l\'interazione dell\'utente</string>
     <string name="service_name_checkin">Registrazione del dispositivo</string>
