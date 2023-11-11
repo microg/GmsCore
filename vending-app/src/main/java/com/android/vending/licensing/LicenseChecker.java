@@ -79,10 +79,10 @@ public abstract class LicenseChecker<D, R> {
 
     static final String AUTH_TOKEN_SCOPE = "oauth2:https://www.googleapis.com/auth/googleplay";
 
-    public abstract Request<?> createRequest(String packageName, String auth, int versionCode, D data,
+    public abstract LicenseRequest<?> createRequest(String packageName, String auth, int versionCode, D data,
                                              BiConsumer<Integer, R> then, Response.ErrorListener errorListener);
 
-    public void checkLicense(Account account, AccountManager accountManager,
+    public void checkLicense(Account account, AccountManager accountManager, String androidId,
                              String packageName, PackageManager packageManager,
                              RequestQueue queue, D queryData,
                              BiConsumerWithException<Integer, R, RemoteException> onResult)
@@ -118,8 +118,9 @@ public abstract class LicenseChecker<D, R> {
                     future -> {
                         try {
                             String auth = future.getResult().getString(KEY_AUTHTOKEN);
-                            Request<?> request = createRequest(packageName, auth,
+                            LicenseRequest<?> request = createRequest(packageName, auth,
                                 versionCode, queryData, onRequestFinished, onRequestError);
+                            request.ANDROID_ID = Long.decode("0x" + androidId);
                             request.setShouldCache(false);
                             queue.add(request);
                         } catch (AuthenticatorException | IOException | OperationCanceledException e) {
@@ -149,7 +150,7 @@ public abstract class LicenseChecker<D, R> {
     public static class V1 extends LicenseChecker<Long, Tuple<String, String>> {
 
         @Override
-        public Request<V1Container> createRequest(String packageName, String auth, int versionCode, Long nonce, BiConsumer<Integer, Tuple<String, String>> then,
+        public LicenseRequest<V1Container> createRequest(String packageName, String auth, int versionCode, Long nonce, BiConsumer<Integer, Tuple<String, String>> then,
                                                   Response.ErrorListener errorListener) {
             return new LicenseRequest.V1(
                 packageName, auth, versionCode, nonce, response -> {
@@ -170,7 +171,7 @@ public abstract class LicenseChecker<D, R> {
 
     public static class V2 extends LicenseChecker<Unit, String> {
         @Override
-        public Request<String> createRequest(String packageName, String auth, int versionCode, Unit data,
+        public LicenseRequest<String> createRequest(String packageName, String auth, int versionCode, Unit data,
                                              BiConsumer<Integer, String> then, Response.ErrorListener errorListener) {
             return new LicenseRequest.V2(
                 packageName, auth, versionCode, response -> {

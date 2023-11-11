@@ -31,21 +31,27 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.android.gms.common.BuildConfig;
+
+import org.microg.gms.profile.Build;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import okio.ByteString;
 
 public abstract class LicenseRequest<T> extends Request<T> {
 
-    private final String xPsRh;
     private final String auth;
     private static final String TAG = "FakeLicenseRequest";
 
     private static final int BASE64_FLAGS = Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING;
-    private static final long ANDROID_ID = 1;
+    long ANDROID_ID = 1;
+    private static final String FINSKY_VERSION = "Finsky/37.5.24-29%20%5B0%5D%20%5BPR%5D%20565477504";
 
     private final Response.Listener<T> successListener;
 
@@ -55,6 +61,10 @@ public abstract class LicenseRequest<T> extends Request<T> {
         this.auth = auth;
 
         this.successListener = successListener;
+    }
+
+    @Override
+    public Map<String, String> getHeaders() {
 
         long millis = System.currentTimeMillis();
         TimestampContainer.Builder timestamp = new TimestampContainer.Builder()
@@ -107,9 +117,9 @@ public abstract class LicenseRequest<T> extends Request<T> {
             .deviceMeta(new DeviceMeta.Builder()
                 .android(
                     new AndroidVersionMeta.Builder()
-                        .androidSdk(0)
-                        .buildNumber("")
-                        .androidVersion("")
+                        .androidSdk(Build.VERSION.SDK_INT)
+                        .buildNumber(Build.ID)
+                        .androidVersion(Build.VERSION.RELEASE)
                         .unknown(0)
                         .build()
                 )
@@ -119,13 +129,13 @@ public abstract class LicenseRequest<T> extends Request<T> {
                 .build()
             )
             .userAgent(new UserAgent.Builder()
-                .deviceProductName("")
-                .deviceSoc("")
-                .deviceModelName("")
-                .finskyVersion("")
-                .deviceName("")
+                .deviceName(Build.DEVICE)
+                .deviceHardware(Build.HARDWARE)
+                .deviceModelName(Build.MODEL)
+                .finskyVersion(FINSKY_VERSION)
+                .deviceProductName(Build.MODEL)
                 .androidId(ANDROID_ID) // must not be 0
-                .deviceSignature("")
+                .buildFingerprint(Build.FINGERPRINT)
                 .build()
             )
             .uuid(new Uuid.Builder()
@@ -134,20 +144,27 @@ public abstract class LicenseRequest<T> extends Request<T> {
                 .build()
             )
             .build().encode();
-        this.xPsRh = new String(Base64.encode(Util.encodeGzip(header), BASE64_FLAGS));
-
-        //Log.d(TAG, "Product " + Build.PRODUCT + ", Board " + Build.BOARD + " Model " +  Build.MODEL + " Device " + Build.DEVICE);
+        String xPsRh = new String(Base64.encode(Util.encodeGzip(header), BASE64_FLAGS));
 
         Log.v(TAG, "X-PS-RH: " + xPsRh);
-    }
 
-    @Override
-    public Map<String, String> getHeaders() {
+        String userAgent = FINSKY_VERSION + " (api=3,versionCode=" + BuildConfig.VERSION_CODE + ",sdk=" + Build.VERSION.SDK +
+            ",device=" + encodeString(Build.DEVICE) + ",hardware=" + encodeString(Build.HARDWARE) + ",product=" + encodeString(Build.PRODUCT) +
+            ",platformVersionRelease=" + encodeString(Build.VERSION.RELEASE) + ",model=" + encodeString(Build.MODEL) + ",buildId=" + encodeString(Build.ID) +
+            ",isWideScreen=" + 0 + ",supportedAbis=" + String.join(";", Build.SUPPORTED_ABIS) + ")";
+        Log.v(TAG, "User-Agent: " + userAgent);
+
         return Map.of(
             "X-PS-RH", xPsRh,
+            "User-Agent", userAgent,
             "Authorization", "Bearer " + auth,
+            "Accept-Language", "en-US",
             "Connection", "Keep-Alive"
         );
+    }
+
+    private static String encodeString(String s) {
+        return URLEncoder.encode(s).replace("+", "%20");
     }
 
     @Override
