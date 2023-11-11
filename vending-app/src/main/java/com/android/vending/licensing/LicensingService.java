@@ -18,15 +18,24 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.net.Uri;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.provider.Settings;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import org.microg.gms.auth.AuthConstants;
+import org.microg.gms.profile.Build;
+import org.microg.gms.profile.ProfileManager;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 import kotlin.Unit;
@@ -42,6 +51,8 @@ public class LicensingService extends Service {
     private static final Uri SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/play");
 
     private static final String PREFERENCE_LICENSING_ENABLED = "play_licensing";
+
+    private static final Uri PROFILE_PROVIDER = Uri.parse("content://com.google.android.gms.microg.profile");
 
     private String androidId;
 
@@ -93,7 +104,7 @@ public class LicensingService extends Service {
         private void checkLicense(long nonce, String packageName, PackageManager packageManager,
                                   ILicenseResultListener listener, Queue<Account> remainingAccounts) throws RemoteException {
             new LicenseChecker.V1().checkLicense(
-                remainingAccounts.poll(), accountManager, packageName, packageManager,
+                remainingAccounts.poll(), accountManager, androidId, packageName, packageManager,
                 queue, nonce,
                 (responseCode, stringTuple) -> {
                     if (responseCode != LICENSED && !remainingAccounts.isEmpty()) {
@@ -128,7 +139,7 @@ public class LicensingService extends Service {
                                     ILicenseV2ResultListener listener, Bundle extraParams,
                                     Queue<Account> remainingAccounts) throws RemoteException {
             new LicenseChecker.V2().checkLicense(
-                remainingAccounts.poll(), accountManager, packageName, packageManager, queue, Unit.INSTANCE,
+                remainingAccounts.poll(), accountManager, androidId, packageName, packageManager, queue, Unit.INSTANCE,
                 (responseCode, data) -> {
                     /*
                      * Suppress failures on V2. V2 is commonly used by free apps whose checker
@@ -167,6 +178,32 @@ public class LicensingService extends Service {
     };
 
     public IBinder onBind(Intent intent) {
+
+
+        Cursor cursor = null;
+        try {
+            cursor = getContentResolver().query(
+                PROFILE_PROVIDER, null, null, null, null
+            );
+
+            if (cursor == null || cursor.getColumnCount() != 2) {
+                Log.e(TAG, "profile provider not available");
+            } else {
+                Map<String, String> profileData = new HashMap<>();
+                while (cursor.moveToNext()) {
+                    profileData.put(cursor.getString(0), cursor.getString(1));
+                }
+                ProfileManager.INSTANCE.applyProfileData(profileData);
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        androidId = String.valueOf(Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID));
+
         queue = Volley.newRequestQueue(this);
         accountManager = AccountManager.get(this);
         notificationRunnable = new LicenseServiceNotificationRunnable(this);
