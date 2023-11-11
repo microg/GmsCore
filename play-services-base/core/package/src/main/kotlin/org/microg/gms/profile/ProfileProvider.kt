@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2023 e Foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package org.microg.gms.profile
 
 import android.content.ContentProvider
