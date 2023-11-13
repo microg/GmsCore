@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_button_get_started">Sätt igång</string>
+    <string name="fido_usb_prompt_body">Anslut din säkerhetsnyckel till USB-porten eller anslut den med en USB-kabel. Om nyckeln har en knapp eller en guldskiva trycker du på den nu.</string>
+    <string name="fido_transport_usb_wait_connect_body">Anslut din USB-säkerhetsnyckel.</string>
+    <string name="fido_nfc_prompt_body">Håll nyckeln platt mot baksidan av enheten tills den slutar vibrera</string>
+    <string name="fido_welcome_body">Genom att använda din säkerhetsnyckel med %1$s kan du skydda dina privata data.</string>
+    <string name="fido_welcome_title">Använd din säkerhetsnyckel med %1$s</string>
+    <string name="fido_transport_selection_biometric">Använd den här enheten med skärmlås</string>
+    <string name="fido_welcome_privileged_check">Ja, %1$s är min betrodda webbläsare och bör tillåtas att använda säkerhetsnycklar med webbplatser från tredje part.</string>
+    <string name="fido_biometric_prompt_body">%1$s behöver verifiera att det är du.</string>
+    <string name="fido_transport_selection_usb">Använd säkerhetsnyckel med USB</string>
+    <string name="fido_transport_selection_title">Välj hur du vill använda din säkerhetsnyckel</string>
+    <string name="fido_biometric_prompt_title">Verifiera din identitet</string>
+    <string name="fido_usb_title">Anslut din USB-säkerhetsnyckel</string>
+    <string name="fido_transport_usb_wait_confirm_body">Tryck på den gyllene ringen eller skivan på %1$s.</string>
+    <string name="fido_welcome_privileged_info">%1$s fungerar som en betrodd webbläsare för att använda din säkerhetsnyckel med %2$s.</string>
+    <string name="fido_nfc_title">Anslut din NFC-säkerhetsnyckel</string>
+    <string name="fido_transport_selection_bluetooth">Använd säkerhetsnyckel med Bluetooth</string>
+    <string name="fido_transport_selection_body">Säkerhetsnycklar fungerar med Bluetooth, NFC och USB. Välj hur du vill använda nyckeln.</string>
+    <string name="fido_transport_selection_nfc">Använd säkerhetsnyckel med NFC</string>
+</resources>

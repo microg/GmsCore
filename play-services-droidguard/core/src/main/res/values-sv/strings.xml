@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_droidguard_mode_network_summary">Anslut till DroidGuard runtime via nätverk</string>
+    <string name="prefcat_droidguard_mode">DroidGuard driftläge</string>
+    <string name="pref_droidguard_mode_embedded_summary">Använd lokal DroidGuard-körning</string>
+    <string name="pref_droidguard_mode_embedded_title">Inbäddad</string>
+    <string name="pref_droidguard_mode_network_title">Fjärr</string>
+</resources>
