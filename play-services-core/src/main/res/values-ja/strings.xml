@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +13,10 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services</string>
     <string name="gms_settings_name">microG設定</string>
     <string name="gms_settings_summary">microG servicesの設定</string>
-
     <string name="just_a_sec">しばらくお待ちください...</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">続行すると、このアプリとGoogleがそれぞれ利用規約とプライバシーポリシーに従ってお客様の情報を使用することを許可したことになります。</string>
@@ -44,46 +42,36 @@
     <string name="deny">拒否</string>
     <string name="auth_notification_title">認証が必要です</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> がGoogleアカウントにアクセスするために認証が必要です。</string>
-
     <string name="perm_status_broadcast_label">内部ブロードキャストを受信</string>
     <string name="perm_c2dm_receive_label">C2DMメッセージを受信</string>
     <string name="perm_c2dm_send_label">C2DMメッセージを他のアプリに送信</string>
     <string name="perm_gtalk_svc_label">メッセージを交換し、Googleのサーバーから同期通知を受信</string>
     <string name="perm_extended_access_label">Googleサービスへの拡張アクセス</string>
-
     <string name="service_name_checkin">Googleデバイス登録</string>
     <string name="service_name_mcs">Cloud Messaging</string>
-
     <string name="games_title">Google Play ゲーム</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> が Play Gamesの使用を要求しています。</string>
     <string name="games_info_content">Play Gamesを使用するには、Google Play ゲーム アプリが必要です。 Google Playゲームアプリ無しでも続行できますが、予期しない動作をする可能性があります。</string>
-
     <string name="pick_place_title">場所を選択</string>
     <string name="pick_place_desc">場所の選択はまだ利用できません。</string>
     <string name="place_picker_select_title">この位置を選択</string>
     <string name="place_picker_nearby_places">近くの場所</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-
     <string name="lacking_permission_toast">microG Services: <xliff:g example="have full network acccess">%1$s</xliff:g>の許可がありません</string>
-
     <string name="network_type_mobile">モバイルネットワーク</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">ローミング</string>
     <string name="network_type_other">その他のネットワーク</string>
-
     <!-- Self check -->
-
     <string name="self_check_cat_fake_sig">署名スプーフィングサポート</string>
     <string name="self_check_cat_gms_packages">インストールされたパッケージ</string>
     <string name="self_check_cat_system">システム</string>
-
     <string name="self_check_name_fake_sig_perm">システムは署名スプーフィングに対応しています: </string>
     <string name="self_check_resolution_fake_sig_perm">実行しているROMはネイティブの署名スプーフィングに対応していません。 あなたはXposedやその他のシステムを使用して、署名スプーフィングを使用することが出来ます。 どのROMが署名スプーフィングをサポートしているか、またサポートしていないROMでmicroGを使用する方法に関するドキュメントを確認してください。</string>
     <string name="self_check_name_perm_granted">システムは署名スプーフィング権限の許可しています: </string>
     <string name="self_check_resolution_perm_granted">これは、ROMが署名スプーフィングをサポートしていることを示す強力な指標ですが、有効化するには追加の操作が必要です。 必要になる可能性のある手順についてのドキュメントを確認してください。</string>
     <string name="self_check_name_system_spoofs">システムの署名スプーフィング: </string>
     <string name="self_check_resolution_system_spoofs">必要になる可能性のある手順についてのドキュメントを確認してください。</string>
-
     <string name="self_check_pkg_gms">Play開発者サービス(GmsCore)</string>
     <string name="self_check_pkg_vending">Playストア(Phonesky)</string>
     <string name="self_check_pkg_gsf">サービスフレームワーク(GSF)</string>
@@ -91,12 +79,9 @@
     <string name="self_check_resolution_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g>、または互換性のあるものをインストールしてください。 互換性のあるアプリケーションについてのドキュメントを参照してください。</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> が持つ正しい署名: </string>
     <string name="self_check_resolution_correct_sig">インストールされている <xliff:g example="F-Droid">%1$s</xliff:g> に互換性がないか、署名スプーフィングが有効ではありません。 互換性のあるアプリケーションとROMに関するドキュメントを確認してください。</string>
-
     <string name="self_check_name_battery_optimizations">バッテリーの最適化を無効にしてください:</string>
     <string name="self_check_resolution_battery_optimizations">バッテリーの最適化を無効にするには、ここをタップしてください。 これを行わない場合、アプリが誤動作する可能性があります。</string>
-
     <!-- Settings strings -->
-
     <string name="prefcat_about">情報</string>
     <string name="prefcat_components">コンポーネント</string>
     <string name="prefcat_configuration">設定</string>
@@ -104,26 +89,20 @@
     <string name="prefcat_location_service">位置情報サービス</string>
     <string name="prefcat_services">サービス</string>
     <string name="prefcat_test">テスト</string>
-
     <string name="cond_gcm_bat_title">バッテリーの最適化が有効です</string>
     <string name="cond_gcm_bat_summary">Cloud Messagingが有効になっていますが、microG Serviceのバッテリーの最適化が有効に設定されています。 プッシュ通知が正しく動作するためには、バッテリーの最適化を無効にする必要があります。</string>
     <string name="cond_gcm_bat_action">最適化無効</string>
     <string name="cond_perm_title">権限がありません</string>
-
     <string name="prefs_account">アカウント設定</string>
     <string name="prefs_account_privacy">個人情報 &amp; プライバシー</string>
     <string name="prefs_account_security">サインイン &amp; セキュリティ</string>
-
     <string name="pref_auth_trust_google_title">アプリの権限についてGoogleを信頼する</string>
     <string name="pref_auth_trust_google_summary">無効にすると、アプリの承認リクエストがGoogleに送信される前にユーザーに確認が求められます。 これが無効になっている場合、一部のアプリケーションはGoogleアカウントの使用に失敗します。</string>
-
     <string name="pref_checkin_enable_summary">お使いの携帯電話をGoogleサービスに登録し、一意のデバイス識別コードを作成します。 microGは、識別コードに加えて、登録済みのGoogleアカウント名も使用します。</string>
     <string name="pref_device_registration_android_id">Android ID</string>
-
     <string name="checkin_not_registered">未登録</string>
     <string name="checkin_last_registration">最終登録: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">デバイスの登録</string>
-
     <string name="pref_add_account_title">アカウント</string>
     <string name="pref_add_account_summary">Googleアカウントを追加</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging は、サードパーティアプリケーションで広く採用されているプッシュメッセージプロバイダーです。 使用する前に、デバイスの登録を有効にする必要があります。</string>
@@ -134,10 +113,8 @@
     <string name="pref_gcm_confirm_new_apps_title">新しいアプリの確認</string>
     <string name="pref_gcm_confirm_new_apps_summary">プッシュ通知を受信する新しいアプリが登録される前に確認する</string>
     <string name="pref_gcm_ping_interval">Ping間隔: <xliff:g example="10 minutes">%1$s</xliff:g></string>
-
     <string name="pref_about_title">microG Servicesについて</string>
     <string name="pref_about_summary">バージョン情報と使用したライブラリ</string>
-
     <string name="gcm_app_error_unregistering">登録解除中にエラーが発生しました</string>
     <string name="gcm_app_not_installed_anymore">アプリが削除されています</string>
     <string name="gcm_unregister_app">登録解除</string>
@@ -151,7 +128,6 @@
     <string name="gcm_unregister_after_deny_message">すでに登録されている、プッシュ通知に登録するアプリを拒否しました。\n今後プッシュメッセージを受信しないように、登録を解除しますか?</string>
     <string name="gcm_messages_counter">メッセージ: <xliff:g example="123">%1$d</xliff:g>個 (<xliff:g example="12345">%2$d</xliff:g>バイト)</string>
     <string name="gcm_enable_switch">プッシュ通知を受信</string>
-
     <string name="pref_push_app_allow_register_title">登録を許可</string>
     <string name="pref_push_app_allow_register_summary">アプリのプッシュ通知への登録を許可</string>
     <string name="pref_push_app_wake_for_delivery_title">メッセージのプッシュ時にアプリを開始</string>
@@ -160,12 +136,15 @@
     <string name="prefcat_push_apps_registered_title">登録されたアプリ</string>
     <string name="prefcat_push_apps_unregistered_title">未登録のアプリ</string>
     <string name="prefcat_push_networks_title">プッシュ通知に使用するためのネットワーク</string>
-
     <string name="safetynet_intro">Google SafetyNetはデバイス認証システムであり、デバイスが適切に保護され、Android CTSと互換性があることを保証します。 一部のアプリケーションは、セキュリティ上の理由または改ざん防止の前提条件としてSafetyNetを使用します。
     
     microG GmsCoreにはSafetyNetのオープンソースな実装が含まれていますが、公式サーバーでは、プロプライエタリなDroidGuardシステムを使用してSafetyNetリクエストに署名する必要があります。</string>
     <string name="safetynet_enable_switch">デバイスの認証を許可</string>
-
     <string name="pref_safetynet_test_title">SafetyNetテストの実行</string>
     <string name="pref_droidguard_operation_mode">動作モード</string>
+    <string name="signin_picker_title">アカウントを選択</string>
+    <string name="signin_picker_subtitle"><xliff:g example="F-Droid">%1$s</xliff:g> を続行するには</string>
+    <string name="signin_picker_add_account_label">他のアカウントを追加</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容を要求しています：</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容の使用を要求しています：</string>
 </resources>
