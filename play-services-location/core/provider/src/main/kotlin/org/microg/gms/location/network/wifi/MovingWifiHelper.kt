@@ -242,6 +242,24 @@ class MovingWifiHelper(private val context: Context) {
         }
         return location
     }
+    
+    private fun parseSncf(location: Location, data: ByteArray): Location {
+            val json = JSONObject(data.decodeToString())
+            if(json.getInt("fix") == -1) throw RuntimeException("GPS not valid")
+            location.accuracy = 100f
+            location.latitude = json.getDouble("latitude")
+	    location.longitude = json.getDouble("longitude")
+            json.optDouble("speed").takeIf { !it.isNaN() }?.let {
+                location.speed = it.toFloat()
+                LocationCompat.setSpeedAccuracyMetersPerSecond(location, location.speed * 0.1f)
+            }
+            location.time = json.getLong("timestamp")
+            json.optDouble("heading").takeIf { !it.isNaN() }?.let {
+                location.bearing = it.toFloat()
+                LocationCompat.setBearingAccuracyDegrees(location, 90f)
+            }
+            return location
+    }
 
     private fun parseAirCanada(location: Location, data: ByteArray): Location {
         val json = JSONObject(data.decodeToString()).getJSONObject("gpsData")
@@ -268,6 +286,11 @@ class MovingWifiHelper(private val context: Context) {
             "Cathay Pacific", "Telekom_FlyNet", "KrisWorld", "SWISS Connect", "Edelweiss Entertainment" -> parsePanasonic(location, data)
             "FlyNet" -> parseBoardConnect(location, data)
             "ACWiFi" -> parseAirCanada(location, data)
+            "OUIFI" -> parseSncf(location, data)
+            "_SNCF_WIFI_INOUI" -> parseSncf(location, data)
+            "_SNCF_WIFI_INTERCITES" -> parseSncf(location, data)
+            "_WIFI_LYRIA" -> parseSncf(location, data)
+            "NormandieTrainConnecte" -> parseSncf(location, data)
             else -> throw UnsupportedOperationException()
         }
     }
@@ -291,7 +314,12 @@ class MovingWifiHelper(private val context: Context) {
             "Edelweiss Entertainment" to "https://services.inflightpanasonic.aero/inflight/services/flightdata/v2/flightdata",
             "FlyNet" to "https://ww2.lufthansa-flynet.com/map/api/flightData",
             "CDWiFi" to "http://cdwifi.cz/portal/api/vehicle/realtime",
-            "ACWiFi" to "https://airbornemedia.inflightinternet.com/asp/api/flight/info"
+            "ACWiFi" to "https://airbornemedia.inflightinternet.com/asp/api/flight/info",
+            "OUIFI" to "https://ouifi.ouigo.com:8084/api/gps",
+            "_SNCF_WIFI_INOUI" to "https://wifi.sncf/router/api/train/gps",
+            "_SNCF_WIFI_INTERCITES" to "https://wifi.intercites.sncf/router/api/train/gps",
+            "_WIFI_LYRIA" to "https://wifi.tgv-lyria.com/router/api/train/gps",
+            "NormandieTrainConnecte" to "https://wifi.normandie.fr/router/api/train/gps"
         )
     }
 }
