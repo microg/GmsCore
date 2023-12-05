@@ -29,12 +29,9 @@
     <PreferenceCategory android:title="@string/prefcat_google_services" android:key="prefcat_google_services">
         <Preference
             android:icon="@drawable/ic_add_account"
-            android:summary="@string/pref_add_account_summary"
-            android:title="@string/pref_add_account_title">
-            <intent
-                android:targetClass="org.microg.gms.auth.login.LoginActivity"
-                android:targetPackage="com.google.android.gms" />
-        </Preference>
+            android:key="pref_accounts"
+            android:summary="@string/pref_accounts_summary"
+            android:title="@string/pref_accounts_title" />
         <Preference
             android:icon="@drawable/ic_device_login"
             android:key="pref_checkin"
