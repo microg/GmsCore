@@ -9,9 +9,9 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
 import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
+import com.huawei.hms.maps.MapClientIdentify
 import org.microg.gms.common.Constants
 import java.io.File
 
@@ -38,6 +38,13 @@ class MapContext(private val context: Context) : ContextWrapper(context.createPa
 
     override fun getClassLoader(): ClassLoader {
         return MapContext::class.java.classLoader!!
+    }
+
+    override fun getPackageName(): String {
+        // Use original package name for requests not from HMS MapClientIdentify
+        val stackTrace = Thread.currentThread().stackTrace
+        if (stackTrace.any { it.className == MapClientIdentify::class.java.name }) return Constants.GMS_PACKAGE_NAME
+        return appContext.packageName
     }
 
     override fun getSharedPreferences(name: String?, mode: Int): SharedPreferences {
