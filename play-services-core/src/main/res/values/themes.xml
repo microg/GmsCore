@@ -16,6 +16,12 @@
 
 <resources>
 
+    <!-- Base application theme -->
+    <style name="Theme.Base" parent="Theme.AppCompat.DayNight.NoActionBar" />
+
+    <!-- Application theme (overrideable per API levels as required) -->
+    <style name="Theme.App" parent="Theme.Base" />
+
     <style name="Theme.LoginBlue" parent="Theme.LoginBlue.Base" />
 
     <style name="Theme.LoginBlue.Base" parent="Theme.AppCompat.Light.NoActionBar">
