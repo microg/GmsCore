@@ -1,0 +1,50 @@
+<!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <meta-data
+            android:name="org.microg.gms.settings.checkin_enable_service"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.gcm_enable_mcs_service"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.auth_manager_visible"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.auth_include_android_id"
+            android:value="false" />
+        <meta-data
+            android:name="org.microg.gms.settings.droidguard_enabled"
+            android:value="true" />
+        <meta-data
+            android:name="org.microg.gms.settings.safetynet_enabled"
+            android:value="true" />
+
+        <activity-alias
+            android:name="org.microg.gms.ui.SettingsActivity"
+            android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
+            tools:node="remove" />
+
+        <activity-alias
+            android:name="org.lighthouse.SettingsActivity"
+            android:icon="@mipmap/ic_app_settings"
+            android:label="@string/gms_settings_name"
+            android:roundIcon="@mipmap/ic_app_settings"
+            android:process=":ui"
+            android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
+            android:taskAffinity="org.microg.gms.settings"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+    </application>
+</manifest>

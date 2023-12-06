@@ -51,6 +51,22 @@ android {
         disable 'MissingTranslation'
     }
 
+    flavorDimensions = ['target']
+    productFlavors {
+        "default" {
+            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
+            dimension 'target'
+        }
+        "huawei" {
+            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
+            dimension 'target'
+        }
+        "huaweilh" {
+            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"com.huawei.permission.sec.MDM.v2\""
+            dimension 'target'
+        }
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8

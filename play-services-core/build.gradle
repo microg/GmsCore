@@ -147,6 +147,12 @@ android {
             dimension 'target'
             versionNameSuffix "-hw"
         }
+        "huaweilh" {
+            dimension 'target'
+            versionNameSuffix "-lh"
+            versionCode appVersionCode - 1000
+            matchingFallbacks = ['huawei']
+        }
         "hms" {
             dimension 'maps'
         }
