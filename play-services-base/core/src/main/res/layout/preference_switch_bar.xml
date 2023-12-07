@@ -27,7 +27,7 @@
         android:paddingStart="56dp"
         android:paddingLeft="56dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textColor="@android:color/white"
         tools:text="Enabled" />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="@null"
-        app:thumbTint="?android:attr/textColorPrimaryInverse"
-        app:trackTint="?android:attr/textColorSecondaryInverse"
+        app:thumbTint="@android:color/white"
+        app:trackTint="@android:color/darker_gray"
         tools:checked="true" />
 </LinearLayout>
