@@ -79,6 +79,9 @@ dependencies {
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
     implementation "androidx.webkit:webkit:$webkitVersion"
 
+    // Gson
+    implementation "com.google.code.gson:gson:$gsonVersion"
+
     // Material Components
     implementation "com.google.android.material:material:$materialVersion"
 

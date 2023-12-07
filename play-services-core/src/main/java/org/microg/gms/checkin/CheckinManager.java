@@ -20,6 +20,12 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.annotation.Nullable;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.auth.AuthRequest;
@@ -33,6 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckinManager {
+
+    private static final String LAST_CHECK_IN_DATA = "LAST_CHECK_IN_DATA";
+    private static final String CHECK_IN_PREF = "check_in";
+
     private static final long MIN_CHECKIN_INTERVAL = 3 * 60 * 60 * 1000; // 3 hours
 
     @SuppressWarnings("MissingPermission")
@@ -42,7 +52,20 @@ public class CheckinManager {
             return null;
         if (!CheckinPreferences.isEnabled(context))
             return null;
-        List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
+        CheckinRequest checkinRequest = getCheckinRequest(context, info);
+        saveLastCheckInRequest(context, checkinRequest);
+        return handleResponse(context, CheckinClient.request(checkinRequest));
+    }
+
+    @Nullable
+    public static String getLastRawCheckInRequest(Context context) {
+        String rawCheckInRequest = getCheckInSharedPreferences(context)
+                .getString(LAST_CHECK_IN_DATA, "");
+        return !rawCheckInRequest.isEmpty() ? rawCheckInRequest : null;
+    }
+
+    private static CheckinRequest getCheckinRequest(Context context, LastCheckinInfo info) throws IOException {
+        List<CheckinClient.Account> accounts = new ArrayList<>();
         AccountManager accountManager = AccountManager.get(context);
         String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         for (Account account : accountManager.getAccountsByType(accountType)) {
@@ -55,10 +78,9 @@ public class CheckinManager {
                 accounts.add(new CheckinClient.Account(account.name, token));
             }
         }
-        CheckinRequest request = CheckinClient.makeRequest(context,
+        return CheckinClient.makeRequest(context,
                 new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
                 Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts);
-        return handleResponse(context, CheckinClient.request(request));
     }
 
     private static LastCheckinInfo handleResponse(Context context, CheckinResponse response) {
@@ -71,5 +93,21 @@ public class CheckinManager {
         }
 
         return info;
+    }
+
+    private static void saveLastCheckInRequest(Context context, CheckinRequest checkinRequest) {
+        getCheckInSharedPreferences(context).edit()
+                .putString(LAST_CHECK_IN_DATA, getGsonInstance().toJson(checkinRequest))
+                .apply();
+    }
+
+    private static SharedPreferences getCheckInSharedPreferences(Context context) {
+        return context.getSharedPreferences(CHECK_IN_PREF, Context.MODE_PRIVATE);
+    }
+
+    private static Gson getGsonInstance() {
+        return new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
     }
 }
