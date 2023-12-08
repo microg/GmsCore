@@ -35,6 +35,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.microg.gms.location.*
+import org.microg.gms.location.core.BuildConfig
 import org.microg.gms.utils.IntentCacheManager
 import java.io.PrintWriter
 import kotlin.math.max
@@ -263,6 +264,21 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
         if (permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED })
             return true
 
+        if (BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION.isNotEmpty()) permissions.add(BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION)
+
+        val permissionGranted = requestPermission(permissions)
+        if (BuildConfig.SHOW_NOTIFICATION_WHEN_NOT_PERMITTED) {
+            val clazz = runCatching { Class.forName("org.microg.gms.location.manager.AskPermissionNotificationActivity") }.getOrNull()
+            if (!permissionGranted) {
+                runCatching { clazz?.getDeclaredMethod("showLocationPermissionNotification", Context::class.java)?.invoke(null, context) }
+            } else {
+                runCatching { clazz?.getDeclaredMethod("hideLocationPermissionNotification", Context::class.java)?.invoke(null, context) }
+            }
+        }
+        return permissionGranted
+    }
+
+    private suspend fun requestPermission(permissions: List<String>): Boolean {
         val (completable, deferred) = activePermissionRequestLock.withLock {
             if (activePermissionRequest == null) {
                 val completable = CompletableDeferred<Boolean>()

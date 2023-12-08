@@ -41,10 +41,8 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "String", "ICHNAEA_KEY", "\"${localProperties.get("ichnaea.key", "")}\""
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
+        buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "false"
     }
 
     lintOptions {
@@ -54,17 +52,24 @@ android {
     flavorDimensions = ['target']
     productFlavors {
         "default" {
-            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
             dimension 'target'
         }
         "huawei" {
-            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
             dimension 'target'
+            buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "true"
         }
         "huaweilh" {
-            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"com.huawei.permission.sec.MDM.v2\""
             dimension 'target'
+            buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"com.huawei.permission.sec.MDM.v2\""
+            buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "true"
         }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        huawei.java.srcDirs += 'src/huawei/kotlin'
+        huaweilh.java.srcDirs += huawei.java.srcDirs
+        huaweilh.res.srcDirs += huawei.res.srcDirs
     }
 
     compileOptions {
