@@ -18,6 +18,7 @@
 
         <activity
             android:name="org.microg.gms.auth.phone.AskPermissionActivity"
+            android:excludeFromRecents="true"
             android:exported="false"
             android:process=":ui"
             android:theme="@style/Theme.Translucent" />

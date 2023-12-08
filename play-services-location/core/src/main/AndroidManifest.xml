@@ -23,6 +23,7 @@
     <application>
         <activity
             android:name="org.microg.gms.location.manager.AskPermissionActivity"
+            android:excludeFromRecents="true"
             android:process=":ui"
             android:theme="@style/Theme.Translucent"
             android:exported="false" />
