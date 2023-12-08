@@ -198,7 +198,7 @@ class LocationManager(private val context: Context, private val lifecycle: Lifec
             intent.putExtra(EXTRA_PENDING_INTENT, coarsePendingIntent)
             intent.putExtra(EXTRA_ENABLE, true)
             intent.putExtra(EXTRA_INTERVAL_MILLIS, networkInterval)
-            intent.putExtra(EXTRA_LOW_POWER, requestManager.granularity <= GRANULARITY_COARSE)
+            intent.putExtra(EXTRA_LOW_POWER, requestManager.granularity <= GRANULARITY_COARSE || requestManager.priority >= Priority.PRIORITY_LOW_POWER)
             intent.putExtra(EXTRA_WORK_SOURCE, requestManager.workSource)
             context.startService(intent)
         }
