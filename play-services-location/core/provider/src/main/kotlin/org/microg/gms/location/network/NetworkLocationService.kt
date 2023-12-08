@@ -77,6 +77,9 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     @GuardedBy("gpsLocationBuffer")
     private val gpsLocationBuffer = LinkedList<Location>()
 
+    private var currentLocalMovingWifi: WifiDetails? = null
+    private var lastLocalMovingWifiLocationCandidate: Location? = null
+
     private val interval: Long
         get() = min(highPowerIntervalMillis, lowPowerIntervalMillis)
 
@@ -108,9 +111,17 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private fun scan(lowPower: Boolean) {
         if (!lowPower) lastHighPowerScanRealtime = SystemClock.elapsedRealtime()
         lastLowPowerScanRealtime = SystemClock.elapsedRealtime()
-        val workSource = synchronized(activeRequests) { activeRequests.minByOrNull { it.intervalMillis }?.workSource }
-        wifiDetailsSource?.startScan(workSource)
-        cellDetailsSource?.startScan(workSource)
+        val currentLocalMovingWifi = currentLocalMovingWifi
+        if (SDK_INT >= 19 && currentLocalMovingWifi != null && (lastLocalMovingWifiLocationCandidate?.elapsedRealtimeNanos ?: 0L) > SystemClock.elapsedRealtimeNanos() - MAX_LOCAL_WIFI_AGE_NS && (lastWifiDetailsRealtimeMillis) > SystemClock.elapsedRealtimeNanos() - MAX_LOCAL_WIFI_SCAN_AGE_NS && getSystemService<WifiManager>()?.connectionInfo?.bssid == currentLocalMovingWifi.macAddress) {
+            Log.d(TAG, "Skip network scan and use current local wifi instead.")
+            updateWifiLocation(listOf(currentLocalMovingWifi))
+        } else {
+            val workSource = synchronized(activeRequests) { activeRequests.minByOrNull { it.intervalMillis }?.workSource }
+            Log.d(TAG, "Start network scan for $workSource")
+            getSystemService<WifiManager>()?.connectionInfo
+            wifiDetailsSource?.startScan(workSource)
+            cellDetailsSource?.startScan(workSource)
+        }
         updateRequests()
     }
 
@@ -191,14 +202,17 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         super.onDestroy()
     }
 
-    suspend fun requestWifiLocation(requestableWifis: List<WifiDetails>, currentLocalMovingWifi: WifiDetails?): Location? {
+    suspend fun requestWifiLocation(requestableWifis: List<WifiDetails>): Location? {
         var candidate: Location? = null
+        val currentLocalMovingWifi = currentLocalMovingWifi
         if (currentLocalMovingWifi != null && settings.wifiMoving) {
             try {
                 withTimeout(5000L) {
-                    candidate = movingWifiHelper.retrieveMovingLocation(currentLocalMovingWifi)
+                    lastLocalMovingWifiLocationCandidate = movingWifiHelper.retrieveMovingLocation(currentLocalMovingWifi)
                 }
+                candidate = lastLocalMovingWifiLocationCandidate
             } catch (e: Exception) {
+                lastLocalMovingWifiLocationCandidate = null
                 Log.w(TAG, "Failed retrieving location for current moving wifi ${currentLocalMovingWifi.ssid}", e)
             }
         }
@@ -262,7 +276,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             return
         }
         @Suppress("DEPRECATION")
-        val currentLocalMovingWifi = getSystemService<WifiManager>()?.connectionInfo
+        currentLocalMovingWifi = getSystemService<WifiManager>()?.connectionInfo
             ?.let { wifiInfo -> wifis.filter { it.macAddress == wifiInfo.bssid && it.isMoving } }
             ?.filter { movingWifiHelper.isLocallyRetrievable(it) }
             ?.singleOrNull()
@@ -276,16 +290,21 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             }
         }
         if (requestableWifis.isEmpty() && currentLocalMovingWifi == null) return
+        updateWifiLocation(requestableWifis, scanResultRealtimeMillis, scanResultTimestamp)
+    }
+
+    private fun updateWifiLocation(requestableWifis: List<WifiDetails>, scanResultRealtimeMillis: Long = 0, scanResultTimestamp: Long = 0) {
         val previousLastRealtimeMillis = lastWifiDetailsRealtimeMillis
-        lastWifiDetailsRealtimeMillis = scanResultRealtimeMillis
+        if (scanResultRealtimeMillis != 0L) lastWifiDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
-            val location = requestWifiLocation(requestableWifis, currentLocalMovingWifi)
+            val location = requestWifiLocation(requestableWifis)
             if (location == null) {
                 lastWifiDetailsRealtimeMillis = previousLastRealtimeMillis
                 return@launch
             }
-            location.time = scanResultTimestamp
-            if (SDK_INT >= 17) location.elapsedRealtimeNanos = scanResultRealtimeMillis * 1_000_000L
+            if (scanResultTimestamp != 0L && location.time == 0L) location.time = scanResultTimestamp
+            if (SDK_INT >= 17 && scanResultRealtimeMillis != 0L && location.elapsedRealtimeNanos == 0L) location.elapsedRealtimeNanos =
+                scanResultRealtimeMillis * 1_000_000L
             synchronized(locationLock) {
                 lastWifiLocation = location
             }
@@ -392,7 +411,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         synchronized(gpsLocationBuffer) {
             if (gpsLocationBuffer.isNotEmpty() && gpsLocationBuffer.last.elapsedMillis < SystemClock.elapsedRealtime() - GPS_BUFFER_SIZE * GPS_PASSIVE_INTERVAL) {
                 gpsLocationBuffer.clear()
-            } else  if (gpsLocationBuffer.size >= GPS_BUFFER_SIZE) {
+            } else if (gpsLocationBuffer.size >= GPS_BUFFER_SIZE) {
                 gpsLocationBuffer.remove()
             }
             gpsLocationBuffer.offer(location)
@@ -438,6 +457,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         const val LOCATION_TIME_CLIFF_MS = 30000L
         const val DEBOUNCE_DELAY_MS = 5000L
         const val MAX_WIFI_SCAN_CACHE_AGE = 1000L * 60 * 60 * 24 // 1 day
+        const val MAX_LOCAL_WIFI_AGE_NS = 60_000_000_000L // 1 minute
+        const val MAX_LOCAL_WIFI_SCAN_AGE_NS = 600_000_000_000L // 10 minutes
     }
 }
 
