@@ -40,7 +40,6 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import okio.ByteString;
 
