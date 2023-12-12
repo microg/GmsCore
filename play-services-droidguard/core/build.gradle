@@ -54,7 +54,7 @@ android {
     }
 
     lintOptions {
-        disable 'MissingTranslation'
+        disable 'MissingTranslation', 'GetLocales'
     }
 
     compileOptions {

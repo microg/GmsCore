@@ -46,7 +46,7 @@ android {
     }
 
     lintOptions {
-        disable 'MissingTranslation'
+        disable 'MissingTranslation', 'GetLocales'
     }
 
     flavorDimensions = ['target']
