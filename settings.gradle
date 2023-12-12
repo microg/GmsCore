@@ -76,6 +76,7 @@ sublude ':play-services-ads-lite:core'
 sublude ':play-services-appinvite:core'
 sublude ':play-services-auth-api-phone:core'
 sublude ':play-services-base:core'
+sublude ':play-services-base:core:package'
 sublude ':play-services-cast:core'
 sublude ':play-services-cast-framework:core'
 include ':play-services-chimera-core'
@@ -106,6 +107,3 @@ sublude ':firebase-auth:core'
 
 include ':play-services-core:microg-ui-tools' // Legacy
 include ':play-services-core'
-
-include ':play-services-base-core-package'
-project(':play-services-base-core-package').projectDir = file('play-services-base/core/package')
