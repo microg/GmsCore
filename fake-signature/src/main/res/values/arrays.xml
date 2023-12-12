@@ -8,6 +8,7 @@
         <item>com.google.android.gms</item>
         <item>com.android.vending</item>
         <item>com.spotify.music</item>
+        <item>com.getir</item>
     </string-array>
     <string-array name="signature_never_fake">
         <item>com.truecaller</item>
