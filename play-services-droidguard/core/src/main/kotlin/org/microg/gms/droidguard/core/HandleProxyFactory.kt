@@ -215,6 +215,10 @@ class HandleProxyFactory(private val context: Context) {
         }
     }
 
+    fun stopQueue() {
+        queue.stop()
+    }
+
     companion object {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
         const val SERVER_URL = "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=AIzaSyBofcZsgLSS7BOnBjZPEkk4rYwzOIz-lTI"

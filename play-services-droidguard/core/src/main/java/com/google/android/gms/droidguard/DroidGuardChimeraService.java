@@ -28,6 +28,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class DroidGuardChimeraService extends TracingIntentService {
+    private DroidGuardServiceBroker droidGuardServiceBroker;
+
     public static final Object a = new Object();
     // factory
     public HandleProxyFactory b;
@@ -112,7 +114,8 @@ public class DroidGuardChimeraService extends TracingIntentService {
     @Override
     public final IBinder onBind(Intent intent) {
         if (intent != null && intent.getAction() != null && intent.getAction().equals("com.google.android.gms.droidguard.service.START")) {
-            return new DroidGuardServiceBroker(this);
+            droidGuardServiceBroker = new DroidGuardServiceBroker(this);
+            return droidGuardServiceBroker;
         }
         return null;
     }
@@ -126,5 +129,13 @@ public class DroidGuardChimeraService extends TracingIntentService {
         this.c = new Object();
         this.d = new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(1), new ThreadPoolExecutor.DiscardPolicy());
         super.onCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (droidGuardServiceBroker != null) {
+            droidGuardServiceBroker.onDestroy();
+        }
+        super.onDestroy();
     }
 }
