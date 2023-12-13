@@ -7,6 +7,7 @@ package org.microg.gms.droidguard.core
 
 import android.content.Context
 import com.android.volley.NetworkResponse
+import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.RequestFuture
 import com.android.volley.toolbox.Volley
@@ -29,7 +30,7 @@ class HandleProxyFactory(private val context: Context) {
     private val classMap = hashMapOf<String, Class<*>>()
     private val dgDb: DgDatabaseHelper = DgDatabaseHelper(context)
     private val version = VersionUtil(context)
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleVolleyRequestQueue(context)
 
     fun createHandle(packageName: String, flow: String?, callback: GuardCallback, request: DroidGuardResultsRequest?): HandleProxy {
         if (!DroidGuardPreferences.isLocalAvailable(context)) throw IllegalAccessException("DroidGuard should not be available locally")
@@ -220,5 +221,12 @@ class HandleProxyFactory(private val context: Context) {
         const val SERVER_URL = "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=AIzaSyBofcZsgLSS7BOnBjZPEkk4rYwzOIz-lTI"
         const val CACHE_FOLDER_NAME = "cache_dg"
         val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
+
+        @Volatile
+        private var requestQueue: RequestQueue? = null
+        fun singleVolleyRequestQueue(context: Context) =
+            requestQueue ?: synchronized(this) {
+                requestQueue ?: Volley.newRequestQueue(context).also { requestQueue = it }
+            }
     }
 }
