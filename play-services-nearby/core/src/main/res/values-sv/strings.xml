@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Rapporterade <xliff:g example="3">%1$d</xliff:g> exponeringsmöten:</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_api_usage_title">API-användning senaste 14 dagarna</string>
+    <string name="pref_exposure_rpi_export_summary">Exportera insamlade ID:n för utökad analys med en annan app.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth och platsåtkomst måste vara aktiverat för att ta emot exponeringsmeddelanden.</string>
+    <string name="exposure_confirm_stop_button">Stäng av</string>
+    <string name="pref_exposure_advertising_id_title">För närvarande sänt ID</string>
+    <string name="exposure_confirm_start_title">Vill du slå på exponeringsmeddelanden?</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Din enhet är inte kompatibel med exponeringsmeddelanden.</string>
+    <string name="pref_exposure_collected_rpis_title">Insamlade ID:n</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tryck för att bevilja nödvändiga behörigheter för exponeringsmeddelanden</string>
+    <string name="pref_exposure_app_report_entry_time_short">Mindre än 5 minuter</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Inga exponeringsmöten rapporterade.</string>
+    <string name="pref_exposure_app_report_entry_distance_far">avlägsen exponering</string>
+    <string name="exposure_confirm_keys_title">Dela dina ID:n med <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_enable_switch">Använd exponeringsmeddelanden</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Bearbetade <xliff:g example="121031">%1$d</xliff:g> diagnosnycklar.</string>
+    <string name="pref_exposure_rpi_export_title">Exportera</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID:n per timma</string>
+    <string name="exposure_notify_off_title">Exponeringsmeddelanden inaktiv</string>
+    <string name="pref_exposure_app_report_updated_title">Uppdaterat: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="exposure_grant_background_location_button">Uppdatera inställningar</string>
+    <string name="pref_exposure_error_location_off_title">Öppna platsinställningar</string>
+    <string name="pref_exposure_rpis_details_summary">När API:et för exponeringsmeddelanden är aktiverat samlar enheten passivt in ID:n (kallas RPI:er (Rolling Proximity Identifiers) från enheter i din närhet.
+\n
+\nNär enhetsägare rapporterar att de har diagnostiserats positivt kan deras ID:n delas. Enheten kontrollerar om något av de kända diagnostiserade ID:na matchar något av de insamlade ID:na och beräknar infektionsrisken.</string>
+    <string name="pref_exposure_info_summary">Med API:et för avisering om exponering kan appar meddela dig om du har exponerats för någon som har rapporterats positivt diagnostiserad.
+\n
+\nDatum, varaktighet och signalstyrka i samband med en exponering kommer att delas med motsvarande app.</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> anrop till <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_enable_info_summary">För att aktivera exponeringsmeddelanden öppnar du någon app som stödjer det.</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Ta bort alla insamlade ID:n</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> behöver ytterligare behörigheter.</string>
+    <string name="service_name_exposure">Exponeringsmeddelanden</string>
+    <string name="pref_exposure_app_report_entry_distance_close">närliggande exponering</string>
+    <string name="exposure_confirm_permission_button">Bevilja</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth måste vara aktivt för att ta emot exponeringsmeddelanden.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Ta bort ändå</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Notis: Riskpoängen definieras av appen. Höga siffror kan referera till låg risk och vice versa.</string>
+    <string name="exposure_confirm_location_description">Platsåtkomst krävs.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Din enhet är endast delvis kompatibel med exponeringsmeddelanden. Du kan aviseras för riskkontakter men kommer inte att kunna meddela andra.</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth måste aktiveras.</string>
+    <string name="exposure_confirm_start_button">Slå på</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID:n insamlade</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID:n senaste timman</string>
+    <string name="exposure_notify_off_location">Platsåtkomst krävs för att ta emot exponeringsmeddelanden.</string>
+    <string name="prefcat_exposure_apps_title">Appar som använder exponeringsmeddelanden</string>
+    <string name="exposure_confirm_stop_summary">Efter inaktivering av exponeringsmeddelanden kommer du inte längre att meddelas när du exponerats för någon som rapporterats positivt diagnostiserad.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, riskpoäng <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="exposure_confirm_stop_title">Vill du slå av exponeringsmeddelanden?</string>
+    <string name="exposure_confirm_keys_summary">Dina ID:n från de senaste 14 dagarna kommer att användas för att informera andra i din närhet, om potentiell exponering.
+\n
+\nDin identitet eller testresultat kommer inte att delas med andra människor.</string>
+    <string name="exposure_confirm_start_summary">Din telefon måste använda Bluetooth för att säkert samla in och dela ID:n med andra telefoner som finns i närheten. <xliff:g example="Corona-Warn"> %1$s </xliff:g> kan meddela dig om du exponerats för någon som rapporterats vara positivt diagnostiserad. Datum, varaktighet och signalstyrka i samband med en exponering kommer att delas med appen.</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Inga poster</string>
+    <string name="pref_exposure_rpi_delete_all_title">Ta bort</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Nya behörigheter krävs</string>
+    <string name="prefcat_exposure_app_report_title">Rapporterade exponeringar</string>
+    <string name="exposure_notify_off_nearby">Exponeringsmeddelanden kräver ytterligare behörigheter för att fungera</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Borttagning av insamlade ID:n kommer att göra det omöjligt att meddela dig om någon av dina kontakter de senaste 14 dagarna diagnostiseras.</string>
+    <string name="exposure_confirm_keys_button">Dela</string>
+    <string name="exposure_grant_background_location_description">Nästan där! Du måste aktivera bakgrundsåtkomst till platsinformation genom att välja alternativet \"Tillåt hela tiden\" på nästa sida. Tryck sedan tillbaka.</string>
+    <string name="exposure_confirm_button">Aktivera</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Aktivera Bluetooth</string>
+    <string name="pref_exposure_app_report_entry_time_about">Ungefär <xliff:g example="13">%1$d</xliff:g> minuter</string>
+</resources>

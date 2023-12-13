@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="pref_location_wifi_mls_enabled_summary">Recupera la llocalización basada nes redes Wi-Fi dende\'l serviciu de llocalización de Mozilla.</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Atroxa llocalmente la llocalización de les redes Wi-Fi al usar el GPS.</string>
+    <string name="location_app_last_access_at">Últimu accesu: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_cell_mls_enabled_title">Solicitar a Mozilla</string>
+    <string name="pref_location_cell_learning_enabled_summary">Atroxa la llocalización de la rede móvil cuando s\'usa\'l GPS.</string>
+    <string name="fragment_location_apps_title">Aplicaciones con accesu a la llocalización</string>
+    <string name="pref_location_app_force_coarse_summary">Siempres devuelve llocalizaciones aproximaes a esta aplicación, inorando\'l so nivel de permisos.</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Recupera direutamente la llocalización de los puntos Wi-Fi compatibles al conectase.</string>
+    <string name="prefcat_location_cell_title">Llocalización pela rede móvil</string>
+    <string name="pref_location_wifi_mls_enabled_title">Solicitar a Mozilla</string>
+    <string name="pref_location_wifi_moving_enabled_title">Solicitar al puntu Wi-Fi</string>
+    <string name="pref_location_app_force_coarse_title">Forciar la llocalización aproximada</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Usar Nominatim</string>
+    <string name="service_name_location">Llocalización</string>
+    <string name="prefcat_location_apps_title">Accesu recién</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Resuelve direiciones con OpenStreetMap Nominatim.</string>
+    <string name="prefcat_location_wifi_title">Llocalización per Wi-Fi</string>
+    <string name="prefcat_geocoder_title">Resolvedor de direiciones</string>
+    <string name="pref_location_cell_mls_enabled_summary">Consigue la llocalización de les torres de telecomunicación móvil dende\'l serviciu de llocalización de Mozilla.</string>
+</resources>

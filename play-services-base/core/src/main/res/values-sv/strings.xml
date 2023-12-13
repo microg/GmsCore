@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktiv i bakgrunden</string>
+    <string name="menu_advanced">Avancerat</string>
+    <string name="service_status_disabled">Inaktiverad</string>
+    <string name="service_status_enabled_short">På</string>
+    <string name="service_status_automatic">Automatiskt</string>
+    <string name="service_status_enabled">Aktiverad</string>
+    <string name="open_app">Öppna</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Exposure Notification">%1$s</xliff:g> körs i bakgrunden.</string>
+    <string name="foreground_service_notification_big_text">Exkludera <xliff:g example="microG Services">%1$s</xliff:g> från batterioptimering eller ändra aviseringsinställningar för att dölja detta meddelande.</string>
+    <string name="list_item_see_all">Se alla</string>
+    <string name="service_status_disabled_short">Av</string>
+    <string name="list_no_item_none">Ingen</string>
+    <string name="service_status_manual">Manuell</string>
+</resources>

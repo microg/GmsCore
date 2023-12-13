@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="perm_ad_id_notification_description">Consente a un\'app di ricevere una notifica in caso di aggiornamento dell\'ID pubblicità o della preferenza dell\'utente relativa alla limitazione del tracciamento degli annunci.</string>
+    <string name="perm_ad_id_notification_label">Notifica sull\'ID pubblicità</string>
+    <string name="perm_ad_id_description">Consente a un\'app dell\'autore di accedere direttamente o indirettamente a un ID pubblicità valido.</string>
+    <string name="perm_ad_id_label">Autorizzazione accesso all\'ID pubblicità</string>
+</resources>

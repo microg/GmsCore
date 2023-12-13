@@ -13,12 +13,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources>
+  --><resources>
     <string name="permission_service_all_label">Tutti i servizi Google</string>
     <string name="permission_service_all_description">Permette alle applicazioni di accedere a tutti i servizi Google mediante l\'account Google.</string>
-
     <string name="permission_service_android_label">Servizi Android</string>
     <string name="permission_service_android_description">Permette alle applicazioni di accedere ai servizi Android mediante l\'account Google.</string>
     <string name="permission_service_adsense_label">Google AdSense</string>
@@ -89,7 +86,6 @@
     <string name="permission_service_youtube_description">Permette alle applicazioni di accedere a YouTube mediante l\'account Google.</string>
     <string name="permission_service_YouTubeUser_label">Nomi utente YouTube</string>
     <string name="permission_service_YouTubeUser_description">Permette alle applicazioni di accedere ai nomi utente YouTube mediante l\'account Google.</string>
-
     <string name="permission_scope_www.googleapis.com_auth_activity">Visualizza la cronologia delle attività delle tue applicazioni Google</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Gestisci la configurazione del tuo account Ad Echange per gli acquirenti</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Visualizza i tuoi dati Ad Exchange</string>
@@ -101,13 +97,13 @@
     <string name="permission_scope_www.googleapis.com_auth_analytics">Visualizza e gestisci i tuoi dati di Google Analytics</string>
     <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Accedi a Google Play Android Developer</string>
     <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Ambito di amministrazione di App engine</string>
-    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Leggi e scrivi gli accessi per la API Groups Migration</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Accesso in lettura e scrittura per l\'API Groups Migration.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Visualizza e gestisci le impostazioni di un gruppo di applicazioni Google</string>
-    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Leggi e scrivi gli accessi per la API License Manager</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Accesso in lettura e scrittura per l\'API License Manager.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order">Leggi e scrivi gli accessi per amministratori ed utenti che eseguono test nel contenitore delle API, oppure leggi e scrivi gli accessi quando viene evocata una operazione API direttamente</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">In aggiunta all\'ambito complessivo di lettura e scrittura OAuth, utilizza l\'ambito di sola lettura OAuth quando richiedi i dati dell\'utente</string>
     <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">Accedi in sola lettura per la API Admin Audit</string>
-    <string name="permission_scope_www.googleapis.com_auth_appstate">Ambito di utilizzo del servizio App State</string>
+    <string name="permission_scope_www.googleapis.com_auth_appstate">Ambito di utilizzo del servizio App State.</string>
     <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">Visualizza i tuoi dati di Google BigQuery</string>
     <string name="permission_scope_www.googleapis.com_auth_bigquery">Visualizza e gestisci i tuoi dati di Google BigQuery</string>
     <string name="permission_scope_www.googleapis.com_auth_blogger">Gestisci il tuo account Blogger</string>
@@ -174,5 +170,4 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Gestisci i tuoi video di YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Visualizza i resoconti monetari di YouTube Analytics per i tuoi contenuti YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Visualizza i resoconti di YouTube Analytics per i tuoi contenuti YouTube</string>
-
 </resources>

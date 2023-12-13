@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_installed">microG Companion nun se pue usar de mou independiente. Abrióse la configuración de microG.</string>
+    <string name="toast_not_installed">microG Companion nun se pue usar de mou independiente. Instala los servicios de microG pa poder usar microG.</string>
+</resources>

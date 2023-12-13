@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_installed">microG Companion kan inte användas fristående. Öppnade inställningar för microG-tjänster istället.</string>
+    <string name="toast_not_installed">microG Companion kan inte användas fristående. Installera mikroG-tjänster för att använda mikroG.</string>
+    <string name="app_name">microG Companion</string>
+</resources>

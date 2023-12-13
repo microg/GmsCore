@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Prodúxose un error al dir en cata de la llicencia.</string>
+    <string name="oss_license_title">Llicencies de códigu abiertu</string>
+    <string name="preferences_license_summary">Detalles de la llicencia pal software de códigu abiertu</string>
+    <string name="no_licenses_available">Esta aplicación nun tien nenguna llicencia de códigu abiertu.</string>
+    <string name="license_list_is_loading">La llista de llicencies ta cargando.</string>
+    <string name="license_is_loading">La información de la llicencia ta cargando.</string>
+</resources>

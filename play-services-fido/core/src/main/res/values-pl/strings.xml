@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_button_get_started">Rozpocznij</string>
+    <string name="fido_usb_prompt_body">Wsuń klucz bezpieczeństwa do portu USB lub połącz się z nim przez kabel USB. Jeżeli Twój klucz ma przycisk lub złoty dysk, naciśnij na niego.</string>
+    <string name="fido_transport_usb_wait_connect_body">Proszę podłączyć Twój klucz U2F przez USB.</string>
+    <string name="fido_nfc_prompt_body">Przyłóż swój klucz bezpieczeństwa ściśle do tyłu urządzenia i trzymaj, aż Twoje urządzenie przestanie wibrować</string>
+    <string name="fido_welcome_body">Używanie twojego klucza bezpieczeństwa z %1$s pomaga chronić twoje prywatne dane.</string>
+    <string name="fido_welcome_title">Używaj Twojego klucza U2F z %1$s</string>
+    <string name="fido_transport_selection_biometric">Korzystaj z tego urządzenia przez blokadę ekranu</string>
+    <string name="fido_welcome_privileged_check">Tak, %1$s jest moją zaufaną przeglądarką i powinna mieć dostęp do korzystania z kluczy bezpieczństwa przez witryny firm trzecich.</string>
+    <string name="fido_biometric_prompt_body">%1$s chce potwierdzić, że to Ty.</string>
+    <string name="fido_transport_selection_usb">Korzystaj z klucza przez USB</string>
+    <string name="fido_transport_selection_title">Wybierz, jak korzystać z Twojego klucza</string>
+    <string name="fido_biometric_prompt_title">Potwierdź swoją tożsamość</string>
+    <string name="fido_usb_title">Połącz z swoim kluczem przez USB</string>
+    <string name="fido_transport_usb_wait_confirm_body">Proszę nacisnąć na złoty pierścień lub dysk na %1$s.</string>
+    <string name="fido_welcome_privileged_info">%1$s powinna funkcjonować jako bezpieczna przeglądarka do używania Twojego klucza bezpieczeństwa z %2$s.</string>
+    <string name="fido_nfc_title">Połącz z swoim kluczem przez NFC</string>
+    <string name="fido_transport_selection_bluetooth">Korzystaj z klucza przez Bluetooth</string>
+    <string name="fido_transport_selection_body">Klucze bezpieczeństwa mogą działać przez Bluetooth, NFC i USB. Wybierz jak chcesz korzystać z swojego klucza.</string>
+    <string name="fido_transport_selection_nfc">Korzystaj z klucza przez NFC</string>
+</resources>

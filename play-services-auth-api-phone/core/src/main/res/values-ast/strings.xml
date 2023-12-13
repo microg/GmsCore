@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sms_user_consent_allow">Permitir</string>
+    <string name="sms_user_consent_title">¿Quies permitir que l\'aplicación <b>%s</b> llea\'l mensaxe d\'abaxo ya introduza\'l códigu\?</string>
+    <string name="sms_user_consent_deny">Negar</string>
+</resources>

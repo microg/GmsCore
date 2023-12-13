@@ -93,6 +93,9 @@ object ProfileManager {
         }
     }.getOrDefault(false)
 
+    fun getActiveProfileData(context: Context): Map<String, String> =
+        getProfileData(context, getProfile(context), getRealData())
+
     private fun getProfileData(context: Context, profile: String, realData: Map<String, String>): Map<String, String> {
         try {
             if (profile in listOf(PROFILE_REAL, PROFILE_NATIVE)) return realData
@@ -243,7 +246,7 @@ object ProfileManager {
         }
     }
 
-    private fun applyProfileData(profileData: Map<String, String>) {
+    fun applyProfileData(profileData: Map<String, String>) {
         fun applyStringField(key: String, valueSetter: (String) -> Unit) = profileData[key]?.let { valueSetter(it) }
         fun applyIntField(key: String, valueSetter: (Int) -> Unit) = profileData[key]?.toIntOrNull()?.let { valueSetter(it) }
         fun applyLongField(key: String, valueSetter: (Long) -> Unit) = profileData[key]?.toLongOrNull()?.let { valueSetter(it) }

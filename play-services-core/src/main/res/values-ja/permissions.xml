@@ -13,12 +13,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources>
+  --><resources>
     <string name="permission_service_all_label">全てのGoogleサービス</string>
     <string name="permission_service_all_description">アプリにリンクされたGoogleアカウントを介したすべてのGoogleサービスの使用を許可します。</string>
-
     <string name="permission_service_android_label">Androidサービス</string>
     <string name="permission_service_android_description">アプリにリンクされたGoogleアカウントを介したAndroidサービスの使用を許可します。</string>
     <string name="permission_service_adsense_label">AdSense</string>
@@ -89,4 +86,18 @@
     <string name="permission_service_youtube_description">アプリにリンクされたGoogleアカウントを介したYouTubeの使用を許可します。</string>
     <string name="permission_service_YouTubeUser_label">YouTubeユーザー</string>
     <string name="permission_service_YouTubeUser_description">アプリにリンクされたGoogleアカウントを介したYouTubeユーザーの使用を許可します。</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense">AdSense データの表示と管理</string>
+    <string name="permission_scope_www.googleapis.com_auth_activity">Google アプリのアクティビティ履歴を表示する</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Google Analytics のデータを表示</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics">Google Analytics データの表示と管理</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">License Manager API への読み取り/書き込みアクセス。</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Ad Exchange 購入者アカウントの設定を管理する</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Ad Exchange データの表示と管理</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsensehost">AdSense ホストデータと関連アカウントの表示と管理</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Google アプリグループの設定を表示および管理する</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Ad Exchange のデータを表示</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">アプリエンジンの管理スコープ。</string>
+    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Google Play Androd Developer へのアクセス</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Groups Migration API への読み取り/書き込みアクセス。</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">AdSense のデータを表示</string>
 </resources>

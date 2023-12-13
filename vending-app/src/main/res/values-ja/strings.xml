@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="toast_installed">microG コンパニオン単体では使用できません。 代わりに microG設定を開いてください。</string>
+    <string name="toast_not_installed">microG コンパニオンは単体では使用できません。 
+\nmicroGを利用するにはmicroG サービスをインストールしてください。</string>
+    <string name="app_name">microG コンパニオン</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="location_permission_notification_title">%s requires location permissions</string>
+    <string name="location_permission_notification_content">Please click and select \"%s\" to allow %s to access this device\'s location</string>
+    <string name="location_permission_background_option_name">Allow all the time</string>
+
+    <string name="permission_hint">It is recommended to grant the "Allow all the time" permission to the MicroG service. The lack of this permission may cause some APPs to be unable to obtain the current location when running in the background. For example, Microsoft Team location sharing function may be affected.</string>
+    <string name="permission_hint_title">Tip:</string>
+    <string name="permission_setting_hint_title">Two steps Only:</string>
+    <string name="open_settings">Open settings</string>
+    <string name="dont_remind_again">Don\'t remind again</string>
+
+    <string name="rationale_foreground_permission">
+        Please allow <xliff:g example="microG">%1$s</xliff:g> to access this device\'s location.
+        \nThe permissions are needed to enable location in map features of supporting apps.
+    </string>
+    <string name="rationale_permission">
+        Please select \"ALLOW ALL THE TIME\" to allow <xliff:g example="microG">%1$s</xliff:g> to access this device\'s location.
+    </string>
+    <string name="rationale_background_permission">
+        Please click on the \"Permission\u00A0Manager\" and select \"ALLOW ALL THE TIME\".
+    </string>
+</resources>
