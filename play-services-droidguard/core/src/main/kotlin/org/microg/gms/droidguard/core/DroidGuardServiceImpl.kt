@@ -13,8 +13,6 @@ import com.google.android.gms.droidguard.internal.IDroidGuardHandle
 import com.google.android.gms.droidguard.internal.IDroidGuardService
 
 class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, private val packageName: String) : IDroidGuardService.Stub() {
-    private var droidGuardHandleImpl: DroidGuardHandleImpl? = null
-
     override fun guard(callbacks: IDroidGuardCallbacks?, flow: String?, map: MutableMap<Any?, Any?>?) {
         Log.d(TAG, "guard()")
         guardWithRequest(callbacks, flow, map, null)
@@ -27,17 +25,12 @@ class DroidGuardServiceImpl(private val service: DroidGuardChimeraService, priva
 
     override fun getHandle(): IDroidGuardHandle {
         Log.d(TAG, "getHandle()")
-        droidGuardHandleImpl = DroidGuardHandleImpl(service, packageName, service.b, service.b(packageName))
-        return droidGuardHandleImpl as DroidGuardHandleImpl
+        return DroidGuardHandleImpl(service, packageName, service.b, service.b(packageName))
     }
 
     override fun getClientTimeoutMillis(): Int {
         Log.d(TAG, "getClientTimeoutMillis()")
         return 60000
-    }
-
-    fun onDestroy() {
-        droidGuardHandleImpl?.onDestroy()
     }
 
     companion object {
