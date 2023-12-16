@@ -15,7 +15,7 @@
             android:name="org.microg.gms.settings.SettingsProvider"
             android:authorities="${applicationId}.microg.settings"
             android:exported="true"
-            android:readPermission="org.microg.gms.permission.READ_SETTINGS"
-            android:writePermission="org.microg.gms.permission.WRITE_SETTINGS" />
+            android:readPermission="${applicationId}.permission.READ_SETTINGS"
+            android:writePermission="${applicationId}.permission.WRITE_SETTINGS" />
     </application>
 </manifest>
