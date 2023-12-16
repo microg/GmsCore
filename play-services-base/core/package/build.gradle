@@ -8,6 +8,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 dependencies {
+    implementation project(':play-services-base')
     implementation project(':play-services-base-core')
 }
 

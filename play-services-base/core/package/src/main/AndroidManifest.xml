@@ -11,5 +11,13 @@
             android:authorities="${applicationId}.microg.profile"
             android:exported="true"
             tools:ignore="ExportedContentProvider" />
+        <service
+            android:name="org.microg.gms.moduleinstall.ModuleInstallService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.chimera.container.moduleinstall.ModuleInstallService.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>
