@@ -108,6 +108,7 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://payments.google.com/",
     "https://policies.google.com/",
     "https://fit.google.com/privacy/settings",
+    "https://maps.google.com/maps/timeline"
 )
 
 private val ACTION_TO_SCREEN_ID = hashMapOf(
