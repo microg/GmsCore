@@ -120,7 +120,11 @@ public abstract class LicenseChecker<D, R> {
                             String auth = future.getResult().getString(KEY_AUTHTOKEN);
                             LicenseRequest<?> request = createRequest(packageName, auth,
                                 versionCode, queryData, onRequestFinished, onRequestError);
-                            request.ANDROID_ID = Long.decode("0x" + androidId);
+
+                            if (androidId != null) {
+                                request.ANDROID_ID = Long.parseLong(androidId, 16);
+                            }
+
                             request.setShouldCache(false);
                             queue.add(request);
                         } catch (AuthenticatorException | IOException | OperationCanceledException e) {
