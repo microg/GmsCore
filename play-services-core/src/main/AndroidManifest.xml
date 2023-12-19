@@ -91,6 +91,36 @@
         android:label="@string/perm_provision_label"
         android:protectionLevel="privileged|signature" />
 
+    <permission
+        android:name="com.google.android.gms.permission.CAR_SPEED"
+        android:label="@string/perm_car_speed_label"
+        android:description="@string/perm_car_speed_description"
+        android:permissionGroup="android.permission-group.LOCATION"
+        android:protectionLevel="dangerous" />
+
+    <permission-group
+        android:name="com.google.android.gms.permission.CAR_INFORMATION"
+        android:label="@string/perm_car_info_label"
+        android:description="@string/perm_car_info_description" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_FUEL"
+        android:label="@string/perm_car_fuel_label"
+        android:description="@string/perm_car_fuel_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_MILEAGE"
+        android:label="@string/perm_car_mileage_label"
+        android:description="@string/perm_car_mileage_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_VENDOR_EXTENSION"
+        android:label="@string/perm_car_vendor_extension_label"
+        android:description="@string/perm_car_vendor_extension_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
