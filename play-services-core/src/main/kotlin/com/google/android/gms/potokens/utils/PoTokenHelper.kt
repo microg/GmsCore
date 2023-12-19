@@ -2,7 +2,6 @@ package com.google.android.gms.potokens.utils
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
@@ -29,6 +28,7 @@ import com.google.android.gms.tasks.Tasks
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
+import org.microg.gms.profile.Build
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.security.SecureRandom
@@ -41,9 +41,6 @@ import kotlin.math.abs
 
 class PoTokenHelper {
 
-    private val tokenUrl: String
-        get() = "https://deviceintegritytokens-pa.googleapis.com/v1/getPoIntegrityToken?alt=proto&key=AIzaSyBtL0AK6Hzgr69rQyeyhi-V1lmtsPGZd1M"
-
     private fun buildKeySet(): KeySet {
         val builder: KeySet.Builder = KeySet.Builder()
         val keyBuilder: Key.Builder = Key.Builder()
@@ -53,7 +50,7 @@ class PoTokenHelper {
         val byteString = initKey.toByteString()
         val cipherKey: CipherKey = CipherKey.Builder().value_(byteString).build()
         val keyData: KeyData = KeyData.Builder()
-            .typeUrl("type.googleapis.com/google.crypto.tink.AesGcmKey")
+            .typeUrl(PoTokenConstants.TYPE_URL)
             .keyMaterialType(1)
             .value_(cipherKey).build()
         keyBuilder.data_(keyData)
@@ -95,7 +92,7 @@ class PoTokenHelper {
         map: Map<String, String>?
     ): String? {
         try {
-            val resultTask = DroidGuard.getClient(context).getResults("po-token-fast", map, request)
+            val resultTask = DroidGuard.getClient(context).getResults(PoTokenConstants.KEY_TOKEN, map, request)
             return Tasks.await(resultTask, 15, TimeUnit.SECONDS)
         } catch (e: Throwable) {
             e.printStackTrace()
@@ -110,11 +107,11 @@ class PoTokenHelper {
             request.setOpenHandles(2)
             request.setClientVersion(220221045)
             keySet?.let {
-                request.bundle.putByteArray("po-fast-key", it.encode())
+                request.bundle.putByteArray(PoTokenConstants.KEY_FAST, it.encode())
             }
             val tmpList = ArrayList<String>()
-            tmpList.add("po-fast-key")
-            request.bundle.putStringArrayList("extraKeysRetainedInFallback", tmpList)
+            tmpList.add(PoTokenConstants.KEY_FAST)
+            request.bundle.putStringArrayList(PoTokenConstants.KEY_FALLBACK, tmpList)
 
             val secureRandom = SecureRandom()
             val randKeyBuf = ByteArray(0x20)
@@ -144,7 +141,7 @@ class PoTokenHelper {
         val future = RequestFuture.newFuture<GetPoIntegrityTokenResponse>()
         Log.d(TAG,"postPoTokenForGms ")
         Volley.newRequestQueue(context).add(object : Request<GetPoIntegrityTokenResponse>(
-            Method.POST, tokenUrl, future) {
+            Method.POST, PoTokenConstants.TOKEN_URL, future) {
 
             override fun deliverResponse(response: GetPoIntegrityTokenResponse?) {
                 future.onResponse(response)
@@ -175,9 +172,9 @@ class PoTokenHelper {
     fun callPoToken(ctx: Context, packageName: String?, inputData: ByteArray?): ByteArray {
         var keySet: KeySet? = null
         val spUtil = SpUtil[ctx]
-        var tokenDesc = spUtil.getString("tokenDesc", "")
-        var tokenBackup = spUtil.getString("tokenBackup", "")
-        var keySetStr = spUtil.getString("keySetStr", "")
+        var tokenDesc = spUtil.getString(PoTokenConstants.KEY_DESC, "")
+        var tokenBackup = spUtil.getString(PoTokenConstants.KEY_BACKUP, "")
+        var keySetStr = spUtil.getString(PoTokenConstants.KEY_SET_STR, "")
 
         if (TextUtils.isEmpty(tokenDesc) || TextUtils.isEmpty(tokenBackup) || TextUtils.isEmpty(keySetStr)) {
             keySet = buildKeySet()
@@ -185,9 +182,9 @@ class PoTokenHelper {
             tokenDesc = Base64.encodeToString(response?.desc?.toByteArray(), Base64.DEFAULT)
             tokenBackup = Base64.encodeToString(response?.backup?.toByteArray(), Base64.DEFAULT)
             keySetStr = Base64.encodeToString(keySet.encode(), Base64.DEFAULT)
-            spUtil.save("tokenDesc", tokenDesc)
-            spUtil.save("tokenBackup", tokenBackup)
-            spUtil.save("keySetStr", keySetStr)
+            spUtil.save(PoTokenConstants.KEY_DESC, tokenDesc)
+            spUtil.save(PoTokenConstants.KEY_BACKUP, tokenBackup)
+            spUtil.save(PoTokenConstants.KEY_SET_STR, keySetStr)
         } else if (!TextUtils.isEmpty(keySetStr)) {
             val result = Base64.decode(keySetStr, Base64.DEFAULT)
             keySet = KeySet.ADAPTER.decode(result)
