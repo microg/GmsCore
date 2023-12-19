@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -45,16 +44,17 @@ public class LicensingService extends Service {
     private RequestQueue queue;
     private AccountManager accountManager;
     private LicenseServiceNotificationRunnable notificationRunnable;
+    private String androidId;
 
     private static final String KEY_V2_RESULT_JWT = "LICENSE_DATA";
+
+    private static final Uri PROFILE_PROVIDER = Uri.parse("content://com.google.android.gms.microg.profile");
+
+    private static final Uri CHECKIN_SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/check-in");
 
     private static final Uri SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/play");
 
     private static final String PREFERENCE_LICENSING_ENABLED = "play_licensing";
-
-    private static final Uri PROFILE_PROVIDER = Uri.parse("content://com.google.android.gms.microg.profile");
-
-    private String androidId;
 
     private final ILicensingService.Stub mLicenseService = new ILicensingService.Stub() {
 
@@ -202,7 +202,20 @@ public class LicensingService extends Service {
             }
         }
 
-        androidId = String.valueOf(Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID));
+        try {
+            cursor = getContentResolver().query(
+                    CHECKIN_SETTINGS_PROVIDER, new String[] { "androidId" }, null, null, null
+            );
+
+            if (cursor != null) {
+                cursor.moveToNext();
+                androidId = Long.toHexString(cursor.getLong(0));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
 
         queue = Volley.newRequestQueue(this);
         accountManager = AccountManager.get(this);
