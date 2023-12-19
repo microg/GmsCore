@@ -712,6 +712,17 @@
             </intent-filter>
         </activity>
 
+        <!-- poToken -->
+
+        <service
+            android:name="com.google.android.gms.potokens.internal.PoTokensApiService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.potokens.service.START" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+
         <!-- Other -->
 
         <service
