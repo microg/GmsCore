@@ -90,6 +90,11 @@
         android:description="@string/perm_provision_description"
         android:label="@string/perm_provision_label"
         android:protectionLevel="privileged|signature" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_SPEED"
+        android:label="@string/perm_card_speed"
+        android:permissionGroup="android.permission-group.LOCATION"
+        android:protectionLevel="dangerous"/>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />

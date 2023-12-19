@@ -54,6 +54,7 @@ This can take a couple of minutes."</string>
     <string name="perm_extended_access_label">Extended access to Google services</string>
     <string name="perm_provision_label">provision microG services</string>
     <string name="perm_provision_description">Allows the app to configure microG services without user interaction</string>
+    <string name="perm_card_speed">read car speed</string>
 
     <string name="service_name_checkin">Google device registration</string>
     <string name="service_name_mcs">Cloud Messaging</string>
