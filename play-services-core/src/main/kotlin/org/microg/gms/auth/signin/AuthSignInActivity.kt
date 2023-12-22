@@ -35,7 +35,6 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE
 import org.microg.gms.auth.login.LoginActivity
-import org.microg.gms.common.Utils
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
