@@ -712,6 +712,14 @@
             </intent-filter>
         </activity>
 
+        <!-- PoToken -->
+
+        <service android:name="com.google.android.gms.potokens.internal.PoTokensApiService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.potokens.service.START" />
+            </intent-filter>
+        </service>
+
         <!-- Other -->
 
         <service
