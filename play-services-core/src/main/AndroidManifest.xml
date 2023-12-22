@@ -473,6 +473,12 @@
             android:name="org.microg.gms.auth.signin.SignInConfigurationService"
             android:exported="false" />
 
+        <service android:name="org.microg.gms.auth.credentials.assistedsignin.AssistedSignInService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.identity.service.signin.START" />
+            </intent-filter>
+        </service>
+
         <!-- Games -->
 
         <activity
@@ -841,7 +847,6 @@
                 <action android:name="com.google.android.gms.auth.account.data.service.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.authorization.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
-                <action android:name="com.google.android.gms.auth.api.identity.service.signin.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
                 <action android:name="com.google.android.gms.auth.api.signin.service.START" />
                 <action android:name="com.google.android.gms.auth.config.service.START" />
