@@ -9,11 +9,12 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 dependencies {
+    api project(':play-services-mlkit-barcode-scanning')
     api project(':play-services-vision')
 
     implementation project(':play-services-base-core')
     implementation "androidx.annotation:annotation:$annotationVersion"
-    implementation 'com.google.zxing:core:3.4.1'
+    implementation "com.google.zxing:core:3.5.2"
 }
 
 android {
