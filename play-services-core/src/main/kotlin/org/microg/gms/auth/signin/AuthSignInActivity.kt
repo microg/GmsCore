@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.databinding.SigninConfirmBinding
 import com.google.android.gms.databinding.SigninPickerBinding
 import kotlinx.coroutines.Dispatchers
@@ -205,28 +206,27 @@ class AuthSignInActivity : AppCompatActivity() {
         data.putExtra(AuthConstants.GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount)
         val bundle = Bundle()
         if (googleSignInAccount != null) {
-            SignInAccount().apply {
+            val signInAccount = SignInAccount().apply {
                 email = googleSignInAccount.email ?: account?.name
                 this.googleSignInAccount = googleSignInAccount
                 userId = googleSignInAccount.id ?: getSystemService<AccountManager>()?.getUserData(
                     account,
                     AuthConstants.GOOGLE_USER_ID
                 )
-            }.let {
-                data.putExtra(AuthConstants.SIGN_IN_ACCOUNT, it)
             }
-            SignInCredential().apply {
+            data.putExtra(AuthConstants.SIGN_IN_ACCOUNT, signInAccount)
+            val credential = SignInCredential().apply {
                 email = googleSignInAccount.email
                 displayName = googleSignInAccount.displayName
                 familyName = googleSignInAccount.familyName
                 givenName = googleSignInAccount.givenName
                 idToken = googleSignInAccount.idToken
-            }.let {
-                bundle.putByteArray(AuthConstants.SIGN_IN_CREDENTIAL, it.toByteArray())
-                bundle.putByteArray(AuthConstants.STATUS, Status.SUCCESS.toByteArray())
             }
+            val credentialToBytes = SafeParcelableSerializer.serializeToBytes(credential)
+            bundle.putByteArray(AuthConstants.SIGN_IN_CREDENTIAL, credentialToBytes)
+            bundle.putByteArray(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(Status.SUCCESS))
         } else {
-            bundle.putByteArray(AuthConstants.STATUS, Status.CANCELED.toByteArray())
+            bundle.putByteArray(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(Status.CANCELED))
         }
         data.putExtras(bundle)
         Log.d(TAG, "Result: ${data.extras?.also { it.keySet() }}")

@@ -473,7 +473,7 @@
             android:name="org.microg.gms.auth.signin.SignInConfigurationService"
             android:exported="false" />
 
-        <service android:name="org.microg.gms.auth.credentials.assistedsignin.AssistedSignInService">
+        <service android:name="org.microg.gms.auth.credentials.identity.IdentitySignInService">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.identity.service.signin.START" />
             </intent-filter>

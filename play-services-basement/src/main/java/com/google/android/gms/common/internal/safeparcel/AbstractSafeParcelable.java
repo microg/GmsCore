@@ -5,8 +5,6 @@
 
 package com.google.android.gms.common.internal.safeparcel;
 
-import android.os.Parcel;
-
 public abstract class AbstractSafeParcelable implements SafeParcelable {
 
     @SuppressWarnings("unchecked")
@@ -22,14 +20,6 @@ public abstract class AbstractSafeParcelable implements SafeParcelable {
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    public byte[] toByteArray() {
-        Parcel parcel = Parcel.obtain();
-        writeToParcel(parcel, 0);
-        byte[] arr_b = parcel.marshall();
-        parcel.recycle();
-        return arr_b;
     }
 
 }

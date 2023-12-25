@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.auth.credentials.assistedsignin
+package org.microg.gms.auth.credentials.identity
 
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.RemoteException
 import android.util.Log
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest
@@ -19,12 +18,34 @@ import com.google.android.gms.auth.api.identity.internal.IGetSignInIntentCallbac
 import com.google.android.gms.auth.api.identity.internal.ISignInService
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
+import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
+import com.google.android.gms.common.internal.ConnectionInfo
+import com.google.android.gms.common.internal.GetServiceRequest
+import com.google.android.gms.common.internal.IGmsCallbacks
+import org.microg.gms.BaseService
+import org.microg.gms.auth.credentials.FEATURES
 import org.microg.gms.auth.signin.AuthSignInActivity
 import org.microg.gms.common.Constants
+import org.microg.gms.common.GmsService
 
-class AssistedSignInServiceImpl(private val mContext: Context, private val clientPackageName: String) :
+const val TAG = "IdentitySignInService"
+
+class IdentitySignInService : BaseService(TAG, GmsService.IDENTITY_SIGN_IN) {
+
+    override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+        val connectionInfo = ConnectionInfo()
+        connectionInfo.features = FEATURES
+        callback.onPostInitCompleteWithConnectionInfo(
+            ConnectionResult.SUCCESS,
+            IdentitySignInServiceImpl(this, request.packageName).asBinder(),
+            connectionInfo
+        )
+    }
+}
+
+class IdentitySignInServiceImpl(private val mContext: Context, private val clientPackageName: String) :
     ISignInService.Stub() {
     override fun beginSignIn(callback: IBeginSignInCallback, request: BeginSignInRequest) {
         Log.d(TAG, "method 'beginSignIn' not fully implemented, return status is CANCELED")
@@ -65,5 +86,4 @@ class AssistedSignInServiceImpl(private val mContext: Context, private val clien
         Log.w(TAG, "method 'getPhoneNumberHintIntent' not fully implemented, return status is CANCELED.")
         callback.onResult(Status.CANCELED, null)
     }
-
 }
