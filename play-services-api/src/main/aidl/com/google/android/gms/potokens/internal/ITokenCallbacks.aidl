@@ -9,6 +9,5 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.potokens.PoToken;
 
 interface ITokenCallbacks {
-    // The direction of 'status' is not specified. parcelable/union can be an in, out, or inout parameter.
     void responseToken(in Status status, in PoToken token) = 1;
 }

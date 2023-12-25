@@ -10,6 +10,5 @@ import com.google.android.gms.potokens.internal.ITokenCallbacks;
 
 interface IPoTokensService {
     void responseStatus(IStatusCallback call, int code) = 1;
-    // The direction of 'bArr' is not specified. array can be an in, out, or inout parameter.
     void responseStatusToken(ITokenCallbacks call, int i, in byte[] bArr) = 2;
 }
