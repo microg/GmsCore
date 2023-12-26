@@ -201,8 +201,8 @@
     <string name="pref_device_registration_device_profile_category">Enhetsprofil</string>
     <string name="pref_safetynet_recent_eval_type">Evalueringstyp</string>
     <string name="pref_vending_summary_licensing_on">Licensiering på</string>
-    <string name="pref_vending_licensing_enable_switch">Svara på begäranden om licensverifiering</string>
-    <string name="pref_vending_license_enable_summary">Vissa appar kräver verifiering att du har köpt dem på Google Play. På begäran av en app kan microG ladda ner ett köpbevis från Google. Om det är inaktiverat, eller om inget Google-konto läggs till, ignoreras begäranden om licensverifiering.</string>
+    <string name="pref_vending_licensing_enable_switch">Svara på förfrågningar om licensverifiering</string>
+    <string name="pref_vending_license_enable_summary">Vissa appar kräver verifiering att du har köpt dem på Google Play. På begäran av en app kan microG ladda ner ett köpbevis från Google. Om det är inaktiverat, eller om inget Google-konto lagts till, ignoreras förfrågan om licensverifiering.</string>
     <string name="pref_vending_summary_licensing_off">Licensiering av</string>
-    <string name="service_name_vending">Play Store tjänster</string>
+    <string name="service_name_vending">Play Store-tjänster</string>
 </resources>
