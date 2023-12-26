@@ -5,9 +5,16 @@
 
 package com.google.android.gms.auth.api.identity;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class BeginSignInRequest extends AutoSafeParcelable {
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class BeginSignInRequest extends AbstractSafeParcelable {
     @Field(1)
     public PasswordRequestOptions passwordRequestOptions;
     @Field(2)
@@ -19,5 +26,10 @@ public class BeginSignInRequest extends AutoSafeParcelable {
     @Field(5)
     public int code;
 
-    public static final Creator<BeginSignInRequest> CREATOR = findCreator(BeginSignInRequest.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<BeginSignInRequest> CREATOR = findCreator(BeginSignInRequest.class);
 }

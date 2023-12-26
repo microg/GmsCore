@@ -5,11 +5,23 @@
 
 package com.google.android.gms.auth.api.identity;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class PasswordRequestOptions extends AutoSafeParcelable {
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class PasswordRequestOptions extends AbstractSafeParcelable {
     @Field(1)
     public boolean primary;
 
-    public static final Creator<PasswordRequestOptions> CREATOR = findCreator(PasswordRequestOptions.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<PasswordRequestOptions> CREATOR = findCreator(PasswordRequestOptions.class);
 }

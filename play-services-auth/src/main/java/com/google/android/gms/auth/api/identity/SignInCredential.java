@@ -5,9 +5,16 @@
 
 package com.google.android.gms.auth.api.identity;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class SignInCredential extends AutoSafeParcelable {
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class SignInCredential extends AbstractSafeParcelable {
     @Field(1)
     public String email;
     @Field(2)
@@ -25,5 +32,10 @@ public class SignInCredential extends AutoSafeParcelable {
     @Field(8)
     public String obfuscatedIdentifier;
 
-    public static final Creator<SignInCredential> CREATOR = findCreator(SignInCredential.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<SignInCredential> CREATOR = findCreator(SignInCredential.class);
 }

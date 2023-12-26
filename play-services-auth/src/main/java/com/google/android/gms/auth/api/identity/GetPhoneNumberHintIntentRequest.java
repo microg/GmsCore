@@ -5,11 +5,23 @@
 
 package com.google.android.gms.auth.api.identity;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class GetPhoneNumberHintIntentRequest extends AutoSafeParcelable {
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class GetPhoneNumberHintIntentRequest extends AbstractSafeParcelable {
     @Field(1)
     public int code;
 
-    public static final Creator<GetPhoneNumberHintIntentRequest> CREATOR = findCreator(GetPhoneNumberHintIntentRequest.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<GetPhoneNumberHintIntentRequest> CREATOR = findCreator(GetPhoneNumberHintIntentRequest.class);
 }

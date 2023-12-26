@@ -6,12 +6,23 @@
 package com.google.android.gms.auth.api.identity;
 
 import android.app.PendingIntent;
+import android.os.Parcel;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import androidx.annotation.NonNull;
 
-public class BeginSignInResult extends AutoSafeParcelable {
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class BeginSignInResult extends AbstractSafeParcelable {
     @Field(1)
     public PendingIntent pendingIntent;
 
-    public static final Creator<BeginSignInResult> CREATOR = findCreator(BeginSignInResult.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<BeginSignInResult> CREATOR = findCreator(BeginSignInResult.class);
 }

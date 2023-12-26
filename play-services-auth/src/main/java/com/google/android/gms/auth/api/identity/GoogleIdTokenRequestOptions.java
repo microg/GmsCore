@@ -5,11 +5,18 @@
 
 package com.google.android.gms.auth.api.identity;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
 import java.util.ArrayList;
 
-public class GoogleIdTokenRequestOptions extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class GoogleIdTokenRequestOptions extends AbstractSafeParcelable {
     @Field(1)
     public boolean idTokenRequested;
     @Field(2)
@@ -21,9 +28,14 @@ public class GoogleIdTokenRequestOptions extends AutoSafeParcelable {
     @Field(5)
     public String serverClientId;
     @Field(6)
-    public ArrayList<?> scopes;
+    public ArrayList<String> scopes;
     @Field(7)
     public boolean forceCodeForRefreshToken;
 
-    public static final Creator<GoogleIdTokenRequestOptions> CREATOR = findCreator(GoogleIdTokenRequestOptions.class);
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<GoogleIdTokenRequestOptions> CREATOR = findCreator(GoogleIdTokenRequestOptions.class);
 }
