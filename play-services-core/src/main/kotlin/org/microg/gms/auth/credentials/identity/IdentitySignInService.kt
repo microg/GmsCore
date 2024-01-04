@@ -63,7 +63,7 @@ class IdentitySignInServiceImpl(private val mContext: Context, private val clien
     ) {
         val signInConfiguration = SignInConfiguration().apply {
             options = GoogleSignInOptions.Builder()
-                .requestIdToken(request.clientId)
+                .requestIdToken(request.serverClientId)
                 .requestId()
                 .requestEmail()
                 .requestProfile()

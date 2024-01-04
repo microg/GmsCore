@@ -63,7 +63,11 @@ class SafeParcelProcessor : AbstractProcessor() {
 class ClassInfo(val classElement: Element) {
     val name = classElement.simpleName.toString()
     val fullName = classElement.toString()
-    val packageName = fullName.split(".").dropLast(1).joinToString(".")
+    val packageName = let {
+        var upmostClassElement = classElement
+        while (upmostClassElement.enclosingElement != null) upmostClassElement = upmostClassElement.enclosingElement
+        upmostClassElement.toString()
+    }
 
     val creatorName = "$name\$000Creator"
     val fullCreatorName = "$packageName.$creatorName"
