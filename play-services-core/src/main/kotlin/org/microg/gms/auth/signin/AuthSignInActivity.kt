@@ -20,16 +20,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
+import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.databinding.SigninConfirmBinding
 import com.google.android.gms.databinding.SigninPickerBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE
 import org.microg.gms.auth.login.LoginActivity
@@ -110,10 +113,11 @@ class AuthSignInActivity : AppCompatActivity() {
             val photo = PeopleManager.getOwnerAvatarBitmap(this@AuthSignInActivity, account.name, false)
             if (photo == null) {
                 lifecycleScope.launchWhenStarted {
-                    val bitmap = withContext(Dispatchers.IO) {
+                    withContext(Dispatchers.IO) {
                         PeopleManager.getOwnerAvatarBitmap(this@AuthSignInActivity, account.name, true)
+                    }?.let {
+                        updateAction(photoView, it)
                     }
-                    updateAction(photoView, bitmap)
                 }
             }
             val displayName = getDisplayName(account)
@@ -197,18 +201,36 @@ class AuthSignInActivity : AppCompatActivity() {
 
     private fun finishResult(statusCode: Int, message: String? = null, account: Account? = null, googleSignInAccount: GoogleSignInAccount? = null) {
         val data = Intent()
-        if (statusCode != CommonStatusCodes.SUCCESS) data.putExtra("errorCode", statusCode)
-        data.putExtra("googleSignInStatus", Status(statusCode, message))
-        data.putExtra("googleSignInAccount", googleSignInAccount)
+        if (statusCode != CommonStatusCodes.SUCCESS) data.putExtra(AuthConstants.ERROR_CODE, statusCode)
+        data.putExtra(AuthConstants.GOOGLE_SIGN_IN_STATUS, Status(statusCode, message))
+        data.putExtra(AuthConstants.GOOGLE_SIGN_IN_ACCOUNT, googleSignInAccount)
+        val bundle = Bundle()
         if (googleSignInAccount != null) {
-            data.putExtra("signInAccount", SignInAccount().apply {
+            val signInAccount = SignInAccount().apply {
                 email = googleSignInAccount.email ?: account?.name
                 this.googleSignInAccount = googleSignInAccount
-                userId = googleSignInAccount.id ?: getSystemService<AccountManager>()?.getUserData(account, "GoogleUserId")
-            })
+                userId = googleSignInAccount.id ?: getSystemService<AccountManager>()?.getUserData(
+                    account,
+                    AuthConstants.GOOGLE_USER_ID
+                )
+            }
+            data.putExtra(AuthConstants.SIGN_IN_ACCOUNT, signInAccount)
+            val credential = SignInCredential().apply {
+                email = googleSignInAccount.email
+                displayName = googleSignInAccount.displayName
+                familyName = googleSignInAccount.familyName
+                givenName = googleSignInAccount.givenName
+                idToken = googleSignInAccount.idToken
+            }
+            val credentialToBytes = SafeParcelableSerializer.serializeToBytes(credential)
+            bundle.putByteArray(AuthConstants.SIGN_IN_CREDENTIAL, credentialToBytes)
+            bundle.putByteArray(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(Status.SUCCESS))
+        } else {
+            bundle.putByteArray(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(Status.CANCELED))
         }
+        data.putExtras(bundle)
         Log.d(TAG, "Result: ${data.extras?.also { it.keySet() }}")
-        setResult(statusCode, data)
+        setResult(RESULT_OK, data)
         finish()
     }
 
