@@ -8,5 +8,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">portal.mav.hu</domain>
         <domain includeSubdomains="true">cdwifi.cz</domain>
+        <domain includeSubdomains="true">hsp.hotsplots.net</domain>
     </domain-config>
 </network-security-config>
