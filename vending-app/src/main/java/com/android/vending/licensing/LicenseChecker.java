@@ -44,12 +44,12 @@ public abstract class LicenseChecker<D, R> {
      */
     static final int LICENSED = 0x0;
     /**
-     * The application is licensed to the user, but there is an updated application version available that is
-     * signed with a different key.
+     * The application is not licensed to the user.
      */
     static final int NOT_LICENSED = 0x1;
     /**
-     * The application is not licensed to the user.
+     * The application is licensed to the user, but there is an updated application version available that is
+     * signed with a different key.
      */
     static final int LICENSED_OLD_KEY = 0x2;
     /**
