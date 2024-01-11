@@ -70,7 +70,7 @@ public class LicenseServiceNotificationRunnable implements Runnable {
         ignoreIntent.putExtra(INTENT_KEY_IGNORE_PACKAGE_NAME, callerPackageName);
         ignoreIntent.putExtra(INTENT_KEY_NOTIFICATION_ID, callerUid);
         PendingIntent ignorePendingIntent = PendingIntent.getBroadcast(
-            context, callerUid * 2 + 1, ignoreIntent, PendingIntent.FLAG_IMMUTABLE
+            context, callerUid * 2 + 1, ignoreIntent, PendingIntent.FLAG_MUTABLE
         );
 
         Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
@@ -128,6 +128,11 @@ public class LicenseServiceNotificationRunnable implements Runnable {
             );
 
             String newIgnorePackage = intent.getStringExtra(INTENT_KEY_IGNORE_PACKAGE_NAME);
+            if (newIgnorePackage == null) {
+                Log.e(TAG, "Received no ignore package; can't add to ignore list.");
+                return;
+            }
+
             Log.d(TAG, "Adding package " + newIgnorePackage + " to ignore list");
 
             ignoreList.add(newIgnorePackage);
