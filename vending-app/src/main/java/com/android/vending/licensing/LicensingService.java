@@ -163,11 +163,15 @@ public class LicensingService extends Service {
         }
 
         private void handleNoAccounts(String packageName, PackageManager packageManager) {
+            notificationRunnable.callerPackageName = packageName;
             try {
                 Log.e(TAG, "not checking license, as user is not signed in");
                 PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
                 notificationRunnable.callerUid = packageInfo.applicationInfo.uid;
                 notificationRunnable.callerAppName = packageManager.getApplicationLabel(packageInfo.applicationInfo);
+                if (notificationRunnable.callerAppName == null) {
+                    notificationRunnable.callerAppName = packageName;
+                }
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e(TAG, "ignored license request, but package name " + packageName + " was not known!");
                 notificationRunnable.callerAppName = packageName;
