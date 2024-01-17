@@ -75,11 +75,13 @@ public class LicenseServiceNotificationRunnable implements Runnable {
             context, callerUid * 2 + 1, ignoreIntent, PendingIntent.FLAG_MUTABLE
         );
 
+        String contentText = context.getString(R.string.license_notification_body);
         Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
             .setSound(null)
             .setContentTitle(context.getString(R.string.license_notification_title, callerAppName))
-            .setContentText(context.getString(R.string.license_notification_body))
+            .setContentText(contentText)
+            .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
             .addAction(
                 new NotificationCompat.Action.Builder(
                     null, context.getString(R.string.license_notification_sign_in), authPendingIntent
