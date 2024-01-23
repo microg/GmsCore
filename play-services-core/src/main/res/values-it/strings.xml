@@ -203,4 +203,6 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="signin_subtext_sharing">Per continuare, microG condividerà il nome, l\'indirizzo email e l\'immagine del profilo del tuo account Google con <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="pref_auth_include_android_id_title">Autenticazione con registrazione del dispositivo</string>
     <string name="signin_subtext_policy_terms">termini di servizio</string>
+    <string name="pref_vending_summary_licensing_on">La licenza è abilitata</string>
+    <string name="service_name_vending">Servizi Play Store</string>
 </resources>
