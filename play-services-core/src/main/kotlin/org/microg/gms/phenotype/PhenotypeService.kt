@@ -51,7 +51,11 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
 
     override fun commitToConfiguration(callbacks: IPhenotypeCallbacks, p1: String?) {
         Log.d(TAG, "commitToConfiguration($p1)")
-        callbacks.onCommitedToConfiguration(Status.SUCCESS)
+        if (p1.equals("CURRENT:null:com.google.android.libraries.social.peoplekit#com.google.android.apps.photos.client_id:43")) {
+            callbacks.onCommitedToConfiguration(Status.INTERNAL_ERROR);
+        } else {
+            callbacks.onCommitedToConfiguration(Status.SUCCESS);
+        }
     }
 
     override fun getExperimentTokens(callbacks: IPhenotypeCallbacks, p1: String?, logSourceName: String?) {
