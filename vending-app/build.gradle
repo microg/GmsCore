@@ -21,6 +21,25 @@ android {
         multiDexEnabled true
     }
 
+    buildTypes {
+        debug {
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate false
+                optimizeCode true
+            }
+        }
+        release {
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate false
+                optimizeCode true
+            }
+        }
+    }
+
     flavorDimensions = ['target']
     productFlavors {
         "default" {
