@@ -17,8 +17,6 @@ android {
         versionCode vendingAppVersionCode
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -91,7 +89,6 @@ dependencies {
 
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "com.android.volley:volley:$volleyVersion"
-    implementation "androidx.multidex:multidex:$multidexVersion"
 }
 
 wire {
