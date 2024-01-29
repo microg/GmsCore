@@ -71,7 +71,7 @@ def execResult(...args) {
     return stdout.toString()
 }
 
-def gmsVersion = "23.35.15"
+def gmsVersion = "24.06.15"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
 def vendingVersion = "37.5.24"
 def vendingVersionCode = Integer.parseInt(vendingVersion.replaceAll('\\.', ''))
