@@ -835,6 +835,15 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.HistoryApi" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -892,7 +901,6 @@
                 <action android:name="com.google.android.gms.fitness.ConfigApi" />
                 <action android:name="com.google.android.gms.fitness.GoalsApi" />
                 <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START" />
-                <action android:name="com.google.android.gms.fitness.HistoryApi" />
                 <action android:name="com.google.android.gms.fitness.InternalApi" />
                 <action android:name="com.google.android.gms.fitness.RecordingApi" />
                 <action android:name="com.google.android.gms.fitness.SensorsApi" />

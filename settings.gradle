@@ -57,6 +57,7 @@ include ':play-services-tasks'
 include ':play-services-vision'
 include ':play-services-vision-common'
 include ':play-services-wearable'
+include ':play-services-fitness'
 
 include ':play-services-api'
 include ':play-services'
