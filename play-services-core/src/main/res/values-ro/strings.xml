@@ -214,4 +214,9 @@
     <string name="pref_safetynet_recent_eval_type">Tipul de evaluare</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> ar dori să folosească Jocuri Play</string>
     <string name="prefs_account_privacy">Informații personale și confidențialitate</string>
+    <string name="service_name_vending">Servicii Play Store</string>
+    <string name="pref_vending_summary_licensing_off">Licențiere oprită</string>
+    <string name="pref_vending_summary_licensing_on">Licențiere pornită</string>
+    <string name="pref_vending_licensing_enable_switch">Răspunde la solicitările de verificare a licenței</string>
+    <string name="pref_vending_license_enable_summary">Unele aplicații necesită verificarea faptului că le-ai achiziționat de pe Google Play. Când este solicitat de o aplicație, microG poate descărca o dovadă de achiziție de la Google. Dacă este dezactivat sau dacă nu este adăugat niciun cont Google, solicitările de verificare a licenței sunt ignorate.</string>
 </resources>
