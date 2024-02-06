@@ -65,6 +65,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var initialized = false
     private var loaded = false
     private val mapLock = Object()
+    private var latLngBounds: LatLngBounds? = null
 
     private val initializedCallbackList = mutableListOf<IOnMapReadyCallback>()
     private var loadedCallback: IOnMapLoadedCallback? = null
@@ -178,7 +179,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     }
 
     override fun setLatLngBoundsForCameraTarget(bounds: LatLngBounds?) {
-        map?.setLatLngBoundsForCameraTarget(bounds?.toHms())
+        if (latLngBounds == null || bounds == null || latLngBounds!! != bounds) {
+            latLngBounds = bounds
+            map?.setLatLngBoundsForCameraTarget(bounds?.toHms())
+        }
     }
 
     override fun addPolyline(options: PolylineOptions): IPolylineDelegate? {
