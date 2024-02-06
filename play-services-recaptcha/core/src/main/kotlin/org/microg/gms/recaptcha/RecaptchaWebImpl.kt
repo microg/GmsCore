@@ -65,7 +65,7 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
     private var webView: WebView? = null
     private var lastRequestToken: String? = null
     private var initFinished = AtomicBoolean(true)
-    private var initContinuation: Continuation<Unit>? = null
+    private var initContinuation: Continuation<Int>? = null
     private var executeFinished = AtomicBoolean(true)
     private var executeContinuation: Continuation<String>? = null
 
@@ -710,10 +710,10 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 val status = RecaptchaWebStatusCode.ADAPTER.decode(Base64.decode(input, Base64.URL_SAFE))
                 if (DEBUG) Log.d(TAG, "zzoid: $status")
                 if (!impl.initFinished.getAndSet(true)) {
-                    if (status.code == 1) {
-                        impl.initContinuation?.resume(Unit)
+                    if (status.code != null) {
+                        impl.initContinuation?.resume(status.code)
                     } else {
-                        impl.initContinuation?.resumeWithException(RuntimeException("Status ${status.code}"))
+                        impl.initContinuation?.resumeWithException(RuntimeException("Status is null"))
                     }
                 }
             }
