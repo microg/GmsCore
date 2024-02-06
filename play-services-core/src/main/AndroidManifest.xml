@@ -835,6 +835,12 @@
             </intent-filter>
         </service>
 
+        <service android:name=".semanticlocation.service.SemanticLocationClientService" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.semanticlocation.service.START_ODLH" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -939,7 +945,6 @@
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
                 <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />
-                <action android:name="com.google.android.gms.semanticlocation.service.START_ODLH" />
                 <action android:name="com.google.android.gms.sesame.service.BIND" />
                 <action android:name="com.google.android.gms.telephonyspam.service.START" />
                 <action android:name="com.google.android.gms.testsupport.service.START" />
