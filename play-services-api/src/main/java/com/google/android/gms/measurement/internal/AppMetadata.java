@@ -31,7 +31,7 @@ public class AppMetadata extends AutoSafeParcelable {
     @Field(11)
     public long versionCode = Integer.MIN_VALUE;
     @Field(12)
-    private String firebaseInstanceId;
+    public String firebaseInstanceId;
     @Field(13)
     private long androidId;
     @Field(14)
@@ -57,7 +57,7 @@ public class AppMetadata extends AutoSafeParcelable {
     @Field(25)
     private String consentSettings;
     @Field(26)
-    private String ephemeralAppInstanceId;
+    public String ephemeralAppInstanceId;
     @Field(27)
     private String sessionStitchingToken;
     @Field(28)
