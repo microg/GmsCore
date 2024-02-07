@@ -849,6 +849,13 @@
             </intent-filter>
         </service>
 
+        <!-- AccountData -->
+        <service android:name="com.google.android.gms.auth.account.data.AccountDataService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.account.data.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -866,7 +873,6 @@
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.chromeos.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.tv.service.START" />
-                <action android:name="com.google.android.gms.auth.account.data.service.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.authorization.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
