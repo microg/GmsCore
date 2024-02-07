@@ -41,4 +41,6 @@ android {
 dependencies {
     api project(':play-services-base')
     api project(':play-services-phenotype')
+
+    annotationProcessor project(':safe-parcel-processor')
 }
