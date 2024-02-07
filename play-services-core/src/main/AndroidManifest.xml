@@ -856,6 +856,13 @@
             </intent-filter>
         </service>
 
+        <!-- AppSet -->
+        <service android:name="com.google.android.gms.appset.internal.AppSetService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.appset.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />

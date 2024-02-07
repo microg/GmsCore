@@ -14,8 +14,6 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.feedback.ErrorReport;
 
-import org.microg.safeparcel.AutoSafeParcelable;
-
 @SafeParcelable.Class
 public class GassResponseParcel extends AbstractSafeParcelable {
 
