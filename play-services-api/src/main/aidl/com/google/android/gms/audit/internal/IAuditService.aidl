@@ -9,5 +9,5 @@ import com.google.android.gms.common.api.internal.IStatusCallback;
 import com.google.android.gms.audit.LogAuditRecordsRequest;
 
 interface IAuditService {
-    void logAuditRecords(in LogAuditRecordsRequest logAuditRecordsRequest, IStatusCallback callback);
+    void logAuditRecords(in LogAuditRecordsRequest request, IStatusCallback callback);
 }

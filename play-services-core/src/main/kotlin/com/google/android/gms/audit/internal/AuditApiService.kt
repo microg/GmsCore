@@ -26,9 +26,19 @@ class AuditApiService : BaseService(TAG, GmsService.AUDIT) {
 
 class AuditApiServiceImpl : IAuditService.Stub() {
 
-    override fun logAuditRecords(logAuditRecordsRequest: LogAuditRecordsRequest?, callback: IStatusCallback) {
+    override fun logAuditRecords(request: LogAuditRecordsRequest?, callback: IStatusCallback) {
         Log.d(TAG, "method 'logAuditRecords' not fully implemented, only return Status.SUCCESS")
-        callback.onResult(Status.SUCCESS)
+        when (request?.writeMode) {
+            1 -> {
+                callback.onResult(Status.SUCCESS)
+            }
+            2 -> {
+                callback.onResult(Status.SUCCESS_CACHE)
+            }
+            else -> {
+                callback.onResult(Status.SUCCESS)
+            }
+        }
     }
 
 }
