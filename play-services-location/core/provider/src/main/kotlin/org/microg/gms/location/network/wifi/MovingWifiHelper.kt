@@ -26,6 +26,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     // Austria
     "OEBB",
     "Austrian Flynet",
+    "svciob", // OEBB Service WIFI
     // Belgium
     "THALYSNET",
     // Canada
