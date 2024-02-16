@@ -15,7 +15,9 @@ import com.google.android.gms.panorama.internal.IPanoramaService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 
-class PanoramaService : BaseService("GmsPanoramaService", GmsService.PANORAMA) {
+const val TAG = "PanoramaService"
+
+class PanoramaService : BaseService(TAG, GmsService.PANORAMA) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS, PanoramaServiceImpl().asBinder(), null)
     }
@@ -23,6 +25,7 @@ class PanoramaService : BaseService("GmsPanoramaService", GmsService.PANORAMA) {
 
 class PanoramaServiceImpl : IPanoramaService.Stub() {
     override fun loadPanoramaInfo(callback: IPanoramaCallbacks?, uri: Uri, bundle: Bundle, needGrantReadUriPermissions: Boolean) {
-        Log.d("GmsPanoramaService", "ERROR:PanoramaService not implement! Print by GMS...$uri bundle:$bundle")
+        Log.d(TAG, "Not implemented! $uri bundle:$bundle")
+        runCatching { callback?.onPanoramaResult(CommonStatusCodes.SUCCESS, null, 0, null) }
     }
 }
