@@ -9,5 +9,5 @@ import android.os.Bundle;
 import android.net.Uri;
 
 interface IPanoramaService {
-    void loadPanoramaInfoAndGrantAccess(IPanoramaCallbacks callback, in Uri uri, in Bundle bundle, boolean needGrantReadUriPermissions) = 0;
+    void loadPanoramaInfo(IPanoramaCallbacks callback, in Uri uri, in Bundle bundle, boolean needGrantReadUriPermissions) = 0;
 }
