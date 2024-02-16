@@ -835,6 +835,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="com.google.android.gms.audit.internal.AuditApiService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.audit.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -847,7 +853,6 @@
                 <action android:name="com.google.android.gms.appusage.service.START" />
                 <action android:name="com.google.android.gms.asterism.service.START" />
                 <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
-                <action android:name="com.google.android.gms.audit.service.START" />
                 <action android:name="com.google.android.gms.auth.account.authapi.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.chromeos.START" />
