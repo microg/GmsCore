@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import org.microg.gms.utils.singleInstanceOf
 import org.microg.gms.utils.toHexString
 import java.io.UnsupportedEncodingException
 import java.lang.RuntimeException
@@ -31,7 +32,7 @@ import kotlin.coroutines.suspendCoroutine
 private const val TAG = "GmsFirebaseAuthClient"
 
 class IdentityToolkitClient(context: Context, private val apiKey: String, private val packageName: String? = null, private val certSha1Hash: ByteArray? = null) {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     private fun buildRelyingPartyUrl(method: String) = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/$method?key=$apiKey"
     private fun buildStsUrl(method: String) = "https://securetoken.googleapis.com/v1/$method?key=$apiKey"

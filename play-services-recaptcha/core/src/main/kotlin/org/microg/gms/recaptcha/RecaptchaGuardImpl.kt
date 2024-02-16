@@ -20,13 +20,14 @@ import com.squareup.wire.ProtoAdapter
 import kotlinx.coroutines.CompletableDeferred
 import org.microg.gms.droidguard.core.DroidGuardResultCreator
 import org.microg.gms.droidguard.core.VersionUtil
+import org.microg.gms.utils.singleInstanceOf
 import java.util.*
 import kotlin.collections.HashMap
 
 private const val TAG = "RecaptchaGuard"
 
 class RecaptchaGuardImpl(private val context: Context, private val packageName: String) : RecaptchaImpl {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
     private var lastToken: String? = null
 
     override suspend fun init(params: InitParams): RecaptchaHandle {

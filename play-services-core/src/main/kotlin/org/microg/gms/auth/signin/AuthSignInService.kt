@@ -40,6 +40,7 @@ import org.microg.gms.BaseService
 import org.microg.gms.auth.AuthPrefs
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.utils.singleInstanceOf
 import org.microg.gms.utils.warnOnTransactionIssues
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -66,7 +67,7 @@ class AuthSignInServiceImpl(
     private val scopes: List<Scope>,
     private val extras: Bundle
 ) : ISignInService.Stub(), LifecycleOwner {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
     override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun silentSignIn(callbacks: ISignInCallbacks, options: GoogleSignInOptions?) {

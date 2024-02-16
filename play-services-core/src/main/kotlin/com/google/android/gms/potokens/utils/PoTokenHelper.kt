@@ -34,6 +34,7 @@ import okio.ByteString.Companion.toByteString
 import org.microg.gms.common.Constants
 import org.microg.gms.profile.Build
 import org.microg.gms.utils.getFirstSignatureDigest
+import org.microg.gms.utils.singleInstanceOf
 import java.nio.ByteBuffer
 import java.security.SecureRandom
 import java.util.Random
@@ -45,7 +46,7 @@ import kotlin.math.abs
 
 class PoTokenHelper(context: Context) {
 
-    private val volleyQueue = Volley.newRequestQueue(context)
+    private val volleyQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     private fun buildKeySet(): KeySet {
         val keyId = abs(Random().nextInt())
