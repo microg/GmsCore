@@ -823,12 +823,6 @@
             </intent-filter>
         </service>
 
-        <service android:name="org.microg.gms.panorama.PanoramaService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.panorama.service.START" />
-            </intent-filter>
-        </service>
-
         <service android:name="org.microg.gms.udc.FacsCacheService">
             <intent-filter>
                 <action android:name="com.google.android.gms.facs.cache.service.START" />
