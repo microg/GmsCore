@@ -835,6 +835,24 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.pseudonymous.PseudonymousIdService" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.pseudonymous.service.START" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.gass.GassService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gass.START" />
+            </intent-filter>
+        </service>
+
+        <service android:name="org.microg.gms.auth.account.data.AccountDataService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.account.data.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name=".semanticlocation.SemanticLocationService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.semanticlocation.service.START_ODLH" />
@@ -863,7 +881,6 @@
                 <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.chromeos.START" />
                 <action android:name="com.google.android.gms.auth.account.authenticator.tv.service.START" />
-                <action android:name="com.google.android.gms.auth.account.data.service.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.authorization.START" />
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
@@ -910,7 +927,6 @@
                 <action android:name="com.google.android.gms.fitness.SessionsApi" />
                 <action android:name="com.google.android.gms.fonts.service.START" />
                 <action android:name="com.google.android.gms.freighter.service.START" />
-                <action android:name="com.google.android.gms.gass.START" />
                 <action android:name="com.google.android.gms.growth.service.START" />
                 <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
@@ -944,7 +960,6 @@
                 <action android:name="com.google.android.gms.plus.service.image.INTENT" />
                 <action android:name="com.google.android.gms.plus.service.internal.START" />
                 <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.pseudonymous.service.START" />
                 <action android:name="com.google.android.gms.rcs.START" />
                 <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
                 <action android:name="com.google.android.gms.romanesco.service.START" />
