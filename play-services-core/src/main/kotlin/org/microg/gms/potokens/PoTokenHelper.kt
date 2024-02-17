@@ -1,9 +1,9 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.potokens.utils
+package org.microg.gms.potokens
 
 import android.content.Context
 import android.text.TextUtils
@@ -26,7 +26,6 @@ import com.google.android.gms.potokens.KeySet
 import com.google.android.gms.potokens.PoTokenInfo
 import com.google.android.gms.potokens.PoTokenResult
 import com.google.android.gms.potokens.PoTokenResultWrap
-import com.google.android.gms.potokens.internal.TAG
 import com.google.android.gms.tasks.Tasks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

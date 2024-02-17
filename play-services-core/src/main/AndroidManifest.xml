@@ -720,7 +720,7 @@
 
         <!-- PoToken -->
 
-        <service android:name="com.google.android.gms.potokens.internal.PoTokensApiService">
+        <service android:name="org.microg.gms.potokens.PoTokensService">
             <intent-filter>
                 <action android:name="com.google.android.gms.potokens.service.START" />
             </intent-filter>
@@ -859,7 +859,7 @@
             </intent-filter>
         </service>
 
-        <service android:name="com.google.android.gms.audit.internal.AuditApiService">
+        <service android:name="org.microg.gms.audit.AuditService">
             <intent-filter>
                 <action android:name="com.google.android.gms.audit.service.START" />
             </intent-filter>
