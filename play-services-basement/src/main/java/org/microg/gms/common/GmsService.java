@@ -124,6 +124,7 @@ public enum GmsService {
     AD_HTTP(166, "com.google.android.gms.ads.service.HTTP"),
     LANGUAGE_PROFILE(167, "com.google.android.gms.languageprofile.service.START"),
     MDNS(168, "com.google.android.gms.mdns.service.START"),
+    SEMANTIC_LOCATION(173, "com.google.android.gms.semanticlocation.service.START_ODLH"),
     FIDO2_ZEROPARTY(180, "com.google.android.gms.fido.fido2.zeroparty.START"),
     G1_RESTORE(181, "com.google.android.gms.backup.G1_RESTORE"),
     G1_BACKUP(182, "com.google.android.gms.backup.G1_BACKUP"),
