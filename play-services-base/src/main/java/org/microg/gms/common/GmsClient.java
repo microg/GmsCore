@@ -49,6 +49,7 @@ public abstract class GmsClient<I extends IInterface> implements Api.Client {
     private final String actionString;
 
     protected boolean requireMicrog;
+    protected String additionalTargetApplication;
     protected String packageName;
 
     protected int serviceId = -1;
@@ -61,6 +62,7 @@ public abstract class GmsClient<I extends IInterface> implements Api.Client {
         this.connectionFailedListener = connectionFailedListener;
         this.actionString = actionString;
         this.requireMicrog = false;
+        this.additionalTargetApplication = null;
         this.packageName = context.getPackageName();
     }
 
@@ -88,7 +90,7 @@ public abstract class GmsClient<I extends IInterface> implements Api.Client {
             MultiConnectionKeeper.getInstance(context).unbind(actionString, serviceConnection);
         }
         serviceConnection = new GmsServiceConnection();
-        if (!MultiConnectionKeeper.getInstance(context).bind(actionString, serviceConnection, requireMicrog)) {
+        if (!MultiConnectionKeeper.getInstance(context).bind(actionString, serviceConnection, requireMicrog, additionalTargetApplication)) {
             state = ConnectionState.ERROR;
             handleConnectionFailed();
         }

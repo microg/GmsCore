@@ -5,6 +5,8 @@
 
 package org.microg.gms.fido.fido2;
 
+import static org.microg.gms.fido.fido2.Constants.MICROG_FIDO_SERVICE_PACKAGE_NAME;
+
 import android.content.Context;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -25,6 +27,7 @@ public class Fido2PrivilegedGmsClient extends GmsClient<IFido2PrivilegedService>
     public Fido2PrivilegedGmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener) {
         super(context, callbacks, connectionFailedListener, GmsService.FIDO2_PRIVILEGED.ACTION);
         serviceId = GmsService.FIDO2_PRIVILEGED.SERVICE_ID;
+        additionalTargetApplication = MICROG_FIDO_SERVICE_PACKAGE_NAME;
     }
 
     public void getRegisterPendingIntent(IFido2PrivilegedCallbacks callbacks, BrowserPublicKeyCredentialCreationOptions options) throws RemoteException {

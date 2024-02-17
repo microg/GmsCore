@@ -56,10 +56,14 @@ public class MultiConnectionKeeper {
     }
 
     public synchronized boolean bind(String action, ServiceConnection connection) {
-        return bind(action, connection, false);
+        return bind(action, connection, false, null);
     }
 
     public synchronized boolean bind(String action, ServiceConnection connection, boolean requireMicrog) {
+        return bind(action, connection, false, null);
+    }
+
+    public synchronized boolean bind(String action, ServiceConnection connection, boolean requireMicrog, String additionalTargetApplication) {
         Connection con = connections.get(action);
         Log.d(TAG, "bind(" + action + ", " + connection + ", " + requireMicrog + ") has=" + (con != null));
         if (con != null) {
@@ -69,7 +73,7 @@ public class MultiConnectionKeeper {
                     con.bind();
             }
         } else {
-            con = new Connection(action, requireMicrog);
+            con = new Connection(action, requireMicrog, additionalTargetApplication);
             con.addConnectionForward(connection);
             con.bind();
             connections.put(action, con);
@@ -97,6 +101,7 @@ public class MultiConnectionKeeper {
     public class Connection {
         private final String actionString;
         private final boolean requireMicrog;
+        private final String additionalTargetApplication;
         private final Set<ServiceConnection> connectionForwards = new HashSet<ServiceConnection>();
         private boolean bound = false;
         private boolean connected = false;
@@ -130,24 +135,34 @@ public class MultiConnectionKeeper {
         };
 
         public Connection(String actionString) {
-            this(actionString, false);
+            this(actionString, false, null);
         }
 
-        public Connection(String actionString, boolean requireMicrog) {
+        public Connection(String actionString, boolean requireMicrog) { this(actionString, requireMicrog, null); }
+
+        public Connection(String actionString, boolean requireMicrog, String additionalTargetApplication) {
             this.actionString = actionString;
             this.requireMicrog = requireMicrog;
+            this.additionalTargetApplication = additionalTargetApplication;
         }
 
         @SuppressLint("InlinedApi")
         public void bind() {
             Log.d(TAG, "Connection(" + actionString + ") : bind()");
             Intent gmsIntent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
+            Intent additionalIntent = null;
+            if (additionalTargetApplication != null) {
+                additionalIntent = new Intent(actionString).setPackage(additionalTargetApplication);
+            }
             Intent selfIntent = new Intent(actionString).setPackage(context.getPackageName());
             Intent intent;
             ResolveInfo resolveInfo;
             if ((resolveInfo = context.getPackageManager().resolveService(gmsIntent, 0)) == null) {
                 Log.w(TAG, "No GMS service found for " + actionString);
-                if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
+                if (additionalIntent != null && context.getPackageManager().resolveService(additionalIntent, 0) != null) {
+                    Log.d(TAG, "Found MicroG-GMS for " + actionString + ", using it instead");
+                    intent = additionalIntent;
+                } else if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
                     Log.d(TAG, "Found service for " + actionString + " in self package, using it instead");
                     intent = selfIntent;
                 } else {
@@ -155,7 +170,10 @@ public class MultiConnectionKeeper {
                 }
             } else if (requireMicrog && !isMicrog(resolveInfo)) {
                 Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
-                if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
+                if (additionalIntent != null && context.getPackageManager().resolveService(additionalIntent, 0) != null) {
+                    Log.d(TAG, "Found MicroG-GMS for " + actionString + ", using it instead");
+                    intent = additionalIntent;
+                } else if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
                     Log.d(TAG, "Found service for " + actionString + " in self package, using it instead");
                     intent = selfIntent;
                 } else {
