@@ -9,7 +9,7 @@ microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow 
 
 License
 -------
-    Copyright 2013-2023 microG Project Team
+    Copyright 2013-2024 microG Project Team
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

@@ -4,6 +4,8 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.squareup.wire'
 
 android {
     namespace "com.android.vending"
@@ -15,6 +17,25 @@ android {
         versionCode vendingAppVersionCode
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+    }
+
+    buildTypes {
+        debug {
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate false
+                optimizeCode true
+            }
+        }
+        release {
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate false
+                optimizeCode true
+            }
+        }
     }
 
     flavorDimensions = ['target']
@@ -34,22 +55,46 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            java {
+                srcDirs += "build/generated/source/proto/main/java"
+            }
+        }
+    }
+
+
     buildFeatures {
         aidl = true
     }
 
     lintOptions {
-        disable 'MissingTranslation'
+        disable 'MissingTranslation', 'GetLocales'
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
 }
 
 dependencies {
     implementation project(':fake-signature')
+    implementation project(':play-services-auth')
+    implementation project(':play-services-base-core')
+
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation "com.android.volley:volley:$volleyVersion"
+}
+
+wire {
+    kotlin {
+        javaInterop = true
+    }
 }
 
 if (file('user.gradle').exists()) {

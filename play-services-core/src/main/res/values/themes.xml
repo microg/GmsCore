@@ -16,11 +16,30 @@
 
 <resources>
 
+    <!-- Base application theme -->
+    <style name="Theme.Base" parent="Theme.AppCompat.DayNight.NoActionBar" />
+
+    <style name="Theme.Base.M3" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="preferenceTheme">@style/Theme.PreferenceThemeOverlay.M3</item>
+    </style>
+
+    <!-- Application theme (< API23) -->
+    <style name="Theme.App" parent="Theme.Base" />
+
     <style name="Theme.LoginBlue" parent="Theme.LoginBlue.Base" />
 
     <style name="Theme.LoginBlue.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/login_blue_theme_primary</item>
         <item name="colorPrimaryDark">@color/login_blue_theme_primary_dark</item>
         <item name="colorAccent">@color/login_blue_theme_accent</item>
+    </style>
+
+    <!-- Preference theme -->
+    <style name="Theme.PreferenceThemeOverlay.M3" parent="@style/PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/Theme.SwitchPreference.M3</item>
+    </style>
+
+    <style name="Theme.SwitchPreference.M3" parent="@style/Preference.SwitchPreferenceCompat.Material">
+        <item name="widgetLayout">@layout/preference_material_switch</item>
     </style>
 </resources>
