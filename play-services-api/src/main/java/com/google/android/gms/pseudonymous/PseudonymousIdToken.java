@@ -19,6 +19,11 @@ public class PseudonymousIdToken extends AbstractSafeParcelable {
     @Field(2)
     public String name;
 
+    @Constructor
+    public PseudonymousIdToken(@Param(2) String name) {
+        this.name = name;
+    }
+
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);

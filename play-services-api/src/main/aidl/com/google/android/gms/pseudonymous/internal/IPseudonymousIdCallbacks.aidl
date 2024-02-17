@@ -9,7 +9,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.pseudonymous.PseudonymousIdToken;
 
 interface IPseudonymousIdCallbacks {
-    void onResponseLong(in Status status, long time) = 2;
-    void onResponse(in Status status) = 1;
-    void onResponseToken(in Status status, in PseudonymousIdToken token) = 0;
+    void onGetTokenResponse(in Status status, in PseudonymousIdToken token) = 0;
+    void onSetTokenResponse(in Status status) = 1;
+    void onGetLastResetWallTimeMsResponse(in Status status, long time) = 2;
 }

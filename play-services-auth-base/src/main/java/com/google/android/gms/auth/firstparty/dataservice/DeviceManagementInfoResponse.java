@@ -16,17 +16,16 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 @SafeParcelable.Class
 public class DeviceManagementInfoResponse extends AbstractSafeParcelable {
     @Field(1)
-    public int code;
+    public final int versionCode;
     @Field(2)
-    public String info;
+    public final String info;
     @Field(3)
-    public boolean status;
+    public final boolean status;
 
-    public DeviceManagementInfoResponse() {
-    }
 
-    public DeviceManagementInfoResponse(int code, String info, boolean status) {
-        this.code = code;
+    @Constructor
+    public DeviceManagementInfoResponse(@Param(1) int versionCode, @Param(2) String info, @Param(3) boolean status) {
+        this.versionCode = versionCode;
         this.info = info;
         this.status = status;
     }

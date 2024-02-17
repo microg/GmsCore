@@ -17,24 +17,22 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 
 private const val TAG = "AppSetService"
+private val FEATURES = arrayOf(Feature("app_set_id", 1L))
 
 class AppSetService : BaseService(TAG, GmsService.APP_SET) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
-        Log.d(TAG, "handleServiceRequest is start")
-        val connectionInfo = ConnectionInfo()
-        connectionInfo.features = arrayOf(Feature("app_set_id", 1L))
         callback?.onPostInitCompleteWithConnectionInfo(
-                ConnectionResult.SUCCESS,
-                AppSetServiceImp().asBinder(),
-                connectionInfo
+            ConnectionResult.SUCCESS,
+            AppSetServiceImpl().asBinder(),
+            ConnectionInfo().apply { features = FEATURES }
         )
     }
 }
 
-class AppSetServiceImp : IAppSetService.Stub() {
-    override fun doRequest(appSetIdRequestParams: AppSetIdRequestParams?, callback: IAppSetIdCallback?) {
-        Log.d(TAG, "AppSetServiceImp doRequest is called -> ${appSetIdRequestParams?.toString()} ")
-        callback?.onResult(Status.SUCCESS, null)
+class AppSetServiceImpl : IAppSetService.Stub() {
+    override fun getAppSetIdInfo(params: AppSetIdRequestParams?, callback: IAppSetIdCallback?) {
+        Log.d(TAG, "AppSetServiceImp getAppSetIdInfo is called -> ${params?.toString()} ")
+        callback?.onAppSetInfo(Status.SUCCESS, null)
     }
 }

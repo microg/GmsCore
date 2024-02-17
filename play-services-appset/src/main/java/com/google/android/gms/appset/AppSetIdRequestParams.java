@@ -17,24 +17,21 @@ import org.microg.gms.utils.ToStringHelper;
 
 @SafeParcelable.Class
 public class AppSetIdRequestParams extends AbstractSafeParcelable {
-
     @Field(1)
-    public String label;
+    public final String version;
     @Field(2)
-    public String data;
+    public final String clientAppPackageName;
 
-    public AppSetIdRequestParams() {
-    }
-
-    public AppSetIdRequestParams(String str, String str2) {
-        this.label = str;
-        this.data = str2;
+    @Constructor
+    public AppSetIdRequestParams(@Param(1) String version, @Param(2) String clientAppPackageName) {
+        this.version = version;
+        this.clientAppPackageName = clientAppPackageName;
     }
 
     @NonNull
     @Override
     public String toString() {
-        return ToStringHelper.name("AppSetIdRequestParams").value(label).value(data).end();
+        return ToStringHelper.name("AppSetIdRequestParams").field("version", version).field("clientAppPackageName", clientAppPackageName).end();
     }
 
     @Override

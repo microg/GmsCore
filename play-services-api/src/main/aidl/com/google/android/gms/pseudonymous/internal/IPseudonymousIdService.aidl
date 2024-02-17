@@ -9,6 +9,7 @@ import com.google.android.gms.pseudonymous.internal.IPseudonymousIdCallbacks;
 import com.google.android.gms.pseudonymous.PseudonymousIdToken;
 
 interface IPseudonymousIdService {
-   void onResponse(IPseudonymousIdCallbacks call) = 0;
-   void onResponseToken(IPseudonymousIdCallbacks call, in PseudonymousIdToken token) = 1;
+   void getToken(IPseudonymousIdCallbacks call) = 0;
+   void setToken(IPseudonymousIdCallbacks call, in PseudonymousIdToken token) = 1;
+   void getLastResetWallTimeMs(IPseudonymousIdCallbacks callbacks) = 2;
 }

@@ -1,12 +1,14 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.auth.account.data
+package org.microg.gms.auth.account.data
 
 import android.accounts.Account
 import android.util.Log
+import com.google.android.gms.auth.account.data.IAccountDataService
+import com.google.android.gms.auth.account.data.IDeviceManagementInfoCallback
 import com.google.android.gms.auth.firstparty.dataservice.DeviceManagementInfoResponse
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Feature
@@ -23,17 +25,11 @@ private const val TAG = "AccountDataService"
 class AccountDataService : BaseService(TAG, GmsService.ACCOUNT_DATA) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        Log.d(TAG, "handleServiceRequest start ")
-        val connectionInfo = ConnectionInfo()
-        connectionInfo.features = arrayOf(
-                Feature("account_data_service", 6L),
-                Feature("account_data_service_legacy", 1L),
-                Feature("account_data_service_token", 7L),
-                Feature("account_data_service_visibility", 1L),
-                Feature("gaiaid_primary_email_api", 1L))
-        callback.onPostInitCompleteWithConnectionInfo(ConnectionResult.SUCCESS,
-                AccountDataServiceImpl().asBinder(),
-                connectionInfo)
+        callback.onPostInitCompleteWithConnectionInfo(
+            ConnectionResult.SUCCESS,
+            AccountDataServiceImpl().asBinder(),
+            ConnectionInfo().apply { features = FEATURES }
+        )
     }
 
 }

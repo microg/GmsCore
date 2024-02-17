@@ -835,28 +835,24 @@
             </intent-filter>
         </service>
 
-        <!-- pseudonymous -->
         <service android:name="com.google.android.gms.pseudonymous.PseudonymousIdService" >
             <intent-filter>
                 <action android:name="com.google.android.gms.pseudonymous.service.START" />
             </intent-filter>
         </service>
 
-        <!-- gass -->
         <service android:name="com.google.android.gms.gass.internal.GassService">
             <intent-filter>
                 <action android:name="com.google.android.gms.gass.START" />
             </intent-filter>
         </service>
 
-        <!-- AccountData -->
-        <service android:name="com.google.android.gms.auth.account.data.AccountDataService">
+        <service android:name="com.google.android.gms.org.microg.gms.auth.account.data.AccountDataService">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.account.data.service.START" />
             </intent-filter>
         </service>
 
-        <!-- AppSet -->
         <service android:name="com.google.android.gms.appset.internal.AppSetService">
             <intent-filter>
                 <action android:name="com.google.android.gms.appset.service.START" />

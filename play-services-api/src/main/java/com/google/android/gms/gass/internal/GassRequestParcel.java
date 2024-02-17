@@ -19,9 +19,9 @@ public class GassRequestParcel extends AbstractSafeParcelable {
     @Field(1)
     public int versionCode;
     @Field(2)
-    public String status;
+    public String packageName;
     @Field(3)
-    public String desc;
+    public String appVersionCode;
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {

@@ -15,18 +15,15 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 
 @SafeParcelable.Class
 public class AppSetInfoParcel extends AbstractSafeParcelable {
-
     @Field(1)
-    public String info;
+    public final String id;
     @Field(2)
-    public int code;
+    public final int scope;
 
-    public AppSetInfoParcel() {
-    }
-
-    public AppSetInfoParcel(String info, int code) {
-        this.info = info;
-        this.code = code;
+    @Constructor
+    public AppSetInfoParcel(@Param(1) String id, @Param(2) int scope) {
+        this.id = id;
+        this.scope = scope;
     }
 
     @Override

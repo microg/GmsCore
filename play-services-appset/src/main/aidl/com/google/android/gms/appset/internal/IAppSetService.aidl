@@ -9,5 +9,5 @@ import com.google.android.gms.appset.AppSetIdRequestParams;
 import com.google.android.gms.appset.internal.IAppSetIdCallback;
 
 interface IAppSetService {
-    void doRequest(in AppSetIdRequestParams appSetIdRequestParams, in IAppSetIdCallback callback) = 0;
+    void getAppSetIdInfo(in AppSetIdRequestParams params, in IAppSetIdCallback callback) = 0;
 }

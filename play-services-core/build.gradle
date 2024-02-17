@@ -24,6 +24,7 @@ dependencies {
     implementation project(':play-services-ads-identifier-core')
     implementation project(':play-services-ads-lite-core')
     implementation project(':play-services-appinvite-core')
+    implementation project(':play-services-appset')
     implementation project(':play-services-auth-api-phone-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
@@ -62,7 +63,6 @@ dependencies {
     implementation project(':play-services-recaptcha')
     implementation project(':play-services-safetynet')
     implementation project(':play-services-tasks-ktx')
-    implementation project(':play-services-appset')
 
     mapboxRuntimeOnly project(':play-services-maps-core-mapbox')
     vtmRuntimeOnly project(':play-services-maps-core-vtm')

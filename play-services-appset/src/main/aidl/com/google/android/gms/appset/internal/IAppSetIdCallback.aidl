@@ -9,5 +9,5 @@ import com.google.android.gms.appset.AppSetInfoParcel;
 import com.google.android.gms.common.api.Status;
 
 interface IAppSetIdCallback {
-    void onResult(in Status status, in AppSetInfoParcel appSetInfoParcel) = 0;
+    void onAppSetInfo(in Status status, in AppSetInfoParcel info) = 0;
 }

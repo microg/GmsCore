@@ -11,6 +11,6 @@ import com.google.android.gms.gass.internal.GassRequestParcel;
 import com.google.android.gms.gass.internal.GassResponseParcel;
 
 interface IGassService {
-    Bundle getGassBundle(in Bundle bundle, int code);
-    GassResponseParcel getGassResponse(in GassRequestParcel gassRequestParcel);
+    GassResponseParcel getGassResponse(in GassRequestParcel gassRequestParcel) = 0;
+    Bundle getGassBundle(in Bundle bundle, int code) = 3;
 }
