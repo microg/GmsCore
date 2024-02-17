@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,6 +33,7 @@ public class MainSettingsActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.settings_root_activity);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         for (SettingsProvider settingsProvider : getAllSettingsProviders(this)) {
             settingsProvider.extendNavigation(getNavController());

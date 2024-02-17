@@ -36,6 +36,7 @@ dependencies {
     implementation project(':play-services-location-core')
     implementation project(':play-services-location-core-base')
     implementation project(':play-services-oss-licenses-core')
+    implementation project(':play-services-panorama-core')
     implementation project(':play-services-pay-core')
     implementation project(':play-services-recaptcha-core')
     implementation project(':play-services-safetynet-core')
@@ -76,6 +77,9 @@ dependencies {
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
     implementation "androidx.webkit:webkit:$webkitVersion"
+
+    // Material Components
+    implementation 'com.google.android.material:material:1.9.0'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"

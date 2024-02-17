@@ -64,7 +64,7 @@ public class SignatureService extends Service {
 
         @Override
         public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-            if (Binder.getCallingPid() > 10000) {
+            if (Binder.getCallingUid() > 10000) {
                 Log.w(TAG, "Illegal access from app");
                 reply.writeException(new UnsupportedOperationException("Illegal"));
                 return true;

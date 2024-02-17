@@ -8,4 +8,12 @@
     <string name="app_name">microG Companion</string>
     <string name="toast_installed">microG Companion cannot be used standalone. Opened microG Services settings instead.</string>
     <string name="toast_not_installed">microG Companion cannot be used standalone. Please install microG Services to use microG.</string>
+
+    <string name="license_notification_channel_name">License notifications</string>
+    <string name="license_notification_channel_description">Notifies when an app tries to validate its license, but you are not signed in to any Google account.</string>
+    <string name="license_notification_title">%1$s could not verify license</string>
+    <string name="license_notification_body">If the app is misbehaving, sign in to a Google account with which you have bought the app.</string>
+
+    <string name="license_notification_sign_in">Sign In</string>
+    <string name="license_notification_ignore">Ignore</string>
 </resources>
