@@ -1,14 +1,17 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
-package com.google.android.gms.gass.internal
+package org.microg.gms.gass
 
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
+import com.google.android.gms.gass.internal.GassRequestParcel
+import com.google.android.gms.gass.internal.GassResponseParcel
+import com.google.android.gms.gass.internal.IGassService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 

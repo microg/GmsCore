@@ -13,9 +13,11 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
+import org.microg.gms.common.Hide;
 import org.microg.gms.utils.ToStringHelper;
 
 @SafeParcelable.Class
+@Hide
 public class AppSetIdRequestParams extends AbstractSafeParcelable {
     @Field(1)
     public final String version;

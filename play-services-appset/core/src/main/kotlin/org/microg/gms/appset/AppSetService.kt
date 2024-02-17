@@ -1,12 +1,14 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.appset.internal
+package org.microg.gms.appset
 
 import android.util.Log
 import com.google.android.gms.appset.AppSetIdRequestParams
+import com.google.android.gms.appset.internal.IAppSetIdCallback
+import com.google.android.gms.appset.internal.IAppSetService
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.Status

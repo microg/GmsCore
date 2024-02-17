@@ -1,9 +1,9 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.pseudonymous
+package org.microg.gms.pseudonymous
 
 import android.util.Log
 import com.google.android.gms.common.Feature
@@ -12,6 +12,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
+import com.google.android.gms.pseudonymous.PseudonymousIdToken
 import com.google.android.gms.pseudonymous.internal.IPseudonymousIdCallbacks
 import com.google.android.gms.pseudonymous.internal.IPseudonymousIdService
 import org.microg.gms.BaseService

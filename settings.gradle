@@ -1,19 +1,19 @@
 def sublude(name) {
-  def projectName = ':' + name.substring(1).replace(':', '-')
-  include projectName
-  project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
+    def projectName = ':' + name.substring(1).replace(':', '-')
+    include projectName
+    project(projectName).projectDir = file(name.substring(1).replace(':', '/'))
 }
 
 def localProperties = new Properties()
 try {
-  var stream = new File(rootDir, 'local.properties').newDataInputStream()
-  localProperties.load(stream)
-  stream.close()
+    var stream = new File(rootDir, 'local.properties').newDataInputStream()
+    localProperties.load(stream)
+    stream.close()
 } catch (ignored) {
-  // Ignore
+    // Ignore
 }
 def hasModule = (String name, boolean enabledByDefault) -> {
-  return localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
+    return localProperties.getProperty("modules." + name, enabledByDefault.toString()).toBoolean()
 }
 
 include ':fake-signature'
@@ -77,6 +77,7 @@ sublude ':play-services-ads:core'
 sublude ':play-services-ads-identifier:core'
 sublude ':play-services-ads-lite:core'
 sublude ':play-services-appinvite:core'
+sublude ':play-services-appset:core'
 sublude ':play-services-auth-api-phone:core'
 sublude ':play-services-base:core'
 sublude ':play-services-base:core:package'
