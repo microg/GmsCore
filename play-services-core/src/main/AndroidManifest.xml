@@ -835,7 +835,7 @@
             </intent-filter>
         </service>
 
-        <service android:name=".semanticlocation.service.SemanticLocationClientService" android:enabled="true" android:exported="true">
+        <service android:name=".semanticlocation.SemanticLocationService" android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.semanticlocation.service.START_ODLH" />
             </intent-filter>

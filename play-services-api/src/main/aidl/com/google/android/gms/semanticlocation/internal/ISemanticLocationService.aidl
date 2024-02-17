@@ -9,13 +9,10 @@ import android.os.IInterface;
 import com.google.android.gms.semanticlocation.SemanticLocationEventRequest;
 import com.google.android.gms.semanticlocation.internal.SemanticLocationParameters;
 import com.google.android.gms.common.api.internal.IStatusCallback;
-// Declare any non-default types here with import statements
 
 interface ISemanticLocationService {
-    void registerSemanticLocationEventsOperation(in SemanticLocationParameters semanticLocationParameters, IStatusCallback callback, in SemanticLocationEventRequest semanticLocationEventRequest, in PendingIntent pendingIntent);
+    void registerSemanticLocationEvents(in SemanticLocationParameters params, IStatusCallback callback, in SemanticLocationEventRequest request, in PendingIntent pendingIntent) = 0;
+    void unregisterSemanticLocationEvents(in SemanticLocationParameters params, IStatusCallback callback, in PendingIntent pendingIntent) = 1;
 
-    void setIncognitoModeOperation(in SemanticLocationParameters semanticLocationParameters, IStatusCallback callback, boolean mode);
-
-    void unregisterSemanticLocationEventsOperation(in SemanticLocationParameters semanticLocationParameters, IStatusCallback callback, in PendingIntent pendingIntent);
-
+    void setIncognitoMode(in SemanticLocationParameters params, IStatusCallback callback, boolean mode) = 4;
 }

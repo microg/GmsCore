@@ -16,14 +16,11 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 @SafeParcelable.Class
 public class SemanticLocationEventRequest extends AbstractSafeParcelable {
     @Field(1)
-    public float position;
+    public final float position;
 
-    public SemanticLocationEventRequest(float position) {
+    @Constructor
+    public SemanticLocationEventRequest(@Param(1) float position) {
         this.position = position;
-    }
-
-    public SemanticLocationEventRequest() {
-
     }
 
     @Override

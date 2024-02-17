@@ -16,15 +16,14 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 @SafeParcelable.Class
 public class SemanticLocationParameters extends AbstractSafeParcelable {
     @Field(1)
-    public Account account;
+    public final Account account;
     @Field(2)
-    public String clientIdentifier;
+    public final String clientIdentifier;
     @Field(3)
-    public String packageName;
+    public final String packageName;
 
-    public SemanticLocationParameters() {}
-
-    public SemanticLocationParameters(Account account, String clientIdentifier, String packageName) {
+    @Constructor
+    public SemanticLocationParameters(@Param(1) Account account, @Param(2) String clientIdentifier, @Param(3) String packageName) {
         this.account = account;
         this.clientIdentifier = clientIdentifier;
         this.packageName = packageName;
