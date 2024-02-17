@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 public interface AppSetIdClient {
     /**
      * Gets the AppSetIdInfo asynchronously.
+     *
      * @return a {@link Task} of the returned {@link AppSetIdInfo}.
      */
     @NonNull
