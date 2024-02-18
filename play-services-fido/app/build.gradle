@@ -1,0 +1,41 @@
+/*
+ * SPDX-FileCopyrightText: 2022 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+dependencies {
+    api project(':play-services-fido-core')
+}
+
+android {
+    namespace "org.microg.gms.fido.app"
+
+    compileSdkVersion androidCompileSdk
+    buildToolsVersion "$androidBuildVersionTools"
+
+    defaultConfig {
+        versionName version
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    lintOptions {
+        disable 'MissingTranslation', 'GetLocales'
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+}
