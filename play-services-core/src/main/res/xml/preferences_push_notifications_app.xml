@@ -3,25 +3,27 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <org.microg.gms.ui.AppHeadingPreference
         android:key="pref_push_app_heading"
         tools:icon="@android:mipmap/sym_def_app_icon"
-        tools:title="@tools:sample/lorem" />
+        tools:title="@tools:sample/lorem"
+        app:allowDividerBelow="false"/>
 
     <PreferenceCategory
         android:key="prefcat_push_app_settings"
         android:layout="@layout/preference_category_no_label">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_push_app_allow_register"
             android:persistent="false"
             android:summary="@string/pref_push_app_allow_register_summary"
             android:title="@string/pref_push_app_allow_register_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="pref_push_app_wake_for_delivery"
             android:persistent="false"

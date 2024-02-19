@@ -78,7 +78,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
             val newStatus = newValue as Boolean
             SafetyNetPreferences.setEnabled(requireContext(), newStatus)
             DroidGuardPreferences.setEnabled(requireContext(), newStatus)
-            droidguardUnsupported.isVisible = switchBarPreference.isChecked && !DroidGuardPreferences.isAvailable(requireContext())
+            droidguardUnsupported.isVisible = newStatus && !DroidGuardPreferences.isAvailable(requireContext())
             true
         }
     }

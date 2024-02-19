@@ -7,5 +7,4 @@
     android:layout_height="wrap_content"
     android:background="@null"
     android:clickable="false"
-    android:focusable="false"
-    app:thumbTint="@color/preference_material_switch_color" />
+    android:focusable="false" />
