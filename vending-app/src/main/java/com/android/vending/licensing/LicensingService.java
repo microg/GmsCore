@@ -84,6 +84,7 @@ public class LicensingService extends Service {
         @Override
         public void checkLicense(long nonce, String packageName, ILicenseResultListener listener) throws RemoteException {
             Log.v(TAG, "checkLicense(" + nonce + ", " + packageName + ")");
+            int callingUid = getCallingUid();
 
             if (!shouldCheckLicense()) {
                 Log.d(TAG, "not checking license, as it is disabled by user");
@@ -96,20 +97,20 @@ public class LicensingService extends Service {
             if (accounts.length == 0) {
                 handleNoAccounts(packageName, packageManager);
             } else {
-                checkLicense(nonce, packageName, packageManager, listener, new LinkedList<>(Arrays.asList(accounts)));
+                checkLicense(callingUid, nonce, packageName, packageManager, listener, new LinkedList<>(Arrays.asList(accounts)));
             }
         }
 
-        private void checkLicense(long nonce, String packageName, PackageManager packageManager,
+        private void checkLicense(int callingUid, long nonce, String packageName, PackageManager packageManager,
                                   ILicenseResultListener listener, Queue<Account> remainingAccounts) throws RemoteException {
             new LicenseChecker.V1().checkLicense(
-                remainingAccounts.poll(), accountManager, androidId, packageName, packageManager,
+                remainingAccounts.poll(), accountManager, androidId, packageName, callingUid, packageManager,
                 queue, nonce,
                 (responseCode, stringTuple) -> {
                     if (responseCode != LICENSED && !remainingAccounts.isEmpty()) {
-                        checkLicense(nonce, packageName, packageManager, listener, remainingAccounts);
+                        checkLicense(callingUid, nonce, packageName, packageManager, listener, remainingAccounts);
                     } else {
-                        listener.verifyLicense(responseCode, stringTuple.a, stringTuple.b);
+                        listener.verifyLicense(responseCode, stringTuple != null ? stringTuple.a : null,  stringTuple != null ? stringTuple.b : null);
                     }
                 }
             );
@@ -118,6 +119,7 @@ public class LicensingService extends Service {
         @Override
         public void checkLicenseV2(String packageName, ILicenseV2ResultListener listener, Bundle extraParams) throws RemoteException {
             Log.v(TAG, "checkLicenseV2(" + packageName + ", " + extraParams + ")");
+            int callingUid = getCallingUid();
 
             if (!shouldCheckLicense()) {
                 Log.d(TAG, "not checking license, as it is disabled by user");
@@ -130,15 +132,15 @@ public class LicensingService extends Service {
             if (accounts.length == 0) {
                 handleNoAccounts(packageName, packageManager);
             } else {
-                checkLicenseV2(packageName, packageManager, listener, extraParams, new LinkedList<>(Arrays.asList(accounts)));
+                checkLicenseV2(callingUid, packageName, packageManager, listener, extraParams, new LinkedList<>(Arrays.asList(accounts)));
             }
         }
 
-        private void checkLicenseV2(String packageName, PackageManager packageManager,
+        private void checkLicenseV2(int callingUid, String packageName, PackageManager packageManager,
                                     ILicenseV2ResultListener listener, Bundle extraParams,
                                     Queue<Account> remainingAccounts) throws RemoteException {
             new LicenseChecker.V2().checkLicense(
-                remainingAccounts.poll(), accountManager, androidId, packageName, packageManager, queue, Unit.INSTANCE,
+                remainingAccounts.poll(), accountManager, androidId, packageName, callingUid, packageManager, queue, Unit.INSTANCE,
                 (responseCode, data) -> {
                     /*
                      * Suppress failures on V2. V2 is commonly used by free apps whose checker
@@ -153,7 +155,7 @@ public class LicensingService extends Service {
 
                         listener.verifyLicense(responseCode, bundle);
                     } else if (!remainingAccounts.isEmpty()) {
-                        checkLicenseV2(packageName, packageManager, listener, extraParams, remainingAccounts);
+                        checkLicenseV2(callingUid, packageName, packageManager, listener, extraParams, remainingAccounts);
                     } else {
                         Log.i(TAG, "Suppressed negative license result for package " + packageName);
                     }

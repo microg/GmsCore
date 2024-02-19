@@ -83,7 +83,7 @@ public abstract class LicenseChecker<D, R> {
                                              BiConsumer<Integer, R> then, Response.ErrorListener errorListener);
 
     public void checkLicense(Account account, AccountManager accountManager, String androidId,
-                             String packageName, PackageManager packageManager,
+                             String packageName, int callingUid, PackageManager packageManager,
                              RequestQueue queue, D queryData,
                              BiConsumerWithException<Integer, R, RemoteException> onResult)
         throws RemoteException {
@@ -92,10 +92,10 @@ public abstract class LicenseChecker<D, R> {
             int versionCode = packageInfo.versionCode;
 
             // Verify caller identity
-            if (packageInfo.applicationInfo.uid != getCallingUid()) {
+            if (packageInfo.applicationInfo.uid != callingUid) {
                 Log.e(TAG,
-                    "an app illegally tried to request licenses for another app (caller: " + getCallingUid() + ")");
-                onResult.accept(ERROR_NON_MATCHING_UID, null);
+                    "an app illegally tried to request licenses for another app (caller: " + callingUid + ")");
+                safeSendResult(onResult, ERROR_NON_MATCHING_UID, null);
             } else {
 
                 BiConsumer<Integer, R> onRequestFinished = (Integer integer, R r) -> {
