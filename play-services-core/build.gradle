@@ -150,6 +150,7 @@ android {
         "default" {
             dimension 'target'
             manifestPlaceholders = [appLabel:"@string/gms_app_name"]
+            resValue "string", "package_id", "com.google.android.gms"
         }
         "huawei" {
             dimension 'target'
@@ -167,6 +168,7 @@ android {
             versionNameSuffix "-user"
             manifestPlaceholders = [appLabel:"@string/gms_user_app_name"]
             matchingFallbacks = ['default']
+            resValue "string", "package_id", "org.microg.gms"
         }
         "hms" {
             dimension 'maps'
