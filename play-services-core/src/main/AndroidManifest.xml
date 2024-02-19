@@ -609,6 +609,13 @@
             android:taskAffinity="org.microg.gms.settings">
         </activity-alias>
 
+        <!-- feedback -->
+        <activity
+            android:name="org.microg.gms.feedback.ui.FeedbackAlohaActivity"
+            android:process=":ui"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <activity
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
