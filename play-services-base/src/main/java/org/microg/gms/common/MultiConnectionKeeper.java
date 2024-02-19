@@ -36,6 +36,7 @@ import java.util.Set;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.MICROG_GMS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConKeeper";
@@ -138,32 +139,50 @@ public class MultiConnectionKeeper {
             this.requireMicrog = requireMicrog;
         }
 
+        private Intent getIntent() {
+            Intent gmsIntent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
+            Intent microGIntent = new Intent(actionString).setPackage(MICROG_GMS_PACKAGE_NAME);
+            Intent selfIntent = new Intent(actionString).setPackage(context.getPackageName());
+            ResolveInfo resolveInfo;
+            // Pref: gms > microG > self
+            // Note that gms and microG can't be both installed on the system because of duplicate
+            // permissions. It is possible to build an app without these permission, but it won't
+            // be a regular build
+            if ((resolveInfo = context.getPackageManager().resolveService(gmsIntent, 0)) != null) {
+                if (requireMicrog && !isMicrog(resolveInfo)) {
+                    Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
+                } else {
+                    Log.d(TAG, "GMS service found for " + actionString);
+                    return gmsIntent;
+                }
+            }
+
+            if ((resolveInfo = context.getPackageManager().resolveService(microGIntent, 0)) != null) {
+                if (requireMicrog && !isMicrog(resolveInfo)) {
+                    // If the user has somehow installed another application with the microG package id
+                    Log.w(TAG, "microG service found for " + actionString + " but looks not like microG");
+                } else {
+                    Log.d(TAG, "microG service found for " + actionString);
+                    return microGIntent;
+                }
+            }
+
+            if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
+                Log.d(TAG, "Found service for " + actionString + " in self package, using it instead");
+                return selfIntent;
+            }
+            return null;
+        }
+
         @SuppressLint("InlinedApi")
         public void bind() {
             Log.d(TAG, "Connection(" + actionString + ") : bind()");
-            Intent gmsIntent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
-            Intent selfIntent = new Intent(actionString).setPackage(context.getPackageName());
             Intent intent;
-            ResolveInfo resolveInfo;
-            if ((resolveInfo = context.getPackageManager().resolveService(gmsIntent, 0)) == null) {
-                Log.w(TAG, "No GMS service found for " + actionString);
-                if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
-                    Log.d(TAG, "Found service for " + actionString + " in self package, using it instead");
-                    intent = selfIntent;
-                } else {
-                    return;
-                }
-            } else if (requireMicrog && !isMicrog(resolveInfo)) {
-                Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
-                if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
-                    Log.d(TAG, "Found service for " + actionString + " in self package, using it instead");
-                    intent = selfIntent;
-                } else {
-                    intent = gmsIntent;
-                }
-            } else {
-                intent = gmsIntent;
+            if ((intent = getIntent()) == null) {
+                Log.w(TAG, "No service found for " + actionString);
+                return;
             }
+
             int flags = Context.BIND_AUTO_CREATE | Context.BIND_DEBUG_UNBIND;
             if (SDK_INT >= ICE_CREAM_SANDWICH) {
                 flags |= Context.BIND_ADJUST_WITH_ACTIVITY;
