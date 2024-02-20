@@ -83,7 +83,11 @@ class LocationRequestManager(private val context: Context, private val lifecycle
 
     suspend fun update(oldBinder: IBinder, binder: IBinder, clientIdentity: ClientIdentity, callback: ILocationCallback, request: LocationRequest, lastLocationCapsule: LastLocationCapsule) {
         lock.withLock {
-            oldBinder.unlinkToDeath(this, 0)
+            try {
+                oldBinder.unlinkToDeath(this, 0)
+            } catch (e: Exception) {
+                Log.w(TAG, "update: ", e)
+            }
             val holder = binderRequests.remove(oldBinder)
             try {
                 val startedHolder = holder?.update(callback, request) ?: LocationRequestHolder(context, clientIdentity, request, callback, null).start().also {
