@@ -112,6 +112,9 @@ android {
         multiDexEnabled true
         multiDexKeepProguard file('multidex-keep.pro')
 
+        manifestPlaceholders = [appLabel:"@string/gms_app_name"]
+        resValue "string", "package_id", "com.google.android.gms"
+
         buildConfigField "String", "SAFETYNET_KEY", "\"${localProperties.get("safetynet.key", "")}\""
         buildConfigField "String", "RECAPTCHA_SITE_KEY", "\"${localProperties.get("recaptcha.siteKey", "")}\""
         buildConfigField "String", "RECAPTCHA_SECRET", "\"${localProperties.get("recaptcha.secret", "")}\""
@@ -149,8 +152,6 @@ android {
     productFlavors {
         "default" {
             dimension 'target'
-            manifestPlaceholders = [appLabel:"@string/gms_app_name"]
-            resValue "string", "package_id", "com.google.android.gms"
         }
         "huawei" {
             dimension 'target'
