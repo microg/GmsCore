@@ -21,7 +21,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
@@ -36,7 +35,7 @@ import java.util.Set;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.MICROG_GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.USER_GMS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConKeeper";
@@ -141,7 +140,7 @@ public class MultiConnectionKeeper {
 
         private Intent getIntent() {
             Intent gmsIntent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
-            Intent microGIntent = new Intent(actionString).setPackage(MICROG_GMS_PACKAGE_NAME);
+            Intent microGIntent = new Intent(actionString).setPackage(USER_GMS_PACKAGE_NAME);
             Intent selfIntent = new Intent(actionString).setPackage(context.getPackageName());
             ResolveInfo resolveInfo;
             // Pref: gms > microG > self
