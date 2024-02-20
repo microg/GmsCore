@@ -176,4 +176,16 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_safetynet_recent_uses">最近使用</string>
     <string name="signin_picker_title">选择一个账户</string>
     <string name="signin_picker_add_account_label">添加另一个账户</string>
+
+    <string name="thanks_your_feedback">感谢您的反馈</string>
+    <string name="feedback_msg_empty_hint">请写好反馈后再发送</string>
+    <string name="feedback_sender">发件人:  </string>
+    <string name="send_feedback">发送反馈</string>
+    <string name="feedback_msg_hint">有反馈意见？我们期待收到您的宝贵意见，但请勿透露敏感信息。有疑问或法律方面的顾虑？请访问帮助中心或支持中心。</string>
+    <string name="screenshot">屏幕截图</string>
+    <string name="system_logs">系统日志</string>
+    <string name="view">查看</string>
+    <string name="feedback_statement">若出于法律原因需提出内容更改要求，请转到法律帮助页面。
+系统会将部分帐号和系统信息发送给 Google。我们将根据您提供的信息解决技术问题、改进服务；使用这些信息时，我们会遵守隐私权政策和服务条款。</string>
+    <string name="google_user">Google用户</string>
 </resources>

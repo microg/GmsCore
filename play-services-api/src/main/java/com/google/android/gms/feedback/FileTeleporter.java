@@ -6,7 +6,6 @@
 package com.google.android.gms.feedback;
 
 import android.os.Parcel;
-import android.os.ParcelFileDescriptor;
 
 import androidx.annotation.NonNull;
 
@@ -16,8 +15,6 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 
 @SafeParcelable.Class
 public class FileTeleporter extends AbstractSafeParcelable {
-    @Field(2)
-    public ParcelFileDescriptor fileDescriptor;
     @Field(3)
     public String contentType;
     @Field(4)

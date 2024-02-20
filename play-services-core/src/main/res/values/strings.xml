@@ -237,4 +237,17 @@ This can take a couple of minutes."</string>
     <string name="pref_vending_summary_licensing_on">Licensing on</string>
     <string name="pref_vending_licensing_enable_switch">Answer license verification requests</string>
     <string name="pref_vending_license_enable_summary">Some apps require verification that you have purchased them on Google Play. When requested by an app, microG can download a proof of purchase from Google. If disabled, or if no Google account is added, requests for license verification are ignored.</string>
+
+    <string name="thanks_your_feedback">Thanks for your feedback</string>
+    <string name="feedback_msg_empty_hint">Please write your feedback before sending it</string>
+    <string name="feedback_sender">From:</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="feedback_msg_hint">Have feedback? We appreciate your feedback, but please do not disclose sensitive information. Have questions or legal concerns? Please visit the Help Center or Support Center.</string>
+    <string name="screenshot">Screenshot</string>
+    <string name="system_logs">System logs</string>
+    <string name="view">View</string>
+    <string name="feedback_statement">If you need to request a content change for legal reasons, please go to the legal help page.
+Some account and system information will be sent to Google. We will use the information you provide to solve technical problems and improve services; when using this information, we will comply with the Privacy Policy and Terms of Service.</string>
+    <string name="google_user">Google User</string>
+
 </resources>
