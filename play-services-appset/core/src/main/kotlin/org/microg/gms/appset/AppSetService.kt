@@ -6,6 +6,7 @@
 package org.microg.gms.appset
 
 import android.util.Log
+import com.google.android.gms.appset.AppSetIdInfo
 import com.google.android.gms.appset.AppSetIdRequestParams
 import com.google.android.gms.appset.AppSetInfoParcel
 import com.google.android.gms.appset.internal.IAppSetIdCallback
@@ -36,6 +37,6 @@ class AppSetService : BaseService(TAG, GmsService.APP_SET) {
 class AppSetServiceImpl : IAppSetService.Stub() {
     override fun getAppSetIdInfo(params: AppSetIdRequestParams?, callback: IAppSetIdCallback?) {
         Log.d(TAG, "AppSetServiceImp getAppSetIdInfo is called -> ${params?.toString()} ")
-        callback?.onAppSetInfo(Status.SUCCESS, AppSetInfoParcel("", 0))
+        callback?.onAppSetInfo(Status.SUCCESS, AppSetInfoParcel("", AppSetIdInfo.SCOPE_APP))
     }
 }
