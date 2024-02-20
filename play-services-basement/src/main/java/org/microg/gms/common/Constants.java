@@ -26,5 +26,4 @@ public class Constants {
     public static final String GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1 = "bd32424203e0fb25f36b57e5aa356f9bdd1da998";
     @Deprecated
     public static final int MAX_REFERENCE_VERSION = GMS_VERSION_CODE;
-    public static final String ACCOUNT_TYPE = "com.google";
 }
