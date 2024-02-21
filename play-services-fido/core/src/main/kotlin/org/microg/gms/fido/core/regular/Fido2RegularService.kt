@@ -17,7 +17,6 @@ import android.os.Parcel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -32,6 +31,7 @@ import com.google.android.gms.fido.fido2.internal.regular.IFido2RegularService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.GmsService.FIDO2_REGULAR
+import org.microg.gms.fido.core.FEATURES
 import org.microg.gms.fido.core.ui.AuthenticatorActivity
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.SOURCE_APP
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SOURCE
@@ -49,12 +49,7 @@ class Fido2RegularService : BaseService(TAG, FIDO2_REGULAR) {
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
             Fido2RegularServiceImpl(this, lifecycle).asBinder(),
-            ConnectionInfo().apply {
-                features = arrayOf(
-                    Feature("is_user_verifying_platform_authenticator_available", 1),
-                    Feature("is_user_verifying_platform_authenticator_available_for_credential", 1)
-                )
-            }
+            ConnectionInfo().apply { features = FEATURES }
         );
     }
 }
