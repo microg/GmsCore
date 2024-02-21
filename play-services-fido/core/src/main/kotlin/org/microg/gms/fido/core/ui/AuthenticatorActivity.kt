@@ -257,10 +257,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    fun startTransportHandling(transport: Transport, instant: Boolean = false): Job = lifecycleScope.launchWhenResumed {
+    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null): Job = lifecycleScope.launchWhenResumed {
         val options = options ?: return@launchWhenResumed
         try {
-            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage), transport)
+            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage, pinRequested, authenticatorPin), transport)
         } catch (e: SecurityException) {
             Log.w(TAG, e)
             if (instant) {
@@ -274,6 +274,9 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         } catch (e: RequestHandlingException) {
             Log.w(TAG, e)
             finishWithError(e.errorCode, e.message ?: e.errorCode.name)
+        } catch (e: MissingPinException) {
+            // Redirect the user to ask for a PIN code
+            navHostFragment.navController.navigate(R.id.openPinFragment)
         } catch (e: Exception) {
             Log.w(TAG, e)
             finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)

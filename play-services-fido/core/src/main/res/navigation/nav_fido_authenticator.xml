@@ -58,10 +58,23 @@
     <fragment
         android:id="@+id/nfcFragment"
         android:name="org.microg.gms.fido.core.ui.NfcTransportFragment"
-        tools:layout="@layout/fido_nfc_transport_fragment" />
+        tools:layout="@layout/fido_nfc_transport_fragment">
+        <action
+            android:id="@+id/openPinFragment"
+            app:destination="@id/pinFragment" />
+    </fragment>
     <fragment
         android:id="@+id/usbFragment"
         android:name="org.microg.gms.fido.core.ui.UsbTransportFragment"
-        tools:layout="@layout/fido_usb_transport_fragment" />
+        tools:layout="@layout/fido_usb_transport_fragment">
+        <action
+            android:id="@+id/openPinFragment"
+            app:destination="@id/pinFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pinFragment"
+        android:name="org.microg.gms.fido.core.ui.PinFragment"
+        tools:layout="@layout/fido_pin_fragment" />
 
 </navigation>
