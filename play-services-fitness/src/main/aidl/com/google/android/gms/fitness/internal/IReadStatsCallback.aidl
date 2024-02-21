@@ -5,8 +5,8 @@
 
 package com.google.android.gms.fitness.internal;
 
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.fitness.result.DataStatsResult;
 
-interface IStatusCallback {
-   void onResult(in Status status) = 1;
+interface IReadStatsCallback {
+    void onResult(in DataStatsResult result) = 1;
 }
