@@ -40,8 +40,7 @@ import org.microg.gms.utils.WorkSourceUtil
 import java.io.PrintWriter
 import kotlin.math.*
 
-class DeviceOrientationManager(private val context: Context, private val lifecycle: Lifecycle) : LifecycleOwner, SensorEventListener, IBinder.DeathRecipient {
-    override fun getLifecycle(): Lifecycle = lifecycle
+class DeviceOrientationManager(private val context: Context, override val lifecycle: Lifecycle) : LifecycleOwner, SensorEventListener, IBinder.DeathRecipient {
     private var lock = Mutex(false)
     private var started: Boolean = false
     private var sensors: Set<Sensor>? = null
