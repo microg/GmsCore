@@ -24,6 +24,7 @@ import java.net.HttpURLConnection
 import java.security.MessageDigest
 
 class RequestHandlingException(val errorCode: ErrorCode, message: String? = null) : Exception(message)
+class MissingPinException(message: String? = null): Exception(message)
 
 enum class RequestOptionsType { REGISTER, SIGN }
 
@@ -148,14 +149,6 @@ private suspend fun isAppIdAllowed(context: Context, appId: String, facetId: Str
 }
 
 suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packageName: String?) {
-    if (type == REGISTER) {
-        if (registerOptions.authenticatorSelection?.requireResidentKey == true) {
-            throw RequestHandlingException(
-                NOT_SUPPORTED_ERR,
-                "Resident credentials or empty 'allowCredentials' lists are not supported  at this time."
-            )
-        }
-    }
     if (type == SIGN) {
         if (signOptions.allowList.isNullOrEmpty()) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "Request doesn't have a valid list of allowed credentials.")

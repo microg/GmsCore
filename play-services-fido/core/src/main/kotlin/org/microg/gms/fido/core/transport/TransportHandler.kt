@@ -6,9 +6,12 @@
 package org.microg.gms.fido.core.transport
 
 import android.content.Context
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ResidentKeyRequirement.*
 import com.google.android.gms.fido.fido2.api.common.UserVerificationRequirement.*
@@ -16,15 +19,32 @@ import com.upokecenter.cbor.CBORObject
 import kotlinx.coroutines.delay
 import org.microg.gms.fido.core.*
 import org.microg.gms.fido.core.protocol.*
+import org.microg.gms.fido.core.protocol.CoseKey.Companion.toByteArray
 import org.microg.gms.fido.core.protocol.msgs.*
 import org.microg.gms.fido.core.transport.nfc.CtapNfcMessageStatusException
 import org.microg.gms.fido.core.transport.usb.ctaphid.CtapHidMessageStatusException
+import java.math.BigInteger
+import java.nio.charset.StandardCharsets
+import java.security.AlgorithmParameters
+import java.security.KeyFactory
+import java.security.KeyPairGenerator
+import java.security.MessageDigest
+import java.security.interfaces.ECPublicKey
+import java.security.spec.ECGenParameterSpec
+import java.security.spec.ECParameterSpec
+import java.security.spec.ECPoint
+import java.security.spec.ECPublicKeySpec
+import javax.crypto.Cipher
+import javax.crypto.KeyAgreement
+import javax.crypto.Mac
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 abstract class TransportHandler(val transport: Transport, val callback: TransportHandlerCallback?) {
     open val isSupported: Boolean
         get() = false
 
-    open suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse =
+    open suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean = false, pin: String? = null): AuthenticatorResponse =
         throw RequestHandlingException(ErrorCode.NOT_SUPPORTED_ERR)
 
     open fun shouldBeUsedInstantly(options: RequestOptions): Boolean = false
@@ -50,7 +70,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     private suspend fun ctap2register(
         connection: CtapConnection,
         options: RequestOptions,
-        clientDataHash: ByteArray
+        clientDataHash: ByteArray,
+        pinToken: ByteArray? = null
     ): Pair<AuthenticatorMakeCredentialResponse, ByteArray?> {
         connection.capabilities
         val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
@@ -58,7 +79,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 RESIDENT_KEY_REQUIRED -> true
                 RESIDENT_KEY_PREFERRED -> connection.hasResidentKey
                 RESIDENT_KEY_DISCOURAGED -> false
-                else -> options.registerOptions.authenticatorSelection?.requireResidentKey == true
+                else -> connection.hasResidentKey
             },
             when (options.registerOptions.authenticatorSelection?.requireUserVerification) {
                 REQUIRED -> true
@@ -75,6 +96,17 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             extensions["uvm"] =
                 options.authenticationExtensions!!.userVerificationMethodExtension!!.uvm.encodeAsCbor()
         }
+
+        var pinProtocol: Int? = null
+        var pinHashEnc: ByteArray? = null
+        if (pinToken != null) {
+            val secretKeySpec = SecretKeySpec(pinToken, "HmacSHA256")
+            val mac = Mac.getInstance("HmacSHA256")
+            mac.init(secretKeySpec)
+            pinHashEnc = mac.doFinal(clientDataHash)
+            pinProtocol = 1
+        }
+
         val request = AuthenticatorMakeCredentialRequest(
             clientDataHash,
             options.registerOptions.rp,
@@ -82,7 +114,9 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             options.registerOptions.parameters,
             options.registerOptions.excludeList.orEmpty(),
             extensions,
-            reqOptions
+            reqOptions,
+            pinHashEnc,
+            pinProtocol
         )
         val response = connection.runCommand(AuthenticatorMakeCredentialCommand(request))
         val credentialId = AuthenticatorData.decode(response.authData).attestedCredentialData?.id
@@ -156,21 +190,23 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         connection: CtapConnection,
         context: Context,
         options: RequestOptions,
-        callerPackage: String
+        callerPackage: String,
+        pinRequested: Boolean,
+        pin: String?
     ): AuthenticatorAttestationResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
         val (response, keyHandle) = when {
             connection.hasCtap2Support -> {
-                if (connection.hasCtap1Support &&
-                    !connection.canMakeCredentialWithoutUserVerification && connection.hasClientPin &&
-                    options.registerOptions.authenticatorSelection?.requireUserVerification != REQUIRED &&
-                    options.registerOptions.authenticatorSelection?.requireResidentKey != true
-                ) {
-                    Log.d(TAG, "Using CTAP1/U2F for PIN-less registration")
-                    ctap1register(connection, options, clientDataHash)
-                } else {
-                    ctap2register(connection, options, clientDataHash)
+                var pinToken: ByteArray? = null
+                if (connection.hasClientPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    pinToken = ctap2getPinToken(connection, pin)
+                } else if (connection.hasClientPin && !pinRequested && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    throw MissingPinException()
                 }
+
+                // Authenticators seem to give a response even without a PIN token, so we'll allow
+                // the client to call this even without having a PIN token set
+                ctap2register(connection, options, clientDataHash, pinToken)
             }
             connection.hasCtap1Support -> ctap1register(connection, options, clientDataHash)
             else -> throw IllegalStateException()
@@ -187,7 +223,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     private suspend fun ctap2sign(
         connection: CtapConnection,
         options: RequestOptions,
-        clientDataHash: ByteArray
+        clientDataHash: ByteArray,
+        pinToken: ByteArray? = null
     ): Pair<AuthenticatorGetAssertionResponse, ByteArray?> {
         val reqOptions = AuthenticatorGetAssertionRequest.Companion.Options(
             userVerification = options.signOptions.requireUserVerification == REQUIRED
@@ -200,15 +237,117 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             extensions["uvm"] =
                 options.authenticationExtensions!!.userVerificationMethodExtension!!.uvm.encodeAsCbor()
         }
+
+        var pinProtocol: Int? = null
+        var pinHashEnc: ByteArray? = null
+        if (pinToken != null) {
+            val secretKeySpec = SecretKeySpec(pinToken, "HmacSHA256")
+            val mac = Mac.getInstance("HmacSHA256")
+            mac.init(secretKeySpec)
+            pinHashEnc = mac.doFinal(clientDataHash)
+            pinProtocol = 1
+        }
+
         val request = AuthenticatorGetAssertionRequest(
             options.rpId,
             clientDataHash,
             options.signOptions.allowList.orEmpty(),
             extensions,
-            reqOptions
+            reqOptions,
+            pinHashEnc,
+            pinProtocol
         )
         val ctap2Response = connection.runCommand(AuthenticatorGetAssertionCommand(request))
         return ctap2Response to ctap2Response.credential?.id
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private suspend fun ctap2getPinToken(
+        connection: CtapConnection,
+        pin: String
+    ): ByteArray? {
+        // Ask for shared secret from authenticator
+        val sharedSecretRequest = AuthenticatorClientPINRequest(
+            0x01,
+            0x02
+        )
+        val sharedSecretResponse = connection.runCommand(AuthenticatorClientPINCommand(sharedSecretRequest))
+
+        if (sharedSecretResponse.keyAgreement == null) {
+            return null;
+        }
+
+        val x = sharedSecretResponse.keyAgreement.x
+        val y = sharedSecretResponse.keyAgreement.y
+
+        val curveName = when (sharedSecretResponse.keyAgreement.curveId) {
+            1 -> "secp256r1"
+            2 -> "secp384r1"
+            3 -> "secp521r1"
+            4 -> "x25519"
+            5 -> "x448"
+            6 -> "Ed25519"
+            7 -> "Ed448"
+            else -> return null
+        }
+
+        // Perform Diffie Hellman key generation
+        val generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore")
+        generator.initialize(
+            KeyGenParameterSpec.Builder(
+                "eckeypair",
+                KeyProperties.PURPOSE_AGREE_KEY
+            ).setAlgorithmParameterSpec(ECGenParameterSpec(curveName))
+                .build())
+
+        val myKeyPair = generator.generateKeyPair()
+        val parameters = AlgorithmParameters.getInstance("EC")
+        parameters.init(ECGenParameterSpec(curveName))
+        val parameterSpec = parameters.getParameterSpec(ECParameterSpec::class.java)
+        val serverKey = KeyFactory.getInstance("EC")
+            .generatePublic(ECPublicKeySpec(ECPoint(BigInteger(1, x), BigInteger(1, y)), parameterSpec))
+        val keyAgreement = KeyAgreement.getInstance("ECDH")
+        keyAgreement.init(myKeyPair.private)
+        keyAgreement.doPhase(serverKey, true)
+
+        // We get the key for the encryption used between the client and the platform by doing an
+        // SHA 256 hash of the shared secret
+        val sharedSecret = keyAgreement.generateSecret()
+        val hash = MessageDigest.getInstance("SHA-256")
+        hash.update(sharedSecret)
+        val sharedKey = SecretKeySpec(hash.digest(), "AES")
+
+        // Hash the PIN, and then encrypt the first 16 bytes of the hash using the shared key
+        val pinHash = MessageDigest.getInstance("SHA-256").digest(pin.toByteArray(StandardCharsets.UTF_8))
+        val cipher = Cipher.getInstance("AES/CBC/NoPadding")
+        cipher.init(Cipher.ENCRYPT_MODE, sharedKey, IvParameterSpec(ByteArray(16)))
+        val pinHashEnc = cipher.doFinal(pinHash.sliceArray(IntRange(0,15)))
+
+        // Now, send back the encrypted pin hash, as well as the public portion of our key so
+        // the authenticator also may perform Diffie Hellman
+        val publicKey = myKeyPair.public
+        if (publicKey !is ECPublicKey) {
+            return null
+        }
+        val coseKey = CoseKey(
+            sharedSecretResponse.keyAgreement.algorithm,
+            publicKey.w.affineX.toByteArray(32),
+            publicKey.w.affineY.toByteArray(32),
+            sharedSecretResponse.keyAgreement.curveId
+        )
+
+        val pinTokenRequest = AuthenticatorClientPINRequest(
+            1,
+            5,
+            coseKey,
+            pinHashEnc = pinHashEnc
+        )
+
+        // The pin token is returned to us in encrypted form. Decrypt it, so we may use it when HMAC
+        // signing later
+        val pinTokenResponse = connection.runCommand(AuthenticatorClientPINCommand(pinTokenRequest))
+        cipher.init(Cipher.DECRYPT_MODE, sharedKey, IvParameterSpec(ByteArray(16)))
+        return cipher.doFinal(pinTokenResponse.pinToken)
     }
 
     private suspend fun ctap1sign(
@@ -268,13 +407,23 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         connection: CtapConnection,
         context: Context,
         options: RequestOptions,
-        callerPackage: String
+        callerPackage: String,
+        pinRequested: Boolean,
+        pin: String?
     ): AuthenticatorAssertionResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
         val (response, credentialId) = when {
             connection.hasCtap2Support -> {
                 try {
-                    ctap2sign(connection, options, clientDataHash)
+                    var pinToken: ByteArray? = null
+                    if (connection.hasClientPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        pinToken = ctap2getPinToken(connection, pin)
+                    } else if (connection.hasClientPin && !pinRequested && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        throw MissingPinException()
+                    }
+
+                    // If we don't have a pin at all, might as well try
+                    ctap2sign(connection, options, clientDataHash, pinToken)
                 } catch (e: Ctap2StatusException) {
                     if (e.status == 0x2e.toByte() &&
                         connection.hasCtap1Support && connection.hasClientPin &&
