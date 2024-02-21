@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_notification_channel_name">Lizenzbenachrichtigungen</string>
+    <string name="license_notification_title">%1$s konnte die Lizenz nicht überprüfen</string>
+    <string name="license_notification_body">Wenn die App nicht ordnungsgemäß funktioniert, melden Sie sich mit einem Google-Konto an, mit dem Sie die App gekauft haben.</string>
+    <string name="license_notification_sign_in">Anmelden</string>
+    <string name="license_notification_channel_description">Benachrichtigt, wenn eine App versucht, ihre Lizenz zu validieren, Sie jedoch nicht bei einem Google-Konto angemeldet sind.</string>
+    <string name="license_notification_ignore">Ignorieren</string>
+</resources>
+
