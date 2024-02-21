@@ -56,7 +56,9 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
 
     override fun getExperimentTokens(callbacks: IPhenotypeCallbacks, p1: String?, logSourceName: String?) {
         Log.d(TAG, "getExperimentTokens($p1, $logSourceName)")
-        callbacks.onExperimentTokens(Status.SUCCESS, ExperimentTokens())
+        val experimentTokens = ExperimentTokens()
+        experimentTokens.field2 = ""
+        callbacks.onExperimentTokens(Status.SUCCESS, experimentTokens)
     }
 
     override fun getDogfoodsToken(callbacks: IPhenotypeCallbacks) {
