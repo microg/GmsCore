@@ -9,4 +9,5 @@
     <string name="license_notification_body">Dacă aplicația se comportă greșit, conectează-te la un Cont Google cu care ai cumpărat aplicația.</string>
     <string name="license_notification_sign_in">Conectează-te</string>
     <string name="license_notification_ignore">Ignoră</string>
+    <string name="pay_disabled">Funcția de plată nu este disponibilă</string>
 </resources>
