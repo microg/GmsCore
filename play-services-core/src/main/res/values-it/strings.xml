@@ -203,6 +203,10 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="signin_subtext_sharing">Per continuare, microG condividerà il nome, l\'indirizzo email e l\'immagine del profilo del tuo account Google con <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="pref_auth_include_android_id_title">Autenticazione con registrazione del dispositivo</string>
     <string name="signin_subtext_policy_terms">termini di servizio</string>
-    <string name="pref_vending_summary_licensing_on">La licenza è abilitata</string>
+    <string name="pref_vending_summary_licensing_on">Verifica delle licenze abilitata</string>
     <string name="service_name_vending">Servizi Play Store</string>
+    <string name="pref_vending_licensing_enable_switch">Rispondi alle richieste di verifica delle licenze</string>
+    <string name="feedback_disabled">Non è possibile inviare feedback al momento</string>
+    <string name="pref_vending_summary_licensing_off">Verifica delle licenze disabilitata</string>
+    <string name="pref_vending_license_enable_summary">Alcune app richiedono la verifica dell\'acquisto da Google Play. Quando un\'app lo richiede, microG può scaricare una prova dell\'acquisto da Google. Se l\'opzione è disabilitata, o se non è stato aggiunto nessun account Google, le richieste di verifica delle licenze vengono ignorate.</string>
 </resources>
