@@ -726,6 +726,16 @@
             </intent-filter>
         </service>
 
+        <!-- fitness -->
+        <service
+            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.HistoryApi" />
+            </intent-filter>
+        </service>
+
         <!-- Other -->
 
         <service
@@ -832,15 +842,6 @@
         <service android:name="org.microg.gms.usagereporting.UsageReportingService">
             <intent-filter>
                 <action android:name="com.google.android.gms.usagereporting.service.START" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.fitness.HistoryApi" />
             </intent-filter>
         </service>
 
