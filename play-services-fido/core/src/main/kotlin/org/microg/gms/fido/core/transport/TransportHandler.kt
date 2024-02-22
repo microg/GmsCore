@@ -103,7 +103,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             val secretKeySpec = SecretKeySpec(pinToken, "HmacSHA256")
             val mac = Mac.getInstance("HmacSHA256")
             mac.init(secretKeySpec)
-            pinHashEnc = mac.doFinal(clientDataHash)
+            pinHashEnc = mac.doFinal(clientDataHash).sliceArray(IntRange(0, 15))
             pinProtocol = 1
         }
 
@@ -199,7 +199,15 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap2Support -> {
                 var pinToken: ByteArray? = null
                 if (connection.hasClientPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    pinToken = ctap2getPinToken(connection, pin)
+                    try {
+                        pinToken = ctap2getPinToken(connection, pin)
+                    } catch (e: Ctap2StatusException) {
+                        if (e.status == 0x31.toByte()) {
+                            throw WrongPinException()
+                        } else {
+                            throw e
+                        }
+                    }
                 } else if (connection.hasClientPin && !pinRequested && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     throw MissingPinException()
                 }
@@ -244,7 +252,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             val secretKeySpec = SecretKeySpec(pinToken, "HmacSHA256")
             val mac = Mac.getInstance("HmacSHA256")
             mac.init(secretKeySpec)
-            pinHashEnc = mac.doFinal(clientDataHash)
+            pinHashEnc = mac.doFinal(clientDataHash).sliceArray(IntRange(0, 15))
             pinProtocol = 1
         }
 
@@ -422,10 +430,13 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                         throw MissingPinException()
                     }
 
-                    // If we don't have a pin at all, might as well try
+                    // Authenticators seem to give a response even without a PIN token, so we'll allow
+                    // the client to call this even without having a PIN token set
                     ctap2sign(connection, options, clientDataHash, pinToken)
                 } catch (e: Ctap2StatusException) {
-                    if (e.status == 0x2e.toByte() &&
+                    if (e.status == 0x31.toByte()) {
+                        throw WrongPinException()
+                    } else if (e.status == 0x2e.toByte() &&
                         connection.hasCtap1Support && connection.hasClientPin &&
                         options.signOptions.allowList.orEmpty().isNotEmpty() &&
                         options.signOptions.requireUserVerification != REQUIRED
