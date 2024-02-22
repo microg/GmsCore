@@ -25,6 +25,7 @@ import java.security.MessageDigest
 
 class RequestHandlingException(val errorCode: ErrorCode, message: String? = null) : Exception(message)
 class MissingPinException(message: String? = null): Exception(message)
+class WrongPinException(message: String? = null): Exception(message)
 
 enum class RequestOptionsType { REGISTER, SIGN }
 

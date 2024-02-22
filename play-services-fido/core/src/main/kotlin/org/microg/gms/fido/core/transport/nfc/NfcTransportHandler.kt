@@ -24,6 +24,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import org.microg.gms.fido.core.MissingPinException
 import org.microg.gms.fido.core.RequestOptionsType
+import org.microg.gms.fido.core.WrongPinException
 import org.microg.gms.fido.core.transport.Transport
 import org.microg.gms.fido.core.transport.TransportHandler
 import org.microg.gms.fido.core.transport.TransportHandlerCallback
@@ -106,6 +107,8 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: MissingPinException) {
+                    throw e
+                } catch (e: WrongPinException) {
                     throw e
                 } catch (e: Exception) {
                     Log.w(TAG, e)
