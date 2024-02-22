@@ -12,6 +12,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
@@ -276,6 +277,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
             finishWithError(e.errorCode, e.message ?: e.errorCode.name)
         } catch (e: MissingPinException) {
             // Redirect the user to ask for a PIN code
+            navHostFragment.navController.navigate(R.id.openPinFragment)
+        } catch (e: WrongPinException) {
+            // Redirect the user, and inform them that the pin was wrong
+            Toast.makeText(baseContext, R.string.fido_wrong_pin, Toast.LENGTH_LONG).show()
             navHostFragment.navController.navigate(R.id.openPinFragment)
         } catch (e: Exception) {
             Log.w(TAG, e)

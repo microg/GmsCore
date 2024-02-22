@@ -150,7 +150,9 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
                 throw e
             } catch (e: MissingPinException) {
                 throw e
-            } catch (e: Exception) {
+            } catch (e: WrongPinException) {
+                throw e
+            }  catch (e: Exception) {
                 Log.w(TAG, e)
             }
         }
