@@ -3,4 +3,10 @@
     <string name="toast_installed">Companionul microG nu poate fi utilizat independent. În schimb, deschide setările microG Services.</string>
     <string name="toast_not_installed">Companionul microG nu poate fi utilizat independent. Instalează serviciile microG pentru a utiliza microG.</string>
     <string name="app_name">Companion microG</string>
+    <string name="license_notification_channel_description">Notifică când o aplicație încearcă să-și valideze licența, dar nu ești conectat la niciun cont Google.</string>
+    <string name="license_notification_channel_name">Notificări de licență</string>
+    <string name="license_notification_title">%1$s nu poate verifica licența</string>
+    <string name="license_notification_body">Dacă aplicația se comportă greșit, conectează-te la un Cont Google cu care ai cumpărat aplicația.</string>
+    <string name="license_notification_sign_in">Conectează-te</string>
+    <string name="license_notification_ignore">Ignoră</string>
 </resources>

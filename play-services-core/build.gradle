@@ -79,7 +79,7 @@ dependencies {
     implementation "androidx.webkit:webkit:$webkitVersion"
 
     // Material Components
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation "com.google.android.material:material:$materialVersion"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"

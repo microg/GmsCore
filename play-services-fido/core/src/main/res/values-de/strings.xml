@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_usb_title">Schließe deinen USB-Sicherheitsschlüssel an</string>
+    <string name="fido_welcome_title">Verwende deinen Sicherheitsschlüssel mit %1$s</string>
+    <string name="fido_welcome_privileged_info">%1$s fungiert als vertrauenswürdiger Browser zur Verwendung deines Sicherheitsschlüssels mit %2$s.</string>
+    <string name="fido_transport_selection_body">Sicherheitsschlüssel funktionieren mit Bluetooth, NFC und USB. Wähle aus, wie du deinen Schlüssel verwenden möchtest.</string>
+    <string name="fido_usb_prompt_body">Stecke deinen Sicherheitsschlüssel in den USB-Anschluss oder verbinde ihn mit einem USB-Kabel. Wenn dein Schlüssel eine Taste oder eine goldene Scheibe hat, tippe jetzt darauf.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Bitte tippe auf den goldenen Ring oder die goldene Scheibe auf %1$s.</string>
+    <string name="fido_welcome_body">Die Verwendung deines Sicherheitsschlüssels mit %1$s hilft, deine privaten Daten zu schützen.</string>
+    <string name="fido_welcome_button_get_started">Los geht’s</string>
+    <string name="fido_welcome_privileged_check">Ja, %1$s ist mein vertrauenswürdiger Browser und sollte Sicherheitsschlüssel für Webseiten von Drittanbietern verwenden dürfen.</string>
+    <string name="fido_transport_selection_title">Wähle aus, wie du deinen Sicherheitsschlüssel verwendest</string>
+    <string name="fido_biometric_prompt_title">Verifiziere deine Identität</string>
+    <string name="fido_biometric_prompt_body">%1$s muss verifizieren, dass du es bist.</string>
+    <string name="fido_nfc_title">Verbinde deinen NFC-Sicherheitsschlüssel</string>
+    <string name="fido_nfc_prompt_body">Halte deinen Schlüssel flach auf die Rückseite deines Geräts, bis es aufhört zu vibrieren</string>
+    <string name="fido_transport_selection_bluetooth">Sicherheitsschlüssel mit Bluetooth verwenden</string>
+    <string name="fido_transport_selection_nfc">Sicherheitsschlüssel mit NFC verwenden</string>
+    <string name="fido_transport_selection_usb">Sicherheitsschlüssel mit USB verwenden</string>
+    <string name="fido_transport_selection_biometric">Dieses Gerät mit Bildschirmsperre verwenden</string>
+    <string name="fido_transport_usb_wait_connect_body">Bitte schließe deinen USB-Sicherheitsschlüssel an.</string>
+</resources>

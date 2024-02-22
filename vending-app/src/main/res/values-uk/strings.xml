@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="toast_installed">microG Companion не можна використовувати окремо. Натомість відкрито налаштування служб microG.</string>
+    <string name="toast_not_installed">microG Companion не можна використовувати окремо. Будь ласка, встановіть microG служби, щоб використовувати microG.</string>
+    <string name="app_name">microG Companion</string>
+</resources>

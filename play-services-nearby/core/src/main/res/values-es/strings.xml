@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="exposure_notify_off_title">Notificaciones de Exposición inactivas</string>
     <string name="exposure_notify_off_bluetooth">El Bluetooth debe estar habilitado para recibir Notificaciones de Exposición.</string>
     <string name="exposure_notify_off_location">El acceso a la ubicación es necesario para recibir las Notificaciones de Exposición.</string>
     <string name="exposure_notify_off_bluetooth_location">El acceso al Bluetooth y a la localización debe estar habilitado para recibir Notificaciones de Exposición.</string>
-
     <string name="service_name_exposure">Notificaciones de Exposición</string>
     <string name="pref_exposure_enable_info_summary">Para habilitar las Notificaciones de Exposición, abre cualquier aplicación que lo soporte.</string>
     <string name="pref_exposure_error_bluetooth_off_title">Habilitar el Bluetooth</string>
@@ -39,13 +38,12 @@
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Eliminar de todas formas</string>
     <string name="pref_exposure_rpi_export_title">Exportar</string>
     <string name="pref_exposure_rpi_export_summary">Exportar identificaciones recogidas para su análisis ampliado con otra aplicación.</string>
-    <string name="pref_exposure_info_summary">La API de Notificaciones de Exposición permite que las aplicaciones le notifiquen si estuvo expuesto a alguien que informó haber sido diagnosticado como positivo.
-
-La fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la aplicación correspondiente.</string>
-    <string name="pref_exposure_rpis_details_summary">Mientras la API de Notificación de Exposición está activada, el dispositivo recoge pasivamente identificaciones (llamadas identificadores de proximidad rodante o RPI) de los dispositivos cercanos.
-
-Cuando los propietarios de los dispositivos informan que el diagnóstico es positivo, se pueden compartir sus identificaciones. Su dispositivo comprueba si alguna de las identificaciones diagnosticadas conocidas coincide con alguna de las identificaciones recogidas y calcula su riesgo de infección.</string>
-
+    <string name="pref_exposure_info_summary">La API de notificaciones de exposición permite que las aplicaciones le notifiquen si ha estado expuesto a alguien con diagnóstico positivo.
+\n
+\nLa fecha, la duración y la intensidad de la señal asociadas a una exposición se compartirán con la app correspondiente.</string>
+    <string name="pref_exposure_rpis_details_summary">Mientras la API de notificación de exposición está activada, el dispositivo recopila de forma pasiva identificadores (denominados identificadores de proximidad móviles o RPI) de los dispositivos cercanos.
+\n
+\nCuando los propietarios de los dispositivos informan de un diagnóstico positivo, sus ID pueden compartirse. Su dispositivo comprueba si alguno de los ID diagnosticados conocidos coincide con alguno de los ID recopilados y calcula su riesgo de infección.</string>
     <string name="exposure_enable_switch">Usar Notificaciones de Exposición</string>
     <string name="exposure_confirm_start_title">¿Encender las Notificaciones de Exposición?</string>
     <string name="exposure_confirm_start_summary">El teléfono debe usar el Bluetooth para recopilar y compartir de manera segura las identificaciones con otros teléfonos que estén cerca.
@@ -58,13 +56,20 @@ La fecha, la duración y la intensidad de la señal asociadas a una exposición 
     <string name="exposure_confirm_stop_summary">Después de desactivar las Notificaciones de Exposición, ya no se le notificará cuando haya estado expuesto a alguien que haya informado de que ha sido diagnosticado como positivo.</string>
     <string name="exposure_confirm_stop_button">Apagar</string>
     <string name="exposure_confirm_keys_title">Comparte tus identificaciones con <xliff:g example="Corona-Warn">%1$s</xliff:g>?</string>
-    <string name="exposure_confirm_keys_summary">Sus identificaciones de los últimos 14 días se usarán para ayudar a notificar a otros que usted ha estado cerca de una posible exposición.
-
-Su identidad o el resultado de la prueba no será compartida con otras personas.</string>
+    <string name="exposure_confirm_keys_summary">Tus identificaciones de los últimos 14 días se utilizarán para ayudar a notificar a otras personas que has estado cerca sobre una posible exposición.
+\n
+\nTu identidad o el resultado de la prueba no se compartirán con otras personas.</string>
     <string name="exposure_confirm_keys_button">Compartir</string>
     <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> necesita permisos adicionales.</string>
     <string name="exposure_confirm_permission_button">Conceder</string>
     <string name="exposure_confirm_bluetooth_description">El Bluetooth debe estar activado.</string>
     <string name="exposure_confirm_location_description">Se requiere acceso a la ubicación.</string>
     <string name="exposure_confirm_button">Habilitar</string>
+    <string name="exposure_grant_background_location_description">¡Ya casi está!. Tendrás que habilitar el acceso a la ubicación en segundo plano seleccionando la opción \"Permitir todo el tiempo\" en la siguiente pantalla. A continuación, pulsa Atrás.</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Sin registros</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> IDs por hora</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Se requieren nuevos permisos</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Pulse para conceder los permisos necesarios para mostrar notificaciones</string>
+    <string name="exposure_notify_off_nearby">Las notificaciones de exposición requieren permisos adicionales para funcionar</string>
+    <string name="exposure_grant_background_location_button">Actualizar los ajustes</string>
 </resources>

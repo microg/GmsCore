@@ -53,7 +53,7 @@ private const val EXTRA_REQUEST_ID = "requestId"
 private const val TIMEOUT = 1000 * 60 * 5 // 5 minutes
 private const val MESSAGE_MAX_LEN = 140
 
-class SmsRetrieverCore(private val context: Context, private val lifecycle: Lifecycle) : LifecycleOwner, DefaultLifecycleObserver {
+class SmsRetrieverCore(private val context: Context, override val lifecycle: Lifecycle) : LifecycleOwner, DefaultLifecycleObserver {
     private val requests: HashMap<Int, SmsRetrieverRequest> = hashMapOf()
     private val requestIdCounter = AtomicInteger(0)
     private lateinit var timeoutBroadcastReceiver: BroadcastReceiver
@@ -65,8 +65,6 @@ class SmsRetrieverCore(private val context: Context, private val lifecycle: Life
     init {
         lifecycle.addObserver(this)
     }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     @TargetApi(19)
     private fun configureBroadcastListenersIfNeeded() {

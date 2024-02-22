@@ -2,15 +2,12 @@
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
+  --><resources>
     <string name="menu_advanced">Avancé</string>
-
     <string name="list_no_item_none">Aucun</string>
-
     <string name="service_status_disabled">Désactivé</string>
     <string name="service_status_enabled">Activé</string>
     <string name="service_status_automatic">Automatique</string>
     <string name="service_status_manual">Manuel</string>
+    <string name="foreground_service_notification_title">Actif en arrière-plan</string>
 </resources>
