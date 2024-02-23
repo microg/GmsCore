@@ -21,6 +21,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
@@ -30,23 +32,96 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.USER_GMS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConKeeper";
+    private static final String PREF_MASTER = "GmsMultiConKeeper";
+    private static final String PREF_TARGET = "GmsMultiConKeeper_target";
 
     private static MultiConnectionKeeper INSTANCE;
 
     private final Context context;
+
+    private final String gmsPackage;
     private final Map<String, Connection> connections = new HashMap<String, Connection>();
+
+    private String getApplicationName(String packageId) throws PackageManager.NameNotFoundException {
+        ApplicationInfo ai;
+        if (SDK_INT >= TIRAMISU) {
+            ai = context.getPackageManager().getApplicationInfo(
+                    packageId,
+                    PackageManager.ApplicationInfoFlags.of(
+                            PackageManager.GET_META_DATA
+                    )
+            );
+        } else {
+            ai = context.getPackageManager().getApplicationInfo(packageId, 0);
+        }
+        return (String) context.getPackageManager().getApplicationLabel(ai);
+    }
+
+    private String getTargetPackageWithoutPref() {
+        // Pref: gms > microG > self
+        PackageManager pm = context.getPackageManager();
+        try {
+            // We check the application has an activity and its name to avoid any fraudulent
+            // app impersonating microG, "Cooking app" with com.google.android.gms id
+            String name = getApplicationName(GMS_PACKAGE_NAME);
+            if (name.contains("Google Play") || name.contains("microG")) {
+                Log.d(TAG, GMS_PACKAGE_NAME + " found !");
+                return GMS_PACKAGE_NAME;
+            } else {
+                Log.w(TAG, USER_GMS_PACKAGE_NAME + " found with another name: " + name);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d(TAG, GMS_PACKAGE_NAME + " not found");
+        }
+        try {
+            String name = getApplicationName(USER_GMS_PACKAGE_NAME);
+            if (name.contains("microG")) {
+                Log.d(TAG, USER_GMS_PACKAGE_NAME + " found !");
+                return USER_GMS_PACKAGE_NAME;
+            } else {
+                Log.w(TAG, USER_GMS_PACKAGE_NAME + " found with another name: " + name);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d(TAG, USER_GMS_PACKAGE_NAME + " not found");
+        }
+        return null;
+    }
+
+    private String getTargetPackage() {
+        SharedPreferences prefs = context.getSharedPreferences(PREF_MASTER, Context.MODE_PRIVATE);
+        final String SELF = "SELF";
+        String target;
+        if ((target = prefs.getString(PREF_TARGET, null)) != null) {
+            switch (target) {
+                case GMS_PACKAGE_NAME:
+                case USER_GMS_PACKAGE_NAME:
+                    return target;
+                case SELF:
+                    return null;
+            }
+        }
+        if ((target = getTargetPackageWithoutPref()) == null ) {
+            prefs.edit().putString(PREF_TARGET, SELF).apply();
+        } else {
+            prefs.edit().putString(PREF_TARGET, target).apply();
+        }
+        return target;
+    }
 
     public MultiConnectionKeeper(Context context) {
         this.context = context;
+        gmsPackage = getTargetPackage();
     }
 
     public synchronized static MultiConnectionKeeper getInstance(Context context) {
@@ -139,36 +214,23 @@ public class MultiConnectionKeeper {
         }
 
         private Intent getIntent() {
-            Intent gmsIntent = new Intent(actionString).setPackage(GMS_PACKAGE_NAME);
-            Intent microGIntent = new Intent(actionString).setPackage(USER_GMS_PACKAGE_NAME);
-            Intent selfIntent = new Intent(actionString).setPackage(context.getPackageName());
+            Intent intent;
             ResolveInfo resolveInfo;
-            // Pref: gms > microG > self
-            // Note that gms and microG can't be both installed on the system because of duplicate
-            // permissions. It is possible to build an app without these permission, but it won't
-            // be a regular build
-            if ((resolveInfo = context.getPackageManager().resolveService(gmsIntent, 0)) != null) {
-                if (requireMicrog && !isMicrog(resolveInfo)) {
-                    Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
-                } else {
-                    Log.d(TAG, "GMS service found for " + actionString);
-                    return gmsIntent;
+            if (gmsPackage != null) {
+                intent = new Intent(actionString).setPackage(gmsPackage);
+                if ((resolveInfo = context.getPackageManager().resolveService(intent, 0)) != null) {
+                    if (requireMicrog && !isMicrog(resolveInfo)) {
+                        Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
+                    } else {
+                        Log.d(TAG, "GMS service found for " + actionString);
+                        return intent;
+                    }
                 }
             }
-
-            if ((resolveInfo = context.getPackageManager().resolveService(microGIntent, 0)) != null) {
-                if (requireMicrog && !isMicrog(resolveInfo)) {
-                    // If the user has somehow installed another application with the microG package id
-                    Log.w(TAG, "microG service found for " + actionString + " but looks not like microG");
-                } else {
-                    Log.d(TAG, "microG service found for " + actionString);
-                    return microGIntent;
-                }
-            }
-
-            if (context.getPackageManager().resolveService(selfIntent, 0) != null) {
+            intent = new Intent(actionString).setPackage(context.getPackageName());
+            if (context.getPackageManager().resolveService(intent, 0) != null) {
                 Log.d(TAG, "Found service for " + actionString + " in self package, using it instead");
-                return selfIntent;
+                return intent;
             }
             return null;
         }
