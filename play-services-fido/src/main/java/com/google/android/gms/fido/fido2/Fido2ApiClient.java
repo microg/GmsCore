@@ -19,7 +19,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fido.fido2.api.IBooleanCallback;
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialCreationOptions;
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions;
-import com.google.android.gms.fido.fido2.internal.regular.IFido2RegularCallbacks;
+import com.google.android.gms.fido.fido2.internal.regular.IFido2AppCallbacks;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
@@ -27,7 +27,6 @@ import org.microg.gms.common.PublicApi;
 import org.microg.gms.common.api.PendingGoogleApiCall;
 import org.microg.gms.fido.fido2.Fido2GmsClient;
 import org.microg.gms.fido.fido2.Fido2PendingIntentImpl;
-import org.microg.gms.fido.fido2.Fido2PrivilegedGmsClient;
 
 /**
  * The entry point for interacting with FIDO2 APIs.
@@ -59,7 +58,7 @@ public class Fido2ApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
     public Task<PendingIntent> getRegisterPendingIntent(PublicKeyCredentialCreationOptions requestOptions) {
         return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2GmsClient>) (client, completionSource) -> {
             try {
-                client.getRegisterPendingIntent(new IFido2RegularCallbacks.Stub() {
+                client.getRegisterPendingIntent(new IFido2AppCallbacks.Stub() {
                     @Override
                     public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
                         if (status.isSuccess()) {
@@ -93,7 +92,7 @@ public class Fido2ApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
     public Task<PendingIntent> getSignPendingIntent(PublicKeyCredentialRequestOptions requestOptions) {
         return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2GmsClient>) (client, completionSource) -> {
             try {
-                client.getSignPendingIntent(new IFido2RegularCallbacks.Stub() {
+                client.getSignPendingIntent(new IFido2AppCallbacks.Stub() {
                     @Override
                     public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
                         if (status.isSuccess()) {

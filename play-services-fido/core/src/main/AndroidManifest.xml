@@ -26,7 +26,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".regular.Fido2RegularService"
+            android:name=".regular.Fido2AppService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.fido.fido2.regular.START" />
