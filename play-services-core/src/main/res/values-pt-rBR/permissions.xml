@@ -128,7 +128,6 @@
     <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Scope de linha de tempo de vidro</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Criar, ler, atualizar e deletar rascunhos. Enviar mensagens e rascunhos.</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Todas as operações de ler/escrever, exceto o permanente e imediato excluimento de tópicos e messages, ignorando a Lixeira.</string>
-    <string name="permission_scope_www.googleapis.com_auth_latitude.all.best"></string>
     <string name="permission_scope_www.googleapis.com_auth_mapsengine">Ver e gerir seus dados do Google Maps Engine</string>
     <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">Ver seus dados do Google Maps Engine</string>
     <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Ver e gerir seu Google Maps para experiência mobile</string>
