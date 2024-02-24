@@ -452,6 +452,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                             !pinRequested &&
                             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
                             (
+                                    options.signOptions.requireUserVerification == null ||
                                     options.signOptions.requireUserVerification == REQUIRED ||
                                     options.signOptions.requireUserVerification == PREFERRED
                             )
