@@ -79,7 +79,10 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 RESIDENT_KEY_REQUIRED -> true
                 RESIDENT_KEY_PREFERRED -> connection.hasResidentKey
                 RESIDENT_KEY_DISCOURAGED -> false
-                else -> connection.hasResidentKey
+                else -> when(options.registerOptions.authenticatorSelection?.requireResidentKey) {
+                    false -> false
+                    else -> connection.hasResidentKey
+                }
             },
             when (options.registerOptions.authenticatorSelection?.requireUserVerification) {
                 REQUIRED -> true
@@ -197,24 +200,44 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
         val (response, keyHandle) = when {
             connection.hasCtap2Support -> {
-                var pinToken: ByteArray? = null
-                if (connection.hasClientPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (connection.hasCtap1Support
+                    && options.registerOptions.authenticatorSelection?.residentKeyRequirement == RESIDENT_KEY_DISCOURAGED) {
+                    ctap1register(connection, options, clientDataHash)
+                } else {
+                    var pinToken: ByteArray? = null
+                    val shouldRequestPin = connection.hasClientPin &&
+                            !pinRequested &&
+                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                            (
+                                    options.registerOptions.authenticatorSelection?.requireUserVerification == REQUIRED ||
+                                    options.registerOptions.authenticatorSelection?.requireUserVerification == PREFERRED
+                            )
+                    if (pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        try {
+                            pinToken = ctap2getPinToken(connection, pin)
+                        } catch (e: Ctap2StatusException) {
+                            if (e.status == 0x31.toByte()) {
+                                throw WrongPinException()
+                            } else {
+                                throw e
+                            }
+                        }
+                    } else if (shouldRequestPin) {
+                        throw MissingPinException()
+                    }
+
+                    // Authenticators seem to give a response even without a PIN token, so we'll allow
+                    // the client to call this even without having a PIN token set
                     try {
-                        pinToken = ctap2getPinToken(connection, pin)
+                        ctap2register(connection, options, clientDataHash, pinToken)
                     } catch (e: Ctap2StatusException) {
-                        if (e.status == 0x31.toByte()) {
-                            throw WrongPinException()
+                        if (e.status == 0x36.toByte()) {
+                            throw MissingPinException()
                         } else {
                             throw e
                         }
                     }
-                } else if (connection.hasClientPin && !pinRequested && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    throw MissingPinException()
                 }
-
-                // Authenticators seem to give a response even without a PIN token, so we'll allow
-                // the client to call this even without having a PIN token set
-                ctap2register(connection, options, clientDataHash, pinToken)
             }
             connection.hasCtap1Support -> ctap1register(connection, options, clientDataHash)
             else -> throw IllegalStateException()
@@ -424,9 +447,18 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
             connection.hasCtap2Support -> {
                 try {
                     var pinToken: ByteArray? = null
-                    if (connection.hasClientPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+                    val shouldRequestPin = connection.hasClientPin &&
+                            !pinRequested &&
+                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                            (
+                                    options.signOptions.requireUserVerification == REQUIRED ||
+                                    options.signOptions.requireUserVerification == PREFERRED
+                            )
+
+                    if (pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         pinToken = ctap2getPinToken(connection, pin)
-                    } else if (connection.hasClientPin && !pinRequested && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    } else if (shouldRequestPin) {
                         throw MissingPinException()
                     }
 
@@ -436,6 +468,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 } catch (e: Ctap2StatusException) {
                     if (e.status == 0x31.toByte()) {
                         throw WrongPinException()
+                    } else if (e.status == 0x36.toByte()) {
+                        throw MissingPinException()
                     } else if (e.status == 0x2e.toByte() &&
                         connection.hasCtap1Support && connection.hasClientPin &&
                         options.signOptions.allowList.orEmpty().isNotEmpty() &&
