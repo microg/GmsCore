@@ -284,4 +284,7 @@ This can take a couple of minutes."</string>
     <string name="credentials_assisted_choose_account_subtitle">to continue to %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Sign in with Google</string>
 
+    <string name="minus_dialog_information">You are using the microG Minus services. Unlike the usual microG services, this flavor only works with apps using microG libraries, not those on Google Play. This means that most applications will ignore these services.</string>
+    <string name="minus_dialog_information_ack">I understand</string>
+
 </resources>
