@@ -53,7 +53,7 @@ class Fido2AppService : BaseService(TAG, FIDO2_REGULAR) {
     }
 }
 
-class Fido2AppServiceImpl(private val context: Context, private val lifecycle: Lifecycle) :
+class Fido2AppServiceImpl(private val context: Context, override val lifecycle: Lifecycle) :
     IFido2AppService.Stub(), LifecycleOwner {
     override fun getRegisterPendingIntent(callbacks: IFido2AppCallbacks, options: PublicKeyCredentialCreationOptions) {
         lifecycleScope.launchWhenStarted {
@@ -93,8 +93,6 @@ class Fido2AppServiceImpl(private val context: Context, private val lifecycle: L
             }
         }
     }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
         warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
