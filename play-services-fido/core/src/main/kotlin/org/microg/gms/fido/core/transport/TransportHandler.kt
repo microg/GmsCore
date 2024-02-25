@@ -84,11 +84,17 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                     else -> connection.hasResidentKey
                 }
             },
+
             when (options.registerOptions.authenticatorSelection?.requireUserVerification) {
                 REQUIRED -> true
                 DISCOURAGED -> false
                 else -> connection.hasUserVerificationSupport
             }
+            // According to newer drafts of CTAP2.1, the user verification key MUST NOT be included
+            // if the authenticator is not capable of built-in verification
+                    && connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
+            // The uv flag also MUST NOT be set if there is a pin code present
+                    && pinToken == null
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
@@ -259,6 +265,11 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     ): Pair<AuthenticatorGetAssertionResponse, ByteArray?> {
         val reqOptions = AuthenticatorGetAssertionRequest.Companion.Options(
             userVerification = options.signOptions.requireUserVerification == REQUIRED
+                    // If the connection doesn't support user verification, the platform MUST NOT
+                    // include the uv parameter (according to the CTAP2.1 draft)
+                    && connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
+                    // Platforms MUST NOT include both the uv option parameter and a pin code
+                    && pinToken == null
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
