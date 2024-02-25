@@ -24,6 +24,7 @@ dependencies {
     implementation project(':play-services-ads-identifier-core')
     implementation project(':play-services-ads-lite-core')
     implementation project(':play-services-appinvite-core')
+    implementation project(':play-services-appset-core')
     implementation project(':play-services-auth-api-phone-core')
     implementation project(':play-services-base-core')
     implementation project(':play-services-cast-core')
@@ -36,6 +37,7 @@ dependencies {
     implementation project(':play-services-location-core')
     implementation project(':play-services-location-core-base')
     implementation project(':play-services-oss-licenses-core')
+    implementation project(':play-services-panorama-core')
     implementation project(':play-services-pay-core')
     implementation project(':play-services-recaptcha-core')
     implementation project(':play-services-safetynet-core')
@@ -75,6 +77,9 @@ dependencies {
     implementation "androidx.mediarouter:mediarouter:$mediarouterVersion"
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
     implementation "androidx.webkit:webkit:$webkitVersion"
+
+    // Material Components
+    implementation "com.google.android.material:material:$materialVersion"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"

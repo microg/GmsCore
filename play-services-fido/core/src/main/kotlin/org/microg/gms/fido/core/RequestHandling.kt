@@ -78,7 +78,7 @@ private suspend fun isFacetIdTrusted(context: Context, facetId: String, appId: S
     val trustedFacets = try {
         val deferred = CompletableDeferred<JSONObject>()
         HttpURLConnection.setFollowRedirects(false)
-        Volley.newRequestQueue(context)
+        singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
             .add(JsonObjectRequest(appId, { deferred.complete(it) }, { deferred.completeExceptionally(it) }))
         val obj = deferred.await()
         val arr = obj.getJSONArray("trustedFacets")
@@ -103,7 +103,7 @@ private suspend fun isAssetLinked(context: Context, rpId: String, facetId: Strin
         val deferred = CompletableDeferred<JSONArray>()
         HttpURLConnection.setFollowRedirects(true)
         val url = "https://$rpId/.well-known/assetlinks.json"
-        Volley.newRequestQueue(context)
+        singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
             .add(JsonArrayRequest(url, { deferred.complete(it) }, { deferred.completeExceptionally(it) }))
         val arr = deferred.await()
         for (obj in arr.map(JSONArray::getJSONObject)) {

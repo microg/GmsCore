@@ -32,12 +32,13 @@ import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.utils.singleInstanceOf
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
 
 class AppCertManager(private val context: Context) {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     private fun readDeviceKey() {
         try {

@@ -2,4 +2,6 @@
 <resources>
     <string name="prefcat_droidguard_mode">DroidGuard-Betriebsmodus</string>
     <string name="pref_droidguard_mode_embedded_title">Eingebettet</string>
+    <string name="pref_droidguard_mode_embedded_summary">Lokale DroidGuard-Laufzeit verwenden</string>
+    <string name="pref_droidguard_mode_network_summary">Über das Netzwerk mit der DroidGuard-Laufzeit verbinden</string>
 </resources>

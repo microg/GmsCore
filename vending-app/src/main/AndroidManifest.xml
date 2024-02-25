@@ -9,6 +9,36 @@
         android:name="com.android.vending.CHECK_LICENSE"
         android:protectionLevel="normal" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <uses-permission android:name="org.microg.gms.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
+
+    <uses-permission
+        android:name="android.permission.USE_CREDENTIALS"
+        android:maxSdkVersion="22" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="market" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data
+                android:scheme="https"
+                android:host="market.android.com" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data
+                android:scheme="https"
+                android:host="play.google.com" />
+        </intent>
+    </queries>
+
     <application
         android:forceQueryable="true"
         android:icon="@mipmap/ic_app"
@@ -30,6 +60,7 @@
 
         <service
             android:name="com.android.vending.licensing.LicensingService"
+            android:permission="com.android.vending.CHECK_LICENSE"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.licensing.ILicensingService" />
@@ -55,5 +86,36 @@
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="org.microg.vending.MarketIntentRedirect"
+            android:theme="@style/Theme.Dialog.NoActionBar"
+            android:exported="true">
+            <intent-filter android:priority="-100">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="market" />
+            </intent-filter>
+            <intent-filter android:priority="-100">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="play.google.com" />
+                <data android:host="market.android.com" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$IgnoreReceiver"
+            android:exported="false" />
+        <receiver
+            android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$SignInReceiver"
+            android:exported="false" />
+
     </application>
 </manifest>

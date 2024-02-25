@@ -31,4 +31,22 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
+
+    <declare-styleable name="PreferenceTheme">
+        <attr format="reference" name="switchBarPreferenceStyle"/>
+    </declare-styleable>
+
+    <declare-styleable name="SwitchBarPreference">
+        <attr format="reference" name="switchBarFrameId" />
+        <attr format="reference" name="switchBarFrameBackgroundOn" />
+        <attr format="reference" name="switchBarFrameBackgroundOff" />
+        <attr format="reference" name="switchBarFrameBackgroundDisabled" />
+    </declare-styleable>
+
+    <style name="Preference.SwitchBar">
+        <item name="layout">@layout/preference_switch_bar</item>
+        <item name="switchBarFrameBackgroundOn">?attr/colorControlActivated</item>
+        <item name="switchBarFrameBackgroundOff">?attr/colorButtonNormal</item>
+        <item name="switchBarFrameBackgroundDisabled">?attr/colorControlHighlight</item>
+    </style>
 </resources>

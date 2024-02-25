@@ -215,13 +215,15 @@ class AuthSignInActivity : AppCompatActivity() {
                 )
             }
             data.putExtra(AuthConstants.SIGN_IN_ACCOUNT, signInAccount)
-            val credential = SignInCredential().apply {
-                email = googleSignInAccount.email
-                displayName = googleSignInAccount.displayName
-                familyName = googleSignInAccount.familyName
-                givenName = googleSignInAccount.givenName
-                idToken = googleSignInAccount.idToken
-            }
+            val credential = SignInCredential(
+                googleSignInAccount.email,
+                googleSignInAccount.displayName,
+                googleSignInAccount.familyName,
+                googleSignInAccount.givenName,
+                null, null,
+                googleSignInAccount.idToken,
+                null, null
+            )
             val credentialToBytes = SafeParcelableSerializer.serializeToBytes(credential)
             bundle.putByteArray(AuthConstants.SIGN_IN_CREDENTIAL, credentialToBytes)
             bundle.putByteArray(AuthConstants.STATUS, SafeParcelableSerializer.serializeToBytes(Status.SUCCESS))
