@@ -32,14 +32,13 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.USER_GMS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_MINUS_PACKAGE_NAME;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConKeeper";
@@ -79,21 +78,21 @@ public class MultiConnectionKeeper {
                 Log.d(TAG, GMS_PACKAGE_NAME + " found !");
                 return GMS_PACKAGE_NAME;
             } else {
-                Log.w(TAG, USER_GMS_PACKAGE_NAME + " found with another name: " + name);
+                Log.w(TAG, GMS_MINUS_PACKAGE_NAME + " found with another name: " + name);
             }
         } catch (PackageManager.NameNotFoundException e) {
             Log.d(TAG, GMS_PACKAGE_NAME + " not found");
         }
         try {
-            String name = getApplicationName(USER_GMS_PACKAGE_NAME);
+            String name = getApplicationName(GMS_MINUS_PACKAGE_NAME);
             if (name.contains("microG")) {
-                Log.d(TAG, USER_GMS_PACKAGE_NAME + " found !");
-                return USER_GMS_PACKAGE_NAME;
+                Log.d(TAG, GMS_MINUS_PACKAGE_NAME + " found !");
+                return GMS_MINUS_PACKAGE_NAME;
             } else {
-                Log.w(TAG, USER_GMS_PACKAGE_NAME + " found with another name: " + name);
+                Log.w(TAG, GMS_MINUS_PACKAGE_NAME + " found with another name: " + name);
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.d(TAG, USER_GMS_PACKAGE_NAME + " not found");
+            Log.d(TAG, GMS_MINUS_PACKAGE_NAME + " not found");
         }
         return null;
     }
@@ -105,7 +104,7 @@ public class MultiConnectionKeeper {
         if ((target = prefs.getString(PREF_TARGET, null)) != null) {
             switch (target) {
                 case GMS_PACKAGE_NAME:
-                case USER_GMS_PACKAGE_NAME:
+                case GMS_MINUS_PACKAGE_NAME:
                     return target;
                 case SELF:
                     return null;
