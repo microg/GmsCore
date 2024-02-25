@@ -5,7 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services</string>
-    <string name="gms_user_app_name">microG User Services</string>
+    <string name="gms_minus_app_name">microG Minus Services</string>
     <string name="gms_settings_name">microG Settings</string>
     <string name="gms_settings_summary">Setup microG services.</string>
 
