@@ -167,7 +167,7 @@ android {
             dimension 'target'
             applicationId = "org.microg.gms"
             versionNameSuffix "-user"
-            manifestPlaceholders = [appLabel:"@string/gms_user_app_name"]
+            manifestPlaceholders = [appLabel:"@string/gms_minus_app_name"]
             matchingFallbacks = ['default']
             resValue "string", "package_id", "org.microg.gms"
         }
