@@ -74,10 +74,10 @@ class IdentitySignInServiceImpl(private val mContext: Context, private val clien
         callback.onResult(Status.CANCELED, null)
     }
 
-    private fun performSignIn(serviceClientId: String): PendingIntent {
+    private fun performSignIn(serverClientId: String): PendingIntent {
         val signInConfiguration = SignInConfiguration().apply {
             options = GoogleSignInOptions.Builder()
-                .requestIdToken(serviceClientId)
+                .requestIdToken(serverClientId)
                 .requestId()
                 .requestEmail()
                 .requestProfile()
