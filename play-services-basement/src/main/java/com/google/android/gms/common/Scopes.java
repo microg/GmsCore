@@ -94,4 +94,6 @@ public class Scopes {
     public static final String USERINFO_EMAIL = "https://www.googleapis.com/auth/userinfo.email";
     @Hide
     public static final String USERINFO_PROFILE = "https://www.googleapis.com/auth/userinfo.profile";
+    @Hide
+    public static final String USER_BIRTHDAY_READ = "https://www.googleapis.com/auth/user.birthday.read";
 }

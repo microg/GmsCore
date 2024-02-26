@@ -43,7 +43,15 @@ import org.microg.gms.utils.getApplicationLabel
 private const val TAG = "AuthSignInActivity"
 private const val REQUEST_CODE_ADD_ACCOUNT = 100
 
-private val ACCEPTABLE_SCOPES = setOf(Scopes.OPENID, Scopes.EMAIL, Scopes.PROFILE, Scopes.USERINFO_EMAIL, Scopes.USERINFO_PROFILE, Scopes.GAMES_LITE)
+private val ACCEPTABLE_SCOPES = setOf(
+    Scopes.OPENID,
+    Scopes.EMAIL,
+    Scopes.PROFILE,
+    Scopes.USERINFO_EMAIL,
+    Scopes.USERINFO_PROFILE,
+    Scopes.GAMES_LITE,
+    Scopes.USER_BIRTHDAY_READ
+)
 
 /**
  * TODO: Get privacy policy / terms of service links via
