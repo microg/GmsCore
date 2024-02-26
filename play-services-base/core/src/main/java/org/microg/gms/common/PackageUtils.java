@@ -77,6 +77,8 @@ public class PackageUtils {
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.recorder", "394d84cd2cf89d3453702c663f98ec6554afc3cd");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.messaging", "0980a12be993528c19107bc21ad811478c63cefc");
         KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.tachyon", "a0bc09af527b6397c7a9ef171d6cf76f757becc3");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.fiber.myfiber", "1058cb8814b79551a4cb5c1798bdc4add2745e96");
+        KNOWN_GOOGLE_PACKAGES.put("com.google.android.apps.access.wifi.consumer", "d850379540d68fbec82a742ab6a8321a3f9a4c7c");
     }
 
     public static boolean isGooglePackage(Context context, String packageName) {
