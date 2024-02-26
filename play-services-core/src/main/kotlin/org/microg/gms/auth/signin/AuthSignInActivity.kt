@@ -50,7 +50,8 @@ private val ACCEPTABLE_SCOPES = setOf(
     Scopes.USERINFO_EMAIL,
     Scopes.USERINFO_PROFILE,
     Scopes.GAMES_LITE,
-    Scopes.USER_BIRTHDAY_READ
+    Scopes.USER_BIRTHDAY_READ,
+    Scopes.GMAIL_READONLY,
 )
 
 /**
