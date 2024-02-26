@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest
 import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
 import com.google.android.gms.auth.api.identity.internal.IBeginSignInCallback
@@ -48,8 +49,8 @@ class IdentitySignInService : BaseService(TAG, GmsService.IDENTITY_SIGN_IN) {
 class IdentitySignInServiceImpl(private val mContext: Context, private val clientPackageName: String) :
     ISignInService.Stub() {
     override fun beginSignIn(callback: IBeginSignInCallback, request: BeginSignInRequest) {
-        Log.d(TAG, "method 'beginSignIn' not fully implemented, return status is CANCELED")
-        callback.onResult(Status.CANCELED, null)
+        Log.d(TAG, "method 'beginSignIn' return status is SUCCESS")
+        callback.onResult(Status.SUCCESS, BeginSignInResult(performSignIn(request.googleIdTokenRequestOptions.serverClientId)))
     }
 
     override fun signOut(callback: IStatusCallback, requestTag: String) {
@@ -61,9 +62,22 @@ class IdentitySignInServiceImpl(private val mContext: Context, private val clien
         callback: IGetSignInIntentCallback,
         request: GetSignInIntentRequest
     ) {
+        Log.d(TAG, "method 'getSignInIntent' return status is SUCCESS")
+        callback.onResult(Status.SUCCESS, performSignIn(request.serverClientId))
+    }
+
+    override fun getPhoneNumberHintIntent(
+        callback: IGetPhoneNumberHintIntentCallback,
+        request: GetPhoneNumberHintIntentRequest
+    ) {
+        Log.w(TAG, "method 'getPhoneNumberHintIntent' not fully implemented, return status is CANCELED.")
+        callback.onResult(Status.CANCELED, null)
+    }
+
+    private fun performSignIn(serverClientId: String): PendingIntent {
         val signInConfiguration = SignInConfiguration().apply {
             options = GoogleSignInOptions.Builder()
-                .requestIdToken(request.serverClientId)
+                .requestIdToken(serverClientId)
                 .requestId()
                 .requestEmail()
                 .requestProfile()
@@ -75,15 +89,7 @@ class IdentitySignInServiceImpl(private val mContext: Context, private val clien
             putExtra("config", signInConfiguration)
         }
         val flags = PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
-        val activity = PendingIntent.getActivity(mContext, 0, intent, flags)
-        callback.onResult(Status.SUCCESS, activity)
+        return PendingIntent.getActivity(mContext, 0, intent, flags)
     }
 
-    override fun getPhoneNumberHintIntent(
-        callback: IGetPhoneNumberHintIntentCallback,
-        request: GetPhoneNumberHintIntentRequest
-    ) {
-        Log.w(TAG, "method 'getPhoneNumberHintIntent' not fully implemented, return status is CANCELED.")
-        callback.onResult(Status.CANCELED, null)
-    }
 }
