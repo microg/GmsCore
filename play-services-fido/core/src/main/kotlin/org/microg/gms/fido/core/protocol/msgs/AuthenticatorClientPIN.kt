@@ -37,6 +37,18 @@ class AuthenticatorClientPINRequest(
                 "newPinEnc=${newPinEnc?.contentToString()}, " +
                 "pinHashEnc=${pinHashEnc?.contentToString()})"
     }
+
+    companion object {
+        // PIN protocol versions
+        const val PIN_PROTOCOL_VERSION_ONE = 0x01
+
+        // PIN subcommands
+        const val GET_RETRIES = 0x01
+        const val GET_KEY_AGREEMENT = 0x02
+        const val SET_PIN = 0x03
+        const val CHANGE_PIN = 0x04
+        const val GET_PIN_TOKEN = 0x05
+    }
 }
 
 class AuthenticatorClientPINResponse(

@@ -71,31 +71,26 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         connection: CtapConnection,
         options: RequestOptions,
         clientDataHash: ByteArray,
+        requireResidentKey: Boolean,
+        requireUserVerification: Boolean,
         pinToken: ByteArray? = null
     ): Pair<AuthenticatorMakeCredentialResponse, ByteArray?> {
-        connection.capabilities
-        val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
-            when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
-                RESIDENT_KEY_REQUIRED -> true
-                RESIDENT_KEY_PREFERRED -> connection.hasResidentKey
-                RESIDENT_KEY_DISCOURAGED -> false
-                else -> when(options.registerOptions.authenticatorSelection?.requireResidentKey) {
-                    false -> false
-                    else -> connection.hasResidentKey
-                }
-            },
 
-            when (options.registerOptions.authenticatorSelection?.requireUserVerification) {
-                REQUIRED -> true
-                DISCOURAGED -> false
-                else -> connection.hasUserVerificationSupport
-            }
-            // According to newer drafts of CTAP2.1, the user verification key MUST NOT be included
-            // if the authenticator is not capable of built-in verification
-                    && connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
-            // The uv flag also MUST NOT be set if there is a pin code present
-                    && pinToken == null
+        // The CTAP2 spec states that the requireUserVerification option from WebAuthn should map
+        // to the "uv" option OR the pinAuth/pinProtocl options in the CTAP standard.
+        // https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html#authenticatorGetInfo
+        // Later drafts of the standard are much more explicit about this, and state that platforms
+        // MUST NOT include the "uv" option key if the authenticator does not support built-in
+        // verification, and that they MUST NOT include both the "uv" option key and the pinUvAuth
+        // parameter in the same request
+        // https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html#authenticatorMakeCredential
+        val ctap2RequireVerification = requireUserVerification && (pinToken == null)
+
+        val reqOptions = AuthenticatorMakeCredentialRequest.Companion.Options(
+            requireResidentKey,
+            ctap2RequireVerification
         )
+
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
             extensions["appidExclude"] =
@@ -204,44 +199,56 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         pin: String?
     ): AuthenticatorAttestationResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
+
+        val authenticatorCapableOfResidentKeys = (connection.capabilities and CAPABILITY_RESIDENT_KEY != 0)
+        val requireResidentKey = when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
+            RESIDENT_KEY_REQUIRED -> true
+            RESIDENT_KEY_PREFERRED -> authenticatorCapableOfResidentKeys
+            RESIDENT_KEY_DISCOURAGED -> false
+            // If residentKeyRequirement is not set, use the value for requireResidentKey
+            // Default value for requireResidentKey is false
+            else -> options.registerOptions.authenticatorSelection?.requireResidentKey == true
+        }
+
+        val hasBuiltInUserVerification = connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
+        val requireUserVerification = when(options.registerOptions.authenticatorSelection?.requireUserVerification) {
+            REQUIRED -> true
+            DISCOURAGED -> false
+            // PREFERRED is the default, according to the standard
+            // https://www.w3.org/TR/webauthn-3/#dom-authenticatorselectioncriteria-userverification
+            // If preferred, only return true if connection is capable of user verification
+            else -> connection.hasClientPin || hasBuiltInUserVerification
+        }
+        // If the authenticator has a built-in verification method, let that take precedence over
+        // client PIN
+        val requiresPin = requireUserVerification  && !hasBuiltInUserVerification && connection.hasClientPin
+
         val (response, keyHandle) = when {
-            connection.hasCtap2Support -> {
-                if (connection.hasCtap1Support
-                    && options.registerOptions.authenticatorSelection?.residentKeyRequirement == RESIDENT_KEY_DISCOURAGED) {
-                    ctap1register(connection, options, clientDataHash)
-                } else {
+            connection.hasCtap2Support && (requireResidentKey || requiresPin) -> {
+                try {
                     var pinToken: ByteArray? = null
-                    val shouldRequestPin = connection.hasClientPin &&
-                            !pinRequested &&
-                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                            (
-                                    options.registerOptions.authenticatorSelection?.requireUserVerification == REQUIRED ||
-                                    options.registerOptions.authenticatorSelection?.requireUserVerification == PREFERRED
-                            )
-                    if (pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        try {
-                            pinToken = ctap2getPinToken(connection, pin)
-                        } catch (e: Ctap2StatusException) {
-                            if (e.status == 0x31.toByte()) {
-                                throw WrongPinException()
-                            } else {
-                                throw e
-                            }
-                        }
-                    } else if (shouldRequestPin) {
+
+                    // If we previously requested a pin and the user cancelled it (ie. pinRequested
+                    // is true and pin is still null), don't throw the exception, and pass the request
+                    // to the authenticator without a pin.
+                    if (requiresPin && !pinRequested && pin == null) {
                         throw MissingPinException()
+                    }
+
+                    if (requiresPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        pinToken = ctap2getPinToken(connection, pin)
                     }
 
                     // Authenticators seem to give a response even without a PIN token, so we'll allow
                     // the client to call this even without having a PIN token set
-                    try {
-                        ctap2register(connection, options, clientDataHash, pinToken)
-                    } catch (e: Ctap2StatusException) {
-                        if (e.status == 0x36.toByte()) {
-                            throw MissingPinException()
-                        } else {
-                            throw e
-                        }
+                    ctap2register(connection, options, clientDataHash, requireResidentKey, requireUserVerification, pinToken)
+                } catch (e: Ctap2StatusException) {
+                    if (e.status == 0x36.toByte()) {
+                        throw MissingPinException()
+                    } else if (e.status == 0x31.toByte()) {
+                        throw WrongPinException()
+                    } else {
+                        throw e
                     }
                 }
             }
@@ -261,15 +268,14 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         connection: CtapConnection,
         options: RequestOptions,
         clientDataHash: ByteArray,
+        requireUserVerification: Boolean,
         pinToken: ByteArray? = null
     ): Pair<AuthenticatorGetAssertionResponse, ByteArray?> {
         val reqOptions = AuthenticatorGetAssertionRequest.Companion.Options(
-            userVerification = options.signOptions.requireUserVerification == REQUIRED
-                    // If the connection doesn't support user verification, the platform MUST NOT
-                    // include the uv parameter (according to the CTAP2.1 draft)
-                    && connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
-                    // Platforms MUST NOT include both the uv option parameter and a pin code
-                    && pinToken == null
+            // The specification states that the WebAuthn requireUserVerification option should map to
+            // the CTAP2 "uv" flag OR pinAuth/pinProtocol. Therefore, set this flag to false if
+            // a pinToken is present
+            userVerification = requireUserVerification && (pinToken == null)
         )
         val extensions = mutableMapOf<String, CBORObject>()
         if (options.authenticationExtensions?.fidoAppIdExtension?.appId != null) {
@@ -310,8 +316,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     ): ByteArray? {
         // Ask for shared secret from authenticator
         val sharedSecretRequest = AuthenticatorClientPINRequest(
-            0x01,
-            0x02
+            AuthenticatorClientPINRequest.PIN_PROTOCOL_VERSION_ONE,
+            AuthenticatorClientPINRequest.GET_KEY_AGREEMENT
         )
         val sharedSecretResponse = connection.runCommand(AuthenticatorClientPINCommand(sharedSecretRequest))
 
@@ -379,8 +385,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         )
 
         val pinTokenRequest = AuthenticatorClientPINRequest(
-            1,
-            5,
+            AuthenticatorClientPINRequest.PIN_PROTOCOL_VERSION_ONE,
+            AuthenticatorClientPINRequest.GET_PIN_TOKEN,
             coseKey,
             pinHashEnc = pinHashEnc
         )
@@ -454,29 +460,41 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         pin: String?
     ): AuthenticatorAssertionResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
+
         val (response, credentialId) = when {
             connection.hasCtap2Support -> {
                 try {
                     var pinToken: ByteArray? = null
 
-                    val shouldRequestPin = connection.hasClientPin &&
-                            !pinRequested &&
-                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                            (
-                                    options.signOptions.requireUserVerification == null ||
-                                    options.signOptions.requireUserVerification == REQUIRED ||
-                                    options.signOptions.requireUserVerification == PREFERRED
-                            )
+                    val hasBuiltInUserVerification = connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
+                    val requireUserVerification = when(options.signOptions.requireUserVerification) {
+                        REQUIRED -> true
+                        DISCOURAGED -> false
+                        // PREFERRED is the default, according to the standard
+                        // https://www.w3.org/TR/webauthn-3/#dom-authenticatorselectioncriteria-userverification
+                        else -> {
+                            // If preferred, only return true if connection is capable of user verification
+                            connection.hasClientPin || hasBuiltInUserVerification
+                        }
+                    }
+                    // If the authenticator has built in user verification, let that take precedence
+                    // over PIN verification
+                    val requiresPin = requireUserVerification && !hasBuiltInUserVerification && connection.hasClientPin
 
-                    if (pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        pinToken = ctap2getPinToken(connection, pin)
-                    } else if (shouldRequestPin) {
+                    // If we require a PIN, throw an exception up to the AuthenticatorActivity
+                    // However, if we've already asked the user for a PIN and the user cancelled
+                    // (ie. pinRequested is true), continue without asking
+                    if (requiresPin && !pinRequested && pin == null) {
                         throw MissingPinException()
+                    }
+
+                    if (requiresPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        pinToken = ctap2getPinToken(connection, pin)
                     }
 
                     // Authenticators seem to give a response even without a PIN token, so we'll allow
                     // the client to call this even without having a PIN token set
-                    ctap2sign(connection, options, clientDataHash, pinToken)
+                    ctap2sign(connection, options, clientDataHash, requireUserVerification, pinToken)
                 } catch (e: Ctap2StatusException) {
                     if (e.status == 0x31.toByte()) {
                         throw WrongPinException()
