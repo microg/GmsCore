@@ -83,11 +83,13 @@ object SettingsContract {
         const val TRUST_GOOGLE = "auth_manager_trust_google"
         const val VISIBLE = "auth_manager_visible"
         const val INCLUDE_ANDROID_ID = "auth_include_android_id"
+        const val STRIP_DEVICE_NAME = "auth_strip_device_name"
 
         val PROJECTION = arrayOf(
             TRUST_GOOGLE,
             VISIBLE,
             INCLUDE_ANDROID_ID,
+            STRIP_DEVICE_NAME,
         )
     }
 

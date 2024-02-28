@@ -27,4 +27,11 @@ object AuthPrefs {
         }
     }
 
+    @JvmStatic
+    fun shouldStripDeviceName(context: Context): Boolean {
+        return SettingsContract.getSettings(context, Auth.getContentUri(context), arrayOf(Auth.STRIP_DEVICE_NAME)) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
 }
