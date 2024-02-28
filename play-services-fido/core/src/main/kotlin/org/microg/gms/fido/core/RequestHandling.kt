@@ -28,6 +28,14 @@ class MissingPinException(message: String? = null): Exception(message)
 class WrongPinException(message: String? = null): Exception(message)
 
 enum class RequestOptionsType { REGISTER, SIGN }
+class UserInfo(
+    val name: String,
+    val displayName: String? = null,
+    val icon: String? = null
+)
+class AuthenticatorResponseWrapper (
+    val responseChoices: List<Pair<UserInfo?, suspend () -> AuthenticatorResponse>>
+)
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions
     get() = when (this) {
@@ -150,11 +158,6 @@ private suspend fun isAppIdAllowed(context: Context, appId: String, facetId: Str
 }
 
 suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packageName: String?) {
-    if (type == SIGN) {
-        if (signOptions.allowList.isNullOrEmpty()) {
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "Request doesn't have a valid list of allowed credentials.")
-        }
-    }
     if (facetId.startsWith("https://")) {
         if (topDomainOf(Uri.parse(facetId).host) != topDomainOf(rpId)) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $facetId")
