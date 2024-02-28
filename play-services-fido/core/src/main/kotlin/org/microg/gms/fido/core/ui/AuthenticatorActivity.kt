@@ -218,7 +218,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
     suspend fun finishWithSuccessResponse(responseWrapper: AuthenticatorResponseWrapper, transport: Transport) {
         if (responseWrapper.responseChoices.size != 1) {
-            val bundle = bundleOf("responseChoices" to responseWrapper.responseChoices, "transport" to transport)
+            val bundle = bundleOf("responseWrapper" to responseWrapper, "transport" to transport)
             navHostFragment.navController.navigate(R.id.openCredentialSelector, bundle)
             return
         }

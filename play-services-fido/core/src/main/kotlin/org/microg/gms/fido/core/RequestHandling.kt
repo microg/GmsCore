@@ -7,6 +7,7 @@ package org.microg.gms.fido.core
 
 import android.content.Context
 import android.net.Uri
+import android.os.Parcelable
 import android.util.Base64
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
@@ -15,6 +16,7 @@ import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import com.google.common.net.InternetDomainName
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.fido.core.RequestOptionsType.REGISTER
@@ -33,9 +35,12 @@ class UserInfo(
     val displayName: String? = null,
     val icon: String? = null
 )
+
+@Parcelize
 class AuthenticatorResponseWrapper (
-    val responseChoices: List<Pair<UserInfo?, suspend () -> AuthenticatorResponse>>
-)
+    val responseChoices: List<Pair<UserInfo?, suspend () -> AuthenticatorResponse>>,
+    val deleteFunctions: List<() -> Unit> = listOf()
+) : Parcelable
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions
     get() = when (this) {

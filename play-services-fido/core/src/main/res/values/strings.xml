@@ -31,4 +31,5 @@
     <string name="fido_wrong_pin">Wrong PIN entered!</string>
     <string name="unknown_credential">Unknown credential</string>
     <string name="credential_icon_description">Credential icon</string>
+    <string name="fido_delete_credential">Delete</string>
 </resources>
