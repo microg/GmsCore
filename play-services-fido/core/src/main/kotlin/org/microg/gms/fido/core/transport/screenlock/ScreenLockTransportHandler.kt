@@ -220,7 +220,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     suspend fun sign(
         options: RequestOptions,
         callerPackage: String
-    ): List<Pair<UserInfo?, suspend () -> AuthenticatorAssertionResponse>> {
+    ): Pair<List<Pair<UserInfo?,suspend () -> AuthenticatorAssertionResponse>>, List<() -> Unit>> {
         if (options.type != RequestOptionsType.SIGN) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         val candidates = mutableListOf<CredentialId>()
         for (descriptor in options.signOptions.allowList.orEmpty()) {
@@ -266,6 +266,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         val (clientData, clientDataHash) = getClientDataAndHash(activity, options, callerPackage)
 
         val credentialList = ArrayList<Pair<UserInfo?, suspend () -> AuthenticatorAssertionResponse>>()
+        val deleteFunctions = ArrayList<() -> Unit>()
 
         for (credentialId in candidates) {
             val keyId = credentialId.data
@@ -286,17 +287,25 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
                 )
             }
 
+            val deleteFunction = {
+                store.deleteKey(options.rpId, keyId)
+            }
+
             credentialList.add(userInfo to responseCallable)
+            deleteFunctions.add(deleteFunction)
         }
 
-        return credentialList
+        return credentialList to deleteFunctions
     }
 
     @RequiresApi(24)
     override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponseWrapper =
         when (options.type) {
             RequestOptionsType.REGISTER -> AuthenticatorResponseWrapper(listOf(Pair(null, register(options, callerPackage))))
-            RequestOptionsType.SIGN -> AuthenticatorResponseWrapper(sign(options, callerPackage))
+            RequestOptionsType.SIGN -> {
+                val (responseChoices, deleteFunctions) = sign(options, callerPackage)
+                AuthenticatorResponseWrapper(responseChoices, deleteFunctions)
+            }
         }
 
     override fun shouldBeUsedInstantly(options: RequestOptions): Boolean {

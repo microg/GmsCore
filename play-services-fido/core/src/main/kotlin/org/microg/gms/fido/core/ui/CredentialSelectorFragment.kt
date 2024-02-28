@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
@@ -20,13 +22,17 @@ import org.microg.gms.fido.core.databinding.FidoCredentialSelectorFragmentBindin
 import org.microg.gms.fido.core.databinding.FidoCredentialSelectorListItemBinding
 import org.microg.gms.fido.core.transport.Transport
 
-class CredentialListAdapter(private val responseChoices: List<Pair<UserInfo?, suspend () -> AuthenticatorResponse>>, private val listSelectionFunction: (suspend () -> AuthenticatorResponse) -> Unit) : BaseAdapter() {
+class CredentialListAdapter(
+    private val responseWrapper: AuthenticatorResponseWrapper,
+    private val listSelectionFunction: (suspend () -> AuthenticatorResponse) -> Unit,
+    private val deleteCredentialFunction: (() -> Unit) -> Unit
+    ) : BaseAdapter() {
     override fun getCount(): Int {
-        return responseChoices.size
+        return responseWrapper.responseChoices.size
     }
 
     override fun getItem(position: Int): Pair<UserInfo?, suspend () -> AuthenticatorResponse> {
-        return responseChoices[position]
+        return responseWrapper.responseChoices[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -53,6 +59,15 @@ class CredentialListAdapter(private val responseChoices: List<Pair<UserInfo?, su
             listSelectionFunction(function)
         }
 
+        if (responseWrapper.deleteFunctions.size == responseWrapper.responseChoices.size) {
+            val deleteButton = view.findViewById<Button>(R.id.deleteCredentialButton)
+            deleteButton.visibility = View.VISIBLE
+
+            binding.onDeleteCredential = View.OnClickListener {
+                deleteCredentialFunction(responseWrapper.deleteFunctions[position])
+            }
+        }
+
         return view
     }
 
@@ -71,8 +86,8 @@ class CredentialSelectorFragment : AuthenticatorActivityFragment() {
         binding = FidoCredentialSelectorFragmentBinding.inflate(inflater, container, false)
 
         transport = arguments?.get("transport") as Transport
-        val responseChoices = arguments?.get("responseChoices") as List<Pair<UserInfo?, suspend () -> AuthenticatorResponse>>
-        val adapter = CredentialListAdapter(responseChoices, this::onListSelection)
+        val responseWrapper = arguments?.get("responseWrapper") as AuthenticatorResponseWrapper
+        val adapter = CredentialListAdapter(responseWrapper, this::onListSelection, this::credentialDeletion)
         binding.fidoCredentialListView.adapter = adapter
 
         return binding.root
@@ -95,4 +110,13 @@ class CredentialSelectorFragment : AuthenticatorActivityFragment() {
         }
     }
 
+    fun credentialDeletion(deleteFunction: () -> Unit) {
+        deleteFunction.invoke()
+        if (!findNavController().navigateUp()) {
+            findNavController().navigate(
+                R.id.transportSelectionFragment,
+                arguments,
+                navOptions { popUpTo(R.id.usbFragment) { inclusive = true } })
+        }
+    }
 }

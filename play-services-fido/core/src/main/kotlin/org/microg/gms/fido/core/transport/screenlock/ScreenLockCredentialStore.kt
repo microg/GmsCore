@@ -111,6 +111,10 @@ class ScreenLockCredentialStore(val context: Context) : SQLiteOpenHelper(context
         return keys
     }
 
+    fun deleteKey(rpId:String, keyId: ByteArray) {
+        keyStore.deleteEntry(getAlias(rpId, keyId))
+    }
+
     fun clearInvalidatedKeys() {
         // Iterate through the keys, try to initiate them, and delete them if this throws an
         // invalidated exception
