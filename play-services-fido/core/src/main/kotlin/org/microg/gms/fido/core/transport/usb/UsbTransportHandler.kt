@@ -84,7 +84,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         iface: UsbInterface,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAttestationResponse {
+    ): suspend () -> AuthenticatorAttestationResponse {
         return CtapHidConnection(context, device, iface).open {
             register(it, context, options, callerPackage, pinRequested, pin)
         }
@@ -97,7 +97,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         iface: UsbInterface,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorAssertionResponse {
+    ): List<Pair<UserInfo?, suspend () -> AuthenticatorAssertionResponse>> {
         return CtapHidConnection(context, device, iface).open {
             sign(it, context, options, callerPackage, pinRequested, pin)
         }
@@ -126,22 +126,22 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         iface: UsbInterface,
         pinRequested: Boolean,
         pin: String?
-    ): AuthenticatorResponse {
+    ): AuthenticatorResponseWrapper {
         Log.d(TAG, "Trying to use ${device.productName} for ${options.type}")
         invokeStatusChanged(
             TransportHandlerCallback.STATUS_WAITING_FOR_USER,
             Bundle().apply { putParcelable(UsbManager.EXTRA_DEVICE, device) })
         try {
             return when (options.type) {
-                RequestOptionsType.REGISTER -> register(options, callerPackage, device, iface, pinRequested, pin)
-                RequestOptionsType.SIGN -> sign(options, callerPackage, device, iface, pinRequested, pin)
+                RequestOptionsType.REGISTER -> AuthenticatorResponseWrapper(listOf(Pair(null, register(options, callerPackage, device, iface, pinRequested, pin))))
+                RequestOptionsType.SIGN -> AuthenticatorResponseWrapper(sign(options, callerPackage, device, iface, pinRequested, pin))
             }
         } finally {
             this.device = null
         }
     }
 
-    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponse {
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponseWrapper {
         for (device in context.usbManager?.deviceList?.values.orEmpty()) {
             val iface = getCtapHidInterface(device) ?: continue
             try {
