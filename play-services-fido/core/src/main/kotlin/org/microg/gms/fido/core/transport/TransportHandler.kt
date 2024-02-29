@@ -200,28 +200,26 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
     ): AuthenticatorAttestationResponse {
         val (clientData, clientDataHash) = getClientDataAndHash(context, options, callerPackage)
 
-        val authenticatorCapableOfResidentKeys = (connection.capabilities and CAPABILITY_RESIDENT_KEY != 0)
         val requireResidentKey = when (options.registerOptions.authenticatorSelection?.residentKeyRequirement) {
             RESIDENT_KEY_REQUIRED -> true
-            RESIDENT_KEY_PREFERRED -> authenticatorCapableOfResidentKeys
+            RESIDENT_KEY_PREFERRED -> connection.hasResidentKey
             RESIDENT_KEY_DISCOURAGED -> false
             // If residentKeyRequirement is not set, use the value for requireResidentKey
             // Default value for requireResidentKey is false
             else -> options.registerOptions.authenticatorSelection?.requireResidentKey == true
         }
 
-        val hasBuiltInUserVerification = connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
         val requireUserVerification = when(options.registerOptions.authenticatorSelection?.requireUserVerification) {
             REQUIRED -> true
             DISCOURAGED -> false
             // PREFERRED is the default, according to the standard
             // https://www.w3.org/TR/webauthn-3/#dom-authenticatorselectioncriteria-userverification
             // If preferred, only return true if connection is capable of user verification
-            else -> connection.hasClientPin || hasBuiltInUserVerification
+            else -> connection.hasClientPin || connection.hasUserVerificationSupport
         }
         // If the authenticator has a built-in verification method, let that take precedence over
         // client PIN
-        val requiresPin = requireUserVerification  && !hasBuiltInUserVerification && connection.hasClientPin
+        val requiresPin = requireUserVerification  && !connection.hasUserVerificationSupport && connection.hasClientPin
 
         val (response, keyHandle) = when {
             connection.hasCtap2Support && (requireResidentKey || requiresPin) -> {
@@ -466,7 +464,6 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                 try {
                     var pinToken: ByteArray? = null
 
-                    val hasBuiltInUserVerification = connection.capabilities and CAPABILITY_USER_VERIFICATION != 0
                     val requireUserVerification = when(options.signOptions.requireUserVerification) {
                         REQUIRED -> true
                         DISCOURAGED -> false
@@ -474,12 +471,12 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                         // https://www.w3.org/TR/webauthn-3/#dom-authenticatorselectioncriteria-userverification
                         else -> {
                             // If preferred, only return true if connection is capable of user verification
-                            connection.hasClientPin || hasBuiltInUserVerification
+                            connection.hasClientPin || connection.hasUserVerificationSupport
                         }
                     }
                     // If the authenticator has built in user verification, let that take precedence
                     // over PIN verification
-                    val requiresPin = requireUserVerification && !hasBuiltInUserVerification && connection.hasClientPin
+                    val requiresPin = requireUserVerification && !connection.hasUserVerificationSupport && connection.hasClientPin
 
                     // If we require a PIN, throw an exception up to the AuthenticatorActivity
                     // However, if we've already asked the user for a PIN and the user cancelled
