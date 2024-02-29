@@ -25,8 +25,8 @@ import org.microg.gms.fido.core.transport.Transport
 class CredentialListAdapter(
     private val responseWrapper: AuthenticatorResponseWrapper,
     private val listSelectionFunction: (suspend () -> AuthenticatorResponse) -> Unit,
-    private val deleteCredentialFunction: (() -> Unit) -> Unit
-    ) : BaseAdapter() {
+    private val deleteCredentialFunction: (suspend () -> Boolean) -> Unit
+) : BaseAdapter() {
     override fun getCount(): Int {
         return responseWrapper.responseChoices.size
     }
@@ -70,7 +70,6 @@ class CredentialListAdapter(
 
         return view
     }
-
 }
 
 class CredentialSelectorFragment : AuthenticatorActivityFragment() {
@@ -110,13 +109,17 @@ class CredentialSelectorFragment : AuthenticatorActivityFragment() {
         }
     }
 
-    fun credentialDeletion(deleteFunction: () -> Unit) {
-        deleteFunction.invoke()
-        if (!findNavController().navigateUp()) {
-            findNavController().navigate(
-                R.id.transportSelectionFragment,
-                arguments,
-                navOptions { popUpTo(R.id.usbFragment) { inclusive = true } })
+    fun credentialDeletion(deleteFunction: suspend () -> Boolean) {
+        binding.fidoCredentialListView.isEnabled = false
+        authenticatorActivity?.lifecycleScope?.launch {
+            val deletionSucceeded = deleteFunction.invoke()
+
+            // If credential is deleted, make leave the fragment, since the list is no longer valid
+            // There is probably some way to update the list, but it doesn't seem to work from inside
+            // the authenticatorActivity's lifecycleScope
+            if (deletionSucceeded) {
+                findNavController().navigateUp()
+            }
         }
     }
 }

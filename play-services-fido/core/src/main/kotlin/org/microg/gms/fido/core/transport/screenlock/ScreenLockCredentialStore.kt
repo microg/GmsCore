@@ -112,7 +112,9 @@ class ScreenLockCredentialStore(val context: Context) : SQLiteOpenHelper(context
     }
 
     fun deleteKey(rpId:String, keyId: ByteArray) {
-        keyStore.deleteEntry(getAlias(rpId, keyId))
+        val keyAlias = getAlias(rpId, keyId)
+        Log.w(TAG, "Deleting key with alias $keyAlias")
+        keyStore.deleteEntry(keyAlias)
     }
 
     fun clearInvalidatedKeys() {
@@ -129,6 +131,7 @@ class ScreenLockCredentialStore(val context: Context) : SQLiteOpenHelper(context
                 val signature = Signature.getInstance("SHA256withECDSA")
                 signature.initSign(key)
             } catch (e: KeyPermanentlyInvalidatedException) {
+                Log.w(TAG, "Removing permanently invalidated key with alias $alias")
                 keysToDelete.add(alias)
             } catch (e: Exception) {
                 // Any other exception, we just continue
@@ -248,6 +251,7 @@ class ScreenLockCredentialStore(val context: Context) : SQLiteOpenHelper(context
         // Use prepared statements to avoid SQL injections
         val preparedDeleteStatement = db.compileStatement("DELETE FROM $TABLE_DISPLAY_NAMES WHERE $COLUMN_KEY_ALIAS = ?")
         for (aliasToDelete in aliasesToDelete) {
+            Log.w(TAG, "Removing userinfo for key with alias $aliasToDelete, since key no longer exists")
             preparedDeleteStatement.bindString(1, aliasToDelete)
             preparedDeleteStatement.executeUpdateDelete()
         }

@@ -39,7 +39,7 @@ class UserInfo(
 @Parcelize
 class AuthenticatorResponseWrapper (
     val responseChoices: List<Pair<UserInfo?, suspend () -> AuthenticatorResponse>>,
-    val deleteFunctions: List<() -> Unit> = listOf()
+    val deleteFunctions: List<suspend () -> Boolean> = ArrayList()
 ) : Parcelable
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions
