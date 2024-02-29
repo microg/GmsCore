@@ -117,7 +117,7 @@ class CredentialSelectorFragment : AuthenticatorActivityFragment() {
             // If credential is deleted, make leave the fragment, since the list is no longer valid
             // There is probably some way to update the list, but it doesn't seem to work from inside
             // the authenticatorActivity's lifecycleScope
-            if (deletionSucceeded) {
+            if (deletionSucceeded && findNavController().currentDestination?.id == R.id.credentialSelectorFragment) {
                 findNavController().navigateUp()
             }
         }
