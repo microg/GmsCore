@@ -220,7 +220,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
     suspend fun sign(
         options: RequestOptions,
         callerPackage: String
-    ): Pair<List<Pair<UserInfo?,suspend () -> AuthenticatorAssertionResponse>>, List<() -> Unit>> {
+    ): Pair<List<Pair<UserInfo?,suspend () -> AuthenticatorAssertionResponse>>, List<suspend () -> Boolean>> {
         if (options.type != RequestOptionsType.SIGN) throw RequestHandlingException(ErrorCode.INVALID_STATE_ERR)
         val candidates = mutableListOf<CredentialId>()
         for (descriptor in options.signOptions.allowList.orEmpty()) {
@@ -266,7 +266,7 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
         val (clientData, clientDataHash) = getClientDataAndHash(activity, options, callerPackage)
 
         val credentialList = ArrayList<Pair<UserInfo?, suspend () -> AuthenticatorAssertionResponse>>()
-        val deleteFunctions = ArrayList<() -> Unit>()
+        val deleteFunctions = ArrayList<suspend () -> Boolean>()
 
         for (credentialId in candidates) {
             val keyId = credentialId.data
@@ -287,8 +287,14 @@ class ScreenLockTransportHandler(private val activity: FragmentActivity, callbac
                 )
             }
 
-            val deleteFunction = {
-                store.deleteKey(options.rpId, keyId)
+            val deleteFunction = suspend {
+                try {
+                    showBiometricPrompt(getApplicationName(activity, options, callerPackage), null)
+                    store.deleteKey(options.rpId, keyId)
+                    true
+                } catch (e: RequestHandlingException) {
+                    false
+                }
             }
 
             credentialList.add(userInfo to responseCallable)
