@@ -31,9 +31,5 @@ public class AuthConstants {
     public static final String ERROR_CODE = "errorCode";
     public static final String SIGN_IN_CREDENTIAL = "sign_in_credential";
     public static final String STATUS = "status";
-    public static final String CONSENT_KEY_COOKIE = "cookie-";
-    public static final String CONSENT_URL = "consentUrl";
-    public static final String CONSENT_MESSENGER = "messenger";
-    public static final String CONSENT_RESULT = "consent_result";
 
 }

@@ -22,11 +22,14 @@ import com.google.android.gms.common.api.Scope
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.ConsentCookiesResponse
 import org.microg.gms.auth.ConsentUrlResponse
 import org.microg.gms.auth.RequestOptions
+import org.microg.gms.auth.consent.CONSENT_KEY_COOKIE
+import org.microg.gms.auth.consent.CONSENT_MESSENGER
+import org.microg.gms.auth.consent.CONSENT_RESULT
+import org.microg.gms.auth.consent.CONSENT_URL
 import org.microg.gms.auth.consent.ConsentSignInActivity
 import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.utils.toHexString
@@ -110,12 +113,12 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
         it.isPermitted = authManager.isPermitted
-        consentResult?.let { result -> it.putDynamicFiled(AuthConstants.CONSENT_RESULT, result) }
+        consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }
     }
     val serverAuthTokenResponse = getServerAuthTokenManager(context, packageName, options, account)?.let {
         it.isPermitted = authManager.isPermitted
-        consentResult?.let { result -> it.putDynamicFiled(AuthConstants.CONSENT_RESULT, result) }
+        consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
         withContext(Dispatchers.IO) { it.requestAuth(true) }
     }
     val googleUserId = authManager.getUserData("GoogleUserId")
@@ -174,8 +177,8 @@ suspend fun performConsentView(context: Context, packageName: String, account: A
     return withContext(Dispatchers.IO) {
         val deferred = CompletableDeferred<String?>()
         val intent = Intent(context, ConsentSignInActivity::class.java).apply {
-            putExtra(AuthConstants.CONSENT_URL, consentResponse.consentUrl)
-            putExtra(AuthConstants.CONSENT_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
+            putExtra(CONSENT_URL, consentResponse.consentUrl)
+            putExtra(CONSENT_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
                 override fun handleMessage(msg: Message) {
                     val content = msg.obj
                     Log.d(TAG, "performConsentView: ConsentSignInActivity deferred ")
@@ -183,7 +186,7 @@ suspend fun performConsentView(context: Context, packageName: String, account: A
                 }
             }))
             cookies.forEachIndexed { index, cookie ->
-                putExtra(AuthConstants.CONSENT_KEY_COOKIE + index, "${cookie?.cookieName}=${cookie?.cookieValue};")
+                putExtra(CONSENT_KEY_COOKIE + index, "${cookie?.cookieName}=${cookie?.cookieValue};")
             }
         }
         Log.d(TAG, "performConsentView: start ConsentSignInActivity")

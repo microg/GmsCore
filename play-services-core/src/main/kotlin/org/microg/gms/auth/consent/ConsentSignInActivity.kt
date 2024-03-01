@@ -20,11 +20,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import com.google.android.gms.R
-import org.microg.gms.auth.AuthConstants
 import org.microg.gms.profile.Build.generateWebViewUserAgentString
 import org.microg.gms.profile.ProfileManager
 
 private const val TAG = "ConsentSignInActivity"
+const val CONSENT_KEY_COOKIE = "cookie-"
+const val CONSENT_URL = "consentUrl"
+const val CONSENT_MESSENGER = "messenger"
+const val CONSENT_RESULT = "consent_result"
 
 class ConsentSignInActivity : Activity() {
 
@@ -34,12 +37,12 @@ class ConsentSignInActivity : Activity() {
 
     private val consentUrl: String?
         get() = runCatching {
-            intent?.getStringExtra(AuthConstants.CONSENT_URL)
+            intent?.getStringExtra(CONSENT_URL)
         }.getOrNull()
 
     private val messenger: Messenger?
         get() = runCatching {
-            intent?.getParcelableExtra<Messenger>(AuthConstants.CONSENT_MESSENGER)
+            intent?.getParcelableExtra<Messenger>(CONSENT_MESSENGER)
         }.getOrNull()
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -101,7 +104,7 @@ class ConsentSignInActivity : Activity() {
         val extras = intent.extras
         if (extras != null && extras.size() > 0) {
             for (i in 0 until extras.size()) {
-                val cookie = extras.getString(AuthConstants.CONSENT_KEY_COOKIE + i)
+                val cookie = extras.getString(CONSENT_KEY_COOKIE + i)
                 if (cookie != null) {
                     cookieManager.setCookie(consentUrl, cookie)
                 }
