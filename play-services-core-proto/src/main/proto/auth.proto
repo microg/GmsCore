@@ -15,3 +15,44 @@ message ConsentData {
     }
     repeated ScopeDetails scopes = 2;
 }
+
+message RequestOptions {
+//    optional bool field_1 = 1;
+//    optional string field_2 = 2;
+//    optional string field_3 = 3;
+//    optional int32 field_4 = 4;
+//    optional int32 field_5 = 5;
+    optional int32 remote = 7;
+    optional int32 version = 10;
+    optional string sessionId = 11;
+//    optional bool field_12 = 12;
+}
+
+message ConsentUrlResponse {
+    optional int32 resultCode = 2;
+    optional string consentUrl = 3;
+    optional Cookie cookie = 4;
+}
+
+message ConsentCookiesResponse {
+    optional ConsentCookies consentCookies = 1;
+}
+
+message ConsentCookies {
+    optional int32 resultCode = 1;
+    repeated Cookie cookies = 2;
+}
+
+message Cookie {
+    optional string cookieName = 1;
+    optional string cookieValue = 2;
+    optional string domain = 3;
+    optional string path = 4;
+    optional int64 sameSite = 5;
+    optional int64 secure = 6;
+    optional int64 httpOnly = 7;
+    optional int64 maxAge = 8;
+    optional int64 version = 9;
+    optional string discard = 10;
+    optional string comment = 12;
+}

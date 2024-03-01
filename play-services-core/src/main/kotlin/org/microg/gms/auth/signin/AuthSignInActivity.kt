@@ -43,17 +43,6 @@ import org.microg.gms.utils.getApplicationLabel
 private const val TAG = "AuthSignInActivity"
 private const val REQUEST_CODE_ADD_ACCOUNT = 100
 
-private val ACCEPTABLE_SCOPES = setOf(
-    Scopes.OPENID,
-    Scopes.EMAIL,
-    Scopes.PROFILE,
-    Scopes.USERINFO_EMAIL,
-    Scopes.USERINFO_PROFILE,
-    Scopes.GAMES_LITE,
-    Scopes.USER_BIRTHDAY_READ,
-    Scopes.GMAIL_READONLY,
-)
-
 /**
  * TODO: Get privacy policy / terms of service links via
  *       https://clientauthconfig.googleapis.com/google.identity.clientauthconfig.v1.ClientAuthConfig/GetDisplayBrand
@@ -76,9 +65,6 @@ class AuthSignInActivity : AppCompatActivity() {
         if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != packageName))
             return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
         val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
-
-        val unacceptableScopes = config?.options?.scopes.orEmpty().filter { it.scopeUri !in ACCEPTABLE_SCOPES }
-        if (unacceptableScopes.isNotEmpty()) return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "Unacceptable scopes: $unacceptableScopes")
 
         val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         if (accounts.isNotEmpty()) {
