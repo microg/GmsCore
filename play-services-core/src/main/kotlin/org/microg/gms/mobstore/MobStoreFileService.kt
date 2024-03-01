@@ -46,16 +46,16 @@ class MobStoreFileServiceImpl(private val packageName: String) : IMobStoreFileSe
 
     override fun openFile(callback: IMobStoreFileCallbacks, openFileDescriptorRequest: OpenFileDescriptorRequest) {
         Log.d(TAG, "call method openFile, packageName:$packageName")
-        callback.onOpenFileResult(Status(CommonStatusCodes.DEVELOPER_ERROR,"unimplemented"), null)
+        callback.onOpenFileResult(Status(CommonStatusCodes.DEVELOPER_ERROR, "unimplemented"), null)
     }
 
     override fun deleteFile(callback: IMobStoreFileCallbacks, deleteFileRequest: DeleteFileRequest) {
         Log.d(TAG, "call method deleteFile, packageName:$packageName")
-        callback.onDeleteFileResult(Status(CommonStatusCodes.DEVELOPER_ERROR,"unimplemented"))
+        callback.onDeleteFileResult(Status(CommonStatusCodes.DEVELOPER_ERROR, "unimplemented"))
     }
 
     override fun renameFile(callback: IMobStoreFileCallbacks, renameRequest: RenameRequest) {
         Log.d(TAG, "call method renameFile, packageName:$packageName")
-        callback.onRenameFileResult(Status(CommonStatusCodes.DEVELOPER_ERROR,"unimplemented"))
+        callback.onRenameFileResult(Status(CommonStatusCodes.DEVELOPER_ERROR, "unimplemented"))
     }
 }
