@@ -865,6 +865,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.mobstore.MobStoreFileService" >
+            <intent-filter>
+                <action android:name="com.google.android.mobstore.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -1008,7 +1014,6 @@
                 <action android:name="com.google.android.mdd.service.START" />
                 <action android:name="com.google.android.mdh.service.START" />
                 <action android:name="com.google.android.mdh.service.listener.START" />
-                <action android:name="com.google.android.mobstore.service.START" />
 
                 <action
                     android:name="com.google.android.gms.wearable.BIND_LISTENER"
