@@ -31,7 +31,7 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
     override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
         Log.d(TAG, "register($packageName, $version, $p3, $p4)")
-        callbacks.onRegistered(Status.SUCCESS)
+        callbacks.onRegistered(if (version != 0) Status.SUCCESS else Status.CANCELED)
     }
 
     override fun weakRegister(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: IntArray?, p5: ByteArray?) {
@@ -50,11 +50,7 @@ class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() 
 
     override fun commitToConfiguration(callbacks: IPhenotypeCallbacks, snapshotToken: String?) {
         Log.d(TAG, "commitToConfiguration($snapshotToken)")
-        if (snapshotToken.equals("CURRENT:null:com.google.android.libraries.social.peoplekit#com.google.android.apps.photos.client_id:43")) {
-            callbacks.onCommitedToConfiguration(Status.INTERNAL_ERROR)
-        } else {
-            callbacks.onCommitedToConfiguration(Status.SUCCESS)
-        }
+        callbacks.onCommitedToConfiguration(Status.SUCCESS)
     }
 
     override fun getExperimentTokens(callbacks: IPhenotypeCallbacks, packageName: String?, logSourceName: String?) {
