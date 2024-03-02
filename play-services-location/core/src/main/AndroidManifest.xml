@@ -21,6 +21,14 @@
         tools:ignore="ProtectedPermissions" />
 
     <application>
+
+        <activity
+            android:name="org.microg.gms.location.ui.GoogleLocationSettingsActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:process=":ui"
+            android:theme="@style/Theme.Translucent" />
         <activity
             android:name="org.microg.gms.location.manager.AskPermissionActivity"
             android:excludeFromRecents="true"

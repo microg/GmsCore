@@ -21,4 +21,7 @@
     <string name="prefcat_location_wifi_title">基于 Wi-Fi 的位置信息</string>
     <string name="prefcat_geocoder_title">地址解析器</string>
     <string name="pref_location_cell_mls_enabled_summary">从 Mozilla 位置服务获取移动网络信号塔位置</string>
+    <string name="gps_open_no">不用了</string>
+    <string name="go_gps_settings">打开位置功能</string>
+    <string name="gps_open_hint">您需要开启设备位置功能才能使用本应用的定位功能。</string>
 </resources>

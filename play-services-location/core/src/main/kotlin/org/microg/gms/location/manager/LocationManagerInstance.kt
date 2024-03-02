@@ -8,12 +8,17 @@ package org.microg.gms.location.manager
 import android.Manifest.permission.*
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.location.LocationManager.GPS_PROVIDER
 import android.location.LocationManager.NETWORK_PROVIDER
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
+import android.os.Message
+import android.os.Messenger
 import android.os.Parcel
 import android.os.SystemClock
 import android.util.Log
@@ -30,8 +35,10 @@ import com.google.android.gms.location.internal.*
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REMOVE_UPDATES
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REQUEST_UPDATES
 import kotlinx.coroutines.*
-import org.microg.gms.common.NonCancelToken
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.microg.gms.location.hasNetworkLocationServiceBuiltIn
+import org.microg.gms.location.ui.GoogleLocationSettingsActivity
 import org.microg.gms.utils.warnOnTransactionIssues
 
 class LocationManagerInstance(
@@ -215,12 +222,35 @@ class LocationManagerInstance(
             val locationManager = context.getSystemService<android.location.LocationManager>()
             val gpsPresent = locationManager?.allProviders?.contains(GPS_PROVIDER) == true
             val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true || context.hasNetworkLocationServiceBuiltIn()
-            val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
-                    context.packageManager.checkPermission(ACCESS_FINE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
             val networkUsable = networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&
                     context.packageManager.checkPermission(ACCESS_COARSE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
+            if (locationManager != null  && !locationManager.isProviderEnabled(GPS_PROVIDER)) {
+                Log.d(TAG, "requestLocationSettingsDialog request gps: ")
+                requestOpenGps()
+            }
+            val gpsUsable =
+                gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
+                        context.packageManager.checkPermission(
+                            ACCESS_FINE_LOCATION,
+                            clientIdentity.packageName
+                        ) == PERMISSION_GRANTED
+            Log.d(TAG, "requestLocationSettingsDialog gpsUsable: $gpsUsable")
             runCatching { callback?.onLocationSettingsResult(LocationSettingsResult(LocationSettingsStates(gpsUsable, networkUsable, false, gpsPresent, networkPresent, true), Status.SUCCESS)) }
         }
+    }
+
+    private val activeGpsRequestLock = Mutex()
+    private suspend fun requestOpenGps(): Boolean {
+        val activeGpsRequest = activeGpsRequestLock.withLock { CompletableDeferred<Boolean>() }
+        val intent = Intent(context, GoogleLocationSettingsActivity::class.java)
+        intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                activeGpsRequest.complete(true)
+            }
+        }))
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+        return activeGpsRequest.await()
     }
 
     // region Mock locations

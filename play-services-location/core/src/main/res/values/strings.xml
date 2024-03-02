@@ -27,4 +27,7 @@
 
     <string name="pref_location_app_force_coarse_title">Force coarse location</string>
     <string name="pref_location_app_force_coarse_summary">Always return coarse locations to this app, ignoring its permission level.</string>
+    <string name="gps_open_no">No,thanks</string>
+    <string name="go_gps_settings">Turn on location</string>
+    <string name="gps_open_hint">You need to turn on the device location function to use the location function of this application.</string>
 </resources>
