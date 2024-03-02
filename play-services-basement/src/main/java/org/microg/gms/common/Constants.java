@@ -25,6 +25,7 @@ public class Constants {
     public static final String GSF_PACKAGE_NAME = "com.google.android.gsf";
     public static final String GMS_PACKAGE_SIGNATURE_SHA1 = "38918a453d07199354f8b19af05ec6562ced5788";
     public static final String GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1 = "bd32424203e0fb25f36b57e5aa356f9bdd1da998";
+    public static final String MICROG_PACKAGE_SIGNATURE_SHA1 = "10321bd893f69af97f7573aafe9de1dc0901f3a1";
     @Deprecated
     public static final int MAX_REFERENCE_VERSION = GMS_VERSION_CODE;
 }
