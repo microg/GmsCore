@@ -22,29 +22,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
+import android.content.pm.Signature;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
-import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_MINUS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
+import static org.microg.gms.common.Constants.GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1;
+import static org.microg.gms.common.Constants.MICROG_PACKAGE_SIGNATURE_SHA1;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConKeeper";
     private static final String PREF_MASTER = "GmsMultiConKeeper";
     private static final String PREF_TARGET = "GmsMultiConKeeper_target";
+    private static final String[] GOOGLE_PRIMARY_KEYS = {GMS_PACKAGE_SIGNATURE_SHA1, GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1};
 
+    private static final String[] MICROG_PRIMARY_KEYS = {MICROG_PACKAGE_SIGNATURE_SHA1};
     private static MultiConnectionKeeper INSTANCE;
 
     private final Context context;
@@ -52,44 +61,65 @@ public class MultiConnectionKeeper {
     private final String gmsPackage;
     private final Map<String, Connection> connections = new HashMap<String, Connection>();
 
-    private String getApplicationName(String packageId) throws PackageManager.NameNotFoundException {
-        ApplicationInfo ai;
-        if (SDK_INT >= TIRAMISU) {
-            ai = context.getPackageManager().getApplicationInfo(
-                    packageId,
-                    PackageManager.ApplicationInfoFlags.of(
-                            PackageManager.GET_META_DATA
-                    )
-            );
-        } else {
-            ai = context.getPackageManager().getApplicationInfo(packageId, 0);
+    private Boolean isGoogleOrMicrogSig(PackageManager pm, String packageId) throws PackageManager.NameNotFoundException {
+        List<String> signatures = new LinkedList<>(Arrays.asList(GOOGLE_PRIMARY_KEYS));
+        signatures.addAll(Arrays.asList(MICROG_PRIMARY_KEYS));
+        return signatureIsIn(pm, packageId, signatures);
+    }
+
+    private Boolean isMicrogSig(PackageManager pm, String packageId) throws PackageManager.NameNotFoundException {
+        List<String> signatures = Arrays.asList(MICROG_PRIMARY_KEYS);
+        return signatureIsIn(pm, packageId, signatures);
+    }
+
+    private Boolean signatureIsIn(PackageManager pm, String packageId, List<String> signatures) throws PackageManager.NameNotFoundException {
+        Signature[] appSignatures = pm.getPackageInfo(packageId, PackageManager.GET_SIGNATURES).signatures;
+        for (Signature sig : appSignatures) {
+            if (sig != null && signatures.contains(sha1sum(sig.toByteArray())))
+                return true;
         }
-        return (String) context.getPackageManager().getApplicationLabel(ai);
+        return false;
+    }
+
+    private String sha1sum(byte[] bytes) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA1");
+        } catch (final NoSuchAlgorithmException e) {
+            return null;
+        }
+        if (md != null) {
+            bytes = md.digest(bytes);
+            if (bytes != null) {
+                StringBuilder sb = new StringBuilder(2 * bytes.length);
+                for (byte b : bytes) {
+                    sb.append(String.format("%02x", b));
+                }
+                return sb.toString();
+            }
+        }
+        return null;
     }
 
     private String getTargetPackageWithoutPref() {
         // Pref: gms > microG > self
         PackageManager pm = context.getPackageManager();
         try {
-            // We check the application has an activity and its name to avoid any fraudulent
-            // app impersonating microG, "Cooking app" with com.google.android.gms id
-            String name = getApplicationName(GMS_PACKAGE_NAME);
-            if (name.contains("Google Play") || name.contains("microG")) {
+            if (isGoogleOrMicrogSig(pm, GMS_PACKAGE_NAME)) {
                 Log.d(TAG, GMS_PACKAGE_NAME + " found !");
                 return GMS_PACKAGE_NAME;
             } else {
-                Log.w(TAG, GMS_MINUS_PACKAGE_NAME + " found with another name: " + name);
+                Log.w(TAG, GMS_PACKAGE_NAME + " found with another signature");
             }
         } catch (PackageManager.NameNotFoundException e) {
             Log.d(TAG, GMS_PACKAGE_NAME + " not found");
         }
         try {
-            String name = getApplicationName(GMS_MINUS_PACKAGE_NAME);
-            if (name.contains("microG")) {
+            if (isMicrogSig(pm, GMS_MINUS_PACKAGE_NAME)) {
                 Log.d(TAG, GMS_MINUS_PACKAGE_NAME + " found !");
                 return GMS_MINUS_PACKAGE_NAME;
             } else {
-                Log.w(TAG, GMS_MINUS_PACKAGE_NAME + " found with another name: " + name);
+                Log.w(TAG, GMS_MINUS_PACKAGE_NAME + " found with another signature");
             }
         } catch (PackageManager.NameNotFoundException e) {
             Log.d(TAG, GMS_MINUS_PACKAGE_NAME + " not found");
