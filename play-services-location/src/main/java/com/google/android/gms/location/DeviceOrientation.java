@@ -67,8 +67,9 @@ public class DeviceOrientation extends AutoSafeParcelable {
     }
 
     public void setHeadingDegrees(float headingDegrees) {
+        headingDegrees = headingDegrees % 360f + 0f;
         if (headingDegrees < 0) {
-            headingDegrees = 360 + headingDegrees;
+            headingDegrees += 360f;
         }
         this.headingDegrees = headingDegrees;
         fieldsMask = (byte) (fieldsMask | 0x4);
