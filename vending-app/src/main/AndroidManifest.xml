@@ -127,7 +127,7 @@
             android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$SignInReceiver"
             android:exported="false" />
 
-        <activity android:name="com.google.android.finsky.billing.lightpurchase.LightPurchaseFlowActivity"
+        <activity android:name="org.microg.vending.billing.LightPurchaseFlowActivity"
             android:exported="true"
             android:theme="@style/Theme.Translucent"
             android:process=":ui">
