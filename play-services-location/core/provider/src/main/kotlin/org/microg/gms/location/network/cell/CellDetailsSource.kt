@@ -11,7 +11,10 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.WorkSource
 import android.telephony.CellInfo
 import android.telephony.TelephonyManager
+import android.util.Log
 import androidx.core.content.getSystemService
+
+const val TAG = "CellDetailsSource"
 
 class CellDetailsSource(private val context: Context, private val callback: CellDetailsCallback) {
     fun enable() = Unit
@@ -21,12 +24,18 @@ class CellDetailsSource(private val context: Context, private val callback: Cell
     fun startScan(workSource: WorkSource?) {
         val telephonyManager = context.getSystemService<TelephonyManager>() ?: return
         if (SDK_INT >= 29) {
-            telephonyManager.requestCellInfoUpdate(context.mainExecutor, object : TelephonyManager.CellInfoCallback() {
-                override fun onCellInfo(cells: MutableList<CellInfo>) {
-                    val details = cells.map(CellInfo::toCellDetails).map { it.repair(context) }.filter(CellDetails::isValid)
-                    if (details.isNotEmpty()) callback.onCellDetailsAvailable(details)
-                }
-            })
+            try {
+                telephonyManager.requestCellInfoUpdate(context.mainExecutor, object : TelephonyManager.CellInfoCallback() {
+                    override fun onCellInfo(cells: MutableList<CellInfo>) {
+                        val details = cells.map(CellInfo::toCellDetails).map { it.repair(context) }.filter(CellDetails::isValid)
+                        if (details.isNotEmpty()) callback.onCellDetailsAvailable(details)
+                    }
+                })
+            } catch (e: SecurityException) {
+                // It may trigger a SecurityException if the ACCESS_FINE_LOCATION permission isn't granted
+                Log.w(TAG, "requestCellInfoUpdate failed", e)
+            }
+
             return
         } else if (SDK_INT >= 17) {
             val allCellInfo = telephonyManager.allCellInfo
