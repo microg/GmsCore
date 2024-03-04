@@ -127,5 +127,15 @@
             android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$SignInReceiver"
             android:exported="false" />
 
+        <activity android:name="com.google.android.finsky.billing.lightpurchase.LightPurchaseFlowActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Translucent"
+            android:process=":ui">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.PURCHASE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>
