@@ -862,13 +862,12 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         }
 
         val runCallbacks = {
-            var copyList: ArrayList<IOnMapReadyCallback>
-            synchronized(mapLock) {
-                copyList = ArrayList(userOnInitializedCallbackList)
-                userOnInitializedCallbackList.clear()
+            val callbacks = synchronized(mapLock) {
+                ArrayList(userOnInitializedCallbackList)
+                    .also { userOnInitializedCallbackList.clear() }
             }
 
-            copyList.forEach {
+            callbacks.forEach {
                 try {
                     it.onMapReady(this)
                 } catch (e: Exception) {
