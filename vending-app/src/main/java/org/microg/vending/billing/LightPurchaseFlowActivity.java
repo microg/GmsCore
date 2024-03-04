@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.finsky.billing.lightpurchase;
+package org.microg.vending.billing;
 
 import android.app.Activity;
 import android.os.Bundle;
