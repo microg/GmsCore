@@ -195,4 +195,5 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="signin_subtext_policy">使用此应用前，请先阅读其%1$s和%2$s。</string>
     <string name="signin_confirm_button_text">允许并共享</string>
     <string name="feedback_disabled">反馈功能不可用</string>
+    <string name="backup_disabled">无法打开备份与重置页面</string>
 </resources>

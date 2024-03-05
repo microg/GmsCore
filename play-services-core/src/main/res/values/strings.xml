@@ -253,5 +253,6 @@ This can take a couple of minutes."</string>
     <string name="pref_vending_license_enable_summary">Some apps require verification that you have purchased them on Google Play. When requested by an app, microG can download a proof of purchase from Google. If disabled, or if no Google account is added, requests for license verification are ignored.</string>
 
     <string name="feedback_disabled">Feedback currently not possible</string>
+    <string name="backup_disabled">Unable to open backup and reset page</string>
 
 </resources>
