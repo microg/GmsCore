@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
@@ -60,6 +61,11 @@ public class MultiConnectionKeeper {
 
     private final String gmsPackage;
     private final Map<String, Connection> connections = new HashMap<String, Connection>();
+
+    private Boolean isSystem(PackageManager pm, String packageId) throws PackageManager.NameNotFoundException {
+        ApplicationInfo ai = pm.getApplicationInfo(packageId, PackageManager.GET_META_DATA);
+        return (ai.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0;
+    }
 
     private Boolean isGoogleOrMicrogSig(PackageManager pm, String packageId) throws PackageManager.NameNotFoundException {
         List<String> signatures = new LinkedList<>(Arrays.asList(GOOGLE_PRIMARY_KEYS));
@@ -105,7 +111,7 @@ public class MultiConnectionKeeper {
         // Pref: gms > microG > self
         PackageManager pm = context.getPackageManager();
         try {
-            if (isGoogleOrMicrogSig(pm, GMS_PACKAGE_NAME)) {
+            if (isSystem(pm, GMS_PACKAGE_NAME) || isGoogleOrMicrogSig(pm, GMS_PACKAGE_NAME)) {
                 Log.d(TAG, GMS_PACKAGE_NAME + " found !");
                 return GMS_PACKAGE_NAME;
             } else {
