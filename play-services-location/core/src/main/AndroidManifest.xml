@@ -23,12 +23,17 @@
     <application>
 
         <activity
-            android:name="org.microg.gms.location.ui.GoogleLocationSettingsActivity"
+            android:name="org.microg.gms.location.settings.LocationSettingsCheckerActivity"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:launchMode="singleTask"
             android:process=":ui"
-            android:theme="@style/Theme.Translucent" />
+            android:theme="@style/AlertThemeSelector">
+            <intent-filter android:priority="-1">
+                <action android:name="com.google.android.gms.location.settings.CHECK_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="org.microg.gms.location.manager.AskPermissionActivity"
             android:excludeFromRecents="true"
