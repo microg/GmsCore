@@ -756,6 +756,18 @@
             </intent-filter>
         </service>
 
+        <!-- backup -->
+
+        <activity
+            android:name="org.microg.gms.backup.BackupSettingsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.backup.ACTION_BACKUP_SETTINGS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- Other -->
 
         <service
