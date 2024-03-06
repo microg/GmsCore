@@ -759,7 +759,7 @@
         <!-- backup -->
 
         <activity
-            android:name="org.microg.gms.backup.component.BackupSettingsCollapsingActivity"
+            android:name="org.microg.gms.backup.BackupSettingsActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
             <intent-filter>
