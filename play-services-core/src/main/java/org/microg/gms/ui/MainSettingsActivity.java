@@ -34,13 +34,13 @@ public class MainSettingsActivity extends AppCompatActivity {
 
     private void showDialogIfNeeded() {
         SharedPreferences prefs = getSharedPreferences(FirstRunMaster, MODE_PRIVATE);
-        if (BuildConfig.APPLICATION_ID == Constants.GMS_MINUS_PACKAGE_NAME &&
+        if (BuildConfig.APPLICATION_ID == Constants.MICROG_PACKAGE_NAME &&
                 prefs.getBoolean(FirstRunPref, true)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-            builder.setMessage(R.string.minus_dialog_information)
-                    .setTitle(R.string.gms_minus_app_name)
-                    .setPositiveButton(R.string.minus_dialog_information_ack, (dialog, id) -> {
+            builder.setMessage(R.string.limited_services_dialog_information)
+                    .setTitle(R.string.limited_services_app_name)
+                    .setPositiveButton(R.string.limited_services_dialog_information_ack, (dialog, id) -> {
                         prefs.edit().putBoolean(FirstRunPref, false).apply();
                     });
 
