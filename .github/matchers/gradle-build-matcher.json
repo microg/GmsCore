@@ -1,0 +1,16 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "gradle-build-problem-matcher",
+      "pattern": [
+        {
+          "regexp": "^([^:]+):(\\d+):\\s(error|Error):\\s(.+)$",
+          "file": 1,
+          "line": 2,
+          "severity": 3,
+          "message": 4
+        }
+      ]
+    }
+  ]
+}
