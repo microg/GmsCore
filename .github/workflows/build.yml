@@ -27,10 +27,19 @@ jobs:
       - name: "Setup matchers"
         run: |
           # Setting up matchers...
-          matcher_file='${{ github.workspace }}/.github/matchers/gradle-build-matcher.json'
-          if test -f "${matcher_file:?}"; then
-            echo "::add-matcher::${matcher_file:?}"
-            echo 'Matcher configured.'
-          fi
+
+          matchers_dir='${{ github.workspace }}/.github/matchers'
+          matcher_list()
+          {
+            echo 'gradle-build-matcher.json'
+            echo 'gradle-build-kotlin-error-matcher.json'
+          }
+
+          matcher_list | while IFS='' read -r NAME; do
+            if test -f "${matchers_dir:?}/${NAME:?}"; then
+              echo "::add-matcher::${matchers_dir:?}/${NAME:?}"
+              echo "Matcher configured: ${NAME:?}"
+            fi
+          done
       - name: "Execute Gradle build"
         run: "./gradlew --no-daemon build"

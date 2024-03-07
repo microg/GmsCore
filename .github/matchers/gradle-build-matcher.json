@@ -1,7 +1,7 @@
 {
   "problemMatcher": [
     {
-      "owner": "gradle-build-problem-matcher",
+      "owner": "gradle-build-matcher",
       "pattern": [
         {
           "regexp": "^([^:]+):(\\d+):\\s(error|Error):\\s(.+)$",
