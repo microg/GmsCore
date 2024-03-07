@@ -43,7 +43,7 @@ import java.util.Set;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GMS_MINUS_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.MICROG_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 import static org.microg.gms.common.Constants.GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1;
 import static org.microg.gms.common.Constants.MICROG_PACKAGE_SIGNATURE_SHA1;
@@ -121,14 +121,14 @@ public class MultiConnectionKeeper {
             Log.d(TAG, GMS_PACKAGE_NAME + " not found");
         }
         try {
-            if (isMicrogSig(pm, GMS_MINUS_PACKAGE_NAME)) {
-                Log.d(TAG, GMS_MINUS_PACKAGE_NAME + " found !");
-                return GMS_MINUS_PACKAGE_NAME;
+            if (isMicrogSig(pm, MICROG_PACKAGE_NAME)) {
+                Log.d(TAG, MICROG_PACKAGE_NAME + " found !");
+                return MICROG_PACKAGE_NAME;
             } else {
-                Log.w(TAG, GMS_MINUS_PACKAGE_NAME + " found with another signature");
+                Log.w(TAG, MICROG_PACKAGE_NAME + " found with another signature");
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.d(TAG, GMS_MINUS_PACKAGE_NAME + " not found");
+            Log.d(TAG, MICROG_PACKAGE_NAME + " not found");
         }
         return null;
     }
@@ -140,7 +140,7 @@ public class MultiConnectionKeeper {
         if ((target = prefs.getString(PREF_TARGET, null)) != null) {
             switch (target) {
                 case GMS_PACKAGE_NAME:
-                case GMS_MINUS_PACKAGE_NAME:
+                case MICROG_PACKAGE_NAME:
                     return target;
                 case SELF:
                     return null;
