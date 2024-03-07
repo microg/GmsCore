@@ -512,6 +512,13 @@
         <!-- Games -->
 
         <activity
+            android:name="org.microg.gms.games.GamesSignInActivity"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.Translucent"/>
+
+        <activity
             android:name="org.microg.gms.games.UpgradeActivity"
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog">
