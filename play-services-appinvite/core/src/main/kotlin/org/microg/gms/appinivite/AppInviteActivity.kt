@@ -27,6 +27,7 @@ import kotlinx.coroutines.CompletableDeferred
 import okio.ByteString.Companion.decodeHex
 import org.microg.gms.appinvite.*
 import org.microg.gms.common.Constants
+import org.microg.gms.utils.singleInstanceOf
 import java.util.*
 
 private const val TAG = "AppInviteActivity"
@@ -37,7 +38,7 @@ private const val APPINVITE_OPENED_FROM_PLAY_STORE = "com.google.android.gms.app
 private const val APPINVITE_REFERRAL_BUNDLE = "com.google.android.gms.appinvite.REFERRAL_BUNDLE"
 
 class AppInviteActivity : AppCompatActivity() {
-    private val queue by lazy { Volley.newRequestQueue(this) }
+    private val queue by lazy { singleInstanceOf { Volley.newRequestQueue(applicationContext) } }
 
     private val Int.px: Int get() = (this * resources.displayMetrics.density).toInt()
 

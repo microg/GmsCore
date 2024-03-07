@@ -37,6 +37,7 @@ import org.microg.gms.droidguard.core.DroidGuardPreferences
 import org.microg.gms.safetynet.SafetyNetDatabase
 import org.microg.gms.safetynet.SafetyNetPreferences
 import org.microg.gms.safetynet.SafetyNetRequestType.*
+import org.microg.gms.utils.singleInstanceOf
 import java.net.URLEncoder
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -77,7 +78,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
             val newStatus = newValue as Boolean
             SafetyNetPreferences.setEnabled(requireContext(), newStatus)
             DroidGuardPreferences.setEnabled(requireContext(), newStatus)
-            droidguardUnsupported.isVisible = switchBarPreference.isChecked && !DroidGuardPreferences.isAvailable(requireContext())
+            droidguardUnsupported.isVisible = newStatus && !DroidGuardPreferences.isAvailable(requireContext())
             true
         }
     }
@@ -122,7 +123,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
                 val response = SafetyNet.getClient(requireActivity())
                     .verifyWithRecaptcha(RECAPTCHA_SITE_KEY).await()
                 val result = if (response.tokenResult != null) {
-                    val queue = Volley.newRequestQueue(context)
+                    val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
                     val json =
                         if (RECAPTCHA_SECRET != null) {
                             suspendCoroutine { continuation ->
@@ -173,7 +174,7 @@ class SafetyNetFragment : PreferenceFragmentCompat() {
                 Log.d(TAG, "Recaptcha Token: " + response.tokenResult)
                 client.close(handle).await()
                 val result = if (response.tokenResult != null) {
-                    val queue = Volley.newRequestQueue(context)
+                    val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
                     val json = if (RECAPTCHA_ENTERPRISE_API_KEY != null) {
                         suspendCoroutine { continuation ->
                             queue.add(JsonObjectRequest(

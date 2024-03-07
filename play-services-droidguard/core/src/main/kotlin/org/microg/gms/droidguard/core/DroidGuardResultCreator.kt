@@ -10,8 +10,8 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.droidguard.DroidGuardClient
-import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.await
+import org.microg.gms.utils.singleInstanceOf
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -36,7 +36,7 @@ interface DroidGuardResultCreator {
 }
 
 private class NetworkDroidGuardResultCreator(private val context: Context) : DroidGuardResultCreator {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
     private val url: String
         get() = DroidGuardPreferences.getNetworkServerUrl(context) ?: throw IllegalStateException("Network URL required")
 

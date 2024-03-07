@@ -40,7 +40,7 @@ class AuthProxyService : BaseService(TAG, GmsService.AUTH_PROXY) {
     }
 }
 
-class AuthServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String) : IAuthService.Stub(), LifecycleOwner {
+class AuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String) : IAuthService.Stub(), LifecycleOwner {
     override fun performProxyRequest(callbacks: IAuthCallbacks, request: ProxyRequest) {
         Log.d(TAG, "performProxyRequest($packageName, $request)")
         lifecycleScope.launchWhenStarted {
@@ -56,8 +56,6 @@ class AuthServiceImpl(private val context: Context, private val lifecycle: Lifec
             callbacks.onSpatulaHeader(result)
         }
     }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

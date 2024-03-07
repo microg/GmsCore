@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="perm_ad_id_label">Permiso de identificación publicitaria</string>
+    <string name="perm_ad_id_description">Permite que una aplicación de editor acceda directa o indirectamente a un ID de publicidad válido.</string>
+    <string name="perm_ad_id_notification_label">Notificación del ID de publicidad</string>
+    <string name="perm_ad_id_notification_description">Permite que una aplicación reciba una notificación cuando se actualiza el ID de publicidad o la preferencia de limitar el seguimiento de anuncios del usuario.</string>
+</resources>

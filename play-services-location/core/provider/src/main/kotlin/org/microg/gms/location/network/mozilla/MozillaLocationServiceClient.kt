@@ -17,12 +17,13 @@ import org.microg.gms.location.provider.BuildConfig
 import org.microg.gms.location.network.precision
 import org.microg.gms.location.network.wifi.WifiDetails
 import org.microg.gms.location.network.wifi.isMoving
+import org.microg.gms.utils.singleInstanceOf
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class MozillaLocationServiceClient(context: Context) {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     suspend fun retrieveMultiWifiLocation(wifis: List<org.microg.gms.location.network.wifi.WifiDetails>): Location = geoLocate(
         GeolocateRequest(

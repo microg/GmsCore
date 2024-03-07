@@ -1,0 +1,71 @@
+syntax = "proto2";
+
+option java_package = "com.android.vending";
+option java_multiple_files = true;
+
+message LicenseRequestHeader {
+  optional StringWrapper encodedTimestamps = 1;
+  optional EncodedTripleWrapper triple = 10;
+  optional LocalityWrapper locality = 11;
+  optional IntWrapper unknown = 12;
+  optional string empty = 14;
+  optional DeviceMeta deviceMeta = 20;
+  optional UserAgent userAgent = 21;
+  optional Uuid uuid = 27;
+}
+
+message StringWrapper {
+  optional string string = 1;
+}
+
+message EncodedTripleWrapper {
+  optional EncodedTriple triple = 1;
+}
+
+message EncodedTriple {
+  optional string encoded1 = 1;
+  optional string encoded2 = 2;
+  optional string empty = 3;
+}
+
+message LocalityWrapper {
+  optional string encodedLocalityProto = 1;
+}
+
+message IntWrapper {
+  optional uint32 integer = 1;
+}
+
+message DeviceMeta {
+  optional AndroidVersionMeta android = 1;
+  optional UnknownByte12 unknown1 = 2;
+  optional uint32 unknown2 = 3; // observed value: 1
+
+}
+
+message AndroidVersionMeta {
+  optional uint32 androidSdk = 1;
+  optional string buildNumber = 2;
+  optional string androidVersion = 3;
+  optional uint32 unknown = 4;
+}
+
+message UnknownByte12 {
+  optional bytes bytes = 12;
+}
+
+message UserAgent {
+  // The names of these attributes are vague guesses and should be adapted if needed.
+  optional string deviceName = 1; // e.g. "OnePlusNord"
+  optional string deviceHardware = 2; // e.g. "qcom"
+  optional string deviceModelName = 3; // e.g. "OnePlus Nord"
+  optional string finskyVersion = 4; // e.g. "Finsky/37.5.24-29%20%5B0%5D%20%5BPR%5D%20565477504"
+  optional string deviceProductName = 5; // e.g. "OnePlusNord"
+  optional uint64 androidId = 6;
+  optional string buildFingerprint = 7; // e.g. "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys"
+}
+
+message Uuid {
+  optional string uuid = 1;
+  optional uint32 unknown = 2; // might be a constant, e.g. format ID. Observed value: 2.
+}

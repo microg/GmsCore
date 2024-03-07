@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Localização</string>
+    <string name="prefcat_location_apps_title">Acesso recente</string>
+    <string name="prefcat_location_wifi_title">Localização por Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Localização por redes móveis</string>
+    <string name="prefcat_geocoder_title">Resolvedor de endereço</string>
+    <string name="pref_location_wifi_mls_enabled_title">Pedir para Mozilla</string>
+    <string name="pref_location_wifi_mls_enabled_summary">Pedir localização baseada em redes Wi-Fi próximas pelos serviços de localização da Mozilla.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Pedir para o ponto de acesso</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Pedir localização por Wi-Fi diretamente pelos pontos de acesso que suportam quando conectado.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Lembrar pelo GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Guarda localmente informações de localização de redes Wi-Fi quando o GPS é usado.</string>
+    <string name="pref_location_cell_mls_enabled_title">Pedir para Mozilla</string>
+    <string name="pref_location_cell_mls_enabled_summary">Pedir a localização de redes móveis pelo serviço de localização da Mozilla.</string>
+    <string name="pref_location_cell_learning_enabled_title">Lembrar pelo GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Guardar localmente localizações de redes móveis quando o GPS é usado.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Usar Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Resolver endereços usando o Nominatim do OpenStreetMap.</string>
+    <string name="fragment_location_apps_title">Apps com acesso à localização</string>
+    <string name="location_app_last_access_at">Último acesso: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Forçar localização menos precisa</string>
+    <string name="pref_location_app_force_coarse_summary">Sempre responder com localizações menos precisas à esse app, ignorando seu nível de permissão.</string>
+</resources>

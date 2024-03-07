@@ -107,10 +107,12 @@ fun GmsGroundOverlayOptions.toHms(): GroundOverlayOptions {
         .image(image.remoteObject.unwrap())
         .visible(isVisible)
         .zIndex(zIndex)
-    if (height > 0) {
-        groundOverlayOptions.position(location.toHms(), width, height)
-    } else {
-        groundOverlayOptions.position(location.toHms(), width)
+    location?.let {
+        if (height > 0) {
+            groundOverlayOptions.position(it.toHms(), width, height)
+        } else {
+            groundOverlayOptions.position(it.toHms(), width)
+        }
     }
     bounds?.let { groundOverlayOptions.positionFromBounds(it.toHms()) }
     return groundOverlayOptions

@@ -59,7 +59,7 @@ class Fido2PrivilegedService : BaseService(TAG, FIDO2_PRIVILEGED) {
     }
 }
 
-class Fido2PrivilegedServiceImpl(private val context: Context, private val lifecycle: Lifecycle) :
+class Fido2PrivilegedServiceImpl(private val context: Context, override val lifecycle: Lifecycle) :
     IFido2PrivilegedService.Stub(), LifecycleOwner {
     override fun getRegisterPendingIntent(callbacks: IFido2PrivilegedCallbacks, options: BrowserPublicKeyCredentialCreationOptions) {
         lifecycleScope.launchWhenStarted {
@@ -105,8 +105,6 @@ class Fido2PrivilegedServiceImpl(private val context: Context, private val lifec
             runCatching { callbacks.onCredentialList(emptyList()) }
         }
     }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
         warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }

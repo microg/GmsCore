@@ -13,16 +13,25 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="gcm_registered_apps_counter">
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> registered Apps</item>
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicativo registrado</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> aplicativos registrados</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicativos registrados</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="other">Falta uma ou mais permissões para a funcionalidade adequada do MicroG Services.</item>
+        <item quantity="one">Uma permissão necessária para o funcionamento adequado dos serviços microG não foi permitida.</item>
+        <item quantity="many">Permissões necessárias para o funcionamento adequado dos serviços microG não foram permitidas.</item>
+        <item quantity="other">Algumas permissões não foram permitidas que são necessárias para o funcionamento adequado dos serviços microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="other">Solicitar permissões em falta</item>
+        <item quantity="one">Pedir permissão faltante</item>
+        <item quantity="many">Pedir permissões faltantes</item>
+        <item quantity="other">Pedir permissões faltantes</item>
+    </plurals>
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurado</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
+        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
     </plurals>
 </resources>

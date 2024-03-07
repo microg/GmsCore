@@ -35,9 +35,8 @@ class SignInService : BaseService(TAG, GmsService.SIGN_IN) {
     }
 }
 
-class SignInServiceImpl(val context: Context, private val lifecycle: Lifecycle, val packageName: String, val scopes: Array<Scope>) : ISignInService.Stub(),
+class SignInServiceImpl(val context: Context, override val lifecycle: Lifecycle, val packageName: String, val scopes: Array<Scope>) : ISignInService.Stub(),
     LifecycleOwner {
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun clearAccountFromSessionStore(sessionId: Int) {
         Log.d(TAG, "Not yet implemented: clearAccountFromSessionStore $sessionId")

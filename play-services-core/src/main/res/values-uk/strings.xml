@@ -25,7 +25,7 @@
     <string name="sorry">Вибачте…</string>
     <string name="auth_before_connect">Застосунок на Вашому пристрої намагається увійти до облікового запису Google.
 \n
-\nЯкщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для підключення до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
+\nЯкщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для під\'єднання до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
     <string name="auth_sign_in">Увійти</string>
     <string name="auth_connecting">Ваш пристрій встановлює зв\'язок із серверами Google для авторизації.
 \n
@@ -211,4 +211,9 @@
     <string name="pref_device_registration_device_profile_category">Профіль пристрою</string>
     <string name="prefcat_push_networks_title">Мережі, які слід використовувати для push-сповіщень</string>
     <string name="pref_safetynet_recent_eval_type">Тип оцінки</string>
+    <string name="pref_vending_summary_licensing_on">Ліцензування ввімкнено</string>
+    <string name="pref_vending_licensing_enable_switch">Відповідати на запити перевірки ліцензії</string>
+    <string name="pref_vending_license_enable_summary">Деякі застосунки вимагають підтвердження того, що ви придбали їх у Google Play. На запит застосунку microG може завантажити підтвердження покупки з Google. Якщо цю функцію вимкнено або якщо обліковий запис Google не додано, запити на перевірку ліцензії ігноруються.</string>
+    <string name="pref_vending_summary_licensing_off">Ліцензування вимкнено</string>
+    <string name="service_name_vending">Служби Play Store</string>
 </resources>

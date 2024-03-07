@@ -5,8 +5,25 @@
 
 package com.google.android.gms.feedback;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class FileTeleporter extends AutoSafeParcelable {
-    public static final Creator<FileTeleporter> CREATOR = findCreator(FileTeleporter.class);
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class FileTeleporter extends AbstractSafeParcelable {
+    @Field(3)
+    public String contentType;
+    @Field(4)
+    public String content;
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<FileTeleporter> CREATOR = findCreator(FileTeleporter.class);
 }

@@ -27,6 +27,7 @@ class GoogleHelpRedirectActivity : AppCompatActivity() {
         //       Long-term best is to not redirect to web but instead implement the thing properly, allowing us also to show
         //       option items, do proper theming for better integration, etc.
         Log.d(TAG, "Open $uri for $callingPackage/${googleHelp.appContext} in Browser")
+        // noinspection UnsafeImplicitIntentLaunch
         startActivity(Intent(Intent.ACTION_VIEW, uri))
         finish()
     }

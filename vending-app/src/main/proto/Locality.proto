@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+option java_package = "com.android.vending";
+option java_multiple_files = true;
+
+import "Timestamp.proto";
+
+message Locality {
+  optional uint32 unknown1 = 2; // value: 1
+  optional uint32 unknown2 = 3; // value: 0
+  optional string countryCode = 4; // e.g. "DE"
+  optional TimestampStringWrapper region = 8; // e.g. "DE-BY" and a timestamp
+  optional TimestampStringWrapper country = 9; // e.g. "DE" and a timestamp
+  optional uint32 unknown3 = 11; // value: 0
+
+}
+
+message TimestampStringWrapper {
+  optional string string = 1;
+  optional Timestamp timestamp = 2;
+}
