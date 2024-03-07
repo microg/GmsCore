@@ -57,7 +57,7 @@ class CellDetailsSource(private val context: Context, private val callback: Cell
         if (networkOperator != null && networkOperator.length > 4) {
             val mcc = networkOperator.substring(0, 3).toIntOrNull()
             val mnc = networkOperator.substring(3).toIntOrNull()
-            val detail: CellLocation? = try {
+            val detail: CellDetails? = try {
                 telephonyManager.cellLocation?.toCellDetails(mcc, mnc)
             } catch (e: SecurityException) {
                 // It may trigger a SecurityException if the ACCESS_FINE_LOCATION permission isn't granted
