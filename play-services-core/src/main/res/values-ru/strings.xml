@@ -220,4 +220,5 @@
     <string name="perm_car_fuel_label">Уровень топлива в машине</string>
     <string name="perm_car_fuel_description">Получение доступа к информации об уровне топлива вашего автомобиля</string>
     <string name="perm_car_vendor_extension_description">Получение доступа к каналу поставщика вашего автомобиля для обмена информацией, касающейся конкретного автомобиля</string>
+    <string name="backup_disabled">Резервное копирование недоступно</string>
 </resources>
