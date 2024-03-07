@@ -220,4 +220,5 @@
     <string name="perm_car_fuel_label">Узровень паліва ў машыне</string>
     <string name="perm_car_mileage_label">Прабег аўтамабіля</string>
     <string name="perm_car_vendor_extension_description">Атрыманне доступу да канала пастаўшчыка вашага аўтамабіля для абмену інфармацыяй, якая датычыцца канкрэтнага аўтамабіля</string>
+    <string name="backup_disabled">Рэзервовае капіраванне недаступна</string>
 </resources>
