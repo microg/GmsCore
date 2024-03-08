@@ -14,6 +14,8 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 
+import org.microg.gms.utils.ToStringHelper;
+
 @SafeParcelable.Class
 public class OpenFileDescriptorRequest extends AbstractSafeParcelable {
 
@@ -36,4 +38,12 @@ public class OpenFileDescriptorRequest extends AbstractSafeParcelable {
     }
 
     public static final SafeParcelableCreatorAndWriter<OpenFileDescriptorRequest> CREATOR = findCreator(OpenFileDescriptorRequest.class);
+
+    @Override
+    public String toString() {
+        return ToStringHelper.name("OpenFileDescriptorRequest")
+                .field("fileUri", fileUri)
+                .field("flag", flag)
+                .end();
+    }
 }

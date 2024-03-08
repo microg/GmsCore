@@ -20,6 +20,13 @@ public class OpenFileDescriptorResponse extends AbstractSafeParcelable {
     @Field(value = 1, getterName = "getFileDescriptor")
     private ParcelFileDescriptor fileDescriptor;
 
+    public OpenFileDescriptorResponse() {
+    }
+
+    public OpenFileDescriptorResponse(ParcelFileDescriptor parcelFileDescriptor) {
+        this.fileDescriptor = parcelFileDescriptor;
+    }
+
     public ParcelFileDescriptor getFileDescriptor() {
         return fileDescriptor;
     }
