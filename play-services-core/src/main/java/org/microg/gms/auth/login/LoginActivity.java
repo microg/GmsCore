@@ -17,6 +17,7 @@
 package org.microg.gms.auth.login;
 
 import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -81,6 +82,7 @@ public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
     public static final String EXTRA_TMPL = "tmpl";
     public static final String EXTRA_EMAIL = "email";
+    public static final String EXTRA_ACCOUNT_AUTHENTICATOR_RESPONSE = "accountAuthenticatorResponse";
     public static final String EXTRA_TOKEN = "masterToken";
     public static final int STATUS_BAR_DISABLE_BACK = 0x00400000;
 
@@ -97,6 +99,7 @@ public class LoginActivity extends AssistantActivity {
     private WebView webView;
     private String accountType;
     private AccountManager accountManager;
+    private AccountAuthenticatorResponse response;
     private InputMethodManager inputMethodManager;
     private ViewGroup authContent;
     private int state = 0;
@@ -136,6 +139,12 @@ public class LoginActivity extends AssistantActivity {
                     closeWeb(true);
             }
         });
+        if(getIntent().hasExtra(EXTRA_ACCOUNT_AUTHENTICATOR_RESPONSE)){
+            Object tempObject = getIntent().getExtras().get("accountAuthenticatorResponse");
+            if (tempObject instanceof AccountAuthenticatorResponse) {
+                response = (AccountAuthenticatorResponse) tempObject;
+            }
+        }
         if (getIntent().hasExtra(EXTRA_TOKEN)) {
             if (getIntent().hasExtra(EXTRA_EMAIL)) {
                 AccountManager accountManager = AccountManager.get(this);
@@ -175,6 +184,14 @@ public class LoginActivity extends AssistantActivity {
         state--;
         if (state == -1) {
             finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(response!=null){
+            response.onError(4, "Canceled");
         }
     }
 
@@ -328,7 +345,15 @@ public class LoginActivity extends AssistantActivity {
                     }
                 });
     }
-
+    private void returnSuccessResponse(Account account){
+        if(response != null){
+            Bundle bd = new Bundle();
+            bd.putString("authAccount",account.name);
+            bd.putBoolean("new_account_created",false);
+            bd.putString("accountType",accountType);
+            response.onResult(bd);
+        }
+    }
     private void retrieveGmsToken(final Account account) {
         final AuthManager authManager = new AuthManager(this, account.name, GMS_PACKAGE_NAME, "ac2dm");
         authManager.setPermitted(true);
@@ -349,7 +374,9 @@ public class LoginActivity extends AssistantActivity {
                         String accountId = PeopleManager.loadUserInfo(LoginActivity.this, account);
                         if (!TextUtils.isEmpty(accountId))
                             accountManager.setUserData(account, "GoogleUserId", accountId);
-                        checkin(true);
+                        if(checkin(true)){
+                            returnSuccessResponse(account);
+                        }
                         finish();
                     }
 
