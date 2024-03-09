@@ -3,4 +3,11 @@
     <string name="toast_installed">microG пратилац се не може користити самостално. Уместо тога, отворена су подешавања microG услуга.</string>
     <string name="toast_not_installed">microG пратилац се не може користити самостално. Инсталирајте microG услуге да бисте користили microG.</string>
     <string name="app_name">microG пратилац</string>
+    <string name="pay_disabled">Плаћање тренутно није могуће</string>
+    <string name="license_notification_channel_name">Обавештења о лиценци</string>
+    <string name="license_notification_title">%1$s није могао да потврди лиценцу</string>
+    <string name="license_notification_body">Ако апликација не ради лоше, пријавите се на Google налог са којим сте купили апликацију.</string>
+    <string name="license_notification_channel_description">Обавештава када апликација покуша да потврди своју лиценцу, али нисте пријављени ни на један Google налог.</string>
+    <string name="license_notification_ignore">Игнориши</string>
+    <string name="license_notification_sign_in">Пријави се</string>
 </resources>
