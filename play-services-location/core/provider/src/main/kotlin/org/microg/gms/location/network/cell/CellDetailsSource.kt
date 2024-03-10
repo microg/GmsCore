@@ -14,7 +14,7 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.content.getSystemService
 
-const val TAG = "CellDetailsSource"
+private const val TAG = "CellDetailsSource"
 
 class CellDetailsSource(private val context: Context, private val callback: CellDetailsCallback) {
     fun enable() = Unit
