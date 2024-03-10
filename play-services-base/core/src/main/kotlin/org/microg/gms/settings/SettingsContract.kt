@@ -7,12 +7,19 @@ package org.microg.gms.settings
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Binder
+import android.os.Bundle
 
 object SettingsContract {
-    fun getAuthority(context: Context) = "${context.packageName}.microg.settings"
+    const val META_DATA_KEY_SOURCE_PACKAGE = "org.microg.gms.settings:source-package"
+    fun getAuthority(context: Context): String {
+        val metaData = runCatching { context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA).metaData }.getOrNull() ?: Bundle.EMPTY
+        val sourcePackage = metaData.getString(META_DATA_KEY_SOURCE_PACKAGE, context.packageName)
+        return "${sourcePackage}.microg.settings"
+    }
     fun getAuthorityUri(context: Context): Uri = Uri.parse("content://${getAuthority(context)}")
 
     object CheckIn {
@@ -179,9 +186,11 @@ object SettingsContract {
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
         const val LICENSING = "vending_licensing"
+        const val BILLING = "vending_billing"
 
         val PROJECTION = arrayOf(
-            LICENSING
+            LICENSING,
+            BILLING,
         )
     }
 

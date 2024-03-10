@@ -343,6 +343,7 @@ class SettingsProvider : ContentProvider() {
     private fun queryVending(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
         when (key) {
             Vending.LICENSING -> getSettingsBoolean(key, false)
+            Vending.BILLING -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -353,6 +354,7 @@ class SettingsProvider : ContentProvider() {
         values.valueSet().forEach { (key, value) ->
             when (key) {
                 Vending.LICENSING -> editor.putBoolean(key, value as Boolean)
+                Vending.BILLING -> editor.putBoolean(key, value as Boolean)
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

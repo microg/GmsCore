@@ -173,7 +173,7 @@ public abstract class LicenseRequest<T> extends Request<T> {
 
     private static Timestamp makeTimestamp(long millis) {
         return new Timestamp.Builder()
-            .seconds((int) (millis / 1000))
+            .seconds((millis / 1000))
             .nanos(Math.floorMod(millis, 1000) * 1000000)
             .build();
     }

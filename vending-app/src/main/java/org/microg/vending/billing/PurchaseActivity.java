@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.android.vending.R;
 
-public class LightPurchaseFlowActivity extends Activity {
+public class PurchaseActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

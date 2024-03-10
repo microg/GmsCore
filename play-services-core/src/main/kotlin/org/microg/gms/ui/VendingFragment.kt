@@ -16,6 +16,7 @@ import org.microg.gms.vending.VendingPreferences
 
 class VendingFragment : PreferenceFragmentCompat() {
     private lateinit var licensingEnabled: TwoStatePreference
+    private lateinit var iapEnable: TwoStatePreference
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_vending)
@@ -34,6 +35,18 @@ class VendingFragment : PreferenceFragmentCompat() {
             }
             true
         }
+
+        iapEnable = preferenceScreen.findPreference(PREF_IAP_ENABLED) ?: iapEnable
+        iapEnable.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+            val appContext = requireContext().applicationContext
+            lifecycleScope.launchWhenResumed {
+                if (newValue is Boolean) {
+                    VendingPreferences.setBillingEnabled(appContext, newValue)
+                }
+                updateContent()
+            }
+            true
+        }
     }
 
     override fun onResume() {
@@ -45,10 +58,12 @@ class VendingFragment : PreferenceFragmentCompat() {
         val appContext = requireContext().applicationContext
         lifecycleScope.launchWhenResumed {
             licensingEnabled.isChecked = VendingPreferences.isLicensingEnabled(appContext)
+            iapEnable.isChecked = VendingPreferences.isBillingEnabled(appContext)
         }
     }
 
     companion object {
         const val PREF_LICENSING_ENABLED = "vending_licensing"
+        const val PREF_IAP_ENABLED = "vending_iap"
     }
 }

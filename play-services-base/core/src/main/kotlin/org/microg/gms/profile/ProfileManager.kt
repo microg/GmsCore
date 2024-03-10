@@ -7,7 +7,10 @@ package org.microg.gms.profile
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.XmlResourceParser
+import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import org.microg.gms.settings.SettingsContract
 import org.microg.gms.settings.SettingsContract.Profile
@@ -19,11 +22,13 @@ import kotlin.random.Random
 
 object ProfileManager {
     private const val TAG = "ProfileManager"
+    const val META_DATA_KEY_SOURCE_PACKAGE = "org.microg.gms.profile:source-package"
     const val PROFILE_REAL = "real"
     const val PROFILE_AUTO = "auto"
     const val PROFILE_NATIVE = "native"
     const val PROFILE_USER = "user"
     const val PROFILE_SYSTEM = "system"
+    const val PROFILE_REMOTE = "remote"
 
     private var activeProfile: String? = null
 
@@ -128,6 +133,17 @@ object ProfileManager {
             Log.w(TAG, e)
             return realData
         }
+    }
+
+    private fun getRemoteProfileData(context: Context, packageName: String): Map<String, String> {
+        val data = mutableMapOf<String, String>()
+        val cursor = context.contentResolver.query(Uri.parse("content://${packageName}.microg.profile"), null, null, null, null)
+        cursor?.use {
+            while (cursor.moveToNext()) {
+                data[cursor.getString(0)] = cursor.getString(1)
+            }
+        }
+        return data
     }
 
     private fun getProfile(context: Context) = getConfiguredProfile(context).let { if (it != PROFILE_AUTO) it else getAutoProfile(context) }
@@ -302,6 +318,17 @@ object ProfileManager {
         activeProfile = profile
     }
 
+    private fun applyRemoteProfile(context: Context, packageName: String) {
+        val profileData = getRemoteProfileData(context, packageName)
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            for ((key, value) in profileData) {
+                Log.v(TAG, "<data key=\"$key\" value=\"$value\" />")
+            }
+        }
+        applyProfileData(profileData)
+        activeProfile = PROFILE_REMOTE
+    }
+
     fun getProfileName(context: Context, profile: String): String? = getProfileName { getProfileXml(context, profile) }
 
     private fun getProfileName(parserCreator: () -> XmlResourceParser?): String? {
@@ -352,14 +379,23 @@ object ProfileManager {
 
     @JvmStatic
     fun ensureInitialized(context: Context) {
+        val metaData = runCatching { context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA).metaData }.getOrNull() ?: Bundle.EMPTY
         synchronized(this) {
             try {
-                val profile = getProfile(context)
-                if (activeProfile == profile) return
-                applyProfile(context, profile)
+                if (metaData.containsKey(META_DATA_KEY_SOURCE_PACKAGE)) {
+                    if (activeProfile != PROFILE_REMOTE) {
+                        val packageName = metaData.getString(META_DATA_KEY_SOURCE_PACKAGE)!!
+                        applyRemoteProfile(context, packageName)
+                    }
+                } else {
+                    val profile = getProfile(context)
+                    if (activeProfile == profile) return
+                    applyProfile(context, profile)
+                }
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
+            Unit
         }
     }
 }
