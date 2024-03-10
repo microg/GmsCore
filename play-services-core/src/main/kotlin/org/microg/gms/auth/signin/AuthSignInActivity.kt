@@ -64,7 +64,7 @@ class AuthSignInActivity : AppCompatActivity() {
         Log.d(TAG, "Request: $config")
 
         val packageName = config?.packageName
-        if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != packageName))
+        if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != this.packageName))
             return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
         val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
 
