@@ -14,6 +14,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.os.bundleOf
 import com.google.android.gms.ads.identifier.internal.IAdvertisingIdService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import java.util.UUID
 
@@ -90,19 +91,19 @@ class AdvertisingIdServiceImpl(private val context: Context) : IAdvertisingIdSer
 
     override fun resetAdvertisingId(packageName: String): String {
         PackageUtils.checkPackageUid(context, packageName, getCallingUid())
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         return configuration.resetAdvertisingId()
     }
 
     override fun setAdTrackingLimitedGlobally(packageName: String, limited: Boolean) {
         PackageUtils.checkPackageUid(context, packageName, getCallingUid())
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         configuration.adTrackingLimitedGlobally = limited
     }
 
     override fun setDebugLoggingEnabled(packageName: String, enabled: Boolean): String {
         PackageUtils.checkPackageUid(context, packageName, getCallingUid())
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         configuration.debugLogging = enabled
         return advertisingId
     }
@@ -112,27 +113,27 @@ class AdvertisingIdServiceImpl(private val context: Context) : IAdvertisingIdSer
     }
 
     override fun isAdTrackingLimitedGlobally(): Boolean {
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         return configuration.adTrackingLimitedGlobally
     }
 
     override fun setAdTrackingLimitedForApp(uid: Int, limited: Boolean) {
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         configuration.adTrackingLimitedPerApp[uid] = limited
     }
 
     override fun resetAdTrackingLimitedForApp(uid: Int) {
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         configuration.adTrackingLimitedPerApp.remove(uid)
     }
 
     override fun getAllAppsLimitedAdTrackingConfiguration(): Bundle {
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         return bundleOf(*configuration.adTrackingLimitedPerApp.map { it.key.toString() to it.value }.toTypedArray())
     }
 
     override fun getAdvertisingIdForApp(uid: Int): String {
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.AD_ID)
         return configuration.getAdvertisingIdForApp(uid)
     }
 }
