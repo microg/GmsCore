@@ -32,6 +32,8 @@ import org.json.JSONObject
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.utils.digest
+import org.microg.gms.utils.getCertificates
 
 private const val TAG = "GmsFirebaseAuth"
 
@@ -83,7 +85,7 @@ class FirebaseAuthService : BaseService(TAG, GmsService.FIREBASE_AUTH) {
 }
 
 class FirebaseAuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String, private val libraryVersion: String?, private val apiKey: String) : IFirebaseAuthService.Stub(), LifecycleOwner {
-    private val client by lazy { IdentityToolkitClient(context, apiKey, packageName, PackageUtils.firstSignatureDigestBytes(context, packageName)) }
+    private val client by lazy { IdentityToolkitClient(context, apiKey, packageName, context.packageManager.getCertificates(packageName).firstOrNull()?.digest("SHA1")) }
     private var authorizedDomain: String? = null
 
     private suspend fun getAuthorizedDomain(): String {

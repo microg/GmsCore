@@ -42,6 +42,7 @@ import com.google.android.gms.auth.HasCapabilitiesRequest;
 import com.google.android.gms.auth.TokenData;
 import com.google.android.gms.common.api.Scope;
 
+import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
 
 import java.io.IOException;
@@ -186,7 +187,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle getAccounts(Bundle extras) {
-        PackageUtils.assertExtendedAccess(context);
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
         String[] accountFeatures = extras.getStringArray(KEY_ACCOUNT_FEATURES);
         String accountType = extras.getString(KEY_ACCOUNT_TYPE);
         Account[] accounts;
@@ -213,7 +214,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public Bundle requestGoogleAccountsAccess(String packageName) throws RemoteException {
-        PackageUtils.assertExtendedAccess(context);
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
         if (SDK_INT >= 26) {
             for (Account account : get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)) {
                 AccountManager.get(context).setAccountVisibility(account, packageName, VISIBILITY_VISIBLE);

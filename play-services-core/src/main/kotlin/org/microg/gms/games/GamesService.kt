@@ -48,7 +48,7 @@ private const val TAG = "GamesService"
 
 class GamesService : BaseService(TAG, GmsService.GAMES) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        val packageName = PackageUtils.getAndCheckCallingPackageOrExtendedAccess(this, request.packageName)
+        val packageName = PackageUtils.getAndCheckCallingPackageOrImpersonation(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
 
         fun sendSignInRequired() {
