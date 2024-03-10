@@ -227,6 +227,5 @@ Isso pode demorar alguns minutos."</string>
     <string name="perm_car_info_description">Acessar a informação do seu carro</string>
     <string name="perm_car_fuel_label">Nível de combustível do carro</string>
     <string name="perm_car_fuel_description">Acessar o nível de combustível do seu carro</string>
-    <string name="perm_car_vendor_extension_label"></string>
     <string name="backup_disabled">Backup não possível nesse momento</string>
 </resources>
