@@ -82,7 +82,6 @@ public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
     public static final String EXTRA_TMPL = "tmpl";
     public static final String EXTRA_EMAIL = "email";
-    public static final String EXTRA_ACCOUNT_AUTHENTICATOR_RESPONSE = "accountAuthenticatorResponse";
     public static final String EXTRA_TOKEN = "masterToken";
     public static final int STATUS_BAR_DISABLE_BACK = 0x00400000;
 
@@ -139,7 +138,7 @@ public class LoginActivity extends AssistantActivity {
                     closeWeb(true);
             }
         });
-        if(getIntent().hasExtra(EXTRA_ACCOUNT_AUTHENTICATOR_RESPONSE)){
+        if(getIntent().hasExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)){
             Object tempObject = getIntent().getExtras().get("accountAuthenticatorResponse");
             if (tempObject instanceof AccountAuthenticatorResponse) {
                 response = (AccountAuthenticatorResponse) tempObject;
@@ -190,8 +189,8 @@ public class LoginActivity extends AssistantActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(response!=null){
-            response.onError(4, "Canceled");
+        if(response != null){
+            response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
         }
     }
 
@@ -348,9 +347,9 @@ public class LoginActivity extends AssistantActivity {
     private void returnSuccessResponse(Account account){
         if(response != null){
             Bundle bd = new Bundle();
-            bd.putString("authAccount",account.name);
+            bd.putString(AccountManager.KEY_ACCOUNT_NAME,account.name);
             bd.putBoolean("new_account_created",false);
-            bd.putString("accountType",accountType);
+            bd.putString(AccountManager.KEY_ACCOUNT_TYPE,accountType);
             response.onResult(bd);
         }
     }
@@ -374,9 +373,8 @@ public class LoginActivity extends AssistantActivity {
                         String accountId = PeopleManager.loadUserInfo(LoginActivity.this, account);
                         if (!TextUtils.isEmpty(accountId))
                             accountManager.setUserData(account, "GoogleUserId", accountId);
-                        if(checkin(true)){
-                            returnSuccessResponse(account);
-                        }
+                        checkin(true);
+                        returnSuccessResponse(account);
                         finish();
                     }
 
