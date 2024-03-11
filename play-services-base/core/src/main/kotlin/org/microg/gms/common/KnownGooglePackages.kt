@@ -131,6 +131,7 @@ val KNOWN_GOOGLE_PACKAGES = mapOf(
 val KNOWN_GOOGLE_PRIVILEGED_CERT_HASHES = listOf(
     "f0fd6c5b410f25cb25c3b53346c8972fae30f8ee7411df910480ad6b2d60db83",
     "7ce83c1b71f3d572fed04c8d40c5cb10ff75e6d87d9df6fbd53f0468c2905053",
+    "3d7a1223019aa39d9ea0e3436ab7c0896bfb4fb679f4de5fe7c23f326c8f994a"
 )
 
 enum class GooglePackagePermission {
