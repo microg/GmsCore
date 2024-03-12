@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,31 +15,40 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <PreferenceScreen
         android:key="k2"
-        android:title="@string/prefs_account_security">
+        android:title="@string/prefs_account_security"
+        app:iconSpaceReserved="false">
         <intent
             android:action="com.google.android.gms.accountsettings.SECURITY_SETTINGS"
             android:targetPackage="com.google.android.gms" />
     </PreferenceScreen>
+
     <PreferenceScreen
         android:key="k3"
-        android:title="@string/prefs_account_privacy">
+        android:title="@string/prefs_account_privacy"
+        app:iconSpaceReserved="false">
         <intent
             android:action="com.google.android.gms.accountsettings.PRIVACY_SETTINGS"
             android:targetPackage="com.google.android.gms" />
     </PreferenceScreen>
+
     <PreferenceScreen
         android:key="k4"
-        android:title="@string/prefs_account">
+        android:title="@string/prefs_account"
+        app:iconSpaceReserved="false">
         <intent
             android:action="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
             android:targetPackage="com.google.android.gms" />
     </PreferenceScreen>
+
     <PreferenceScreen
         android:key="legacy"
-        android:title="Legacy settings">
+        android:title="Legacy settings"
+        app:iconSpaceReserved="false">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="org.microg.gms.ui.LegacyAccountSettingsActivity"

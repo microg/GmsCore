@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,5 +20,5 @@
     android:accountType="com.google"
     android:customTokens="true"
     android:icon="@drawable/proprietary_auth_gls_ic_google_selected"
-    android:smallIcon="@drawable/proprietary_auth_gls_ic_google_minitab_selected"
-    android:label="@string/google_account_label" />
+    android:label="@string/google_account_label"
+    android:smallIcon="@drawable/proprietary_auth_gls_ic_google_minitab_selected" />

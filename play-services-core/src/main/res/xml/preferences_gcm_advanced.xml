@@ -15,54 +15,63 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreferenceCompat
+    <org.microg.gms.ui.SwitchBarPreference
         android:defaultValue="false"
-        android:persistent="false"
         android:key="gcm_confirm_new_apps"
+        android:persistent="false"
+        android:title="@string/pref_gcm_confirm_new_apps_title" />
+
+    <Preference
+        android:selectable="false"
         android:summary="@string/pref_gcm_confirm_new_apps_summary"
-        android:title="@string/pref_gcm_confirm_new_apps_title"/>
+        app:iconSpaceReserved="false" />
 
     <PreferenceCategory
         android:key="prefcat_networks"
-        android:title="@string/prefcat_push_networks_title">
+        android:title="@string/prefcat_push_networks_title"
+        app:iconSpaceReserved="false">
 
         <ListPreference
             android:defaultValue="0"
-            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_mobile"
+            android:persistent="false"
             android:summary="ON / Automatic: 13 min"
-            android:title="@string/network_type_mobile"/>
+            android:title="@string/network_type_mobile"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="0"
-            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_wifi"
+            android:persistent="false"
             android:summary="ON / Manual: 30 min"
-            android:title="@string/network_type_wifi"/>
+            android:title="@string/network_type_wifi"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="0"
-            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_roaming"
+            android:persistent="false"
             android:summary="OFF"
-            android:title="@string/network_type_roaming"/>
+            android:title="@string/network_type_roaming"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="0"
-            android:persistent="false"
             android:entries="@array/gcm_network_config_names"
             android:entryValues="@array/gcm_network_config_values"
             android:key="gcm_network_other"
+            android:persistent="false"
             android:summary="ON / Automatic: 30 min"
-            android:title="@string/network_type_other"/>
-
+            android:title="@string/network_type_other"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

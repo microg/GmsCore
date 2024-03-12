@@ -8,19 +8,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:title="@string/prefcat_safetynet_apps_title">
+
     <Preference
         android:key="pref_safetynet_apps_all_progress"
         android:layout="@layout/preference_progress_bar"
         app:allowDividerBelow="false" />
+
     <PreferenceCategory
         android:key="prefcat_safetynet_apps_all"
         android:layout="@layout/preference_category_no_label"
         app:isPreferenceVisible="false"
         tools:isPreferenceVisible="true">
+
         <Preference
             android:enabled="false"
             android:key="pref_safetynet_apps_all_none"
             android:title="@string/list_no_item_none"
+            app:iconSpaceReserved="false"
             app:isPreferenceVisible="false"
             tools:isPreferenceVisible="true" />
     </PreferenceCategory>

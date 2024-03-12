@@ -7,34 +7,45 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
+
         <Preference
             android:icon="@drawable/ic_open"
             android:key="pref_exposure_app_open"
             android:title="@string/open_app" />
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="prefcat_exposure_app_report"
-        android:title="@string/prefcat_exposure_app_report_title">
+        android:title="@string/prefcat_exposure_app_report_title"
+        app:iconSpaceReserved="false">
+
         <Preference
             android:enabled="false"
             android:key="pref_exposure_app_report_none"
             android:order="0"
             android:title="@string/list_no_item_none"
+            app:iconSpaceReserved="false"
             app:isPreferenceVisible="false"
             tools:isPreferenceVisible="true" />
+
         <Preference
             android:enabled="false"
             android:key="pref_exposure_app_report_updated"
             android:order="100"
             android:summary="@string/pref_exposure_app_last_report_summary_diagnosis_keys"
-            android:title="@string/pref_exposure_app_report_updated_title" />
+            android:title="@string/pref_exposure_app_report_updated_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
+
         <Preference
             android:enabled="false"
             android:key="pref_exposure_app_api_usage"
             android:title="@string/pref_exposure_app_api_usage_title"
+            app:iconSpaceReserved="false"
             tools:summary="@string/pref_exposure_app_api_usage_summary_line" />
     </PreferenceCategory>
 </PreferenceScreen>

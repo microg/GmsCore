@@ -16,11 +16,17 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <PreferenceCategory android:title="DroidGuard">
+
+    <PreferenceCategory
+        android:title="DroidGuard"
+        app:iconSpaceReserved="false">
+
         <Preference
             android:key="pref_droidguard_mode"
             android:title="@string/pref_droidguard_operation_mode"
+            app:iconSpaceReserved="false"
             tools:summary="Local (embedded)" />
     </PreferenceCategory>
 </PreferenceScreen>

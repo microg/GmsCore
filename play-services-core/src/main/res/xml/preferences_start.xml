@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +17,11 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_header">
+
+    <PreferenceCategory
+        android:key="prefcat_header"
+        android:layout="@layout/preference_category_no_label">
+
         <Preference
             android:icon="@drawable/self_check"
             android:summary="@string/self_check_desc"
@@ -26,7 +31,11 @@
                 android:targetPackage="com.google.android.gms" />
         </Preference>
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/prefcat_google_services" android:key="prefcat_google_services">
+
+    <PreferenceCategory
+        android:key="prefcat_google_services"
+        android:title="@string/prefcat_google_services">
+
         <Preference
             android:icon="@drawable/ic_add_account"
             android:summary="@string/pref_add_account_summary"
@@ -35,22 +44,27 @@
                 android:targetClass="org.microg.gms.auth.login.LoginActivity"
                 android:targetPackage="com.google.android.gms" />
         </Preference>
+
         <Preference
             android:icon="@drawable/ic_device_login"
             android:key="pref_checkin"
             android:title="@string/service_name_checkin" />
+
         <Preference
             android:icon="@drawable/ic_cloud_bell"
             android:key="pref_gcm"
             android:title="@string/service_name_mcs" />
+
         <Preference
             android:icon="@drawable/ic_certificate"
             android:key="pref_snet"
             android:title="@string/service_name_snet" />
+
         <Preference
             android:icon="@drawable/ic_shop"
             android:key="pref_vending"
             android:title="@string/service_name_vending" />
+
         <Preference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
@@ -61,13 +75,21 @@
                 android:targetPackage="com.google.android.gms" />
         </Preference>
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_other_services">
+
+    <PreferenceCategory
+        android:key="prefcat_other_services"
+        android:layout="@layout/preference_category_no_label">
+
         <Preference
             android:icon="@drawable/ic_map_marker"
             android:key="pref_location"
-            android:title="@string/service_name_location"/>
+            android:title="@string/service_name_location" />
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_footer">
+
+    <PreferenceCategory
+        android:key="prefcat_footer"
+        android:layout="@layout/preference_category_no_label">
+
         <Preference
             android:icon="@drawable/ic_info_outline"
             android:key="pref_about"

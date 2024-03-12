@@ -5,29 +5,40 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <PreferenceCategory
         android:key="prefcat_exposure_rpi_histogram"
+        app:iconSpaceReserved="false"
         tools:title="@string/prefcat_exposure_rpis_histogram_title">
+
         <org.microg.gms.nearby.exposurenotification.ui.DotChartPreference
             android:key="pref_exposure_rpi_histogram"
             android:selectable="false"
             tools:layout="@layout/preference_dot_chart" />
     </PreferenceCategory>
+
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
+
         <Preference
             android:key="pref_exposure_export_database"
             android:summary="@string/pref_exposure_rpi_export_summary"
-            android:title="@string/pref_exposure_rpi_export_title" />
+            android:title="@string/pref_exposure_rpi_export_title"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:key="pref_exposure_rpi_delete_all"
             android:summary="@string/pref_exposure_rpi_delete_all_summary"
-            android:title="@string/pref_exposure_rpi_delete_all_title" />
+            android:title="@string/pref_exposure_rpi_delete_all_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+
+    <PreferenceCategory android:icon="@drawable/ic_info_outline">
+
         <org.microg.gms.ui.TextPreference
-            android:icon="@drawable/ic_info_outline"
             android:selectable="false"
-            android:summary="@string/pref_exposure_rpis_details_summary" />
+            android:summary="@string/pref_exposure_rpis_details_summary"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -6,39 +6,48 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:title="Push notifications">
+    android:title="@string/prefcat_push_apps_title">
 
     <org.microg.gms.ui.SwitchBarPreference
-        android:title="@string/gcm_enable_switch"
         android:key="pref_push_enabled"
-        android:persistent="false" />
+        android:persistent="false"
+        android:title="@string/gcm_enable_switch" />
 
     <PreferenceCategory
         android:key="prefcat_push_apps"
-        android:title="@string/prefcat_push_apps_title">
+        android:title="@string/prefcat_push_apps_title"
+        app:iconSpaceReserved="false">
+
         <Preference
             android:enabled="false"
             android:key="pref_push_apps_none"
-            android:title="@string/list_no_item_none" />
+            android:title="@string/list_no_item_none"
+            app:iconSpaceReserved="false" />
+
         <Preference
             android:icon="@drawable/ic_expand_apps"
             android:key="pref_push_apps_all"
             android:order="5"
             android:title="@string/list_item_see_all" />
     </PreferenceCategory>
+
     <PreferenceCategory
         android:key="prefcat_push_status"
         android:layout="@layout/preference_category_no_label">
+
         <Preference
-            android:key="pref_push_status"
             android:enabled="false"
+            android:key="pref_push_status"
             android:title="@string/pref_info_status"
+            app:iconSpaceReserved="false"
             tools:summary="Connected since 15 minutes ago" />
     </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label">
+
+    <PreferenceCategory android:icon="@drawable/ic_info_outline">
+
         <org.microg.gms.ui.TextPreference
-            android:icon="@drawable/ic_info_outline"
             android:selectable="false"
-            android:summary="@string/pref_gcm_enable_mcs_summary" />
+            android:summary="@string/pref_gcm_enable_mcs_summary"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
