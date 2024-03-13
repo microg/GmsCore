@@ -98,4 +98,31 @@ public interface SafetyNetApi {
     interface RecaptchaTokenResult extends Result {
         String getTokenResult();
     }
+
+    /**
+     * {@link Response} from {@link SafetyNetClient#enableVerifyApps()}
+     * and {@link SafetyNetClient#isVerifyAppsEnabled()}.
+     * <p>
+     * This response contains a simple boolean that indicates the current state of Play Protect/Verify Apps
+     * on the device.
+     */
+    class VerifyAppsUserResponse extends Response<VerifyAppsUserResult> {
+        public boolean isVerifyAppsEnabled() {
+            return getResult().isVerifyAppsEnabled();
+        }
+    }
+
+    /**
+     * A {@link Result} from {@link SafetyNetClient#enableVerifyApps()}
+     * and {@link SafetyNetClient#isVerifyAppsEnabled()}.
+     * <p>
+     * This response contains a simple boolean that indicates the current state of Play Protect/Verify Apps
+     * on the device. An unsuccessful {@link Status} does not indicate that Verify Apps is enabled or disabled.
+     *
+     * @deprecated use {@link VerifyAppsUserResponse} as returned by public APIs instead.
+     */
+    @Deprecated
+    interface VerifyAppsUserResult extends Result {
+        boolean isVerifyAppsEnabled();
+    }
 }

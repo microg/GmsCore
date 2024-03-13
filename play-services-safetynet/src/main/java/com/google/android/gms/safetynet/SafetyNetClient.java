@@ -117,4 +117,65 @@ public class SafetyNetClient extends GoogleApi<Api.ApiOptions.NoOptions> {
             }
         });
     }
+
+    /**
+     * Enables the Play Protect/Verify Apps feature on this device if it was disabled, and returns whether Verify Apps
+     * is currently active once the user action has taken place (if necessary).
+     */
+    public Task<SafetyNetApi.VerifyAppsUserResponse> enableVerifyApps() {
+        return scheduleTask((PendingGoogleApiCall<SafetyNetApi.VerifyAppsUserResponse, SafetyNetGmsClient>) (client, completionSource) -> {
+            try {
+                client.enableVerifyApps(new ISafetyNetCallbacksDefaultStub() {
+                    @Override
+                    public void onVerifyAppsUserResult(Status status, boolean enabled) throws RemoteException {
+                        SafetyNetApi.VerifyAppsUserResponse response = new SafetyNetApi.VerifyAppsUserResponse();
+                        response.setResult(new SafetyNetApi.VerifyAppsUserResult() {
+                            @Override
+                            public boolean isVerifyAppsEnabled() {
+                                return enabled;
+                            }
+
+                            @Override
+                            public Status getStatus() {
+                                return status;
+                            }
+                        });
+                        completionSource.setResult(response);
+                    }
+                });
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    /**
+     * Checks if the Play Protect/Verify Apps feature is currently enabled and active on this device.
+     */
+    public Task<SafetyNetApi.VerifyAppsUserResponse> isVerifyAppsEnabled() {
+        return scheduleTask((PendingGoogleApiCall<SafetyNetApi.VerifyAppsUserResponse, SafetyNetGmsClient>) (client, completionSource) -> {
+            try {
+                client.isVerifyAppsEnabled(new ISafetyNetCallbacksDefaultStub() {
+                    @Override
+                    public void onVerifyAppsUserResult(Status status, boolean enabled) throws RemoteException {
+                        SafetyNetApi.VerifyAppsUserResponse response = new SafetyNetApi.VerifyAppsUserResponse();
+                        response.setResult(new SafetyNetApi.VerifyAppsUserResult() {
+                            @Override
+                            public boolean isVerifyAppsEnabled() {
+                                return enabled;
+                            }
+
+                            @Override
+                            public Status getStatus() {
+                                return status;
+                            }
+                        });
+                        completionSource.setResult(response);
+                    }
+                });
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
 }
