@@ -8,6 +8,7 @@ package org.microg.gms.ui
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.res.TypedArrayUtils
 import androidx.preference.PreferenceViewHolder
@@ -24,9 +25,33 @@ class SwitchBarPreference : TwoStatePreference {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
         val a = context.obtainStyledAttributes(attrs, R.styleable.SwitchBarPreference, defStyleAttr, defStyleRes)
         frameId = a.getResourceId(R.styleable.SwitchBarPreference_switchBarFrameId, 0)
-        backgroundOn = a.getDrawable(R.styleable.SwitchBarPreference_switchBarFrameBackgroundOn)
-        backgroundOff = a.getDrawable(R.styleable.SwitchBarPreference_switchBarFrameBackgroundOff)
-        backgroundDisabled = a.getDrawable(R.styleable.SwitchBarPreference_switchBarFrameBackgroundDisabled)
+        var fallbackToSwitchBar = false
+
+        backgroundOn = try {
+            a.getDrawable(R.styleable.SwitchBarPreference_switchBarFrameBackgroundOn)
+        } catch (e: Exception) {
+            Log.w(TAG, e)
+            fallbackToSwitchBar = true
+            null
+        }
+        backgroundOff = try {
+            a.getDrawable(R.styleable.SwitchBarPreference_switchBarFrameBackgroundOff)
+        } catch (e: Exception) {
+            Log.w(TAG, e)
+            fallbackToSwitchBar = true
+            null
+        }
+        backgroundDisabled = try {
+            a.getDrawable(R.styleable.SwitchBarPreference_switchBarFrameBackgroundDisabled)
+        } catch (e: Exception) {
+            Log.w(TAG, e)
+            fallbackToSwitchBar = true
+            null
+        }
+
+        if (fallbackToSwitchBar) {
+            layoutResource = R.layout.preference_switch_bar
+        }
     }
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, R.style.Preference_SwitchBar)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, R.attr.switchBarPreferenceStyle)
