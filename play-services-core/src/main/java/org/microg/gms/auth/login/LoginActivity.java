@@ -304,7 +304,9 @@ public class LoginActivity extends AssistantActivity {
                             accountManager.setUserData(account, "lastName", response.lastName);
                             if (!TextUtils.isEmpty(response.accountId))
                                 accountManager.setUserData(account, "GoogleUserId", response.accountId);
-
+                            if (isAuthVisible(LoginActivity.this) && SDK_INT >= 26) {
+                                accountManager.setAccountVisibility(account, PACKAGE_NAME_KEY_LEGACY_NOT_VISIBLE, VISIBILITY_USER_MANAGED_VISIBLE);
+                            }
                             retrieveGmsToken(account);
                             setResult(RESULT_OK);
                         } else {
