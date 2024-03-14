@@ -99,7 +99,7 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
 
     override fun onResume() {
         super.onResume()
-        updateContent()
+        runCatching { updateContent() }.onFailure { database.close() }
     }
 
     override fun onPause() {
