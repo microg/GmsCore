@@ -9,7 +9,6 @@
         <activity
             android:name="org.microg.gms.location.manager.AskPermissionNotificationActivity"
             android:excludeFromRecents="true"
-            android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             android:exported="false" />
 
