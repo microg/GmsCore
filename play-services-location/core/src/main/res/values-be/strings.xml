@@ -21,4 +21,11 @@
     <string name="fragment_location_apps_title">Прыкладанні з доступам да месцазнаходжання</string>
     <string name="pref_location_app_force_coarse_title">Прымусова выкарыстоўваць прыкладнае месцазнаходжанне</string>
     <string name="pref_location_app_force_coarse_summary">Заўсёды даваць дадатку прыкладнае месцазнаходжанне, ігнаруючы ўзровень доступу дадатку.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Для атрымання падрабязнай інфармацыі перайдзіце ў налады месцазнаходжання.</string>
+    <string name="location_settings_dialog_message_title_to_continue">Каб працягнуць, уключыце вызначэнне месцазнаходжання прылады</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Вашай прыладзе патрабуецца:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Выкарыстанне GPS, Wi-Fi, сотавых сетак і датчыкаў</string>
+    <string name="location_settings_dialog_message_gls_consent">Выкарыстанне службы вызначэння месцазнаходжання; у рамках работы гэтай службы могуць перыядычна ананімна збірацца і выкарыстоўвацца дадзеныя аб месцазнаходжанні для павышэння дакладнасці вызначэння месцазнаходжання і паслуг на аснове месцазнаходжання.</string>
+    <string name="location_settings_dialog_btn_cancel">Не, дзякуй</string>
+    <string name="location_settings_dialog_btn_sure">ОК</string>
 </resources>
