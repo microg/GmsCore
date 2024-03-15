@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="sms_user_consent_title">允许<b>%s</b>读取以下消息并输入代码吗？</string>
+    <string name="sms_user_consent_allow">允许</string>
+    <string name="sms_user_consent_deny">拒绝</string>
+</resources>

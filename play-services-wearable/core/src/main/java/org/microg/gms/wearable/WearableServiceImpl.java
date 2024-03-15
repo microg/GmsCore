@@ -28,28 +28,7 @@ import android.util.Log;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.ConnectionConfiguration;
-import com.google.android.gms.wearable.internal.AddListenerRequest;
-import com.google.android.gms.wearable.internal.AddLocalCapabilityResponse;
-import com.google.android.gms.wearable.internal.AncsNotificationParcelable;
-import com.google.android.gms.wearable.internal.CapabilityInfoParcelable;
-import com.google.android.gms.wearable.internal.DeleteDataItemsResponse;
-import com.google.android.gms.wearable.internal.GetCapabilityResponse;
-import com.google.android.gms.wearable.internal.GetCloudSyncSettingResponse;
-import com.google.android.gms.wearable.internal.GetConfigResponse;
-import com.google.android.gms.wearable.internal.GetConfigsResponse;
-import com.google.android.gms.wearable.internal.GetConnectedNodesResponse;
-import com.google.android.gms.wearable.internal.GetDataItemResponse;
-import com.google.android.gms.wearable.internal.GetFdForAssetResponse;
-import com.google.android.gms.wearable.internal.GetLocalNodeResponse;
-import com.google.android.gms.wearable.internal.IChannelStreamCallbacks;
-import com.google.android.gms.wearable.internal.IWearableCallbacks;
-import com.google.android.gms.wearable.internal.IWearableService;
-import com.google.android.gms.wearable.internal.NodeParcelable;
-import com.google.android.gms.wearable.internal.PutDataRequest;
-import com.google.android.gms.wearable.internal.PutDataResponse;
-import com.google.android.gms.wearable.internal.RemoveListenerRequest;
-import com.google.android.gms.wearable.internal.RemoveLocalCapabilityResponse;
-import com.google.android.gms.wearable.internal.SendMessageResponse;
+import com.google.android.gms.wearable.internal.*;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -314,8 +293,9 @@ public class WearableServiceImpl extends IWearableService.Stub {
     }
 
     @Override
-    public void getConnectedCapaibilties(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
+    public void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) throws RemoteException {
         Log.d(TAG, "unimplemented Method: getConnectedCapaibilties: " + nodeFilter);
+        callbacks.onGetAllCapabilitiesResponse(new GetAllCapabilitiesResponse());
     }
 
     @Override

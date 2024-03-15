@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
 import org.microg.gms.auth.appcert.AppCertManager
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
@@ -33,14 +34,15 @@ class AuthProxyService : BaseService(TAG, GmsService.AUTH_PROXY) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
                 ?: throw IllegalArgumentException("Missing package name")
+        PackageUtils.assertGooglePackagePermission(this, GooglePackagePermission.APP_CERT)
         val consumerPackageName = request.extras.getString("consumerPkg")
-        if (consumerPackageName != null) PackageUtils.assertExtendedAccess(this)
+        if (consumerPackageName != null) PackageUtils.assertGooglePackagePermission(this, GooglePackagePermission.IMPERSONATE)
         val serviceImpl = AuthServiceImpl(this, lifecycle, consumerPackageName ?: packageName)
         callback.onPostInitComplete(CommonStatusCodes.SUCCESS, serviceImpl, Bundle())
     }
 }
 
-class AuthServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String) : IAuthService.Stub(), LifecycleOwner {
+class AuthServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String) : IAuthService.Stub(), LifecycleOwner {
     override fun performProxyRequest(callbacks: IAuthCallbacks, request: ProxyRequest) {
         Log.d(TAG, "performProxyRequest($packageName, $request)")
         lifecycleScope.launchWhenStarted {
@@ -56,8 +58,6 @@ class AuthServiceImpl(private val context: Context, private val lifecycle: Lifec
             callbacks.onSpatulaHeader(result)
         }
     }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

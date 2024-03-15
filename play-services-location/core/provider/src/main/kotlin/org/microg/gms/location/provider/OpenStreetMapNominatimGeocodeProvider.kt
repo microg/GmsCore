@@ -19,6 +19,7 @@ import com.google.android.gms.location.internal.ClientIdentity
 import org.json.JSONObject
 import org.microg.address.Formatter
 import org.microg.gms.location.LocationSettings
+import org.microg.gms.utils.singleInstanceOf
 import java.io.PrintWriter
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 
 class OpenStreetMapNominatimGeocodeProvider(private val context: Context) : GeocodeProvider() {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
     private val formatter = runCatching { Formatter() }.getOrNull()
     private val addressCache = LruCache<CacheKey, Address>(CACHE_SIZE)
     private val settings by lazy { LocationSettings(context) }

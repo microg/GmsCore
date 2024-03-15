@@ -91,6 +91,36 @@
         android:label="@string/perm_provision_label"
         android:protectionLevel="privileged|signature" />
 
+    <permission
+        android:name="com.google.android.gms.permission.CAR_SPEED"
+        android:label="@string/perm_car_speed_label"
+        android:description="@string/perm_car_speed_description"
+        android:permissionGroup="android.permission-group.LOCATION"
+        android:protectionLevel="dangerous" />
+
+    <permission-group
+        android:name="com.google.android.gms.permission.CAR_INFORMATION"
+        android:label="@string/perm_car_info_label"
+        android:description="@string/perm_car_info_description" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_FUEL"
+        android:label="@string/perm_car_fuel_label"
+        android:description="@string/perm_car_fuel_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_MILEAGE"
+        android:label="@string/perm_car_mileage_label"
+        android:description="@string/perm_car_mileage_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_VENDOR_EXTENSION"
+        android:label="@string/perm_car_vendor_extension_label"
+        android:description="@string/perm_car_vendor_extension_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -482,6 +512,13 @@
         <!-- Games -->
 
         <activity
+            android:name="org.microg.gms.games.GamesSignInActivity"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.Translucent"/>
+
+        <activity
             android:name="org.microg.gms.games.UpgradeActivity"
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog">
@@ -720,11 +757,23 @@
 
         <!-- PoToken -->
 
-        <service android:name="com.google.android.gms.potokens.internal.PoTokensApiService">
+        <service android:name="org.microg.gms.potokens.PoTokensService">
             <intent-filter>
                 <action android:name="com.google.android.gms.potokens.service.START" />
             </intent-filter>
         </service>
+
+        <!-- backup -->
+
+        <activity
+            android:name="org.microg.gms.backup.BackupSettingsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.backup.ACTION_BACKUP_SETTINGS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
         <!-- Other -->
 
@@ -868,7 +917,7 @@
             </intent-filter>
         </service>
 
-        <service android:name="com.google.android.gms.audit.internal.AuditApiService">
+        <service android:name="org.microg.gms.audit.AuditService">
             <intent-filter>
                 <action android:name="com.google.android.gms.audit.service.START" />
             </intent-filter>

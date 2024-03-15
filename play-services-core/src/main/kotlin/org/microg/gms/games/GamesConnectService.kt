@@ -46,9 +46,7 @@ class GamesConnectService : BaseService(TAG, GmsService.GAMES) {
     }
 }
 
-class GamesConnectServiceImpl(val context: Context, private val lifecycle: Lifecycle, val packageName: String) : IGamesConnectService.Stub(), LifecycleOwner {
-
-    override fun getLifecycle(): Lifecycle = lifecycle
+class GamesConnectServiceImpl(val context: Context, override val lifecycle: Lifecycle, val packageName: String) : IGamesConnectService.Stub(), LifecycleOwner {
 
     override fun signIn(callback: IGamesConnectCallbacks?, request: GamesSignInRequest?) {
         Log.d(TAG, "signIn($request)")

@@ -6,9 +6,9 @@
 package org.microg.gms.feedback
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.Feature

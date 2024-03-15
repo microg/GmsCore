@@ -59,6 +59,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
                 }
                 if (allowedPrefixes.isNotEmpty() && allowedPrefixes.none { url.startsWith(it) }) {
                     try {
+                        // noinspection UnsafeImplicitIntentLaunch
                         activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply { addCategory(Intent.CATEGORY_BROWSABLE) })
                     } catch (e: Exception) {
                         Log.w(TAG, "Error forwarding to browser", e)

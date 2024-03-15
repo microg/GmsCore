@@ -1,12 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2022 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
+  --><resources>
     <string name="fido_welcome_title">Выкарыстоўваць ваш ключ бяспекі для %1$s</string>
-    <string name="fido_welcome_body">Выкарыстанне ключа бяспекі для %1$s дапамагае абараніць вашыя асабістыя дадзеныя</string>
+    <string name="fido_welcome_body">Выкарыстанне ключа бяспекі для %1$s дапамагае абараніць вашыя асабістыя дадзеныя.</string>
     <string name="fido_welcome_button_get_started">Пачынаем працу</string>
     <string name="fido_welcome_privileged_info">%1$s выступае ў якасці даверанага браўзэра для выкарыстання вашага ключа бяспекі з %2$s.</string>
     <string name="fido_welcome_privileged_check">Так, %1$s мой давераны браўзэр, і яму павінна быць дазволена выкарыстоўваць ключы бяспекі на іншых вэб-сайтах.</string>

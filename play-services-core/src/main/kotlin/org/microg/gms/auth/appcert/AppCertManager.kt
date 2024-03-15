@@ -32,12 +32,16 @@ import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.utils.digest
+import org.microg.gms.utils.getCertificates
+import org.microg.gms.utils.singleInstanceOf
+import org.microg.gms.utils.toBase64
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.random.Random
 
 class AppCertManager(private val context: Context) {
-    private val queue = Volley.newRequestQueue(context)
+    private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
     private fun readDeviceKey() {
         try {
@@ -148,7 +152,7 @@ class AppCertManager(private val context: Context) {
 
     suspend fun getSpatulaHeader(packageName: String): String? {
         val deviceKey = deviceKey ?: if (fetchDeviceKey()) deviceKey else null
-        val packageCertificateHash = Base64.encodeToString(PackageUtils.firstSignatureDigestBytes(context, packageName), Base64.NO_WRAP)
+        val packageCertificateHash = context.packageManager.getCertificates(packageName).firstOrNull()?.digest("SHA1")?.toBase64(Base64.NO_WRAP)
         val proto = if (deviceKey != null) {
             val macSecret = deviceKey.macSecret?.toByteArray()
             if (macSecret == null) {

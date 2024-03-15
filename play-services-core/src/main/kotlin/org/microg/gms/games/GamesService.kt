@@ -48,7 +48,7 @@ private const val TAG = "GamesService"
 
 class GamesService : BaseService(TAG, GmsService.GAMES) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        val packageName = PackageUtils.getAndCheckCallingPackageOrExtendedAccess(this, request.packageName)
+        val packageName = PackageUtils.getAndCheckCallingPackageOrImpersonation(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
 
         fun sendSignInRequired() {
@@ -101,10 +101,8 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
     }
 }
 
-class GamesServiceImpl(val context: Context, private val lifecycle: Lifecycle, val packageName: String, val account: Account, val player: Player) :
+class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, val packageName: String, val account: Account, val player: Player) :
     IGamesService.Stub(), LifecycleOwner {
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun clientDisconnecting(clientId: Long) {
         Log.d(TAG, "Not yet implemented: clientDisconnecting($clientId)")

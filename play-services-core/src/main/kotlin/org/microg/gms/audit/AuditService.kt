@@ -1,12 +1,13 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.audit.internal
+package org.microg.gms.audit
 
 import android.util.Log
 import com.google.android.gms.audit.LogAuditRecordsRequest
+import com.google.android.gms.audit.internal.IAuditService
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
@@ -17,14 +18,14 @@ import org.microg.gms.common.GmsService
 
 private const val TAG = "AuditApiService"
 
-class AuditApiService : BaseService(TAG, GmsService.AUDIT) {
+class AuditService : BaseService(TAG, GmsService.AUDIT) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        callback.onPostInitComplete(ConnectionResult.SUCCESS, AuditApiServiceImpl().asBinder(), null)
+        callback.onPostInitComplete(ConnectionResult.SUCCESS, AuditServiceImpl().asBinder(), null)
     }
 
 }
 
-class AuditApiServiceImpl : IAuditService.Stub() {
+class AuditServiceImpl : IAuditService.Stub() {
 
     override fun logAuditRecords(request: LogAuditRecordsRequest?, callback: IStatusCallback) {
         Log.d(TAG, "method 'logAuditRecords' not fully implemented, only return Status.SUCCESS")

@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">Se ha producido un error al obtener la licencia.</string>
+    <string name="oss_license_title">Licencias de código abierto</string>
+    <string name="license_is_loading">La información de la licencia se está cargando.</string>
+    <string name="no_licenses_available">Esta aplicación no tiene ninguna licencia de código abierto.</string>
+    <string name="license_list_is_loading">La lista de licencias se está cargando.</string>
+    <string name="preferences_license_summary">Detalles de la licencia del software de código abierto</string>
+</resources>

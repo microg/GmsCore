@@ -1,14 +1,12 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.potokens.utils
+package org.microg.gms.potokens
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.android.volley.toolbox.Volley
-import org.microg.gms.droidguard.core.HandleProxyFactory
 
 class PoTokenPreferences(context: Context) {
 

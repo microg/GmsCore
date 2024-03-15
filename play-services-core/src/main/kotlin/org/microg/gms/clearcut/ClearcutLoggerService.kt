@@ -29,7 +29,7 @@ class ClearcutLoggerService : BaseService(TAG, GmsService.CLEARCUT_LOGGER) {
     }
 }
 
-class ClearcutLoggerServiceImpl(private val lifecycle: Lifecycle) : IClearcutLoggerService.Stub(), LifecycleOwner {
+class ClearcutLoggerServiceImpl(override val lifecycle: Lifecycle) : IClearcutLoggerService.Stub(), LifecycleOwner {
     private var collectForDebugExpiryTime: Long = 0
 
     override fun log(callbacks: IClearcutLoggerCallbacks, event: LogEventParcelable) {
@@ -72,8 +72,6 @@ class ClearcutLoggerServiceImpl(private val lifecycle: Lifecycle) : IClearcutLog
             runCatching { callbacks.onLogEventParcelables(DataHolder.empty(CommonStatusCodes.SUCCESS)) }
         }
     }
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean = warnOnTransactionIssues(code, reply, flags, TAG) { super.onTransact(code, data, reply, flags) }
 }

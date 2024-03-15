@@ -26,6 +26,7 @@ import org.microg.gms.common.Constants
 import org.microg.gms.common.Utils
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.utils.singleInstanceOf
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -145,7 +146,7 @@ fun JSONObject.toPlayer() = PlayerEntity(
     null
 )
 
-suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = Volley.newRequestQueue(context)) {
+suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
     val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
     val authToken = withContext(Dispatchers.IO) { authManager.requestAuth(false).auth }
@@ -202,7 +203,7 @@ suspend fun performGamesSignIn(
     account: Account,
     permitted: Boolean = false,
     scopes: List<Scope> = emptyList(),
-    queue: RequestQueue = Volley.newRequestQueue(context)
+    queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 ): Boolean {
     val scopes = (scopes.toSet() + Scope(Scopes.GAMES_LITE)).toList().sortedBy { it.scopeUri }
     val authManager = AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")

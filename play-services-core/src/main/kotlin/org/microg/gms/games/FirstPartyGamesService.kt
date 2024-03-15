@@ -21,6 +21,7 @@ import com.google.android.gms.games.client.PlayGamesConsistencyTokens
 import org.microg.gms.BaseService
 import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
@@ -29,10 +30,11 @@ private val FIRST_PARTY_PACKAGES = setOf(Constants.GMS_PACKAGE_NAME, GAMES_PACKA
 
 class FirstPartyGamesService : BaseService(TAG, GmsService.GAMES) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        val packageName = PackageUtils.getAndCheckCallingPackageOrExtendedAccess(this, request.packageName)
+        val packageName = PackageUtils.getAndCheckCallingPackageOrImpersonation(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
         val callingPackageName = PackageUtils.getCallingPackage(this) ?: packageName
-        if (!PackageUtils.callerHasExtendedAccess(this)) throw IllegalArgumentException("$callingPackageName does not have extended access")
+        if (!PackageUtils.callerHasGooglePackagePermission(this, GooglePackagePermission.GAMES))
+            throw IllegalArgumentException("$callingPackageName does not have google games access")
         if (callingPackageName !in FIRST_PARTY_PACKAGES) throw IllegalArgumentException("$callingPackageName is not first-party")
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
