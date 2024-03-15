@@ -21,4 +21,11 @@
     <string name="pref_location_wifi_mls_enabled_title">Запрашивать с серверов Mozilla</string>
     <string name="pref_location_cell_learning_enabled_title">Запоминать от GPS</string>
     <string name="prefcat_location_cell_title">Местоположение по мобильному интернету</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Вашему устройству требуется:</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Для получения подробной информации перейдите в настройки местоположения.</string>
+    <string name="location_settings_dialog_btn_sure">ОК</string>
+    <string name="location_settings_dialog_message_title_to_continue">Чтобы продолжить, включите определение местоположения устройства</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Использование GPS, Wi-Fi, сотовых сетей и датчиков</string>
+    <string name="location_settings_dialog_message_gls_consent">Использование службы определения местоположения; в рамках работы этой службы могут периодически анонимно собираться и использоваться данные о местоположении для повышения точности определения местоположения и услуг на основе местоположения.</string>
+    <string name="location_settings_dialog_btn_cancel">Нет, спасибо</string>
 </resources>

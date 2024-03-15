@@ -10,4 +10,13 @@
     <string name="toast_installed">microG Companion не может использоваться отдельно. Открываются настройки сервисов microG.</string>
     <string name="toast_not_installed">microG Companion не может использоваться отдельно. Пожалуйста, установите сервисы microG чтобы использовать microG.</string>
     <string name="pay_disabled">Функция оплаты недоступна</string>
+    <string name="error_unknown">Неизвестная ошибка. Выйдите и повторите попытку.</string>
+    <string name="tips_more_details">Подробнее</string>
+    <string name="error_network">Отсутствует подключение к Интернету. Убедитесь, что Wi-Fi или передача данных включены, и повторите попытку.</string>
+    <string name="error_passwd">Введенный вами пароль неверен.</string>
+    <string name="tips_input_passwd">Введите пароль</string>
+    <string name="tips_remember_login_info">Запомнить авторизацию на этом устройстве</string>
+    <string name="tips_forget_passwd">Забыли пароль?</string>
+    <string name="text_verify_button">Подтвердить</string>
+    <string name="confirm_purchase">Подтверждение покупки</string>
 </resources>
