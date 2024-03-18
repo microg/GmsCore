@@ -52,7 +52,7 @@
     <string name="exposure_confirm_stop_summary">După dezactivarea notificărilor de expunere, nu vei mai fi notificat când ai fost expus la cineva care a raportat că a fost diagnosticat pozitiv.</string>
     <string name="exposure_confirm_start_button">Pornește</string>
     <string name="exposure_confirm_keys_button">Distribuie</string>
-    <string name="exposure_confirm_permission_button">Permite</string>
+    <string name="exposure_confirm_permission_button">Acordă</string>
     <string name="exposure_confirm_button">Activează</string>
     <string name="exposure_confirm_keys_title">Partajezi ID-urile cu <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
     <string name="exposure_confirm_keys_summary">ID-urile tale din ultimele 14 zile vor fi folosite pentru a-i anunța pe alții că ai fost aproape despre o potențială expunere.
