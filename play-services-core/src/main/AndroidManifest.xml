@@ -922,6 +922,8 @@
                 <action android:name="com.google.android.gms.ads.service.CACHE" />
                 <action android:name="com.google.android.gms.ads.service.CONSENT_LOOKUP" />
                 <action android:name="com.google.android.gms.ads.service.HTTP" />
+                <action android:name="com.google.android.gms.inappreach.service.START"/>
+                <action android:name="com.google.android.gms.auth.blockstore.service.START"/>
                 <action android:name="com.google.android.gms.appstate.service.START" />
                 <action android:name="com.google.android.gms.appusage.service.START" />
                 <action android:name="com.google.android.gms.asterism.service.START" />
