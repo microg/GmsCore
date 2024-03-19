@@ -304,6 +304,7 @@ public class LoginActivity extends AssistantActivity {
                             accountManager.setUserData(account, "lastName", response.lastName);
                             if (!TextUtils.isEmpty(response.accountId))
                                 accountManager.setUserData(account, "GoogleUserId", response.accountId);
+
                             retrieveGmsToken(account);
                             setResult(RESULT_OK);
                         } else {
