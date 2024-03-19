@@ -833,11 +833,21 @@
                 <action android:name="com.google.android.gms.ads.gservice.START" />
             </intent-filter>
         </service>
+
+        <!-- feedback -->
+
         <service android:name="org.microg.gms.feedback.FeedbackService">
             <intent-filter>
                 <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.google.android.gms.feedback.FeedbackActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.Translucent"/>
+
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
