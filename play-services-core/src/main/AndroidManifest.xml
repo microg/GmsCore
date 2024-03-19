@@ -845,6 +845,7 @@
         <activity
             android:name="com.google.android.gms.feedback.FeedbackActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.Translucent"/>
 
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
