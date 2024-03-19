@@ -934,6 +934,7 @@
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
                 <action android:name="com.google.android.gms.auth.api.signin.service.START" />
+                <action android:name="com.google.android.gms.auth.blockstore.service.START"/>
                 <action android:name="com.google.android.gms.auth.config.service.START" />
                 <action android:name="com.google.android.gms.auth.cryptauth.cryptauthservice.START" />
                 <action android:name="com.google.android.gms.auth.proximity.devicesyncservice.START" />
@@ -980,6 +981,7 @@
                 <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.identity.service.BIND" />
+                <action android:name="com.google.android.gms.inappreach.service.START"/>
                 <action android:name="com.google.android.gms.instantapps.START" />
                 <action android:name="com.google.android.gms.kids.service.START" />
                 <action android:name="com.google.android.gms.learning.internal.dynamitesupport.START" />
