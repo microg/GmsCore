@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.Response;
 import com.google.android.gms.tasks.Task;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
 
 /**
@@ -22,7 +23,7 @@ import org.microg.gms.common.PublicApi;
  * If a {@link Task} with this response type fails, it will receive a {@link ResolvableApiException} which may be able to resolve the failure.
  * See {@link SettingsClient} for more details.
  * <p>
- * The current location settings states can be accessed via {@link #getLocationSettingsStates()}. See {@link LocationSettingsResult} for more details.
+ * The current location settings states can be accessed via {@link #getLocationSettingsStates()}. See {@link LocationSettingsStates} for more details.
  */
 public class LocationSettingsResponse extends Response<LocationSettingsResult> {
     /**
@@ -33,7 +34,7 @@ public class LocationSettingsResponse extends Response<LocationSettingsResult> {
         return getResult().getLocationSettingsStates();
     }
 
-    @PublicApi(exclude = true)
+    @Hide
     public LocationSettingsResponse(@NonNull LocationSettingsResult result) {
         super(result);
     }

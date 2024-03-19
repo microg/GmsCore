@@ -232,7 +232,7 @@ class LocationManagerInstance(
                         PendingIntent.getActivity(context, clientIdentity.packageName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
                     Status(CommonStatusCodes.RESOLUTION_REQUIRED, CommonStatusCodes.getStatusCodeString(CommonStatusCodes.RESOLUTION_REQUIRED), pendingIntent)
                 }
-                callback?.onLocationSettingsResult(LocationSettingsResult(locationSettingsStates, status))
+                callback?.onLocationSettingsResult(LocationSettingsResult(status, locationSettingsStates))
             }
         }
     }
