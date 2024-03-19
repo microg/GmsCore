@@ -20,7 +20,7 @@ class DroidGuardServiceBroker(val service: DroidGuardChimeraService) : AbstractG
     }
 
     override fun handleServiceRequest(callback: IGmsCallbacks?, request: GetServiceRequest?, service: GmsService?) {
-        val packageName = PackageUtils.getAndCheckCallingPackageOrExtendedAccess(this.service, request!!.packageName)
+        val packageName = PackageUtils.getAndCheckCallingPackageOrImpersonation(this.service, request!!.packageName)
         callback!!.onPostInitComplete(0, DroidGuardServiceImpl(this.service, packageName!!), null)
     }
 }

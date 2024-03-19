@@ -96,7 +96,7 @@
     <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Visualizza i tuoi dati di Google Analytics</string>
     <string name="permission_scope_www.googleapis.com_auth_analytics">Visualizza e gestisci i tuoi dati di Google Analytics</string>
     <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Accedi a Google Play Android Developer</string>
-    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Ambito di amministrazione di App engine</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Ambito di amministrazione di App engine.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Accesso in lettura e scrittura per l\'API Groups Migration.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Visualizza e gestisci le impostazioni di un gruppo di applicazioni Google</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Accesso in lettura e scrittura per l\'API License Manager.</string>
@@ -132,14 +132,14 @@
     <string name="permission_scope_www.googleapis.com_auth_freebase">Accedi a Freebase con il tuo account</string>
     <string name="permission_scope_www.googleapis.com_auth_fusiontables">Gestisci le tue tabelle di Fusion Tables</string>
     <string name="permission_scope_www.googleapis.com_auth_fusiontables.readonly">Visualizza le tue tabelle di Fusion Tables</string>
-    <string name="permission_scope_www.googleapis.com_auth_games">Ambito per accedere ai dati di Google Play Giochi</string>
+    <string name="permission_scope_www.googleapis.com_auth_games">Ambito per accedere ai dati di Google Play Giochi.</string>
     <string name="permission_scope_www.googleapis.com_auth_gan">Gestisci i tuoi dati GAN</string>
     <string name="permission_scope_www.googleapis.com_auth_gan.readonly">Visualizza i tuoi dati GAN</string>
     <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">Messaggistica cloud per Chrome</string>
     <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Ambito della sequenza temporale di Glass</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Crea, leggi, aggiorna, cancella bozze ed invia messaggi</string>
     <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Tutte le operazioni di lettura e scrittura ad eccezione dell\'immediata e permanente cancellazione dei threads e dei messaggi, bypassando il cestino</string>
-    <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Visualizza tutte le risorse ed i rispettivi metadati</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Visualizza tutte le risorse e i rispettivi metadati—nessuna operazione in scrittura.</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.best">Gestisci la tua migliore posizione disponibile e la cronologia delle localizzazioni</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Gestisci la tua localizzazione a livello urbano e la cronologia delle localizzazioni</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Gestisci la tua migliore posizione disponibile</string>
@@ -155,7 +155,7 @@
     <string name="permission_scope_www.googleapis.com_auth_shoppingapi">Visualizza i dati dei tuoi prodotti</string>
     <string name="permission_scope_www.googleapis.com_auth_siteverification">Gestisci la lista di siti e di domini che controlli</string>
     <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Gestisci le verifiche del tuo nuovo sito con Google</string>
-    <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Leggi e scrivi gli accessi per la API Shopping Content</string>
+    <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Accesso in lettura e scrittura per l\'API Shopping Content.</string>
     <string name="permission_scope_www.googleapis.com_auth_taskqueue.consumer">Svolgi attività dalla tua coda</string>
     <string name="permission_scope_www.googleapis.com_auth_taskqueue">Gestisci le tue attività</string>
     <string name="permission_scope_www.googleapis.com_auth_tasks">Gestisci le tue attività</string>

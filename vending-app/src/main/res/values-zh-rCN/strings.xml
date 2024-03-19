@@ -2,4 +2,6 @@
 <resources>
     <string name="toast_installed">microG Companion 不可单独使用。已转而打开 microG 服务设置。</string>
     <string name="toast_not_installed">microG Companion 不可单独使用。请安装 microG 服务以使用 microG。</string>
+
+    <string name="pay_disabled">支付功能不可用</string>
 </resources>

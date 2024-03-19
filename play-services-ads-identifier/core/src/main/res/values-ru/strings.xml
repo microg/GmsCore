@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="perm_ad_id_notification_description">Разрешает приложению получать уведомление когда рекламный идентификатор или предпочтение о лимите рекламной слежки пользователя обновлены.</string>
+    <string name="perm_ad_id_label">Разрешение рекламного идентификатора</string>
+    <string name="perm_ad_id_description">Разрешает издателю приложения прямо или косвенно получать доступ к рекламному идентификатору.</string>
+    <string name="perm_ad_id_notification_label">Уведомление рекламного идентификатора</string>
+</resources>

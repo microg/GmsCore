@@ -54,4 +54,15 @@
     <string name="exposure_confirm_keys_button">Distribuie</string>
     <string name="exposure_confirm_permission_button">Permite</string>
     <string name="exposure_confirm_button">Activează</string>
+    <string name="exposure_confirm_keys_title">Partajezi ID-urile cu <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_summary">ID-urile tale din ultimele 14 zile vor fi folosite pentru a-i anunța pe alții că ai fost aproape despre o potențială expunere.
+\n
+\nIdentitatea sau rezultatul testului nu vor fi partajate altor persoane.</string>
+    <string name="exposure_grant_background_location_description">Aproape gata! Va trebui să activezi accesul la locația de fundal selectând opțiunea „Permite tot timpul” pe ecranul următor. Apoi apasă înapoi.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> necesită permisiuni suplimentare.</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth trebuie să fie activat.</string>
+    <string name="exposure_confirm_location_description">Este necesar accesul la locație.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Sunt necesare permisiuni noi</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Atinge pentru a acorda permisiunile necesare notificărilor de expunere</string>
+    <string name="exposure_grant_background_location_button">Actualizare setări</string>
 </resources>

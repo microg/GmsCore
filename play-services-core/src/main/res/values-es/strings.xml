@@ -102,7 +102,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="prefs_account_privacy">Información personal &amp; privacidad</string>
     <string name="prefs_account_security">Inicio de sesión &amp; seguridad</string>
     <string name="pref_auth_trust_google_title">Confiar en Google para los permisos de las aplicaciones</string>
-    <string name="pref_auth_trust_google_summary">Cuando este desactivado, se preguntara al usuario antes de que una aplicación envíe una solicitud de autorización a Google. Algunas aplicaciones fallaran al usar la cuenta de Google si esta desactivado.</string>
+    <string name="pref_auth_trust_google_summary">Cuando está desactivada, se pregunta al usuario antes de enviar a Google la solicitud de autorización de una aplicación. Algunas aplicaciones no podrán utilizar la cuenta de Google si esta opción está desactivada.</string>
     <string name="pref_auth_visible_title">Permitir que las aplicaciones encuentren cuentas</string>
     <string name="pref_auth_visible_summary">Cuando esté habilitado, todas las aplicaciones de este dispositivo podrán ver la dirección de correo electrónico de sus cuentas de Google sin necesidad de autorización previa.</string>
     <string name="pref_checkin_enable_summary">El registro del dispositivo es un proceso oculto que se usa para crear un identificador único para los servicios de Google. microG quita información identificativa aparte del nombre en tu cuenta de Google de estos datos.</string>
@@ -157,7 +157,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="signin_confirm_button_text">Permitir y compartir</string>
     <string name="signin_subtext_sharing">Para continuar, microG compartirá el nombre, la dirección de correo electrónico y la foto de perfil de su cuenta de Google con <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="perm_gsf_read_gservices_label">leer la configuración del servicio de Google</string>
-    <string name="pref_auth_include_android_id_summary">Si se desactiva, las solicitudes de autenticación no se vincularán al registro del dispositivo, lo que permite el inicio de sesión de dispositivos no autorizados, pero puede tener consecuencias imprevistas.</string>
+    <string name="pref_auth_include_android_id_summary">Si se desactiva, las solicitudes de autenticación no se vincularán al registro del dispositivo, lo que puede permitir el inicio de sesión de dispositivos no autorizados, pero puede tener consecuencias imprevistas.</string>
     <string name="pref_test_summary_passed">Superadas todas las pruebas</string>
     <string name="pref_test_summary_warn">Atención: %s</string>
     <string name="pref_droidguard_unsupported_summary">La ejecución de DroidGuard no es compatible con este dispositivo. Los servicios de SafetyNet pueden comportarse mal.</string>
@@ -219,4 +219,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="pref_vending_licensing_enable_switch">Responder a las solicitudes de verificación de licencias</string>
     <string name="signin_picker_title">Elija una cuenta</string>
     <string name="signin_picker_add_account_label">Añadir otra cuenta</string>
+    <string name="feedback_disabled">Actualmente no es posible recibir comentarios</string>
+    <string name="pref_auth_strip_device_name_title">Eliminar el nombre del dispositivo para la autenticación</string>
+    <string name="pref_auth_strip_device_name_summary">Cuando está activada, las solicitudes de autenticación no incluyen el nombre del dispositivo, lo que puede permitir que dispositivos no autorizados inicien sesión, pero puede tener consecuencias imprevistas.</string>
 </resources>

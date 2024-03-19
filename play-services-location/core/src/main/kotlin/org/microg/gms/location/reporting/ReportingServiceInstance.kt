@@ -10,6 +10,7 @@ import android.os.Parcel
 import android.util.Log
 import com.google.android.gms.location.reporting.*
 import com.google.android.gms.location.reporting.internal.IReportingService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
@@ -19,7 +20,7 @@ class ReportingServiceInstance(private val context: Context, private val package
     override fun getReportingState(account: Account): ReportingState {
         Log.d(TAG, "getReportingState")
         val state = ReportingState()
-        if (PackageUtils.callerHasExtendedAccess(context)) {
+        if (PackageUtils.callerHasGooglePackagePermission(context, GooglePackagePermission.REPORTING)) {
             state.deviceTag = 0
         }
         return state
