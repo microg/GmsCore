@@ -119,8 +119,7 @@ public class SafetyNetClient extends GoogleApi<Api.ApiOptions.NoOptions> {
     }
 
     /**
-     * Enables the Play Protect/Verify Apps feature on this device if it was disabled, and returns whether Verify Apps
-     * is currently active once the user action has taken place (if necessary).
+     * Prompts the user to enable Verify Apps if it is currently turned off.
      */
     public Task<SafetyNetApi.VerifyAppsUserResponse> enableVerifyApps() {
         return scheduleTask((PendingGoogleApiCall<SafetyNetApi.VerifyAppsUserResponse, SafetyNetGmsClient>) (client, completionSource) -> {
@@ -150,7 +149,7 @@ public class SafetyNetClient extends GoogleApi<Api.ApiOptions.NoOptions> {
     }
 
     /**
-     * Checks if the Play Protect/Verify Apps feature is currently enabled and active on this device.
+     * Determines whether Verify Apps is enabled.
      */
     public Task<SafetyNetApi.VerifyAppsUserResponse> isVerifyAppsEnabled() {
         return scheduleTask((PendingGoogleApiCall<SafetyNetApi.VerifyAppsUserResponse, SafetyNetGmsClient>) (client, completionSource) -> {
