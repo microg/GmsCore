@@ -19,8 +19,15 @@ package com.google.android.gms.wearable.internal;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
+import java.util.List;
+
 public class GetAllCapabilitiesResponse extends AutoSafeParcelable {
-    @SafeParceled(1)
+    @Field(1)
     private int versionCode = 1;
-    public static final Creator<GetAllCapabilitiesResponse> CREATOR = new AutoCreator<GetAllCapabilitiesResponse>(GetAllCapabilitiesResponse.class);
+    @Field(2)
+    public int statusCode;
+    @Field(3)
+    public List<CapabilityInfoParcelable> capabilities;
+
+    public static final Creator<GetAllCapabilitiesResponse> CREATOR = findCreator(GetAllCapabilitiesResponse.class);
 }

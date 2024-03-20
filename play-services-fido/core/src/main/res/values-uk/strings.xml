@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="fido_welcome_button_get_started">Почнімо</string>
+    <string name="fido_usb_prompt_body">Під\'єднайте ключ безпеки до USB-порту або за допомогою USB-кабелю. Якщо на вашому ключі є кнопка, торкніться його.</string>
+    <string name="fido_transport_usb_wait_connect_body">Будь ласка, під\'єднайте свій USB-ключ безпеки.</string>
+    <string name="fido_nfc_prompt_body">Притисніть ключ до задньої панелі пристрою, доки він не перестане вібрувати</string>
+    <string name="fido_welcome_body">Використання ключа безпеки для %1$s допомагає захистити ваші приватні дані.</string>
+    <string name="fido_welcome_title">Використати ключ безпеки для %1$s</string>
+    <string name="fido_transport_selection_biometric">Використовувати цей пристрій з заблокованим екраном</string>
+    <string name="fido_welcome_privileged_check">Так, %1$s – мій довірений браузер, і надати йому дозвіл використовувати ключі безпеки на сторонніх вебсайтах.</string>
+    <string name="fido_biometric_prompt_body">%1$s потрібно підтвердити, що це ви.</string>
+    <string name="fido_transport_selection_usb">Використовувати ключ безпеки з USB</string>
+    <string name="fido_transport_selection_title">Оберіть як використовувати ключ безпеки</string>
+    <string name="fido_biometric_prompt_title">Підтвердьте свою особу</string>
+    <string name="fido_usb_title">Під\'єднайте USB-ключ безпеки</string>
+    <string name="fido_transport_usb_wait_confirm_body">Торкніться золотого кільця або диска на %1$s.</string>
+    <string name="fido_welcome_privileged_info">%1$s діє як довірений браузер для використання вашого ключа безпеки з %2$s.</string>
+    <string name="fido_nfc_title">Під\'єднайте NFC-ключ безпеки</string>
+    <string name="fido_transport_selection_bluetooth">Використовувати ключ безпеки з Bluetooth</string>
+    <string name="fido_transport_selection_body">Ключі безпеки працюють із Bluetooth, NFC і USB. Виберіть, як ви хочете використовувати свій ключ.</string>
+    <string name="fido_transport_selection_nfc">Використовувати ключ безпеки з NFC</string>
+</resources>

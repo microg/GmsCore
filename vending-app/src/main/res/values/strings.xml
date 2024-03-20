@@ -16,4 +16,6 @@
 
     <string name="license_notification_sign_in">Sign In</string>
     <string name="license_notification_ignore">Ignore</string>
+
+    <string name="pay_disabled">Pay currently not possible</string>
 </resources>

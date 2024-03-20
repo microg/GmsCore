@@ -7,6 +7,7 @@ package org.microg.vending;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,6 +33,11 @@ public class MarketIntentRedirect extends Activity {
         finish();
     }
 
+    private boolean isNonSelfIntent(@NonNull Intent intent) {
+        ResolveInfo resolveInfo = getPackageManager().resolveActivity(intent, 0);
+        return resolveInfo != null && resolveInfo.activityInfo != null && !getPackageName().equals(resolveInfo.activityInfo.packageName);
+    }
+
     private void processIntent(@NonNull Intent intent) {
         Log.d(TAG, "Received " + intent);
         Intent newIntent = new Intent(intent);
@@ -39,9 +45,11 @@ public class MarketIntentRedirect extends Activity {
         newIntent.setComponent(null);
         if ("market".equals(newIntent.getScheme())) {
             try {
-                Log.d(TAG, "Redirect to " + newIntent);
-                startActivity(newIntent);
-                return;
+                if (isNonSelfIntent(newIntent)) {
+                    Log.d(TAG, "Redirect to " + newIntent);
+                    startActivity(newIntent);
+                    return;
+                }
             } catch (Exception e) {
                 Log.w(TAG, e);
             }
@@ -62,9 +70,11 @@ public class MarketIntentRedirect extends Activity {
             Log.d(TAG, "Rewrote as " + newIntent + " (" + newIntent.getDataString() + ")");
         }
         try {
-            Log.d(TAG, "Redirect to " + newIntent);
-            startActivity(newIntent);
-            return;
+            if (isNonSelfIntent(newIntent)) {
+                Log.d(TAG, "Redirect to " + newIntent);
+                startActivity(newIntent);
+                return;
+            }
         } catch (Exception e) {
             Log.w(TAG, e);
             Toast.makeText(this, "Unable to open", Toast.LENGTH_SHORT).show();

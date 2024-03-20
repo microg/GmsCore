@@ -26,6 +26,7 @@ import com.google.android.gms.credential.manager.firstparty.internal.ICredential
 import com.google.android.gms.credential.manager.invocationparams.CredentialManagerInvocationParams
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.toBase64
 import org.microg.gms.utils.warnOnTransactionIssues
@@ -34,7 +35,7 @@ private const val TAG = "CredentialManager"
 
 class CredentialManagerService : BaseService(TAG, GmsService.CREDENTIAL_MANAGER) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        if (!PackageUtils.callerHasExtendedAccess(this)) {
+        if (!PackageUtils.callerHasGooglePackagePermission(this, GooglePackagePermission.CREDENTIALS)) {
             Log.d(TAG, "No access to ${request.packageName}, lacks permission.")
             callback.onPostInitComplete(ConnectionResult.API_DISABLED_FOR_CONNECTION, null, null)
             return
@@ -50,8 +51,7 @@ class CredentialManagerService : BaseService(TAG, GmsService.CREDENTIAL_MANAGER)
 
 }
 
-private class CredentialManagerServiceImpl(private val context: Context, private val lifecycle: Lifecycle) : ICredentialManagerService.Stub(), LifecycleOwner {
-    override fun getLifecycle(): Lifecycle = lifecycle
+private class CredentialManagerServiceImpl(private val context: Context, override val lifecycle: Lifecycle) : ICredentialManagerService.Stub(), LifecycleOwner {
 
     override fun getCredentialManagerIntent(callback: IPendingIntentCallback?, params: CredentialManagerInvocationParams?) {
         Log.d(TAG, "Not yet implemented: getCredentialManagerIntent $params")

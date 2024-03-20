@@ -61,6 +61,7 @@ class LoaderActivity : AppCompatActivity() {
                 Uri.parse(fallbackUrl)
             }
             Log.d(TAG, "Opening fallback $fallbackUrl")
+            // noinspection UnsafeImplicitIntentLaunch
             val intent = Intent(ACTION_VIEW, uri).apply { addCategory(CATEGORY_BROWSABLE) }
             startActivity(intent)
             finishResult(RESULT_OK)

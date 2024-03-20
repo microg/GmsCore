@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_content_error">Произошла ошибка при получении лицензии.</string>
+    <string name="no_licenses_available">У этого приложения нету лицензий с открытым исходным кодом.</string>
+    <string name="oss_license_title">Лицензии с открытым исходным кодом</string>
+    <string name="license_is_loading">Загрузка информации о лицензии.</string>
+    <string name="license_list_is_loading">Загрузка списка лицензий.</string>
+    <string name="preferences_license_summary">Подробности о лицензиях для ПО с открытым исходным кодом</string>
+</resources>

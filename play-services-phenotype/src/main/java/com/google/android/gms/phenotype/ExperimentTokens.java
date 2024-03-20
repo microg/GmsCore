@@ -5,6 +5,7 @@
 
 package com.google.android.gms.phenotype;
 
+import androidx.annotation.NonNull;
 import org.microg.safeparcel.AutoSafeParcelable;
 
 public class ExperimentTokens extends AutoSafeParcelable {
@@ -26,6 +27,8 @@ public class ExperimentTokens extends AutoSafeParcelable {
     public byte[][] directs;
     @Field(10)
     public int[] genericDimensions;
+    @Field(11)
+    public byte[][] external;
 
     public static final Creator<ExperimentTokens> CREATOR = findCreator(ExperimentTokens.class);
 }

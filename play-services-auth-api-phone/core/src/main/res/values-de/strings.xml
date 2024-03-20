@@ -2,4 +2,5 @@
 <resources>
     <string name="sms_user_consent_allow">Erlauben</string>
     <string name="sms_user_consent_deny">Ablehnen</string>
+    <string name="sms_user_consent_title"><b>%s</b> erlauben, die folgende Nachricht zu lesen und den Code einzugeben?</string>
 </resources>

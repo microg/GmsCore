@@ -47,4 +47,22 @@
 \n
 \nCând proprietarii de dispozitive raportează că sunt diagnosticați pozitivi, ID-urile lor pot fi partajate. Dispozitivul verifică dacă vreunul dintre ID-urile diagnosticate cunoscute se potrivește cu oricare dintre ID-urile colectate și calculează riscul de infecție.</string>
     <string name="exposure_confirm_start_summary">Telefonul trebuie să utilizeze Bluetooth pentru a colecta și a partaja ID-uri în siguranță cu alte telefoane din apropiere.<xliff:g example="Corona-Warn">%1$s</xliff:g> poate anunța dacă ai fost expus la cineva care a raportat că a fost diagnosticat pozitiv. Data, durata și puterea semnalului asociate cu o expunere vor fi partajate cu aplicația.</string>
+    <string name="exposure_confirm_stop_title">Dezactivezi notificările de expunere?</string>
+    <string name="exposure_confirm_stop_button">Oprire</string>
+    <string name="exposure_confirm_stop_summary">După dezactivarea notificărilor de expunere, nu vei mai fi notificat când ai fost expus la cineva care a raportat că a fost diagnosticat pozitiv.</string>
+    <string name="exposure_confirm_start_button">Pornește</string>
+    <string name="exposure_confirm_keys_button">Distribuie</string>
+    <string name="exposure_confirm_permission_button">Permite</string>
+    <string name="exposure_confirm_button">Activează</string>
+    <string name="exposure_confirm_keys_title">Partajezi ID-urile cu <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_summary">ID-urile tale din ultimele 14 zile vor fi folosite pentru a-i anunța pe alții că ai fost aproape despre o potențială expunere.
+\n
+\nIdentitatea sau rezultatul testului nu vor fi partajate altor persoane.</string>
+    <string name="exposure_grant_background_location_description">Aproape gata! Va trebui să activezi accesul la locația de fundal selectând opțiunea „Permite tot timpul” pe ecranul următor. Apoi apasă înapoi.</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> necesită permisiuni suplimentare.</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth trebuie să fie activat.</string>
+    <string name="exposure_confirm_location_description">Este necesar accesul la locație.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Sunt necesare permisiuni noi</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Atinge pentru a acorda permisiunile necesare notificărilor de expunere</string>
+    <string name="exposure_grant_background_location_button">Actualizare setări</string>
 </resources>
