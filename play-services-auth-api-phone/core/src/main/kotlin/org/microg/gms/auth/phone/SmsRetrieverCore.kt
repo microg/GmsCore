@@ -25,6 +25,7 @@ import android.telephony.SmsMessage
 import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -160,7 +161,7 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
     private fun getTimeoutPendingIntent(context: Context, packageName: String): PendingIntent {
         val intent = Intent(ACTION_SMS_RETRIEVE_TIMEOUT)
         intent.setPackage(packageName)
-        return PendingIntent.getBroadcast(context, ++requestCode, intent, PendingIntent.FLAG_IMMUTABLE)
+        return PendingIntentCompat.getBroadcast(context, ++requestCode, intent, 0, false)!!
     }
 
     private fun tryHandleIncomingMessageAsRetrieverMessage(message: SmsMessage): Boolean {

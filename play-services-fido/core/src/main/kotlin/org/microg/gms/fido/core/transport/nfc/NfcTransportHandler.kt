@@ -14,6 +14,7 @@ import android.nfc.Tag
 import android.nfc.tech.IsoDep
 import android.util.Log
 import androidx.core.app.OnNewIntentProvider
+import androidx.core.app.PendingIntentCompat
 import androidx.core.util.Consumer
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAssertionResponse
 import com.google.android.gms.fido.fido2.api.common.AuthenticatorAttestationResponse
@@ -36,7 +37,7 @@ class NfcTransportHandler(private val activity: Activity, callback: TransportHan
 
     private suspend fun waitForNewNfcTag(adapter: NfcAdapter): Tag {
         val intent = Intent(activity, activity.javaClass).apply { addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP) }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_MUTABLE)
+        val pendingIntent: PendingIntent = PendingIntentCompat.getActivity(activity, 0, intent, 0, true)!!
         adapter.enableForegroundDispatch(
             activity,
             pendingIntent,

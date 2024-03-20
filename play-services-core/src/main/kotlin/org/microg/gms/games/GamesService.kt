@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcel
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -55,7 +56,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
             Log.d(TAG, "Sending SIGN_IN_REQUIRED to $packageName")
             callback.onPostInitCompleteWithConnectionInfo(ConnectionResult.SIGN_IN_REQUIRED, null, ConnectionInfo().apply {
                 params = bundleOf(
-                    "pendingIntent" to PendingIntent.getActivity(
+                    "pendingIntent" to PendingIntentCompat.getActivity(
                         this@GamesService,
                         packageName.hashCode(),
                         Intent(this@GamesService, GamesSignInActivity::class.java).apply {
@@ -63,7 +64,8 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                             putExtra(EXTRA_ACCOUNT, request.account)
                             putExtra(EXTRA_SCOPES, request.scopes)
                         },
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                        PendingIntent.FLAG_UPDATE_CURRENT,
+                        false
                     )
                 )
             })

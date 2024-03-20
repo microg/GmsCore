@@ -6,13 +6,12 @@
 package org.microg.gms.nearby.exposurenotification
 
 import android.app.AlarmManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +49,7 @@ class CleanupService : LifecycleService() {
 
     fun stop() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pendingIntent = PendingIntent.getService(applicationContext, CleanupService::class.java.name.hashCode(), Intent(applicationContext, CleanupService::class.java), FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT or FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntentCompat.getService(applicationContext, CleanupService::class.java.name.hashCode(), Intent(applicationContext, CleanupService::class.java), FLAG_ONE_SHOT or FLAG_UPDATE_CURRENT, false)!!
         alarmManager.set(AlarmManager.RTC, ExposurePreferences(this).lastCleanup + CLEANUP_INTERVAL, pendingIntent)
         stopSelf()
     }
