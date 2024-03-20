@@ -7,17 +7,22 @@ package org.microg.gms.location.manager
 
 import android.Manifest.permission.*
 import android.app.PendingIntent
+import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.location.Location
 import android.location.LocationManager.GPS_PROVIDER
 import android.location.LocationManager.NETWORK_PROVIDER
 import android.os.Binder
+import android.os.Build.VERSION.SDK_INT
 import android.os.IBinder
 import android.os.Parcel
 import android.os.SystemClock
+import android.provider.Settings
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -26,14 +31,14 @@ import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.internal.ICancelToken
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.location.*
 import com.google.android.gms.location.internal.*
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REMOVE_UPDATES
 import com.google.android.gms.location.internal.DeviceOrientationRequestUpdateData.REQUEST_UPDATES
 import kotlinx.coroutines.*
-import org.microg.gms.common.Constants
 import org.microg.gms.location.hasNetworkLocationServiceBuiltIn
-import org.microg.gms.location.settings.ACTION_LOCATION_SETTINGS_CHECKER
+import org.microg.gms.location.settings.*
 import org.microg.gms.utils.warnOnTransactionIssues
 
 class LocationManagerInstance(
@@ -211,29 +216,36 @@ class LocationManagerInstance(
     }
 
     override fun requestLocationSettingsDialog(settingsRequest: LocationSettingsRequest?, callback: ISettingsCallbacks?, packageName: String?) {
-        Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName}")
+        Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName} $settingsRequest")
         val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
-            val locationManager = context.getSystemService<android.location.LocationManager>()
-            val gpsPresent = locationManager?.allProviders?.contains(GPS_PROVIDER) == true
-            val networkPresent = locationManager?.allProviders?.contains(NETWORK_PROVIDER) == true || context.hasNetworkLocationServiceBuiltIn()
-            val gpsUsable = gpsPresent && locationManager?.isProviderEnabled(GPS_PROVIDER) == true &&
-                    context.packageManager.checkPermission(ACCESS_FINE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
-            val networkUsable = networkPresent && locationManager?.isProviderEnabled(NETWORK_PROVIDER) == true &&
-                    context.packageManager.checkPermission(ACCESS_COARSE_LOCATION, clientIdentity.packageName) == PERMISSION_GRANTED
-            runCatching {
-                val locationSettingsStates = LocationSettingsStates(gpsUsable, networkUsable, false, gpsPresent, networkPresent, true)
-                val status = if (locationSettingsStates.isLocationUsable) {
-                    Status.SUCCESS
-                } else {
-                    val intent = Intent(ACTION_LOCATION_SETTINGS_CHECKER)
-                    intent.setPackage(Constants.GMS_PACKAGE_NAME)
-                    val pendingIntent =
-                        PendingIntent.getActivity(context, clientIdentity.packageName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                    Status(CommonStatusCodes.RESOLUTION_REQUIRED, CommonStatusCodes.getStatusCodeString(CommonStatusCodes.RESOLUTION_REQUIRED), pendingIntent)
-                }
-                callback?.onLocationSettingsResult(LocationSettingsResult(status, locationSettingsStates))
+            val states = context.getDetailedLocationSettingsStates()
+            val requests = settingsRequest?.requests?.map {
+                it.priority to (if (it.granularity == Granularity.GRANULARITY_PERMISSION_LEVEL) context.granularityFromPermission(clientIdentity) else it.granularity)
+            }.orEmpty()
+            val gpsRequested = requests.any { it.first == Priority.PRIORITY_HIGH_ACCURACY && it.second == Granularity.GRANULARITY_FINE }
+            val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
+            val bleRequested = settingsRequest?.needBle == true
+            val statusCode = when {
+                gpsRequested && states.gpsPresent && !states.gpsUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
+                networkLocationRequested && states.networkLocationPresent && !states.networkLocationUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
+                bleRequested && states.blePresent && !states.bleUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
+                gpsRequested && !states.gpsPresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
+                networkLocationRequested && !states.networkLocationPresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
+                bleRequested && !states.blePresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
+                else -> CommonStatusCodes.SUCCESS
             }
+
+            val resolution = if (statusCode == CommonStatusCodes.RESOLUTION_REQUIRED) {
+                val intent = Intent(ACTION_LOCATION_SETTINGS_CHECKER)
+                intent.setPackage(context.packageName)
+                intent.putExtra(EXTRA_ORIGINAL_PACKAGE_NAME, clientIdentity.packageName)
+                intent.putExtra(EXTRA_SETTINGS_REQUEST, SafeParcelableSerializer.serializeToBytes(settingsRequest))
+                PendingIntentCompat.getActivity(context, clientIdentity.packageName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT, true)
+            } else null
+            val status = Status(statusCode, LocationSettingsStatusCodes.getStatusCodeString(statusCode), resolution)
+            Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName} returns $status")
+            runCatching { callback?.onLocationSettingsResult(LocationSettingsResult(status, states.toApi())) }
         }
     }
 

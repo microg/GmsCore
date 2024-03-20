@@ -11,12 +11,15 @@ import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.TextView
 import org.microg.gms.location.core.R
 
 const val ACTION_LOCATION_SETTINGS_CHECKER = "com.google.android.gms.location.settings.CHECK_SETTINGS"
 
 private const val REQUEST_CODE_LOCATION = 120
+const val EXTRA_ORIGINAL_PACKAGE_NAME = "originalPackageName"
+const val EXTRA_SETTINGS_REQUEST = "locationSettingsRequests"
 
 class LocationSettingsCheckerActivity : Activity() {
 
@@ -25,6 +28,7 @@ class LocationSettingsCheckerActivity : Activity() {
         setContentView(R.layout.activity_location_setting_checker)
 
         findViewById<TextView>(R.id.location_setting_checker_sure).setOnClickListener {
+            // TODO: We also should handle permissions, Airplane Mode and BLE here.
             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
             startActivityForResult(intent, REQUEST_CODE_LOCATION)
         }

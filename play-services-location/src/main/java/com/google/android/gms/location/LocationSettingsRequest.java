@@ -16,6 +16,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -112,6 +113,17 @@ public class LocationSettingsRequest extends AbstractSafeParcelable {
             this.needBle = needBle;
             return this;
         }
+    }
+
+    @Hide
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("LocationSettingsRequest")
+                .value(requests)
+                .field("alwaysShow", alwaysShow)
+                .field("needBle", needBle)
+                .end();
     }
 
     public static final SafeParcelableCreatorAndWriter<LocationSettingsRequest> CREATOR = findCreator(LocationSettingsRequest.class);
