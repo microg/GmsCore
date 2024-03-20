@@ -31,7 +31,7 @@ class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
 class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
     override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
         Log.d(TAG, "register($packageName, $version, $p3, $p4)")
-        callbacks.onRegistered(Status.SUCCESS)
+        callbacks.onRegistered(if (version != 0) Status.SUCCESS else Status.CANCELED)
     }
 
     override fun weakRegister(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: IntArray?, p5: ByteArray?) {
