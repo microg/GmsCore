@@ -1,72 +1,86 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.location;
 
+import android.app.Activity;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.Status;
 
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
-import org.microg.safeparcel.SafeParceled;
 
 /**
- * Result of checking settings via checkLocationSettings(GoogleApiClient, LocationSettingsRequest),
- * indicates whether a dialog should be shown to ask the user's consent to change their settings.
- * The method getStatus() can be be used to confirm if the request was successful. If the current
- * location settings don't satisfy the app's requirements and the user has permission to change the
- * settings, the app could use startResolutionForResult(Activity, int) to start an intent to show a
- * dialog, asking for user's consent to change the settings. The current location settings states
- * can be accessed via getLocationSettingsStates(). See LocationSettingsResult for more details.
+ * Result of checking settings via {@link SettingsApi#checkLocationSettings(GoogleApiClient, LocationSettingsRequest)},
+ * indicates whether a dialog should be shown to ask the user's consent to change their
+ * settings.
+ * <p>
+ * The method {@link #getStatus()} can be used to confirm if the request was successful. If the current location settings don't
+ * satisfy the app's requirements and the user has permission to change the settings, the app could use
+ * {@link Status#startResolutionForResult(Activity, int)} to start an intent to show a dialog, asking for user's consent to
+ * change the settings.
+ * <p>
+ * The current location settings states can be accessed via {@link #getLocationSettingsStates()}. See
+ * {@link LocationSettingsStates} for more details.
  */
 @PublicApi
-public class LocationSettingsResult extends AutoSafeParcelable implements Result {
+@SafeParcelable.Class
+public class LocationSettingsResult extends AbstractSafeParcelable implements Result {
 
-    @SafeParceled(1000)
-    private int versionCode = 1;
+    @Field(1000)
+    int versionCode = 1;
 
-    @SafeParceled(1)
-    private Status status;
+    @Field(1)
+    @NonNull
+    private final Status status;
 
-    @SafeParceled(2)
-    private LocationSettingsStates settings;
+    @Field(2)
+    @Nullable
+    private final LocationSettingsStates settings;
 
 
     /**
      * Retrieves the location settings states.
      */
+    @Nullable
     public LocationSettingsStates getLocationSettingsStates() {
         return settings;
     }
 
     @Override
+    @NonNull
     public Status getStatus() {
         return status;
     }
 
-    @PublicApi(exclude = true)
-    public LocationSettingsResult(LocationSettingsStates settings, Status status) {
+    @Hide
+    @Constructor
+    public LocationSettingsResult(@Param(1) @NonNull Status status, @Param(2) @Nullable LocationSettingsStates settings) {
         this.settings = settings;
         this.status = status;
     }
 
-    @PublicApi(exclude = true)
-    public LocationSettingsResult(Status status) {
-        this.status = status;
+    @Hide
+    public LocationSettingsResult(@NonNull Status status) {
+        this(status, null);
     }
 
-    public static final Creator<LocationSettingsResult> CREATOR = new AutoCreator<LocationSettingsResult>(LocationSettingsResult.class);
+    public static final SafeParcelableCreatorAndWriter<LocationSettingsResult> CREATOR = findCreator(LocationSettingsResult.class);
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
 }
