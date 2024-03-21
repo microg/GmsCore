@@ -16,6 +16,7 @@
 
 package org.microg.gms.firebase.dynamiclinks;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.Bundle;
@@ -33,13 +34,40 @@ import com.google.firebase.dynamiclinks.internal.ShortDynamicLinkImpl;
 public class DynamicLinksServiceImpl extends IDynamicLinksService.Stub {
     private static final String TAG = "GmsDynamicLinksServImpl";
 
+    private String mPackageName;
+
     public DynamicLinksServiceImpl(Context context, String packageName, Bundle extras) {
+        mPackageName = packageName;
     }
 
 
     @Override
     public void getInitialLink(IDynamicLinksCallbacks callback, String link) throws RemoteException {
-        callback.onStatusDynamicLinkData(Status.SUCCESS, null);
+        if(link != null) {
+            Uri linkUri = Uri.parse(link);
+            String packageName = linkUri.getQueryParameter("apn");
+            String amvParameter = linkUri.getQueryParameter("amv");
+            if(packageName == null) {
+                throw new RuntimeException("Missing package name");
+            } else if (!mPackageName.equals(packageName)) {
+                throw new RuntimeException("Registered package name:" + mPackageName + " does not match link package name: " + packageName);
+            }
+            int amv = 0;
+            if(amvParameter != null && amvParameter != "") {
+                amv = Integer.parseInt(amvParameter);
+            }
+            DynamicLinkData data = new DynamicLinkData(
+                null,
+                linkUri.getQueryParameter("link"),
+                amv,
+                0,
+                null,
+                null
+            );
+            callback.onStatusDynamicLinkData(Status.SUCCESS, data);
+        } else {
+            callback.onStatusDynamicLinkData(Status.SUCCESS, null);
+        }
     }
 
 

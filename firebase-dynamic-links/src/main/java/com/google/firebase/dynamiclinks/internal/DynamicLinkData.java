@@ -40,6 +40,14 @@ public class DynamicLinkData extends AutoSafeParcelable {
         extensionBundle = new Bundle();
         redirectUrl = Uri.EMPTY;
     }
+    public DynamicLinkData(String dynamicLink, String deepLink, int minVersion, long clickTimestamp, Bundle extensionBundle, Uri redirectUrl) {
+        this.dynamicLink = dynamicLink;
+        this.deepLink = deepLink;
+        this.minVersion = minVersion;
+        this.clickTimestamp = clickTimestamp;
+        this.extensionBundle = extensionBundle;
+        this.redirectUrl = redirectUrl;
+    }
 
     public static final Creator<DynamicLinkData> CREATOR = new AutoCreator<DynamicLinkData>(DynamicLinkData.class);
 }
