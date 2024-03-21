@@ -41,5 +41,7 @@ jobs:
               echo "Matcher configured: ${NAME:?}"
             fi
           done
-      - name: "Execute Gradle build"
-        run: "./gradlew --no-daemon build"
+      - name: "Execute Gradle assemble"
+        run: "./gradlew --no-daemon assemble"
+      - name: "Execute Gradle check"
+        run: "./gradlew --no-daemon check"
