@@ -23,9 +23,9 @@ android {
         debug {
             postprocessing {
                 removeUnusedCode true
-                removeUnusedResources true
+                removeUnusedResources false
                 obfuscate false
-                optimizeCode true
+                optimizeCode false
             }
         }
         release {
