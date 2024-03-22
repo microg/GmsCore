@@ -18,7 +18,7 @@ public class AppListDatabaseOpenHelper extends SQLiteOpenHelper {
     public static final String TABLE_APPLIST = "applist";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_FAKE = "fake";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DROP_APP_LIST_TABLE = "DROP TABLE IF EXISTS " + TABLE_APPLIST;
     private static final String CREATE_APP_LIST_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_APPLIST + "(" +
             COLUMN_NAME + " VARCHAR(255) PRIMARY KEY, " +

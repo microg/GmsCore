@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="exposure_notify_off_title">Паведамленні аб рызыцы інфікавання не актыўныя</string>
     <string name="exposure_notify_off_bluetooth">Bluetooth павінен быць уключаны, каб прымаць паведамленні аб рызыцы інфікавання.</string>
     <string name="exposure_notify_off_location">Доступ да месцазнаходжання абавязковы, каб прымаць паведамленні аб рызыцы інфікавання.</string>
     <string name="exposure_notify_off_bluetooth_location">Bluetooth і вызначэнне месцазнаходжання павінны быць уключаны, каб прымаць паведамленні аб рызыцы інфікавання.</string>
     <string name="exposure_notify_off_nearby">Паведамленням аб рызыцы інфікавання для працы патрабуюцца дадатковыя дазволы</string>
-
     <string name="service_name_exposure">Паведамленні аб рызыцы інфікавання</string>
     <string name="pref_exposure_enable_info_summary">Каб уключыць паведамленні аб рызыцы інфікавання запусціце любое прыкладанне, якое іх падтрымлівае.</string>
     <string name="pref_exposure_error_bluetooth_off_title">Ўключыць Bluetooth</string>
@@ -48,7 +47,6 @@
     <string name="pref_exposure_rpis_details_summary">"Пакуль API паведамленняў аб рызыцы інфікавання уключаны, ваша прылада пасіўна збірае ідэнтыфікатары (званыя слізгальнымі ідэнтыфікатарамі збліжэння або RPI) з суседніх прылад.
 
 Калі ўладальнікі прылад паведамляюць аб пацверджаным дыягназе, іх ідэнтыфікатары могуць быць распаўсюджаныя. Ваша прылада правярае, ці адпавядае якой-небудзь з вядомых ідэнтыфікатараў з пацьвердзіць дыягназам любому з сабраных вамі ідэнтыфікатараў, і разлічвае рызыку заражэння."</string>
-
     <string name="exposure_enable_switch">Выкарыстоўваць паведамленні аб рызыцы інфікавання</string>
     <string name="exposure_confirm_start_title">Ўключыць паведамленні аб рызыцы інфікавання?</string>
     <string name="exposure_confirm_start_summary">"Ваш тэлефон павінен выкарыстоўваць Bluetooth для бяспечнага збору і распаўсюджвання ідэнтыфікатараў іншым тэлефонам, якія знаходзяцца паблізу.
@@ -69,9 +67,9 @@
     <string name="exposure_confirm_permission_button">Даць дазвол</string>
     <string name="exposure_confirm_bluetooth_description">Bluetooth павінен быць уключаны.</string>
     <string name="exposure_confirm_location_description">патрабуецца доступ да месцазнаходжання.</string>
-    <string name="exposure_confirm_button">Ўключыць</string>
+    <string name="exposure_confirm_button">Уключыць</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Патрабуецца дадатковы дазвол</string>
-    <string name="pref_exposure_error_nearby_not_granted_description">Націсніце, каб даць неабходныя дазволы апавяшчэнням аб рызыцы інфікавання.</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Націсніце, каб даць неабходныя дазволы апавяшчэнням аб рызыцы інфікавання</string>
     <string name="exposure_grant_background_location_description">Амаль гатова! Вам трэба будзе ўключыць фонавы доступ да месцазнаходжання, выбраўшы опцыю \'Дазволіць у любым рэжыме\' на наступным экране. Потым вярніцеся назад.</string>
     <string name="exposure_grant_background_location_button">Абнавіць налады</string>
 </resources>

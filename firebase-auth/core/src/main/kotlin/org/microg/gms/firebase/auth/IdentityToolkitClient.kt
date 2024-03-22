@@ -127,10 +127,10 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
 
     suspend fun getTokenByRefreshToken(refreshToken: String): JSONObject = suspendCoroutine { continuation ->
         queue.add(object : JsonRequest<JSONObject>(POST, buildStsUrl("token"), "grant_type=refresh_token&refresh_token=$refreshToken", { continuation.resume(it) }, { continuation.resumeWithException(RuntimeException(it)) }) {
-            override fun parseNetworkResponse(response: NetworkResponse?): Response<JSONObject> {
+            override fun parseNetworkResponse(response: NetworkResponse): Response<JSONObject> {
                 return try {
-                    val jsonString = String(response!!.data, Charset.forName(HttpHeaderParser.parseCharset(response!!.headers, PROTOCOL_CHARSET)))
-                    Response.success(JSONObject(jsonString), HttpHeaderParser.parseCacheHeaders(response))
+                    val jsonString = String(response.data, Charset.forName(HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET)))
+                    Response.success(JSONObject(jsonString), null)
                 } catch (e: UnsupportedEncodingException) {
                     Response.error(ParseError(e))
                 } catch (je: JSONException) {

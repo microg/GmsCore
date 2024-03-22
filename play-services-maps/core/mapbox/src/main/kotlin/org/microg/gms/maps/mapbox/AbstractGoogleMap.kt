@@ -58,11 +58,11 @@ abstract class AbstractGoogleMap(context: Context) : IGoogleMapDelegate.Stub() {
         onInfoWindowClickListener = listener
     }
 
-    override fun setOnInfoWindowLongClickListener(listener: IOnInfoWindowLongClickListener) {
+    override fun setOnInfoWindowLongClickListener(listener: IOnInfoWindowLongClickListener?) {
         onInfoWindowLongClickListener = listener
     }
 
-    override fun setOnInfoWindowCloseListener(listener: IOnInfoWindowCloseListener) {
+    override fun setOnInfoWindowCloseListener(listener: IOnInfoWindowCloseListener?) {
         onInfoWindowCloseListener = listener
     }
 

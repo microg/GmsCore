@@ -91,6 +91,36 @@
         android:label="@string/perm_provision_label"
         android:protectionLevel="privileged|signature" />
 
+    <permission
+        android:name="com.google.android.gms.permission.CAR_SPEED"
+        android:label="@string/perm_car_speed_label"
+        android:description="@string/perm_car_speed_description"
+        android:permissionGroup="android.permission-group.LOCATION"
+        android:protectionLevel="dangerous" />
+
+    <permission-group
+        android:name="com.google.android.gms.permission.CAR_INFORMATION"
+        android:label="@string/perm_car_info_label"
+        android:description="@string/perm_car_info_description" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_FUEL"
+        android:label="@string/perm_car_fuel_label"
+        android:description="@string/perm_car_fuel_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_MILEAGE"
+        android:label="@string/perm_car_mileage_label"
+        android:description="@string/perm_car_mileage_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+    <permission
+        android:name="com.google.android.gms.permission.CAR_VENDOR_EXTENSION"
+        android:label="@string/perm_car_vendor_extension_label"
+        android:description="@string/perm_car_vendor_extension_description"
+        android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
+        android:protectionLevel="dangerous" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -488,6 +518,13 @@
         <!-- Games -->
 
         <activity
+            android:name="org.microg.gms.games.GamesSignInActivity"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.Translucent"/>
+
+        <activity
             android:name="org.microg.gms.games.UpgradeActivity"
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog">
@@ -732,6 +769,18 @@
             </intent-filter>
         </service>
 
+        <!-- backup -->
+
+        <activity
+            android:name="org.microg.gms.backup.BackupSettingsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.backup.ACTION_BACKUP_SETTINGS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
         <!-- Other -->
 
         <service
@@ -790,11 +839,21 @@
                 <action android:name="com.google.android.gms.ads.gservice.START" />
             </intent-filter>
         </service>
+
+        <!-- feedback -->
+
         <service android:name="org.microg.gms.feedback.FeedbackService">
             <intent-filter>
                 <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.google.android.gms.feedback.FeedbackActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.Translucent"/>
+
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
@@ -891,6 +950,7 @@
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
                 <action android:name="com.google.android.gms.auth.api.signin.service.START" />
+                <action android:name="com.google.android.gms.auth.blockstore.service.START"/>
                 <action android:name="com.google.android.gms.auth.config.service.START" />
                 <action android:name="com.google.android.gms.auth.cryptauth.cryptauthservice.START" />
                 <action android:name="com.google.android.gms.auth.proximity.devicesyncservice.START" />
@@ -937,6 +997,7 @@
                 <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.identity.service.BIND" />
+                <action android:name="com.google.android.gms.inappreach.service.START"/>
                 <action android:name="com.google.android.gms.instantapps.START" />
                 <action android:name="com.google.android.gms.kids.service.START" />
                 <action android:name="com.google.android.gms.learning.internal.dynamitesupport.START" />

@@ -24,6 +24,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.android.vending.VendingPreferences;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
@@ -51,42 +52,14 @@ public class LicensingService extends Service {
 
     private static final Uri CHECKIN_SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/check-in");
 
-    private static final Uri SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/vending");
-
-    private static final String PREFERENCE_LICENSING_ENABLED = "vending_licensing";
-
     private final ILicensingService.Stub mLicenseService = new ILicensingService.Stub() {
-
-        private boolean shouldCheckLicense() {
-
-            Cursor cursor = null;
-            try {
-                cursor = getContentResolver().query(
-                    SETTINGS_PROVIDER, new String[]{PREFERENCE_LICENSING_ENABLED}, null, null, null
-                );
-
-                if (cursor == null || cursor.getColumnCount() != 1) {
-                    Log.e(TAG, "settings provider not available");
-                    return false;
-                } else {
-                    cursor.moveToNext();
-                    return cursor.getInt(0) != 0;
-                }
-
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        }
-
 
         @Override
         public void checkLicense(long nonce, String packageName, ILicenseResultListener listener) throws RemoteException {
             Log.v(TAG, "checkLicense(" + nonce + ", " + packageName + ")");
             int callingUid = getCallingUid();
 
-            if (!shouldCheckLicense()) {
+            if (!VendingPreferences.isLicensingEnabled(getApplicationContext())) {
                 Log.d(TAG, "not checking license, as it is disabled by user");
                 return;
             }
@@ -121,7 +94,7 @@ public class LicensingService extends Service {
             Log.v(TAG, "checkLicenseV2(" + packageName + ", " + extraParams + ")");
             int callingUid = getCallingUid();
 
-            if (!shouldCheckLicense()) {
+            if (!VendingPreferences.isLicensingEnabled(getApplicationContext())) {
                 Log.d(TAG, "not checking license, as it is disabled by user");
                 return;
             }

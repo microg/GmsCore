@@ -6,9 +6,9 @@
 package org.microg.gms.feedback
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.Feature
@@ -77,8 +77,11 @@ class FeedbackServiceImpl(private val context: Context, private val lifecycleSco
     private fun showFeedbackDisabledToast() {
         lifecycleScope.launchWhenStarted {
             withContext(Dispatchers.Main){
-                val content = context.resources.getString(com.google.android.gms.R.string.feedback_disabled)
-                Toast.makeText(context, content, Toast.LENGTH_SHORT).show()
+                val intent: Intent = Intent().apply {
+                    setClassName(context, "com.google.android.gms.feedback.FeedbackActivity")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
             }
         }
     }

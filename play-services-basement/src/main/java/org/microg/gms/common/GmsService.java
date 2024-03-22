@@ -158,6 +158,7 @@ public enum GmsService {
     THUNDERBIRD(226, "com.google.android.gms.thunderbird.service.START"),
     NEARBY_EXPOSURE(236, "com.google.android.gms.nearby.exposurenotification.START"),
     GMS_COMPLIANCE(257, "com.google.android.gms.gmscompliance.service.START"),
+    BLOCK_STORE(258, "com.google.android.gms.auth.blockstore.service.START"),
     FIDO_SOURCE_DEVICE(262, "com.google.android.gms.fido.sourcedevice.service.START"),
     FAST_PAIR(265, "com.google.android.gms.nearby.fastpair.START"),
     MATCHSTICK_LIGHTER(268, "com.google.android.gms.matchstick.lighter.service.START"),

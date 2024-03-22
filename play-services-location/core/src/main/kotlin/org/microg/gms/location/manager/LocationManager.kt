@@ -8,7 +8,6 @@ package org.microg.gms.location.manager
 import android.Manifest
 import android.app.Activity
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_MUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
@@ -17,6 +16,7 @@ import android.location.Location
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
@@ -146,7 +146,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         }
         val intent = Intent(context, LocationManagerService::class.java)
         intent.action = LocationManagerService.ACTION_REPORT_LOCATION
-        coarsePendingIntent = PendingIntent.getService(context, 0, intent, (if (SDK_INT >= 31) FLAG_MUTABLE else 0) or FLAG_UPDATE_CURRENT)
+        coarsePendingIntent = PendingIntentCompat.getService(context, 0, intent, FLAG_UPDATE_CURRENT, true)
         lastLocationCapsule.start()
         requestManager.start()
     }

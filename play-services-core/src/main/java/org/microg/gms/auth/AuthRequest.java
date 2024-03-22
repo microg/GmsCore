@@ -132,6 +132,10 @@ public class AuthRequest extends HttpFormClient.Request {
         if (AuthPrefs.shouldIncludeAndroidId(context)) {
             androidIdHex = Long.toHexString(LastCheckinInfo.read(context).getAndroidId());
         }
+        if (AuthPrefs.shouldStripDeviceName(context)) {
+            deviceName = "";
+            buildVersion = "";
+        }
         return this;
     }
 

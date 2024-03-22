@@ -49,7 +49,7 @@
     <string name="gcm_network_state_connected">Ansluten sedan <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrerad</string>
     <string name="pref_more_settings">Mer</string>
-    <string name="pref_auth_include_android_id_summary">Vid inaktivering kommer autentiseringsförfrågningar inte att kopplas till enhetsregistreringen, vilket gör att obehöriga enheter kan logga in, men kan ha oförutsedda konsekvenser.</string>
+    <string name="pref_auth_include_android_id_summary">Vid inaktivering kommer autentiseringsförfrågningar inte att kopplas till enhetsregistreringen, vilket kan göra att obehöriga enheter kan logga in, men kan ha oförutsedda konsekvenser.</string>
     <string name="pref_gcm_heartbeat_title">Cloud Messaging hjärtslagsintervall</string>
     <string name="signin_picker_subtitle">för att fortsätta till <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_confirm_title">Tillåt att logga in på <xliff:g example="F-Droid">%1$s</xliff:g></string>
@@ -114,9 +114,7 @@
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> kräver din autentisering för att komma åt ditt Google-konto.</string>
     <string name="gms_app_name">microG-tjänster</string>
     <string name="self_check_name_perm_granted">Systemet ger signaturspoofingtillstånd:</string>
-    <string name="auth_before_connect">En app på din enhet försöker logga in på ett Google-konto.
-\n
-\nOm detta var avsiktligt, använd knappen <b>Logga in</b> för att ansluta till Googles inloggningssida, om inte, tryck på <b>Avbryt</b> för att gå tillbaka till programmet som gjorde att den här dialogrutan dök upp.</string>
+    <string name="auth_before_connect">En app på din enhet försöker logga in på ett Google-konto. \u0020Om detta var avsiktligt, använd knappen <b>Logga in</b> för att ansluta till Googles inloggningssida, om inte, tryck på <b>Avbryt</b> för att gå tillbaka till programmet som gjorde att den här dialogrutan dök upp.</string>
     <string name="self_check_name_battery_optimizations">Batterioptimering ignorerad:</string>
     <string name="signin_subtext_sharing">För att fortsätta kommer microG att dela namn, e-postadress och profilbild för ditt Google-konto med <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="auth_notification_title">Autentisering krävs</string>
@@ -205,4 +203,7 @@
     <string name="pref_vending_license_enable_summary">Vissa appar kräver verifiering att du har köpt dem på Google Play. På begäran av en app kan microG ladda ner ett köpbevis från Google. Om det är inaktiverat, eller om inget Google-konto lagts till, ignoreras förfrågan om licensverifiering.</string>
     <string name="pref_vending_summary_licensing_off">Licensiering av</string>
     <string name="service_name_vending">Play Store-tjänster</string>
+    <string name="feedback_disabled">Återkoppling är inte möjligt för närvarande</string>
+    <string name="pref_auth_strip_device_name_summary">När det är aktiverat kommer autentiseringsförfrågningar inte att inkludera enhetens namn, vilket kan tillåta obehöriga enheter att logga in, men kan ha oförutsedda konsekvenser.</string>
+    <string name="pref_auth_strip_device_name_title">Ta bort enhetsnamn för autentisering</string>
 </resources>

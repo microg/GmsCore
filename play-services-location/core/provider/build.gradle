@@ -12,6 +12,7 @@ dependencies {
     implementation project(':play-services-base-core')
     implementation project(':play-services-location-core-base')
 
+    implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.lifecycle:lifecycle-service:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
 

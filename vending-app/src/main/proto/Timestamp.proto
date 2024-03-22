@@ -19,7 +19,7 @@ message TimestampContainer1 {
 }
 
 message Timestamp {
-  optional uint32 seconds = 1;
+  optional uint64 seconds = 1;
   optional uint32 nanos = 2;
 }
 

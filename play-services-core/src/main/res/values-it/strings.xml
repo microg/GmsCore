@@ -24,7 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> vorrebbe utilizzare:</string>
     <string name="account_manager_title">Gestione dell\'account Google</string>
     <string name="sorry">Ci dispiace…</string>
-    <string name="auth_before_connect">Un\'applicazione sul tuo dispositivo sta tentando di effettuare l\'accesso ad un account Google.\n\nSe ciò era intenzionale, utilizza il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, altrimenti premi <b>Annulla</b> per tornare all\'applicazione che ha aperto questa schermata.</string>
+    <string name="auth_before_connect">Un\'applicazione sul tuo dispositivo sta tentando di effettuare l\'accesso ad un account Google. \u0020Se ciò era intenzionale, utilizza il pulsante <b>Accedi</b> per collegarti alla pagina di autenticazione di Google, altrimenti premi <b>Annulla</b> per tornare all\'applicazione che ha aperto questa schermata.</string>
     <string name="auth_sign_in">Accedi</string>
     <string name="auth_connecting">"Il tuo dispositivo sta stabilendo la connessione con i server di Google per autenticarti.
 
@@ -203,6 +203,10 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="signin_subtext_sharing">Per continuare, microG condividerà il nome, l\'indirizzo email e l\'immagine del profilo del tuo account Google con <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="pref_auth_include_android_id_title">Autenticazione con registrazione del dispositivo</string>
     <string name="signin_subtext_policy_terms">termini di servizio</string>
-    <string name="pref_vending_summary_licensing_on">La licenza è abilitata</string>
+    <string name="pref_vending_summary_licensing_on">Verifica delle licenze abilitata</string>
     <string name="service_name_vending">Servizi Play Store</string>
+    <string name="pref_vending_licensing_enable_switch">Rispondi alle richieste di verifica delle licenze</string>
+    <string name="feedback_disabled">Non è possibile inviare feedback al momento</string>
+    <string name="pref_vending_summary_licensing_off">Verifica delle licenze disabilitata</string>
+    <string name="pref_vending_license_enable_summary">Alcune app richiedono la verifica dell\'acquisto da Google Play. Quando un\'app lo richiede, microG può scaricare una prova dell\'acquisto da Google. Se l\'opzione è disabilitata, o se non è stato aggiunto nessun account Google, le richieste di verifica delle licenze vengono ignorate.</string>
 </resources>

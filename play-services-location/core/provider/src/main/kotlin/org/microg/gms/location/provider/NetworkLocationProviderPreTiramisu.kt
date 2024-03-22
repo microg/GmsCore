@@ -6,7 +6,6 @@
 package org.microg.gms.location.provider
 
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_MUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
@@ -15,6 +14,7 @@ import android.location.Location
 import android.os.Build.VERSION.SDK_INT
 import android.os.WorkSource
 import androidx.annotation.RequiresApi
+import androidx.core.app.PendingIntentCompat
 import com.android.location.provider.ProviderPropertiesUnbundled
 import com.android.location.provider.ProviderRequestUnbundled
 import org.microg.gms.location.*
@@ -86,7 +86,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
             if (enabled) throw IllegalStateException()
             val intent = Intent(context, NetworkLocationProviderService::class.java)
             intent.action = ACTION_REPORT_LOCATION
-            pendingIntent = PendingIntent.getService(context, 0, intent, (if (SDK_INT >= 31) FLAG_MUTABLE else 0) or FLAG_UPDATE_CURRENT)
+            pendingIntent = PendingIntentCompat.getService(context, 0, intent, FLAG_UPDATE_CURRENT, true)
             currentRequest = null
             enabled = true
             when {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="prefcat_current_accounts"
+        android:title="@string/prefcat_accounts_current_accounts_title">
+        <Preference
+            android:enabled="false"
+            android:key="pref_current_accounts_none"
+            android:title="@string/list_no_item_none" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_account_settings"
+        android:title="@string/prefcat_accounts_settings_title">
+        <Preference
+            android:summary="@string/pref_add_account_summary"
+            android:title="@string/pref_add_account_title">
+            <intent
+                android:targetClass="org.microg.gms.auth.login.LoginActivity"
+                android:targetPackage="com.google.android.gms" />
+        </Preference>
+        <Preference
+            android:key="pref_manage_accounts"
+            android:summary="@string/pref_accounts_manage_accounts_summary"
+            android:title="@string/pref_accounts_manage_accounts_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

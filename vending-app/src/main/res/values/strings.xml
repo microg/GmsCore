@@ -16,4 +16,16 @@
 
     <string name="license_notification_sign_in">Sign In</string>
     <string name="license_notification_ignore">Ignore</string>
+
+    <string name="pay_disabled">Pay currently not possible</string>
+
+    <string name="confirm_purchase">Confirm Purchase</string>
+    <string name="error_network">Not connected to the internet. Please make sure Wi-Fi or mobile network is turned on and try again.</string>
+    <string name="error_passwd">The password you entered is incorrect.</string>
+    <string name="error_unknown">Unknown error, please exit and try again.</string>
+    <string name="tips_input_passwd">Enter your password</string>
+    <string name="tips_remember_login_info">Remember my login on this device</string>
+    <string name="tips_forget_passwd">Forget password?</string>
+    <string name="tips_more_details">Learn more</string>
+    <string name="text_verify_button">Verify</string>
 </resources>

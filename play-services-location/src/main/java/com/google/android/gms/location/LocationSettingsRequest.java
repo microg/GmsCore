@@ -1,11 +1,22 @@
 /*
- * SPDX-FileCopyrightText: 2015, microG Project Team
+ * SPDX-FileCopyrightText: 2015 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.location;
 
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.utils.ToStringHelper;
 import org.microg.safeparcel.AutoSafeParcelable;
 import org.microg.safeparcel.SafeParceled;
 
@@ -13,31 +24,35 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Specifies the types of location services the client is interested in using. Settings will be checked for optimal functionality
+ * of all requested services. Use {@link LocationSettingsRequest.Builder} to construct this object.
+ */
 @PublicApi
-public class LocationSettingsRequest extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class LocationSettingsRequest extends AbstractSafeParcelable {
     @Field(1000)
     private int versionCode = 2;
 
     @Field(value = 1, subClass = LocationRequest.class)
-    @PublicApi(exclude = true)
-    public List<LocationRequest> requests;
+    @Hide
+    public final List<LocationRequest> requests;
 
     @Field(2)
-    @PublicApi(exclude = true)
-    public boolean alwaysShow;
+    @Hide
+    public final boolean alwaysShow;
 
     @Field(3)
-    @PublicApi(exclude = true)
-    public boolean needBle;
+    @Hide
+    public final boolean needBle;
 
     @Field(5)
-    @PublicApi(exclude = true)
-    public LocationSettingsConfiguration configuration;
+    @Hide
+    @Nullable
+    public final LocationSettingsConfiguration configuration;
 
-    private LocationSettingsRequest() {
-    }
-
-    private LocationSettingsRequest(List<LocationRequest> requests, boolean alwaysShow, boolean needBle, LocationSettingsConfiguration configuration) {
+    @Constructor
+    LocationSettingsRequest(@Param(1) List<LocationRequest> requests, @Param(2) boolean alwaysShow, @Param(3) boolean needBle, @Param(5) @Nullable LocationSettingsConfiguration configuration) {
         this.requests = requests;
         this.alwaysShow = alwaysShow;
         this.needBle = needBle;
@@ -100,5 +115,21 @@ public class LocationSettingsRequest extends AutoSafeParcelable {
         }
     }
 
-    public static final Creator<LocationSettingsRequest> CREATOR = new AutoCreator<LocationSettingsRequest>(LocationSettingsRequest.class);
+    @Hide
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("LocationSettingsRequest")
+                .value(requests)
+                .field("alwaysShow", alwaysShow)
+                .field("needBle", needBle)
+                .end();
+    }
+
+    public static final SafeParcelableCreatorAndWriter<LocationSettingsRequest> CREATOR = findCreator(LocationSettingsRequest.class);
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
 }

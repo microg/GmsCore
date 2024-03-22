@@ -3,7 +3,8 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <permission
         android:name="com.android.vending.CHECK_LICENSE"
@@ -11,10 +12,13 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
     <uses-permission android:name="org.microg.gms.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
@@ -39,24 +43,31 @@
         </intent>
     </queries>
 
+    <uses-sdk tools:overrideLibrary="coil.svg, coil.compose.singleton, coil.compose.base,
+        androidx.compose.material.icons,com.google.accompanist.drawablepainter,androidx.compose.ui.util,
+        androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
+        androidx.activity.compose,androidx.compose.runtime.saveable,
+        androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
+     coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics" />
+
     <application
         android:forceQueryable="true"
         android:icon="@mipmap/ic_app"
         android:roundIcon="@mipmap/ic_app"
         android:label="@string/app_name">
 
+        <meta-data
+            android:name="org.microg.gms.settings:source-package"
+            android:value="com.google.android.gms" />
+
+        <meta-data
+            android:name="org.microg.gms.profile:source-package"
+            android:value="com.google.android.gms" />
+
         <activity
             android:name=".GrantFakeSignaturePermissionActivity"
             android:exported="true"
             android:theme="@style/Theme.Dialog.NoActionBar" />
-
-        <service
-            android:name="com.android.vending.billing.InAppBillingService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
-            </intent-filter>
-        </service>
 
         <service
             android:name="com.android.vending.licensing.LicensingService"
@@ -97,11 +108,20 @@
 
                 <data android:scheme="market" />
             </intent-filter>
-            <intent-filter android:priority="-100">
-                <action android:name="android.intent.action.VIEW" />
+            <!--
+            Play Store website opens this via intent:// URI if BROWSABLE category is added.
+            If the only other valid or the configured default retriever of the intent is the web browser itself,
+            this would cause an infinite loop of redirects between the redirector and the web browser opening
+            the Play Store website.
 
+            To prevent this, we remove the BROWSABLE category. This ensure best possible compatibility without running
+            into the aforementioned issue.
+            -->
+            <intent-filter
+                android:priority="-100"
+                tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
@@ -115,6 +135,35 @@
             android:exported="false" />
         <receiver
             android:name="com.android.vending.licensing.LicenseServiceNotificationRunnable$SignInReceiver"
+            android:exported="false" />
+
+        <activity
+            android:name="org.microg.vending.billing.PurchaseActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Translucent"
+            android:process=":ui">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.PURCHASE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.android.vending.billing.InAppBillingService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="org.microg.vending.billing.ui.InAppBillingHostActivity"
+            android:exported="true"
+            android:theme="@style/InAppBillingStyle"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="org.microg.vending.billing.ui.PlayWebViewActivity"
             android:exported="false" />
 
     </application>
