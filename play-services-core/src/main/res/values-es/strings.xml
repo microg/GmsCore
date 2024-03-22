@@ -231,11 +231,11 @@ Esto podría tardar algunos minutos."</string>
     <string name="perm_car_vendor_extension_label">Canal de proveedores de automóviles</string>
     <string name="perm_car_vendor_extension_description">Accede al canal de proveedores de tu coche para intercambiar información específica sobre él</string>
     <string name="backup_disabled">Actualmente no es posible realizar copias de seguridad</string>
-    <string name="pref_accounts_title">Cuentas</string>
+    <string name="pref_accounts_title">Cuenta de Google</string>
     <string name="pref_accounts_summary">Agregar y administrar cuentas de Google</string>
     <string name="pref_vending_billing_note_experimental">Esta característica es experimental y puede provocar pérdidas de dinero. Usted ha sido advertido.</string>
     <string name="pref_vending_billing_note_licensing">Es posible que algunas aplicaciones requieran que también habilites la verificación de licencia para verificar tus compras.</string>
-    <string name="prefcat_accounts_current_accounts_title">Cuentas actualmente registradas</string>
+    <string name="prefcat_accounts_current_accounts_title">Cuentas</string>
     <string name="pref_vending_licensing_category">Licencia de Google Play</string>
     <string name="prefcat_accounts_settings_title">Ajustes</string>
     <string name="pref_vending_billing_category">Facturación de Google Play</string>
