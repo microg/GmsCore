@@ -151,12 +151,10 @@ This can take a couple of minutes."</string>
     <string name="pref_info_status">Status</string>
     <string name="pref_more_settings">More</string>
 
-    <string name="pref_accounts_title">Accounts</string>
+    <string name="pref_accounts_title">Google Accounts</string>
     <string name="pref_accounts_summary">Add and manage Google accounts</string>
     <string name="prefcat_accounts_settings_title">Settings</string>
-    <string name="prefcat_accounts_current_accounts_title">Currently signed-in accounts</string>
-    <string name="pref_accounts_manage_accounts_title">Manage accounts</string>
-    <string name="pref_accounts_manage_accounts_summary">Manage existing accounts settings</string>
+    <string name="prefcat_accounts_current_accounts_title">Accounts</string>
     <string name="pref_add_account_title">Account</string>
     <string name="pref_add_account_summary">Add Google account</string>
 
