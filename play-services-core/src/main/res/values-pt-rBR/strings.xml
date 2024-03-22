@@ -240,8 +240,6 @@ Isso pode demorar alguns minutos."</string>
     <string name="prefcat_accounts_current_accounts_title">Contas conectadas no momento</string>
     <string name="pref_accounts_summary">Adicionar e gerenciar contas Google</string>
     <string name="pref_vending_billing_category">Cobrança do Google Play</string>
-    <string name="pref_accounts_manage_accounts_title">Gerenciar contas</string>
-    <string name="pref_accounts_manage_accounts_summary">Gerenciar configurações de contas existentes</string>
     <string name="pref_vending_licensing_category">Licenciamento do Google Play</string>
     <string name="pref_vending_billing_enable_switch">Lidar com solicitações de cobrança</string>
     <string name="pref_vending_billing_enable_summary">Quando ativado, alguns apps podem completar compras ou começar assinaturas pelo serviço de cobrança do Google Play.</string>

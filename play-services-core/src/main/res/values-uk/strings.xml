@@ -232,9 +232,7 @@
     <string name="perm_car_vendor_extension_description">Отримання доступу до каналу продавця вашої машини, щоб обмінятися інформацією про специфічну машину</string>
     <string name="pref_accounts_summary">Додати та керувати обліковими записами Google</string>
     <string name="prefcat_accounts_settings_title">Налаштування</string>
-    <string name="pref_accounts_manage_accounts_title">Керувати обліковими записами</string>
     <string name="feedback_disabled">Надіслати відгук наразі неможливо</string>
-    <string name="pref_accounts_manage_accounts_summary">Керування наявними налаштуваннями облікових записів</string>
     <string name="pref_vending_billing_category">Платежі Google Play</string>
     <string name="pref_vending_billing_enable_summary">Після ввімкнення деякі застосунки можуть оформлювати покупки або підписки через платіжну систему Google Play.</string>
     <string name="pref_vending_billing_note_experimental">Ця функція експериментальна і може призвести до втрати грошей. Вас попередили.</string>

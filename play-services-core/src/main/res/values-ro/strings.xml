@@ -236,8 +236,6 @@
     <string name="pref_accounts_summary">Adaugă și gestionează conturile Google</string>
     <string name="prefcat_accounts_settings_title">Setări</string>
     <string name="prefcat_accounts_current_accounts_title">Conturi conectate în prezent</string>
-    <string name="pref_accounts_manage_accounts_title">Gestionează conturile</string>
-    <string name="pref_accounts_manage_accounts_summary">Gestionează setările conturilor existente</string>
     <string name="pref_vending_licensing_category">Licențiere Google Play</string>
     <string name="pref_vending_billing_enable_switch">Gestionează cererile de facturare</string>
     <string name="pref_vending_billing_enable_summary">Odată activate, unele aplicații pot finaliza achizițiile sau pot începe abonamente prin serviciul Google Play Billing.</string>

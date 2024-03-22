@@ -236,9 +236,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="pref_vending_billing_note_experimental">Esta característica es experimental y puede provocar pérdidas de dinero. Usted ha sido advertido.</string>
     <string name="pref_vending_billing_note_licensing">Es posible que algunas aplicaciones requieran que también habilites la verificación de licencia para verificar tus compras.</string>
     <string name="prefcat_accounts_current_accounts_title">Cuentas actualmente registradas</string>
-    <string name="pref_accounts_manage_accounts_title">Gestionar cuentas</string>
     <string name="pref_vending_licensing_category">Licencia de Google Play</string>
-    <string name="pref_accounts_manage_accounts_summary">Administrar la configuración de las cuentas actuales</string>
     <string name="prefcat_accounts_settings_title">Ajustes</string>
     <string name="pref_vending_billing_category">Facturación de Google Play</string>
     <string name="pref_vending_billing_enable_switch">Procesar la facturación</string>

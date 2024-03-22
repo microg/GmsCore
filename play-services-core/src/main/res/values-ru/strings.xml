@@ -223,8 +223,6 @@
     <string name="backup_disabled">Резервное копирование недоступно</string>
     <string name="prefcat_accounts_settings_title">Настройки</string>
     <string name="prefcat_accounts_current_accounts_title">Активные в настоящее время аккаунты</string>
-    <string name="pref_accounts_manage_accounts_title">Управление аккаунтами</string>
-    <string name="pref_accounts_manage_accounts_summary">Управление настройками существующих аккаунтов</string>
     <string name="pref_vending_licensing_category">Лицензирование Google Play</string>
     <string name="pref_vending_billing_category">Платежи Google Play</string>
     <string name="pref_vending_billing_enable_summary">Если включено, некоторые приложения смогут совершать покупки или подписки через службу Google Play Billing.</string>
