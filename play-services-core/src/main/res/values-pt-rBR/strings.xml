@@ -42,7 +42,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="perm_gtalk_svc_label">trocar mensagens e receber notificações de sincronização dos servidores do Google</string>
     <string name="perm_extended_access_label">Acesso extendido aos serviços Google</string>
     <string name="service_name_checkin">Registro de dispositivo no Google</string>
-    <string name="service_name_mcs">Mensagens pela Nuvem</string>
+    <string name="service_name_mcs">Mensagens pela Nuvem (Cloud Messaging)</string>
     <string name="games_title">Google Play Jogos</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar Play Games</string>
     <string name="games_info_content">Para usar o Play Games, é necessário instalar o aplicativo Google Play Games. O aplicativo pode continuar sem Play Games, mas é possível que ele se comporte inesperadamente.</string>
@@ -83,7 +83,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="prefcat_location_service">Servico de localização</string>
     <string name="prefcat_services">Serviços</string>
     <string name="cond_gcm_bat_title">Otimização de bateria ativada</string>
-    <string name="cond_gcm_bat_summary">Você ativou as Mensagens na Nuvem, mas possui otimizações de bateria ativas para os serviços MicroG. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
+    <string name="cond_gcm_bat_summary">Você ativou o Cloud Messaging, mas possui otimizações de bateria ativas para os serviços MicroG. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
     <string name="cond_gcm_bat_action">Ignorar otimizações</string>
     <string name="cond_perm_title">Permissão faltando</string>
     <string name="prefs_account">Preferências da conta</string>
@@ -92,12 +92,12 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_auth_trust_google_title">Confie no Google para permissões de aplicativo</string>
     <string name="pref_auth_trust_google_summary">Quando desabilitado, o usuário é solicitado antes que uma solicitação de autorização de um app seja enviada ao Google. Algumas aplicações deixarão de utilizar a Conta Google se isto estiver desativado.</string>
     <string name="pref_checkin_enable_summary">Registra seu dispositivo nos serviços do Google e cria um identificador de dispositivo único. O microG remove informações que podem te identificar, exceto o nome da sua conta Google, dos dados do seu registro.</string>
-    <string name="pref_gcm_enable_mcs_summary">As Mensagens na Nuvem (Cloud Messaging) é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
+    <string name="pref_gcm_enable_mcs_summary">As Mensagens pela Nuvem (Cloud Messaging) é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
     <string name="pref_gcm_heartbeat_title">Intervalo do heartbeat do Cloud Messaging</string>
     <string name="pref_gcm_heartbeat_summary">O intervalo em segundos para o sistema a checar os servidores do Google. Aumentar esse número reduzirá o consumo da bateria, mas poderá causar atrasos nas mensagens push.
 \nDepreciado, será substituído em versão futura.</string>
-    <string name="pref_gcm_apps_title">Aplicativos que usam Mensagens na Nuvem</string>
-    <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados nas Mensagens na Nuvem.</string>
+    <string name="pref_gcm_apps_title">Aplicativos que usam o Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados no Cloud Messaging.</string>
     <string name="pref_about_title">Sobre serviços microG</string>
     <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
     <string name="gcm_app_error_unregistering">Erro removendo o registro</string>
@@ -107,7 +107,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="gcm_no_message_yet">Nenhuma mensagem recebida até agora</string>
     <string name="gcm_last_message_at">Última mensagem: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrado</string>
-    <string name="gcm_registered_since">Registrado desde: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered_since">Registrado: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_unregister_confirm_title">Remover registro de <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
     <string name="gcm_unregister_confirm_message">Algumas aplicações não se registram novamente automaticamente e/ou não fornecem uma opção para fazer isso manualmente. Esses aplicativos podem não funcionar corretamente após o removimento do registro.
 \nContinuar?</string>
@@ -115,7 +115,7 @@ Isso pode demorar alguns minutos."</string>
 \nDeseja cancelar o registro agora para que não receba mensagens de envio no futuro?</string>
     <string name="gcm_messages_counter">Mensagens: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">Desconectado</string>
-    <string name="gcm_network_state_connected">Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_network_state_connected">Conectado <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="service_name_vending">Serviços da Play Store</string>
     <string name="prefcat_configuration">Configuração</string>
     <string name="pref_auth_include_android_id_title">Autenticar com registração do dispositivo</string>
@@ -157,7 +157,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_safetynet_recent_cat_request">Solicitar dados</string>
     <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
     <string name="pref_safetynet_recent_request_time">Tempo da solicitação</string>
-    <string name="push_notifications_summary_manual">Ativo / Manual: %s</string>
+    <string name="push_notifications_summary_manual">Ativado / Manual: %s</string>
     <string name="push_notifications_summary_values_seconds">%s segundos</string>
     <string name="push_notifications_summary_values_minutes">%s minutos</string>
     <string name="pref_vending_summary_licensing_off">Licenciamento desligado</string>
@@ -215,7 +215,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="pref_safetynet_recent_token">Token</string>
     <string name="pref_safetynet_test_invalid_json">JSON inválido</string>
     <string name="push_notifications_summary_off">Desativado</string>
-    <string name="push_notifications_summary_automatic">Ativo / Automático: %s</string>
+    <string name="push_notifications_summary_automatic">Ativado / Automático: %s</string>
     <string name="pref_safetynet_recent_copied">Copiado para a área de transferência!</string>
     <string name="pref_safetynet_test_integrity_cts_passed">Integridade e CTS passados</string>
     <string name="pref_safetynet_test_cts_failed">CTS falhou</string>
@@ -235,9 +235,9 @@ Isso pode demorar alguns minutos."</string>
     <string name="perm_car_mileage_description">Acessar a quilometragem do seu carro</string>
     <string name="perm_car_vendor_extension_label">Canal de vendedor do carro</string>
     <string name="perm_car_vendor_extension_description">Acessar o canal do vendedor do carro para trocar informações específicas do carro</string>
-    <string name="pref_accounts_title">Contas</string>
+    <string name="pref_accounts_title">Contas do Google</string>
     <string name="prefcat_accounts_settings_title">Configurações</string>
-    <string name="prefcat_accounts_current_accounts_title">Contas conectadas no momento</string>
+    <string name="prefcat_accounts_current_accounts_title">Contas</string>
     <string name="pref_accounts_summary">Adicionar e gerenciar contas Google</string>
     <string name="pref_vending_billing_category">Cobrança do Google Play</string>
     <string name="pref_vending_licensing_category">Licenciamento do Google Play</string>
