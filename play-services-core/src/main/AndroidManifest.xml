@@ -399,7 +399,7 @@
             android:excludeFromRecents="true"
             android:exported="true"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
 
@@ -476,7 +476,7 @@
 
         <activity
             android:name="org.microg.gms.auth.signin.AuthSignInActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar"
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar"
             android:process=":ui"
             android:exported="true">
             <intent-filter>
@@ -516,7 +516,7 @@
             android:enabled="true"
             android:exported="false"
             android:process=":ui"
-            android:theme="@style/Theme.Translucent"/>
+            android:theme="@style/Theme.App.Translucent"/>
 
         <activity
             android:name="org.microg.gms.games.UpgradeActivity"
@@ -650,7 +650,7 @@
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
@@ -685,7 +685,7 @@
             android:process=":ui"
             android:exported="true"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.accountsettings.action.VIEW_SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -841,7 +841,7 @@
             android:name="com.google.android.gms.feedback.FeedbackActivity"
             android:exported="true"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.Translucent"/>
+            android:theme="@style/Theme.App.Translucent"/>
 
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
