@@ -221,8 +221,8 @@
     <string name="perm_car_mileage_label">Прабег аўтамабіля</string>
     <string name="perm_car_vendor_extension_description">Атрыманне доступу да канала пастаўшчыка вашага аўтамабіля для абмену інфармацыяй, якая датычыцца канкрэтнага аўтамабіля</string>
     <string name="backup_disabled">Рэзервовае капіраванне недаступна</string>
-    <string name="pref_accounts_title">Акаўнты</string>
-    <string name="prefcat_accounts_current_accounts_title">Актыўныя ў цяперашні час акаўнты</string>
+    <string name="pref_accounts_title">Акаўнты Google</string>
+    <string name="prefcat_accounts_current_accounts_title">Акаўнты</string>
     <string name="pref_accounts_summary">Даданне і кіраванне ўліковымі запісамі Google</string>
     <string name="prefcat_accounts_settings_title">Налады</string>
     <string name="pref_vending_billing_note_experimental">Гэтая функцыя эксперыментальная і можа прывесці да страты грошай.</string>
