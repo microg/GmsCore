@@ -18,7 +18,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:orientation="vertical">
 
     <ImageView
@@ -68,10 +68,9 @@
         android:text="@string/about_root_libraries"
         android:textColor="?attr/colorAccent"/>
 
-    <ListView
+    <LinearLayout
+        android:orientation="vertical"
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        tools:listitem="@android:layout/simple_list_item_2"/>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

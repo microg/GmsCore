@@ -28,7 +28,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services" android:key="prefcat_google_services">
         <Preference
-            android:icon="@drawable/ic_add_account"
+            android:icon="@drawable/ic_manage_accounts"
             android:key="pref_accounts"
             android:summary="@string/pref_accounts_summary"
             android:title="@string/pref_accounts_title" />

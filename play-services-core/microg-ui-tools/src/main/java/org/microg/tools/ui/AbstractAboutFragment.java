@@ -24,11 +24,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -105,24 +102,14 @@ public abstract class AbstractAboutFragment extends Fragment {
         List<Library> libraries = new ArrayList<Library>();
         collectLibraries(libraries);
         Collections.sort(libraries);
-        ((ListView) aboutRoot.findViewById(android.R.id.list)).setAdapter(new LibraryAdapter(getContext(), libraries.toArray(new Library[libraries.size()])));
-
+        ViewGroup list = aboutRoot.findViewById(android.R.id.list);
+        for (Library library : libraries) {
+            View v = inflater.inflate(android.R.layout.simple_list_item_2, list, false);
+            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, library.name, getLibVersion(library.packageName)));
+            ((TextView) v.findViewById(android.R.id.text2)).setText(library.copyright != null ? library.copyright : getString(R.string.about_default_license));
+            list.addView(v);
+        }
         return aboutRoot;
-    }
-
-    private class LibraryAdapter extends ArrayAdapter<Library> {
-
-        public LibraryAdapter(Context context, Library[] libraries) {
-            super(context, android.R.layout.simple_list_item_2, android.R.id.text1, libraries);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = super.getView(position, convertView, parent);
-            ((TextView) v.findViewById(android.R.id.text1)).setText(getString(R.string.about_name_version_str, getItem(position).name, getLibVersion(getItem(position).packageName)));
-            ((TextView) v.findViewById(android.R.id.text2)).setText(getItem(position).copyright != null ? getItem(position).copyright : getString(R.string.about_default_license));
-            return v;
-        }
     }
 
     protected static class Library implements Comparable<Library> {
