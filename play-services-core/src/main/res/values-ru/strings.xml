@@ -222,13 +222,13 @@
     <string name="perm_car_vendor_extension_description">Получение доступа к каналу поставщика вашего автомобиля для обмена информацией, касающейся конкретного автомобиля</string>
     <string name="backup_disabled">Резервное копирование недоступно</string>
     <string name="prefcat_accounts_settings_title">Настройки</string>
-    <string name="prefcat_accounts_current_accounts_title">Активные в настоящее время аккаунты</string>
+    <string name="prefcat_accounts_current_accounts_title">Аккаунты</string>
     <string name="pref_vending_licensing_category">Лицензирование Google Play</string>
     <string name="pref_vending_billing_category">Платежи Google Play</string>
     <string name="pref_vending_billing_enable_summary">Если включено, некоторые приложения смогут совершать покупки или подписки через службу Google Play Billing.</string>
     <string name="pref_vending_billing_note_experimental">Эта функция экспериментальная и может привести к потере денег. Вы были предупреждены.</string>
     <string name="pref_vending_billing_note_licensing">Некоторым приложениям может потребоваться, чтобы вы включили проверку лицензии для проверки ваших платежей.</string>
-    <string name="pref_accounts_title">Аккаунты</string>
+    <string name="pref_accounts_title">Аккаунты Google</string>
     <string name="pref_accounts_summary">Добавление и управление учётными записями Google</string>
     <string name="pref_vending_billing_enable_switch">Обрабатывать платёжные запросы</string>
 </resources>
