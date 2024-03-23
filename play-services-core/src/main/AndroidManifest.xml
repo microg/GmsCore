@@ -509,6 +509,12 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name="org.microg.gms.auth.consent.ConsentSignInActivity"
+            android:process=":ui"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+
         <!-- Games -->
 
         <activity
