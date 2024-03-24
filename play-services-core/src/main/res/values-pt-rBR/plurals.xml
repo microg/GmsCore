@@ -20,14 +20,14 @@
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicativos registrados</item>
     </plurals>
     <plurals name="cond_perm_summary">
-        <item quantity="one">Uma permissão necessária para o funcionamento adequado dos serviços microG não foi permitida.</item>
-        <item quantity="many">Permissões necessárias para o funcionamento adequado dos serviços microG não foram permitidas.</item>
-        <item quantity="other">Algumas permissões não foram permitidas que são necessárias para o funcionamento adequado dos serviços microG.</item>
+        <item quantity="one">Uma permissão necessária para o funcionamento adequado dos serviços microG não foi concedida.</item>
+        <item quantity="many">Permissões necessárias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
+        <item quantity="other">Algumas permissões necessárias para o funcionamento adequado dos serviços microG não foram concedidas.</item>
     </plurals>
     <plurals name="cond_perm_action">
-        <item quantity="one">Pedir permissão faltante</item>
-        <item quantity="many">Pedir permissões faltantes</item>
-        <item quantity="other">Pedir permissões faltantes</item>
+        <item quantity="one">Solicitar permissão faltante</item>
+        <item quantity="many">Solicitar permissões faltantes</item>
+        <item quantity="other">Solicitar permissões faltantes</item>
     </plurals>
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurado</item>
