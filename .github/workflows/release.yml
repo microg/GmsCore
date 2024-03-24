@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Cache Gradle
+        uses: burrunan/gradle-cache-action@v1
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Build
+        run: ./gradlew --no-daemon :play-services-core:assembleHmsDefault
+
+      - name: Sign
+        id: sign_apk
+        uses: ilharp/sign-android-release@v1
+        with:
+          releaseDir: play-services-core/build/outputs/apk/hmsDefault/release
+          signingKey: ${{ secrets.SIGNING_KEYSTORE }}
+          keyAlias: ${{ secrets.SIGNING_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{steps.sign_apk.outputs.signedFile}}
