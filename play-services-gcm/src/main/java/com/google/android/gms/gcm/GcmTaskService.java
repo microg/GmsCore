@@ -38,10 +38,10 @@ import org.microg.gms.gcm.GcmConstants;
  * {@link com.google.android.gms.gcm.GcmTaskService#SERVICE_ACTION_EXECUTE_TASK}. Here's an example:
  * <pre>
  *     <service android:name="MyTaskService"
- *              android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE"
+ *              android:permission="${basePackageName}.android.gms.permission.BIND_NETWORK_TASK_SERVICE"
  *              android:exported="true">
  *              <intent-filter>
- *                  <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY"/>
+ *                  <action android:name="${basePackageName}.android.gms.gcm.ACTION_TASK_READY"/>
  *              </intent-filter>
  *     </service>
  * </pre>

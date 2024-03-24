@@ -67,9 +67,9 @@ import static org.microg.gms.gcm.GcmConstants.SCHEDULER_ACTION_SCHEDULE;
  * <pre>
  * <service android:name=".MyUploadService"
  *     android:exported="true"
- *     android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE" >
+ *     android:permission="${basePackageName}.android.gms.permission.BIND_NETWORK_TASK_SERVICE" >
  *     <intent-filter>
- *        <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
+ *        <action android:name="${basePackageName}.android.gms.gcm.ACTION_TASK_READY" />
  *     </intent-filter>
  * </service>
  * </pre>

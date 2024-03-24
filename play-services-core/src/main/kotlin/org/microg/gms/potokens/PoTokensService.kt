@@ -32,7 +32,7 @@ class PoTokensService : BaseService(TAG, GmsService.POTOKENS) {
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
             PoTokensServiceImpl(
-                applicationContext, request.packageName, lifecycleScope
+                applicationContext, "com.google.android.apps.youtube", lifecycleScope
             ),
             ConnectionInfo().apply { features = FEATURES }
         )

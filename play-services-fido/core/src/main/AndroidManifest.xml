@@ -21,7 +21,7 @@
             android:name=".privileged.Fido2PrivilegedService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.fido.fido2.privileged.START" />
+                <action android:name="${basePackageName}.android.gms.fido.fido2.privileged.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

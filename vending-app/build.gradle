@@ -17,6 +17,10 @@ android {
         versionCode vendingAppVersionCode
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+
+        manifestPlaceholders = [
+                basePackageName: "$basePackageName"
+        ]
     }
 
     buildTypes {

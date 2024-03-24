@@ -7,8 +7,8 @@
 
     <application>
         <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:name="${basePackageName}.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:label="@string/oss_license_title" />
-        <activity android:name="com.google.android.gms.oss.licenses.OssLicensesActivity" />
+        <activity android:name="${basePackageName}.android.gms.oss.licenses.OssLicensesActivity" />
     </application>
 </manifest>

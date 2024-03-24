@@ -28,6 +28,7 @@ import com.android.vending.VendingPreferences;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import com.google.android.gms.base.BuildConfig;
 import org.microg.gms.auth.AuthConstants;
 import org.microg.gms.profile.ProfileManager;
 
@@ -48,9 +49,9 @@ public class LicensingService extends Service {
 
     private static final String KEY_V2_RESULT_JWT = "LICENSE_DATA";
 
-    private static final Uri PROFILE_PROVIDER = Uri.parse("content://com.google.android.gms.microg.profile");
+    private static final Uri PROFILE_PROVIDER = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gms.microg.profile");
 
-    private static final Uri CHECKIN_SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/check-in");
+    private static final Uri CHECKIN_SETTINGS_PROVIDER = Uri.parse("content://" + BuildConfig.BASE_PACKAGE_NAME + ".android.gms.microg.settings/check-in");
 
     private final ILicensingService.Stub mLicenseService = new ILicensingService.Stub() {
 
@@ -77,15 +78,15 @@ public class LicensingService extends Service {
         private void checkLicense(int callingUid, long nonce, String packageName, PackageManager packageManager,
                                   ILicenseResultListener listener, Queue<Account> remainingAccounts) throws RemoteException {
             new LicenseChecker.V1().checkLicense(
-                remainingAccounts.poll(), accountManager, androidId, packageName, callingUid, packageManager,
-                queue, nonce,
-                (responseCode, stringTuple) -> {
-                    if (responseCode != LICENSED && !remainingAccounts.isEmpty()) {
-                        checkLicense(callingUid, nonce, packageName, packageManager, listener, remainingAccounts);
-                    } else {
-                        listener.verifyLicense(responseCode, stringTuple != null ? stringTuple.a : null,  stringTuple != null ? stringTuple.b : null);
+                    remainingAccounts.poll(), accountManager, androidId, packageName, callingUid, packageManager,
+                    queue, nonce,
+                    (responseCode, stringTuple) -> {
+                        if (responseCode != LICENSED && !remainingAccounts.isEmpty()) {
+                            checkLicense(callingUid, nonce, packageName, packageManager, listener, remainingAccounts);
+                        } else {
+                            listener.verifyLicense(responseCode, stringTuple != null ? stringTuple.a : null, stringTuple != null ? stringTuple.b : null);
+                        }
                     }
-                }
             );
         }
 
@@ -113,26 +114,26 @@ public class LicensingService extends Service {
                                     ILicenseV2ResultListener listener, Bundle extraParams,
                                     Queue<Account> remainingAccounts) throws RemoteException {
             new LicenseChecker.V2().checkLicense(
-                remainingAccounts.poll(), accountManager, androidId, packageName, callingUid, packageManager, queue, Unit.INSTANCE,
-                (responseCode, data) -> {
-                    /*
-                     * Suppress failures on V2. V2 is commonly used by free apps whose checker
-                     * will not throw users out of the app if it never receives a response.
-                     *
-                     * This means that users who are signed in to a Google account will not
-                     * get a worse experience in these apps than users that are not signed in.
-                     */
-                    if (responseCode == LICENSED) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(KEY_V2_RESULT_JWT, data);
+                    remainingAccounts.poll(), accountManager, androidId, packageName, callingUid, packageManager, queue, Unit.INSTANCE,
+                    (responseCode, data) -> {
+                        /*
+                         * Suppress failures on V2. V2 is commonly used by free apps whose checker
+                         * will not throw users out of the app if it never receives a response.
+                         *
+                         * This means that users who are signed in to a Google account will not
+                         * get a worse experience in these apps than users that are not signed in.
+                         */
+                        if (responseCode == LICENSED) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(KEY_V2_RESULT_JWT, data);
 
-                        listener.verifyLicense(responseCode, bundle);
-                    } else if (!remainingAccounts.isEmpty()) {
-                        checkLicenseV2(callingUid, packageName, packageManager, listener, extraParams, remainingAccounts);
-                    } else {
-                        Log.i(TAG, "Suppressed negative license result for package " + packageName);
+                            listener.verifyLicense(responseCode, bundle);
+                        } else if (!remainingAccounts.isEmpty()) {
+                            checkLicenseV2(callingUid, packageName, packageManager, listener, extraParams, remainingAccounts);
+                        } else {
+                            Log.i(TAG, "Suppressed negative license result for package " + packageName);
+                        }
                     }
-                }
             );
 
         }
@@ -161,7 +162,7 @@ public class LicensingService extends Service {
         Cursor cursor = null;
         try {
             cursor = getContentResolver().query(
-                PROFILE_PROVIDER, null, null, null, null
+                    PROFILE_PROVIDER, null, null, null, null
             );
 
             if (cursor == null || cursor.getColumnCount() != 2) {
@@ -182,7 +183,7 @@ public class LicensingService extends Service {
 
         try {
             cursor = getContentResolver().query(
-                    CHECKIN_SETTINGS_PROVIDER, new String[] { "androidId" }, null, null, null
+                    CHECKIN_SETTINGS_PROVIDER, new String[]{"androidId"}, null, null, null
             );
 
             if (cursor != null) {

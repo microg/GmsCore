@@ -17,64 +17,64 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <permission
-        android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"
+        android:name="${basePackageName}.android.providers.gsf.permission.READ_GSERVICES"
         android:label="@string/perm_gsf_read_gservices_label"
         android:protectionLevel="normal" />
     <permission
-        android:name="com.google.android.c2dm.permission.RECEIVE"
+        android:name="${basePackageName}.android.c2dm.permission.RECEIVE"
         android:label="@string/perm_c2dm_receive_label"
         android:permissionGroup="android.permission-group.NETWORK"
         android:protectionLevel="normal" />
     <permission
-        android:name="com.google.android.c2dm.permission.SEND"
+        android:name="${basePackageName}.android.c2dm.permission.SEND"
         android:label="@string/perm_c2dm_send_label"
         android:permissionGroup="android.permission-group.NETWORK"
         android:protectionLevel="privileged|signature" />
     <permission
-        android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE"
+        android:name="${basePackageName}.android.gtalkservice.permission.GTALK_SERVICE"
         android:label="@string/perm_gtalk_svc_label"
         android:permissionGroup="android.permission-group.MESSAGES"
         android:protectionLevel="signature" />
 
     <permission-tree
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH"
+        android:name="${basePackageName}.android.googleapps.permission.GOOGLE_AUTH"
         android:icon="@drawable/proprietary_auth_ic_scope_icon_default" />
 
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.cp"
+        android:name="${basePackageName}.android.googleapps.permission.GOOGLE_AUTH.cp"
         android:description="@string/permission_service_cp_description"
         android:label="@string/permission_service_cp_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.local"
+        android:name="${basePackageName}.android.googleapps.permission.GOOGLE_AUTH.local"
         android:description="@string/permission_service_local_description"
         android:label="@string/permission_service_local_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.mail"
+        android:name="${basePackageName}.android.googleapps.permission.GOOGLE_AUTH.mail"
         android:description="@string/permission_service_mail_description"
         android:label="@string/permission_service_mail_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.googleapps.permission.GOOGLE_AUTH.writely"
+        android:name="${basePackageName}.android.googleapps.permission.GOOGLE_AUTH.writely"
         android:description="@string/permission_service_writely_description"
         android:label="@string/permission_service_writely_label"
         android:protectionLevel="dangerous" />
 
     <permission
-        android:name="com.google.android.gms.permission.AD_ID"
+        android:name="${basePackageName}.android.gms.permission.AD_ID"
         android:label="@string/perm_ad_id_label"
         android:description="@string/perm_ad_id_description"
         android:protectionLevel="normal" />
     <permission
-        android:name="com.google.android.gms.permission.AD_ID_NOTIFICATION"
+        android:name="${basePackageName}.android.gms.permission.AD_ID_NOTIFICATION"
         android:label="@string/perm_ad_id_notification_label"
         android:description="@string/perm_ad_id_notification_description"
         android:protectionLevel="normal" />
 
 
     <permission
-        android:name="com.google.android.gms.auth.api.phone.permission.SEND"
+        android:name="${basePackageName}.android.gms.auth.api.phone.permission.SEND"
         android:protectionLevel="signature" />
 
     <permission
@@ -92,30 +92,30 @@
         android:protectionLevel="privileged|signature" />
 
     <permission
-        android:name="com.google.android.gms.permission.CAR_SPEED"
+        android:name="${basePackageName}.android.gms.permission.CAR_SPEED"
         android:label="@string/perm_car_speed_label"
         android:description="@string/perm_car_speed_description"
         android:permissionGroup="android.permission-group.LOCATION"
         android:protectionLevel="dangerous" />
 
     <permission-group
-        android:name="com.google.android.gms.permission.CAR_INFORMATION"
+        android:name="${basePackageName}.android.gms.permission.CAR_INFORMATION"
         android:label="@string/perm_car_info_label"
         android:description="@string/perm_car_info_description" />
     <permission
-        android:name="com.google.android.gms.permission.CAR_FUEL"
+        android:name="${basePackageName}.android.gms.permission.CAR_FUEL"
         android:label="@string/perm_car_fuel_label"
         android:description="@string/perm_car_fuel_description"
         android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.gms.permission.CAR_MILEAGE"
+        android:name="${basePackageName}.android.gms.permission.CAR_MILEAGE"
         android:label="@string/perm_car_mileage_label"
         android:description="@string/perm_car_mileage_description"
         android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="com.google.android.gms.permission.CAR_VENDOR_EXTENSION"
+        android:name="${basePackageName}.android.gms.permission.CAR_VENDOR_EXTENSION"
         android:label="@string/perm_car_vendor_extension_label"
         android:description="@string/perm_car_vendor_extension_description"
         android:permissionGroup="com.google.android.gms.permission.CAR_INFORMATION"
@@ -141,10 +141,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.google.android.c2dm.permission.SEND" />
-    <uses-permission android:name="com.google.android.gtalkservice.permission.GTALK_SERVICE" />
-    <uses-permission android:name="com.google.android.gms.auth.api.phone.permission.SEND" />
+    <uses-permission android:name="${basePackageName}.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="${basePackageName}.android.c2dm.permission.SEND" />
+    <uses-permission android:name="${basePackageName}.android.gtalkservice.permission.GTALK_SERVICE" />
+    <uses-permission android:name="${basePackageName}.android.gms.auth.api.phone.permission.SEND" />
 
     <uses-permission android:name="org.microg.gms.STATUS_BROADCAST" />
 
@@ -169,7 +169,7 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.App">
 
-        <library android:name="com.google.android.gms" />
+        <library android:name="${basePackageName}.android.gms" />
 
         <!-- Provision -->
 
@@ -187,7 +187,7 @@
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
-                <action android:name="com.google.android.gms.location.places.ui.PICK_PLACE" />
+                <action android:name="${basePackageName}.android.gms.location.places.ui.PICK_PLACE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -195,20 +195,20 @@
 
         <service android:name="org.microg.gms.places.GeoDataService">
             <intent-filter>
-                <action android:name="com.google.android.gms.location.places.GeoDataApi" />
-                <action android:name="com.google.android.gms.location.places.PlacesApi" />
+                <action android:name="${basePackageName}.android.gms.location.places.GeoDataApi" />
+                <action android:name="${basePackageName}.android.gms.location.places.PlacesApi" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.places.PlaceDetectionService">
             <intent-filter>
-                <action android:name="com.google.android.gms.location.places.PlaceDetectionApi" />
+                <action android:name="${basePackageName}.android.gms.location.places.PlaceDetectionApi" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.wearable.location.WearableLocationService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <action android:name="${basePackageName}.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data
                     android:host="*"
                     android:pathPrefix="/com/google/android/location/fused/wearable"
@@ -220,11 +220,11 @@
 
         <provider
             android:name="org.microg.gms.gservices.GServicesProvider"
-            android:authorities="com.google.android.gsf.gservices"
+            android:authorities="${basePackageName}.android.gsf.gservices"
             android:exported="true" />
         <provider
             android:name="org.microg.gms.settings.GoogleSettingsProvider"
-            android:authorities="com.google.settings"
+            android:authorities="${basePackageName}.settings"
             android:exported="true" />
         <provider
             android:name="org.microg.gms.feeds.SubscribedFeedsProvider"
@@ -238,7 +238,7 @@
 
         <service android:name="org.microg.gms.checkin.CheckinService">
             <intent-filter>
-                <action android:name="com.google.android.gms.checkin.BIND_TO_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.checkin.BIND_TO_SERVICE" />
             </intent-filter>
         </service>
 
@@ -253,7 +253,7 @@
                 <action android:name="android.intent.action.PACKAGE_RESTARTED" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="${basePackageName}.android.c2dm.intent.RECEIVE" />
 
                 <category android:name="android.server.checkin.CHECKIN" />
             </intent-filter>
@@ -271,8 +271,8 @@
             android:name="org.microg.gms.gcm.PushRegisterService"
             android:process=":persistent">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.REGISTER" />
-                <action android:name="com.google.android.c2dm.intent.UNREGISTER" />
+                <action android:name="${basePackageName}.android.c2dm.intent.REGISTER" />
+                <action android:name="${basePackageName}.android.c2dm.intent.UNREGISTER" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -282,7 +282,7 @@
             android:name="org.microg.gms.gcm.PushRegisterReceiver"
             android:process=":persistent">
             <intent-filter>
-                <action android:name="com.google.iid.TOKEN_REQUEST" />
+                <action android:name="${basePackageName}.iid.TOKEN_REQUEST" />
             </intent-filter>
         </receiver>
 
@@ -294,7 +294,7 @@
             android:name="org.microg.gms.gcm.SendReceiver"
             android:process=":persistent">
             <intent-filter>
-                <action android:name="com.google.android.gcm.intent.SEND" />
+                <action android:name="${basePackageName}.android.gcm.intent.SEND" />
             </intent-filter>
         </receiver>
 
@@ -341,7 +341,7 @@
 
         <service android:name="org.microg.gms.car.CarService">
             <intent-filter>
-                <action android:name="com.google.android.gms.car.service.START" />
+                <action android:name="${basePackageName}.android.gms.car.service.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -351,7 +351,7 @@
 
         <service android:name="org.microg.gms.people.PeopleService">
             <intent-filter>
-                <action android:name="com.google.android.gms.people.service.START" />
+                <action android:name="${basePackageName}.android.gms.people.service.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -372,7 +372,7 @@
 
         <service android:name="org.microg.gms.wearable.WearableService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND" />
+                <action android:name="${basePackageName}.android.gms.wearable.BIND" />
             </intent-filter>
         </service>
 
@@ -383,7 +383,7 @@
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.google.android.gsf.action.GET_GLS" />
+                <action android:name="${basePackageName}.android.gsf.action.GET_GLS" />
             </intent-filter>
 
             <meta-data
@@ -401,7 +401,7 @@
             android:process=":ui"
             android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
-                <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
+                <action android:name="${basePackageName}.android.gms.common.account.CHOOSE_ACCOUNT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -414,7 +414,7 @@
             android:process=":ui"
             android:theme="@style/Theme.LoginBlue">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.login.LOGIN" />
+                <action android:name="${basePackageName}.android.gms.auth.login.LOGIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -438,39 +438,39 @@
 
         <provider
             android:name="org.microg.gms.auth.AccountContentProvider"
-            android:authorities="com.google.android.gms.auth.accounts"
+            android:authorities="${basePackageName}.android.gms.auth.accounts"
             android:exported="true" />
 
         <activity
             android:name="org.microg.gms.auth.credentials.CredentialPickerActivity"
             android:process=":ui">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.credentials.PICKER" />
+                <action android:name="${basePackageName}.android.gms.auth.api.credentials.PICKER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <service android:name="org.microg.gms.auth.credentials.CredentialsService">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.credentials.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.api.credentials.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.auth.proxy.AuthProxyService">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.auth.appcert.AppCertService">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.be.appcert.AppCertService" />
+                <action android:name="${basePackageName}.android.gms.auth.be.appcert.AppCertService" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.credential.CredentialManagerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.credential.manager.service.firstparty.START" />
+                <action android:name="${basePackageName}.android.gms.credential.manager.service.firstparty.START" />
             </intent-filter>
         </service>
 
@@ -480,21 +480,21 @@
             android:process=":ui"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.GOOGLE_SIGN_IN" />
+                <action android:name="${basePackageName}.android.gms.auth.GOOGLE_SIGN_IN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <service android:name="org.microg.gms.signin.SignInService">
             <intent-filter>
-                <action android:name="com.google.android.gms.signin.service.START" />
+                <action android:name="${basePackageName}.android.gms.signin.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.auth.signin.AuthSignInService">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.signin.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.api.signin.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -505,7 +505,7 @@
 
         <service android:name="org.microg.gms.auth.credentials.identity.IdentitySignInService">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.identity.service.signin.START" />
+                <action android:name="${basePackageName}.android.gms.auth.api.identity.service.signin.START" />
             </intent-filter>
         </service>
 
@@ -529,7 +529,7 @@
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog">
             <intent-filter>
-                <action android:name="com.google.android.gms.games.PLAY_GAMES_UPGRADE" />
+                <action android:name="${basePackageName}.android.gms.games.PLAY_GAMES_UPGRADE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -538,7 +538,7 @@
             android:name="org.microg.gms.games.GamesService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.games.service.START" />
+                <action android:name="${basePackageName}.android.gms.games.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -547,7 +547,7 @@
             android:name="org.microg.gms.games.GamesConnectService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.games.internal.connect.service.START" />
+                <action android:name="${basePackageName}.android.gms.games.internal.connect.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -559,13 +559,13 @@
         <!-- Chimera -->
         <provider
             android:name="org.microg.gms.chimera.ServiceProvider"
-            android:authorities="com.google.android.gms.chimera"
+            android:authorities="${basePackageName}.android.gms.chimera"
             android:exported="true" />
 
         <!-- Fonts -->
         <provider
             android:name="org.microg.gms.fonts.FontsProvider"
-            android:authorities="com.google.android.gms.fonts"
+            android:authorities="${basePackageName}.android.gms.fonts"
             android:exported="true" />
 
         <!-- microG Settings activity -->
@@ -590,7 +590,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-                <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -645,7 +645,7 @@
 
         <!-- microG Settings activity-alias for Google settings compatibility -->
         <activity-alias
-            android:name="com.google.android.gms.app.settings.GoogleSettingsLink"
+            android:name="${basePackageName}.android.gms.app.settings.GoogleSettingsLink"
             android:process=":ui"
             android:exported="true"
             android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
@@ -677,10 +677,10 @@
             android:taskAffinity="org.microg.gms.settings"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
-                <action android:name="com.google.android.gms.accountsettings.MY_ACCOUNT" />
-                <action android:name="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS" />
-                <action android:name="com.google.android.gms.accountsettings.PRIVACY_SETTINGS" />
-                <action android:name="com.google.android.gms.accountsettings.SECURITY_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.accountsettings.MY_ACCOUNT" />
+                <action android:name="${basePackageName}.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.accountsettings.PRIVACY_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.accountsettings.SECURITY_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -693,11 +693,11 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
-                <action android:name="com.google.android.gms.accountsettings.action.VIEW_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.accountsettings.action.VIEW_SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.google.android.gms.accountsettings.action.BROWSE_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.accountsettings.action.BROWSE_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -709,9 +709,9 @@
             android:process=":ui"
             android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
-                <action android:name="com.google.android.gms.location.settings.LOCATION_HISTORY" />
-                <action android:name="com.google.android.location.settings.LOCATION_REPORTING_SETTINGS" />
-                <action android:name="com.google.android.gms.location.settings.LOCATION_REPORTING_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.location.settings.LOCATION_HISTORY" />
+                <action android:name="${basePackageName}.android.location.settings.LOCATION_REPORTING_SETTINGS" />
+                <action android:name="${basePackageName}.android.gms.location.settings.LOCATION_REPORTING_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -721,12 +721,12 @@
 
         <provider
             android:name="org.microg.gms.phenotype.ConfigurationProvider"
-            android:authorities="com.google.android.gms.phenotype"
+            android:authorities="${basePackageName}.android.gms.phenotype"
             android:exported="true" />
 
         <service android:name="org.microg.gms.phenotype.PhenotypeService">
             <intent-filter>
-                <action android:name="com.google.android.gms.phenotype.service.START" />
+                <action android:name="${basePackageName}.android.gms.phenotype.service.START" />
             </intent-filter>
         </service>
 
@@ -736,7 +736,7 @@
             android:name="org.microg.gms.googlehelp.GoogleHelpService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
+                <action android:name="${basePackageName}.android.gms.googlehelp.service.GoogleHelpService.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -747,7 +747,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.googlehelp.HELP" />
+                <action android:name="${basePackageName}.android.gms.googlehelp.HELP" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
@@ -760,7 +760,7 @@
 
         <service android:name="org.microg.gms.potokens.PoTokensService">
             <intent-filter>
-                <action android:name="com.google.android.gms.potokens.service.START" />
+                <action android:name="${basePackageName}.android.gms.potokens.service.START" />
             </intent-filter>
         </service>
 
@@ -771,7 +771,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.fitness.HistoryApi" />
+                <action android:name="${basePackageName}.android.gms.fitness.HistoryApi" />
             </intent-filter>
         </service>
 
@@ -782,7 +782,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.backup.ACTION_BACKUP_SETTINGS"/>
+                <action android:name="${basePackageName}.android.gms.backup.ACTION_BACKUP_SETTINGS"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -793,7 +793,7 @@
             android:name="org.microg.gms.measurement.MeasurementService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.measurement.START" />
+                <action android:name="${basePackageName}.android.gms.measurement.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -802,38 +802,38 @@
             android:name="org.microg.gms.languageprofile.LanguageProfileService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.languageprofile.service.START" />
+                <action android:name="${basePackageName}.android.gms.languageprofile.service.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
         <service android:name="org.microg.gms.mdm.NetworkQualityService">
             <intent-filter>
-                <action android:name="com.google.android.gms.mdm.services.START" />
+                <action android:name="${basePackageName}.android.gms.mdm.services.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
         <service android:name="org.microg.gms.icing.LightweightIndexService">
             <intent-filter>
-                <action android:name="com.google.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.icing.LIGHTWEIGHT_INDEX_SERVICE" />
             </intent-filter>
         </service>
         <service android:name="org.microg.gms.icing.IndexService">
             <intent-filter>
-                <action android:name="com.google.android.gms.icing.INDEX_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.icing.INDEX_SERVICE" />
             </intent-filter>
         </service>
         <service
             android:name=".analytics.service.AnalyticsService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.analytics.service.START" />
+                <action android:name="${basePackageName}.android.gms.analytics.service.START" />
             </intent-filter>
         </service>
         <service android:name="org.microg.gms.playlog.PlayLogService">
             <intent-filter>
-                <action android:name="com.google.android.gms.playlog.service.START" />
+                <action android:name="${basePackageName}.android.gms.playlog.service.START" />
             </intent-filter>
         </service>
         <service
@@ -842,7 +842,7 @@
 
         <service android:name="org.microg.gms.ads.GService">
             <intent-filter>
-                <action android:name="com.google.android.gms.ads.gservice.START" />
+                <action android:name="${basePackageName}.android.gms.ads.gservice.START" />
             </intent-filter>
         </service>
 
@@ -850,7 +850,7 @@
 
         <service android:name="org.microg.gms.feedback.FeedbackService">
             <intent-filter>
-                <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
+                <action android:name="${basePackageName}.android.gms.feedback.internal.IFeedbackService" />
             </intent-filter>
         </service>
 
@@ -862,228 +862,228 @@
 
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.clearcut.service.START" />
+                <action android:name="${basePackageName}.android.gms.clearcut.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
         <service android:name="org.microg.gms.drive.api.DriveApiService">
             <intent-filter>
-                <action android:name="com.google.android.gms.drive.ApiService.START" />
-                <action android:name="com.google.android.gms.drive.ApiService.STOP" />
-                <action android:name="com.google.android.gms.drive.ApiService.RESET_AFTER_BOOT" />
+                <action android:name="${basePackageName}.android.gms.drive.ApiService.START" />
+                <action android:name="${basePackageName}.android.gms.drive.ApiService.STOP" />
+                <action android:name="${basePackageName}.android.gms.drive.ApiService.RESET_AFTER_BOOT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
         <service android:name="org.microg.gms.reminders.RemindersService">
             <intent-filter>
-                <action android:name="com.google.android.gms.reminders.service.START" />
+                <action android:name="${basePackageName}.android.gms.reminders.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.wallet.PaymentService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wallet.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.wallet.service.BIND" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.firebase.dynamiclinks.DynamicLinksService">
             <intent-filter>
-                <action android:name="com.google.firebase.dynamiclinks.service.START" />
+                <action android:name="${basePackageName}.firebase.dynamiclinks.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.udc.FacsCacheService">
             <intent-filter>
-                <action android:name="com.google.android.gms.facs.cache.service.START" />
+                <action android:name="${basePackageName}.android.gms.facs.cache.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.usagereporting.UsageReportingService">
             <intent-filter>
-                <action android:name="com.google.android.gms.usagereporting.service.START" />
+                <action android:name="${basePackageName}.android.gms.usagereporting.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.pseudonymous.PseudonymousIdService" >
             <intent-filter>
-                <action android:name="com.google.android.gms.pseudonymous.service.START" />
+                <action android:name="${basePackageName}.android.gms.pseudonymous.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.gass.GassService">
             <intent-filter>
-                <action android:name="com.google.android.gms.gass.START" />
+                <action android:name="${basePackageName}.android.gms.gass.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.auth.account.data.AccountDataService">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.account.data.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.account.data.service.START" />
             </intent-filter>
         </service>
 
         <service android:name=".semanticlocation.SemanticLocationService" android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.semanticlocation.service.START_ODLH" />
+                <action android:name="${basePackageName}.android.gms.semanticlocation.service.START_ODLH" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.audit.AuditService">
             <intent-filter>
-                <action android:name="com.google.android.gms.audit.service.START" />
+                <action android:name="${basePackageName}.android.gms.audit.service.START" />
             </intent-filter>
         </service>
 
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
-                <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
-                <action android:name="com.google.android.gms.accounts.ACCOUNT_SERVICE" />
-                <action android:name="com.google.android.gms.ads.identifier.service.EVENT_ATTESTATION" />
-                <action android:name="com.google.android.gms.ads.service.CACHE" />
-                <action android:name="com.google.android.gms.ads.service.CONSENT_LOOKUP" />
-                <action android:name="com.google.android.gms.ads.service.HTTP" />
-                <action android:name="com.google.android.gms.appstate.service.START" />
-                <action android:name="com.google.android.gms.appusage.service.START" />
-                <action android:name="com.google.android.gms.asterism.service.START" />
-                <action android:name="com.google.android.gms.audiomodem.service.AudioModemService.START" />
-                <action android:name="com.google.android.gms.auth.account.authapi.START" />
-                <action android:name="com.google.android.gms.auth.account.authenticator.auto.service.START" />
-                <action android:name="com.google.android.gms.auth.account.authenticator.chromeos.START" />
-                <action android:name="com.google.android.gms.auth.account.authenticator.tv.service.START" />
-                <action android:name="com.google.android.gms.auth.api.identity.service.authorization.START" />
-                <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
-                <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
-                <action android:name="com.google.android.gms.auth.api.signin.service.START" />
-                <action android:name="com.google.android.gms.auth.blockstore.service.START"/>
-                <action android:name="com.google.android.gms.auth.config.service.START" />
-                <action android:name="com.google.android.gms.auth.cryptauth.cryptauthservice.START" />
-                <action android:name="com.google.android.gms.auth.proximity.devicesyncservice.START" />
-                <action android:name="com.google.android.gms.auth.proximity.securechannelservice.START" />
-                <action android:name="com.google.android.gms.auth.proximity.START" />
-                <action android:name="com.google.android.gms.auth.service.START" />
-                <action android:name="com.google.android.gms.backup.G1_BACKUP" />
-                <action android:name="com.google.android.gms.backup.G1_RESTORE" />
-                <action android:name="com.google.android.gms.backup.GMS_MODULE_RESTORE" />
-                <action android:name="com.google.android.gms.beacon.internal.IBleService.START" />
-                <action android:name="com.google.android.gms.carrierauth.service.START" />
-                <action android:name="com.google.android.gms.cast.firstparty.START" />
-                <action android:name="com.google.android.gms.cast_mirroring.service.START" />
-                <action android:name="com.google.android.gms.cast.remote_display.service.START" />
-                <action android:name="com.google.android.gms.chromesync.service.START" />
-                <action android:name="com.google.android.gms.common.download.START" />
-                <action android:name="com.google.android.gms.common.service.START" />
-                <action android:name="com.google.android.gms.common.telemetry.service.START" />
-                <action android:name="com.google.android.gms.config.START" />
-                <action android:name="com.google.android.gms.constellation.service.START" />
-                <action android:name="com.google.android.gms.deviceconnection.service.START" />
-                <action android:name="com.google.android.gms.enterprise.loader.service.START" />
-                <action android:name="com.google.android.gms.facs.internal.service.START" />
-                <action android:name="com.google.android.gms.fido.credentialstore.internal_service.START" />
-                <action android:name="com.google.android.gms.fido.fido2.regular.START" />
-                <action android:name="com.google.android.gms.fido.fido2.zeroparty.START" />
-                <action android:name="com.google.android.gms.fido.sourcedevice.service.START" />
-                <action android:name="com.google.android.gms.fido.targetdevice.internal_service.START" />
-                <action android:name="com.google.android.gms.fido.u2f.privileged.START" />
-                <action android:name="com.google.android.gms.fido.u2f.thirdparty.START" />
-                <action android:name="com.google.android.gms.fido.u2f.zeroparty.START" />
-                <action android:name="com.google.android.gms.fitness.BleApi" />
-                <action android:name="com.google.android.gms.fitness.ConfigApi" />
-                <action android:name="com.google.android.gms.fitness.GoalsApi" />
-                <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START" />
-                <action android:name="com.google.android.gms.fitness.InternalApi" />
-                <action android:name="com.google.android.gms.fitness.RecordingApi" />
-                <action android:name="com.google.android.gms.fitness.SensorsApi" />
-                <action android:name="com.google.android.gms.fitness.SessionsApi" />
-                <action android:name="com.google.android.gms.fonts.service.START" />
-                <action android:name="com.google.android.gms.freighter.service.START" />
-                <action android:name="com.google.android.gms.growth.service.START" />
-                <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
-                <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
-                <action android:name="com.google.android.gms.identity.service.BIND" />
-                <action android:name="com.google.android.gms.inappreach.service.START"/>
-                <action android:name="com.google.android.gms.instantapps.START" />
-                <action android:name="com.google.android.gms.kids.service.START" />
-                <action android:name="com.google.android.gms.learning.internal.dynamitesupport.START" />
-                <action android:name="com.google.android.gms.learning.intservice.START" />
-                <action android:name="com.google.android.gms.learning.predictor.START" />
-                <action android:name="com.google.android.gms.learning.trainer.START" />
-                <action android:name="com.google.android.gms.learning.training.background.START" />
-                <action android:name="com.google.android.gms.locationsharing.api.START" />
-                <action android:name="com.google.android.gms.locationsharingreporter.service.START" />
-                <action android:name="com.google.android.gms.lockbox.service.START" />
-                <action android:name="com.google.android.gms.matchstick.lighter.service.START" />
-                <action android:name="com.google.android.gms.mdm.services.DeviceManagerApiService.START" />
-                <action android:name="com.google.android.gms.mdns.service.START" />
-                <action android:name="com.google.android.gms.nearby.bootstrap.service.NearbyBootstrapService.START" />
-                <action android:name="com.google.android.gms.nearby.connection.service.START" />
-                <action android:name="com.google.android.gms.nearby.fastpair.START" />
-                <action android:name="com.google.android.gms.nearby.messages.service.NearbyMessagesService.START" />
-                <action android:name="com.google.android.gms.nearby.sharing.service.NearbySharingService.START" />
-                <action android:name="com.google.android.gms.nearby.sharing.START_SERVICE" />
-                <action android:name="com.google.android.gms.notifications.service.START" />
-                <action android:name="com.google.android.gms.ocr.service.internal.START" />
-                <action android:name="com.google.android.gms.ocr.service.START" />
-                <action android:name="com.google.android.gms.payse.service.BIND" />
-                <action android:name="com.google.android.gms.people.contactssync.service.START" />
-                <action android:name="com.google.android.gms.photos.autobackup.service.START" />
-                <action android:name="com.google.android.gms.plus.service.default.INTENT" />
-                <action android:name="com.google.android.gms.plus.service.image.INTENT" />
-                <action android:name="com.google.android.gms.plus.service.internal.START" />
-                <action android:name="com.google.android.gms.plus.service.START" />
-                <action android:name="com.google.android.gms.rcs.START" />
-                <action android:name="com.google.android.gms.romanesco.MODULE_BACKUP_AGENT" />
-                <action android:name="com.google.android.gms.romanesco.service.START" />
-                <action android:name="com.google.android.gms.search.service.SEARCH_AUTH_START" />
-                <action android:name="com.google.android.gms.sesame.service.BIND" />
-                <action android:name="com.google.android.gms.telephonyspam.service.START" />
-                <action android:name="com.google.android.gms.testsupport.service.START" />
-                <action android:name="com.google.android.gms.scheduler.ACTION_PROXY_SCHEDULE" />
-                <action android:name="com.google.android.gms.setup.auth.SecondDeviceAuth.START" />
-                <action android:name="com.google.android.gms.smartdevice.d2d.SourceDeviceService.START" />
-                <action android:name="com.google.android.gms.smartdevice.d2d.TargetDeviceService.START" />
-                <action android:name="com.google.android.gms.smartdevice.directtransfer.SourceDirectTransferService.START" />
-                <action android:name="com.google.android.gms.smartdevice.directtransfer.TargetDirectTransferService.START" />
-                <action android:name="com.google.android.gms.smartdevice.postsetup.PostSetupService.START" />
-                <action android:name="com.google.android.gms.smartdevice.setup.accounts.AccountsService.START" />
-                <action android:name="com.google.android.gms.smartdevice.wifi.START_WIFI_HELPER_SERVICE" />
-                <action android:name="com.google.android.gms.social.location.activity.service.START" />
-                <action android:name="com.google.android.gms.statementservice.EXECUTE" />
-                <action android:name="com.google.android.gms.stats.ACTION_UPLOAD_DROPBOX_ENTRIES" />
-                <action android:name="com.google.android.gms.speech.service.START" />
-                <action android:name="com.google.android.gms.thunderbird.service.START" />
-                <action android:name="com.google.android.gms.trustagent.BridgeApi.START" />
-                <action android:name="com.google.android.gms.trustagent.StateApi.START" />
-                <action android:name="com.google.android.gms.trustagent.trustlet.trustletmanagerservice.BIND" />
-                <action android:name="com.google.android.gms.trustlet.bluetooth.service.BIND" />
-                <action android:name="com.google.android.gms.trustlet.connectionlessble.service.BIND" />
-                <action android:name="com.google.android.gms.trustlet.face.service.BIND" />
-                <action android:name="com.google.android.gms.trustlet.nfc.service.BIND" />
-                <action android:name="com.google.android.gms.trustlet.onbody.service.BIND" />
-                <action android:name="com.google.android.gms.trustlet.place.service.BIND" />
-                <action android:name="com.google.android.gms.trustlet.voiceunlock.service.BIND" />
-                <action android:name="com.google.android.gms.udc.service.START" />
-                <action android:name="com.google.android.gms.update.START_API_SERVICE" />
-                <action android:name="com.google.android.gms.update.START_SERVICE" />
-                <action android:name="com.google.android.gms.update.START_SINGLE_USER_API_SERVICE" />
-                <action android:name="com.google.android.gms.update.START_TV_API_SERVICE" />
-                <action android:name="com.google.android.gms.userlocation.service.START" />
-                <action android:name="com.google.android.gms.vehicle.cabin.service.START" />
-                <action android:name="com.google.android.gms.vehicle.climate.service.START" />
-                <action android:name="com.google.android.gms.vehicle.info.service.START" />
-                <action android:name="com.google.android.gms.walletp2p.service.firstparty.BIND" />
-                <action android:name="com.google.android.gms.walletp2p.service.zeroparty.BIND" />
-                <action android:name="com.google.android.gms.wearable.BIND" />
-                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
-                <action android:name="com.google.android.gms.wearable.NODE_CHANGED" />
-                <action android:name="com.google.android.mdd.service.START" />
-                <action android:name="com.google.android.mdh.service.START" />
-                <action android:name="com.google.android.mdh.service.listener.START" />
-                <action android:name="com.google.android.mobstore.service.START" />
+                <action android:name="${basePackageName}.android.contextmanager.service.ContextManagerService.START" />
+                <action android:name="${basePackageName}.android.gms.accounts.ACCOUNT_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.ads.identifier.service.EVENT_ATTESTATION" />
+                <action android:name="${basePackageName}.android.gms.ads.service.CACHE" />
+                <action android:name="${basePackageName}.android.gms.ads.service.CONSENT_LOOKUP" />
+                <action android:name="${basePackageName}.android.gms.ads.service.HTTP" />
+                <action android:name="${basePackageName}.android.gms.appstate.service.START" />
+                <action android:name="${basePackageName}.android.gms.appusage.service.START" />
+                <action android:name="${basePackageName}.android.gms.asterism.service.START" />
+                <action android:name="${basePackageName}.android.gms.audiomodem.service.AudioModemService.START" />
+                <action android:name="${basePackageName}.android.gms.auth.account.authapi.START" />
+                <action android:name="${basePackageName}.android.gms.auth.account.authenticator.auto.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.account.authenticator.chromeos.START" />
+                <action android:name="${basePackageName}.android.gms.auth.account.authenticator.tv.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.api.identity.service.authorization.START" />
+                <action android:name="${basePackageName}.android.gms.auth.api.identity.service.credentialsaving.START" />
+                <action android:name="${basePackageName}.android.gms.auth.api.phone.service.InternalService.START" />
+                <action android:name="${basePackageName}.android.gms.auth.api.signin.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.blockstore.service.START"/>
+                <action android:name="${basePackageName}.android.gms.auth.config.service.START" />
+                <action android:name="${basePackageName}.android.gms.auth.cryptauth.cryptauthservice.START" />
+                <action android:name="${basePackageName}.android.gms.auth.proximity.devicesyncservice.START" />
+                <action android:name="${basePackageName}.android.gms.auth.proximity.securechannelservice.START" />
+                <action android:name="${basePackageName}.android.gms.auth.proximity.START" />
+                <action android:name="${basePackageName}.android.gms.auth.service.START" />
+                <action android:name="${basePackageName}.android.gms.backup.G1_BACKUP" />
+                <action android:name="${basePackageName}.android.gms.backup.G1_RESTORE" />
+                <action android:name="${basePackageName}.android.gms.backup.GMS_MODULE_RESTORE" />
+                <action android:name="${basePackageName}.android.gms.beacon.internal.IBleService.START" />
+                <action android:name="${basePackageName}.android.gms.carrierauth.service.START" />
+                <action android:name="${basePackageName}.android.gms.cast.firstparty.START" />
+                <action android:name="${basePackageName}.android.gms.cast_mirroring.service.START" />
+                <action android:name="${basePackageName}.android.gms.cast.remote_display.service.START" />
+                <action android:name="${basePackageName}.android.gms.chromesync.service.START" />
+                <action android:name="${basePackageName}.android.gms.common.download.START" />
+                <action android:name="${basePackageName}.android.gms.common.service.START" />
+                <action android:name="${basePackageName}.android.gms.common.telemetry.service.START" />
+                <action android:name="${basePackageName}.android.gms.config.START" />
+                <action android:name="${basePackageName}.android.gms.constellation.service.START" />
+                <action android:name="${basePackageName}.android.gms.deviceconnection.service.START" />
+                <action android:name="${basePackageName}.android.gms.enterprise.loader.service.START" />
+                <action android:name="${basePackageName}.android.gms.facs.internal.service.START" />
+                <action android:name="${basePackageName}.android.gms.fido.credentialstore.internal_service.START" />
+                <action android:name="${basePackageName}.android.gms.fido.fido2.regular.START" />
+                <action android:name="${basePackageName}.android.gms.fido.fido2.zeroparty.START" />
+                <action android:name="${basePackageName}.android.gms.fido.sourcedevice.service.START" />
+                <action android:name="${basePackageName}.android.gms.fido.targetdevice.internal_service.START" />
+                <action android:name="${basePackageName}.android.gms.fido.u2f.privileged.START" />
+                <action android:name="${basePackageName}.android.gms.fido.u2f.thirdparty.START" />
+                <action android:name="${basePackageName}.android.gms.fido.u2f.zeroparty.START" />
+                <action android:name="${basePackageName}.android.gms.fitness.BleApi" />
+                <action android:name="${basePackageName}.android.gms.fitness.ConfigApi" />
+                <action android:name="${basePackageName}.android.gms.fitness.GoalsApi" />
+                <action android:name="${basePackageName}.android.gms.fitness.GoogleFitnessService.START" />
+                <action android:name="${basePackageName}.android.gms.fitness.InternalApi" />
+                <action android:name="${basePackageName}.android.gms.fitness.RecordingApi" />
+                <action android:name="${basePackageName}.android.gms.fitness.SensorsApi" />
+                <action android:name="${basePackageName}.android.gms.fitness.SessionsApi" />
+                <action android:name="${basePackageName}.android.gms.fonts.service.START" />
+                <action android:name="${basePackageName}.android.gms.freighter.service.START" />
+                <action android:name="${basePackageName}.android.gms.growth.service.START" />
+                <action android:name="${basePackageName}.android.gms.googlehelp.service.GoogleHelpService.START" />
+                <action android:name="${basePackageName}.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
+                <action android:name="${basePackageName}.android.gms.identity.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.inappreach.service.START"/>
+                <action android:name="${basePackageName}.android.gms.instantapps.START" />
+                <action android:name="${basePackageName}.android.gms.kids.service.START" />
+                <action android:name="${basePackageName}.android.gms.learning.internal.dynamitesupport.START" />
+                <action android:name="${basePackageName}.android.gms.learning.intservice.START" />
+                <action android:name="${basePackageName}.android.gms.learning.predictor.START" />
+                <action android:name="${basePackageName}.android.gms.learning.trainer.START" />
+                <action android:name="${basePackageName}.android.gms.learning.training.background.START" />
+                <action android:name="${basePackageName}.android.gms.locationsharing.api.START" />
+                <action android:name="${basePackageName}.android.gms.locationsharingreporter.service.START" />
+                <action android:name="${basePackageName}.android.gms.lockbox.service.START" />
+                <action android:name="${basePackageName}.android.gms.matchstick.lighter.service.START" />
+                <action android:name="${basePackageName}.android.gms.mdm.services.DeviceManagerApiService.START" />
+                <action android:name="${basePackageName}.android.gms.mdns.service.START" />
+                <action android:name="${basePackageName}.android.gms.nearby.bootstrap.service.NearbyBootstrapService.START" />
+                <action android:name="${basePackageName}.android.gms.nearby.connection.service.START" />
+                <action android:name="${basePackageName}.android.gms.nearby.fastpair.START" />
+                <action android:name="${basePackageName}.android.gms.nearby.messages.service.NearbyMessagesService.START" />
+                <action android:name="${basePackageName}.android.gms.nearby.sharing.service.NearbySharingService.START" />
+                <action android:name="${basePackageName}.android.gms.nearby.sharing.START_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.notifications.service.START" />
+                <action android:name="${basePackageName}.android.gms.ocr.service.internal.START" />
+                <action android:name="${basePackageName}.android.gms.ocr.service.START" />
+                <action android:name="${basePackageName}.android.gms.payse.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.people.contactssync.service.START" />
+                <action android:name="${basePackageName}.android.gms.photos.autobackup.service.START" />
+                <action android:name="${basePackageName}.android.gms.plus.service.default.INTENT" />
+                <action android:name="${basePackageName}.android.gms.plus.service.image.INTENT" />
+                <action android:name="${basePackageName}.android.gms.plus.service.internal.START" />
+                <action android:name="${basePackageName}.android.gms.plus.service.START" />
+                <action android:name="${basePackageName}.android.gms.rcs.START" />
+                <action android:name="${basePackageName}.android.gms.romanesco.MODULE_BACKUP_AGENT" />
+                <action android:name="${basePackageName}.android.gms.romanesco.service.START" />
+                <action android:name="${basePackageName}.android.gms.search.service.SEARCH_AUTH_START" />
+                <action android:name="${basePackageName}.android.gms.sesame.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.telephonyspam.service.START" />
+                <action android:name="${basePackageName}.android.gms.testsupport.service.START" />
+                <action android:name="${basePackageName}.android.gms.scheduler.ACTION_PROXY_SCHEDULE" />
+                <action android:name="${basePackageName}.android.gms.setup.auth.SecondDeviceAuth.START" />
+                <action android:name="${basePackageName}.android.gms.smartdevice.d2d.SourceDeviceService.START" />
+                <action android:name="${basePackageName}.android.gms.smartdevice.d2d.TargetDeviceService.START" />
+                <action android:name="${basePackageName}.android.gms.smartdevice.directtransfer.SourceDirectTransferService.START" />
+                <action android:name="${basePackageName}.android.gms.smartdevice.directtransfer.TargetDirectTransferService.START" />
+                <action android:name="${basePackageName}.android.gms.smartdevice.postsetup.PostSetupService.START" />
+                <action android:name="${basePackageName}.android.gms.smartdevice.setup.accounts.AccountsService.START" />
+                <action android:name="${basePackageName}.android.gms.smartdevice.wifi.START_WIFI_HELPER_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.social.location.activity.service.START" />
+                <action android:name="${basePackageName}.android.gms.statementservice.EXECUTE" />
+                <action android:name="${basePackageName}.android.gms.stats.ACTION_UPLOAD_DROPBOX_ENTRIES" />
+                <action android:name="${basePackageName}.android.gms.speech.service.START" />
+                <action android:name="${basePackageName}.android.gms.thunderbird.service.START" />
+                <action android:name="${basePackageName}.android.gms.trustagent.BridgeApi.START" />
+                <action android:name="${basePackageName}.android.gms.trustagent.StateApi.START" />
+                <action android:name="${basePackageName}.android.gms.trustagent.trustlet.trustletmanagerservice.BIND" />
+                <action android:name="${basePackageName}.android.gms.trustlet.bluetooth.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.trustlet.connectionlessble.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.trustlet.face.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.trustlet.nfc.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.trustlet.onbody.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.trustlet.place.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.trustlet.voiceunlock.service.BIND" />
+                <action android:name="${basePackageName}.android.gms.udc.service.START" />
+                <action android:name="${basePackageName}.android.gms.update.START_API_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.update.START_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.update.START_SINGLE_USER_API_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.update.START_TV_API_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.userlocation.service.START" />
+                <action android:name="${basePackageName}.android.gms.vehicle.cabin.service.START" />
+                <action android:name="${basePackageName}.android.gms.vehicle.climate.service.START" />
+                <action android:name="${basePackageName}.android.gms.vehicle.info.service.START" />
+                <action android:name="${basePackageName}.android.gms.walletp2p.service.firstparty.BIND" />
+                <action android:name="${basePackageName}.android.gms.walletp2p.service.zeroparty.BIND" />
+                <action android:name="${basePackageName}.android.gms.wearable.BIND" />
+                <action android:name="${basePackageName}.android.gms.wearable.DATA_CHANGED" />
+                <action android:name="${basePackageName}.android.gms.wearable.NODE_CHANGED" />
+                <action android:name="${basePackageName}.android.mdd.service.START" />
+                <action android:name="${basePackageName}.android.mdh.service.START" />
+                <action android:name="${basePackageName}.android.mdh.service.listener.START" />
+                <action android:name="${basePackageName}.android.mobstore.service.START" />
 
                 <action
-                    android:name="com.google.android.gms.wearable.BIND_LISTENER"
+                    android:name="${basePackageName}.android.gms.wearable.BIND_LISTENER"
                     tools:ignore="WearableBindListener" />
             </intent-filter>
         </service>

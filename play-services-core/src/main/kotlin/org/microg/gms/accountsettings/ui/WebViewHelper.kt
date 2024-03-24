@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
+import org.microg.gms.common.Constants.GOOGLE_SERVICES_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
 import java.net.URLEncoder
 import java.util.*
@@ -102,7 +103,7 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
     private fun openWebWithAccount(accountName: String, url: String?) {
         try {
             val service = "weblogin:continue=" + URLEncoder.encode(url, "utf-8")
-            val authManager = AuthManager(activity, accountName, GMS_PACKAGE_NAME, service)
+            val authManager = AuthManager(activity, accountName, GOOGLE_SERVICES_PACKAGE_NAME, service)
             val authUrl = authManager.requestAuth(false)?.auth
             if (authUrl?.contains("WILL_NOT_SIGN_IN") == true) {
                 throw RuntimeException("Would not sign in")

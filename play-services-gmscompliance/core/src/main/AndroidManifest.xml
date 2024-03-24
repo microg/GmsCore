@@ -9,7 +9,7 @@
     <application>
         <service android:name="org.microg.gms.gmscompliance.GmsDeviceComplianceService">
             <intent-filter>
-                <action android:name="com.google.android.gms.gmscompliance.service.START" />
+                <action android:name="${basePackageName}.android.gms.gmscompliance.service.START" />
             </intent-filter>
         </service>
     </application>

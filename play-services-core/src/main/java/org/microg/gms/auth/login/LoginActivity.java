@@ -75,8 +75,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
-import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
+import static org.microg.gms.common.Constants.*;
 
 public class LoginActivity extends AssistantActivity {
     public static final String TMPL_NEW_ACCOUNT = "new_account";
@@ -354,7 +353,7 @@ public class LoginActivity extends AssistantActivity {
         }
     }
     private void retrieveGmsToken(final Account account) {
-        final AuthManager authManager = new AuthManager(this, account.name, GMS_PACKAGE_NAME, "ac2dm");
+        final AuthManager authManager = new AuthManager(this, account.name, GOOGLE_SERVICES_PACKAGE_NAME, "ac2dm");
         authManager.setPermitted(true);
         new AuthRequest().fromContext(this)
                 .appIsGms()

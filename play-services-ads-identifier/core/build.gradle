@@ -21,6 +21,10 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+
+        manifestPlaceholders = [
+                basePackageName: "$basePackageName"
+        ]
     }
 
     sourceSets {

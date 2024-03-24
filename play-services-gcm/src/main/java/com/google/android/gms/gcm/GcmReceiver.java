@@ -44,12 +44,12 @@ import static org.microg.gms.gcm.GcmConstants.GCMID_REFRESH;
  * <p/>
  * <pre>
  * <receiver
- *     android:name="com.google.android.gms.gcm.GcmReceiver"
+ *     android:name="${basePackageName}.android.gms.gcm.GcmReceiver"
  *     android:exported="true"
- *     android:permission="com.google.android.c2dm.permission.SEND" >
+ *     android:permission="${basePackageName}.android.c2dm.permission.SEND" >
  *     <intent-filter>
- *         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
- *         <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+ *         <action android:name="${basePackageName}.android.c2dm.intent.RECEIVE" />
+ *         <action android:name="${basePackageName}.android.c2dm.intent.REGISTRATION" />
  *         <category android:name="YOUR_PACKAGE_NAME" />
  *     </intent-filter>
  * </receiver></pre>

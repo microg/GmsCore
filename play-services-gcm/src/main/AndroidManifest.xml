@@ -18,7 +18,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Permissions required for GCM -->
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="${basePackageName}.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- Move to play-services-measurement -->

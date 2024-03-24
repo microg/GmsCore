@@ -103,6 +103,8 @@ android {
     }
 
     defaultConfig {
+        applicationId "${basePackageName}.android.gms"
+
         versionName version
         versionCode appVersionCode
 
@@ -118,6 +120,18 @@ android {
         buildConfigField "String", "RECAPTCHA_ENTERPRISE_PROJECT_ID", "\"${localProperties.get("recaptchaEnterpreise.projectId", "")}\""
         buildConfigField "String", "RECAPTCHA_ENTERPRISE_SITE_KEY", "\"${localProperties.get("recaptchaEnterpreise.siteKey", "")}\""
         buildConfigField "String", "RECAPTCHA_ENTERPRISE_API_KEY", "\"${localProperties.get("recaptchaEnterpreise.apiKey", "")}\""
+        buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
+
+        manifestPlaceholders = [
+                basePackageName: "$basePackageName"
+        ]
+
+        resValue "string", "base_package_name", "$basePackageName"
+        resValue "string", "application_id", "$applicationId"
+        resValue "string", "var_pref_auth_action_security_settings", "${basePackageName}.android.gms.accountsettings.SECURITY_SETTINGS"
+        resValue "string", "var_pref_auth_action_privacy_settings", "${basePackageName}.android.gms.accountsettings.PRIVACY_SETTINGS"
+        resValue "string", "var_pref_auth_action_preferences_settings", "${basePackageName}.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
+        resValue "string", "var_pref_start_gms_package", "${basePackageName}.android.gms"
 
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"

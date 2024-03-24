@@ -154,7 +154,7 @@ fun JSONObject.toPlayer() = PlayerEntity(
 )
 
 suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
-    val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
+    val authManager = AuthManager(context, account.name, Constants.GOOGLE_SERVICES_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
     val authToken = withContext(Dispatchers.IO) { authManager.requestAuth(false).auth }
     val androidId = getSettings(context, CheckIn.getContentUri(context), arrayOf(CheckIn.ANDROID_ID)) { cursor: Cursor -> cursor.getLong(0) }
