@@ -21,11 +21,17 @@
     <string name="prefcat_location_wifi_title">Localizare Wi-Fi</string>
     <string name="prefcat_geocoder_title">Căutare adrese</string>
     <string name="pref_location_cell_mls_enabled_summary">Preia locațiile turnurilor de telefonie mobilă din rețeaua mobilă de la Mozilla Location Service.</string>
-    <string name="location_settings_dialog_message_title_to_continue">Pentru a continua, activează locația dispozitivului, care utilizează serviciul de localizare</string>
+    <string name="location_settings_dialog_message_title_to_continue">Pentru a continua, activează locația dispozitivului, care utilizează serviciul de localizare microG</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Folosească receptorul GPS, Wi-Fi, rețelele celulare și senzorii</string>
     <string name="location_settings_dialog_message_details_end_paragraph">Pentru detalii, accesează setările locației.</string>
     <string name="location_settings_dialog_btn_sure">Bine</string>
     <string name="location_settings_dialog_message_details_start_paragraph">Dispozitivul va trebui să:</string>
-    <string name="location_settings_dialog_message_gls_consent">Utilizeze serviciul de localizare; ca parte a acestui serviciu, poate colecta periodic date despre locație și poate utiliza aceste date într-un mod anonim pentru a îmbunătăți acuratețea locației și serviciile bazate pe locație.</string>
+    <string name="location_settings_dialog_message_gls_consent">Utilizează serviciul de localizare microG; ca parte a acestui serviciu, microG poate colecta periodic date despre locație și poate utiliza aceste date într-un mod anonim pentru a îmbunătăți acuratețea locației și serviciile bazate pe locație.</string>
     <string name="location_settings_dialog_btn_cancel">Nu, mulțumesc</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Pentru o experiență mai bună, activează locația dispozitivului, care utilizează serviciul de localizare microG</string>
+    <string name="pref_location_custom_url_summary">Aceasta permite setarea unei adrese URL de serviciu personalizată. Valorile nevalide pot face ca serviciile de localizare să nu răspundă sau să fie complet indisponibile.</string>
+    <string name="pref_location_custom_url_reset">Resetează</string>
+    <string name="pref_location_custom_url_title">Configurează adresa URL a serviciului</string>
+    <string name="pref_location_custom_url_details">Calea /v1/geolocate este atașată automat. Dacă furnizorul de locație necesită o cheie, aceasta poate fi atașată ca parametru de interogare la adresa URL rădăcină.</string>
+    <string name="pref_location_custom_url_input_hint">Adresa URL personalizată a serviciului</string>
 </resources>

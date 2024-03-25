@@ -231,11 +231,11 @@
     <string name="perm_car_vendor_extension_description">Obținerea accesului la canalul furnizorului de automobile, pentru a face schimb de informații specifice automobilului</string>
     <string name="pref_auth_strip_device_name_summary">Când este activată, solicitările de autentificare nu vor include numele dispozitivului, ceea ce poate permite dispozitivelor neautorizate să se conecteze, dar poate avea consecințe neprevăzute.</string>
     <string name="backup_disabled">Momentan, copierea de rezervă nu este posibilă</string>
-    <string name="pref_accounts_title">Conturi</string>
+    <string name="pref_accounts_title">Conturi Google</string>
     <string name="pref_vending_billing_category">Facturare Google Play</string>
     <string name="pref_accounts_summary">Adaugă și gestionează conturile Google</string>
     <string name="prefcat_accounts_settings_title">Setări</string>
-    <string name="prefcat_accounts_current_accounts_title">Conturi conectate în prezent</string>
+    <string name="prefcat_accounts_current_accounts_title">Conturi</string>
     <string name="pref_vending_licensing_category">Licențiere Google Play</string>
     <string name="pref_vending_billing_enable_switch">Gestionează cererile de facturare</string>
     <string name="pref_vending_billing_enable_summary">Odată activate, unele aplicații pot finaliza achizițiile sau pot începe abonamente prin serviciul Google Play Billing.</string>
