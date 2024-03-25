@@ -35,9 +35,4 @@
     <string name="about_root_summary">Sumar</string>
     <string name="about_root_version">Versiune v0.1.0</string>
     <string name="about_root_libraries">Biblioteci incluse</string>
-
-    <string name="about_android_support_v4">Biblioteca de asistență v4</string>
-    <string name="about_android_support_v7_appcompat">Biblioteca de asistență v7 appcompat</string>
-    <string name="about_android_support_v7_preference">Biblioteca de asistență de preferințe v7</string>
-    <string name="about_android_support_license">Apache License 2.0, Proiectul Android Open Source</string>
-    </resources>
+</resources>
