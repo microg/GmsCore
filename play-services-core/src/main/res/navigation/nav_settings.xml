@@ -24,14 +24,8 @@
             android:id="@+id/openSafetyNetSettings"
             app:destination="@id/safetyNetFragment" />
         <action
-            android:id="@+id/openVendingSettings"
-            app:destination="@id/vendingFragment" />
-        <action
             android:id="@+id/openMoreGoogleSettings"
             app:destination="@id/googleMoreFragment" />
-        <action
-            android:id="@+id/openLocationSettings"
-            app:destination="@id/nav_location" />
         <action
             android:id="@+id/openAbout"
             app:destination="@id/aboutFragment" />
@@ -144,13 +138,6 @@
             app:argType="string" />
     </fragment>
 
-    <!-- Play Store services -->
-
-    <fragment
-        android:id="@+id/vendingFragment"
-        android:name="org.microg.gms.ui.VendingFragment"
-        android:label="@string/service_name_vending" />
-
     <!-- More -->
 
     <fragment
@@ -166,7 +153,4 @@
         android:label="@string/prefcat_about"
         tools:layout="@layout/about_root" />
 
-    <!-- Included -->
-
-    <include app:graph="@navigation/nav_location" />
 </navigation>

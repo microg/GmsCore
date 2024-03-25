@@ -15,7 +15,7 @@
 
         <service android:name="org.microg.gms.cast.CastDeviceControllerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE" />
+                <action android:name="${basePackageName}.android.gms.cast.service.BIND_CAST_DEVICE_CONTROLLER_SERVICE" />
             </intent-filter>
         </service>
     </application>

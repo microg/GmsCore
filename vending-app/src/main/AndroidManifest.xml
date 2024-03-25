@@ -17,7 +17,7 @@
         android:maxSdkVersion="22" />
     <uses-permission android:name="org.microg.gms.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
+    <uses-permission android:name="${basePackageName}.android.gms.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission
@@ -58,11 +58,11 @@
 
         <meta-data
             android:name="org.microg.gms.settings:source-package"
-            android:value="com.google.android.gms" />
+            android:value="${basePackageName}.android.gms" />
 
         <meta-data
             android:name="org.microg.gms.profile:source-package"
-            android:value="com.google.android.gms" />
+            android:value="${basePackageName}.android.gms" />
 
         <activity
             android:name=".GrantFakeSignaturePermissionActivity"
@@ -79,10 +79,10 @@
         </service>
 
         <service
-            android:name="com.google.android.finsky.externalreferrer.GetInstallReferrerService"
+            android:name="${basePackageName}.android.finsky.externalreferrer.GetInstallReferrerService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.finsky.BIND_GET_INSTALL_REFERRER_SERVICE" />
+                <action android:name="${basePackageName}.android.finsky.BIND_GET_INSTALL_REFERRER_SERVICE" />
             </intent-filter>
         </service>
 

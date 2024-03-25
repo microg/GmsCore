@@ -54,7 +54,7 @@
             android:permission="android.permission.WRITE_SECURE_SETTINGS">
             <intent-filter>
                 <action android:name="com.android.location.service.GeocodeProvider" />
-                <action android:name="com.google.android.location.GeocodeProvider" />
+                <action android:name="${basePackageName}.android.location.GeocodeProvider" />
             </intent-filter>
             <meta-data
                 android:name="serviceVersion"

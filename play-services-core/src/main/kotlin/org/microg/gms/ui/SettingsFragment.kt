@@ -43,14 +43,6 @@ class SettingsFragment : ResourceSettingsFragment() {
             findNavController().navigate(requireContext(), R.id.openSafetyNetSettings)
             true
         }
-        findPreference<Preference>(PREF_LOCATION)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openLocationSettings)
-            true
-        }
-        findPreference<Preference>(PREF_VENDING)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            findNavController().navigate(requireContext(), R.id.openVendingSettings)
-            true
-        }
 
         findPreference<Preference>(PREF_ABOUT)!!.apply {
             onPreferenceClickListener = Preference.OnPreferenceClickListener {

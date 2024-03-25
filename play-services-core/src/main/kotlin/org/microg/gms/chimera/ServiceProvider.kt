@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.core.os.bundleOf
+import com.google.android.gms.base.BuildConfig
 import org.microg.gms.DummyService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.RemoteListenerProxy
@@ -79,7 +80,7 @@ class ServiceProvider : ContentProvider() {
 
     override fun getType(uri: Uri): String {
         Log.d(TAG, "getType: $uri")
-        return "vnd.android.cursor.item/com.google.android.gms.chimera"
+        return "vnd.android.cursor.item/" + BuildConfig.BASE_PACKAGE_NAME + ".android.gms.chimera"
     }
 
     companion object {

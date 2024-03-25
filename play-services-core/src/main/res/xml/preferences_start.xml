@@ -23,7 +23,7 @@
             android:title="@string/self_check_title">
             <intent
                 android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-                android:targetPackage="com.google.android.gms" />
+                android:targetPackage="@string/var_pref_start_gms_package" />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services" android:key="prefcat_google_services">
@@ -45,24 +45,14 @@
             android:key="pref_snet"
             android:title="@string/service_name_snet" />
         <Preference
-            android:icon="@drawable/ic_shop"
-            android:key="pref_vending"
-            android:title="@string/service_name_vending" />
-        <Preference
             android:icon="@drawable/dots_horizontal"
             android:key="pref_google_more"
             android:title="@string/pref_more_settings"
             app:isPreferenceVisible="false">
             <intent
                 android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
-                android:targetPackage="com.google.android.gms" />
+                android:targetPackage="@string/var_pref_start_gms_package" />
         </Preference>
-    </PreferenceCategory>
-    <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_other_services">
-        <Preference
-            android:icon="@drawable/ic_map_marker"
-            android:key="pref_location"
-            android:title="@string/service_name_location"/>
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_footer">
         <Preference

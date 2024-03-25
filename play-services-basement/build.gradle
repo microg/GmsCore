@@ -20,9 +20,9 @@ apply plugin: 'signing'
 
 dependencies {
     // Dependencies from play-services-basement:18.1.0
-    api "androidx.collection:collection:1.0.0"
-    api "androidx.core:core:1.2.0"
-    api "androidx.fragment:fragment:1.0.0"
+    api 'androidx.collection:collection:1.4.0'
+    api 'androidx.core:core:1.12.0'
+    api 'androidx.fragment:fragment:1.6.2'
 
     annotationProcessor project(':safe-parcel-processor')
 }
@@ -50,7 +50,12 @@ android {
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
         buildConfigField "int", "VERSION_CODE", "$appVersionCode"
+        buildConfigField "String", "BASE_PACKAGE_NAME", "\"$basePackageName\""
         consumerProguardFile 'consumer-rules.pro'
+
+        manifestPlaceholders = [
+                basePackageName: "$basePackageName"
+        ]
     }
 
     compileOptions {

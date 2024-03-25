@@ -15,9 +15,9 @@
             android:exported="true"
             android:process="com.google.android.gms.unstable">
             <intent-filter>
-                <action android:name="com.google.android.gms.droidguard.service.INIT" />
-                <action android:name="com.google.android.gms.droidguard.service.PING" />
-                <action android:name="com.google.android.gms.droidguard.service.START" />
+                <action android:name="${basePackageName}.android.gms.droidguard.service.INIT" />
+                <action android:name="${basePackageName}.android.gms.droidguard.service.PING" />
+                <action android:name="${basePackageName}.android.gms.droidguard.service.START" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

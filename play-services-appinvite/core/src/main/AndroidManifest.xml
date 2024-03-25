@@ -11,7 +11,7 @@
             android:name="org.microg.gms.appinivite.AppInviteService"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.android.gms.appinvite.service.START" />
+                <action android:name="${basePackageName}.android.gms.appinvite.service.START" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
@@ -37,7 +37,7 @@
                 <data android:pathPrefix="/" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.google.firebase.dynamiclinks.VIEW_DYNAMIC_LINK" />
+                <action android:name="${basePackageName}.firebase.dynamiclinks.VIEW_DYNAMIC_LINK" />
 
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />

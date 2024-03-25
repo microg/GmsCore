@@ -38,8 +38,8 @@ description = 'microG implementation of play-services-cast'
 
 dependencies {
     // Dependencies from play-services-cast:21.2.0
-    api "androidx.core:core:1.0.0"
-    api "androidx.mediarouter:mediarouter:1.2.2"
+    api 'androidx.core:core:1.12.0'
+    api 'androidx.mediarouter:mediarouter:1.7.0'
     api project(':play-services-base')
     api project(':play-services-basement')
     //api project(':play-services-flags')

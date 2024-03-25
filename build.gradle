@@ -4,10 +4,13 @@
  */
 
 buildscript {
+    ext.applicationNamespace = "com.google.android.gms"
+    ext.basePackageName = "app.revanced"
+
     ext.cronetVersion = '102.5005.125'
     ext.wearableVersion = '0.1.1'
 
-    ext.kotlinVersion = '1.9.22'
+    ext.kotlinVersion = '1.9.23'
     ext.coroutineVersion = '1.7.3'
 
     ext.annotationVersion = '1.7.1'
@@ -18,18 +21,18 @@ buildscript {
     ext.lifecycleVersion = '2.7.0'
     ext.loaderVersion = '1.1.0'
     ext.materialVersion = '1.11.0'
-    ext.mediarouterVersion = '1.6.0'
+    ext.mediarouterVersion = '1.7.0'
     ext.multidexVersion = '2.0.1'
     ext.navigationVersion = '2.7.7'
-    ext.preferenceVersion = '1.2.0'
+    ext.preferenceVersion = '1.2.1'
     ext.recyclerviewVersion = '1.3.2'
     ext.webkitVersion = '1.10.0'
 
     ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
-    ext.wireVersion = '4.8.0'
+    ext.wireVersion = '4.9.8'
 
-    ext.androidBuildGradleVersion = '8.2.2'
+    ext.androidBuildGradleVersion = '8.3.1'
 
     ext.androidBuildVersionTools = '34.0.0'
 
@@ -63,62 +66,20 @@ buildscript {
     }
 }
 
-def execResult(...args) {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine args
-        standardOutput = stdout
-    }
-    return stdout.toString()
-}
-
-def gmsVersion = "24.09.13"
-def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
-def vendingVersion = "40.2.26"
-def vendingVersionCode = Integer.parseInt(vendingVersion.replaceAll('\\.', ''))
-def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1)
-def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim())
-def gitCommitId = execResult('git', 'show-ref', '--abbrev=7', '--head', 'HEAD').trim().split(' ')[0]
-def gitDirty = false
-execResult('git', 'status', '--porcelain').lines().each { stat ->
-  def status = stat.substring(0,2)
-  def file = stat.substring(3)
-  if (status == '??') {
-    if (subprojects.any { p -> file.startsWith(p.name + '/') }) {
-      logger.lifecycle('Dirty file: {} (untracked)', file)
-      gitDirty = true
-    } else {
-      logger.info('New file outside module: {} (ignored for dirty check)', file)
-    }
-  } else {
-    logger.lifecycle('Dirty file: {} (changed)', file)
-    gitDirty = true
-  }
-}
-def ourVersionBase = gitVersionBase.substring(0, gitVersionBase.lastIndexOf('.'))
-def ourVersionMinor = Integer.parseInt(ourVersionBase.substring(ourVersionBase.lastIndexOf('.') + 1))
-def ourGmsVersionCode = gmsVersionCode * 1000 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
-def ourGmsVersionName = "$ourVersionBase.$gmsVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
-def ourVendingVersionCode = 80000000 + vendingVersionCode * 100 + ourVersionMinor * 2  + (gitCommitCount > 0 || gitDirty ? 1 : 0)
-def ourVendingVersionName = "$ourVersionBase.$vendingVersionCode" + (gitCommitCount > 0 && !gitDirty ? "-$gitCommitCount" : "") + (gitDirty ? "-dirty" : "") + (gitCommitCount > 0 && !gitDirty ? " ($gitCommitId)" : "")
-logger.lifecycle('Starting build for GMS version {} ({})...', ourGmsVersionName, ourGmsVersionCode)
-
 allprojects {
     apply plugin: 'idea'
 
     group = 'org.microg.gms'
-    version = ourGmsVersionName
-    ext.vendingAppVersionName = ourVendingVersionName
-    ext.vendingAppVersionCode = ourVendingVersionCode
-    ext.appVersionCode = ourGmsVersionCode
-    ext.isReleaseVersion = false
+    ext.appVersionCode = 241017000
+    ext.baseVersion = ext.appVersionCode.toString()[0..1] + '.' + ext.appVersionCode.toString()[2..3] + '.' + ext.appVersionCode.toString()[4..5]
+    version = "0.3.0." + ext.baseVersion.replaceAll("\\.", "")
+    ext.isReleaseVersion = true
 }
 
 subprojects {
     repositories {
         mavenCentral()
         google()
-        if (hasModule("hms", false)) maven {url 'https://developer.huawei.com/repo/'}
     }
 }
 

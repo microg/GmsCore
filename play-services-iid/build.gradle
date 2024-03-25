@@ -19,6 +19,10 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+
+        manifestPlaceholders = [
+                basePackageName: "$basePackageName"
+        ]
     }
 
     compileOptions {
@@ -29,8 +33,9 @@ android {
 
 dependencies {
     // Dependencies from play-services-iid:17.0.0
-    api "androidx.collection:collection:1.0.0"
-    api "androidx.core:core:1.0.0"
+    api 'androidx.collection:collection:1.4.0'
+    api 'androidx.core:core:1.12.0'
+    api 'androidx.legacy:legacy-support-v13:1.0.0'
     api project(':play-services-base')
     api project(':play-services-basement')
     //api project(':play-services-stats')
