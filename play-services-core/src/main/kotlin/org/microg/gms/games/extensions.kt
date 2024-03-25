@@ -52,6 +52,13 @@ const val EXTRA_OTHER_PLAYER_IN_GAME_NAME = "com.google.android.gms.games.EXTRA_
 
 const val GAMES_PACKAGE_NAME = "com.google.android.play.games"
 
+val List<Scope>.realScopes
+    get() = if (any { it.scopeUri == Scopes.GAMES }) {
+        this
+    } else {
+        this.toSet() + Scope(Scopes.GAMES_LITE)
+    }.toList().sortedBy { it.scopeUri }
+
 fun PlayerEntity.toContentValues(): ContentValues = contentValuesOf(
     PlayerColumns.externalPlayerId to playerId,
     PlayerColumns.profileName to displayName,
@@ -205,9 +212,9 @@ suspend fun performGamesSignIn(
     scopes: List<Scope> = emptyList(),
     queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 ): Boolean {
-    val scopes = (scopes.toSet() + Scope(Scopes.GAMES_LITE)).toList().sortedBy { it.scopeUri }
-    val authManager = AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
-    if (scopes.size == 1) authManager.setItCaveatTypes("2")
+    val realScopes = scopes.realScopes
+    val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
+    if (realScopes.size == 1) authManager.setItCaveatTypes("2")
     if (permitted) authManager.isPermitted = true
     val authResponse = withContext(Dispatchers.IO) { authManager.requestAuth(true) }
     if (authResponse.auth == null) return false
