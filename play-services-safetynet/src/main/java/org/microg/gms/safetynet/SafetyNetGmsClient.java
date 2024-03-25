@@ -31,6 +31,14 @@ public class SafetyNetGmsClient extends GmsClient<ISafetyNetService> {
         getServiceInterface().verifyWithRecaptcha(callbacks, siteKey);
     }
 
+    public void enableVerifyApps(ISafetyNetCallbacks callbacks) throws RemoteException {
+        getServiceInterface().enableVerifyApps(callbacks);
+    }
+
+    public void isVerifyAppsEnabled(ISafetyNetCallbacks callbacks) throws RemoteException {
+        getServiceInterface().isVerifyAppsEnabled(callbacks);
+    }
+
     @Override
     protected ISafetyNetService interfaceFromBinder(IBinder binder) {
         return ISafetyNetService.Stub.asInterface(binder);
