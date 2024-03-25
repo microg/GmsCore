@@ -77,7 +77,9 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                     ?: GamesConfigurationService.getDefaultAccount(this@GamesService, packageName)
                     ?: return@launchWhenStarted sendSignInRequired()
 
-                val scopes = (request.scopes.toSet() + Scope(Scopes.GAMES_LITE)).toList().sortedBy { it.scopeUri }
+                val scopes = request.scopes.toList().realScopes
+                Log.d(TAG, "handleServiceRequest scopes to ${scopes.joinToString(" ")}")
+
                 val authManager = AuthManager(this@GamesService, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
                 if (!authManager.isPermitted && !AuthPrefs.isTrustGooglePermitted(this@GamesService)) {
                     Log.d(TAG, "Not permitted to use $account for ${scopes.toList()}, sign in required")
@@ -85,6 +87,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                 }
 
                 if (!performGamesSignIn(this@GamesService, packageName, account, scopes = scopes)) {
+                    Log.d(TAG, "performGamesSignIn fail, sign in required")
                     return@launchWhenStarted sendSignInRequired()
                 }
 
