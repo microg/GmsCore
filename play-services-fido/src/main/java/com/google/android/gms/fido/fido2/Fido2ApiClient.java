@@ -10,15 +10,22 @@ package com.google.android.gms.fido.fido2;
 
 import android.app.PendingIntent;
 import android.content.Context;
+import android.os.RemoteException;
 
 import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.fido.fido2.api.IBooleanCallback;
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialCreationOptions;
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions;
+import com.google.android.gms.fido.fido2.internal.regular.IFido2AppCallbacks;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
 import org.microg.gms.common.PublicApi;
+import org.microg.gms.common.api.PendingGoogleApiCall;
+import org.microg.gms.fido.fido2.Fido2GmsClient;
 import org.microg.gms.fido.fido2.Fido2PendingIntentImpl;
 
 /**
@@ -26,7 +33,7 @@ import org.microg.gms.fido.fido2.Fido2PendingIntentImpl;
  */
 @PublicApi
 public class Fido2ApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
-    private static final Api<Api.ApiOptions.NoOptions> API = null;
+    private static final Api<Api.ApiOptions.NoOptions> API = new Api<>((options, context, looper, clientSettings, callbacks, connectionFailedListener) -> new Fido2GmsClient(context, callbacks, connectionFailedListener));
 
     @PublicApi(exclude = true)
     public Fido2ApiClient(Context context) {
@@ -49,7 +56,22 @@ public class Fido2ApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
      * @return Task with PendingIntent to launch FIDO2 registration request
      */
     public Task<PendingIntent> getRegisterPendingIntent(PublicKeyCredentialCreationOptions requestOptions) {
-        throw new UnsupportedOperationException();
+        return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2GmsClient>) (client, completionSource) -> {
+            try {
+                client.getRegisterPendingIntent(new IFido2AppCallbacks.Stub() {
+                    @Override
+                    public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
+                        if (status.isSuccess()) {
+                            completionSource.setResult(pendingIntent);
+                        } else {
+                            completionSource.setException(new ApiException(status));
+                        }
+                    }
+                }, requestOptions);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
     }
 
     /**
@@ -68,7 +90,22 @@ public class Fido2ApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
      * @return Task with PendingIntent to launch FIDO2 signature request
      */
     public Task<PendingIntent> getSignPendingIntent(PublicKeyCredentialRequestOptions requestOptions) {
-        throw new UnsupportedOperationException();
+        return scheduleTask((PendingGoogleApiCall<PendingIntent, Fido2GmsClient>) (client, completionSource) -> {
+            try {
+                client.getSignPendingIntent(new IFido2AppCallbacks.Stub() {
+                    @Override
+                    public void onPendingIntent(Status status, PendingIntent pendingIntent) throws RemoteException {
+                        if (status.isSuccess()) {
+                            completionSource.setResult(pendingIntent);
+                        } else {
+                            completionSource.setException(new ApiException(status));
+                        }
+                    }
+                }, requestOptions);
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
     }
 
     /**
@@ -76,6 +113,22 @@ public class Fido2ApiClient extends GoogleApi<Api.ApiOptions.NoOptions> {
      * device.
      */
     public Task<Boolean> isUserVerifyingPlatformAuthenticatorAvailable() {
-        throw new UnsupportedOperationException();
+        return scheduleTask((PendingGoogleApiCall<Boolean, Fido2GmsClient>) (client, completionSource) -> {
+            try {
+                client.isUserVerifyingPlatformAuthenticatorAvailable(new IBooleanCallback.Stub() {
+                    @Override
+                    public void onBoolean(boolean value) throws RemoteException {
+                        completionSource.setResult(value);
+                    }
+
+                    @Override
+                    public void onError(Status status) throws RemoteException {
+                        completionSource.setException(new ApiException(status));
+                    }
+                });
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
     }
 }
