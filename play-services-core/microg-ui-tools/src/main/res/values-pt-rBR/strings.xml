@@ -17,7 +17,7 @@
 
 <resources>
     <string name="lib_name">Ferramentas de UI do microGT</string>
-    <string name="lib_license">Licença "Apache License 2.0", Time do microG</string>
+    <string name="lib_license">Apache License 2.0, Equipe do microG</string>
 
     <string name="about_version_str">Versão %1$s</string>
     <string name="about_name_version_str">%1$s %2$s</string>
@@ -40,5 +40,5 @@
     <string name="about_android_support_v4">Biblioteca de suporte à v4</string>
     <string name="about_android_support_v7_appcompat">Biblioteca de suporte à v7 appcompat</string>
     <string name="about_android_support_v7_preference">Biblioteca de suporte à v7 de preferências</string>
-    <string name="about_android_support_license">Licença "Apache License 2.0", The Android Open Source Project</string>
+    <string name="about_android_support_license">Apache License 2.0, The Android Open Source Project</string>
 </resources>
