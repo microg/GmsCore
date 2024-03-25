@@ -47,7 +47,12 @@ class LocationManager(private val context: Context, override val lifecycle: Life
     private val postProcessor by lazy { LocationPostProcessor() }
     private val lastLocationCapsule by lazy { LastLocationCapsule(context) }
     val database by lazy { LocationAppsDatabase(context) }
-    private val requestManager by lazy { LocationRequestManager(context, lifecycle, postProcessor, database) { onRequestManagerUpdated() } }
+    private val requestManager by lazy { LocationRequestManager(context, lifecycle, postProcessor, database) {
+        lifecycleScope.launchWhenStarted {
+            ensurePermissions()
+        }
+        onRequestManagerUpdated()
+    } }
     private val gpsLocationListener by lazy { LocationListenerCompat { updateGpsLocation(it) } }
     private val networkLocationListener by lazy { LocationListenerCompat { updateNetworkLocation(it) } }
     private var boundToSystemNetworkLocation: Boolean = false
@@ -277,34 +282,24 @@ class LocationManager(private val context: Context, override val lifecycle: Life
     }
 
     private suspend fun requestPermission(permissions: List<String>): Boolean {
-        val (completable, deferred) = activePermissionRequestLock.withLock {
-            if (activePermissionRequest == null) {
-                val completable = CompletableDeferred<Boolean>()
-                activePermissionRequest = completable
-                completable to activePermissionRequest!!
-            } else {
-                null to activePermissionRequest!!
-            }
-        }
-        if (completable != null) {
-            val intent = Intent(context, AskPermissionActivity::class.java)
-            intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
-                override fun handleMessage(msg: Message) {
-                    if (msg.what == Activity.RESULT_OK) {
-                        lastLocationCapsule.fetchFromSystem()
-                        onRequestManagerUpdated()
-                        val grantResults = msg.data?.getIntArray(EXTRA_GRANT_RESULTS) ?: IntArray(0)
-                        completable.complete(grantResults.size == permissions.size && grantResults.all { it == PackageManager.PERMISSION_GRANTED })
-                    } else {
-                        completable.complete(false)
-                    }
+        val permissionRequest = activePermissionRequestLock.withLock {CompletableDeferred<Boolean>()}
+        val intent = Intent(context, AskPermissionActivity::class.java)
+        intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
+            override fun handleMessage(msg: Message) {
+                if (msg.what == Activity.RESULT_OK) {
+                    lastLocationCapsule.fetchFromSystem()
+                    onRequestManagerUpdated()
+                    val grantResults = msg.data?.getIntArray(EXTRA_GRANT_RESULTS) ?: IntArray(0)
+                    permissionRequest.complete(grantResults.size == permissions.size && grantResults.all { it == PackageManager.PERMISSION_GRANTED })
+                } else {
+                    permissionRequest.complete(false)
                 }
-            }))
-            intent.putExtra(EXTRA_PERMISSIONS, permissions.toTypedArray())
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            context.startActivity(intent)
-        }
-        return deferred.await()
+            }
+        }))
+        intent.putExtra(EXTRA_PERMISSIONS, permissions.toTypedArray())
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+        return permissionRequest.await()
     }
 
     fun dump(writer: PrintWriter) {
