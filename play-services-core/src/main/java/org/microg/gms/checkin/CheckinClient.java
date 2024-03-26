@@ -81,26 +81,26 @@ public class CheckinClient {
     public static CheckinRequest makeRequest(Context context, DeviceConfiguration deviceConfiguration,
                                              DeviceIdentifier deviceIdent, PhoneInfo phoneInfo,
                                              LastCheckinInfo checkinInfo, Locale locale,
-                                             List<Account> accounts) {
+                                             List<Account> accounts, Boolean brandSpoof) {
         ProfileManager.ensureInitialized(context);
         CheckinRequest.Builder builder = new CheckinRequest.Builder()
                 .accountCookie(new ArrayList<>())
                 .androidId(checkinInfo.getAndroidId())
                 .checkin(new CheckinRequest.Checkin.Builder()
                         .build(new CheckinRequest.Checkin.Build.Builder()
-                                .bootloader(Build.BOOTLOADER)
-                                .brand(Build.BRAND)
+                                .bootloader(brandSpoof ? "c2f2-0.2-5799621" : Build.BOOTLOADER)
+                                .brand(brandSpoof ? "google" : Build.BRAND)
                                 .clientId("android-google")
-                                .device(Build.DEVICE)
-                                .fingerprint(Build.FINGERPRINT)
-                                .hardware(Build.HARDWARE)
-                                .manufacturer(Build.MANUFACTURER)
-                                .model(Build.MODEL)
+                                .device(brandSpoof ? "generic" : Build.DEVICE)
+                                .fingerprint(brandSpoof ? "google/coral/coral:10/QD1A.190821.007/5831595:user/release-keys" : Build.FINGERPRINT)
+                                .hardware(brandSpoof ? "coral" : Build.HARDWARE)
+                                .manufacturer(brandSpoof ? "Google" : Build.MANUFACTURER)
+                                .model(brandSpoof ? "mainline" : Build.MODEL)
                                 .otaInstalled(false) // TODO?
                                 //.packageVersionCode(Constants.MAX_REFERENCE_VERSION)
-                                .product(Build.PRODUCT)
-                                .radio(Build.RADIO)
-                                .sdkVersion(Build.VERSION.SDK_INT)
+                                .product(brandSpoof ? "coral" : Build.PRODUCT)
+                                .radio(brandSpoof ? "" : Build.RADIO)
+                                .sdkVersion(brandSpoof ? 29 : Build.VERSION.SDK_INT)
                                 .time(Build.TIME / 1000)
                                 .build())
                         .cellOperator(phoneInfo.cellOperator)

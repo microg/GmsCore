@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/auth_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -66,13 +66,12 @@
             android:background="#e4e7e9">
 
             <Button
-                android:id="@+id/back_button"
-                style="?attr/buttonBarNegativeButtonStyle"
+                android:id="@+id/spoof_button"
+                style="?attr/buttonBarPositiveButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="48dip"
-                android:layout_alignParentLeft="true"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_marginStart="0dp"
                 android:paddingLeft="38dp"
                 android:paddingRight="38dp"
                 android:textAllCaps="true"
@@ -83,15 +82,14 @@
                 android:id="@+id/next_button"
                 style="?attr/buttonBarPositiveButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="48dip"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+                android:layout_marginEnd="0dp"
                 android:paddingLeft="38dp"
                 android:paddingRight="38dp"
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
         </RelativeLayout>
     </LinearLayout>
 

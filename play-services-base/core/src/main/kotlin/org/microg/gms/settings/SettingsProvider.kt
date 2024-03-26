@@ -116,6 +116,7 @@ class SettingsProvider : ContentProvider() {
             CheckIn.SECURITY_TOKEN -> checkInPrefs.getLong(key, 0)
             CheckIn.VERSION_INFO -> checkInPrefs.getString(key, "") ?: ""
             CheckIn.DEVICE_DATA_VERSION_INFO -> checkInPrefs.getString(key, "") ?: ""
+            CheckIn.BRAND_SPOOF -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException()
         }
     }
@@ -133,6 +134,10 @@ class SettingsProvider : ContentProvider() {
                 // special case: not saved in checkInPrefs
                 updateCheckInEnabled(value as Boolean)
             }
+            if (key == CheckIn.BRAND_SPOOF) {
+                // special case: not saved in checkInPrefs
+                updateSpoofingEnabled(value as Boolean)
+            }
             when (key) {
                 CheckIn.ANDROID_ID -> editor.putLong(key, value as Long)
                 CheckIn.DIGEST -> editor.putString(key, value as String?)
@@ -148,6 +153,12 @@ class SettingsProvider : ContentProvider() {
     private fun updateCheckInEnabled(enabled: Boolean) {
         preferences.edit()
             .putBoolean(CheckIn.ENABLED, enabled)
+            .apply()
+    }
+
+    private fun updateSpoofingEnabled(enabled: Boolean) {
+        preferences.edit()
+            .putBoolean(CheckIn.BRAND_SPOOF, enabled)
             .apply()
     }
 
