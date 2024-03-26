@@ -763,6 +763,19 @@
                 <action android:name="${basePackageName}.android.mdh.service.listener.START" />
             </intent-filter>
         </service>
+
+        <meta-data
+                android:name="org.microg.gms.settings.checkin_enable_service"
+                android:value="true" />
+        <meta-data
+                android:name="org.microg.gms.settings.gcm_enable_mcs_service"
+                android:value="true" />
+        <meta-data
+                android:name="org.microg.gms.settings.droidguard_enabled"
+                android:value="true" />
+        <meta-data
+                android:name="org.microg.gms.settings.safetynet_enabled"
+                android:value="true" />
     </application>
 
 </manifest>
