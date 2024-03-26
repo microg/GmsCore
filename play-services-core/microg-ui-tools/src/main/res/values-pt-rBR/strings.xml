@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="lib_name">Ferramentas de UI do microGT</string>
+    <string name="lib_name">Ferramentas de UI do microG</string>
     <string name="lib_license">Apache License 2.0, Equipe do microG</string>
 
     <string name="about_version_str">Versão %1$s</string>
