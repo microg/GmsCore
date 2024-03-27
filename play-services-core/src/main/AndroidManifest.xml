@@ -78,15 +78,15 @@
         android:protectionLevel="signature" />
 
     <permission
-        android:name="org.microg.gms.STATUS_BROADCAST"
+        android:name="${basePackageName}.microg.gms.STATUS_BROADCAST"
         android:label="@string/perm_status_broadcast_label"
         android:protectionLevel="normal" />
     <permission
-        android:name="org.microg.gms.EXTENDED_ACCESS"
+        android:name="${basePackageName}.microg.gms.EXTENDED_ACCESS"
         android:label="@string/perm_extended_access_label"
         android:protectionLevel="dangerous" />
     <permission
-        android:name="org.microg.gms.PROVISION"
+        android:name="${basePackageName}.microg.gms.PROVISION"
         android:description="@string/perm_provision_description"
         android:label="@string/perm_provision_label"
         android:protectionLevel="privileged|signature" />
@@ -146,7 +146,7 @@
     <uses-permission android:name="${basePackageName}.android.gtalkservice.permission.GTALK_SERVICE" />
     <uses-permission android:name="${basePackageName}.android.gms.auth.api.phone.permission.SEND" />
 
-    <uses-permission android:name="org.microg.gms.STATUS_BROADCAST" />
+    <uses-permission android:name="${basePackageName}.microg.gms.STATUS_BROADCAST" />
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -176,7 +176,7 @@
         <service
             android:name="org.microg.gms.provision.ProvisionService"
             android:exported="true"
-            android:permission="org.microg.gms.PROVISION" />
+            android:permission="${basePackageName}.microg.gms.PROVISION" />
 
         <!-- Location -->
 
