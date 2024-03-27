@@ -24,13 +24,13 @@ jobs:
           java-version: "17"
 
       - name: Build
-        run: ./gradlew --no-daemon :play-services-core:assembleHmsDefault
+        run: ./gradlew --no-daemon :play-services-core:assembleMapboxDefault
 
       - name: Sign
         id: sign_apk
         uses: ilharp/sign-android-release@v1
         with:
-          releaseDir: play-services-core/build/outputs/apk/hmsDefault/release
+          releaseDir: play-services-core/build/outputs/apk/mapboxDefault/release
           signingKey: ${{ secrets.SIGNING_KEYSTORE }}
           keyAlias: ${{ secrets.SIGNING_KEY_ALIAS }}
           keyStorePassword: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
