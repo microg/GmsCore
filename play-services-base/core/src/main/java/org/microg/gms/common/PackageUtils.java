@@ -81,6 +81,11 @@ public class PackageUtils {
                     packageCandidate
             );
 
+            // See https://github.com/ReVanced/GmsCore/issues/10.
+            ExtendedPackageInfo extendedPackageInfo = new ExtendedPackageInfo(context, packageName);
+            if (!extendedPackageInfo.isInstalled())
+                return true;
+
             if (new ExtendedPackageInfo(context, packageName).hasGooglePackagePermission(permission)) {
                 return true;
             }
@@ -241,7 +246,7 @@ public class PackageUtils {
         if (packageName != null && suggestedPackageName != null && !packageName.equals(suggestedPackageName)) {
             throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + suggestedPackageName + "] (seems to be " + packageName + ")");
         }
-        return PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
+        return packageName;
     }
 
     @Nullable

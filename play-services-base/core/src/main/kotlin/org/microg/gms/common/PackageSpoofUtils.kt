@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Utilities to spoof package information.
  */
-internal object PackageSpoofUtils {
+object PackageSpoofUtils {
     private const val TAG = "SpoofUtils"
     private const val META_SPOOF_PACKAGE_NAME =
         BuildConfig.BASE_PACKAGE_NAME + ".android.gms.SPOOFED_PACKAGE_NAME"
