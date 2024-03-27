@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">Gwasanaethau Craidd microG</string>
+    <string name="gms_settings_name">Gosodiadau microG</string>
+    <string name="gms_settings_summary">Gosod gwasanaethau craidd microG.</string>
+
+    <string name="just_a_sec">Un eiliad…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Wrth barhau, rwyt yn caniatáu\'r ap hwn a Google i ddefnyddio dy wybodaeth yn ôl telerau eu gwasanaethau a\'u polisïau preifatrwydd.</string>
+    <string name="ask_scope_permission_title">Hoffai <xliff:g example="F-Droid">%1$s</xliff:g>:</string>
+    <string name="ask_service_permission_title">Hoffai <xliff:g example="F-Droid">%1$s</xliff:g> ddefnyddio:</string>
+    <string name="account_manager_title">Rheolwr Cyfrif Google</string>
+    <string name="sorry">Sori…</string>
+    <string name="auth_before_connect">"Mae ap ar dy ddyfais yn ceisio mewngofnodi i gyfrif Google.
+
+Os yw hyn yn fwriadol, defnyddia\'r botwm <b>Mewngofnodi</b> i gysylltu â thudalen mewngofnodi Google. Fel arall, pwysa <b>Diddymu</b> i ddychwelyd i\'r ap achosodd y deialog hwn i ymddangos."</string>
+    <string name="auth_sign_in">Mewngofnodi</string>
+    <string name="auth_connecting">"Mae dy ddyfais yn sefydlu cysylltiad â gweinyddion Google i dy fewngofnodi.
+
+Gall hyn gymryd ychydig eiliadau."</string>
+    <string name="no_network_error_desc">"Nid oes gennyt gysylltiad â rhwydwaith.
+
+Gall hyn fod yn broblem dros dro neu mae\'n bosib nad yw dy ddyfais Android wedi\'i alluogi ar gyfer gwasanaethau data. Rho gynnig arall arni pan fyddi wedi cysylltu â rhwydwaith symudol neu cysyllta â rhwydwaith Wi-Fi.!</string>
+    <string name="auth_general_error_desc">"Roedd problem yn cyfathrebu â gweinyddwyr Google.
+
+Rho gynnig arall arni\'n hwyrach."</string>
+    <string name="auth_finalize">"Mae dy ddyfais yn cysylltu â Google i gadw gwybodaeth i dy gyfrif.
+
+Gall hyn gymryd cwpl o funudau."</string>
+    <string name="allow">Caniatáu</string>
+    <string name="deny">Gwrthod</string>
+    <string name="auth_notification_title">Angen dilysiad</string>
+    <string name="auth_notification_content">Mae ar <xliff:g example="F-Droid">%1$s</xliff:g> angen dy ganiatâd cyn cael at dy gyfrif Google.</string>
+
+    <string name="perm_status_broadcast_label">gwrando ar ddarllediadau statws mewnol</string>
+    <string name="perm_c2dm_receive_label">gwrando ar negeseuon C2DM</string>
+    <string name="perm_c2dm_send_label">anfon negeseuon C2DM at apiau eraill</string>
+    <string name="perm_gtalk_svc_label">cyfnewid negeseuon a derbyn hysbysiadau sync gan weinyddion Google</string>
+    <string name="perm_extended_access_label">"Ymestyn mynediad i wasanaethau Google</string>
+
+    <string name="service_name_checkin">Cofrestriad dyfais Google</string>
+    <string name="service_name_mcs">Google Cloud Messaging</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+
+    <string name="service_status_disabled">Analluogwyd</string>
+    <string name="service_status_enabled">Galluogwyd</string>
+    <string name="service_status_automatic">Awtomatig</string>
+    <string name="service_status_manual">A llaw</string>
+
+    <string name="menu_advanced">Uwch</string>
+    <string name="list_no_item_none">Dim</string>
+
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title">Hoffai <xliff:g example="F-Droid">%1$s</xliff:g> ddefnyddio Play Games</string>
+    <string name="games_info_content">I ddefnydido Play Games rhaid gosod yr ap Google Play Games. Gall yr ap parhau heb Play Games, ond mae\'n bosib na fydd yn ymddwyn fel y disgwyl.</string>
+
+    <string name="pick_place_title">Dewis lleoliad</string>
+    <string name="pick_place_desc">Dyw dewisydd lleoliad ddim ar gael eto.</string>
+    <string name="place_picker_select_title">Dewis y lleoliad hwn</string>
+    <string name="place_picker_nearby_places">Lleoliadau gerllaw</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+
+    <string name="lacking_permission_toast">microG Services Core: Lacking permission to <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+
+    <string name="network_type_mobile">Rhwydwaith symudol</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Crwydro</string>
+    <string name="network_type_other">Rhwydweithiau eraill</string>
+
+    <!-- Self check -->
+
+    <string name="self_check_cat_fake_sig">Cefnogaeth ffugio llofnodion</string>
+    <string name="self_check_cat_gms_packages">Pecynnau wedi\'u gosod</string>
+    <string name="self_check_cat_system">System</string>
+
+    <string name="self_check_name_fake_sig_perm">System ddim yn cefnogi ffugio llofnodion: </string>
+    <string name="self_check_resolution_fake_sig_perm">Nid oes gan dy ROM cefnogaeth frodorol i ffugio llofnodion. Gellir defnyddio Xposed neu systemau eraill i ffugio llofnodion. Gwiria\'r ddogfennaeth i wirio pa ROMiau sy\'n cefnogi ffugio llofnodion a sut i ddefnyddio microG ar rai sydd ddim.</string>
+    <string name="self_check_name_perm_granted">System yn caniatáu ffugio llofnodion:</string>
+    <string name="self_check_resolution_perm_granted">Mae hyn yn arwydd cryf bod y ROM yn cefnogi ffugio llofnodion, ond mae angen gweithred bellach i\'w weithredu. Gwiria\'r ddogfennaeth i wybod pa gamau sydd angen eu cymryd.</string>
+    <string name="self_check_name_system_spoofs">System yn ffugio llofnodion: </string>
+    <string name="self_check_resolution_system_spoofs">Gwiria\'r ddogfennaeth i weld pa gamau mae\'n bosib bod yn rhaid eu cymryd.</string>
+
+    <string name="self_check_pkg_gms">Gwasanaethau Play (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Fframwaith Gwasanaethau (GSF)</string>
+    <string name="self_check_name_app_installed">Gosodwyd <xliff:g example="F-Droid">%1$s</xliff:g>: </string>
+    <string name="self_check_resolution_app_installed">Gosoda ap <xliff:g example="F-Droid">%1$s</xliff:g> neu un cydnaws. Gwiria\'r ddogfennaeth i wirio pa apiau sy\'n gydnaws.</string>
+    <string name="self_check_name_correct_sig">Mae gan <xliff:g example="F-Droid">%1$s</xliff:g> lofnod cywir: </string>
+    <string name="self_check_resolution_correct_sig">Naill ai dyw\'r <xliff:g example="F-Droid">%1$s</xliff:g> wedi\'i osod ddim yn gydnaws neu dyw ffugio llofnodion heb ei roi ar waith ar ei gyfer. Gwiria\'r ddogfennaeth ar ba apiau a ROMiau sy\'n gydnaws.</string>
+
+    <string name="self_check_name_battery_optimizations">Optimeiddiadau batri wedi\'u hanwybyddu:</string>
+    <string name="self_check_resolution_battery_optimizations">Cyffyrdda yma i analluogi optimeiddiadau batri. Gall peidio â gwneud hyn achosi apiau i gamymddwyn.</string>
+
+    <!-- Settings strings -->
+
+    <string name="prefcat_about">Ynghylch</string>
+    <string name="prefcat_components">Cydrannau</string>
+    <string name="prefcat_configuration">Ffurfweddiad</string>
+    <string name="prefcat_google_services">Gwasanaethau Google</string>
+    <string name="prefcat_location_service">Gwasanaeth lleoliad</string>
+    <string name="prefcat_operation_mode">Modd gweithredu</string>
+    <string name="prefcat_services">Gwasanaethau</string>
+    <string name="prefcat_test">Profi</string>
+
+    <string name="cond_gcm_bat_title">Galluogwyd optimeiddiadau batri</string>
+    <string name="cond_gcm_bat_summary">Rwyt wedi galluogi Google Cloud Messaging ond mae optimeiddiadau batri ar waith ar gyfer Gwasanaethau Craidd microG. Dylid anwybyddu optimeiddiadau batri er mwyn i hysbysiadau gwthio medru cyrraedd.</string>
+    <string name="cond_gcm_bat_action">Anwybyddu optimeiddiadau</string>
+    <string name="cond_perm_title">Caniatâd ar goll</string>
+
+    <string name="prefs_account">Dewisiadau cyfrif</string>
+    <string name="prefs_account_privacy">Gwybodaeth bersonol a phreifatrwydd</string>
+    <string name="prefs_account_security">Mewngofnodi a diogelwch</string>
+
+    <string name="pref_auth_trust_google_title">Ymddiried yn Google ar gyfer caniatâd apiau</string>
+    <string name="pref_auth_trust_google_summary">Pan wedi\'i analluogi, caiff defnyddiwr ei ofyn am ganiatâd cyn bod cais awdurdodiad ap yn cael ei anfon at Google. Gall rhai apiau methu â defnyddio\'r cyfrif Google os yw hwn wedi\'i analluogi.</string>
+    <string name="pref_auth_visible_title">Caniatáu apiau i ganfod cyfrifon</string>
+    <string name="pref_auth_visible_summary">Pan wedi\'i alluogi, bydd pob ap ar y ddyfais hon yn medru gweld cyfeiriad e-bost dy gyfrifon Google heb ganiatâd ymlaen llaw.</string>
+
+    <string name="pref_checkin_enable_summary">Mae\'n cofrestru dy ddyfais i wasanaethau Google ac yn creu adnabyddydd dyfais unigryw. Mae microG yn tynnu pob darn o wybodaeth adnabod ond am enw dy gyfrif Google oddi\'r data cofrestru.</string>
+
+    <string name="pref_more_settings">Mwy</string>
+
+    <string name="pref_add_account_title">Cyfrif</string>
+    <string name="pref_add_account_summary">Ychwanegu cyfrif Google</string>
+    <string name="pref_gcm_enable_mcs_summary">Mae Google Cloud Messaging yn ddarparwr hysbysiadau gwthio a ddefnyddir gan nifer o apiau trydydd parti. I\'w ddefnyddio, rhaid galluogi cofrestru\'r ddyfais.</string>
+    <string name="pref_gcm_heartbeat_title">Cyfnod curiad Cloud Messaging</string>
+    <string name="pref_gcm_heartbeat_summary">Dyma\'r cyfnod mewn eiliadau y mae\'r system yn curo fel calon gyda gweinyddwyr Google. Bydd cynyddu\'r rhif hwn yn lleihau defnydd batri, ond gellir achosi oedi gyda rhai negeseuon gwthio.\ni ddefnyddir bellach. Caiff ei newid mewn fersiwn newydd.</string>
+    <string name="pref_gcm_apps_title">Apiau yn defnyddio Google Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">Rhestr apiau wedi cofrestru ar gyfer Google Cloud Messaging.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Cadarnhau apiau newydd</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Gofyn cyn cofrestru ap newydd i dderbyn hysbysiadau gwthio</string>
+    <string name="pref_gcm_ping_interval">Cyfnod pingio: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+
+    <string name="pref_about_title">Ynghylch Gwasanaethau Craidd microG</string>
+    <string name="pref_about_summary">Gwybodaeth fersiwn a\'r llyfrgelloedd a ddefnyddir</string>
+
+    <string name="gcm_app_error_unregistering">Gwall dadgofrestru</string>
+    <string name="gcm_app_not_installed_anymore">Heb ei osod bellach</string>
+    <string name="gcm_unregister_app">Dadgofrestru</string>
+    <string name="gcm_not_registered">Heb gofrestru</string>
+    <string name="gcm_no_message_yet">Dim negeseuon wedi\'u derbyn hyd yn hyn</string>
+    <string name="gcm_last_message_at">Neges ddiwethaf: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Wedi cofrestru</string>
+    <string name="gcm_registered_since">Wedi cofrestru ers: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Dadgofrestru <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
+    <string name="gcm_unregister_confirm_message">Dyw rhai apiau ddim yn dadgofrestru yn awtomatig a/neu ddim yn rhoi\'r cynnig i wneud felly. Mae\'n bosib na fydd yr apiau hyn yn gweithio\'n iawn ar ôl dadgofrestru.\nParhau?</string>
+    <string name="gcm_unregister_after_deny_message">Rwyt wedi gwrthod caniatáu i ap gofrestru ar gyfer hysbysiadau gwthio sydd eisoes wedi\'i gofrestru.\nWyt ti am ei ddadgofrestru nawr fel nad yw yn derbyn hysbysiadau gwthio yn y dyfodol?</string>
+    <string name="gcm_messages_counter">Negeseuon: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> beit)</string>
+    <string name="gcm_state_disconnected">Statws Cyfredol: Wedi datgysylltu</string>
+    <string name="gcm_state_connected">Statws Cyfredol: Wedi cysylltu ers <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+
+    <string name="snet_intro">Mae Google SafetyNet yn system tystio dyfeisiau er sicrhau bod dyfais wedi\'i ddiogelu\'n gywir ac yn gydnaws ag Android CTS. Mae rhai apiau yn defnyddio SafetyNet am resymau diogelwch neu fel anghenraid i warchod rhag ymyrryd.\n\nMae GmsCore microG yn cynnwys gweithrediad am ddim o SafetyNet, ond mae ar y gweinydd swyddogol angen i geisiadau SafetyNet fod wedi\'u llofnodi gyda\'r system DroidGuard sy\'n perthyn i Google. Mae fersiwn pwll tywod o DroidGuard ar gael fel ap "DroidGuard Helper" ar wahân.</string>
+
+    <string name="pref_snet_testdrive_title">Rhoi cynnig ar ardystiad SafetyNet</string>
+
+    <string name="pref_snet_status_official_title">Defnyddio gweinydd swyddogol</string>
+    <string name="pref_snet_status_official_summary">Angen system heb ei wreiddio a gyda DroidGuard Helper microG wedi\'i osod arno</string>
+    <string name="pref_snet_status_official_info">gweinydd swyddogol</string>
+    <string name="pref_snet_status_third_party_title">Defnyddio gweinydd trydydd parti</string>
+    <string name="pref_snet_status_third_party_summary">Mae\'n bosib gall gweinyddwyr trydydd parti ymateb i geisiadau SafetyNet heb lofnod DroidGuard</string>
+    <string name="pref_snet_status_third_party_info">gweinydd trydydd parti</string>
+    <string name="pref_snet_custom_url_title">URL gweinydd amgen</string>
+    <string name="pref_snet_custom_url_summary">URL llawn y gweinydd trydydd parti i ateb ceisiadau SafetyNet</string>
+    <string name="pref_snet_self_signed_title">Defnyddio tystysgrif wedi\'i llofnodi\'i hun</string>
+    <string name="pref_snet_self_signed_summary">Yn hytrach na gofyn i weinydd, llofnodi atebion SafetyNet yn lleol gyda thystysgrif sy\'n llofnodi ei hun. Bydd y mwyafrif o apiau yn gwrthod derbyn y fath tystysgrif.</string>
+    <string name="pref_snet_status_self_signed_info">tystysgrif a lofnodir ei hun</string>
+
+</resources>
