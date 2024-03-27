@@ -799,11 +799,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 runCallbacks()
             }
             if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
-        } else if (mapView?.isShown == false) {
-            runOnMainLooper(forceQueue = true) {
-                Log.d("$TAG:$tag", "Invoking callback now: map cannot be initialized because it is not shown (yet)")
-                runCallbacks()
-            }
         } else {
             Log.d(
                     "$TAG:$tag",
