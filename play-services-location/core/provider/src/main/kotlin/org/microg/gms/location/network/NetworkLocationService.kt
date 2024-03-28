@@ -33,8 +33,8 @@ import org.microg.gms.location.network.LocationCacheDatabase.Companion.NEGATIVE_
 import org.microg.gms.location.network.cell.CellDetails
 import org.microg.gms.location.network.cell.CellDetailsCallback
 import org.microg.gms.location.network.cell.CellDetailsSource
-import org.microg.gms.location.network.mozilla.MozillaLocationServiceClient
-import org.microg.gms.location.network.mozilla.ServiceException
+import org.microg.gms.location.network.ichnaea.IchnaeaServiceClient
+import org.microg.gms.location.network.ichnaea.ServiceException
 import org.microg.gms.location.network.wifi.*
 import java.io.FileDescriptor
 import java.io.PrintWriter
@@ -53,7 +53,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private val lowPowerScanRunnable = Runnable { this.scan(true) }
     private var wifiDetailsSource: WifiDetailsSource? = null
     private var cellDetailsSource: CellDetailsSource? = null
-    private val mozilla by lazy { MozillaLocationServiceClient(this) }
+    private val ichnaea by lazy { IchnaeaServiceClient(this) }
     private val cache by lazy { LocationCacheDatabase(this) }
     private val movingWifiHelper by lazy { MovingWifiHelper(this) }
     private val settings by lazy { LocationSettings(this) }
@@ -223,8 +223,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                     ?.takeIf { it.time > System.currentTimeMillis() - MAX_WIFI_SCAN_CACHE_AGE }) {
                     NEGATIVE_CACHE_ENTRY -> null
                     null -> {
-                        if (settings.wifiMls) {
-                            val location = mozilla.retrieveMultiWifiLocation(requestableWifis)
+                        if (settings.wifiIchnaea) {
+                            val location = ichnaea.retrieveMultiWifiLocation(requestableWifis)
                             location.time = System.currentTimeMillis()
                             requestableWifis.hash()?.let { wifiScanCache[it.toHexString()] = location }
                             location
@@ -342,8 +342,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 when (val cacheLocation = cache.getCellLocation(singleCell, allowLearned = settings.cellLearning)) {
                     NEGATIVE_CACHE_ENTRY -> null
 
-                    null -> if (settings.cellMls) {
-                        mozilla.retrieveSingleCellLocation(singleCell).also {
+                    null -> if (settings.cellIchnaea) {
+                        ichnaea.retrieveSingleCellLocation(singleCell).also {
                             it.time = System.currentTimeMillis()
                             cache.putCellLocation(singleCell, it)
                         }
@@ -436,7 +436,9 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         writer.println("Interval: high-power: ${highPowerIntervalMillis.formatDuration()}, low-power: ${lowPowerIntervalMillis.formatDuration()}")
         writer.println("Last wifi location: $lastWifiLocation${if (lastWifiLocation == lastLocation) " (active)" else ""}")
         writer.println("Last cell location: $lastCellLocation${if (lastCellLocation == lastLocation) " (active)" else ""}")
-        writer.println("Settings: Wi-Fi MLS=${settings.wifiMls} moving=${settings.wifiMoving} learn=${settings.wifiLearning} Cell MLS=${settings.cellMls} learn=${settings.cellLearning}")
+        writer.println("Wifi settings: ichnaea=${settings.wifiIchnaea} moving=${settings.wifiMoving} learn=${settings.wifiLearning}")
+        writer.println("Cell settings: ichnaea=${settings.cellIchnaea} learn=${settings.cellLearning}")
+        writer.println("Ichnaea settings: endpoint=${settings.ichneaeEndpoint}")
         writer.println("Wifi scan cache size=${wifiScanCache.size()} hits=${wifiScanCache.hitCount()} miss=${wifiScanCache.missCount()} puts=${wifiScanCache.putCount()} evicts=${wifiScanCache.evictionCount()}")
         writer.println("GPS location buffer size=${gpsLocationBuffer.size} first=${gpsLocationBuffer.firstOrNull()?.elapsedMillis?.formatRealtime()} last=${gpsLocationBuffer.lastOrNull()?.elapsedMillis?.formatRealtime()}")
         cache.dump(writer)

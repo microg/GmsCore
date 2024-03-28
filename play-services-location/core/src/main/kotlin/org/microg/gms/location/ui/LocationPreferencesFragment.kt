@@ -20,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.location.LocationSettings
 import org.microg.gms.location.core.R
-import org.microg.gms.location.hasMozillaLocationServiceSupport
+import org.microg.gms.location.hasIchnaeaLocationServiceSupport
 import org.microg.gms.location.hasNetworkLocationServiceBuiltIn
 import org.microg.gms.location.manager.LocationAppsDatabase
 import org.microg.gms.ui.AppIconPreference
@@ -32,10 +32,10 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var locationAppsAll: Preference
     private lateinit var locationAppsNone: Preference
     private lateinit var networkProviderCategory: PreferenceCategory
-    private lateinit var wifiMls: TwoStatePreference
+    private lateinit var wifiIchnaea: TwoStatePreference
     private lateinit var wifiMoving: TwoStatePreference
     private lateinit var wifiLearning: TwoStatePreference
-    private lateinit var cellMls: TwoStatePreference
+    private lateinit var cellIchnaea: TwoStatePreference
     private lateinit var cellLearning: TwoStatePreference
     private lateinit var nominatim: TwoStatePreference
     private lateinit var database: LocationAppsDatabase
@@ -52,10 +52,10 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         locationAppsAll = preferenceScreen.findPreference("pref_location_apps_all") ?: locationAppsAll
         locationAppsNone = preferenceScreen.findPreference("pref_location_apps_none") ?: locationAppsNone
         networkProviderCategory = preferenceScreen.findPreference("prefcat_location_network_provider") ?: networkProviderCategory
-        wifiMls = preferenceScreen.findPreference("pref_location_wifi_mls_enabled") ?: wifiMls
+        wifiIchnaea = preferenceScreen.findPreference("pref_location_wifi_mls_enabled") ?: wifiIchnaea
         wifiMoving = preferenceScreen.findPreference("pref_location_wifi_moving_enabled") ?: wifiMoving
         wifiLearning = preferenceScreen.findPreference("pref_location_wifi_learning_enabled") ?: wifiLearning
-        cellMls = preferenceScreen.findPreference("pref_location_cell_mls_enabled") ?: cellMls
+        cellIchnaea = preferenceScreen.findPreference("pref_location_cell_mls_enabled") ?: cellIchnaea
         cellLearning = preferenceScreen.findPreference("pref_location_cell_learning_enabled") ?: cellLearning
         nominatim = preferenceScreen.findPreference("pref_geocoder_nominatim_enabled") ?: nominatim
 
@@ -63,8 +63,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             findNavController().navigate(requireContext(), R.id.openAllLocationApps)
             true
         }
-        wifiMls.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).wifiMls = newValue as Boolean
+        wifiIchnaea.setOnPreferenceChangeListener { _, newValue ->
+            LocationSettings(requireContext()).wifiIchnaea = newValue as Boolean
             true
         }
         wifiMoving.setOnPreferenceChangeListener { _, newValue ->
@@ -75,8 +75,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             LocationSettings(requireContext()).wifiLearning = newValue as Boolean
             true
         }
-        cellMls.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).cellMls = newValue as Boolean
+        cellIchnaea.setOnPreferenceChangeListener { _, newValue ->
+            LocationSettings(requireContext()).cellIchnaea = newValue as Boolean
             true
         }
         cellLearning.setOnPreferenceChangeListener { _, newValue ->
@@ -89,8 +89,8 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
         }
 
         networkProviderCategory.isVisible = requireContext().hasNetworkLocationServiceBuiltIn()
-        wifiMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
-        cellMls.isVisible = requireContext().hasMozillaLocationServiceSupport()
+        wifiIchnaea.isVisible = requireContext().hasIchnaeaLocationServiceSupport()
+        cellIchnaea.isVisible = requireContext().hasIchnaeaLocationServiceSupport()
         wifiLearning.isVisible =
             SDK_INT >= 17 && requireContext().getSystemService<LocationManager>()?.allProviders.orEmpty().contains(LocationManager.GPS_PROVIDER)
         cellLearning.isVisible =
@@ -110,10 +110,10 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private fun updateContent() {
         lifecycleScope.launchWhenResumed {
             val context = requireContext()
-            wifiMls.isChecked = LocationSettings(context).wifiMls
+            wifiIchnaea.isChecked = LocationSettings(context).wifiIchnaea
             wifiMoving.isChecked = LocationSettings(context).wifiMoving
             wifiLearning.isChecked = LocationSettings(context).wifiLearning
-            cellMls.isChecked = LocationSettings(context).cellMls
+            cellIchnaea.isChecked = LocationSettings(context).cellIchnaea
             cellLearning.isChecked = LocationSettings(context).cellLearning
             nominatim.isChecked = LocationSettings(context).geocoderNominatim
             val (apps, showAll) = withContext(Dispatchers.IO) {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.location.network.mozilla
+package org.microg.gms.location.network.ichnaea
 
 import org.json.JSONArray
 import org.json.JSONObject
@@ -48,9 +48,35 @@ internal fun GeolocateRequest.toJson() = JSONObject().apply {
     if (homeMobileCountryCode != null) put("homeMobileCountryCode", homeMobileCountryCode)
     if (homeMobileNetworkCode != null) put("homeMobileNetworkCode", homeMobileNetworkCode)
     if (radioType != null) put("radioType", radioType.toString())
+    if (!bluetoothBeacons.isNullOrEmpty()) put("bluetoothBeacons", JSONArray(bluetoothBeacons.map(BluetoothBeacon::toJson)))
     if (!cellTowers.isNullOrEmpty()) put("cellTowers", JSONArray(cellTowers.map(CellTower::toJson)))
     if (!wifiAccessPoints.isNullOrEmpty()) put("wifiAccessPoints", JSONArray(wifiAccessPoints.map(WifiAccessPoint::toJson)))
     if (fallbacks != null) put("fallbacks", fallbacks.toJson())
+}
+
+internal fun GeosubmitRequest.toJson() = JSONObject().apply {
+    if (items != null) put("items", JSONArray(items.map(GeosubmitItem::toJson)))
+}
+
+private fun GeosubmitItem.toJson() = JSONObject().apply {
+    if (timestamp != null) put("timestamp", timestamp)
+    if (position != null) put("position", position.toJson())
+    if (!bluetoothBeacons.isNullOrEmpty()) put("bluetoothBeacons", JSONArray(bluetoothBeacons.map(BluetoothBeacon::toJson)))
+    if (!cellTowers.isNullOrEmpty()) put("cellTowers", JSONArray(cellTowers.map(CellTower::toJson)))
+    if (!wifiAccessPoints.isNullOrEmpty()) put("wifiAccessPoints", JSONArray(wifiAccessPoints.map(WifiAccessPoint::toJson)))
+}
+
+private fun GeosubmitPosition.toJson() = JSONObject().apply {
+    if (latitude != null) put("latitude", latitude)
+    if (longitude != null) put("longitude", longitude)
+    if (accuracy != null) put("accuracy", accuracy)
+    if (altitude != null) put("altitude", altitude)
+    if (altitudeAccuracy != null) put("altitudeAccuracy", altitudeAccuracy)
+    if (age != null) put("age", age)
+    if (heading != null) put("heading", heading)
+    if (pressure != null) put("pressure", pressure)
+    if (speed != null) put("speed", speed)
+    if (source != null) put("source", source.toString())
 }
 
 private fun JSONObject.toResponseLocation() = ResponseLocation(
@@ -62,6 +88,13 @@ private fun JSONObject.toResponseError() = ResponseError(
     code = getInt("code"),
     message = getString("message")
 )
+
+private fun BluetoothBeacon.toJson() = JSONObject().apply {
+    if (macAddress != null) put("macAddress", macAddress)
+    if (name != null) put("name", name)
+    if (age != null) put("age", age)
+    if (signalStrength != null) put("signalStrength", signalStrength)
+}
 
 private fun CellTower.toJson() = JSONObject().apply {
     if (radioType != null) put("radioType", radioType.toString())

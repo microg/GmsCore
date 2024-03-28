@@ -40,8 +40,12 @@ class ProvisionService : LifecycleService() {
                 DroidGuardPreferences.setEnabled(this@ProvisionService, it)
             }
             LocationSettings(this@ProvisionService).apply {
-                intent?.extras?.getBooleanOrNull("wifi_mls")?.let { wifiMls = it }
-                intent?.extras?.getBooleanOrNull("cell_mls")?.let { cellMls = it }
+                intent?.extras?.getBooleanOrNull("wifi_mls")?.let { wifiIchnaea = it }
+                intent?.extras?.getBooleanOrNull("wifi_ichnaea")?.let { wifiIchnaea = it }
+                intent?.extras?.getBooleanOrNull("cell_mls")?.let { cellIchnaea = it }
+                intent?.extras?.getBooleanOrNull("cell_ichnaea")?.let { cellIchnaea = it }
+                intent?.extras?.getString("ichnaea_endpoint")?.let { ichneaeEndpoint = it }
+                intent?.extras?.getBooleanOrNull("ichnaea_contribute")?.let { ichnaeaContribute = it }
                 intent?.extras?.getBooleanOrNull("wifi_learning")?.let { wifiLearning = it }
                 intent?.extras?.getBooleanOrNull("cell_learning")?.let { cellLearning = it }
                 intent?.extras?.getBooleanOrNull("wifi_moving")?.let { wifiMoving = it }
