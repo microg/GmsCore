@@ -24,6 +24,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.RemoteException;
@@ -48,6 +49,7 @@ import org.microg.gms.common.PackageUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -231,9 +233,17 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     }
 
     @Override
-    public int hasCapabilities(HasCapabilitiesRequest request) throws RemoteException {
-        Log.w(TAG, "Not implemented: hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ")");
-        return 1;
+    public int hasCapabilities(HasCapabilitiesRequest request) {
+        Log.d(TAG, "hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ") is Called");
+        int callingUid = Binder.getCallingUid();
+        String[] packagesForUid = context.getPackageManager().getPackagesForUid(callingUid);
+        if (packagesForUid == null || packagesForUid.length == 0) {
+            Log.w(TAG, "hasCapabilities error <no packages>");
+            throw new SecurityException("Caller isn't signed with recognized keys!");
+        }
+        int result = new CapabilitiesManager(TAG, context).checkCapabilities(request.account, new HashSet<>(Arrays.asList(request.capabilities)));
+        Log.d(TAG, "hasCapabilities result:" + result);
+        return result;
     }
 
     @Override
