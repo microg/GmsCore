@@ -27,6 +27,7 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.os.IBinder;
 import android.util.Log;
+import com.google.android.gms.base.BuildConfig;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -179,7 +180,7 @@ public class MultiConnectionKeeper {
             if (resolveInfo == null || resolveInfo.serviceInfo == null) return false;
             if (resolveInfo.serviceInfo.name.startsWith("org.microg.")) return true;
             try {
-                PermissionInfo info = context.getPackageManager().getPermissionInfo("org.microg.gms.EXTENDED_ACCESS", 0);
+                PermissionInfo info = context.getPackageManager().getPermissionInfo(BuildConfig.BASE_PACKAGE_NAME + ".microg.gms.EXTENDED_ACCESS", 0);
                 return info.packageName.equals(resolveInfo.serviceInfo.packageName);
             } catch (PackageManager.NameNotFoundException e) {
                 return false;

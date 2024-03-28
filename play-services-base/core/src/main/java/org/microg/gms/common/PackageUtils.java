@@ -27,6 +27,7 @@ import android.os.Binder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import com.google.android.gms.common.BuildConfig;
 import org.microg.gms.utils.ExtendedPackageInfo;
 
 import java.lang.reflect.Method;
@@ -60,7 +61,7 @@ public class PackageUtils {
      */
     @Deprecated
     public static boolean callerHasExtendedAccessPermission(Context context) {
-        return context.checkCallingPermission("org.microg.gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
+        return context.checkCallingPermission(BuildConfig.BASE_PACKAGE_NAME + ".microg.gms.EXTENDED_ACCESS") == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void assertGooglePackagePermission(Context context, GooglePackagePermission permission) {
@@ -79,6 +80,11 @@ public class PackageUtils {
                     context.getPackageManager(),
                     packageCandidate
             );
+
+            // See https://github.com/ReVanced/GmsCore/issues/10.
+            ExtendedPackageInfo extendedPackageInfo = new ExtendedPackageInfo(context, packageName);
+            if (!extendedPackageInfo.isInstalled())
+                return true;
 
             if (new ExtendedPackageInfo(context, packageName).hasGooglePackagePermission(permission)) {
                 return true;
@@ -240,7 +246,7 @@ public class PackageUtils {
         if (packageName != null && suggestedPackageName != null && !packageName.equals(suggestedPackageName)) {
             throw new SecurityException("UID [" + callingUid + "] is not related to packageName [" + suggestedPackageName + "] (seems to be " + packageName + ")");
         }
-        return PackageSpoofUtils.spoofPackageName(context.getPackageManager(), packageName);
+        return packageName;
     }
 
     @Nullable
