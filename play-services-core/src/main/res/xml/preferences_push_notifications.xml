@@ -39,9 +39,8 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
-        <org.microg.gms.ui.TextPreference
-            android:icon="@drawable/ic_info_outline"
+        <org.microg.gms.ui.FooterPreference
             android:selectable="false"
-            android:summary="@string/pref_gcm_enable_mcs_summary" />
+            android:title="@string/pref_gcm_enable_mcs_summary" />
     </PreferenceCategory>
 </PreferenceScreen>

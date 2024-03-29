@@ -27,18 +27,18 @@
             android:selectable="false"
             android:summary="@string/pref_vending_billing_enable_summary"
             app:iconSpaceReserved="false" />
+        <org.microg.gms.ui.TextPreference
+            android:icon="@drawable/ic_circle_warn"
+            android:selectable="false"
+            android:summary="@string/pref_vending_billing_note_experimental" />
         <SwitchPreferenceCompat
             android:title="@string/pref_vending_billing_enable_switch"
             android:key="vending_iap"
             android:persistent="false"
             app:iconSpaceReserved="false" />
         <org.microg.gms.ui.TextPreference
-            android:icon="@drawable/ic_circle_warn"
             android:selectable="false"
-            android:summary="@string/pref_vending_billing_note_experimental" />
-        <org.microg.gms.ui.TextPreference
-            android:icon="@drawable/ic_info_outline"
-            android:selectable="false"
-            android:summary="@string/pref_vending_billing_note_licensing" />
+            android:summary="@string/pref_vending_billing_note_licensing"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

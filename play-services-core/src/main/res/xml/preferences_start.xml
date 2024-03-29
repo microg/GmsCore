@@ -18,7 +18,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_header">
         <Preference
-            android:icon="@drawable/self_check"
+            android:icon="@drawable/ic_check_list"
             android:summary="@string/self_check_desc"
             android:title="@string/self_check_title">
             <intent
