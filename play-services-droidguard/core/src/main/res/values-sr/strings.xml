@@ -3,6 +3,6 @@
     <string name="pref_droidguard_mode_network_summary">Повежите се са DroidGuard временом извршавања преко мреже</string>
     <string name="prefcat_droidguard_mode">DroidGuard режим рада</string>
     <string name="pref_droidguard_mode_embedded_summary">Користите локално DroidGuard време извршавања</string>
-    <string name="pref_droidguard_mode_embedded_title">Уграђено</string>
-    <string name="pref_droidguard_mode_network_title">Удаљено</string>
+    <string name="pref_droidguard_mode_embedded_title">Уграђени</string>
+    <string name="pref_droidguard_mode_network_title">Удаљени</string>
 </resources>

@@ -15,7 +15,7 @@
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG услуге</string>
-    <string name="gms_settings_name">Подешавања microG</string>
+    <string name="gms_settings_name">microG подешавања</string>
     <string name="just_a_sec">Само тренутак…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Ако наставите, дозволићете овој апликацији и Google-у да користе ваше податке у складу са њиховим условима коришћења и политикама приватности.</string>
@@ -177,7 +177,7 @@
     <string name="pref_device_registration_android_id">Android ID</string>
     <string name="gcm_network_state_disconnected">Прекинута веза</string>
     <string name="signin_picker_add_account_label">Додај други налог</string>
-    <string name="pref_device_registration_select_profile_title">Изаберите профил</string>
+    <string name="pref_device_registration_select_profile_title">Избор профила</string>
     <string name="auth_connecting">Ваш уређај успоставља везу са Google серверима да бисте се пријавили.
 \n
 \nОво може да потраје неколико секунди.</string>
@@ -204,7 +204,7 @@
     <string name="pref_test_summary_running">Ради…</string>
     <string name="pref_safetynet_recent_cat_basic">Основни подаци</string>
     <string name="gms_settings_summary">Подесите microG услуге.</string>
-    <string name="pref_add_account_summary">Додајте Google налог</string>
+    <string name="pref_add_account_summary">Додај Google налог</string>
     <string name="profile_name_system">Системски: %s</string>
     <string name="pref_safetynet_recent_cat_response">Подаци одговора</string>
     <string name="pref_push_app_allow_register_summary">Дозволите апликацији да се региструје за push-обавештења.</string>
@@ -235,4 +235,14 @@
     <string name="pref_auth_strip_device_name_title">Уклони име уређаја за аутентификацију</string>
     <string name="feedback_disabled">Повратна информација тренутно није могућа</string>
     <string name="backup_disabled">Прављење резервне копије тренутно није могуће</string>
+    <string name="pref_accounts_title">Google налози</string>
+    <string name="pref_accounts_summary">Додајте или управљајте Google налозима</string>
+    <string name="prefcat_accounts_settings_title">Подешавања</string>
+    <string name="prefcat_accounts_current_accounts_title">Налози</string>
+    <string name="pref_vending_licensing_category">Google Play лиценцирање</string>
+    <string name="pref_vending_billing_note_experimental">Ова функција је експериментална и може довести до губитка новца. Упозорени сте.</string>
+    <string name="pref_vending_billing_category">Google Play наплата</string>
+    <string name="pref_vending_billing_note_licensing">Неке апликације могу захтевати да омогућите и верификацију лиценце да бисте верификовали своје куповине.</string>
+    <string name="pref_vending_billing_enable_summary">Једном када је омогућено, неке апликације могу да доврше куповине или да започну претплате преко Google Play услуге наплате.</string>
+    <string name="pref_vending_billing_enable_switch">Обрађуј захтеве за наплату</string>
 </resources>
