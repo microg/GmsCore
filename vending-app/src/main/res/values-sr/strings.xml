@@ -10,4 +10,13 @@
     <string name="license_notification_channel_description">Обавештава када апликација покуша да потврди своју лиценцу, али нисте пријављени ни на један Google налог.</string>
     <string name="license_notification_ignore">Игнориши</string>
     <string name="license_notification_sign_in">Пријави се</string>
+    <string name="confirm_purchase">Потврди куповину</string>
+    <string name="tips_forget_passwd">Заборављена лозинка?</string>
+    <string name="tips_more_details">Сазнај више</string>
+    <string name="tips_input_passwd">Унесите своју лозинку</string>
+    <string name="error_network">Није повезан на интернет. Уверите се да је Wi-Fi или мобилна мрежа укључена и покушајте поново.</string>
+    <string name="text_verify_button">Верификуј</string>
+    <string name="error_passwd">Лозинка коју сте унели је нетачна.</string>
+    <string name="tips_remember_login_info">Запамти моју пријаву на овом уређају</string>
+    <string name="error_unknown">Непозната грешка, изађите и покушајте поново.</string>
 </resources>
