@@ -14,7 +14,8 @@
 
     <PreferenceCategory
         android:key="prefcat_safetynet_apps"
-        android:title="@string/prefcat_safetynet_apps_title">
+        android:title="@string/prefcat_safetynet_apps_title"
+        app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:key="pref_safetynet_apps_none"
