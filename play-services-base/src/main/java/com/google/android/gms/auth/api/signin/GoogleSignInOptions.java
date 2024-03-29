@@ -234,6 +234,17 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
         }
 
         /**
+         * Specifies OAuth 2.0 scopes your application requests. See {@link Scopes} for more information.
+         *
+         * @param scopes More OAuth 2.0 scopes requested by your app.
+         */
+        @NonNull
+        public Builder requestScopes(@NonNull List<Scope> scopes) {
+            this.scopes.addAll(scopes);
+            return this;
+        }
+
+        /**
          * Specifies that offline access is requested. Requesting offline access requires that the server client ID be specified.
          * <p>
          * You don't need to use {@link #requestIdToken(String)} when you use this option. When your server exchanges the code for tokens, an ID token will be

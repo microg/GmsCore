@@ -80,7 +80,7 @@ class AuthSignInServiceImpl(
                 val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
                 if (account != null && options?.isForceCodeForRefreshToken != true && options?.includeUnacceptableScope != true) {
                     if (getOAuthManager(context, packageName, options, account).isPermitted || AuthPrefs.isTrustGooglePermitted(context)) {
-                        val googleSignInAccount = performSignIn(context, packageName, options, account)
+                        val googleSignInAccount = performSignIn(context, packageName, options, account, true)
                         if (googleSignInAccount != null) {
                             sendResult(googleSignInAccount, Status(CommonStatusCodes.SUCCESS))
                         } else {
