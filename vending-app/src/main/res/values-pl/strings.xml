@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_installed">microG Companion nie może być niezależnie używany. Zamiast tego otwarto ustawienia Usług microG.</string>
-    <string name="toast_not_installed">microG Companion nie może być niezależnie używany. Zainstaluj Usługi microG aby korzystać z microG.</string>
     <string name="app_name">microG Companion</string>
+    <string name="toast_installed">microG Companion nie może być używany oddzielnie. Zamiast tego otwarto ustawienia usług microG.</string>
+    <string name="toast_not_installed">microG Companion nie może być używany oddzielnie. Zainstaluj usługi microG, aby korzystać z microG.</string>
+
+    <string name="license_notification_channel_name">Powiadomienia o licencji</string>
+    <string name="license_notification_channel_description">Powiadamia, gdy aplikacja próbuje zweryfikować licencję, ale użytkownik nie jest zalogowany na żadne konto Google.</string>
+    <string name="license_notification_title">%1$s nie mógł zweryfikować licencji</string>
+    <string name="license_notification_body">Jeśli aplikacja działa nieprawidłowo, zaloguj się na konto Google, z którego zakupiono aplikację.</string>
+    <string name="license_notification_sign_in">Zaloguj się</string>
+    <string name="license_notification_ignore">Zignoruj</string>
+
+    <string name="pay_disabled">Płatność nie jest obecnie możliwa</string>
+
+    <string name="confirm_purchase">Potwierdź zakup</string>
+    <string name="error_network">Brak połączenia z Internetem. Upewnij się, że Wi-Fi lub dane komórkowe są włączone i spróbuj ponownie.</string>
+    <string name="error_passwd">Wprowadzone hasło jest nieprawidłowe.</string>
+    <string name="error_unknown">Nieznany błąd, wyjdź i spróbuj ponownie.</string>
+    <string name="tips_input_passwd">Wprowadź swoje hasło</string>
+    <string name="tips_remember_login_info">Zapamiętaj mój login na tym urządzeniu</string>
+    <string name="tips_forget_passwd">Nie pamiętasz hasła?</string>
+    <string name="tips_more_details">Dowiedz się więcej</string>
+    <string name="text_verify_button">Zweryfikuj</string>
 </resources>
