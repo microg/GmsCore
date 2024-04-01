@@ -9,4 +9,14 @@
     <string name="license_notification_body">Om appen inte beter sig illa, logga in på det Google-konto som du har köpt appen med.</string>
     <string name="license_notification_sign_in">Logga in</string>
     <string name="license_notification_ignore">Ignorera</string>
+    <string name="pay_disabled">Betalning är för närvarande inte möjlig</string>
+    <string name="error_passwd">Du angav ett felaktigt lösenord.</string>
+    <string name="tips_input_passwd">Ange ditt lösenord</string>
+    <string name="tips_remember_login_info">Kom ihåg mina inloggningsuppgifter på denna enhet</string>
+    <string name="confirm_purchase">Bekräfta köp</string>
+    <string name="error_network">Inte ansluten till internet. Se till att Wi-Fi eller mobilnät är aktiverat och försök igen.</string>
+    <string name="error_unknown">Okänt fel, avsluta och försök igen.</string>
+    <string name="tips_forget_passwd">Glömt lösenordet?</string>
+    <string name="tips_more_details">Läs mer</string>
+    <string name="text_verify_button">Verifiera</string>
 </resources>

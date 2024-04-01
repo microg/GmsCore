@@ -21,4 +21,12 @@
     <string name="prefcat_location_wifi_title">Wi-Fi-plats</string>
     <string name="prefcat_geocoder_title">Adresslösare</string>
     <string name="pref_location_cell_mls_enabled_summary">Hämta mobilnätens mobilmastplatser från Mozilla Location Service.</string>
+    <string name="location_settings_dialog_message_title_to_continue">För att fortsätta, slå på enhetens platstjänst, som använder mikroG:s platsservice</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Din enhet behöver:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Använda GPS, Wi-Fi, mobilnät och sensorer</string>
+    <string name="location_settings_dialog_btn_sure">OK</string>
+    <string name="location_settings_dialog_message_gls_consent">Använd microG:s platstjänst. Som en del av denna tjänst kan mikroG samla in platsdata regelbundet och använda dessa data på ett anonymt sätt för att förbättra platsens noggrannhet och platsbaserade tjänster.</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Gå till platsinställningarna för detaljerad info.</string>
+    <string name="location_settings_dialog_btn_cancel">Nej tack!</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">För en bättre upplevelse, slå på enhetens platstjänst, som använder mikroG:s platsservice</string>
 </resources>
