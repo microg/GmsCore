@@ -70,10 +70,11 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
-                    android:background="@drawable/permission_step_2"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/permission_step_2" />
 
             </LinearLayout>
 
