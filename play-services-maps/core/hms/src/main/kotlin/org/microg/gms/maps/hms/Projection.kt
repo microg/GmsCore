@@ -12,10 +12,13 @@ import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.internal.IProjectionDelegate
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.VisibleRegion
 import com.huawei.hms.maps.Projection
 import org.microg.gms.maps.hms.utils.toGms
 import org.microg.gms.maps.hms.utils.toHms
+
+private const val TAG = "GmsMapProjection"
 
 class ProjectionImpl(private val projection: Projection) : IProjectionDelegate.Stub() {
 
@@ -54,8 +57,21 @@ class ProjectionImpl(private val projection: Projection) : IProjectionDelegate.S
         Log.d(TAG, "getVisibleRegion: $visibleRegion")
         return lastVisibleRegion
     }
+}
 
-    companion object {
-        private val TAG = "GmsMapProjection"
+class DummyProjection : IProjectionDelegate.Stub() {
+    override fun fromScreenLocation(obj: IObjectWrapper?): LatLng {
+        Log.d(TAG, "Map not initialized when calling getProjection(). Cannot calculate fromScreenLocation")
+        return LatLng(0.0, 0.0)
+    }
+
+    override fun toScreenLocation(latLng: LatLng?): IObjectWrapper {
+        Log.d(TAG, "Map not initialized when calling getProjection(). Cannot calculate toScreenLocation")
+        return ObjectWrapper.wrap(Point(0, 0))
+    }
+
+    override fun getVisibleRegion(): VisibleRegion {
+        Log.d(TAG, "Map not initialized when calling getProjection(). Cannot calculate getVisibleRegion")
+        return VisibleRegion(LatLngBounds(LatLng(0.0, 0.0), LatLng(0.0, 0.0)))
     }
 }

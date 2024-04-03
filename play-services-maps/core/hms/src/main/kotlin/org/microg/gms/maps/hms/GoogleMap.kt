@@ -298,12 +298,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         it.setContentDescription(desc)
     }
 
-    override fun getUiSettings(): IUiSettingsDelegate? = map?.uiSettings?.let { UiSettingsImpl(it) }
+    override fun getUiSettings(): IUiSettingsDelegate =
+        map?.uiSettings?.let { UiSettingsImpl(it) } ?: UiSettingsCache().also {
+            internalOnInitializedCallbackList.add(it.getMapReadyCallback())
+        }
 
-    override fun getProjection(): IProjectionDelegate? = map?.projection?.let {
-        Log.d(TAG, "getProjection")
-        ProjectionImpl(it)
-    }
+    override fun getProjection(): IProjectionDelegate =
+        map?.projection?.let { ProjectionImpl(it) } ?: DummyProjection()
 
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
         Log.d(TAG, "setOnCameraChangeListener");
