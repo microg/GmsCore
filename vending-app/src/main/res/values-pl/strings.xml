@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_installed">microG Companion nie może być niezależnie używany. Zamiast tego otwarto ustawienia Usług microG.</string>
-    <string name="toast_not_installed">microG Companion nie może być niezależnie używany. Zainstaluj Usługi microG aby korzystać z microG.</string>
+    <string name="toast_installed">Nie można używać microG Companion niezależnie. Zamiast tego otwarto ustawienia usług microG.</string>
+    <string name="toast_not_installed">Nie można używać microG Companion niezależnie. Zainstaluj usługi microG, aby korzystać z microG.</string>
     <string name="app_name">microG Companion</string>
+    <string name="pay_disabled">Płatność nie jest obecnie możliwa</string>
+    <string name="error_passwd">Wprowadzone hasło jest nieprawidłowe.</string>
+    <string name="error_unknown">Nieznany błąd, wyjdź i spróbuj ponownie.</string>
+    <string name="tips_remember_login_info">Zapamiętaj moje dane do logowania na tym urządzeniu</string>
+    <string name="tips_forget_passwd">Nie pamiętasz hasła?</string>
+    <string name="text_verify_button">Zweryfikuj</string>
+    <string name="tips_input_passwd">Wprowadź hasło</string>
+    <string name="license_notification_ignore">Ignoruj</string>
+    <string name="tips_more_details">Dowiedz się więcej</string>
+    <string name="confirm_purchase">Potwierdź zakup</string>
+    <string name="error_network">Brak połączenia z internetem. Upewnij się, że sieć Wi-Fi lub komórkowa jest włączona i spróbuj ponownie.</string>
+    <string name="license_notification_channel_name">Powiadomienia dotyczące licencji</string>
+    <string name="license_notification_channel_description">Powiadamia, gdy aplikacja próbuje zweryfikować swoją licencję, ale użytkownik nie jest zalogowany do żadnego konta Google.</string>
+    <string name="license_notification_title">%1$s nie może zweryfikować licencji</string>
+    <string name="license_notification_body">Jeśli aplikacja działa nieprawidłowo, zaloguj się na konto Google, za pomocą którego aplikacja została zakupiona.</string>
+    <string name="license_notification_sign_in">Zaloguj się</string>
 </resources>

@@ -5,10 +5,10 @@
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="menu_advanced">Zaawansowane</string>
     <string name="list_no_item_none">Brak</string>
-    <string name="service_status_disabled">Nieaktywny</string>
-    <string name="service_status_enabled">Aktywny</string>
-    <string name="service_status_automatic">Automatyczny</string>
-    <string name="service_status_manual">Ręczny</string>
+    <string name="service_status_disabled">Wyłączono</string>
+    <string name="service_status_enabled">Włączono</string>
+    <string name="service_status_automatic">Automatycznie</string>
+    <string name="service_status_manual">Ręcznie</string>
     <string name="foreground_service_notification_title">Aktywność w tle</string>
     <string name="service_status_enabled_short">Wł.</string>
     <string name="open_app">Otwórz</string>

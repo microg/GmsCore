@@ -153,7 +153,7 @@ Spróbuj ponownie później."</string>
     <string name="push_notifications_summary_values_minutes">%s minut</string>
     <string name="perm_provision_label">dostarczanie usług microG</string>
     <string name="gcm_network_state_connected">Połączono od <xliff:g example="2 hours ago">%1$s</xliff:g></string>
-    <string name="pref_auth_include_android_id_summary">Gdy wyłączone, żądania uwierzytelnienia nie będą zależne od rejestracji urządzenia, co pozwala nieuwierzytelnionym urządzeniom na zalogowanie się, lecz może spowodować nieprzewidziane skutki.</string>
+    <string name="pref_auth_include_android_id_summary">Gdy wyłączone, żądania uwierzytelnienia nie będą zależne od rejestracji urządzenia, co może zezwolić nieuwierzytelnionym urządzeniom na zalogowanie się, lecz może spowodować nieprzewidziane skutki.</string>
     <string name="signin_picker_subtitle">aby przejść dalej do aplikacji <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="pref_safetynet_test_integrity_cts_passed">Spójność i CTS prawidłowe</string>
     <string name="pref_safetynet_recent_uses">Ostatnie żądania</string>
@@ -188,9 +188,7 @@ Spróbuj ponownie później."</string>
     <string name="pref_safetynet_recent_copied">Skopiowano do schowka!</string>
     <string name="prefcat_push_apps_title">Aplikacje korzystające z powiadomień „push”</string>
     <string name="profile_name_user">Własny: %s</string>
-    <string name="auth_before_connect">Aplikacja usiłuje się zalogować do konta Google.
-\n
-\nJeżeli to było zamierzone, naciśnij przycisk <b>Zaloguj</b> aby przejść do strony logowania Google, w przeciwnym wypadku, naciśnij <b>Anuluj</b> aby wrócić z powrotem do aplikacji, która sprawiła, że ten komunikat został wyświetlony.</string>
+    <string name="auth_before_connect">Aplikacja usiłuje się zalogować do konta Google. \u0020 \u0020Jeżeli to było zamierzone, naciśnij przycisk <b>Zaloguj</b> aby przejść do strony logowania Google, w przeciwnym wypadku, naciśnij <b>Anuluj</b> aby wrócić z powrotem do aplikacji, która sprawiła, że ten komunikat został wyświetlony.</string>
     <string name="pref_recaptcha_test_title">Sprawdź usługę ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Aby kontynuować, microG udostępni nazwę, adres email i zdjęcie profilowe Twojego konta Google aplikacji <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
     <string name="pref_auth_include_android_id_title">Uwierzytelnij przez rejestrację urządzenia</string>
@@ -211,4 +209,33 @@ Spróbuj ponownie później."</string>
     <string name="pref_device_registration_device_profile_category">Profil urządzenia</string>
     <string name="prefcat_push_networks_title">Sieci z powiadomieniami „push”</string>
     <string name="pref_safetynet_recent_eval_type">Typ sprawdzania</string>
+    <string name="perm_car_speed_label">Prędkość samochodu</string>
+    <string name="perm_car_info_label">Informacje o samochodzie</string>
+    <string name="perm_car_speed_description">Uzyskaj dostęp do prędkości samochodu</string>
+    <string name="perm_car_info_description">Uzyskaj dostęp do informacji o samochodzie</string>
+    <string name="perm_car_fuel_label">Poziom paliwa samochodu</string>
+    <string name="perm_car_fuel_description">Uzyskaj dostęp do poziomu paliwa samochodu</string>
+    <string name="perm_car_mileage_label">Przebieg samochodu</string>
+    <string name="perm_car_mileage_description">Uzyskaj dostęp do przebiegu samochodu</string>
+    <string name="perm_car_vendor_extension_label">Kanał dostawcy samochodu</string>
+    <string name="perm_car_vendor_extension_description">Uzyskaj dostęp do kanału dostawcy samochodu w celu wymiany informacji dotyczących samochodu</string>
+    <string name="pref_auth_strip_device_name_summary">Po włączeniu tej opcji żądania uwierzytelnienia nie będą zawierać nazwy urządzenia, co może umożliwić logowanie się nieautoryzowanym urządzeniom, ale może mieć nieprzewidziane konsekwencje.</string>
+    <string name="pref_accounts_summary">Dodawanie i zarządzanie kontami Google</string>
+    <string name="prefcat_accounts_settings_title">Ustawienia</string>
+    <string name="feedback_disabled">Informacje zwrotne nie są obecnie możliwe</string>
+    <string name="backup_disabled">Tworzenie kopii zapasowych nie jest obecnie możliwe</string>
+    <string name="pref_auth_strip_device_name_title">Usuwanie nazwy urządzenia przy uwierzytelnianiu</string>
+    <string name="pref_accounts_title">Konta Google</string>
+    <string name="prefcat_accounts_current_accounts_title">Konta</string>
+    <string name="service_name_vending">Usługi Sklepu Play</string>
+    <string name="pref_vending_license_enable_summary">Niektóre aplikacje wymagają weryfikacji, czy zostały zakupione w Google Play. Na żądanie aplikacji, microG może pobrać dowód zakupu z Google. Jeśli funkcja ta jest wyłączona lub nie dodano konta Google, żądania weryfikacji licencji są ignorowane.</string>
+    <string name="pref_vending_summary_licensing_on">Licencjonowanie włączone</string>
+    <string name="pref_vending_licensing_category">Licencjonowanie Google Play</string>
+    <string name="pref_vending_licensing_enable_switch">Odpowiadanie na prośby o weryfikację licencji</string>
+    <string name="pref_vending_summary_licensing_off">Licencjonowanie wyłączone</string>
+    <string name="pref_vending_billing_enable_switch">Obsługa zleceń rozliczeniowych</string>
+    <string name="pref_vending_billing_category">Rozliczenia Google Play</string>
+    <string name="pref_vending_billing_enable_summary">Po włączeniu niektóre aplikacje mogą dokonywać zakupów lub uruchamiać subskrypcje za pośrednictwem usługi Google Play Billing.</string>
+    <string name="pref_vending_billing_note_experimental">Ta funkcja jest eksperymentalna i może prowadzić do utraty pieniędzy. Ostrzegamy!</string>
+    <string name="pref_vending_billing_note_licensing">Niektóre aplikacje mogą wymagać włączenia weryfikacji licencji w celu weryfikacji zakupów.</string>
 </resources>
