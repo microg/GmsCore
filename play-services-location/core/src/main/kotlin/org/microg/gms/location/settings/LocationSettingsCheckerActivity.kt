@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.microg.gms.location.core.R
+import org.microg.gms.ui.buildAlertDialog
 
 const val ACTION_LOCATION_SETTINGS_CHECKER = "com.google.android.gms.location.settings.CHECK_SETTINGS"
 const val EXTRA_ORIGINAL_PACKAGE_NAME = "originalPackageName"
@@ -101,16 +102,11 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
 
     private fun showDialog() {
 
-        val alertDialog = try {
-            // Try material design first
-            MaterialAlertDialogBuilder(this)
-        } catch (e: Exception) {
-            AlertDialog.Builder(this)
-        }
-                .setOnCancelListener(this)
-                .setPositiveButton(R.string.location_settings_dialog_btn_sure, this)
-                .setNegativeButton(R.string.location_settings_dialog_btn_cancel, this)
-                .create()
+        val alertDialog = buildAlertDialog()
+            .setOnCancelListener(this)
+            .setPositiveButton(R.string.location_settings_dialog_btn_sure, this)
+            .setNegativeButton(R.string.location_settings_dialog_btn_cancel, this)
+            .create()
         alertDialog.setCanceledOnTouchOutside(false)
 
         val view = layoutInflater.inflate(R.layout.location_settings_dialog, null)

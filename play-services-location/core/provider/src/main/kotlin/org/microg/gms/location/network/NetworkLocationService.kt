@@ -438,7 +438,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         writer.println("Last cell location: $lastCellLocation${if (lastCellLocation == lastLocation) " (active)" else ""}")
         writer.println("Wifi settings: ichnaea=${settings.wifiIchnaea} moving=${settings.wifiMoving} learn=${settings.wifiLearning}")
         writer.println("Cell settings: ichnaea=${settings.cellIchnaea} learn=${settings.cellLearning}")
-        writer.println("Ichnaea settings: endpoint=${settings.ichneaeEndpoint}")
+        writer.println("Ichnaea settings: endpoint=${settings.ichneaeEndpoint} contribute=${settings.ichnaeaContribute}")
         writer.println("Wifi scan cache size=${wifiScanCache.size()} hits=${wifiScanCache.hitCount()} miss=${wifiScanCache.missCount()} puts=${wifiScanCache.putCount()} evicts=${wifiScanCache.evictionCount()}")
         writer.println("GPS location buffer size=${gpsLocationBuffer.size} first=${gpsLocationBuffer.firstOrNull()?.elapsedMillis?.formatRealtime()} last=${gpsLocationBuffer.lastOrNull()?.elapsedMillis?.formatRealtime()}")
         cache.dump(writer)

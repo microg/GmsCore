@@ -18,6 +18,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import org.microg.gms.nearby.core.R
 import org.microg.gms.nearby.exposurenotification.ExposureDatabase
+import org.microg.gms.ui.buildAlertDialog
 
 @TargetApi(21)
 class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
@@ -49,7 +50,7 @@ class ExposureNotificationsRpisFragment : PreferenceFragmentCompat() {
         deleteAll = preferenceScreen.findPreference("pref_exposure_rpi_delete_all") ?: deleteAll
         exportDb = preferenceScreen.findPreference("pref_exposure_export_database") ?: exportDb
         deleteAll.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            AlertDialog.Builder(requireContext())
+            requireContext().buildAlertDialog()
                     .setTitle(R.string.pref_exposure_rpi_delete_all_title)
                     .setView(R.layout.exposure_notifications_confirm_delete)
                     .setPositiveButton(R.string.pref_exposure_rpi_delete_all_warning_confirm_button) { _, _ ->

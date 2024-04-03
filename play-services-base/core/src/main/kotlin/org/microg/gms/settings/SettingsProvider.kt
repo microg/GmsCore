@@ -336,7 +336,7 @@ class SettingsProvider : ContentProvider() {
                 Location.CELL_ICHNAEA -> editor.putBoolean(key, value as Boolean)
                 Location.CELL_LEARNING -> editor.putBoolean(key, value as Boolean)
                 Location.GEOCODER_NOMINATIM -> editor.putBoolean(key, value as Boolean)
-                Location.ICHNAEA_ENDPOINT -> editor.putString(key, value as String)
+                Location.ICHNAEA_ENDPOINT -> (value as String).let { if (it.isBlank()) editor.remove(key) else editor.putString(key, it) }
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

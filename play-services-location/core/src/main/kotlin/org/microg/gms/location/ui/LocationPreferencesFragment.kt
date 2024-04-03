@@ -5,9 +5,15 @@
 
 package org.microg.gms.location.ui
 
+import android.content.DialogInterface
 import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +22,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.location.LocationSettings
@@ -24,6 +31,7 @@ import org.microg.gms.location.hasIchnaeaLocationServiceSupport
 import org.microg.gms.location.hasNetworkLocationServiceBuiltIn
 import org.microg.gms.location.manager.LocationAppsDatabase
 import org.microg.gms.ui.AppIconPreference
+import org.microg.gms.ui.buildAlertDialog
 import org.microg.gms.ui.getApplicationInfoIfExists
 import org.microg.gms.ui.navigate
 
@@ -39,6 +47,39 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
     private lateinit var cellLearning: TwoStatePreference
     private lateinit var nominatim: TwoStatePreference
     private lateinit var database: LocationAppsDatabase
+
+    init {
+        setHasOptionsMenu(true)
+    }
+
+    companion object {
+        private const val MENU_ICHNAEA_URL = Menu.FIRST
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if (requireContext().hasIchnaeaLocationServiceSupport()) {
+            menu.add(0, MENU_ICHNAEA_URL, 0, R.string.pref_location_custom_url_title)
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == MENU_ICHNAEA_URL) {
+            val view = layoutInflater.inflate(R.layout.preference_location_custom_url, null)
+            view.findViewById<EditText>(android.R.id.edit).setText(LocationSettings(requireContext()).ichneaeEndpoint)
+            requireContext().buildAlertDialog()
+                .setTitle(R.string.pref_location_custom_url_title)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    LocationSettings(requireContext()).ichneaeEndpoint = view.findViewById<EditText>(android.R.id.edit).text.toString()
+                }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> }
+                .setNeutralButton(R.string.pref_location_custom_url_reset) { _, _ -> LocationSettings(requireContext()).ichneaeEndpoint = "" }
+                .setView(view)
+                .show()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,30 +104,18 @@ class LocationPreferencesFragment : PreferenceFragmentCompat() {
             findNavController().navigate(requireContext(), R.id.openAllLocationApps)
             true
         }
-        wifiIchnaea.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).wifiIchnaea = newValue as Boolean
-            true
+        fun configureChangeListener(preference: TwoStatePreference, listener: (Boolean) -> Unit) {
+            preference.setOnPreferenceChangeListener { _, newValue ->
+                listener(newValue as Boolean)
+                true
+            }
         }
-        wifiMoving.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).wifiMoving = newValue as Boolean
-            true
-        }
-        wifiLearning.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).wifiLearning = newValue as Boolean
-            true
-        }
-        cellIchnaea.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).cellIchnaea = newValue as Boolean
-            true
-        }
-        cellLearning.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).cellLearning = newValue as Boolean
-            true
-        }
-        nominatim.setOnPreferenceChangeListener { _, newValue ->
-            LocationSettings(requireContext()).geocoderNominatim = newValue as Boolean
-            true
-        }
+        configureChangeListener(wifiIchnaea) { LocationSettings(requireContext()).wifiIchnaea = it }
+        configureChangeListener(wifiMoving) { LocationSettings(requireContext()).wifiMoving = it }
+        configureChangeListener(wifiLearning) { LocationSettings(requireContext()).wifiLearning = it }
+        configureChangeListener(cellIchnaea) { LocationSettings(requireContext()).cellIchnaea = it }
+        configureChangeListener(cellLearning) { LocationSettings(requireContext()).cellLearning = it }
+        configureChangeListener(nominatim) { LocationSettings(requireContext()).geocoderNominatim = it }
 
         networkProviderCategory.isVisible = requireContext().hasNetworkLocationServiceBuiltIn()
         wifiIchnaea.isVisible = requireContext().hasIchnaeaLocationServiceSupport()

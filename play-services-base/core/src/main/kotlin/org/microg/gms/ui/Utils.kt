@@ -17,11 +17,13 @@ import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import androidx.navigation.ui.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun PackageManager.getApplicationInfoIfExists(packageName: String?, flags: Int = 0): ApplicationInfo? = packageName?.let {
     try {
@@ -57,6 +59,12 @@ val Context.systemAnimationsEnabled: Boolean
         return duration != 0f && transition != 0f
     }
 
+fun Context.buildAlertDialog() = try {
+    // Try material design first
+    MaterialAlertDialogBuilder(this)
+} catch (e: Exception) {
+    AlertDialog.Builder(this)
+}
 
 @ColorInt
 fun Context.resolveColor(@AttrRes resid: Int): Int? {
