@@ -6,9 +6,9 @@ on:
       - "v*"
 
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
-    name: Deploy
+    name: Release
     steps:
       - uses: actions/checkout@v2
         with:
