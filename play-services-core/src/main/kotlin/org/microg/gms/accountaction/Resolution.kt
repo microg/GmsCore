@@ -16,16 +16,20 @@ data object CryptAuthSyncKeys : Resolution()
  */
 data class UserIntervention(val actions: Set<UserAction>) : Resolution()
 
-/**
- * Represents a situation that is known to be unsupported by microG.
- * Advise the user to remove the account.
- */
-data object NoResolution : Resolution()
-
 enum class UserAction {
     ENABLE_CHECKIN,
     ENABLE_GCM,
     ALLOW_MICROG_GCM,
     ENABLE_LOCKSCREEN,
     REAUTHENTICATE
+}
+
+/**
+ * Represents a situation that is known to be unsupported by microG.
+ * Advise the user to remove the account.
+ */
+data class NoResolution(val reason: NoResolutionReason) : Resolution()
+
+enum class NoResolutionReason {
+    ADVANCED_DEVICE_MANAGEMENT_NOT_SUPPORTED
 }
