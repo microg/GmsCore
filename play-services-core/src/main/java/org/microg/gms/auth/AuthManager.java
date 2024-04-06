@@ -13,8 +13,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.RequiresPermission;
-
 import org.microg.gms.accountaction.ErrorResolverKt;
 import org.microg.gms.accountaction.Resolution;
 import org.microg.gms.common.NotOkayException;
@@ -261,7 +259,7 @@ public class AuthManager {
             return requestAuth(legacy);
         } catch (NotOkayException e) {
             if (e.getMessage() != null) {
-                Resolution errorResolution = ErrorResolverKt.fromErrorMessage(e.getMessage());
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
                 if (errorResolution != null) {
                     return ErrorResolverKt.initiateFromBackgroundBlocking(
                             errorResolution,

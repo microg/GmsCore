@@ -1,6 +1,7 @@
 package org.microg.gms.cryptauth
 
 import android.accounts.Account
+import android.app.KeyguardManager
 import android.content.Context
 import android.util.Log
 import com.google.android.gms.BuildConfig
@@ -57,7 +58,7 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
         .extraParam("scope", GCM_REGISTER_SCOPE)
     ).let {
         if (!it.containsKey(GcmConstants.EXTRA_REGISTRATION_ID)) {
-            Log.d(TAG, "No instance ID was gathered. Is GCM enabled?")
+            Log.d(TAG, "No instance ID was gathered. Is GCM enabled, has there been a checkin?")
             return null
         }
         it.getString(GcmConstants.EXTRA_REGISTRATION_ID)!!
@@ -92,7 +93,7 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
         device_model = Build.MODEL ?: "",
         device_manufacturer = Build.MANUFACTURER ?: "",
         device_type = ClientAppMetadata.DeviceType.ANDROID,
-        using_secure_screenlock = true, // TODO actual value
+        using_secure_screenlock = context.isLockscreenConfigured(),
         bluetooth_radio_supported = true, // TODO actual value? doesn't seem relevant
         // bluetooth_radio_enabled = false,
         ble_radio_supported = true, // TODO: actual value? doesn't seem relevant
@@ -158,6 +159,15 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
         } catch (e: Exception) {
             null
         }
+    }
+}
+
+fun Context.isLockscreenConfigured(): Boolean {
+    val service: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        return service.isDeviceSecure
+    } else {
+        return service.isKeyguardSecure
     }
 }
 
