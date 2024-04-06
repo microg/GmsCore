@@ -5,8 +5,10 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.microg.gms.cryptauth.syncCryptAuthKeys
+import java.io.IOException
 
 /**
  * @return `null` if it is unknown how to resolve the problem, an
@@ -33,15 +35,20 @@ fun fromErrorMessage(s: String): Resolution? = if (s.startsWith("Error=")) {
 }
 
 
-suspend fun Resolution.initiateBackground(context: Context, account: Account, retryFunction: () -> Any) {
+fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
     when (this) {
         CryptAuthSyncKeys -> {
-            withContext(Dispatchers.IO) {
+            runBlocking {
                 syncCryptAuthKeys(context, account)
             }
-            retryFunction()
+            return retryFunction.run()
         }
         NoResolution -> TODO()
         is UserIntervention -> TODO()
     }
+}
+
+interface RetryFunction<T> {
+    @Throws(IOException::class)
+    fun run(): T
 }
