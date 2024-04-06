@@ -40,8 +40,8 @@ private const val GCM_REGISTER_SCOPE = "GCM"
 
 private const val AFTER_REQUEST_DELAY = 500L
 
-suspend fun request(context: Context, account: Account): JSONObject? = request(context, account.name)
-suspend fun request(context: Context, accountName: String): JSONObject? {
+suspend fun syncCryptAuthKeys(context: Context, account: Account): JSONObject? = syncCryptAuthKeys(context, account.name)
+suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject? {
 
     val lastCheckinInfo = LastCheckinInfo.read(context)
 
@@ -57,6 +57,7 @@ suspend fun request(context: Context, accountName: String): JSONObject? {
         .extraParam("scope", GCM_REGISTER_SCOPE)
     ).let {
         if (!it.containsKey(GcmConstants.EXTRA_REGISTRATION_ID)) {
+            Log.d(TAG, "No instance ID was gathered. Is GCM enabled?")
             return null
         }
         it.getString(GcmConstants.EXTRA_REGISTRATION_ID)!!
