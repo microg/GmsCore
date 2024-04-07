@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
@@ -11,11 +10,13 @@
     <Preference
         android:key="pref_push_apps_all_progress"
         android:layout="@layout/preference_progress_bar"
-        app:allowDividerBelow="false" />
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false" />
     <PreferenceCategory
         android:key="prefcat_push_apps_registered"
         android:title="@string/prefcat_push_apps_registered_title"
         app:isPreferenceVisible="false"
+        app:iconSpaceReserved="false"
         tools:isPreferenceVisible="true">
         <Preference
             android:enabled="false"
@@ -28,6 +29,7 @@
         android:key="prefcat_push_apps_unregistered"
         android:title="@string/prefcat_push_apps_unregistered_title"
         app:isPreferenceVisible="false"
+        app:iconSpaceReserved="false"
         tools:isPreferenceVisible="true">
         <Preference
             android:enabled="false"

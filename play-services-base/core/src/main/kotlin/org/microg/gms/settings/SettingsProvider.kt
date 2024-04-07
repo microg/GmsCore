@@ -15,6 +15,7 @@ import android.database.MatrixCursor
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.preference.PreferenceManager
+import org.microg.gms.base.core.BuildConfig
 import org.microg.gms.common.PackageUtils.warnIfNotMainProcess
 import org.microg.gms.settings.SettingsContract.Auth
 import org.microg.gms.settings.SettingsContract.CheckIn
@@ -310,12 +311,13 @@ class SettingsProvider : ContentProvider() {
 
     private fun queryLocation(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
         when (key) {
-            Location.WIFI_MLS -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
+            Location.WIFI_ICHNAEA -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
             Location.WIFI_MOVING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("de.sorunome.unifiednlp.trains"))
             Location.WIFI_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
-            Location.CELL_MLS -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
+            Location.CELL_ICHNAEA -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("org.microg.nlp.backend.ichnaea"))
             Location.CELL_LEARNING -> getSettingsBoolean(key, hasUnifiedNlpLocationBackend("helium314.localbackend", "org.fitchfamily.android.dejavu"))
             Location.GEOCODER_NOMINATIM -> getSettingsBoolean(key, hasUnifiedNlpGeocoderBackend("org.microg.nlp.backend.nominatim") )
+            Location.ICHNAEA_ENDPOINT -> getSettingsString(key, BuildConfig.ICHNAEA_ENDPOINT_DEFAULT)
             else -> throw IllegalArgumentException("Unknown key: $key")
         }
     }
@@ -328,12 +330,13 @@ class SettingsProvider : ContentProvider() {
         val editor = preferences.edit()
         values.valueSet().forEach { (key, value) ->
             when (key) {
-                Location.WIFI_MLS -> editor.putBoolean(key, value as Boolean)
+                Location.WIFI_ICHNAEA -> editor.putBoolean(key, value as Boolean)
                 Location.WIFI_MOVING -> editor.putBoolean(key, value as Boolean)
                 Location.WIFI_LEARNING -> editor.putBoolean(key, value as Boolean)
-                Location.CELL_MLS -> editor.putBoolean(key, value as Boolean)
+                Location.CELL_ICHNAEA -> editor.putBoolean(key, value as Boolean)
                 Location.CELL_LEARNING -> editor.putBoolean(key, value as Boolean)
                 Location.GEOCODER_NOMINATIM -> editor.putBoolean(key, value as Boolean)
+                Location.ICHNAEA_ENDPOINT -> (value as String).let { if (it.isBlank()) editor.remove(key) else editor.putString(key, it) }
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
         }

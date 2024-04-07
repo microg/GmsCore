@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.location.network.mozilla
+package org.microg.gms.location.network.ichnaea
 
 data class ResponseError(
-    val code: Int,
-    val message: String
+    val code: Int? = null,
+    val message: String? = null
 )

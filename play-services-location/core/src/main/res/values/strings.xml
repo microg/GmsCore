@@ -37,4 +37,9 @@
     <string name="location_settings_dialog_btn_cancel">No thanks</string>
     <string name="location_settings_dialog_btn_sure">OK</string>
 
+    <string name="pref_location_custom_url_title">Configure service URL</string>
+    <string name="pref_location_custom_url_reset">Reset</string>
+    <string name="pref_location_custom_url_summary">This allows setting a custom service URL. Invalid values can result in location services being unresponsive or entirely unavailable.</string>
+    <string name="pref_location_custom_url_details">The /v1/geolocate path is automatically appended. If the location provider requires a key, it can be appended as a query parameter to the root URL.</string>
+    <string name="pref_location_custom_url_input_hint">Custom service URL</string>
 </resources>

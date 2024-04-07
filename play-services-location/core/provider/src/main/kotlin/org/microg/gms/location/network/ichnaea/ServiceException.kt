@@ -3,6 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.location.network.mozilla
+package org.microg.gms.location.network.ichnaea
 
 class ServiceException(val error: ResponseError) : Exception(error.message)

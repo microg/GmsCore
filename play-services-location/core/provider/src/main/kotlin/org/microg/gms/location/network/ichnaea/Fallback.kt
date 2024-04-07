@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.location.network.mozilla
+package org.microg.gms.location.network.ichnaea
 
 /**
  * By default, both a GeoIP based position fallback and a fallback based on cell location areas (lac’s) are enabled. Omit the fallbacks section if you want to use the defaults. Change the values to false if you want to disable either of the fallbacks.

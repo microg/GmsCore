@@ -163,20 +163,22 @@ object SettingsContract {
         fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
-        const val WIFI_MLS = "location_wifi_mls"
+        const val WIFI_ICHNAEA = "location_wifi_mls"
         const val WIFI_MOVING = "location_wifi_moving"
         const val WIFI_LEARNING = "location_wifi_learning"
-        const val CELL_MLS = "location_cell_mls"
+        const val CELL_ICHNAEA = "location_cell_mls"
         const val CELL_LEARNING = "location_cell_learning"
         const val GEOCODER_NOMINATIM = "location_geocoder_nominatim"
+        const val ICHNAEA_ENDPOINT = "location_ichnaea_endpoint"
 
         val PROJECTION = arrayOf(
-            WIFI_MLS,
+            WIFI_ICHNAEA,
             WIFI_MOVING,
             WIFI_LEARNING,
-            CELL_MLS,
+            CELL_ICHNAEA,
             CELL_LEARNING,
             GEOCODER_NOMINATIM,
+            ICHNAEA_ENDPOINT,
         )
     }
 

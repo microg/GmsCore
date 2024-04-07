@@ -11,7 +11,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.SystemClock
 import android.text.format.DateUtils
-import android.util.Log
 import androidx.core.location.LocationCompat
 
 const val ACTION_NETWORK_LOCATION_SERVICE = "org.microg.gms.location.network.ACTION_NETWORK_LOCATION_SERVICE"
@@ -51,25 +50,9 @@ fun Long.formatDuration(): CharSequence {
     return ret
 }
 
-private var hasMozillaLocationServiceSupportFlag: Boolean? = null
-fun Context.hasMozillaLocationServiceSupport(): Boolean {
+fun Context.hasIchnaeaLocationServiceSupport(): Boolean {
     if (!hasNetworkLocationServiceBuiltIn()) return false
-    var flag = hasMozillaLocationServiceSupportFlag
-    if (flag == null) {
-        return try {
-            val clazz = Class.forName("org.microg.gms.location.network.mozilla.MozillaLocationServiceClient")
-            val apiKey = clazz.getDeclaredField("API_KEY").get(null) as? String?
-            flag = apiKey != null
-            hasMozillaLocationServiceSupportFlag = flag
-            flag
-        } catch (e: Exception) {
-            Log.w("Location", e)
-            hasMozillaLocationServiceSupportFlag = false
-            false
-        }
-    } else {
-        return flag
-    }
+    return LocationSettings(this).ichneaeEndpoint.isNotBlank()
 }
 
 private var hasNetworkLocationServiceBuiltInFlag: Boolean? = null

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.microg.gms.location.network.mozilla
+package org.microg.gms.location.network.ichnaea
 
 data class WifiAccessPoint(
     /**

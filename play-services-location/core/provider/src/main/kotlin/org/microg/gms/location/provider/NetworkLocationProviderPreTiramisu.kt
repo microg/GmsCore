@@ -11,10 +11,15 @@ import android.content.Context
 import android.content.Intent
 import android.location.Criteria
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.os.WorkSource
 import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
+import androidx.core.content.getSystemService
 import com.android.location.provider.ProviderPropertiesUnbundled
 import com.android.location.provider.ProviderRequestUnbundled
 import org.microg.gms.location.*
@@ -40,6 +45,8 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     private var currentRequest: ProviderRequestUnbundled? = null
     private var pendingIntent: PendingIntent? = null
     private var lastReportedLocation: Location? = null
+    private val handler = Handler(Looper.getMainLooper())
+    private val reportAgainRunnable = Runnable { reportAgain() }
 
     private fun updateRequest() {
         if (enabled) {
@@ -65,6 +72,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
                 intent.putExtra(EXTRA_BYPASS, currentRequest?.isLocationSettingsIgnored ?: false)
             }
             context.startService(intent)
+            reportAgain()
         }
     }
 
@@ -93,6 +101,13 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
                 SDK_INT >= 30 -> isAllowed = true
                 SDK_INT >= 29 -> isEnabled = true
             }
+            try {
+                if (lastReportedLocation == null) {
+                    lastReportedLocation = context.getSystemService<LocationManager>()?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                }
+            } catch (_: SecurityException) {
+            } catch (_: Exception) {
+            }
         }
     }
 
@@ -107,18 +122,35 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
             pendingIntent = null
             currentRequest = null
             enabled = false
+            handler.removeCallbacks(reportAgainRunnable)
+        }
+    }
+
+    private fun reportAgain() {
+        // Report location again if it's recent enough
+        lastReportedLocation?.let {
+            if (it.elapsedMillis + MIN_INTERVAL_MILLIS < SystemClock.elapsedRealtime() ||
+                it.elapsedMillis + (currentRequest?.interval ?: 0) < SystemClock.elapsedRealtime()) {
+                reportLocationToSystem(it)
+            }
         }
     }
 
     override fun reportLocationToSystem(location: Location) {
-        location.provider = "network"
+        handler.removeCallbacks(reportAgainRunnable)
+        location.provider = LocationManager.NETWORK_PROVIDER
         location.extras?.remove(LOCATION_EXTRA_PRECISION)
         lastReportedLocation = location
         super.reportLocation(location)
+        val repeatInterval = max(MIN_REPORT_MILLIS, currentRequest?.interval ?: Long.MAX_VALUE)
+        if (repeatInterval < MIN_INTERVAL_MILLIS) {
+            handler.postDelayed(reportAgainRunnable, repeatInterval)
+        }
     }
 
     companion object {
         private const val MIN_INTERVAL_MILLIS = 20000L
+        private const val MIN_REPORT_MILLIS = 1000L
         private val properties = ProviderPropertiesUnbundled.create(false, false, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
     }
 }

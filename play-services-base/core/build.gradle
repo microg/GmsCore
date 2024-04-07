@@ -32,10 +32,18 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+        if (localProperties.get("ichnaea.endpoint", "") != "") {
+            buildConfigField "String", "ICHNAEA_ENDPOINT_DEFAULT", "\"${localProperties.get("ichnaea.endpoint")}\""
+        } else if (localProperties.get("ichnaea.key", "") != "") {
+            buildConfigField "String", "ICHNAEA_ENDPOINT_DEFAULT", "\"https://location.services.mozilla.com/?key=${localProperties.get("ichnaea.key")}\""
+        } else {
+            buildConfigField "String", "ICHNAEA_ENDPOINT_DEFAULT", "\"\""
+        }
     }
 
     buildFeatures {
         dataBinding = true
+        buildConfig = true
     }
 
     sourceSets {
