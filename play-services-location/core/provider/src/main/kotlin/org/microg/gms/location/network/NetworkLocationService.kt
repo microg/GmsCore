@@ -41,6 +41,7 @@ import java.io.PrintWriter
 import java.lang.Math.pow
 import java.nio.ByteBuffer
 import java.util.LinkedList
+import kotlin.math.max
 import kotlin.math.min
 
 class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDetailsCallback {
@@ -271,10 +272,6 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         val scanResultTimestamp = min(wifis.maxOf { it.timestamp ?: Long.MAX_VALUE }, System.currentTimeMillis())
         val scanResultRealtimeMillis =
             if (SDK_INT >= 17) SystemClock.elapsedRealtime() - (System.currentTimeMillis() - scanResultTimestamp) else scanResultTimestamp
-        if (scanResultRealtimeMillis < lastWifiDetailsRealtimeMillis + interval / 2 && lastWifiDetailsRealtimeMillis != 0L) {
-            Log.d(TAG, "Ignoring wifi details, similar age as last ($scanResultRealtimeMillis < $lastWifiDetailsRealtimeMillis + $interval / 2)")
-            return
-        }
         @Suppress("DEPRECATION")
         currentLocalMovingWifi = getSystemService<WifiManager>()?.connectionInfo
             ?.let { wifiInfo -> wifis.filter { it.macAddress == wifiInfo.bssid && it.isMoving } }
@@ -294,6 +291,10 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     }
 
     private fun updateWifiLocation(requestableWifis: List<WifiDetails>, scanResultRealtimeMillis: Long = 0, scanResultTimestamp: Long = 0) {
+        if (scanResultRealtimeMillis < lastWifiDetailsRealtimeMillis + interval / 2 && lastWifiDetailsRealtimeMillis != 0L) {
+            Log.d(TAG, "Ignoring wifi details, similar age as last ($scanResultRealtimeMillis < $lastWifiDetailsRealtimeMillis + $interval / 2)")
+            return
+        }
         val previousLastRealtimeMillis = lastWifiDetailsRealtimeMillis
         if (scanResultRealtimeMillis != 0L) lastWifiDetailsRealtimeMillis = scanResultRealtimeMillis
         lifecycleScope.launch {
@@ -302,9 +303,9 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                 lastWifiDetailsRealtimeMillis = previousLastRealtimeMillis
                 return@launch
             }
-            if (scanResultTimestamp != 0L && location.time == 0L) location.time = scanResultTimestamp
-            if (SDK_INT >= 17 && scanResultRealtimeMillis != 0L && location.elapsedRealtimeNanos == 0L) location.elapsedRealtimeNanos =
-                scanResultRealtimeMillis * 1_000_000L
+            if (scanResultTimestamp != 0L) location.time = max(scanResultTimestamp, location.time)
+            if (SDK_INT >= 17 && scanResultRealtimeMillis != 0L) location.elapsedRealtimeNanos =
+                max(location.elapsedRealtimeNanos, scanResultRealtimeMillis * 1_000_000L)
             synchronized(locationLock) {
                 lastWifiLocation = location
             }
@@ -372,22 +373,43 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     }
 
     private fun sendLocationUpdate(now: Boolean = false) {
+        fun cliffLocations(old: Location?, new: Location?): Location? {
+            // We move from wifi towards cell with accuracy
+            if (old == null) return new
+            if (new == null) return old
+            val diff = new.elapsedMillis - old.elapsedMillis
+            if (diff < LOCATION_TIME_CLIFF_START_MS) return old
+            if (diff > LOCATION_TIME_CLIFF_END_MS) return new
+            val pct = (diff - LOCATION_TIME_CLIFF_START_MS).toDouble() / (LOCATION_TIME_CLIFF_END_MS - LOCATION_TIME_CLIFF_START_MS).toDouble()
+            return Location(old).apply {
+                provider = "cliff"
+                latitude = old.latitude * (1.0-pct) + new.latitude * pct
+                longitude = old.longitude * (1.0-pct) + new.longitude * pct
+                accuracy = (old.accuracy * (1.0-pct) + new.accuracy * pct).toFloat()
+                altitude = old.altitude * (1.0-pct) + new.altitude * pct
+                time = (old.time.toDouble() * (1.0-pct) + new.time.toDouble() * pct).toLong()
+                elapsedRealtimeNanos = (old.elapsedRealtimeNanos.toDouble() * (1.0-pct) + new.elapsedRealtimeNanos.toDouble() * pct).toLong()
+            }
+        }
         val location = synchronized(locationLock) {
             if (lastCellLocation == null && lastWifiLocation == null) return
             when {
                 // Only non-null
                 lastCellLocation == null -> lastWifiLocation
                 lastWifiLocation == null -> lastCellLocation
-                // Consider cliff
-                lastCellLocation!!.elapsedMillis > lastWifiLocation!!.elapsedMillis + LOCATION_TIME_CLIFF_MS -> lastCellLocation
-                lastWifiLocation!!.elapsedMillis > lastCellLocation!!.elapsedMillis + LOCATION_TIME_CLIFF_MS -> lastWifiLocation
+                // Consider cliff end
+                lastCellLocation!!.elapsedMillis > lastWifiLocation!!.elapsedMillis + LOCATION_TIME_CLIFF_END_MS -> lastCellLocation
+                lastWifiLocation!!.elapsedMillis > lastCellLocation!!.elapsedMillis + LOCATION_TIME_CLIFF_START_MS -> lastWifiLocation
                 // Wifi out of cell range with higher precision
                 lastCellLocation!!.precision > lastWifiLocation!!.precision && lastWifiLocation!!.distanceTo(lastCellLocation!!) > 2 * lastCellLocation!!.accuracy -> lastCellLocation
+                // Consider cliff start
+                lastCellLocation!!.elapsedMillis > lastWifiLocation!!.elapsedMillis + LOCATION_TIME_CLIFF_START_MS -> cliffLocations(lastWifiLocation, lastCellLocation)
                 else -> lastWifiLocation
             }
         } ?: return
         if (location == lastLocation) return
-        if (lastLocation == lastWifiLocation && location == lastCellLocation && !now) {
+        if (lastLocation == lastWifiLocation && lastLocation.let { it != null && location.accuracy > it.accuracy } && !now) {
+            Log.d(TAG, "Debounce inaccurate location update")
             handler.postDelayed({
                 sendLocationUpdate(true)
             }, DEBOUNCE_DELAY_MS)
@@ -456,7 +478,8 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         const val GPS_BUFFER_SIZE = 60
         const val GPS_PASSIVE_INTERVAL = 1000L
         const val GPS_PASSIVE_MIN_ACCURACY = 25f
-        const val LOCATION_TIME_CLIFF_MS = 30000L
+        const val LOCATION_TIME_CLIFF_START_MS = 30000L
+        const val LOCATION_TIME_CLIFF_END_MS = 60000L
         const val DEBOUNCE_DELAY_MS = 5000L
         const val MAX_WIFI_SCAN_CACHE_AGE = 1000L * 60 * 60 * 24 // 1 day
         const val MAX_LOCAL_WIFI_AGE_NS = 60_000_000_000L // 1 minute

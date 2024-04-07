@@ -11,8 +11,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import com.android.volley.Request.Method
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONObject
 import org.microg.gms.location.LocationSettings
 import org.microg.gms.location.network.cell.CellDetails
 import org.microg.gms.location.network.precision
@@ -20,6 +22,7 @@ import org.microg.gms.location.network.wifi.WifiDetails
 import org.microg.gms.location.network.wifi.isMoving
 import org.microg.gms.location.provider.BuildConfig
 import org.microg.gms.utils.singleInstanceOf
+import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -75,12 +78,32 @@ class IchnaeaServiceClient(private val context: Context) {
         }
     }
 
+    private fun continueError(continuation: Continuation<GeolocateResponse>, error: VolleyError) {
+        try {
+            val response = JSONObject(error.networkResponse.data.decodeToString()).toGeolocateResponse()
+            if (response.error != null) {
+                continuation.resume(response)
+                return
+            } else if (response.location?.lat != null){
+                Log.w(TAG, "Received location in response with error code")
+            } else {
+                Log.w(TAG, "Received valid json without error in response with error code")
+            }
+        } catch (_: Exception) {
+        }
+        if (error.networkResponse != null) {
+            continuation.resume(GeolocateResponse(error = ResponseError(error.networkResponse.statusCode, error.message)))
+            return
+        }
+        continuation.resumeWithException(error)
+    }
+
     private suspend fun rawGeoLocate(request: GeolocateRequest): GeolocateResponse = suspendCoroutine { continuation ->
         val url = Uri.parse(settings.ichneaeEndpoint).buildUpon().appendPath("v1").appendPath("geolocate").build().toString()
         queue.add(object : JsonObjectRequest(Method.POST, url, request.toJson(), {
             continuation.resume(it.toGeolocateResponse())
         }, {
-            continuation.resumeWithException(it)
+            continueError(continuation, it)
         }) {
             override fun getHeaders(): Map<String, String> = getRequestHeaders()
         })

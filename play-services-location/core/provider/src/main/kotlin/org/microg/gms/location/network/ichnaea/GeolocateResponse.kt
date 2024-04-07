@@ -6,8 +6,8 @@
 package org.microg.gms.location.network.ichnaea
 
 data class GeolocateResponse(
-    val location: ResponseLocation?,
-    val accuracy: Double?,
-    val fallback: String?,
-    val error: ResponseError?
+    val location: ResponseLocation? = null,
+    val accuracy: Double? = null,
+    val fallback: String? = null,
+    val error: ResponseError? = null
 )
