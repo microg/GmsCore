@@ -37,6 +37,25 @@ This can take a couple of minutes."</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> requires your authorization to access your Google account.</string>
     <string name="auth_package_override_request_title">"Allow <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privileged access to <xliff:g example="account@example.com">%2$s</xliff:g>?"</string>
     <string name="auth_package_override_request_message">"<b><xliff:g example="F-Droid">%1$s</xliff:g></b> wants to access your account as if it was <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. This might grant it privileged access to your account."</string>
+    <string name="auth_action_notification_channel_name">Google account alerts</string>
+    <string name="auth_action_notification_channel_description">Notifies when one of your Google accounts requires additional setup before it can be used or when an account is incompatible with microG.</string>
+    <string name="auth_action_notification_title">Account action required</string>
+    <string name="auth_action_notification_content">Your Google account needs additional setup.</string>
+
+    <string name="auth_action_activity_header">Finish setting up your Google account</string>
+    <string name="auth_action_activity_explanation">Complete the following steps to be able to use your Google account %s on this device.</string>
+    <string name="auth_action_step_enable_checkin">Enable device registration</string>
+    <string name="auth_action_step_enable_checkin_description">"Your device needs to register to Google at least once.
+
+You can disable Google device registration after account setup is complete.</string>
+    <string name="auth_action_step_enable_gcm">Enable Cloud Messaging</string>
+    <string name="auth_action_step_enable_gcm_description">You can disable Cloud Messaging after account setup is complete.</string>
+    <string name="auth_action_step_allow_microg_gcm">Allow Cloud Messaging for microG</string>
+    <string name="auth_action_step_allow_microg_gcm_description">According to your preferences, microG needs permission from you before it can register itself for Cloud Messaging.</string>
+    <string name="auth_action_step_enable_lockscreen">Configure secure screen lock</string>
+    <string name="auth_action_step_enable_lockscreen_description">Your Google account is managed by your workplace or educational institution. Your administrator decided that devices need to set up a secure screen lock before they can access account data.</string>
+    <string name="auth_action_step_perform_content_description">Click to perform step</string>
+    <string name="auth_action_activity_finish">Finish</string>
 
     <string name="signin_picker_title">Choose an account</string>
     <string name="signin_picker_subtitle">to continue to <xliff:g example="F-Droid">%1$s</xliff:g></string>
