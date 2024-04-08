@@ -53,10 +53,11 @@ fun Context.resolveAuthErrorMessage(s: String): Resolution? = if (s.startsWith("
             SettingsContract.CheckIn.LAST_CHECK_IN
         )
         SettingsContract.getSettings(this, SettingsContract.CheckIn.getContentUri(this), settingsProjection) { cursor ->
-            val checkInEnabled = cursor.getInt(0) != 0
+            //val checkInEnabled = cursor.getInt(0) != 0
             val lastCheckIn = cursor.getLong(1)
 
-            if (lastCheckIn <= 0 && !checkInEnabled) {
+            if (lastCheckIn <= 0) {
+                // user is also asked to enable checkin if there had never been a successful checkin (network errors?)
                 actions += UserAction.ENABLE_CHECKIN
             }
         }
