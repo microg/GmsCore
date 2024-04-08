@@ -36,7 +36,7 @@ class AccountActionActivity : ComponentActivity() {
 }
 
 @Composable
-fun Content(userTasks: UserIntervention, finish: () -> Unit) {
+fun Content(userTasks: Map<UserAction, Boolean>, finish: () -> Unit) {
     Column {
         Column {
             Text(
@@ -53,7 +53,7 @@ fun Content(userTasks: UserIntervention, finish: () -> Unit) {
         }
         Surface(Modifier.fillMaxHeight()) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                userTasks.UiComponents()
+                UserInterventionComponents(userActions = userTasks)
                 Button(
                     onClick = finish,
                     enabled = false,
@@ -76,5 +76,12 @@ fun Content(userTasks: UserIntervention, finish: () -> Unit) {
 @Preview
 @Composable
 fun Preview() {
-    Content(UserIntervention(setOf(UserAction.ENABLE_CHECKIN, UserAction.ENABLE_GCM, UserAction.ALLOW_MICROG_GCM, UserAction.ENABLE_LOCKSCREEN))) {}
+    Content(
+        mapOf(
+            UserAction.ENABLE_CHECKIN to true,
+            UserAction.ENABLE_GCM to true,
+            UserAction.ALLOW_MICROG_GCM to false,
+            UserAction.ENABLE_LOCKSCREEN to false
+        )
+    ) {}
 }

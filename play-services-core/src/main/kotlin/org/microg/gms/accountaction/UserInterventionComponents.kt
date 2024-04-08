@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -28,28 +29,32 @@ import com.google.android.gms.R
 import org.microg.gms.accountaction.UserAction.*
 
 @Composable
-fun UserIntervention.UiComponents() {
-    for ((index, action) in actions.withIndex()) {
-        when (action) {
+fun UserInterventionComponents(userActions: Map<UserAction, Boolean>) {
+    for ((index, action) in userActions.entries.withIndex()) {
+        when (action.component1()) {
             ENABLE_CHECKIN -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_checkin),
                 description = stringResource(id = R.string.auth_action_step_enable_checkin_description),
-                sequenceNumber = index + 1
+                sequenceNumber = index + 1,
+                completed = action.component2()
             )
             ENABLE_GCM -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_gcm),
                 description = stringResource(id = R.string.auth_action_step_enable_gcm_description),
-                sequenceNumber = index + 1
+                sequenceNumber = index + 1,
+                completed = action.component2()
             )
             ALLOW_MICROG_GCM -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_allow_microg_gcm),
                 description = stringResource(id = R.string.auth_action_step_allow_microg_gcm_description),
-                sequenceNumber = index + 1
+                sequenceNumber = index + 1,
+                completed = action.component2()
             )
             ENABLE_LOCKSCREEN -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_lockscreen),
                 description = stringResource(id = R.string.auth_action_step_enable_lockscreen_description),
-                sequenceNumber = index + 1
+                sequenceNumber = index + 1,
+                completed = action.component2()
             )
             REAUTHENTICATE -> TODO()
         }
@@ -57,29 +62,43 @@ fun UserIntervention.UiComponents() {
 }
 
 @Composable
-fun UserInterventionCommonComponent(title: String, description: String, sequenceNumber: Int?) {
+fun UserInterventionCommonComponent(title: String, description: String, sequenceNumber: Int?, completed: Boolean) {
     Surface(onClick = { /*TODO*/ }) {
 
-        val circleColor = colorResource(id = R.color.login_blue_theme_primary)
+        val color = if (completed) {
+            colorResource(id = R.color.material_success)
+        } else {
+            colorResource(id = R.color.login_blue_theme_primary)
+        }
+
         Column(
             Modifier
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
 
-            Row(Modifier.padding(bottom = 16.dp)) {
+            Row {
                 Box(Modifier.size(32.dp)) {
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         drawCircle(
-                            color = circleColor
+                            color = color
                         )
                     }
 
-                    sequenceNumber?.let {
-                        Text(
-                            text = it.toString(),
+                    if (completed) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = stringResource(R.string.auth_action_step_completed_content_description),
                             modifier = Modifier.align(Alignment.Center),
-                            style = LocalTextStyle.current.copy(color = Color.White)
+                            tint = Color.White
                         )
+                    } else {
+                        sequenceNumber?.let {
+                            Text(
+                                text = it.toString(),
+                                modifier = Modifier.align(Alignment.Center),
+                                style = LocalTextStyle.current.copy(color = Color.White)
+                            )
+                        }
                     }
                 }
                 Spacer(Modifier.width(16.dp))
@@ -91,13 +110,20 @@ fun UserInterventionCommonComponent(title: String, description: String, sequence
                     style = MaterialTheme.typography.labelLarge
                 )
                 Spacer(Modifier.width(16.dp))
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = stringResource(id = R.string.auth_action_step_perform_content_description),
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                if (!completed) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = stringResource(id = R.string.auth_action_step_perform_content_description),
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                }
+            }
+            if (!completed) {
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
-            Text(text = description)
         }
     }
 }
@@ -106,6 +132,8 @@ fun UserInterventionCommonComponent(title: String, description: String, sequence
 @Composable
 fun PreviewInterventionComponent() {
     Column {
-        UserIntervention(setOf(ENABLE_CHECKIN, ENABLE_GCM, ALLOW_MICROG_GCM, ENABLE_LOCKSCREEN)).UiComponents()
+        UserInterventionComponents(userActions =
+           mapOf(ENABLE_CHECKIN to true, ENABLE_GCM to true, ALLOW_MICROG_GCM to false, ENABLE_LOCKSCREEN to false)
+        )
     }
 }

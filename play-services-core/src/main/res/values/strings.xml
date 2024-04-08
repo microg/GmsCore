@@ -54,8 +54,11 @@ You can disable Google device registration after account setup is complete.</str
     <string name="auth_action_step_allow_microg_gcm">Allow Cloud Messaging for microG</string>
     <string name="auth_action_step_allow_microg_gcm_description">According to your preferences, microG needs permission from you before it can register itself for Cloud Messaging.</string>
     <string name="auth_action_step_enable_lockscreen">Configure secure screen lock</string>
-    <string name="auth_action_step_enable_lockscreen_description">Your Google account is managed by your workplace or educational institution. Your administrator decided that devices need to set up a secure screen lock before they can access account data.</string>
+    <string name="auth_action_step_enable_lockscreen_description">"Your Google account is managed by your workplace or educational institution. Your administrator decided that devices need a secure screen lock before they can access account data.
+
+Please set up a password, PIN, or pattern lock screen."</string>
     <string name="auth_action_step_perform_content_description">Click to perform step</string>
+    <string name="auth_action_step_completed_content_description">Step completed</string>
     <string name="auth_action_activity_finish">Finish</string>
 
     <string name="signin_picker_title">Choose an account</string>
