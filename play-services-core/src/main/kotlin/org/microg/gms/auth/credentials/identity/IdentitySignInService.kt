@@ -52,7 +52,7 @@ class IdentitySignInServiceImpl(private val mContext: Context, private val clien
     ISignInService.Stub() {
     override fun beginSignIn(callback: IBeginSignInCallback, request: BeginSignInRequest) {
         Log.d(TAG, "method 'beginSignIn' return status is SUCCESS")
-        if (!request.isAutoSelectEnabled || !request.googleIdTokenRequestOptions.isSupported) {
+        if (!request.isAutoSelectEnabled || !request.googleIdTokenRequestOptions.isSupported || !request.passwordRequestOptions.isSupported) {
             callback.onResult(Status.CANCELED, null)
             return
         }
