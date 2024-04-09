@@ -642,6 +642,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <action android:name="com.google.android.gms.settings.EXPOSURE_NOTIFICATION_SETTINGS" />
+                <action android:name="org.microg.gms.settings.CHECKIN_SETTINGS" />
+                <action android:name="org.microg.gms.settings.GCM_SETTINGS" />
+                <action android:name="org.microg.gms.settings.MICROG_APP_GCM_SETTINGS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

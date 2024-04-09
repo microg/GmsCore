@@ -1,5 +1,10 @@
 package org.microg.gms.accountaction
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.os.ResultReceiver
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,49 +26,78 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.R
 import org.microg.gms.accountaction.UserAction.*
+import org.microg.gms.common.Constants
+import org.microg.gms.ui.AskPushPermission
+import kotlin.coroutines.resume
+
+const val ACTION_CHECKIN = "org.microg.gms.settings.DEVICE_REGISTRATION_SETTINGS"
+const val ACTION_GCM = "org.microg.gms.settings.GCM_SETTINGS"
+const val ACTION_GCM_APP = "org.microg.gms.settings.GCM_APP_SETTINGS"
+const val URI_GCM_MICROG_APP = "x-gms-settings://gcm/${Constants.GMS_PACKAGE_NAME}"
 
 @Composable
 fun UserInterventionComponents(userActions: Map<UserAction, Boolean>) {
     for ((index, action) in userActions.entries.withIndex()) {
+        val context = LocalContext.current as Activity
         when (action.component1()) {
             ENABLE_CHECKIN -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_checkin),
                 description = stringResource(id = R.string.auth_action_step_enable_checkin_description),
                 sequenceNumber = index + 1,
                 completed = action.component2()
-            )
+            ) {
+                Intent(ACTION_CHECKIN).let { context.startActivityForResult(it, 0) }
+            }
             ENABLE_GCM -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_gcm),
                 description = stringResource(id = R.string.auth_action_step_enable_gcm_description),
                 sequenceNumber = index + 1,
                 completed = action.component2()
-            )
+            ) {
+                Intent(ACTION_GCM).let { context.startActivityForResult(it, 1) }
+            }
             ALLOW_MICROG_GCM -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_allow_microg_gcm),
                 description = stringResource(id = R.string.auth_action_step_allow_microg_gcm_description),
                 sequenceNumber = index + 1,
                 completed = action.component2()
-            )
+            ) {
+                Intent(context, AskPushPermission::class.java).apply {
+                    putExtra(AskPushPermission.EXTRA_REQUESTED_PACKAGE, Constants.GMS_PACKAGE_NAME)
+                    putExtra(AskPushPermission.EXTRA_FORCE_ASK, true)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                    addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
+                }.let { context.startActivity(it) }
+            }
             ENABLE_LOCKSCREEN -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_lockscreen),
                 description = stringResource(id = R.string.auth_action_step_enable_lockscreen_description),
                 sequenceNumber = index + 1,
                 completed = action.component2()
-            )
+            ) {
+                runCatching {
+                    Intent(android.provider.Settings.ACTION_SECURITY_SETTINGS).let { context.startActivity(it) }
+                }.onFailure {
+                    Intent(android.provider.Settings.ACTION_SETTINGS).let { context.startActivity(it) }
+                }
+
+            }
             REAUTHENTICATE -> TODO()
         }
     }
 }
 
 @Composable
-fun UserInterventionCommonComponent(title: String, description: String, sequenceNumber: Int?, completed: Boolean) {
-    Surface(onClick = { /*TODO*/ }) {
+fun UserInterventionCommonComponent(title: String, description: String, sequenceNumber: Int?, completed: Boolean, onClick: () -> Unit) {
+    Surface(onClick = onClick, enabled = !completed) {
 
         val color = if (completed) {
             colorResource(id = R.color.material_success)
