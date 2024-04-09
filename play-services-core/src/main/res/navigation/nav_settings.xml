@@ -57,7 +57,11 @@
         android:id="@+id/checkinFragment"
         android:name="org.microg.gms.ui.DeviceRegistrationFragment"
         android:label="@string/service_name_checkin"
-        tools:layout="@layout/device_registration_fragment" />
+        tools:layout="@layout/device_registration_fragment">
+        <deepLink
+            app:uri="x-gms-settings://checkin"
+            app:action="org.microg.gms.settings.CHECKIN_SETTINGS" />
+    </fragment>
 
     <!-- Push Notifications -->
 
@@ -75,6 +79,9 @@
         <action
             android:id="@+id/openGcmAdvancedSettings"
             app:destination="@id/gcmAdvancedFragment" />
+        <deepLink
+            app:uri="x-gms-settings://gcm"
+            app:action="org.microg.gms.settings.GCM_SETTINGS" />
     </fragment>
 
     <fragment
