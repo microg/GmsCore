@@ -5,6 +5,7 @@
 
 package org.microg.gms.auth.credentials.identity
 
+import android.accounts.AccountManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -26,6 +27,7 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.credentials.FEATURES
 import org.microg.gms.auth.signin.AuthSignInActivity
 import org.microg.gms.common.Constants
@@ -50,7 +52,21 @@ class IdentitySignInServiceImpl(private val mContext: Context, private val clien
     ISignInService.Stub() {
     override fun beginSignIn(callback: IBeginSignInCallback, request: BeginSignInRequest) {
         Log.d(TAG, "method 'beginSignIn' return status is SUCCESS")
-        callback.onResult(Status.SUCCESS, BeginSignInResult(performSignIn(request.googleIdTokenRequestOptions.serverClientId)))
+        if (!request.isAutoSelectEnabled || !request.googleIdTokenRequestOptions.isSupported) {
+            callback.onResult(Status.CANCELED, null)
+            return
+        }
+        if (request.googleIdTokenRequestOptions.filterByAuthorizedAccounts()) {
+            val accounts = AccountManager.get(mContext).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+            if (accounts.isEmpty()) {
+                callback.onResult(Status.CANCELED, null)
+                return
+            }
+        }
+        callback.onResult(
+            Status.SUCCESS,
+            BeginSignInResult(performSignIn(request.googleIdTokenRequestOptions.serverClientId))
+        )
     }
 
     override fun signOut(callback: IStatusCallback, requestTag: String) {
