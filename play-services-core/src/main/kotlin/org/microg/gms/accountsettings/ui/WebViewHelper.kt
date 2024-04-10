@@ -23,7 +23,6 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.common.Constants.GMS_PACKAGE_NAME
 import org.microg.gms.common.PackageUtils
-import org.microg.gms.cryptauth.syncCryptAuthKeys
 import java.net.URLEncoder
 import java.util.*
 
@@ -100,10 +99,8 @@ class WebViewHelper(private val activity: AppCompatActivity, private val webView
         }
     }
 
-    private suspend fun openWebWithAccount(accountName: String, url: String?) {
+    private fun openWebWithAccount(accountName: String, url: String?) {
         try {
-            syncCryptAuthKeys(activity, accountName)
-
             val service = "weblogin:continue=" + URLEncoder.encode(url, "utf-8")
             val authManager = AuthManager(activity, accountName, GMS_PACKAGE_NAME, service)
             val authUrl = authManager.requestAuth(false)?.auth
