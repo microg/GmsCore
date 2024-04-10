@@ -1,5 +1,7 @@
 package org.microg.gms.accountaction
 
+import java.io.Serializable
+
 sealed class Resolution
 
 /**
@@ -11,18 +13,24 @@ sealed class Resolution
 data object CryptAuthSyncKeys : Resolution()
 
 /**
- * Represents a situation in which user actions are required to fix
- * the problem.
+ * Represents a situation in which user actions are required to satisfy
+ * the requirements that need to be fulfilled before the problem can be
+ * fixed.
  */
-data class UserIntervention(val actions: Set<UserAction>) : Resolution()
+data class UserSatisfyRequirements(val actions: Set<Requirement>) : Resolution(), Serializable
 
-enum class UserAction {
+enum class Requirement {
     ENABLE_CHECKIN,
     ENABLE_GCM,
     ALLOW_MICROG_GCM,
-    ENABLE_LOCKSCREEN,
-    REAUTHENTICATE
+    ENABLE_LOCKSCREEN
 }
+
+/**
+ * Represents a situation in which the user's authentication has become
+ * invalid, and they need to enter their credentials again.
+ */
+data object Reauthenticate : Resolution()
 
 /**
  * Represents a situation that is known to be unsupported by microG.

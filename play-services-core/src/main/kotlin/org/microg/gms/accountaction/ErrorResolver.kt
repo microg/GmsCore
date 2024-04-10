@@ -2,6 +2,7 @@ package org.microg.gms.accountaction
 
 import android.accounts.Account
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.Constants
@@ -33,6 +34,11 @@ const val DEVICE_MANAGEMENT_REQUIRED = "DeviceManagementRequired"
  */
 const val DEVICE_MANAGEMENT_ADMIN_PENDING_APPROVAL = "DeviceManagementAdminPendingApproval"
 
+/**
+ * Indicates that the token stored on the device is no longer valid.
+ */
+const val BAD_AUTHENTICATION = "BadAuthentication"
+
 const val TAG = "GmsAccountErrorResolve"
 
 /**
@@ -42,58 +48,65 @@ const val TAG = "GmsAccountErrorResolve"
 fun Context.resolveAuthErrorMessage(s: String): Resolution? = if (s.startsWith("Error=")) {
     resolveAuthErrorMessage(s.drop("Error=".length))
 } else when (s) {
-    DEVICE_MANAGEMENT_SCREENLOCK_REQUIRED -> {
-
-        val actions = mutableSetOf<UserAction>()
-
-
-
-        val settingsProjection = arrayOf(
-            SettingsContract.CheckIn.ENABLED,
-            SettingsContract.CheckIn.LAST_CHECK_IN
-        )
-        SettingsContract.getSettings(this, SettingsContract.CheckIn.getContentUri(this), settingsProjection) { cursor ->
-            val checkInEnabled = cursor.getInt(0) != 0
-            val lastCheckIn = cursor.getLong(1)
-
-            if (lastCheckIn <= 0 || !checkInEnabled) {
-                // user is also asked to enable checkin if there had never been a successful checkin (network errors?)
-                actions += UserAction.ENABLE_CHECKIN
+    DEVICE_MANAGEMENT_SCREENLOCK_REQUIRED -> listOf(
+        Requirement.ENABLE_CHECKIN,
+        Requirement.ENABLE_GCM,
+        Requirement.ALLOW_MICROG_GCM,
+        Requirement.ENABLE_LOCKSCREEN
+    )
+        .associateWith { checkRequirementSatisfied(it) }
+        .filterValues { satisfied -> !satisfied }.let {
+            if (it.isEmpty()) {
+                // all requirements are satisfied, crypt auth sync keys can be run
+                CryptAuthSyncKeys
+            } else {
+                // prompt user to satisfy missing requirements
+                UserSatisfyRequirements(it.keys)
             }
         }
 
-        val gcmPrefs = GcmPrefs.get(this)
-        if (!gcmPrefs.isEnabled) {
-            actions += UserAction.ENABLE_GCM
-        }
-
-        val gcmDatabaseEntry = GcmDatabase(this).use {
-            it.getApp(Constants.GMS_PACKAGE_NAME)
-        }
-        if (gcmDatabaseEntry != null &&
-            !gcmDatabaseEntry.allowRegister ||
-            gcmDatabaseEntry == null &&
-            gcmPrefs.confirmNewApps
-        ) {
-            actions += UserAction.ALLOW_MICROG_GCM
-        }
-
-        if (!isLockscreenConfigured()) {
-            actions += UserAction.ENABLE_LOCKSCREEN
-        }
-
-        if (actions.isEmpty()) {
-            CryptAuthSyncKeys
-        } else {
-            UserIntervention(actions)
-        }
-    }
-
     DEVICE_MANAGEMENT_ADMIN_PENDING_APPROVAL, DEVICE_MANAGEMENT_REQUIRED ->
         NoResolution(NoResolutionReason.ADVANCED_DEVICE_MANAGEMENT_NOT_SUPPORTED)
+
+    BAD_AUTHENTICATION -> Reauthenticate
+
     else -> null
 }.also { Log.d(TAG, "Error was: $s. Diagnosis: $it.") }
 
+fun Context.checkRequirementSatisfied(requirement: Requirement): Boolean = when (requirement) {
+    Requirement.ENABLE_CHECKIN -> isCheckinEnabled()
+    Requirement.ENABLE_GCM -> isGcmEnabled()
+    Requirement.ALLOW_MICROG_GCM -> isMicrogAppGcmAllowed()
+    Requirement.ENABLE_LOCKSCREEN -> isLockscreenConfigured()
+}
+
+fun Context.isCheckinEnabled(): Boolean {
+    val settingsProjection = arrayOf(
+        SettingsContract.CheckIn.ENABLED,
+        SettingsContract.CheckIn.LAST_CHECK_IN
+    )
+    return SettingsContract.getSettings(this, SettingsContract.CheckIn.getContentUri(this), settingsProjection) { cursor ->
+        val checkInEnabled = cursor.getInt(0) != 0
+        val lastCheckIn = cursor.getLong(1)
+
+        // user is also asked to enable checkin if there had never been a successful checkin (network errors?)
+        lastCheckIn > 0 && checkInEnabled
+    }
+}
+
+fun Context.isGcmEnabled(): Boolean = GcmPrefs.get(this).isEnabled
+
+fun Context.isMicrogAppGcmAllowed(): Boolean {
+    val gcmPrefs = GcmPrefs.get(this)
+    val gcmDatabaseEntry = GcmDatabase(this).use {
+        it.getApp(Constants.GMS_PACKAGE_NAME)
+    }
+    return !(gcmDatabaseEntry != null &&
+            !gcmDatabaseEntry.allowRegister ||
+            gcmDatabaseEntry == null &&
+            gcmPrefs.confirmNewApps)
+
+}
 
 fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
     when (this) {
@@ -108,8 +121,15 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
             Log.w(TAG, "This account cannot be used with microG due to $reason")
             return null
         }
-        is UserIntervention -> {
+        is UserSatisfyRequirements -> {
             Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                context.sendAccountActionNotification(account, this)
+            }
+            return null
+        }
+        Reauthenticate -> {
+            Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
             return null
         }
     }

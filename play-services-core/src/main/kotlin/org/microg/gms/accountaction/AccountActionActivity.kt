@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -25,18 +25,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.R
 
+internal const val INTENT_KEY_USER_ACTION = "userAction"
+internal const val INTENT_KEY_ACCOUNT_NAME = "accountName"
+
 @RequiresApi(21)
 class AccountActionActivity : ComponentActivity() {
+
+    // mutableStateMapOf() returns an unordered map
+    val taskMap: MutableList<Pair<Requirement, Boolean>> = mutableStateListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState == null) {
+            val requirements = intent.getSerializableExtra(INTENT_KEY_USER_ACTION) as Array<Requirement>
+            taskMap.addAll(requirements.map { it to false })
+        }
+
+        val accountName = intent.getStringExtra(INTENT_KEY_ACCOUNT_NAME) ?: "<?>"
+
         setContent {
-            org.microg.gms.accountaction.Preview()
+            Content(accountName, taskMap.toMap()) {
+                finish()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        for ((index, task) in taskMap.withIndex()) {
+            taskMap[index] = task.component1() to checkRequirementSatisfied(task.component1())
         }
     }
 }
 
 @Composable
-fun Content(userTasks: Map<UserAction, Boolean>, finish: () -> Unit) {
+fun Content(accountName: String, taskMap: Map<Requirement, Boolean>, finish: () -> Unit) {
     Column {
         Column {
             Text(
@@ -45,7 +70,7 @@ fun Content(userTasks: Map<UserAction, Boolean>, finish: () -> Unit) {
                 style = MaterialTheme.typography.headlineLarge
             )
             Text(
-                text = stringResource(id = R.string.auth_action_activity_explanation, "admin@fynngodau.de"),
+                text = stringResource(id = R.string.auth_action_activity_explanation, accountName),
                 modifier = Modifier.padding(16.dp),
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -53,10 +78,11 @@ fun Content(userTasks: Map<UserAction, Boolean>, finish: () -> Unit) {
         }
         Surface(Modifier.fillMaxHeight()) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                UserInterventionComponents(userActions = userTasks)
+                UserInterventionComponents(userActions = taskMap)
+
                 Button(
                     onClick = finish,
-                    enabled = false,
+                    enabled = !taskMap.containsValue(false),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(
                             id = R.color.login_blue_theme_primary
@@ -77,11 +103,12 @@ fun Content(userTasks: Map<UserAction, Boolean>, finish: () -> Unit) {
 @Composable
 fun Preview() {
     Content(
+        "admin@example.com",
         mapOf(
-            UserAction.ENABLE_CHECKIN to true,
-            UserAction.ENABLE_GCM to true,
-            UserAction.ALLOW_MICROG_GCM to false,
-            UserAction.ENABLE_LOCKSCREEN to false
+            Requirement.ENABLE_CHECKIN to true,
+            Requirement.ENABLE_GCM to true,
+            Requirement.ALLOW_MICROG_GCM to false,
+            Requirement.ENABLE_LOCKSCREEN to false
         )
     ) {}
 }
