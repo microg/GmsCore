@@ -18,16 +18,14 @@ import com.google.android.gms.R
 
 private const val CHANNEL_ID = "AccountNotification"
 
-internal const val INTENT_KEY_USER_ACTION = "userAction"
-internal const val INTENT_KEY_ACCOUNT_NAME = "accountName"
 
 @RequiresApi(21)
-fun Context.sendAccountActionNotification(account: Account, action: UserAction) {
+fun Context.sendAccountActionNotification(account: Account, action: UserSatisfyRequirements) {
 
     registerAccountNotificationChannel()
 
     val intent: PendingIntent =Intent(this, AccountActionActivity::class.java).apply {
-        putExtra(INTENT_KEY_USER_ACTION, action)
+        putExtra(INTENT_KEY_USER_ACTION, action.actions.toTypedArray())
         putExtra(INTENT_KEY_ACCOUNT_NAME, account.name)
     }.let {
         PendingIntent.getActivity(

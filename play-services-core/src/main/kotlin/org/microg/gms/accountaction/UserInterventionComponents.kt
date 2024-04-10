@@ -2,9 +2,6 @@ package org.microg.gms.accountaction
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.os.ResultReceiver
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -32,25 +30,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.R
-import org.microg.gms.accountaction.UserAction.*
+import org.microg.gms.accountaction.Requirement.*
 import org.microg.gms.common.Constants
 import org.microg.gms.ui.AskPushPermission
-import kotlin.coroutines.resume
 
-const val ACTION_CHECKIN = "org.microg.gms.settings.DEVICE_REGISTRATION_SETTINGS"
+const val ACTION_CHECKIN = "org.microg.gms.settings.CHECKIN_SETTINGS"
 const val ACTION_GCM = "org.microg.gms.settings.GCM_SETTINGS"
-const val ACTION_GCM_APP = "org.microg.gms.settings.GCM_APP_SETTINGS"
-const val URI_GCM_MICROG_APP = "x-gms-settings://gcm/${Constants.GMS_PACKAGE_NAME}"
 
 @Composable
-fun UserInterventionComponents(userActions: Map<UserAction, Boolean>) {
+fun UserInterventionComponents(userActions: Map<Requirement, Boolean>) {
     for ((index, action) in userActions.entries.withIndex()) {
         val context = LocalContext.current as Activity
+        val displayIndex = if (userActions.size > 1) index + 1 else null
         when (action.component1()) {
             ENABLE_CHECKIN -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_checkin),
                 description = stringResource(id = R.string.auth_action_step_enable_checkin_description),
-                sequenceNumber = index + 1,
+                sequenceNumber = displayIndex,
                 completed = action.component2()
             ) {
                 Intent(ACTION_CHECKIN).let { context.startActivityForResult(it, 0) }
@@ -58,7 +54,7 @@ fun UserInterventionComponents(userActions: Map<UserAction, Boolean>) {
             ENABLE_GCM -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_gcm),
                 description = stringResource(id = R.string.auth_action_step_enable_gcm_description),
-                sequenceNumber = index + 1,
+                sequenceNumber = displayIndex,
                 completed = action.component2()
             ) {
                 Intent(ACTION_GCM).let { context.startActivityForResult(it, 1) }
@@ -66,7 +62,7 @@ fun UserInterventionComponents(userActions: Map<UserAction, Boolean>) {
             ALLOW_MICROG_GCM -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_allow_microg_gcm),
                 description = stringResource(id = R.string.auth_action_step_allow_microg_gcm_description),
-                sequenceNumber = index + 1,
+                sequenceNumber = displayIndex,
                 completed = action.component2()
             ) {
                 Intent(context, AskPushPermission::class.java).apply {
@@ -80,7 +76,7 @@ fun UserInterventionComponents(userActions: Map<UserAction, Boolean>) {
             ENABLE_LOCKSCREEN -> UserInterventionCommonComponent(
                 title = stringResource(id = R.string.auth_action_step_enable_lockscreen),
                 description = stringResource(id = R.string.auth_action_step_enable_lockscreen_description),
-                sequenceNumber = index + 1,
+                sequenceNumber = displayIndex,
                 completed = action.component2()
             ) {
                 runCatching {
@@ -90,7 +86,6 @@ fun UserInterventionComponents(userActions: Map<UserAction, Boolean>) {
                 }
 
             }
-            REAUTHENTICATE -> TODO()
         }
     }
 }
@@ -126,9 +121,15 @@ fun UserInterventionCommonComponent(title: String, description: String, sequence
                             tint = Color.White
                         )
                     } else {
-                        sequenceNumber?.let {
+                        if (sequenceNumber == null) {
+                            Canvas(modifier = Modifier.size(12.dp).align(Alignment.Center)) {
+                                drawCircle(
+                                    color = Color.White
+                                )
+                            }
+                        } else {
                             Text(
-                                text = it.toString(),
+                                text = sequenceNumber.toString(),
                                 modifier = Modifier.align(Alignment.Center),
                                 style = LocalTextStyle.current.copy(color = Color.White)
                             )
@@ -166,8 +167,17 @@ fun UserInterventionCommonComponent(title: String, description: String, sequence
 @Composable
 fun PreviewInterventionComponent() {
     Column {
-        UserInterventionComponents(userActions =
-           mapOf(ENABLE_CHECKIN to true, ENABLE_GCM to true, ALLOW_MICROG_GCM to false, ENABLE_LOCKSCREEN to false)
+        UserInterventionComponents(
+            userActions = mapOf(
+                ENABLE_CHECKIN to true,
+                ENABLE_GCM to true,
+                ALLOW_MICROG_GCM to false,
+                ENABLE_LOCKSCREEN to false
+            )
+        )
+        HorizontalDivider()
+        UserInterventionComponents(
+            userActions = mapOf(ENABLE_LOCKSCREEN to false)
         )
     }
 }
