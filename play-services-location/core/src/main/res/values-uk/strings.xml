@@ -21,4 +21,17 @@
     <string name="prefcat_location_wifi_title">Розташування Wi-Fi</string>
     <string name="prefcat_geocoder_title">Розв\'язувач адрес</string>
     <string name="pref_location_cell_mls_enabled_summary">Отримайте розташування стільникових вишок мобільної мережі від служби Mozilla Location Service.</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Для кращої роботи увімкніть функцію визначення місцеположення пристрою, яка використовує службу визначення місцеположення microG</string>
+    <string name="location_settings_dialog_message_title_to_continue">Щоб продовжити, увімкніть визначення місцеположення пристрою, який використовує службу визначення місцеположення microG</string>
+    <string name="location_settings_dialog_btn_sure">Гаразд</string>
+    <string name="location_settings_dialog_message_gls_consent">Використання сервісу визначення місцеположення microG; в рамках цього сервісу microG може періодично збирати дані про ваше перебування та використовувати ці дані анонімно для підвищення точності визначення місцеположення та надання послуг на основі координат.</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Пристрій повинен буде:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Використання GPS, Wi-Fi, мобільні мережі та датників</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Щоб подробиць, перейдіть до налаштувань місцеположення.</string>
+    <string name="location_settings_dialog_btn_cancel">Ні, дякую</string>
+    <string name="pref_location_custom_url_title">Налаштування URL-адресу служби</string>
+    <string name="pref_location_custom_url_reset">Скинути</string>
+    <string name="pref_location_custom_url_summary">Це дозволяє встановити власну URL-адресу служби. Неправильні значення можуть призвести до того, що служби визначення місцеположення не відповідатимуть або будуть недоступні.</string>
+    <string name="pref_location_custom_url_details">Шлях /v1/geolocate буде додано автоматично. Якщо постачальник послуг з визначення місцяположення вимагає ключ, його можна додати як параметр запиту до кореневої URL-адреси.</string>
+    <string name="pref_location_custom_url_input_hint">Власна URL-адреса служби</string>
 </resources>
