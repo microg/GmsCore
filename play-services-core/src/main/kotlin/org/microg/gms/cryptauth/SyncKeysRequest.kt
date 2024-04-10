@@ -11,6 +11,7 @@ import cryptauthv2.ClientAppMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import okio.ByteString.Companion.toByteString
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.auth.AuthConstants
@@ -36,7 +37,7 @@ private const val TAG = "SyncKeysRequest"
 
 private const val GCM_REGISTER_SENDER = "745476177629"
 private const val GCM_REGISTER_SUBTYPE = "745476177629"
-private const val GCM_REGISTER_SUBSCIPTION = "745476177629"
+private const val GCM_REGISTER_SUBSCRIPTION = "745476177629"
 private const val GCM_REGISTER_SCOPE = "GCM"
 
 private const val AFTER_REQUEST_DELAY = 500L
@@ -49,12 +50,20 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
     // Instance ID token for use in CryptAuth query
     val instanceToken = completeRegisterRequest(context, GcmDatabase(context), RegisterRequest().build(context)
         .checkin(lastCheckinInfo)
-        .app("com.google.android.gms", Constants.GMS_PACKAGE_SIGNATURE_SHA1, BuildConfig.VERSION_CODE)
+        .app("com.google.android.gms", CERTIFICATE.lowercase(), BuildConfig.VERSION_CODE)
         .sender(GCM_REGISTER_SENDER)
-        .extraParam("subscription", GCM_REGISTER_SUBSCIPTION)
-        .extraParam("X-subscription", GCM_REGISTER_SUBSCIPTION)
+        .extraParam("subscription", GCM_REGISTER_SUBSCRIPTION)
+        .extraParam("X-subscription", GCM_REGISTER_SUBSCRIPTION)
         .extraParam("subtype", GCM_REGISTER_SUBTYPE)
         .extraParam("X-subtype", GCM_REGISTER_SUBTYPE)
+        .extraParam("app_ver", BuildConfig.VERSION_CODE.toString())
+        .extraParam("osv", "30")
+        .extraParam("cliv", "iid-202414000")
+        .extraParam("gmsv", BuildConfig.VERSION_CODE.toString())
+        .extraParam("app_ver_name","%09d".format(BuildConfig.VERSION_CODE).let {
+            "${it.substring(0, 2)}.${it.substring(2, 4)}.${it.substring(4, 6)} (190800-{{cl}})"
+        })
+        .info("s_mGjPgQdoQeQEb1aBJ6XhxiEx997Bg")
         .extraParam("scope", GCM_REGISTER_SCOPE)
     ).let {
         if (!it.containsKey(GcmConstants.EXTRA_REGISTRATION_ID)) {
@@ -74,6 +83,7 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
     val clientAppMetadata = ClientAppMetadata(
         application_specific_metadata = listOf(
             ApplicationSpecificMetadata(
+                gcm_registration_id = instanceToken.toByteArray().toByteString(),
                 notification_enabled = true,
                 device_software_version = "%09d".format(BuildConfig.VERSION_CODE).let {
                     "${it.substring(0, 2)}.${it.substring(2, 4)}.${it.substring(4, 6)} (190800-{{cl}})"
