@@ -227,6 +227,7 @@ class LocationManagerInstance(
             val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
             val bleRequested = settingsRequest?.needBle == true
             val statusCode = when {
+                !states.mgLocationUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
                 gpsRequested && states.gpsPresent && !states.gpsUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
                 networkLocationRequested && states.networkLocationPresent && !states.networkLocationUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
                 bleRequested && states.blePresent && !states.bleUsable -> CommonStatusCodes.RESOLUTION_REQUIRED

@@ -5,12 +5,15 @@
 
 package org.microg.gms.location.manager
 
+import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.*
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +36,7 @@ import kotlin.math.max
 class LocationRequestManager(private val context: Context, override val lifecycle: Lifecycle, private val postProcessor: LocationPostProcessor, private val database: LocationAppsDatabase = LocationAppsDatabase(context), private val requestDetailsUpdatedCallback: () -> Unit) :
     IBinder.DeathRecipient, LifecycleOwner {
     private val lock = Mutex()
+    private val permissions = mutableListOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     private val binderRequests = mutableMapOf<IBinder, LocationRequestHolder>()
     private val pendingIntentRequests = mutableMapOf<PendingIntent, LocationRequestHolder>()
     private val cacheManager by lazy { IntentCacheManager.create<LocationManagerService, LocationRequestHolderParcelable>(context, CACHE_TYPE) }
@@ -43,6 +47,9 @@ class LocationRequestManager(private val context: Context, override val lifecycl
         private set
     var workSource = WorkSource()
         private set
+    private var hasPermission: Boolean =
+        permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
+    private var permissionChanged: Boolean = false
     private var requestDetailsUpdated = false
     private var checkingWhileHighAccuracy = false
 
@@ -196,7 +203,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             newWorkSource.add(holder.workSource)
         }
         if (newPriority == PRIORITY_HIGH_ACCURACY && priority != PRIORITY_HIGH_ACCURACY) lifecycleScope.launchWhenStarted { checkWhileHighAccuracy() }
-        if (newPriority != priority || newGranularity != granularity || newIntervalMillis != intervalMillis || newWorkSource != workSource) {
+        if (newPriority != priority || newGranularity != granularity || newIntervalMillis != intervalMillis || newWorkSource != workSource || permissionChanged) {
             priority = newPriority
             granularity = newGranularity
             intervalMillis = newIntervalMillis
@@ -237,7 +244,13 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 }
                 binderRequests.remove(binder)
             }
-            if (pendingIntentsToRemove.isNotEmpty() || bindersToRemove.isNotEmpty()) {
+            permissionChanged = if (!hasPermission) {
+                permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
+                    .also { hasPermission = it }
+            } else {
+                false
+            }
+            if (pendingIntentsToRemove.isNotEmpty() || bindersToRemove.isNotEmpty() || permissionChanged) {
                 recalculateRequests()
             }
         }
