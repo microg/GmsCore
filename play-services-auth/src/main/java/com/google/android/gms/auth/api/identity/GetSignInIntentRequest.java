@@ -17,6 +17,7 @@ import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -39,16 +40,17 @@ public class GetSignInIntentRequest extends AbstractSafeParcelable {
     @Field(value = 6, getterName = "getTheme")
     private final int theme;
 
+    @NonNull
     @Override
     public String toString() {
-        return "GetSignInIntentRequest{" +
-                "serverClientId='" + serverClientId + '\'' +
-                ", hostedDomainFilter='" + hostedDomainFilter + '\'' +
-                ", sessionId='" + sessionId + '\'' +
-                ", nonce='" + nonce + '\'' +
-                ", requestVerifiedPhoneNumber=" + requestVerifiedPhoneNumber +
-                ", theme=" + theme +
-                '}';
+        return ToStringHelper.name("GetSignInIntentRequest")
+                .field("serverClientId", serverClientId)
+                .field("hostedDomainFilter", hostedDomainFilter)
+                .field("sessionId", sessionId)
+                .field("nonce", nonce)
+                .field("requestVerifiedPhoneNumber", requestVerifiedPhoneNumber)
+                .field("theme", theme)
+                .end();
     }
 
     @Constructor
