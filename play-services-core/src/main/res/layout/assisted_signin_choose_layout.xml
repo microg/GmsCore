@@ -42,20 +42,27 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sign_multi_title" />
 
-    <LinearLayout
-        android:id="@+id/sign_multi_account_container"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sign_multi_account_container_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/ic_choose_rounded_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sign_multi_description"/>
+        app:layout_constraintTop_toBottomOf="@id/sign_multi_description"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/sign_multi_account_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/ic_choose_rounded_background" />
+
+    </androidx.core.widget.NestedScrollView>
 
     <Space
-        app:layout_constraintTop_toBottomOf="@id/sign_multi_account_container"
+        app:layout_constraintTop_toBottomOf="@id/sign_multi_account_container_scroll"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_width="match_parent"
