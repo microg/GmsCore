@@ -23,7 +23,6 @@ import com.google.android.gms.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.firstparty.proximity.data.Permit
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -35,7 +34,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.microg.gms.people.PeopleManager
-import org.microg.gms.signin.Storage
 import org.microg.gms.utils.getApplicationLabel
 
 private const val TAG = "AssistedSignInFragment"

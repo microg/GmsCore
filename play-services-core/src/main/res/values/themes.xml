@@ -3,7 +3,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme -->
     <style name="Theme.Base" parent="Theme.Material3.DynamicColors.DayNight">
@@ -174,7 +174,7 @@
 
     <style name="GISDescriptionStyle" parent="@style/TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
-        <item name="android:letterSpacing">0.014</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0.014</item>
     </style>
 
 </resources>
