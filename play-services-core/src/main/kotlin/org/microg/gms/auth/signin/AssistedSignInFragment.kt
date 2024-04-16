@@ -53,7 +53,6 @@ class AssistedSignInFragment(
     private var container: FrameLayout? = null
     private var loginJob: Job? = null
     private var isSigning = false
-    private var autoSignInAccount: Account? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -70,7 +69,6 @@ class AssistedSignInFragment(
     }
 
     private fun autoSingleSignIn(account: Account, permitted: Boolean = false) {
-        autoSignInAccount = account
         if (beginSignInRequest.isAutoSelectEnabled) {
             prepareSignInLoading(account, permitted = permitted) { prepareChooseLogin(account, permitted = permitted) }
         } else {
