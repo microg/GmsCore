@@ -7,6 +7,7 @@ package org.microg.gms.auth.signin
 
 import android.accounts.AccountManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -105,7 +106,7 @@ class AssistedSignInActivity : AppCompatActivity() {
             AssistedSignInFragment(googleSignInOptions!!, beginSignInRequest!!, accounts, clientPackageName!!,
                 { errorResult(it) },
                 { loginResult(it) })
-                .show(supportFragmentManager, "AssistedSignInDialogFragment")
+                .show(supportFragmentManager, AssistedSignInFragment.TAG)
             return
         }
 

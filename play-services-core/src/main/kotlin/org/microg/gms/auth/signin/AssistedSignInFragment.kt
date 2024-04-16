@@ -10,6 +10,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,8 +37,6 @@ import kotlinx.coroutines.withContext
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
-private const val TAG = "AssistedSignInFragment"
-
 class AssistedSignInFragment(
     private val options: GoogleSignInOptions,
     private val beginSignInRequest: BeginSignInRequest,
@@ -46,6 +45,10 @@ class AssistedSignInFragment(
     private val errorBlock: (Status) -> Unit,
     private val loginBlock: (GoogleSignInAccount?) -> Unit
 ) : BottomSheetDialogFragment() {
+
+    companion object {
+        const val TAG = "AssistedSignInFragment"
+    }
 
     private var cancelBtn: ImageView? = null
     private var container: FrameLayout? = null
@@ -148,8 +151,7 @@ class AssistedSignInFragment(
             if (cancelBlock != null) {
                 loadingView.findViewById<TextView>(R.id.sign_cancel).visibility = View.VISIBLE
                 loadingView.findViewById<TextView>(R.id.sign_cancel).setOnClickListener {
-                    isSigning = false
-                    loginJob?.cancel()
+                    cancelLoginIn()
                     cancelBlock()
                 }
             }
@@ -203,6 +205,14 @@ class AssistedSignInFragment(
             dialog.behavior.isDraggable = false
             dialog.setCanceledOnTouchOutside(false)
         }
+        dialog.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                cancelLoginIn()
+                dialog.dismiss()
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
         return dialog
     }
 
@@ -248,6 +258,12 @@ class AssistedSignInFragment(
             }
             loginBlock(googleSignInAccount)
         }
+    }
+
+    private fun cancelLoginIn() {
+        Log.d(TAG, "cancelLoginIn ")
+        isSigning = false
+        loginJob?.cancel()
     }
 
 }
