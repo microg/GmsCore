@@ -39,6 +39,18 @@ public class GetSignInIntentRequest extends AbstractSafeParcelable {
     @Field(value = 6, getterName = "getTheme")
     private final int theme;
 
+    @Override
+    public String toString() {
+        return "GetSignInIntentRequest{" +
+                "serverClientId='" + serverClientId + '\'' +
+                ", hostedDomainFilter='" + hostedDomainFilter + '\'' +
+                ", sessionId='" + sessionId + '\'' +
+                ", nonce='" + nonce + '\'' +
+                ", requestVerifiedPhoneNumber=" + requestVerifiedPhoneNumber +
+                ", theme=" + theme +
+                '}';
+    }
+
     @Constructor
     GetSignInIntentRequest(@Param(1) String serverClientId, @Param(2) String hostedDomainFilter, @Param(3) String sessionId, @Param(4) String nonce, @Param(5) boolean requestVerifiedPhoneNumber, @Param(6) int theme) {
         this.serverClientId = serverClientId;

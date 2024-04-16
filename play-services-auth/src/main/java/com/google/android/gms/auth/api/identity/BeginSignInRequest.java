@@ -18,6 +18,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRequestOptions;
 import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,20 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
     private final PasskeysRequestOptions passkeysRequestOptions;
     @Field(value = 7, getterName = "getPasskeyJsonRequestOptions")
     private final PasskeyJsonRequestOptions passkeyJsonRequestOptions;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("BeginSignInRequest")
+                .field("PasswordRequestOptions", passwordRequestOptions)
+                .field("GoogleIdTokenRequestOptions", googleIdTokenRequestOptions)
+                .field("sessionId", sessionId)
+                .field("autoSelectEnabled", autoSelectEnabled)
+                .field("theme", theme)
+                .field("PasskeysRequestOptions", passkeysRequestOptions)
+                .field("PasskeyJsonRequestOptions", passkeyJsonRequestOptions)
+                .end();
+    }
 
     @Constructor
     BeginSignInRequest(@Param(1) PasswordRequestOptions passwordRequestOptions, @Param(2) GoogleIdTokenRequestOptions googleIdTokenRequestOptions, @Param(3) String sessionId, @Param(4) boolean autoSelectEnabled, @Param(5) int theme, @Param(6) PasskeysRequestOptions passkeysRequestOptions, @Param(7) PasskeyJsonRequestOptions passkeyJsonRequestOptions) {
@@ -115,6 +130,20 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
         private final List<String> idTokenDepositionScopes;
         @Field(value = 7, getterName = "requestVerifiedPhoneNumber")
         private final boolean requestVerifiedPhoneNumber;
+
+        @NonNull
+        @Override
+        public String toString() {
+            return ToStringHelper.name("GoogleIdTokenRequestOptions")
+                    .field("supported", supported)
+                    .field("serverClientId", serverClientId)
+                    .field("nonce", nonce)
+                    .field("filterByAuthorizedAccounts", filterByAuthorizedAccounts)
+                    .field("linkedServiceId", linkedServiceId)
+                    .field("idTokenDepositionScopes", idTokenDepositionScopes)
+                    .field("requestVerifiedPhoneNumber", requestVerifiedPhoneNumber)
+                    .end();
+        }
 
         @Hide
         @Constructor
@@ -316,6 +345,15 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
         @Field(value = 2, getterName = "getRequestJson")
         private final String requestJson;
 
+        @NonNull
+        @Override
+        public String toString() {
+            return ToStringHelper.name("PasskeyJsonRequestOptions")
+                    .field("supported", supported)
+                    .field("requestJson", requestJson)
+                    .end();
+        }
+
         @Constructor
         @Hide
         public PasskeyJsonRequestOptions(@Param(1) boolean supported, @Param(2) String requestJson) {
@@ -408,6 +446,16 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
         private final byte[] challenge;
         @Field(value = 3, getterName = "getRpId")
         private final String rpId;
+
+        @NonNull
+        @Override
+        public String toString() {
+            return ToStringHelper.name("PasskeysRequestOptions")
+                    .field("supported", supported)
+                    .field("challenge", challenge)
+                    .field("rpId", rpId)
+                    .end();
+        }
 
         @Constructor
         @Hide
@@ -515,6 +563,14 @@ public class BeginSignInRequest extends AbstractSafeParcelable {
     public static class PasswordRequestOptions extends AbstractSafeParcelable {
         @Field(value = 1, getterName = "isSupported")
         public final boolean supported;
+
+        @NonNull
+        @Override
+        public String toString() {
+            return ToStringHelper.name("PasswordRequestOptions")
+                    .field("supported", supported)
+                    .end();
+        }
 
         @Constructor
         @Hide
