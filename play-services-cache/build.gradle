@@ -1,0 +1,36 @@
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+android {
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.9"
+    }
+
+    namespace 'org.microg.gms.cache'
+    compileSdkVersion androidCompileSdk
+
+
+    defaultConfig {
+        minSdkVersion androidMinSdk
+        targetSdkVersion androidTargetSdk
+    }
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+dependencies {
+    implementation("androidx.compose.runtime:runtime:1.0.0")
+    // coroutines
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation 'androidx.datastore:datastore-preferences-rxjava3:1.0.0'
+}

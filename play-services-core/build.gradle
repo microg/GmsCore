@@ -63,6 +63,7 @@ dependencies {
     implementation project(':play-services-recaptcha')
     implementation project(':play-services-safetynet')
     implementation project(':play-services-tasks-ktx')
+    implementation project(':play-services-cache')
     implementation project(':play-services-fitness')
 
     mapboxRuntimeOnly project(':play-services-maps-core-mapbox')
@@ -134,9 +135,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'MissingTranslation', 'GetLocales', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
-    }
 
     buildTypes {
         release {
@@ -181,10 +179,15 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/ASL2.0'
         jniLibs {
             useLegacyPackaging true
         }
+        resources {
+            excludes += ['META-INF/ASL2.0']
+        }
+    }
+    lint {
+        disable 'MissingTranslation', 'GetLocales', 'InvalidPackage', 'BatteryLife', 'ImpliedQuantity', 'MissingQuantity', 'InvalidWakeLockTag', 'UniquePermission'
     }
 }
 

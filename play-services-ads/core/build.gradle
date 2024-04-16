@@ -9,7 +9,7 @@ apply plugin: 'kotlin-android'
 dependencies {
     api project(':play-services-ads')
     implementation project(':play-services-base-core')
-
+    implementation project(':play-services-cache')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 }
 

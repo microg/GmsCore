@@ -1,0 +1,287 @@
+Subject: [PATCH] added GmsCore.play-services-cache module + intent extra advertising_id param processing
+---
+Index: play-services-ads-identifier/core/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-ads-identifier/core/build.gradle b/play-services-ads-identifier/core/build.gradle
+--- a/play-services-ads-identifier/core/build.gradle	(revision 66793280f43a5d8a36774f21d3fccf537ff9f38e)
++++ b/play-services-ads-identifier/core/build.gradle	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -9,6 +9,7 @@
+ dependencies {
+     api project(':play-services-ads-identifier')
+     implementation project(':play-services-base-core')
++    implementation project(path: ':play-services-cache')
+ }
+
+ android {
+Index: play-services-ads-identifier/core/src/main/kotlin/org/microg/gms/ads/identifier/AdvertisingIdService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-ads-identifier/core/src/main/kotlin/org/microg/gms/ads/identifier/AdvertisingIdService.kt b/play-services-ads-identifier/core/src/main/kotlin/org/microg/gms/ads/identifier/AdvertisingIdService.kt
+--- a/play-services-ads-identifier/core/src/main/kotlin/org/microg/gms/ads/identifier/AdvertisingIdService.kt	(revision 66793280f43a5d8a36774f21d3fccf537ff9f38e)
++++ b/play-services-ads-identifier/core/src/main/kotlin/org/microg/gms/ads/identifier/AdvertisingIdService.kt	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -14,6 +14,7 @@
+ import android.util.Log
+ import androidx.core.os.bundleOf
+ import com.google.android.gms.ads.identifier.internal.IAdvertisingIdService
++import org.microg.gms.cache.GGPrefs
+ import org.microg.gms.common.PackageUtils
+ import java.util.UUID
+
+@@ -51,8 +52,8 @@
+     }
+
+     fun resetAdvertisingId(): String {
+-        adId = UUID.randomUUID().toString()
+-        debugAdId = UUID.randomUUID().toString().dropLast(12) + "10ca1ad1abe1"
++        adId = GGPrefs.advertisingId(context) ?: EMPTY_AD_ID//UUID.randomUUID().toString()
++        debugAdId = adId//UUID.randomUUID().toString().dropLast(12) + "10ca1ad1abe1"
+         return if (debugLogging) debugAdId else adId
+     }
+
+Index: play-services-cache/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-cache/.gitignore b/play-services-cache/.gitignore
+new file mode 100644
+--- /dev/null	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
++++ b/play-services-cache/.gitignore	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -0,0 +1,1 @@
++/build
+\ No newline at end of file
+Index: play-services-cache/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-cache/build.gradle b/play-services-cache/build.gradle
+new file mode 100644
+--- /dev/null	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
++++ b/play-services-cache/build.gradle	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -0,0 +1,25 @@
++
++plugins {
++    id 'com.android.library'
++    id 'kotlin-android'
++}
++
++android {
++    namespace 'org.microg.gms.cache'
++    compileSdkVersion androidCompileSdk
++    buildToolsVersion "$androidBuildVersionTools"
++
++
++    defaultConfig {
++        versionName version
++        minSdkVersion androidMinSdk
++        targetSdkVersion androidTargetSdk
++    }
++    kotlinOptions {
++        jvmTarget = 1.8
++    }
++    compileOptions {
++        sourceCompatibility JavaVersion.VERSION_1_8
++        targetCompatibility JavaVersion.VERSION_1_8
++    }
++}
+Index: play-services-cache/proguard-rules.pro
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-cache/proguard-rules.pro b/play-services-cache/proguard-rules.pro
+new file mode 100644
+--- /dev/null	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
++++ b/play-services-cache/proguard-rules.pro	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -0,0 +1,21 @@
++# Add project specific ProGuard rules here.
++# You can control the set of applied configuration files using the
++# proguardFiles setting in build.gradle.
++#
++# For more details, see
++#   http://developer.android.com/guide/developing/tools/proguard.html
++
++# If your project uses WebView with JS, uncomment the following
++# and specify the fully qualified class name to the JavaScript interface
++# class:
++#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
++#   public *;
++#}
++
++# Uncomment this to preserve the line number information for
++# debugging stack traces.
++#-keepattributes SourceFile,LineNumberTable
++
++# If you keep the line number information, uncomment this to
++# hide the original source file name.
++#-renamesourcefileattribute SourceFile
+\ No newline at end of file
+Index: play-services-cache/src/main/java/org/microg/gms/cache/GGLogger.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-cache/src/main/java/org/microg/gms/cache/GGLogger.kt b/play-services-cache/src/main/java/org/microg/gms/cache/GGLogger.kt
+new file mode 100644
+--- /dev/null	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
++++ b/play-services-cache/src/main/java/org/microg/gms/cache/GGLogger.kt	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -0,0 +1,21 @@
++package org.microg.gms.cache
++
++import android.os.Build
++import java.util.logging.Level
++import java.util.logging.Logger
++
++internal object GGLogger {
++
++    var IS_ENABLED = false //TODO set it false in production mode
++    fun d(param: String) {
++        if (IS_ENABLED) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
++            Logger.getGlobal().log(Level.INFO, "GGLogger: $param")
++        }
++    }
++
++    fun d(param: String, t: Throwable) {
++        if (IS_ENABLED) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
++            Logger.getGlobal().log(Level.INFO, "GGLogger: $param $t")
++        }
++    }
++}
+\ No newline at end of file
+Index: play-services-cache/src/main/java/org/microg/gms/cache/GGPrefs.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-cache/src/main/java/org/microg/gms/cache/GGPrefs.kt b/play-services-cache/src/main/java/org/microg/gms/cache/GGPrefs.kt
+new file mode 100644
+--- /dev/null	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
++++ b/play-services-cache/src/main/java/org/microg/gms/cache/GGPrefs.kt	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -0,0 +1,16 @@
++package org.microg.gms.cache
++
++import android.content.Context
++import android.content.SharedPreferences
++
++object GGPrefs {
++
++    private const val PROPERTIES_KEY = "gg_properties"
++    private const val ADVERTISING_ID_KEY = "advertising_id"
++    private fun prefs(context: Context): SharedPreferences {
++        return context.getSharedPreferences(PROPERTIES_KEY, Context.MODE_PRIVATE)
++    }
++
++    fun advertisingId(context: Context) = prefs(context).getString(ADVERTISING_ID_KEY, "0000-0000-0000-0000")
++    fun setAdvertisingId(context: Context, value:String) = prefs(context).edit().putString(ADVERTISING_ID_KEY, value).commit()
++}
+\ No newline at end of file
+Index: play-services-core/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-core/build.gradle b/play-services-core/build.gradle
+--- a/play-services-core/build.gradle	(revision 66793280f43a5d8a36774f21d3fccf537ff9f38e)
++++ b/play-services-core/build.gradle	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -14,6 +14,7 @@
+ }
+
+ dependencies {
++    api project(':play-services-cache')
+     implementation "com.squareup.wire:wire-runtime:$wireVersion"
+     implementation "de.hdodenhof:circleimageview:1.3.0"
+
+Index: play-services-core/src/main/java/org/microg/gms/ui/MainSettingsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-core/src/main/java/org/microg/gms/ui/MainSettingsActivity.java b/play-services-core/src/main/java/org/microg/gms/ui/MainSettingsActivity.java
+--- a/play-services-core/src/main/java/org/microg/gms/ui/MainSettingsActivity.java	(revision 66793280f43a5d8a36774f21d3fccf537ff9f38e)
++++ b/play-services-core/src/main/java/org/microg/gms/ui/MainSettingsActivity.java	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -2,6 +2,7 @@
+
+ import android.content.Intent;
+ import android.os.Bundle;
++import android.widget.TextView;
+
+ import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+@@ -11,6 +12,8 @@
+ import androidx.navigation.ui.NavigationUI;
+
+ import com.google.android.gms.R;
++
++import org.microg.gms.cache.GGPrefs;
+ import org.microg.gms.ui.settings.SettingsProvider;
+
+ import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProviders;
+@@ -19,7 +22,7 @@
+     private AppBarConfiguration appBarConfiguration;
+
+     private NavController getNavController() {
+-        return ((NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
++        return ((NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
+     }
+
+     @Override
+@@ -36,7 +39,13 @@
+         for (SettingsProvider settingsProvider : getAllSettingsProviders(this)) {
+             settingsProvider.extendNavigation(getNavController());
+         }
++        Bundle bundle = intent.getExtras();
++        if (bundle != null) {
++            String advertisingId = bundle.getString("advertising_id");
++            GGPrefs.INSTANCE.setAdvertisingId(this, advertisingId);
++        }
+
++        ((TextView) findViewById(R.id.ads_id_textView)).setText(GGPrefs.INSTANCE.advertisingId(this));
+         appBarConfiguration = new AppBarConfiguration.Builder(getNavController().getGraph()).build();
+         NavigationUI.setupActionBarWithNavController(this, getNavController(), appBarConfiguration);
+     }
+Index: play-services-core/src/main/res/layout/settings_root_activity.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/play-services-core/src/main/res/layout/settings_root_activity.xml b/play-services-core/src/main/res/layout/settings_root_activity.xml
+--- a/play-services-core/src/main/res/layout/settings_root_activity.xml	(revision 66793280f43a5d8a36774f21d3fccf537ff9f38e)
++++ b/play-services-core/src/main/res/layout/settings_root_activity.xml	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -13,7 +13,15 @@
+         android:id="@+id/navhost"
+         android:name="androidx.navigation.fragment.NavHostFragment"
+         android:layout_width="match_parent"
+-        android:layout_height="match_parent"
++        android:layout_height="wrap_content"
+         app:defaultNavHost="true"
+         app:navGraph="@navigation/nav_settings" />
++
++    <TextView
++        android:layout_marginHorizontal="16dp"
++        android:textColor="@android:color/black"
++        android:textSize="20dp"
++        android:id="@+id/ads_id_textView"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"/>
+ </LinearLayout>
+Index: settings.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/settings.gradle b/settings.gradle
+--- a/settings.gradle	(revision 66793280f43a5d8a36774f21d3fccf537ff9f38e)
++++ b/settings.gradle	(revision 56b05fde59169d9fbdb97577ea98b91582b65d74)
+@@ -106,3 +106,4 @@
+
+ include ':play-services-core:microg-ui-tools' // Legacy
+ include ':play-services-core'
++include ':play-services-cache'
+diff --git a/play-services-cache/consumer-rules.pro b/play-services-cache/consumer-rules.pro
+new file mode 100644

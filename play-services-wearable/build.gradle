@@ -19,7 +19,6 @@ android {
     }
 
     defaultConfig {
-        versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
     }
@@ -28,10 +27,10 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
-
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
     }
+
 }
 
 wire {

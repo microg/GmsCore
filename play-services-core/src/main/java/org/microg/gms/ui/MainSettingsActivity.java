@@ -2,6 +2,7 @@ package org.microg.gms.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.gms.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import org.microg.gms.ui.settings.SettingsProvider;
+
+import org.microg.gms.ads.identifier.AdvertisingIdService;
+import org.microg.gms.cache.GGPrefs;
 
 import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProviders;
 
@@ -45,6 +49,18 @@ public class MainSettingsActivity extends AppCompatActivity {
 
         appBarConfiguration = new AppBarConfiguration.Builder(getNavController().getGraph()).build();
         NavigationUI.setupWithNavController(toolbarLayout, toolbar, getNavController(), appBarConfiguration);
+
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            String advertisingId = bundle.getString("advertising_id");
+
+            ((TextView) findViewById(R.id.ads_id_textView)).setText(advertisingId);
+
+            GGPrefs.INSTANCE.setAdvertisingId(this, advertisingId);
+            //AdvertisingIdClient.getAdvertisingIdInfo(this).advertisingId = advertisingId;
+            stopService(new Intent(this, AdvertisingIdService.class));
+            startService(new Intent(this, AdvertisingIdService.class));
+        }
     }
 
     @Override

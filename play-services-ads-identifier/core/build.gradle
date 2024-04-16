@@ -9,6 +9,7 @@ apply plugin: 'kotlin-android'
 dependencies {
     api project(':play-services-ads-identifier')
     implementation project(':play-services-base-core')
+    implementation project(path: ':play-services-cache')
 }
 
 android {

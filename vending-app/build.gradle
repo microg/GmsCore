@@ -70,9 +70,6 @@ android {
         compose true
     }
 
-    lintOptions {
-        disable 'MissingTranslation', 'GetLocales'
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -84,6 +81,9 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.5.10'
+    }
+    lint {
+        disable 'MissingTranslation', 'GetLocales'
     }
 }
 

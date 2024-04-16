@@ -14,6 +14,8 @@ import android.provider.Settings;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 
+import org.microg.gms.cache.GGPrefs;
+
 import java.io.IOException;
 
 /**
@@ -39,13 +41,14 @@ public class AdvertisingIdClient {
      */
     public static Info getAdvertisingIdInfo(Context context) {
         // We don't actually implement this functionality, but always claim that ad tracking was limited by user preference
-        return new Info("00000000-0000-0000-0000-000000000000", true);
+        return new Info( GGPrefs.INSTANCE.advertisingIdStateFlow(context).getValue(), false);
     }
 
     /**
      * Includes both the advertising ID as well as the limit ad tracking setting.
      */
     public static class Info {
+
         private final String advertisingId;
         private final boolean limitAdTrackingEnabled;
 
