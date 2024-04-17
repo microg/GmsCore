@@ -155,7 +155,7 @@
     <string name="prefcat_test">Тест</string>
     <string name="gcm_network_state_connected">Повезано <xliff:g example="2 hours ago"> %1$s</xliff:g></string>
     <string name="pref_more_settings">Више</string>
-    <string name="pref_auth_include_android_id_summary">Када је онемогућено, захтеви за аутентификацију неће бити повезани са регистрацијом уређаја, што омогућава неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
+    <string name="pref_auth_include_android_id_summary">Када је онемогућено, захтеви за аутентификацију неће бити повезани са регистрацијом уређаја, што ће можда омогућити неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
     <string name="signin_picker_subtitle">настави на <xliff:g example="F-Droid"> %1$s</xliff:g></string>
     <string name="pref_safetynet_test_integrity_cts_passed">Интегритет и CTS су прошли</string>
     <string name="pref_safetynet_recent_uses">Недавне употребе</string>
@@ -216,4 +216,23 @@
     <string name="pref_device_registration_device_profile_category">Профил уређаја</string>
     <string name="prefcat_push_networks_title">Мреже за коришћење за push-обавештења</string>
     <string name="pref_safetynet_recent_eval_type">Тип провере</string>
+    <string name="pref_vending_summary_licensing_on">Лиценцирање укључено</string>
+    <string name="pref_vending_licensing_enable_switch">Одговори на захтеве за верификацију лиценце</string>
+    <string name="pref_vending_license_enable_summary">Неке апликације захтевају верификацију да сте их купили на Google Play-у. Када апликација то затражи, microG може да преузме доказ о куповини с Google-а. Ако је онемогућено или ако Google налог није додат, захтеви за верификацију лиценце се игноришу.</string>
+    <string name="pref_vending_summary_licensing_off">Лиценцирање искључено</string>
+    <string name="service_name_vending">Play Store услуге</string>
+    <string name="perm_car_info_description">Приступите информацијама о вашем аутомобилу</string>
+    <string name="perm_car_fuel_label">Ниво горива у аутомобилу</string>
+    <string name="perm_car_fuel_description">Приступите информацијама о нивоу горива у вашем аутомобилу</string>
+    <string name="perm_car_mileage_label">Километража аутомобила</string>
+    <string name="perm_car_vendor_extension_label">Канал добављача аутомобила</string>
+    <string name="perm_car_speed_label">Брзина аутомобила</string>
+    <string name="perm_car_info_label">Информације о аутомобилу</string>
+    <string name="perm_car_mileage_description">Приступите информацијама о километражи вашег аутомобила</string>
+    <string name="perm_car_vendor_extension_description">Приступите каналу добављача вашег аутомобила да бисте разменили информације специфичне за аутомобил</string>
+    <string name="pref_auth_strip_device_name_summary">Када је омогућено, захтеви за аутентификацију неће укључивати име уређаја, што може омогућити неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
+    <string name="perm_car_speed_description">Приступите брзини вашег аутомобила</string>
+    <string name="pref_auth_strip_device_name_title">Уклони име уређаја за аутентификацију</string>
+    <string name="feedback_disabled">Повратна информација тренутно није могућа</string>
+    <string name="backup_disabled">Прављење резервне копије тренутно није могуће</string>
 </resources>

@@ -1,20 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="exposure_notify_off_title">Exposure Notifications deaktiviert</string>
-    <string name="exposure_notify_off_bluetooth">Bluetooth muss eingeschaltet sein, um Exposure Notifications zu nutzen.</string>
-    <string name="exposure_notify_off_location">Standortzugriff muss eingeschaltet sein, um Exposure Notifications zu nutzen.</string>
-    <string name="exposure_notify_off_bluetooth_location">Bluetooth und Standortzugriff müssen eingeschaltet sein, um Exposure Notifications zu nutzen.</string>
-
-    <string name="service_name_exposure">Exposure Notifications</string>
-    <string name="pref_exposure_enable_info_summary">Öffne eine App, die Exposure Notifications unterstützt, um diese zu aktivieren.</string>
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Expositionsbenachrichtigungen deaktiviert</string>
+    <string name="exposure_notify_off_bluetooth">Bluetooth muss eingeschaltet sein, um Expositionsbenachrichtigungen zu nutzen.</string>
+    <string name="exposure_notify_off_location">Standortzugriff muss eingeschaltet sein, um Expositionsbenachrichtigungen zu nutzen.</string>
+    <string name="exposure_notify_off_bluetooth_location">Bluetooth und Standortzugriff müssen eingeschaltet sein, um Expositionsbenachrichtigungen zu nutzen.</string>
+    <string name="service_name_exposure">Expositionsbenachrichtigungen</string>
+    <string name="pref_exposure_enable_info_summary">Um Expositionsbenachrichtigungen zu aktivieren, öffnen Sie eine beliebige App, die diese unterstützt.</string>
     <string name="pref_exposure_error_bluetooth_off_title">Bluetooth einschalten</string>
     <string name="pref_exposure_error_location_off_title">Standortzugriff verwalten</string>
-    <string name="pref_exposure_error_bluetooth_unsupported_summary">Leider ist dein Gerät nicht mit Exposure Notifications kompatibel.</string>
-    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Leider ist dein Gerät nicht vollständig mit Exposure Notifications kompatibel. Du wirst Warnungen über Risikokontakte erhalten, aber nicht andere Benachrichtigen können.</string>
-    <string name="prefcat_exposure_apps_title">Apps, die Exposure Notifications nutzen</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Leider ist dein Gerät nicht mit Expositionsbenachrichtigungen kompatibel.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Leider ist dein Gerät nicht vollständig mit Expositionsbenachrichtigungen kompatibel. Du wirst Warnungen über Risikokontakte erhalten, aber nicht andere benachrichtigen können.</string>
+    <string name="prefcat_exposure_apps_title">Apps, die Expositionsbenachrichtigungen nutzen</string>
     <string name="pref_exposure_collected_rpis_title">Gesammelte IDs</string>
     <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> IDs in den letzten 60 Minuten</string>
     <string name="pref_exposure_advertising_id_title">Aktuell verwendete ID</string>
@@ -41,23 +40,22 @@
     <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Trotzdem löschen</string>
     <string name="pref_exposure_rpi_export_title">Exportieren</string>
     <string name="pref_exposure_rpi_export_summary">Exportiere gesammelte IDs zur weiteren Analyse mit einer anderen App.</string>
-    <string name="pref_exposure_info_summary">"Die Exposure Notifications API ermöglicht es Apps, dich zu warnen, falls du Kontakt zu einer positiv getesteten Person hattest.
-
-Das Datum, die Zeitdauer und die Signalstärke, die dem Kontakt zugeordnet sind, werden mit der zugehörigen App geteilt."</string>
+    <string name="pref_exposure_info_summary">Die API für Expositionsbenachrichtigungen ermöglicht es Apps, dich zu benachrichtigen, falls du Kontakt zu einer positiv getesteten Person hattest.
+\n
+\nDas Datum, die Zeitdauer und die Signalstärke, die dem Kontakt zugeordnet sind, werden mit der zugehörigen App geteilt.</string>
     <string name="pref_exposure_rpis_details_summary">"Während die Exposure Notification API aktiviert ist, sammelt das Gerät passiv IDs (Rolling Proximity Identifiers bzw. RPIs) von Geräten in der Nähe.
 
 Sobald die Eigentümer von Geräten positiv getestet wurden, können ihre IDs geteilt werden. Dein Gerät prüft, ob eine gespeicherte ID zu einer positiv getesteten Person gehört und berechnet das Infektionsrisiko."</string>
-
-    <string name="exposure_enable_switch">Exposure Notifications aktivieren</string>
-    <string name="exposure_confirm_start_title">Exposure Notifications aktivieren?</string>
+    <string name="exposure_enable_switch">Expositionsbenachrichtigungen nutzen</string>
+    <string name="exposure_confirm_start_title">Expositionsbenachrichtigungen einschalten?</string>
     <string name="exposure_confirm_start_summary">"Dein Smartphone benötigt Bluetooth, um IDs von anderen Personen sicher zu teilen und zu speichern.
 
 <xliff:g example="Corona-Warn">%1$s</xliff:g> kann dich benachrichtigen, falls du Kontakt zu einer positiv getesteten Person hattest.
 
 Das Datum, die Zeitdauer und die Signalstärke, die einem Kontakt zugeordnet wurden werden mit der App geteilt."</string>
     <string name="exposure_confirm_start_button">Einschalten</string>
-    <string name="exposure_confirm_stop_title">Exposure Notifications deaktivieren?</string>
-    <string name="exposure_confirm_stop_summary">Nach dem Deaktivieren wirst du nicht mehr benachrichtigt, falls du Kontakt mit einer positiv getesteten Person hattest.</string>
+    <string name="exposure_confirm_stop_title">Expositionsbenachrichtigungen ausschalten?</string>
+    <string name="exposure_confirm_stop_summary">Nach dem Deaktivieren von Expositionsbenachrichtigungen wirst du nicht mehr benachrichtigt, falls du Kontakt mit einer positiv getesteten Person hattest.</string>
     <string name="exposure_confirm_stop_button">Deaktivieren</string>
     <string name="exposure_confirm_keys_title">IDs mit <xliff:g example="Corona-Warn">%1$s</xliff:g> teilen?</string>
     <string name="exposure_confirm_keys_summary">"Deine IDs der letzten Tage werden genutzt, um Nutzer, die in den letzten 14 Tagen mit dir Kontakt hatten, zu benachrichtigen.
@@ -70,7 +68,8 @@ Deine Identität oder das Testergebnis werden nicht geteilt."</string>
     <string name="exposure_confirm_location_description">Standortzugriff muss eingeschaltet sein.</string>
     <string name="exposure_confirm_button">Aktivieren</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Neue Berechtigung benötigt</string>
-    <string name="pref_exposure_error_nearby_not_granted_description">Tippe hier um die benötigten Berechtigungen zu erteilen</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Tippe hier, um die erforderlichen Berechtigungen für Expositionsbenachrichtigungen zu erteilen</string>
     <string name="exposure_grant_background_location_description">Fast geschafft! Du musst den Zugriff auf den Standort im Hintergrund erlauben indem du auf dem nächsten Bildschirm \'Immer zulassen\' auswählst und dann hierher zurück kommst.</string>
     <string name="exposure_grant_background_location_button">Einstellungen Öffnen</string>
+    <string name="exposure_notify_off_nearby">Expositionsbenachrichtigungen erfordern zusätzliche Berechtigungen, um zu funktionieren</string>
 </resources>

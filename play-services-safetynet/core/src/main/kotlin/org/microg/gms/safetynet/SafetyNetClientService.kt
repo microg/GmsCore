@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.droidguard.core.DroidGuardPreferences
 import org.microg.gms.droidguard.core.DroidGuardResultCreator
@@ -58,9 +59,8 @@ private fun StringBuilder.appendUrlEncodedParam(key: String, value: String?) = a
 class SafetyNetClientServiceImpl(
     private val context: Context,
     private val packageName: String,
-    private val lifecycle: Lifecycle
+    override val lifecycle: Lifecycle
 ) : ISafetyNetService.Stub(), LifecycleOwner {
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun attest(callbacks: ISafetyNetCallbacks, nonce: ByteArray) {
         attestWithApiKey(callbacks, nonce, DEFAULT_API_KEY)
@@ -140,7 +140,7 @@ class SafetyNetClientServiceImpl(
 
     override fun getSharedUuid(callbacks: ISafetyNetCallbacks) {
         PackageUtils.checkPackageUid(context, packageName, getCallingUid())
-        PackageUtils.assertExtendedAccess(context)
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.SAFETYNET)
 
         // TODO
         Log.d(TAG, "dummy Method: getSharedUuid")

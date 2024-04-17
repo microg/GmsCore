@@ -16,47 +16,45 @@ import com.google.android.gms.phenotype.internal.IPhenotypeCallbacks
 import com.google.android.gms.phenotype.internal.IPhenotypeService
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
 
 private const val TAG = "PhenotypeService"
 
 class PhenotypeService : BaseService(TAG, GmsService.PHENOTYPE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest?, service: GmsService?) {
-        callback.onPostInitComplete(0, PhenotypeServiceImpl().asBinder(), null)
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request?.packageName)
+        callback.onPostInitComplete(0, PhenotypeServiceImpl(packageName).asBinder(), null)
     }
 }
 
-class PhenotypeServiceImpl : IPhenotypeService.Stub() {
-    override fun register(callbacks: IPhenotypeCallbacks, p1: String?, p2: Int, p3: Array<out String>?, p4: ByteArray?) {
-        Log.d(TAG, "register($p1, $p2, $p3, $p4)")
-        callbacks.onRegistered(Status.SUCCESS)
+class PhenotypeServiceImpl(val packageName: String?) : IPhenotypeService.Stub() {
+    override fun register(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?) {
+        Log.d(TAG, "register($packageName, $version, $p3, $p4)")
+        callbacks.onRegistered(if (version != 0) Status.SUCCESS else Status.CANCELED)
     }
 
-    override fun weakRegister(callbacks: IPhenotypeCallbacks, p1: String?, p2: Int, p3: Array<out String>?, p4: IntArray?, p5: ByteArray?) {
-        Log.d(TAG, "weakRegister($p1, $p2, $p3, $p4, $p5)")
+    override fun weakRegister(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: IntArray?, p5: ByteArray?) {
+        Log.d(TAG, "weakRegister($packageName, $version, $p3, $p4, $p5)")
         callbacks.onWeakRegistered(Status.SUCCESS)
     }
 
-    override fun unregister(callbacks: IPhenotypeCallbacks, p1: String?) {
-        Log.d(TAG, "unregister($p1)")
+    override fun unregister(callbacks: IPhenotypeCallbacks, packageName: String?) {
+        Log.d(TAG, "unregister($packageName)")
         callbacks.onUnregistered(Status.SUCCESS)
     }
 
-    override fun getConfigurationSnapshot(callbacks: IPhenotypeCallbacks, p1: String?, p2: String?) {
-        Log.d(TAG, "getConfigurationSnapshot($p1, $p2)")
-        callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
-            field4 = emptyArray()
-        })
+    override fun getConfigurationSnapshot(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?) {
+        getConfigurationSnapshot2(callbacks, packageName, user, null)
     }
 
-    override fun commitToConfiguration(callbacks: IPhenotypeCallbacks, p1: String?) {
-        Log.d(TAG, "commitToConfiguration($p1)")
+    override fun commitToConfiguration(callbacks: IPhenotypeCallbacks, snapshotToken: String?) {
+        Log.d(TAG, "commitToConfiguration($snapshotToken)")
         callbacks.onCommitedToConfiguration(Status.SUCCESS)
     }
 
-    override fun getExperimentTokens(callbacks: IPhenotypeCallbacks, p1: String?, logSourceName: String?) {
-        Log.d(TAG, "getExperimentTokens($p1, $logSourceName)")
-        callbacks.onExperimentTokens(Status.SUCCESS, ExperimentTokens())
+    override fun getExperimentTokens(callbacks: IPhenotypeCallbacks, packageName: String?, logSourceName: String?) {
+        getExperimentTokensForLogging(callbacks, packageName, logSourceName, null, this.packageName)
     }
 
     override fun getDogfoodsToken(callbacks: IPhenotypeCallbacks) {
@@ -74,27 +72,27 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
         callbacks.onFlag(Status.SUCCESS, null)
     }
 
-    override fun getCommitedConfiguration(callbacks: IPhenotypeCallbacks, p1: String?) {
-        Log.d(TAG, "getCommitedConfiguration($p1)")
+    override fun getCommitedConfiguration(callbacks: IPhenotypeCallbacks, packageName: String?) {
+        Log.d(TAG, "getCommitedConfiguration($packageName)")
         callbacks.onCommittedConfiguration(Status.SUCCESS, Configurations().apply {
             field4 = emptyArray()
         })
     }
 
-    override fun getConfigurationSnapshot2(callbacks: IPhenotypeCallbacks, p1: String?, p2: String?, p3: String?) {
-        Log.d(TAG, "getConfigurationSnapshot2($p1, $p2, $p3)")
+    override fun getConfigurationSnapshot2(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?) {
+        Log.d(TAG, "getConfigurationSnapshot2($packageName, $user, $p3)")
         callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
             field4 = emptyArray()
         })
     }
 
-    override fun syncAfterOperation(callbacks: IPhenotypeCallbacks, p1: String?, p2: Long) {
-        Log.d(TAG, "syncAfterOperation($p1, $p2)")
-        callbacks.onSyncFinished(Status.SUCCESS, p2)
+    override fun syncAfterOperation(callbacks: IPhenotypeCallbacks, packageName: String?, version: Long) {
+        Log.d(TAG, "syncAfterOperation($packageName, $version)")
+        callbacks.onSyncFinished(Status.SUCCESS, version)
     }
 
-    override fun registerSync(callbacks: IPhenotypeCallbacks, p1: String?, p2: Int, p3: Array<out String>?, p4: ByteArray?, p5: String?, p6: String?) {
-        Log.d(TAG, "registerSync($p1, $p2, $p3, $p4, $p5, $p6)")
+    override fun registerSync(callbacks: IPhenotypeCallbacks, packageName: String?, version: Int, p3: Array<out String>?, p4: ByteArray?, p5: String?, p6: String?) {
+        Log.d(TAG, "registerSync($packageName, $version, $p3, $p4, $p5, $p6)")
         callbacks.onConfiguration(Status.SUCCESS, Configurations().apply {
             field4 = emptyArray()
         })
@@ -125,8 +123,8 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
         callbacks.onRegistered(Status.SUCCESS)
     }
 
-    override fun setAppSpecificProperties(callbacks: IPhenotypeCallbacks, p1: String?, p2: ByteArray?) {
-        Log.d(TAG, "setAppSpecificProperties($p1, $p2)")
+    override fun setAppSpecificProperties(callbacks: IPhenotypeCallbacks, packageName: String?, p2: ByteArray?) {
+        Log.d(TAG, "setAppSpecificProperties($packageName, $p2)")
         callbacks.onAppSpecificPropertiesSet(Status.SUCCESS)
     }
 
@@ -135,15 +133,15 @@ class PhenotypeServiceImpl : IPhenotypeService.Stub() {
         callbacks.onServingVersion(Status.SUCCESS, 1)
     }
 
-    override fun getExperimentTokens2(callbacks: IPhenotypeCallbacks, p1: String?, p2: String?, p3: String?, p4: String?) {
-        Log.d(TAG, "getExperimentTokens2($p1, $p2, $p3, $p4)")
+    override fun getExperimentTokensForLogging(callbacks: IPhenotypeCallbacks, packageName: String?, user: String?, p3: String?, clientPackageName: String?) {
+        Log.d(TAG, "getExperimentTokens($packageName, $user, $p3, $clientPackageName)")
         callbacks.onExperimentTokens(Status.SUCCESS, ExperimentTokens().apply {
             field2 = ""
         })
     }
 
-    override fun syncAfterOperation2(callbacks: IPhenotypeCallbacks?, p1: Long) {
-        Log.d(TAG, "Not yet implemented: syncAfterOperation2")
+    override fun syncAllAfterOperation(callbacks: IPhenotypeCallbacks?, p1: Long) {
+        Log.d(TAG, "Not yet implemented: syncAllAfterOperation")
     }
 
     override fun setRuntimeProperties(callbacks: IStatusCallback?, p1: String?, p2: ByteArray?) {

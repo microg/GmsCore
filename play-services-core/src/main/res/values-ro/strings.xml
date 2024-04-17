@@ -43,7 +43,7 @@
     <string name="prefcat_location_service">Servicii de localizare</string>
     <string name="prefcat_services">Servicii de fundal</string>
     <string name="pref_auth_trust_google_title">Ai încredere în Google pentru permisiunile aplicației</string>
-    <string name="pref_auth_trust_google_summary">Dacă este dezactivat, utilizatorul este întrebat înainte de trimiterea către Google a unei solicitări de autorizare a aplicației. Unele aplicații nu vor reuși să utilizeze contul Google, dacă această opțiune este dezactivată.</string>
+    <string name="pref_auth_trust_google_summary">Când este dezactivată, utilizatorul este întrebat înainte ca cererea de autorizare a unei aplicații să fie trimisă la Google. Unele aplicații nu vor reuși să utilizeze contul Google, dacă această opțiune este dezactivată.</string>
     <string name="pref_checkin_enable_summary">\"Înregistrarea dispozitivului\" este un proces ascuns care este utilizat pentru a crea un identificator unic pentru serviciile Google. Serviciile microG înlătură alte date de identificare cu excepția numelui contului dvs. Google.</string>
     <string name="pref_gcm_enable_mcs_summary">Mesageria Google Cloud este un furnizor de notificări de tip push utilizat de multe aplicații. Pentru a utiliza trebuie să activezi \"Înregistrarea dispozitivului\".</string>
     <string name="auth_sign_in">Conectare</string>
@@ -55,9 +55,7 @@
 \n
 \nAcest lucru poate dura câteva secunde.</string>
     <string name="signin_confirm_button_text">Permite și distribuie</string>
-    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google.
-\n
-\nDacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog.</string>
+    <string name="auth_before_connect">O aplicație de pe dispozitivul tău încearcă să se conecteze la un cont Google. \u0020Dacă acest lucru a fost intenționat, utilizează butonul <b>Conectare</b> pentru a te conecta la pagina de conectare Google, dacă nu, apasă <b>Anulare</b> pentru a reveni la aplicația care a generat acest dialog.</string>
     <string name="gms_settings_summary">Configurează serviciile microG.</string>
     <string name="pref_device_registration_import_custom_profile_title">Importă profil personalizat</string>
     <string name="pref_safetynet_recent_request_type">Tipul solicitării</string>
@@ -122,7 +120,7 @@
     <string name="gcm_network_state_connected">Conectat <xliff:g example="2 hours ago">%1$s</xliff:g></string>
     <string name="gcm_registered">Înregistrat</string>
     <string name="pref_more_settings">Mai multe</string>
-    <string name="pref_auth_include_android_id_summary">Când este dezactivat, solicitările de autentificare nu vor fi legate de înregistrarea dispozitivului, ceea ce permite dispozitivelor neautorizate să se conecteze, dar poate avea consecințe neprevăzute.</string>
+    <string name="pref_auth_include_android_id_summary">Când este dezactivată, solicitările de autentificare nu vor fi legate de înregistrarea dispozitivului, ceea ce poate permite dispozitivelor neautorizate să se conecteze, dar poate avea consecințe neprevăzute.</string>
     <string name="pref_gcm_heartbeat_title">Intervalul de conectare a mesajelor în cloud</string>
     <string name="pref_safetynet_test_integrity_cts_passed">Integritatea și CTS au trecut</string>
     <string name="pref_safetynet_recent_uses">Utilizări recente</string>
@@ -214,4 +212,33 @@
     <string name="pref_safetynet_recent_eval_type">Tipul de evaluare</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> ar dori să folosească Jocuri Play</string>
     <string name="prefs_account_privacy">Informații personale și confidențialitate</string>
+    <string name="service_name_vending">Servicii Play Store</string>
+    <string name="pref_vending_summary_licensing_off">Licențiere oprită</string>
+    <string name="pref_vending_summary_licensing_on">Licențiere pornită</string>
+    <string name="pref_vending_licensing_enable_switch">Răspunde la solicitările de verificare a licenței</string>
+    <string name="pref_vending_license_enable_summary">Unele aplicații necesită verificarea faptului că le-ai achiziționat de pe Google Play. Când este solicitat de o aplicație, microG poate descărca o dovadă de achiziție de la Google. Dacă este dezactivat sau dacă nu este adăugat niciun cont Google, solicitările de verificare a licenței sunt ignorate.</string>
+    <string name="feedback_disabled">Momentan, feedback-ul nu este posibil</string>
+    <string name="perm_car_info_label">Informații despre automobil</string>
+    <string name="perm_car_fuel_label">Nivelul combustibilului în automobil</string>
+    <string name="perm_car_fuel_description">Accesarea informațiilor despre nivelul de combustibil al automobilului</string>
+    <string name="perm_car_mileage_label">Kilometrajul mașinii</string>
+    <string name="perm_car_vendor_extension_label">Canalul furnizorului de automobile</string>
+    <string name="pref_auth_strip_device_name_title">Elimină numele dispozitivului pentru autentificare</string>
+    <string name="perm_car_speed_label">Viteza automobilului</string>
+    <string name="perm_car_speed_description">Accesarea vitezei automobilului</string>
+    <string name="perm_car_info_description">Accesarea informațiilor despre automobil</string>
+    <string name="perm_car_mileage_description">Obținerea accesului la informații despre kilometrajul automobilului</string>
+    <string name="perm_car_vendor_extension_description">Obținerea accesului la canalul furnizorului de automobile, pentru a face schimb de informații specifice automobilului</string>
+    <string name="pref_auth_strip_device_name_summary">Când este activată, solicitările de autentificare nu vor include numele dispozitivului, ceea ce poate permite dispozitivelor neautorizate să se conecteze, dar poate avea consecințe neprevăzute.</string>
+    <string name="backup_disabled">Momentan, copierea de rezervă nu este posibilă</string>
+    <string name="pref_accounts_title">Conturi</string>
+    <string name="pref_vending_billing_category">Facturare Google Play</string>
+    <string name="pref_accounts_summary">Adaugă și gestionează conturile Google</string>
+    <string name="prefcat_accounts_settings_title">Setări</string>
+    <string name="prefcat_accounts_current_accounts_title">Conturi conectate în prezent</string>
+    <string name="pref_vending_licensing_category">Licențiere Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Gestionează cererile de facturare</string>
+    <string name="pref_vending_billing_enable_summary">Odată activate, unele aplicații pot finaliza achizițiile sau pot începe abonamente prin serviciul Google Play Billing.</string>
+    <string name="pref_vending_billing_note_experimental">Această funcție este experimentală și poate duce la pierderi de bani. Ai fost avertizat.</string>
+    <string name="pref_vending_billing_note_licensing">Este posibil ca unele aplicații să solicite să activezi și verificarea licenței pentru a verifica achizițiile.</string>
 </resources>

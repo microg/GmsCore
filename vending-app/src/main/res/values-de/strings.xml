@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_installed">microG Companion kann nicht eigenständig verwendet werden. Öffne stattdessen die microG Services-Einstellungen.</string>
+    <string name="toast_not_installed">microG Companion kann nicht eigenständig verwendet werden. Bitte installiere microG Services, um microG zu nutzen.</string>
+    <string name="pay_disabled">Bezahlung derzeit nicht möglich</string>
+    <string name="confirm_purchase">Kauf bestätigen</string>
+    <string name="error_passwd">Das eingegebene Passwort ist falsch.</string>
+    <string name="error_network">Keine Verbindung zum Internet. Bitte stelle sicher, dass WLAN oder mobile Daten eingeschaltet sind und probiere es dann erneut.</string>
+    <string name="error_unknown">Unbekannter Fehler, bitte beenden und erneut versuchen.</string>
+    <string name="tips_input_passwd">Passwort eingeben</string>
+    <string name="tips_remember_login_info">Passwort auf diesem Gerät speichern</string>
+    <string name="tips_more_details">Mehr erfahren</string>
+    <string name="tips_forget_passwd">Passwort vergessen?</string>
+    <string name="text_verify_button">Prüfen</string>
+    <string name="license_notification_channel_name">Lizenzbenachrichtigungen</string>
+    <string name="license_notification_channel_description">Benachrichtigt, wenn eine App versucht, ihre Lizenz zu validieren, Sie jedoch nicht bei einem Google-Konto angemeldet sind.</string>
+    <string name="license_notification_title">%1$s konnte die Lizenz nicht überprüfen</string>
+    <string name="license_notification_body">Wenn die App nicht ordnungsgemäß funktioniert, melden Sie sich mit einem Google-Konto an, mit dem Sie die App gekauft haben.</string>
+    <string name="license_notification_sign_in">Anmelden</string>
+    <string name="license_notification_ignore">Ignorieren</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="location_permission_notification_title">%s 需要位置权限</string>
+    <string name="location_permission_notification_content">请点击并选择 \"%s\" 去允许 %s 访问此设备的位置。</string>
+    <string name="location_permission_background_option_name">始终允许</string>
+
+    <string name="permission_hint">建议给microG服务授予"始终允许"权限，缺少此权限可能将导致部分应用在后台运行时无法获取当前位置的问题，如Microsoft Teams的位置分享功能可能会受影响。</string>
+    <string name="permission_hint_title">提示信息:</string>
+    <string name="permission_setting_hint_title">只需两步：</string>
+    <string name="open_settings">打开设置</string>
+    <string name="dont_remind_again">不再提醒</string>
+
+    <string name="rationale_foreground_permission">
+        请允许 <xliff:g example="microG">%1$s</xliff:g> 访问此设备的位置。
+        \n需要这些权限才能在支持应用程序的地图功能中启用位置。
+    </string>
+    <string name="rationale_permission">
+       请选择“始终允许”以允许 <xliff:g example="microG">%1$s</xliff:g> 访问此设备的位置。
+    </string>
+    <string name="rationale_background_permission">
+        请点击“权限管理器”并选择“始终允许”。
+    </string>
+</resources>

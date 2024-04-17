@@ -30,10 +30,15 @@ class ServiceProvider : ContentProvider() {
         when (method) {
             "serviceIntentCall" -> {
                 val serviceAction = extras?.getString("serviceActionBundleKey") ?: return null
-                val ourServiceAction = GmsService.byAction(serviceAction)?.takeIf { it.SERVICE_ID > 0 }?.ACTION ?: serviceAction
                 val context = context!!
-                val intent = Intent(ourServiceAction).apply { `package` = context.packageName }
-                val resolveInfo = context.packageManager.resolveService(intent, 0)
+                var intent = Intent(serviceAction).apply { `package` = context.packageName }
+                var resolveInfo = context.packageManager.resolveService(intent, 0)
+                if (resolveInfo == null && GmsService.byAction(serviceAction).ACTION != null) {
+                    // Try again with action as defined in GmsService
+                    val overrideAction = GmsService.byAction(serviceAction).ACTION
+                    val overrideActionIntent = Intent(overrideAction).apply { `package` = context.packageName }
+                    resolveInfo = context.packageManager.resolveService(overrideActionIntent, 0)
+                }
                 if (resolveInfo != null) {
                     intent.setClassName(resolveInfo.serviceInfo.packageName, resolveInfo.serviceInfo.name)
                 } else {

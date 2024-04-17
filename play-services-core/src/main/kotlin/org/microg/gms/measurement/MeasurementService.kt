@@ -52,7 +52,7 @@ class MeasurementServiceImpl : IMeasurementService.Stub() {
 
     override fun getAppInstanceId(app: AppMetadata): String? {
         Log.d(TAG, "getAppInstanceId() for $app")
-        return null
+        return app.ephemeralAppInstanceId ?: app.firebaseInstanceId
     }
 
     override fun sendConditionalUserProperty(property: ConditionalUserPropertyParcel, app: AppMetadata) {

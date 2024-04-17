@@ -1,2 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Ubicación</string>
+    <string name="prefcat_location_apps_title">Últimos accesos</string>
+    <string name="pref_location_wifi_mls_enabled_summary">Obtén la ubicación basada en Wi-Fi desde Servicio de ubicación de Mozilla.</string>
+    <string name="pref_location_cell_mls_enabled_summary">Obtén la ubicación de las torres de telefonía móvil del Servicio de Ubicación de Mozilla.</string>
+    <string name="location_app_last_access_at">Últimoacceso: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="prefcat_location_wifi_title">Ubicación Wi-Fi</string>
+    <string name="prefcat_location_cell_title">Ubicación de la red móvil</string>
+    <string name="prefcat_geocoder_title">Resolución de direcciones</string>
+    <string name="pref_location_wifi_mls_enabled_title">Petición de Mozilla</string>
+    <string name="pref_location_wifi_moving_enabled_title">Petición desde el Hotspot</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Obtén la ubicación Wi-Fi directamente de los puntos de acceso compatibles cuando estés conectado.</string>
+    <string name="pref_location_wifi_learning_enabled_title">Recordar desde el GPS</string>
+    <string name="pref_location_wifi_learning_enabled_summary">Almacena localmente las ubicaciones Wi-Fi cuando se utiliza el GPS.</string>
+    <string name="pref_location_cell_mls_enabled_title">Petición de Mozilla</string>
+    <string name="pref_location_cell_learning_enabled_title">Recordar desde el GPS</string>
+    <string name="pref_location_cell_learning_enabled_summary">Almacena localmente las ubicaciones de la red móvil cuando se utiliza el GPS.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Usar Nominatim</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">Resolver direcciones utilizando OpenStreetMap Nominatim.</string>
+    <string name="fragment_location_apps_title">Aplicaciones con acceso de ubicación</string>
+    <string name="pref_location_app_force_coarse_title">Forzar ubicación aproximada</string>
+    <string name="pref_location_app_force_coarse_summary">Devuelve siempre ubicaciones aproximadas a esta aplicación, ignorando su nivel de permiso.</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Su dispositivo deberá:</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Para obtener más información, vaya a la configuración de la ubicación.</string>
+    <string name="location_settings_dialog_btn_cancel">No, gracias</string>
+    <string name="location_settings_dialog_btn_sure">De acuerdo</string>
+    <string name="location_settings_dialog_message_title_to_continue">Para continuar, activa la ubicación del dispositivo, que utiliza el servicio de ubicación</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Utilizar GPS, Wi‑Fi, redes móviles y sensores</string>
+    <string name="location_settings_dialog_message_gls_consent">Utilizar el servicio de localización; Como parte de este servicio, puede recopilar datos de ubicación periódicamente y utilizar estos datos de forma anónima para mejorar la precisión de la ubicación y los servicios basados en la ubicación.</string>
+</resources>

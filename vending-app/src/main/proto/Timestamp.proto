@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+option java_package = "com.android.vending";
+option java_multiple_files = true;
+
+message TimestampContainer {
+  optional TimestampContainer1Wrapper container1Wrapper = 3;
+  optional TimestampContainer2 container2 = 6;
+}
+
+message TimestampContainer1Wrapper {
+  optional string androidId = 1;
+  optional TimestampContainer1 container = 2;
+}
+
+message TimestampContainer1 {
+  optional string timestamp = 1;
+  optional Timestamp wrapper = 2;
+}
+
+message Timestamp {
+  optional uint64 seconds = 1;
+  optional uint32 nanos = 2;
+}
+
+message TimestampContainer2 {
+  optional TimestampWrapper wrapper = 1;
+  optional Timestamp timestamp = 2;
+}
+
+message TimestampWrapper {
+  optional Timestamp timestamp = 1;
+}

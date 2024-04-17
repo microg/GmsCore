@@ -7,34 +7,35 @@ buildscript {
     ext.cronetVersion = '102.5005.125'
     ext.wearableVersion = '0.1.1'
 
-    ext.kotlinVersion = '1.7.22'
-    ext.coroutineVersion = '1.6.4'
+    ext.kotlinVersion = '1.9.22'
+    ext.coroutineVersion = '1.7.3'
 
-    ext.annotationVersion = '1.5.0'
+    ext.annotationVersion = '1.7.1'
     ext.appcompatVersion = '1.6.1'
     ext.biometricVersion = '1.1.0'
-    ext.coreVersion = '1.9.0'
-    ext.fragmentVersion = '1.5.5'
-    ext.lifecycleVersion = '2.5.1'
+    ext.coreVersion = '1.12.0'
+    ext.fragmentVersion = '1.6.2'
+    ext.lifecycleVersion = '2.7.0'
     ext.loaderVersion = '1.1.0'
-    ext.mediarouterVersion = '1.3.1'
+    ext.materialVersion = '1.11.0'
+    ext.mediarouterVersion = '1.6.0'
     ext.multidexVersion = '2.0.1'
-    ext.navigationVersion = '2.5.3'
+    ext.navigationVersion = '2.7.7'
     ext.preferenceVersion = '1.2.0'
-    ext.recyclerviewVersion = '1.2.0'
-    ext.webkitVersion = '1.4.0'
+    ext.recyclerviewVersion = '1.3.2'
+    ext.webkitVersion = '1.10.0'
 
     ext.slf4jVersion = '1.7.36'
     ext.volleyVersion = '1.2.1'
     ext.wireVersion = '4.8.0'
 
-    ext.androidBuildGradleVersion = '8.0.2'
+    ext.androidBuildGradleVersion = '8.2.2'
 
-    ext.androidBuildVersionTools = '33.0.1'
+    ext.androidBuildVersionTools = '34.0.0'
 
-    ext.androidMinSdk = 14
+    ext.androidMinSdk = 19
     ext.androidTargetSdk = 29
-    ext.androidCompileSdk = 33
+    ext.androidCompileSdk = 34
 
     ext.localProperties = new Properties()
 
@@ -71,9 +72,9 @@ def execResult(...args) {
     return stdout.toString()
 }
 
-def gmsVersion = "23.35.15"
+def gmsVersion = "24.09.13"
 def gmsVersionCode = Integer.parseInt(gmsVersion.replaceAll('\\.', ''))
-def vendingVersion = "37.5.24"
+def vendingVersion = "40.2.26"
 def vendingVersionCode = Integer.parseInt(vendingVersion.replaceAll('\\.', ''))
 def gitVersionBase = execResult('git', 'describe', '--tags', '--abbrev=0', '--match=v[0-9]*').trim().substring(1)
 def gitCommitCount = Integer.parseInt(execResult('git', 'rev-list', '--count', "v$gitVersionBase..HEAD").trim())

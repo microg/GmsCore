@@ -19,6 +19,8 @@ import org.microg.gms.maps.hms.utils.toHms
 
 class ProjectionImpl(private val projection: Projection) : IProjectionDelegate.Stub() {
 
+    private var lastVisibleRegion: VisibleRegion? = null
+
     override fun fromScreenLocation(obj: IObjectWrapper?): LatLng? {
         Log.d(TAG, "fromScreenLocation")
         return try {
@@ -43,10 +45,14 @@ class ProjectionImpl(private val projection: Projection) : IProjectionDelegate.S
         }
     }
 
-    override fun getVisibleRegion(): VisibleRegion {
+    override fun getVisibleRegion(): VisibleRegion? {
         val visibleRegion = projection.visibleRegion
+        if (visibleRegion.farLeft.latitude.isNaN() || visibleRegion.farLeft.longitude.isNaN()) {
+            return lastVisibleRegion
+        }
+        lastVisibleRegion = visibleRegion.toGms()
         Log.d(TAG, "getVisibleRegion: $visibleRegion")
-        return visibleRegion.toGms()
+        return lastVisibleRegion
     }
 
     companion object {

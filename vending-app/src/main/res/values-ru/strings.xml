@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_notification_channel_name">Уведомления лицензий</string>
+    <string name="license_notification_channel_description">Уведомляет, когда приложение пытается проверить свою лицензию, но вы не вошли ни в одну учетную запись Google.</string>
+    <string name="license_notification_title">%1$s не может проверить лицензию</string>
+    <string name="license_notification_body">Если приложение работает неправильно, войдите в учетную запись Google, с помощью которой вы купили приложение.</string>
+    <string name="license_notification_sign_in">Войти</string>
+    <string name="license_notification_ignore">Игнорировать</string>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_installed">microG Companion не может использоваться отдельно. Открываются настройки сервисов microG.</string>
+    <string name="toast_not_installed">microG Companion не может использоваться отдельно. Пожалуйста, установите сервисы microG чтобы использовать microG.</string>
+    <string name="pay_disabled">Функция оплаты недоступна</string>
+    <string name="error_unknown">Неизвестная ошибка. Выйдите и повторите попытку.</string>
+    <string name="tips_more_details">Подробнее</string>
+    <string name="error_network">Отсутствует подключение к Интернету. Убедитесь, что Wi-Fi или передача данных включены, и повторите попытку.</string>
+    <string name="error_passwd">Введенный вами пароль неверен.</string>
+    <string name="tips_input_passwd">Введите пароль</string>
+    <string name="tips_remember_login_info">Запомнить авторизацию на этом устройстве</string>
+    <string name="tips_forget_passwd">Забыли пароль?</string>
+    <string name="text_verify_button">Подтвердить</string>
+    <string name="confirm_purchase">Подтверждение покупки</string>
+</resources>

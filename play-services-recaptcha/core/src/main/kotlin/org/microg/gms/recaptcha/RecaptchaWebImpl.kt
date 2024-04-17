@@ -61,15 +61,13 @@ import kotlin.coroutines.suspendCoroutine
 private const val TAG = "RecaptchaWeb"
 
 @RequiresApi(19)
-class RecaptchaWebImpl(private val context: Context, private val packageName: String, private val lifecycle: Lifecycle) : RecaptchaImpl, LifecycleOwner {
+class RecaptchaWebImpl(private val context: Context, private val packageName: String, override val lifecycle: Lifecycle) : RecaptchaImpl, LifecycleOwner {
     private var webView: WebView? = null
     private var lastRequestToken: String? = null
     private var initFinished = AtomicBoolean(true)
-    private var initContinuation: Continuation<Unit>? = null
+    private var initContinuation: Continuation<Int>? = null
     private var executeFinished = AtomicBoolean(true)
     private var executeContinuation: Continuation<String>? = null
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override suspend fun init(params: InitParams): RecaptchaHandle {
         lastRequestToken = UUID.randomUUID().toString()
@@ -710,10 +708,10 @@ class RecaptchaWebImpl(private val context: Context, private val packageName: St
                 val status = RecaptchaWebStatusCode.ADAPTER.decode(Base64.decode(input, Base64.URL_SAFE))
                 if (DEBUG) Log.d(TAG, "zzoid: $status")
                 if (!impl.initFinished.getAndSet(true)) {
-                    if (status.code == 1) {
-                        impl.initContinuation?.resume(Unit)
+                    if (status.code != null) {
+                        impl.initContinuation?.resume(status.code)
                     } else {
-                        impl.initContinuation?.resumeWithException(RuntimeException("Status ${status.code}"))
+                        impl.initContinuation?.resumeWithException(RuntimeException("Status is null"))
                     }
                 }
             }

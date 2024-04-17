@@ -6,6 +6,45 @@
 
 <resources>
 
+    <style name="Theme.Base.Light.Dialog" parent="Theme.AppCompat.Light.Dialog" />
+
+    <style name="Theme.Base.Light.Dialog.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Base.Light.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert" />
+
+    <style name="Theme.Base.Light.Dialog.Alert.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Base.DayNight.Dialog.Alert" parent="Theme.AppCompat.DayNight.Dialog.Alert" />
+
+    <style name="Theme.Base.DayNight.Dialog.Alert.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Base.Translucent" parent="Theme.Base.DayNight.Dialog.Alert.NoActionBar">
+        <item name="background">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+    <style name="Theme.App.Translucent" parent="Theme.Base.Translucent" />
+    <style name="Theme.App.DayNight.Dialog.Alert.NoActionBar" parent="Theme.Base.DayNight.Dialog.Alert.NoActionBar" />
+    <style name="Theme.App.Light.Dialog.NoActionBar" parent="Theme.Base.Light.Dialog.NoActionBar" />
+    <style name="Theme.App.Light.Dialog.Alert.NoActionBar" parent="Theme.Base.Light.Dialog.Alert.NoActionBar" />
+
+    <!-- compatibility -->
+
     <style name="Theme.AppCompat.Light.Dialog.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -30,5 +69,25 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
+    <!-- Switch Bar -->
+
+    <declare-styleable name="PreferenceTheme">
+        <attr format="reference" name="switchBarPreferenceStyle"/>
+    </declare-styleable>
+
+    <declare-styleable name="SwitchBarPreference">
+        <attr format="reference" name="switchBarFrameId" />
+        <attr format="reference" name="switchBarFrameBackgroundOn" />
+        <attr format="reference" name="switchBarFrameBackgroundOff" />
+        <attr format="reference" name="switchBarFrameBackgroundDisabled" />
+    </declare-styleable>
+
+    <style name="Preference.SwitchBar">
+        <item name="layout">@layout/preference_switch_bar</item>
+        <item name="switchBarFrameBackgroundOn">?attr/colorControlActivated</item>
+        <item name="switchBarFrameBackgroundOff">?attr/colorButtonNormal</item>
+        <item name="switchBarFrameBackgroundDisabled">?attr/colorControlHighlight</item>
     </style>
 </resources>

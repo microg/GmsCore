@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="exposure_notify_off_title">Уведомления о риске инфицирования не активны</string>
     <string name="exposure_notify_off_bluetooth">Bluetooth должен быть включён, чтобы принимать уведомления о риске инфицирования.</string>
     <string name="exposure_notify_off_location">Доступ к местоположению обязателен, чтобы принимать уведомления о риске инфицирования.</string>
     <string name="exposure_notify_off_bluetooth_location">Bluetooth и определение местоположения должны быть включены, чтобы принимать уведомления о риске инфицирования</string>
     <string name="exposure_notify_off_nearby">Уведомлениям о риске инфицирования для работы требуются дополнительные разрешения</string>
-
     <string name="service_name_exposure">Уведомления о риске инфицирования</string>
     <string name="pref_exposure_enable_info_summary">Чтобы включить уведомления о риске инфицирования запустите любое приложение, которое их поддерживает.</string>
     <string name="pref_exposure_error_bluetooth_off_title">Включить Bluetooth</string>
@@ -48,7 +47,6 @@
     <string name="pref_exposure_rpis_details_summary">"Пока API уведомлений о риске инфицирования включен, ваше устройство пассивно собирает идентификаторы (называемые скользящими идентификаторами сближения или RPI) с соседних устройств.
 
 Когда владельцы устройств сообщают о положительном диагнозе, их идентификаторы могут быть распространены. Ваше устройство проверяет, соответствует ли какой-либо из известных идентификаторов с подтверждённым диагнозом любому из собранных вами идентификаторов, и рассчитывает риск заражения."</string>
-
     <string name="exposure_enable_switch">Использовать уведомления о риске инфицирования</string>
     <string name="exposure_confirm_start_title">Включить уведомлений о риске инфицирования?</string>
     <string name="exposure_confirm_start_summary">"Ваш телефон должен использовать Bluetooth для безопасного сбора и распространения идентификаторов другим телефонам, находящимся поблизости.
@@ -71,7 +69,7 @@
     <string name="exposure_confirm_location_description">требуется доступ к местоположению.</string>
     <string name="exposure_confirm_button">Включить</string>
     <string name="pref_exposure_error_nearby_not_granted_title">Требуется дополнительное разрешение</string>
-    <string name="pref_exposure_error_nearby_not_granted_description">Нажмите, чтобы предоставить необходимые разрешения уведомлениям о риске инфицирования.</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Нажмите, чтобы предоставить необходимые разрешения уведомлениям о риске инфицирования</string>
     <string name="exposure_grant_background_location_description">Почти готово! Вам нужно будет включить фоновый доступ к местоположению, выбрав опцию \'Разрешить в любом режиме\' на следующем экране. Затем вернитесь назад.</string>
     <string name="exposure_grant_background_location_button">Обновить настройки</string>
 </resources>

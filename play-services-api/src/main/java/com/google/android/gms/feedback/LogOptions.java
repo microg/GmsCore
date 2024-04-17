@@ -5,8 +5,33 @@
 
 package com.google.android.gms.feedback;
 
-import org.microg.safeparcel.AutoSafeParcelable;
+import android.os.Parcel;
 
-public class LogOptions extends AutoSafeParcelable {
-    public static final Creator<LogOptions> CREATOR = findCreator(LogOptions.class);
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class LogOptions extends AbstractSafeParcelable {
+
+    @Field(2)
+    public String options;
+    @Field(3)
+    public boolean unknownBool3;
+    @Field(4)
+    public boolean unknownBool4;
+    @Field(5)
+    public boolean unknownBool5;
+    @Field(6)
+    public boolean unknownBool6;
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
+
+    public static final SafeParcelableCreatorAndWriter<LogOptions> CREATOR = findCreator(LogOptions.class);
+
 }

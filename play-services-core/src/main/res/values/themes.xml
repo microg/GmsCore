@@ -1,20 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ Copyright (C) 2013-2017 microG Project Team
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+  ~ SPDX-FileCopyrightText: 2015 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
   -->
 
 <resources>
+
+    <!-- Base application theme -->
+    <style name="Theme.Base" parent="Theme.Material3.DynamicColors.DayNight">
+        <item name="preferenceTheme">@style/Theme.Base.PreferenceThemeOverlay</item>
+    </style>
+
+    <style name="Theme.Base.DayNight" parent="Theme.Base.Light" />
+
+    <style name="Theme.Base.DayNight.NoActionBar" parent="Theme.Base.Light.NoActionBar" />
+
+    <style name="Theme.Base.Dark" />
+
+    <style name="Theme.Base.Dark.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Base.Light" />
+
+    <style name="Theme.Base.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Base.DayNight.Dialog.Alert" parent="Theme.Material3.DayNight.Dialog.Alert" />
+
+    <!-- Preference theme -->
+    <style name="Theme.Base.PreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/Theme.Base.Preference.SwitchPreferenceCompat</item>
+    </style>
+
+    <style name="Theme.Base.Preference.SwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material">
+        <item name="widgetLayout">@layout/preference_material_switch</item>
+    </style>
+
+    <!-- Application theme (< API23) -->
+    <style name="Theme.App" parent="Theme.Base.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/gm3_ref_palette_primary40</item>
+        <item name="colorOnPrimary">@color/gm3_ref_palette_primary100</item>
+        <item name="colorPrimaryContainer">@color/gm3_ref_palette_primary90</item>
+        <item name="colorOnPrimaryContainer">@color/gm3_ref_palette_primary10</item>
+        <item name="colorPrimaryInverse">@color/gm3_ref_palette_primary80</item>
+        <item name="colorPrimaryFixed">@color/gm3_ref_palette_primary90</item>
+        <item name="colorPrimaryFixedDim">@color/gm3_ref_palette_primary80</item>
+        <item name="colorOnPrimaryFixed">@color/gm3_ref_palette_primary10</item>
+        <item name="colorOnPrimaryFixedVariant">@color/gm3_ref_palette_primary30</item>
+        <item name="colorSecondary">@color/gm3_ref_palette_secondary40</item>
+        <item name="colorOnSecondary">@color/gm3_ref_palette_secondary100</item>
+        <item name="colorSecondaryContainer">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorOnSecondaryContainer">@color/gm3_ref_palette_secondary10</item>
+        <item name="colorSecondaryFixed">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorSecondaryFixedDim">@color/gm3_ref_palette_secondary80</item>
+        <item name="colorOnSecondaryFixed">@color/gm3_ref_palette_secondary10</item>
+        <item name="colorOnSecondaryFixedVariant">@color/gm3_ref_palette_secondary30</item>
+        <item name="colorTertiary">@color/gm3_ref_palette_tertiary40</item>
+        <item name="colorOnTertiary">@color/gm3_ref_palette_tertiary100</item>
+        <item name="colorTertiaryContainer">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorOnTertiaryContainer">@color/gm3_ref_palette_tertiary10</item>
+        <item name="colorTertiaryFixed">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorTertiaryFixedDim">@color/gm3_ref_palette_tertiary80</item>
+        <item name="colorOnTertiaryFixed">@color/gm3_ref_palette_tertiary10</item>
+        <item name="colorOnTertiaryFixedVariant">@color/gm3_ref_palette_tertiary30</item>
+
+        <item name="colorError">@color/gm3_ref_palette_error40</item>
+        <item name="colorOnError">@color/gm3_ref_palette_error100</item>
+        <item name="colorErrorContainer">@color/gm3_ref_palette_error90</item>
+        <item name="colorOnErrorContainer">@color/gm3_ref_palette_error10</item>
+        <item name="colorOutline">@color/gm3_ref_palette_neutral_variant50</item>
+        <item name="colorOutlineVariant">@color/gm3_ref_palette_neutral_variant80</item>
+        <item name="android:colorBackground">@color/gm3_ref_palette_neutral100</item>
+        <item name="colorOnBackground">@color/gm3_ref_palette_neutral10</item>
+        <item name="colorSurface">@color/gm3_ref_palette_neutral100</item>
+        <item name="colorOnSurface">@color/gm3_ref_palette_neutral10</item>
+        <item name="colorSurfaceVariant">@color/gm3_ref_palette_neutral_variant90</item>
+        <item name="colorOnSurfaceVariant">@color/gm3_ref_palette_neutral_variant30</item>
+        <item name="colorSurfaceInverse">@color/gm3_ref_palette_neutral20</item>
+        <item name="colorOnSurfaceInverse">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorSurfaceBright">@color/gm3_ref_palette_neutral100</item>
+        <item name="colorSurfaceDim">#ffd3dbe5</item>
+        <item name="colorSurfaceContainer">#fff0f4f9</item>
+        <item name="colorSurfaceContainerLow">#fff8fafd</item>
+        <item name="colorSurfaceContainerLowest">@color/gm3_ref_palette_primary100</item>
+        <item name="colorSurfaceContainerHigh">#ffe9eef6</item>
+        <item name="colorSurfaceContainerHighest">#ffdde3ea</item>
+    </style>
+
+    <!-- TODO: Heavy duplication -->
+    <style name="Theme.App.Translucent" parent="Theme.Base.Translucent">
+        <item name="colorPrimary">@color/gm3_ref_palette_primary40</item>
+        <item name="colorOnPrimary">@color/gm3_ref_palette_primary100</item>
+        <item name="colorPrimaryContainer">@color/gm3_ref_palette_primary90</item>
+        <item name="colorOnPrimaryContainer">@color/gm3_ref_palette_primary10</item>
+        <item name="colorPrimaryInverse">@color/gm3_ref_palette_primary80</item>
+        <item name="colorPrimaryFixed">@color/gm3_ref_palette_primary90</item>
+        <item name="colorPrimaryFixedDim">@color/gm3_ref_palette_primary80</item>
+        <item name="colorOnPrimaryFixed">@color/gm3_ref_palette_primary10</item>
+        <item name="colorOnPrimaryFixedVariant">@color/gm3_ref_palette_primary30</item>
+        <item name="colorSecondary">@color/gm3_ref_palette_secondary40</item>
+        <item name="colorOnSecondary">@color/gm3_ref_palette_secondary100</item>
+        <item name="colorSecondaryContainer">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorOnSecondaryContainer">@color/gm3_ref_palette_secondary10</item>
+        <item name="colorSecondaryFixed">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorSecondaryFixedDim">@color/gm3_ref_palette_secondary80</item>
+        <item name="colorOnSecondaryFixed">@color/gm3_ref_palette_secondary10</item>
+        <item name="colorOnSecondaryFixedVariant">@color/gm3_ref_palette_secondary30</item>
+        <item name="colorTertiary">@color/gm3_ref_palette_tertiary40</item>
+        <item name="colorOnTertiary">@color/gm3_ref_palette_tertiary100</item>
+        <item name="colorTertiaryContainer">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorOnTertiaryContainer">@color/gm3_ref_palette_tertiary10</item>
+        <item name="colorTertiaryFixed">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorTertiaryFixedDim">@color/gm3_ref_palette_tertiary80</item>
+        <item name="colorOnTertiaryFixed">@color/gm3_ref_palette_tertiary10</item>
+        <item name="colorOnTertiaryFixedVariant">@color/gm3_ref_palette_tertiary30</item>
+
+        <item name="colorError">@color/gm3_ref_palette_error40</item>
+        <item name="colorOnError">@color/gm3_ref_palette_error100</item>
+        <item name="colorErrorContainer">@color/gm3_ref_palette_error90</item>
+        <item name="colorOnErrorContainer">@color/gm3_ref_palette_error10</item>
+        <item name="colorOutline">@color/gm3_ref_palette_neutral_variant50</item>
+        <item name="colorOutlineVariant">@color/gm3_ref_palette_neutral_variant80</item>
+        <item name="android:colorBackground">@color/gm3_ref_palette_neutral100</item>
+        <item name="colorOnBackground">@color/gm3_ref_palette_neutral10</item>
+        <item name="colorSurface">@color/gm3_ref_palette_neutral100</item>
+        <item name="colorOnSurface">@color/gm3_ref_palette_neutral10</item>
+        <item name="colorSurfaceVariant">@color/gm3_ref_palette_neutral_variant90</item>
+        <item name="colorOnSurfaceVariant">@color/gm3_ref_palette_neutral_variant30</item>
+        <item name="colorSurfaceInverse">@color/gm3_ref_palette_neutral20</item>
+        <item name="colorOnSurfaceInverse">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorSurfaceBright">@color/gm3_ref_palette_neutral100</item>
+        <item name="colorSurfaceDim">#ffd3dbe5</item>
+        <item name="colorSurfaceContainer">#fff0f4f9</item>
+        <item name="colorSurfaceContainerLow">#fff8fafd</item>
+        <item name="colorSurfaceContainerLowest">@color/gm3_ref_palette_primary100</item>
+        <item name="colorSurfaceContainerHigh">#ffe9eef6</item>
+        <item name="colorSurfaceContainerHighest">#ffdde3ea</item>
+    </style>
 
     <style name="Theme.LoginBlue" parent="Theme.LoginBlue.Base" />
 

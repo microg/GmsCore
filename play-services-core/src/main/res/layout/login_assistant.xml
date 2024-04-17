@@ -38,10 +38,10 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:padding="18dp"
                 android:text="@string/just_a_sec"
                 android:textColor="@color/primary_text_default_material_dark"
-                android:textSize="24sp"/>
+                android:textSize="24sp"
+                android:paddingLeft="18dp" />
         </RelativeLayout>
 
         <FrameLayout

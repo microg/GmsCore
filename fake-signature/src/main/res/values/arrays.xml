@@ -8,6 +8,30 @@
         <item>com.google.android.gms</item>
         <item>com.android.vending</item>
         <item>com.spotify.music</item>
+        <item>com.getir</item>
+        <item>com.pozitron.iscep</item>
+        <item>com.widgetable.theme.android</item>
+        <item>pro.huobi</item>
+        <item>com.tarparos.phigaea</item>
+        <item>com.artem.scotepio</item>
+        <item>com.sabah.deprembs</item>
+        <item>com.boynergrup.hopi</item>
+        <item>com.belbim.istanbulkart</item>
+        <item>com.a101.plus</item>
+        <item>com.widgetable.theme.android</item>
+        <item>net.wargaming.wot.blitz</item>
+        <item>com.litatom.app</item>
+        <item>com.ataexpress.tiklagelsin</item>
+        <item>tr.com.petrolofisi</item>
+        <item>com.mobisoft.beymen</item>
+        <item>com.unilever.algida</item>
+        <item>com.mobisoft.morhipo</item>
+        <item>com.zzkko</item>
+        <item>com.didilabs.kaavefali</item>
+        <item>com.airbnb.android</item>
+        <item>com.mobillium.papara</item>
+        <item>co.com.fincaraiz.app</item>
+        <item>com.frisby.frisby</item>
     </string-array>
     <string-array name="signature_never_fake">
         <item>com.truecaller</item>

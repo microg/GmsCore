@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="perm_ad_id_label">Дазвол рэкламнага ідэнтыфікатара</string>
+    <string name="perm_ad_id_description">Дазваляе выдаўцу дадатку прама ці ўскосна атрымліваць доступ да рэкламнага ідэнтыфікатара.</string>
+    <string name="perm_ad_id_notification_label">Апавяшчэнне рэкламнага ідэнтыфікатара</string>
+    <string name="perm_ad_id_notification_description">Дазваляе дадаткам атрымліваць апавяшчэнне калі рэкламны ідэнтыфікатар або перавага аб ліміце рэкламнай сачэння карыстальніка абноўленыя.</string>
+</resources>

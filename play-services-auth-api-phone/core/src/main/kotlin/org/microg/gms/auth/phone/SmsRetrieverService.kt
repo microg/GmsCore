@@ -47,10 +47,8 @@ class SmsRetrieverService : BaseService(TAG, GmsService.SMS_RETRIEVER) {
 }
 
 
-class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, private val packageName: String, private val lifecycle: Lifecycle) :
+class SmsRetrieverServiceImpl(private val smsRetriever: SmsRetrieverCore, private val packageName: String, override val lifecycle: Lifecycle) :
     ISmsRetrieverApiService.Stub(), LifecycleOwner {
-
-    override fun getLifecycle(): Lifecycle = lifecycle
 
     override fun startSmsRetriever(callback: ISmsRetrieverResultCallback) {
         Log.d(TAG, "startSmsRetriever()")

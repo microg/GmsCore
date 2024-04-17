@@ -40,6 +40,8 @@ public final class Status extends AbstractSafeParcelable implements Result {
     @PublicApi(exclude = true)
     public static final Status CANCELED = new Status(CommonStatusCodes.CANCELED, "Cancelled");
     @PublicApi(exclude = true)
+    public static final Status SUCCESS_CACHE = new Status(CommonStatusCodes.SUCCESS_CACHE, "Success");
+    @PublicApi(exclude = true)
     public static final Status SUCCESS = new Status(CommonStatusCodes.SUCCESS, "Success");
 
     @Field(1000)

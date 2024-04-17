@@ -17,6 +17,7 @@ import org.microg.gms.settings.SettingsContract;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Map;
 
 import static org.microg.gms.common.HttpFormClient.RequestContent;
 import static org.microg.gms.common.HttpFormClient.RequestHeader;
@@ -94,6 +95,9 @@ public class AuthRequest extends HttpFormClient.Request {
     public String oauth2IncludeProfile;
     @RequestContent("oauth2_include_email")
     public String oauth2IncludeEmail;
+    @HttpFormClient.RequestContentDynamic
+    public Map<Object, Object> dynamicFields;
+
     public String deviceName;
     public String buildVersion;
 
@@ -127,6 +131,10 @@ public class AuthRequest extends HttpFormClient.Request {
         locale(Utils.getLocale(context));
         if (AuthPrefs.shouldIncludeAndroidId(context)) {
             androidIdHex = Long.toHexString(LastCheckinInfo.read(context).getAndroidId());
+        }
+        if (AuthPrefs.shouldStripDeviceName(context)) {
+            deviceName = "";
+            buildVersion = "";
         }
         return this;
     }
@@ -238,6 +246,11 @@ public class AuthRequest extends HttpFormClient.Request {
 
     public AuthRequest itCaveatTypes(String itCaveatTypes) {
         this.itCaveatTypes = itCaveatTypes;
+        return this;
+    }
+
+    public AuthRequest putDynamicFiledMap(Map<Object, Object> dynamicFields) {
+        this.dynamicFields = dynamicFields;
         return this;
     }
 

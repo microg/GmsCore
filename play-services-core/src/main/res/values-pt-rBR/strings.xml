@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +13,16 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="gms_app_name">microG Services</string>
-    <string name="gms_settings_name">Configurações microG</string>
-
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">Serviços microG</string>
+    <string name="gms_settings_name">Configurações do microG</string>
     <string name="just_a_sec">Aguarde um momento…</string>
     <string name="google_account_label">Google</string>
     <string name="ask_permission_tos">Ao continuar, você permite que este aplicativo e o Google usem suas informações de acordo com seus respectivos termos de serviço e políticas de privacidade.</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de:</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar:</string>
-    <string name="account_manager_title">Gerente de Contas do Google</string>
-    <string name="sorry">Sorry…</string>
+    <string name="account_manager_title">Gerenciador de Contas do Google</string>
+    <string name="sorry">Desculpe…</string>
     <string name="no_network_error_desc">"Você não tem uma conexão de rede.
 
 Este pode ser um problema temporário ou seu dispositivo Android não pode ser provisionado para serviços de dados. Tente novamente quando estiver conectado a uma rede móvel ou conecte-se a uma rede Wi-Fi."</string>
@@ -36,59 +34,48 @@ Tente mais tarde."</string>
 Isso pode demorar alguns minutos."</string>
     <string name="allow">Permitir</string>
     <string name="deny">Negar</string>
-    <string name="auth_notification_title">Autentificação requerida</string>
+    <string name="auth_notification_title">Requer autenticação</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g>requer sua autorização para acessar sua Conta do Google.</string>
-
     <string name="perm_status_broadcast_label">ouvir transmissões de status internos</string>
     <string name="perm_c2dm_receive_label">ouvir C2DM mensagens</string>
     <string name="perm_c2dm_send_label">enviar mensagens C2DM para outros aplicativos</string>
     <string name="perm_gtalk_svc_label">trocar mensagens e receber notificações de sincronização dos servidores do Google</string>
     <string name="perm_extended_access_label">Acesso extendido aos serviços Google</string>
-
-    <string name="service_name_checkin">Registro de dispositivo do Google</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
-
-    <string name="games_title">Google Play Games</string>
+    <string name="service_name_checkin">Registro de dispositivo no Google</string>
+    <string name="service_name_mcs">Mensagens pela Nuvem (Cloud Messaging)</string>
+    <string name="games_title">Google Play Jogos</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> gostaria de usar Play Games</string>
     <string name="games_info_content">Para usar o Play Games, é necessário instalar o aplicativo Google Play Games. O aplicativo pode continuar sem Play Games, mas é possível que ele se comporte inesperadamente.</string>
-
     <string name="pick_place_title">Escolha um lugar</string>
     <string name="pick_place_desc">O selecionador de locais ainda não está disponível.</string>
     <string name="place_picker_select_title">Selecione esta localização</string>
     <string name="place_picker_nearby_places">Locais próximos</string>
     <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
-
-    <string name="lacking_permission_toast">microG Services: Sem permissão para <xliff:g example="have full network acccess">%1$s</xliff:g></string>
-
+    <string name="lacking_permission_toast">Serviços microG: Sem permissão para <xliff:g example="have full network acccess">%1$s</xliff:g></string>
     <string name="network_type_mobile">Rede móvel</string>
     <string name="network_type_wifi">Wi-Fi</string>
     <string name="network_type_roaming">Roaming</string>
     <string name="network_type_other">Outras redes</string>
-
     <!-- Self check -->
 
     <string name="self_check_cat_fake_sig">Suporte de spoofing de assinatura</string>
     <string name="self_check_cat_gms_packages">Pacotes instalados</string>
     <string name="self_check_cat_system">Sistema</string>
-
     <string name="self_check_name_fake_sig_perm">O sistema possui suporte a spoofing de assinatura: </string>
-    <string name="self_check_resolution_fake_sig_perm">Sua ROM não tem suporte nativo para falsificação de assinaturas. Você ainda pode usar Xposed ou outros sistemas para spoof assinatura. Verifique a documentação sobre quais ROMs suportam spoofing de assinaturas e como usar microG em ROMs que não tem esse suporte.</string>
+    <string name="self_check_resolution_fake_sig_perm">Sua ROM não tem suporte nativo para o spoofing de assinaturas. Você ainda pode usar Xposed ou outros sistemas para fazer spoof da assinatura. Verifique a documentação sobre quais ROMs suportam spoofing de assinaturas e como usar microG em ROMs que não tem esse suporte.</string>
     <string name="self_check_name_perm_granted">O sistema concede permissão de spoofing de assinatura: </string>
     <string name="self_check_resolution_perm_granted">Este é um forte indicador de que a ROM suporta spoofing de assinaturas, mas requer mais ação para ativá-la. Verifique a documentação sobre quais etapas podem ser necessárias.</string>
-    <string name="self_check_name_system_spoofs">Assinatura de spoofs do sistema: </string>
+    <string name="self_check_name_system_spoofs">Sistema faz spoof da assinatura:</string>
     <string name="self_check_resolution_system_spoofs">Verifique a documentação sobre quais etapas podem ser necessárias.</string>
-
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
     <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalou: </string>
-    <string name="self_check_resolution_app_installed">Instalar a aplicação <xliff:g example="F-Droid">%1$s</xliff:g> ou compatível. Verifique a documentação sobre quais aplicativos são compatíveis.</string>
+    <string name="self_check_resolution_app_installed">Instalar a aplicação <xliff:g example="F-Droid">%1$s</xliff:g> ou uma compatível. Verifique a documentação sobre quais aplicativos são compatíveis.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> tem assinatura correta: </string>
-    <string name="self_check_resolution_correct_sig">Ou o instalado <xliff:g example="F-Droid">%1$s</xliff:g> não é compatível ou o spoofing de assinatura não está ativo para ele. Verifique a documentação sobre quais aplicativos e ROMs são compatíveis.</string>
-
+    <string name="self_check_resolution_correct_sig">O <xliff:g example="F-Droid">%1$s</xliff:g> não é compatível ou o spoofing de assinatura não está ativo para ele. Verifique a documentação sobre quais aplicativos e ROMs são compatíveis.</string>
     <string name="self_check_name_battery_optimizations">Otimização de bateria ignorada:</string>
-    <string name="self_check_resolution_battery_optimizations">Toque aqui para desativar as otimização da bateria. Não fazer isso pode resultar em aplicativos com má execução.</string>
-
+    <string name="self_check_resolution_battery_optimizations">Toque aqui para desativar as otimizações de bateria. Não fazer isso pode resultar em aplicativos se mal comportando.</string>
     <!-- Settings strings -->
 
     <string name="prefcat_about">Sobre</string>
@@ -96,40 +83,166 @@ Isso pode demorar alguns minutos."</string>
     <string name="prefcat_location_service">Servico de localização</string>
     <string name="prefcat_services">Serviços</string>
     <string name="cond_gcm_bat_title">Otimização de bateria ativada</string>
-    <string name="cond_gcm_bat_summary">Você ativou o Cloud Messaging, mas possui otimizações de bateria ativas para o microG Services. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
-    <string name="cond_gcm_bat_action">Ignorar otimização</string>
-    <string name="cond_perm_title">Permissão ausente</string>
-
+    <string name="cond_gcm_bat_summary">Você ativou o Cloud Messaging, mas possui otimizações de bateria ativas para os serviços MicroG. Para que as notificações push cheguem, você deve ignorar as otimizações da bateria.</string>
+    <string name="cond_gcm_bat_action">Ignorar otimizações</string>
+    <string name="cond_perm_title">Permissão faltando</string>
     <string name="prefs_account">Preferências da conta</string>
     <string name="prefs_account_privacy">Informação pessoal &amp; privacidade</string>
     <string name="prefs_account_security">Login &amp; segurança</string>
-
     <string name="pref_auth_trust_google_title">Confie no Google para permissões de aplicativo</string>
-    <string name="pref_auth_trust_google_summary">Quando desabilitado, o usuário é solicitado antes que uma solicitação de autorização de apps seja enviada ao Google. Algumas aplicações deixarão de utilizar a Conta Google se esta estiver desativada.</string>
-
-    <string name="pref_checkin_enable_summary">Registre seu dispositivo nos serviços do Google e crie um identificador de dispositivo exclusivo. MicroG que identifica outros bits que o nome da sua conta do Google a partir de dados de registro.</string>
-
-    <string name="pref_gcm_enable_mcs_summary">O Cloud Messaging é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
-    <string name="pref_gcm_heartbeat_title">Intervalo de pulsação da Messagem na nuvem</string>
-    <string name="pref_gcm_heartbeat_summary">O intervalo em segundos para o sistema a pulsar os servidores do Google. Aumentar esse número reduzirá o consumo da bateria, mas poderá causar atrasos nas mensagens push.\nDesativado, será substituído em versão futura.</string>
+    <string name="pref_auth_trust_google_summary">Quando desabilitado, o usuário é solicitado antes que uma solicitação de autorização de um app seja enviada ao Google. Algumas aplicações deixarão de utilizar a Conta Google se isto estiver desativado.</string>
+    <string name="pref_checkin_enable_summary">Registra seu dispositivo nos serviços do Google e cria um identificador de dispositivo único. O microG remove informações que podem te identificar, exceto o nome da sua conta Google, dos dados do seu registro.</string>
+    <string name="pref_gcm_enable_mcs_summary">As Mensagens pela Nuvem (Cloud Messaging) é um provedor de notificação push usado por muitos aplicativos de terceiros. Para usá-lo, você deve ativar o registro do dispositivo.</string>
+    <string name="pref_gcm_heartbeat_title">Intervalo do heartbeat do Cloud Messaging</string>
+    <string name="pref_gcm_heartbeat_summary">O intervalo em segundos para o sistema a checar os servidores do Google. Aumentar esse número reduzirá o consumo da bateria, mas poderá causar atrasos nas mensagens push.
+\nDepreciado, será substituído em versão futura.</string>
     <string name="pref_gcm_apps_title">Aplicativos que usam o Cloud Messaging</string>
     <string name="pref_gcm_apps_summary">Lista de apps atualmente registrados no Cloud Messaging.</string>
-    <string name="pref_about_title">Sobre microG Services</string>
+    <string name="pref_about_title">Sobre serviços microG</string>
     <string name="pref_about_summary">Informações de versão e bibliotecas usadas</string>
-
-    <string name="gcm_app_error_unregistering">Erro ao cancelar o registro</string>
+    <string name="gcm_app_error_unregistering">Erro removendo o registro</string>
     <string name="gcm_app_not_installed_anymore">Não está mais instalado</string>
-    <string name="gcm_unregister_app">Cancelar registro</string>
+    <string name="gcm_unregister_app">Remover registro</string>
     <string name="gcm_not_registered">Não registrado</string>
     <string name="gcm_no_message_yet">Nenhuma mensagem recebida até agora</string>
     <string name="gcm_last_message_at">Última mensagem: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gcm_registered">Registrado</string>
-    <string name="gcm_registered_since">Registrado desde: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
-    <string name="gcm_unregister_confirm_title">Cancelar registro <xliff:g example="F-Droid">%1$s</xliff:g>?</string>
-    <string name="gcm_unregister_confirm_message">Algumas aplicações não registam automaticamente e/ou não fornecem uma opção para fazê-lo manualmente. Esses aplicativos podem não funcionar corretamente após o cancelamento do registro.\nContinuar?</string>
-    <string name="gcm_unregister_after_deny_message">Você negou um app para se registrar para notificações push que já está registrado.\nDeseja cancelar o registo agora para que não receba mensagens de envio no futuro?</string>
+    <string name="gcm_registered_since">Registrado: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">Remover registro de <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
+    <string name="gcm_unregister_confirm_message">Algumas aplicações não se registram novamente automaticamente e/ou não fornecem uma opção para fazer isso manualmente. Esses aplicativos podem não funcionar corretamente após o removimento do registro.
+\nContinuar?</string>
+    <string name="gcm_unregister_after_deny_message">Você negou um app se registrar para notificações push que já está registrado.
+\nDeseja cancelar o registro agora para que não receba mensagens de envio no futuro?</string>
     <string name="gcm_messages_counter">Mensagens: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
     <string name="gcm_network_state_disconnected">Desconectado</string>
-    <string name="gcm_network_state_connected">Conectado desde <xliff:g example="2 hours ago">%1$s</xliff:g></string>
-
+    <string name="gcm_network_state_connected">Conectado <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="service_name_vending">Serviços da Play Store</string>
+    <string name="prefcat_configuration">Configuração</string>
+    <string name="pref_auth_include_android_id_title">Autenticar com registração do dispositivo</string>
+    <string name="pref_device_registration_android_id">ID do Android</string>
+    <string name="checkin_enable_switch">Registrar dispositivo</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_more_settings">Mais</string>
+    <string name="pref_add_account_title">Conta</string>
+    <string name="pref_add_account_summary">Adicionar conta Google</string>
+    <string name="pref_gcm_confirm_new_apps_title">Confirmar novos apps</string>
+    <string name="gcm_enable_switch">Receber notificações push</string>
+    <string name="gcm_allow_app_popup">Permitir que <xliff:g example="F-Droid">%1$s</xliff:g> se registre para notificações push?</string>
+    <string name="pref_push_app_allow_register_title">Permitir registração</string>
+    <string name="pref_push_app_allow_register_summary">Permite que o app registre para notificações push.</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Iniciar o app em segundo plano para receber notificações push entrando.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Iniciar app quando uma mensagem push for recebida</string>
+    <string name="prefcat_push_apps_title">Apps usando notificações push</string>
+    <string name="prefcat_push_networks_title">Redes para usar para notificações push</string>
+    <string name="safetynet_enable_switch">Permitir atestação do dispositivo</string>
+    <string name="pref_safetynet_test_title">Testar atestação do SafetyNet</string>
+    <string name="pref_test_summary_passed">Passou todos os testes</string>
+    <string name="pref_test_summary_failed">Falhou: %s</string>
+    <string name="pref_test_summary_warn">Aviso: %s</string>
+    <string name="pref_droidguard_operation_mode">Modo de operação</string>
+    <string name="prefcat_safetynet_apps_title">Apps usando o SafetyNet</string>
+    <string name="menu_clear_recent_requests">Limpar solitações recentes</string>
+    <string name="safetynet_last_run_at">Último uso: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">Nativo</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_user">Customizado: %s</string>
+    <string name="profile_name_system">Sistema: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Importar perfil customizado</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Importar perfil de dispositivo de arquivo</string>
+    <string name="pref_device_registration_select_profile_title">Escolher perfil</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">reCAPTCHA Empresarial: %s</string>
+    <string name="pref_safetynet_recent_response_status">Status da resposta</string>
+    <string name="pref_safetynet_recent_cat_response">Dados da resposta</string>
+    <string name="pref_safetynet_recent_cat_request">Solicitar dados</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Tempo da solicitação</string>
+    <string name="push_notifications_summary_manual">Ativado / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s segundos</string>
+    <string name="push_notifications_summary_values_minutes">%s minutos</string>
+    <string name="pref_vending_summary_licensing_off">Licenciamento desligado</string>
+    <string name="pref_vending_summary_licensing_on">Licenciamento ligado</string>
+    <string name="pref_vending_licensing_enable_switch">Responder solicitações de verificação de liçença</string>
+    <string name="signin_picker_subtitle">para continuar para <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_title">Permitir fazer login ao <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_subtext_sharing">Para continuar, o microG irá compartilhar nome, endereço de email, e foto de perfil de sua conta Google com <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="feedback_disabled">Feedback atualmente não possível</string>
+    <string name="auth_before_connect">Um app no seu dispositivo está tentando fazer login numa conta Google. \u0020Se isso for intencional, use o botão <b>Fazer login</b> para se conectar a pagina de login do Google, se não, clique em <b>Cancelar</b> para voltar para o app que fez com que esse diálogo aparecesse.</string>
+    <string name="perm_provision_label">provisionar serviços microG</string>
+    <string name="service_name_snet">SafetyNet do Google</string>
+    <string name="prefcat_google_services">Serviços do Google</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Perguntar antes de registrar um novo app para receber notificações push</string>
+    <string name="prefcat_test">Teste</string>
+    <string name="pref_auth_include_android_id_summary">Quando desativado, pedidos de autenticação são serão conectados a registração do dispositivo, o que pode permitir que dispositivos não autorizados façam login, mas pode ter consequências não esperadas.</string>
+    <string name="pref_gcm_ping_interval">Intervalo de ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_auth_visible_title">Permitir que apps encontrem contas</string>
+    <string name="checkin_not_registered">Não registrado</string>
+    <string name="pref_auth_visible_summary">Quando ativado, todos os apps no dispositivo poderam ver o endereço de email das suas contas Google sem autorização prévia.</string>
+    <string name="checkin_last_registration">Última registração: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="prefcat_push_apps_registered_title">Apps registrados</string>
+    <string name="prefcat_push_apps_unregistered_title">Apps não registrados</string>
+    <string name="pref_recaptcha_test_title">Testar reCAPTCHA</string>
+    <string name="safetynet_intro">SafetyNet do Google é um sistema de certificação de dispositivo, confirmando que um dispositivo é devidamente protegido e compatível com o CTS do Android. Alguns apps usam o SafetyNet para motivos de segurança ou um pré-requisito para proteção contra intervenção.
+\n
+\nmicroG GmsCore contém uma implementação aberta do SafetyNet, porém o servidor oficial requer que pedidos do SafetyNet sejam assinados usando o sistema proprietário DroidGuard.</string>
+    <string name="pref_recaptcha_enterprise_test_title">Testar reCAPTCHA Empresarial</string>
+    <string name="pref_test_summary_running">Rodando…</string>
+    <string name="pref_droidguard_unsupported_summary">Execução do DroidGuard não é suportada nesse dispositivo. Serviços do SafetyNet podem se comportar mal.</string>
+    <string name="profile_name_auto">Automático: %s</string>
+    <string name="pref_device_registration_device_profile_category">Perfil do dispositivo</string>
+    <string name="pref_safetynet_recent_uses">Usos recentes</string>
+    <string name="pref_safetynet_recent_attestation_summary">Atestação: %s</string>
+    <string name="pref_safetynet_recent_request_type">Tipo de solicitação</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">reCAPTCHA: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Copiar dados JSON JWS</string>
+    <string name="pref_safetynet_recent_advice">Dica</string>
+    <string name="pref_safetynet_recent_eval_type">Tipo de avaliação</string>
+    <string name="pref_vending_license_enable_summary">Alguns apps requerem verificação que você comprou eles na Play Store. Quando solicitado por um app, o microG pode baixar uma prova de compra do Google. Se desativado, ou se nenhuma conta Google foi adicionada, solicitações de licença são ignoradas.</string>
+    <string name="gms_settings_summary">Configurar serviços microG.</string>
+    <string name="auth_sign_in">Fazer login</string>
+    <string name="auth_connecting">Seu dispositivo está estabelecendo uma conexão aos servidores do Google para te logar.
+\n
+\nIsso pode demorar alguns segundos.</string>
+    <string name="signin_picker_title">Escolha uma conta</string>
+    <string name="signin_picker_add_account_label">Adicionar outra conta</string>
+    <string name="signin_confirm_button_text">Permitir e compartilhar</string>
+    <string name="signin_subtext_policy">Antes de usar esse app, revise seu %1$s e %2$s.</string>
+    <string name="signin_subtext_policy_privacy">política de privacidade</string>
+    <string name="signin_subtext_policy_terms">termos de uso</string>
+    <string name="perm_gsf_read_gservices_label">ler configuração de serviço Google</string>
+    <string name="perm_provision_description">Permite que o app configure serviços microG sem interação do usuário</string>
+    <string name="pref_safetynet_recent_cat_basic">Dados básicos</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_test_invalid_json">JSON inválido</string>
+    <string name="push_notifications_summary_off">Desativado</string>
+    <string name="push_notifications_summary_automatic">Ativado / Automático: %s</string>
+    <string name="pref_safetynet_recent_copied">Copiado para a área de transferência!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integridade e CTS passados</string>
+    <string name="pref_safetynet_test_cts_failed">CTS falhou</string>
+    <string name="pref_safetynet_test_integrity_failed">Integridade falhou</string>
+    <string name="pref_safetynet_test_not_completed">Não completado ainda</string>
+    <string name="pref_safetynet_test_no_result">Nenhum resultado</string>
+    <string name="pref_auth_strip_device_name_title">Remover nome do dispositivo para autenticação</string>
+    <string name="pref_auth_strip_device_name_summary">Quanto ativado, requisições de autenticação não incluirão o nome do dispositivo, o que pode permitir que dispositivos não autorizados façam login, mas pode ter consequências não previstas.</string>
+    <string name="perm_car_speed_label">Velocidade do carro</string>
+    <string name="perm_car_info_label">Informação do carro</string>
+    <string name="perm_car_speed_description">Acessar a velocidade do seu carro</string>
+    <string name="perm_car_info_description">Acessar a informação do seu carro</string>
+    <string name="perm_car_fuel_label">Nível de combustível do carro</string>
+    <string name="perm_car_fuel_description">Acessar o nível de combustível do seu carro</string>
+    <string name="backup_disabled">Backup não possível nesse momento</string>
+    <string name="perm_car_mileage_label">Quilometragem do carro</string>
+    <string name="perm_car_mileage_description">Acessar a quilometragem do seu carro</string>
+    <string name="perm_car_vendor_extension_label">Canal de vendedor do carro</string>
+    <string name="perm_car_vendor_extension_description">Acessar o canal do vendedor do carro para trocar informações específicas do carro</string>
+    <string name="pref_accounts_title">Contas do Google</string>
+    <string name="prefcat_accounts_settings_title">Configurações</string>
+    <string name="prefcat_accounts_current_accounts_title">Contas</string>
+    <string name="pref_accounts_summary">Adicionar e gerenciar contas Google</string>
+    <string name="pref_vending_billing_category">Cobrança do Google Play</string>
+    <string name="pref_vending_licensing_category">Licenciamento do Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Lidar com solicitações de cobrança</string>
+    <string name="pref_vending_billing_enable_summary">Quando ativado, alguns apps podem completar compras ou começar assinaturas pelo serviço de cobrança do Google Play.</string>
+    <string name="pref_vending_billing_note_experimental">Essa função é experimental e pode causar perca de dinheiro. Você foi avisado.</string>
+    <string name="pref_vending_billing_note_licensing">Alguns apps podem precisar que você ative a verificação de licença para verificar suas compras.</string>
 </resources>

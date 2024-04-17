@@ -13,23 +13,25 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend configurado</item>
+        <item quantity="many"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
         <item quantity="other"><xliff:g example="3">%1$d</xliff:g> backends configurados</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> aplicación registrada</item>
+        <item quantity="many"><xliff:g example="123">%1$d</xliff:g> aplicaciones registradas</item>
         <item quantity="other"><xliff:g example="123">%1$d</xliff:g> aplicaciones registradas</item>
     </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">No se concede el permiso necesario para el correcto funcionamiento de los servicios de microG.</item>
+        <item quantity="many">No se conceden los permisos necesarios para el correcto funcionamiento de los servicios microG.</item>
         <item quantity="other">No se conceden los permisos necesarios para el correcto funcionamiento de los de servicios de microG.</item>
     </plurals>
     <plurals name="cond_perm_action">
         <item quantity="one">Solicitar el permiso que falta</item>
+        <item quantity="many">Solicitar los permisos que faltan</item>
         <item quantity="other">Solicitar los permisos que faltan</item>
     </plurals>
 </resources>

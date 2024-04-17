@@ -25,7 +25,7 @@
     <string name="sorry">Вибачте…</string>
     <string name="auth_before_connect">Застосунок на Вашому пристрої намагається увійти до облікового запису Google.
 \n
-\nЯкщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для підключення до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
+\nЯкщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для під\'єднання до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
     <string name="auth_sign_in">Увійти</string>
     <string name="auth_connecting">Ваш пристрій встановлює зв\'язок із серверами Google для авторизації.
 \n
@@ -99,7 +99,7 @@
     <string name="prefs_account_privacy">Персональна інформація та приватність</string>
     <string name="prefs_account_security">Авторизація та безпека</string>
     <string name="pref_auth_trust_google_title">Довіряти дозволам Google в додатках</string>
-    <string name="pref_auth_trust_google_summary">Коли вимкнено, у користувача запитується дозвіл на авторизацію Google. Деякі додатки не можуть використовувати обліковий запис Google, без даної можливості.</string>
+    <string name="pref_auth_trust_google_summary">Коли вимкнено, у користувача запитується дозвіл на авторизацію Google. Деякі застосунки не можуть використовувати обліковий запис Google, без даної можливості.</string>
     <string name="pref_checkin_enable_summary">Реєструє Ваш пристрій в сервісах Google та створює унікальний ідентифікатор. MicroG видаляє всі біти ідентифікації, окрім імені Вашого облікового запису Google.</string>
     <string name="pref_more_settings">Додатково</string>
     <string name="pref_gcm_enable_mcs_summary">Cloud Messaging надає push-сповіщення, які використовуються в багатьох сторонніх додатках. Аби використовувати їх, ви повинні увімкнути реєстрацію пристрою.</string>
@@ -211,4 +211,33 @@
     <string name="pref_device_registration_device_profile_category">Профіль пристрою</string>
     <string name="prefcat_push_networks_title">Мережі, які слід використовувати для push-сповіщень</string>
     <string name="pref_safetynet_recent_eval_type">Тип оцінки</string>
+    <string name="pref_vending_summary_licensing_on">Ліцензування ввімкнено</string>
+    <string name="pref_vending_licensing_enable_switch">Відповідати на запити перевірки ліцензії</string>
+    <string name="pref_vending_license_enable_summary">Деякі застосунки вимагають підтвердження того, що ви придбали їх у Google Play. На запит застосунку microG може завантажити підтвердження покупки з Google. Якщо цю функцію вимкнено або якщо обліковий запис Google не додано, запити на перевірку ліцензії ігноруються.</string>
+    <string name="pref_vending_summary_licensing_off">Ліцензування вимкнено</string>
+    <string name="service_name_vending">Служби Play Store</string>
+    <string name="perm_car_speed_label">Швидкість машини</string>
+    <string name="perm_car_speed_description">Отримання доступу до швидкості вашої машини</string>
+    <string name="perm_car_info_label">Інформація про машину</string>
+    <string name="perm_car_info_description">Отримання доступу до інформації про вашу машину</string>
+    <string name="pref_accounts_title">Облікові записи</string>
+    <string name="prefcat_accounts_current_accounts_title">Поточні активні облікові записи</string>
+    <string name="pref_vending_licensing_category">Ліцензування Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Обробляти платіжні запити</string>
+    <string name="perm_car_fuel_label">Рівень палива в машині</string>
+    <string name="perm_car_fuel_description">Доступ до інформації про рівень пального у вашій машині</string>
+    <string name="perm_car_mileage_label">Пробіг машини</string>
+    <string name="perm_car_mileage_description">Доступ до інформації про пробіг машини</string>
+    <string name="perm_car_vendor_extension_label">Канал постачальника машин</string>
+    <string name="perm_car_vendor_extension_description">Отримання доступу до каналу продавця вашої машини, щоб обмінятися інформацією про специфічну машину</string>
+    <string name="pref_accounts_summary">Додати та керувати обліковими записами Google</string>
+    <string name="prefcat_accounts_settings_title">Налаштування</string>
+    <string name="feedback_disabled">Надіслати відгук наразі неможливо</string>
+    <string name="pref_vending_billing_category">Платежі Google Play</string>
+    <string name="pref_vending_billing_enable_summary">Після ввімкнення деякі застосунки можуть оформлювати покупки або підписки через платіжну систему Google Play.</string>
+    <string name="pref_vending_billing_note_experimental">Ця функція експериментальна і може призвести до втрати грошей. Вас попередили.</string>
+    <string name="pref_vending_billing_note_licensing">Для підтвердження покупок у деяких застосунках може знадобитися також увімкнути перевірку ліцензії.</string>
+    <string name="backup_disabled">Резервне копіювання наразі неможливе</string>
+    <string name="pref_auth_strip_device_name_title">Видалити назву пристрою для автентифікації</string>
+    <string name="pref_auth_strip_device_name_summary">Якщо ввімкнено, запити на автентифікацію не міститимуть ім\'я пристрою, що може дозволити несанкціонованим пристроям входити в обліковий запис, але може мати непередбачені наслідки.</string>
 </resources>

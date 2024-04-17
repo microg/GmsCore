@@ -16,6 +16,7 @@ import android.location.LocationManager
 import android.os.*
 import android.util.Base64
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -52,7 +53,7 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 @TargetApi(21)
-class ExposureNotificationServiceImpl(private val context: Context, private val lifecycle: Lifecycle, private val packageName: String) : INearbyExposureNotificationService.Stub(), LifecycleOwner {
+class ExposureNotificationServiceImpl(private val context: Context, override val lifecycle: Lifecycle, private val packageName: String) : INearbyExposureNotificationService.Stub(), LifecycleOwner {
 
     // Table of back-end public keys, used to verify the signature of the diagnosed TEKs.
     // The table is indexed by package names.
@@ -95,8 +96,6 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
 
     private fun LifecycleCoroutineScope.launchSafely(block: suspend CoroutineScope.() -> Unit): Job = launchWhenStarted { try { block() } catch (e: Exception) { Log.w(TAG, "Error in coroutine", e) } }
 
-    override fun getLifecycle(): Lifecycle = lifecycle
-
     private fun pendingConfirm(permission: String): PendingIntent {
         val intent = Intent(ACTION_CONFIRM)
         intent.`package` = context.packageName
@@ -115,7 +114,7 @@ class ExposureNotificationServiceImpl(private val context: Context, private val 
             Log.w(TAG, e)
         }
         Log.d(TAG, "Pending: $intent")
-        val pi = PendingIntent.getActivity(context, permission.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
+        val pi = PendingIntentCompat.getActivity(context, permission.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT, false)!!
         Log.d(TAG, "Pending: $pi")
         return pi
     }

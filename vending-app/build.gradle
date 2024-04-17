@@ -4,6 +4,8 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.squareup.wire'
 
 android {
     namespace "com.android.vending"
@@ -15,6 +17,25 @@ android {
         versionCode vendingAppVersionCode
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
+    }
+
+    buildTypes {
+        debug {
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources false
+                obfuscate false
+                optimizeCode false
+            }
+        }
+        release {
+            postprocessing {
+                removeUnusedCode true
+                removeUnusedResources true
+                obfuscate false
+                optimizeCode true
+            }
+        }
     }
 
     flavorDimensions = ['target']
@@ -34,22 +55,76 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            java {
+                srcDirs += "build/generated/source/proto/main/java"
+            }
+        }
+    }
+
+
     buildFeatures {
         aidl = true
+        buildConfig = true
+        compose true
     }
 
     lintOptions {
-        disable 'MissingTranslation'
+        disable 'MissingTranslation', 'GetLocales'
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = 1.8
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.10'
+    }
 }
 
 dependencies {
     implementation project(':fake-signature')
+    implementation project(':play-services-auth')
+    implementation project(':play-services-base-core')
+
+    implementation "com.squareup.wire:wire-runtime:$wireVersion"
+    implementation "com.android.volley:volley:$volleyVersion"
+
+    implementation "androidx.webkit:webkit:$webkitVersion"
+
+    implementation "com.squareup.wire:wire-grpc-client:$wireVersion"
+
+    //compose
+    implementation platform('androidx.compose:compose-bom:2022.10.00')
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.animation:animation-graphics'
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-svg:2.2.2")
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
+
+    //droidguard
+    implementation project(':play-services-droidguard')
+
+    //androidx
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    implementation "androidx.preference:preference-ktx:$preferenceVersion"
+}
+
+wire {
+    kotlin {
+        javaInterop = true
+    }
 }
 
 if (file('user.gradle').exists()) {

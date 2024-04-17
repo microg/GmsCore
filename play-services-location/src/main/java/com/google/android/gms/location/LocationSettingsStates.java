@@ -10,36 +10,41 @@ package com.google.android.gms.location;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer;
 import org.microg.gms.common.PublicApi;
-import org.microg.safeparcel.AutoSafeParcelable;
 
 /**
  * Stores the current states of all location-related settings.
  */
 @PublicApi
-public class LocationSettingsStates extends AutoSafeParcelable {
+@SafeParcelable.Class
+public class LocationSettingsStates extends AbstractSafeParcelable {
 
     @Field(1000)
-    private int versionCode = 2;
+    int versionCode = 2;
 
     @Field(1)
-    private boolean gpsUsable;
+    private final boolean gpsUsable;
 
     @Field(2)
-    private boolean networkLocationUsable;
+    private final boolean networkLocationUsable;
 
     @Field(3)
-    private boolean bleUsable;
+    private final boolean bleUsable;
 
     @Field(4)
-    private boolean gpsPresent;
+    private final boolean gpsPresent;
 
     @Field(5)
-    private boolean networkLocationPresent;
+    private final boolean networkLocationPresent;
 
     @Field(6)
-    private boolean blePresent;
+    private final boolean blePresent;
 
     /**
      * Whether BLE is present on the device.
@@ -101,7 +106,8 @@ public class LocationSettingsStates extends AutoSafeParcelable {
         return networkLocationUsable;
     }
 
-    public LocationSettingsStates(boolean gpsUsable, boolean networkLocationUsable, boolean bleUsable, boolean gpsPresent, boolean networkLocationPresent, boolean blePresent) {
+    @Constructor
+    public LocationSettingsStates(@Param(1) boolean gpsUsable, @Param(2) boolean networkLocationUsable, @Param(3) boolean bleUsable, @Param(4) boolean gpsPresent, @Param(5) boolean networkLocationPresent, @Param(6) boolean blePresent) {
         this.gpsUsable = gpsUsable;
         this.networkLocationUsable = networkLocationUsable;
         this.bleUsable = bleUsable;
@@ -111,8 +117,9 @@ public class LocationSettingsStates extends AutoSafeParcelable {
     }
 
     /**
-     * Retrieves the location settings states from the intent extras. When the location settings dialog finishes, you can use this method to retrieve the
-     * current location settings states from the intent in your {@link Activity#onActivityResult(int, int, Intent)};
+     * Retrieves the location settings states from the intent extras. When the location settings dialog finishes, you can use this
+     * method to retrieve the current location settings states from the intent in your
+     * {@link Activity#onActivityResult(int, int, Intent)}.
      */
     public static LocationSettingsStates fromIntent(Intent intent) {
         byte[] bytes = intent.getByteArrayExtra(EXTRA_NAME);
@@ -120,7 +127,12 @@ public class LocationSettingsStates extends AutoSafeParcelable {
         return SafeParcelableSerializer.deserializeFromBytes(bytes, CREATOR);
     }
 
-    public static final Creator<LocationSettingsStates> CREATOR = new AutoCreator<LocationSettingsStates>(LocationSettingsStates.class);
+    public static final SafeParcelableCreatorAndWriter<LocationSettingsStates> CREATOR = findCreator(LocationSettingsStates.class);
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
 
     private static final String EXTRA_NAME = "com.google.android.gms.location.LOCATION_SETTINGS_STATES";
 }

@@ -26,6 +26,7 @@ import org.microg.gms.common.Constants
 import org.microg.gms.common.Utils
 import org.microg.gms.settings.SettingsContract.CheckIn
 import org.microg.gms.settings.SettingsContract.getSettings
+import org.microg.gms.utils.singleInstanceOf
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -50,6 +51,13 @@ const val EXTRA_SELF_IN_GAME_NAME = "com.google.android.gms.games.EXTRA_SELF_IN_
 const val EXTRA_OTHER_PLAYER_IN_GAME_NAME = "com.google.android.gms.games.EXTRA_OTHER_PLAYER_IN_GAME_NAME"
 
 const val GAMES_PACKAGE_NAME = "com.google.android.play.games"
+
+val List<Scope>.realScopes
+    get() = if (any { it.scopeUri == Scopes.GAMES }) {
+        this
+    } else {
+        this.toSet() + Scope(Scopes.GAMES_LITE)
+    }.toList().sortedBy { it.scopeUri }
 
 fun PlayerEntity.toContentValues(): ContentValues = contentValuesOf(
     PlayerColumns.externalPlayerId to playerId,
@@ -145,7 +153,7 @@ fun JSONObject.toPlayer() = PlayerEntity(
     null
 )
 
-suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = Volley.newRequestQueue(context)) {
+suspend fun registerForGames(context: Context, account: Account, queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }) {
     val authManager = AuthManager(context, account.name, Constants.GMS_PACKAGE_NAME, "oauth2:${Scopes.GAMES_FIRSTPARTY}")
     authManager.setOauth2Foreground("1")
     val authToken = withContext(Dispatchers.IO) { authManager.requestAuth(false).auth }
@@ -202,11 +210,11 @@ suspend fun performGamesSignIn(
     account: Account,
     permitted: Boolean = false,
     scopes: List<Scope> = emptyList(),
-    queue: RequestQueue = Volley.newRequestQueue(context)
+    queue: RequestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 ): Boolean {
-    val scopes = (scopes.toSet() + Scope(Scopes.GAMES_LITE)).toList().sortedBy { it.scopeUri }
-    val authManager = AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
-    if (scopes.size == 1) authManager.setItCaveatTypes("2")
+    val realScopes = scopes.realScopes
+    val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
+    if (realScopes.size == 1) authManager.setItCaveatTypes("2")
     if (permitted) authManager.isPermitted = true
     val authResponse = withContext(Dispatchers.IO) { authManager.requestAuth(true) }
     if (authResponse.auth == null) return false

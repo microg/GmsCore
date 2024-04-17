@@ -71,6 +71,7 @@ class MapContext(private val context: Context) : ContextWrapper(context.createPa
     }
 
     override fun startActivity(intent: Intent?) {
+        intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 

@@ -44,41 +44,36 @@ public class RomSpoofSignatureChecks implements SelfCheckGroup {
 
     @Override
     public void doChecks(Context context, ResultCollector collector) {
-        boolean hasPermission = addRomKnowsFakeSignaturePermission(context, collector);
-        if (hasPermission) {
-            addSystemGrantsFakeSignaturePermission(context, collector);
-        }
         addSystemSpoofsSignature(context, collector);
     }
 
-    private boolean addRomKnowsFakeSignaturePermission(Context context, ResultCollector collector) {
+    private boolean addSystemSpoofsSignature(Context context, ResultCollector collector) {
         boolean knowsPermission = true;
         try {
             context.getPackageManager().getPermissionInfo(FAKE_SIGNATURE_PERMISSION, 0);
         } catch (PackageManager.NameNotFoundException e) {
             knowsPermission = false;
         }
-        collector.addResult(context.getString(R.string.self_check_name_fake_sig_perm), knowsPermission ? Positive : Unknown,
-                context.getString(R.string.self_check_resolution_fake_sig_perm));
-        return knowsPermission;
-    }
-
-    private boolean addSystemGrantsFakeSignaturePermission(Context context, ResultCollector collector) {
-        boolean grantsPermission = ContextCompat.checkSelfPermission(context, FAKE_SIGNATURE_PERMISSION) == PERMISSION_GRANTED;
-        collector.addResult(context.getString(R.string.self_check_name_perm_granted), grantsPermission ? Positive : Negative,
-                context.getString(R.string.self_check_resolution_perm_granted), new CheckResolver() {
-                    @Override
-                    public void tryResolve(Fragment fragment) {
-                        fragment.requestPermissions(new String[]{FAKE_SIGNATURE_PERMISSION}, 0);
-                    }
-                });
-        return grantsPermission;
-    }
-
-    private boolean addSystemSpoofsSignature(Context context, ResultCollector collector) {
+        boolean grantsPermission = false;
+        if (knowsPermission) {
+            grantsPermission = ContextCompat.checkSelfPermission(context, FAKE_SIGNATURE_PERMISSION) == PERMISSION_GRANTED;
+        }
         boolean spoofsSignature = GMS_PACKAGE_SIGNATURE_SHA1.equals(PackageUtils.firstSignatureDigest(context, Constants.GMS_PACKAGE_NAME));
-        collector.addResult(context.getString(R.string.self_check_name_system_spoofs), spoofsSignature ? Positive : Negative,
-                context.getString(R.string.self_check_resolution_system_spoofs));
+        if (knowsPermission && !spoofsSignature && !grantsPermission) {
+            collector.addResult(
+                    context.getString(R.string.self_check_name_system_spoofs),
+                    spoofsSignature ? Positive : Negative,
+                    context.getString(org.microg.tools.ui.R.string.self_check_resolution_permission),
+                    fragment -> fragment.requestPermissions(new String[]{FAKE_SIGNATURE_PERMISSION}, 0)
+            );
+        } else {
+            collector.addResult(
+                    context.getString(R.string.self_check_name_system_spoofs),
+                    spoofsSignature ? Positive : Negative,
+                    context.getString(R.string.self_check_resolution_system_spoofs),
+                    fragment -> fragment.requestPermissions(new String[]{FAKE_SIGNATURE_PERMISSION}, 0)
+            );
+        }
         return spoofsSignature;
     }
 }

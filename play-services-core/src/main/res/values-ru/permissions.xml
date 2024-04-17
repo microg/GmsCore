@@ -13,12 +13,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources>
+  --><resources>
     <string name="permission_service_all_label">Все сервисы Google</string>
     <string name="permission_service_all_description">Дает приложению доступ к сервисам Google через любой связанный аккаунт Google.</string>
-
     <string name="permission_service_android_label">Сервисы Android</string>
     <string name="permission_service_android_description">Дает приложению доступ к сервисам Android через любую связанную учетную запись Google.</string>
     <string name="permission_service_adsense_label">AdSense</string>
@@ -41,7 +38,7 @@
     <string name="permission_service_gbase_description">Дает приложению доступ к Google Base через любую связанную учетную запись Google.</string>
     <string name="permission_service_grandcentral_label">Google Voice</string>
     <string name="permission_service_grandcentral_description">Дает приложению доступ к Google Voice через любую связанную учетную запись Google.</string>
-    <string name="permission_service_groups2_label">Google Groups</string>
+    <string name="permission_service_groups2_label">Группы Google</string>
     <string name="permission_service_groups2_description">Дает приложению доступ к Google Groups через любую связанную учетную запись Google.</string>
     <string name="permission_service_health_label">Google Health</string>
     <string name="permission_service_health_description">Дает приложению доступ к Google Health через любую связанную учетную запись Google.</string>
@@ -53,17 +50,17 @@
     <string name="permission_service_knol_description">Дает приложению доступ к Knol через любую связанную учетную запись Google.</string>
     <string name="permission_service_lh2_label">Picasa Web Albums</string>
     <string name="permission_service_lh2_description">Дает приложению доступ к Picasa Web Albums через любую связанную учетную запись Google.</string>
-    <string name="permission_service_local_label">Google Maps</string>
+    <string name="permission_service_local_label">Google Карты</string>
     <string name="permission_service_local_description">Дает приложению доступ к Google Maps через любую связанную учетную запись Google.</string>
     <string name="permission_service_mail_label">Google Mail</string>
     <string name="permission_service_mail_description">Дает приложению доступ к Google Mail через любую связанную учетную запись Google.</string>
-    <string name="permission_service_news_label">Google News</string>
+    <string name="permission_service_news_label">Google Новости</string>
     <string name="permission_service_news_description">Дает приложению доступ к Google News через любую связанную учетную запись Google.</string>
     <string name="permission_service_notebook_label">Google Notebook</string>
     <string name="permission_service_notebook_description">Дает приложению доступ к Google Notebook через любую связанную учетную запись Google.</string>
     <string name="permission_service_orkut_label">Orkut</string>
     <string name="permission_service_orkut_description">Дает приложению доступ к Orkut через любую связанную учетную запись Google.</string>
-    <string name="permission_service_print_label">Google Book Search</string>
+    <string name="permission_service_print_label">Google Книги</string>
     <string name="permission_service_print_description">Дает приложению доступ к Google Book Search через любую связанную учетную запись Google.</string>
     <string name="permission_service_sierra_label">Аккаунты Google Checkout</string>
     <string name="permission_service_sierra_description">Дает приложению доступ к аккаунтам Google Checkout через любую связанную учетную запись Google.</string>
@@ -73,15 +70,15 @@
     <string name="permission_service_sierrasandbox_description">Дает приложению доступ к аккаунтам Google Checkout Sandbox через любую связанную учетную запись Google.</string>
     <string name="permission_service_sitemaps_label">Google Webmaster Tools</string>
     <string name="permission_service_sitemaps_description">Дает приложению доступ к Google Webmaster Tools через любую связанную учетную запись Google.</string>
-    <string name="permission_service_speech_label">Voice Search</string>
+    <string name="permission_service_speech_label">Голосовой поиск</string>
     <string name="permission_service_speech_description">Дает приложению доступ к Voice Search через любую связанную учетную запись Google.</string>
-    <string name="permission_service_speechpersonalization_label">Personalized Speech Recognition</string>
+    <string name="permission_service_speechpersonalization_label">Персонализированное распознавание речи</string>
     <string name="permission_service_speechpersonalization_description">Дает приложению доступ к Personalized Speech Recognition через любую связанную учетную запись Google.</string>
     <string name="permission_service_talk_label">Google Talk</string>
     <string name="permission_service_talk_description">Дает приложению доступ к Google Talk через любую связанную учетную запись Google.</string>
     <string name="permission_service_wifi_label">Google Wi-Fi</string>
     <string name="permission_service_wifi_description">Дает приложению доступ к Google Wi-Fi через любую связанную учетную запись Google.</string>
-    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_label">Google Таблицы</string>
     <string name="permission_service_wise_description">Дает приложению доступ к Google Spreadsheets через любую связанную учетную запись Google.</string>
     <string name="permission_service_writely_label">Google Docs</string>
     <string name="permission_service_writely_description">Дает приложению доступ к Google Docs через любую связанную учетную запись Google.</string>
@@ -89,7 +86,6 @@
     <string name="permission_service_youtube_description">Дает приложению доступ к YouTube через любую связанную учетную запись Google.</string>
     <string name="permission_service_YouTubeUser_label">Имена пользователей YouTube</string>
     <string name="permission_service_YouTubeUser_description">Позволяет приложению получить доступ к имени пользователя(ей) YouTube, который связан с акаунтом Google.</string>
-
     <string name="permission_scope_www.googleapis.com_auth_activity">Просмотреть историю активности ваших приложений Google</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Управление своей учетной записью покупателя Ad Exchange</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Просмотр ваших Ad Exchange данных</string>
@@ -148,7 +144,7 @@
     <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Выбрать ваш город, и историю местоположений</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Выбрать ваше самое точно местоположение</string>
     <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">Выберите свой город</string>
-    <string name="permission_scope_www.googleapis.com_auth_mapsengine">"предоставляет доступ на чтение и запись к данным Maps Engine пользователя из вашего приложения."</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">Просмотр и управление данными Google Maps Engine</string>
     <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">"предоставляет доступ к пользовательмкому Maps Engine только для чтения для вас"</string>
     <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Просмотр и управление вашими Google Картами для мобильных устройств</string>
     <string name="permission_scope_www.googleapis.com_auth_orkut">Управление своими действиями Orkut</string>
@@ -174,5 +170,4 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Управление вашими видео на YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Простор на YouTube аналитики валютного отчеты для вашего контента YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Простотр на YouTube аналитических отчетов для вашего контента YouTube</string>
-
 </resources>

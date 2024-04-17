@@ -44,6 +44,13 @@
         android:name="org.microg.gms.ui.SelfCheckFragment"
         android:label="@string/self_check_title" />
 
+    <!-- Account -->
+
+    <fragment
+        android:id="@+id/accountManagerFragment"
+        android:name="org.microg.gms.ui.AccountsFragment"
+        android:label="@string/pref_accounts_title" />
+
     <!-- Device registration -->
 
     <fragment

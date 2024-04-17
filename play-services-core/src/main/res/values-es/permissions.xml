@@ -13,14 +13,11 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources>
+  --><resources>
     <string name="permission_service_all_label">Todos los servicios de Google</string>
     <string name="permission_service_all_description">Permite a la aplicación acceder a todos los servicios de Google a través de cualquier cuenta de Google asociada.</string>
-
     <string name="permission_service_android_label">Servicios de Android</string>
-    <string name="permission_service_android_description">Permite a la aplicación acceder a todos los servicios de Google a través de cualquier cuenta de Google asociada.</string>
+    <string name="permission_service_android_description">Permite que la aplicación acceda a los servicios de Android a través de cualquier cuenta de Google asociada.</string>
     <string name="permission_service_adsense_label">AdSense</string>
     <string name="permission_service_adsense_description">Permite a la aplicación acceder a todos los servicios de AdSense a través de cualquier cuenta de Google asociada.</string>
     <string name="permission_service_adwords_label">AdWords</string>
@@ -29,7 +26,7 @@
     <string name="permission_service_ah_description">Permite a la aplicación acceder a todos los servicios de Google App Engine a través de cualquier cuenta de Google asociada.</string>
     <string name="permission_service_blogger_label">Blogger</string>
     <string name="permission_service_blogger_description">Permite a la aplicación acceder a todos los servicios de Blogger a través de cualquier cuenta de Google asociada.</string>
-    <string name="permission_service_cl_label">Google Calendar</string>
+    <string name="permission_service_cl_label">Calendario de Google</string>
     <string name="permission_service_cl_description">Permite a la aplicación acceder a todos los servicios de Google Calendar a través de cualquier cuenta de Google asociada.</string>
     <string name="permission_service_cp_label">Contactos</string>
     <string name="permission_service_cp_description">Permite a la aplicación acceder a todos los servicios de Contactos a través de cualquier cuenta de Google asociada.</string>
@@ -89,7 +86,6 @@
     <string name="permission_service_youtube_description">Permite a la aplicación acceder a todos los servicios de YouTube a través de cualquier cuenta de Google asociada.</string>
     <string name="permission_service_YouTubeUser_label">Nombres de usuario de YouTube</string>
     <string name="permission_service_YouTubeUser_description">Permite a la aplicación acceder a todos los servicios de nombres de usuario(s) de YouTube a través de cualquier cuenta de Google asociada.</string>
-
     <string name="permission_scope_www.googleapis.com_auth_activity">Ver el historial de actividad de tus Google Apps</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Administrar la configuración de su cuenta de comprador de Ad Exchange</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Ver tus datos de Ad Exchange</string>
@@ -174,5 +170,4 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Administrar tus vídeos de YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Ver los informes monetarios de YouTube Analytics para su contenido de YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Ver los informes de YouTube Analytics para su contenido de YouTube</string>
-
 </resources>

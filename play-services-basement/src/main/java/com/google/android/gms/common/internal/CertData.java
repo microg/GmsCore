@@ -16,8 +16,10 @@
 
 package com.google.android.gms.common.internal;
 
+import android.os.IBinder;
 import android.os.RemoteException;
 
+import androidx.annotation.Nullable;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 
@@ -62,5 +64,41 @@ public class CertData extends ICertData.Stub {
     @Override
     public int remoteHashCode() throws RemoteException {
         return hashCode();
+    }
+
+    @Nullable
+    public static CertData unwrap(IBinder certDataBinder) {
+        if (certDataBinder instanceof CertData) {
+            return (CertData) certDataBinder;
+        } else if (certDataBinder instanceof IObjectWrapper) {
+            return unwrap((IObjectWrapper) certDataBinder);
+        } else if (certDataBinder instanceof ICertData) {
+            return unwrap((ICertData) certDataBinder);
+        }
+        return null;
+    }
+
+    public static CertData unwrap(IObjectWrapper certDataWrapper) {
+        CertData certData = ObjectWrapper.unwrapTyped(certDataWrapper, CertData.class);
+        if (certData != null) return certData;
+        byte[] bytes = ObjectWrapper.unwrapTyped(certDataWrapper, byte[].class);
+        if (bytes != null) return new CertData(bytes);
+        ICertData iCertData = ObjectWrapper.unwrapTyped(certDataWrapper, ICertData.class);
+        if (iCertData != null) return unwrap(iCertData);
+        return null;
+    }
+
+    public static CertData unwrap(ICertData iCertData) {
+        if (iCertData == null) return null;
+        if (iCertData instanceof CertData) return (CertData) iCertData;
+        try {
+            byte[] bytes = ObjectWrapper.unwrapTyped(iCertData.getWrappedBytes(), byte[].class);
+            if (bytes != null) {
+                return new CertData(bytes);
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
+        return null;
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-  ~ SPDX-FileCopyrightText: 2020, microG Project Team
+  ~ SPDX-FileCopyrightText: 2020 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
@@ -15,7 +15,8 @@
 
     <PreferenceCategory
         android:key="prefcat_push_apps"
-        android:title="@string/prefcat_push_apps_title">
+        android:title="@string/prefcat_push_apps_title"
+        app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:key="pref_push_apps_none"
@@ -28,17 +29,18 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:key="prefcat_push_status"
-        android:layout="@layout/preference_category_no_label">
+        android:layout="@layout/preference_category_no_label"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="pref_push_status"
             android:enabled="false"
             android:title="@string/pref_info_status"
-            tools:summary="Connected since 15 minutes ago" />
+            tools:summary="Connected since 15 minutes ago"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
-        <org.microg.gms.ui.TextPreference
-            android:icon="@drawable/ic_info_outline"
+        <org.microg.gms.ui.FooterPreference
             android:selectable="false"
-            android:summary="@string/pref_gcm_enable_mcs_summary" />
+            android:title="@string/pref_gcm_enable_mcs_summary" />
     </PreferenceCategory>
 </PreferenceScreen>

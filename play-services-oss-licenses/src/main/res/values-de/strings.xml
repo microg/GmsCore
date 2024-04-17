@@ -3,4 +3,7 @@
     <string name="license_content_error">Beim Abrufen der Lizenz ist ein Fehler aufgetreten.</string>
     <string name="oss_license_title">Open-Source-Lizenzen</string>
     <string name="no_licenses_available">Diese App hat keine Open-Source-Lizenzen.</string>
+    <string name="license_is_loading">Lizenzinformationen werden geladen.</string>
+    <string name="license_list_is_loading">Lizenzliste wird geladen.</string>
+    <string name="preferences_license_summary">Lizenzdetails für Open-Source-Software</string>
 </resources>

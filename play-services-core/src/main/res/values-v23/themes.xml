@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Base.Light">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+    <style name="Theme.Base.Dark">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!-- Preference theme -->
+    <style name="Theme.Base.PreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/Theme.Base.Preference.SwitchPreferenceCompat</item>
+        <item name="switchBarPreferenceStyle">@style/Theme.Base.Preference.SwitchBarPreference</item>
+    </style>
+
+    <style name="Theme.Base.Preference.SwitchBarPreference" parent="@style/Preference.SwitchBar">
+        <item name="layout">@layout/preference_material_switch_bar</item>
+        <item name="switchBarFrameId">@id/frame</item>
+        <item name="switchBarFrameBackgroundOn">@drawable/material_switch_bar_background</item>
+        <item name="switchBarFrameBackgroundOff">@drawable/material_switch_bar_background</item>
+        <item name="switchBarFrameBackgroundDisabled">@drawable/material_switch_bar_background_disabled</item>
+    </style>
+</resources>

@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">microG Companion</string>
+    <string name="toast_installed">microG Companion no se puede utilizar de forma independiente. En su lugar, abre la configuración de microG Services.</string>
+    <string name="toast_not_installed">microG Companion no puede utilizarse de forma autónoma. Por favor, instale microG Services para utilizar microG.</string>
+    <string name="license_notification_title">%1$s no pudo verificar la licencia</string>
+    <string name="license_notification_body">Si la aplicación no funciona correctamente, accede a la cuenta de Google con la que compraste la aplicación.</string>
+    <string name="license_notification_sign_in">Iniciar sesión</string>
+    <string name="license_notification_ignore">Ignorar</string>
+    <string name="license_notification_channel_name">Notificaciones de licencia</string>
+    <string name="license_notification_channel_description">Notifica cuando una aplicación intenta validar su licencia, pero no has iniciado sesión en ninguna cuenta de Google.</string>
+    <string name="pay_disabled">Actualmente no es posible pagar</string>
+    <string name="error_passwd">La contraseña que ha ingresado es incorrecta.</string>
+    <string name="error_unknown">Error desconocido, sal y vuelve a intentarlo.</string>
+    <string name="tips_forget_passwd">¿Olvidaste tu contraseña?</string>
+    <string name="tips_more_details">Más detalles</string>
+    <string name="confirm_purchase">Confirmar la compra</string>
+    <string name="error_network">Sin conexión a internet. Por favor, asegúrate de que la red Wi-Fi o móvil esté activada y vuelve a intentarlo.</string>
+    <string name="tips_input_passwd">Ingresa tu contraseña</string>
+    <string name="tips_remember_login_info">Recordar el inicio de sesión en este dispositivo</string>
+    <string name="text_verify_button">Verificar</string>
+</resources>

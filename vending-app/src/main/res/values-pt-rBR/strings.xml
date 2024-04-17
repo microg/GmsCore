@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_notification_channel_name">Notificações de licença</string>
+    <string name="license_notification_channel_description">Notifica quando um app tenta validar sua licença, mas você não está logado à nenhuma conta Google.</string>
+    <string name="license_notification_title">%1$s não conseguiu verificar sua licença</string>
+    <string name="license_notification_body">Se um app estiver com mal comportamento, entre em uma conta Google aonde você comprou o app.</string>
+    <string name="license_notification_sign_in">Fazer login</string>
+    <string name="license_notification_ignore">Ignorar</string>
+    <string name="app_name">Companheiro do microG</string>
+    <string name="toast_installed">O companheiro do microG não pode ser utilizado sozinho. Abrindo configurações dos serviços microG.</string>
+    <string name="toast_not_installed">O companheiro do microG não pode ser utilizado sozinho. Por favor instale serviços microG para utilizar o microG.</string>
+    <string name="pay_disabled">Pagar não é possível nesse momento</string>
+    <string name="error_passwd">A senha que você inseriu está incorreta.</string>
+    <string name="tips_input_passwd">Insira sua senha</string>
+    <string name="text_verify_button">Verificar</string>
+    <string name="confirm_purchase">Confirmar compra</string>
+    <string name="error_network">Não conectado à internet. Tenha certeza que o Wi-Fi ou as redes móveis estão ativados e tente novamente.</string>
+    <string name="error_unknown">Erro desconhecido, por favor saia e tente novamente.</string>
+    <string name="tips_remember_login_info">Lembre do meu login nesse dispositivo</string>
+    <string name="tips_forget_passwd">Esqueceu a senha?</string>
+    <string name="tips_more_details">Aprenda mais</string>
+</resources>

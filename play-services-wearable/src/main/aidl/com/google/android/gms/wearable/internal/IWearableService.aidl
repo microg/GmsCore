@@ -35,7 +35,7 @@ interface IWearableService {
 
     // Capabilties
     void getConnectedCapability(IWearableCallbacks callbacks, String capability, int nodeFilter) = 41;
-    void getConnectedCapaibilties(IWearableCallbacks callbacks, int nodeFilter) = 42;
+    void getAllCapabilities(IWearableCallbacks callbacks, int nodeFilter) = 42;
     void addLocalCapability(IWearableCallbacks callbacks, String capability) = 45;
     void removeLocalCapability(IWearableCallbacks callbacks, String capability) = 46;
 

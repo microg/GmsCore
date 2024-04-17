@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2024 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <style name="Theme.Base.DayNight" parent="Theme.Base.Dark" />
+    <style name="Theme.Base.DayNight.NoActionBar" parent="Theme.Base.Dark.NoActionBar" />
+
+    <style name="Theme.App" parent="Theme.Base.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/gm3_ref_palette_primary80</item>
+        <item name="colorOnPrimary">@color/gm3_ref_palette_primary20</item>
+        <item name="colorPrimaryContainer">@color/gm3_ref_palette_primary30</item>
+        <item name="colorOnPrimaryContainer">@color/gm3_ref_palette_primary90</item>
+        <item name="colorPrimaryInverse">@color/gm3_ref_palette_primary40</item>
+        <item name="colorPrimaryFixed">@color/gm3_ref_palette_primary90</item>
+        <item name="colorPrimaryFixedDim">@color/gm3_ref_palette_primary80</item>
+        <item name="colorOnPrimaryFixed">@color/gm3_ref_palette_primary10</item>
+        <item name="colorOnPrimaryFixedVariant">@color/gm3_ref_palette_primary30</item>
+        <item name="colorSecondary">@color/gm3_ref_palette_secondary80</item>
+        <item name="colorOnSecondary">@color/gm3_ref_palette_secondary20</item>
+        <item name="colorSecondaryContainer">@color/gm3_ref_palette_secondary30</item>
+        <item name="colorOnSecondaryContainer">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorSecondaryFixed">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorSecondaryFixedDim">@color/gm3_ref_palette_secondary80</item>
+        <item name="colorOnSecondaryFixed">@color/gm3_ref_palette_secondary10</item>
+        <item name="colorOnSecondaryFixedVariant">@color/gm3_ref_palette_secondary30</item>
+        <item name="colorTertiary">@color/gm3_ref_palette_tertiary80</item>
+        <item name="colorOnTertiary">@color/gm3_ref_palette_tertiary20</item>
+        <item name="colorTertiaryContainer">@color/gm3_ref_palette_tertiary30</item>
+        <item name="colorOnTertiaryContainer">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorTertiaryFixed">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorTertiaryFixedDim">@color/gm3_ref_palette_tertiary80</item>
+        <item name="colorOnTertiaryFixed">@color/gm3_ref_palette_tertiary10</item>
+        <item name="colorOnTertiaryFixedVariant">@color/gm3_ref_palette_tertiary30</item>
+
+        <item name="colorError">@color/gm3_ref_palette_error80</item>
+        <item name="colorOnError">@color/gm3_ref_palette_error20</item>
+        <item name="colorErrorContainer">@color/gm3_ref_palette_error30</item>
+        <item name="colorOnErrorContainer">@color/gm3_ref_palette_error90</item>
+        <item name="colorOutline">@color/gm3_ref_palette_neutral_variant60</item>
+        <item name="colorOutlineVariant">@color/gm3_ref_palette_neutral_variant30</item>
+        <item name="android:colorBackground">@color/gm3_ref_palette_neutral6</item>
+        <item name="colorOnBackground">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorSurface">@color/gm3_ref_palette_neutral6</item>
+        <item name="colorOnSurface">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorSurfaceVariant">@color/gm3_ref_palette_neutral_variant30</item>
+        <item name="colorOnSurfaceVariant">@color/gm3_ref_palette_neutral_variant80</item>
+        <item name="colorSurfaceInverse">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorOnSurfaceInverse">@color/gm3_ref_palette_neutral20</item>
+        <item name="colorSurfaceBright">#ff37393b</item>
+        <item name="colorSurfaceDim">@color/gm3_ref_palette_neutral6</item>
+        <item name="colorSurfaceContainer">#ff1e1f20</item>
+        <item name="colorSurfaceContainerLow">#ff1b1b1b</item>
+        <item name="colorSurfaceContainerLowest">#ff0e0e0e</item>
+        <item name="colorSurfaceContainerHigh">#ff282a2c</item>
+        <item name="colorSurfaceContainerHighest">#ff333537</item>
+    </style>
+
+    <!-- TODO: Heavy duplication -->
+    <style name="Theme.App.Translucent" parent="Theme.Base.Translucent">
+        <item name="colorPrimary">@color/gm3_ref_palette_primary80</item>
+        <item name="colorOnPrimary">@color/gm3_ref_palette_primary20</item>
+        <item name="colorPrimaryContainer">@color/gm3_ref_palette_primary30</item>
+        <item name="colorOnPrimaryContainer">@color/gm3_ref_palette_primary90</item>
+        <item name="colorPrimaryInverse">@color/gm3_ref_palette_primary40</item>
+        <item name="colorPrimaryFixed">@color/gm3_ref_palette_primary90</item>
+        <item name="colorPrimaryFixedDim">@color/gm3_ref_palette_primary80</item>
+        <item name="colorOnPrimaryFixed">@color/gm3_ref_palette_primary10</item>
+        <item name="colorOnPrimaryFixedVariant">@color/gm3_ref_palette_primary30</item>
+        <item name="colorSecondary">@color/gm3_ref_palette_secondary80</item>
+        <item name="colorOnSecondary">@color/gm3_ref_palette_secondary20</item>
+        <item name="colorSecondaryContainer">@color/gm3_ref_palette_secondary30</item>
+        <item name="colorOnSecondaryContainer">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorSecondaryFixed">@color/gm3_ref_palette_secondary90</item>
+        <item name="colorSecondaryFixedDim">@color/gm3_ref_palette_secondary80</item>
+        <item name="colorOnSecondaryFixed">@color/gm3_ref_palette_secondary10</item>
+        <item name="colorOnSecondaryFixedVariant">@color/gm3_ref_palette_secondary30</item>
+        <item name="colorTertiary">@color/gm3_ref_palette_tertiary80</item>
+        <item name="colorOnTertiary">@color/gm3_ref_palette_tertiary20</item>
+        <item name="colorTertiaryContainer">@color/gm3_ref_palette_tertiary30</item>
+        <item name="colorOnTertiaryContainer">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorTertiaryFixed">@color/gm3_ref_palette_tertiary90</item>
+        <item name="colorTertiaryFixedDim">@color/gm3_ref_palette_tertiary80</item>
+        <item name="colorOnTertiaryFixed">@color/gm3_ref_palette_tertiary10</item>
+        <item name="colorOnTertiaryFixedVariant">@color/gm3_ref_palette_tertiary30</item>
+
+        <item name="colorError">@color/gm3_ref_palette_error80</item>
+        <item name="colorOnError">@color/gm3_ref_palette_error20</item>
+        <item name="colorErrorContainer">@color/gm3_ref_palette_error30</item>
+        <item name="colorOnErrorContainer">@color/gm3_ref_palette_error90</item>
+        <item name="colorOutline">@color/gm3_ref_palette_neutral_variant60</item>
+        <item name="colorOutlineVariant">@color/gm3_ref_palette_neutral_variant30</item>
+        <item name="android:colorBackground">@color/gm3_ref_palette_neutral6</item>
+        <item name="colorOnBackground">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorSurface">@color/gm3_ref_palette_neutral6</item>
+        <item name="colorOnSurface">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorSurfaceVariant">@color/gm3_ref_palette_neutral_variant30</item>
+        <item name="colorOnSurfaceVariant">@color/gm3_ref_palette_neutral_variant80</item>
+        <item name="colorSurfaceInverse">@color/gm3_ref_palette_neutral90</item>
+        <item name="colorOnSurfaceInverse">@color/gm3_ref_palette_neutral20</item>
+        <item name="colorSurfaceBright">#ff37393b</item>
+        <item name="colorSurfaceDim">@color/gm3_ref_palette_neutral6</item>
+        <item name="colorSurfaceContainer">#ff1e1f20</item>
+        <item name="colorSurfaceContainerLow">#ff1b1b1b</item>
+        <item name="colorSurfaceContainerLowest">#ff0e0e0e</item>
+        <item name="colorSurfaceContainerHigh">#ff282a2c</item>
+        <item name="colorSurfaceContainerHighest">#ff333537</item>
+    </style>
+</resources>

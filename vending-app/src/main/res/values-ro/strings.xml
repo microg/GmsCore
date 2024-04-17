@@ -3,4 +3,20 @@
     <string name="toast_installed">Companionul microG nu poate fi utilizat independent. În schimb, deschide setările microG Services.</string>
     <string name="toast_not_installed">Companionul microG nu poate fi utilizat independent. Instalează serviciile microG pentru a utiliza microG.</string>
     <string name="app_name">Companion microG</string>
+    <string name="license_notification_channel_description">Notifică când o aplicație încearcă să-și valideze licența, dar nu ești conectat la niciun cont Google.</string>
+    <string name="license_notification_channel_name">Notificări de licență</string>
+    <string name="license_notification_title">%1$s nu poate verifica licența</string>
+    <string name="license_notification_body">Dacă aplicația se comportă greșit, conectează-te la un Cont Google cu care ai cumpărat aplicația.</string>
+    <string name="license_notification_sign_in">Conectează-te</string>
+    <string name="license_notification_ignore">Ignoră</string>
+    <string name="pay_disabled">Funcția de plată nu este disponibilă</string>
+    <string name="error_passwd">Parola pe care a-i introdus-o este incorectă.</string>
+    <string name="error_unknown">Eroare necunoscută, ieși și încearcă din nou.</string>
+    <string name="tips_input_passwd">Introdu parola</string>
+    <string name="tips_forget_passwd">Parolă uitată?</string>
+    <string name="confirm_purchase">Confirmă achiziția</string>
+    <string name="error_network">Nu este conectat la internet. Asigură-te că rețeaua Wi-Fi sau mobilă este activată și încearcă din nou.</string>
+    <string name="tips_remember_login_info">Memorizează autentificarea mea pe acest dispozitiv</string>
+    <string name="tips_more_details">Află mai multe</string>
+    <string name="text_verify_button">Verifică</string>
 </resources>

@@ -6,7 +6,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application>
+    <application tools:overrideLibrary="coil.svg">
         <activity-alias
             android:name="org.lighthouseex.MainActivity"
             android:exported="true"

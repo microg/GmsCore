@@ -98,4 +98,32 @@ public interface SafetyNetApi {
     interface RecaptchaTokenResult extends Result {
         String getTokenResult();
     }
+
+    /**
+     * A {@link Response} to get user decisions for the Verify Apps API.
+     */
+    class VerifyAppsUserResponse extends Response<VerifyAppsUserResult> {
+        /**
+         * Returns whether the user has enabled Verify Apps when prompted.
+         * <p>
+         * This method is only meaningful when used with
+         * {@link SafetyNetClient#enableVerifyApps()} or {@link SafetyNetClient#isVerifyAppsEnabled()}.
+         */
+        public boolean isVerifyAppsEnabled() {
+            return getResult().isVerifyAppsEnabled();
+        }
+    }
+
+    /**
+     * A {@link Result} to get user decisions for the Verify Apps API.
+     *
+     * @deprecated use {@link VerifyAppsUserResponse} instead.
+     */
+    @Deprecated
+    interface VerifyAppsUserResult extends Result {
+        /**
+         * Returns whether the user has enabled Verify Apps when prompted.
+         */
+        boolean isVerifyAppsEnabled();
+    }
 }

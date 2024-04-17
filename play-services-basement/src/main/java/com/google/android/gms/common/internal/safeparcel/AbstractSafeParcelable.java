@@ -9,7 +9,12 @@ public abstract class AbstractSafeParcelable implements SafeParcelable {
 
     @SuppressWarnings("unchecked")
     public static <T extends AbstractSafeParcelable> SafeParcelableCreatorAndWriter<T> findCreator(java.lang.Class<T> tClass) {
-        String creatorClassName = tClass.getName() + "$000Creator";
+        java.lang.Class<?> upmostClass = tClass;
+        while (upmostClass.getEnclosingClass() != null) upmostClass = upmostClass.getEnclosingClass();
+        String upmostClassName = upmostClass.getName();
+        int idx = upmostClassName.lastIndexOf('.');
+        String packagePrefix = idx > 0 ? upmostClassName.substring(0, idx + 1) : "";
+        String creatorClassName = packagePrefix + tClass.getSimpleName() + "$000Creator";
         try {
             return (SafeParcelableCreatorAndWriter<T>) java.lang.Class.forName(creatorClassName).newInstance();
         } catch (Exception e) {
@@ -21,4 +26,5 @@ public abstract class AbstractSafeParcelable implements SafeParcelable {
     public int describeContents() {
         return 0;
     }
+
 }

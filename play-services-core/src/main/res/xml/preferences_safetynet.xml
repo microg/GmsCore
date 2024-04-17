@@ -14,7 +14,8 @@
 
     <PreferenceCategory
         android:key="prefcat_safetynet_apps"
-        android:title="@string/prefcat_safetynet_apps_title">
+        android:title="@string/prefcat_safetynet_apps_title"
+        app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:key="pref_safetynet_apps_none"
@@ -45,11 +46,6 @@
             tools:summary="@string/pref_test_summary_passed" />
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label">
-        <org.microg.gms.ui.TextPreference
-            android:icon="@drawable/ic_info_outline"
-            android:key="pref_safetynet_summary"
-            android:selectable="false"
-            android:summary="@string/safetynet_intro" />
         <Preference
             app:isPreferenceVisible="false"
             tools:isPreferenceVisible="true"
@@ -57,5 +53,9 @@
             android:key="pref_droidguard_unsupported"
             android:selectable="false"
             android:summary="@string/pref_droidguard_unsupported_summary" />
+        <org.microg.gms.ui.FooterPreference
+            android:key="pref_safetynet_summary"
+            android:selectable="false"
+            android:title="@string/safetynet_intro" />
     </PreferenceCategory>
 </PreferenceScreen>

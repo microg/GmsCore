@@ -13,18 +13,18 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> навигационный модуль настроен</item>
         <item quantity="few"><xliff:g example="3">%1$d</xliff:g> навигационных модуля настроено</item>
-        <item quantity="other"><xliff:g example="3">%1$d</xliff:g> навигационных модулей настроено</item>
+        <item quantity="many"><xliff:g example="5">%1$d</xliff:g> навигационных модулей настроено</item>
+        <item quantity="other"><xliff:g example="5">%1$d</xliff:g> навигационных модулей настроено</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one"><xliff:g example="1">%1$d</xliff:g> привязанное приложение</item>
-        <item quantity="few"><xliff:g example="123">%1$d</xliff:g> привязанных приложения</item>
-        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> привязанных приложений</item>
+        <item quantity="few"><xliff:g example="3">%1$d</xliff:g> привязанных приложения</item>
+        <item quantity="many"><xliff:g example="5">%1$d</xliff:g> привязанных приложений</item>
+        <item quantity="other"><xliff:g example="5">%1$d</xliff:g> привязанных приложений</item>
     </plurals>
     <plurals name="cond_perm_summary">
         <item quantity="one">Не предоставлено разрешение, которое требуется для правильного функционирования microG Services.</item>

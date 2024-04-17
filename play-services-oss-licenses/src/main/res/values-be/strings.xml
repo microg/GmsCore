@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_list_is_loading">Загрузка спісу ліцэнзій.</string>
+    <string name="preferences_license_summary">Падрабязнасці аб ліцэнзіях для ПЗ з адкрытым зыходным кодам</string>
+    <string name="license_content_error">Адбылася памылка пры атрыманні ліцэнзіі.</string>
+    <string name="no_licenses_available">У гэтага прыкладання няма ліцэнзій з адчыненым зыходным кодам.</string>
+    <string name="oss_license_title">Ліцэнзіі з адкрытым зыходным кодам</string>
+    <string name="license_is_loading">Загрузка інфармацыі аб ліцэнзіі.</string>
+</resources>

@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="toast_installed">microG Companion 不可单独使用。已转而打开 microG 服务设置。</string>
+    <string name="toast_not_installed">microG Companion 不可单独使用。请安装 microG 服务以使用 microG。</string>
+
+    <string name="pay_disabled">支付功能不可用</string>
+
+    <string name="confirm_purchase">确定购买</string>
+    <string name="error_network">未连接到互联网。请确保WLAN网络或移动数据网络已开启，然后重试。</string>
+    <string name="error_passwd">您输入的密码有误。</string>
+    <string name="error_unknown">未知错误，请退出重试。</string>
+    <string name="tips_input_passwd">输入您的密码</string>
+    <string name="tips_remember_login_info">在此设备上记住我的登录信息</string>
+    <string name="tips_forget_passwd">忘记了密码？</string>
+    <string name="tips_more_details">了解详情</string>
+    <string name="text_verify_button">验证</string>
+</resources>

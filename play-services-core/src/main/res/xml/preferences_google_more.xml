@@ -16,13 +16,13 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="true"
         android:enabled="false"
         android:key="network_google_enabled"
         android:summary="If disabled, all connections to Google servers usually done by microG will be denied. This overrides service specific settings."
         android:title="Allow connecting to Google servers"/>
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:defaultValue="false"
         android:dependency="network_google_enabled"
         android:enabled="false"

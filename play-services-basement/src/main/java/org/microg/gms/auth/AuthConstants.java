@@ -24,4 +24,14 @@ public class AuthConstants {
     public static final String PROVIDER_EXTRA_CLEAR_PASSWORD = "clear_password";
     public static final String PROVIDER_EXTRA_ACCOUNTS = "accounts";
     public static final String DEFAULT_ACCOUNT_TYPE = "com.google";
+    public static final String GOOGLE_USER_ID = "GoogleUserId";
+    public static final String GOOGLE_SIGN_IN_STATUS = "googleSignInStatus";
+    public static final String GOOGLE_SIGN_IN_ACCOUNT = "googleSignInAccount";
+    public static final String SIGN_IN_ACCOUNT = "signInAccount";
+    public static final String ERROR_CODE = "errorCode";
+    public static final String SIGN_IN_CREDENTIAL = "sign_in_credential";
+    public static final String STATUS = "status";
+    public static final String SCOPE_OAUTH2 = "oauth2:";
+    public static final String SCOPE_EM_OP_PRO = "oauth2:email openid profile";
+
 }

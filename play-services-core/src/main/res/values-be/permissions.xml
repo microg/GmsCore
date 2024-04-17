@@ -13,12 +13,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources>
+  --><resources>
     <string name="permission_service_all_label">Усе сэрвісы Google</string>
     <string name="permission_service_all_description">Дае прыкладанню доступ да сэрвісаў Google праз любы звязаны уліковы запіс Google.</string>
-
     <string name="permission_service_android_label">Сэрвісы Android</string>
     <string name="permission_service_android_description">Дае прыкладанню доступ да сэрвісаў Android праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_adsense_label">AdSense</string>
@@ -41,7 +38,7 @@
     <string name="permission_service_gbase_description">Дае прыкладанню доступ да Google Base праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_grandcentral_label">Google Voice</string>
     <string name="permission_service_grandcentral_description">Дае прыкладанню доступ да Google Voice праз любы звязаны уліковы запіс Google.</string>
-    <string name="permission_service_groups2_label">Google Groups</string>
+    <string name="permission_service_groups2_label">Групы Google</string>
     <string name="permission_service_groups2_description">Дае прыкладанню доступ да Google Groups праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_health_label">Google Health</string>
     <string name="permission_service_health_description">Дае прыкладанню доступ да Google Health праз любы звязаны уліковы запіс Google.</string>
@@ -53,17 +50,17 @@
     <string name="permission_service_knol_description">Дае прыкладанню доступ да Knol праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_lh2_label">Picasa Web Albums</string>
     <string name="permission_service_lh2_description">Дае прыкладанню доступ да Picasa Web Albums праз любы звязаны уліковы запіс Google.</string>
-    <string name="permission_service_local_label">Google Maps</string>
+    <string name="permission_service_local_label">Google Карты</string>
     <string name="permission_service_local_description">Дае прыкладанню доступ да Google Maps праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_mail_label">Google Mail</string>
     <string name="permission_service_mail_description">Дае прыкладанню доступ да Google Mail праз любы звязаны уліковы запіс Google.</string>
-    <string name="permission_service_news_label">Google News</string>
+    <string name="permission_service_news_label">Google Навіны</string>
     <string name="permission_service_news_description">Дае прыкладанню доступ да Google News праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_notebook_label">Google Notebook</string>
     <string name="permission_service_notebook_description">Дае прыкладанню доступ да Google Notebook праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_orkut_label">Orkut</string>
     <string name="permission_service_orkut_description">Дае прыкладанню доступ да Orkut праз любы звязаны уліковы запіс Google.</string>
-    <string name="permission_service_print_label">Google Book Search</string>
+    <string name="permission_service_print_label">Google Кнігі</string>
     <string name="permission_service_print_description">Дае прыкладанню доступ да Google Book Search праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_sierra_label">Аккаунты Google Checkout</string>
     <string name="permission_service_sierra_description">Дае прыкладанню доступ да акаўнтаў Google Checkout праз любы звязаны уліковы запіс Google.</string>
@@ -73,15 +70,15 @@
     <string name="permission_service_sierrasandbox_description">Дае прыкладанню доступ да акаўнтаў Google Checkout Sandbox праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_sitemaps_label">Google Webmaster Tools</string>
     <string name="permission_service_sitemaps_description">Дае прыкладанню доступ да Google Webmaster Tools праз любы звязаны уліковы запіс Google.</string>
-    <string name="permission_service_speech_label">Voice Search</string>
+    <string name="permission_service_speech_label">Галасавы пошук</string>
     <string name="permission_service_speech_description">Дае прыкладанню доступ да Voice Search праз любы звязаны уліковы запіс Google.</string>
-    <string name="permission_service_speechpersonalization_label">Personalized Speech Recognition</string>
+    <string name="permission_service_speechpersonalization_label">Персаналізаванае распазнанне маўлення</string>
     <string name="permission_service_speechpersonalization_description">Дае прыкладанню доступ да Personalized Speech Recognition праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_talk_label">Google Talk</string>
     <string name="permission_service_talk_description">Дае прыкладанню доступ да Google Talk праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_wifi_label">Google Wi-Fi</string>
     <string name="permission_service_wifi_description">Дае прыкладанню доступ да Google Wi-Fi праз любы звязаны уліковы запіс Google.</string>
-    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_label">Google Табліцы</string>
     <string name="permission_service_wise_description">Дае прыкладанню доступ да Google Spreadsheets праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_writely_label">Google Docs</string>
     <string name="permission_service_writely_description">Дае прыкладанню доступ да Google Docs праз любы звязаны уліковы запіс Google.</string>
@@ -89,7 +86,6 @@
     <string name="permission_service_youtube_description">Дае прыкладанню доступ да YouTube праз любы звязаны уліковы запіс Google.</string>
     <string name="permission_service_YouTubeUser_label">Имена пользователей YouTube</string>
     <string name="permission_service_YouTubeUser_description">Дазваляе прыкладанню атрымаць доступ да імя карыстальніка(аў) YouTube, які звязаны з акаунтам Google.</string>
-
     <string name="permission_scope_www.googleapis.com_auth_activity">Праглядзець гісторыю актыўнасці вашых прыкладанняў Google</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Кіраванне сваім уліковым запісам пакупніка Ad Exchange</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Прагляд вашых Ad Exchange дадзеных</string>
@@ -174,5 +170,4 @@
     <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Кіраванне вашымі відэа на YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Прагляд грашовых справаздачаў YouTube Analytics для вашага кантэнту на YouTube</string>
     <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Прагляд на YouTube аналітычных справаздач для вашага кантэнту YouTube</string>
-
 </resources>
