@@ -58,15 +58,13 @@ class AssistedSignInFragment(
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated start")
-        if (accounts.count() == 1) {
-            autoSingleSignIn(accounts.first())
-            return
+        lifecycleScope.launch {
+            filterAccountsLogin({
+                prepareMultiSignIn(it)
+            }, { account, permitted ->
+                autoSingleSignIn(account, permitted)
+            })
         }
-        filterAccountsLogin({
-            prepareMultiSignIn(it)
-        }, {
-            autoSingleSignIn(it, true)
-        })
     }
 
     private fun autoSingleSignIn(account: Account, permitted: Boolean = false) {
@@ -77,13 +75,8 @@ class AssistedSignInFragment(
         }
     }
 
-    private fun filterAccountsLogin(multiMethod: (List<Account>) -> Unit, loginMethod: (Account) -> Unit) {
+    private fun filterAccountsLogin(multiMethod: (List<Account>) -> Unit, loginMethod: (Account, Boolean) -> Unit) {
         lifecycleScope.launch {
-            val filterByAuthorizedAccounts = beginSignInRequest.googleIdTokenRequestOptions.filterByAuthorizedAccounts()
-            if (!filterByAuthorizedAccounts) {
-                multiMethod(emptyList())
-                return@launch
-            }
             val allowAutoLoginAccounts = mutableListOf<Account>()
             accounts.forEach { account ->
                 val authStatus = checkAppAuthStatus(requireContext(), clientPackageName, options, account)
@@ -91,8 +84,17 @@ class AssistedSignInFragment(
                     allowAutoLoginAccounts.add(account)
                 }
             }
+            if (accounts.size == 1) {
+                loginMethod(accounts.first(), allowAutoLoginAccounts.isNotEmpty())
+                return@launch
+            }
+            val filterByAuthorizedAccounts = beginSignInRequest.googleIdTokenRequestOptions.filterByAuthorizedAccounts()
+            if (!filterByAuthorizedAccounts) {
+                multiMethod(allowAutoLoginAccounts)
+                return@launch
+            }
             if (allowAutoLoginAccounts.size == 1) {
-                loginMethod(allowAutoLoginAccounts.first())
+                loginMethod(allowAutoLoginAccounts.first(), true)
                 return@launch
             }
             multiMethod(allowAutoLoginAccounts)
