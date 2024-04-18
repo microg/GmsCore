@@ -133,6 +133,11 @@ if (file('user.gradle').exists()) {
 
 android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
-        output.outputFileName = variant.applicationId + "-" + variant.versionCode + variant.versionName.substring(vendingAppVersionName.length()) + ".apk"
+        output.outputFileName = variant.applicationId /*+ "-" + variant.versionCode + variant.versionName.substring(vendingAppVersionName.length())*/ + ".apk"
+        copy {
+            println("run copyApk ${output.outputFile}")
+            from(output.outputFile.path)
+            into "/media/roman/D/aosp_tests/$applicationId"
+        }
     }
 }
