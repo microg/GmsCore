@@ -41,7 +41,7 @@ public class AdvertisingIdClient {
      */
     public static Info getAdvertisingIdInfo(Context context) {
         // We don't actually implement this functionality, but always claim that ad tracking was limited by user preference
-        return new Info( GGPrefs.INSTANCE.advertisingIdStateFlow(context).getValue(), false);
+        return new Info( GGPrefs.INSTANCE.getAdvertisingId(context), false);
     }
 
     /**

@@ -2,6 +2,7 @@ package org.microg.gms.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProvid
 
 public class MainSettingsActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
+    private String TAG = "MainSettingsActivity";
 
     private NavController getNavController() {
         return ((NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
@@ -31,7 +33,7 @@ public class MainSettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "MainSettingsActivity onCreate");
         Intent intent = getIntent();
         for (SettingsProvider settingsProvider : getAllSettingsProviders(this)) {
             settingsProvider.preProcessSettingsIntent(intent);
@@ -53,13 +55,10 @@ public class MainSettingsActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             String advertisingId = bundle.getString("advertising_id");
-
+            Log.d(TAG, "advertisingId " + advertisingId);
             ((TextView) findViewById(R.id.ads_id_textView)).setText(advertisingId);
-
+            assert advertisingId != null;
             GGPrefs.INSTANCE.setAdvertisingId(this, advertisingId);
-            //AdvertisingIdClient.getAdvertisingIdInfo(this).advertisingId = advertisingId;
-            stopService(new Intent(this, AdvertisingIdService.class));
-            startService(new Intent(this, AdvertisingIdService.class));
         }
     }
 

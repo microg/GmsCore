@@ -7,20 +7,17 @@ package org.microg.gms.ads.identifier
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import androidx.core.os.bundleOf
 import com.google.android.gms.ads.identifier.internal.IAdvertisingIdService
 import org.microg.gms.cache.GGPrefs
 import org.microg.gms.common.GooglePackagePermission
 import org.microg.gms.common.PackageUtils
-import java.util.UUID
 
 const val TAG = "AdvertisingId"
-const val EMPTY_AD_ID = "00000000-0000-0000-0000-000000000000"
+//const val EMPTY_AD_ID = "00000000-0000-0000-0000-000000000000"
 
 class AdvertisingIdService : Service() {
     override fun onBind(intent: Intent): IBinder? {
@@ -32,8 +29,8 @@ class MemoryAdvertisingIdConfiguration(context: Context) : AdvertisingIdConfigur
     override val adTrackingLimitedPerApp: MutableMap<Int, Boolean> = hashMapOf()
     override var adTrackingLimitedGlobally: Boolean = false
     override var debugLogging: Boolean = false
-    override var adId: String = GGPrefs.advertisingIdStateFlow(context).value
-    override var debugAdId: String = GGPrefs.advertisingIdStateFlow(context).value
+    override fun adId(context: Context): String = GGPrefs.getAdvertisingId(context)
+    override fun debugAdId(context: Context): String = GGPrefs.getAdvertisingId(context)
 
     init {
         resetAdvertisingId()
@@ -44,8 +41,8 @@ abstract class AdvertisingIdConfiguration(private val context: Context) {
     abstract val adTrackingLimitedPerApp: MutableMap<Int, Boolean>
     abstract var adTrackingLimitedGlobally: Boolean
     abstract var debugLogging: Boolean
-    abstract var adId: String
-    abstract var debugAdId: String
+    abstract fun adId(context: Context): String
+    abstract fun debugAdId(context: Context): String
 
     fun isAdTrackingLimitedForApp(uid: Int): Boolean {
         if (adTrackingLimitedGlobally) return true
@@ -53,13 +50,13 @@ abstract class AdvertisingIdConfiguration(private val context: Context) {
     }
 
     fun resetAdvertisingId(): String {
-        adId = GGPrefs.advertisingIdStateFlow(context).value
-        debugAdId = GGPrefs.advertisingIdStateFlow(context).value
-        return if (debugLogging) debugAdId else adId
+       // adId = GGPrefs.getAdvertisingId(context)
+       // debugAdId = GGPrefs.getAdvertisingId(context)
+        return if (debugLogging) debugAdId(context) else adId(context)
     }
 
     fun getAdvertisingIdForApp(uid: Int): String {
-        return GGPrefs.advertisingIdStateFlow(context).value
+        return GGPrefs.getAdvertisingId(context)
         /*if (isAdTrackingLimitedForApp(uid)) return EMPTY_AD_ID
         try {
             val packageNames = context.packageManager.getPackagesForUid(uid) ?: return EMPTY_AD_ID
