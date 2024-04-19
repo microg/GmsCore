@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="license_notification_channel_description">Signale lorsqu\'une application tente de valider sa licence, mais que vous n\'êtes connecté(e) à aucun compte Google.</string>
+    <string name="license_notification_title">%1$s n\'a pas pu vérifier la licence</string>
+    <string name="license_notification_body">Si l\'application ne fonctionne pas correctement, connectez-vous au compte Google avec lequel vous avez acheté l\'application.</string>
+    <string name="license_notification_sign_in">S\'identifier</string>
+    <string name="license_notification_channel_name">Notifications de licence</string>
+    <string name="license_notification_ignore">Ignorer</string>
+</resources>

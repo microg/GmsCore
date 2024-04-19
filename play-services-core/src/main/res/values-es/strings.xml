@@ -24,9 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> quiere usar:</string>
     <string name="account_manager_title">Administrador de cuentas de Google</string>
     <string name="sorry">Lo sentimos…</string>
-    <string name="auth_before_connect">Una aplicación de tu dispositivo está intentando iniciar sesión en una cuenta de Google.
-\n
-\nSi esto fue intencional, use el botón <b>Iniciar</b> sesión para conectarse a la página de inicio de sesión de Google, si no, presione <b>Cancelar</b> para volver a la aplicación que hizo que apareciera este cuadro de diálogo.</string>
+    <string name="auth_before_connect">Una aplicación de tu dispositivo está intentando iniciar sesión en una cuenta de Google. \u0020Si esto fue intencional, use el botón <b>Iniciar sesión</b> para conectarse a la página de inicio de sesión de Google, si no, presione <b>Cancelar</b> para volver a la aplicación que hizo que apareciera este cuadro de diálogo.</string>
     <string name="auth_sign_in">Iniciar sesión</string>
     <string name="auth_connecting">Tu dispositivo está estableciendo una conexión con los servidores de Google para iniciar sesión.
 \n
@@ -222,4 +220,25 @@ Esto podría tardar algunos minutos."</string>
     <string name="feedback_disabled">Actualmente no es posible recibir comentarios</string>
     <string name="pref_auth_strip_device_name_title">Eliminar el nombre del dispositivo para la autenticación</string>
     <string name="pref_auth_strip_device_name_summary">Cuando está activada, las solicitudes de autenticación no incluyen el nombre del dispositivo, lo que puede permitir que dispositivos no autorizados inicien sesión, pero puede tener consecuencias imprevistas.</string>
+    <string name="perm_car_speed_label">Velocidad del coche</string>
+    <string name="perm_car_speed_description">Accede a la velocidad de tu coche</string>
+    <string name="perm_car_info_label">Información del coche</string>
+    <string name="perm_car_info_description">Accede a la información de tu coche</string>
+    <string name="perm_car_fuel_label">Nivel de combustible del coche</string>
+    <string name="perm_car_fuel_description">Accede a la información sobre el nivel de combustible de tu coche</string>
+    <string name="perm_car_mileage_label">Kilometraje del coche</string>
+    <string name="perm_car_mileage_description">Accede a la información sobre el kilometraje de tu coche</string>
+    <string name="perm_car_vendor_extension_label">Canal de proveedores de automóviles</string>
+    <string name="perm_car_vendor_extension_description">Accede al canal de proveedores de tu coche para intercambiar información específica sobre él</string>
+    <string name="backup_disabled">Actualmente no es posible realizar copias de seguridad</string>
+    <string name="pref_accounts_title">Cuenta de Google</string>
+    <string name="pref_accounts_summary">Agregar y administrar cuentas de Google</string>
+    <string name="pref_vending_billing_note_experimental">Esta característica es experimental y puede provocar pérdidas de dinero. Usted ha sido advertido.</string>
+    <string name="pref_vending_billing_note_licensing">Es posible que algunas aplicaciones requieran que también habilites la verificación de licencia para verificar tus compras.</string>
+    <string name="prefcat_accounts_current_accounts_title">Cuentas</string>
+    <string name="pref_vending_licensing_category">Licencia de Google Play</string>
+    <string name="prefcat_accounts_settings_title">Ajustes</string>
+    <string name="pref_vending_billing_category">Facturación de Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Procesar la facturación</string>
+    <string name="pref_vending_billing_enable_summary">Una vez habilitadas, algunas aplicaciones pueden completar compras o iniciar suscripciones a través del servicio Play Billing de Google.</string>
 </resources>

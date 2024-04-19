@@ -155,7 +155,7 @@
     <string name="prefcat_test">Тест</string>
     <string name="gcm_network_state_connected">Повезано <xliff:g example="2 hours ago"> %1$s</xliff:g></string>
     <string name="pref_more_settings">Више</string>
-    <string name="pref_auth_include_android_id_summary">Када је онемогућено, захтеви за аутентификацију неће бити повезани са регистрацијом уређаја, што омогућава неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
+    <string name="pref_auth_include_android_id_summary">Када је онемогућено, захтеви за аутентификацију неће бити повезани са регистрацијом уређаја, што ће можда омогућити неовлашћеним уређајима да се пријаве, али може имати непредвиђене последице.</string>
     <string name="signin_picker_subtitle">настави на <xliff:g example="F-Droid"> %1$s</xliff:g></string>
     <string name="pref_safetynet_test_integrity_cts_passed">Интегритет и CTS су прошли</string>
     <string name="pref_safetynet_recent_uses">Недавне употребе</string>
@@ -234,4 +234,5 @@
     <string name="perm_car_speed_description">Приступите брзини вашег аутомобила</string>
     <string name="pref_auth_strip_device_name_title">Уклони име уређаја за аутентификацију</string>
     <string name="feedback_disabled">Повратна информација тренутно није могућа</string>
+    <string name="backup_disabled">Прављење резервне копије тренутно није могуће</string>
 </resources>

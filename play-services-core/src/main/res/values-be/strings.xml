@@ -186,8 +186,8 @@
     <string name="push_notifications_summary_manual">УКЛ / Уручную: %s</string>
     <string name="push_notifications_summary_values_seconds">%s секунд</string>
     <string name="push_notifications_summary_values_minutes">%s хвілін</string>
-    <string name="pref_vending_summary_licensing_off">Пацвярджэнне ліцэнзій выкл</string>
-    <string name="pref_vending_summary_licensing_on">Пацвярджэнне ліцэнзій укл</string>
+    <string name="pref_vending_summary_licensing_off">Апрацоўка ліцэнзій Выкл.</string>
+    <string name="pref_vending_summary_licensing_on">Апрацоўка ліцэнзій Укл.</string>
     <string name="pref_vending_license_enable_summary">Некаторыя прыкладанні патрабуюць пацверджання таго, што вы набылі іх у Google Play. Па запыце прыкладання microG можа загрузіць пацверджанне пакупкі ад Google. Калі адключана або ўліковы запіс Google не дададзены, запыты на праверку ліцэнзіі ігнаруюцца.</string>
     <string name="signin_confirm_title">Дазволіць <xliff:g example="F-Droid">%1$s</xliff:g> увайсці ў акаўнт</string>
     <string name="feedback_disabled">Адпраўка водгукаў у цяперашні час немагчымая</string>
@@ -220,4 +220,15 @@
     <string name="perm_car_fuel_label">Узровень паліва ў машыне</string>
     <string name="perm_car_mileage_label">Прабег аўтамабіля</string>
     <string name="perm_car_vendor_extension_description">Атрыманне доступу да канала пастаўшчыка вашага аўтамабіля для абмену інфармацыяй, якая датычыцца канкрэтнага аўтамабіля</string>
+    <string name="backup_disabled">Рэзервовае капіраванне недаступна</string>
+    <string name="pref_accounts_title">Акаўнты Google</string>
+    <string name="prefcat_accounts_current_accounts_title">Акаўнты</string>
+    <string name="pref_accounts_summary">Даданне і кіраванне ўліковымі запісамі Google</string>
+    <string name="prefcat_accounts_settings_title">Налады</string>
+    <string name="pref_vending_billing_note_experimental">Гэтая функцыя эксперыментальная і можа прывесці да страты грошай.</string>
+    <string name="pref_vending_licensing_category">Ліцэнзаванне Google Play</string>
+    <string name="pref_vending_billing_category">Плацяжы Google Play</string>
+    <string name="pref_vending_billing_enable_summary">Калі ўключана, некаторыя прыкладанні змогуць здзяйсняць пакупкі ці падпіскі праз службу Google Play Billing.</string>
+    <string name="pref_vending_billing_enable_switch">Апрацоўваць плацежныя запыты</string>
+    <string name="pref_vending_billing_note_licensing">Некаторым прыкладанням можа спатрэбіцца, каб вы ўключылі праверку ліцэнзіі для праверкі вашых плацяжоў.</string>
 </resources>

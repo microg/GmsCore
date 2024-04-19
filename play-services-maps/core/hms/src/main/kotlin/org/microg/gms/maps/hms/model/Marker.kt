@@ -11,62 +11,73 @@ import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.dynamic.unwrap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.internal.IMarkerDelegate
 import com.huawei.hms.maps.model.Marker
+import org.microg.gms.maps.hms.GoogleMapImpl
 import org.microg.gms.maps.hms.utils.toGms
 import org.microg.gms.maps.hms.utils.toHms
 
-class MarkerImpl(private val marker: Marker) : IMarkerDelegate.Stub() {
+class MarkerImpl(private val mapImpl: GoogleMapImpl, private val id: String, private val options: MarkerOptions) : IMarkerDelegate.Stub() {
+
+    private var marker: Marker? = null
+
+    @Synchronized
+    fun update() {
+        marker = mapImpl.map?.addMarker(options.toHms())?.also {
+            mapImpl.markers[it.id] = this
+        }
+    }
 
     override fun remove() {
-        marker.remove()
+        marker?.remove()
     }
 
-    override fun getId(): String = marker.id
+    override fun getId(): String = marker?.id ?: id
 
     override fun setPosition(position: LatLng?) {
-        marker.position = position?.toHms()
+        marker?.position = position?.toHms()
     }
 
-    override fun getPosition(): LatLng {
-        return marker.position.toGms()
+    override fun getPosition(): LatLng? {
+        return marker?.position?.toGms()
     }
 
     override fun setTitle(title: String?) {
-        marker.title = title
+        marker?.title = title
     }
 
-    override fun getTitle(): String? = marker.title
+    override fun getTitle(): String? = marker?.title
 
     override fun setSnippet(snippet: String?) {
-        marker.snippet = snippet
+        marker?.snippet = snippet
     }
 
-    override fun getSnippet(): String? = marker.snippet
+    override fun getSnippet(): String? = marker?.snippet
 
     override fun setDraggable(draggable: Boolean) {
-        marker.isDraggable = draggable
+        marker?.isDraggable = draggable
     }
 
-    override fun isDraggable(): Boolean = marker.isDraggable
+    override fun isDraggable(): Boolean = marker?.isDraggable ?: false
 
     override fun showInfoWindow() {
-        marker.showInfoWindow()
+        marker?.showInfoWindow()
     }
 
     override fun hideInfoWindow() {
-        marker.hideInfoWindow()
+        marker?.hideInfoWindow()
     }
 
     override fun isInfoWindowShown(): Boolean {
-        return marker.isInfoWindowShown
+        return marker?.isInfoWindowShown ?: false
     }
 
     override fun setVisible(visible: Boolean) {
-        marker.isVisible = visible
+        marker?.isVisible = visible
     }
 
-    override fun isVisible(): Boolean = marker.isVisible
+    override fun isVisible(): Boolean = marker?.isVisible ?: false
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -87,48 +98,48 @@ class MarkerImpl(private val marker: Marker) : IMarkerDelegate.Stub() {
     override fun hashCodeRemote(): Int = hashCode()
 
     override fun setIcon(obj: IObjectWrapper?) {
-        marker.setIcon(obj.unwrap())
+        marker?.setIcon(obj.unwrap())
     }
 
     override fun setAnchor(x: Float, y: Float) {
-        marker.setMarkerAnchor(x, y)
+        marker?.setMarkerAnchor(x, y)
     }
 
     override fun setFlat(flat: Boolean) {
-        marker.isFlat = flat
+        marker?.isFlat = flat
     }
 
     override fun isFlat(): Boolean {
-        return marker.isFlat
+        return marker?.isFlat ?: false
     }
 
     override fun setRotation(rotation: Float) {
-        marker.rotation = rotation
+        marker?.rotation = rotation
     }
 
-    override fun getRotation(): Float = marker.rotation
+    override fun getRotation(): Float = marker?.rotation ?: 0f
 
     override fun setInfoWindowAnchor(x: Float, y: Float) {
-        marker.setInfoWindowAnchor(x, y)
+        marker?.setInfoWindowAnchor(x, y)
     }
 
     override fun setAlpha(alpha: Float) {
-        marker.alpha = alpha
+        marker?.alpha = alpha
     }
 
-    override fun getAlpha(): Float = marker.alpha
+    override fun getAlpha(): Float = marker?.alpha ?: 0f
 
     override fun setZIndex(zIndex: Float) {
-        marker.zIndex = zIndex
+        marker?.zIndex = zIndex
     }
 
-    override fun getZIndex(): Float = marker.zIndex
+    override fun getZIndex(): Float = marker?.zIndex ?: 0f
 
     override fun setTag(obj: IObjectWrapper?) {
-        marker.tag = obj.unwrap()
+        marker?.tag = obj.unwrap()
     }
 
-    override fun getTag(): IObjectWrapper = ObjectWrapper.wrap(marker.tag)
+    override fun getTag(): IObjectWrapper = ObjectWrapper.wrap(marker?.tag)
 
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
         if (super.onTransact(code, data, reply, flags)) {

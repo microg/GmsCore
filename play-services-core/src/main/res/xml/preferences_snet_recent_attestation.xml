@@ -4,48 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory
-        android:title="@string/pref_safetynet_recent_cat_basic">
+        android:title="@string/pref_safetynet_recent_cat_basic"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="pref_request_type"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_request_type"
+            app:iconSpaceReserved="false"
             tools:summary="ATTESTATION" />
 
         <Preference
             android:key="pref_time"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_request_time"
+            app:iconSpaceReserved="false"
             tools:summary="1970/01/01 1:00 AM" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_safetynet_recent_cat_request">
+        android:title="@string/pref_safetynet_recent_cat_request"
+        app:iconSpaceReserved="false">
 
         <Preference
             android:key="pref_nonce"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_nonce"
+            app:iconSpaceReserved="false"
             tools:summary="68b329da9893e34099c7d8ad5c" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_safetynet_recent_cat_response">
+        android:title="@string/pref_safetynet_recent_cat_response"
+        app:iconSpaceReserved="false">
         <Preference
             android:key="pref_status"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_response_status"
+            app:iconSpaceReserved="false"
             tools:summary="CTS failed" />
 
         <Preference
             android:key="pref_eval_type"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_eval_type"
+            app:iconSpaceReserved="false"
             tools:summary="HARDWARE_BACKED" />
 
         <Preference
             android:key="pref_advice"
             android:selectable="false"
             android:title="@string/pref_safetynet_recent_advice"
+            app:iconSpaceReserved="false"
             tools:summary="RESTORE_TO_FACTORY_ROM" />
 
         <Preference

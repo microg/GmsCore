@@ -299,13 +299,9 @@ class MovingWifiHelper(private val context: Context) {
             "CDWiFi", "MAVSTART-WIFI" -> parsePassengera(location, data)
             "AegeanWiFi" -> parseDisplayUgo(location, data)
             "Cathay Pacific", "Telekom_FlyNet", "KrisWorld", "SWISS Connect", "Edelweiss Entertainment" -> parsePanasonic(location, data)
-            "FlyNet" -> parseBoardConnect(location, data)
+            "FlyNet", "Austrian FlyNet" -> parseBoardConnect(location, data)
             "ACWiFi" -> parseAirCanada(location, data)
-            "OUIFI" -> parseSncf(location, data)
-            "_SNCF_WIFI_INOUI" -> parseSncf(location, data)
-            "_SNCF_WIFI_INTERCITES" -> parseSncf(location, data)
-            "_WIFI_LYRIA" -> parseSncf(location, data)
-            "NormandieTrainConnecte" -> parseSncf(location, data)
+            "OUIFI", "_SNCF_WIFI_INOUI", "_SNCF_WIFI_INTERCITES", "_WIFI_LYRIA", "NormandieTrainConnecte" -> parseSncf(location, data)
             "agilis-Wifi" -> parseHotsplots(location, data)
             else -> throw UnsupportedOperationException()
         }
@@ -337,6 +333,7 @@ class MovingWifiHelper(private val context: Context) {
             "_WIFI_LYRIA" to "https://wifi.tgv-lyria.com/router/api/train/gps",
             "NormandieTrainConnecte" to "https://wifi.normandie.fr/router/api/train/gps",
             "agilis-Wifi" to "http://hsp.hotsplots.net/status.json",
+            "Austrian FlyNet" to "https://www.austrian-flynet.com/map/api/flightData",
         )
     }
 }

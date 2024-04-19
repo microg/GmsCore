@@ -21,4 +21,12 @@
     <string name="prefcat_location_wifi_title">基于 Wi-Fi 的位置信息</string>
     <string name="prefcat_geocoder_title">地址解析器</string>
     <string name="pref_location_cell_mls_enabled_summary">从 Mozilla 位置服务获取移动网络信号塔位置</string>
+    <string name="location_settings_dialog_message_title_to_continue">要继续，请开启设备位置信息功能
+\n（使用位置信息服务）</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">您的设备将需要:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">使用GPS、WLAN、移动网络和传感器</string>
+    <string name="location_settings_dialog_message_gls_consent">使用位置信息服务；在提供该服务的过程中，可能会定期收集位置数据，并以匿名方式使用这类数据，从而提高位置信息的精准度并改善基于地理位置的服务。</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">有关详细信息，请访问 位置信息设置。</string>
+    <string name="location_settings_dialog_btn_cancel">不用了</string>
+    <string name="location_settings_dialog_btn_sure">确定</string>
 </resources>

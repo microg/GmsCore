@@ -23,4 +23,19 @@ object VendingPreferences {
             put(SettingsContract.Vending.LICENSING, enabled)
         }
     }
+
+    @JvmStatic
+    fun isBillingEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.BILLING)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setBillingEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.BILLING, enabled)
+        }
+    }
 }

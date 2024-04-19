@@ -21,4 +21,11 @@
     <string name="prefcat_location_wifi_title">Localizare Wi-Fi</string>
     <string name="prefcat_geocoder_title">Căutare adrese</string>
     <string name="pref_location_cell_mls_enabled_summary">Preia locațiile turnurilor de telefonie mobilă din rețeaua mobilă de la Mozilla Location Service.</string>
+    <string name="location_settings_dialog_message_title_to_continue">Pentru a continua, activează locația dispozitivului, care utilizează serviciul de localizare</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Folosească receptorul GPS, Wi-Fi, rețelele celulare și senzorii</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Pentru detalii, accesează setările locației.</string>
+    <string name="location_settings_dialog_btn_sure">Bine</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Dispozitivul va trebui să:</string>
+    <string name="location_settings_dialog_message_gls_consent">Utilizeze serviciul de localizare; ca parte a acestui serviciu, poate colecta periodic date despre locație și poate utiliza aceste date într-un mod anonim pentru a îmbunătăți acuratețea locației și serviciile bazate pe locație.</string>
+    <string name="location_settings_dialog_btn_cancel">Nu, mulțumesc</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="pref_exposure_error_bluetooth_off_title">Ввімкнути Bluetooth</string>
     <string name="exposure_notify_off_bluetooth_location">Щоб отримувати сповіщення про вплив, потрібно увімкнути Bluetooth і доступ до розташування.</string>
     <string name="exposure_notify_off_title">Сповіщення про вплив неактивні</string>
@@ -9,4 +9,18 @@
     <string name="exposure_notify_off_bluetooth">Bluetooth повинен бути включений для отримання повідомлень про експозицію.</string>
     <string name="exposure_notify_off_location">Для отримання сповіщень про експозицію необхідний доступ до місця розташування.</string>
     <string name="exposure_notify_off_nearby">Сповіщення про вплив вимагають додаткових дозволів на роботу</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">На жаль, ваш пристрій не сумісний з функцією сповіщень про зараження.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">На жаль, ваш пристрій лише частково сумісний зі сповіщеннями про зараження. Ви можете отримувати сповіщення про небезпечні контакти, але не зможете сповіщати інших.</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ідентифікаторів за останню годину</string>
+    <string name="pref_exposure_app_report_updated_title">Оновлено: <xliff:g example="Today, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_about">Близько <xliff:g example="13">%1$d</xliff:g> хвилин</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Оброблено <xliff:g example="121031">%1$d</xliff:g> діагностичних ключів.</string>
+    <string name="prefcat_exposure_apps_title">Застосунок, який використовує сповіщення про зараження</string>
+    <string name="pref_exposure_collected_rpis_title">Зібрані ідентифікатори</string>
+    <string name="pref_exposure_advertising_id_title">Поточний ідентифікатор, який транслюється</string>
+    <string name="prefcat_exposure_app_report_title">Виявлені зараження</string>
+    <string name="pref_exposure_app_report_entry_time_short">Менше 5 хвилин тому</string>
+    <string name="pref_exposure_app_report_entry_distance_close">поблизу зараження</string>
+    <string name="pref_exposure_app_report_entry_distance_far">зараження далеко</string>
 </resources>

@@ -16,6 +16,7 @@ import android.location.LocationManager
 import android.os.*
 import android.util.Base64
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.core.location.LocationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -113,7 +114,7 @@ class ExposureNotificationServiceImpl(private val context: Context, override val
             Log.w(TAG, e)
         }
         Log.d(TAG, "Pending: $intent")
-        val pi = PendingIntent.getActivity(context, permission.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
+        val pi = PendingIntentCompat.getActivity(context, permission.hashCode(), intent, PendingIntent.FLAG_ONE_SHOT, false)!!
         Log.d(TAG, "Pending: $pi")
         return pi
     }

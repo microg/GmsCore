@@ -7,12 +7,19 @@ package org.microg.gms.settings
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Binder
+import android.os.Bundle
 
 object SettingsContract {
-    fun getAuthority(context: Context) = "${context.packageName}.microg.settings"
+    const val META_DATA_KEY_SOURCE_PACKAGE = "org.microg.gms.settings:source-package"
+    fun getAuthority(context: Context): String {
+        val metaData = runCatching { context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA).metaData }.getOrNull() ?: Bundle.EMPTY
+        val sourcePackage = metaData.getString(META_DATA_KEY_SOURCE_PACKAGE, context.packageName)
+        return "${sourcePackage}.microg.settings"
+    }
     fun getAuthorityUri(context: Context): Uri = Uri.parse("content://${getAuthority(context)}")
 
     object CheckIn {
@@ -156,20 +163,22 @@ object SettingsContract {
         fun getContentUri(context: Context) = Uri.withAppendedPath(getAuthorityUri(context), id)
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
-        const val WIFI_MLS = "location_wifi_mls"
+        const val WIFI_ICHNAEA = "location_wifi_mls"
         const val WIFI_MOVING = "location_wifi_moving"
         const val WIFI_LEARNING = "location_wifi_learning"
-        const val CELL_MLS = "location_cell_mls"
+        const val CELL_ICHNAEA = "location_cell_mls"
         const val CELL_LEARNING = "location_cell_learning"
         const val GEOCODER_NOMINATIM = "location_geocoder_nominatim"
+        const val ICHNAEA_ENDPOINT = "location_ichnaea_endpoint"
 
         val PROJECTION = arrayOf(
-            WIFI_MLS,
+            WIFI_ICHNAEA,
             WIFI_MOVING,
             WIFI_LEARNING,
-            CELL_MLS,
+            CELL_ICHNAEA,
             CELL_LEARNING,
             GEOCODER_NOMINATIM,
+            ICHNAEA_ENDPOINT,
         )
     }
 
@@ -179,9 +188,11 @@ object SettingsContract {
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
         const val LICENSING = "vending_licensing"
+        const val BILLING = "vending_billing"
 
         val PROJECTION = arrayOf(
-            LICENSING
+            LICENSING,
+            BILLING,
         )
     }
 

@@ -4,4 +4,10 @@
     <string name="toast_not_installed">L\'app microG Companion non può essere usata da sola. Installa l\'app microG Services per utilizzare microG.</string>
     <string name="app_name">microG Companion</string>
     <string name="pay_disabled">Al momento non è possibile effettuare pagamenti</string>
+    <string name="license_notification_channel_name">Notifiche di licenza</string>
+    <string name="license_notification_channel_description">Avvisa quando un\'applicazione cerca di convalidare la propria licenza, ma non sei connesso a nessun account Google.</string>
+    <string name="license_notification_title">%1$s non è riuscita a verificare la licenza</string>
+    <string name="license_notification_body">Se l\'app non funziona correttamente, accedi con un account Google con cui hai acquistato l\'app.</string>
+    <string name="license_notification_sign_in">Accedi</string>
+    <string name="license_notification_ignore">Ignora</string>
 </resources>

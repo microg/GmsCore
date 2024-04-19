@@ -81,8 +81,9 @@ public class HttpFormClient {
         }
 
         Log.d(TAG, "-- Request --\n" + content);
+        String replace = content.toString().trim().replace("\n", "");
         OutputStream os = connection.getOutputStream();
-        os.write(content.toString().getBytes());
+        os.write(replace.trim().getBytes());
         os.close();
 
         if (connection.getResponseCode() != 200) {
@@ -117,7 +118,11 @@ public class HttpFormClient {
     private static void appendParam(StringBuilder content, String key, String value) {
         if (content.length() > 0)
             content.append("&");
-        content.append(Uri.encode(key)).append("=").append(Uri.encode(String.valueOf(value)));
+        if (key.equals("token_request_options")) {
+            content.append(Uri.encode(key)).append("=").append(value);
+        } else {
+            content.append(Uri.encode(key)).append("=").append(Uri.encode(String.valueOf(value)));
+        }
     }
 
     private static <T> T parseResponse(Class<T> tClass, HttpURLConnection connection, String result) throws IOException {
@@ -138,6 +143,7 @@ public class HttpFormClient {
                 for (Field field : tClass.getDeclaredFields()) {
                     if (field.isAnnotationPresent(ResponseField.class) &&
                             key.equals(field.getAnnotation(ResponseField.class).value())) {
+                        field.setAccessible(true);
                         matched = true;
                         if (field.getType().equals(String.class)) {
                             field.set(response, value);
@@ -163,6 +169,7 @@ public class HttpFormClient {
                 if (strings == null || strings.size() != 1) continue;
                 String value = strings.get(0);
                 try {
+                    field.setAccessible(true);
                     if (field.getType().equals(String.class)) {
                         field.set(response, value);
                     } else if (field.getType().equals(boolean.class)) {
@@ -178,6 +185,7 @@ public class HttpFormClient {
             }
             if (field.isAnnotationPresent(ResponseStatusCode.class) && field.getType() == int.class) {
                 try {
+                    field.setAccessible(true);
                     field.setInt(response, connection.getResponseCode());
                 } catch (IllegalAccessException e) {
                     Log.w(TAG, e);
@@ -185,6 +193,7 @@ public class HttpFormClient {
             }
             if (field.isAnnotationPresent(ResponseStatusText.class) && field.getType() == String.class) {
                 try {
+                    field.setAccessible(true);
                     field.set(response, connection.getResponseMessage());
                 } catch (IllegalAccessException e) {
                     Log.w(TAG, e);

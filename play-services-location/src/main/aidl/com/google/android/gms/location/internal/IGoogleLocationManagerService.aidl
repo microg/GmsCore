@@ -133,4 +133,6 @@ interface IGoogleLocationManagerService {
 //    int getActivityRecognitionMode() = 77;
 
 //    void injectLocatinWithCallback(in Location mockLocation, int injectionType, IStatusCallback callback) = 85;
+
+//    void isGoogleLocationAccuracyEnabled(in IBooleanStatusCallback callback) = 94;
 }

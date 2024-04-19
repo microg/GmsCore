@@ -28,6 +28,10 @@
         <item>com.mobisoft.morhipo</item>
         <item>com.zzkko</item>
         <item>com.didilabs.kaavefali</item>
+        <item>com.airbnb.android</item>
+        <item>com.mobillium.papara</item>
+        <item>co.com.fincaraiz.app</item>
+        <item>com.frisby.frisby</item>
     </string-array>
     <string-array name="signature_never_fake">
         <item>com.truecaller</item>

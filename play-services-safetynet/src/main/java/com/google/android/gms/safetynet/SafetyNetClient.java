@@ -117,4 +117,64 @@ public class SafetyNetClient extends GoogleApi<Api.ApiOptions.NoOptions> {
             }
         });
     }
+
+    /**
+     * Prompts the user to enable Verify Apps if it is currently turned off.
+     */
+    public Task<SafetyNetApi.VerifyAppsUserResponse> enableVerifyApps() {
+        return scheduleTask((PendingGoogleApiCall<SafetyNetApi.VerifyAppsUserResponse, SafetyNetGmsClient>) (client, completionSource) -> {
+            try {
+                client.enableVerifyApps(new ISafetyNetCallbacksDefaultStub() {
+                    @Override
+                    public void onVerifyAppsUserResult(Status status, boolean enabled) throws RemoteException {
+                        SafetyNetApi.VerifyAppsUserResponse response = new SafetyNetApi.VerifyAppsUserResponse();
+                        response.setResult(new SafetyNetApi.VerifyAppsUserResult() {
+                            @Override
+                            public boolean isVerifyAppsEnabled() {
+                                return enabled;
+                            }
+
+                            @Override
+                            public Status getStatus() {
+                                return status;
+                            }
+                        });
+                        completionSource.setResult(response);
+                    }
+                });
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
+
+    /**
+     * Determines whether Verify Apps is enabled.
+     */
+    public Task<SafetyNetApi.VerifyAppsUserResponse> isVerifyAppsEnabled() {
+        return scheduleTask((PendingGoogleApiCall<SafetyNetApi.VerifyAppsUserResponse, SafetyNetGmsClient>) (client, completionSource) -> {
+            try {
+                client.isVerifyAppsEnabled(new ISafetyNetCallbacksDefaultStub() {
+                    @Override
+                    public void onVerifyAppsUserResult(Status status, boolean enabled) throws RemoteException {
+                        SafetyNetApi.VerifyAppsUserResponse response = new SafetyNetApi.VerifyAppsUserResponse();
+                        response.setResult(new SafetyNetApi.VerifyAppsUserResult() {
+                            @Override
+                            public boolean isVerifyAppsEnabled() {
+                                return enabled;
+                            }
+
+                            @Override
+                            public Status getStatus() {
+                                return status;
+                            }
+                        });
+                        completionSource.setResult(response);
+                    }
+                });
+            } catch (Exception e) {
+                completionSource.setException(e);
+            }
+        });
+    }
 }

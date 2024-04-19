@@ -399,7 +399,7 @@
             android:excludeFromRecents="true"
             android:exported="true"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
 
@@ -476,7 +476,7 @@
 
         <activity
             android:name="org.microg.gms.auth.signin.AuthSignInActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar"
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar"
             android:process=":ui"
             android:exported="true">
             <intent-filter>
@@ -509,6 +509,12 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name="org.microg.gms.auth.consent.ConsentSignInActivity"
+            android:process=":ui"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
+
         <!-- Games -->
 
         <activity
@@ -516,7 +522,7 @@
             android:enabled="true"
             android:exported="false"
             android:process=":ui"
-            android:theme="@style/Theme.Translucent"/>
+            android:theme="@style/Theme.App.Translucent"/>
 
         <activity
             android:name="org.microg.gms.games.UpgradeActivity"
@@ -650,7 +656,7 @@
             android:name="org.microg.gms.ui.AskPushPermission"
             android:excludeFromRecents="true"
             android:process=":ui"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar" />
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar" />
 
         <activity
             android:name="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
@@ -663,11 +669,6 @@
             android:label="@string/self_check_title"
             android:process=":ui"
             android:taskAffinity="org.microg.gms.settings" />
-
-        <activity
-            android:name="org.microg.gms.ui.LegacyAccountSettingsActivity"
-            android:process=":ui"
-            android:taskAffinity="org.microg.gms.settings"></activity>
 
         <activity
             android:name="org.microg.gms.accountsettings.ui.MainActivity"
@@ -690,7 +691,7 @@
             android:process=":ui"
             android:exported="true"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.AppCompat.DayNight.Dialog.Alert.NoActionBar">
+            android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.accountsettings.action.VIEW_SETTINGS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -760,6 +761,17 @@
         <service android:name="org.microg.gms.potokens.PoTokensService">
             <intent-filter>
                 <action android:name="com.google.android.gms.potokens.service.START" />
+            </intent-filter>
+        </service>
+
+        <!-- fitness -->
+
+        <service
+            android:name="com.google.android.gms.fitness.service.history.FitHistoryBroker"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fitness.HistoryApi" />
             </intent-filter>
         </service>
 
@@ -833,11 +845,21 @@
                 <action android:name="com.google.android.gms.ads.gservice.START" />
             </intent-filter>
         </service>
+
+        <!-- feedback -->
+
         <service android:name="org.microg.gms.feedback.FeedbackService">
             <intent-filter>
                 <action android:name="com.google.android.gms.feedback.internal.IFeedbackService" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.google.android.gms.feedback.FeedbackActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.App.Translucent"/>
+
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
@@ -934,6 +956,7 @@
                 <action android:name="com.google.android.gms.auth.api.identity.service.credentialsaving.START" />
                 <action android:name="com.google.android.gms.auth.api.phone.service.InternalService.START" />
                 <action android:name="com.google.android.gms.auth.api.signin.service.START" />
+                <action android:name="com.google.android.gms.auth.blockstore.service.START"/>
                 <action android:name="com.google.android.gms.auth.config.service.START" />
                 <action android:name="com.google.android.gms.auth.cryptauth.cryptauthservice.START" />
                 <action android:name="com.google.android.gms.auth.proximity.devicesyncservice.START" />
@@ -969,7 +992,6 @@
                 <action android:name="com.google.android.gms.fitness.ConfigApi" />
                 <action android:name="com.google.android.gms.fitness.GoalsApi" />
                 <action android:name="com.google.android.gms.fitness.GoogleFitnessService.START" />
-                <action android:name="com.google.android.gms.fitness.HistoryApi" />
                 <action android:name="com.google.android.gms.fitness.InternalApi" />
                 <action android:name="com.google.android.gms.fitness.RecordingApi" />
                 <action android:name="com.google.android.gms.fitness.SensorsApi" />
@@ -980,6 +1002,7 @@
                 <action android:name="com.google.android.gms.googlehelp.service.GoogleHelpService.START" />
                 <action android:name="com.google.android.gms.herrevad.services.LightweightNetworkQualityAndroidService.START" />
                 <action android:name="com.google.android.gms.identity.service.BIND" />
+                <action android:name="com.google.android.gms.inappreach.service.START"/>
                 <action android:name="com.google.android.gms.instantapps.START" />
                 <action android:name="com.google.android.gms.kids.service.START" />
                 <action android:name="com.google.android.gms.learning.internal.dynamitesupport.START" />

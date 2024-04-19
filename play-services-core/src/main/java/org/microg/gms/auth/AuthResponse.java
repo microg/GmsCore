@@ -124,6 +124,8 @@ public class AuthResponse {
         if (scopeConsentDetails != null) sb.append(", scopeConsentDetails='").append(scopeConsentDetails).append('\'');
         if (consentDataBase64 != null) sb.append(", consentDataBase64='").append(consentDataBase64).append('\'');
         if (auths != null) sb.append(", auths='").append(auths).append('\'');
+        if (itMetadata != null) sb.append(", itMetadata='").append(itMetadata).append('\'');
+        if (resolutionDataBase64 != null) sb.append(", resolutionDataBase64='").append(resolutionDataBase64).append('\'');
         sb.append('}');
         return sb.toString();
     }

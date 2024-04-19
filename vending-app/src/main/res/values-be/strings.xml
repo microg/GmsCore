@@ -10,4 +10,13 @@
     <string name="toast_installed">microG Companion не можа выкарыстоўвацца асобна. Адкрываюцца наладкі сэрвісаў microG.</string>
     <string name="toast_not_installed">microG Companion не можа выкарыстоўвацца асобна. Калі ласка, усталюйце сэрвісы microG каб выкарыстоўваць microG.</string>
     <string name="pay_disabled">Функцыя аплаты недаступная</string>
+    <string name="tips_input_passwd">Увядзіце пароль</string>
+    <string name="tips_forget_passwd">Забылі пароль?</string>
+    <string name="tips_more_details">Больш падрабязна</string>
+    <string name="confirm_purchase">Пацвярджэнне пакупкі</string>
+    <string name="error_network">Адсутнічае падлучэнне да Інтэрнэту. Пераканайцеся, што Wi-Fi або перадача даных уключаны, і паспрабуйце яшчэ раз.</string>
+    <string name="error_passwd">Уведзены вамі пароль няправільны.</string>
+    <string name="error_unknown">Невядомая памылка. Выйдзіце і паўторыце спробу.</string>
+    <string name="tips_remember_login_info">Запомніць аўтарызацыю на гэтай прыладзе</string>
+    <string name="text_verify_button">Пацвердзіць</string>
 </resources>

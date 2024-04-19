@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:key="prefcat_current_accounts"
+        android:title="@string/prefcat_accounts_current_accounts_title"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:enabled="false"
+            android:order="9"
+            android:key="pref_current_accounts_none"
+            android:title="@string/list_no_item_none" />
+        <Preference
+            android:icon="@drawable/ic_add"
+            android:order="10"
+            android:title="@string/pref_add_account_summary">
+            <intent
+                android:targetClass="org.microg.gms.auth.login.LoginActivity"
+                android:targetPackage="com.google.android.gms" />
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="prefcat_account_settings"
+        android:title="@string/prefcat_accounts_settings_title"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            android:persistent="false"
+            android:key="auth_manager_trust_google"
+            android:summary="@string/pref_auth_trust_google_summary"
+            android:title="@string/pref_auth_trust_google_title"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:persistent="false"
+            android:key="auth_manager_visible"
+            android:summary="@string/pref_auth_visible_summary"
+            android:title="@string/pref_auth_visible_title"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:persistent="false"
+            android:key="auth_include_android_id"
+            android:summary="@string/pref_auth_include_android_id_summary"
+            android:title="@string/pref_auth_include_android_id_title"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:persistent="false"
+            android:key="auth_strip_device_name"
+            android:summary="@string/pref_auth_strip_device_name_summary"
+            android:title="@string/pref_auth_strip_device_name_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

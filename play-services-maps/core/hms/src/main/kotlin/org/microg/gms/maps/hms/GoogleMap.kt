@@ -27,23 +27,24 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.internal.*
 import com.huawei.hms.maps.CameraUpdate
 import com.huawei.hms.maps.HuaweiMap
-import com.huawei.hms.maps.HuaweiMapOptions
 import com.huawei.hms.maps.MapView
 import com.huawei.hms.maps.MapsInitializer
+import com.huawei.hms.maps.OnMapReadyCallback
 import com.huawei.hms.maps.internal.IOnIndoorStateChangeListener
 import com.huawei.hms.maps.internal.IOnInfoWindowCloseListener
 import com.huawei.hms.maps.internal.IOnInfoWindowLongClickListener
 import com.huawei.hms.maps.internal.IOnPoiClickListener
 import com.huawei.hms.maps.model.Marker
-import org.microg.gms.common.Constants
 import org.microg.gms.maps.hms.model.*
 import org.microg.gms.maps.hms.utils.*
+import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 private fun <T : Any> LongSparseArray<T>.values() = (0 until size()).mapNotNull { valueAt(it) }
 
-fun runOnMainLooper(method: () -> Unit) {
-    if (Looper.myLooper() == Looper.getMainLooper()) {
+fun runOnMainLooper(forceQueue: Boolean = false, method: () -> Unit) {
+    if (!forceQueue && Looper.myLooper() == Looper.getMainLooper()) {
         method()
     } else {
         Handler(Looper.getMainLooper()).post {
@@ -65,8 +66,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var initialized = false
     private var loaded = false
     private val mapLock = Object()
+    private var latLngBounds: LatLngBounds? = null
 
-    private val initializedCallbackList = mutableListOf<IOnMapReadyCallback>()
+    private val internalOnInitializedCallbackList = CopyOnWriteArrayList<OnMapReadyCallback>()
+    private val initializedCallbackList = CopyOnWriteArrayList<IOnMapReadyCallback>()
     private var loadedCallback: IOnMapLoadedCallback? = null
     private var cameraChangeListener: IOnCameraChangeListener? = null
     private var cameraMoveListener: IOnCameraMoveListener? = null
@@ -77,7 +80,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var mapLongClickListener: IOnMapLongClickListener? = null
 
     private val groundOverlays = mutableMapOf<String, GroundOverlayImpl>()
-    private val markers = mutableMapOf<String, MarkerImpl>()
     private val polylines = mutableMapOf<String, PolylineImpl>()
     private val polygons = mutableMapOf<String, PolygonImpl>()
     private val circles = mutableMapOf<String, CircleImpl>()
@@ -86,6 +88,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     private var storedMapType: Int = options.mapType
     val waitingCameraUpdates = mutableListOf<CameraUpdate>()
     var locationEnabled: Boolean = false
+
+    private var markerId = 0L
+    val markers = mutableMapOf<String, MarkerImpl>()
 
     init {
         val mapContext = MapContext(context)
@@ -123,16 +128,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    fun afterInitialized(runnable: () -> Unit) {
-        initializedCallbackList.add(object : IOnMapReadyCallback {
-            override fun onMapReady(map: IGoogleMapDelegate?) {
-                runnable()
-            }
-
-            override fun asBinder(): IBinder? = null
-        })
-    }
-
     override fun animateCameraWithCallback(cameraUpdate: IObjectWrapper?, callback: ICancelableCallback?) {
         val update = cameraUpdate.unwrap<CameraUpdate>() ?: return
         synchronized(mapLock) {
@@ -140,19 +135,23 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 this.map?.animateCamera(update, callback?.toHms())
             } else {
                 waitingCameraUpdates.add(update)
-                afterInitialized { callback?.onFinish() }
+                afterInitialize { callback?.onFinish() }
             }
         }
     }
 
-    override fun animateCameraWithDurationAndCallback(cameraUpdate: IObjectWrapper?, duration: Int, callback: ICancelableCallback?) {
+    override fun animateCameraWithDurationAndCallback(
+            cameraUpdate: IObjectWrapper?,
+            duration: Int,
+            callback: ICancelableCallback?
+    ) {
         val update = cameraUpdate.unwrap<CameraUpdate>() ?: return
         synchronized(mapLock) {
             if (initialized) {
                 this.map?.animateCamera(update, duration, callback?.toHms())
             } else {
                 waitingCameraUpdates.add(update)
-                afterInitialized { callback?.onFinish() }
+                afterInitialize { callback?.onFinish() }
             }
         }
     }
@@ -164,21 +163,24 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return true
     }
 
-    override fun setMinZoomPreference(minZoom: Float) {
-        map?.setMinZoomPreference(toHmsZoom(minZoom))
+    override fun setMinZoomPreference(minZoom: Float) = afterInitialize {
+        it.setMinZoomPreference(toHmsZoom(minZoom))
     }
 
-    override fun setMaxZoomPreference(maxZoom: Float) {
-        map?.setMaxZoomPreference(toHmsZoom(maxZoom))
+    override fun setMaxZoomPreference(maxZoom: Float) = afterInitialize {
+        it.setMaxZoomPreference(toHmsZoom(maxZoom))
     }
 
-    override fun resetMinMaxZoomPreference() {
-        map?.setMinZoomPreference(3.toFloat())
-        map?.setMaxZoomPreference(18.toFloat())
+    override fun resetMinMaxZoomPreference() = afterInitialize {
+        it.setMinZoomPreference(3.toFloat())
+        it.setMaxZoomPreference(18.toFloat())
     }
 
-    override fun setLatLngBoundsForCameraTarget(bounds: LatLngBounds?) {
-        map?.setLatLngBoundsForCameraTarget(bounds?.toHms())
+    override fun setLatLngBoundsForCameraTarget(bounds: LatLngBounds?) = afterInitialize {
+        if (latLngBounds == null || bounds == null || latLngBounds!! != bounds) {
+            latLngBounds = bounds
+            it.setLatLngBoundsForCameraTarget(bounds?.toHms())
+        }
     }
 
     override fun addPolyline(options: PolylineOptions): IPolylineDelegate? {
@@ -195,11 +197,14 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return polygonImpl
     }
 
-    override fun addMarker(options: MarkerOptions): IMarkerDelegate? {
-        val marker = map?.addMarker(options.toHms()) ?: return null
-        val markerImpl = MarkerImpl(marker)
-        markers[markerImpl.id] = markerImpl
-        return markerImpl
+    override fun addMarker(options: MarkerOptions): IMarkerDelegate {
+        val marker = MarkerImpl(this, "m${markerId++}", options)
+        if (map != null) {
+            marker.update()
+        } else {
+            markers[marker.id] = marker
+        }
+        return marker
     }
 
     override fun addGroundOverlay(options: GroundOverlayOptions): IGroundOverlayDelegate? {
@@ -255,9 +260,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return map?.isTrafficEnabled ?: false
     }
 
-    override fun setTrafficEnabled(traffic: Boolean) {
+    override fun setTrafficEnabled(traffic: Boolean) = afterInitialize {
         Log.d(TAG, "setTrafficEnabled")
-        map?.isTrafficEnabled = traffic
+        it.isTrafficEnabled = traffic
     }
 
     override fun isIndoorEnabled(): Boolean {
@@ -265,17 +270,18 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return map?.isIndoorEnabled ?: false
     }
 
-    override fun setIndoorEnabled(indoor: Boolean) {
+    override fun setIndoorEnabled(indoor: Boolean) = afterInitialize {
         Log.d(TAG, "setIndoorEnabled")
-        map?.isIndoorEnabled = indoor
+        it.isIndoorEnabled = indoor
     }
 
     override fun isMyLocationEnabled(): Boolean {
         return map?.isMyLocationEnabled ?: false
     }
 
-    override fun setMyLocationEnabled(myLocation: Boolean) {
-        map?.isMyLocationEnabled = myLocation
+    override fun setMyLocationEnabled(myLocation: Boolean) = afterInitialize {
+        Log.d(TAG, "setMyLocationEnabled $myLocation")
+        it.isMyLocationEnabled = myLocation
     }
 
     override fun getMyLocation(): Location? {
@@ -283,12 +289,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return null
     }
 
-    override fun setLocationSource(locationSource: ILocationSourceDelegate?) {
+    override fun setLocationSource(locationSource: ILocationSourceDelegate?) = afterInitialize {
         Log.d(TAG, "unimplemented Method: setLocationSource")
     }
 
-    override fun setContentDescription(desc: String?) {
-        map?.setContentDescription(desc)
+    override fun setContentDescription(desc: String?) = afterInitialize {
+        Log.d(TAG, "setContentDescription desc -> $desc")
+        it.setContentDescription(desc)
     }
 
     override fun getUiSettings(): IUiSettingsDelegate? = map?.uiSettings?.let { UiSettingsImpl(it) }
@@ -298,10 +305,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         ProjectionImpl(it)
     }
 
-    override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) {
+    override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
         Log.d(TAG, "setOnCameraChangeListener");
         cameraChangeListener = listener
-        map?.setOnCameraIdleListener {
+        it.setOnCameraIdleListener {
             try {
                 cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
             } catch (e: Exception) {
@@ -310,27 +317,29 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setOnCircleClickListener(listener: IOnCircleClickListener?) {
+    override fun setOnCircleClickListener(listener: IOnCircleClickListener?) = afterInitialize { hmap ->
         Log.d(TAG, "setOnCircleClickListener")
-        map?.setOnCircleClickListener { listener?.onCircleClick(circles[it.id]) }
+        hmap.setOnCircleClickListener { listener?.onCircleClick(circles[it.id]) }
     }
 
-    override fun setOnGroundOverlayClickListener(listener: IOnGroundOverlayClickListener?) {
-        Log.d(TAG, "Method: setOnGroundOverlayClickListener")
-        map?.setOnGroundOverlayClickListener { listener?.onGroundOverlayClick(groundOverlays[it.id]) }
-    }
+    override fun setOnGroundOverlayClickListener(listener: IOnGroundOverlayClickListener?) =
+            afterInitialize { hmap ->
+                Log.d(TAG, "Method: setOnGroundOverlayClickListener")
+                hmap.setOnGroundOverlayClickListener { listener?.onGroundOverlayClick(groundOverlays[it.id]) }
+            }
 
-    override fun setOnInfoWindowLongClickListener(listener: com.google.android.gms.maps.internal.IOnInfoWindowLongClickListener?) {
-        Log.d(TAG,"Not yet implemented setInfoWindowLongClickListener")
-    }
+    override fun setOnInfoWindowLongClickListener(listener: com.google.android.gms.maps.internal.IOnInfoWindowLongClickListener?) =
+            afterInitialize {
+                Log.d(TAG, "Not yet implemented setInfoWindowLongClickListener")
+            }
 
     fun setOnIndoorStateChangeListener(listener: IOnIndoorStateChangeListener?) {
         Log.d(TAG, "unimplemented Method: setOnIndoorStateChangeListener")
     }
 
-    override fun setOnMapClickListener(listener: IOnMapClickListener?) {
+    override fun setOnMapClickListener(listener: IOnMapClickListener?) = afterInitialize {
         mapClickListener = listener
-        map?.setOnMapClickListener { latlng ->
+        it.setOnMapClickListener { latlng ->
             try {
                 mapClickListener?.onMapClick(latlng.toGms())
             } catch (e: Exception) {
@@ -339,9 +348,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setOnMapLongClickListener(listener: IOnMapLongClickListener?) {
+    override fun setOnMapLongClickListener(listener: IOnMapLongClickListener?) = afterInitialize {
         mapLongClickListener = listener
-        map?.setOnMapLongClickListener { latlng ->
+        it.setOnMapLongClickListener { latlng ->
             try {
                 mapLongClickListener?.onMapLongClick(latlng.toGms())
             } catch (e: Exception) {
@@ -350,12 +359,15 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setOnMarkerClickListener(listener: IOnMarkerClickListener?) {
-        map?.setOnMarkerClickListener { listener?.onMarkerClick(markers[it.id]) ?: false }
+    override fun setOnMarkerClickListener(listener: IOnMarkerClickListener?) = afterInitialize { hmap ->
+        hmap.setOnMarkerClickListener {
+            Log.d("GmsGoogleMap", "setOnMarkerClickListener marker id -> ${it.id}")
+            listener?.onMarkerClick(markers[it.id]) ?: false
+        }
     }
 
-    override fun setOnMarkerDragListener(listener: IOnMarkerDragListener?) {
-        map?.setOnMarkerDragListener(object : HuaweiMap.OnMarkerDragListener{
+    override fun setOnMarkerDragListener(listener: IOnMarkerDragListener?) = afterInitialize {
+        it.setOnMarkerDragListener(object : HuaweiMap.OnMarkerDragListener {
             override fun onMarkerDragStart(p0: Marker?) {
                 listener?.onMarkerDragStart(markers[p0?.id])
             }
@@ -370,9 +382,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         })
     }
 
-    override fun setOnInfoWindowClickListener(listener: IOnInfoWindowClickListener?) {
+    override fun setOnInfoWindowClickListener(listener: IOnInfoWindowClickListener?) = afterInitialize { hmap ->
         Log.d(TAG, "setOnInfoWindowClickListener")
-        map?.setOnInfoWindowClickListener { listener?.onInfoWindowClick(markers[it.id]) }
+        hmap.setOnInfoWindowClickListener { listener?.onInfoWindowClick(markers[it.id]) }
     }
 
     fun setOnInfoWindowCloseListener(listener: IOnInfoWindowCloseListener?) {
@@ -383,9 +395,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         Log.d(TAG, "unimplemented Method: setOnInfoWindowLongClickListener")
     }
 
-    override fun setInfoWindowAdapter(adapter: IInfoWindowAdapter?) {
+    override fun setInfoWindowAdapter(adapter: IInfoWindowAdapter?) = afterInitialize {
         Log.d(TAG, "setInfoWindowAdapter")
-        map?.setInfoWindowAdapter(object : HuaweiMap.InfoWindowAdapter{
+        it.setInfoWindowAdapter(object : HuaweiMap.InfoWindowAdapter {
             override fun getInfoContents(p0: Marker?): View? {
                 return adapter?.getInfoContents(markers[p0?.id]).unwrap<View>()
             }
@@ -397,54 +409,56 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         })
     }
 
-    override fun setOnMyLocationChangeListener(listener: IOnMyLocationChangeListener?) {
+    override fun setOnMyLocationChangeListener(listener: IOnMyLocationChangeListener?) = afterInitialize {
         Log.d(TAG, "deprecated Method: setOnMyLocationChangeListener")
     }
 
-    override fun setOnMyLocationButtonClickListener(listener: IOnMyLocationButtonClickListener?) {
+    override fun setOnMyLocationButtonClickListener(listener: IOnMyLocationButtonClickListener?) = afterInitialize {
         Log.d(TAG, "setOnMyLocationButtonClickListener")
-        map?.setOnMyLocationButtonClickListener { listener?.onMyLocationButtonClick() ?: false }
+        it.setOnMyLocationButtonClickListener { listener?.onMyLocationButtonClick() ?: false }
     }
 
-    override fun setOnMyLocationClickListener(listener: IOnMyLocationClickListener?) {
+    override fun setOnMyLocationClickListener(listener: IOnMyLocationClickListener?) = afterInitialize { hmap ->
         Log.d(TAG, "setOnMyLocationClickListener")
-        map?.setOnMyLocationClickListener { listener?.onMyLocationClick(it) }
+        hmap.setOnMyLocationClickListener { listener?.onMyLocationClick(it) }
     }
 
     fun setOnPoiClickListener(listener: IOnPoiClickListener?) {
         Log.d(TAG, "unimplemented Method: setOnPoiClickListener")
     }
 
-    override fun setOnPolygonClickListener(listener: IOnPolygonClickListener?) {
+    override fun setOnPolygonClickListener(listener: IOnPolygonClickListener?) = afterInitialize { hmap ->
         Log.d(TAG, "setOnPolygonClickListener")
-        map?.setOnPolygonClickListener { listener?.onPolygonClick(polygons[it.id]) }
+        hmap.setOnPolygonClickListener { listener?.onPolygonClick(polygons[it.id]) }
     }
 
-    override fun setOnInfoWindowCloseListener(listener: com.google.android.gms.maps.internal.IOnInfoWindowCloseListener?) {
-        Log.d(TAG, "Not yet implemented setInfoWindowCloseListener")
-    }
+    override fun setOnInfoWindowCloseListener(listener: com.google.android.gms.maps.internal.IOnInfoWindowCloseListener?) =
+            afterInitialize {
+                Log.d(TAG, "Not yet implemented setInfoWindowCloseListener")
+            }
 
-    override fun setOnPolylineClickListener(listener: IOnPolylineClickListener?) {
+
+    override fun setOnPolylineClickListener(listener: IOnPolylineClickListener?) = afterInitialize { hmap ->
         Log.d(TAG, "unimplemented Method: setOnPolylineClickListener")
-        map?.setOnPolylineClickListener { listener?.onPolylineClick(polylines[it.id]) }
+        hmap.setOnPolylineClickListener { listener?.onPolylineClick(polylines[it.id]) }
     }
 
-    override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) {
+    override fun snapshot(callback: ISnapshotReadyCallback, bitmap: IObjectWrapper?) = afterInitialize {
         Log.d(TAG, "snapshot")
-        val hmsBitmap = bitmap.unwrap<Bitmap>() ?: return
+        val hmsBitmap = bitmap.unwrap<Bitmap>() ?: return@afterInitialize
         val hmsCallback = HuaweiMap.SnapshotReadyCallback { p0 -> callback.onBitmapReady(p0) }
-        map?.snapshot(hmsCallback, hmsBitmap)
+        it.snapshot(hmsCallback, hmsBitmap)
     }
 
-    override fun snapshotForTest(callback: ISnapshotReadyCallback) {
+    override fun snapshotForTest(callback: ISnapshotReadyCallback) = afterInitialize {
         Log.d(TAG, "snapshotForTest")
         val hmsCallback = HuaweiMap.SnapshotReadyCallback { p0 -> callback.onBitmapReady(p0) }
-        map?.snapshot(hmsCallback)
+        it.snapshot(hmsCallback)
     }
 
-    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
+    override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) = afterInitialize {
         Log.d(TAG, "setPadding: $left $top $right $bottom")
-        map?.setPadding(left, top, right, bottom)
+        it.setPadding(left, top, right, bottom)
     }
 
     override fun isBuildingsEnabled(): Boolean {
@@ -452,9 +466,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         return map?.isBuildingsEnabled ?: true
     }
 
-    override fun setBuildingsEnabled(buildings: Boolean) {
+    override fun setBuildingsEnabled(buildings: Boolean) = afterInitialize {
         Log.d(TAG, "setBuildingsEnabled: $buildings")
-        map?.isBuildingsEnabled = buildings
+        it.isBuildingsEnabled = buildings
     }
 
     override fun setOnMapLoadedCallback(callback: IOnMapLoadedCallback?) {
@@ -477,10 +491,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setCameraMoveStartedListener(listener: IOnCameraMoveStartedListener?) {
+    override fun setCameraMoveStartedListener(listener: IOnCameraMoveStartedListener?) = afterInitialize { hmap ->
         Log.d(TAG, "setCameraMoveStartedListener")
         cameraMoveStartedListener = listener
-        map?.setOnCameraMoveStartedListener {
+        hmap.setOnCameraMoveStartedListener {
             try {
                 cameraMoveStartedListener?.onCameraMoveStarted(it)
             } catch (e: Exception) {
@@ -489,10 +503,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setCameraMoveListener(listener: IOnCameraMoveListener?) {
+    override fun setCameraMoveListener(listener: IOnCameraMoveListener?) = afterInitialize {
         Log.d(TAG, "setCameraMoveListener")
         cameraMoveListener = listener
-        map?.setOnCameraMoveListener {
+        it.setOnCameraMoveListener {
             try {
                 cameraMoveListener?.onCameraMove()
             } catch (e: Exception) {
@@ -501,10 +515,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setCameraMoveCanceledListener(listener: IOnCameraMoveCanceledListener?) {
+    override fun setCameraMoveCanceledListener(listener: IOnCameraMoveCanceledListener?) = afterInitialize {
         Log.d(TAG, "setCameraMoveCanceledListener")
         cameraMoveCanceledListener = listener
-        map?.setOnCameraMoveCanceledListener {
+        it.setOnCameraMoveCanceledListener {
             try {
                 cameraMoveCanceledListener?.onCameraMoveCanceled()
             } catch (e: Exception) {
@@ -513,10 +527,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    override fun setCameraIdleListener(listener: IOnCameraIdleListener?) {
+    override fun setCameraIdleListener(listener: IOnCameraIdleListener?) = afterInitialize {
         Log.d(TAG, "onCameraIdle: successful")
         cameraIdleListener = listener
-        map?.setOnCameraIdleListener {
+        it.setOnCameraIdleListener {
             try {
                 cameraIdleListener?.onCameraIdle()
             } catch (e: Exception) {
@@ -556,6 +570,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
             mapView.getMapAsync(this::initMap)
 
             created = true
+            runOnMainLooper(forceQueue = true) { tryRunUserInitializedCallbacks("onCreate") }
         }
     }
 
@@ -673,23 +688,25 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
         synchronized(mapLock) {
             initialized = true
+            markers.filter { it.key.startsWith("m") }.forEach { it.value.update() }
             waitingCameraUpdates.forEach { map.moveCamera(it) }
-            val initializedCallbackList = ArrayList(initializedCallbackList)
-            Log.d(TAG, "Invoking ${initializedCallbackList.size} callbacks delayed, as map is initialized")
-            for (callback in initializedCallbackList) {
-                try {
-                    callback.onMapReady(this)
-                } catch (e: Exception) {
-                    Log.w(TAG, e)
-                }
+            val initializedCallbacks = ArrayList(internalOnInitializedCallbackList)
+            Log.d(TAG, "Invoking ${initializedCallbacks.size} internal callbacks now that the true map is initialized")
+            for (callback in initializedCallbacks) {
+                callback.onMapReady(map)
             }
+            internalOnInitializedCallbackList.clear()
         }
+
+        tryRunUserInitializedCallbacks(tag = "initMap")
     }
 
     override fun onResume() = mapView?.onResume() ?: Unit
     override fun onPause() = mapView?.onPause() ?: Unit
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
+        initializedCallbackList.clear()
+        internalOnInitializedCallbackList.clear()
         circles.map { it.value.remove() }
         circles.clear()
         polylines.map { it.value.remove() }
@@ -737,17 +754,61 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     fun getMapAsync(callback: IOnMapReadyCallback) {
         synchronized(mapLock) {
+            initializedCallbackList.add(callback)
+        }
+        tryRunUserInitializedCallbacks("getMapAsync")
+    }
+
+    private fun afterInitialize(runnable: (HuaweiMap) -> Unit) {
+        synchronized(mapLock) {
             if (initialized) {
-                Log.d(TAG, "Invoking callback instantly, as map is initialized")
-                try {
-                    callback.onMapReady(this)
-                } catch (e: Exception) {
-                    Log.w(TAG, e)
-                }
+                runnable(map!!)
             } else {
-                Log.d(TAG, "Delay callback invocation, as map is not yet initialized")
-                initializedCallbackList.add(callback)
+                internalOnInitializedCallbackList.add(OnMapReadyCallback {
+                    runnable(it)
+                })
             }
+        }
+    }
+
+    private var isInvokingInitializedCallbacks = AtomicBoolean(false)
+    private fun tryRunUserInitializedCallbacks(tag: String = "") {
+
+        synchronized(mapLock) {
+            if (initializedCallbackList.isEmpty()) return
+        }
+
+        val runCallbacks = {
+            synchronized(mapLock) {
+                initializedCallbackList.forEach {
+                    try {
+                        it.onMapReady(this)
+                    } catch (e: Exception) {
+                        Log.w(TAG, e)
+                    }
+                }.also {
+                    initializedCallbackList.clear()
+                }
+            }
+        }
+
+        if (initialized && map != null) {
+            Log.d("$TAG:$tag", "Invoking callback now, as map is initialized")
+            val wasCallbackActive = isInvokingInitializedCallbacks.getAndSet(true)
+            runOnMainLooper(forceQueue = wasCallbackActive) {
+                runCallbacks()
+            }
+            if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
+        } else if (mapView?.isShown == false) {
+            runOnMainLooper(forceQueue = true) {
+                Log.d("$TAG:$tag", "Invoking callback now: map cannot be initialized because it is not shown (yet)")
+                runCallbacks()
+            }
+        } else {
+            Log.d(
+                    "$TAG:$tag",
+                    "Initialized callbacks could not be run at this point, as the map view has not been created yet."
+            )
         }
     }
 

@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcel
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -55,7 +56,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
             Log.d(TAG, "Sending SIGN_IN_REQUIRED to $packageName")
             callback.onPostInitCompleteWithConnectionInfo(ConnectionResult.SIGN_IN_REQUIRED, null, ConnectionInfo().apply {
                 params = bundleOf(
-                    "pendingIntent" to PendingIntent.getActivity(
+                    "pendingIntent" to PendingIntentCompat.getActivity(
                         this@GamesService,
                         packageName.hashCode(),
                         Intent(this@GamesService, GamesSignInActivity::class.java).apply {
@@ -63,7 +64,8 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                             putExtra(EXTRA_ACCOUNT, request.account)
                             putExtra(EXTRA_SCOPES, request.scopes)
                         },
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                        PendingIntent.FLAG_UPDATE_CURRENT,
+                        false
                     )
                 )
             })
@@ -75,7 +77,9 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                     ?: GamesConfigurationService.getDefaultAccount(this@GamesService, packageName)
                     ?: return@launchWhenStarted sendSignInRequired()
 
-                val scopes = (request.scopes.toSet() + Scope(Scopes.GAMES_LITE)).toList().sortedBy { it.scopeUri }
+                val scopes = request.scopes.toList().realScopes
+                Log.d(TAG, "handleServiceRequest scopes to ${scopes.joinToString(" ")}")
+
                 val authManager = AuthManager(this@GamesService, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
                 if (!authManager.isPermitted && !AuthPrefs.isTrustGooglePermitted(this@GamesService)) {
                     Log.d(TAG, "Not permitted to use $account for ${scopes.toList()}, sign in required")
@@ -83,6 +87,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                 }
 
                 if (!performGamesSignIn(this@GamesService, packageName, account, scopes = scopes)) {
+                    Log.d(TAG, "performGamesSignIn fail, sign in required")
                     return@launchWhenStarted sendSignInRequired()
                 }
 

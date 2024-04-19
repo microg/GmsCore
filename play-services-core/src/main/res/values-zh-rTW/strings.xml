@@ -120,4 +120,5 @@
     	
     	microG GmsCore包含了SafetyNet的自由執行，但官方伺服器需要SafetyNet請求經非自由軟體性質的DroidGuard系統簽名。</string>
     <string name="pref_safetynet_test_title">測試SafetyNet驗證</string>
+    <string name="pref_vending_billing_enable_switch">啟用後一些應用程式可以透過Google 應用程式內購買服務完成應用程式內服務購買訂閱</string>
 </resources>

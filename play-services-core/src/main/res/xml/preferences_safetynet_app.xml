@@ -15,7 +15,8 @@
 
     <PreferenceCategory
         android:key="prefcat_safetynet_recent_list"
-        android:title="@string/pref_safetynet_recent_uses">
+        android:title="@string/pref_safetynet_recent_uses"
+        app:iconSpaceReserved="false">
         <Preference
             android:enabled="false"
             android:key="pref_safetynet_recent_none"
