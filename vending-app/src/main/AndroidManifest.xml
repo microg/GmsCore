@@ -6,10 +6,6 @@
 <manifest xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <permission
-        android:name="com.android.vending.CHECK_LICENSE"
-        android:protectionLevel="normal" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission
@@ -71,7 +67,6 @@
 
         <service
             android:name="com.android.vending.licensing.LicensingService"
-            android:permission="com.android.vending.CHECK_LICENSE"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.licensing.ILicensingService" />
