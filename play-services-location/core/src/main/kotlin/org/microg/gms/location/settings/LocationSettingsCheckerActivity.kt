@@ -9,6 +9,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,6 +26,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationSettingsRequest
 import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.AskPermissionActivity
+import org.microg.gms.location.manager.EXTRA_GRANT_RESULTS
 import org.microg.gms.location.manager.EXTRA_MESSENGER
 import org.microg.gms.location.manager.EXTRA_PERMISSIONS
 import org.microg.gms.ui.buildAlertDialog
@@ -45,8 +47,15 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     private var requests: List<LocationRequest>? = null
     private var callingPackage: String? = null
 
+    private val mgLocationPermission = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "LocationSettingsCheckerActivity onCreate")
         callingPackage = callingActivity?.packageName
         if (callingPackage == null) {
             Log.e(TAG, "Started without calling activity set")
@@ -129,7 +138,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
             item.findViewById<ImageView>(android.R.id.icon).setImageDrawable(
                 when (improvement) {
                     Improvement.GPS_AND_NLP -> ContextCompat.getDrawable(this, R.drawable.ic_gps)
-                    Improvement.PERMISSIONS -> ContextCompat.getDrawable(this, R.drawable.ic_gms)
+                    Improvement.PERMISSIONS -> ContextCompat.getDrawable(this, R.drawable.ic_mg)
                     else -> {
                         Log.w(TAG, "Unsupported improvement: $improvement")
                         null
@@ -148,14 +157,16 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
         when (improvement) {
             Improvement.PERMISSIONS -> {
                 val intent = Intent(this, AskPermissionActivity::class.java)
-                intent.putExtra(
-                    EXTRA_PERMISSIONS,
-                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                )
+                intent.putExtra(EXTRA_PERMISSIONS, mgLocationPermission)
                 intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
                     override fun handleMessage(msg: Message) {
-                        if (msg.what == RESULT_OK) {
-                            checkImprovements()
+                        if (msg.what == RESULT_OK ) {
+                            val grantResults = msg.data?.getIntArray(EXTRA_GRANT_RESULTS) ?: IntArray(0)
+                            if (grantResults.size == mgLocationPermission.size && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                                checkImprovements()
+                            } else {
+                                finishResult(RESULT_CANCELED)
+                            }
                         } else {
                             finishResult(RESULT_CANCELED)
                         }
