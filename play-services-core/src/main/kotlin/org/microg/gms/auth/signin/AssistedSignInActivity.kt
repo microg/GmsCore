@@ -8,6 +8,7 @@ package org.microg.gms.auth.signin
 import android.accounts.AccountManager
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -143,8 +144,8 @@ class AssistedSignInActivity : AppCompatActivity() {
         val credential = SignInCredential(
             googleSignInAccount.email,
             googleSignInAccount.displayName,
-            googleSignInAccount.familyName,
             googleSignInAccount.givenName,
+            googleSignInAccount.familyName,
             null,
             null,
             googleSignInAccount.idToken,
@@ -165,6 +166,16 @@ class AssistedSignInActivity : AppCompatActivity() {
             loginResult(googleSignInAccount)
         } else {
             super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d(TAG, "onNewIntent intent:$intent")
+        val fragment = supportFragmentManager.findFragmentByTag(AssistedSignInFragment.TAG)
+        if (fragment != null) {
+            val assistedSignInFragment = fragment as AssistedSignInFragment
+            assistedSignInFragment.cancelLoginIn(true)
         }
     }
 

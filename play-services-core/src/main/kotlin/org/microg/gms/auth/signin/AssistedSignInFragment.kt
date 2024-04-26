@@ -26,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -55,6 +56,9 @@ class AssistedSignInFragment(
     private var loginJob: Job? = null
     private var isSigning = false
 
+    private var lastChooseAccount: Account? = null
+    private var lastChooseAccountPermitted = false
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Log.d(TAG, "onActivityCreated start")
@@ -69,7 +73,7 @@ class AssistedSignInFragment(
 
     private fun autoSingleSignIn(account: Account, permitted: Boolean = false) {
         if (beginSignInRequest.isAutoSelectEnabled) {
-            prepareSignInLoading(account, permitted = permitted) { prepareChooseLogin(account, permitted = permitted) }
+            prepareSignInLoading(account, permitted = permitted) { cancelLoginIn(true) }
         } else {
             prepareChooseLogin(account, permitted = permitted)
         }
@@ -153,7 +157,6 @@ class AssistedSignInFragment(
             if (cancelBlock != null) {
                 loadingView.findViewById<TextView>(R.id.sign_cancel).visibility = View.VISIBLE
                 loadingView.findViewById<TextView>(R.id.sign_cancel).setOnClickListener {
-                    cancelLoginIn()
                     cancelBlock()
                 }
             }
@@ -203,13 +206,12 @@ class AssistedSignInFragment(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.setOnShowListener {
+            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
             dialog.behavior.skipCollapsed = true
-            dialog.behavior.isDraggable = false
             dialog.setCanceledOnTouchOutside(false)
         }
         dialog.setOnKeyListener { _, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
-                cancelLoginIn()
                 dialog.dismiss()
                 return@setOnKeyListener true
             }
@@ -238,6 +240,7 @@ class AssistedSignInFragment(
         if (!assistedSignInActivity.isChangingConfigurations && !isSigning) {
             errorBlock(Status(CommonStatusCodes.CANCELED, "User cancelled."))
         }
+        cancelLoginIn()
         super.onDismiss(dialog)
     }
 
@@ -248,6 +251,8 @@ class AssistedSignInFragment(
 
     private fun loginIn(account: Account, permitted: Boolean = false) {
         loginJob = lifecycleScope.launch {
+            lastChooseAccount = account
+            lastChooseAccountPermitted = permitted
             isSigning = true
             delay(3000)
             val googleSignInAccount = withContext(Dispatchers.IO) {
@@ -262,10 +267,13 @@ class AssistedSignInFragment(
         }
     }
 
-    private fun cancelLoginIn() {
+    fun cancelLoginIn(showChoose:Boolean = false) {
         Log.d(TAG, "cancelLoginIn ")
         isSigning = false
         loginJob?.cancel()
+        if (showChoose && lastChooseAccount != null) {
+            prepareChooseLogin(lastChooseAccount!!, permitted = lastChooseAccountPermitted)
+        }
     }
 
 }
