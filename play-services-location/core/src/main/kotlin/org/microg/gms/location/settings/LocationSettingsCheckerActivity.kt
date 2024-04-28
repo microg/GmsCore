@@ -9,12 +9,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import android.os.Messenger
 import android.provider.Settings
 import android.util.Log
 import android.widget.ImageView
@@ -24,10 +21,9 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationSettingsRequest
+import org.microg.gms.common.Constants
 import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.AskPermissionActivity
-import org.microg.gms.location.manager.EXTRA_GRANT_RESULTS
-import org.microg.gms.location.manager.EXTRA_MESSENGER
 import org.microg.gms.location.manager.EXTRA_PERMISSIONS
 import org.microg.gms.ui.buildAlertDialog
 
@@ -36,6 +32,7 @@ const val EXTRA_ORIGINAL_PACKAGE_NAME = "originalPackageName"
 const val EXTRA_SETTINGS_REQUEST = "locationSettingsRequests"
 const val EXTRA_REQUESTS = "locationRequests"
 const val EXTRA_SETTINGS_STATES = "com.google.android.gms.location.LOCATION_SETTINGS_STATES"
+const val EXTRA_SHOW_MG_SETTINGS = "showMgLocationSettings"
 
 private const val REQUEST_CODE_LOCATION = 120
 private const val TAG = "LocationSettings"
@@ -44,34 +41,23 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     private var alwaysShow = false
     private var needBle = false
     private var improvements = emptyList<Improvement>()
+    private val displayList = mutableListOf<Improvement>()
     private var requests: List<LocationRequest>? = null
-    private var callingPackage: String? = null
 
-    private val mgLocationPermission = arrayOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-    )
+    private val mgLocationPermission =
+        arrayListOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION).apply {
+            if (Build.VERSION.SDK_INT >= 29) add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "LocationSettingsCheckerActivity onCreate")
-        callingPackage = callingActivity?.packageName
-        if (callingPackage == null) {
-            Log.e(TAG, "Started without calling activity set")
-            finishResult(RESULT_CANCELED)
-            return
-        }
         if (intent.hasExtra(EXTRA_SETTINGS_REQUEST)) {
             try {
                 val request = SafeParcelableSerializer.deserializeFromBytes(intent.getByteArrayExtra(EXTRA_SETTINGS_REQUEST), LocationSettingsRequest.CREATOR)
                 alwaysShow = request.alwaysShow
                 needBle = request.needBle
                 requests = request.requests
-                val originalCallingPackage = intent.getStringExtra(EXTRA_ORIGINAL_PACKAGE_NAME)
-                if (callingPackage == packageName && originalCallingPackage != null) {
-                    callingPackage = originalCallingPackage
-                }
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -106,8 +92,8 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
         val detailedStates = getDetailedLocationSettingsStates()
         // TODO: Correctly determine the needed improvements based on requests
         improvements = listOfNotNull(
-            Improvement.GPS_AND_NLP.takeIf { !detailedStates.gpsUsable || !detailedStates.networkLocationUsable },
-            Improvement.PERMISSIONS.takeIf { !detailedStates.coarseLocationPermission || !detailedStates.fineLocationPermission },
+            Improvement.GPS_AND_NLP.takeIf { !displayList.contains(it) && (!detailedStates.gpsUsable || !detailedStates.networkLocationUsable) },
+            Improvement.PERMISSIONS.takeIf { !displayList.contains(it) && (!detailedStates.coarseLocationPermission || !detailedStates.fineLocationPermission) },
         )
     }
 
@@ -154,25 +140,20 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
 
     private fun handleContinue() {
         val improvement = improvements.firstOrNull() ?: return finishResult(RESULT_OK)
+        displayList.add(improvement)
         when (improvement) {
             Improvement.PERMISSIONS -> {
-                val intent = Intent(this, AskPermissionActivity::class.java)
-                intent.putExtra(EXTRA_PERMISSIONS, mgLocationPermission)
-                intent.putExtra(EXTRA_MESSENGER, Messenger(object : Handler(Looper.getMainLooper()) {
-                    override fun handleMessage(msg: Message) {
-                        if (msg.what == RESULT_OK ) {
-                            val grantResults = msg.data?.getIntArray(EXTRA_GRANT_RESULTS) ?: IntArray(0)
-                            if (grantResults.size == mgLocationPermission.size && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                                checkImprovements()
-                            } else {
-                                finishResult(RESULT_CANCELED)
-                            }
-                        } else {
-                            finishResult(RESULT_CANCELED)
-                        }
+                val targetIntent = if (intent.hasExtra(EXTRA_SHOW_MG_SETTINGS) && intent.getBooleanExtra(EXTRA_SHOW_MG_SETTINGS, false)) {
+                    Intent().apply {
+                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        data = Uri.fromParts("package", Constants.GMS_PACKAGE_NAME, null)
                     }
-                }))
-                startActivity(intent)
+                }else{
+                    Intent(this, AskPermissionActivity::class.java).apply {
+                        putExtra(EXTRA_PERMISSIONS, mgLocationPermission.toTypedArray())
+                    }
+                }
+                startActivityForResult(targetIntent, REQUEST_CODE_LOCATION)
                 return
             }
             Improvement.GPS, Improvement.NLP, Improvement.GPS_AND_NLP -> {

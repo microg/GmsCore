@@ -242,11 +242,21 @@ class LocationManagerInstance(
                 intent.setPackage(context.packageName)
                 intent.putExtra(EXTRA_ORIGINAL_PACKAGE_NAME, clientIdentity.packageName)
                 intent.putExtra(EXTRA_SETTINGS_REQUEST, SafeParcelableSerializer.serializeToBytes(settingsRequest))
+                if (!locationManager.firstRequestLocationSettingsDialog && !states.mgLocationUsable) {
+                    Log.d(TAG, "requestLocationSettingsDialog show microG settings ")
+                    // PendingIntent will only be executed for the first time.
+                    // When MG is not granted positioning permission, it will be processed here to prompt the user for authorization.
+                    intent.putExtra(EXTRA_SHOW_MG_SETTINGS, true)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    context.startActivity(intent)
+                }
                 PendingIntentCompat.getActivity(context, clientIdentity.packageName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT, true)
             } else null
             val status = Status(statusCode, LocationSettingsStatusCodes.getStatusCodeString(statusCode), resolution)
             Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName} returns $status")
-            runCatching { callback?.onLocationSettingsResult(LocationSettingsResult(status, states.toApi())) }
+            runCatching { callback?.onLocationSettingsResult(LocationSettingsResult(status, states.toApi())) }.onSuccess {
+                locationManager.firstRequestLocationSettingsDialog = false
+            }
         }
     }
 

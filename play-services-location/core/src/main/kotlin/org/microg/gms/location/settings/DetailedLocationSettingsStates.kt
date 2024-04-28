@@ -44,7 +44,7 @@ data class DetailedLocationSettingsStates(
     val bleUsable: Boolean
         get() = blePresent && (bleEnabled || (bleScanAlways && !airplaneMode))
     val mgLocationUsable: Boolean
-        get() = fineLocationPermission && coarseLocationPermission
+        get() = fineLocationPermission || coarseLocationPermission
 
     fun toApi() = LocationSettingsStates(gpsUsable, networkLocationUsable, bleUsable, gpsPresent, networkLocationPresent, blePresent)
 }

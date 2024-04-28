@@ -48,7 +48,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
     var workSource = WorkSource()
         private set
     private var hasPermission: Boolean =
-        permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
+        permissions.any { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
     private var permissionChanged: Boolean = false
     private var requestDetailsUpdated = false
     private var checkingWhileHighAccuracy = false
@@ -245,7 +245,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 binderRequests.remove(binder)
             }
             permissionChanged = if (!hasPermission) {
-                permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
+                permissions.any { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
                     .also { hasPermission = it }
             } else {
                 false

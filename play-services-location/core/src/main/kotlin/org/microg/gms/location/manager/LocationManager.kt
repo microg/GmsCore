@@ -58,6 +58,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
     var started: Boolean = false
         private set
+    var firstRequestLocationSettingsDialog:Boolean = true
 
     suspend fun getLastLocation(clientIdentity: ClientIdentity, request: LastLocationRequest): Location? {
         if (request.maxUpdateAgeMillis < 0) throw IllegalArgumentException()
@@ -262,18 +263,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         if (permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED })
             return true
 
-        if (BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION.isNotEmpty()) permissions.add(BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION)
-
-        val permissionGranted = requestPermission(permissions)
-        if (BuildConfig.SHOW_NOTIFICATION_WHEN_NOT_PERMITTED) {
-            val clazz = runCatching { Class.forName("org.microg.gms.location.manager.AskPermissionNotificationActivity") }.getOrNull()
-            if (!permissionGranted) {
-                runCatching { clazz?.getDeclaredMethod("showLocationPermissionNotification", Context::class.java)?.invoke(null, context) }
-            } else {
-                runCatching { clazz?.getDeclaredMethod("hideLocationPermissionNotification", Context::class.java)?.invoke(null, context) }
-            }
-        }
-        return permissionGranted
+        return requestPermission(permissions)
     }
 
     private suspend fun requestPermission(permissions: List<String>): Boolean {
