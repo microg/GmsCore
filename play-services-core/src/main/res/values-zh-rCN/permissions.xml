@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2013-2017 microG Project Team
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  -->
-
-<resources>
+  --><resources>
     <string name="permission_service_all_label">所有 Google 服务</string>
     <string name="permission_service_all_description">允许应用通过任何已关联的 Google 账号来使用所有 Google 服务。</string>
-
     <string name="permission_service_android_label">Android 服务</string>
     <string name="permission_service_android_description">允许应用通过任何已关联的 Google 账号来使用所有 Android 服务。</string>
     <string name="permission_service_adsense_description">允许应用通过任何已关联的 Google 账号来使用 AdSense。</string>
@@ -74,7 +72,6 @@
     <string name="permission_service_blogger_label">Blogger</string>
     <string name="permission_service_health_label">Google Health</string>
     <string name="permission_service_health_description">允许应用通过任何已关联的 Google 账号来使用 Google Health。</string>
-
     <string name="permission_scope_www.googleapis.com_auth_youtube">管理您的 YouTube 账号</string>
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">查看并管理您在 YouTube 上的资产和相关内容</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">查看您的 YouTube 账号</string>
@@ -124,5 +121,21 @@
     <string name="permission_scope_www.googleapis.com_auth_adsensehost">查看并管理您的 AdSense 服务资料和关联账户</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">License Manager API 的读写权限。</string>
     <string name="permission_scope_www.googleapis.com_auth_plus.me">知道您在 Google 是谁</string>
-
+    <string name="permission_service_jotspot_description">允许应用程序通过任何关联的谷歌帐户访问JotSpot。</string>
+    <string name="permission_service_knol_description">允许应用程序通过任何关联的谷歌帐户访问Knol。</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_service_ig_description">允许应用通过任何关联的谷歌帐户访问iGoogle。</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.appdata">允许访问应用数据文件夹</string>
+    <string name="permission_service_sierra_label">Google Checkout账号</string>
+    <string name="permission_service_sierraqa_label">Google Checkout QA账号</string>
+    <string name="permission_service_sierrasandbox_label">Google Checkout沙盒账号</string>
+    <string name="permission_service_sierrasandbox_description">允许应用通过任何已关联的Google账号来使用Google Checkout沙盒账号。</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">管理你的Ad Exchange buyer账号设置</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Groups Migration API的读写权限。</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">查看和管理Google 应用组的设置</string>
+    <string name="permission_service_sitemaps_label">Google Webmaster工具</string>
+    <string name="permission_service_sierra_description">允许应用通过任何关联的Google 帐号访问Google Checkout账号。</string>
+    <string name="permission_service_sierraqa_description">允许应用通过任何已关联的Google账号来使用Google Checkout QA账号。</string>
+    <string name="permission_service_sitemaps_description">允许应用通过已关联的Google账号来使用Google Webmaster工具。</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">应用引擎管理范围。</string>
 </resources>
