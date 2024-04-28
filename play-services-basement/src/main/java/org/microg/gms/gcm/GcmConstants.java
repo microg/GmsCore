@@ -61,6 +61,7 @@ public final class GcmConstants {
     public static final String EXTRA_SENDER_LEGACY = "legacy.sender";
     public static final String EXTRA_SEND_TO = "google.to";
     public static final String EXTRA_SEND_FROM = "google.from";
+    public static final String EXTRA_SENT_TIME = "google.sent_time";
     public static final String EXTRA_SIGNATURE = "sig";
     public static final String EXTRA_SUBSCIPTION = "subscription";
     public static final String EXTRA_SUBTYPE = "subtype";
