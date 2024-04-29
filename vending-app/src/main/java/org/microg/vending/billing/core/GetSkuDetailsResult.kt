@@ -1,7 +1,9 @@
 package org.microg.vending.billing.core
 
+import android.util.Log
 import org.microg.vending.billing.proto.DocId
 import org.microg.vending.billing.proto.SkuDetailsResponse
+import org.microg.vending.billing.proto.SkuInfo
 
 
 class GetSkuDetailsResult private constructor(
@@ -23,11 +25,12 @@ class GetSkuDetailsResult private constructor(
                 )
             }
             val skuDetailsList =
-                skuDetailsResponse.details.filter { it.skuDetails.isNotBlank() && it.skuInfo != null}
+                skuDetailsResponse.details.filter { it.skuDetails.isNotBlank() }
                     .map { skuDetails ->
+                        val skuInfo = skuDetails.skuInfo ?: SkuInfo()
                         SkuDetailsItem(
                             skuDetails.skuDetails,
-                            skuDetails.skuInfo!!.skuItem.associate { it.token to it.docId }
+                            skuInfo.skuItem.associate { it.token to it.docId }
                         )
                     }
             return GetSkuDetailsResult(skuDetailsList)
