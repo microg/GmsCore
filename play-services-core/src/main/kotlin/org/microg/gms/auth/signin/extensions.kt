@@ -96,11 +96,11 @@ fun getServerAuthTokenManager(context: Context, packageName: String, options: Go
 
 suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false): GoogleSignInAccount? {
     val authManager = getOAuthManager(context, packageName, options, account)
-    if (permitted) authManager.isPermitted = true
     val authResponse = withContext(Dispatchers.IO) {
         if (options?.includeUnacceptableScope == true) {
             authManager.setTokenRequestOptions(consentRequestOptions)
         }
+        if (permitted) authManager.isPermitted = true
         authManager.requestAuth(true)
     }
     var consentResult:String ?= null
@@ -110,7 +110,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     } else {
         if (authResponse.auth == null) return null
     }
-    Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}")
+    Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
         it.isPermitted = authManager.isPermitted
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }
