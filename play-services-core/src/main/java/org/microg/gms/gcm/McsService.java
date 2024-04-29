@@ -548,7 +548,8 @@ public class McsService extends Service implements Handler.Callback {
         intent.setAction(ACTION_C2DM_RECEIVE);
         intent.putExtra(EXTRA_FROM, msg.from);
         intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
-        intent.putExtra(EXTRA_SENT_TIME, msg.sent);
+        if (msg.sent != null && msg.sent != 0) intent.putExtra(EXTRA_SENT_TIME, msg.sent);
+        if (msg.ttl != null && msg.ttl != 0) intent.putExtra(EXTRA_TTL, msg.ttl);
         if (msg.persistent_id != null) intent.putExtra(EXTRA_MESSAGE_ID, msg.persistent_id);
         if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
         if (msg.raw_data != null) {
