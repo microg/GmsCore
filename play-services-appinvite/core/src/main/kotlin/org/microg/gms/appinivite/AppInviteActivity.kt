@@ -117,7 +117,7 @@ class AppInviteActivity : AppCompatActivity() {
                             language = Locale.getDefault().language
                         ),
                         link = LinkInfo(
-                            empty = "",
+                            invitationId = "",
                             uri = intent.data.toString()
                         ),
                         system = SystemInfo(
