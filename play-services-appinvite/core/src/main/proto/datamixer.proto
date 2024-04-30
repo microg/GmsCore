@@ -8,7 +8,7 @@ message ClientIdInfo {
 }
 
 message LinkInfo {
-    optional string empty = 1; // e.g. ""
+    optional string invitationId = 1; // e.g. ""
     optional string uri = 2;
 }
 

@@ -40,6 +40,7 @@
                     android:id="@+id/hint_content_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@android:color/darker_gray"
                     android:text="@string/permission_hint"
                     android:textSize="16sp" />
 
@@ -70,10 +71,11 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="25dp"
                     android:layout_marginEnd="25dp"
-                    android:background="@drawable/permission_step_2"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/permission_step_2" />
 
             </LinearLayout>
 

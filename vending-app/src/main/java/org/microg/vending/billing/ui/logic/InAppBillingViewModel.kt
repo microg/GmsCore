@@ -180,6 +180,7 @@ class InAppBillingViewModel : ViewModel() {
                     UIType.PURCHASE_PAYMENT_DECLINED_CONTINUE_BUTTON,
                     UIType.PURCHASE_CART_PAYMENT_OPTIONS_LINK,
                     UIType.PURCHASE_CART_CONTINUE_BUTTON,
+                    UIType.PURCHASE_CONSENT_COLLECTION_REFUND_RIGHTS_CONTINUE_BUTTON,
                     UIType.BILLING_PROFILE_SCREEN_ABANDON -> {
                         if (action.screenId?.isNotBlank() == true) {
                             if (showScreen(action.screenId!!)) {
@@ -193,6 +194,7 @@ class InAppBillingViewModel : ViewModel() {
 
                     UIType.BILLING_PROFILE_OPTION_CREATE_INSTRUMENT,
                     UIType.BILLING_PROFILE_OPTION_ADD_PLAY_CREDIT,
+                    UIType.BILLING_PROFILE_BUTTON_UPDATE_INSTRUMENT,
                     UIType.BILLING_PROFILE_OPTION_REDEEM_CODE -> {
                         viewModelScope.launch(Dispatchers.IO) {
                             showPaymentMethodPage("action")

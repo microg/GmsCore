@@ -268,7 +268,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         if (BuildConfig.SHOW_NOTIFICATION_WHEN_NOT_PERMITTED) {
             val clazz = runCatching { Class.forName("org.microg.gms.location.manager.AskPermissionNotificationActivity") }.getOrNull()
             if (!permissionGranted) {
-                runCatching { clazz?.getDeclaredMethod("showLocationPermissionNotification", Context::class.java)?.invoke(null, context) }
+                runCatching { clazz?.getDeclaredMethod("showLocationPermissionNotification", Context::class.java)?.invoke(null, context.applicationContext) }
             } else {
                 runCatching { clazz?.getDeclaredMethod("hideLocationPermissionNotification", Context::class.java)?.invoke(null, context) }
             }

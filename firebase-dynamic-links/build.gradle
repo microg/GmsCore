@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: 2019, e Foundation
- * SPDX-FileCopyrightText: 2020, microG Project Team
+ * SPDX-FileCopyrightText: 2019 e Foundation
+ * SPDX-FileCopyrightText: 2020 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -31,8 +31,17 @@ android {
 }
 
 dependencies {
+    // Dependencies from firebase-dynamic-links:21.2.0
+    api 'androidx.annotation:annotation:1.2.0'
+    api project(':play-services-base')
     api project(':play-services-basement')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    api project(':play-services-tasks')
+//    api project(':firebase-auth-interop')
+//    api project(':firebase-measurement-connector')
+//    api project(':firebase-common')
+//    api project(':firebase-common-ktx')
+//    api project(':firebase-components')
+    api 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
 }
 
 apply from: '../gradle/publish-android.gradle'
