@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="lib_name">Ferramentas de UI do microG</string>
+    <string name="lib_license">Licença "Apache 2.0", Equipe do microG</string>
+
+    <string name="about_version_str">Versão %1$s</string>
+    <string name="about_name_version_str">%1$s %2$s</string>
+    <string name="about_default_license">Todos os direitos reservados.</string>
+
+    <string name="prefcat_setup">Configurar</string>
+
+    <string name="self_check_title">Autoverificação</string>
+    <string name="self_check_desc">Verifique se o sistema está configurado corretamente para usar o microG.</string>
+
+    <string name="self_check_cat_permissions">Permissões concedidas</string>
+    <string name="self_check_name_permission">Permissão para %1$s:</string>
+    <string name="self_check_resolution_permission">Toque aqui para conceder esta permissão. Não conceder esta permissão pode resultar em aplicativos com mal comportamento.</string>
+
+    <string name="about_root_title">Demo de UI do microG</string>
+    <string name="about_root_summary">Resumo</string>
+    <string name="about_root_version">Versão v0.1.0</string>
+    <string name="about_root_libraries">Bibliotecas inclusas</string>
+
+    <string name="about_android_support_v4">Biblioteca de suporte v4</string>
+    <string name="about_android_support_v7_appcompat">Biblioteca de suporte v7 appcompat</string>
+    <string name="about_android_support_v7_preference">Biblioteca de suporte de preferências v7 </string>
+    <string name="about_android_support_license">Licença "Apache 2.0", Android Open Source Project</string>
+</resources>
