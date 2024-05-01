@@ -478,6 +478,7 @@
             android:name="org.microg.gms.auth.signin.AuthSignInActivity"
             android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar"
             android:process=":ui"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.GOOGLE_SIGN_IN" />
@@ -513,6 +514,7 @@
             android:name="org.microg.gms.auth.consent.ConsentSignInActivity"
             android:process=":ui"
             android:exported="false"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
 
         <!-- Games -->
@@ -522,6 +524,7 @@
             android:enabled="true"
             android:exported="false"
             android:process=":ui"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:theme="@style/Theme.App.Translucent"/>
 
         <activity
