@@ -227,7 +227,7 @@ class LocationManagerInstance(
             val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
             val bleRequested = settingsRequest?.needBle == true
             // Starting Android 10, fine location permission is required to scan for wifi networks
-            val networkLocationRequiresFine = context.hasNetworkLocationServiceBuiltIn() && SDK_INT > 29
+            val networkLocationRequiresFine = context.hasNetworkLocationServiceBuiltIn() && SDK_INT >= 29
             val statusCode = when {
                 // Permission checks
                 gpsRequested && states.gpsPresent && !states.fineLocationPermission -> CommonStatusCodes.RESOLUTION_REQUIRED
