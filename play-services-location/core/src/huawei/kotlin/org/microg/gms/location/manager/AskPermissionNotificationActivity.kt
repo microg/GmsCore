@@ -41,6 +41,7 @@ import androidx.core.content.getSystemService
 import org.microg.gms.location.core.R
 import org.microg.gms.location.core.BuildConfig
 import org.microg.gms.utils.getApplicationLabel
+import java.lang.Exception
 
 @RequiresApi(23)
 class AskPermissionNotificationActivity : AppCompatActivity() {
@@ -94,12 +95,7 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
 
         val hintContentTv = findViewById<TextView>(R.id.hint_content_tv)
         hintContentTv.text = builder
-
-        val showTimes = sharedPreferences.getInt(PERMISSION_SHOW_TIMES, 0)
-        Log.d(TAG, "reject show times:$showTimes")
-        if (showTimes >= 1) {
-            hintView.visibility = View.VISIBLE
-        }
+        hintView.visibility = View.VISIBLE
     }
 
     private fun checkAllPermissions(): Boolean {
@@ -213,24 +209,12 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
     }
 
     private fun reject() {
-        val showTimes = sharedPreferences.getInt(PERMISSION_SHOW_TIMES, 0)
-        Log.d(TAG, "reject show times:$showTimes")
-        if (showTimes >= 1) {
-            hintView.visibility = View.VISIBLE
-        } else {
-            val editor = sharedPreferences.edit()
-            editor.putInt(PERMISSION_SHOW_TIMES, showTimes + 1)
-            editor.apply()
-            setResult(RESULT_CANCELED)
-            finish()
-        }
-
+        hintView.visibility = View.VISIBLE
     }
 
 
     companion object {
         private const val SHARED_PREFERENCE_NAME = "location_perm_notify"
-        const val PERMISSION_SHOW_TIMES = "permission_show_times"
         const val PERMISSION_REJECT_SHOW = "permission_reject_show"
         private const val NOTIFICATION_ID = 1026359765
 
@@ -303,6 +287,10 @@ private object AskPermissionNotificationCancel : BroadcastReceiver() {
     }
 
     fun unregister(context: Context) {
-        context.unregisterReceiver(this)
+        try {
+            context.unregisterReceiver(this)
+        } catch (e: Exception) {
+            Log.w(TAG, e)
+        }
     }
 }

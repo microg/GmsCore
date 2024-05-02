@@ -94,9 +94,9 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="prefs_account_privacy">Informazioni personali e riservatezza</string>
     <string name="prefs_account_security">Accesso e sicurezza</string>
     <string name="pref_auth_trust_google_title">Dai fiducia a Google per i permessi alle applicazioni</string>
-    <string name="pref_auth_trust_google_summary">Quando questa opzione è disabilitata, viene interpellato l\'utente prima che ogni richiesta di autorizzazione da parte delle applicazioni venga inviata a Google. Alcune applicazioni potrebbero fallire nell\'utilizzare l\'account Google se questa opzione è disabilitata.</string>
+    <string name="pref_auth_trust_google_summary">Quando l\'opzione è disabilitata, l\'utente viene interpellato prima che ogni richiesta di autorizzazione da parte di un\'app venga inviata a Google. Alcune applicazioni non riusciranno a utilizzare l\'account Google se questa opzione è disabilitata.</string>
     <string name="pref_auth_visible_title">Consenti alle applicazioni di visualizzare gli account</string>
-    <string name="pref_auth_visible_summary">Quando questa opzione è abilitata, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica degli account Google senza autorizzazione preventiva.</string>
+    <string name="pref_auth_visible_summary">Quando l\'opzione è abilitata, tutte le applicazioni su questo dispositivo saranno in grado di visualizzare gli indirizzi di posta elettronica degli account Google senza autorizzazione preventiva.</string>
     <string name="pref_checkin_enable_summary">Registra il tuo dispositivo ai servizi Google e crea un identificativo univoco. microG rimuove dai dati di registrazione alcune parti funzionali all\'identificazione, oltre al nome dell\'account Google.</string>
     <string name="pref_device_registration_android_id">Identificativo univoco Android</string>
     <string name="checkin_not_registered">Non registrato</string>
@@ -193,7 +193,7 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="signin_subtext_policy_privacy">informativa sulla privacy</string>
     <string name="perm_gsf_read_gservices_label">lettura della configurazione dei servizi Google</string>
     <string name="signin_picker_title">Scegli un account</string>
-    <string name="pref_auth_include_android_id_summary">Se l\'opzione è disabilitata, le richieste di autenticazione non saranno collegate alla registrazione del dispositivo. Ciò consente a dispositivi non autorizzati di effettuare l\'accesso, ma potrebbe avere delle conseguenze impreviste.</string>
+    <string name="pref_auth_include_android_id_summary">Se l\'opzione è disabilitata, le richieste di autenticazione non saranno collegate alla registrazione del dispositivo. Ciò può consentire a dispositivi non autorizzati di effettuare l\'accesso, ma potrebbe avere delle conseguenze impreviste.</string>
     <string name="signin_picker_subtitle">per continuare su <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="pref_droidguard_unsupported_summary">L\'esecuzione di DroidGuard non è supportata su questo dispositivo. I servizi di SafetyNet potrebbero funzionare in maniera anomala.</string>
     <string name="signin_confirm_title">Consenti l\'accesso a <xliff:g example="F-Droid">%1$s</xliff:g></string>
@@ -209,4 +209,25 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="feedback_disabled">Non è possibile inviare feedback al momento</string>
     <string name="pref_vending_summary_licensing_off">Verifica delle licenze disabilitata</string>
     <string name="pref_vending_license_enable_summary">Alcune app richiedono la verifica dell\'acquisto da Google Play. Quando un\'app lo richiede, microG può scaricare una prova dell\'acquisto da Google. Se l\'opzione è disabilitata, o se non è stato aggiunto nessun account Google, le richieste di verifica delle licenze vengono ignorate.</string>
+    <string name="pref_accounts_title">Account Google</string>
+    <string name="pref_accounts_summary">Aggiungi e gestisci gli account Google</string>
+    <string name="prefcat_accounts_settings_title">Impostazioni</string>
+    <string name="pref_vending_licensing_category">Verifica delle licenze di Google Play</string>
+    <string name="backup_disabled">Non è possibile effettuare backup al momento</string>
+    <string name="prefcat_accounts_current_accounts_title">Account</string>
+    <string name="pref_vending_billing_category">Pagamenti di Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Gestisci le richieste di pagamento</string>
+    <string name="pref_vending_billing_enable_summary">Se l\'opzione è abilitata, alcune app potranno completare acquisti o sottoscrivere abbonamenti tramite il servizio di pagamenti di Google Play.</string>
+    <string name="pref_auth_strip_device_name_summary">Se l\'opzione è abilitata, le richieste di autenticazione non includeranno il nome del dispositivo. Ciò può consentire a dispositivi non autorizzati di effettuare l\'accesso, ma potrebbe avere delle conseguenze impreviste.</string>
+    <string name="pref_auth_strip_device_name_title">Rimuovi il nome del dispositivo per l\'autenticazione</string>
+    <string name="perm_car_speed_label">Velocità dell\'auto</string>
+    <string name="perm_car_speed_description">Accesso alla velocità della tua auto</string>
+    <string name="perm_car_info_label">Informazioni sull\'auto</string>
+    <string name="perm_car_info_description">Accesso alle informazioni della tua auto</string>
+    <string name="perm_car_fuel_label">Livello di carburante dell\'auto</string>
+    <string name="perm_car_fuel_description">Accesso alle informazioni sul livello di carburante della tua auto</string>
+    <string name="perm_car_mileage_label">Consumo di carburante dell\'auto</string>
+    <string name="perm_car_vendor_extension_label">Canale del produttore dell\'auto</string>
+    <string name="perm_car_vendor_extension_description">Accesso al canale del produttore per lo scambio di informazioni specifiche sull\'auto</string>
+    <string name="perm_car_mileage_description">Accesso alle informazioni sul consumo di carburante della tua auto</string>
 </resources>

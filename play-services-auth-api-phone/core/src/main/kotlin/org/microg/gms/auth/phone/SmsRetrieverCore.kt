@@ -16,6 +16,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.database.Cursor
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.provider.ContactsContract
@@ -296,19 +297,20 @@ class SmsRetrieverCore(private val context: Context, override val lifecycle: Lif
         }
 
         val normalizePhoneNumber = normalizePhoneNumber(phoneNumber)
-        val cursor = context.contentResolver.query(Phone.CONTENT_URI, arrayOf(Phone.NUMBER), null, null, null) ?: return false
+        var cursor: Cursor? = null
         try {
+            cursor = context.contentResolver.query(Phone.CONTENT_URI, arrayOf(Phone.NUMBER), null, null, null) ?: return false
             while (cursor.moveToNext()) {
                 val addressIndex = cursor.getColumnIndex(Phone.NUMBER)
                 val contactPhoneNumber = normalizePhoneNumber(cursor.getString(addressIndex))
-                if (normalizePhoneNumber == contactPhoneNumber) {
+                if (!TextUtils.isEmpty(normalizePhoneNumber) && !TextUtils.isEmpty(contactPhoneNumber) && normalizePhoneNumber == contactPhoneNumber) {
                     return true
                 }
             }
         } catch (e: Exception) {
             Log.w(TAG, e)
         } finally {
-            cursor.close()
+            cursor?.close()
         }
         return false
     }

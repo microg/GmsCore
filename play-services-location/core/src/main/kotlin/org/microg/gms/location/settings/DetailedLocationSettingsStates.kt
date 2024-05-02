@@ -38,9 +38,9 @@ data class DetailedLocationSettingsStates(
     val networkLocationPresent: Boolean
         get() = networkLocationSystemFeature || networkLocationProviderBuiltIn
     val gpsUsable: Boolean
-        get() = gpsProviderEnabled && fineLocationPermission && backgroundLocationPermission
+        get() = gpsProviderEnabled
     val networkLocationUsable: Boolean
-        get() = (networkLocationProviderEnabled || networkLocationProviderBuiltIn) && coarseLocationPermission && backgroundLocationPermission
+        get() = (networkLocationProviderEnabled || networkLocationProviderBuiltIn)
     val bleUsable: Boolean
         get() = blePresent && (bleEnabled || (bleScanAlways && !airplaneMode))
 

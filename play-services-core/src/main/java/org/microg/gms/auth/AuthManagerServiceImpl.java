@@ -232,7 +232,14 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
 
     @Override
     public int hasCapabilities(HasCapabilitiesRequest request) throws RemoteException {
-        Log.w(TAG, "Not implemented: hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ")");
+        PackageUtils.assertGooglePackagePermission(context, GooglePackagePermission.ACCOUNT);
+        List<String> services = Arrays.asList(AccountManager.get(context).getUserData(request.account, "services").split(","));
+        for (String capability : request.capabilities) {
+            if (capability.startsWith("service_") && !services.contains(capability.substring(8)) || !services.contains(capability)) {
+                return 6;
+            }
+        }
+        Log.w(TAG, "Not fully implemented: hasCapabilities(" + request.account + ", " + Arrays.toString(request.capabilities) + ")");
         return 1;
     }
 

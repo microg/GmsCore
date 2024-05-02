@@ -27,6 +27,7 @@
             android:excludeFromRecents="true"
             android:exported="false"
             android:process=":ui"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.App.Translucent">
             <intent-filter android:priority="-1">
                 <action android:name="com.google.android.gms.location.settings.CHECK_SETTINGS" />

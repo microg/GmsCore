@@ -11,12 +11,12 @@
     <string name="fido_nfc_prompt_body">Segure sua chave de segurança atrás do seu dispositivo até que ele pare de vibrar</string>
     <string name="fido_biometric_prompt_title">Verifique sua identidade</string>
     <string name="fido_biometric_prompt_body">%1$s precisa verificar que é você.</string>
-    <string name="fido_usb_prompt_body">Conecte sua chave de segurança à porta USB ou com um cabo USB. Se sua chave tem um botão ou disco de ouro, clique nele agora.</string>
+    <string name="fido_usb_prompt_body">Conecte sua chave de segurança na porta USB ou com um cabo USB. Se sua chave tem um botão ou disco de ouro, clique nele agora.</string>
     <string name="fido_nfc_title">Conecte sua chave de segurança NFC</string>
     <string name="fido_welcome_title">Use sua chave de segurança com %1$s</string>
     <string name="fido_transport_selection_nfc">Usar chave de segurança com NFC</string>
     <string name="fido_transport_selection_usb">Usar chave de segurança com USB</string>
-    <string name="fido_transport_selection_biometric">Usar esse dispositivo com o bloqueio de tela</string>
-    <string name="fido_transport_usb_wait_connect_body">Por favor conecte sua chave de segurança USB.</string>
-    <string name="fido_transport_usb_wait_confirm_body">Por favor clique no disco ou anel de ouro em %1$s.</string>
+    <string name="fido_transport_selection_biometric">Usar este dispositivo com o bloqueio de tela</string>
+    <string name="fido_transport_usb_wait_connect_body">Conecte sua chave de segurança USB.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Clique no disco ou anel de ouro em %1$s.</string>
 </resources>

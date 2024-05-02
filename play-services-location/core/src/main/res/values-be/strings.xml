@@ -22,10 +22,16 @@
     <string name="pref_location_app_force_coarse_title">Прымусова выкарыстоўваць прыкладнае месцазнаходжанне</string>
     <string name="pref_location_app_force_coarse_summary">Заўсёды даваць дадатку прыкладнае месцазнаходжанне, ігнаруючы ўзровень доступу дадатку.</string>
     <string name="location_settings_dialog_message_details_end_paragraph">Для атрымання падрабязнай інфармацыі перайдзіце ў налады месцазнаходжання.</string>
-    <string name="location_settings_dialog_message_title_to_continue">Каб працягнуць, уключыце вызначэнне месцазнаходжання прылады</string>
+    <string name="location_settings_dialog_message_title_to_continue">Каб працягнуць, уключыце вызначэнне месцазнаходжання, з выкарыстаннем службы вызначэння месцазнаходжання microG</string>
     <string name="location_settings_dialog_message_details_start_paragraph">Вашай прыладзе патрабуецца:</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Выкарыстанне GPS, Wi-Fi, сотавых сетак і датчыкаў</string>
-    <string name="location_settings_dialog_message_gls_consent">Выкарыстанне службы вызначэння месцазнаходжання; у рамках работы гэтай службы могуць перыядычна ананімна збірацца і выкарыстоўвацца дадзеныя аб месцазнаходжанні для павышэння дакладнасці вызначэння месцазнаходжання і паслуг на аснове месцазнаходжання.</string>
+    <string name="location_settings_dialog_message_gls_consent">Выкарыстанне службы вызначэння месцазнаходжання; у рамках работы гэтай службы microG можа перыядычна ананімна збіраць і выкарыстоўваць дадзеныя аб месцазнаходжанні для павышэння дакладнасці вызначэння месцазнаходжання і паслуг на аснове месцазнаходжання.</string>
     <string name="location_settings_dialog_btn_cancel">Не, дзякуй</string>
     <string name="location_settings_dialog_btn_sure">ОК</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Для паляпшэння вынікаў, уключыце вызначэнне месцазнаходжання, якое выкарыстоўвае службу вызначэння месцазнаходжання microG</string>
+    <string name="pref_location_custom_url_title">Настройка адрасу службы</string>
+    <string name="pref_location_custom_url_reset">Скінуць</string>
+    <string name="pref_location_custom_url_summary">Гэты параметр дазваляе наладзіць URL-адрас службы. Няправільныя значэнні могуць прывесці да таго, што службы вызначэння месцазнаходжання перастануць адказваць на запыты або будуць цалкам недаступныя.</string>
+    <string name="pref_location_custom_url_details">Шлях /v1/geocate будзе дададзены аўтаматычна. Калі правайдэру месцазнаходжання патрабуецца ключ, яго можна дадаць да каранёвага URL-адрасу ў якасці параметра запыту.</string>
+    <string name="pref_location_custom_url_input_hint">Свой адрас службы</string>
 </resources>

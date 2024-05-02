@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service_name_location">Vị trí</string>
+    <string name="prefcat_location_apps_title">Các yêu cầu vị trí gần đây</string>
+</resources>

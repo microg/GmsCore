@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_content_error">Nagkaroon ng error habang kinukuha ang lisensya.</string>
+    <string name="no_licenses_available">Ang app na ito ay walang mga open source na lisensya.</string>
+    <string name="oss_license_title">Mga open source na lisensya</string>
+    <string name="license_is_loading">Naglo-load ang impormasyon ng lisensya.</string>
+    <string name="license_list_is_loading">Naglo-load ang listahan ng lisensya.</string>
+    <string name="preferences_license_summary">Mga detalye ng lisensya para sa open source software</string>
+</resources>

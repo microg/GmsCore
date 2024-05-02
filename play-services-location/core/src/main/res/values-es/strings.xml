@@ -25,7 +25,13 @@
     <string name="location_settings_dialog_message_details_end_paragraph">Para obtener más información, vaya a la configuración de la ubicación.</string>
     <string name="location_settings_dialog_btn_cancel">No, gracias</string>
     <string name="location_settings_dialog_btn_sure">De acuerdo</string>
-    <string name="location_settings_dialog_message_title_to_continue">Para continuar, activa la ubicación del dispositivo, que utiliza el servicio de ubicación</string>
+    <string name="location_settings_dialog_message_title_to_continue">Para continuar, activa la ubicación del dispositivo, que utiliza el servicio de ubicación de microG</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Utilizar GPS, Wi‑Fi, redes móviles y sensores</string>
-    <string name="location_settings_dialog_message_gls_consent">Utilizar el servicio de localización; Como parte de este servicio, puede recopilar datos de ubicación periódicamente y utilizar estos datos de forma anónima para mejorar la precisión de la ubicación y los servicios basados en la ubicación.</string>
+    <string name="location_settings_dialog_message_gls_consent">Utilizar el servicio de ubicación de microG; como parte de este servicio, microG puede recopilar datos de ubicación periódicamente y utilizar estos datos de forma anónima para mejorar la precisión de la ubicación y los servicios basados en la ubicación.</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Para una mejor experiencia, activa la ubicación del dispositivo, que utiliza el servicio de ubicación de microG</string>
+    <string name="pref_location_custom_url_title">Configurar la URL del servicio</string>
+    <string name="pref_location_custom_url_reset">Restablecer</string>
+    <string name="pref_location_custom_url_summary">Permite establecer una URL de servicio personalizada. Los valores no válidos pueden provocar que los servicios de localización no respondan o no estén disponibles por completo.</string>
+    <string name="pref_location_custom_url_input_hint">URL personalizada del servicio</string>
+    <string name="pref_location_custom_url_details">La ruta /v1/geolocate se añade automáticamente. Si el proveedor de localización requiere una clave, puede añadirse como parámetro de consulta a la URL raíz.</string>
 </resources>

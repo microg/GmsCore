@@ -2,6 +2,7 @@ package org.microg.vending.billing.core
 
 import android.content.Context
 import android.util.Base64
+import android.util.Log
 import com.android.vending.Timestamp
 import org.json.JSONObject
 import org.microg.gms.utils.toBase64
@@ -92,8 +93,13 @@ class IAPCore(
             val requestBody = skuDetailsRequest.encode()
             val cacheEntry = skuDetailsCache.get(requestBody)
             if (cacheEntry != null) {
-                return GetSkuDetailsResult.parseFrom(ResponseWrapper.ADAPTER.decode(cacheEntry).payload?.skuDetailsResponse)
+                val getSkuDetailsResult = GetSkuDetailsResult.parseFrom(ResponseWrapper.ADAPTER.decode(cacheEntry).payload?.skuDetailsResponse)
+                if (getSkuDetailsResult.skuDetailsList != null && getSkuDetailsResult.skuDetailsList.isNotEmpty()) {
+                    Log.d("IAPCore", "getSkuDetails from cache ")
+                    return getSkuDetailsResult
+                }
             }
+            Log.d("IAPCore", "getSkuDetails: ")
             val response = HttpClient(context).post(
                 GooglePlayApi.URL_SKU_DETAILS,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),

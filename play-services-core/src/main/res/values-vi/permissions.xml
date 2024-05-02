@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_service_cp_label">Danh bạ</string>
+    <string name="permission_service_cp_description">Cho phép ứng dụng truy cập Danh bạ thông qua bất kỳ tài khoản Google nào được liên kết.</string>
+</resources>

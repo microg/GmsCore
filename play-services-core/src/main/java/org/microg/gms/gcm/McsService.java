@@ -69,6 +69,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.SSLContext;
@@ -548,6 +549,8 @@ public class McsService extends Service implements Handler.Callback {
         intent.setAction(ACTION_C2DM_RECEIVE);
         intent.putExtra(EXTRA_FROM, msg.from);
         intent.putExtra(EXTRA_MESSAGE_ID, msg.id);
+        if (msg.sent != null && msg.sent != 0) intent.putExtra(EXTRA_SENT_TIME, msg.sent);
+        if (msg.ttl != null && msg.ttl != 0) intent.putExtra(EXTRA_TTL, msg.ttl);
         if (msg.persistent_id != null) intent.putExtra(EXTRA_MESSAGE_ID, msg.persistent_id);
         if (msg.token != null) intent.putExtra(EXTRA_COLLAPSE_KEY, msg.token);
         if (msg.raw_data != null) {
@@ -560,6 +563,10 @@ public class McsService extends Service implements Handler.Callback {
             intent.addFlags(Intent.FLAG_EXCLUDE_STOPPED_PACKAGES);
         }
         for (AppData appData : msg.app_data) {
+            if (appData.key == null) continue;
+            String key = appData.key.toLowerCase(Locale.US);
+            // Some keys are exclusively set by the client and not the app.
+            if (key.equals(EXTRA_FROM) || (key.startsWith("google.") && !key.startsWith("google.c."))) continue;
             intent.putExtra(appData.key, appData.value_);
         }
 

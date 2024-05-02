@@ -166,5 +166,14 @@
             android:name="org.microg.vending.billing.ui.PlayWebViewActivity"
             android:exported="false" />
 
+        <service
+            android:name="com.google.android.finsky.assetmoduleservice.AssetModuleService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.play.core.assetmoduleservice.BIND_ASSET_MODULE_SERVICE" />
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>

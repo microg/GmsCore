@@ -527,12 +527,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         if (callback != null) {
             synchronized(mapLock) {
                 if (loaded) {
-                    Log.d(TAG, "Invoking callback instantly, as map is loaded")
-                    try {
-                        callback.onMapLoaded()
-                    } catch (e: Exception) {
-                        Log.w(TAG, e)
-                    }
+                    callback.scheduleExecute()
                 } else {
                     Log.d(TAG, "Delay callback invocation, as map is not yet loaded")
                     loadedCallback = callback
@@ -768,10 +763,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
 
                 synchronized(mapLock) {
                     loaded = true
-                    if (loadedCallback != null) {
-                        Log.d(TAG, "Invoking callback delayed, as map is loaded")
-                        loadedCallback?.onMapLoaded()
-                    }
+                    loadedCallback?.scheduleExecute()
                 }
 
                 isMyLocationEnabled = locationEnabled
@@ -854,7 +846,29 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
         tryRunUserInitializedCallbacks("getMapAsync")
     }
 
+    /**
+     * Per docs, `onMapLoaded` shall only be called when the map has finished loading,
+     * and some apps like Signal location sharing rely on this to behave accordingly.
+     * However, MapLibre does not provide proper `onMapLoaded` callbacks.
+     *
+     * Workaround: schedule map loaded callback for a certain time in the future.
+     */
+    private fun IOnMapLoadedCallback.scheduleExecute() {
+        Log.d(TAG, "Scheduling executing of OnMapLoadedCallback in ${ON_MAP_LOADED_CALLBACK_DELAY}ms, as map is now initialized.")
+        Handler(Looper.getMainLooper()).postDelayed({
+            Log.d(TAG, "Executing scheduled onMapLoaded callback")
+
+            try {
+                this.onMapLoaded()
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+            }
+
+        }, ON_MAP_LOADED_CALLBACK_DELAY)
+    }
+
     private var isInvokingInitializedCallbacks = AtomicBoolean(false)
+
     fun tryRunUserInitializedCallbacks(tag: String = "") {
 
         synchronized(mapLock) {
@@ -910,6 +924,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
             }
 
     companion object {
-        private val TAG = "GmsMap"
+        private const val TAG = "GmsMap"
+        private const val ON_MAP_LOADED_CALLBACK_DELAY = 500L
     }
 }

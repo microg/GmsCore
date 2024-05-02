@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="license_notification_ignore">Huwag pansinin</string>
+    <string name="app_name">Kasamahan ng microG</string>
+    <string name="toast_installed">Hindi magagamit ang Kasamahan ng microG nang nakapag-iisa. Binuksan na lang ang mga setting ng Mga Serbisyo ng microG sa halip.</string>
+    <string name="toast_not_installed">Hindi magagamit ang Kasamahan ng microG nang nakapag-iisa. Paki-install ang Mga Serbisyo ng microG para gamitin ang microG.</string>
+    <string name="license_notification_channel_name">Mga notification ng lisensya</string>
+    <string name="license_notification_channel_description">Aabisuhan kapag sinusubukan ng isang app na patunayin ang lisensya, ngunit hindi ka naka-sign in sa anumang Google account.</string>
+    <string name="license_notification_title">Hindi mapatunay ng %1$s ang lisensya</string>
+    <string name="license_notification_body">Kung hindi gumagana ang app, mag-sign in sa isang Google account kung saan mo binili ang app.</string>
+    <string name="license_notification_sign_in">Mag-Sign In</string>
+    <string name="pay_disabled">Kasalukuyang hindi posible ang pagbili</string>
+    <string name="confirm_purchase">Kumpirmahin ang Pagbili</string>
+    <string name="error_network">Hindi nakakonekta sa internet. Pakisigurado na nakabulas ang Wi-Fi o mobile network at subukan muli.</string>
+    <string name="error_passwd">Mali ang inilagay mong password.</string>
+    <string name="error_unknown">Hindi alam na error, mangyaring umalis at subukan muli.</string>
+    <string name="tips_input_passwd">Ilagay ang iyong password</string>
+    <string name="tips_remember_login_info">Tandaan ang login sa device na ito</string>
+    <string name="tips_forget_passwd">Nakalimutan ang password?</string>
+    <string name="tips_more_details">Matuto pa</string>
+    <string name="text_verify_button">I-verify</string>
+</resources>
