@@ -96,7 +96,7 @@ fun getServerAuthTokenManager(context: Context, packageName: String, options: Go
 
 suspend fun checkAppAuthStatus(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): Boolean {
     val authManager = getOAuthManager(context, packageName, options, account)
-    authManager.isPermitted = false
+    authManager.ignoreStoredPermission = true
     return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
 }
 

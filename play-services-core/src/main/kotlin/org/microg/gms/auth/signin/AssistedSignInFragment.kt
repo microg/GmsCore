@@ -54,7 +54,7 @@ class AssistedSignInFragment(
     private var cancelBtn: ImageView? = null
     private var container: FrameLayout? = null
     private var loginJob: Job? = null
-    private var isSigning = false
+    private var isSigningIn = false
 
     private var lastChooseAccount: Account? = null
     private var lastChooseAccountPermitted = false
@@ -73,7 +73,7 @@ class AssistedSignInFragment(
 
     private fun autoSingleSignIn(account: Account, permitted: Boolean = false) {
         if (beginSignInRequest.isAutoSelectEnabled) {
-            prepareSignInLoading(account, permitted = permitted) { cancelLoginIn(true) }
+            prepareSignInLoading(account, permitted = permitted) { cancelLogin(true) }
         } else {
             prepareChooseLogin(account, permitted = permitted)
         }
@@ -161,7 +161,7 @@ class AssistedSignInFragment(
                 }
             }
             container?.addView(loadingView)
-            loginIn(account, permitted)
+            startLogin(account, permitted)
         }
     }
 
@@ -237,10 +237,10 @@ class AssistedSignInFragment(
 
     override fun onDismiss(dialog: DialogInterface) {
         val assistedSignInActivity = requireContext() as AssistedSignInActivity
-        if (!assistedSignInActivity.isChangingConfigurations && !isSigning) {
+        if (!assistedSignInActivity.isChangingConfigurations && !isSigningIn) {
             errorBlock(Status(CommonStatusCodes.CANCELED, "User cancelled."))
         }
-        cancelLoginIn()
+        cancelLogin()
         super.onDismiss(dialog)
     }
 
@@ -249,17 +249,17 @@ class AssistedSignInFragment(
         cancelBtn?.isClickable = visible
     }
 
-    private fun loginIn(account: Account, permitted: Boolean = false) {
+    private fun startLogin(account: Account, permitted: Boolean = false) {
         loginJob = lifecycleScope.launch {
             lastChooseAccount = account
             lastChooseAccountPermitted = permitted
-            isSigning = true
+            isSigningIn = true
             delay(3000)
             val googleSignInAccount = withContext(Dispatchers.IO) {
                 performSignIn(requireContext(), clientPackageName, options, account, permitted)
             }
             if (googleSignInAccount == null) {
-                isSigning = false
+                isSigningIn = false
                 prepareChooseLogin(account, showConsent = true, permitted = true)
                 return@launch
             }
@@ -267,9 +267,9 @@ class AssistedSignInFragment(
         }
     }
 
-    fun cancelLoginIn(showChoose:Boolean = false) {
-        Log.d(TAG, "cancelLoginIn ")
-        isSigning = false
+    fun cancelLogin(showChoose: Boolean = false) {
+        Log.d(TAG, "cancelLogin")
+        isSigningIn = false
         loginJob?.cancel()
         if (showChoose && lastChooseAccount != null) {
             prepareChooseLogin(lastChooseAccount!!, permitted = lastChooseAccountPermitted)

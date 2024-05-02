@@ -7,8 +7,6 @@ package org.microg.gms.auth.signin
 
 import android.accounts.AccountManager
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -34,8 +32,6 @@ const val GOOGLE_SIGN_IN_OPTIONS = "google_sign_in_options"
 
 private const val TAG = "AssistedSignInActivity"
 private const val REQUEST_CODE_SIGN_IN = 120
-
-private val NEED_SING_IN = arrayListOf("com.scaleup.chatai")
 
 class AssistedSignInActivity : AppCompatActivity() {
 
@@ -92,15 +88,6 @@ class AssistedSignInActivity : AppCompatActivity() {
         if (beginSignInRequest != null) {
             Log.d(TAG, "beginSignInRequest start")
             if (accounts.isEmpty()) {
-                // In fact, if you log in through the beginSignIn method without logging in to a Google account,
-                // GMS will report an Operation failed error, resulting in no page feedback when the user clicks.
-                // However, some applications want to use this method to log in to a Google account,
-                // so the package name that needs to be logged in is added here to allow the application to jump to the login page.
-                // e.g. Nova
-                if (NEED_SING_IN.contains(clientPackageName)) {
-                    prepareSignIn()
-                    return
-                }
                 errorResult(Status(CommonStatusCodes.ERROR, "accounts is empty."))
                 return
             }
@@ -175,7 +162,7 @@ class AssistedSignInActivity : AppCompatActivity() {
         val fragment = supportFragmentManager.findFragmentByTag(AssistedSignInFragment.TAG)
         if (fragment != null) {
             val assistedSignInFragment = fragment as AssistedSignInFragment
-            assistedSignInFragment.cancelLoginIn(true)
+            assistedSignInFragment.cancelLogin(true)
         }
     }
 
