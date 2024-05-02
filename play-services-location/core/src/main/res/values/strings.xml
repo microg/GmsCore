@@ -32,7 +32,9 @@
     <string name="location_settings_dialog_message_title_to_continue">To continue, turn on device location, which uses microG\'s location service</string>
     <string name="location_settings_dialog_message_details_start_paragraph">Your device will need to:</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Use GPS, Wi‑Fi, cell networks, and sensors</string>
+    <string name="location_settings_dialog_message_grant_permissions">Grant location permissions to microG Service</string>
     <string name="location_settings_dialog_message_gls_consent">Use microG location service; as part of this service, microG may collect location data periodically and use this data in an anonymous way to improve location accuracy and location-based services.</string>
+
     <string name="location_settings_dialog_message_details_end_paragraph">For details, go to the location settings.</string>
     <string name="location_settings_dialog_btn_cancel">No thanks</string>
     <string name="location_settings_dialog_btn_sure">OK</string>
