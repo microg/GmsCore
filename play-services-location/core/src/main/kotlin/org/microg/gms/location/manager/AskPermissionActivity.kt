@@ -28,6 +28,7 @@ const val EXTRA_PERMISSIONS = "permissions"
 const val EXTRA_GRANT_RESULTS = "results"
 
 private const val REQUEST_CODE_PERMISSION = 120
+private const val REQUEST_CODE_SETTINGS = 121
 
 class AskPermissionActivity : AppCompatActivity() {
     private var permissionGrants = IntArray(0)
@@ -35,17 +36,10 @@ class AskPermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "AskPermissionActivity: onCreate")
-        if (firstRequestLocationSettingsDialog) {
-            requestPermissions()
-        } else {
-            Intent().apply {
-                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                data = Uri.fromParts("package", packageName, null)
-            }
-        }
+        requestPermissions()
     }
 
-    private fun requestPermissions(permissions: Array<String> = intent?.getStringArrayExtra(EXTRA_PERMISSIONS) ?: emptyArray()) {
+    private fun updatePermissionGrants(permissions: Array<String> = intent?.getStringArrayExtra(EXTRA_PERMISSIONS) ?: emptyArray()) {
         permissionGrants = permissions.map {
             if (BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION.isNotEmpty() && BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION == it) {
                 PackageManager.PERMISSION_GRANTED
@@ -53,11 +47,22 @@ class AskPermissionActivity : AppCompatActivity() {
                 ContextCompat.checkSelfPermission(this, it)
             }
         }.toIntArray()
+    }
+
+    private fun requestPermissions(permissions: Array<String> = intent?.getStringArrayExtra(EXTRA_PERMISSIONS) ?: emptyArray()) {
+        updatePermissionGrants(permissions)
         if (permissionGrants.all { it == PackageManager.PERMISSION_GRANTED }) {
             sendReply(extras = bundleOf(EXTRA_GRANT_RESULTS to permissionGrants))
             finish()
         } else {
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_PERMISSION)
+            if (firstRequestLocationSettingsDialog) {
+                ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_PERMISSION)
+            } else {
+                startActivityForResult(Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    data = Uri.fromParts("package", packageName, null)
+                }, REQUEST_CODE_SETTINGS)
+            }
         }
     }
 
@@ -107,6 +112,16 @@ class AskPermissionActivity : AppCompatActivity() {
             finish()
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_SETTINGS) {
+            updatePermissionGrants()
+            sendReply(extras = bundleOf(EXTRA_GRANT_RESULTS to permissionGrants))
+            finish()
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
