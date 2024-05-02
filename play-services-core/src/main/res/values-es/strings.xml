@@ -241,4 +241,15 @@ Esto podría tardar algunos minutos."</string>
     <string name="pref_vending_billing_category">Facturación de Google Play</string>
     <string name="pref_vending_billing_enable_switch">Procesar la facturación</string>
     <string name="pref_vending_billing_enable_summary">Una vez habilitadas, algunas aplicaciones pueden completar compras o iniciar suscripciones a través del servicio Play Billing de Google.</string>
+    <string name="credentials_assisted_signin_consent">Al continuar, Google compartirá su nombre, dirección de correo electrónico y foto de perfil con %1$s . Ver Política de privacidad y términos de servicio de %1$s .</string>
+    <string name="credentials_assisted_signin_description">Puede administrar Iniciar sesión con Google en sus cuentas de Google.</string>
+    <string name="credentials_assisted_choose_account_label">Elige una cuenta</string>
+    <string name="credentials_assisted_choose_account_subtitle">para continuar a %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Inicia sesión con Google</string>
+    <string name="credentials_assisted_cancel">Cancelar</string>
+    <string name="credentials_assisted_signin_consent_header">Firmando como %1$s</string>
+    <string name="credentials_assisted_continue">Continuar</string>
+    <string name="credentials_assisted_confirmation_header">Registrándote</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Continuar como %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Vuelve a iniciar sesión en %1$s con Google</string>
 </resources>

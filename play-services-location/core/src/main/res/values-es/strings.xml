@@ -34,4 +34,5 @@
     <string name="pref_location_custom_url_summary">Permite establecer una URL de servicio personalizada. Los valores no válidos pueden provocar que los servicios de localización no respondan o no estén disponibles por completo.</string>
     <string name="pref_location_custom_url_input_hint">URL personalizada del servicio</string>
     <string name="pref_location_custom_url_details">La ruta /v1/geolocate se añade automáticamente. Si el proveedor de localización requiere una clave, puede añadirse como parámetro de consulta a la URL raíz.</string>
+    <string name="location_settings_dialog_message_grant_permissions">Otorgar permisos de ubicación al servicio microG</string>
 </resources>
