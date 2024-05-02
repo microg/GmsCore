@@ -41,6 +41,7 @@ import androidx.core.content.getSystemService
 import org.microg.gms.location.core.R
 import org.microg.gms.location.core.BuildConfig
 import org.microg.gms.utils.getApplicationLabel
+import java.lang.Exception
 
 @RequiresApi(23)
 class AskPermissionNotificationActivity : AppCompatActivity() {
@@ -286,6 +287,10 @@ private object AskPermissionNotificationCancel : BroadcastReceiver() {
     }
 
     fun unregister(context: Context) {
-        context.unregisterReceiver(this)
+        try {
+            context.unregisterReceiver(this)
+        } catch (e: Exception) {
+            Log.w(TAG, e)
+        }
     }
 }

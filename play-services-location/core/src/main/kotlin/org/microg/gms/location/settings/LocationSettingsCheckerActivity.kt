@@ -36,13 +36,13 @@ const val EXTRA_REQUESTS = "locationRequests"
 const val EXTRA_SETTINGS_STATES = "com.google.android.gms.location.LOCATION_SETTINGS_STATES"
 
 private const val REQUEST_CODE_LOCATION = 120
+private const val REQUEST_CODE_PERMISSION = 121
 private const val TAG = "LocationSettings"
 
 class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelListener, DialogInterface.OnClickListener {
     private var alwaysShow = false
     private var needBle = false
     private var improvements = emptyList<Improvement>()
-    private val displayList = mutableListOf<Improvement>()
     private var requests: List<LocationRequest>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,8 +93,8 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
         val gpsRequested = requests.any { it.first == Priority.PRIORITY_HIGH_ACCURACY && it.second == Granularity.GRANULARITY_FINE }
         val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
         improvements = listOfNotNull(
-            Improvement.GPS_AND_NLP.takeIf { !displayList.contains(it) && (gpsRequested && !states.gpsUsable || networkLocationRequested && !states.networkLocationUsable) },
-            Improvement.PERMISSIONS.takeIf { !displayList.contains(it) && (!states.coarseLocationPermission || !states.fineLocationPermission) },
+            Improvement.GPS_AND_NLP.takeIf { gpsRequested && !states.gpsUsable || networkLocationRequested && !states.networkLocationUsable },
+            Improvement.PERMISSIONS.takeIf { !states.coarseLocationPermission || !states.fineLocationPermission },
         )
     }
 
@@ -141,13 +141,12 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
 
     private fun handleContinue() {
         val improvement = improvements.firstOrNull() ?: return finishResult(RESULT_OK)
-        displayList.add(improvement)
         when (improvement) {
             Improvement.PERMISSIONS -> {
                 val intent = Intent(this, AskPermissionActivity::class.java).apply {
                     putExtra(EXTRA_PERMISSIONS, locationPermissions.toTypedArray())
                 }
-                startActivityForResult(intent, REQUEST_CODE_LOCATION)
+                startActivityForResult(intent, REQUEST_CODE_PERMISSION)
                 return
             }
 
@@ -167,7 +166,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_LOCATION) {
+        if (requestCode == REQUEST_CODE_LOCATION || requestCode == REQUEST_CODE_PERMISSION) {
             checkImprovements()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
