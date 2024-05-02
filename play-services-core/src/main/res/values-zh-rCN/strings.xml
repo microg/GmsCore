@@ -226,4 +226,16 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
     <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+
+    <string name="credentials_assisted_cancel">取消</string>
+    <string name="credentials_assisted_continue">继续</string>
+    <string name="credentials_assisted_confirmation_header">正在登录</string>
+    <string name="credentials_assisted_continue_as_user_button_label">继续以%1$s的身份登录</string>
+    <string name="credentials_assisted_sign_back_title">通过 Google 重新登录 %1$s</string>
+    <string name="credentials_assisted_signin_consent_header">登录%1$s</string>
+    <string name="credentials_assisted_signin_consent">如果您继续操作，Google 会将您的姓名、电子邮件地址和个人资料照片提供给 %1$s。请参阅 %1$s 的隐私权政策和服务条款。</string>
+    <string name="credentials_assisted_signin_description">您可以在您的 Google 账号中管理“使用 Google 账号登录”功能。</string>
+    <string name="credentials_assisted_choose_account_label">选择账号</string>
+    <string name="credentials_assisted_choose_account_subtitle">以继续使用 %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">使用 Google 账号登录</string>
 </resources>

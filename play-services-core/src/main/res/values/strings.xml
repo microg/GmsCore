@@ -267,4 +267,16 @@ This can take a couple of minutes."</string>
     <string name="pref_vending_billing_note_experimental">This feature is experimental and may lead to loss of money. You have been warned.</string>
     <string name="pref_vending_billing_note_licensing">Some apps may require you to also enable license verification to verify your purchases.</string>
 
+    <string name="credentials_assisted_cancel">Cancel</string>
+    <string name="credentials_assisted_continue">Continue</string>
+    <string name="credentials_assisted_confirmation_header">Signing you in</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Continue as %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Sign back in to %1$s with Google</string>
+    <string name="credentials_assisted_signin_consent_header">Signing as %1$s</string>
+    <string name="credentials_assisted_signin_consent">By continuing, Google will share your name, email address, and profile picture with %1$s. See %1$s\'s Privacy Policy and Terms of Service.</string>
+    <string name="credentials_assisted_signin_description">You can manage Sign in with Google in your Google Accounts.</string>
+    <string name="credentials_assisted_choose_account_label">Choose account</string>
+    <string name="credentials_assisted_choose_account_subtitle">to continue to %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Sign in with Google</string>
+
 </resources>
