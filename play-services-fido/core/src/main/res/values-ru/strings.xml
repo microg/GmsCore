@@ -1,12 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ SPDX-FileCopyrightText: 2022 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
+  --><resources>
     <string name="fido_welcome_title">Использовать ваш ключ безопасности для %1$s</string>
-    <string name="fido_welcome_body">Использование ключа безопасности для %1$s помогает защитить ваши личные данные</string>
+    <string name="fido_welcome_body">Использование ключа безопасности для %1$s помогает защитить ваши личные данные.</string>
     <string name="fido_welcome_button_get_started">Приступаем к работе</string>
     <string name="fido_welcome_privileged_info">%1$s выступает в качестве доверенного браузера для использования вашего ключа безопасности с %2$s.</string>
     <string name="fido_welcome_privileged_check">Да, %1$s мой доверенный браузер, и ему должно быть разрешено использовать ключи безопасности на сторонних веб-сайтах.</string>
@@ -24,4 +22,9 @@
     <string name="fido_transport_selection_biometric">Использовать это устройство с заблокированным экраном</string>
     <string name="fido_transport_usb_wait_connect_body">Пожалуйста, подключите ваш USB-ключ безопасности.</string>
     <string name="fido_transport_usb_wait_confirm_body">Пожалуйста, коснитесь золотого кольца или диска на %1$s.</string>
+    <string name="fido_pin_title">Введите PIN-код вашего аутентификатора</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_pin_cancel">Отмена</string>
+    <string name="fido_pin_hint">От 4 до 63 символов</string>
+    <string name="fido_wrong_pin">Неверный PIN-код!</string>
 </resources>
