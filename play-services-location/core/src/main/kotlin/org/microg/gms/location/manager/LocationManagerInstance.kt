@@ -226,11 +226,18 @@ class LocationManagerInstance(
             val gpsRequested = requests.any { it.first == Priority.PRIORITY_HIGH_ACCURACY && it.second == Granularity.GRANULARITY_FINE }
             val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
             val bleRequested = settingsRequest?.needBle == true
+            // Starting Android 10, fine location permission is required to scan for wifi networks
+            val networkLocationRequiresFine = context.hasNetworkLocationServiceBuiltIn() && SDK_INT > 29
             val statusCode = when {
-                !states.mgLocationUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
+                // Permission checks
+                gpsRequested && states.gpsPresent && !states.fineLocationPermission -> CommonStatusCodes.RESOLUTION_REQUIRED
+                networkLocationRequested && states.networkLocationPresent && !states.coarseLocationPermission -> CommonStatusCodes.RESOLUTION_REQUIRED
+                networkLocationRequested && states.networkLocationPresent && networkLocationRequiresFine && !states.fineLocationPermission -> CommonStatusCodes.RESOLUTION_REQUIRED
+                // Enabled checks
                 gpsRequested && states.gpsPresent && !states.gpsUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
                 networkLocationRequested && states.networkLocationPresent && !states.networkLocationUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
                 bleRequested && states.blePresent && !states.bleUsable -> CommonStatusCodes.RESOLUTION_REQUIRED
+                // Feature not present checks
                 gpsRequested && !states.gpsPresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
                 networkLocationRequested && !states.networkLocationPresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
                 bleRequested && !states.blePresent -> LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
@@ -242,21 +249,11 @@ class LocationManagerInstance(
                 intent.setPackage(context.packageName)
                 intent.putExtra(EXTRA_ORIGINAL_PACKAGE_NAME, clientIdentity.packageName)
                 intent.putExtra(EXTRA_SETTINGS_REQUEST, SafeParcelableSerializer.serializeToBytes(settingsRequest))
-                if (!locationManager.firstRequestLocationSettingsDialog && !states.mgLocationUsable) {
-                    Log.d(TAG, "requestLocationSettingsDialog show microG settings ")
-                    // PendingIntent will only be executed for the first time.
-                    // When MG is not granted positioning permission, it will be processed here to prompt the user for authorization.
-                    intent.putExtra(EXTRA_SHOW_MG_SETTINGS, true)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    context.startActivity(intent)
-                }
                 PendingIntentCompat.getActivity(context, clientIdentity.packageName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT, true)
             } else null
             val status = Status(statusCode, LocationSettingsStatusCodes.getStatusCodeString(statusCode), resolution)
             Log.d(TAG, "requestLocationSettingsDialog by ${getClientIdentity().packageName} returns $status")
-            runCatching { callback?.onLocationSettingsResult(LocationSettingsResult(status, states.toApi())) }.onSuccess {
-                locationManager.firstRequestLocationSettingsDialog = false
-            }
+            runCatching { callback?.onLocationSettingsResult(LocationSettingsResult(status, states.toApi())) }
         }
     }
 

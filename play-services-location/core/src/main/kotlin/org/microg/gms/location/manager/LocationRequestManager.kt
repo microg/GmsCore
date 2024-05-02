@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.*
+import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -36,7 +37,6 @@ import kotlin.math.max
 class LocationRequestManager(private val context: Context, override val lifecycle: Lifecycle, private val postProcessor: LocationPostProcessor, private val database: LocationAppsDatabase = LocationAppsDatabase(context), private val requestDetailsUpdatedCallback: () -> Unit) :
     IBinder.DeathRecipient, LifecycleOwner {
     private val lock = Mutex()
-    private val permissions = mutableListOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     private val binderRequests = mutableMapOf<IBinder, LocationRequestHolder>()
     private val pendingIntentRequests = mutableMapOf<PendingIntent, LocationRequestHolder>()
     private val cacheManager by lazy { IntentCacheManager.create<LocationManagerService, LocationRequestHolderParcelable>(context, CACHE_TYPE) }
@@ -47,8 +47,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
         private set
     var workSource = WorkSource()
         private set
-    private var hasPermission: Boolean =
-        permissions.any { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
+    private var grantedPermissions: List<Int> = locationPermissions.map { ContextCompat.checkSelfPermission(context, it) }
     private var permissionChanged: Boolean = false
     private var requestDetailsUpdated = false
     private var checkingWhileHighAccuracy = false
@@ -209,6 +208,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
             intervalMillis = newIntervalMillis
             workSource = newWorkSource
             requestDetailsUpdated = true
+            permissionChanged = false
         }
     }
 
@@ -244,11 +244,12 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 }
                 binderRequests.remove(binder)
             }
-            permissionChanged = if (!hasPermission) {
-                permissions.any { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED }
-                    .also { hasPermission = it }
-            } else {
-                false
+            if (grantedPermissions.any { it != PackageManager.PERMISSION_GRANTED }) {
+                val grantedPermissions = locationPermissions.map { ContextCompat.checkSelfPermission(context, it) }
+                if (grantedPermissions == this.grantedPermissions) {
+                    this.grantedPermissions = grantedPermissions
+                    permissionChanged = true
+                }
             }
             if (pendingIntentsToRemove.isNotEmpty() || bindersToRemove.isNotEmpty() || permissionChanged) {
                 recalculateRequests()
@@ -305,6 +306,11 @@ class LocationRequestManager(private val context: Context, override val lifecycl
     }
 
     companion object {
+        private val locationPermissions = listOfNotNull(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            if (SDK_INT >= 29) Manifest.permission.ACCESS_BACKGROUND_LOCATION else null
+        )
         const val CACHE_TYPE = 1
 
         private class LocationRequestHolderParcelable(

@@ -172,8 +172,7 @@ public class LoginActivity extends AssistantActivity {
         if (state == 1) {
             init();
         } else if (state == -1) {
-            setResult(RESULT_CANCELED);
-            finish();
+            loginCanceled();
         }
     }
 
@@ -182,16 +181,22 @@ public class LoginActivity extends AssistantActivity {
         super.onBackButtonClicked();
         state--;
         if (state == -1) {
-            finish();
+            loginCanceled();
         }
+    }
+
+    public void loginCanceled() {
+        setResult(RESULT_CANCELED);
+        if (response != null) {
+            response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
+        }
+        finish();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(response != null){
-            response.onError(AccountManager.ERROR_CODE_CANCELED, "Canceled");
-        }
+        loginCanceled();
     }
 
     private void init() {

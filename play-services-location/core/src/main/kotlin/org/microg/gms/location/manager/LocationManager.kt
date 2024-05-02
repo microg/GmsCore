@@ -58,7 +58,6 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
     var started: Boolean = false
         private set
-    var firstRequestLocationSettingsDialog:Boolean = true
 
     suspend fun getLastLocation(clientIdentity: ClientIdentity, request: LastLocationRequest): Location? {
         if (request.maxUpdateAgeMillis < 0) throw IllegalArgumentException()
@@ -262,6 +261,8 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
         if (permissions.all { ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED })
             return true
+
+        if (BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION.isNotEmpty()) permissions.add(BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION)
 
         return requestPermission(permissions)
     }
