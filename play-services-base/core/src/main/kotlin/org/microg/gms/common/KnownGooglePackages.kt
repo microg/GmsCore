@@ -90,7 +90,7 @@ private val KNOWN_GOOGLE_PACKAGES = mapOf(
         PERMISSIONS_PRIVILEGED
     ),
     Pair(
-        PackageAndCertHash("com.google.android.apps.youtube", SHA1, "24bb24c05e47e0aefa68a58a766179d9b613a600"),
+        PackageAndCertHash("com.google.android.youtube", SHA1, "24bb24c05e47e0aefa68a58a766179d9b613a600"),
         PERMISSIONS_PRIVILEGED
     ),
     Pair(
