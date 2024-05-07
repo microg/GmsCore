@@ -250,11 +250,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     fun applyMapType() {
         // TODO: Serve map styles locally
+        Log.d(TAG, "Method: applyMapType -> $storedMapType")
         when (storedMapType) {
-            MAP_TYPE_SATELLITE -> map?.mapType = HuaweiMap.MAP_TYPE_SATELLITE
             MAP_TYPE_TERRAIN -> map?.mapType = HuaweiMap.MAP_TYPE_TERRAIN
-            MAP_TYPE_HYBRID -> map?.mapType = HuaweiMap.MAP_TYPE_HYBRID
-            //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
+            // MAP_TYPE_SATELLITE, MAP_TYPE_HYBRID, MAP_TYPE_NONE, MAP_TYPE_NORMAL,
             else -> map?.mapType = HuaweiMap.MAP_TYPE_NORMAL
         }
         // map?.let { BitmapDescriptorFactoryImpl.registerMap(it) }
