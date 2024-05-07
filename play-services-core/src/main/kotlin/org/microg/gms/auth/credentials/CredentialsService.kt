@@ -23,7 +23,7 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "CredentialService"
 
 val FEATURES = arrayOf(
-    Feature("auth_api_credentials_begin_sign_in", 8),
+    Feature("auth_api_credentials_begin_sign_in", 9),
     Feature("auth_api_credentials_sign_out", 2),
     Feature("auth_api_credentials_authorize", 1),
     Feature("auth_api_credentials_revoke_access", 1),
