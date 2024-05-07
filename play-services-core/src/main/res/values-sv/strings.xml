@@ -206,4 +206,25 @@
     <string name="feedback_disabled">Återkoppling är inte möjligt för närvarande</string>
     <string name="pref_auth_strip_device_name_summary">När det är aktiverat kommer autentiseringsförfrågningar inte att inkludera enhetens namn, vilket kan tillåta obehöriga enheter att logga in, men kan ha oförutsedda konsekvenser.</string>
     <string name="pref_auth_strip_device_name_title">Ta bort enhetsnamn för autentisering</string>
+    <string name="perm_car_info_description">Tillgång till din bils information</string>
+    <string name="perm_car_speed_label">Bilhastighet</string>
+    <string name="perm_car_info_label">Bilinformation</string>
+    <string name="perm_car_fuel_label">Bilens bränslenivå</string>
+    <string name="perm_car_fuel_description">Få tillgång till din bils bränslenivåinformation</string>
+    <string name="perm_car_mileage_label">Bilens körsträcka</string>
+    <string name="perm_car_speed_description">Få tillgång till din bils hastighet</string>
+    <string name="perm_car_vendor_extension_label">Bilförsäljarkanal</string>
+    <string name="perm_car_vendor_extension_description">Få tillgång till din bils leverantörskanal för att utbyta bilspecifik information</string>
+    <string name="pref_accounts_summary">Lägg till och hantera Google-konton</string>
+    <string name="prefcat_accounts_settings_title">Inställningar</string>
+    <string name="pref_accounts_title">Google-konton</string>
+    <string name="prefcat_accounts_current_accounts_title">Konton</string>
+    <string name="pref_vending_licensing_category">Google Play-licensiering</string>
+    <string name="pref_vending_billing_category">Google Play-fakturering</string>
+    <string name="pref_vending_billing_enable_switch">Hantera fakturafrågor</string>
+    <string name="pref_vending_billing_enable_summary">När det är aktiverat kan vissa appar slutföra inköp eller starta prenumerationer via Googles Plays betalningstjänst.</string>
+    <string name="pref_vending_billing_note_experimental">Denna funktion är experimentell och kan leda till förlust av pengar. Du har varnats.</string>
+    <string name="pref_vending_billing_note_licensing">Vissa appar kan kräva att du också aktiverar licensverifiering för att verifiera dina inköp.</string>
+    <string name="backup_disabled">Säkerhetskopiering är för närvarande inte möjlig</string>
+    <string name="perm_car_mileage_description">Få tillgång till din bils körsträcka</string>
 </resources>

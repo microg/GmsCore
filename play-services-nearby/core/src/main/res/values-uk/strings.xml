@@ -23,4 +23,10 @@
     <string name="pref_exposure_app_report_entry_time_short">Менше 5 хвилин тому</string>
     <string name="pref_exposure_app_report_entry_distance_close">поблизу зараження</string>
     <string name="pref_exposure_app_report_entry_distance_far">зараження далеко</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Повідомлено про <xliff:g example="3">%1$d</xliff:g> небезпечні контакти:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>, оцінка ризику <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> запитів до <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Про випадки небезпечних контактів не повідомлялося.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Примітка: Оцінка ризику визначається застосунком. Високі показники можуть означати низький ризик або навпаки.</string>
+    <string name="pref_exposure_app_api_usage_title">Використання API за останні 14 днів</string>
 </resources>

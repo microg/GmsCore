@@ -89,18 +89,24 @@ fun getServerAuthTokenManager(context: Context, packageName: String, options: Go
     val serverAuthTokenManager = AuthManager(context, account.name, packageName, "oauth2:server:client_id:${options.serverClientId}:api_scope:${options.scopeUris.joinToString(" ")}")
     serverAuthTokenManager.includeEmail = if (options.includeEmail) "1" else "0"
     serverAuthTokenManager.includeProfile = if (options.includeProfile) "1" else "0"
-    serverAuthTokenManager.setOauth2Prompt(if (options.isForceCodeForRefreshToken) "consent" else "auto")
+    serverAuthTokenManager.setOauth2Prompt("auto")
     serverAuthTokenManager.setItCaveatTypes("2")
     return serverAuthTokenManager
 }
 
+suspend fun checkAppAuthStatus(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): Boolean {
+    val authManager = getOAuthManager(context, packageName, options, account)
+    authManager.ignoreStoredPermission = true
+    return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
+}
+
 suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false): GoogleSignInAccount? {
     val authManager = getOAuthManager(context, packageName, options, account)
-    if (permitted) authManager.isPermitted = true
     val authResponse = withContext(Dispatchers.IO) {
         if (options?.includeUnacceptableScope == true) {
             authManager.setTokenRequestOptions(consentRequestOptions)
         }
+        if (permitted) authManager.isPermitted = true
         authManager.requestAuth(true)
     }
     var consentResult:String ?= null
@@ -110,7 +116,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
     } else {
         if (authResponse.auth == null) return null
     }
-    Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}")
+    Log.d(TAG, "id token requested: ${options?.isIdTokenRequested == true}, serverClientId = ${options?.serverClientId}, permitted = ${authManager.isPermitted}")
     val idTokenResponse = getIdTokenManager(context, packageName, options, account)?.let {
         it.isPermitted = authManager.isPermitted
         consentResult?.let { result -> it.putDynamicFiled(CONSENT_RESULT, result) }

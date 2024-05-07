@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="menu_advanced">Advanced</string>
+    <string name="list_no_item_none">Wala</string>
+    <string name="list_item_see_all">Tignan lahat</string>
+    <string name="open_app">Buksan</string>
+    <string name="service_status_disabled">Naka-disable</string>
+    <string name="service_status_enabled">Naka-enable</string>
+    <string name="service_status_automatic">Awtomatiko</string>
+    <string name="service_status_manual">Manwal</string>
+    <string name="service_status_enabled_short">Nakabukas</string>
+    <string name="service_status_disabled_short">Nakapatay</string>
+    <string name="foreground_service_notification_title">Aktibo sa background</string>
+    <string name="foreground_service_notification_text">Tumatakbo ang <xliff:g example="Exposure Notification">%1$s</xliff:g> sa background.</string>
+    <string name="foreground_service_notification_big_text">Ibukod ang <xliff:g example="microG Services">%1$s</xliff:g> sa pag-optimize ng baterya o palitan ang mga setting ng notification para itago ang notification na ito.</string>
+</resources>

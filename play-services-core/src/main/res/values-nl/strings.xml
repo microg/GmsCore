@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="account_manager_title">Google-accountbeheerder</string>
+    <string name="auth_sign_in">Sign in</string>
+    <string name="self_check_name_fake_sig_perm">System has signature spoofing support:</string>
+    <string name="self_check_name_perm_granted">System grants signature spoofing permission:</string>
+    <string name="pref_add_account_summary">Add Google account</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Start the app while in background to receive the incoming push messages.</string>
+    <string name="profile_name_user">Custom: %s</string>
+    <string name="push_notifications_summary_off">OFF</string>
+    <string name="gms_app_name">microG-diensten</string>
+    <string name="gms_settings_name">microG-instellingen</string>
+    <string name="gms_settings_summary">MicroG-services instellen.</string>
+    <string name="just_a_sec">Even…</string>
+    <string name="ask_permission_tos">Als u doorgaat, geeft u deze app en Google toestemming uw gegevens te gebruiken in overeenstemming met hun respectieve servicevoorwaarden en privacybeleid.</string>
+    <string name="google_account_label">Google</string>
+    <string name="sorry">Sorry…</string>
+    <string name="auth_before_connect">An app on your device is trying to sign in to a Google account.
+\n
+\nIf this was intentional, use the <b>Sign in</b> button to connect to Google’s sign-in page, if not, press <b>Cancel</b> to go back to the application that caused this dialog to show up.</string>
+    <string name="auth_connecting">Your device is establishing a connection to Google’s servers to sign you in.
+\n
+\nThis can take a few seconds.</string>
+    <string name="no_network_error_desc">You don’t have a network connection.
+\n
+\nThis could be a temporary problem or your Android device may not be provisioned for data services. Try again when connected to a mobile network, or connect to a Wi-Fi network.</string>
+    <string name="auth_general_error_desc">There was a problem communicating with Google servers.
+\n
+\nTry again later.</string>
+    <string name="auth_finalize">Your device is contacting Google to save information to your account.
+\n
+\nThis can take a couple of minutes.</string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
+    <string name="auth_notification_title">Authentication required</string>
+    <string name="auth_notification_content">&lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; requires your authorization to access your Google account.</string>
+    <string name="signin_picker_title">Choose an account</string>
+    <string name="signin_picker_subtitle">to continue to &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="signin_picker_add_account_label">Add another account</string>
+    <string name="signin_confirm_title">Allow to sign you in to &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="signin_confirm_button_text">Allow and share</string>
+    <string name="signin_subtext_sharing">To continue, microG will share name, email address and profile picture of your Google Account with &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;.</string>
+    <string name="signin_subtext_policy">Before using this app, review its %1$s and %2$s.</string>
+    <string name="signin_subtext_policy_privacy">privacy policy</string>
+    <string name="signin_subtext_policy_terms">terms of service</string>
+    <string name="perm_status_broadcast_label">listen to internal status broadcasts</string>
+    <string name="perm_gsf_read_gservices_label">read Google service configuration</string>
+    <string name="perm_c2dm_receive_label">listen to C2DM messages</string>
+    <string name="perm_c2dm_send_label">send C2DM messages to other apps</string>
+    <string name="perm_gtalk_svc_label">exchange messages and receive sync notifications from Google servers</string>
+    <string name="perm_extended_access_label">Extended access to Google services</string>
+    <string name="perm_provision_label">provision microG services</string>
+    <string name="perm_provision_description">Allows the app to configure microG services without user interaction</string>
+    <string name="perm_car_speed_label">Car speed</string>
+    <string name="perm_car_speed_description">Access your car\'s speed</string>
+    <string name="perm_car_info_label">Car information</string>
+    <string name="perm_car_info_description">Access your car\'s information</string>
+    <string name="perm_car_fuel_label">Car fuel level</string>
+    <string name="perm_car_fuel_description">Access your car\'s fuel level information</string>
+    <string name="perm_car_mileage_label">Car mileage</string>
+    <string name="perm_car_vendor_extension_label">Car vendor channel</string>
+    <string name="perm_car_mileage_description">Access your car\'s mileage information</string>
+    <string name="perm_car_vendor_extension_description">Access your car\'s vendor channel to exchange car-specific information</string>
+    <string name="service_name_checkin">Google device registration</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_vending">Play Store services</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title">&lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; would like to use Play Games</string>
+    <string name="games_info_content">To use Play Games it is required to install the Google Play Games app. The application might continue without Play Games, but it is possible that it will behave unexpectedly.</string>
+    <string name="pick_place_title">Pick a place</string>
+    <string name="pick_place_desc">Place picker is not yet available.</string>
+    <string name="place_picker_select_title">Select this location</string>
+    <string name="place_picker_nearby_places">Nearby places</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="lacking_permission_toast">microG Services: Lacking permission to &lt;xliff:g example=have full network acccess xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="network_type_mobile">Mobile network</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Roaming</string>
+    <string name="network_type_other">Other networks</string>
+    <string name="self_check_cat_fake_sig">Signature spoofing support</string>
+    <string name="self_check_cat_gms_packages">Installed packages</string>
+    <string name="self_check_cat_system">System</string>
+    <string name="self_check_resolution_fake_sig_perm">Your ROM has no native support for signature spoofing. You can still use Xposed or other systems to spoof signature. Please check the documentation on which ROMs do support signature spoofing and how to use microG on ROMs that do not.</string>
+    <string name="self_check_resolution_perm_granted">This is a strong indicator that the ROM does support signature spoofing, but requires further action to activate it. Please check the documentation on which steps might be required.</string>
+    <string name="self_check_name_system_spoofs">System spoofs signature:</string>
+    <string name="self_check_resolution_system_spoofs">Please check the documentation on which steps might be required.</string>
+    <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_name_app_installed">"&lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; installed: "</string>
+    <string name="self_check_resolution_app_installed">Install the application &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; or a compatible one. Please check the documentation on which applications are compatible.</string>
+    <string name="self_check_name_correct_sig">"&lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; has correct signature: "</string>
+    <string name="self_check_resolution_correct_sig">Either the installed &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; is not compatible or signature spoofing is not active for it. Please check the documentation on which applications and ROMs are compatible.</string>
+    <string name="self_check_name_battery_optimizations">Battery optimizations ignored:</string>
+    <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications.</string>
+    <string name="prefcat_about">About</string>
+    <string name="prefcat_components">Components</string>
+    <string name="prefcat_configuration">Configuration</string>
+    <string name="prefcat_google_services">Google Services</string>
+    <string name="prefcat_location_service">Location service</string>
+    <string name="prefcat_services">Services</string>
+    <string name="prefcat_test">Test</string>
+    <string name="cond_gcm_bat_title">Battery optimizations enabled</string>
+    <string name="cond_gcm_bat_summary">You enabled Cloud Messaging but have battery optimizations active for microG Services. For push notifications to arrive you should ignore battery optimizations.</string>
+    <string name="cond_gcm_bat_action">Ignore optimizations</string>
+    <string name="cond_perm_title">Permission missing</string>
+    <string name="prefs_account">Account preferences</string>
+    <string name="prefs_account_privacy">Personal info &amp; privacy</string>
+    <string name="prefs_account_security">Sign-in &amp; security</string>
+    <string name="pref_auth_trust_google_title">Trust Google for app permissions</string>
+    <string name="pref_auth_trust_google_summary">When disabled, the user is asked before an app\'s authorization request is sent to Google. Some applications will fail to use the Google account if this is disabled.</string>
+    <string name="pref_auth_visible_title">Allow apps to find accounts</string>
+    <string name="pref_auth_visible_summary">When enabled, all applications on this device will be able to see email address of your Google Accounts without prior authorization.</string>
+    <string name="pref_auth_include_android_id_title">Authenticate with device registration</string>
+    <string name="pref_auth_include_android_id_summary">When disabled, authentication requests won\'t be linked to the device registration, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
+    <string name="pref_auth_strip_device_name_title">Strip device name for authentication</string>
+    <string name="pref_auth_strip_device_name_summary">When enabled, authentication requests won\'t include the device\'s name, which may allow unauthorized devices to sign in, but may have unforeseen consequences.</string>
+    <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Not registered</string>
+    <string name="checkin_last_registration">Last registration: &lt;xliff:g example=Yesterday, 02:20 PM xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="checkin_enable_switch">Register device</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_more_settings">More</string>
+    <string name="pref_accounts_title">Google Accounts</string>
+    <string name="pref_accounts_summary">Add and manage Google accounts</string>
+    <string name="prefcat_accounts_settings_title">Settings</string>
+    <string name="prefcat_accounts_current_accounts_title">Accounts</string>
+    <string name="pref_add_account_title">Account</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging is a push notification provider used by many third-party applications. To use it you must enable device registration.</string>
+    <string name="pref_gcm_heartbeat_title">Cloud Messaging heartbeat interval</string>
+    <string name="pref_gcm_heartbeat_summary">The interval in seconds for the system to heartbeat the Google servers. Increasing this number will reduce battery consumption, but might cause delays on push messages.
+\nDeprecated, will be replaced in future release.</string>
+    <string name="pref_gcm_apps_title">Apps using Cloud Messaging</string>
+    <string name="pref_gcm_apps_summary">List of apps currently registered for Cloud Messaging.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Confirm new apps</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Ask before registering a new app to receive push notifications</string>
+    <string name="pref_gcm_ping_interval">Ping interval: &lt;xliff:g example=10 minutes xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="pref_about_title">About microG Services</string>
+    <string name="pref_about_summary">Version information and used libraries</string>
+    <string name="gcm_app_error_unregistering">Error unregistering</string>
+    <string name="gcm_app_not_installed_anymore">No longer installed</string>
+    <string name="gcm_unregister_app">Unregister</string>
+    <string name="gcm_not_registered">Not registered</string>
+    <string name="gcm_no_message_yet">No messages received so far</string>
+    <string name="gcm_last_message_at">Last message: &lt;xliff:g example=Yesterday, 02:20 PM xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="gcm_registered">Registered</string>
+    <string name="gcm_registered_since">Registered since: &lt;xliff:g example=Yesterday, 02:20 PM xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="gcm_unregister_confirm_title">Unregister &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;?</string>
+    <string name="gcm_unregister_confirm_message">Some apps do not automatically re-register and/or do not provide an option to do so manually. These apps might not work correctly after unregistering.
+\nContinue?</string>
+    <string name="gcm_unregister_after_deny_message">You denied an app to register for push notifications that is already registered.
+\nDo you want to unregister it now so it does not receive push messages in the future?</string>
+    <string name="gcm_messages_counter">Messages: &lt;xliff:g example=123 xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$d&lt;/xliff:g&gt; (&lt;xliff:g example=12345 xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%2$d&lt;/xliff:g&gt; bytes)</string>
+    <string name="gcm_network_state_disconnected">Disconnected</string>
+    <string name="gcm_network_state_connected">Connected since &lt;xliff:g example=2 hours ago xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="gcm_enable_switch">Receive push notifications</string>
+    <string name="gcm_allow_app_popup">Allow &lt;xliff:g example=F-Droid xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt; to register for push notifications?</string>
+    <string name="pref_push_app_allow_register_title">Allow registration</string>
+    <string name="pref_push_app_allow_register_summary">Allow the app to register for push notifications.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Start app on push message</string>
+    <string name="prefcat_push_apps_title">Apps using push notifications</string>
+    <string name="prefcat_push_apps_registered_title">Registered apps</string>
+    <string name="prefcat_push_apps_unregistered_title">Unregistered apps</string>
+    <string name="prefcat_push_networks_title">Networks to use for push notifications</string>
+    <string name="safetynet_intro">Google SafetyNet is a device certification system, ensuring that the device is properly secured and compatible with Android CTS. Some applications use SafetyNet for security reasons or as a prerequisite for tamper-protection.
+\n
+\nmicroG GmsCore contains a free implementation of SafetyNet, but the official server requires SafetyNet requests to be signed using the proprietary DroidGuard system.</string>
+    <string name="safetynet_enable_switch">Allow device attestation</string>
+    <string name="pref_safetynet_test_title">Test SafetyNet attestation</string>
+    <string name="pref_recaptcha_test_title">Test ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Test ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Passed all tests</string>
+    <string name="pref_droidguard_operation_mode">Operation mode</string>
+    <string name="pref_test_summary_failed">Failed: %s</string>
+    <string name="pref_test_summary_warn">Warning: %s</string>
+    <string name="pref_test_summary_running">Running…</string>
+    <string name="pref_droidguard_unsupported_summary">DroidGuard execution is unsupported on this device. SafetyNet services may misbehave.</string>
+    <string name="prefcat_safetynet_apps_title">Apps using SafetyNet</string>
+    <string name="menu_clear_recent_requests">Clear recent requests</string>
+    <string name="safetynet_last_run_at">Last use: &lt;xliff:g example=Yesterday, 02:20 PM xmlns:xliff=urn:oasis:names:tc:xliff:document:1.2&gt;%1$s&lt;/xliff:g&gt;</string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Real</string>
+    <string name="profile_name_auto">Automatic: %s</string>
+    <string name="profile_name_system">System: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Import custom profile</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Import device profile from file</string>
+    <string name="pref_device_registration_select_profile_title">Select profile</string>
+    <string name="pref_device_registration_device_profile_category">Device profile</string>
+    <string name="pref_safetynet_recent_uses">Recent uses</string>
+    <string name="pref_safetynet_recent_attestation_summary">Attestation: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">Copy JSON JWS data</string>
+    <string name="pref_safetynet_recent_advice">Advice</string>
+    <string name="pref_safetynet_recent_eval_type">Evaluation type</string>
+    <string name="pref_safetynet_recent_response_status">Response status</string>
+    <string name="pref_safetynet_recent_cat_response">Response data</string>
+    <string name="pref_safetynet_recent_cat_request">Request data</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Time of request</string>
+    <string name="pref_safetynet_recent_request_type">Request type</string>
+    <string name="pref_safetynet_recent_cat_basic">Basic data</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Copied to clipboard!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Integrity and CTS passed</string>
+    <string name="pref_safetynet_test_not_completed">Not completed yet</string>
+    <string name="pref_safetynet_test_cts_failed">CTS failed</string>
+    <string name="pref_safetynet_test_integrity_failed">Integrity failed</string>
+    <string name="pref_safetynet_test_no_result">No result</string>
+    <string name="pref_safetynet_test_invalid_json">Invalid JSON</string>
+    <string name="push_notifications_summary_automatic">ON / Automatic: %s</string>
+    <string name="push_notifications_summary_manual">ON / Manual: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s seconds</string>
+    <string name="push_notifications_summary_values_minutes">%s minutes</string>
+    <string name="pref_vending_summary_licensing_off">Licensing off</string>
+    <string name="pref_vending_summary_licensing_on">Licensing on</string>
+    <string name="pref_vending_licensing_category">Google Play Licensing</string>
+    <string name="pref_vending_licensing_enable_switch">Answer license verification requests</string>
+    <string name="feedback_disabled">Feedback currently not possible</string>
+    <string name="pref_vending_license_enable_summary">Some apps require verification that you have purchased them on Google Play. When requested by an app, microG can download a proof of purchase from Google. If disabled, or if no Google account is added, requests for license verification are ignored.</string>
+    <string name="backup_disabled">Backup currently not possible</string>
+    <string name="pref_vending_billing_category">Google Play Billing</string>
+    <string name="pref_vending_billing_enable_switch">Handle billing requests</string>
+    <string name="pref_vending_billing_enable_summary">Once enabled, some apps can complete purchases or start subscriptions through Google\'s Play Billing service.</string>
+    <string name="pref_vending_billing_note_experimental">This feature is experimental and may lead to loss of money. You have been warned.</string>
+    <string name="pref_vending_billing_note_licensing">Some apps may require you to also enable license verification to verify your purchases.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil het volgende:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> wil het volgende gebruiken:</string>
+</resources>

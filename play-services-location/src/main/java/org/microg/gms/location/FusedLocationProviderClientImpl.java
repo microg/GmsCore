@@ -55,7 +55,7 @@ public class FusedLocationProviderClientImpl extends FusedLocationProviderClient
     @NonNull
     @Override
     public Task<LocationAvailability> getLocationAvailability() {
-        return null;
+        return scheduleTask((ReturningGoogleApiCall<LocationAvailability, LocationClientImpl>) LocationClientImpl::getLocationAvailability);
     }
 
     @Override

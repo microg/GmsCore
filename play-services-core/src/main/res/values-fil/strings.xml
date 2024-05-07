@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="ask_permission_tos">Sa pamamagitan ng pagpatuloy, pinapayagan mo ang app na ito at ang Google na gamitin ang iyong impormasyon alinsunod sa kani-kanilang mga tuntunin ng serbisyo at patakaran sa privacy.</string>
+    <string name="ask_scope_permission_title">Gusto ng <xliff:g example="F-Droid">%1$s</xliff:g> na:</string>
+    <string name="auth_sign_in">Mag-sign in</string>
+    <string name="auth_connecting">Ang iyong device ay gumagawa ng koneksyon sa server ng Google para i-sign in ka.
+\n
+\nMaari ito tumagal ng ilang segundo.</string>
+    <string name="auth_general_error_desc">Nagkaroon ng problema sa pakikipag-ugnayan sa mga server ng Google.
+\n
+\nSubukan muli sa ibang pagkakataon.</string>
+    <string name="auth_finalize">Nakikipag-ugnayan ang iyong device sa Google para mag-save ng impormasyon sa iyong account.
+\n
+\nMaari itong tumagal ng ilang minuto.</string>
+    <string name="allow">Payagan</string>
+    <string name="deny">Tanggihan</string>
+    <string name="auth_notification_title">Kinakailangan ng authentication</string>
+    <string name="auth_notification_content">Kinakailangan ng <xliff:g example="F-Droid">%1$s</xliff:g> ang iyong awtorisasyon para i-access ang iyong Google account.</string>
+    <string name="signin_picker_title">Pumili ng account</string>
+    <string name="signin_picker_subtitle">para tumuloy sa <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_title">Payagan na i-sign in ka sa <xliff:g example="F-Droid">%1$s</xliff:g></string>
+    <string name="signin_confirm_button_text">Payagan at ibahagi</string>
+    <string name="signin_subtext_sharing">Para magpatuloy, ibabahagi ng microG ang iyong pangalan, email address, at larawan ng profile ng iyong Google Account sa <xliff:g example="F-Droid">%1$s</xliff:g>.</string>
+    <string name="signin_subtext_policy">Bago gamitin ang app na ito, suriin ang %1$s at %2$s nito.</string>
+    <string name="signin_subtext_policy_privacy">patakaran sa privacy</string>
+    <string name="signin_subtext_policy_terms">mga tuntunin ng serbisyo</string>
+    <string name="perm_c2dm_receive_label">makinig sa mga C2DM na mensahe</string>
+    <string name="perm_c2dm_send_label">magpadala ng mga C2DM na mensahe sa ibang mga app</string>
+    <string name="perm_gtalk_svc_label">ipagpalit ang mga mensahe at tumanggap ng mga sync notification galing sa mga server ng Google</string>
+    <string name="perm_extended_access_label">Palawakin ang access sa mga serbisyo ng Google</string>
+    <string name="perm_provision_label">i-provision ang mga serbisyo ng microG</string>
+    <string name="perm_provision_description">Pinapayagan ng app na i-configure ang mga serbisyo ng microG ng walang user interaction</string>
+    <string name="perm_car_speed_label">Bilis ng kotse</string>
+    <string name="perm_car_speed_description">I-access ang bilis ng iyong kotse</string>
+    <string name="perm_car_info_label">Impormasyon ng kotse</string>
+    <string name="perm_car_info_description">I-access ang impormasyon ng iyong kotse</string>
+    <string name="perm_car_fuel_label">Level ng fuel ng kotse</string>
+    <string name="perm_car_fuel_description">I-access ang impormasyon ng level ng fuel ng iyong kotse</string>
+    <string name="perm_car_mileage_label">Mileage ng kotse</string>
+    <string name="perm_car_mileage_description">I-access ang impormasyon ng mileage ng iyong kotse</string>
+    <string name="service_name_checkin">Pagrehistro ng device ng Google</string>
+    <string name="service_name_mcs">Cloud na Pagmemensahe</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_vending">Mga serbisyo ng Play Store</string>
+    <string name="games_title">Google Play Games</string>
+    <string name="games_info_title">Gusto ng <xliff:g example="F-Droid">%1$s</xliff:g> na gamitin ang Play Games</string>
+    <string name="games_info_content">Para gamitin ang Play Games kinakailangan na i-install ang Google Play Games app. Maaring magpatuloy ang application ng walang Play Games, pero posible na kumilos nang hindi inaasahan.</string>
+    <string name="place_picker_select_title">Piliin ang lokasyon na ito</string>
+    <string name="network_type_mobile">Network ng mobile</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Pag-roam</string>
+    <string name="network_type_other">Ibang mga network</string>
+    <string name="self_check_cat_fake_sig">Support sa panggagaya ng signature</string>
+    <string name="self_check_cat_gms_packages">Mga naka-install na package</string>
+    <string name="self_check_cat_system">Sistema</string>
+    <string name="self_check_name_fake_sig_perm">Mayroong support ang sistema sa paggagaya ng signature:</string>
+    <string name="self_check_resolution_fake_sig_perm">Ang iyong ROM ay walang native na support sa paggagaya ng signature. Pwede mo pa rin gamitin ang Xposed o ibang mga sistema para gayahin ang signature. Mangyaring suriin ang dokumentasyon sa kung anong mga ROM ay sinusuportahan ang paggagaya ng signatjre at paano gamitin ang microG sa mga ROM na hindi sinusuportahan.</string>
+    <string name="self_check_name_perm_granted">Pinayagan ng sistema ang paggaya ng signature na pahintulot:</string>
+    <string name="self_check_name_system_spoofs">Ginagaya ng sistema ang signature:</string>
+    <string name="self_check_resolution_system_spoofs">Mangyaring suriin ang dokumentasyon kung anong mga step ang maaring kinakailangan.</string>
+    <string name="self_check_pkg_gms">Mga Serbisyo ng Play (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_name_app_installed">Naka-install ang <xliff:g example="F-Droid">%1$s</xliff:g>: </string>
+    <string name="self_check_name_correct_sig">Tama ang signature ng <xliff:g example="F-Droid">%1$s</xliff:g>: </string>
+    <string name="self_check_resolution_correct_sig">Ang naka-inatall na <xliff:g example="F-Droid">%1$s</xliff:g> ay alinman hindi compatible o hindi aktibo ang paggaya ng signature para dito. Mangyaring suriin ang dokumentasyon kung anong mga application at ROM ang compatible.</string>
+    <string name="self_check_resolution_battery_optimizations">Pindutin dito para i-disable ang pag-optimize ng baterya. Ang hindi paggawa nito ay maaring magresulta sa mga maling pag-uugali ng mga application.</string>
+    <string name="prefcat_components">Mga component</string>
+    <string name="prefcat_google_services">Mga Serbisyo ng Google</string>
+    <string name="prefcat_location_service">Serbisyo ng lokasyon</string>
+    <string name="prefcat_services">Mga serbisyo</string>
+    <string name="prefcat_test">Pagsubok</string>
+    <string name="cond_gcm_bat_title">Naka-enable ang pag-optimize ng baterya</string>
+    <string name="cond_gcm_bat_summary">Na-enable mo ang Cloud na Pagmemensahe pero aktibo ang pag-optimize ng baterya para sa Mga Serbisyo ng microG. Para makatanggap ng mga notification kailangan mong hindi pansinin ang pag-optimize ng baterya.</string>
+    <string name="cond_gcm_bat_action">Huwag pansinin ang mga optimization</string>
+    <string name="cond_perm_title">Nawawalang pahintulot</string>
+    <string name="prefs_account">Mga kagustuhan ng account</string>
+    <string name="prefs_account_privacy">Personal na impormasyon at privacy</string>
+    <string name="prefs_account_security">Pag-sign in at seguridad</string>
+    <string name="pref_auth_visible_title">Payagan ang app na maghanap ng mga account</string>
+    <string name="pref_auth_visible_summary">Kapag naka-enable, ang lahat ng mga application sa device na ito ay makakakita ng email address ng iyong mga Google Account nang walang priyor na awtorisasyon.</string>
+    <string name="pref_auth_include_android_id_title">Mag-authenticate sa pamamagitan ng device registration</string>
+    <string name="pref_auth_strip_device_name_title">Alisin ang pangalan ng device para sa authentication</string>
+    <string name="pref_auth_strip_device_name_summary">Kapag na-enable, ang mga kahilingan ng authorization ay hindi sasamahan ang pangalan ng device, na maaring magpapahintulot sa mga hindi awtorisadong device na mag-sign in, ngunit maaring magkaroon ng mga hindi inaasahang kahihinatan.</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="checkin_not_registered">Hindi nakarehistro</string>
+    <string name="checkin_last_registration">Huling pagrehistro: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">I-rehistro ang device</string>
+    <string name="pref_gcm_enable_mcs_summary">Ang Cloud na Pagmemensahe ay isang provider ng push notification na ginagamit ng maraming third-party na application. Para gamitin kailangan mo i-enable ang pagrehistro ng device.</string>
+    <string name="pref_add_account_title">Account</string>
+    <string name="prefcat_accounts_current_accounts_title">Mga Account</string>
+    <string name="prefcat_accounts_settings_title">Mga Setting</string>
+    <string name="pref_accounts_summary">Magdagdag at ipamahala ang mga Google account</string>
+    <string name="pref_accounts_title">Mga Google Account</string>
+    <string name="pref_info_status">Status</string>
+    <string name="pref_gcm_heartbeat_summary">Ang pagitan sa segundo para sa sistema para i-heartbeat ang mga Google server. Ang pagtaas ng numero na ito ay babawasan ang pagkonsumo ng baterya ngunit maaaring magdulot ng pagkaantala sa mga push message.
+\nHindi na ginagamit, papalitan sa hinaharap na release.</string>
+    <string name="pref_about_title">Tungkol sa Mga Serbisyo ng microG</string>
+    <string name="pref_about_summary">Impormasyon ng beryson at mga ginamit na library</string>
+    <string name="gcm_app_error_unregistering">Error sa pag-unregister</string>
+    <string name="gcm_app_not_installed_anymore">Hindi na naka-install</string>
+    <string name="gcm_unregister_app">I-unregister</string>
+    <string name="gcm_not_registered">Hindi nakarehistro</string>
+    <string name="gcm_no_message_yet">Walang natanggap na mensahe sa ngayon</string>
+    <string name="gcm_last_message_at">Huling mensahe: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Nakarehistro</string>
+    <string name="gcm_registered_since">Nakarehistro noong: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_unregister_confirm_title">I-unregister ang <xliff:g example="F-Droid">%1$s</xliff:g>\?</string>
+    <string name="gcm_unregister_confirm_message">Ang ibang mga app ay hindi awtomatikong magrerehistro muli at/o hindi nagbibigay-daan ng opsyon para gawin ng manwal. Ang mga app na ito ay maaring hindi gumana ng mabuti pagkatapos i-unregister.
+\nMagpatuloy?</string>
+    <string name="gcm_unregister_after_deny_message">Tinanggihan mo ang app na magrehistro para sa mga push notification na nakarehistro na.
+\nGusto mo ba i-unregister ngayon para hindi ito makatanggap ng mga push message sa hinaharap?</string>
+    <string name="gcm_messages_counter">Mga mensahe: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bytes)</string>
+    <string name="gcm_network_state_disconnected">Nadiskonekta</string>
+    <string name="gcm_network_state_connected">Nakakonekta noong <xliff:g example="2 hours ago">%1$s</xliff:g></string>
+    <string name="gcm_enable_switch">Tumanggap ng mga push notification</string>
+    <string name="gcm_allow_app_popup">Payagan ang <xliff:g example="F-Droid">%1$s</xliff:g> na magrehistro para sa mga push notification?</string>
+    <string name="pref_push_app_allow_register_title">Payagan ang pagrehistro</string>
+    <string name="pref_push_app_allow_register_summary">Payagan ang app na magrehistro para sa mga push notification.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Simulan ang app sa push message</string>
+    <string name="safetynet_enable_switch">Payagan ang pagpapatunay ng device</string>
+    <string name="pref_safetynet_test_title">Subukan ang pagpapatunay ng SafetyNet</string>
+    <string name="pref_recaptcha_test_title">Subukan ang ReCAPTCHA</string>
+    <string name="pref_recaptcha_enterprise_test_title">Subukan ang ReCAPTCHA Enterprise</string>
+    <string name="pref_test_summary_passed">Pinasa ang lahat ng mga pagsubok</string>
+    <string name="pref_test_summary_failed">Nabigo: %s</string>
+    <string name="pref_test_summary_warn">Babala: %s</string>
+    <string name="pref_test_summary_running">Tumatakbo…</string>
+    <string name="pref_droidguard_operation_mode">Mode ng operasyon</string>
+    <string name="pref_droidguard_unsupported_summary">Ang DroidGuard execution ay hindi sinusuportan sa device na ito. Ang mga serbisyo ng SafetyNet ay maaring magluko.</string>
+    <string name="prefcat_safetynet_apps_title">Mga app na ginagamit ang SafetyNet</string>
+    <string name="menu_clear_recent_requests">I-clear ang mga kamakailan na hiling</string>
+    <string name="safetynet_last_run_at">Huling paggamit: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="profile_name_native">Native</string>
+    <string name="profile_name_real">Totoo</string>
+    <string name="profile_name_user">Custom: %s</string>
+    <string name="profile_name_auto">Awtomatiko: %s</string>
+    <string name="profile_name_system">Sistema: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Mag-import ng custom na profile</string>
+    <string name="pref_device_registration_serial_title">Serial</string>
+    <string name="pref_safetynet_recent_copy_json">Kopyahin ang JSON JWS data</string>
+    <string name="pref_safetynet_recent_advice">Payo</string>
+    <string name="pref_safetynet_recent_eval_type">Uri ng pagsusuri</string>
+    <string name="pref_safetynet_recent_response_status">Status ng tugon</string>
+    <string name="pref_safetynet_recent_cat_response">Data ng tugon</string>
+    <string name="pref_safetynet_recent_cat_request">Data ng hiling</string>
+    <string name="pref_safetynet_recent_nonce">Nonce (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">Oras ng hiling</string>
+    <string name="pref_safetynet_recent_request_type">Uri ng hiling</string>
+    <string name="pref_safetynet_recent_cat_basic">Basic na data</string>
+    <string name="pref_safetynet_recent_token">Token</string>
+    <string name="pref_safetynet_recent_copied">Kinopya sa clipboard!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Pumasa ang Integrity at CTS</string>
+    <string name="pref_safetynet_test_cts_failed">Nabigo ang CTS</string>
+    <string name="pref_safetynet_test_integrity_failed">Nabigo ang integrity</string>
+    <string name="pref_safetynet_test_not_completed">Hindi pa nakumpleto</string>
+    <string name="pref_safetynet_test_no_result">Walang resulta</string>
+    <string name="pref_safetynet_test_invalid_json">Hindi wastong JSON</string>
+    <string name="push_notifications_summary_off">NAKAPATAY</string>
+    <string name="push_notifications_summary_automatic">NAKABUKAS / Awtomatiko: %s</string>
+    <string name="push_notifications_summary_manual">NAKABUKAS / Manwal: %s</string>
+    <string name="push_notifications_summary_values_seconds">%s segundo</string>
+    <string name="push_notifications_summary_values_minutes">%s minuto</string>
+    <string name="pref_vending_summary_licensing_off">Nakapatay ang paglilisensya</string>
+    <string name="pref_vending_summary_licensing_on">Nakabukas ang paglilisensya</string>
+    <string name="pref_vending_licensing_category">Paglilisensya ng Google Play</string>
+    <string name="pref_vending_licensing_enable_switch">Sagutin ang mga hiling ng pagpapatunay ng lisensya</string>
+    <string name="pref_vending_license_enable_summary">Ang ibang mga app ay nangangailangan ng pagpapatunay na binili mo sila sa Google Play. Kapag hiniling ng app, da-download ang microG ng patunay ng pagbili galing sa Google. Kapag naka-disable, o walang nadagdag na Google account, ang mga hiling para sa pagpapatunay ng lisensya ay hindi papansinin.</string>
+    <string name="feedback_disabled">Kasalukuyang hindi pa posible ang pagpuna</string>
+    <string name="backup_disabled">Kasalukuyang hindi pa posible ang pag-back up</string>
+    <string name="pref_vending_billing_category">Billing ng Google Play</string>
+    <string name="pref_vending_billing_enable_switch">Ipamahala ang mga hiling ng billing</string>
+    <string name="pref_vending_billing_enable_summary">Kapag na-enable, ang ibang app ay maaring magkumpleto ng mga pagbili o magsimula ng mga subscription sa pamamagitan ng serbisyo ng Play Billing ng Google.</string>
+    <string name="pref_vending_billing_note_experimental">Pang-eksperimento ang feature na ito at maaring humatong sa pagkawalan ng pera. Ikaw ay binigyan ng babala.</string>
+    <string name="pref_vending_billing_note_licensing">Ang ibang mga app ay maaring kailangananin na i-enable din ang pagpatunay ng lisenya para patunayin ang iyong mga pagbili.</string>
+    <string name="gms_app_name">Mga Serbisyo ng microG</string>
+    <string name="gms_settings_name">Mga Setting ng microG</string>
+    <string name="gms_settings_summary">I-set up ang mga serbisyo ng microG.</string>
+    <string name="just_a_sec">Sandali lang…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_service_permission_title">Gusto gamitin ng <xliff:g example="F-Droid">%1$s</xliff:g> ang:</string>
+    <string name="account_manager_title">Pamahalaan ng Google Account</string>
+    <string name="sorry">Sorry…</string>
+    <string name="no_network_error_desc">Wala kang koneksyon sa network.
+\n
+\nMaari ito isang pansamantalang problema o ang iyong Android device ay maaring hindi naka-provision para sa mga serbisyo ng data. Subukan muli kapag nakakonekta sa mobile network, o kumonekta sa Wi-Fi network.</string>
+    <string name="signin_picker_add_account_label">Magdagdag ng isa pang account</string>
+    <string name="auth_before_connect">Ang isang app sa device mo ay sinusubukang mag-sign in sa isang Google Account. \u0020Kung sinasadya ito, gamitin ang <b>Mag-sign in</b> na button para kumonekta sa sign-in page ng Google, kung hindi, pindutin ang <b>Kanselahin</b> para bumalik sa application na naging sanhi ng pagpakita ng dialog na ito.</string>
+    <string name="perm_status_broadcast_label">makinig sa mga internal status broadcast</string>
+    <string name="pick_place_title">Pumili ng lugar</string>
+    <string name="place_picker_nearby_places">Mga malapit na lugar</string>
+    <string name="pick_place_desc">Hindi pa available ang pagpili ng lugar.</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="perm_gsf_read_gservices_label">basahin ang configuration ng serbisyo ng Google</string>
+    <string name="lacking_permission_toast">Mga serbisyo ng microG: Kulang ng pahintulot na <xliff:g example="have full network acccess">%1$s</xliff:g></string>
+    <string name="self_check_resolution_perm_granted">Ito ang pinakamalakas na indikasyon na ang ROM ay sumusuporta ng paggaya ng signature, pero nangangailangan ng higit pang aksyon para paganahin. Mangyaring suriin ang dokumentasyon kung anong mga step ang maaring kinakilangan.</string>
+    <string name="self_check_resolution_app_installed">I-install ang application na <xliff:g example="F-Droid">%1$s</xliff:g> o isang compatible. Mangyaring suriin ang dokumentasyon kung anong mga application ang sinusuportahan.</string>
+    <string name="self_check_name_battery_optimizations">Hindi pinapansin ang pag-optimize ng baterya:</string>
+    <string name="prefcat_about">Tungkol sa</string>
+    <string name="prefcat_configuration">Configuration</string>
+    <string name="pref_auth_include_android_id_summary">Kapag na-disable, hindi mali-link ang mga kahilingan sa pag-authenticate sa pagpaparehistro ng device, na maaaring magpapahintulot sa mga hindi awtorisadong device na mag-sign in, ngunit maaaring magkaroon ng mga hindi inaasahang kahihinatnan.</string>
+    <string name="pref_auth_trust_google_title">Pagkatiwalaan ang Google para sa mga pahintulot ng app</string>
+    <string name="pref_auth_trust_google_summary">Kapag naka-disable, ang user ay tinatanong bago ang awtorisasyon ng app na hiling ay ipapadala sa Google. Ang ibang mga application ay mabibigong gamitin ang Google account kapag naka-disable ito.</string>
+    <string name="pref_checkin_enable_summary">Nirerehistro ang iyong device sa mga serbisyo ng Google at gagawa ng kakaibang device identitfier. Tinatanggal ng microG ang mga nakakakilalang bahagi maliban sa pangalan ng iyong Google account at data ng pagrehistro.</string>
+    <string name="pref_add_account_summary">Magdagdag ng Google account</string>
+    <string name="pref_more_settings">Higit pa</string>
+    <string name="pref_gcm_heartbeat_title">Pagitan ng heartbeat ng Cloud na Pagmemensahe</string>
+    <string name="pref_gcm_apps_title">Mga app na ginagamit ang Cloud na Pagmemensahe</string>
+    <string name="pref_gcm_apps_summary">Listahan ng mga app na kasalukuyang nakarehistro sa Cloud na Pagmemensahe.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Kumpirmahin ang mga bagong app</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Magtanong bago i-rehistro ang isang app upang magkaroon ng mga push notification</string>
+    <string name="pref_gcm_ping_interval">Pagitan ng ping: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_device_registration_import_custom_profile_summary">Mag-import ng device profile galing sa file</string>
+    <string name="pref_device_registration_select_profile_title">Pumili ng profile</string>
+    <string name="pref_device_registration_device_profile_category">Profile ng device</string>
+    <string name="pref_safetynet_recent_uses">Mga kamakailan na paggamit</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Simulan ang app habang nasa background upang matanggap ang mga papasok na push message.</string>
+    <string name="pref_safetynet_recent_attestation_summary">Pagpapatunay: %s</string>
+    <string name="prefcat_push_apps_title">Mga app na gumagamit ng push notification</string>
+    <string name="prefcat_push_apps_registered_title">Mga nakarehistro na app</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="prefcat_push_apps_unregistered_title">Mga hindi nakarehistro na app</string>
+    <string name="prefcat_push_networks_title">Mga network na gagamitin para sa push notification</string>
+    <string name="safetynet_intro">Ang Google SafetyNet ay isang sistema ng sertipikason ng device, na sinisigurado na ang device ay maayos na na-secure at compatible sa Android CTS. Ang ibang mga application ay gumagamit ng SafetyNet para sa mga kadahilanang pangseguridad o isang kinakailangan para sa tamper-protection.
+\n
+\nNaglalaman ng microG GmsCore ang libreng implementasyon ng SafetyNet, pero ang opisyal na server ay nangangailangan na ang mga SafetyNet request ay naka-sign gamit ang proprietary na sistema ng DroidGuard.</string>
+    <string name="perm_car_vendor_extension_label">Channel ng vendor ng kotse</string>
+    <string name="perm_car_vendor_extension_description">I-access ang channel ng vendor ng iyong kotse para ipagpalit ang impormasyon sa kotse</string>
+</resources>

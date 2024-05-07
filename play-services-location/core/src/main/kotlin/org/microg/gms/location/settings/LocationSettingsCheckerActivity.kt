@@ -5,26 +5,28 @@
 
 package org.microg.gms.location.settings
 
+import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.location.LocationManager
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
+import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.gms.location.Priority
 import org.microg.gms.location.core.R
+import org.microg.gms.location.manager.AskPermissionActivity
+import org.microg.gms.location.manager.EXTRA_PERMISSIONS
+import org.microg.gms.location.manager.granularityFromPermission
 import org.microg.gms.ui.buildAlertDialog
 
 const val ACTION_LOCATION_SETTINGS_CHECKER = "com.google.android.gms.location.settings.CHECK_SETTINGS"
@@ -34,6 +36,7 @@ const val EXTRA_REQUESTS = "locationRequests"
 const val EXTRA_SETTINGS_STATES = "com.google.android.gms.location.LOCATION_SETTINGS_STATES"
 
 private const val REQUEST_CODE_LOCATION = 120
+private const val REQUEST_CODE_PERMISSION = 121
 private const val TAG = "LocationSettings"
 
 class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelListener, DialogInterface.OnClickListener {
@@ -41,26 +44,16 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     private var needBle = false
     private var improvements = emptyList<Improvement>()
     private var requests: List<LocationRequest>? = null
-    private var callingPackage: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        callingPackage = callingActivity?.packageName
-        if (callingPackage == null) {
-            Log.e(TAG, "Started without calling activity set")
-            finishResult(RESULT_CANCELED)
-            return
-        }
+        Log.d(TAG, "LocationSettingsCheckerActivity onCreate")
         if (intent.hasExtra(EXTRA_SETTINGS_REQUEST)) {
             try {
                 val request = SafeParcelableSerializer.deserializeFromBytes(intent.getByteArrayExtra(EXTRA_SETTINGS_REQUEST), LocationSettingsRequest.CREATOR)
                 alwaysShow = request.alwaysShow
                 needBle = request.needBle
                 requests = request.requests
-                val originalCallingPackage = intent.getStringExtra(EXTRA_ORIGINAL_PACKAGE_NAME)
-                if (callingPackage == packageName && originalCallingPackage != null) {
-                    callingPackage = originalCallingPackage
-                }
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -92,11 +85,16 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     }
 
     private fun updateImprovements() {
-        val detailedStates = getDetailedLocationSettingsStates()
-        // TODO: Correctly determine the needed improvements based on requests
+        val states = getDetailedLocationSettingsStates()
+        val requests = requests?.map {
+            // TODO: We assume fine for permission level granularity here
+            it.priority to (if (it.granularity == Granularity.GRANULARITY_PERMISSION_LEVEL) Granularity.GRANULARITY_FINE else it.granularity)
+        }.orEmpty()
+        val gpsRequested = requests.any { it.first == Priority.PRIORITY_HIGH_ACCURACY && it.second == Granularity.GRANULARITY_FINE }
+        val networkLocationRequested = requests.any { it.first <= Priority.PRIORITY_LOW_POWER && it.second >= Granularity.GRANULARITY_COARSE }
         improvements = listOfNotNull(
-            Improvement.GPS_AND_NLP.takeIf { !detailedStates.gpsUsable || !detailedStates.networkLocationUsable },
-//            Improvement.PERMISSIONS.takeIf { !detailedStates.coarseLocationPermission || !detailedStates.fineLocationPermission || !detailedStates.backgroundLocationPermission },
+            Improvement.GPS_AND_NLP.takeIf { gpsRequested && !states.gpsUsable || networkLocationRequested && !states.networkLocationUsable },
+            Improvement.PERMISSIONS.takeIf { !states.coarseLocationPermission || !states.fineLocationPermission },
         )
     }
 
@@ -118,6 +116,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
             val item = layoutInflater.inflate(R.layout.location_settings_dialog_item, messages, false)
             item.findViewById<TextView>(android.R.id.text1).text = when (improvement) {
                 Improvement.GPS_AND_NLP -> getString(R.string.location_settings_dialog_message_location_services_gps_and_nlp)
+                Improvement.PERMISSIONS -> getString(R.string.location_settings_dialog_message_grant_permissions)
                 else -> {
                     Log.w(TAG, "Unsupported improvement: $improvement")
                     ""
@@ -126,6 +125,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
             item.findViewById<ImageView>(android.R.id.icon).setImageDrawable(
                 when (improvement) {
                     Improvement.GPS_AND_NLP -> ContextCompat.getDrawable(this, R.drawable.ic_gps)
+                    Improvement.PERMISSIONS -> ContextCompat.getDrawable(this, R.drawable.ic_location)
                     else -> {
                         Log.w(TAG, "Unsupported improvement: $improvement")
                         null
@@ -142,12 +142,21 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     private fun handleContinue() {
         val improvement = improvements.firstOrNull() ?: return finishResult(RESULT_OK)
         when (improvement) {
+            Improvement.PERMISSIONS -> {
+                val intent = Intent(this, AskPermissionActivity::class.java).apply {
+                    putExtra(EXTRA_PERMISSIONS, locationPermissions.toTypedArray())
+                }
+                startActivityForResult(intent, REQUEST_CODE_PERMISSION)
+                return
+            }
+
             Improvement.GPS, Improvement.NLP, Improvement.GPS_AND_NLP -> {
                 // TODO: If we have permission to, just activate directly
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivityForResult(intent, REQUEST_CODE_LOCATION)
                 return // We will continue from onActivityResult
             }
+
             else -> {
                 Log.w(TAG, "Unsupported improvement: $improvement")
             }
@@ -157,17 +166,21 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_LOCATION) {
-            // Check if we improved, if so continue, otherwise show dialog again
-            val oldImprovements = improvements
-            updateImprovements()
-            if (oldImprovements == improvements) {
-                showDialog()
-            } else {
-                handleContinue()
-            }
+        if (requestCode == REQUEST_CODE_LOCATION || requestCode == REQUEST_CODE_PERMISSION) {
+            checkImprovements()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun checkImprovements() {
+        // Check if we improved, if so continue, otherwise show dialog again
+        val oldImprovements = improvements
+        updateImprovements()
+        if (oldImprovements == improvements) {
+            showDialog()
+        } else {
+            handleContinue()
         }
     }
 
@@ -193,5 +206,13 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
             DialogInterface.BUTTON_NEGATIVE -> finishResult(RESULT_CANCELED)
             DialogInterface.BUTTON_POSITIVE -> handleContinue()
         }
+    }
+
+    companion object {
+        private val locationPermissions = listOfNotNull(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            if (SDK_INT >= 29) Manifest.permission.ACCESS_BACKGROUND_LOCATION else null
+        )
     }
 }

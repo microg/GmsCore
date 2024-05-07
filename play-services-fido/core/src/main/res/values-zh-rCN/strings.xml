@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ SPDX-FileCopyrightText: 2022 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
+  --><resources>
     <string name="fido_welcome_title">在 %1$s 上使用安全密钥</string>
     <string name="fido_welcome_body">在 %1$s 上使用安全密钥有助于保护您的隐私数据。</string>
     <string name="fido_welcome_button_get_started">开始</string>
@@ -22,5 +21,5 @@
     <string name="fido_transport_usb_wait_connect_body">请连接您的 USB 安全密钥。</string>
     <string name="fido_transport_usb_wait_confirm_body">请点按 %1$s 上的金色圆环。</string>
     <string name="fido_nfc_title">连接您的 NFC 安全密钥</string>
-    <string name="fido_nfc_prompt_body">将您的密钥平贴在设备背部，直到其停止振动。</string>
+    <string name="fido_nfc_prompt_body">将您的密钥贴在设备背部，直到其停止振动</string>
 </resources>

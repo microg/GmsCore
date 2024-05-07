@@ -21,7 +21,7 @@ jobs:
           distribution: "temurin"
           java-version: "17"
       - name: "Gradle Wrapper validation"
-        uses: gradle/wrapper-validation-action@v2
+        uses: gradle/actions/wrapper-validation@v3
       - name: "Setup Gradle"
         uses: gradle/actions/setup-gradle@v3
       - name: "Setup matchers"

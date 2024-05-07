@@ -11,6 +11,6 @@ import com.google.firebase.dynamiclinks.internal.IDynamicLinksCallbacks;
 import android.os.Bundle;
 
 interface IDynamicLinksService {
-    void getInitialLink(IDynamicLinksCallbacks callback, String link) = 0;
+    void getDynamicLink(IDynamicLinksCallbacks callback, String link) = 0;
     void createShortDynamicLink(IDynamicLinksCallbacks callback, in Bundle extras) = 1;
 }

@@ -10,4 +10,13 @@
     <string name="license_notification_body">Se l\'app non funziona correttamente, accedi con un account Google con cui hai acquistato l\'app.</string>
     <string name="license_notification_sign_in">Accedi</string>
     <string name="license_notification_ignore">Ignora</string>
+    <string name="confirm_purchase">Conferma acquisto</string>
+    <string name="error_passwd">La password inserita è errata.</string>
+    <string name="error_unknown">Errore sconosciuto, esci e riprova.</string>
+    <string name="tips_forget_passwd">Password dimenticata?</string>
+    <string name="tips_input_passwd">Inserisci la password</string>
+    <string name="tips_more_details">Maggiori informazioni</string>
+    <string name="text_verify_button">Verifica</string>
+    <string name="tips_remember_login_info">Ricorda le mie credenziali su questo dispositivo</string>
+    <string name="error_network">Connessione a Internet assente. Verifica che la connessione Wi-Fi o alla rete cellulare sia attiva e riprova.</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="license_content_error">Wystąpił błąd przy ściąganiu licencji.</string>
+    <string name="license_content_error">Wystąpił błąd przy pobieraniu licencji.</string>
     <string name="oss_license_title">Licencje otwartoźródłowe</string>
     <string name="preferences_license_summary">Szczegóły licencji dla oprogramowania otwartoźródłowego</string>
     <string name="no_licenses_available">Ta aplikacja nie zawiera licencji otwartoźródłowych.</string>

@@ -24,8 +24,14 @@
     <string name="location_settings_dialog_message_details_start_paragraph">Вашему устройству требуется:</string>
     <string name="location_settings_dialog_message_details_end_paragraph">Для получения подробной информации перейдите в настройки местоположения.</string>
     <string name="location_settings_dialog_btn_sure">ОК</string>
-    <string name="location_settings_dialog_message_title_to_continue">Чтобы продолжить, включите определение местоположения устройства</string>
+    <string name="location_settings_dialog_message_title_to_continue">Чтобы продолжить, включите определение местоположения, с использованием службы определения местоположения microG</string>
     <string name="location_settings_dialog_message_location_services_gps_and_nlp">Использование GPS, Wi-Fi, сотовых сетей и датчиков</string>
-    <string name="location_settings_dialog_message_gls_consent">Использование службы определения местоположения; в рамках работы этой службы могут периодически анонимно собираться и использоваться данные о местоположении для повышения точности определения местоположения и услуг на основе местоположения.</string>
+    <string name="location_settings_dialog_message_gls_consent">Использование службы определения местоположения; в рамках работы этой службы microG может периодически анонимно собирать и использовать данные о местоположении для повышения точности определения местоположения и услуг на основе местоположения.</string>
     <string name="location_settings_dialog_btn_cancel">Нет, спасибо</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Для улучшения результатов, включите определение местоположения, которое использует службу определения местоположения microG</string>
+    <string name="pref_location_custom_url_title">Настройка адреса службы</string>
+    <string name="pref_location_custom_url_reset">Сброс</string>
+    <string name="pref_location_custom_url_summary">Этот параметр позволяет настроить URL-адрес службы. Неверные значения могут привести к тому, что службы определения местоположения перестанут отвечать на запросы или будут полностью недоступны.</string>
+    <string name="pref_location_custom_url_details">Путь /v1/geocate будет добавлен автоматически. Если провайдеру местоположения требуется ключ, его можно добавить к корневому URL-адресу в качестве параметра запроса.</string>
+    <string name="pref_location_custom_url_input_hint">Свой адрес службы</string>
 </resources>

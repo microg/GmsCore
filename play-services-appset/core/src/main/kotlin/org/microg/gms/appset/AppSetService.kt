@@ -37,6 +37,6 @@ class AppSetService : BaseService(TAG, GmsService.APP_SET) {
 class AppSetServiceImpl : IAppSetService.Stub() {
     override fun getAppSetIdInfo(params: AppSetIdRequestParams?, callback: IAppSetIdCallback?) {
         Log.d(TAG, "AppSetServiceImp getAppSetIdInfo is called -> ${params?.toString()} ")
-        callback?.onAppSetInfo(Status.SUCCESS, AppSetInfoParcel("", AppSetIdInfo.SCOPE_APP))
+        callback?.onAppSetInfo(Status.SUCCESS, AppSetInfoParcel("00000000-0000-0000-0000-000000000000", AppSetIdInfo.SCOPE_APP))
     }
 }

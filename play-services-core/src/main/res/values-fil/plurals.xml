@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <plurals name="pref_unifiednlp_summary">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> backend na naka-configure</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> mga backend na naka-configure</item>
+    </plurals>
+    <plurals name="gcm_registered_apps_counter">
+        <item quantity="one"><xliff:g example="1">%1$d</xliff:g> nakarehistro na App</item>
+        <item quantity="other"><xliff:g example="123">%1$d</xliff:g> mga nakarehistro na App</item>
+    </plurals>
+    <plurals name="cond_perm_summary">
+        <item quantity="one">Ang isang pahintulot para sa wastong pagsasaayos ng Mga Serbisyo ng microG ay hindi nabigyan.</item>
+        <item quantity="other">Ang mga pahintulot para sa wastong pagsasaayos ng Mga Serbisyo ng microG ay hindi nabigyan.</item>
+    </plurals>
+    <plurals name="cond_perm_action">
+        <item quantity="one">Ihiling ang nawawalang pahintulot</item>
+        <item quantity="other">Ihiling ang mga nawawalang pahintulot</item>
+    </plurals>
+</resources>
