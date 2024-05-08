@@ -12,6 +12,7 @@ import android.location.Location
 import android.os.SystemClock
 import android.os.WorkSource
 import org.microg.gms.location.EXTRA_LOCATION
+import org.microg.gms.location.EXTRA_ELAPSED_REALTIME
 
 class NetworkLocationRequest(
     var pendingIntent: PendingIntent,
@@ -20,10 +21,14 @@ class NetworkLocationRequest(
     var bypass: Boolean,
     var workSource: WorkSource
 ) {
-    private var lastRealtime = 0L
+    var lastRealtime = 0L
+        private set
 
     fun send(context: Context, location: Location) {
         lastRealtime = SystemClock.elapsedRealtime()
-        pendingIntent.send(context, 0, Intent().apply { putExtra(EXTRA_LOCATION, location) })
+        pendingIntent.send(context, 0, Intent().apply {
+            putExtra(EXTRA_LOCATION, location)
+            putExtra(EXTRA_ELAPSED_REALTIME, lastRealtime)
+        })
     }
 }

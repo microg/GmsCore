@@ -58,7 +58,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
     private val cache by lazy { LocationCacheDatabase(this) }
     private val movingWifiHelper by lazy { MovingWifiHelper(this) }
     private val settings by lazy { LocationSettings(this) }
-    private val wifiScanCache = LruCache<String, Location>(100)
+    private val wifiScanCache = LruCache<String, Location>(WIFI_SCAN_CACHE_SIZE)
 
     private var lastHighPowerScanRealtime = 0L
     private var lastLowPowerScanRealtime = 0L
@@ -234,7 +234,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
                         }
                     }
 
-                    else -> cacheLocation
+                    else -> Location(cacheLocation)
                 }?.takeIf { candidate == null || it.accuracy < candidate?.accuracy!! } ?: candidate
             } catch (e: Exception) {
                 Log.w(TAG, "Failed retrieving location for ${requestableWifis.size} wifi networks", e)
@@ -468,7 +468,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
             if (activeRequests.isNotEmpty()) {
                 writer.println("Active requests:")
                 for (request in activeRequests) {
-                    writer.println("- ${request.workSource} ${request.intervalMillis.formatDuration()} (low power: ${request.lowPower}, bypass: ${request.bypass})")
+                    writer.println("- ${request.workSource} ${request.intervalMillis.formatDuration()} (low power: ${request.lowPower}, bypass: ${request.bypass}) reported ${request.lastRealtime.formatRealtime()}")
                 }
             }
         }
@@ -484,6 +484,7 @@ class NetworkLocationService : LifecycleService(), WifiDetailsCallback, CellDeta
         const val MAX_WIFI_SCAN_CACHE_AGE = 1000L * 60 * 60 * 24 // 1 day
         const val MAX_LOCAL_WIFI_AGE_NS = 60_000_000_000L // 1 minute
         const val MAX_LOCAL_WIFI_SCAN_AGE_NS = 600_000_000_000L // 10 minutes
+        const val WIFI_SCAN_CACHE_SIZE = 200
     }
 }
 
@@ -500,7 +501,7 @@ fun List<WifiDetails>.hash(): ByteArray? {
     fun WifiDetails.hashBytes(): ByteArray {
         return macBytes + byteArrayOf(
             ((maxTimestamp - (timestamp ?: 0L)) / (60 * 1000)).toByte(), // timestamp
-            ((signalStrength ?: 0) / 10).toByte() // signal strength
+            ((signalStrength ?: 0) / 20).toByte() // signal strength
         )
     }
 
