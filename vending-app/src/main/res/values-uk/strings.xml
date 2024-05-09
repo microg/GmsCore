@@ -3,4 +3,20 @@
     <string name="toast_installed">microG Companion не можна використовувати окремо. Натомість відкрито налаштування служб microG.</string>
     <string name="toast_not_installed">microG Companion не можна використовувати окремо. Будь ласка, встановіть microG служби, щоб використовувати microG.</string>
     <string name="app_name">microG Companion</string>
+    <string name="pay_disabled">Оплатити наразі неможливо</string>
+    <string name="error_passwd">Введено неправильний пароль.</string>
+    <string name="tips_input_passwd">Введіть пароль</string>
+    <string name="tips_more_details">Докладніше</string>
+    <string name="text_verify_button">Підтвердити</string>
+    <string name="license_notification_body">Якщо застосунок поводиться неправильно, увійдіть в обліковий запис Google, за допомогою якого ви придбали його.</string>
+    <string name="confirm_purchase">Підтвердити покупку</string>
+    <string name="error_network">Не під\'єднано до мережі. Переконайтеся, що Wi-Fi або мобільна мережа ввімкнені, й спробуйте ще раз.</string>
+    <string name="error_unknown">Невідома помилка, вийдіть та спробуйте ще раз.</string>
+    <string name="tips_remember_login_info">Запам\'ятати мої дані входу на цьому пристрої</string>
+    <string name="tips_forget_passwd">Забули пароль?</string>
+    <string name="license_notification_channel_name">Сповіщення про ліцензії</string>
+    <string name="license_notification_channel_description">Сповіщає, коли застосунок намагається підтвердити свою ліцензію, але ви не ввійшли до жодного облікового запису Google.</string>
+    <string name="license_notification_title">%1$s не вдалося підтвердити ліцензію</string>
+    <string name="license_notification_sign_in">Увійти</string>
+    <string name="license_notification_ignore">Ігнорувати</string>
 </resources>
