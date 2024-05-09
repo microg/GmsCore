@@ -129,8 +129,8 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     private fun reportAgain() {
         // Report location again if it's recent enough
         lastReportedLocation?.let {
-            if (it.elapsedMillis + MIN_INTERVAL_MILLIS < SystemClock.elapsedRealtime() ||
-                it.elapsedMillis + (currentRequest?.interval ?: 0) < SystemClock.elapsedRealtime()) {
+            if (it.elapsedMillis + MIN_INTERVAL_MILLIS > SystemClock.elapsedRealtime() ||
+                it.elapsedMillis + (currentRequest?.interval ?: 0) > SystemClock.elapsedRealtime()) {
                 reportLocationToSystem(it)
             }
         }
