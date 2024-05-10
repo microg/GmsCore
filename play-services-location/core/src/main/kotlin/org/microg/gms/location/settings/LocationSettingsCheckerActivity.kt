@@ -9,7 +9,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.Settings
@@ -25,8 +24,8 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
 import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.AskPermissionActivity
+import org.microg.gms.location.manager.EXTRA_CALLING_PACKAGE
 import org.microg.gms.location.manager.EXTRA_PERMISSIONS
-import org.microg.gms.location.manager.granularityFromPermission
 import org.microg.gms.ui.buildAlertDialog
 
 const val ACTION_LOCATION_SETTINGS_CHECKER = "com.google.android.gms.location.settings.CHECK_SETTINGS"
@@ -44,6 +43,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     private var needBle = false
     private var improvements = emptyList<Improvement>()
     private var requests: List<LocationRequest>? = null
+    private var callingPackageName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +58,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
                 Log.w(TAG, e)
             }
         }
+        callingPackageName = callingPackage
         if (requests == null && intent.hasExtra(EXTRA_REQUESTS)) {
             try {
                 val arrayList = intent.getSerializableExtra(EXTRA_REQUESTS) as? ArrayList<*>
@@ -145,6 +146,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
             Improvement.PERMISSIONS -> {
                 val intent = Intent(this, AskPermissionActivity::class.java).apply {
                     putExtra(EXTRA_PERMISSIONS, locationPermissions.toTypedArray())
+                    putExtra(EXTRA_CALLING_PACKAGE, callingPackageName)
                 }
                 startActivityForResult(intent, REQUEST_CODE_PERMISSION)
                 return

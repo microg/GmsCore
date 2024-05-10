@@ -17,6 +17,7 @@ import android.os.Messenger
 import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.arraySetOf
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -26,6 +27,7 @@ import org.microg.gms.location.core.BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION
 const val EXTRA_MESSENGER = "messenger"
 const val EXTRA_PERMISSIONS = "permissions"
 const val EXTRA_GRANT_RESULTS = "results"
+const val EXTRA_CALLING_PACKAGE = "callingPackage"
 
 private const val REQUEST_CODE_PERMISSION = 120
 private const val REQUEST_CODE_SETTINGS = 121
@@ -34,6 +36,9 @@ class AskPermissionActivity : AppCompatActivity() {
     private var permissionGrants = IntArray(0)
     private val permissionsFromIntent: Array<String>
         get() = intent?.getStringArrayExtra(EXTRA_PERMISSIONS) ?: emptyArray()
+    private val callingPackageName:String?
+        get() = intent?.getStringExtra(EXTRA_CALLING_PACKAGE)
+
     private val permissionsToRequest: Array<String>
         get() = permissionsFromIntent.let {
             if (FORCE_SHOW_BACKGROUND_PERMISSION.isNotEmpty() && it.contains(ACCESS_BACKGROUND_LOCATION) && !it.contains(FORCE_SHOW_BACKGROUND_PERMISSION)) {
@@ -45,7 +50,14 @@ class AskPermissionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "AskPermissionActivity: onCreate")
+        Log.d(TAG, "AskPermissionActivity: onCreate callingPackage->$callingPackageName")
+        if (callingPackageName != null) {
+            if (displayCallingPackageSet.contains(callingPackageName)) {
+                finishWithReply()
+                return
+            }
+            displayCallingPackageSet.add(callingPackageName!!)
+        }
         requestPermissions()
     }
 
@@ -119,7 +131,8 @@ class AskPermissionActivity : AppCompatActivity() {
                 val onlyBackgroundDenied = backgroundDenied && grantResults.count { it == PackageManager.PERMISSION_DENIED } == 1
                 val someAccepted = !permissionGrants.contentEquals(grantResults)
                 Log.d(TAG, "onRequestPermissionsResult onlyBackgroundDenied: $onlyBackgroundDenied someAccepted:$someAccepted")
-                if (onlyBackgroundDenied && someAccepted) {
+                if (onlyBackgroundDenied && someAccepted && firstRequestLocationSettingsDialog) {
+                    firstRequestLocationSettingsDialog = false
                     // Only background denied, ask again as some systems require that
                     requestPermissions()
                     return
@@ -143,5 +156,6 @@ class AskPermissionActivity : AppCompatActivity() {
 
     companion object {
         private var firstRequestLocationSettingsDialog: Boolean = true
+        private val displayCallingPackageSet: MutableSet<String> = arraySetOf()
     }
 }
