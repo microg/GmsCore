@@ -28,7 +28,6 @@ import com.android.volley.Request as VolleyRequest
 import com.android.volley.Response as VolleyResponse
 
 class HandleProxyFactory(private val context: Context) {
-    private val classMap = hashMapOf<String, Class<*>>()
     private val dgDb: DgDatabaseHelper = DgDatabaseHelper(context)
     private val version = VersionUtil(context)
     private val queue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
@@ -218,6 +217,7 @@ class HandleProxyFactory(private val context: Context) {
     }
 
     companion object {
+        private val classMap = hashMapOf<String, Class<*>>()
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
         const val SERVER_URL = "https://www.googleapis.com/androidantiabuse/v1/x/create?alt=PROTO&key=AIzaSyBofcZsgLSS7BOnBjZPEkk4rYwzOIz-lTI"
         const val CACHE_FOLDER_NAME = "cache_dg"
