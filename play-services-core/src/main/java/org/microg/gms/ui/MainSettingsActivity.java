@@ -25,23 +25,23 @@ import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProvid
 public class MainSettingsActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
 
-    private static final String FirstRunMaster = "FirstRun";
-    private static final String FirstRunPref = "FirstRun_pref";
+    private static final String FIRST_RUN_MASTER = "org.microg.gms_firstRun";
+    private static final String FIRST_RUN_PREF = "as_run";
 
     private NavController getNavController() {
         return ((NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navhost)).getNavController();
     }
 
     private void showDialogIfNeeded() {
-        SharedPreferences prefs = getSharedPreferences(FirstRunMaster, MODE_PRIVATE);
-        if (BuildConfig.APPLICATION_ID == Constants.MICROG_PACKAGE_NAME &&
-                prefs.getBoolean(FirstRunPref, true)) {
+        SharedPreferences prefs = getSharedPreferences(FIRST_RUN_MASTER, MODE_PRIVATE);
+        if (BuildConfig.APPLICATION_ID == Constants.USER_MICROG_PACKAGE_NAME &&
+                prefs.getBoolean(FIRST_RUN_PREF, true)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage(R.string.limited_services_dialog_information)
                     .setTitle(R.string.limited_services_app_name)
                     .setPositiveButton(R.string.limited_services_dialog_information_ack, (dialog, id) -> {
-                        prefs.edit().putBoolean(FirstRunPref, false).apply();
+                        prefs.edit().putBoolean(FIRST_RUN_PREF, false).apply();
                     });
 
             builder.create().show();

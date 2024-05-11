@@ -43,15 +43,15 @@ import java.util.Set;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
-import static org.microg.gms.common.Constants.MICROG_PACKAGE_NAME;
+import static org.microg.gms.common.Constants.USER_MICROG_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_SIGNATURE_SHA1;
 import static org.microg.gms.common.Constants.GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1;
 import static org.microg.gms.common.Constants.MICROG_PACKAGE_SIGNATURE_SHA1;
 
 public class MultiConnectionKeeper {
     private static final String TAG = "GmsMultiConKeeper";
-    private static final String PREF_MASTER = "GmsMultiConKeeper";
-    private static final String PREF_TARGET = "GmsMultiConKeeper_target";
+    private static final String PREF_NAME = "org.microg.gms_connection";
+    private static final String PREF_TARGET = "target";
     private static final String[] GOOGLE_PRIMARY_KEYS = {GMS_PACKAGE_SIGNATURE_SHA1, GMS_SECONDARY_PACKAGE_SIGNATURE_SHA1};
 
     private static final String[] MICROG_PRIMARY_KEYS = {MICROG_PACKAGE_SIGNATURE_SHA1};
@@ -59,7 +59,7 @@ public class MultiConnectionKeeper {
 
     private final Context context;
 
-    private final String gmsPackage;
+    private final String targetPackage;
     private final Map<String, Connection> connections = new HashMap<String, Connection>();
 
     private Boolean isSystem(PackageManager pm, String packageId) throws PackageManager.NameNotFoundException {
@@ -121,26 +121,26 @@ public class MultiConnectionKeeper {
             Log.d(TAG, GMS_PACKAGE_NAME + " not found");
         }
         try {
-            if (isMicrogSig(pm, MICROG_PACKAGE_NAME)) {
-                Log.d(TAG, MICROG_PACKAGE_NAME + " found !");
-                return MICROG_PACKAGE_NAME;
+            if (isMicrogSig(pm, USER_MICROG_PACKAGE_NAME)) {
+                Log.d(TAG, USER_MICROG_PACKAGE_NAME + " found !");
+                return USER_MICROG_PACKAGE_NAME;
             } else {
-                Log.w(TAG, MICROG_PACKAGE_NAME + " found with another signature");
+                Log.w(TAG, USER_MICROG_PACKAGE_NAME + " found with another signature");
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.d(TAG, MICROG_PACKAGE_NAME + " not found");
+            Log.d(TAG, USER_MICROG_PACKAGE_NAME + " not found");
         }
         return null;
     }
 
     private String getTargetPackage() {
-        SharedPreferences prefs = context.getSharedPreferences(PREF_MASTER, Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         final String SELF = "SELF";
         String target;
         if ((target = prefs.getString(PREF_TARGET, null)) != null) {
             switch (target) {
                 case GMS_PACKAGE_NAME:
-                case MICROG_PACKAGE_NAME:
+                case USER_MICROG_PACKAGE_NAME:
                     return target;
                 case SELF:
                     return null;
@@ -156,7 +156,7 @@ public class MultiConnectionKeeper {
 
     public MultiConnectionKeeper(Context context) {
         this.context = context;
-        gmsPackage = getTargetPackage();
+        targetPackage = getTargetPackage();
     }
 
     public synchronized static MultiConnectionKeeper getInstance(Context context) {
@@ -251,8 +251,8 @@ public class MultiConnectionKeeper {
         private Intent getIntent() {
             Intent intent;
             ResolveInfo resolveInfo;
-            if (gmsPackage != null) {
-                intent = new Intent(actionString).setPackage(gmsPackage);
+            if (targetPackage != null) {
+                intent = new Intent(actionString).setPackage(targetPackage);
                 if ((resolveInfo = context.getPackageManager().resolveService(intent, 0)) != null) {
                     if (requireMicrog && !isMicrog(resolveInfo)) {
                         Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
