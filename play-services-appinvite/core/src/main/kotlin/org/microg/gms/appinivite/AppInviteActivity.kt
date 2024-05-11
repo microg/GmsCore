@@ -37,6 +37,19 @@ private const val APPINVITE_INVITATION_ID = "com.google.android.gms.appinvite.IN
 private const val APPINVITE_OPENED_FROM_PLAY_STORE = "com.google.android.gms.appinvite.OPENED_FROM_PLAY_STORE"
 private const val APPINVITE_REFERRAL_BUNDLE = "com.google.android.gms.appinvite.REFERRAL_BUNDLE"
 
+private const val APPINVITE_DEFAULT_PATH = "/iosgoogleapp/default"
+
+private fun String.toRealUri(): Uri {
+    Log.d(TAG, "Url: $this")
+    val linkUri = Uri.parse(this)
+    if (APPINVITE_DEFAULT_PATH == linkUri.path) {
+        val url = linkUri.getQueryParameter("url") ?: return linkUri
+        Log.d(TAG, "realUrl: $url")
+        return Uri.parse(url)
+    }
+    return linkUri
+}
+
 class AppInviteActivity : AppCompatActivity() {
     private val queue by lazy { singleInstanceOf { Volley.newRequestQueue(applicationContext) } }
 
@@ -72,7 +85,7 @@ class AppInviteActivity : AppCompatActivity() {
     private fun open(appInviteLink: MutateAppInviteLinkResponse) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
-            data = appInviteLink.data_?.intentData?.let { Uri.parse(it) }
+            data = appInviteLink.data_?.intentData?.toRealUri()
             `package` = appInviteLink.data_?.packageName
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra(
@@ -85,7 +98,7 @@ class AppInviteActivity : AppCompatActivity() {
         }
         val fallbackIntent = Intent(Intent.ACTION_VIEW).apply {
             addCategory(Intent.CATEGORY_DEFAULT)
-            data = appInviteLink.data_?.fallbackUrl?.let { Uri.parse(it) }
+            data = appInviteLink.data_?.fallbackUrl?.toRealUri()
         }
         val installedVersionCode = runCatching {
             intent.resolveActivity(packageManager)?.let {
