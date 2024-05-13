@@ -37,49 +37,21 @@ class LicensingService : Service() {
             listener: ILicenseResultListener
         ): Unit = runBlocking {
             Log.v(TAG, "checkLicense($nonce, $packageName)")
-            val callingUid = getCallingUid()
 
-            if (!isLicensingEnabled(this@LicensingService)) {
-                Log.d(TAG, "not checking license, as it is disabled by user")
-                return@runBlocking
-            }
-
-            val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-            val packageManager = packageManager
-
-            lateinit var lastResponse: LicenseResponse
-            if (accounts.isEmpty()) {
-                handleNoAccounts(packageName, packageManager)
-                return@runBlocking
-            } else for (account: Account in accounts) {
-
-                lastResponse = httpClient.checkLicense(
-                    account,
-                    accountManager,
-                    androidId,
-                    packageName,
-                    callingUid,
-                    packageManager,
-                    V1Request(nonce)
-                )
-
-                if (lastResponse.result == LICENSED) {
-                    // Do not consider further accounts
-                    break
-                }
-            }
+            val response = checkLicenseCommon(packageName, V1Parameters(nonce))
 
             /* If a license is found, it is now stored in `lastResponse`. Otherwise, it now contains
              * an error. In either case, we should send it to the application.
              */
             try {
-                when (lastResponse) {
-                    is V1Response -> listener.verifyLicense(lastResponse.result, lastResponse.signedData, lastResponse.signature)
-                    is ErrorResponse -> listener.verifyLicense(lastResponse.result, null, null)
+                when (response) {
+                    is V1Response -> listener.verifyLicense(response.result, response.signedData, response.signature)
+                    is ErrorResponse -> listener.verifyLicense(response.result, null, null)
                     is V2Response -> Unit // should never happen
+                    null -> Unit // no license check was performed at all
                 }
             } catch (e: Exception) {
-                Log.w(TAG, "Remote threw an exception while returning license result ${lastResponse}")
+                Log.w(TAG, "Remote threw an exception while returning license result ${response}")
             }
         }
 
@@ -90,42 +62,8 @@ class LicensingService : Service() {
             extraParams: Bundle
         ): Unit = runBlocking {
             Log.v(TAG, "checkLicenseV2($packageName, $extraParams)")
-            val callingUid = getCallingUid()
 
-            if (!isLicensingEnabled(this@LicensingService)) {
-                Log.d(TAG, "not checking license, as it is disabled by user")
-                return@runBlocking
-            }
-
-            val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
-            val packageManager = packageManager
-
-            if (accounts.isEmpty()) {
-                handleNoAccounts(packageName, packageManager)
-                return@runBlocking
-            } else for (account: Account in accounts) {
-
-                val response = httpClient.checkLicense(
-                    account,
-                    accountManager,
-                    androidId,
-                    packageName,
-                    callingUid,
-                    packageManager,
-                    V2Request
-                )
-
-                if (response.result == LICENSED && response is V2Response) {
-                    val bundle = Bundle()
-                    bundle.putString(KEY_V2_RESULT_JWT, response.jwt)
-
-                    try {
-                        listener.verifyLicense(response.result, bundle)
-                    } catch (e: Exception) {
-                        Log.w(TAG, "Remote threw an exception while returning license result ${response}")
-                    }
-                }
-            }
+            val response = checkLicenseCommon(packageName, V2Parameters)
 
             /*
              * Suppress failures on V2. V2 is commonly used by free apps whose checker
@@ -134,11 +72,84 @@ class LicensingService : Service() {
              * This means that users who are signed in to a Google account will not
              * get a worse experience in these apps than users that are not signed in.
              *
-             * Normally, we would otherwise send the response NOT_LICENSED with an empty
-             * bundle here.
+             * Normally, we would otherwise always send the response.
              */
+            if (response?.result == LICENSED && response is V2Response) {
+                val bundle = Bundle()
+                bundle.putString(KEY_V2_RESULT_JWT, response.jwt)
+
+                try {
+                    listener.verifyLicense(response.result, bundle)
+                } catch (e: Exception) {
+                    Log.w(TAG, "Remote threw an exception while returning license result ${response}")
+                }
+            }
             Log.i(TAG, "Suppressed negative license result for package $packageName")
 
+        }
+
+        /**
+         * Checks for license on all accounts.
+         *
+         * @return `null` if no check is performed (for example, because the feature is disabled),
+         * an instance of [LicenseResponse] otherwise.
+         */
+        suspend fun checkLicenseCommon(
+            packageName: String,
+            request: LicenseRequestParameters
+        ): LicenseResponse? {
+            val callingUid = getCallingUid()
+
+            if (!isLicensingEnabled(this@LicensingService)) {
+                Log.d(TAG, "not checking license, as it is disabled by user")
+                return null
+            }
+
+            val packageInfo = try {
+                packageManager.getPackageInfo(packageName, 0)
+            } catch (e: PackageManager.NameNotFoundException) {
+                Log.e(TAG,
+                    "an app tried to request licenses for package $packageName, which does not exist"
+                )
+                return ErrorResponse(ERROR_INVALID_PACKAGE_NAME)
+            }
+
+            // Verify caller identity
+            if (packageInfo.applicationInfo.uid != callingUid) {
+                Log.e(
+                    TAG,
+                    "an app illegally tried to request licenses for another app (caller: $callingUid)"
+                )
+                return ErrorResponse(ERROR_NON_MATCHING_UID)
+            }
+
+            val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+            val packageManager = packageManager
+
+            lateinit var lastRespone: LicenseResponse
+            if (accounts.isEmpty()) {
+                handleNoAccounts(packageName, packageManager)
+                return null
+            } else for (account: Account in accounts) {
+
+                lastRespone = httpClient.checkLicense(
+                    account, accountManager, androidId, packageInfo, packageName, request
+                )
+
+                if (lastRespone.result == LICENSED) {
+                    return lastRespone;
+                }
+            }
+
+            // Attempt to acquire license if app is free ("auto-purchase")
+            val firstAccount = accounts[0]
+            /* TODO if (acquireFreeAppLicense(firstAccount)) {
+                lastRespone = httpClient.checkLicense(
+                    firstAccount, accountManager, androidId, packageInfo, packageName, request
+                )
+            }*/
+
+            return lastRespone
         }
 
         private fun handleNoAccounts(packageName: String, packageManager: PackageManager) {

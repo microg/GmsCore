@@ -4,9 +4,10 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AuthenticatorException
 import android.accounts.OperationCanceledException
-import android.content.pm.PackageManager
+import android.content.pm.PackageInfo
 import android.os.RemoteException
 import android.util.Log
+import com.android.vending.LicenseResult
 import com.android.vending.getAuthToken
 import com.android.volley.VolleyError
 import org.microg.vending.billing.core.HttpClient
@@ -72,27 +73,13 @@ const val AUTH_TOKEN_SCOPE: String = "oauth2:https://www.googleapis.com/auth/goo
  */
 @Throws(RemoteException::class)
 suspend fun HttpClient.checkLicense(
-    account: Account, accountManager: AccountManager, androidId: String?,
-    packageName: String, callingUid: Int, packageManager: PackageManager, queryData: RequestParameters
+    account: Account,
+    accountManager: AccountManager,
+    androidId: String?,
+    packageInfo: PackageInfo,
+    packageName: String,
+    queryData: LicenseRequestParameters
 ) : LicenseResponse {
-    val packageInfo = try {
-        packageManager.getPackageInfo(packageName, 0)
-    } catch (e: PackageManager.NameNotFoundException) {
-        Log.e(TAG,
-            "an app tried to request licenses for package $packageName, which does not exist"
-        )
-        return ErrorResponse(ERROR_INVALID_PACKAGE_NAME)
-    }
-    val versionCode = packageInfo.versionCode
-
-    // Verify caller identity
-    if (packageInfo.applicationInfo.uid != callingUid) {
-        Log.e(
-            TAG,
-            "an app illegally tried to request licenses for another app (caller: $callingUid)"
-        )
-        return ErrorResponse(ERROR_NON_MATCHING_UID)
-    }
 
     val auth = try {
         accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false)
@@ -110,11 +97,11 @@ suspend fun HttpClient.checkLicense(
 
     return try {
         when (queryData) {
-            is V1Request -> makeLicenseV1Request(
-                packageName, auth, versionCode, queryData.nonce, decodedAndroidId
+            is V1Parameters -> makeLicenseV1Request(
+                packageName, auth, packageInfo.versionCode, queryData.nonce, decodedAndroidId
             )
-            is V2Request -> makeLicenseV2Request(
-                packageName, auth, versionCode, decodedAndroidId
+            is V2Parameters -> makeLicenseV2Request(
+                packageName, auth, packageInfo.versionCode, decodedAndroidId
             )
         } ?: ErrorResponse(NOT_LICENSED)
     } catch (e: VolleyError) {
@@ -128,11 +115,37 @@ suspend fun HttpClient.checkLicense(
     }
 }
 
-sealed class RequestParameters
-data class V1Request(
+suspend fun HttpClient.makeLicenseV1Request(
+    packageName: String, auth: String, versionCode: Int, nonce: Long, androidId: Long
+): V1Response? = get(
+    url = "https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=$packageName&vc=$versionCode&nnc=$nonce",
+    headers = getLicenseRequestHeaders(auth, androidId),
+    adapter = LicenseResult.ADAPTER
+).information?.v1?.let {
+    if (it.result != null && it.signedData != null && it.signature != null) {
+        V1Response(it.result, it.signedData, it.signature)
+    } else null
+}
+
+suspend fun HttpClient.makeLicenseV2Request(
+    packageName: String,
+    auth: String,
+    versionCode: Int,
+    androidId: Long
+): V2Response? = get(
+    url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
+    headers = getLicenseRequestHeaders(auth, androidId),
+    adapter = LicenseResult.ADAPTER
+).information?.v2?.license?.jwt?.let {
+    // Field present ←→ user has license
+    V2Response(LICENSED, it)
+}
+
+sealed class LicenseRequestParameters
+data class V1Parameters(
     val nonce: Long
-) : RequestParameters()
-object V2Request : RequestParameters()
+) : LicenseRequestParameters()
+object V2Parameters : LicenseRequestParameters()
 
 sealed class LicenseResponse(
     val result: Int
