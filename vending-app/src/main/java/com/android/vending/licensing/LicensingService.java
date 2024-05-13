@@ -48,8 +48,6 @@ public class LicensingService extends Service {
 
     private static final String KEY_V2_RESULT_JWT = "LICENSE_DATA";
 
-    private static final Uri PROFILE_PROVIDER = Uri.parse("content://com.google.android.gms.microg.profile");
-
     private static final Uri CHECKIN_SETTINGS_PROVIDER = Uri.parse("content://com.google.android.gms.microg.settings/check-in");
 
     private final ILicensingService.Stub mLicenseService = new ILicensingService.Stub() {
@@ -157,41 +155,18 @@ public class LicensingService extends Service {
 
     public IBinder onBind(Intent intent) {
 
+        ProfileManager.ensureInitialized(this);
 
-        Cursor cursor = null;
-        try {
-            cursor = getContentResolver().query(
-                PROFILE_PROVIDER, null, null, null, null
-            );
-
-            if (cursor == null || cursor.getColumnCount() != 2) {
-                Log.e(TAG, "profile provider not available");
-            } else {
-                Map<String, String> profileData = new HashMap<>();
-                while (cursor.moveToNext()) {
-                    profileData.put(cursor.getString(0), cursor.getString(1));
-                }
-                ProfileManager.INSTANCE.applyProfileData(profileData);
-            }
-
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        try {
-            cursor = getContentResolver().query(
-                    CHECKIN_SETTINGS_PROVIDER, new String[] { "androidId" }, null, null, null
-            );
-
+        try (Cursor cursor = getContentResolver().query(
+                CHECKIN_SETTINGS_PROVIDER,
+                new String[]{"androidId"},
+                null,
+                null,
+                null
+        )) {
             if (cursor != null) {
                 cursor.moveToNext();
                 androidId = Long.toHexString(cursor.getLong(0));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
             }
         }
 
