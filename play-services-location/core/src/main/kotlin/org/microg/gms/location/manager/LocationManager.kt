@@ -232,7 +232,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         if (gpsLocation.elapsedMillis < elapsedMillis + MAX_FINE_UPDATE_INTERVAL) return false
 
         val distance = distanceTo(gpsLocation)
-        if (distance > min(2 * gpsLocation.accuracy, MIN_UNREASONABLE_DISTANCE_FROM_GPS)) {
+        if (distance > max(2 * gpsLocation.accuracy, MIN_UNREASONABLE_DISTANCE_FROM_GPS)) {
             Log.d(TAG, String.format("Unreasonable location %s vs gps (accuracy %.0f): distance %.0f",
                 this.provider, gpsLocation.accuracy, distance))
             return true
