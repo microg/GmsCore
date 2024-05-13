@@ -8,7 +8,6 @@ import com.android.vending.EncodedTriple
 import com.android.vending.EncodedTripleWrapper
 import com.android.vending.IntWrapper
 import com.android.vending.LicenseRequestHeader
-import com.android.vending.LicenseResult
 import com.android.vending.Locality
 import com.android.vending.LocalityWrapper
 import com.android.vending.StringWrapper
@@ -26,7 +25,6 @@ import com.android.vending.encodeGzip
 import com.google.android.gms.common.BuildConfig
 import okio.ByteString
 import org.microg.gms.profile.Build
-import org.microg.vending.billing.core.HttpClient
 import java.net.URLEncoder
 import java.util.UUID
 
@@ -35,33 +33,7 @@ private const val TAG = "FakeLicenseRequest"
 private const val BASE64_FLAGS = Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
 private const val FINSKY_VERSION = "Finsky/37.5.24-29%20%5B0%5D%20%5BPR%5D%20565477504"
 
-suspend fun HttpClient.makeLicenseV1Request(
-    packageName: String, auth: String, versionCode: Int, nonce: Long, androidId: Long
-): V1Response? = get(
-        url = "https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=$packageName&vc=$versionCode&nnc=$nonce",
-        headers = getHeaders(auth, androidId),
-        adapter = LicenseResult.ADAPTER
-    ).information?.v1?.let {
-        if (it.result != null && it.signedData != null && it.signature != null) {
-            V1Response(it.result, it.signedData, it.signature)
-        } else null
-    }
-
-suspend fun HttpClient.makeLicenseV2Request(
-    packageName: String,
-    auth: String,
-    versionCode: Int,
-    androidId: Long
-): V2Response? = get(
-    url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
-    headers = getHeaders(auth, androidId),
-    adapter = LicenseResult.ADAPTER
-).information?.v2?.license?.jwt?.let {
-    // Field present ←→ user has license
-    V2Response(LICENSED, it)
-}
-
-private fun getHeaders(auth: String, androidId: Long): Map<String, String> {
+internal fun getLicenseRequestHeaders(auth: String, androidId: Long): Map<String, String> {
     var millis = System.currentTimeMillis()
     val timestamp = TimestampContainer.Builder()
         .container2(
