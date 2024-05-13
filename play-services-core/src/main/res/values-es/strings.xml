@@ -50,7 +50,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="perm_provision_label">prestación de servicios de microG</string>
     <string name="perm_provision_description">Permite a la aplicación configurar los servicios de microG sin la interacción del usuario</string>
     <string name="service_name_checkin">Registro del dispositivo de Google</string>
-    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_mcs">Servicios en la nube</string>
     <string name="service_name_snet">Google SafetyNet</string>
     <string name="games_title">Google Play Juegos</string>
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> quiere usar Play Juegos</string>
@@ -77,7 +77,7 @@ Esto podría tardar algunos minutos."</string>
     <string name="self_check_resolution_system_spoofs">Por favor compruebe la documentación en que pasos se deben seguir.</string>
     <string name="self_check_pkg_gms">Play Services (GmsCore)</string>
     <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
-    <string name="self_check_pkg_gsf">Services Framework (GSF)</string>
+    <string name="self_check_pkg_gsf">Marco de servicios (MSG)</string>
     <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> instalado: </string>
     <string name="self_check_resolution_app_installed">Instala la aplicación <xliff:g example="F-Droid">%1$s</xliff:g> o una compatible. Por favor comprueba la documentación en que aplicaciones son compatibles.</string>
     <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> tiene una firma correcta: </string>
