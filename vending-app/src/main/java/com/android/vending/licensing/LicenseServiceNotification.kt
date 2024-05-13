@@ -138,21 +138,22 @@ class IgnoreReceiver : BroadcastReceiver() {
         Log.d(TAG, "Adding package $newIgnorePackage to ignore list")
 
         ignoreList.add(newIgnorePackage)
-        preferences.edit().putStringSet(PREFERENCES_KEY_IGNORE_PACKAGES_LIST, ignoreList)
+        preferences.edit()
+            .putStringSet(PREFERENCES_KEY_IGNORE_PACKAGES_LIST, ignoreList)
             .apply()
     }
 }
 
 class SignInReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // Dismiss all notifications
 
+        // Dismiss all notifications
         NotificationManagerCompat.from(context).cancelAll()
 
         Log.d(TAG, "Starting sign in activity")
-        val authIntent = Intent(GMS_AUTH_INTENT_ACTION)
-        authIntent.setPackage(GMS_PACKAGE_NAME)
-        authIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(authIntent)
+        Intent(GMS_AUTH_INTENT_ACTION).apply {
+            setPackage(GMS_PACKAGE_NAME)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }.let { context.startActivity(it) }
     }
 }

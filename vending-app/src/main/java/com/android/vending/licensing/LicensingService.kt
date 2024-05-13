@@ -17,15 +17,16 @@ import android.util.Log
 import com.android.vending.VendingPreferences.isLicensingEnabled
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.profile.ProfileManager.ensureInitialized
-import java.util.LinkedList
-import java.util.Queue
+import org.microg.vending.billing.core.HttpClient
 
 class LicensingService : Service() {
     private lateinit var queue: RequestQueue
     private lateinit var accountManager: AccountManager
     private lateinit var androidId: String
+    private lateinit var httpClient: HttpClient
 
     private val mLicenseService: ILicensingService.Stub = object : ILicensingService.Stub() {
 
@@ -34,56 +35,51 @@ class LicensingService : Service() {
             nonce: Long,
             packageName: String,
             listener: ILicenseResultListener
-        ) {
+        ): Unit = runBlocking {
             Log.v(TAG, "checkLicense($nonce, $packageName)")
             val callingUid = getCallingUid()
 
-            if (!isLicensingEnabled(applicationContext)) {
+            if (!isLicensingEnabled(this@LicensingService)) {
                 Log.d(TAG, "not checking license, as it is disabled by user")
-                return
+                return@runBlocking
             }
 
             val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
             val packageManager = packageManager
 
+            lateinit var lastResponse: LicenseResponse
             if (accounts.isEmpty()) {
                 handleNoAccounts(packageName, packageManager)
-            } else {
-                checkLicense(
-                    callingUid, nonce, packageName, packageManager, listener, LinkedList(
-                        listOf(*accounts)
-                    )
-                )
-            }
-        }
+                return@runBlocking
+            } else for (account: Account in accounts) {
 
-        @Throws(RemoteException::class)
-        private fun checkLicense(
-            callingUid: Int, nonce: Long, packageName: String, packageManager: PackageManager,
-            listener: ILicenseResultListener, remainingAccounts: Queue<Account>
-        ) {
-            LicenseChecker.V1().checkLicense(
-                remainingAccounts.poll(),
-                accountManager,
-                androidId,
-                packageName,
-                callingUid,
-                packageManager,
-                queue,
-                nonce
-            ) { responseCode: Int, stringTuple: Pair<String?, String?>? ->
-                if (responseCode != LicenseChecker.LICENSED && !remainingAccounts.isEmpty()) {
-                    checkLicense(
-                        callingUid,
-                        nonce,
-                        packageName,
-                        packageManager,
-                        listener,
-                        remainingAccounts
-                    )
-                } else {
-                    listener.verifyLicense(responseCode, stringTuple?.first, stringTuple?.second)
+                lastResponse = httpClient.checkLicense(
+                    account,
+                    accountManager,
+                    androidId,
+                    packageName,
+                    callingUid,
+                    packageManager,
+                    V1Request(nonce)
+                )
+
+                if (lastResponse.result == LICENSED) {
+                    // Do not consider further accounts
+                    break
                 }
+            }
+
+            /* If a license is found, it is now stored in `lastResponse`. Otherwise, it now contains
+             * an error. In either case, we should send it to the application.
+             */
+            try {
+                when (lastResponse) {
+                    is V1Response -> listener.verifyLicense(lastResponse.result, lastResponse.signedData, lastResponse.signature)
+                    is ErrorResponse -> listener.verifyLicense(lastResponse.result, null, null)
+                    is V2Response -> Unit // should never happen
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Remote threw an exception while returning license result ${lastResponse}")
             }
         }
 
@@ -92,13 +88,13 @@ class LicensingService : Service() {
             packageName: String,
             listener: ILicenseV2ResultListener,
             extraParams: Bundle
-        ) {
+        ): Unit = runBlocking {
             Log.v(TAG, "checkLicenseV2($packageName, $extraParams)")
             val callingUid = getCallingUid()
 
-            if (!isLicensingEnabled(applicationContext)) {
+            if (!isLicensingEnabled(this@LicensingService)) {
                 Log.d(TAG, "not checking license, as it is disabled by user")
-                return
+                return@runBlocking
             }
 
             val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
@@ -106,56 +102,43 @@ class LicensingService : Service() {
 
             if (accounts.isEmpty()) {
                 handleNoAccounts(packageName, packageManager)
-            } else {
-                checkLicenseV2(
-                    callingUid, packageName, packageManager, listener, extraParams, LinkedList(
-                        listOf(*accounts)
-                    )
+                return@runBlocking
+            } else for (account: Account in accounts) {
+
+                val response = httpClient.checkLicense(
+                    account,
+                    accountManager,
+                    androidId,
+                    packageName,
+                    callingUid,
+                    packageManager,
+                    V2Request
                 )
-            }
-        }
 
-        @Throws(RemoteException::class)
-        private fun checkLicenseV2(
-            callingUid: Int, packageName: String, packageManager: PackageManager,
-            listener: ILicenseV2ResultListener, extraParams: Bundle,
-            remainingAccounts: Queue<Account>
-        ) {
-            LicenseChecker.V2().checkLicense(
-                remainingAccounts.poll(),
-                accountManager,
-                androidId,
-                packageName,
-                callingUid,
-                packageManager,
-                queue,
-                Unit
-            ) { responseCode: Int, data: String? ->
-                /*
-                 * Suppress failures on V2. V2 is commonly used by free apps whose checker
-                 * will not throw users out of the app if it never receives a response.
-                 *
-                 * This means that users who are signed in to a Google account will not
-                 * get a worse experience in these apps than users that are not signed in.
-                 */
-                if (responseCode == LicenseChecker.LICENSED) {
+                if (response.result == LICENSED && response is V2Response) {
                     val bundle = Bundle()
-                    bundle.putString(KEY_V2_RESULT_JWT, data)
+                    bundle.putString(KEY_V2_RESULT_JWT, response.jwt)
 
-                    listener.verifyLicense(responseCode, bundle)
-                } else if (!remainingAccounts.isEmpty()) {
-                    checkLicenseV2(
-                        callingUid,
-                        packageName,
-                        packageManager,
-                        listener,
-                        extraParams,
-                        remainingAccounts
-                    )
-                } else {
-                    Log.i(TAG, "Suppressed negative license result for package $packageName")
+                    try {
+                        listener.verifyLicense(response.result, bundle)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Remote threw an exception while returning license result ${response}")
+                    }
                 }
             }
+
+            /*
+             * Suppress failures on V2. V2 is commonly used by free apps whose checker
+             * will not throw users out of the app if it never receives a response.
+             *
+             * This means that users who are signed in to a Google account will not
+             * get a worse experience in these apps than users that are not signed in.
+             *
+             * Normally, we would otherwise send the response NOT_LICENSED with an empty
+             * bundle here.
+             */
+            Log.i(TAG, "Suppressed negative license result for package $packageName")
+
         }
 
         private fun handleNoAccounts(packageName: String, packageManager: PackageManager) {
@@ -195,6 +178,7 @@ class LicensingService : Service() {
         }
         queue = Volley.newRequestQueue(this)
         accountManager = AccountManager.get(this)
+        httpClient = HttpClient(this)
 
         return mLicenseService
     }
