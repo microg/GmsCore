@@ -275,11 +275,154 @@ message ResponseWrapper {
 }
 
 message Payload {
+  DetailsResponse detailsResponse = 2;
+  BuyResponse buyResponse = 4;
   ConsumePurchaseResponse consumePurchaseResponse = 30;
   PurchaseHistoryResponse purchaseHistoryResponse = 67;
   SkuDetailsResponse skuDetailsResponse = 82;
   AcquireResponse acquireResponse = 94;
   AcknowledgePurchaseResponse acknowledgePurchaseResponse = 140;
+}
+
+message DetailsResponse {
+  string analyticsCookie = 2;
+  //Review userReview = 3;
+  Item item = 4;
+  string footerHtml = 5;
+  bytes serverLogsCookie = 6;
+  //DiscoveryBadge discoveryBadge = 7;
+  bool enableReviews = 8;
+  //Features features = 12;
+  string detailsStreamUrl = 13;
+  string userReviewUrl = 14;
+  string postAcquireDetailsStreamUrl = 17;
+}
+
+message BuyResponse {
+  // …
+  string encodedDeliveryToken = 55;
+  // …
+}
+
+message Item {
+  string id = 1;
+  string subId = 2;
+  int32 type = 3;
+  int32 categoryId = 4;
+  string title = 5;
+  string creator = 6;
+  string descriptionHtml = 7;
+  Offer offer = 8;
+//  Availability availability = 9;
+//  repeated Image image = 10;
+  repeated Item subItem = 11;
+//  ContainerMetadata containerMetadata = 12;
+  DocumentDetails details = 13;
+//  AggregateRating aggregateRating = 14;
+//  Annotations annotations = 15;
+  string detailsUrl = 16;
+  string shareUrl = 17;
+  string reviewsUrl = 18;
+  string backendUrl = 19;
+  string purchaseDetailsUrl = 20;
+  bool detailsReusable = 21;
+  string subtitle = 22;
+  string translatedDescriptionHtml = 23;
+  bytes serverLogsCookie = 24;
+//  AppInfo appInfo = 25;
+  bool mature = 26;
+  string promotionalDescription = 27;
+  bool availableForPreregistration = 29;
+//  ReviewTip tip = 30;
+  string reviewSnippetsUrl = 31;
+  bool forceShareability = 32;
+  bool useWishlistAsPrimaryAction = 33;
+  string reviewQuestionsUrl = 34;
+  string reviewSummaryUrl = 39;
+}
+
+message DocumentDetails {
+  AppDetails appDetails = 1;
+//  SubscriptionDetails subscriptionDetails = 7;
+}
+
+message AppDetails {
+  string developerName = 1;
+  int32 majorVersionNumber = 2;
+  int32 versionCode = 3;
+  string versionString = 4;
+  string title = 5;
+  string appCategory = 7;
+  int32 contentRating = 8;
+  int64 infoDownloadSize = 9;
+  string permission = 10;
+  string developerEmail = 11;
+  string developerWebsite = 12;
+  string infoDownload = 13;
+  string packageName = 14;
+  string recentChangesHtml = 15;
+  string infoUpdatedOn = 16;
+//  repeated FileMetadata file = 17;
+  string appType = 18;
+  repeated string certificateHash = 19;
+  bool variesWithDevice = 21;
+//  repeated CertificateSet certificateSet = 22;
+  repeated string autoAcquireFreeAppIfHigherVersionAvailableTag = 23;
+  bool hasInstantLink = 24;
+  repeated string splitId = 25;
+  bool gamepadRequired = 26;
+  bool externallyHosted = 27;
+  bool everExternallyHosted = 28;
+  string installNotes = 30;
+  int32 installLocation = 31;
+  int32 targetSdkVersion = 32;
+  string hasPreregistrationPromoCode = 33;
+//  Dependencies dependencies = 34;
+//  TestingProgramInfo testingProgramInfo = 35;
+//  EarlyAccessInfo earlyAccessInfo = 36;
+//  EditorChoice editorChoice = 41;
+  string instantLink = 43;
+  string developerAddress = 45;
+//  Publisher publisher = 46;
+  string categoryName = 48;
+  int64 downloadCount = 53;
+  string downloadLabelDisplay = 61;
+  string inAppProduct = 67;
+  string downloadLabelAbbreviated = 77;
+  string downloadLabel = 78;
+//  Compatibility compatibility = 82;
+}
+
+message Offer {
+  int64 micros = 1;
+  string currencyCode = 2;
+  string formattedAmount = 3;
+  repeated Offer convertedPrice = 4;
+  bool checkoutFlowRequired = 5;
+  int64 fullPriceMicros = 6;
+  string formattedFullAmount = 7;
+  int32 offerType = 8;
+//  RentalTerms rentalTerms = 9;
+  int64 onSaleDate = 10;
+  repeated string promotionLabel = 11;
+//  SubscriptionTerms subscriptionTerms = 12;
+  string formattedName = 13;
+  string formattedDescription = 14;
+  bool preorder = 15;
+  int32 onSaleDateDisplayTimeZoneOffsetMillis = 16;
+  int32 licensedOfferType = 17;
+//  SubscriptionContentTerms subscriptionContentTerms = 18;
+  string offerId = 19;
+  int64 preorderFulfillmentDisplayDate = 20;
+//  LicenseTerms licenseTerms = 21;
+  bool sale = 22;
+//  VoucherTerms voucherTerms = 23;
+//  OfferPayment offerPayment = 24;
+  bool repeatLastPayment = 25;
+  string buyButtonLabel = 26;
+  bool instantPurchaseEnabled = 27;
+  int64 saleEndTimestamp = 30;
+  string saleMessage = 31;
 }
 
 message AcquireResponse {
