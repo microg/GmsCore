@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.profile.ProfileManager.ensureInitialized
+import org.microg.vending.billing.acquireFreeAppLicense
 import org.microg.vending.billing.core.HttpClient
 
 class LicensingService : Service() {
@@ -83,8 +84,9 @@ class LicensingService : Service() {
                 } catch (e: Exception) {
                     Log.w(TAG, "Remote threw an exception while returning license result ${response}")
                 }
+            } else {
+                Log.i(TAG, "Suppressed negative license result for package $packageName")
             }
-            Log.i(TAG, "Suppressed negative license result for package $packageName")
 
         }
 
@@ -126,30 +128,30 @@ class LicensingService : Service() {
             val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
             val packageManager = packageManager
 
-            lateinit var lastRespone: LicenseResponse
+            lateinit var lastResponse: LicenseResponse
             if (accounts.isEmpty()) {
                 handleNoAccounts(packageName, packageManager)
                 return null
             } else for (account: Account in accounts) {
 
-                lastRespone = httpClient.checkLicense(
+                lastResponse = httpClient.checkLicense(
                     account, accountManager, androidId, packageInfo, packageName, request
                 )
 
-                if (lastRespone.result == LICENSED) {
-                    return lastRespone;
+                if (lastResponse.result == LICENSED) {
+                    return lastResponse;
                 }
             }
 
             // Attempt to acquire license if app is free ("auto-purchase")
             val firstAccount = accounts[0]
-            /* TODO if (acquireFreeAppLicense(firstAccount)) {
-                lastRespone = httpClient.checkLicense(
+            if (httpClient.acquireFreeAppLicense(this@LicensingService, firstAccount, packageName)) {
+                lastResponse = httpClient.checkLicense(
                     firstAccount, accountManager, androidId, packageInfo, packageName, request
                 )
-            }*/
+            }
 
-            return lastRespone
+            return lastResponse
         }
 
         private fun handleNoAccounts(packageName: String, packageManager: PackageManager) {
