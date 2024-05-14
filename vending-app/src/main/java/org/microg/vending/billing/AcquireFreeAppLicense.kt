@@ -35,9 +35,10 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
     }
 
     val item = detailsResult?.item
-    val versionCode = item?.details?.appDetails?.versionCode
-    if (detailsResult == null || versionCode == null) {
-        Log.e(TAG, "Unable to auto-purchase $packageName because the server did not send sufficient details")
+    val appDetails = item?.details?.appDetails
+    val versionCode = appDetails?.versionCode
+    if (detailsResult == null || versionCode == null || appDetails.packageName != packageName) {
+        Log.e(TAG, "Unable to auto-purchase $packageName because the server did not send sufficient or matching details")
         return false
     }
 

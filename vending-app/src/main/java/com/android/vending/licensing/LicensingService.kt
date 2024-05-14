@@ -15,6 +15,7 @@ import android.os.IBinder
 import android.os.RemoteException
 import android.util.Log
 import com.android.vending.VendingPreferences.isLicensingEnabled
+import com.android.vending.VendingPreferences.isLicensingPurchaseFreeAppsEnabled
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import kotlinx.coroutines.runBlocking
@@ -144,11 +145,20 @@ class LicensingService : Service() {
             }
 
             // Attempt to acquire license if app is free ("auto-purchase")
-            val firstAccount = accounts[0]
-            if (httpClient.acquireFreeAppLicense(this@LicensingService, firstAccount, packageName)) {
-                lastResponse = httpClient.checkLicense(
-                    firstAccount, accountManager, androidId, packageInfo, packageName, request
-                )
+            if (isLicensingPurchaseFreeAppsEnabled(this@LicensingService)) {
+                val firstAccount = accounts[0]
+                if (httpClient.acquireFreeAppLicense(
+                        this@LicensingService,
+                        firstAccount,
+                        packageName
+                    )
+                ) {
+                    lastResponse = httpClient.checkLicense(
+                        firstAccount, accountManager, androidId, packageInfo, packageName, request
+                    )
+                }
+            } else {
+                Log.d(TAG, "Not auto-purchasing $packageName as it is disabled by the user")
             }
 
             return lastResponse
