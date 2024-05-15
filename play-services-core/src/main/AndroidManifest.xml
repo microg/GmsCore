@@ -954,6 +954,12 @@
             </intent-filter>
         </service>
 
+        <service android:name="org.microg.gms.common.ClientTelemetryService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.common.telemetry.service.START" />
+            </intent-filter>
+        </service>
+
         <service android:name="org.microg.gms.DummyService">
             <intent-filter>
                 <action android:name="com.google.android.contextmanager.service.ContextManagerService.START" />
@@ -992,7 +998,6 @@
                 <action android:name="com.google.android.gms.chromesync.service.START" />
                 <action android:name="com.google.android.gms.common.download.START" />
                 <action android:name="com.google.android.gms.common.service.START" />
-                <action android:name="com.google.android.gms.common.telemetry.service.START" />
                 <action android:name="com.google.android.gms.config.START" />
                 <action android:name="com.google.android.gms.constellation.service.START" />
                 <action android:name="com.google.android.gms.deviceconnection.service.START" />
