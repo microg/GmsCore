@@ -234,4 +234,10 @@
     <string name="signin_confirm_button_text">允許與分享</string>
     <string name="signin_subtext_policy">在使用此應用程式之前，請檢查其%1$s和%2$s。</string>
     <string name="pref_safetynet_recent_eval_type">評估類型</string>
+    <string name="credentials_assisted_cancel">取消</string>
+    <string name="credentials_assisted_continue">下一步</string>
+    <string name="credentials_assisted_confirmation_header">將你登入</string>
+    <string name="credentials_assisted_continue_as_user_button_label">以「%1$s」的身分繼續</string>
+    <string name="credentials_assisted_signin_consent_header">以「%1$s」的身分登入</string>
+    <string name="credentials_assisted_signin_consent">繼續即表示</string>
 </resources>

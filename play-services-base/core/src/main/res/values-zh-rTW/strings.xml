@@ -2,10 +2,15 @@
 <!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-
-<resources>
+  --><resources>
     <string name="menu_advanced">進階</string>
-
     <string name="list_no_item_none">無</string>
+    <string name="foreground_service_notification_title">在背景運作</string>
+    <string name="service_status_disabled">已停用</string>
+    <string name="service_status_automatic">自動</string>
+    <string name="service_status_enabled">已啟用</string>
+    <string name="service_status_enabled_short">開啟</string>
+    <string name="service_status_disabled_short">關閉</string>
+    <string name="service_status_manual">手動</string>
+    <string name="open_app">開啟</string>
 </resources>

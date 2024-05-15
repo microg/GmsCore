@@ -15,8 +15,7 @@
   ~ limitations under the License.
   --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="pref_unifiednlp_summary">
-        <item quantity="one">已設定<xliff:g example="1">%1$d</xliff:g>個背景伺服器</item>
-        <item quantity="other">已設定<xliff:g example="3">%1$d</xliff:g>個背景伺服器</item>
+        <item quantity="other">已設定 <xliff:g example="3">%1$d</xliff:g> 個背景伺服器</item>
     </plurals>
     <plurals name="gcm_registered_apps_counter">
         <item quantity="one">已註冊<xliff:g example="1">%1$d</xliff:g>個程式</item>

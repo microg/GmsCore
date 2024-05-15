@@ -98,7 +98,7 @@
     <string name="permission_scope_www.googleapis.com_auth_androidpublisher">使用 Google Play Android 開發者的權限</string>
     <string name="permission_scope_www.googleapis.com_auth_appengine.admin">程式引擎最高權限。</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Groups Migration API 的讀寫權限。</string>
-    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">閱覽並管理 Google 程式群組的設定</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">查看及管理 Google 程式群組的設定</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.licensing">License Manager API 的讀寫權限。</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order">供轉銷商管理員和使用者在 API 沙盒中測試時取得讀取 / 寫入存取權限，或在直接呼叫 API 操作時取得讀取/寫入存取權限。</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">除了整體讀取 / 寫入 OAuth 範圍外，在檢索客戶資料時還使用唯讀 OAuth 範圍。</string>
