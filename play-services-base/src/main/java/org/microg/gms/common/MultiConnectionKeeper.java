@@ -74,6 +74,10 @@ public class MultiConnectionKeeper {
         return signatureIsIn(pm, packageId, signatures);
     }
 
+    private Boolean isSystemGoogleOrMicrogSig(PackageManager pm, String packageId) throws PackageManager.NameNotFoundException {
+        return isSystem(pm, packageId) || isGoogleOrMicrogSig(pm, packageId);
+    }
+
     private Boolean isMicrogSig(PackageManager pm, String packageId) throws PackageManager.NameNotFoundException {
         List<String> signatures = Arrays.asList(MICROG_PRIMARY_KEYS);
         return signatureIsIn(pm, packageId, signatures);
@@ -112,7 +116,7 @@ public class MultiConnectionKeeper {
         // Pref: gms > microG > self
         PackageManager pm = context.getPackageManager();
         try {
-            if (isSystem(pm, GMS_PACKAGE_NAME) || isGoogleOrMicrogSig(pm, GMS_PACKAGE_NAME)) {
+            if (isSystemGoogleOrMicrogSig(pm, GMS_PACKAGE_NAME)) {
                 Log.d(TAG, GMS_PACKAGE_NAME + " found !");
                 return GMS_PACKAGE_NAME;
             } else {
@@ -242,15 +246,24 @@ public class MultiConnectionKeeper {
         private Intent getIntent() {
             Intent intent;
             ResolveInfo resolveInfo;
+            PackageManager pm = context.getPackageManager();
             if (!Objects.equals(targetPackage, context.getPackageName())) {
                 intent = new Intent(actionString).setPackage(targetPackage);
-                if ((resolveInfo = context.getPackageManager().resolveService(intent, 0)) != null) {
-                    if (requireMicrog && !isMicrog(resolveInfo)) {
-                        Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
-                    } else {
-                        Log.d(TAG, "GMS service found for " + actionString);
-                        return intent;
+                try {
+                    if ((resolveInfo = context.getPackageManager().resolveService(intent, 0)) != null) {
+                        if (requireMicrog && !isMicrog(resolveInfo)) {
+                            Log.w(TAG, "GMS service found for " + actionString + " but looks not like microG");
+                        } else {
+                            if (isSystemGoogleOrMicrogSig(pm, targetPackage)){
+                                Log.d(TAG, "GMS service found for " + actionString);
+                                return intent;
+                            } else {
+                                Log.w(TAG, "GMS service found for " + actionString + " but is not system, and doesn't have microG or Google signature");
+                            }
+                        }
                     }
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.d(TAG, targetPackage + " not found");
                 }
             }
             intent = new Intent(actionString).setPackage(context.getPackageName());
