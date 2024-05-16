@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -130,27 +131,17 @@ public class MultiConnectionKeeper {
         } catch (PackageManager.NameNotFoundException e) {
             Log.d(TAG, USER_MICROG_PACKAGE_NAME + " not found");
         }
-        return null;
+        return context.getPackageName();
     }
 
     private String getTargetPackage() {
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        final String SELF = "SELF";
         String target;
         if ((target = prefs.getString(PREF_TARGET, null)) != null) {
-            switch (target) {
-                case GMS_PACKAGE_NAME:
-                case USER_MICROG_PACKAGE_NAME:
-                    return target;
-                case SELF:
-                    return null;
-            }
+            return target;
         }
-        if ((target = getTargetPackageWithoutPref()) == null ) {
-            prefs.edit().putString(PREF_TARGET, SELF).apply();
-        } else {
-            prefs.edit().putString(PREF_TARGET, target).apply();
-        }
+        target = getTargetPackageWithoutPref();
+        prefs.edit().putString(PREF_TARGET, target).apply();
         return target;
     }
 
@@ -251,7 +242,7 @@ public class MultiConnectionKeeper {
         private Intent getIntent() {
             Intent intent;
             ResolveInfo resolveInfo;
-            if (targetPackage != null) {
+            if (!Objects.equals(targetPackage, context.getPackageName())) {
                 intent = new Intent(actionString).setPackage(targetPackage);
                 if ((resolveInfo = context.getPackageManager().resolveService(intent, 0)) != null) {
                     if (requireMicrog && !isMicrog(resolveInfo)) {
