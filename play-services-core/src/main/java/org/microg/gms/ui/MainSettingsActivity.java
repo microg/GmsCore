@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
@@ -20,6 +19,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import org.microg.gms.common.Constants;
 import org.microg.gms.ui.settings.SettingsProvider;
 
+import static org.microg.gms.ui.UtilsKt.buildAlertDialog;
 import static org.microg.gms.ui.settings.SettingsProviderKt.getAllSettingsProviders;
 
 public class MainSettingsActivity extends AppCompatActivity {
@@ -36,15 +36,14 @@ public class MainSettingsActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(FIRST_RUN_MASTER, MODE_PRIVATE);
         if (BuildConfig.APPLICATION_ID == Constants.USER_MICROG_PACKAGE_NAME &&
                 prefs.getBoolean(FIRST_RUN_PREF, true)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            builder.setMessage(R.string.limited_services_dialog_information)
+            buildAlertDialog(this)
+                    .setMessage(R.string.limited_services_dialog_information)
                     .setTitle(R.string.limited_services_app_name)
                     .setPositiveButton(R.string.limited_services_dialog_information_ack, (dialog, id) -> {
                         prefs.edit().putBoolean(FIRST_RUN_PREF, false).apply();
-                    });
-
-            builder.create().show();
+                    })
+                    .create()
+                    .show();
         }
     }
 
