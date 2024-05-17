@@ -165,4 +165,9 @@
     <string name="permission_scope_www.googleapis.com_auth_gmail.modify">除立即和永久性删除信息以外的读/写权限（不含回收站）。</string>
     <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Shopping Content API 的读/写权限。</string>
     <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Glass 时间轴权限</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">在整体读取 / 写入 Oauth 范围之外，在获取用户资料时还使用只读 Oauth 范围。</string>
+    <string name="permission_scope_www.googleapis.com_auth_appstate">应用状态服务的运行权限。</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate.readonly">查看您的 Google Coordinate jobs</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate">查看并管理您的 Google Maps Coordinate jobs</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.install">让用户允许安装应用的特殊权限</string>
 </resources>
