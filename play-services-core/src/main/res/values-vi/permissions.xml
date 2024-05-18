@@ -2,4 +2,23 @@
 <resources>
     <string name="permission_service_cp_label">Danh bạ</string>
     <string name="permission_service_cp_description">Cho phép ứng dụng truy cập Danh bạ thông qua bất kỳ tài khoản Google nào được liên kết.</string>
+    <string name="permission_service_android_label">Dịch vụ Android</string>
+    <string name="permission_service_android_description">Cho phép ứng dụng truy cập các dịch vụ Android thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">Cho phép ứng dụng truy cập AdWords thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Cho phép ứng dụng truy cập Blogger thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="permission_service_cl_label">Lịch Google</string>
+    <string name="permission_service_cl_description">Cho phép ứng dụng truy cập Lịch Google thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">Xem tài khoản YouTube của bạn</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">Xem báo cáo phân tích YouTube cho nội dung YouTube của bạn</string>
+    <string name="permission_service_all_label">Tất cả dịch vụ Gooogle</string>
+    <string name="permission_service_all_description">Cho phép ứng dụng truy cập tất cả các dịch vụ của Google thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Cho phép ứng dụng truy cập AdSense thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="permission_service_ah_description">Cho phép ứng dụng truy cập Google App Engine thông qua bất cứ tài khoản Google nào được liên kết.</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">Xem báo cáo tiền tệ YouTube Analytics cho nội dung YouTube của bạn</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.upload">Quản lý video YouTube của bạn</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtubepartner">Xem và quản lý nội dung của bạn và nội dung liên quan trên YouTube</string>
 </resources>
