@@ -21,12 +21,14 @@ import com.android.vending.TimestampWrapper
 import com.android.vending.UnknownByte12
 import com.android.vending.UserAgent
 import com.android.vending.Uuid
-import com.android.vending.encodeGzip
 import com.google.android.gms.common.BuildConfig
 import okio.ByteString
 import org.microg.gms.profile.Build
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.net.URLEncoder
 import java.util.UUID
+import java.util.zip.GZIPOutputStream
 
 private const val TAG = "FakeLicenseRequest"
 
@@ -155,4 +157,22 @@ private fun makeTimestamp(millis: Long): Timestamp {
 
 private fun encodeString(s: String?): String {
     return URLEncoder.encode(s).replace("+", "%20")
+}
+
+/**
+ * From [StackOverflow](https://stackoverflow.com/a/46688434/), CC BY-SA 4.0 by Sergey Frolov, adapted.
+ */
+fun ByteArray.encodeGzip(): ByteArray {
+    try {
+        ByteArrayOutputStream().use { byteOutput ->
+            GZIPOutputStream(byteOutput).use { gzipOutput ->
+                gzipOutput.write(this)
+                gzipOutput.finish()
+                return byteOutput.toByteArray()
+            }
+        }
+    } catch (e: IOException) {
+        Log.e(TAG, "Failed to encode bytes as GZIP")
+        return ByteArray(0)
+    }
 }

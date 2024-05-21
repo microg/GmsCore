@@ -2,16 +2,20 @@ package com.android.vending.licensing
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.accounts.AccountManagerFuture
 import android.accounts.AuthenticatorException
 import android.accounts.OperationCanceledException
 import android.content.pm.PackageInfo
+import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
 import com.android.vending.LicenseResult
-import com.android.vending.getAuthToken
 import com.android.volley.VolleyError
 import org.microg.vending.billing.core.HttpClient
 import java.io.IOException
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "FakeLicenseChecker"
 
@@ -66,6 +70,28 @@ const val ERROR_INVALID_PACKAGE_NAME: Int = 0x102
 const val ERROR_NON_MATCHING_UID: Int = 0x103
 
 const val AUTH_TOKEN_SCOPE: String = "oauth2:https://www.googleapis.com/auth/googleplay"
+
+sealed class LicenseRequestParameters
+data class V1Parameters(
+    val nonce: Long
+) : LicenseRequestParameters()
+object V2Parameters : LicenseRequestParameters()
+
+sealed class LicenseResponse(
+    val result: Int
+)
+class V1Response(
+    result: Int,
+    val signedData: String,
+    val signature: String
+) : LicenseResponse(result)
+class V2Response(
+    result: Int,
+    val jwt: String?
+): LicenseResponse(result)
+class ErrorResponse(
+    result: Int
+): LicenseResponse(result)
 
 /**
  * Performs license check including caller UID verification, using a given account, for which
@@ -141,24 +167,15 @@ suspend fun HttpClient.makeLicenseV2Request(
     V2Response(LICENSED, it)
 }
 
-sealed class LicenseRequestParameters
-data class V1Parameters(
-    val nonce: Long
-) : LicenseRequestParameters()
-object V2Parameters : LicenseRequestParameters()
 
-sealed class LicenseResponse(
-    val result: Int
-)
-class V1Response(
-    result: Int,
-    val signedData: String,
-    val signature: String
-) : LicenseResponse(result)
-class V2Response(
-    result: Int,
-    val jwt: String?
-): LicenseResponse(result)
-class ErrorResponse(
-    result: Int
-): LicenseResponse(result)
+suspend fun AccountManager.getAuthToken(account: Account, authTokenType: String, notifyAuthFailure: Boolean) =
+    suspendCoroutine { continuation ->
+        getAuthToken(account, authTokenType, notifyAuthFailure, { future: AccountManagerFuture<Bundle> ->
+            try {
+                val result = future.result
+                continuation.resume(result)
+            } catch (e: Exception) {
+                continuation.resumeWithException(e)
+            }
+        }, null)
+    }
