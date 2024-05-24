@@ -32,7 +32,7 @@ internal const val INTENT_KEY_ACCOUNT_NAME = "accountName"
 class AccountActionActivity : ComponentActivity() {
 
     // mutableStateMapOf() returns an unordered map
-    val taskMap: MutableList<Pair<Requirement, Boolean>> = mutableStateListOf()
+    private val taskMap: MutableList<Pair<Requirement, Boolean>> = mutableStateListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
