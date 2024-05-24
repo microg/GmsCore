@@ -3,6 +3,7 @@ package org.microg.gms.cryptauth
 import android.accounts.Account
 import android.app.KeyguardManager
 import android.content.Context
+import android.util.Base64
 import android.util.Log
 import com.google.android.gms.BuildConfig
 import com.google.android.gms.common.Scopes
@@ -28,6 +29,8 @@ import org.microg.gms.profile.Build
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
+import java.security.KeyPairGenerator
+import java.security.MessageDigest
 import kotlin.math.roundToInt
 
 private const val SYNC_KEY_URL = "https://cryptauthenrollment.googleapis.com/v1:syncKeys"
@@ -35,12 +38,16 @@ private const val API_KEY = "AIzaSyAP-gfH3qvi6vgHZbSYwQ_XHqV_mXHhzIk"
 private const val CERTIFICATE = "58E1C4133F7441EC3D2C270270A14802DA47BA0E"
 private const val TAG = "SyncKeysRequest"
 
-private const val GCM_REGISTER_SENDER = "745476177629"
-private const val GCM_REGISTER_SUBTYPE = "745476177629"
-private const val GCM_REGISTER_SUBSCRIPTION = "745476177629"
+private const val GCM_REGISTER_SENDER = "16502139086"
+private const val GCM_REGISTER_SUBTYPE = "16502139086"
+private const val GCM_REGISTER_SUBSCRIPTION = "16502139086"
 private const val GCM_REGISTER_SCOPE = "GCM"
+private const val GCM_REGISTER_CLIV = "iid-202414000"
+private const val GCM_REGISTER_INFO = "0wqs6iYsl_URQEb1aBJ6XhzCbHSr-hg"
 
-private const val AFTER_REQUEST_DELAY = 500L
+private const val RSA_KEY_SIZE = 2048
+
+private const val AFTER_REQUEST_DELAY = 750L
 
 suspend fun syncCryptAuthKeys(context: Context, account: Account): JSONObject? = syncCryptAuthKeys(context, account.name)
 suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject? {
@@ -48,6 +55,7 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
     val lastCheckinInfo = LastCheckinInfo.read(context)
 
     // Instance ID token for use in CryptAuth query
+    val instanceId = generateAppId()
     val instanceToken = completeRegisterRequest(context, GcmDatabase(context), RegisterRequest().build(context)
         .checkin(lastCheckinInfo)
         .app("com.google.android.gms", CERTIFICATE.lowercase(), BuildConfig.VERSION_CODE)
@@ -57,14 +65,15 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
         .extraParam("subtype", GCM_REGISTER_SUBTYPE)
         .extraParam("X-subtype", GCM_REGISTER_SUBTYPE)
         .extraParam("app_ver", BuildConfig.VERSION_CODE.toString())
-        .extraParam("osv", "30")
-        .extraParam("cliv", "iid-202414000")
+        .extraParam("osv", "29")
+        .extraParam("cliv", GCM_REGISTER_CLIV)
         .extraParam("gmsv", BuildConfig.VERSION_CODE.toString())
+        .extraParam("appid", instanceId)
+        .extraParam("scope", GCM_REGISTER_SCOPE)
         .extraParam("app_ver_name","%09d".format(BuildConfig.VERSION_CODE).let {
             "${it.substring(0, 2)}.${it.substring(2, 4)}.${it.substring(4, 6)} (190800-{{cl}})"
         })
-        .info("s_mGjPgQdoQeQEb1aBJ6XhxiEx997Bg")
-        .extraParam("scope", GCM_REGISTER_SCOPE)
+        .info(GCM_REGISTER_INFO)
     ).let {
         if (!it.containsKey(GcmConstants.EXTRA_REGISTRATION_ID)) {
             Log.d(TAG, "No instance ID was gathered. Is GCM enabled, has there been a checkin?")
@@ -72,7 +81,6 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
         }
         it.getString(GcmConstants.EXTRA_REGISTRATION_ID)!!
     }
-    val instanceId = instanceToken.split(':')[0]
 
     // CryptAuth sync request tells server whether or not screenlock is enabled
     val cryptauthService = AuthConstants.SCOPE_OAUTH2 + Scopes.CRYPTAUTH
@@ -172,12 +180,28 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
     }
 }
 
+/**
+ * Generates an app / instance ID based on the hash of the public key of an RSA keypair.
+ * The key itself is never used.
+ */
+fun generateAppId(): String {
+    val rsaGenerator = KeyPairGenerator.getInstance("RSA")
+    rsaGenerator.initialize(RSA_KEY_SIZE)
+    val keyPair = rsaGenerator.generateKeyPair()
+
+    val digest = MessageDigest.getInstance("SHA1").digest(keyPair.public.encoded)
+    digest[0] = ((112 + (0xF and digest[0].toInt())) and 0xFF).toByte()
+    return Base64.encodeToString(
+        digest, 0, 8, Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
+    )
+}
+
 fun Context.isLockscreenConfigured(): Boolean {
     val service: KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-        return service.isDeviceSecure
+    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+        service.isDeviceSecure
     } else {
-        return service.isKeyguardSecure
+        service.isKeyguardSecure
     }
 }
 
