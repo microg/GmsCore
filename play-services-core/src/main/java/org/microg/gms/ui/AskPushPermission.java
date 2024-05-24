@@ -38,14 +38,14 @@ public class AskPushPermission extends FragmentActivity {
 
         packageName = getIntent().getStringExtra(EXTRA_REQUESTED_PACKAGE);
         resultReceiver = getIntent().getParcelableExtra(EXTRA_RESULT_RECEIVER);
-        boolean force = getIntent().getBooleanExtra(EXTRA_FORCE_ASK, false);
-        if (packageName == null || (resultReceiver == null && !force)) {
+        boolean forceAsk = getIntent().getBooleanExtra(EXTRA_FORCE_ASK, false);
+        if (packageName == null || (resultReceiver == null && !forceAsk)) {
             answered = true;
             finish();
             return;
         }
 
-        if (!force && database.getApp(packageName) != null) {
+        if (!forceAsk && database.getApp(packageName) != null) {
             resultReceiver.send(Activity.RESULT_OK, Bundle.EMPTY);
             answered = true;
             finish();
