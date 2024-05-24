@@ -135,6 +135,35 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
     }
 }
 
+fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Account, retryFunction: RetryFunction<T>): T? {
+    when (this) {
+        CryptAuthSyncKeys -> {
+            Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
+            runBlocking {
+                syncCryptAuthKeys(context, account)
+            }
+            return retryFunction.run()
+        }
+        is NoResolution -> {
+            Log.w(TAG, "This account cannot be used with microG due to $reason")
+            return null
+        }
+        is UserSatisfyRequirements -> {
+            Log.w(TAG, "User intervention required! You need to ${actions.joinToString(", ")}.")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                AccountActionActivity.createIntent(context, account, this).let {
+                    context.startActivity(it)
+                }
+            }
+            return null
+        }
+        Reauthenticate -> {
+            Log.w(TAG, "Your account credentials have expired! Please remove the account, then sign in again.")
+            return null
+        }
+    }
+}
+
 interface RetryFunction<T> {
     @Throws(IOException::class)
     fun run(): T

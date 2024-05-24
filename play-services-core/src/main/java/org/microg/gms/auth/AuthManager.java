@@ -277,6 +277,29 @@ public class AuthManager {
         }
     }
 
+    public AuthResponse requestAuthWithForegroundResolution(boolean legacy) throws IOException {
+        try {
+            return requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution != null) {
+                    return ErrorResolverKt.initiateFromForegroundBlocking(
+                            errorResolution,
+                            context,
+                            getAccount(),
+                            // infinite loop is prevented
+                            () -> requestAuth(legacy)
+                    );
+                } else {
+                    throw new IOException(e);
+                }
+            } else {
+                throw new IOException(e);
+            }
+        }
+    }
+
     public AuthResponse requestAuth(boolean legacy) throws IOException {
         if (service.equals(AuthConstants.SCOPE_GET_ACCOUNT_ID)) {
             AuthResponse response = new AuthResponse();

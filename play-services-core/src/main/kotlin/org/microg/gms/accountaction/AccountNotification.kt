@@ -24,10 +24,7 @@ fun Context.sendAccountActionNotification(account: Account, action: UserSatisfyR
 
     registerAccountNotificationChannel()
 
-    val intent: PendingIntent =Intent(this, AccountActionActivity::class.java).apply {
-        putExtra(INTENT_KEY_USER_ACTION, action.actions.toTypedArray())
-        putExtra(INTENT_KEY_ACCOUNT_NAME, account.name)
-    }.let {
+    val intent: PendingIntent = AccountActionActivity.createIntent(this, account, action).let {
         PendingIntent.getActivity(
             this,
             account.hashCode(),

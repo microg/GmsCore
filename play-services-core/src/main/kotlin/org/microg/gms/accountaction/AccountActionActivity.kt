@@ -1,5 +1,8 @@
 package org.microg.gms.accountaction
 
+import android.accounts.Account
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -57,6 +60,14 @@ class AccountActionActivity : ComponentActivity() {
         for ((index, task) in taskMap.withIndex()) {
             taskMap[index] = task.component1() to checkRequirementSatisfied(task.component1())
         }
+    }
+
+    companion object {
+        fun createIntent(context: Context, account: Account, action: UserSatisfyRequirements) =
+            Intent(context, AccountActionActivity::class.java).apply {
+                putExtra(INTENT_KEY_USER_ACTION, action.actions.toTypedArray())
+                putExtra(INTENT_KEY_ACCOUNT_NAME, account.name)
+            }
     }
 }
 

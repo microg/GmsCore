@@ -119,7 +119,7 @@ suspend fun syncCryptAuthKeys(context: Context, accountName: String): JSONObject
         "syncSingleKeyRequests" to jsonArrayOf(
             jsonObjectOf(
                 "keyName" to "PublicKey",
-                "keyHandles" to "ZGV2aWNlX2tleQo=" // base64 for `device_key`<
+                "keyHandles" to "ZGV2aWNlX2tleQo=" // base64 for `device_key`
             )
         ),
         "clientMetadata" to jsonObjectOf(
