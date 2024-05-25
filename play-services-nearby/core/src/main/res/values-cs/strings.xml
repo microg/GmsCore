@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="exposure_notify_off_title">Oznámení o možném kontaktu nejsou aktivní</string>
+    <string name="exposure_notify_off_bluetooth">Pro získávání oznámení o možném kontaktu musíte povolit Bluetooth.</string>
+    <string name="exposure_notify_off_location">Pro získávání oznámení o možném kontaktu je vyžadován přístup k poloze.</string>
+    <string name="exposure_notify_off_nearby">Oznámení o možném kontaktu vyžadují dodatečná oprávnění pro správnou funkčnost</string>
+    <string name="service_name_exposure">Oznámení o možném kontaktu</string>
+    <string name="pref_exposure_enable_info_summary">Pro zapnutí oznámení o možném kontaktu otevřete podporovanou aplikaci.</string>
+    <string name="prefcat_exposure_apps_title">Aplikace používající oznámení o možném kontaktu</string>
+    <string name="pref_exposure_collected_rpis_title">Nasbíraná ID</string>
+    <string name="pref_exposure_collected_rpis_summary"><xliff:g example="63">%1$d</xliff:g> ID v poslední hodině</string>
+    <string name="pref_exposure_advertising_id_title">Aktuálně vysílané ID</string>
+    <string name="prefcat_exposure_app_report_title">Nahlášené kontakty</string>
+    <string name="pref_exposure_app_report_updated_title">Aktualizováno: <xliff:g example="dnes, 14:02">%1$s</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_time_short">Méně než 5 minut</string>
+    <string name="pref_exposure_app_report_entry_time_about">Asi <xliff:g example="13">%1$d</xliff:g> minut</string>
+    <string name="pref_exposure_app_report_entry_distance_close">blízký kontakt</string>
+    <string name="pref_exposure_app_report_entry_distance_far">vzdálený kontakt</string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="Asi 12 minut">%1$s</xliff:g>, <xliff:g example="vzdálený kontakt">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_no">Nenahlášeny žádné kontakty.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">Nahlášeno <xliff:g example="3">%1$d</xliff:g> kontaktů:</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Včera, 12:00 - 14:00">%1$s</xliff:g>, rizikové skóre <xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> volání na <xliff:g example="provideDiagnosisKeys">%2$s</xliff:g></string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> nasbíraných ID</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Žádné záznamy</string>
+    <string name="pref_exposure_rpi_delete_all_title">Odstranit</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Odstranit všechna nasbíraná ID</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Odstraněním nasbíraných ID znemožníte upozornění v případě, že byl v posledních 14 dnech diagnostikován některý z vašich kontaktů.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Přesto odstranit</string>
+    <string name="pref_exposure_rpi_export_title">Exportovat</string>
+    <string name="pref_exposure_rpi_export_summary">Exportovat nasbíraná ID pro rozšířenou analýzu v jiné aplikaci.</string>
+    <string name="exposure_enable_switch">Používat oznámení o možném kontaktu</string>
+    <string name="exposure_confirm_start_title">Zapnout oznámení o možném kontaktu?</string>
+    <string name="exposure_confirm_start_summary">Váš telefon potřebuje používat Bluetooth pro bezpečné sbírání a sdílení ID s ostatními telefony, které jsou v okolí. \u0020Aplikace <xliff:g example="eRouška">%1$s</xliff:g> vám může oznámit, zda jste se setkali s někým, kdo byl nahlášen jako pozitivní. \u0020Datum, doba trvání a síla signálu spojené s kontaktem budou sdíleny s touto aplikací.</string>
+    <string name="exposure_confirm_start_button">Zapnout</string>
+    <string name="exposure_confirm_stop_title">Vypnout oznámení o možném kontaktu?</string>
+    <string name="exposure_confirm_stop_summary">Po vypnutí oznámení o možném kontaktu již nebudete upozorněni, zda jste se setkali s někým, kdo byl nahlášen jako pozitivní.</string>
+    <string name="exposure_confirm_stop_button">Vypnout</string>
+    <string name="exposure_confirm_keys_title">Chcete sdílet vaše ID s aplikací <xliff:g example="eRouška">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_button">Sdílet</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="Služby microG">%1$s</xliff:g> vyžadují dodatečná oprávnění.</string>
+    <string name="exposure_confirm_permission_button">Udělit</string>
+    <string name="exposure_confirm_bluetooth_description">Je třeba povolit Bluetooth.</string>
+    <string name="exposure_confirm_location_description">Je vyžadován přístup k poloze.</string>
+    <string name="exposure_confirm_button">Zapnout</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Klepněte pro udělení požadovaných oprávnění službe oznámení o možném kontaktu</string>
+    <string name="exposure_grant_background_location_description">Skoro hotovo! Povolte prosím přístup k poloze na pozadí klepnutím na možnost„Povolit vždy“ na další obrazovce. Poté se vraťte zpět.</string>
+    <string name="exposure_notify_off_bluetooth_location">Pro získávání oznámení o možném kontaktu je vyžadován přístup k Bluetooth a k poloze.</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID za hodinu</string>
+    <string name="pref_exposure_error_bluetooth_off_title">Zapnout Bluetooth</string>
+    <string name="pref_exposure_error_bluetooth_unsupported_summary">Vaše zařízení bohužel není kompatibilní s oznámeními o možném kontaktu.</string>
+    <string name="pref_exposure_app_last_report_summary_encounters_suffix">Poznámka: rizikové skóre je definováno aplikací. Vysoká čísla mohou znamenat nízké riziko nebo naopak.</string>
+    <string name="pref_exposure_error_location_off_title">Otevřít nastavení polohy</string>
+    <string name="pref_exposure_app_api_usage_title">Využití API v posledních 14 dnech</string>
+    <string name="pref_exposure_info_summary">Rozhraní API oznámení o možném kontaktu umožňuje aplikacím vás upozornit, pokud jste se setkali s někým, kdo byl nahlášen jako pozitivní.
+\n
+\nDatum, doba trvání a síla signálu spojené s kontaktem budou sdíleny s odpovídající aplikací.</string>
+    <string name="pref_exposure_error_bluetooth_no_advertise_summary">Vaše zařízení je bohužel jen částečně kompatibilní s oznámeními o možném kontaktu. Budete upozorněni na rizikové kontakty, nebudete ale moci upozornit ostatní.</string>
+    <string name="pref_exposure_rpis_details_summary">Při povoleném rozhraní API oznámení o možném kontaktu bude vaše zařízení pasivně získávat ID (nazývané Rolling Proximity Identifiers, neboli RPI) z okolních zařízení.
+\n
+\nJakmile bude majitel zařízení nahlášen jako pozitivní, může být sdíleno jeho ID. Vaše zařízení kontroluje, zda se některé ze známých ID shoduje s nasbíranými ID a vypočítá riziko vašeho nakažení.</string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">Zpracováno <xliff:g example="121031">%1$d</xliff:g> diagnostických klíčů.</string>
+    <string name="exposure_confirm_keys_summary">Vaše ID z posledních 14 dnů budou použita pro pomoc s upozorněním lidí, poblíž kterých jste se nacházeli, o možném kontaktu.
+\n
+\nVaše identita nebo výsledek testu nebudou s ostatními lidmi sdíleny.</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Vyžadována nová oprávnění</string>
+    <string name="exposure_grant_background_location_button">Upravit nastavení</string>
+</resources>

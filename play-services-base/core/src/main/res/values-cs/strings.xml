@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="foreground_service_notification_title">Aktivní na pozadí</string>
+    <string name="foreground_service_notification_text"><xliff:g example="Oznámení o možném kontaktu">%1$s</xliff:g> běží na pozadí.</string>
+    <string name="foreground_service_notification_big_text">Pro skrytí tohoto oznámení vypněte optimalizaci baterie pro <xliff:g example="Služby microG">%1$s</xliff:g> nebo změňte nastavení oznámení.</string>
+    <string name="list_no_item_none">Žádné</string>
+    <string name="list_item_see_all">Zobrazit vše</string>
+    <string name="open_app">Otevřít</string>
+    <string name="service_status_disabled">Zakázáno</string>
+    <string name="service_status_enabled">Povoleno</string>
+    <string name="service_status_enabled_short">Zap</string>
+    <string name="menu_advanced">Pokročilé</string>
+    <string name="service_status_automatic">Automatické</string>
+    <string name="service_status_manual">Ruční</string>
+    <string name="service_status_disabled_short">Vyp</string>
+</resources>
