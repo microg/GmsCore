@@ -309,13 +309,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
         Log.d(TAG, "setOnCameraChangeListener");
         cameraChangeListener = listener
-        it.setOnCameraIdleListener {
-            try {
-                cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
-            } catch (e: Exception) {
-                Log.w(TAG, e)
-            }
-        }
+//        it.setOnCameraIdleListener {
+//            try {
+//                cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
+//            } catch (e: Exception) {
+//                Log.w(TAG, e)
+//            }
+//        }
     }
 
     override fun setOnCircleClickListener(listener: IOnCircleClickListener?) = afterInitialize { hmap ->
@@ -509,7 +509,15 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         cameraMoveListener = listener
         it.setOnCameraMoveListener {
             try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if(mapView != null){
+                        if(mapView!!.parent != null){
+                            mapView!!.parent.onDescendantInvalidated(mapView!!,mapView!!)
+                        }
+                    }
+                }
                 cameraMoveListener?.onCameraMove()
+                cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
