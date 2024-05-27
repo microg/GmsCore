@@ -25,13 +25,13 @@
 
     <string name="prefcat_setup">Установить</string>
 
-    <string name="self_check_title">Проверка работоспособности</string>
+    <string name="self_check_title">Работоспособность</string>
     <string name="self_check_desc">Проверьте, правильно ли настроена система для использования microG.</string>
 
     <string name="self_check_cat_permissions">Права доступа предоставлены</string>
     <!-- it's better if the next line stays like this -->
     <string name="self_check_name_permission">%1$s:</string>
-    <string name="self_check_resolution_permission">Нажмите здесь, чтобы дать разрешение. Непредоставление разрешения может привести к некорректной работе приложения.</string>
+    <string name="self_check_resolution_permission">Коснитесь, чтобы предоставить разрешение. Отсутствующее разрешение может привести к некорректной работе приложения.</string>
 
     <string name="about_root_title">microG UI Demo</string>
     <string name="about_root_summary">Подробности</string>

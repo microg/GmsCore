@@ -23,9 +23,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> бажав би використовувати:</string>
     <string name="account_manager_title">Google Account Manager</string>
     <string name="sorry">Вибачте…</string>
-    <string name="auth_before_connect">Застосунок на Вашому пристрої намагається увійти до облікового запису Google.
-\n
-\nЯкщо Ви очікували цю дію, натисніть кнопку <b>Увійти</b> для під\'єднання до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
+    <string name="auth_before_connect">Застосунок на вашому пристрої намагається увійти до облікового запису Google.. \u0020Якщо ви очікували на це, натисніть кнопку <b>Увійти</b> для під\'єднання до сторінки авторизації Google, інакше натисніть <b>Скасувати</b>, аби перейти назад до застосунку, що викликав це вікно.</string>
     <string name="auth_sign_in">Увійти</string>
     <string name="auth_connecting">Ваш пристрій встановлює зв\'язок із серверами Google для авторизації.
 \n
@@ -220,8 +218,8 @@
     <string name="perm_car_speed_description">Отримання доступу до швидкості вашої машини</string>
     <string name="perm_car_info_label">Інформація про машину</string>
     <string name="perm_car_info_description">Отримання доступу до інформації про вашу машину</string>
-    <string name="pref_accounts_title">Облікові записи</string>
-    <string name="prefcat_accounts_current_accounts_title">Поточні активні облікові записи</string>
+    <string name="pref_accounts_title">Облікові записи Google</string>
+    <string name="prefcat_accounts_current_accounts_title">Облікові записи</string>
     <string name="pref_vending_licensing_category">Ліцензування Google Play</string>
     <string name="pref_vending_billing_enable_switch">Обробляти платіжні запити</string>
     <string name="perm_car_fuel_label">Рівень палива в машині</string>

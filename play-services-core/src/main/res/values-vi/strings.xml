@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="gms_app_name">microG Services</string>
+    <string name="gms_settings_name">Cài đặt microG</string>
+    <string name="gms_settings_summary">Thiết lập các dịch vụ của microG.</string>
+    <string name="auth_general_error_desc">Đã xảy ra sự cố giao tiếp với máy chủ Google.
+\n
+\nHãy thử lại sau.</string>
+    <string name="auth_finalize">Thiết bị của bạn đang liên lạc với Google để lưu thông tin vào tài khoản của bạn.
+\n
+\nViệc này có thể mất vài phút.</string>
+    <string name="allow">Cho phép</string>
+    <string name="deny">Từ chối</string>
+    <string name="auth_notification_title">Yêu cầu xác thực</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">1%1$s</xliff:g> yêu cầu xác thực từ bạn để truy cập tài khoản Google của bạn.</string>
+    <string name="signin_picker_title">Chọn tài khoản</string>
+    <string name="signin_picker_add_account_label">Thêm tài khoản khác</string>
+    <string name="signin_confirm_button_text">Cho phép và chia sẻ</string>
+    <string name="signin_subtext_policy">Trước khi sử dụng ứng dụng này, hãy xem lại %1$s và %2$s của ứng dụng.</string>
+    <string name="signin_subtext_policy_privacy">chính sách bảo mật</string>
+    <string name="signin_subtext_policy_terms">điều khoản dịch vụ</string>
+    <string name="just_a_sec">Đợi một chút…</string>
+    <string name="ask_permission_tos">Bằng cách tiếp tục, bạn cho phép ứng dụng này và Google sử dụng thông tin của mình theo các điều khoản tương ứng của dịch vụ và chính sách bảo mật.</string>
+    <string name="auth_sign_in">Đăng nhập</string>
+    <string name="auth_connecting">Thiết bị của bạn đang thiết lập kết nối với máy chủ của Google để đăng nhập cho bạn.
+\n
+\nĐiều này cần khoảng vài giây để thực hiện.</string>
+    <string name="no_network_error_desc">Bạn hiện tại không có kết nối mạng.
+\n
+\nĐây có thể là sự cố tạm thời hoặc thiết bị Android của bạn có thể không được cung cấp cho các dịch vụ dữ liệu. Thử lại khi kết nối với mạng di động hoặc kết nối với mạng Wi-Fi.</string>
+    <string name="signin_picker_subtitle">để tiếp tục <xliff:g example="F-Droid">1%1$s</xliff:g></string>
+    <string name="signin_confirm_title">Cho phép bạn đăng nhập vào <xliff:g example="F-Droid">1%1$s</xliff:g></string>
+    <string name="signin_subtext_sharing">Để tiếp tục, microG sẽ chia sẻ tên, địa chỉ email và ảnh hồ sơ từ tải khoản Google của bạn với <xliff:g example="F-Droid">1%1$s</xliff:g>.</string>
+</resources>

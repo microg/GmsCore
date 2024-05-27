@@ -16,8 +16,11 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.internal.IGroundOverlayDelegate
 import org.microg.gms.maps.mapbox.GoogleMapImpl
 import org.microg.gms.utils.warnOnTransactionIssues
+import kotlin.math.cos
+import kotlin.math.min
 
 class GroundOverlayImpl(private val map: GoogleMapImpl, private val id: String, options: GroundOverlayOptions) : IGroundOverlayDelegate.Stub() {
+    private val image: BitmapDescriptorImpl? = options.image?.remoteObject?.unwrap()
     private var location: LatLng? = options.location
     private var width: Float = options.width
     private var height: Float = options.height
@@ -26,8 +29,38 @@ class GroundOverlayImpl(private val map: GoogleMapImpl, private val id: String, 
     private var zIndex: Float = options.zIndex
     private var visible: Boolean = options.isVisible
     private var transparency: Float = options.transparency
+    private var anchorU: Float = options.anchorU
+    private var anchorV: Float = options.anchorV
     private var clickable: Boolean = options.isClickable
     private var tag: Any? = null
+
+    init {
+        // Compute missing values
+        if (height < 0 || height.isNaN()) {
+            val imageHeight = image?.size?.getOrNull(0) ?: -1f
+            val imageWidth = image?.size?.getOrNull(1) ?: -1f
+            if (imageHeight >= 0 && imageWidth > 0) {
+                height = (imageHeight / imageWidth) * width
+            }
+        }
+        if (bounds == null && width >= 0 && height >= 0 && location != null) {
+            val latitudeSpan = Math.toDegrees(height.toDouble() / EARTH_RADIUS)
+            val longitudeSpan = min(Math.toDegrees(width.toDouble() / (cos(Math.toRadians(location!!.latitude)) * EARTH_RADIUS)), 359.999999)
+            val north = location!!.latitude + (latitudeSpan * anchorV)
+            val south = location!!.latitude - (latitudeSpan * (1.0 - anchorV))
+            val west = location!!.longitude - (longitudeSpan * anchorU)
+            val east = location!!.longitude + (longitudeSpan * (1.0 - anchorU))
+            bounds = LatLngBounds(LatLng(south, west), LatLng(north, east))
+        }
+        if (location == null && bounds != null) {
+            val north = bounds!!.northeast.latitude
+            val south = bounds!!.southwest.latitude
+            var east = bounds!!.northeast.longitude
+            val west = bounds!!.southwest.longitude
+            while (east < west) east += 360.0
+            location = LatLng((1.0 - anchorV) * north + anchorV * south, (1.0 - anchorU) * west + anchorU * east)
+        }
+    }
 
     override fun getId(): String {
         return id
@@ -136,5 +169,6 @@ class GroundOverlayImpl(private val map: GoogleMapImpl, private val id: String, 
 
     companion object {
         private const val TAG = "GroundOverlay"
+        private const val EARTH_RADIUS = 6371009.0
     }
 }

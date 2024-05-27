@@ -87,19 +87,6 @@ class AuthSignInActivity : AppCompatActivity() {
         startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE_ADD_ACCOUNT)
     }
 
-    private fun getDisplayName(account: Account): String? {
-        val databaseHelper = DatabaseHelper(this)
-        val cursor = databaseHelper.getOwner(account.name)
-        return try {
-            if (cursor.moveToNext()) {
-                cursor.getColumnIndex("display_name").takeIf { it >= 0 }?.let { cursor.getString(it) }.takeIf { !it.isNullOrBlank() }
-            } else null
-        } finally {
-            cursor.close()
-            databaseHelper.close()
-        }
-    }
-
     private fun bindAccountRow(root: View, account: Account, updateAction: (ImageView, Bitmap) -> Unit) {
         val photoView = root.findViewById<ImageView>(R.id.account_photo)
         val displayNameView = root.findViewById<TextView>(R.id.account_display_name)
@@ -115,7 +102,7 @@ class AuthSignInActivity : AppCompatActivity() {
                     }
                 }
             }
-            val displayName = getDisplayName(account)
+            val displayName = PeopleManager.getDisplayName(this@AuthSignInActivity, account.name)
             photoView.setImageBitmap(photo)
             if (displayName != null) {
                 displayNameView.text = displayName

@@ -17,6 +17,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.os.WorkSource
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
 import androidx.core.content.getSystemService
@@ -45,6 +46,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     private var currentRequest: ProviderRequestUnbundled? = null
     private var pendingIntent: PendingIntent? = null
     private var lastReportedLocation: Location? = null
+    private var lastReportTime: Long = 0
     private val handler = Handler(Looper.getMainLooper())
     private val reportAgainRunnable = Runnable { reportAgain() }
 
@@ -80,6 +82,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
         writer.println("Enabled: $enabled")
         writer.println("Current request: $currentRequest")
         writer.println("Last reported: $lastReportedLocation")
+        writer.println("Last report time: ${lastReportTime.formatRealtime()}")
     }
 
     override fun onSetRequest(request: ProviderRequestUnbundled, source: WorkSource) {
@@ -129,8 +132,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     private fun reportAgain() {
         // Report location again if it's recent enough
         lastReportedLocation?.let {
-            if (it.elapsedMillis + MIN_INTERVAL_MILLIS < SystemClock.elapsedRealtime() ||
-                it.elapsedMillis + (currentRequest?.interval ?: 0) < SystemClock.elapsedRealtime()) {
+            if (it.elapsedMillis + max(currentRequest?.interval ?: 0, MIN_INTERVAL_MILLIS) > SystemClock.elapsedRealtime()) {
                 reportLocationToSystem(it)
             }
         }
@@ -141,6 +143,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
         location.provider = LocationManager.NETWORK_PROVIDER
         location.extras?.remove(LOCATION_EXTRA_PRECISION)
         lastReportedLocation = location
+        lastReportTime = SystemClock.elapsedRealtime()
         super.reportLocation(location)
         val repeatInterval = max(MIN_REPORT_MILLIS, currentRequest?.interval ?: Long.MAX_VALUE)
         if (repeatInterval < MIN_INTERVAL_MILLIS) {

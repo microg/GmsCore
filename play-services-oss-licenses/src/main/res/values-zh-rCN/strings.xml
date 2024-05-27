@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="oss_license_title">开源许可证</string>
+    <string name="license_is_loading">正在加载许可证信息。</string>
+    <string name="license_list_is_loading">正在加载许可证列表。</string>
+    <string name="preferences_license_summary">开源软件的许可证详细信息</string>
+    <string name="license_content_error">获取许可证时出错。</string>
+    <string name="no_licenses_available">此应用没有任何开源许可证。</string>
+</resources>

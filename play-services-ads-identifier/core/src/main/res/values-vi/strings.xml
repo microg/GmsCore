@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perm_ad_id_notification_description">Cho phép một ứng dụng nhận được thông báo khi ID quảng cáo hoặc giới hạn tùy chọn theo dõi quảng cáo của người dùng được cập nhật.</string>
+    <string name="perm_ad_id_label">Quyền của Mã Quảng cáo</string>
+    <string name="perm_ad_id_notification_label">Thông báo của Mã Quảng cáo</string>
+    <string name="perm_ad_id_description">Cho phép ứng dụng của nhà xuất bản truy cập trực tiếp hoặc gián tiếp vào một mã quảng cáo hợp lệ.</string>
+</resources>

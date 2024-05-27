@@ -147,4 +147,19 @@
     <string name="signin_picker_add_account_label">他のアカウントを追加</string>
     <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容を要求しています：</string>
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> は次の内容の使用を要求しています：</string>
+    <string name="prefcat_accounts_settings_title">設定</string>
+    <string name="prefcat_accounts_current_accounts_title">アカウント</string>
+    <string name="service_name_vending">Play Store サービス</string>
+    <string name="pref_auth_visible_title">アプリがアカウントを検索できるようにする</string>
+    <string name="pref_auth_include_android_id_title">デバイス登録による認証</string>
+    <string name="signin_confirm_button_text">許可と共有</string>
+    <string name="signin_subtext_policy">このアプリを使用する前に、%1$s and %2$sを確認してください。</string>
+    <string name="perm_provision_description">ユーザーが操作しなくても、アプリがmicroGサービスを設定できるようにします</string>
+    <string name="pref_auth_visible_summary">有効にすると、このデバイス上のすべてのアプリケーションは、事前の承認なしにGoogleアカウントのメールアドレスを見ることができます。</string>
+    <string name="signin_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g>へのサインインを許可</string>
+    <string name="signin_subtext_sharing">続けて、microGはあなたのGoogleアカウントの名前、メールアドレス、プロフィール画像を<xliff:g example="F-Droid">%1$s</xliff:g>と共有します。</string>
+    <string name="signin_subtext_policy_privacy">プライバシーポリシー</string>
+    <string name="signin_subtext_policy_terms">利用規約</string>
+    <string name="perm_gsf_read_gservices_label">Googleサービスの設定を読む</string>
+    <string name="perm_provision_label">microG サービスの提供</string>
 </resources>

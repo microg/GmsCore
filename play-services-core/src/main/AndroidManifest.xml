@@ -478,6 +478,7 @@
             android:name="org.microg.gms.auth.signin.AuthSignInActivity"
             android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar"
             android:process=":ui"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.GOOGLE_SIGN_IN" />
@@ -510,9 +511,25 @@
         </service>
 
         <activity
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"
+            android:name="org.microg.gms.auth.signin.AssistedSignInActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":ui"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.credentials.ASSISTED_SIGNIN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="org.microg.gms.auth.consent.ConsentSignInActivity"
             android:process=":ui"
             android:exported="false"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog"/>
 
         <!-- Games -->
@@ -522,6 +539,7 @@
             android:enabled="true"
             android:exported="false"
             android:process=":ui"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
             android:theme="@style/Theme.App.Translucent"/>
 
         <activity

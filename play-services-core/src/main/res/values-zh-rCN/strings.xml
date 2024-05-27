@@ -48,7 +48,7 @@
     <string name="prefs_account">账号设置</string>
     <string name="prefs_account_privacy">个人资料与隐私</string>
     <string name="prefs_account_security">登录与安全</string>
-    <string name="pref_auth_trust_google_summary">禁用后，应用在向 Google 请求验证前需要得到您的同意。有些程序可能会因此无法使用 Google 账号。</string>
+    <string name="pref_auth_trust_google_summary">禁用后，应用在向 Google 请求验证前需要得到您的同意。部分程序可能会因此无法使用 Google 账号。</string>
     <string name="checkin_not_registered">未注册</string>
     <string name="checkin_last_registration">上次注册：<xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="gms_settings_name">microG 设置</string>
@@ -76,9 +76,9 @@
     <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> 想要使用 Play 游戏</string>
     <string name="self_check_name_system_spoofs">系统签名伪装：</string>
     <string name="self_check_resolution_system_spoofs">请查阅文档以了解所需步骤。</string>
-    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> 已安装：</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> 已安装： </string>
     <string name="self_check_resolution_app_installed">安装 <xliff:g example="F-Droid">%1$s</xliff:g> 或与之兼容的应用。请查阅文档以了解有哪些兼容应用。</string>
-    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 包含正确签名：</string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> 包含正确签名： </string>
     <string name="self_check_resolution_correct_sig">已安装的 <xliff:g example="F-Droid">%1$s</xliff:g> 不兼容，或者您未对其启用签名伪装。请查阅文档以了解兼容的应用或 ROM。</string>
     <string name="pref_auth_visible_title">允许应用寻找 Google 账号</string>
     <string name="pref_auth_visible_summary">启用后，您设备上的所有应用将可以看到与您 Google 账号关联的电子邮件地址，而无需您的许可。</string>
@@ -170,13 +170,13 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="pref_safetynet_test_invalid_json">无效 JSON</string>
     <string name="pref_safetynet_test_cts_failed">未通过 CTS 测试</string>
     <string name="pref_recaptcha_enterprise_test_title">进行 reCAPTCHA Enterprise 测试</string>
-    <string name="pref_safetynet_recent_copied">已复制到剪贴板</string>
+    <string name="pref_safetynet_recent_copied">已复制到剪贴板！</string>
     <string name="pref_safetynet_test_integrity_cts_passed">已通过完整性和 CTS 测试</string>
     <string name="pref_safetynet_test_integrity_failed">未通过完整性测试</string>
     <string name="pref_safetynet_recent_uses">最近使用</string>
     <string name="signin_picker_title">选择一个账户</string>
     <string name="signin_picker_add_account_label">添加另一个账户</string>
-    <string name="pref_auth_include_android_id_summary">禁用此项后，验证请求将不包含设备注册信息，以允许您在未获得认证的设备上登录，但可能有未知后果。</string>
+    <string name="pref_auth_include_android_id_summary">禁用此项后，验证请求将不包含设备注册信息，以允许您在未获认证的设备上登录，但可能有未知后果。</string>
     <string name="signin_picker_subtitle">以继续使用“<xliff:g example="F-Droid">%1$s</xliff:g>”</string>
     <string name="signin_confirm_title">允许将您登录到“<xliff:g example="F-Droid">%1$s</xliff:g>”</string>
     <string name="pref_vending_license_enable_summary">一些应用需要验证您是否已在 Google Play 商店购买。收到相应请求时，microG 可以从 Google 处下载您的购买凭证。若禁用此设置，或未添加 Google 账号，授权验证请求将被忽略。</string>
@@ -197,5 +197,45 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="feedback_disabled">反馈功能不可用</string>
     <string name="backup_disabled">备份功能不可用</string>
     <string name="pref_vending_billing_enable_switch">使用 Google 应用内购买服务</string>
-    <string name="pref_vending_billing_enable_summary">启用后一些应用可以通过Google 应用内购买服务完成应用内服务购买订阅</string>
+    <string name="pref_vending_billing_enable_summary">启用后一些应用可以通过Google 应用内购买服务完成应用内服务购买订阅。</string>
+    <string name="perm_car_speed_label">车辆速度</string>
+    <string name="perm_car_speed_description">访问您的车速</string>
+    <string name="perm_car_info_label">车辆信息</string>
+    <string name="perm_car_info_description">访问您的车辆信息</string>
+    <string name="perm_car_fuel_label">车辆燃油油位</string>
+    <string name="perm_car_fuel_description">访问您的汽的燃油油位信息</string>
+    <string name="perm_car_mileage_label">车辆行驶里程</string>
+    <string name="perm_car_mileage_description">访问您的车辆里程信息</string>
+    <string name="perm_car_vendor_extension_label">车辆经销商频道</string>
+    <string name="perm_car_vendor_extension_description">允许与车辆经销商交换车辆特定信息</string>
+    <string name="pref_auth_strip_device_name_title">剥离设备名称以进行身份验证</string>
+    <string name="pref_auth_strip_device_name_summary">启用后，身份验证请求将不包括设备名称，这可能允许未经授权的设备登录，但可能会产生不可预见的后果。</string>
+    <string name="pref_accounts_title">Google账号</string>
+    <string name="prefcat_accounts_settings_title">设置</string>
+    <string name="pref_vending_licensing_category">Google Play 许可</string>
+    <string name="prefcat_accounts_current_accounts_title">账号</string>
+    <string name="pref_vending_billing_category">Google Play 结算系统</string>
+    <string name="pref_vending_billing_note_experimental">此功能是实验性的，可能会导致资金损失。您已收到警告。</string>
+    <string name="pref_vending_billing_note_licensing">某些应用程序可能还要求您启用许可证验证以验证您的购买。</string>
+    <string name="service_name_vending">Play 商店服务</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_droidguard_unsupported_summary">此设备不支持DroidGuard。SafetyNet服务不可靠。</string>
+    <string name="pref_safetynet_recent_attestation_summary">证明：%s</string>
+    <string name="pref_accounts_summary">添加和管理Google账号</string>
+    <string name="perm_gsf_read_gservices_label">读取Google服务配置</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+
+    <string name="credentials_assisted_cancel">取消</string>
+    <string name="credentials_assisted_continue">继续</string>
+    <string name="credentials_assisted_confirmation_header">正在登录</string>
+    <string name="credentials_assisted_continue_as_user_button_label">继续以%1$s的身份登录</string>
+    <string name="credentials_assisted_sign_back_title">通过 Google 重新登录 %1$s</string>
+    <string name="credentials_assisted_signin_consent_header">登录%1$s</string>
+    <string name="credentials_assisted_signin_consent">如果您继续操作，Google 会将您的姓名、电子邮件地址和个人资料照片提供给 %1$s。请参阅 %1$s 的隐私权政策和服务条款。</string>
+    <string name="credentials_assisted_signin_description">您可以在您的 Google 账号中管理“使用 Google 账号登录”功能。</string>
+    <string name="credentials_assisted_choose_account_label">选择账号</string>
+    <string name="credentials_assisted_choose_account_subtitle">以继续使用 %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">使用 Google 账号登录</string>
 </resources>

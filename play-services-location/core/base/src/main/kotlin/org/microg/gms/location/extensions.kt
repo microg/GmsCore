@@ -15,6 +15,7 @@ import androidx.core.location.LocationCompat
 
 const val ACTION_NETWORK_LOCATION_SERVICE = "org.microg.gms.location.network.ACTION_NETWORK_LOCATION_SERVICE"
 const val EXTRA_LOCATION = "location"
+const val EXTRA_ELAPSED_REALTIME = "elapsed_realtime"
 const val EXTRA_PENDING_INTENT = "pending_intent"
 const val EXTRA_ENABLE = "enable"
 const val EXTRA_INTERVAL_MILLIS = "interval"

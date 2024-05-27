@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ SPDX-FileCopyrightText: 2020, microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
-  -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  --><resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="exposure_notify_off_title">接触史通知未启用</string>
     <string name="exposure_notify_off_bluetooth">需要启用蓝牙以接收接触史通知。</string>
     <string name="exposure_notify_off_location">需要位置访问权限以接收接触史通知。</string>
     <string name="exposure_notify_off_bluetooth_location">需要启用蓝牙和位置访问权限以接收接触史通知。</string>
     <string name="exposure_notify_off_nearby">接触史通知需要额外权限来运作</string>
-
     <string name="service_name_exposure">接触史通知系统</string>
     <string name="pref_exposure_enable_info_summary">要启用接触史通知系统，请打开支持该系统的应用。</string>
     <string name="pref_exposure_error_bluetooth_off_title">启用蓝牙</string>
@@ -57,8 +56,10 @@
     <string name="exposure_confirm_keys_title">向 <xliff:g example="Corona-Warn">%1$s</xliff:g> 共享您的标识符？</string>
     <string name="exposure_confirm_keys_button">共享</string>
     <string name="exposure_confirm_stop_summary">关闭接触史通知后，您将无法在最近接触过确诊对象时获得通知。</string>
-    <string name="pref_exposure_error_nearby_not_granted_description">点击以向接触史通知授予权限。</string>
-    <string name="exposure_confirm_keys_summary">您最近 14 天的标识符将被用来帮助向您附近的人通知您的潜在接触史。不会向他人共享您的个人身份和检测结果。</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">点击以向接触史通知授予权限</string>
+    <string name="exposure_confirm_keys_summary">您最近 14 天的标识符将被用来帮助向您附近的人通知您的潜在接触史。
+\n
+\n不会向他人共享您的个人身份和检测结果。</string>
     <string name="exposure_confirm_start_summary">"您的设备需要蓝牙以安全地收集并与附近的其他设备共享标识符。
 
 <xliff:g example="Corona-Warn">%1$s</xliff:g> 可以在您曾与新冠肺炎阳性确诊患者接触时通知您。
@@ -66,6 +67,9 @@
 接触的发生日期、时长和与信号强度将被共享给相应的应用。"</string>
     <string name="pref_exposure_rpis_histogram_legend_records">每小时 <xliff:g example="0 - 50">%1$s</xliff:g> 个标识符</string>
     <string name="prefcat_exposure_rpis_histogram_title">已收集 <xliff:g example="230">%1$d</xliff:g> 个标识符</string>
-    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="Yesterday, 12:00 - 14:00">%1$s</xliff:g>，风险评分：<xliff:g example="99">%2$d</xliff:g></string>
-    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="About 12 minutes">%1$s</xliff:g>, <xliff:g example="distant exposure">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_line"><xliff:g example="昨天, 12:00 - 14:00">%1$s</xliff:g>，风险评分：<xliff:g example="99">%2$d</xliff:g></string>
+    <string name="pref_exposure_app_report_entry_combined"><xliff:g example="约12分钟">%1$s</xliff:g>, <xliff:g example="远距离暴露">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_encounters_prefix">已报告<xliff:g example="3">%1$d</xliff:g>暴露遭遇：</string>
+    <string name="pref_exposure_app_api_usage_summary_line"><xliff:g example="12">%1$d</xliff:g> 联系<xliff:g example="提供诊断密钥">%2$s</xliff:g></string>
+    <string name="pref_exposure_app_last_report_summary_diagnosis_keys">处理<xliff:g example="121031">%1$d</xliff:g>诊断密钥。</string>
 </resources>

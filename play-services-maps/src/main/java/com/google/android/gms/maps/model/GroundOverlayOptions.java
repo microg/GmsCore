@@ -35,7 +35,7 @@ public class GroundOverlayOptions extends AutoSafeParcelable {
     @Field(4)
     private float width;
     @Field(5)
-    private float height;
+    private float height = NO_DIMENSION;
     @Field(6)
     private LatLngBounds bounds;
     @Field(7)

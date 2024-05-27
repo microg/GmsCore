@@ -3,7 +3,7 @@
   ~ SPDX-License-Identifier: Apache-2.0
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme -->
     <style name="Theme.Base" parent="Theme.Material3.DynamicColors.DayNight">
@@ -148,4 +148,33 @@
         <item name="colorPrimaryDark">@color/login_blue_theme_primary_dark</item>
         <item name="colorAccent">@color/login_blue_theme_accent</item>
     </style>
+
+    <style name="ThemeTranslucentCommon" parent="@style/Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogDayNightTheme</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBottomSheetDialogDayNightTheme" parent="@style/ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/GISBottomSheetStyle</item>
+    </style>
+
+    <style name="GISBottomSheetStyle" parent="@style/Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@android:color/white</item>
+    </style>
+
+    <style name="GISDescriptionStyle" parent="@style/TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0.014</item>
+    </style>
+
 </resources>

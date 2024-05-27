@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_droidguard_mode_embedded_summary">Gamitin ang lokal na DroidGuard runtime</string>
+    <string name="pref_droidguard_mode_network_summary">Kumonekta sa DroidGuard runtime sa pamamagitan ng network</string>
+    <string name="pref_droidguard_mode_network_title">Remote</string>
+    <string name="prefcat_droidguard_mode">Mode ng operasyon ng DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">Naka-embed</string>
+</resources>

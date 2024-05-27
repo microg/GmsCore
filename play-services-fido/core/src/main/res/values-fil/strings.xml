@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">Gamitin ang iyong security key sa %1$s</string>
+    <string name="fido_welcome_body">Ang paggamit ng security sa %1$s ay tinutulungang protektahan ang iyong pribadong data.</string>
+    <string name="fido_welcome_button_get_started">Magsimula</string>
+    <string name="fido_welcome_privileged_check">Oo, ang %1$s ay ang aking pinagkakatiwalaang browser at papayagan na gamitin ang mga security key sa mga third-party na website.</string>
+    <string name="fido_transport_selection_title">Pumili kung paano gamitin ang iyong security key</string>
+    <string name="fido_biometric_prompt_title">I-verify ang iyong pagkakakilanlan</string>
+    <string name="fido_biometric_prompt_body">Kailangang i-verify ka ng %1$s.</string>
+    <string name="fido_usb_title">Konektahin ang iyong USB security key</string>
+    <string name="fido_usb_prompt_body">Konektahin ang iyong security key sa USB port o konektahin gamit ng USB cable. Kapag may button o gintong disc ang iyong key, i-tap ngayon.</string>
+    <string name="fido_nfc_prompt_body">Hawakan ng patag ang iyong key sa likod ng iyong device hanggang sa tumigil ito sa pag-vibrate</string>
+    <string name="fido_transport_selection_bluetooth">Gamitin ang iyong security key gamit ng Bluetooth</string>
+    <string name="fido_transport_selection_nfc">Gamitin ang iyong security gamit ng NFC</string>
+    <string name="fido_transport_selection_usb">Gamitin ang security key gamit ng USB</string>
+    <string name="fido_transport_usb_wait_connect_body">Paki-konekta ng iyong USB security key.</string>
+    <string name="fido_transport_usb_wait_confirm_body">Paki-tap ang gintong ring o disc sa %1$s.</string>
+    <string name="fido_welcome_privileged_info">Ang %1$s ay gumaganap bilang pinagkakatiwalaang browser para gamitin ang iyong security key sa %2$s.</string>
+    <string name="fido_transport_selection_body">Gumagana ang mga security key sa Bluetooth, NFC, at USB. Piliin kung paano mo gustong gamitin ang iyong key.</string>
+    <string name="fido_nfc_title">Konektahin ang iyong NFC security key</string>
+    <string name="fido_transport_selection_biometric">Gamitin ang device na ito gamit ng screen lock</string>
+</resources>

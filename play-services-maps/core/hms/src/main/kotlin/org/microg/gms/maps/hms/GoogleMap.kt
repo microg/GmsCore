@@ -298,12 +298,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         it.setContentDescription(desc)
     }
 
-    override fun getUiSettings(): IUiSettingsDelegate? = map?.uiSettings?.let { UiSettingsImpl(it) }
+    override fun getUiSettings(): IUiSettingsDelegate =
+        map?.uiSettings?.let { UiSettingsImpl(it) } ?: UiSettingsCache().also {
+            internalOnInitializedCallbackList.add(it.getMapReadyCallback())
+        }
 
-    override fun getProjection(): IProjectionDelegate? = map?.projection?.let {
-        Log.d(TAG, "getProjection")
-        ProjectionImpl(it)
-    }
+    override fun getProjection(): IProjectionDelegate =
+        map?.projection?.let { ProjectionImpl(it) } ?: DummyProjection()
 
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
         Log.d(TAG, "setOnCameraChangeListener");
@@ -555,18 +556,13 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!created) {
-            Log.d(TAG, "create: ${context.packageName},\n$options")
+            Log.d(TAG_LOGO, "create: ${context.packageName},\n$options")
             val mapContext = MapContext(context)
             MapsInitializer.initialize(mapContext)
             val mapView = MapView(mapContext, options.toHms())
             this.mapView = mapView
             view.addView(mapView)
             mapView.onCreate(savedInstanceState?.toHms())
-            view.viewTreeObserver.addOnGlobalLayoutListener {
-                if (!isFakeWatermark) {
-                    fakeWatermark()
-                }
-            }
             mapView.getMapAsync(this::initMap)
 
             created = true
@@ -574,22 +570,17 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
     }
 
-    private var isFakeWatermark: Boolean = false
-    private fun fakeWatermark() {
-        Log.d(TAG_LOGO, "start")
-        try {
-            val view1 = view.getChildAt(0) as ViewGroup
-            val view2 = view1.getChildAt(0) as ViewGroup
-            val view4 = view2.getChildAt(1)
-            Log.d(TAG_LOGO, view4.toString())
-            if (view4 is LinearLayout) {
-                view4.visibility = View.GONE
-                isFakeWatermark = true
-            } else {
-                throw Exception("LinearLayout not found")
-            }
-        } catch (tr: Throwable) {
-            Log.d(TAG_LOGO, "Throwable", tr)
+    private fun fakeWatermark(method: () -> Unit) {
+        Log.d(TAG_LOGO, "start -> $view")
+        val view1 = view.getChildAt(0) as? ViewGroup
+        val view2 = view1?.getChildAt(0) as? ViewGroup
+        val view4 = view2?.getChildAt(1)
+        Log.d(TAG_LOGO, view4?.toString() ?: "view4 is null")
+        if (view4 is LinearLayout) {
+            view4.visibility = View.GONE
+            method()
+        } else {
+            Log.d(TAG_LOGO, "LinearLayout not found")
         }
     }
 
@@ -696,6 +687,7 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 callback.onMapReady(map)
             }
             internalOnInitializedCallbackList.clear()
+            fakeWatermark { Log.d(TAG_LOGO, "fakeWatermark success") }
         }
 
         tryRunUserInitializedCallbacks(tag = "initMap")
@@ -799,11 +791,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
                 runCallbacks()
             }
             if (!wasCallbackActive) isInvokingInitializedCallbacks.set(false)
-        } else if (mapView?.isShown == false) {
-            runOnMainLooper(forceQueue = true) {
-                Log.d("$TAG:$tag", "Invoking callback now: map cannot be initialized because it is not shown (yet)")
-                runCallbacks()
-            }
         } else {
             Log.d(
                     "$TAG:$tag",
