@@ -36,8 +36,6 @@ class AskPermissionActivity : AppCompatActivity() {
     private var permissionGrants = IntArray(0)
     private val permissionsFromIntent: Array<String>
         get() = intent?.getStringArrayExtra(EXTRA_PERMISSIONS) ?: emptyArray()
-    private val callingPackageName:String?
-        get() = intent?.getStringExtra(EXTRA_CALLING_PACKAGE)
 
     private val permissionsToRequest: Array<String>
         get() = permissionsFromIntent.let {
@@ -50,14 +48,7 @@ class AskPermissionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "AskPermissionActivity: onCreate callingPackage->$callingPackageName")
-        if (callingPackageName != null) {
-            if (displayCallingPackageSet.contains(callingPackageName)) {
-                finishWithReply()
-                return
-            }
-            displayCallingPackageSet.add(callingPackageName!!)
-        }
+        Log.d(TAG, "AskPermissionActivity: onCreate ")
         requestPermissions()
     }
 
@@ -139,7 +130,7 @@ class AskPermissionActivity : AppCompatActivity() {
                 }
             }
             firstRequestLocationSettingsDialog = false
-            finishWithReply()
+            requestPermissions()
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
@@ -147,7 +138,6 @@ class AskPermissionActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_SETTINGS) {
-            updatePermissionGrants()
             finishWithReply()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -156,6 +146,5 @@ class AskPermissionActivity : AppCompatActivity() {
 
     companion object {
         private var firstRequestLocationSettingsDialog: Boolean = true
-        private val displayCallingPackageSet: MutableSet<String> = arraySetOf()
     }
 }

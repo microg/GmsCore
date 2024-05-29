@@ -59,8 +59,6 @@ class LocationManager(private val context: Context, override val lifecycle: Life
     var started: Boolean = false
         private set
 
-    var callingPackageName: String? = null
-
     suspend fun getLastLocation(clientIdentity: ClientIdentity, request: LastLocationRequest): Location? {
         if (request.maxUpdateAgeMillis < 0) throw IllegalArgumentException()
         GranularityUtil.checkValidGranularity(request.granularity)
@@ -294,7 +292,6 @@ class LocationManager(private val context: Context, override val lifecycle: Life
                 }
             }))
             intent.putExtra(EXTRA_PERMISSIONS, permissions.toTypedArray())
-            intent.putExtra(EXTRA_CALLING_PACKAGE, callingPackageName)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         }

@@ -43,7 +43,6 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     private var needBle = false
     private var improvements = emptyList<Improvement>()
     private var requests: List<LocationRequest>? = null
-    private var callingPackageName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +57,6 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
                 Log.w(TAG, e)
             }
         }
-        callingPackageName = callingPackage
         if (requests == null && intent.hasExtra(EXTRA_REQUESTS)) {
             try {
                 val arrayList = intent.getSerializableExtra(EXTRA_REQUESTS) as? ArrayList<*>
@@ -146,7 +144,6 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
             Improvement.PERMISSIONS -> {
                 val intent = Intent(this, AskPermissionActivity::class.java).apply {
                     putExtra(EXTRA_PERMISSIONS, locationPermissions.toTypedArray())
-                    putExtra(EXTRA_CALLING_PACKAGE, callingPackageName)
                 }
                 startActivityForResult(intent, REQUEST_CODE_PERMISSION)
                 return
@@ -168,10 +165,16 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_LOCATION || requestCode == REQUEST_CODE_PERMISSION) {
-            checkImprovements()
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_LOCATION -> {
+                checkImprovements()
+            }
+            REQUEST_CODE_PERMISSION -> {
+                finishResult(RESULT_OK)
+            }
+            else -> {
+                super.onActivityResult(requestCode, resultCode, data)
+            }
         }
     }
 

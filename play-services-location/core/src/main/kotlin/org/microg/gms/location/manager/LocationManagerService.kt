@@ -48,7 +48,6 @@ class LocationManagerService : BaseService(TAG, GmsService.LOCATION_MANAGER) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
             ?: throw IllegalArgumentException("Missing package name")
         locationManager.start()
-        locationManager.callingPackageName = packageName
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
             LocationManagerInstance(this, locationManager, packageName, lifecycle).asBinder(),
