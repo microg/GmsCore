@@ -17,7 +17,6 @@ import android.os.Messenger
 import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.collection.arraySetOf
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
