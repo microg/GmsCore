@@ -24,7 +24,6 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
 import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.AskPermissionActivity
-import org.microg.gms.location.manager.EXTRA_CALLING_PACKAGE
 import org.microg.gms.location.manager.EXTRA_PERMISSIONS
 import org.microg.gms.ui.buildAlertDialog
 

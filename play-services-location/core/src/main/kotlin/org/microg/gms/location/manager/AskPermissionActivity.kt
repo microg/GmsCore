@@ -27,7 +27,6 @@ import org.microg.gms.location.core.BuildConfig.FORCE_SHOW_BACKGROUND_PERMISSION
 const val EXTRA_MESSENGER = "messenger"
 const val EXTRA_PERMISSIONS = "permissions"
 const val EXTRA_GRANT_RESULTS = "results"
-const val EXTRA_CALLING_PACKAGE = "callingPackage"
 
 private const val REQUEST_CODE_PERMISSION = 120
 private const val REQUEST_CODE_SETTINGS = 121
@@ -36,7 +35,6 @@ class AskPermissionActivity : AppCompatActivity() {
     private var permissionGrants = IntArray(0)
     private val permissionsFromIntent: Array<String>
         get() = intent?.getStringArrayExtra(EXTRA_PERMISSIONS) ?: emptyArray()
-
     private val permissionsToRequest: Array<String>
         get() = permissionsFromIntent.let {
             if (FORCE_SHOW_BACKGROUND_PERMISSION.isNotEmpty() && it.contains(ACCESS_BACKGROUND_LOCATION) && !it.contains(FORCE_SHOW_BACKGROUND_PERMISSION)) {
@@ -48,7 +46,7 @@ class AskPermissionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "AskPermissionActivity: onCreate ")
+        Log.d(TAG, "AskPermissionActivity: onCreate")
         requestPermissions()
     }
 
