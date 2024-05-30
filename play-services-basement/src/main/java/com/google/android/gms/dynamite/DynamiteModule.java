@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class DynamiteModule {
-    private static final String TAG = "DynamiteModule";
+    private static final String TAG = "GmsDynamiteModule";
 
     public static final int NONE = 0;
     public static final int LOCAL = -1;
