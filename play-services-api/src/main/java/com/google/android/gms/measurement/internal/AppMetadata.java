@@ -39,7 +39,7 @@ public class AppMetadata extends AutoSafeParcelable {
     @Field(15)
     public int appType;
     @Field(16)
-    private boolean adIdReportingEnabled;
+    private boolean adIdReportingEnabled = true;
     @Field(17)
     public boolean ssaidCollectionEnabled = true;
     @Field(18)
@@ -55,19 +55,19 @@ public class AppMetadata extends AutoSafeParcelable {
     @Field(24)
     public String gaAppId;
     @Field(25)
-    private String consentSettings;
+    private String consentSettings = "";
     @Field(26)
-    public String ephemeralAppInstanceId;
+    public String ephemeralAppInstanceId = "";
     @Field(27)
     private String sessionStitchingToken;
     @Field(28)
-    private boolean sgtmUploadEnabled;
+    private boolean sgtmUploadEnabled = false;
     @Field(29)
     private long targetOsVersion;
     @Field(30)
-    private int consentSource;
+    private int consentSource = 100;
     @Field(31)
-    private String dmaConsent;
+    private String dmaConsent = "";
     @Field(32)
     private int adServicesVersion;
 
