@@ -1,7 +1,13 @@
 syntax = "proto2";
 option java_package = "org.microg.gms.appinvite";
 
+enum ClientPlatform {
+    Android = 1;
+    IOS = 2;
+}
+
 message ClientIdInfo {
+    optional ClientPlatform platform = 1;
     optional string packageName = 3; // e.g. com.google.android.gms
     optional string signature = 4; // Signing certificate sha-1 base64 with padding, e.g. WOHEEz90Qew9LCcCcKFIAtpHug4=
     optional string language = 6; // e.g. en
