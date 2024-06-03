@@ -63,13 +63,8 @@ buildscript {
     }
 }
 
-def execResult(...args) {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine args
-        standardOutput = stdout
-    }
-    return stdout.toString()
+def execResult(... args) {
+    providers.exec { commandLine args }.standardOutput.asText.get()
 }
 
 def gmsVersion = "24.09.13"
