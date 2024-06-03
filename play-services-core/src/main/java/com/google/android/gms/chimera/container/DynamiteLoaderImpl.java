@@ -22,7 +22,6 @@ import android.util.Log;
 
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
-import com.google.android.gms.dynamite.DynamiteModule;
 import com.google.android.gms.dynamite.IDynamiteLoader;
 
 public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
@@ -38,12 +37,7 @@ public class DynamiteLoaderImpl extends IDynamiteLoader.Stub {
     public IObjectWrapper createModuleContextV2(IObjectWrapper wrappedContext, String moduleId, int minVersion) throws RemoteException {
         Log.d(TAG, "createModuleContext for " + moduleId + " at version " + minVersion);
         final Context originalContext = (Context) ObjectWrapper.unwrap(wrappedContext);
-        try {
-            Context moduleContext = DynamiteModule.load(originalContext, DynamiteModule.PREFER_LOCAL, moduleId).getModuleContext();
-            return ObjectWrapper.wrap(moduleContext);
-        } catch (Exception e) {
-            return ObjectWrapper.wrap(DynamiteContext.create(moduleId, originalContext));
-        }
+        return ObjectWrapper.wrap(DynamiteContext.create(moduleId, originalContext));
     }
 
     @Override

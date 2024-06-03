@@ -102,7 +102,7 @@ class AppMeasurementDynamiteService : IAppMeasurementDynamiteService.Stub() {
 
     override fun getAppInstanceId(receiver: IBundleReceiver?) {
         Log.d(TAG, "Not yet implemented: getAppInstanceId")
-        receiver?.onBundle(Bundle().apply { putString("r", null) })
+        receiver?.onBundle(Bundle().apply { putString("r", "") })
     }
 
     override fun getGmpAppId(receiver: IBundleReceiver?) {
