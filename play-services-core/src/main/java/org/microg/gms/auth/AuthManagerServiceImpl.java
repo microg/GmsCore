@@ -144,7 +144,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
             return result;
         }
         try {
-            AuthResponse res = authManager.requestAuth(false);
+            AuthResponse res = authManager.requestAuthWithBackgroundResolution(false);
             if (res.auth != null) {
                 if (!AuthConstants.SCOPE_GET_ACCOUNT_ID.equals(scope))
                     Log.d(TAG, "getToken: " + res);

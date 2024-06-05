@@ -13,6 +13,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 
+import org.microg.gms.accountaction.ErrorResolverKt;
+import org.microg.gms.accountaction.Resolution;
+import org.microg.gms.common.NotOkayException;
 import org.microg.gms.common.PackageUtils;
 import org.microg.gms.settings.SettingsContract;
 
@@ -244,6 +247,52 @@ public class AuthManager {
             return (flags & FLAG_SYSTEM) > 0 || (flags & FLAG_UPDATED_SYSTEM_APP) > 0;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
+        }
+    }
+
+    public AuthResponse requestAuthWithBackgroundResolution(boolean legacy) throws IOException {
+        try {
+            return requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution != null) {
+                    return ErrorResolverKt.initiateFromBackgroundBlocking(
+                            errorResolution,
+                            context,
+                            getAccount(),
+                            // infinite loop is prevented
+                            () -> requestAuth(legacy)
+                    );
+                } else {
+                    throw new IOException(e);
+                }
+            } else {
+                throw new IOException(e);
+            }
+        }
+    }
+
+    public AuthResponse requestAuthWithForegroundResolution(boolean legacy) throws IOException {
+        try {
+            return requestAuth(legacy);
+        } catch (NotOkayException e) {
+            if (e.getMessage() != null) {
+                Resolution errorResolution = ErrorResolverKt.resolveAuthErrorMessage(context, e.getMessage());
+                if (errorResolution != null) {
+                    return ErrorResolverKt.initiateFromForegroundBlocking(
+                            errorResolution,
+                            context,
+                            getAccount(),
+                            // infinite loop is prevented
+                            () -> requestAuth(legacy)
+                    );
+                } else {
+                    throw new IOException(e);
+                }
+            } else {
+                throw new IOException(e);
+            }
         }
     }
 

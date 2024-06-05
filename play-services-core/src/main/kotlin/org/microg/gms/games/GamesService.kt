@@ -558,7 +558,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
                     serverAuthTokenManager.setItCaveatTypes("2")
                     serverAuthTokenManager.isPermitted = true
                     serverAuthTokenManager.invalidateAuthToken()
-                    serverAuthTokenManager.requestAuth(true)
+                    serverAuthTokenManager.requestAuthWithBackgroundResolution(true)
                 }
                 if (serverAuthTokenResponse.auth != null) {
                     callbacks.onServerAuthCode(Status(CommonStatusCodes.SUCCESS), serverAuthTokenResponse.auth)
