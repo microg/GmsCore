@@ -9,6 +9,8 @@ jobs:
   build:
     name: "Gradle build"
     runs-on: ubuntu-latest
+    env:
+      GRADLE_MICROG_VERSION_WITHOUT_GIT: 1
 
     steps:
       - name: "Checkout sources"
@@ -41,7 +43,9 @@ jobs:
               echo "Matcher configured: ${NAME:?}"
             fi
           done
+      - name: "Inspect Gradle tasks"
+        run: "./gradlew tasks"
       - name: "Execute Gradle assemble"
-        run: "./gradlew --no-daemon assemble"
+        run: "./gradlew assemble"
       - name: "Execute Gradle check"
-        run: "./gradlew --no-daemon check"
+        run: "./gradlew check"
