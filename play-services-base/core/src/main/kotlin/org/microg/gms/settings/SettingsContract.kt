@@ -188,10 +188,12 @@ object SettingsContract {
         fun getContentType(context: Context) = "vnd.android.cursor.item/vnd.${getAuthority(context)}.$id"
 
         const val LICENSING = "vending_licensing"
+        const val LICENSING_PURCHASE_FREE_APPS = "vending_licensing_purchase_free_apps"
         const val BILLING = "vending_billing"
 
         val PROJECTION = arrayOf(
             LICENSING,
+            LICENSING_PURCHASE_FREE_APPS,
             BILLING,
         )
     }

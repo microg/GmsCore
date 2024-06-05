@@ -275,11 +275,42 @@ message ResponseWrapper {
 }
 
 message Payload {
+  DetailsResponse detailsResponse = 2;
+  BuyResponse buyResponse = 4;
   ConsumePurchaseResponse consumePurchaseResponse = 30;
   PurchaseHistoryResponse purchaseHistoryResponse = 67;
   SkuDetailsResponse skuDetailsResponse = 82;
   AcquireResponse acquireResponse = 94;
   AcknowledgePurchaseResponse acknowledgePurchaseResponse = 140;
+}
+
+message DetailsResponse {
+  Item item = 4;
+}
+
+message BuyResponse {
+  string encodedDeliveryToken = 55;
+}
+
+message Item {
+  Offer offer = 8;
+  repeated Item subItem = 11;
+  DocumentDetails details = 13;
+}
+
+message DocumentDetails {
+  AppDetails appDetails = 1;
+}
+
+message AppDetails {
+  int32 versionCode = 3;
+  string packageName = 14;
+}
+
+message Offer {
+  int64 micros = 1;
+  int32 offerType = 8;
+  string offerId = 19;
 }
 
 message AcquireResponse {
