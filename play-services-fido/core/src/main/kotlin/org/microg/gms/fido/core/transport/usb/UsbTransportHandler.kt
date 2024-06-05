@@ -81,10 +81,12 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         options: RequestOptions,
         callerPackage: String,
         device: UsbDevice,
-        iface: UsbInterface
+        iface: UsbInterface,
+        pinRequested: Boolean,
+        pin: String?
     ): AuthenticatorAttestationResponse {
         return CtapHidConnection(context, device, iface).open {
-            register(it, context, options, callerPackage)
+            register(it, context, options, callerPackage, pinRequested, pin)
         }
     }
 
@@ -92,10 +94,12 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         options: RequestOptions,
         callerPackage: String,
         device: UsbDevice,
-        iface: UsbInterface
+        iface: UsbInterface,
+        pinRequested: Boolean,
+        pin: String?
     ): AuthenticatorAssertionResponse {
         return CtapHidConnection(context, device, iface).open {
-            sign(it, context, options, callerPackage)
+            sign(it, context, options, callerPackage, pinRequested, pin)
         }
     }
 
@@ -119,7 +123,9 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
         options: RequestOptions,
         callerPackage: String,
         device: UsbDevice,
-        iface: UsbInterface
+        iface: UsbInterface,
+        pinRequested: Boolean,
+        pin: String?
     ): AuthenticatorResponse {
         Log.d(TAG, "Trying to use ${device.productName} for ${options.type}")
         invokeStatusChanged(
@@ -127,22 +133,26 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
             Bundle().apply { putParcelable(UsbManager.EXTRA_DEVICE, device) })
         try {
             return when (options.type) {
-                RequestOptionsType.REGISTER -> register(options, callerPackage, device, iface)
-                RequestOptionsType.SIGN -> sign(options, callerPackage, device, iface)
+                RequestOptionsType.REGISTER -> register(options, callerPackage, device, iface, pinRequested, pin)
+                RequestOptionsType.SIGN -> sign(options, callerPackage, device, iface, pinRequested, pin)
             }
         } finally {
             this.device = null
         }
     }
 
-    override suspend fun start(options: RequestOptions, callerPackage: String): AuthenticatorResponse {
+    override suspend fun start(options: RequestOptions, callerPackage: String, pinRequested: Boolean, pin: String?): AuthenticatorResponse {
         for (device in context.usbManager?.deviceList?.values.orEmpty()) {
             val iface = getCtapHidInterface(device) ?: continue
             try {
-                return handle(options, callerPackage, device, iface)
+                return handle(options, callerPackage, device, iface, pinRequested, pin)
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Exception) {
+            } catch (e: MissingPinException) {
+                throw e
+            } catch (e: WrongPinException) {
+                throw e
+            }  catch (e: Exception) {
                 Log.w(TAG, e)
             }
         }
@@ -151,7 +161,7 @@ class UsbTransportHandler(private val context: Context, callback: TransportHandl
             val device = waitForNewUsbDevice()
             val iface = getCtapHidInterface(device) ?: continue
             try {
-                return handle(options, callerPackage, device, iface)
+                return handle(options, callerPackage, device, iface, pinRequested, pin)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {

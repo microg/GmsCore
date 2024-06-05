@@ -41,12 +41,16 @@ class CtapNfcConnection(
         Log.d(TAG, "Send CTAP2 command: ${request.toBase64(Base64.NO_WRAP)}")
         var (statusCode, payload) = decodeResponseApdu(isoDep.transceive(request))
         Log.d(TAG, "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${payload.toBase64(Base64.NO_WRAP)}")
-        while (statusCode == 0x9100.toShort()) {
+        while (statusCode == 0x9100.toShort() || (statusCode > 0x6100.toShort() && statusCode < 0x6200.toShort())) {
             Log.d(TAG, "Sending GETRESPONSE")
             val res = decodeResponseApdu(isoDep.transceive(encodeCommandApdu(0x00, 0xC0.toByte(), 0x00,0x00)))
             Log.d(TAG, "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${payload.toBase64(Base64.NO_WRAP)}")
+            if (statusCode < 0x6200.toShort()) {
+                payload = payload.plus(res.second)
+            } else {
+                payload = res.second
+            }
             statusCode = res.first
-            payload = res.second
         }
         if (statusCode != 0x9000.toShort()) {
             throw CtapNfcMessageStatusException(statusCode.toInt() and 0xffff)

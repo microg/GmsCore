@@ -12,6 +12,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
@@ -257,10 +258,10 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
     }
 
     @RequiresApi(24)
-    fun startTransportHandling(transport: Transport, instant: Boolean = false): Job = lifecycleScope.launchWhenResumed {
+    fun startTransportHandling(transport: Transport, instant: Boolean = false, pinRequested: Boolean = false, authenticatorPin: String? = null): Job = lifecycleScope.launchWhenResumed {
         val options = options ?: return@launchWhenResumed
         try {
-            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage), transport)
+            finishWithSuccessResponse(getTransportHandler(transport)!!.start(options, callerPackage, pinRequested, authenticatorPin), transport)
         } catch (e: SecurityException) {
             Log.w(TAG, e)
             if (instant) {
@@ -274,6 +275,13 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         } catch (e: RequestHandlingException) {
             Log.w(TAG, e)
             finishWithError(e.errorCode, e.message ?: e.errorCode.name)
+        } catch (e: MissingPinException) {
+            // Redirect the user to ask for a PIN code
+            navHostFragment.navController.navigate(R.id.openPinFragment)
+        } catch (e: WrongPinException) {
+            // Redirect the user, and inform them that the pin was wrong
+            Toast.makeText(baseContext, R.string.fido_wrong_pin, Toast.LENGTH_LONG).show()
+            navHostFragment.navController.navigate(R.id.openPinFragment)
         } catch (e: Exception) {
             Log.w(TAG, e)
             finishWithError(UNKNOWN_ERR, e.message ?: e.javaClass.simpleName)
