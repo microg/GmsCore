@@ -109,6 +109,13 @@ class IdentityToolkitClient(context: Context, private val apiKey: String, privat
                     .put("token", token)
                     .put("returnSecureToken", returnSecureToken))
 
+    suspend fun verifyAssertion(requestUri: String? = null, postBody: String? = null, returnSecureToken: Boolean = true, returnIdpCredential: Boolean = true): JSONObject =
+            request("verifyAssertion", JSONObject()
+                    .put("requestUri", requestUri)
+                    .put("postBody", postBody)
+                    .put("returnSecureToken", returnSecureToken)
+                    .put("returnIdpCredential", returnIdpCredential))
+
     suspend fun verifyPassword(email: String? = null, password: String? = null, tenantId: String? = null, returnSecureToken: Boolean = true): JSONObject =
             request("verifyPassword", JSONObject()
                     .put("email", email)

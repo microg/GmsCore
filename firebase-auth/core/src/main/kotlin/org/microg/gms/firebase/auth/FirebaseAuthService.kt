@@ -487,13 +487,27 @@ class FirebaseAuthServiceImpl(private val context: Context, override val lifecyc
     }
 
     override fun signInWithCredential(request: SignInWithCredentialAidlRequest, callbacks: IFirebaseAuthCallbacks) {
-        Log.d(TAG, "Not yet implemented: signInWithCredential")
-        callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
+        lifecycleScope.launchWhenStarted {
+            Log.d(TAG, "signInWithCredential request: ${request.request}")
+            try {
+                val tokenResult = client.verifyAssertion(request.request.requestUri, request.request.postBody, request.request.returnSecureToken, request.request.returnIdpCredential)
+                Log.d(TAG, "signInWithCredential callback: $tokenResult ")
+                val idToken = tokenResult.getString("idToken")
+                val refreshToken = tokenResult.getString("refreshToken")
+                val getTokenResponse = client.getTokenByRefreshToken(refreshToken).toGetTokenResponse()
+                val accountInfoResult = client.getAccountInfo(idToken = idToken).getJSONArray("users").getJSONObject(0).toGetAccountInfoUser()
+                Log.d(TAG, "signInWithCredential callback: onGetTokenResponseAndUser")
+                callbacks.onGetTokenResponseAndUser(getTokenResponse, accountInfoResult)
+            } catch (e: Exception) {
+                Log.w(TAG, "signInWithCredential callback: onFailure", e)
+                callbacks.onFailure(Status(CommonStatusCodes.INTERNAL_ERROR, e.message))
+            }
+        }
     }
 
     override fun signInWithCredentialCompat(verifyAssertionRequest: VerifyAssertionRequest, callbacks: IFirebaseAuthCallbacks) {
-        Log.d(TAG, "Not yet implemented: signInWithCredentialCompat")
-        callbacks.onFailure(Status(CommonStatusCodes.CANCELED, "Not supported"))
+        Log.d(TAG, "signInWithCredentialCompat verifyAssertionRequest: $verifyAssertionRequest")
+        signInWithCredential(SignInWithCredentialAidlRequest(verifyAssertionRequest), callbacks)
     }
 
     override fun signInWithCustomToken(request: SignInWithCustomTokenAidlRequest, callbacks: IFirebaseAuthCallbacks) {
