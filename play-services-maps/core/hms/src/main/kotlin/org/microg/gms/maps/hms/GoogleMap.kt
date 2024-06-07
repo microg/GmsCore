@@ -309,13 +309,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
         Log.d(TAG, "setOnCameraChangeListener");
         cameraChangeListener = listener
-//        it.setOnCameraIdleListener {
-//            try {
-//                cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
-//            } catch (e: Exception) {
-//                Log.w(TAG, e)
-//            }
-//        }
     }
 
     override fun setOnCircleClickListener(listener: IOnCircleClickListener?) = afterInitialize { hmap ->
