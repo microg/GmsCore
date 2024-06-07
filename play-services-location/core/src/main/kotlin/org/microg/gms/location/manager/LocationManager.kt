@@ -46,6 +46,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
     private var coarsePendingIntent: PendingIntent? = null
     private val postProcessor by lazy { LocationPostProcessor() }
     private val lastLocationCapsule by lazy { LastLocationCapsule(context) }
+    private var lastGpsLocation: Location? = null
     val database by lazy { LocationAppsDatabase(context) }
     private val requestManager by lazy { LocationRequestManager(context, lifecycle, postProcessor, database) { onRequestManagerUpdated() } }
     private val gpsLocationListener by lazy { LocationListenerCompat { updateGpsLocation(it) } }
@@ -224,11 +225,28 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         }
     }
 
+    private fun Location.isUnreasonablyFarFromRecentGpsLocation(): Boolean {
+        val gpsLocation = lastGpsLocation ?: return false
+
+        // Ignore GPS location that is too old compared to this location
+        if (gpsLocation.elapsedMillis < elapsedMillis + MAX_FINE_UPDATE_INTERVAL) return false
+
+        val distance = distanceTo(gpsLocation)
+        if (distance > max(2 * gpsLocation.accuracy, MIN_UNREASONABLE_DISTANCE_FROM_GPS)) {
+            Log.d(TAG, String.format("Unreasonable location %s vs gps (accuracy %.0f): distance %.0f",
+                this.provider, gpsLocation.accuracy, distance))
+            return true
+        }
+        return false
+    }
+
     fun updateNetworkLocation(location: Location) {
         val lastLocation = lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE)
 
         // Ignore outdated location
         if (lastLocation != null && location.elapsedMillis + UPDATE_CLIFF_MS < lastLocation.elapsedMillis) return
+
+        if (location.isUnreasonablyFarFromRecentGpsLocation()) return
 
         if (lastLocation == null ||
             lastLocation.accuracy > location.accuracy ||
@@ -242,6 +260,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
     fun updateGpsLocation(location: Location) {
         lastLocationCapsule.updateFineLocation(location)
+        lastGpsLocation = location
         sendNewLocation()
     }
 
@@ -324,5 +343,6 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         const val MAX_FINE_UPDATE_INTERVAL = 10_000L
         const val EXTENSION_CLIFF_MS = 10_000L
         const val UPDATE_CLIFF_MS = 30_000L
+        const val MIN_UNREASONABLE_DISTANCE_FROM_GPS = 1_000f // 1 kilometer
     }
 }
