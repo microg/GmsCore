@@ -771,15 +771,16 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
         val runCallbacks = {
-            synchronized(mapLock) {
-                initializedCallbackList.forEach {
-                    try {
-                        it.onMapReady(this)
-                    } catch (e: Exception) {
-                        Log.w(TAG, e)
-                    }
-                }.also {
-                    initializedCallbackList.clear()
+            val callbacks = synchronized(mapLock) {
+                ArrayList(initializedCallbackList)
+                    .also { initializedCallbackList.clear() }
+            }
+
+            callbacks.forEach {
+                try {
+                    it.onMapReady(this)
+                } catch (e: Exception) {
+                    Log.w(TAG, e)
                 }
             }
         }
