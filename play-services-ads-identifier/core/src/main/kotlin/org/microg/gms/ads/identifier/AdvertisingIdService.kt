@@ -29,7 +29,7 @@ class AdvertisingIdService : Service() {
 
 class MemoryAdvertisingIdConfiguration(context: Context) : AdvertisingIdConfiguration(context) {
     override val adTrackingLimitedPerApp: MutableMap<Int, Boolean> = hashMapOf()
-    override var adTrackingLimitedGlobally: Boolean = true
+    override var adTrackingLimitedGlobally: Boolean = false
     override var debugLogging: Boolean = false
     override var adId: String = EMPTY_AD_ID
     override var debugAdId: String = EMPTY_AD_ID
