@@ -42,7 +42,11 @@ public class CheckinManager {
             return null;
         if (!CheckinPreferences.isEnabled(context))
             return null;
-        List<CheckinClient.Account> accounts = new ArrayList<CheckinClient.Account>();
+        return handleResponse(context, CheckinClient.request(getCheckinRequest(context, info)));
+    }
+
+    public static CheckinRequest getCheckinRequest(Context context, LastCheckinInfo info) throws IOException {
+        List<CheckinClient.Account> accounts = new ArrayList<>();
         AccountManager accountManager = AccountManager.get(context);
         String accountType = AuthConstants.DEFAULT_ACCOUNT_TYPE;
         for (Account account : accountManager.getAccountsByType(accountType)) {
@@ -55,10 +59,9 @@ public class CheckinManager {
                 accounts.add(new CheckinClient.Account(account.name, token));
             }
         }
-        CheckinRequest request = CheckinClient.makeRequest(context,
+        return CheckinClient.makeRequest(context,
                 new DeviceConfiguration(context), Utils.getDeviceIdentifier(context),
                 Utils.getPhoneInfo(context), info, Utils.getLocale(context), accounts);
-        return handleResponse(context, CheckinClient.request(request));
     }
 
     private static LastCheckinInfo handleResponse(Context context, CheckinResponse response) {

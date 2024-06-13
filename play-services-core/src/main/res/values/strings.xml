@@ -144,6 +144,9 @@ This can take a couple of minutes."</string>
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
 
+    <string name="pref_device_registration_data_title">Device registration data</string>
+    <string name="pref_device_registration_data_summary">Check data shared with Google servers for device registration</string>
+
     <string name="checkin_not_registered">Not registered</string>
     <string name="checkin_last_registration">Last registration: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
     <string name="checkin_enable_switch">Register device</string>
