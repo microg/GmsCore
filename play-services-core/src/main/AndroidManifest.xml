@@ -427,6 +427,13 @@
             android:process=":ui"
             android:theme="@style/Theme.AppCompat.DayNight.Dialog" />
 
+        <activity
+            android:name="org.microg.gms.auth.AskPackageOverrideActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent" />
+
         <service
             android:name=".auth.GetToken"
             android:exported="true" />
