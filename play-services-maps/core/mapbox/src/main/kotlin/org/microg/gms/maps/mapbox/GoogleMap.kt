@@ -278,6 +278,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun setMapStyle(options: MapStyleOptions?): Boolean {
         Log.d(TAG, "setMapStyle options: " + options?.getJson())
         mapStyle = options
+        applyMapStyle()
         return true
     }
 
