@@ -25,6 +25,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".regular.Fido2RegularService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.fido.fido2.regular.START" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".ui.AuthenticatorActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
