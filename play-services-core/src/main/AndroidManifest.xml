@@ -878,6 +878,13 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.App.Translucent"/>
 
+        <activity
+            android:name="com.google.android.gms.credential.manager.PasswordManagerActivity"
+            android:exported="true"
+            android:process=":ui"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.Translucent"/>
+
         <service android:name="org.microg.gms.clearcut.ClearcutLoggerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.clearcut.service.START" />
