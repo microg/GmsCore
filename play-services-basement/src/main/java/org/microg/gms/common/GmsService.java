@@ -138,7 +138,7 @@ public enum GmsService {
     AD_CONSENT_LOOKUP(195, "com.google.android.gms.ads.service.CONSENT_LOOKUP"),
     CREDENTIAL_MANAGER(196, "com.google.android.gms.credential.manager.service.firstparty.START"),
     PHONE_INTERNAL(197, "com.google.android.gms.auth.api.phone.service.InternalService.START"),
-    PAY(198, "com.google.android.gms.pay.service.BIND"),
+    PAY(198, "com.google.android.gms.pay.service.BIND", "com.google.android.gms.pay.service.THIRD_PARTY"),
     ASTERISM(199, "com.google.android.gms.asterism.service.START"),
     MODULE_RESTORE(201, "com.google.android.gms.backup.GMS_MODULE_RESTORE"),
     FACS_CACHE(202, "com.google.android.gms.facs.cache.service.START"),
