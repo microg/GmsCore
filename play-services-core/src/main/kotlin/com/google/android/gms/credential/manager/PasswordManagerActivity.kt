@@ -66,7 +66,6 @@ class PasswordManagerActivity : AppCompatActivity() {
 
     private fun constructPswPath(): String {
         val psmPath = StringBuilder().apply {
-            append(PSW_MANAGER_PATH)
             if (!utmSource.isNullOrEmpty()) {
                 if (isEmpty()) append("?") else append("&")
                 append("$EXTRA_KEY_UTM_SOURCE=$utmSource")
@@ -83,6 +82,7 @@ class PasswordManagerActivity : AppCompatActivity() {
                 if (isEmpty()) append("?") else append("&")
                 append("$EXTRA_KEY_UTM_CONTENT=$utmContent")
             }
+            insert(0, PSW_MANAGER_PATH)
         }.toString()
         Log.d(TAG, "constructPswPath: $psmPath")
         return psmPath
