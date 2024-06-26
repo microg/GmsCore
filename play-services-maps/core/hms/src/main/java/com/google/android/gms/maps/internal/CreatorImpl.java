@@ -16,12 +16,15 @@ import android.util.Log;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.StreetViewPanoramaOptions;
 import com.google.android.gms.maps.model.internal.IBitmapDescriptorFactoryDelegate;
 
 import com.huawei.hms.maps.MapsInitializer;
 import org.microg.gms.maps.hms.CameraUpdateFactoryImpl;
 import org.microg.gms.maps.hms.MapFragmentImpl;
 import org.microg.gms.maps.hms.MapViewImpl;
+import org.microg.gms.maps.hms.StreetViewPanoramaFragmentImpl;
+import org.microg.gms.maps.hms.StreetViewPanoramaViewImpl;
 import org.microg.gms.maps.hms.model.BitmapDescriptorFactoryImpl;
 
 @Keep
@@ -58,6 +61,16 @@ public class CreatorImpl extends ICreator.Stub {
         BitmapDescriptorFactoryImpl.INSTANCE.initialize(ObjectWrapper.unwrapTyped(resources, Resources.class));
         //ResourcesContainer.set((Resources) ObjectWrapper.unwrap(resources));
         Log.d(TAG, "initV2 " + flags);
+    }
+
+    @Override
+    public IStreetViewPanoramaViewDelegate newStreetViewPanoramaViewDelegate(IObjectWrapper context, StreetViewPanoramaOptions options) {
+        return new StreetViewPanoramaViewImpl(ObjectWrapper.unwrapTyped(context, Context.class));
+    }
+
+    @Override
+    public IStreetViewPanoramaFragmentDelegate newStreetViewPanoramaFragmentDelegate(IObjectWrapper activity) {
+        return new StreetViewPanoramaFragmentImpl(ObjectWrapper.unwrapTyped(activity, Activity.class));
     }
 
     @Override
