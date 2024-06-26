@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.gms.maps;
+package com.google.android.gms.maps.model;
 
 import android.os.Parcel;
 
@@ -23,47 +23,26 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
-import com.google.android.gms.maps.model.StreetViewSource;
 
 @SafeParcelable.Class
-public class StreetViewPanoramaOptions extends AbstractSafeParcelable {
+public class StreetViewSource extends AbstractSafeParcelable {
+
+    public static final StreetViewSource DEFAULT = new StreetViewSource(0);
+
     @Field(2)
-    public StreetViewPanoramaCamera panoramaCamera;
+    public int streetViewType;
 
-    @Field(3)
-    public String panoramaId;
+    public StreetViewSource(int streetViewType) {
+        this.streetViewType = streetViewType;
+    }
 
-    @Field(4)
-    public LatLng position;
+    public StreetViewSource() {
+    }
 
-    @Field(5)
-    public Integer radius;
-
-    @Field(6)
-    private Boolean userNavigationEnabled;
-
-    @Field(7)
-    private Boolean zoomGesturesEnabled;
-
-    @Field(8)
-    private Boolean panningGesturesEnabled;
-
-    @Field(9)
-    private Boolean streetNamesEnabled;
-
-    @Field(10)
-    private Boolean useViewLifecycleInFragment;
-
-    @Field(11)
-    public StreetViewSource source;
-
-    public static final SafeParcelableCreatorAndWriter<StreetViewPanoramaOptions> CREATOR = findCreator(StreetViewPanoramaOptions.class);
+    public static final SafeParcelableCreatorAndWriter<StreetViewSource> CREATOR = findCreator(StreetViewSource.class);
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);
     }
-
 }

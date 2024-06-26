@@ -16,8 +16,30 @@
 
 package com.google.android.gms.maps.model;
 
-import org.microg.gms.common.PublicApi;
+import android.os.Parcel;
 
-@PublicApi
-public class StreetViewPanoramaCamera {
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+
+@SafeParcelable.Class
+public class StreetViewPanoramaCamera extends AbstractSafeParcelable {
+
+    @Field(2)
+    public float zoom;
+
+    @Field(3)
+    public float tilt;
+
+    @Field(4)
+    public float bearing;
+
+    public static final SafeParcelableCreatorAndWriter<StreetViewPanoramaCamera> CREATOR = findCreator(StreetViewPanoramaCamera.class);
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
 }
