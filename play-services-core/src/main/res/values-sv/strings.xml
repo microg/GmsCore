@@ -227,4 +227,15 @@
     <string name="pref_vending_billing_note_licensing">Vissa appar kan kräva att du också aktiverar licensverifiering för att verifiera dina inköp.</string>
     <string name="backup_disabled">Säkerhetskopiering är för närvarande inte möjlig</string>
     <string name="perm_car_mileage_description">Få tillgång till din bils körsträcka</string>
+    <string name="credentials_assisted_continue">Fortsätt</string>
+    <string name="credentials_assisted_cancel">Avbryt</string>
+    <string name="credentials_assisted_confirmation_header">Loggar in dig</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Fortsätt som %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Logga in igen, på %1$s, med Google</string>
+    <string name="credentials_assisted_signin_consent_header">Loggar in som %1$s</string>
+    <string name="credentials_assisted_signin_description">Du kan hantera inloggning med Google i dina Google-konton.</string>
+    <string name="credentials_assisted_choose_account_label">Välj konto</string>
+    <string name="credentials_assisted_signin_consent">Genom att fortsätta kommer Google att dela ditt namn, din e-postadress och din profilbild med %1$s. Se %1$s:s sekretesspolicy och användarvillkor.</string>
+    <string name="credentials_assisted_choose_account_subtitle">för att fortsätta till %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Logga in med Google</string>
 </resources>
