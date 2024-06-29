@@ -89,7 +89,7 @@ Versuche es später noch einmal."</string>
     <!-- Settings strings -->
     <string name="prefcat_about">Infos</string>
     <string name="prefcat_components">Komponenten</string>
-    <string name="prefcat_configuration">Einstellungen</string>
+    <string name="prefcat_configuration">Konfiguration</string>
     <string name="prefcat_google_services">Google-Dienste</string>
     <string name="prefcat_location_service">Standortdienst</string>
     <string name="prefcat_services">Dienste</string>
@@ -102,7 +102,7 @@ Versuche es später noch einmal."</string>
     <string name="prefs_account_privacy">Persönliche Daten &amp; Privatsphäre</string>
     <string name="prefs_account_security">Anmeldung &amp; Sicherheit</string>
     <string name="pref_auth_trust_google_title">Vertraue Google bei App Rechten</string>
-    <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt bevor eine App Autorisierungsanfrage an Google geschickt wird. Einige Apps werden das Google Konto nicht nutzen können, wenn deaktiviert.</string>
+    <string name="pref_auth_trust_google_summary">Wenn deaktiviert, wird der Nutzer gefragt, bevor die Autorisierungsanfrage einer App an Google gesendet wird. Einige Apps können das Google-Konto nicht verwenden, wenn dies deaktiviert ist.</string>
     <string name="pref_auth_visible_title">Apps erlauben, Konten zu finden</string>
     <string name="pref_auth_visible_summary">Wenn aktiviert, können alle Apps auf diesem Gerät die E-Mail-Adressen deiner Google-Konten ohne vorherige Autorisierung einsehen.</string>
     <string name="pref_checkin_enable_summary">Registriert dein Gerät bei den Google-Diensten und erstellt eine eindeutige Gerätekennung. microG entfernt andere identifizierende Elemente außer deinem Google-Kontonamen aus den Registrierungsdaten.</string>
@@ -154,7 +154,7 @@ Versuche es später noch einmal."</string>
     <string name="signin_picker_add_account_label">Weiteres Konto hinzufügen</string>
     <string name="signin_confirm_button_text">Erlauben und teilen</string>
     <string name="pref_auth_include_android_id_title">Authentifizierung mit Geräteregistrierung</string>
-    <string name="pref_auth_include_android_id_summary">Wenn aktiviert, werden Authentifizierungsanfragen nicht mit der Geräteregistrierung verknüpft, wodurch sich nicht autorisierte Geräte anmelden können, was jedoch unvorhergesehene Folgen haben kann.</string>
+    <string name="pref_auth_include_android_id_summary">Wenn deaktiviert, werden Authentifizierungsanfragen nicht mit der Geräteregistrierung verknüpft, was nicht autorisierten Geräten die Anmeldung ermöglicht, aber auch unvorhergesehene Folgen haben kann.</string>
     <string name="pref_test_summary_passed">Alle Tests bestanden</string>
     <string name="pref_test_summary_failed">Fehlgeschlagen: %s</string>
     <string name="pref_test_summary_warn">Warnung: %s</string>
@@ -216,4 +216,43 @@ Versuche es später noch einmal."</string>
     <string name="signin_subtext_policy">Bevor du diese App benutzt, solltest du %1$s und %2$s überprüfen.</string>
     <string name="signin_subtext_policy_terms">Nutzungsbedingungen</string>
     <string name="perm_gsf_read_gservices_label">Google-Dienstkonfiguration lesen</string>
+    <string name="perm_car_speed_label">Geschwindigkeit des Autos</string>
+    <string name="perm_car_speed_description">Zugriff auf die Geschwindigkeit deines Autos</string>
+    <string name="perm_car_info_label">Informationen zum Auto</string>
+    <string name="perm_car_info_description">Zugriff auf die Informationen deines Autos</string>
+    <string name="perm_car_fuel_label">Kraftstoffstand des Autos</string>
+    <string name="perm_car_fuel_description">Zugriff auf die Informationen zum Kraftstoffstand deines Autos</string>
+    <string name="perm_car_mileage_label">Kilometerstand des Autos</string>
+    <string name="perm_car_mileage_description">Zugriff auf die Informationen zum Kilometerstand deines Autos</string>
+    <string name="perm_car_vendor_extension_label">Kanal für Autoverkäufer</string>
+    <string name="perm_car_vendor_extension_description">Zugriff auf den Kanal für Autoverkäufer zum Austausch fahrzeugspezifischer Informationen</string>
+    <string name="credentials_assisted_sign_back_title">Melde dich wieder bei %1$s mit Google an</string>
+    <string name="credentials_assisted_continue">Fortsetzen</string>
+    <string name="credentials_assisted_cancel">Abbrechen</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Als %1$s fortfahren</string>
+    <string name="credentials_assisted_signin_consent">Wenn du fortfährst, wird Google deinen Namen, deine E-Mail-Adresse und dein Profilbild mit %1$s teilen. Siehe die Datenschutzbestimmungen und Nutzungsbedingungen von %1$s.</string>
+    <string name="credentials_assisted_signin_description">Über Google anmelden kannst du in deinen Google-Konten verwalten.</string>
+    <string name="credentials_assisted_choose_account_label">Konto auswählen</string>
+    <string name="credentials_assisted_signin_button_text_long">Über Google anmelden</string>
+    <string name="pref_accounts_title">Google-Konten</string>
+    <string name="pref_accounts_summary">Google-Konten hinzufügen und verwalten</string>
+    <string name="prefcat_accounts_settings_title">Einstellungen</string>
+    <string name="prefcat_accounts_current_accounts_title">Konten</string>
+    <string name="feedback_disabled">Rückmeldung derzeit nicht möglich</string>
+    <string name="pref_vending_licensing_category">Google Play-Lizenzierung</string>
+    <string name="pref_vending_billing_category">Google Play-Abrechnung</string>
+    <string name="pref_vending_billing_note_experimental">Diese Funktion ist experimentell und kann zu Geldverlusten führen. Du wurdest gewarnt.</string>
+    <string name="pref_vending_billing_note_licensing">Bei einigen Apps musst du möglicherweise auch die Lizenzverifizierung aktivieren, um deine Einkäufe zu verifizieren.</string>
+    <string name="pref_vending_billing_enable_summary">Sobald aktiviert, können einige Apps Käufe oder Abonnements über den Google Play-Abrechnungsdienst abschließen.</string>
+    <string name="backup_disabled">Datensicherung derzeit nicht möglich</string>
+    <string name="pref_device_registration_android_id">Android ID</string>
+    <string name="pref_recaptcha_enterprise_test_title">ReCAPTCHA Enterprise testen</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_auth_strip_device_name_title">Gerätename zur Authentifizierung entfernen</string>
+    <string name="pref_auth_strip_device_name_summary">Wenn aktiviert, enthalten die Authentifizierungsanfragen nicht den Gerätenamen, wodurch sich nicht autorisierte Geräte anmelden können, was jedoch unvorhergesehene Folgen haben kann.</string>
+    <string name="credentials_assisted_signin_consent_header">Anmelden als %1$s</string>
+    <string name="credentials_assisted_confirmation_header">Sie werden angemeldet</string>
+    <string name="credentials_assisted_choose_account_subtitle">weiter zu %1$s</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> möchte auf Ihr Konto zugreifen, als ob es <b><xliff:g example="F-Droid">%2$s</xliff:g> von <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b> wäre. Dies könnte einen privilegierten Zugang zu Ihrem Konto gewähren.</string>
+    <string name="auth_package_override_request_title">Erlauben Sie <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierten Zugriff auf <xliff:g example="konto@beispiel.de">%2$s</xliff:g>\?</string>
 </resources>

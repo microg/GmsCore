@@ -21,4 +21,18 @@
     <string name="pref_location_cell_learning_enabled_title">Von GPS merken</string>
     <string name="pref_location_cell_learning_enabled_summary">Mobilfunkstandorte lokal speichern, wenn GPS verwendet wird.</string>
     <string name="pref_location_app_force_coarse_summary">Immer grobe Standorte an diese App zurückgeben, ohne Rücksicht auf die Berechtigungsstufe.</string>
+    <string name="location_settings_dialog_btn_cancel">Nein danke</string>
+    <string name="location_settings_dialog_btn_sure">OK</string>
+    <string name="pref_location_custom_url_title">Dienst-URL konfigurieren</string>
+    <string name="pref_location_custom_url_reset">Zurücksetzen</string>
+    <string name="location_settings_dialog_message_grant_permissions">Erteilen von Standortberechtigungen für den microG-Dienst</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Das muss dein Gerät können:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">Nutzung von GPS, Wi-Fi, Mobilfunknetzen und Sensoren</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Schalte die Geräteortung, die den microG-Standortdienst nutzt, für eine bessere Erfahrung ein</string>
+    <string name="location_settings_dialog_message_title_to_continue">Schalte zum Fortfahren die Geräteortung, die den microG-Standortdienst nutzt, ein</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Einzelheiten dazu findest du in den Standorteinstellungen.</string>
+    <string name="location_settings_dialog_message_gls_consent">Nutzung des microG-Standortdienstes; im Rahmen dieses Dienstes kann microG in regelmäßigen Abständen Standortdaten sammeln und diese Daten in anonymer Form zur Verbesserung der Standortgenauigkeit und der standortbezogenen Dienste verwenden.</string>
+    <string name="pref_location_custom_url_input_hint">Benutzerdefinierte Dienst-URL</string>
+    <string name="pref_location_custom_url_summary">Dies ermöglicht die Einstellung einer benutzerdefinierten Dienst-URL. Ungültige Werte können dazu führen, dass Standortdienste nicht mehr reagieren oder gar nicht mehr verfügbar sind.</string>
+    <string name="pref_location_custom_url_details">Der Pfad /v1/geolocate wird automatisch angehängt. Wenn der Standortdienstanbieter einen Schlüssel benötigt, kann dieser als Abfrageparameter an die Stamm-URL angehängt werden.</string>
 </resources>
