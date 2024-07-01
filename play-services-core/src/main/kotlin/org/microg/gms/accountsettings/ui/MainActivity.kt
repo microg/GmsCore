@@ -43,6 +43,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     235 to "https://myactivity.google.com/activitycontrols/youtube",
     238 to "https://www.google.com/setting/search/privateresults/",
     241 to "https://myaccount.google.com/communication-preferences",
+    242 to "https://myadcenter.google.com/controls",
     300 to "https://myaccount.google.com/language",
     301 to "https://drive.google.com/settings/storage",
     302 to "https://myaccount.google.com/deleteservices",
@@ -108,7 +109,8 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://payments.google.com/",
     "https://policies.google.com/",
     "https://fit.google.com/privacy/settings",
-    "https://maps.google.com/maps/timeline"
+    "https://maps.google.com/maps/timeline",
+    "https://myadcenter.google.com/controls"
 )
 
 private val ACTION_TO_SCREEN_ID = hashMapOf(
