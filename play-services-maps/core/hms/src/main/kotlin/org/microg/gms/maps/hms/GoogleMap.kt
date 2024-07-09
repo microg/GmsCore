@@ -209,6 +209,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun addGroundOverlay(options: GroundOverlayOptions): IGroundOverlayDelegate? {
         Log.d(TAG, "Method: addGroundOverlay")
+        if (options.width <= 0 && options.height <= 0 && options.bounds == null) {
+            Log.w(TAG, "addGroundOverlay options Parameters do not meet requirements")
+            return null
+        }
         val groundOverlay = map?.addGroundOverlay(options.toHms()) ?: return null
         val groundOverlayImpl = GroundOverlayImpl(groundOverlay)
         groundOverlays[groundOverlayImpl.id] = groundOverlayImpl
