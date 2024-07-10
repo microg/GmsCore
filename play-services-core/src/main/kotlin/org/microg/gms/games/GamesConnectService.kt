@@ -65,8 +65,9 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
                     callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED, null, resolution), null)
                 }
 
-                1 -> { // Auto sign-in on start, don't provide resolution if not
-                    callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED), null)
+                1 -> { // Automatically try to log in with a supported account at startup,
+                    // and provide an account selection solution if verification fails
+                    callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED, null, resolution), null)
                 }
 
                 else -> {
