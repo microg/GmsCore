@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.GetSignInIntentRequest
@@ -21,6 +22,7 @@ import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
+import kotlinx.coroutines.launch
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.Constants
 
@@ -91,10 +93,19 @@ class AssistedSignInActivity : AppCompatActivity() {
                 errorResult(Status(CommonStatusCodes.ERROR, "accounts is empty."))
                 return
             }
-            AssistedSignInFragment(googleSignInOptions!!, beginSignInRequest!!, accounts, clientPackageName!!,
-                { errorResult(it) },
-                { loginResult(it) })
-                .show(supportFragmentManager, AssistedSignInFragment.TAG)
+            lifecycleScope.launch {
+                runCatching {
+                    checkAppAuthStatus(this@AssistedSignInActivity, clientPackageName!!, googleSignInOptions!!, accounts.first())
+                }.onFailure {
+                    Log.d(TAG, "checkAppAuthStatus: error: ${it.localizedMessage ?: "signIn error"}")
+                    errorResult(Status(CommonStatusCodes.ERROR, it.localizedMessage ?: "signIn error"))
+                }.onSuccess {
+                    AssistedSignInFragment(googleSignInOptions!!, beginSignInRequest!!, accounts, clientPackageName!!,
+                            { errorResult(it) },
+                            { loginResult(it) })
+                            .show(supportFragmentManager, AssistedSignInFragment.TAG)
+                }
+            }
             return
         }
 
