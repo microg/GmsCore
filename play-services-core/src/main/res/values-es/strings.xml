@@ -252,4 +252,8 @@ Esto podría tardar algunos minutos."</string>
     <string name="credentials_assisted_confirmation_header">Registrándote</string>
     <string name="credentials_assisted_continue_as_user_button_label">Continuar como %1$s</string>
     <string name="credentials_assisted_sign_back_title">Vuelve a iniciar sesión en %1$s con Google</string>
+    <string name="auth_package_override_request_title">¿Permitir &lt;b&gt;&lt;xliff:g example=«F-Droid»&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; el acceso privilegiado a &lt;xliff:g example=«account@example.com»&gt;%2$s&lt;/xliff:g&gt;?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> quiere acceder a tu cuenta como si fuera <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Esto podría otorgarle acceso privilegiado a su cuenta.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Agregar automáticamente aplicaciones gratuitas a la biblioteca</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Las aplicaciones gratuitas pueden comprobar si se han descargado de Google Play. Añade aplicaciones gratuitas automáticamente a la biblioteca de tu cuenta para que siempre pasen la comprobación todas las aplicaciones gratuitas que estén disponibles actualmente.</string>
 </resources>
