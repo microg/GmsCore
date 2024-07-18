@@ -126,4 +126,23 @@
     <string name="permission_service_ah_description">Ermöglicht der App den Zugriff auf die Google App Engine über ein beliebiges verbundenes Google-Konto.</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.apps.readonly">Ansehen deiner Google Drive-Apps</string>
     <string name="permission_scope_www.googleapis.com_auth_drive.scripts">Ändere das Verhalten deiner Skripte für Google Apps Script</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_notebook_label">Google Notebook</string>
+    <string name="permission_service_sierra_label">Google Checkout Accounts</string>
+    <string name="permission_service_sierra_description">Ermöglicht der App den Zugriff auf die Google Checkout Accounts über ein beliebiges verbundenes Google-Konto.</string>
+    <string name="permission_service_sierraqa_label">Google Checkout QA Accounts</string>
+    <string name="permission_service_sierraqa_description">Ermöglicht der App den Zugriff auf die Google Checkout QA Accounts über ein beliebiges verbundenes Google-Konto.</string>
+    <string name="permission_service_sierrasandbox_label">Google Checkout Sandbox Accounts</string>
+    <string name="permission_service_sitemaps_label">Google Webmaster Tools</string>
+    <string name="permission_service_sitemaps_description">Ermöglicht der App den Zugriff auf die Google Webmaster Tools über ein beliebiges verbundenes Google-Konto.</string>
+    <string name="permission_service_speech_description">Ermöglicht der App den Zugriff auf die Sprachsuche über ein beliebiges verbundenes Google-Konto.</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Verwalte deinen Ad Exchange buyer Account</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Lese deine Ad Exchange Daten</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Umfang des App-Engine-Administrators.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Lese und verwalte die Einstellungen einer Google Apps Gruppe</string>
+    <string name="permission_service_health_description">Erlaubt App durch jeden verbundenen Google Account auf Google Health zuzugreifen.</string>
+    <string name="permission_service_notebook_description">Ermöglicht der App den Zugriff auf die Google Notebook über ein beliebiges verbundenes Google-Konto.</string>
+    <string name="permission_service_sierrasandbox_description">Ermöglicht der App den Zugriff auf die Google Checkout Sandbox Accounts über ein beliebiges verbundenes Google-Konto.</string>
+    <string name="permission_service_speechpersonalization_description">Ermöglicht der App den Zugriff auf die personalisierte Spracherkennung über ein beliebiges verbundenes Google-Konto.</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Lese und verwalte deine Ad Exchange Daten</string>
 </resources>
