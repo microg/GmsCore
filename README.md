@@ -1,7 +1,7 @@
 # microG Services
 
 [![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
-<a href="https://hosted.weblate.org/engage/microg/">
+<a href=TRANSLATION.md>
 <img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
 </a>
 
