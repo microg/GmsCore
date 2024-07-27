@@ -136,7 +136,7 @@
     <string name="permission_service_sitemaps_label">Google Webmaster Tools</string>
     <string name="permission_service_sitemaps_description">Ermöglicht der App den Zugriff auf die Google Webmaster Tools über ein beliebiges verbundenes Google-Konto.</string>
     <string name="permission_service_speech_description">Ermöglicht der App den Zugriff auf die Sprachsuche über ein beliebiges verbundenes Google-Konto.</string>
-    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Verwalte deinen Ad Exchange buyer Account</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer"></string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Lese deine Ad Exchange Daten</string>
     <string name="permission_scope_www.googleapis.com_auth_appengine.admin">Umfang des App-Engine-Administrators.</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Lese und verwalte die Einstellungen einer Google Apps Gruppe</string>
@@ -145,4 +145,8 @@
     <string name="permission_service_sierrasandbox_description">Ermöglicht der App den Zugriff auf die Google Checkout Sandbox Accounts über ein beliebiges verbundenes Google-Konto.</string>
     <string name="permission_service_speechpersonalization_description">Ermöglicht der App den Zugriff auf die personalisierte Spracherkennung über ein beliebiges verbundenes Google-Konto.</string>
     <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Lese und verwalte deine Ad Exchange Daten</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">Verwalte deine Daten und Berechtigungen in Google Cloud Storage</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order">Für den Lese-/Schreibzugriff von Wiederverkäufer-Administratoren und Benutzer beim Testen in der API-Sandbox oder dem Lese-/Schreibzugriff beim direkten Aufruf einer API-Operation.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">Zusätzlich zum allgemeinen OAuth-Lese-/Schreibbereich solltest du den OAuth-Lesebereich verwenden, wenn du die Daten des Kunden abrufst.</string>
+    <string name="permission_scope_www.googleapis.com_auth_urlshortener">Verwalte deine goo.gl Kurz-URLs</string>
 </resources>
