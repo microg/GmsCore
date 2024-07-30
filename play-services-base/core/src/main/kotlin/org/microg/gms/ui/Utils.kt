@@ -46,7 +46,7 @@ fun NavController.navigate(context: Context, @IdRes resId: Int, args: Bundle? = 
     } else null)
 }
 
-fun Context.hideIcon(hide: Boolean) {
+fun Context.hideAppIcon(hide: Boolean) {
     packageManager.setComponentEnabledSetting(
         ComponentName.createRelative(this, "org.microg.gms.ui.SettingsActivity"),
         when (hide) {

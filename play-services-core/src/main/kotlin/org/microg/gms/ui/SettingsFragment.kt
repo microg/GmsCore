@@ -61,10 +61,10 @@ class SettingsFragment : ResourceSettingsFragment() {
             }
             summary = getString(org.microg.tools.ui.R.string.about_version_str, AboutFragment.getSelfVersion(context))
         }
-        
-        findPreference<SwitchPreferenceCompat>(SettingsContract.CheckIn.HIDE_LAUNCHER_ICON)!!.apply {
+
+        findPreference<SwitchPreferenceCompat>(SettingsContract.CheckIn.HIDE_APP_ICON)!!.apply {
             setOnPreferenceChangeListener { _, newValue ->
-                requireActivity().hideIcon(newValue as Boolean)
+                requireActivity().hideAppIcon(newValue as Boolean)
                 true
             }
 

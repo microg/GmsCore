@@ -117,7 +117,7 @@ class SettingsProvider : ContentProvider() {
             CheckIn.SECURITY_TOKEN -> checkInPrefs.getLong(key, 0)
             CheckIn.VERSION_INFO -> checkInPrefs.getString(key, "") ?: ""
             CheckIn.DEVICE_DATA_VERSION_INFO -> checkInPrefs.getString(key, "") ?: ""
-            CheckIn.HIDE_LAUNCHER_ICON -> getSettingsBoolean(key, true)
+            CheckIn.HIDE_APP_ICON -> getSettingsBoolean(key, true)
             else -> throw IllegalArgumentException()
         }
     }
@@ -135,9 +135,9 @@ class SettingsProvider : ContentProvider() {
                 // special case: not saved in checkInPrefs
                 updateCheckInEnabled(value as Boolean)
             }
-            if (key == CheckIn.HIDE_LAUNCHER_ICON) {
+            if (key == CheckIn.HIDE_APP_ICON) {
                 // special case: not saved in checkInPrefs
-                updateHideLauncherIcon(value as Boolean)
+                updateHideAppIcon(value as Boolean)
             }
             when (key) {
                 CheckIn.ANDROID_ID -> editor.putLong(key, value as Long)
@@ -157,9 +157,9 @@ class SettingsProvider : ContentProvider() {
             .apply()
     }
 
-    private fun updateHideLauncherIcon(enabled: Boolean) {
+    private fun updateHideAppIcon(enabled: Boolean) {
         preferences.edit()
-            .putBoolean(CheckIn.HIDE_LAUNCHER_ICON, enabled)
+            .putBoolean(CheckIn.HIDE_APP_ICON, enabled)
             .apply()
     }
 

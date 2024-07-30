@@ -76,7 +76,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT;
 import static org.microg.gms.auth.AuthPrefs.isAuthVisible;
-import static org.microg.gms.checkin.CheckinPreferences.hideLauncherIcon;
+import static org.microg.gms.checkin.CheckinPreferences.hideAppIcon;
 import static org.microg.gms.common.Constants.GMS_PACKAGE_NAME;
 import static org.microg.gms.common.Constants.GMS_VERSION_CODE;
 
