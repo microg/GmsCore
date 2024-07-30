@@ -28,5 +28,11 @@ object CheckinPreferences {
             context.sendOrderedBroadcast(Intent(context, TriggerReceiver::class.java), null)
         }
     }
+    @JvmStatic
+    fun hideLauncherIcon(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, CheckIn.getContentUri(context)) {
+            put(CheckIn.HIDE_LAUNCHER_ICON, enabled)
+        }
+    }
 
 }

@@ -17,8 +17,10 @@ import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.vending.VendingPreferences
 import org.microg.gms.safetynet.SafetyNetPreferences
+import androidx.preference.SwitchPreferenceCompat
 import org.microg.gms.ui.settings.SettingsProvider
 import org.microg.gms.ui.settings.getAllSettingsProviders
+import org.microg.gms.vending.VendingPreferences
 import org.microg.tools.ui.ResourceSettingsFragment
 
 class SettingsFragment : ResourceSettingsFragment() {
@@ -58,6 +60,14 @@ class SettingsFragment : ResourceSettingsFragment() {
                 true
             }
             summary = getString(org.microg.tools.ui.R.string.about_version_str, AboutFragment.getSelfVersion(context))
+        }
+        
+        findPreference<SwitchPreferenceCompat>(SettingsContract.CheckIn.HIDE_LAUNCHER_ICON)!!.apply {
+            setOnPreferenceChangeListener { _, newValue ->
+                requireActivity().hideIcon(newValue as Boolean)
+                true
+            }
+
         }
 
         for (entry in getAllSettingsProviders(requireContext()).flatMap { it.getEntriesStatic(requireContext()) }) {
