@@ -14,10 +14,6 @@ import org.microg.gms.auth.AuthConstants
 const val PASSWORD_MANAGER_CLASS_NAME = "com.google.android.gms.credential.manager.PasswordManagerActivity"
 
 const val EXTRA_KEY_ACCOUNT_NAME = "pwm.DataFieldNames.accountName"
-const val EXTRA_KEY_UTM_SOURCE = "utm_source"
-const val EXTRA_KEY_UTM_MEDIUM = "utm_medium"
-const val EXTRA_KEY_UTM_CAMPAIGN = "utm_campaign"
-const val EXTRA_KEY_UTM_CONTENT = "utm_content"
 
 private const val TAG = "PasswordManagerActivity"
 
@@ -29,14 +25,6 @@ class PasswordManagerActivity : AppCompatActivity() {
 
     private val accountName: String?
         get() = runCatching { intent?.getStringExtra(EXTRA_KEY_ACCOUNT_NAME) }.getOrNull()
-    private val utmSource: String?
-        get() = runCatching { intent?.getStringExtra(EXTRA_KEY_UTM_SOURCE) }.getOrNull()
-    private val utmMedium: String?
-        get() = runCatching { intent?.getStringExtra(EXTRA_KEY_UTM_MEDIUM) }.getOrNull()
-    private val utmCampaign: String?
-        get() = runCatching { intent?.getStringExtra(EXTRA_KEY_UTM_CAMPAIGN) }.getOrNull()
-    private val utmContent: String?
-        get() = runCatching { intent?.getStringExtra(EXTRA_KEY_UTM_CONTENT) }.getOrNull()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,31 +49,7 @@ class PasswordManagerActivity : AppCompatActivity() {
         }
         layout.addView(webView)
         setContentView(layout)
-        WebViewHelper(this, webView).openWebView(constructPswPath(), realAccountName)
-    }
-
-    private fun constructPswPath(): String {
-        val psmPath = StringBuilder().apply {
-            if (!utmSource.isNullOrEmpty()) {
-                if (isEmpty()) append("?") else append("&")
-                append("$EXTRA_KEY_UTM_SOURCE=$utmSource")
-            }
-            if (!utmMedium.isNullOrEmpty()) {
-                if (isEmpty()) append("?") else append("&")
-                append("$EXTRA_KEY_UTM_MEDIUM=$utmMedium")
-            }
-            if (!utmCampaign.isNullOrEmpty()) {
-                if (isEmpty()) append("?") else append("&")
-                append("$EXTRA_KEY_UTM_CAMPAIGN=$utmCampaign")
-            }
-            if (!utmContent.isNullOrEmpty()) {
-                if (isEmpty()) append("?") else append("&")
-                append("$EXTRA_KEY_UTM_CONTENT=$utmContent")
-            }
-            insert(0, PSW_MANAGER_PATH)
-        }.toString()
-        Log.d(TAG, "constructPswPath: $psmPath")
-        return psmPath
+        WebViewHelper(this, webView).openWebView(PSW_MANAGER_PATH, realAccountName)
     }
 
     override fun onBackPressed() {

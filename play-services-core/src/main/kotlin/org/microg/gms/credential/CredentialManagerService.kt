@@ -22,10 +22,6 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import com.google.android.gms.credential.manager.EXTRA_KEY_ACCOUNT_NAME
-import com.google.android.gms.credential.manager.EXTRA_KEY_UTM_CAMPAIGN
-import com.google.android.gms.credential.manager.EXTRA_KEY_UTM_CONTENT
-import com.google.android.gms.credential.manager.EXTRA_KEY_UTM_MEDIUM
-import com.google.android.gms.credential.manager.EXTRA_KEY_UTM_SOURCE
 import com.google.android.gms.credential.manager.PASSWORD_MANAGER_CLASS_NAME
 import com.google.android.gms.credential.manager.common.IPendingIntentCallback
 import com.google.android.gms.credential.manager.common.ISettingsCallback
@@ -69,15 +65,8 @@ private class CredentialManagerServiceImpl(private val context: Context, overrid
                     setClassName(Constants.GMS_PACKAGE_NAME, PASSWORD_MANAGER_CLASS_NAME)
                     putExtra(EXTRA_KEY_ACCOUNT_NAME, params.account.name)
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    if (params.caller != null) {
-                        putExtra(EXTRA_KEY_UTM_SOURCE, params.caller.source)
-                        putExtra(EXTRA_KEY_UTM_MEDIUM, params.caller.medium)
-                        putExtra(EXTRA_KEY_UTM_CAMPAIGN, params.caller.campaign)
-                        putExtra(EXTRA_KEY_UTM_CONTENT, params.caller.content)
-                    }
                 }
-                val flags = PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
-                val pendingIntent = PendingIntent.getActivity(context, 0, intent, flags)
+                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
                 callback?.onPendingIntent(Status.SUCCESS, pendingIntent)
             }.onFailure {
                 Log.d(TAG, "getCredentialManagerIntent error", it)
