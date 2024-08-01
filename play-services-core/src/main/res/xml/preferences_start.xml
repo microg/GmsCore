@@ -66,10 +66,11 @@
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_footer">
         <SwitchPreferenceCompat
-            android:key="hideAppIcon"
-            android:title="@string/pref_hide_app_icon"
+            android:defaultValue="false"
             android:icon="@drawable/ic_hide_app_icon"
-            android:defaultValue="false"/>
+            android:key="hideAppIcon"
+            android:title="@string/pref_hide_app_icon_title"
+            app:summary="@string/pref_hide_app_icon_summary" />
         <Preference
             android:icon="@drawable/ic_info_outline"
             android:key="pref_about"
