@@ -139,7 +139,6 @@ class SettingsFragment : ResourceSettingsFragment() {
 
     companion object {
         const val PREF_ABOUT = "pref_about"
-        const val PREF_HIDE_APP_ICON = "pref_hide_app_icon"
         const val PREF_GCM = "pref_gcm"
         const val PREF_SNET = "pref_snet"
         const val PREF_LOCATION = "pref_location"
