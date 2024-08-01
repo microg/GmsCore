@@ -600,9 +600,7 @@
             android:label="@string/gms_settings_name"
             android:process=":ui"
             android:roundIcon="@mipmap/ic_app_settings"
-            android:taskAffinity="org.microg.gms.settings"
-            android:enabled="false"
-            android:exported="true">
+            android:taskAffinity="org.microg.gms.settings">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <data
@@ -631,7 +629,9 @@
             android:roundIcon="@mipmap/ic_app_settings"
             android:process=":ui"
             android:targetActivity="org.microg.gms.ui.MainSettingsActivity"
-            android:taskAffinity="org.microg.gms.settings">
+            android:taskAffinity="org.microg.gms.settings"
+            android:enabled="false"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -11,13 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import androidx.preference.SwitchPreferenceCompat
 import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
-import org.microg.gms.vending.VendingPreferences
 import org.microg.gms.safetynet.SafetyNetPreferences
-import androidx.preference.SwitchPreferenceCompat
+import org.microg.gms.settings.SettingsContract
 import org.microg.gms.ui.settings.SettingsProvider
 import org.microg.gms.ui.settings.getAllSettingsProviders
 import org.microg.gms.vending.VendingPreferences
@@ -139,6 +139,7 @@ class SettingsFragment : ResourceSettingsFragment() {
 
     companion object {
         const val PREF_ABOUT = "pref_about"
+        const val PREF_HIDE_APP_ICON = "pref_hide_app_icon"
         const val PREF_GCM = "pref_gcm"
         const val PREF_SNET = "pref_snet"
         const val PREF_LOCATION = "pref_location"

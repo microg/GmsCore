@@ -117,7 +117,7 @@ class SettingsProvider : ContentProvider() {
             CheckIn.SECURITY_TOKEN -> checkInPrefs.getLong(key, 0)
             CheckIn.VERSION_INFO -> checkInPrefs.getString(key, "") ?: ""
             CheckIn.DEVICE_DATA_VERSION_INFO -> checkInPrefs.getString(key, "") ?: ""
-            CheckIn.HIDE_APP_ICON -> getSettingsBoolean(key, true)
+            CheckIn.HIDE_APP_ICON -> getSettingsBoolean(key, false)
             else -> throw IllegalArgumentException()
         }
     }
