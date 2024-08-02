@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_name_location">Məkan</string>
+    <string name="prefcat_location_apps_title">Son giriş</string>
+    <string name="prefcat_location_wifi_title">Wi-Fi məkanı</string>
+    <string name="prefcat_location_cell_title">Mobil şəbəkə məkanı</string>
+    <string name="prefcat_geocoder_title">Ünvan qəbuledici</string>
+    <string name="pref_location_wifi_mls_enabled_title">Mozilla-dan sorğu</string>
+    <string name="pref_location_wifi_mls_enabled_summary">Mozilla Məkan Xidmətindən Wi-Fi əsaslı yeri əldə edin.</string>
+    <string name="pref_location_wifi_moving_enabled_title">Hotspot-dan sorğu</string>
+    <string name="pref_location_wifi_moving_enabled_summary">Qoşulduqda Wi-Fi məkanını birbaşa dəstəklənən Hotspots-dan əldə edin.</string>
+    <string name="pref_location_wifi_learning_enabled_title">GPS-dən xatırla</string>
+    <string name="pref_location_wifi_learning_enabled_summary">GPS istifadə edildikdə Wi-Fi məkanların yerli olaraq saxla.</string>
+    <string name="pref_location_cell_mls_enabled_summary">Mozilla Məkan Xidmətindən mobil şəbəkə qülləsinin yerlərini əldə edin.</string>
+    <string name="pref_location_cell_learning_enabled_title">GPS-dən xatırla</string>
+    <string name="pref_location_cell_learning_enabled_summary">GPS istifadə edildikdə mobil şəbəkə yerlərin yerli olaraq saxla.</string>
+    <string name="pref_geocoder_nominatim_enabled_title">Nominatim istifadə et</string>
+    <string name="fragment_location_apps_title">Məkan girişi olan tətbiqlər</string>
+    <string name="location_app_last_access_at">Son giriş: <xliff:g example="Dünən, 02:20 PM"> %1$s</xliff:g></string>
+    <string name="pref_location_app_force_coarse_title">Kobud yeri zorla</string>
+    <string name="pref_location_app_force_coarse_summary">İcazə səviyyəsinə məhəl qoymadan həmişə bu tətbiqə kobud yerləri qaytarın.</string>
+    <string name="location_settings_dialog_message_title_to_continue">Davam etmək üçün microG-nin məkan xidmətin istifadə edən cihaz məkanın aktiv et</string>
+    <string name="location_settings_dialog_message_details_start_paragraph">Cihazınız aşağıdakıları tələb edəcək:</string>
+    <string name="location_settings_dialog_message_location_services_gps_and_nlp">GPS, Wi‑Fi, mobil şəbəkələr və sensorları istifadə edin</string>
+    <string name="location_settings_dialog_message_grant_permissions">microG Xidmətinə məkan icazələri ver</string>
+    <string name="location_settings_dialog_message_details_end_paragraph">Təfərrüatlar üçün məkan tənzimləmələrinə keçin.</string>
+    <string name="location_settings_dialog_btn_cancel">Xeyr, təşəkkür</string>
+    <string name="location_settings_dialog_btn_sure">Oldu</string>
+    <string name="pref_location_custom_url_reset">Sıfırla</string>
+    <string name="pref_location_custom_url_details">/v1/geolocate yolu avtomatik olaraq əlavə olunur. Məkan təminatçısı açar tələb edirsə, o, kök URL-ə sorğu faktoru kimi əlavə edilə bilər.</string>
+    <string name="pref_location_custom_url_input_hint">Fərdi xidmət URL-i</string>
+    <string name="pref_location_cell_mls_enabled_title">Mozilla-dan sorğu</string>
+    <string name="pref_geocoder_nominatim_enabled_summary">OpenStreetMap Nominatim istifadə edərək ünvanları qəbul et.</string>
+    <string name="location_settings_dialog_message_title_for_better_experience">Daha yaxşı təcrübə üçün microG-nin məkan xidmətin istifadə edən cihazın məkanın aktiv et</string>
+    <string name="pref_location_custom_url_title">Xidmət URL-ni konfiqurasiya et</string>
+    <string name="pref_location_custom_url_summary">Bu, fərdi xidmət URL-i təyin etməyə imkan verir. Yanlış dəyərlər məkan xidmətlərinin cavab verməməsi və ya tamamilə əlçatan olmaması ilə nəticələnə bilər.</string>
+    <string name="location_settings_dialog_message_gls_consent">microG məkan xidmətin istifadə edin; bu xidmətin bir hissəsi kimi microG məkan məlumatını vaxtaşırı toplaya və məkan dəqiqliyini və məkan əsaslı xidmətləri təkmilləşdirmək üçün bu məlumatı gizli şəkildə istifadə edə bilər.</string>
+</resources>
