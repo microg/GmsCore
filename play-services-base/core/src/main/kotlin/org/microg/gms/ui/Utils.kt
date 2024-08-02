@@ -47,8 +47,9 @@ fun NavController.navigate(context: Context, @IdRes resId: Int, args: Bundle? = 
 }
 
 fun Context.hideAppIcon(hide: Boolean) {
+    val componentName = ComponentName("org.microg.gms.ui", "org.microg.gms.ui.SettingsActivity")
     packageManager.setComponentEnabledSetting(
-        ComponentName.createRelative(this, "org.microg.gms.ui.SettingsActivity"),
+        componentName,
         when (hide) {
             true -> PackageManager.COMPONENT_ENABLED_STATE_DISABLED
             false -> PackageManager.COMPONENT_ENABLED_STATE_ENABLED
