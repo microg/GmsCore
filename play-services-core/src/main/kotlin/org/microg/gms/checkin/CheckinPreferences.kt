@@ -29,9 +29,9 @@ object CheckinPreferences {
         }
     }
     @JvmStatic
-    fun hideAppIcon(context: Context, enabled: Boolean) {
+    fun hideAppIcon(context: Context, hide: Boolean) {
         SettingsContract.setSettings(context, CheckIn.getContentUri(context)) {
-            put(CheckIn.HIDE_APP_ICON, enabled)
+            put(CheckIn.HIDE_APP_ICON, hide)
         }
     }
 

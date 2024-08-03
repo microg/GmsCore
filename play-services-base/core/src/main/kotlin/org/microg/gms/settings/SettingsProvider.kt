@@ -157,9 +157,9 @@ class SettingsProvider : ContentProvider() {
             .apply()
     }
 
-    private fun updateHideAppIcon(enabled: Boolean) {
+    private fun updateHideAppIcon(hide: Boolean) {
         preferences.edit()
-            .putBoolean(CheckIn.HIDE_APP_ICON, enabled)
+            .putBoolean(CheckIn.HIDE_APP_ICON, hide)
             .apply()
     }
 
