@@ -68,7 +68,7 @@
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:icon="@drawable/ic_hide_app_icon"
-            android:key="pref_hide_app_icon"
+            android:key="hideAppIcon"
             android:summary="@string/pref_hide_app_icon_summary"
             android:title="@string/pref_hide_app_icon_title" />
         <Preference
