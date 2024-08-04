@@ -31,18 +31,26 @@ import org.microg.gms.utils.warnOnTransactionIssues
 private const val TAG = "RecaptchaService"
 
 class RecaptchaService : BaseService(TAG, GmsService.RECAPTCHA) {
-    private fun getRecaptchaImpl(packageName: String) = when {
-        SafetyNetPreferences.isEnabled(this) && SDK_INT >= 19 -> RecaptchaWebImpl(this, packageName, lifecycle)
-        DroidGuardPreferences.isAvailable(this) -> RecaptchaGuardImpl(this, packageName)
-        else -> RecaptchaImpl.Unsupported
+    private fun getRecaptchaImpl(packageName: String): ArrayList<RecaptchaImpl> {
+        val list = ArrayList<RecaptchaImpl>()
+        if (SafetyNetPreferences.isEnabled(this) && SDK_INT >= 19) {
+            list.add(RecaptchaWebImpl(this, packageName, lifecycle))
+        }
+        if (DroidGuardPreferences.isAvailable(this)) {
+            list.add(RecaptchaGuardImpl(this, packageName))
+        }
+        if (list.isEmpty()) {
+            list.add(RecaptchaImpl.Unsupported)
+        }
+        return list
     }
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)!!
-        val impl = getRecaptchaImpl(packageName)
+        val imps = getRecaptchaImpl(packageName)
         callback.onPostInitCompleteWithConnectionInfo(
             CommonStatusCodes.SUCCESS,
-            RecaptchaServiceImpl(this, packageName, lifecycle, impl),
+            RecaptchaServiceImpl(this, packageName, lifecycle, imps),
             ConnectionInfo().apply {
                 features = arrayOf(
                     Feature("verify_with_recaptcha_v2_internal", 1),
@@ -59,8 +67,10 @@ class RecaptchaServiceImpl(
     private val context: Context,
     private val packageName: String,
     override val lifecycle: Lifecycle,
-    private val impl: RecaptchaImpl
+    private val imps: List<RecaptchaImpl>
 ) : IRecaptchaService.Stub(), LifecycleOwner {
+
+    private var realRecaptchaImpl: RecaptchaImpl? = null
 
     override fun verifyWithRecaptcha(callback: IExecuteCallback, siteKey: String, packageName: String) {
         Log.d(TAG, "Not yet implemented: verifyWithRecaptcha($siteKey, $packageName)")
@@ -85,7 +95,11 @@ class RecaptchaServiceImpl(
         lifecycleScope.launch {
             Log.d(TAG, "close($handle)")
             try {
-                callback.onClosed(Status.SUCCESS, impl.close(handle))
+                if (realRecaptchaImpl == null) {
+                    throw UnsupportedOperationException("Method <close> realRecaptchaImpl is null")
+                }
+                Log.d(TAG, "close realRecaptchaImpl:${realRecaptchaImpl}")
+                callback.onClosed(Status.SUCCESS, realRecaptchaImpl!!.close(handle))
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -96,11 +110,21 @@ class RecaptchaServiceImpl(
         lifecycleScope.launch {
             Log.d(TAG, "init($params)")
             try {
-                val handle = impl.init(params)
-                if (params.version == LEGACY_VERSION) {
-                    callback.onHandle(Status.SUCCESS, handle)
-                } else {
-                    callback.onResults(Status.SUCCESS, InitResults().also { it.handle = handle })
+                Log.d(TAG, "imps size: ${imps.size}")
+                for (recaptchaImpl in imps) {
+                    Log.d(TAG, "recaptchaImpl:${recaptchaImpl}")
+                    val recaptchaHandle = runCatching { recaptchaImpl.init(params) }.getOrNull() ?: continue
+                    realRecaptchaImpl = recaptchaImpl
+                    if (params.version == LEGACY_VERSION) {
+                        callback.onHandle(Status.SUCCESS, recaptchaHandle)
+                    } else {
+                        callback.onResults(Status.SUCCESS, InitResults().also { it.handle = recaptchaHandle })
+                    }
+                    Log.d(TAG, "realRecaptchaImpl:${realRecaptchaImpl}")
+                    return@launch
+                }
+                if (realRecaptchaImpl == null) {
+                    throw UnsupportedOperationException("Method <init2> realRecaptchaImpl is null")
                 }
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -121,7 +145,11 @@ class RecaptchaServiceImpl(
         Log.d(TAG, "execute($params)")
         lifecycleScope.launch {
             try {
-                val data = impl.execute(params)
+                if (realRecaptchaImpl == null) {
+                    throw UnsupportedOperationException("Method <execute2> realRecaptchaImpl is null")
+                }
+                Log.d(TAG, "execute2 realRecaptchaImpl:${realRecaptchaImpl}")
+                val data = realRecaptchaImpl!!.execute(params)
                 if (params.version == LEGACY_VERSION) {
                     callback.onData(Status.SUCCESS, data)
                 } else {
