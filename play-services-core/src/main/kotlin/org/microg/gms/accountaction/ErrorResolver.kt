@@ -7,7 +7,7 @@ import android.util.Log
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.Constants
 import org.microg.gms.cryptauth.isLockscreenConfigured
-import org.microg.gms.cryptauth.syncCryptAuthKeys
+import org.microg.gms.cryptauth.sendDeviceScreenlockState
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
 import org.microg.gms.settings.SettingsContract
@@ -113,7 +113,7 @@ fun <T> Resolution.initiateFromBackgroundBlocking(context: Context, account: Acc
         CryptAuthSyncKeys -> {
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
             runBlocking {
-                syncCryptAuthKeys(context, account)
+                context.sendDeviceScreenlockState(account)
             }
             return retryFunction.run()
         }
@@ -140,7 +140,7 @@ fun <T> Resolution.initiateFromForegroundBlocking(context: Context, account: Acc
         CryptAuthSyncKeys -> {
             Log.d(TAG, "Resolving account error by performing cryptauth sync keys call.")
             runBlocking {
-                syncCryptAuthKeys(context, account)
+                context.sendDeviceScreenlockState(account)
             }
             return retryFunction.run()
         }
