@@ -93,19 +93,10 @@ class AssistedSignInActivity : AppCompatActivity() {
                 errorResult(Status(CommonStatusCodes.ERROR, "accounts is empty."))
                 return
             }
-            lifecycleScope.launch {
-                runCatching {
-                    checkAppAuthStatus(this@AssistedSignInActivity, clientPackageName!!, googleSignInOptions!!, accounts.first())
-                }.onFailure {
-                    Log.d(TAG, "checkAppAuthStatus: error: ${it.localizedMessage ?: "signIn error"}")
-                    errorResult(Status(CommonStatusCodes.ERROR, it.localizedMessage ?: "signIn error"))
-                }.onSuccess {
-                    AssistedSignInFragment(googleSignInOptions!!, beginSignInRequest!!, accounts, clientPackageName!!,
-                            { errorResult(it) },
-                            { loginResult(it) })
-                            .show(supportFragmentManager, AssistedSignInFragment.TAG)
-                }
-            }
+            AssistedSignInFragment(googleSignInOptions!!, beginSignInRequest!!, accounts, clientPackageName!!,
+                { errorResult(it) },
+                { loginResult(it) })
+                .show(supportFragmentManager, AssistedSignInFragment.TAG)
             return
         }
 
