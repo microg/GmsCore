@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest
@@ -123,7 +124,7 @@ class IdentitySignInServiceImpl(private val mContext: Context, private val clien
             putExtras(bundle)
         }
         val flags = PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
-        return PendingIntent.getActivity(mContext, 0, intent, flags)
+        return PendingIntentCompat.getActivity(mContext, 0, intent, flags, false)!!
     }
 
 }

@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 
+import androidx.core.app.PendingIntentCompat;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -52,7 +53,7 @@ public class GamesStubService extends BaseService {
         intent.setPackage(GMS_PACKAGE_NAME);
         intent.putExtra(EXTRA_GAME_PACACKE_NAME, packageName);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("pendingIntent", PendingIntent.getActivity(this, packageName.hashCode(), intent, FLAG_UPDATE_CURRENT));
+        bundle.putParcelable("pendingIntent", PendingIntentCompat.getActivity(this, packageName.hashCode(), intent, FLAG_UPDATE_CURRENT, false));
         callback.onPostInitComplete(CommonStatusCodes.RESOLUTION_REQUIRED, null, bundle);
     }
 }

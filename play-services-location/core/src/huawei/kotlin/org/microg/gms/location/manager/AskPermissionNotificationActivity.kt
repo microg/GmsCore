@@ -11,8 +11,6 @@ import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -35,6 +33,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.PendingIntentCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED
 import androidx.core.content.getSystemService
@@ -232,11 +231,11 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
             val notification = NotificationCompat.Builder(context, createNotificationChannel(context))
                 .setContentTitle(title).setContentText(text)
                 .setSmallIcon(R.drawable.ic_permission_notification)
-                .setContentIntent(PendingIntent.getActivity(context, 0, Intent(context, AskPermissionNotificationActivity::class.java), FLAG_IMMUTABLE))
+                .setContentIntent(PendingIntentCompat.getActivity(context, 0, Intent(context, AskPermissionNotificationActivity::class.java), 0, false))
                 .setStyle(NotificationCompat.BigTextStyle().bigText(text))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setOngoing(true)
-                .setDeleteIntent(PendingIntent.getBroadcast(context, 0, AskPermissionNotificationCancel.getTrigger(context), FLAG_IMMUTABLE))
+                .setDeleteIntent(PendingIntentCompat.getBroadcast(context, 0, AskPermissionNotificationCancel.getTrigger(context), 0, false))
                 .build()
             context.getSystemService<NotificationManager>()?.notify(NOTIFICATION_ID, notification)
             notificationIsShown = true

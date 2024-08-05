@@ -11,6 +11,7 @@ import android.content.Intent
 import android.os.Parcel
 import android.util.Base64
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -66,7 +67,7 @@ private class CredentialManagerServiceImpl(private val context: Context, overrid
                     putExtra(EXTRA_KEY_ACCOUNT_NAME, params.account.name)
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
-                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                val pendingIntent = PendingIntentCompat.getActivity(context, 0, intent, 0, false)
                 callback?.onPendingIntent(Status.SUCCESS, pendingIntent)
             }.onFailure {
                 Log.d(TAG, "getCredentialManagerIntent error", it)
