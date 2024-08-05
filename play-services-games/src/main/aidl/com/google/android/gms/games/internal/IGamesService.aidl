@@ -92,6 +92,8 @@ interface IGamesService {
     Intent getAchievementsIntent() = 9004;
     Intent getPlayerSearchIntent() = 9009;
 
+//    void getSelectSnapshotIntent(String str, boolean z, boolean z2, int i) = 12001;
+//    void loadSnapshotsResult(IGamesCallbacks callbacks, boolean forceReload) = 12002;
     void loadEvents(IGamesCallbacks callbacks, boolean forceReload) = 12015;
     void incrementEvent(String eventId, int incrementAmount) = 12016;
 //    void discardAndCloseSnapshot(in Contents contents) = 12018;
