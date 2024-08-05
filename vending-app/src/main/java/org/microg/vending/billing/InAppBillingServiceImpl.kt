@@ -18,7 +18,16 @@ import androidx.core.os.bundleOf
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import com.android.billingclient.api.BillingClient.ProductType
 import com.android.vending.VendingPreferences
+import com.android.vending.billing.IInAppBillingCreateAlternativeBillingOnlyTokenCallback
+import com.android.vending.billing.IInAppBillingCreateExternalPaymentReportingDetailsCallback
+import com.android.vending.billing.IInAppBillingDelegateToBackendCallback
+import com.android.vending.billing.IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback
+import com.android.vending.billing.IInAppBillingGetBillingConfigCallback
+import com.android.vending.billing.IInAppBillingGetExternalPaymentDialogIntentCallback
+import com.android.vending.billing.IInAppBillingIsAlternativeBillingOnlyAvailableCallback
+import com.android.vending.billing.IInAppBillingIsExternalPaymentAvailableCallback
 import com.android.vending.billing.IInAppBillingService
+import com.android.vending.billing.IInAppBillingServiceCallback
 import org.microg.vending.billing.ui.InAppBillingHostActivity
 import org.microg.vending.billing.ui.logic.BuyFlowResult
 import com.google.android.gms.droidguard.DroidGuardClient
@@ -28,6 +37,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.utils.toHexString
 import org.microg.vending.billing.core.*
+import java.util.Locale
 
 private class BuyFlowCacheEntry(
     var packageName: String,
@@ -179,7 +189,7 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
             Log.w(TAG, "isBillingSupported: Billing is disabled")
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Billing is disabled")
         }
-        if (apiVersion < 3 || apiVersion > 17) {
+        if (apiVersion < 3) {
             return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Client does not support the requesting billing API.")
         }
         if (extraParams != null && apiVersion < 7) {
@@ -624,6 +634,48 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
         extraParams?.size()
         Log.d(TAG, "o(apiVersion=$apiVersion, packageName=$packageName, arg3=$arg3, extraParams=$extraParams)")
         return resultBundle(BillingResponseCode.BILLING_UNAVAILABLE, "Not yet implemented")
+    }
+
+    override fun showInAppMessages(apiVersion: Int, packageName: String?, extraParams: Bundle?, callback: IInAppBillingServiceCallback?) {
+        Log.d(TAG,"showInAppMessages Not yet implemented")
+    }
+
+    override fun createAlternativeBillingOnlyToken(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingCreateAlternativeBillingOnlyTokenCallback?) {
+        Log.d(TAG,"createAlternativeBillingOnlyToken Not yet implemented")
+    }
+
+    override fun createExternalPaymentReportingDetails(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingCreateExternalPaymentReportingDetailsCallback?) {
+        Log.d(TAG,"createExternalPaymentReportingDetails Not yet implemented")
+    }
+
+    override fun delegateToBackend(bundle: Bundle?, callback: IInAppBillingDelegateToBackendCallback?) {
+        Log.d(TAG,"delegateToBackend Not yet implemented")
+    }
+
+    override fun getAlternativeBillingOnlyDialogIntent(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback?) {
+        Log.d(TAG,"getAlternativeBillingOnlyDialogIntent Not yet implemented")
+    }
+
+    override fun getBillingConfig(apiVersion: Int, packageName: String?, bundle: Bundle?, callback: IInAppBillingGetBillingConfigCallback) {
+        Log.d(TAG,"getBillingConfig apiVersion:$apiVersion packageName:$packageName bundle:$bundle")
+        val temp = Bundle()
+        val locale: Locale = Locale.getDefault()
+        val countryCode: String = locale.country
+        temp.putString("BILLING_CONFIG", "{\"countryCode\":\"$countryCode\"}")
+        val result = resultBundle(BillingResponseCode.OK, "", temp)
+        callback.callback(result)
+    }
+
+    override fun getExternalPaymentDialogIntent(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingGetExternalPaymentDialogIntentCallback?) {
+        Log.d(TAG,"getExternalPaymentDialogIntent Not yet implemented")
+    }
+
+    override fun isAlternativeBillingOnlyAvailable(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingIsAlternativeBillingOnlyAvailableCallback?) {
+        Log.d(TAG,"isAlternativeBillingOnlyAvailable Not yet implemented")
+    }
+
+    override fun isExternalPaymentAvailable(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingIsExternalPaymentAvailableCallback?) {
+        Log.d(TAG,"isExternalPaymentAvailable Not yet implemented")
     }
 
 }

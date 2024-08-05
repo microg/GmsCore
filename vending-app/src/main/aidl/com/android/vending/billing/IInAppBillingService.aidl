@@ -1,6 +1,16 @@
 package com.android.vending.billing;
 
 import android.os.Bundle;
+import com.android.vending.billing.IInAppBillingServiceCallback;
+import com.android.vending.billing.IInAppBillingCreateAlternativeBillingOnlyTokenCallback;
+import com.android.vending.billing.IInAppBillingCreateExternalPaymentReportingDetailsCallback;
+import com.android.vending.billing.IInAppBillingDelegateToBackendCallback;
+import com.android.vending.billing.IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback;
+import com.android.vending.billing.IInAppBillingGetBillingConfigCallback;
+import com.android.vending.billing.IInAppBillingGetExternalPaymentDialogIntentCallback;
+import com.android.vending.billing.IInAppBillingIsAlternativeBillingOnlyAvailableCallback;
+import com.android.vending.billing.IInAppBillingIsExternalPaymentAvailableCallback;
+
 
 /**
  * InAppBillingService is the service that provides in-app billing version 3 and beyond.
@@ -367,4 +377,23 @@ interface IInAppBillingService {
 //    void showInAppMessages(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingServiceCallback callback) = 1200;
 
 //    void r(String packageName, Bundle arg2, eql arg3) = 1300;
+
+    void showInAppMessages(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingServiceCallback callback) = 1200;
+
+    void createAlternativeBillingOnlyToken(int i, String str, in Bundle bundle, IInAppBillingCreateAlternativeBillingOnlyTokenCallback callback) = 1500;
+
+    void createExternalPaymentReportingDetails(int i, String str, in Bundle bundle, IInAppBillingCreateExternalPaymentReportingDetailsCallback callback) = 1800;
+
+    void delegateToBackend(in Bundle bundle, IInAppBillingDelegateToBackendCallback callback) = 2000;
+
+    void getAlternativeBillingOnlyDialogIntent(int i, String str, in Bundle bundle, IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback callback) = 1600;
+
+    void getBillingConfig(int apiVersion, String packageName, in Bundle bundle, IInAppBillingGetBillingConfigCallback callback) = 1300;
+
+    void getExternalPaymentDialogIntent(int i, String str, in Bundle bundle, IInAppBillingGetExternalPaymentDialogIntentCallback callback) = 1900;
+
+    void isAlternativeBillingOnlyAvailable(int i, String str, in Bundle bundle, IInAppBillingIsAlternativeBillingOnlyAvailableCallback callback) = 1400;
+
+    void isExternalPaymentAvailable(int i, String str, in Bundle bundle, IInAppBillingIsExternalPaymentAvailableCallback callback) = 1700;
+
 }
