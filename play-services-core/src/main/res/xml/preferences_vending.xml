@@ -18,6 +18,16 @@
             android:key="vending_licensing"
             android:persistent="false"
             app:iconSpaceReserved="false" />
+        <org.microg.gms.ui.TextPreference
+            android:selectable="false"
+            android:summary="@string/pref_vending_licensing_purchase_free_apps_summary"
+            app:iconSpaceReserved="false" />
+        <SwitchPreferenceCompat
+            android:title="@string/pref_vending_licensing_purchase_free_apps_switch"
+            android:key="vending_licensing_purchase_free_apps"
+            android:persistent="false"
+            android:dependency="vending_licensing"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

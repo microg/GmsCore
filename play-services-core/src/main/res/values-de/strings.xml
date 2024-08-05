@@ -207,6 +207,8 @@ Versuche es später noch einmal."</string>
     <string name="signin_picker_subtitle">weiter zu <xliff:g example="F-Droid">%1$s</xliff:g></string>
     <string name="signin_subtext_sharing">Um fortzufahren, wird microG Name, E-Mail-Adresse und Profilbild deines Google-Kontos mit <xliff:g example="F-Droid">%1$s</xliff:g> teilen.</string>
     <string name="pref_vending_license_enable_summary">Einige Apps erfordern einen Nachweis, dass du sie auf Google Play gekauft hast. Wenn dies von einer App verlangt wird, kann microG einen Kaufnachweis von Google herunterladen. Wenn deaktiviert oder kein Google-Konto hinzugefügt wurde, werden Anfragen zur Lizenzverifizierung ignoriert.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Kostenfreie Apps automatisch zur Mediathek hinzufügen</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Kostenfreie Apps können prüfen, ob sie aus dem Google Play-Store bezogen wurden. Wenn du kostenfreie Apps automatisch zur Konto-Mediathek hinzufügst, wird dieser Test für alle Apps bestanden, die kostenlos und für dich derzeit verfügbar sind.</string>
     <string name="pref_recaptcha_test_title">ReCAPTCHA testen</string>
     <string name="signin_picker_title">Ein Konto auswählen</string>
     <string name="signin_subtext_policy_privacy">Datenschutzerklärung</string>

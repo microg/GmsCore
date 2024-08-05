@@ -25,6 +25,21 @@ object VendingPreferences {
     }
 
     @JvmStatic
+    fun isLicensingPurchaseFreeAppsEnabled(context: Context): Boolean {
+        val projection = arrayOf(SettingsContract.Vending.LICENSING_PURCHASE_FREE_APPS)
+        return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
+            c.getInt(0) != 0
+        }
+    }
+
+    @JvmStatic
+    fun setLicensingPurchaseFreeAppsEnabled(context: Context, enabled: Boolean) {
+        SettingsContract.setSettings(context, SettingsContract.Vending.getContentUri(context)) {
+            put(SettingsContract.Vending.LICENSING_PURCHASE_FREE_APPS, enabled)
+        }
+    }
+
+    @JvmStatic
     fun isBillingEnabled(context: Context): Boolean {
         val projection = arrayOf(SettingsContract.Vending.BILLING)
         return SettingsContract.getSettings(context, SettingsContract.Vending.getContentUri(context), projection) { c ->
