@@ -7,6 +7,8 @@ package org.microg.gms.utils;
 
 import android.util.Base64;
 
+import java.util.Arrays;
+
 public class ToStringHelper {
     private StringBuilder sb;
     private boolean hasField;
@@ -109,6 +111,15 @@ public class ToStringHelper {
     public ToStringHelper field(String name, byte[] val, boolean forceNull) {
         if (val == null && !forceNull) return this;
         return fieldUnquoted(name, val == null ? "null" : Base64.encodeToString(val, Base64.NO_WRAP | Base64.NO_PADDING | Base64.URL_SAFE));
+    }
+
+    public ToStringHelper field(String name, Object[] val) {
+        return field(name, val, false);
+    }
+
+    public ToStringHelper field(String name, Object[] val, boolean forceNull) {
+        if (val == null && !forceNull) return this;
+        return fieldUnquoted(name, val == null ? "null" : Arrays.toString(val));
     }
 
     public String end() {
