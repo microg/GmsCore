@@ -216,12 +216,13 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
     companion object {
         private const val SHARED_PREFERENCE_NAME = "location_perm_notify"
         const val PERMISSION_REJECT_SHOW = "permission_reject_show"
+        private const val PERMISSION_IS_SHOW = "permission_is_show"
         private const val NOTIFICATION_ID = 1026359765
-
-        private var notificationIsShown = false
 
         @JvmStatic
         fun showLocationPermissionNotification(context: Context) {
+            val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCE_NAME, MODE_PRIVATE)
+            val notificationIsShown = sharedPreferences.getBoolean(PERMISSION_IS_SHOW, false)
             if (notificationIsShown) return
             AskPermissionNotificationCancel.register(context)
             val appName = context.packageManager.getApplicationLabel(context.packageName).toString()
@@ -239,15 +240,17 @@ class AskPermissionNotificationActivity : AppCompatActivity() {
                 .setDeleteIntent(PendingIntent.getBroadcast(context, 0, AskPermissionNotificationCancel.getTrigger(context), FLAG_IMMUTABLE))
                 .build()
             context.getSystemService<NotificationManager>()?.notify(NOTIFICATION_ID, notification)
-            notificationIsShown = true
+            sharedPreferences.edit().putBoolean(PERMISSION_IS_SHOW, true).apply()
         }
 
         @JvmStatic
         fun hideLocationPermissionNotification(context: Context) {
+            val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCE_NAME, MODE_PRIVATE)
+            val notificationIsShown = sharedPreferences.getBoolean(PERMISSION_IS_SHOW, false)
             if (!notificationIsShown) return
             context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
             AskPermissionNotificationCancel.unregister(context)
-            notificationIsShown = false
+            sharedPreferences.edit().putBoolean(PERMISSION_IS_SHOW, false).apply()
         }
 
         @TargetApi(26)
