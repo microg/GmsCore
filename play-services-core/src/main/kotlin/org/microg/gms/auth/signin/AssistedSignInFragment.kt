@@ -274,7 +274,6 @@ class AssistedSignInFragment(
             }.onFailure {
                 Log.d(TAG, "startLogin: error", it)
                 errorBlock(Status(CommonStatusCodes.INTERNAL_ERROR, "signIn error"))
-                return@launch
             }
         }
     }
