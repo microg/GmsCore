@@ -21,6 +21,7 @@
 
     <color name="dialog_border_color">#88CCCCCC</color>
     <color name="material_error">#fff44336</color>
+    <color name="material_success">#34a853</color>
 
     <color name="gm3_ref_palette_error10">#ff410e0b</color>
     <color name="gm3_ref_palette_error100">#ffffffff</color>
