@@ -119,14 +119,15 @@ class AskPermissionActivity : AppCompatActivity() {
                 val onlyBackgroundDenied = backgroundDenied && grantResults.count { it == PackageManager.PERMISSION_DENIED } == 1
                 val someAccepted = !permissionGrants.contentEquals(grantResults)
                 Log.d(TAG, "onRequestPermissionsResult onlyBackgroundDenied: $onlyBackgroundDenied someAccepted:$someAccepted")
-                if (onlyBackgroundDenied && someAccepted) {
+                if (onlyBackgroundDenied && someAccepted && firstRequestLocationSettingsDialog) {
+                    firstRequestLocationSettingsDialog = false
                     // Only background denied, ask again as some systems require that
                     requestPermissions()
                     return
                 }
             }
             firstRequestLocationSettingsDialog = false
-            finishWithReply()
+            requestPermissions()
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
@@ -134,7 +135,6 @@ class AskPermissionActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_SETTINGS) {
-            updatePermissionGrants()
             finishWithReply()
         } else {
             super.onActivityResult(requestCode, resultCode, data)
