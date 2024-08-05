@@ -57,7 +57,7 @@
     <string name="permission_service_groups2_label">Google 网上论坛</string>
     <string name="permission_service_groups2_description">允许应用通过任何已关联的 Google 账号访问 Google 网上论坛。</string>
     <string name="permission_service_youtube_label">YouTube</string>
-    <string name="permission_service_wise_label">Google Spreadsheets</string>
+    <string name="permission_service_wise_label">Google 表格</string>
     <string name="permission_service_wifi_label">Google Wi-Fi</string>
     <string name="permission_service_talk_label">Google Talk</string>
     <string name="permission_service_print_label">Google 图书搜索</string>
@@ -65,12 +65,12 @@
     <string name="permission_service_orkut_label">Orkut</string>
     <string name="permission_service_dodgeball_label">Dodgeball</string>
     <string name="permission_service_gbase_label">Google Base</string>
-    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_grandcentral_label">Google 语音</string>
     <string name="permission_service_adsense_label">AdSense</string>
     <string name="permission_service_adwords_label">Adwords</string>
     <string name="permission_service_ah_label">Google App Engine</string>
     <string name="permission_service_blogger_label">Blogger</string>
-    <string name="permission_service_health_label">Google Health</string>
+    <string name="permission_service_health_label">Google 健康</string>
     <string name="permission_service_health_description">允许应用通过任何已关联的 Google 账号访问 Google Health。</string>
     <string name="permission_scope_www.googleapis.com_auth_youtube">管理您的 YouTube 账号</string>
     <string name="permission_scope_www.googleapis.com_auth_youtubepartner">查看并管理您在 YouTube 上的资产和相关内容</string>
