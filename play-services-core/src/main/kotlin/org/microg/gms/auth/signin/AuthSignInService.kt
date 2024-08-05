@@ -104,8 +104,12 @@ class AuthSignInServiceImpl(
         lifecycleScope.launchWhenStarted {
             try {
                 val account = account ?: options?.account ?: SignInConfigurationService.getDefaultAccount(context, packageName)
-                if (account != null) performSignOut(context, packageName, options, account)
-                SignInConfigurationService.setDefaultAccount(context, packageName, null)
+                if (account != null) {
+                    val defaultOptions = SignInConfigurationService.getDefaultOptions(context, packageName)
+                    Log.d(TAG, "$packageName:signOut defaultOptions:($defaultOptions)")
+                    performSignOut(context, packageName, defaultOptions ?: options, account)
+                }
+                SignInConfigurationService.setDefaultSignInInfo(context, packageName, null, null)
                 runCatching { callbacks.onSignOut(Status.SUCCESS) }
             } catch (e: Exception) {
                 Log.w(TAG, e)
@@ -138,7 +142,7 @@ class AuthSignInServiceImpl(
                         authManager.invalidateAuthToken(token)
                         authManager.isPermitted = false
                     }
-                    SignInConfigurationService.setDefaultAccount(context, packageName, account)
+                    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
                     runCatching { callbacks.onRevokeAccess(Status.SUCCESS) }
                 } catch (e: Exception) {
                     Log.w(TAG, e)

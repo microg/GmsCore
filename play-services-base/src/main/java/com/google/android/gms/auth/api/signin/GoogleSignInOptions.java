@@ -72,6 +72,7 @@ public class GoogleSignInOptions extends AutoSafeParcelable {
     private String logSessionId;
 
     private GoogleSignInOptions() {
+        this.scopes = new ArrayList<>();
     }
 
     /**
