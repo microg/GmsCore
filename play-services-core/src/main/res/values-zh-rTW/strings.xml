@@ -239,5 +239,5 @@
     <string name="credentials_assisted_confirmation_header">將你登入</string>
     <string name="credentials_assisted_continue_as_user_button_label">以「%1$s」的身分繼續</string>
     <string name="credentials_assisted_signin_consent_header">以「%1$s」的身分登入</string>
-    <string name="credentials_assisted_signin_consent">繼續即表示</string>
+    <string name="credentials_assisted_signin_consent">如果您繼續操作，Google 會將您的姓名、電郵地址和個人照片提供給 %1$s。請參閱 %1$s 的隱私權政策和服務條款。</string>
 </resources>
