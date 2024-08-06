@@ -23,7 +23,7 @@
             android:title="@string/self_check_title">
             <intent
                 android:targetClass="org.microg.gms.ui.SelfCheckFragment$AsActivity"
-                android:targetPackage="com.google.android.gms" />
+                android:targetPackage="@string/package_id" />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/prefcat_google_services" android:key="prefcat_google_services">
@@ -55,7 +55,7 @@
             app:isPreferenceVisible="false">
             <intent
                 android:targetClass="org.microg.gms.ui.GoogleMoreFragment$AsActivity"
-                android:targetPackage="com.google.android.gms" />
+                android:targetPackage="@string/package_id" />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:layout="@layout/preference_category_no_label" android:key="prefcat_other_services">
