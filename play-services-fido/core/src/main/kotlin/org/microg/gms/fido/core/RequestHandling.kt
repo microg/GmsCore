@@ -7,6 +7,7 @@ package org.microg.gms.fido.core
 
 import android.content.Context
 import android.net.Uri
+import android.os.Parcelable
 import android.util.Base64
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
@@ -15,6 +16,7 @@ import com.google.android.gms.fido.fido2.api.common.*
 import com.google.android.gms.fido.fido2.api.common.ErrorCode.*
 import com.google.common.net.InternetDomainName
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import org.json.JSONObject
 import org.microg.gms.fido.core.RequestOptionsType.REGISTER
@@ -24,8 +26,21 @@ import java.net.HttpURLConnection
 import java.security.MessageDigest
 
 class RequestHandlingException(val errorCode: ErrorCode, message: String? = null) : Exception(message)
+class MissingPinException(message: String? = null): Exception(message)
+class WrongPinException(message: String? = null): Exception(message)
 
 enum class RequestOptionsType { REGISTER, SIGN }
+class UserInfo(
+    val name: String,
+    val displayName: String? = null,
+    val icon: String? = null
+)
+
+@Parcelize
+class AuthenticatorResponseWrapper (
+    val responseChoices: List<Pair<UserInfo?, suspend () -> AuthenticatorResponse>>,
+    val deleteFunctions: List<suspend () -> Boolean> = ArrayList()
+) : Parcelable
 
 val RequestOptions.registerOptions: PublicKeyCredentialCreationOptions
     get() = when (this) {
@@ -148,19 +163,6 @@ private suspend fun isAppIdAllowed(context: Context, appId: String, facetId: Str
 }
 
 suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packageName: String?) {
-    if (type == REGISTER) {
-        if (registerOptions.authenticatorSelection?.requireResidentKey == true) {
-            throw RequestHandlingException(
-                NOT_SUPPORTED_ERR,
-                "Resident credentials or empty 'allowCredentials' lists are not supported  at this time."
-            )
-        }
-    }
-    if (type == SIGN) {
-        if (signOptions.allowList.isNullOrEmpty()) {
-            throw RequestHandlingException(NOT_ALLOWED_ERR, "Request doesn't have a valid list of allowed credentials.")
-        }
-    }
     if (facetId.startsWith("https://")) {
         if (topDomainOf(Uri.parse(facetId).host) != topDomainOf(rpId)) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "RP ID $rpId not allowed from facet $facetId")

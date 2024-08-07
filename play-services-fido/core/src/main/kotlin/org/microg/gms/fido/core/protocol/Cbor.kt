@@ -6,10 +6,13 @@ package org.microg.gms.fido.core.protocol
 
 import android.util.Log
 import com.google.android.gms.fido.common.Transport
+import com.google.android.gms.fido.fido2.api.common.Algorithm
+import com.google.android.gms.fido.fido2.api.common.EC2Algorithm
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialDescriptor
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialParameters
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialRpEntity
 import com.google.android.gms.fido.fido2.api.common.PublicKeyCredentialUserEntity
+import com.google.android.gms.fido.fido2.api.common.RSAAlgorithm
 import com.upokecenter.cbor.CBORObject
 
 private const val TAG = "FidoCbor"
@@ -54,6 +57,33 @@ fun CBORObject.decodeAsPublicKeyCredentialUserEntity() = PublicKeyCredentialUser
     get("icon")?.AsString(),
     get("displayName")?.AsString() ?: "".also { Log.w(TAG, "displayName was not present") }
 )
+
+fun CBORObject.decodeAsCoseKey() = CoseKey(
+    getAlgorithm(get(CoseKey.ALG).AsInt32Value()),
+    get(CoseKey.X).GetByteString(),
+    get(CoseKey.Y).GetByteString(),
+    get(CoseKey.CRV).AsInt32Value()
+)
+
+fun getAlgorithm(algorithmInt: Int): Algorithm {
+    return when (algorithmInt) {
+        -65535 -> RSAAlgorithm.RS1
+        -262 -> RSAAlgorithm.LEGACY_RS1
+        -261 -> EC2Algorithm.ED512
+        -260 -> EC2Algorithm.ED256
+        -259 -> RSAAlgorithm.RS512
+        -258 -> RSAAlgorithm.RS384
+        -257 -> RSAAlgorithm.RS256
+        -39 -> RSAAlgorithm.PS512
+        -38 -> RSAAlgorithm.PS384
+        -37 -> RSAAlgorithm.PS256
+        -36 -> EC2Algorithm.ES512
+        -35 -> EC2Algorithm.ES384
+        -7 -> EC2Algorithm.ES256
+
+        else -> Algorithm { algorithmInt }
+    }
+}
 
 fun PublicKeyCredentialParameters.encodeAsCbor() = CBORObject.NewMap().apply {
     set("alg", algorithmIdAsInteger.encodeAsCbor())
