@@ -209,6 +209,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     override fun addGroundOverlay(options: GroundOverlayOptions): IGroundOverlayDelegate? {
         Log.d(TAG, "Method: addGroundOverlay")
+        if (options.width <= 0 && options.height <= 0 && options.bounds == null) {
+            Log.w(TAG, "addGroundOverlay options Parameters do not meet requirements")
+            return null
+        }
         val groundOverlay = map?.addGroundOverlay(options.toHms()) ?: return null
         val groundOverlayImpl = GroundOverlayImpl(groundOverlay)
         groundOverlays[groundOverlayImpl.id] = groundOverlayImpl
@@ -246,11 +250,10 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
 
     fun applyMapType() {
         // TODO: Serve map styles locally
+        Log.d(TAG, "Method: applyMapType -> $storedMapType")
         when (storedMapType) {
-            MAP_TYPE_SATELLITE -> map?.mapType = HuaweiMap.MAP_TYPE_SATELLITE
             MAP_TYPE_TERRAIN -> map?.mapType = HuaweiMap.MAP_TYPE_TERRAIN
-            MAP_TYPE_HYBRID -> map?.mapType = HuaweiMap.MAP_TYPE_HYBRID
-            //MAP_TYPE_NONE, MAP_TYPE_NORMAL,
+            // MAP_TYPE_SATELLITE, MAP_TYPE_HYBRID, MAP_TYPE_NONE, MAP_TYPE_NORMAL,
             else -> map?.mapType = HuaweiMap.MAP_TYPE_NORMAL
         }
         // map?.let { BitmapDescriptorFactoryImpl.registerMap(it) }
@@ -309,13 +312,6 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
     override fun setOnCameraChangeListener(listener: IOnCameraChangeListener?) = afterInitialize {
         Log.d(TAG, "setOnCameraChangeListener");
         cameraChangeListener = listener
-        it.setOnCameraIdleListener {
-            try {
-                cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
-            } catch (e: Exception) {
-                Log.w(TAG, e)
-            }
-        }
     }
 
     override fun setOnCircleClickListener(listener: IOnCircleClickListener?) = afterInitialize { hmap ->
@@ -509,7 +505,15 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         cameraMoveListener = listener
         it.setOnCameraMoveListener {
             try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if(mapView != null){
+                        if(mapView!!.parent != null){
+                            mapView!!.parent.onDescendantInvalidated(mapView!!,mapView!!)
+                        }
+                    }
+                }
                 cameraMoveListener?.onCameraMove()
+                cameraChangeListener?.onCameraChange(map?.cameraPosition?.toGms())
             } catch (e: Exception) {
                 Log.w(TAG, e)
             }
@@ -771,15 +775,16 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         }
 
         val runCallbacks = {
-            synchronized(mapLock) {
-                initializedCallbackList.forEach {
-                    try {
-                        it.onMapReady(this)
-                    } catch (e: Exception) {
-                        Log.w(TAG, e)
-                    }
-                }.also {
-                    initializedCallbackList.clear()
+            val callbacks = synchronized(mapLock) {
+                ArrayList(initializedCallbackList)
+                    .also { initializedCallbackList.clear() }
+            }
+
+            callbacks.forEach {
+                try {
+                    it.onMapReady(this)
+                } catch (e: Exception) {
+                    Log.w(TAG, e)
                 }
             }
         }

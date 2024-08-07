@@ -36,6 +36,21 @@
         </activity>
 
         <activity
+            android:name="org.microg.gms.location.settings.GoogleLocationSettingsActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent">
+            <intent-filter>
+                <action android:name="com.google.android.location.settings.GOOGLE_LOCATION_SETTINGS" />
+                <action android:name="com.google.android.gms.location.settings.GOOGLE_LOCATION_SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="org.microg.gms.location.manager.AskPermissionActivity"
             android:excludeFromRecents="true"
             android:process=":ui"

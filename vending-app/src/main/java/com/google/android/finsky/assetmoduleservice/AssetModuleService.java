@@ -21,6 +21,8 @@ import java.util.List;
 public class AssetModuleService extends Service {
     private static final String TAG = "AssetModuleService";
 
+    private final List<String> requested = new ArrayList<>();
+
     private final IAssetModuleService.Stub service = new IAssetModuleService.Stub() {
 
         @Override
@@ -65,6 +67,12 @@ public class AssetModuleService extends Service {
         public void requestDownloadInfo(String packageName, List<Bundle> list, Bundle bundle, IAssetModuleServiceCallback callback) throws RemoteException {
             Log.d(TAG, "Method (requestDownloadInfo) called by packageName -> " + packageName);
             Bundle result = new Bundle();
+            if (requested.contains(packageName)) {
+                result.putInt("error_code", -5);
+                callback.onError(result);
+                return;
+            }
+            requested.add(packageName);
             result.putStringArrayList("pack_names", new ArrayList<>());
             callback.onRequestDownloadInfo(result, result);
         }
@@ -84,5 +92,12 @@ public class AssetModuleService extends Service {
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind");
         return service.asBinder();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Log.d(TAG, "onUnbind");
+        requested.clear();
+        return super.onUnbind(intent);
     }
 }

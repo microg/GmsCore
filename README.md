@@ -1,10 +1,17 @@
-microG Services
-=======
+# microG Services
+
 [![Build status](https://github.com/microg/GmsCore/actions/workflows/build.yml/badge.svg)](https://github.com/microg/GmsCore/actions/workflows/build.yml)
+<a href=TRANSLATION.md>
+<img src="https://hosted.weblate.org/widget/microg/svg-badge.svg" alt="Translation status" />
+</a>
 
 microG Services is a FLOSS (Free/Libre Open Source Software) framework to allow applications designed for Google Play Services to run on systems, where Play Services is not available.
 
 ### Please refer to the [wiki](https://github.com/microg/GmsCore/wiki) for downloads and instructions
+
+## Translations
+
+If you'd like to help translate microG, take a look at [TRANSLATION](TRANSLATION.md).
 
 
 License

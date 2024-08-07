@@ -113,7 +113,11 @@ class LocationRequestManager(private val context: Context, override val lifecycl
     suspend fun remove(oldBinder: IBinder) {
         lock.withLock {
             oldBinder.unlinkToDeath(this, 0)
-            if (binderRequests.remove(oldBinder) != null) recalculateRequests()
+            val holder = binderRequests.remove(oldBinder)
+            if (holder != null) {
+                holder.cancel()
+                recalculateRequests()
+            }
         }
         notifyRequestDetailsUpdated()
     }
@@ -398,7 +402,7 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 get() = request.intervalMillis < 60000 || effectivePriority == PRIORITY_HIGH_ACCURACY
 
             fun update(callback: ILocationCallback, request: LocationRequest): LocationRequestHolder {
-                val changedGranularity = request.granularity != this.request.granularity
+                val changedGranularity = request.granularity != this.request.granularity || request.granularity == GRANULARITY_PERMISSION_LEVEL
                 if (changedGranularity && shouldPersistOp) context.finishAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)
                 this.callback = callback
                 this.request = request
@@ -421,7 +425,6 @@ class LocationRequestManager(private val context: Context, override val lifecycl
                 } else {
                     if (!context.checkAppOpForEffectiveGranularity(clientIdentity, effectiveGranularity)) throw RuntimeException("Lack of permission")
                 }
-                // TODO: Register app op watch
                 return this
             }
 

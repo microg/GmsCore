@@ -139,7 +139,7 @@ public class LoginActivity extends AssistantActivity {
             }
         });
         if(getIntent().hasExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE)){
-            Object tempObject = getIntent().getExtras().get("accountAuthenticatorResponse");
+            Object tempObject = getIntent().getExtras().get(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
             if (tempObject instanceof AccountAuthenticatorResponse) {
                 response = (AccountAuthenticatorResponse) tempObject;
             }

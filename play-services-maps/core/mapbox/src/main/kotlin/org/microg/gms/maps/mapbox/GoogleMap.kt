@@ -152,6 +152,33 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                 if (rules[RelativeLayout.ALIGN_PARENT_END] == RelativeLayout.TRUE) gravity = gravity or Gravity.END
                 map?.uiSettings?.logoGravity = gravity
             }
+
+            override fun setMargins(left: Int, top: Int, right: Int, bottom: Int) {
+                super.setMargins(left, top, right, bottom)
+                map?.uiSettings?.setLogoMargins(left, top, right, bottom)
+            }
+        }
+        val fakeCompass = View(mapContext)
+        fakeCompass.tag = "GoogleMapCompass"
+        fakeCompass.layoutParams = object : RelativeLayout.LayoutParams(0, 0) {
+            @SuppressLint("RtlHardcoded")
+            override fun addRule(verb: Int, subject: Int) {
+                super.addRule(verb, subject)
+                val rules = this.rules
+                var gravity = 0
+                if (rules[RelativeLayout.ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE) gravity = gravity or Gravity.BOTTOM
+                if (rules[RelativeLayout.ALIGN_PARENT_TOP] == RelativeLayout.TRUE) gravity = gravity or Gravity.TOP
+                if (rules[RelativeLayout.ALIGN_PARENT_LEFT] == RelativeLayout.TRUE) gravity = gravity or Gravity.LEFT
+                if (rules[RelativeLayout.ALIGN_PARENT_RIGHT] == RelativeLayout.TRUE) gravity = gravity or Gravity.RIGHT
+                if (rules[RelativeLayout.ALIGN_PARENT_START] == RelativeLayout.TRUE) gravity = gravity or Gravity.START
+                if (rules[RelativeLayout.ALIGN_PARENT_END] == RelativeLayout.TRUE) gravity = gravity or Gravity.END
+                map?.uiSettings?.compassGravity = gravity
+            }
+
+            override fun setMargins(left: Int, top: Int, right: Int, bottom: Int) {
+                super.setMargins(left, top, right, bottom)
+                map?.uiSettings?.setCompassMargins(left, top, right, bottom)
+            }
         }
         this.view = object : FrameLayout(mapContext) {
             @Keep
@@ -165,6 +192,14 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
                     return try {
                         @Suppress("UNCHECKED_CAST")
                         fakeWatermark as T
+                    } catch (e: ClassCastException) {
+                        null
+                    }
+                }
+                if ("GoogleMapCompass" == tag) {
+                    return try {
+                        @Suppress("UNCHECKED_CAST")
+                        fakeCompass as T
                     } catch (e: ClassCastException) {
                         null
                     }
@@ -243,6 +278,7 @@ class GoogleMapImpl(context: Context, var options: GoogleMapOptions) : AbstractG
     override fun setMapStyle(options: MapStyleOptions?): Boolean {
         Log.d(TAG, "setMapStyle options: " + options?.getJson())
         mapStyle = options
+        applyMapStyle()
         return true
     }
 
