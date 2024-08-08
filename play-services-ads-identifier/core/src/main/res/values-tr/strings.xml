@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ SPDX-FileCopyrightText: 2023 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+
+<resources>
+    <string name="perm_ad_id_label">Reklam kimliği izni</string>
+    <string name="perm_ad_id_description">Bir yayıncı uygulamasının geçerli bir reklam kimliğine doğrudan veya dolaylı olarak erişmesine izin verir.</string>
+    <string name="perm_ad_id_notification_label">Reklam kimliği bildirimi</string>
+    <string name="perm_ad_id_notification_description">Bir uygulamanın, kullanıcının reklam kimliği veya reklam izleme tercihi güncellendiğinde bir bildirim almasını sağlar.</string>
+</resources>

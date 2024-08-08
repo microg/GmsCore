@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2022 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="license_content_error">Lisans alınırken bir hata oluştu.</string>
+    <string name="no_licenses_available">Bu uygulamanın herhangi bir açık kaynak kod lisansı yok.</string>
+    <string name="oss_license_title">Açık kaynak kod lisansları</string>
+    <!-- The following strings are not used by the library code but must be kept for compatibility,
+         since they may be used by apps that depend on it. -->
+    <string name="license_is_loading">Lisans bilgisi yükleniyor.</string>
+    <string name="license_list_is_loading">Lisans listesi yükleniyor.</string>
+    <string name="preferences_license_summary">Açık kaynak kodlu yazılım için lisans detayları</string>
+</resources>

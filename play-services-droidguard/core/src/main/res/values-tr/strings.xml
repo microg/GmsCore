@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ SPDX-FileCopyrightText: 2021 microG Project Team
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<resources>
+    <string name="prefcat_droidguard_mode">DroidGuard çalışma modu</string>
+    <string name="pref_droidguard_mode_embedded_title">Gömülü</string>
+    <string name="pref_droidguard_mode_embedded_summary">Yerel DroidGuard çalıştırıcısını kullan</string>
+    <string name="pref_droidguard_mode_network_title">Uzaktan</string>
+    <string name="pref_droidguard_mode_network_summary">Ağ üzerinden uzak bir DroidGuard çalıştırıcısına bağlan</string>
+</resources>

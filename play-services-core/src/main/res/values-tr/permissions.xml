@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2013-2017 microG Project Team
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<resources>
+    <string name="permission_service_all_label">Bütün Google hizmetleri</string>
+    <string name="permission_service_all_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile bütün Google hizmetlerine erişmesine izin verir.</string>
+    <string name="permission_service_android_label">Android hizmetleri</string>
+    <string name="permission_service_android_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Android hizmetlerine erişmesine izin verir.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_adsense_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile AdSense\'e erişmesine izin verir.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile AdWords\'e erişmesine izin verir.</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_ah_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google App Engine\'e erişmesine izin verir.</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Blogger\'a erişmesine izin verir.</string>
+    <string name="permission_service_cl_label">Google Takvim</string>
+    <string name="permission_service_cl_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Takvim\'e erişmesine izin verir.</string>
+    <string name="permission_service_cp_label">Kişiler</string>
+    <string name="permission_service_cp_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Kişiler\'e erişmesine izin verir.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_dodgeball_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Dodgeball\'a erişmesine izin verir.</string>
+    <string name="permission_service_finance_label">Google Finans</string>
+    <string name="permission_service_finance_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Finans\'a erişmesine izin verir.</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_gbase_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Base\'e erişmesine izin verir.</string>
+    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_grandcentral_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Voice\'e erişmesine izin verir.</string>
+    <string name="permission_service_groups2_label">Google Gruplar</string>
+    <string name="permission_service_groups2_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Gruplar\'a erişmesine izin verir.</string>
+    <string name="permission_service_health_label">Google Sağlık</string>
+    <string name="permission_service_health_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Sağlık\'a erişmesine izin verir.</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_service_ig_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile iGoogle\'a erişmesine izin verir.</string>
+    <string name="permission_service_jotspot_label">JotSpot</string>
+    <string name="permission_service_jotspot_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile JotSpot\'a erişmesine izin verir.</string>
+    <string name="permission_service_knol_label">Knol</string>
+    <string name="permission_service_knol_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Knol\'a erişmesine izin verir.</string>
+    <string name="permission_service_lh2_label">Picasa Web Albümleri</string>
+    <string name="permission_service_lh2_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Picasa Web Albümleri\'ne erişmesine izin verir.</string>
+    <string name="permission_service_local_label">Google Haritalar</string>
+    <string name="permission_service_local_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Haritalar\'a erişmesine izin verir.</string>
+    <string name="permission_service_mail_label">Google Mail</string>
+    <string name="permission_service_mail_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Mail\'e erişmesine izin verir.</string>
+    <string name="permission_service_news_label">Google Haberler</string>
+    <string name="permission_service_news_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Haberler\'e erişmesine izin verir.</string>
+    <string name="permission_service_notebook_label">Google Notebook</string>
+    <string name="permission_service_notebook_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Notebook\'a erişmesine izin verir.</string>
+    <string name="permission_service_orkut_label">Orkut</string>
+    <string name="permission_service_orkut_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Orkut\'a erişmesine izin verir.</string>
+    <string name="permission_service_print_label">Google Kitap Arama</string>
+    <string name="permission_service_print_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Kitap Arama\'ya erişmesine izin verir.</string>
+    <string name="permission_service_sierra_label">Google Checkout hesapları</string>
+    <string name="permission_service_sierra_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Checkout hesaplarına erişmesine izin verir.</string>
+    <string name="permission_service_sierraqa_label">Google Checkout QA hesapları</string>
+    <string name="permission_service_sierraqa_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Checkout QA hesaplarına erişmesine izin verir.</string>
+    <string name="permission_service_sierrasandbox_label">Google Checkout Sandbox hesapları</string>
+    <string name="permission_service_sierrasandbox_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Checkout Sandbox hesaplarına erişmesine izin verir.</string>
+    <string name="permission_service_sitemaps_label">Google Webmaster Araçları</string>
+    <string name="permission_service_sitemaps_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Webmaster Araçları\'na erişmesine izin verir.</string>
+    <string name="permission_service_speech_label">Sesli Arama</string>
+    <string name="permission_service_speech_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Sesli Arama\'ya erişmesine izin verir.</string>
+    <string name="permission_service_speechpersonalization_label">Kişiselleştirilmiş Ses Tanıma</string>
+    <string name="permission_service_speechpersonalization_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Kişiselleştirilmiş Ses Tanıma\'ya erişmesine izin verir.</string>
+    <string name="permission_service_talk_label">Google Talk</string>
+    <string name="permission_service_talk_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Talk\'a erişmesine izin verir.</string>
+    <string name="permission_service_wifi_label">Google Wi-Fi</string>
+    <string name="permission_service_wifi_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Wi-Fi\'ye erişmesine izin verir.</string>
+    <string name="permission_service_wise_label">Google Tablolar</string>
+    <string name="permission_service_wise_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Tablolar\'a erişmesine izin verir.</string>
+    <string name="permission_service_writely_label">Google Dökümanlar</string>
+    <string name="permission_service_writely_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile Google Dökümanlar\'a erişmesine izin verir.</string>
+    <string name="permission_service_youtube_label">YouTube</string>
+    <string name="permission_service_youtube_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile YouTube\'a erişmesine izin verir.</string>
+    <string name="permission_service_YouTubeUser_label">YouTube kullanıcı adları</string>
+    <string name="permission_service_YouTubeUser_description">Uygulamanın, bağlı herhangi bir Google hesabıyla ile YouTube kullanıcı adlarına erişmesine izin verir.</string>
+    <string name="permission_scope_www.googleapis.com_auth_activity">Google uygulamalarınızın kullanım geçmişini görme</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.buyer">Ad Exchange alıcı hesap ayarlarını yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller.readonly">Ad Exchange verinizi görme</string>
+    <string name="permission_scope_www.googleapis.com_auth_adexchange.seller">Ad Exchange verinizi görme ve değiştirme</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsensehost">AdSense sağlayıcı verinizi görme, yönetme ve ilgili hesapları görme</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">AdSense verinizi görme</string>
+    <string name="permission_scope_www.googleapis.com_auth_adsense">AdSense verinizi görme ve değiştirme</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics.readonly">Google Analytics verinizi görme</string>
+    <string name="permission_scope_www.googleapis.com_auth_analytics">Google Analytics verinizi görme ve değiştirme</string>
+    <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Google Play Android Geliştiricisi\'ne erişme</string>
+    <string name="permission_scope_www.googleapis.com_auth_appengine.admin">App engine yönetici izni.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Gruplar Taşıma API için okuma ve yazma erişimi.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.groups.settings">Bir Google Apps Grubunun ayarlarını görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.licensing">Lisans Yönetici API\'na okuma/yazma erişimi.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order">Bayi yöneticileri ve kullanıcıları için API\'nın sanal alanında test yaparken okuma/yazma erişimi veya bir API işlemini doğrudan çağırırken okuma/yazma erişimi.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps.order.readonly">Genel okuma/yazma OAuth kapsamına ek olarak, müşterinin verilerini alırken salt okunur OAuth kapsamını kullanma.</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">Yönetici Denetim API\'sine salt okunur erişme</string>
+    <string name="permission_scope_www.googleapis.com_auth_appstate">App State hizmetini kullanma kapsamı.</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery.readonly">Verilerinizi Google BigQuery\'de görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_bigquery">Verilerinizi Google BigQuery\'de görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger">Blogger hesabınızı yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_blogger.readonly">Blogger hesabınızı görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_books">Kitaplarınızı yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar">Takvimlerinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_calendar.readonly">Takvimlerinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_cloudprint">Google Cloud Print verilerinizi görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute.readonly">Google Compute Engine kaynaklarınızı görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_compute">Google Compute Engine kaynaklarınızı görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate.readonly">Google Coordinate işlerinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_coordinate">Google Haritalar Coordinate işlerinizi görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.full_control">Google Cloud Storage\'daki verilerinizi ve izinlerinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_only">Google Cloud Storage\'daki verilerinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_devstorage.read_write">Google Cloud Storage\'daki verilerinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_dfareporting">Reklamverenler için DoubleClick raporlarınızı görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.appdata">Uygulama Verileri klasörüne erişim sağlama</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.apps.readonly">Google Drive uygulamalarınızı görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.file">Bu uygulama ile açtığınız veya oluşturduğunuz Google Drive dosyalarını görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.install">Kullanıcıların bir uygulamanın yüklenmesini onaylamasına izin vermek için kullanılan özel kapsam</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.metadata.readonly">Google Drive\'ınızdaki dosyalar ve belgeler için meta verileri görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.readonly">Google Drive\'ınızdaki dosya ve belgeleri görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive.scripts">Google Apps Script komut dosyalarınızın davranışını değiştirme</string>
+    <string name="permission_scope_www.googleapis.com_auth_drive">Google Drive\'ınızdaki dosya ve belgeleri görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase.readonly">Freebase hesabınızı görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_freebase">Hesabınızla Freebase\'de oturum açma</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables">Fusion Tablolarınızı yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_fusiontables.readonly">Fusion Tablolarınızı görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_games">Google Play Games\'teki verilere erişmek için kapsam.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan">GAN verinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_gan.readonly">GAN verinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_gcm_for_chrome">Chrome için CloudMessaging</string>
+    <string name="permission_scope_www.googleapis.com_auth_glass.timeline">Glass timeline kapsamı</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.compose">Taslaklar oluşturma, okuma, güncelleme ve silme. Mesaj ve taslak gönderme.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.modify">Konuların ve mesajların anında, kalıcı olarak silinmesi dışında tüm okuma/yazma işlemleri, Çöp Kutusunu atlayarak.</string>
+    <string name="permission_scope_www.googleapis.com_auth_gmail.readonly">Tüm kaynakları ve meta verilerini okuma - yazma işlemi yok.</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.all.best">Kullanılabilir en iyi konumunuzu ve konum geçmişinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.all.city">Şehir düzeyinde konumunuzu ve konum geçmişinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.current.best">Kullanılabilir en iyi konumunuzu yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_latitude.current.city">Şehir düzeyinde konumunuzu yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine">Google Maps Engine verilerinizi görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_mapsengine.readonly">Google Maps Engine verilerinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_mobilemaps.firstparty">Mobil deneyim için Google Haritalar\'ınızı görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_orkut">Orkut etkinliğinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_orkut.readonly">Orkut verilerinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_plus.login">Adınızı, temel bilgilerinizi ve Google+\'da bağlı olduğunuz kişilerin listesini bilme</string>
+    <string name="permission_scope_www.googleapis.com_auth_plus.me">Google\'da kim olduğunuzu bilme</string>
+    <string name="permission_scope_www.googleapis.com_auth_prediction">Google Prediction API\'de verilerinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_shoppingapi">Ürün verilerinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification">Kontrol ettiğiniz sitelerin ve alan adlarının listesini yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_siteverification.verify_only">Google ile yeni site doğrulamalarınızı yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_structuredcontent">Alışveriş İçeriği API\'sine okuma/yazma erişimi.</string>
+    <string name="permission_scope_www.googleapis.com_auth_taskqueue.consumer">Taskqueue\'larınızdaki görevleri tüketme</string>
+    <string name="permission_scope_www.googleapis.com_auth_taskqueue">Görevlerinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks">Görevlerinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_tasks.readonly">Görevlerinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_tracks">Google Maps Tracks API, Bu kapsam projenizin verilerine okuma ve yazma erişimi sağlar.</string>
+    <string name="permission_scope_www.googleapis.com_auth_urlshortener">goo.gl kısa URL\'lerinizi yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.email">E-posta adresinizi görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_userinfo.profile">Hesabınızla ilgili temel bilgileri görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube">YouTube hesabınızı yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtubepartner">YouTube\'daki varlıklarınızı ve ilişkili içeriklerinizi görüntüleme ve yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">YouTube hesabınızı görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.upload">YouTube videolarınızı yönetme</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics_monetary.readonly">YouTube içeriğiniz için YouTube Analytics parasal raporlarını görüntüleme</string>
+    <string name="permission_scope_www.googleapis.com_auth_yt_analytics.readonly">YouTube içeriğiniz için YouTube Analytics raporlarını görüntüleme</string>
+</resources>
