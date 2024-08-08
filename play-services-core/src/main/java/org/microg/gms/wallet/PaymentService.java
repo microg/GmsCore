@@ -17,8 +17,10 @@
 package org.microg.gms.wallet;
 
 import android.os.RemoteException;
-import android.util.Log;
 
+import com.google.android.gms.common.Feature;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
 
@@ -26,12 +28,26 @@ import org.microg.gms.BaseService;
 import org.microg.gms.common.GmsService;
 
 public class PaymentService extends BaseService {
+
+    public static final Feature[] FEATURES = new Feature[]{
+        new Feature("wallet", 1L),
+        new Feature("wallet_biometric_auth_keys", 1L),
+        new Feature("wallet_payment_dynamic_update", 2L),
+        new Feature("wallet_1p_initialize_buyflow", 1L),
+        new Feature("wallet_warm_up_ui_process", 1L),
+        new Feature("wallet_get_setup_wizard_intent", 4L),
+        new Feature("wallet_get_payment_card_recognition_intent", 1L),
+        new Feature("wallet_save_instrument", 1L)
+    };
+
     public PaymentService() {
         super("GmsWalletPaySvc", GmsService.WALLET);
     }
 
     @Override
     public void handleServiceRequest(IGmsCallbacks callback, GetServiceRequest request, GmsService service) throws RemoteException {
-        callback.onPostInitComplete(0, new OwServiceImpl(this), null);
+        ConnectionInfo connectionInfo = new ConnectionInfo();
+        connectionInfo.features = FEATURES;
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, new OwServiceImpl(this), connectionInfo);
     }
 }
