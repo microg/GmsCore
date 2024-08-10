@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023 microG Project Team
+ * SPDX-FileCopyrightText: 2024 microG Project Team
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -14,26 +14,24 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.dynamic.ObjectWrapper;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.internal.IGoogleMapDelegate;
-import com.google.android.gms.maps.internal.IMapViewDelegate;
-import com.google.android.gms.maps.internal.IOnMapReadyCallback;
+import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
+import com.google.android.gms.maps.StreetViewPanorama;
+import com.google.android.gms.maps.internal.*;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
-public class MapViewDelegate implements MapLifecycleDelegate {
+public class StreetViewPanoramaViewDelegate implements StreetViewLifecycleDelegate {
     private final ViewGroup container;
-    private final IMapViewDelegate delegate;
+    private final IStreetViewPanoramaViewDelegate delegate;
     private View view;
 
-    public MapViewDelegate(ViewGroup container, IMapViewDelegate delegate) {
+    public StreetViewPanoramaViewDelegate(ViewGroup container, IStreetViewPanoramaViewDelegate delegate) {
         this.container = container;
         this.delegate = delegate;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
-        throw new UnsupportedOperationException("onCreateView not allowed on MapViewDelegate");
+        throw new UnsupportedOperationException("onCreateView not allowed on StreetViewPanoramaViewDelegate");
     }
 
     @Override
@@ -62,31 +60,12 @@ public class MapViewDelegate implements MapLifecycleDelegate {
 
     @Override
     public void onDestroyView() {
-        throw new UnsupportedOperationException("onDestroyView not allowed on MapViewDelegate");
-    }
-
-    public void onEnterAmbient(Bundle bundle) {
-        try {
-            Bundle temp = new Bundle();
-            MapsBundleHelper.transfer(bundle, temp);
-            delegate.onEnterAmbient(temp);
-            MapsBundleHelper.transfer(temp, bundle);
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
-    }
-
-    public void onExitAmbient() {
-        try {
-            delegate.onExitAmbient();
-        } catch (RemoteException e) {
-            throw new RuntimeRemoteException(e);
-        }
+        throw new UnsupportedOperationException("onDestroyView not allowed on StreetViewPanoramaViewDelegate");
     }
 
     @Override
     public void onInflate(@NonNull Activity activity, @NonNull Bundle options, @Nullable Bundle onInflate) {
-        throw new UnsupportedOperationException("onInflate not allowed on MapViewDelegate");
+        throw new UnsupportedOperationException("onInflate not allowed on StreetViewPanoramaViewDelegate");
     }
 
     @Override
@@ -147,12 +126,12 @@ public class MapViewDelegate implements MapLifecycleDelegate {
     }
 
     @Override
-    public void getMapAsync(@NonNull OnMapReadyCallback callback) {
+    public void getStreetViewPanoramaAsync(@NonNull OnStreetViewPanoramaReadyCallback callback) {
         try {
-            delegate.getMapAsync(new IOnMapReadyCallback.Stub() {
+            delegate.getStreetViewPanoramaAsync(new IOnStreetViewPanoramaReadyCallback.Stub() {
                 @Override
-                public void onMapReady(IGoogleMapDelegate map) throws RemoteException {
-                    callback.onMapReady(new GoogleMap(map));
+                public void onStreetViewPanoramaReady(IStreetViewPanoramaDelegate streetViewPanorama) throws RemoteException {
+                    callback.onStreetViewPanoramaReady(new StreetViewPanorama(streetViewPanorama));
                 }
             });
         } catch (RemoteException e) {

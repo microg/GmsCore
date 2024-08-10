@@ -1,23 +1,87 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2015 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.maps.model;
 
-import org.microg.gms.common.PublicApi;
+import android.os.Parcel;
+import androidx.annotation.NonNull;
+import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.utils.ToStringHelper;
 
-@PublicApi
-public class StreetViewPanoramaLocation {
+import java.util.Objects;
+
+/**
+ * An immutable class that contains details of the user's current Street View panorama
+ */
+@SafeParcelable.Class
+public class StreetViewPanoramaLocation extends AbstractSafeParcelable {
+    /**
+     * Array of {@link StreetViewPanoramaLink} able to be reached from the current position
+     */
+    @NonNull
+    @Field(2)
+    public final StreetViewPanoramaLink[] links;
+    /**
+     * The location of the current Street View panorama
+     */
+    @NonNull
+    @Field(3)
+    public final LatLng position;
+    /**
+     * The panorama ID of the current Street View panorama
+     */
+    @NonNull
+    @Field(4)
+    public final String panoId;
+
+    /**
+     * Constructs a StreetViewPanoramaLocation.
+     *
+     * @param links    List of {@link StreetViewPanoramaLink} reachable from the current position. Must not be {@code null}.
+     * @param position The location of the current Street View panorama. Must not be {@code null}.
+     * @param panoId   Identification string for the current Street View panorama. Must not be {@code null}.
+     */
+    @Constructor
+    public StreetViewPanoramaLocation(@NonNull @Param(2) StreetViewPanoramaLink[] links, @NonNull @Param(3) LatLng position, @NonNull @Param(4) String panoId) {
+        this.links = links;
+        this.position = position;
+        this.panoId = panoId;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StreetViewPanoramaLocation)) return false;
+
+        StreetViewPanoramaLocation that = (StreetViewPanoramaLocation) o;
+        return position.equals(that.position) && panoId.equals(that.panoId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(new Object[]{this.position, this.panoId});
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("StreetViewPanoramaLocation")
+                .field("panoId", panoId)
+                .field("position", position)
+                .end();
+    }
+
+    public static final SafeParcelableCreatorAndWriter<StreetViewPanoramaLocation> CREATOR = findCreator(StreetViewPanoramaLocation.class);
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        CREATOR.writeToParcel(this, dest, flags);
+    }
 }
