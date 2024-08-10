@@ -35,8 +35,8 @@ class ClientTelemetryService : BaseService(TAG, GmsService.TELEMETRY) {
 class ClientTelemetryServiceImpl(override val lifecycle: Lifecycle) :
     IClientTelemetryService.Stub(), LifecycleOwner {
 
-    override fun recordDataOperation(data: TelemetryData?) {
-        Log.d(TAG, "Method <recordDataOperation> called, data: $data")
+    override fun log(data: TelemetryData?) {
+        Log.d(TAG, "log: $data")
     }
 
 }

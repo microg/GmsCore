@@ -9,6 +9,7 @@ import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
@@ -21,32 +22,31 @@ import java.util.List;
 public class TelemetryData extends AbstractSafeParcelable {
 
     @Field(1)
-    public int dataType;
+    final int telemetryConfigVersion;
     @Field(2)
-    public List<MethodInvocation> dataList;
+    @Nullable
+    List<MethodInvocation> methodInvocations;
 
-    public TelemetryData() {
-    }
-
-    public TelemetryData(int dataType, List<MethodInvocation> dataList) {
-        this.dataType = dataType;
-        this.dataList = dataList;
+    @Constructor
+    public TelemetryData(@Param(1) int telemetryConfigVersion, @Param(2) @Nullable List<MethodInvocation> methodInvocations) {
+        this.telemetryConfigVersion = telemetryConfigVersion;
+        this.methodInvocations = methodInvocations;
     }
 
     @NonNull
     @Override
     public String toString() {
         return ToStringHelper.name("TelemetryData")
-                .field("dataType", dataType)
-                .field("dataList", dataList)
+                .field("telemetryConfigVersion", telemetryConfigVersion)
+                .field("methodInvocations", methodInvocations)
                 .end();
     }
-
-    public static SafeParcelableCreatorAndWriter<TelemetryData> CREATOR = findCreator(TelemetryData.class);
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);
     }
+
+    public static SafeParcelableCreatorAndWriter<TelemetryData> CREATOR = findCreator(TelemetryData.class);
 
 }
