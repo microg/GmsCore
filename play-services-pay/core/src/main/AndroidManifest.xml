@@ -28,7 +28,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.google.android.gms.pay.service.PayThirdPartyService"
+            android:name="org.microg.gms.pay.ThirdPartyPayService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.pay.service.THIRD_PARTY" />

@@ -2,21 +2,26 @@ package com.google.android.gms.pay;
 
 import android.os.Parcel;
 
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 
+@Hide
 @SafeParcelable.Class
 public class SavePassesRequest extends AbstractSafeParcelable {
+    @Nullable
     @Field(1)
-    public String passesJson;
+    public String json;
+    @Nullable
     @Field(2)
-    public String jwtToken;
+    public String jwt;
 
     @Constructor
-    public SavePassesRequest(@Param(1) String passesJson, @Param(2) String jwtToken) {
-        this.passesJson = passesJson;
-        this.jwtToken = jwtToken;
+    public SavePassesRequest(@Nullable @Param(1) String json, @Nullable @Param(2) String jwt) {
+        this.json = json;
+        this.jwt = jwt;
     }
 
     @Override

@@ -5,15 +5,17 @@ import android.os.Parcel;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
+import org.microg.gms.utils.ToStringHelper;
 
-
+@Hide
 @SafeParcelable.Class
 public class GetPayApiAvailabilityStatusRequest extends AbstractSafeParcelable {
     @Field(1)
     public int requestType;
 
     @Constructor
-    public GetPayApiAvailabilityStatusRequest(@Param(1) int requestType) {
+    public GetPayApiAvailabilityStatusRequest(@Param(1) @PayClient.RequestType int requestType) {
         this.requestType = requestType;
     }
 
@@ -26,8 +28,8 @@ public class GetPayApiAvailabilityStatusRequest extends AbstractSafeParcelable {
 
     @Override
     public String toString() {
-        return "GetPayApiAvailabilityStatusRequest{" +
-                "requestType=" + requestType +
-                '}';
+        return ToStringHelper.name("GetPayApiAvailabilityStatusRequest")
+                .field("requestType", requestType)
+                .end();
     }
 }

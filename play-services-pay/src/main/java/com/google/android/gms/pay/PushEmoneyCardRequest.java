@@ -5,15 +5,17 @@ import android.os.Parcel;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 
+@Hide
 @SafeParcelable.Class
 public class PushEmoneyCardRequest extends AbstractSafeParcelable {
     @Field(1)
-    public String eMoneyCardJson;
+    public String json;
 
     @Constructor
-    public PushEmoneyCardRequest(@Param(1) String eMoneyCardJson) {
-        this.eMoneyCardJson = eMoneyCardJson;
+    public PushEmoneyCardRequest(@Param(1) String json) {
+        this.json = json;
     }
 
     @Override

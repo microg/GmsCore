@@ -5,7 +5,9 @@ import android.os.Parcel;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 
+@Hide
 @SafeParcelable.Class
 public class GetMdocCredentialRequest extends AbstractSafeParcelable {
     @Field(1)
@@ -20,11 +22,6 @@ public class GetMdocCredentialRequest extends AbstractSafeParcelable {
         this.unknownFieldA = unknownFieldA;
         this.unknownFieldB = unknownFieldB;
         this.unknownFieldC = unknownFieldC;
-    }
-
-    @Constructor
-    public GetMdocCredentialRequest() {
-
     }
 
     @Override

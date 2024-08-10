@@ -1,4 +1,9 @@
-package com.google.android.gms.pay.service
+/*
+ * SPDX-FileCopyrightText: 2024 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package org.microg.gms.pay
 
 import android.util.Log
 import com.google.android.gms.common.Feature
@@ -13,6 +18,7 @@ import com.google.android.gms.pay.GetPayApiAvailabilityStatusRequest
 import com.google.android.gms.pay.GetPendingIntentForWalletOnWearRequest
 import com.google.android.gms.pay.NotifyCardTapEventRequest
 import com.google.android.gms.pay.NotifyEmoneyCardStatusUpdateRequest
+import com.google.android.gms.pay.PayApiAvailabilityStatus
 import com.google.android.gms.pay.PushEmoneyCardRequest
 import com.google.android.gms.pay.SavePassesRequest
 import com.google.android.gms.pay.SyncBundleRequest
@@ -22,37 +28,37 @@ import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 
 
-private const val TAG = "PayThirdPartyService"
+private const val TAG = "ThirdPartyPayService"
 
-class PayThirdPartyService : BaseService(TAG, GmsService.PAY) {
+class ThirdPartyPayService : BaseService(TAG, GmsService.PAY) {
 
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
-        runCatching {
-            Log.d(TAG, "handleServiceRequest: ")
-            callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, PayThirdPartyServiceImpl().asBinder(), ConnectionInfo().apply {
-                features = arrayOf(Feature("pay_get_pay_api_availability_status", 3),
-                        Feature("pay_save_passes", 5),
-                        Feature("pay_save_passes_jwt", 3),
-                        Feature("pay_sync_bundle", 2),
-                        Feature("pay_get_pending_intent_for_wallet_on_wear", 2),
-                        Feature("pay_get_mdoc_credential_pending_intent", 1),
-                        Feature("pay_notify_card_tap_event", 1),
-                        Feature("pay_check_readiness_for_emoney", 1),
-                        Feature("pay_push_emoney_card", 1),
-                        Feature("pay_notify_emoney_card_status_update", 1)
-                        )
-            })
-        }
+        callback.onPostInitCompleteWithConnectionInfo(CommonStatusCodes.SUCCESS, ThirdPartyPayServiceImpl().asBinder(), ConnectionInfo().apply {
+            features = arrayOf(
+                Feature("pay_get_pay_api_availability_status", 3),
+                Feature("pay_save_passes", 5),
+                Feature("pay_save_passes_jwt", 3),
+                Feature("pay_sync_bundle", 2),
+                Feature("pay_get_pending_intent_for_wallet_on_wear", 2),
+                Feature("pay_get_mdoc_credential_pending_intent", 1),
+                Feature("pay_notify_card_tap_event", 1),
+                Feature("pay_check_readiness_for_emoney", 1),
+                Feature("pay_push_emoney_card", 1),
+                Feature("pay_notify_emoney_card_status_update", 1)
+            )
+        })
     }
 }
 
-class PayThirdPartyServiceImpl : IThirdPartyPayService.Stub() {
+class ThirdPartyPayServiceImpl : IThirdPartyPayService.Stub() {
     override fun getPayApiAvailabilityStatus(request: GetPayApiAvailabilityStatusRequest?, callback: IPayServiceCallbacks) {
-        callback.onGetPayApiAvailabilityStatus(Status.SUCCESS, 2)
+        Log.d(TAG, "onPayApiAvailabilityStatus: Reporting NOT_ELIGIBLE")
+        callback.onPayApiAvailabilityStatus(Status.SUCCESS, PayApiAvailabilityStatus.NOT_ELIGIBLE)
     }
 
     override fun savePasses(request: SavePassesRequest?, callback: IPayServiceCallbacks) {
-        callback.onSavePasses(Status(CommonStatusCodes.SERVICE_MISSING))
+        Log.d(TAG, "savePasses: return SERVICE_MISSING")
+        callback.onPendingIntent(Status(CommonStatusCodes.SERVICE_MISSING))
     }
 
     override fun syncBundle(request: SyncBundleRequest?, callback: IPayServiceCallbacks?) {

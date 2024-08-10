@@ -2,18 +2,22 @@ package com.google.android.gms.pay;
 
 import android.os.Parcel;
 
+import androidx.annotation.Nullable;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import org.microg.gms.common.Hide;
 
+@Hide
 @SafeParcelable.Class
 public class NotifyCardTapEventRequest extends AbstractSafeParcelable {
+    @Nullable
     @Field(1)
-    public String eventJson;
+    public String json;
 
     @Constructor
-    public NotifyCardTapEventRequest(@Param(1) String eventJson) {
-        this.eventJson = eventJson;
+    public NotifyCardTapEventRequest(@Nullable @Param(1) String json) {
+        this.json = json;
     }
 
     @Override
