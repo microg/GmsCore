@@ -11,11 +11,12 @@ import android.widget.TextView
 import com.google.android.gms.dynamic.IObjectWrapper
 import com.google.android.gms.dynamic.ObjectWrapper
 import com.google.android.gms.maps.internal.IOnStreetViewPanoramaReadyCallback
+import com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate
 import com.google.android.gms.maps.internal.IStreetViewPanoramaViewDelegate
 
 class StreetViewPanoramaViewImpl(private val context: Context) : IStreetViewPanoramaViewDelegate.Stub() {
 
-    override fun init(): IObjectWrapper? {
+    override fun getStreetViewPanorama(): IStreetViewPanoramaDelegate? {
         return null
     }
 
@@ -41,7 +42,7 @@ class StreetViewPanoramaViewImpl(private val context: Context) : IStreetViewPano
         return ObjectWrapper.wrap(TextView(context))
     }
 
-    override fun getStreetViewAsync(callback: IOnStreetViewPanoramaReadyCallback?) {
+    override fun getStreetViewPanoramaAsync(callback: IOnStreetViewPanoramaReadyCallback?) {
     }
 
     override fun onStart() {

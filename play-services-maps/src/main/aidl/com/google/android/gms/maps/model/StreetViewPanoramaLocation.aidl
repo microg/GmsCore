@@ -3,6 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package com.google.android.gms.maps;
+package com.google.android.gms.maps.model;
 
-parcelable StreetViewPanoramaOptions;
+parcelable StreetViewPanoramaLocation;

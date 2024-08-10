@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.internal.IOnStreetViewPanoramaReadyCallback;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate;
 import com.google.android.gms.maps.internal.IStreetViewPanoramaViewDelegate;
 
 public class StreetViewPanoramaViewImpl extends IStreetViewPanoramaViewDelegate.Stub {
@@ -24,7 +25,7 @@ public class StreetViewPanoramaViewImpl extends IStreetViewPanoramaViewDelegate.
     }
 
     @Override
-    public IObjectWrapper init() throws RemoteException {
+    public IStreetViewPanoramaDelegate getStreetViewPanorama() throws RemoteException {
         return null;
     }
 
@@ -64,7 +65,7 @@ public class StreetViewPanoramaViewImpl extends IStreetViewPanoramaViewDelegate.
     }
 
     @Override
-    public void getStreetViewAsync(IOnStreetViewPanoramaReadyCallback callback) throws RemoteException {
+    public void getStreetViewPanoramaAsync(IOnStreetViewPanoramaReadyCallback callback) throws RemoteException {
 
     }
 

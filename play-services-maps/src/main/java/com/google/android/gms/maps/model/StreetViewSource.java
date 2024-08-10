@@ -1,17 +1,9 @@
 /*
- * Copyright (C) 2013-2017 microG Project Team
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * SPDX-FileCopyrightText: 2024 microG Project Team
+ * SPDX-License-Identifier: Apache-2.0
+ * Notice: Portions of this file are reproduced from work created and shared by Google and used
+ *         according to terms described in the Creative Commons 4.0 Attribution License.
+ *         See https://developers.google.com/readme/policies for details.
  */
 
 package com.google.android.gms.maps.model;
@@ -23,26 +15,67 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.common.internal.safeparcel.AbstractSafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
+import com.google.android.gms.maps.StreetViewPanorama;
+import com.google.android.gms.maps.StreetViewPanoramaOptions;
 
+/**
+ * Identifiers to limit Street View searches to selected sources. See {@link StreetViewPanorama#setPosition(LatLng, StreetViewSource)},
+ * {@link StreetViewPanorama#setPosition(LatLng, int, StreetViewSource)}, {@link StreetViewPanoramaOptions#position(LatLng, Integer, StreetViewSource)} or
+ * {@link StreetViewPanoramaOptions#position(LatLng, StreetViewSource)}.
+ */
 @SafeParcelable.Class
 public class StreetViewSource extends AbstractSafeParcelable {
 
+    /**
+     * Default: Uses the default sources of Street View, searches will not be limited to specific sources.
+     */
     public static final StreetViewSource DEFAULT = new StreetViewSource(0);
+    /**
+     * Limits Street View searches to outdoor collections. Indoor collections are not included in search results. Note also that the search only
+     * returns panoramas where it's possible to determine whether they're indoors or outdoors. For example, photo spheres are not returned
+     * because it's unknown whether they are indoors or outdoors.
+     */
+    public static final StreetViewSource OUTDOOR = new StreetViewSource(1);
 
     @Field(2)
-    public int streetViewType;
+    final int type;
 
-    public StreetViewSource(int streetViewType) {
-        this.streetViewType = streetViewType;
+    @Constructor
+    StreetViewSource(@Param(2) int type) {
+        this.type = type;
     }
 
-    public StreetViewSource() {
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StreetViewSource)) return false;
+
+        StreetViewSource that = (StreetViewSource) o;
+        return type == that.type;
     }
 
-    public static final SafeParcelableCreatorAndWriter<StreetViewSource> CREATOR = findCreator(StreetViewSource.class);
+    @Override
+    public int hashCode() {
+        return type;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        switch (type) {
+            case 0:
+                return "StreetViewSource:DEFAULT";
+            case 1:
+                return "StreetViewSource:OUTDOOR";
+            default:
+                return "StreetViewSource:UNKNOWN(" + type + ")";
+        }
+    }
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         CREATOR.writeToParcel(this, dest, flags);
     }
+
+    public static final SafeParcelableCreatorAndWriter<StreetViewSource> CREATOR = findCreator(StreetViewSource.class);
 }

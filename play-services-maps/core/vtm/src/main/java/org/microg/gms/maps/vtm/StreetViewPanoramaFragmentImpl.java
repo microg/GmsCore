@@ -14,6 +14,7 @@ import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.dynamic.ObjectWrapper;
 import com.google.android.gms.maps.StreetViewPanoramaOptions;
 import com.google.android.gms.maps.internal.IOnStreetViewPanoramaReadyCallback;
+import com.google.android.gms.maps.internal.IStreetViewPanoramaDelegate;
 import com.google.android.gms.maps.internal.IStreetViewPanoramaFragmentDelegate;
 
 public class StreetViewPanoramaFragmentImpl extends IStreetViewPanoramaFragmentDelegate.Stub {
@@ -25,7 +26,7 @@ public class StreetViewPanoramaFragmentImpl extends IStreetViewPanoramaFragmentD
     }
 
     @Override
-    public IObjectWrapper initStreetView() throws RemoteException {
+    public IStreetViewPanoramaDelegate getStreetViewPanorama() throws RemoteException {
         return null;
     }
 
@@ -80,7 +81,7 @@ public class StreetViewPanoramaFragmentImpl extends IStreetViewPanoramaFragmentD
     }
 
     @Override
-    public void getStreetViewAsync(IOnStreetViewPanoramaReadyCallback callback) throws RemoteException {
+    public void getStreetViewPanoramaAsync(IOnStreetViewPanoramaReadyCallback callback) throws RemoteException {
 
     }
 

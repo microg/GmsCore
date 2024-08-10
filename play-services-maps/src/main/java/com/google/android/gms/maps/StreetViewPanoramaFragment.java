@@ -5,4 +5,7 @@
 
 package com.google.android.gms.maps;
 
-parcelable StreetViewPanoramaOptions;
+import android.app.Fragment;
+
+public class StreetViewPanoramaFragment extends Fragment {
+}
