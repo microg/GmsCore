@@ -28,6 +28,10 @@ public class AccountChangeEventsResponse extends AutoSafeParcelable {
     @SafeParceled(value = 2, subClass = AccountChangeEvent.class)
     private List<AccountChangeEvent> events;
 
+    public List<AccountChangeEvent> getEvents() {
+        return events;
+    }
+
     public AccountChangeEventsResponse() {
         events = new ArrayList<AccountChangeEvent>();
     }

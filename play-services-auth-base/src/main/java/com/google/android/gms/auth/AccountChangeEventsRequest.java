@@ -40,6 +40,14 @@ public class AccountChangeEventsRequest extends AutoSafeParcelable {
         return null;
     }
 
+    @Constructor
+    public AccountChangeEventsRequest(@Param(value = 1) int versionCode, @Param(value = 2) int since, @Param(value = 3) String accountName, @Param(value = 4) Account account) {
+        this.versionCode = versionCode;
+        this.since = since;
+        this.accountName = accountName;
+        this.account = account;
+    }
+
     public static Creator<AccountChangeEventsRequest> CREATOR = new AutoCreator<AccountChangeEventsRequest>(AccountChangeEventsRequest.class);
 
 }

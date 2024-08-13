@@ -6,6 +6,8 @@
 package com.google.android.gms.common.data;
 
 import android.database.CharArrayBuffer;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import org.microg.gms.common.Hide;
 
@@ -18,6 +20,11 @@ public abstract class DataBufferRef {
     public DataBufferRef(DataHolder dataHolder, int dataRow) {
         this.dataHolder = dataHolder;
         setDataRow(dataRow);
+    }
+
+    protected Uri parseUri(String column) {
+        String imageUri;
+        return (imageUri = this.dataHolder.getString(column, dataRow, this.windowIndex)) == null ? null : Uri.parse(imageUri);
     }
 
     protected void copyToBuffer(@NonNull String column, @NonNull CharArrayBuffer dataOut) {

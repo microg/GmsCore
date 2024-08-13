@@ -28,6 +28,7 @@ import com.google.android.gms.games.internal.connect.IGamesConnectService
 import org.microg.gms.BaseService
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.AuthPrefs
+import org.microg.gms.auth.signin.SignInConfigurationService
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.utils.warnOnTransactionIssues
@@ -62,7 +63,7 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
                 }
 
                 1 -> { // Auto sign-in on start, don't provide resolution if not
-                    callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED), null)
+                    callback?.onSignIn(Status(CommonStatusCodes.SIGN_IN_REQUIRED, null, resolution), null)
                 }
 
                 else -> {
@@ -74,6 +75,7 @@ class GamesConnectServiceImpl(val context: Context, override val lifecycle: Life
             try {
                 val account = request?.previousStepResolutionResult?.resultData?.getParcelableExtra<Account>(EXTRA_ACCOUNT)
                     ?: GamesConfigurationService.getDefaultAccount(context, packageName)
+                    ?: SignInConfigurationService.getDefaultAccount(context, packageName)
                     ?: return@launchWhenStarted sendSignInRequired()
                 val authManager = AuthManager(context, account.name, packageName, "oauth2:${Scopes.GAMES_LITE}")
                 if (!authManager.isPermitted && !AuthPrefs.isTrustGooglePermitted(context)) return@launchWhenStarted sendSignInRequired()

@@ -13,6 +13,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcel
+import android.os.ParcelFileDescriptor
+import android.text.TextUtils
 import android.util.Log
 import androidx.core.app.PendingIntentCompat
 import androidx.core.os.bundleOf
@@ -22,18 +24,23 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.data.DataHolder
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
+import com.google.android.gms.drive.Contents
+import com.google.android.gms.drive.DriveId
+import com.google.android.gms.games.GameColumns
+import com.google.android.gms.games.GamesStatusCodes
 import com.google.android.gms.games.Player
 import com.google.android.gms.games.PlayerColumns
 import com.google.android.gms.games.PlayerEntity
 import com.google.android.gms.games.internal.IGamesCallbacks
 import com.google.android.gms.games.internal.IGamesClient
 import com.google.android.gms.games.internal.IGamesService
+import com.google.android.gms.games.snapshot.SnapshotColumns
+import com.google.android.gms.games.snapshot.SnapshotMetadataChangeEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -41,9 +48,17 @@ import org.microg.gms.BaseService
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthManager
 import org.microg.gms.auth.AuthPrefs
+import org.microg.gms.auth.signin.SignInConfigurationService
+import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.games.achievements.AchievementsDataClient
+import org.microg.gms.games.snapshot.SnapshotsDataClient
 import org.microg.gms.utils.warnOnTransactionIssues
+import java.io.File
+import java.io.FileOutputStream
+import java.util.regex.Pattern
+
 
 private const val TAG = "GamesService"
 
@@ -75,12 +90,14 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
             try {
                 val account = request.account?.takeIf { it.name != AuthConstants.DEFAULT_ACCOUNT }
                     ?: GamesConfigurationService.getDefaultAccount(this@GamesService, packageName)
+                    ?: SignInConfigurationService.getDefaultAccount(this@GamesService, packageName)
                     ?: return@launchWhenStarted sendSignInRequired()
 
                 val scopes = request.scopes.toList().realScopes
                 Log.d(TAG, "handleServiceRequest scopes to ${scopes.joinToString(" ")}")
 
-                val authManager = AuthManager(this@GamesService, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
+                val oauth2Service = "oauth2:${scopes.joinToString(" ")}"
+                val authManager = AuthManager(this@GamesService, account.name, packageName, oauth2Service)
                 if (!authManager.isPermitted && !AuthPrefs.isTrustGooglePermitted(this@GamesService)) {
                     Log.d(TAG, "Not permitted to use $account for ${scopes.toList()}, sign in required")
                     return@launchWhenStarted sendSignInRequired()
@@ -95,7 +112,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
 
                 callback.onPostInitCompleteWithConnectionInfo(
                     CommonStatusCodes.SUCCESS,
-                    GamesServiceImpl(this@GamesService, lifecycle, packageName, account, player),
+                    GamesServiceImpl(this@GamesService, lifecycle, packageName, account, player, oauth2Service),
                     ConnectionInfo()
                 )
             } catch (e: Exception) {
@@ -106,11 +123,15 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
     }
 }
 
-class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, val packageName: String, val account: Account, val player: Player) :
+class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, val packageName: String, val account: Account, val player: Player, val oauthService:String) :
     IGamesService.Stub(), LifecycleOwner {
 
+    private val pattern: Pattern = Pattern.compile("[0-9a-zA-Z-._~]{1,100}")
+    private var saveName: String? = null
+
     override fun clientDisconnecting(clientId: Long) {
-        Log.d(TAG, "Not yet implemented: clientDisconnecting($clientId)")
+        Log.d(TAG, "Method clientDisconnecting called:$clientId")
+        AchievementsDataClient.get(context).release()
     }
 
     override fun signOut(callbacks: IGamesCallbacks?) {
@@ -140,8 +161,8 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun getCurrentAccountName(): String? {
-        Log.d(TAG, "Not yet implemented: getCurrentAccountName")
-        return null
+        Log.d(TAG, "getCurrentAccountName called: ${account.name}")
+        return account.name
     }
 
     override fun loadGameplayAclInternal(callbacks: IGamesCallbacks?, gameId: String?) {
@@ -161,8 +182,8 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun getCurrentPlayerId(): String? {
-        Log.d(TAG, "Not yet implemented: getCurrentPlayerId")
-        return null
+        Log.d(TAG, "Method getCurrentPlayerId Called: ${player.playerId}")
+        return player.playerId
     }
 
     override fun getCurrentPlayer(): DataHolder? {
@@ -221,22 +242,44 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun loadAchievements(callbacks: IGamesCallbacks?) {
+        Log.d(TAG, "Method loadAchievements called")
         loadAchievementsV2(callbacks, false)
     }
 
-    override fun revealAchievement(callbacks: IGamesCallbacks?, achievementId: String?, windowToken: IBinder?, extraArgs: Bundle?) {
-        runCatching { extraArgs?.keySet() }
-        Log.d(TAG, "Not yet implemented: revealAchievement($achievementId, $windowToken, $extraArgs)")
+    override fun revealAchievement(callbacks: IGamesCallbacks?, achievementId: String, windowToken: IBinder?, extraArgs: Bundle?) {
+        Log.d(TAG, "Method revealAchievement($achievementId, $windowToken, $extraArgs) Called")
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val ret = AchievementsDataClient.get(context).revealAchievement(account, packageName, achievementId)
+                callbacks?.onAchievementUpdated(if (ret != -1) 0 else ret, achievementId)
+            }.onFailure {
+                Log.d(TAG, "revealAchievement: error", it)
+            }
+        }
     }
 
-    override fun unlockAchievement(callbacks: IGamesCallbacks?, achievementId: String?, windowToken: IBinder?, extraArgs: Bundle?) {
-        runCatching { extraArgs?.keySet() }
-        Log.d(TAG, "Not yet implemented: unlockAchievement($achievementId, $windowToken, $extraArgs")
+    override fun unlockAchievement(callbacks: IGamesCallbacks?, achievementId: String, windowToken: IBinder?, extraArgs: Bundle?) {
+        Log.d(TAG, "Method unlockAchievement($achievementId, $windowToken, $extraArgs) Called")
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val ret = AchievementsDataClient.get(context).unlockAchievement(account, packageName, achievementId)
+                callbacks?.onAchievementUpdated(if (ret != -1) 0 else ret, achievementId)
+            }.onFailure {
+                Log.d(TAG, "unlockAchievement: error", it)
+            }
+        }
     }
 
-    override fun incrementAchievement(callbacks: IGamesCallbacks?, achievementId: String?, numSteps: Int, windowToken: IBinder?, extraArgs: Bundle?) {
-        runCatching { extraArgs?.keySet() }
-        Log.d(TAG, "Not yet implemented: incrementAchievement($achievementId, $numSteps, $windowToken, $extraArgs)")
+    override fun incrementAchievement(callbacks: IGamesCallbacks?, achievementId: String, numSteps: Int, windowToken: IBinder?, extraArgs: Bundle?) {
+        Log.d(TAG, "Method: incrementAchievement($achievementId, $numSteps, $windowToken, $extraArgs) Called")
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val ret = AchievementsDataClient.get(context).incrementAchievement(account, packageName, achievementId, numSteps)
+                callbacks?.onAchievementUpdated(if (ret != -1) 0 else ret, achievementId)
+            }.onFailure {
+                Log.d(TAG, "incrementAchievement: error", it)
+            }
+        }
     }
 
     override fun loadGame(callbacks: IGamesCallbacks?) {
@@ -465,21 +508,33 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun loadAchievementsV2(callbacks: IGamesCallbacks?, forceReload: Boolean) {
-        Log.d(TAG, "Not yet implemented: loadAchievementsV2($forceReload)")
-        callbacks?.onAchievementsLoaded(DataHolder.empty(CommonStatusCodes.SUCCESS))
+        Log.d(TAG, "Method loadAchievementsV2 called: forceReload:$forceReload")
+        lifecycleScope.launchWhenStarted {
+            AchievementsDataClient.get(context).loadAchievementsData(packageName, account, forceReload)?.run {
+                callbacks?.onAchievementsLoaded(this)
+            }
+        }
     }
 
     override fun submitLeaderboardScore(callbacks: IGamesCallbacks?, leaderboardId: String?, score: Long, scoreTag: String?) {
         Log.d(TAG, "Not yet implemented: submitLeaderboardScore($leaderboardId, $score, $scoreTag)")
     }
 
-    override fun setAchievementSteps(callbacks: IGamesCallbacks?, id: String?, numSteps: Int, windowToken: IBinder?, extras: Bundle?) {
-        runCatching { extras?.keySet() }
-        Log.d(TAG, "Not yet implemented: setAchievementSteps($id, $numSteps, $windowToken, $extras)")
+    override fun setAchievementSteps(callbacks: IGamesCallbacks?, achievementId: String, numSteps: Int, windowToken: IBinder?, extras: Bundle?) {
+        Log.d(TAG, "Method setAchievementSteps($achievementId, $numSteps, $windowToken, $extras) called")
+        lifecycleScope.launchWhenStarted {
+            runCatching {
+                val ret = AchievementsDataClient.get(context).setAchievementSteps(account, packageName, achievementId, numSteps)
+                callbacks?.onAchievementUpdated(if (ret != -1) 0 else ret, achievementId)
+            }.onFailure {
+                Log.d(TAG, "setAchievementSteps: error", it)
+            }
+        }
     }
 
     private fun getGamesIntent(action: String, block: Intent.() -> Unit = {}) = Intent(action).apply {
-        setPackage(GAMES_PACKAGE_NAME)
+        setPackage(Constants.GMS_PACKAGE_NAME)
+        putExtra(EXTRA_ACCOUNT_KEY, Integer.toHexString(account.name.hashCode()))
         putExtra(EXTRA_GAME_PACKAGE_NAME, packageName)
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         block()
@@ -491,6 +546,52 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
 
     override fun getPlayerSearchIntent(): Intent = getGamesIntent(ACTION_PLAYER_SEARCH)
 
+    override fun getSelectSnapshotIntent(
+        title: String?,
+        allowAddButton: Boolean,
+        allowDelete: Boolean,
+        maxSnapshots: Int
+    ): Intent {
+        Log.d(TAG, "Method getSelectSnapshotIntent($title, $allowAddButton, $allowDelete, $maxSnapshots) called")
+        return getGamesIntent(ACTION_VIEW_SNAPSHOTS) {
+            putExtra(EXTRA_TITLE, title)
+            putExtra(EXTRA_ALLOW_CREATE_SNAPSHOT, allowAddButton)
+            putExtra(EXTRA_ALLOW_DELETE_SNAPSHOT, allowDelete)
+            putExtra(EXTRA_MAX_SNAPSHOTS, maxSnapshots)
+        }
+    }
+
+    override fun loadSnapshots(callbacks: IGamesCallbacks?, forceReload: Boolean) {
+        Log.d(TAG, "Method loadSnapshots(forceReload:$forceReload) called")
+    }
+
+    override fun commitSnapshot(
+        callbacks: IGamesCallbacks?,
+        str: String?,
+        change: SnapshotMetadataChangeEntity?,
+        contents: Contents?
+    ) {
+        Log.d(TAG, "Method commitSnapshot(str:$str, change:$change, dvd:$contents)")
+        lifecycleScope.launchWhenStarted {
+            if (change != null && contents?.parcelFileDescriptor != null) {
+                runCatching {
+                    val result = SnapshotsDataClient.get(context)
+                        .commitSnapshot(packageName, account, saveName, oauthService, change, contents, maxCoverImageSize)
+                    if (result == true) {
+                        callbacks?.commitSnapshotResult(DataHolder.empty(GamesStatusCodes.OK.code))
+                    } else {
+                        callbacks?.commitSnapshotResult(DataHolder.empty(GamesStatusCodes.SNAPSHOT_COMMIT_FAILED.code))
+                    }
+                }.onFailure {
+                    Log.w(TAG, "commitSnapshot: error", it)
+                    callbacks?.commitSnapshotResult(DataHolder.empty(GamesStatusCodes.SNAPSHOT_COMMIT_FAILED.code))
+                }
+            } else {
+                callbacks?.commitSnapshotResult(DataHolder.empty(GamesStatusCodes.SNAPSHOT_COMMIT_FAILED.code))
+            }
+        }
+    }
+
     override fun loadEvents(callbacks: IGamesCallbacks?, forceReload: Boolean) {
         Log.d(TAG, "Not yet implemented: loadEvents($forceReload)")
     }
@@ -499,20 +600,66 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
         Log.d(TAG, "Not yet implemented: incrementEvent($eventId, $incrementAmount)")
     }
 
+    override fun discardAndCloseSnapshot(contents: Contents?) {
+        Log.d(TAG, "discardAndCloseSnapshot: $contents")
+    }
+
     override fun loadEventsById(callbacks: IGamesCallbacks?, forceReload: Boolean, eventsIds: Array<out String>?) {
         Log.d(TAG, "Not yet implemented: loadEventsById($forceReload, $eventsIds)")
     }
 
     override fun getMaxDataSize(): Int {
+        Log.d(TAG, "getMaxDataSize: ")
         return 3 * 1024 * 1024
     }
 
     override fun getMaxCoverImageSize(): Int {
+        Log.d(TAG, "getMaxCoverImageSize: ")
         return 800 * 1024
     }
 
-    override fun registerEventClient(callback: IGamesClient?, l: Long) {
-        Log.d(TAG, "Not yet implemented: registerEventClient($l)")
+    override fun resolveSnapshotHead(callbacks: IGamesCallbacks, saveName: String?, i: Int) {
+        Log.d(TAG, "Method saveSnapshot $saveName, $i")
+        if (TextUtils.isEmpty(saveName)) {
+            Log.w(TAG, "saveSnapshot: Must provide a non empty fileName!")
+            return
+        }
+        if (!pattern.matcher(saveName).matches()) {
+            Log.w(TAG, "saveSnapshot: Must provide a valid file name!")
+            return
+        }
+        val driveId = DriveId(null, 30, 0, DriveId.RESOURCE_TYPE_FILE)
+        val file = File.createTempFile("blob", ".tmp", context.filesDir)
+        this.saveName = saveName
+        lifecycleScope.launchWhenStarted {
+            val resolveSnapshotHeadRequest = ResolveSnapshotHeadRequest.Builder().apply {
+                this.snapshotName = saveName
+                unknownFileInt2 = 5
+                unknownFileInt3 = 3
+            }.build()
+            val resolveSnapshotHeadResponse = SnapshotsDataClient.get(context).resolveSnapshotHead(packageName, account, resolveSnapshotHeadRequest, oauthService)
+            val contentUrl = resolveSnapshotHeadResponse?.snapshotMetadata?.snapshot?.snapshotContentInfo?.url
+            if (contentUrl != null) {
+                val contentByteArray = SnapshotsDataClient.get(context).getDataFromDrive(packageName, account, contentUrl, oauthService)
+                val fileOutputStream = FileOutputStream(file)
+                fileOutputStream.write(contentByteArray)
+            }
+            val columns = PlayerColumns.CURRENT_PLAYER_COLUMNS.toTypedArray() +
+                    GameColumns.CURRENT_GAME_COLUMNS.toTypedArray() +
+                    SnapshotColumns.CURRENT_GAME_COLUMNS.toTypedArray()
+            val dataHolder = if (player is PlayerEntity) {
+                    DataHolder.builder(columns)
+                        .withRow(player.toContentValues()).build(CommonStatusCodes.SUCCESS)
+                 } else {
+                    DataHolder.builder(columns).build(CommonStatusCodes.SIGN_IN_REQUIRED)
+                 }
+            callbacks.onResolveSnapshotHead(dataHolder, Contents(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_WRITE), 1, ParcelFileDescriptor.MODE_READ_WRITE, driveId, true, null))
+        }
+
+    }
+
+    override fun registerEventClient(callback: IGamesClient?, clientId: Long) {
+        Log.d(TAG, "Not yet implemented: registerEventClient($clientId)")
     }
 
     private fun getCompareProfileIntent(playerId: String, block: Intent.() -> Unit = {}): Intent = getGamesIntent(ACTION_VIEW_PROFILE) {
@@ -529,8 +676,17 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
         Log.d(TAG, "Not yet implemented: loadPlayerStats($forceReload)")
     }
 
+    override fun getLeaderboardsScoresIntent(leaderboardId: String?, timeSpan: Int, collection: Int): Intent {
+        Log.d(TAG, "Method getLeaderboardsScoresIntent Called: timeSpan:$timeSpan collection:$collection")
+        return getGamesIntent(ACTION_VIEW_LEADERBOARDS_SCORES) {
+            putExtra(EXTRA_LEADERBOARD_ID, leaderboardId)
+            putExtra(EXTRA_LEADERBOARD_TIME_SPAN, timeSpan)
+            putExtra(EXTRA_LEADERBOARD_COLLECTION, collection)
+        }
+    }
+
     override fun getCurrentAccount(): Account? {
-        Log.d(TAG, "Not yet implemented: getCurrentAccount")
+        Log.d(TAG, "Method getCurrentAccount Called: ${account.name}")
         return account
     }
 

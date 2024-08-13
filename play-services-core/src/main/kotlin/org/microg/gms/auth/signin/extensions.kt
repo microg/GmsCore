@@ -41,6 +41,8 @@ private const val TAG = "AuthSignInExtensions"
 
 private val ACCEPTABLE_SCOPES = setOf(Scopes.OPENID, Scopes.EMAIL, Scopes.PROFILE, Scopes.USERINFO_EMAIL, Scopes.USERINFO_PROFILE, Scopes.GAMES_LITE)
 
+private val GAMES_SCOPES = setOf(Scopes.GAMES, Scopes.GAMES_LITE)
+
 private fun Long?.orMaxIfNegative() = this?.takeIf { it >= 0L } ?: Long.MAX_VALUE
 
 val GoogleSignInOptions.scopeUris
@@ -57,6 +59,9 @@ val GoogleSignInOptions.includeProfile
 
 val GoogleSignInOptions.includeUnacceptableScope
     get() = scopeUris.any { it.scopeUri !in ACCEPTABLE_SCOPES }
+
+val GoogleSignInOptions.includeGamesScope
+    get() = scopeUris.any { it.scopeUri in GAMES_SCOPES }
 
 val consentRequestOptions: String?
     get() = runCatching {
@@ -96,6 +101,13 @@ fun getServerAuthTokenManager(context: Context, packageName: String, options: Go
 
 suspend fun checkAppAuthStatus(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account): Boolean {
     val authManager = getOAuthManager(context, packageName, options, account)
+    authManager.ignoreStoredPermission = true
+    return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
+}
+
+suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeList: List<Scope>?, account: Account): Boolean {
+    val scopes = scopeList.orEmpty().sortedBy { it.scopeUri }
+    val authManager = AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
     authManager.ignoreStoredPermission = true
     return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
 }

@@ -29,6 +29,7 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.internal.ConnectionInfo;
 import com.google.android.gms.common.internal.GetServiceRequest;
 import com.google.android.gms.common.internal.IGmsCallbacks;
@@ -53,6 +54,7 @@ public abstract class GmsClient<I extends IInterface> implements Api.Client {
 
     protected int serviceId = -1;
     protected Account account = null;
+    protected Scope[] scopes = null;
     protected Bundle extras = new Bundle();
 
     public GmsClient(Context context, ConnectionCallbacks callbacks, OnConnectionFailedListener connectionFailedListener, String actionString) {
@@ -68,10 +70,12 @@ public abstract class GmsClient<I extends IInterface> implements Api.Client {
         if (serviceId == -1) {
             throw new IllegalStateException("Service ID not set in constructor and onConnectedToBroker not implemented");
         }
+        Log.d(TAG, "onConnectedToBroker: " + serviceId);
         GetServiceRequest request = new GetServiceRequest(serviceId);
         request.packageName = packageName;
         request.account = account;
         request.extras = extras;
+        request.scopes = scopes;
         broker.getService(callbacks, request);
     }
 
