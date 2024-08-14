@@ -91,7 +91,7 @@
             android:layout_margin="24dp"
             android:visibility="gone"
             app:backgroundTint="#ffffffff"
-            app:srcCompat="@drawable/ic_add"
+            android:src="@drawable/ic_add"
             app:tint="#027e5a" />
 
     </RelativeLayout>
