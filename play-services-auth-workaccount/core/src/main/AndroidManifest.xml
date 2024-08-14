@@ -22,5 +22,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+        <service
+            android:name="org.microg.gms.auth.account.authenticator.WorkAccountAuthenticatorService"
+            android:process=":persistent"
+            android:enabled="false"
+            android:exported="false">
+
+           <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+           </intent-filter>
+
+           <meta-data
+               android:name="android.accounts.AccountAuthenticator"
+               android:resource="@xml/auth_work_authenticator"/>
+
+           <meta-data
+               android:name="android.accounts.AccountAuthenticator.customTokens"
+               android:value="1"/>
+
+        </service>
+
     </application>
 </manifest>
