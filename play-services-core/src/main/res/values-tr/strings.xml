@@ -111,7 +111,7 @@
     <string name="prefcat_configuration">Seçenekler</string>
     <string name="prefcat_google_services">Google Servisleri</string>
     <string name="prefcat_location_service">Konum servisi</string>
-    <string name="prefcat_services">Services</string>
+    <string name="prefcat_services">Hizmetler</string>
     <string name="prefcat_test">Test</string>
     <string name="cond_gcm_bat_title">Pil optimizasyonları açık</string>
     <string name="cond_gcm_bat_action">Optimizasyonları kapat</string>
@@ -242,4 +242,6 @@
     <string name="credentials_assisted_signin_consent">Devam ettiğinizde Google, adınızı, e-posta adresinizi ve profil resminizi %1$s ile paylaşacaktır. %1$s uygulamasının gizlilik politikasına ve hizmet şartlarına göz atın.</string>
     <string name="credentials_assisted_signin_description">Google ile oturum aç özelliğini Google hesaplarınızdan yönetebilirsiniz.</string>
     <string name="credentials_assisted_choose_account_label">Hesap seç</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Özgür uygulamaları otomatik olarak kütüphaneye ekle</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Özgür uygulamalar Google Play\'den indirilip indirilmediklerini denetleyebilir. Şu anda kullanabileceğiniz tüm özgür uygulamaların denetimini her zaman geçmek için özgür uygulamaları otomatik olarak hesap kütüphanenize ekleyin.</string>
 </resources>
