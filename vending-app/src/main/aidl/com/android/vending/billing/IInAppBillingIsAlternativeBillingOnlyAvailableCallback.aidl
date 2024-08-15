@@ -6,7 +6,11 @@ package com.android.vending.billing;
 
 import android.os.Bundle;
 
-
 interface IInAppBillingIsAlternativeBillingOnlyAvailableCallback {
+    /**
+     * @param bundle a Bundle with the following keys:
+     *        "RESPONSE_CODE" - Integer
+     *        "DEBUG_MESSAGE" - String
+     */
     void callback(in Bundle bundle);
 }

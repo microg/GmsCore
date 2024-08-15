@@ -7,5 +7,11 @@ package com.android.vending.billing;
 import android.os.Bundle;
 
 interface IInAppBillingGetExternalPaymentDialogIntentCallback {
-
+    /**
+     * @param bundle a Bundle with the following keys:
+     *        "RESPONSE_CODE" - Integer
+     *        "DEBUG_MESSAGE" - String
+     *        "EXTERNAL_PAYMENT_DIALOG_INTENT" - PendingIntent
+     */
+    void callback(in Bundle bundle);
 }

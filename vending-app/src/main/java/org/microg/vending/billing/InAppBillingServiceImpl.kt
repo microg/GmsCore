@@ -35,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import org.json.JSONObject
 import org.microg.gms.utils.toHexString
 import org.microg.vending.billing.core.*
 import java.util.Locale
@@ -637,45 +638,72 @@ class InAppBillingServiceImpl(private val context: Context) : IInAppBillingServi
     }
 
     override fun showInAppMessages(apiVersion: Int, packageName: String?, extraParams: Bundle?, callback: IInAppBillingServiceCallback?) {
-        Log.d(TAG,"showInAppMessages Not yet implemented")
-    }
-
-    override fun createAlternativeBillingOnlyToken(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingCreateAlternativeBillingOnlyTokenCallback?) {
-        Log.d(TAG,"createAlternativeBillingOnlyToken Not yet implemented")
-    }
-
-    override fun createExternalPaymentReportingDetails(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingCreateExternalPaymentReportingDetailsCallback?) {
-        Log.d(TAG,"createExternalPaymentReportingDetails Not yet implemented")
-    }
-
-    override fun delegateToBackend(bundle: Bundle?, callback: IInAppBillingDelegateToBackendCallback?) {
-        Log.d(TAG,"delegateToBackend Not yet implemented")
-    }
-
-    override fun getAlternativeBillingOnlyDialogIntent(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback?) {
-        Log.d(TAG,"getAlternativeBillingOnlyDialogIntent Not yet implemented")
+        Log.d(TAG, "showInAppMessages Not yet implemented")
     }
 
     override fun getBillingConfig(apiVersion: Int, packageName: String?, bundle: Bundle?, callback: IInAppBillingGetBillingConfigCallback) {
-        Log.d(TAG,"getBillingConfig apiVersion:$apiVersion packageName:$packageName bundle:$bundle")
-        val temp = Bundle()
-        val locale: Locale = Locale.getDefault()
-        val countryCode: String = locale.country
-        temp.putString("BILLING_CONFIG", "{\"countryCode\":\"$countryCode\"}")
-        val result = resultBundle(BillingResponseCode.OK, "", temp)
+        Log.d(TAG, "getBillingConfig apiVersion:$apiVersion packageName:$packageName bundle:$bundle")
+        val result = resultBundle(BillingResponseCode.OK, "", bundleOf(
+            "BILLING_CONFIG" to JSONObject().apply { put("countryCode", Locale.getDefault().country) }.toString()
+        ))
         callback.callback(result)
     }
 
-    override fun getExternalPaymentDialogIntent(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingGetExternalPaymentDialogIntentCallback?) {
-        Log.d(TAG,"getExternalPaymentDialogIntent Not yet implemented")
+    override fun isAlternativeBillingOnlyAvailable(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingIsAlternativeBillingOnlyAvailableCallback?
+    ) {
+        Log.d(TAG, "isAlternativeBillingOnlyAvailable Not yet implemented")
     }
 
-    override fun isAlternativeBillingOnlyAvailable(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingIsAlternativeBillingOnlyAvailableCallback?) {
-        Log.d(TAG,"isAlternativeBillingOnlyAvailable Not yet implemented")
+    override fun createAlternativeBillingOnlyToken(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingCreateAlternativeBillingOnlyTokenCallback?
+    ) {
+        Log.d(TAG, "createAlternativeBillingOnlyToken Not yet implemented")
     }
 
-    override fun isExternalPaymentAvailable(i: Int, str: String?, bundle: Bundle?, callback: IInAppBillingIsExternalPaymentAvailableCallback?) {
-        Log.d(TAG,"isExternalPaymentAvailable Not yet implemented")
+    override fun getAlternativeBillingOnlyDialogIntent(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingGetAlternativeBillingOnlyDialogIntentCallback?
+    ) {
+        Log.d(TAG, "getAlternativeBillingOnlyDialogIntent Not yet implemented")
     }
 
+    override fun isExternalOfferAvailable(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingIsExternalPaymentAvailableCallback?
+    ) {
+        Log.d(TAG, "isExternalOfferAvailable Not yet implemented")
+    }
+
+    override fun createExternalOfferReportingDetails(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingCreateExternalPaymentReportingDetailsCallback?
+    ) {
+        Log.d(TAG, "createExternalOfferReportingDetails Not yet implemented")
+    }
+
+    override fun showExternalOfferInformationDialog(
+        apiVersion: Int,
+        packageName: String?,
+        extraParams: Bundle?,
+        callback: IInAppBillingGetExternalPaymentDialogIntentCallback?
+    ) {
+        Log.d(TAG, "showExternalOfferInformationDialog Not yet implemented")
+    }
+
+    override fun delegateToBackend(bundle: Bundle?, callback: IInAppBillingDelegateToBackendCallback?) {
+        Log.d(TAG, "delegateToBackend Not yet implemented")
+    }
 }
