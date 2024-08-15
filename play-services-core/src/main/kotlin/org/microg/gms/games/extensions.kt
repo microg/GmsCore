@@ -218,7 +218,7 @@ suspend fun performGamesSignIn(
     if (permitted) authManager.isPermitted = true
     val authResponse = withContext(Dispatchers.IO) { authManager.requestAuth(true) }
     if (authResponse.auth == null) return false
-    if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, packageName, account) == null) {
+    if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
         suspend fun fetchSelfPlayer() = suspendCoroutine<JSONObject> { continuation ->
             queue.add(
                 object : JsonObjectRequest(
@@ -244,7 +244,7 @@ suspend fun performGamesSignIn(
                 throw e
             }
         }
-        GamesConfigurationService.setPlayer(context, packageName, account, result.toString())
+        GamesConfigurationService.setPlayer(context, account, result.toString())
     }
     return true
 }
