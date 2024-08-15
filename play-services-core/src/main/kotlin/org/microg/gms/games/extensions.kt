@@ -245,31 +245,6 @@ suspend fun performGamesSignIn(
             }
         }
         GamesConfigurationService.setPlayer(context, packageName, account, result.toString())
-        if (packageName != GAMES_PACKAGE_NAME) {
-            try {
-                suspendCoroutine { continuation ->
-                    queue.add(object : Request<Unit>(Method.POST, "https://www.googleapis.com/games/v1/applications/played", {
-                        continuation.resumeWithException(it)
-                    }) {
-                        override fun parseNetworkResponse(response: NetworkResponse): Response<Unit> {
-                            if (response.statusCode == 204) return success(Unit, null)
-                            return Response.error(VolleyError(response))
-                        }
-
-                        override fun deliverResponse(response: Unit) {
-                            continuation.resume(response)
-                        }
-
-                        override fun getHeaders(): MutableMap<String, String> {
-                            return mutableMapOf(
-                                "Authorization" to "OAuth ${authResponse.auth}"
-                            )
-                        }
-                    })
-                }
-            } catch (ignored: Exception) {
-            }
-        }
     }
     return true
 }
