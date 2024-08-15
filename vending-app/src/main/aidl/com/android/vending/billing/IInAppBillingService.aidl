@@ -374,10 +374,6 @@ interface IInAppBillingService {
      *        "KEY_CATEGORY_IDS" - ArrayList<Integer>
      *        "playBillingLibraryVersion" - String
      */
-//    void showInAppMessages(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingServiceCallback callback) = 1200;
-
-//    void r(String packageName, Bundle arg2, eql arg3) = 1300;
-
     void showInAppMessages(int apiVersion, String packageName, in Bundle extraParams, IInAppBillingServiceCallback callback) = 1200;
 
     void createAlternativeBillingOnlyToken(int i, String str, in Bundle bundle, IInAppBillingCreateAlternativeBillingOnlyTokenCallback callback) = 1500;

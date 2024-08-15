@@ -79,7 +79,7 @@ class HttpClient(context: Context) {
             override fun getHeaders(): Map<String, String> = headers
             override fun getBody(): ByteArray = payload.encode()
             override fun getBodyContentType(): String = "application/x-protobuf"
-        }.setShouldCache(cache).setRetryPolicy(DefaultRetryPolicy(POST_TIMEOUT, 3, 0.0F)))
+        }.setShouldCache(cache).setRetryPolicy(DefaultRetryPolicy(POST_TIMEOUT, 0, 0.0F)))
     }
 
     suspend fun post(
