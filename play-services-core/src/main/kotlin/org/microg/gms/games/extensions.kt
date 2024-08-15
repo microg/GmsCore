@@ -216,7 +216,7 @@ suspend fun performGamesSignIn(
     val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
     if (realScopes.size == 1) authManager.setItCaveatTypes("2")
     if (permitted) authManager.isPermitted = true
-    val authResponse = withContext(Dispatchers.IO) { authManager.requestAuth(true) }
+    var authResponse = withContext(Dispatchers.IO) { authManager.requestAuth(true) }
     if (authResponse.auth == null) return false
     if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
         suspend fun fetchSelfPlayer() = suspendCoroutine<JSONObject> { continuation ->
@@ -237,9 +237,22 @@ suspend fun performGamesSignIn(
         val result = try {
             fetchSelfPlayer()
         } catch (e: Exception) {
-            if (e is VolleyError && e.networkResponse?.statusCode == 404) {
-                registerForGames(context, account, queue)
-                fetchSelfPlayer()
+            if (e is VolleyError) {
+                val statusCode = e.networkResponse?.statusCode
+                when (statusCode) {
+                    404 -> {
+                        registerForGames(context, account, queue)
+                        fetchSelfPlayer()
+                    }
+                    403 -> {
+                        val gameAuthManager = AuthManager(context, account.name, GAMES_PACKAGE_NAME, authManager.service)
+                        gameAuthManager.isPermitted = authManager.isPermitted
+                        authResponse = withContext(Dispatchers.IO) { gameAuthManager.requestAuth(true) }
+                        if (authResponse.auth == null) return false
+                        fetchSelfPlayer()
+                    }
+                    else -> throw e
+                }
             } else {
                 throw e
             }
