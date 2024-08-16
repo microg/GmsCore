@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="permission_service_all_label">Tüm Google servisleri</string>
+    <string name="permission_service_all_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla tüm Google servislerine erişmesine izin verir.</string>
+    <string name="permission_service_adsense_label">AdSense</string>
+    <string name="permission_service_ah_label">Google App Engine</string>
+    <string name="permission_service_blogger_label">Blogger</string>
+    <string name="permission_service_blogger_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Blogger\'a erişmesine izin verir.</string>
+    <string name="permission_service_cl_label">Google Takvim</string>
+    <string name="permission_service_cl_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Google Takvim\'e erişmesine izin verir.</string>
+    <string name="permission_service_cp_label">Kişiler</string>
+    <string name="permission_service_cp_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Kişiler\'e erişmesine izin verir.</string>
+    <string name="permission_service_dodgeball_label">Dodgeball</string>
+    <string name="permission_service_finance_label">Google Finans</string>
+    <string name="permission_service_gbase_label">Google Base</string>
+    <string name="permission_service_grandcentral_label">Google Voice</string>
+    <string name="permission_service_groups2_label">Google Gruplar</string>
+    <string name="permission_service_grandcentral_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Google Voice\'a erişmesine izin verir.</string>
+    <string name="permission_service_health_label">Google Health</string>
+    <string name="permission_service_health_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Google Health\'a erişmesine izin verir.</string>
+    <string name="permission_service_ig_label">iGoogle</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.readonly">YouTube hesabını görüntüle</string>
+    <string name="permission_scope_www.googleapis.com_auth_youtube.upload">YouTube videolarını yönet</string>
+    <string name="permission_service_dodgeball_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Dodgeball\'a erişmesine izin verir.</string>
+    <string name="permission_service_finance_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Google Finans\'a erişmesine izin verir.</string>
+    <string name="permission_service_gbase_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Google Base\'e erişmesine izin verir.</string>
+    <string name="permission_service_groups2_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Google Gruplar\'a erişmesine izin verir.</string>
+    <string name="permission_service_android_label">Android servisleri</string>
+    <string name="permission_service_android_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Android servislerine erişmesine izin verir.</string>
+    <string name="permission_service_adsense_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla AdSense\'e erişmesine izin verir.</string>
+    <string name="permission_service_adwords_label">AdWords</string>
+    <string name="permission_service_adwords_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla AdWords\'e erişmesine izin verir.</string>
+    <string name="permission_service_ah_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla Google App Engine\'e erişmesine izin verir.</string>
+    <string name="permission_service_ig_description">Uygulamanın, ilgili herhangi bir Google hesabı aracılığıyla iGoogle\'a erişmesine izin verir.</string>
+</resources>
