@@ -8,6 +8,7 @@ package org.microg.gms.accountsettings.ui
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.webkit.WebView
@@ -131,6 +132,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val screenId = intent?.getIntExtra(EXTRA_SCREEN_ID, -1).takeIf { it != -1 } ?: ACTION_TO_SCREEN_ID[intent.action] ?: 1
+        val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
+
         val screenOptions = intent.extras?.keySet().orEmpty()
             .filter { it.startsWith(EXTRA_SCREEN_OPTIONS_PREFIX) }
             .map { it.substring(EXTRA_SCREEN_OPTIONS_PREFIX.length) to intent.getStringExtra(it) }
@@ -150,6 +153,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (screenId in SCREEN_ID_TO_URL) {
+            val screenUrl = SCREEN_ID_TO_URL[screenId]?.run { if (screenId == 547 && !product.isNullOrEmpty()) { replace("search", product) } else { this } }
             val layout = RelativeLayout(this)
             layout.addView(ProgressBar(this).apply {
                 layoutParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
@@ -164,7 +168,7 @@ class MainActivity : AppCompatActivity() {
             }
             layout.addView(webView)
             setContentView(layout)
-            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(SCREEN_ID_TO_URL[screenId], accountName)
+            WebViewHelper(this, webView, ALLOWED_WEB_PREFIXES).openWebView(screenUrl, accountName)
             setResult(RESULT_OK)
         } else {
             Log.w(TAG, "Unknown screen id, can't open corresponding web page")
