@@ -245,7 +245,7 @@ fun getClientDataAndHash(
     callingPackage: String
 ): Pair<ByteArray, ByteArray> {
     val clientData: ByteArray?
-    var clientDataHash = (options as? BrowserPublicKeyCredentialCreationOptions)?.clientDataHash
+    var clientDataHash = (options as? BrowserRequestOptions)?.clientDataHash
     if (clientDataHash == null) {
         clientData = options.getWebAuthnClientData(callingPackage, getFacetId(context, options, callingPackage))
         clientDataHash = clientData.digest("SHA-256")
