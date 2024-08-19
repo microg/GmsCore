@@ -56,7 +56,7 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
         trySplitInstall(pkg, splits, false)
         taskQueue.put(Runnable {
             try{
-                callback.j(1, Bundle())
+                callback.onStartInstall(1, Bundle())
             }catch (ignored: RemoteException){
             }
         })
@@ -90,7 +90,7 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
 
     override fun getSessionStates(pkg: String, callback: ISplitInstallServiceCallback) {
         Log.i(TAG, "getSessionStates for package: $pkg")
-        callback.i(ArrayList<Any?>(1))
+        callback.onGetSessionStates(ArrayList<Bundle>(1))
     }
 
     override fun splitRemoval(
@@ -108,7 +108,7 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
         callback: ISplitInstallServiceCallback
     ) {
         Log.i(TAG, "Split deferred not implemented")
-        callback.d(Bundle())
+        callback.onDeferredInstall(Bundle())
     }
 
     override fun getSessionState2(
