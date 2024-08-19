@@ -38,7 +38,7 @@ class CtapNfcConnection(
     override suspend fun <Q : Ctap2Request, S : Ctap2Response> runCommand(command: Ctap2Command<Q, S>): S {
         require(hasCtap2Support)
         val request = encodeCommandApdu(0x80.toByte(), 0x10, 0x00, 0x00, byteArrayOf(command.request.commandByte) + command.request.payload, extended = true)
-        Log.d(TAG, "Send CTAP2 command: ${request.toBase64(Base64.NO_WRAP)}")
+        Log.d(TAG, "Send CTAP2 command: ${request.toBase64(Base64.NO_WRAP)} (${command.request.commandByte} - ${command.request.parameters})")
         var (statusCode, payload) = decodeResponseApdu(isoDep.transceive(request))
         Log.d(TAG, "Received CTAP2 response(${(statusCode.toInt() and 0xffff).toString(16)}): ${payload.toBase64(Base64.NO_WRAP)}")
         while (statusCode == 0x9100.toShort() || (statusCode > 0x6100.toShort() && statusCode < 0x6200.toShort())) {

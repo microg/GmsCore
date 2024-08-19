@@ -6,7 +6,7 @@
 package org.microg.gms.fido.core.transport
 
 import android.content.Context
-import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -219,7 +219,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         }
         // If the authenticator has a built-in verification method, let that take precedence over
         // client PIN
-        val requiresPin = requireUserVerification  && !connection.hasUserVerificationSupport && connection.hasClientPin
+        val requiresPin = requireUserVerification && !connection.hasUserVerificationSupport && connection.hasClientPin
 
         val (response, keyHandle) = when {
             connection.hasCtap2Support && (requireResidentKey || requiresPin) -> {
@@ -233,7 +233,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                         throw MissingPinException()
                     }
 
-                    if (requiresPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (requiresPin && pin != null && SDK_INT >= 23) {
                         pinToken = ctap2getPinToken(connection, pin)
                     }
 
@@ -307,7 +307,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         return ctap2Response to ctap2Response.credential?.id
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+    @RequiresApi(23)
     private suspend fun ctap2getPinToken(
         connection: CtapConnection,
         pin: String
@@ -338,13 +338,8 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
         }
 
         // Perform Diffie Hellman key generation
-        val generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore")
-        generator.initialize(
-            KeyGenParameterSpec.Builder(
-                "eckeypair",
-                KeyProperties.PURPOSE_AGREE_KEY
-            ).setAlgorithmParameterSpec(ECGenParameterSpec(curveName))
-                .build())
+        val generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC)
+        generator.initialize(ECGenParameterSpec(curveName))
 
         val myKeyPair = generator.generateKeyPair()
         val parameters = AlgorithmParameters.getInstance("EC")
@@ -485,7 +480,7 @@ abstract class TransportHandler(val transport: Transport, val callback: Transpor
                         throw MissingPinException()
                     }
 
-                    if (requiresPin && pin != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (requiresPin && pin != null && SDK_INT >= 23) {
                         pinToken = ctap2getPinToken(connection, pin)
                     }
 

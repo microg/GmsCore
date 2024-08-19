@@ -12,6 +12,7 @@ import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
 import android.os.Build.VERSION.SDK_INT
 import android.os.Parcel
+import android.util.Log
 import androidx.core.app.PendingIntentCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -100,6 +101,7 @@ class Fido2PrivilegedServiceImpl(private val context: Context, override val life
     }
 
     override fun getCredentialList(callbacks: ICredentialListCallback, rpId: String) {
+        Log.w(TAG, "Not yet implemented: getCredentialList")
         lifecycleScope.launchWhenStarted {
             runCatching { callbacks.onCredentialList(emptyList()) }
         }
