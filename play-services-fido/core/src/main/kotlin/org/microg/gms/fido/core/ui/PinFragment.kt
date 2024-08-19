@@ -1,10 +1,16 @@
 package org.microg.gms.fido.core.ui
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
+import androidx.core.content.getSystemService
+import androidx.databinding.adapters.TextViewBindingAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
@@ -33,8 +39,28 @@ class PinFragment: AuthenticatorActivityFragment() {
         binding.onEnterPin = View.OnClickListener {
             enterPin()
         }
+        binding.onInputChange = TextViewBindingAdapter.AfterTextChanged {
+            view?.findViewById<Button>(R.id.pin_fragment_ok)?.isEnabled = it.toString().encodeToByteArray().size in 4..63
+        }
+        binding.root.findViewById<EditText>(R.id.pin_editor)?.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE &&
+                (event == null || event.action == KeyEvent.ACTION_DOWN) &&
+                v.text.toString().encodeToByteArray().size in 4 ..63) {
+                enterPin()
+                true
+            } else {
+                false
+            }
+        }
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view?.findViewById<EditText>(R.id.pin_editor)?.let { editText ->
+            requireContext().getSystemService<InputMethodManager>()?.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+        }
     }
 
     fun enterPin () {
