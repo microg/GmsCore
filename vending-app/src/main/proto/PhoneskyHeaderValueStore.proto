@@ -1,0 +1,433 @@
+
+option java_package = "com.google.android.phonesky.header";
+option java_multiple_files = true;
+
+message PhoneskyValueStore{//aknj
+  map<string,PhoneskyValue> values = 2;
+}
+
+message PhoneskyValue{ //ayie
+  optional SyncToken  sysncTokenValue = 1;
+  optional ExperimentWrapper  experimentWrapperValue = 10;
+  optional TocToken  tocTokenValue = 11; //j
+  optional PhoneskyUnknowFieldK  unknowFieldk = 12;
+  optional RequestLanguagePkg  languages = 15;
+  optional ConsistencyTokenWrapper  ConsistencyTokenWrapperValue = 16; //n
+  optional DeviceBuildInfo  deviceBuildInfoValue = 20; //q
+  optional BaseDeviceInfo  baseDeviceInfoValue = 21; //r
+  optional UnknowDeviceId  unknowDeviceIdValue = 27;
+}
+
+message UnknowDeviceId {
+  optional string  uuid = 1;
+  optional int32  type = 2; //enum
+}
+
+message BaseDeviceInfo {
+  optional string  device = 1;
+  optional string  hardware = 2;
+  optional string  model = 3;
+  optional string  gpVersion = 4; //e
+  optional string  product = 5;
+  optional int64  androidId = 6; //f
+  optional string  fingerPrint = 7;
+}
+
+message DeviceBuildInfo {
+  optional BuildInfo  buildInfo = 1;
+  optional string  marketClientId = 2; //c
+  optional bool  unknowBooleD = 3; //d
+}
+
+message BuildInfo {
+  optional int32  sdkInt = 1; //b
+  optional string  id = 2; //c
+  optional string  release = 3; //d
+  optional int32  constInte = 4; //e
+}
+
+message ConsistencyTokenWrapper {
+  optional string  ConsistencyToken = 1; //b
+  optional string  unknowTokenc = 2; //c
+  optional string  unknowTokenf = 6; //f
+}
+
+message RequestLanguagePkg {
+  repeated string language = 1;
+}
+
+message PhoneskyUnknowFieldK {
+  optional int32 mvalue = 1; //enum
+}
+
+message TocToken {
+  optional bytes  token = 1;
+}
+
+message ExperimentWrapper {
+    optional ExperServerToken experServerTokenValue = 1;
+}
+
+message ExperServerToken {
+  optional string  regularServerToken = 1;
+  optional string  stableServerToken = 2;
+  optional bytes  unknowField = 3;
+}
+
+message SyncToken {
+    optional string  mvalue = 1;
+}
+
+enum PaurchaseType {
+    UNKNOWN_ITEM_TYPE = 0;
+    ANDROID_APP = 1;
+    ANDROID_APP_DEVELOPER = 2;
+    ANDROID_IN_APP_ITEM = 3;
+    DYNAMIC_ANDROID_IN_APP_ITEM = 4;
+    ANDROID_APP_SUBSCRIPTION = 5;
+    DYNAMIC_ANDROID_APP_SUBSCRIPTION = 6;
+    MOVIE = 7;
+    TV_SHOW = 8;
+    TV_SEASON = 9;
+    TV_EPISODE  =10;
+    AUDIOBOOK  =11;
+    AUDIOBOOK_SERIES  =24;
+    EBOOK  =12;
+    EBOOK_SERIES  =13;
+    BOOK_AUTHOR  =14;
+    ALBUM  =15;
+    SONG  =16;
+    MUSIC_ARTIST  =17;
+    MAGAZINE  =18;
+    MAGAZINE_ISSUE  =19;
+    NEWSPAPER  =20;
+    NEWS_ISSUE  =21;
+    VOUCHER  =22;
+    YOUTUBE_COMMERCE_ITEM  =25;
+    LOYALTY_REWARD  =26;
+    BOOK_SUBSCRIPTION  =27;
+    LOYALTY_VOUCHER  =28;
+    LOYALTY_PLAY_CREDIT  =29;
+}
+
+enum DeviceType {
+    NO_DEVICE = 0;
+    PHONE =1 ;
+    GTV =2 ;
+    TABLET =3 ;
+    TABLET_LARGE =4 ;
+    ANDROID_TV =5 ;
+    WEAR =6 ;
+    CHROMEBOOK =7 ;
+    ANDROID_AUTO =8 ;
+    HIGH_PERFORMANCE_EMULATOR =10 ;
+    ANDROID_XR =11 ;
+}
+//message awgc {
+//  optional feauture  b = 1;
+//}
+
+enum Feauture {
+    FEATURED_UNSPECIFIED =0;
+    FEATURED_TV_MOVIES =1;
+    FEATURED_ENTERTAINMENT_VIDEO =2;
+    FEATURED_EBOOK =3;
+    FEATURED_AUDIOBOOK =4;
+    FEATURED_BOOK_SERIES =5;
+    FEATURED_MUSIC =6;
+    FEATURED_PODCAST =7;
+    FEATURED_RADIO =8;
+    FEATURED_SHOPPING_PRODUCT =9;
+    FEATURED_FOOD_PRODUCT =10;
+    FEATURED_RECIPE =11;
+    FEATURED_FOOD_STORE =12;
+    FEATURED_GENERIC_CONTENT =13;
+}
+
+message GoogleApiResponse {
+    optional FdfeApiResponse fdfeApiResponseValue = 1;
+    optional UnknowTypebbfe  g= 5;
+    optional bytes  unknowFieldBytes= 9;
+}
+
+message UnknowTypebbfe {
+    optional int64 id=1;
+}
+
+message FdfeApiResponse {
+    optional TocResponse tocApi = 6;
+    optional SplitResponse splitReqResult = 21;
+    optional SyncApiResp syncResult = 183;
+}
+
+message TocResponse {
+//    optional bool o=11;
+    optional string tocTokenValue=22; //t
+}
+
+message SplitResponse {
+    optional int32 b = 1; //unknow enum
+    optional PkgFetchInfo pkgList = 2;
+}
+
+message PkgFetchInfo {
+    repeated SplitPkgInfo pkgDownlaodInfo = 15;
+}
+
+message SplitPkgInfo {
+    optional string splitPkgName = 1;
+    optional int64 size = 2;
+    optional string checkSum = 4;
+    optional string downloadUrl1 = 5;
+    optional DownloadInfo slaveDownloadInfo = 8;
+    optional string mabyChecksum = 9;
+    optional string unknowPkgInfoF = 15;
+    optional DownloadInfo otherDownloadInfo = 16;
+}
+
+message DownloadInfo {
+    optional int32 id = 1; //unknow enum
+    optional int64 size = 2;
+    optional string url = 3;
+}
+
+//--------------------------request for /fdfe/sync--
+
+message SyncReqWrapper {
+    repeated SyncRequest mvalue = 1;
+}
+
+message SyncRequest {
+    oneof payload {
+        AccountAossiationPayload AccountAossiationPayloadVALUE = 7;
+        DeviceAccountsPaylaod DeviceAccountsPaylaodVALUE = 8;
+        CarrierPropertiesPayload CarrierPropertiesPayloadVALUE = 9;
+        DeviceCapabilitiesPayload DeviceCapabilitiesPayloadVALUE = 10;
+        DeviceInputPropertiesPayload DeviceInputPropertiesPayloadVALUE = 11;
+        DeviceModelPayload DeviceModelPayloadVALUE = 12;
+        EnterprisePropertiesPayload enterprisePropertiesPayload = 13;
+        HardwareIdentifierPayload HardwareIdentifierPayloadVALUE = 14;
+        HardwarePropertiesPayload HardwarePropertiesPayloadVALUE = 15;
+        LocalePropertiesPayload LocalePropertiesPayloadVALUE = 16;
+        NotificationRoutingInfoPayload NotificationRoutingInfoPayloadVALUE = 17;
+        PlayPartnerPropertiesPayload PlayPartnerPropertiesPayloadVALUE = 18;
+        PlayPropertiesPayload PlayPropertiesPayloadVALUE = 19;
+        ScreenPropertiesPayload ScreenPropertiesPayloadVALUE = 20;
+        SystemPropertiesPayload SystemPropertiesPayloadVALUE = 21;
+        GpuPayload GpuPayloadVALUE = 24;
+        UnknowTypeFirstSync UnknowTypeFirstSyncValue = 30;
+    }
+}
+
+message AccountAossiationPayload {
+    optional AccountAssValue mvalue = 1;
+}
+
+message AccountAssValue {
+    optional string mvalue = 1;
+}
+
+message DeviceAccountsPaylaod {
+    repeated AccountAssValue mvalue = 1;
+}
+
+message CarrierPropertiesPayload {
+    optional string simOperator = 1;
+    optional TelephonyStateWrapper telephonyStateValue = 2;
+}
+
+message TelephonyStateWrapper {
+    optional TelephonyInfo mvalue = 1;
+}
+
+message TelephonyInfo {
+    optional int64 subscriberId1 = 1;
+    optional string operatorName = 2;
+    optional string groupidLevel = 3;
+//    optional string e = 4;
+//    repeated string f = 5;
+    optional int32 simcardId = 6;
+    optional int32 CarrierIdFromSimMccMnc = 7;
+}
+
+message DeviceCapabilitiesPayload {
+    repeated FeatureInfoProto featureInfos = 1;
+    repeated string systemSharedLibraryNames = 2;
+    repeated string locales = 3;
+    repeated string glExtensions = 4;
+    optional bool unknowFlag = 5;
+}
+
+message DeviceInputPropertiesPayload {
+    optional int32 reqKeyboardType = 1; //unknow enum
+    optional bool reqInputFeatures1 = 2;
+    optional int32 reqNavigation = 3; //unknow enum
+}
+
+message DeviceModelPayload {
+    optional string MANUFACTURER = 1;
+    optional string MODEL = 2;
+    optional string DEVICE = 3;
+    optional string PRODUCT = 4;
+    optional string BRAND = 5;
+}
+
+message EnterprisePropertiesPayload {
+    optional ProfileInfo profileOwner = 1;
+    repeated ProfileInfo mdefault = 2;
+}
+
+message ProfileInfo {
+    optional string pkgName = 1;
+    optional string pkgSHA1 = 2;
+    optional string pkgSHA256 = 3;
+    optional MangedScope policyTypeValue = 4; //unknow enum
+}
+
+enum MangedScope {
+    UNKNOWN_MANAGED_SCOPE = 0;
+    MANAGED_DEVICES = 1;
+    MANAGED_PROFILES = 2;
+    MANAGED_AVENGER = 3;
+    LEGACY_DEVICE_ADMINS = 4;
+}
+
+message HardwareIdentifierPayload {
+    optional fixed64 imeid = 1;
+}
+
+message HardwarePropertiesPayload {
+    optional bool isLowRamDevice = 1;
+    optional int64 totalMem = 2;
+    optional int32 availableProcessors = 3;
+    repeated string supportedAbis = 4;
+}
+
+message LocalePropertiesPayload {
+    optional string b = 1;
+}
+
+message NotificationRoutingInfoPayload {
+    optional string locale = 1;
+}
+
+message PlayPartnerPropertiesPayload {
+    optional string marketId = 1;
+    optional string partnerIdMs = 2;
+    optional string partnerIdAd = 3;
+}
+
+message PlayPropertiesPayload {
+    optional int32 playVersion = 2;
+}
+
+message ScreenPropertiesPayload {
+    optional int32 reqTouchScreen = 1; //unknow enum
+    optional int32 displaySizex = 2;
+    optional int32 displaySizey = 3;
+    optional int32 desityDeviceStablePoint = 4; //unknow enum
+    optional int32 desityDeviceStable = 5;
+}
+
+message SystemPropertiesPayload {
+    optional string fingerprint = 1;
+    optional int64 sdkInt = 2;
+    optional string previewSdkFingerprint = 3;
+    optional string buildCodeName = 4;
+    optional string oemkey1 = 5;
+    optional int32 reqGlEsVersion = 6;
+}
+
+message GpuPayload {
+    optional GpuInfoWrapper gpuInfo = 1;
+}
+
+message GpuInfoWrapper {
+    optional string glRenderer = 1;
+    optional string glVendor = 2;
+    optional string glVersion = 3;
+}
+
+
+
+message UnknowTypeFirstSync {
+}
+
+//-----------------response for fdfe/sync
+message SyncApiResp {
+    repeated SyncApiRespEmptyA unknowFieldA=1;
+    optional SyncToken syncTokenValue=2;
+//    repeated string c=3;
+}
+
+message SyncApiRespEmptyA {
+    oneof b {
+        UnknowTypeaynt unknowEmptyField = 2;
+//        aynp oneofField1 = 3;
+    }
+    optional int64 id=1;
+}
+
+message UnknowTypeaynt {
+    optional UnknowEmptyAynx a=1;
+    optional int32 id=2; //unknow enum
+}
+
+message UnknowEmptyAynx {
+    oneof b {
+        UnknowTypeawwm oneofField25 = 26;
+    }
+}
+
+message UnknowTypeawwm {
+    optional int32 id=1;
+}
+
+//----------------------proto for payloads protostroe------
+
+message DeviceInfoCollect {
+    optional int32 reqTouchScreen = 1; //unknow enum
+    optional int32 reqKeyboardType = 2; //unknow enum
+    optional int32 reqNavigation = 3; //unknow enum
+    optional int32 desityDeviceStablePoint = 4; //unknow enum
+    optional bool reqInputFeatures1 = 5;
+    optional bool reqInputFeatures2 = 6;
+    optional int32 desityDeviceStable = 7; //DENSITY_DEVICE_STABLE
+    optional int32 reqGlEsVersion = 8;
+    repeated string systemSharedLibraryNames = 9;
+    repeated string featureNames = 10;
+    repeated string supportedAbis = 11;
+    optional int32 displaySizex = 12;
+    optional int32 displaySizey = 13;
+    repeated string locales = 14;
+    repeated string glExtensions = 15;
+    optional int32 smallestScreenWidthDp = 18;
+    optional bool isLowRamDevice = 19;
+    optional int64 totalMem = 20;
+    optional int32 availableProcessors = 21;
+    repeated FeatureInfoProto featureInfos = 26;
+    optional int32 screenLayout = 27; //unknow enum
+    optional string oemkey1 = 29;
+    optional string buildCodeName = 30;
+    optional string previewSdkFingerprint = 31;
+}
+
+message FeatureInfoProto {
+    optional string name = 1;
+    optional int32 version = 2;
+}
+
+message ProfileInfoTemp {
+    optional string packageName = 1;
+    optional string pkgSHA1 = 2;
+    optional string pkgSHA256 = 3;
+    optional PolicyType policyTypeValue = 4; //unknow enum
+}
+
+enum PolicyType {
+    UNKNOW = 0;
+    MANAGED_DEVICE = 1;
+    MANAGED_PROFILE = 2;
+    LEGACY_DEVICE_ADMIN = 3;
+}
+
