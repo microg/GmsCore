@@ -36,6 +36,7 @@ public class GoogleAuthUtil {
     @SuppressLint({"InlinedApi"})
     private static final String KEY_ANDROID_PACKAGE_NAME = "androidPackageName";
     private static final String KEY_CLIENT_PACKAGE_NAME = "clientPackageName";
+    private static final String KEY_SCOPE_PERMISSION = "scope_permission";
     private static final ComponentName GET_TOKEN_COMPONENT = new ComponentName("com.google.android.gms", "com.google.android.gms.auth.GetToken");
 
     /** @deprecated */
@@ -154,6 +155,7 @@ public class GoogleAuthUtil {
         if (TextUtils.isEmpty(result.getString(KEY_ANDROID_PACKAGE_NAME))) {
             result.putString(KEY_ANDROID_PACKAGE_NAME, clientPackageName);
         }
+        result.putBoolean(KEY_SCOPE_PERMISSION, true);
         result.putLong("service_connection_start_time_millis", SystemClock.elapsedRealtime());
         TokenDataBinder dataBinder = new TokenDataBinder(account, scope, result);
         Log.d(TAG, "getTokenDataFromService: clientPackageName: " + clientPackageName);

@@ -41,7 +41,6 @@ import com.google.android.gms.auth.GetHubTokenInternalResponse;
 import com.google.android.gms.auth.GetHubTokenRequest;
 import com.google.android.gms.auth.HasCapabilitiesRequest;
 import com.google.android.gms.auth.TokenData;
-import com.google.android.gms.common.api.Scope;
 
 import org.microg.gms.common.GooglePackagePermission;
 import org.microg.gms.common.PackageUtils;
@@ -73,6 +72,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
     public static final String KEY_SYNC_EXTRAS = "sync_extras";
     public static final String KEY_DELEGATION_TYPE = "delegation_type";
     public static final String KEY_DELEGATEE_USER_ID = "delegatee_user_id";
+    public static final String KEY_SCOPE_PERMISSION = "scope_permission";
 
     public static final String KEY_ERROR = "Error";
     public static final String KEY_USER_RECOVERY_INTENT = "userRecoveryIntent";
@@ -130,6 +130,9 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         AuthManager authManager = new AuthManager(context, account.name, packageName, scope);
         if (extras.containsKey(KEY_DELEGATION_TYPE) && extras.getInt(KEY_DELEGATION_TYPE) != 0 ) {
             authManager.setDelegation(extras.getInt(KEY_DELEGATION_TYPE), extras.getString("delegatee_user_id"));
+        }
+        if (extras.containsKey(KEY_SCOPE_PERMISSION)) {
+            authManager.setPermitted(extras.getBoolean(KEY_SCOPE_PERMISSION));
         }
         authManager.setOauth2Foreground(notify ? "0" : "1");
         Bundle result = new Bundle();
