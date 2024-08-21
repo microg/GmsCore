@@ -8,6 +8,7 @@ package org.microg.gms.fido.core
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
+import android.util.Log
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -22,6 +23,8 @@ import org.microg.gms.fido.core.RequestOptionsType.SIGN
 import org.microg.gms.utils.*
 import java.net.HttpURLConnection
 import java.security.MessageDigest
+
+private const val TAG = "Fido"
 
 class RequestHandlingException(val errorCode: ErrorCode, message: String? = null) : Exception(message)
 class MissingPinException(message: String? = null): Exception(message)
@@ -117,8 +120,10 @@ private suspend fun isAssetLinked(context: Context, rpId: String, facetId: Strin
                 if (fingerprint.equals(fp, ignoreCase = true)) return true
             }
         }
+        Log.w(TAG, "No matching asset link")
         return false
     } catch (e: Exception) {
+        Log.w(TAG, "Failed fetching asset link", e)
         return false
     }
 }

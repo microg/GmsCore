@@ -38,6 +38,11 @@
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:exported="false"
             android:process=":ui"
-            android:theme="@style/Theme.Translucent" />
+            android:theme="@style/Theme.Translucent">
+            <intent-filter>
+                <action android:name="org.microg.gms.fido.AUTHENTICATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

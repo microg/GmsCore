@@ -81,7 +81,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
         try {
 
-            val callerPackage = callingActivity?.packageName ?: return finish()
+            val callerPackage = (if (callingActivity?.packageName == packageName && intent.hasExtra(KEY_CALLER)) intent.getStringExtra(KEY_CALLER) else callingActivity?.packageName) ?: return finish()
             if (!intent.extras?.keySet().orEmpty().containsAll(REQUIRED_EXTRAS)) {
                 return finishWithError(UNKNOWN_ERR, "Extra missing from request")
             }
@@ -245,7 +245,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         } else {
             intent.putExtra(FIDO2_KEY_RESPONSE_EXTRA, response.serializeToBytes())
         }
-        setResult(-1, intent)
+        setResult(RESULT_OK, intent)
         finish()
     }
 
@@ -333,6 +333,8 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
 
         const val TYPE_REGISTER = "register"
         const val TYPE_SIGN = "sign"
+
+        const val KEY_CALLER = "caller"
 
         val IMPLEMENTED_TRANSPORTS = setOf(USB, SCREEN_LOCK, NFC)
         val INSTANT_SUPPORTED_TRANSPORTS = setOf(SCREEN_LOCK)

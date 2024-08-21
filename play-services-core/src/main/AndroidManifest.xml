@@ -518,6 +518,13 @@
         </service>
 
         <activity
+            android:name="org.microg.gms.auth.credentials.identity.IdentityFidoProxyActivity"
+            android:exported="false"
+            android:process=":ui"
+            android:theme="@style/Theme.App.Translucent"
+            android:excludeFromRecents="true"/>
+
+        <activity
             android:theme="@style/Theme.AppCompat.Dialog.Alert"
             android:name="org.microg.gms.auth.signin.AssistedSignInActivity"
             android:enabled="true"
