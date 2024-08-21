@@ -252,7 +252,7 @@ class MovingWifiHelper(private val context: Context) {
     
     private fun parseSncf(location: Location, data: ByteArray): Location {
         val json = JSONObject(data.decodeToString())
-        if(json.getInt("fix") == -1) throw RuntimeException("GPS not valid")
+        if(json.has("fix") && json.getInt("fix") == -1) throw RuntimeException("GPS not valid")
         location.accuracy = 100f
         location.latitude = json.getDouble("latitude")
         location.longitude = json.getDouble("longitude")
