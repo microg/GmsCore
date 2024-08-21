@@ -20,7 +20,6 @@
     <uses-permission android:name="com.google.android.gms.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"/>
 
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
@@ -53,7 +52,6 @@
      coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics" />
 
     <application
-        android:name=".MainApplication"
         android:forceQueryable="true"
         android:icon="@mipmap/ic_app"
         android:roundIcon="@mipmap/ic_app"

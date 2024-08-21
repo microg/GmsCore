@@ -107,7 +107,6 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.7.2'
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-svg:2.2.2")
-    implementation 'org.brotli:dec:0.1.2'
     implementation "com.google.android.material:material:$materialVersion"
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
 

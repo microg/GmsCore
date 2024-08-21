@@ -1,0 +1,88 @@
+
+option java_package = "com.google.android.phonesky.header";
+option java_multiple_files = true;
+
+message GoogleApiResponse {
+    optional FdfeApiResponse fdfeApiResponseValue = 1;
+    optional UnknowTypebbfe  g= 5;
+    optional bytes  unknowFieldBytes= 9;
+}
+
+message UnknowTypebbfe {
+    optional int64 id=1;
+}
+
+message FdfeApiResponse {
+    optional TocResponse tocApi = 6;
+    optional SplitResponse splitReqResult = 21;
+    optional SyncApiResp syncResult = 183;
+}
+
+message TocResponse {
+//    optional bool o=11;
+    optional string tocTokenValue=22; //t
+}
+
+message SplitResponse {
+    optional int32 b = 1; //unknow enum
+    optional PkgFetchInfo pkgList = 2;
+}
+
+message PkgFetchInfo {
+    repeated SplitPkgInfo pkgDownlaodInfo = 15;
+}
+
+message SplitPkgInfo {
+    optional string splitPkgName = 1;
+    optional int64 size = 2;
+    optional string checkSum = 4;
+    optional string downloadUrl1 = 5;
+    optional DownloadInfo slaveDownloadInfo = 8;
+    optional string mabyChecksum = 9;
+    optional string unknowPkgInfoF = 15;
+    optional DownloadInfo otherDownloadInfo = 16;
+}
+
+message DownloadInfo {
+    optional int32 id = 1; //unknow enum
+    optional int64 size = 2;
+    optional string url = 3;
+}
+
+
+
+//-----------------response for fdfe/sync
+message SyncApiResp {
+    repeated SyncApiRespEmptyA unknowFieldA=1;
+    optional SyncToken syncTokenValue=2;
+//    repeated string c=3;
+}
+
+message SyncToken {
+    optional string  mvalue = 1;
+}
+
+
+message SyncApiRespEmptyA {
+    oneof b {
+        UnknowTypeaynt unknowEmptyField = 2;
+//        aynp oneofField1 = 3;
+    }
+    optional int64 id=1;
+}
+
+message UnknowTypeaynt {
+    optional UnknowEmptyAynx a=1;
+    optional int32 id=2; //unknow enum
+}
+
+message UnknowEmptyAynx {
+    oneof b {
+        UnknowTypeawwm oneofField25 = 26;
+    }
+}
+
+message UnknowTypeawwm {
+    optional int32 id=1;
+}
+
