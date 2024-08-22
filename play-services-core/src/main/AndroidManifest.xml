@@ -402,6 +402,7 @@
             android:theme="@style/Theme.App.DayNight.Dialog.Alert.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT" />
+                <action android:name="com.google.android.gms.common.account.CHOOSE_ACCOUNT_USERTILE"/>
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
