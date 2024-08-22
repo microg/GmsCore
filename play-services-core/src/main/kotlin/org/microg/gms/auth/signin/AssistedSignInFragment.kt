@@ -87,6 +87,7 @@ class AssistedSignInFragment(
                     val authStatus = checkAccountAuthStatus(requireContext(), clientPackageName, options.scopes, account)
                     if (authStatus) {
                         allowAutoLoginAccounts.add(account)
+                    }
                 }
             }.onFailure {
                 Log.d(TAG, "filterAccountsLogin: error", it)
