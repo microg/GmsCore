@@ -14,6 +14,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAn
 
 import android.os.Bundle;
 import android.net.Uri;
+import org.microg.gms.utils.ToStringHelper;
 
 public class DynamicLinkData extends AbstractSafeParcelable {
     @Field(1)
@@ -41,6 +42,19 @@ public class DynamicLinkData extends AbstractSafeParcelable {
         this.clickTimestamp = clickTimestamp;
         this.extensionBundle = extensionBundle;
         this.redirectUrl = redirectUrl;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return ToStringHelper.name("DynamicLinkData")
+                .field("dynamicLink", dynamicLink)
+                .field("deepLink", deepLink)
+                .field("minVersion", minVersion)
+                .field("clickTimestamp", clickTimestamp)
+                .field("extensionBundle", extensionBundle)
+                .field("redirectUrl", redirectUrl)
+                .end();
     }
 
     @Override

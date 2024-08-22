@@ -41,9 +41,9 @@ android {
         versionName version
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
-        buildConfigField "String", "ICHNAEA_KEY", "\"${localProperties.get("ichnaea.key", "")}\""
         buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"\""
         buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "false"
+        buildConfigField "boolean", "ALWAYS_LISTEN_GPS_PASSIVE", "true"
     }
 
     lintOptions {
@@ -59,11 +59,13 @@ android {
             dimension 'target'
             buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"com.huawei.permission.sec.MDM.v2\""
             buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "true"
+            buildConfigField "boolean", "ALWAYS_LISTEN_GPS_PASSIVE", "false"
         }
         "huaweilh" {
             dimension 'target'
             buildConfigField "String", "FORCE_SHOW_BACKGROUND_PERMISSION", "\"com.huawei.permission.sec.MDM.v2\""
             buildConfigField "boolean", "SHOW_NOTIFICATION_WHEN_NOT_PERMITTED", "true"
+            buildConfigField "boolean", "ALWAYS_LISTEN_GPS_PASSIVE", "false"
         }
     }
 
