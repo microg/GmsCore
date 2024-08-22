@@ -20,6 +20,7 @@ class SplitInstallService : LifecycleService() {
     }
 
     override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
         if (mService == null) {
             mService = SplitInstallServiceImpl(this.applicationContext)
         }
