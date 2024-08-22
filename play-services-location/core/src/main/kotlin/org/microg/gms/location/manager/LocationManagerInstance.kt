@@ -303,11 +303,7 @@ class LocationManagerInstance(
         val clientIdentity = getClientIdentity()
         lifecycleScope.launchWhenStarted {
             try {
-                if (oldBinder != null) {
-                    locationManager.updateBinderRequest(clientIdentity, oldBinder, binder, callback, request)
-                } else {
-                    locationManager.addBinderRequest(clientIdentity, binder, callback, request)
-                }
+                locationManager.updateBinderRequest(clientIdentity, oldBinder, binder, callback, request)
                 statusCallback.onResult(Status.SUCCESS)
             } catch (e: Exception) {
                 try {

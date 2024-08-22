@@ -152,7 +152,7 @@ suspend fun performSignIn(context: Context, packageName: String, options: Google
             databaseHelper.close()
         }
     } else listOf(null, null, null, null)
-    SignInConfigurationService.setDefaultAccount(context, packageName, account)
+    SignInConfigurationService.setDefaultSignInInfo(context, packageName, account, options?.toJson())
     return GoogleSignInAccount(
         id,
         tokenId,

@@ -35,6 +35,8 @@ This can take a couple of minutes."</string>
     <string name="deny">Deny</string>
     <string name="auth_notification_title">Authentication required</string>
     <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g> requires your authorization to access your Google account.</string>
+    <string name="auth_package_override_request_title">"Allow <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privileged access to <xliff:g example="account@example.com">%2$s</xliff:g>?"</string>
+    <string name="auth_package_override_request_message">"<b><xliff:g example="F-Droid">%1$s</xliff:g></b> wants to access your account as if it was <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. This might grant it privileged access to your account."</string>
 
     <string name="signin_picker_title">Choose an account</string>
     <string name="signin_picker_subtitle">to continue to <xliff:g example="F-Droid">%1$s</xliff:g></string>
@@ -257,6 +259,8 @@ This can take a couple of minutes."</string>
     <string name="pref_vending_licensing_category">Google Play Licensing</string>
     <string name="pref_vending_licensing_enable_switch">Answer license verification requests</string>
     <string name="pref_vending_license_enable_summary">Some apps require verification that you have purchased them on Google Play. When requested by an app, microG can download a proof of purchase from Google. If disabled, or if no Google account is added, requests for license verification are ignored.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Automatically add free apps to library</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Free apps may check whether they had been downloaded from Google Play. Automatically add free apps to your account library to always pass the check for all free apps currently available to you.</string>
 
     <string name="feedback_disabled">Feedback currently not possible</string>
     <string name="backup_disabled">Backup currently not possible</string>

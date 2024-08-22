@@ -26,7 +26,6 @@ private const val TAG = "AppInviteService"
 class AppInviteService : BaseService(TAG, GmsService.APP_INVITE) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
         PackageUtils.getAndCheckCallingPackage(this, request.packageName)
-        Log.d(TAG, "callb: $callback ; req: $request ; serv: $service")
         callback.onPostInitComplete(0, AppInviteServiceImpl(this, request.packageName, request.extras), null)
     }
 }

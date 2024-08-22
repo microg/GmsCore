@@ -19,20 +19,22 @@ class CoseKey(
     constructor(algorithm: Algorithm, x: BigInteger, y: BigInteger, curveId: Int, curvePointSize: Int) :
             this(algorithm, x.toByteArray(curvePointSize), y.toByteArray(curvePointSize), curveId)
 
-    fun encode(): ByteArray = CBORObject.NewMap().apply {
+    fun encode(): ByteArray = encodeAsCbor().EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical)
+
+    fun encodeAsCbor(): CBORObject = CBORObject.NewMap().apply {
         set(KTY, 2.encodeAsCbor())
         set(ALG, algorithm.algoValue.encodeAsCbor())
         set(CRV, curveId.encodeAsCbor())
         set(X, x.encodeAsCbor())
         set(Y, y.encodeAsCbor())
-    }.EncodeToBytes(CBOREncodeOptions.DefaultCtap2Canonical)
+    }
 
     companion object {
-        private const val KTY = 1
-        private const val ALG = 3
-        private const val CRV = -1
-        private const val X = -2
-        private const val Y = -3
+        const val KTY = 1
+        const val ALG = 3
+        const val CRV = -1
+        const val X = -2
+        const val Y = -3
 
         fun BigInteger.toByteArray(size: Int): ByteArray {
             val res = ByteArray(size)
