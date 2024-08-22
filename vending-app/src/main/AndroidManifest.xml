@@ -58,10 +58,6 @@
         android:label="@string/app_name">
 
         <meta-data
-            android:name="GpVersion"
-            android:value="41.2.21-31 [0] [PR] 636997666"/>
-
-        <meta-data
             android:name="org.microg.gms.settings:source-package"
             android:value="com.google.android.gms" />
 
@@ -98,7 +94,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.INFO" />
             </intent-filter>

@@ -15,17 +15,17 @@ import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
 import android.content.pm.PackageInstaller.Session
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
+import android.text.TextUtils
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.R
-import com.android.vending.RequestLanguagePackage
 import com.google.android.phonesky.header.GoogleApiRequest
 import com.google.android.play.core.splitinstall.protocol.ISplitInstallService
 import com.google.android.play.core.splitinstall.protocol.ISplitInstallServiceCallback
@@ -33,11 +33,11 @@ import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.concurrent.thread
@@ -131,7 +131,6 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
         Log.i(TAG, "Complete install for app update not implemented")
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     override fun languageSplitInstall(
         pkg: String,
         splits: List<Bundle>,
@@ -151,7 +150,6 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
         Log.i(TAG, "Language split uninstallation requested but app not found, package: %s$pkg")
     }
 
-    @SuppressLint("StringFormatMatches")
     private fun trySplitInstall(pkg: String, splits: List<Bundle>, isLanguageSplit: Boolean) {
         Log.d(TAG, "trySplitInstall: $splits")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -193,17 +191,7 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
         }
 
         val packageManager = context.packageManager
-        var versionCode: Long = 0
-        try {
-            val packageInfo = packageManager.getPackageInfo(packageName, 0)
-            versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                packageInfo.longVersionCode // For API level 28 and above
-            } else {
-                packageInfo.versionCode.toLong() // For API level 27 and below
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            Log.e("SplitInstallServiceImpl", "Error getting package info", e)
-        }
+        val versionCode = PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(packageName, 0))
         val downloadUrls = getDownloadUrls(packageName, langName, splitName, versionCode)
         Log.d(TAG, "requestSplitsPackage download url size : " + downloadUrls.size)
         if (downloadUrls.isEmpty()){
@@ -232,7 +220,6 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun downloadSplitPackage(downloadUrls: ArrayList<Array<String>>) : Boolean{
         Log.d(TAG, "downloadSplitPackage downloadUrl:$downloadUrls")
         var stat = true
@@ -244,7 +231,7 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
             connection.requestMethod = "GET"
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedInputStream(connection.inputStream).use { inputstream ->
-                    BufferedOutputStream(Files.newOutputStream(Paths.get(tempFilePath.toString(),downloadUrl[0]))).use { outputstream ->
+                    BufferedOutputStream(FileOutputStream(File(tempFilePath.toString(),downloadUrl[0]))).use { outputstream ->
                         inputstream.copyTo(outputstream)
                     }
                 }
@@ -256,7 +243,6 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
         return stat
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun installSplitPackage(
         downloadUrl: ArrayList<Array<String>>,
         packageName: String,
@@ -297,10 +283,13 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
                         try {
                             downloadUrl.forEach { item ->
                                 val pkgPath = File(tempFilePath.toString(),item[0])
-                                session.openWrite(item[0], 0, -1).use { outputstream ->
-                                    Files.newInputStream(pkgPath.toPath()).copyTo(outputstream)
-                                    session.fsync(outputstream)
+                                session.openWrite(item[0], 0, -1).use { outputStream ->
+                                    FileInputStream(pkgPath).use { inputStream ->
+                                        inputStream.copyTo(outputStream)
+                                    }
+                                    session.fsync(outputStream)
                                 }
+
                                 totalDownloaded += pkgPath.length()
                                 pkgPath.delete()
                             }
@@ -357,21 +346,20 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
             val googleApiRequest =
                 GoogleApiRequest(
                     requestUrl.toString(), "GET", accounts[0], context,
-                    RequestLanguagePackage.Builder().language(langName.filterNotNull()).build()
+                    langName.filterNotNull()
                 )
             val response = googleApiRequest.sendRequest(null)
             val pkgs = response?.fdfeApiResponseValue?.splitReqResult?.pkgList?.pkgDownlaodInfo
-            Log.w(TAG, "response?.fdfeApiResponseValue?.splitReqResult?.pkgList?.pkgDownlaodInfo:" + pkgs);
             if (pkgs != null) {
                 for (item in pkgs) {
                     for (lang in langName) {
-                        if (("config.$lang") == item.splitPkgName) {
+                        if (TextUtils.equals("config.$lang", item.splitPkgName)) {
                             downloadUrls.add(arrayOf(lang!!, item.downloadUrl1!!))
                         }
                     }
                     Log.d(TAG, "requestSplitsPackage: $splitName")
                     for (split in splitName) {
-                        if (split != null && split == item.splitPkgName) {
+                        if (split != null && TextUtils.equals(split, item.splitPkgName)) {
                             downloadUrls.add(arrayOf(split, item.downloadUrl1!!))
                         }
                     }
@@ -397,7 +385,7 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
                             }
                         }
                         if(taskQueue.size <= 1){
-                            NotificationManagerCompat.from(context).cancel(1)
+                            NotificationManagerCompat.from(context).cancel(NOTIFY_ID)
                             sendCompleteBroad(context, intent)
                         }
                     }
@@ -409,15 +397,14 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
                     }
 
                     PackageInstaller.STATUS_PENDING_USER_ACTION -> {
-                        val intent0 =
-                            intent.extras!![Intent.EXTRA_INTENT] as Intent?
-                        intent0!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        ContextCompat.startActivity(context, intent0, null)
+                        val extraIntent = intent.extras!![Intent.EXTRA_INTENT] as Intent?
+                        extraIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        ContextCompat.startActivity(context, extraIntent, null)
                     }
 
                     else -> {
                         taskQueue.clear()
-                        NotificationManagerCompat.from(context).cancel(1)
+                        NotificationManagerCompat.from(context).cancel(NOTIFY_ID)
                         val errorMsg = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
                         Log.d("InstallResultReceiver", errorMsg ?: "")
                         Log.w(TAG, "onReceive: install fail")
@@ -425,26 +412,28 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
                 }
             } catch (e: Exception) {
                 taskQueue.clear()
-                NotificationManagerCompat.from(context).cancel(1)
+                NotificationManagerCompat.from(context).cancel(NOTIFY_ID)
                 Log.w(TAG, "Error handling install result", e)
             }
         }
 
-        private fun sendCompleteBroad(context: Context, intent: Intent) {
-            Log.d(TAG, "sendCompleteBroad: $intent")
-            val extra = Bundle()
-            extra.putInt("status", 5)
-            extra.putLong("total_bytes_to_download", intent.getLongExtra("bytes_downloaded",0))
-            extra.putString("languages", intent.getStringExtra("language"))
-            extra.putInt("error_code", 0)
-            extra.putInt("session_id", 0)
-            extra.putLong("bytes_downloaded", intent.getLongExtra("bytes_downloaded",0))
-            val intent = Intent("com.google.android.play.core.splitinstall.receiver.SplitInstallUpdateIntentService")
-            intent.setPackage(intent.getStringExtra("pkg"))
-            intent.putExtra("session_state", extra)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
-            context.sendBroadcast(intent)
+        private fun sendCompleteBroad(context: Context, originalIntent: Intent) {
+            Log.d(TAG, "sendCompleteBroadcast: $originalIntent")
+            val extra = Bundle().apply {
+                putInt("status", 5)
+                putLong("total_bytes_to_download", originalIntent.getLongExtra("bytes_downloaded", 0))
+                putString("languages", originalIntent.getStringExtra("language"))
+                putInt("error_code", 0)
+                putInt("session_id", 0)
+                putLong("bytes_downloaded", originalIntent.getLongExtra("bytes_downloaded", 0))
+            }
+            val broadcastIntent = Intent("com.google.android.play.core.splitinstall.receiver.SplitInstallUpdateIntentService").apply {
+                setPackage(originalIntent.getStringExtra("pkg"))
+                putExtra("session_state", extra)
+                addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+            }
+            context.sendBroadcast(broadcastIntent)
         }
     }
 

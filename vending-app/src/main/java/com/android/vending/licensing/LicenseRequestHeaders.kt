@@ -35,7 +35,7 @@ private const val TAG = "FakeLicenseRequest"
 private const val BASE64_FLAGS = Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
 private const val FINSKY_VERSION = "Finsky/37.5.24-29%20%5B0%5D%20%5BPR%5D%20565477504"
 
-internal fun getLicenseRequestHeaders(auth: String, androidId: Long): Map<String, String> {
+internal fun getDefaultLicenseRequestHeaderBuilder(androidId: Long) : LicenseRequestHeader.Builder {
     var millis = System.currentTimeMillis()
     val timestamp = TimestampContainer.Builder()
         .container2(
@@ -79,7 +79,7 @@ internal fun getLicenseRequestHeaders(auth: String, androidId: Long): Map<String
         Base64.encode(locality.encode(), BASE64_FLAGS)
     )
 
-    val header = LicenseRequestHeader.Builder()
+    return LicenseRequestHeader.Builder()
         .encodedTimestamps(StringWrapper.Builder().string(encodedTimestamps).build())
         .triple(
             EncodedTripleWrapper.Builder().triple(
@@ -126,7 +126,10 @@ internal fun getLicenseRequestHeaders(auth: String, androidId: Long): Map<String
                 .unknown(2)
                 .build()
         )
-        .build().encode()
+}
+
+internal fun getLicenseRequestHeaders(auth: String, androidId: Long): Map<String, String> {
+    val header = getDefaultLicenseRequestHeaderBuilder(androidId).build().encode()
     val xPsRh = String(Base64.encode(header.encodeGzip(), BASE64_FLAGS))
 
     Log.v(TAG, "X-PS-RH: $xPsRh")
