@@ -13,6 +13,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager.GPS_PROVIDER
+import android.location.LocationManager.NETWORK_PROVIDER
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.util.Log
@@ -221,23 +223,33 @@ class LocationManager(private val context: Context, override val lifecycle: Life
 
         val locationManager = context.getSystemService<SystemLocationManager>() ?: return
         if (gpsInterval != currentGpsInterval) {
-            locationManager.requestSystemProviderUpdates(SystemLocationManager.GPS_PROVIDER, gpsInterval, QUALITY_HIGH_ACCURACY, gpsLocationListener)
             if (gpsInterval == Long.MAX_VALUE) {
+                // Fetch last location from GPS, just to make sure we already considered it
                 try {
-                    val newGpsLocation = locationManager.getLastKnownLocation(SystemLocationManager.GPS_PROVIDER)
+                    val newGpsLocation = locationManager.getLastKnownLocation(GPS_PROVIDER)
                     if (newGpsLocation != null && newGpsLocation.elapsedMillis > (lastGpsLocation?.elapsedMillis ?: 0)) {
                         updateGpsLocation(newGpsLocation)
                     }
-                    currentGpsInterval = gpsInterval
                 } catch (e: SecurityException) {
                     // Ignore
                 }
             }
+            try {
+                locationManager.requestSystemProviderUpdates(GPS_PROVIDER, gpsInterval, QUALITY_HIGH_ACCURACY, gpsLocationListener)
+                currentGpsInterval = gpsInterval
+            } catch (e: Exception) {
+                // Ignore
+            }
         }
-        if (!context.hasNetworkLocationServiceBuiltIn() && LocationManagerCompat.hasProvider(locationManager, SystemLocationManager.NETWORK_PROVIDER) && currentNetworkInterval != networkInterval) {
+        if (!context.hasNetworkLocationServiceBuiltIn() && LocationManagerCompat.hasProvider(locationManager, NETWORK_PROVIDER) && currentNetworkInterval != networkInterval) {
             boundToSystemNetworkLocation = true
-            locationManager.requestSystemProviderUpdates(SystemLocationManager.NETWORK_PROVIDER, networkInterval, if (lowPower) QUALITY_LOW_POWER else QUALITY_BALANCED_POWER_ACCURACY, networkLocationListener)
-            currentNetworkInterval = networkInterval
+            try {
+                val quality = if (lowPower) QUALITY_LOW_POWER else QUALITY_BALANCED_POWER_ACCURACY
+                locationManager.requestSystemProviderUpdates(NETWORK_PROVIDER, networkInterval, quality, networkLocationListener)
+                currentNetworkInterval = networkInterval
+            } catch (e: Exception) {
+                // Ignore
+            }
         }
     }
 
@@ -246,7 +258,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
             if (interval != Long.MAX_VALUE) {
                 Log.d(TAG, "Request updates for $provider at interval ${interval}ms")
                 LocationManagerCompat.requestLocationUpdates(this, provider, Builder(interval).setQuality(quality).build(), listener, context.mainLooper)
-            } else if (BuildConfig.ALWAYS_LISTEN_GPS_PASSIVE && provider == SystemLocationManager.GPS_PROVIDER) {
+            } else if (BuildConfig.ALWAYS_LISTEN_GPS_PASSIVE && provider == GPS_PROVIDER) {
                 Log.d(TAG, "Request updates for $provider passively")
                 LocationManagerCompat.requestLocationUpdates(this, provider, Builder(PASSIVE_INTERVAL).setQuality(QUALITY_LOW_POWER).setMinUpdateIntervalMillis(MAX_FINE_UPDATE_INTERVAL).build(), listener, context.mainLooper)
             } else {
@@ -254,9 +266,9 @@ class LocationManager(private val context: Context, override val lifecycle: Life
                 LocationManagerCompat.removeUpdates(this, listener)
             }
         } catch (e: SecurityException) {
-            // Ignore
+            throw RuntimeException(e)
         } catch (e: Exception) {
-            // Ignore
+            throw RuntimeException(e)
         }
     }
 
@@ -344,6 +356,7 @@ class LocationManager(private val context: Context, override val lifecycle: Life
         writer.println("Location availability: ${lastLocationCapsule.locationAvailability}")
         writer.println("Last coarse location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_COARSE, Long.MAX_VALUE), GRANULARITY_COARSE, true)}")
         writer.println("Last fine location: ${postProcessor.process(lastLocationCapsule.getLocation(GRANULARITY_FINE, Long.MAX_VALUE), GRANULARITY_FINE, true)}")
+        writer.println("Interval: gps=${if (currentGpsInterval==Long.MAX_VALUE) "off" else currentGpsInterval.formatDuration()} network=${if (currentNetworkInterval==Long.MAX_VALUE) "off" else currentNetworkInterval.formatDuration()}")
         writer.println("Network location: built-in=${context.hasNetworkLocationServiceBuiltIn()} system=$boundToSystemNetworkLocation")
         requestManager.dump(writer)
         deviceOrientationManager.dump(writer)
