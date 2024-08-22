@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import org.microg.gms.location.network.TAG
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -25,7 +26,7 @@ import java.util.*
 private val MOVING_WIFI_HOTSPOTS = setOf(
     // Austria
     "OEBB",
-    "Austrian Flynet",
+    "Austrian FlyNet",
     "svciob", // OEBB Service WIFI
     // Belgium
     "THALYSNET",
@@ -67,13 +68,18 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "KrisWorld",
     // Sweden
     "SJ",
+    "saswifi",
     // Switzerland
     "SBB-Free",
     "SWISS Connect",
     "Edelweiss Entertainment",
     // United Kingdom
+    "Avanti_Free_WiFi",
     "CrossCountryWiFi",
     "GWR WiFi",
+    "LNR On Board Wi-Fi",
+    "LOOP on train WiFi",
+    "WMR On Board Wi-Fi",
     // United States
     "Amtrak_WiFi",
 )
@@ -114,7 +120,6 @@ class MovingWifiHelper(private val context: Context) {
                 @Suppress("DEPRECATION")
                 (connectivityManager.allNetworks.singleOrNull {
                     val networkInfo = connectivityManager.getNetworkInfo(it)
-                    Log.d(org.microg.gms.location.network.TAG, "Network info: $networkInfo")
                     networkInfo?.type == TYPE_WIFI && networkInfo.isConnected
                 })
             } else {

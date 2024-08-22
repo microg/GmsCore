@@ -57,6 +57,15 @@
             android:theme="@style/Theme.App.Translucent"
             android:exported="false" />
 
+        <activity
+            android:name="org.microg.gms.location.ui.ImportExportActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.microg.gms.location.network.ACTION_NETWORK_IMPORT_EXPORT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name="org.microg.gms.location.manager.LocationManagerService"
             android:exported="true">
@@ -64,6 +73,7 @@
                 <action android:name="com.google.android.location.internal.GoogleLocationManagerService.START" />
             </intent-filter>
         </service>
+
         <service
             android:name="org.microg.gms.location.reporting.ReportingAndroidService"
             android:exported="true">
@@ -74,5 +84,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name="org.microg.gms.location.ui.ConfigurationRequiredReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="org.microg.gms.location.network.ACTION_CONFIGURATION_REQUIRED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

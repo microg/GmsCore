@@ -7,7 +7,11 @@ package org.microg.gms.location.network.ichnaea
 
 data class GeolocateResponse(
     val location: ResponseLocation? = null,
-    val accuracy: Double? = null,
+    val horizontalAccuracy: Double? = null,
     val fallback: String? = null,
-    val error: ResponseError? = null
+    val error: ResponseError? = null,
+
+    // Custom
+    val verticalAccuracy: Double? = null,
+    val raw: List<RawGeolocateEntry> = emptyList(),
 )
