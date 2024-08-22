@@ -10,6 +10,9 @@ import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
 import org.json.JSONObject
 import org.microg.gms.utils.singleInstanceOf
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -17,7 +20,39 @@ import kotlin.coroutines.suspendCoroutine
 private const val POST_TIMEOUT = 8000
 
 class HttpClient(context: Context) {
-    private val requestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+
+    val requestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+
+    suspend fun download(
+        url: String, downloadFile: File, tag: String
+    ): String = suspendCoroutine { continuation ->
+        val uriBuilder = Uri.parse(url).buildUpon()
+        requestQueue.add(object : Request<String>(Method.GET, uriBuilder.build().toString(), null) {
+            override fun parseNetworkResponse(response: NetworkResponse): Response<String> {
+                if (response.statusCode != 200) throw VolleyError(response)
+                return try {
+                    val parentDir = downloadFile.getParentFile()
+                    if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
+                        throw IOException("Failed to create directories: ${parentDir.absolutePath}")
+                    }
+                    val fos = FileOutputStream(downloadFile)
+                    fos.write(response.data)
+                    fos.close()
+                    Response.success(downloadFile.absolutePath, HttpHeaderParser.parseCacheHeaders(response))
+                } catch (e: Exception) {
+                    Response.error(VolleyError(e))
+                }
+            }
+
+            override fun deliverResponse(response: String) {
+                continuation.resume(response)
+            }
+
+            override fun deliverError(error: VolleyError) {
+                continuation.resumeWithException(error)
+            }
+        }.setShouldCache(false).setTag(tag))
+    }
 
     suspend fun <O> get(
         url: String,
@@ -47,8 +82,6 @@ class HttpClient(context: Context) {
             override fun getHeaders(): Map<String, String> = headers
         }.setShouldCache(cache))
     }
-
-
 
     suspend fun <I : Message<I, *>, O> post(
         url: String,
