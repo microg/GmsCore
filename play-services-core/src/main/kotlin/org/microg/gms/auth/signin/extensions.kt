@@ -106,13 +106,6 @@ suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeL
     return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
 }
 
-suspend fun checkAccountAuthStatus(context: Context, packageName: String, scopeList: List<Scope>?, account: Account): Boolean {
-    val scopes = scopeList.orEmpty().sortedBy { it.scopeUri }
-    val authManager = AuthManager(context, account.name, packageName, "oauth2:${scopes.joinToString(" ")}")
-    authManager.ignoreStoredPermission = true
-    return withContext(Dispatchers.IO) { authManager.requestAuth(true) }.auth != null
-}
-
 suspend fun performSignIn(context: Context, packageName: String, options: GoogleSignInOptions?, account: Account, permitted: Boolean = false): GoogleSignInAccount? {
     val authManager = getOAuthManager(context, packageName, options, account)
     val authResponse = withContext(Dispatchers.IO) {
