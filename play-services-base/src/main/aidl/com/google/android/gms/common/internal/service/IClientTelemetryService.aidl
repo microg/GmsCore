@@ -8,5 +8,5 @@ package com.google.android.gms.common.internal.service;
 import com.google.android.gms.common.internal.TelemetryData;
 
 interface IClientTelemetryService {
-    void log(in TelemetryData data) = 0;
+    oneway void log(in TelemetryData data) = 0;
 }

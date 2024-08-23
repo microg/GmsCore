@@ -135,7 +135,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun signOut(callbacks: IGamesCallbacks?) {
-        Log.d(TAG, "Not yet implemented: signOut")
+        Log.d(TAG, "signOut called")
         lifecycleScope.launchWhenStarted {
             GamesConfigurationService.setDefaultAccount(context, packageName, null)
             callbacks?.onSignOutComplete()
@@ -182,7 +182,7 @@ class GamesServiceImpl(val context: Context, override val lifecycle: Lifecycle, 
     }
 
     override fun getCurrentPlayerId(): String? {
-        Log.d(TAG, "Method getCurrentPlayerId Called: ${player.playerId}")
+        Log.d(TAG, "getCurrentPlayerId called: ${player.playerId}")
         return player.playerId
     }
 

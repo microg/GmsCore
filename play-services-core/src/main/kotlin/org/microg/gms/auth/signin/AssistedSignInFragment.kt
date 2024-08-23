@@ -84,7 +84,7 @@ class AssistedSignInFragment(
             val allowAutoLoginAccounts = mutableListOf<Account>()
             runCatching {
                 accounts.forEach { account ->
-                    val authStatus = checkAppAuthStatus(requireContext(), clientPackageName, options, account)
+                    val authStatus = checkAccountAuthStatus(requireContext(), clientPackageName, options.scopes, account)
                     if (authStatus) {
                         allowAutoLoginAccounts.add(account)
                     }

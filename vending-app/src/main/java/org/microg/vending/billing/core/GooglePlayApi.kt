@@ -10,5 +10,7 @@ class GooglePlayApi {
         const val URL_CONSUME_PURCHASE = "$URL_FDFE/consumePurchase"
         const val URL_GET_PURCHASE_HISTORY = "$URL_FDFE/inAppPurchaseHistory"
         const val URL_AUTH_PROOF_TOKENS = "https://www.googleapis.com/reauth/v1beta/users/me/reauthProofTokens"
+        const val URL_DETAILS = "$URL_FDFE/details"
+        const val URL_PURCHASE = "$URL_FDFE/purchase"
     }
 }

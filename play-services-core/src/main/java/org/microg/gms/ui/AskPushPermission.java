@@ -1,6 +1,7 @@
 package org.microg.gms.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.R;
@@ -60,9 +62,8 @@ public class AskPushPermission extends FragmentActivity {
             return;
         }
 
-        setContentView(R.layout.ask_gcm);
-
         try {
+            View view = getLayoutInflater().inflate(R.layout.ask_gcm, null);
             PackageManager pm = getPackageManager();
             final ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
             String label = pm.getApplicationLabel(info).toString();
@@ -70,31 +71,29 @@ public class AskPushPermission extends FragmentActivity {
             SpannableString s = new SpannableString(raw);
             s.setSpan(new StyleSpan(Typeface.BOLD), raw.indexOf(label), raw.indexOf(label) + label.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
-            ((TextView) findViewById(R.id.permission_message)).setText(s);
-            findViewById(R.id.permission_allow_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (answered) return;
-                    database.noteAppKnown(packageName, true);
-                    answered = true;
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(EXTRA_EXPLICIT, true);
-                    resultReceiver.send(Activity.RESULT_OK, bundle);
-                    finish();
-                }
-            });
-            findViewById(R.id.permission_deny_button).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (answered) return;
-                    database.noteAppKnown(packageName, false);
-                    answered = true;
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(EXTRA_EXPLICIT, true);
-                    resultReceiver.send(Activity.RESULT_CANCELED, bundle);
-                    finish();
-                }
-            });
+            ((TextView) view.findViewById(R.id.permission_message)).setText(s);
+            UtilsKt.buildAlertDialog(this)
+                    .setView(view)
+                    .setPositiveButton(R.string.allow, (dialog, which) -> {
+                        if (answered) return;
+                        database.noteAppKnown(packageName, true);
+                        answered = true;
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(EXTRA_EXPLICIT, true);
+                        resultReceiver.send(Activity.RESULT_OK, bundle);
+                        finish();
+                    })
+                    .setNegativeButton(R.string.deny, (dialog, which) -> {
+                        if (answered) return;
+                        database.noteAppKnown(packageName, false);
+                        answered = true;
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean(EXTRA_EXPLICIT, true);
+                        resultReceiver.send(Activity.RESULT_CANCELED, bundle);
+                        finish();
+                    })
+                    .create()
+                    .show();
         } catch (PackageManager.NameNotFoundException e) {
             finish();
         }
