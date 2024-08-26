@@ -353,7 +353,7 @@ class SplitInstallServiceImpl(private val context: Context) : ISplitInstallServi
             if (pkgs != null) {
                 for (item in pkgs) {
                     for (lang in langName) {
-                        if (TextUtils.equals("config.$lang", item.splitPkgName)) {
+                        if (TextUtils.equals("config.$lang", item.splitPkgName) || "config.$lang".startsWith(item.splitPkgName!!)) {
                             downloadUrls.add(arrayOf(lang!!, item.downloadUrl1!!))
                         }
                     }
