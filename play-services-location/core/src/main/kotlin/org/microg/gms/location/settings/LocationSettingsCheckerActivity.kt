@@ -9,7 +9,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.Settings
@@ -17,6 +16,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
 import com.google.android.gms.location.Granularity
@@ -26,7 +26,6 @@ import com.google.android.gms.location.Priority
 import org.microg.gms.location.core.R
 import org.microg.gms.location.manager.AskPermissionActivity
 import org.microg.gms.location.manager.EXTRA_PERMISSIONS
-import org.microg.gms.location.manager.granularityFromPermission
 import org.microg.gms.ui.buildAlertDialog
 
 const val ACTION_LOCATION_SETTINGS_CHECKER = "com.google.android.gms.location.settings.CHECK_SETTINGS"
@@ -44,6 +43,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     private var needBle = false
     private var improvements = emptyList<Improvement>()
     private var requests: List<LocationRequest>? = null
+    private var dialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +80,16 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkImprovements()
+    }
+
+    override fun onPause() {
+        dialog?.dismiss()
+        super.onPause()
+    }
+
     enum class Improvement {
         GPS, NLP, GPS_AND_NLP, WIFI, WIFI_SCANNING, BLUETOOTH, BLE_SCANNING, PERMISSIONS, DATA_SOURCE
     }
@@ -99,13 +109,13 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     }
 
     private fun showDialog() {
-
-        val alertDialog = buildAlertDialog()
+        val dialog = this.dialog?.takeIf { it.isShowing } ?: buildAlertDialog()
             .setOnCancelListener(this)
             .setPositiveButton(R.string.location_settings_dialog_btn_sure, this)
             .setNegativeButton(R.string.location_settings_dialog_btn_cancel, this)
             .create()
-        alertDialog.setCanceledOnTouchOutside(false)
+            .apply { setCanceledOnTouchOutside(false) }
+            .also { this@LocationSettingsCheckerActivity.dialog = it }
 
         val view = layoutInflater.inflate(R.layout.location_settings_dialog, null)
         view.findViewById<TextView>(R.id.message_title)
@@ -135,8 +145,8 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
             messages.addView(item, messageIndex + 1)
         }
 
-        alertDialog.setView(view)
-        alertDialog.show()
+        dialog.setView(view)
+        if (!dialog.isShowing) dialog.show()
     }
 
     private fun handleContinue() {
@@ -185,6 +195,7 @@ class LocationSettingsCheckerActivity : Activity(), DialogInterface.OnCancelList
     }
 
     private fun finishResult(resultCode: Int) {
+        if (dialog?.isShowing == true) dialog?.dismiss()
         val states = getDetailedLocationSettingsStates().toApi()
         setResult(resultCode, Intent().apply {
             putExtra(EXTRA_SETTINGS_STATES, SafeParcelableSerializer.serializeToBytes(states))

@@ -19,7 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.internal.IGoogleMapDelegate;
 import com.google.android.gms.maps.internal.IMapViewDelegate;
 import com.google.android.gms.maps.internal.IOnMapReadyCallback;
-import com.google.android.gms.maps.internal.MapLifecycleDelegate;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 
 public class MapViewDelegate implements MapLifecycleDelegate {

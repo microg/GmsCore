@@ -28,6 +28,7 @@ import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableCreatorAndWriter;
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.GmsService;
+import org.microg.gms.utils.ToStringHelper;
 
 import java.util.Arrays;
 
@@ -57,13 +58,13 @@ public class GetServiceRequest extends AbstractSafeParcelable {
     @Field(11)
     public Feature[] apiFeatures;
     @Field(12)
-    boolean supportsConnectionInfo;
+    public boolean supportsConnectionInfo;
     @Field(13)
     int field13;
     @Field(14)
     boolean field14;
     @Field(15)
-    String attributionTag;
+    public String attributionTag;
 
     private GetServiceRequest() {
         serviceId = -1;
@@ -79,14 +80,18 @@ public class GetServiceRequest extends AbstractSafeParcelable {
 
     @Override
     public String toString() {
-        return "GetServiceRequest{" +
-                "serviceId=" + GmsService.nameFromServiceId(serviceId) +
-                ", gmsVersion=" + gmsVersion +
-                ", packageName='" + packageName + '\'' +
-                (scopes == null || scopes.length == 0 ? "" : (", scopes=" + Arrays.toString(scopes))) +
-                (extras == null ? "" : (", extras=" + extras)) +
-                (account == null ? "" : (", account=" + account)) +
-                '}';
+        return ToStringHelper.name("GetServiceRequest")
+                .value(GmsService.nameFromServiceId(serviceId))
+                .field("packageName", packageName)
+                .field("gmsVersion", gmsVersion)
+                .field("scopes", scopes)
+                .field("extras", extras)
+                .field("account", account)
+                .field("defaultFeatures", defaultFeatures)
+                .field("apiFeatures", apiFeatures)
+                .field("supportsConnectionInfo", supportsConnectionInfo)
+                .field("attributionTag", attributionTag)
+                .end();
     }
 
     @Override

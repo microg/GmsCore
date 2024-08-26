@@ -82,11 +82,17 @@ class AssistedSignInFragment(
     private fun filterAccountsLogin(multiMethod: (List<Account>) -> Unit, loginMethod: (Account, Boolean) -> Unit) {
         lifecycleScope.launch {
             val allowAutoLoginAccounts = mutableListOf<Account>()
-            accounts.forEach { account ->
-                val authStatus = checkAppAuthStatus(requireContext(), clientPackageName, options, account)
-                if (authStatus) {
-                    allowAutoLoginAccounts.add(account)
+            runCatching {
+                accounts.forEach { account ->
+                    val authStatus = checkAccountAuthStatus(requireContext(), clientPackageName, options.scopes, account)
+                    if (authStatus) {
+                        allowAutoLoginAccounts.add(account)
+                    }
                 }
+            }.onFailure {
+                Log.d(TAG, "filterAccountsLogin: error", it)
+                errorBlock(Status(CommonStatusCodes.INTERNAL_ERROR, "auth error"))
+                return@launch
             }
             if (accounts.size == 1) {
                 loginMethod(accounts.first(), allowAutoLoginAccounts.isNotEmpty())
@@ -255,15 +261,20 @@ class AssistedSignInFragment(
             lastChooseAccountPermitted = permitted
             isSigningIn = true
             delay(3000)
-            val googleSignInAccount = withContext(Dispatchers.IO) {
-                performSignIn(requireContext(), clientPackageName, options, account, permitted)
+            runCatching {
+                val googleSignInAccount = withContext(Dispatchers.IO) {
+                    performSignIn(requireContext(), clientPackageName, options, account, permitted)
+                }
+                if (googleSignInAccount == null) {
+                    isSigningIn = false
+                    prepareChooseLogin(account, showConsent = true, permitted = true)
+                    return@launch
+                }
+                loginBlock(googleSignInAccount)
+            }.onFailure {
+                Log.d(TAG, "startLogin: error", it)
+                errorBlock(Status(CommonStatusCodes.INTERNAL_ERROR, "signIn error"))
             }
-            if (googleSignInAccount == null) {
-                isSigningIn = false
-                prepareChooseLogin(account, showConsent = true, permitted = true)
-                return@launch
-            }
-            loginBlock(googleSignInAccount)
         }
     }
 

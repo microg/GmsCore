@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.*
 import android.util.Log
+import androidx.core.app.PendingIntentCompat
 import androidx.legacy.content.WakefulBroadcastReceiver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -261,7 +262,7 @@ internal class PushRegisterHandler(private val context: Context, private val dat
         private get() {
             val intent = Intent()
             intent.setPackage("com.google.example.invalidpackage")
-            return PendingIntent.getBroadcast(context, 0, intent, 0)
+            return PendingIntentCompat.getBroadcast(context, 0, intent, 0, false)!!
         }
 
     override fun handleMessage(msg: Message) {

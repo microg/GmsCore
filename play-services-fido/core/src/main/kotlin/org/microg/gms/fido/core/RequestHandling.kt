@@ -8,6 +8,7 @@ package org.microg.gms.fido.core
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
+import android.util.Log
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -23,7 +24,11 @@ import org.microg.gms.utils.*
 import java.net.HttpURLConnection
 import java.security.MessageDigest
 
+private const val TAG = "Fido"
+
 class RequestHandlingException(val errorCode: ErrorCode, message: String? = null) : Exception(message)
+class MissingPinException(message: String? = null): Exception(message)
+class WrongPinException(message: String? = null): Exception(message)
 
 enum class RequestOptionsType { REGISTER, SIGN }
 
@@ -115,8 +120,10 @@ private suspend fun isAssetLinked(context: Context, rpId: String, facetId: Strin
                 if (fingerprint.equals(fp, ignoreCase = true)) return true
             }
         }
+        Log.w(TAG, "No matching asset link")
         return false
     } catch (e: Exception) {
+        Log.w(TAG, "Failed fetching asset link", e)
         return false
     }
 }
@@ -148,14 +155,6 @@ private suspend fun isAppIdAllowed(context: Context, appId: String, facetId: Str
 }
 
 suspend fun RequestOptions.checkIsValid(context: Context, facetId: String, packageName: String?) {
-    if (type == REGISTER) {
-        if (registerOptions.authenticatorSelection?.requireResidentKey == true) {
-            throw RequestHandlingException(
-                NOT_SUPPORTED_ERR,
-                "Resident credentials or empty 'allowCredentials' lists are not supported  at this time."
-            )
-        }
-    }
     if (type == SIGN) {
         if (signOptions.allowList.isNullOrEmpty()) {
             throw RequestHandlingException(NOT_ALLOWED_ERR, "Request doesn't have a valid list of allowed credentials.")
@@ -251,7 +250,7 @@ fun getClientDataAndHash(
     callingPackage: String
 ): Pair<ByteArray, ByteArray> {
     val clientData: ByteArray?
-    var clientDataHash = (options as? BrowserPublicKeyCredentialCreationOptions)?.clientDataHash
+    var clientDataHash = (options as? BrowserRequestOptions)?.clientDataHash
     if (clientDataHash == null) {
         clientData = options.getWebAuthnClientData(callingPackage, getFacetId(context, options, callingPackage))
         clientDataHash = clientData.digest("SHA-256")

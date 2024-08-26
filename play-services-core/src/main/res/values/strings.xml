@@ -281,6 +281,8 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="pref_vending_licensing_category">Google Play Licensing</string>
     <string name="pref_vending_licensing_enable_switch">Answer license verification requests</string>
     <string name="pref_vending_license_enable_summary">Some apps require verification that you have purchased them on Google Play. When requested by an app, microG can download a proof of purchase from Google. If disabled, or if no Google account is added, requests for license verification are ignored.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Automatically add free apps to library</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Free apps may check whether they had been downloaded from Google Play. Automatically add free apps to your account library to always pass the check for all free apps currently available to you.</string>
 
     <string name="feedback_disabled">Feedback currently not possible</string>
     <string name="backup_disabled">Backup currently not possible</string>

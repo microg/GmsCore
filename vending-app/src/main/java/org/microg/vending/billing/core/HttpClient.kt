@@ -14,7 +14,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-private const val POST_TIMEOUT = 15000
+private const val POST_TIMEOUT = 8000
 
 class HttpClient(context: Context) {
     private val requestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }

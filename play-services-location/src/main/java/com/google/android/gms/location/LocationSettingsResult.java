@@ -42,11 +42,11 @@ public class LocationSettingsResult extends AbstractSafeParcelable implements Re
     @Field(1000)
     int versionCode = 1;
 
-    @Field(1)
+    @Field(value = 1, getterName = "getStatus")
     @NonNull
     private final Status status;
 
-    @Field(2)
+    @Field(value = 2, getterName = "getLocationSettingsStates")
     @Nullable
     private final LocationSettingsStates settings;
 
