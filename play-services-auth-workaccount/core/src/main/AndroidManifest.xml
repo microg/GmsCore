@@ -7,6 +7,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission
         android:name="android.permission.GET_ACCOUNTS"
         android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
@@ -23,7 +26,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="org.microg.gms.auth.account.authenticator.WorkAccountAuthenticatorService"
+            android:name="com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService"
             android:process=":persistent"
             android:enabled="false"
             android:exported="false">

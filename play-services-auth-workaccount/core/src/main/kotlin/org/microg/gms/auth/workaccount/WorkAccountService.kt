@@ -39,11 +39,13 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
         return super.onTransact(code, data, reply, flags)
     }
 
-    override fun addWorkAccount(googleApiClient: IObjectWrapper?, s: String?): IWorkAccountService.AddAccountResult {
+    override fun addWorkAccount(googleApiClient: IObjectWrapper?, s: String?): AddAccountResult {
+        // TODO: caller expects that an account is actually created
         Log.d(TAG, "addWorkAccount with $googleApiClient, $s")
+        Log.d(TAG, "stub implementation, not creating account; please create manually!")
+        // TODO: use correct AIDL
         return object : AddAccountResult.Stub() {
             override fun getAccount(): Account? {
-                // TODO
 
                 return AccountManager.get(context).accounts.firstOrNull()?.also { Log.d(TAG, "returning account $it") }
             }
@@ -68,7 +70,7 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
          sharedPreferences.edit().putBoolean("enabled_by_admin", true).apply()
 
          val componentName = ComponentName("com.google.android.gms", "com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService")
-         //context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+         context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
     }
 
      override fun setWorkAuthenticatorEnabledWithResult(googleApiClient: IObjectWrapper?, b: Boolean): IObjectWrapper {
