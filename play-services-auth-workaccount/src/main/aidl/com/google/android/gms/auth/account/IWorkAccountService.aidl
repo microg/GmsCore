@@ -1,21 +1,13 @@
 package com.google.android.gms.auth.account;
 
 import android.accounts.Account;
-import com.google.android.gms.dynamic.IObjectWrapper;
+import com.google.android.gms.auth.account.IWorkAccountCallback;
 
 interface IWorkAccountService {
 
-    interface AddAccountResult {
-        Account getAccount();
-        IObjectWrapper getStatus();
-    }
+    void setWorkAuthenticatorEnabled(boolean enabled) = 0;
 
-    void setWorkAuthenticatorEnabled(IObjectWrapper googleApiClient, boolean b);
+    void addWorkAccount(IWorkAccountCallback callback, String token) = 1;
 
-    AddAccountResult addWorkAccount(IObjectWrapper googleApiClient, String s);
-
-    IObjectWrapper removeWorkAccount(IObjectWrapper googleApiClient, IObjectWrapper account);
-
-
-    IObjectWrapper setWorkAuthenticatorEnabledWithResult(IObjectWrapper googleApiClient, boolean b);
+    void removeWorkAccount(IWorkAccountCallback callback, in Account account) = 2;
 }
