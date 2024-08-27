@@ -2,24 +2,18 @@ package org.microg.gms.auth.workaccount
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Parcel
-import android.os.UserManager
 import android.util.Log
+import com.google.android.gms.auth.account.IWorkAccountCallback
 import com.google.android.gms.auth.account.IWorkAccountService
-import com.google.android.gms.auth.account.IWorkAccountService.AddAccountResult
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
-import com.google.android.gms.dynamic.IObjectWrapper
-import com.google.android.gms.dynamic.ObjectWrapper
-import com.google.android.gms.dynamic.unwrap
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
 
@@ -39,42 +33,39 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
         return super.onTransact(code, data, reply, flags)
     }
 
-    override fun addWorkAccount(googleApiClient: IObjectWrapper?, s: String?): AddAccountResult {
+    override fun setWorkAuthenticatorEnabled(enabled: Boolean) {
+        Log.d(TAG, "setWorkAuthenticatorEnabled with $enabled")
+        /*val devicePolicyManager = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val userManger = context.getSystemService(Context.USER_SERVICE) as UserManager
+        val sharedPreferences = context.getSharedPreferences("work_account_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean("enabled_by_admin", true).apply()*/
+
+        val componentName = ComponentName("com.google.android.gms", "com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService")
+        context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+    }
+
+    override fun addWorkAccount(
+        callback: IWorkAccountCallback?,
+        token: String?
+    ) {
         // TODO: caller expects that an account is actually created
-        Log.d(TAG, "addWorkAccount with $googleApiClient, $s")
+        Log.d(TAG, "addWorkAccount with token $token")
         Log.d(TAG, "stub implementation, not creating account; please create manually!")
-        // TODO: use correct AIDL
-        return object : AddAccountResult.Stub() {
-            override fun getAccount(): Account? {
-
-                return AccountManager.get(context).accounts.firstOrNull()?.also { Log.d(TAG, "returning account $it") }
-            }
-
-            override fun getStatus(): IObjectWrapper {
-                return ObjectWrapper.wrap(Status(CommonStatusCodes.SUCCESS)).also { Log.d(TAG, "returning status $it (${it.unwrap<Status>()})") }
-            }
+        // if account already exists, return one of those as the "new one" (temporary implementation)
+        AccountManager.get(context).getAccountsByType("com.google.work").firstOrNull()?.let {
+            callback?.onAccountAdded(it)
         }
     }
 
-     override fun removeWorkAccount(googleApiClient: IObjectWrapper?, account: IObjectWrapper?): IObjectWrapper {
-         Log.d(TAG, "removeWorkAccount")
-        return ObjectWrapper.wrap(null)
-    }
+    override fun removeWorkAccount(
+        callback: IWorkAccountCallback?,
+        account: Account?
+    ) {
+        // TODO: caller expects that the account is actually removed
+        Log.d(TAG, "removeWorkAccount with account ${account?.name}")
+        Log.d(TAG, "stub implementation, not removing account; please remove manually!")
+        val noAccounts = AccountManager.get(context).getAccountsByType("com.google.work").isEmpty()
+        callback?.onAccountRemoved(noAccounts)
 
-     override fun setWorkAuthenticatorEnabled(googleApiClient: IObjectWrapper?, b: Boolean) {
-         // TODO
-         Log.d(TAG, "setWorkAuthenticatorEnabled with $googleApiClient, $b")
-         val devicePolicyManager = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-         val userManger = context.getSystemService(Context.USER_SERVICE) as UserManager
-         val sharedPreferences = context.getSharedPreferences("work_account_prefs", Context.MODE_PRIVATE)
-         sharedPreferences.edit().putBoolean("enabled_by_admin", true).apply()
-
-         val componentName = ComponentName("com.google.android.gms", "com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService")
-         context.packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
-    }
-
-     override fun setWorkAuthenticatorEnabledWithResult(googleApiClient: IObjectWrapper?, b: Boolean): IObjectWrapper {
-        Log.d(TAG, "setWorkAuthenticatorEnabledWithResult $googleApiClient, $b")
-        return ObjectWrapper.wrap(null)
     }
 }

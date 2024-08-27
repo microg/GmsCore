@@ -18,13 +18,7 @@
 
         <service
             android:name="org.microg.gms.auth.workaccount.WorkAccountService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.service.SmsRetrieverApiService.START" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
+            android:exported="true" />
         <service
             android:name="com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService"
             android:process=":persistent"
