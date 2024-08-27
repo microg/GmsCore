@@ -78,8 +78,9 @@ private val splitRecord = arrayListOf<Array<String>>()
 private fun Context.splitSaveFile() = File(filesDir, FILE_SAVE_PATH)
 
 suspend fun trySplitInstall(context: Context, httpClient: HttpClient, pkg: String, splits: List<Bundle>) {
-    if (lastSplitPackageName != null && lastSplitPackageName != pkg && mutex.isLocked) {
-        mutex.unlock()
+    if (lastSplitPackageName != null && lastSplitPackageName != pkg) {
+        if (mutex.isLocked) mutex.unlock()
+        splitRecord.clear()
     }
     mutex.withLock {
         Log.d(TAG, "trySplitInstall: pkg: $pkg")
