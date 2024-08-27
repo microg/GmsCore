@@ -183,9 +183,9 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.google.android.finsky.splitinstallservice.SplitInstallServiceImpl$InstallResultReceiver"
-            android:exported="true">
-        </receiver>
+        <receiver
+            android:name="com.google.android.finsky.splitinstallservice.InstallResultReceiver"
+            android:exported="true"/>
 
     </application>
 </manifest>

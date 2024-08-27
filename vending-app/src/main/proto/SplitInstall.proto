@@ -1,88 +1,83 @@
 
-option java_package = "com.google.android.phonesky.header";
+option java_package = "com.google.android.finsky";
 option java_multiple_files = true;
 
 message GoogleApiResponse {
-    optional FdfeApiResponse fdfeApiResponseValue = 1;
-    optional UnknowTypebbfe  g= 5;
-    optional bytes  unknowFieldBytes= 9;
+    optional ApiResponse response = 1;
+    optional UnknownType type= 5;
+    optional bytes unknownFieldBytes= 9;
 }
 
-message UnknowTypebbfe {
+message UnknownType {
     optional int64 id=1;
 }
 
-message FdfeApiResponse {
+message ApiResponse {
     optional TocResponse tocApi = 6;
     optional SplitResponse splitReqResult = 21;
-    optional SyncApiResp syncResult = 183;
+//    optional SyncApiResp syncResult = 183;
 }
 
 message TocResponse {
-//    optional bool o=11;
-    optional string tocTokenValue=22; //t
+    optional string tocTokenValue = 22;
 }
 
 message SplitResponse {
-    optional int32 b = 1; //unknow enum
+    optional int32 unknownInt32 = 1;
     optional PkgFetchInfo pkgList = 2;
 }
 
 message PkgFetchInfo {
-    repeated SplitPkgInfo pkgDownlaodInfo = 15;
+    repeated SplitPkgInfo pkgDownLoadInfo = 15;
 }
 
 message SplitPkgInfo {
     optional string splitPkgName = 1;
     optional int64 size = 2;
     optional string checkSum = 4;
-    optional string downloadUrl1 = 5;
+    optional string downloadUrl = 5;
     optional DownloadInfo slaveDownloadInfo = 8;
-    optional string mabyChecksum = 9;
-    optional string unknowPkgInfoF = 15;
+    optional string checksum = 9;
+    optional string unknownPkgInfoString = 15;
     optional DownloadInfo otherDownloadInfo = 16;
 }
 
 message DownloadInfo {
-    optional int32 id = 1; //unknow enum
+    optional int32 id = 1;
     optional int64 size = 2;
     optional string url = 3;
 }
 
-
-
-//-----------------response for fdfe/sync
-message SyncApiResp {
-    repeated SyncApiRespEmptyA unknowFieldA=1;
-    optional SyncToken syncTokenValue=2;
-//    repeated string c=3;
-}
-
-message SyncToken {
-    optional string  mvalue = 1;
-}
-
-
-message SyncApiRespEmptyA {
-    oneof b {
-        UnknowTypeaynt unknowEmptyField = 2;
-//        aynp oneofField1 = 3;
-    }
-    optional int64 id=1;
-}
-
-message UnknowTypeaynt {
-    optional UnknowEmptyAynx a=1;
-    optional int32 id=2; //unknow enum
-}
-
-message UnknowEmptyAynx {
-    oneof b {
-        UnknowTypeawwm oneofField25 = 26;
-    }
-}
-
-message UnknowTypeawwm {
-    optional int32 id=1;
-}
+//message SyncApiResp {
+//    repeated SyncRespContent content = 1;
+//    optional SyncToken syncTokenValue = 2;
+////    repeated string c=3;
+//}
+//
+//message SyncToken {
+//    optional string  mvalue = 1;
+//}
+//
+//
+//message SyncRespContent {
+//    oneof b {
+//        UnknowTypeaynt unknowEmptyField = 2;
+//    }
+//    optional int64 token = 1;
+//}
+//
+//message UnknownType {
+//    optional UnknowEmptyAynx a=1;
+//    optional int32 id=2; //unknow enum
+//}
+//
+//message UnknowEmptyAynx {
+//    oneof b {
+//        UnknowTypeawwm oneofField25 = 26;
+//    }
+//}
+//
+//message UnknowTypeawwm {
+//    optional int32 id=1;
+//}
 
