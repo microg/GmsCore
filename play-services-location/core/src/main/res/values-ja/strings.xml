@@ -18,4 +18,5 @@
     <string name="pref_location_wifi_learning_enabled_summary">GPS使用時にWi-Fiロケーションをローカルに保存します。</string>
     <string name="pref_location_cell_mls_enabled_title">Mozilla からのリクエスト</string>
     <string name="fragment_location_apps_title">位置情報にアクセスできるアプリ</string>
+    <string name="pref_location_wifi_learning_enabled_title">GPSを保存</string>
 </resources>
