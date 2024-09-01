@@ -2,6 +2,7 @@ package org.microg.gms.auth.workaccount
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
@@ -20,6 +21,7 @@ import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
 import org.microg.gms.common.GmsService
+import org.microg.gms.common.PackageUtils
 
 private const val TAG = "GmsWorkAccountService"
 
@@ -29,12 +31,26 @@ class WorkAccountService : BaseService(TAG, GmsService.WORK_ACCOUNT) {
         request: GetServiceRequest,
         service: GmsService
     ) {
-        callback.onPostInitCompleteWithConnectionInfo(
-            CommonStatusCodes.SUCCESS,
-            WorkAccountServiceImpl(this),
-            ConnectionInfo().apply {
-                features = arrayOf(Feature("work_account_client_is_whitelisted", 1))
-            })
+        val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
+        val policyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val authorized = policyManager.isDeviceOwnerApp(packageName) || policyManager.isProfileOwnerApp(packageName)
+
+        if (authorized) {
+            callback.onPostInitCompleteWithConnectionInfo(
+                CommonStatusCodes.SUCCESS,
+                WorkAccountServiceImpl(this),
+                ConnectionInfo().apply {
+                    features = arrayOf(Feature("work_account_client_is_whitelisted", 1))
+                })
+        } else {
+            // Return mock response, don't tell client that it is whitelisted
+            callback.onPostInitCompleteWithConnectionInfo(
+                CommonStatusCodes.SUCCESS,
+                UnauthorizedWorkAccountServiceImpl(),
+                ConnectionInfo().apply {
+                    features = emptyArray()
+                })
+        }
     }
 }
 
@@ -67,6 +83,9 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
         token: String?
     ) {
         Log.d(TAG, "addWorkAccount with token $token")
+        if (accountManager.getAccountsByType(WORK_ACCOUNT_TYPE).isNotEmpty()) {
+            Log.w(TAG, "A work account already exists. Refusing to add a second one.")
+        }
         val future = accountManager.addAccount(
             WORK_ACCOUNT_TYPE,
             null,
@@ -106,5 +125,19 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
                 }.start()
             }
         }
+    }
+}
+
+class UnauthorizedWorkAccountServiceImpl : IWorkAccountService.Stub() {
+    override fun setWorkAuthenticatorEnabled(enabled: Boolean) {
+        throw SecurityException("client not admin, yet tried to enable work authenticator")
+    }
+
+    override fun addWorkAccount(callback: IWorkAccountCallback?, token: String?) {
+        throw SecurityException("client not admin, yet tried to add work account")
+    }
+
+    override fun removeWorkAccount(callback: IWorkAccountCallback?, account: Account?) {
+        throw SecurityException("client not admin, yet tried to remove work account")
     }
 }
