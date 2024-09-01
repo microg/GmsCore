@@ -25,13 +25,16 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         options: Bundle
     ): Bundle {
         val name = "account${options.getInt(AccountManager.KEY_CALLER_UID)}"
-        val type = "com.google.work"
+        val password = if (options.containsKey(KEY_ACCOUNT_CREATION_TOKEN)) {
+            options.getString(KEY_ACCOUNT_CREATION_TOKEN).also { Log.d(TAG, "read token $it") }
+        } else null
+
         AccountManager.get(context).addAccountExplicitly(
-            Account(name, type), "***", Bundle()
+            Account(name, WORK_ACCOUNT_TYPE), password, Bundle()
         )
         return Bundle().apply {
             putString(AccountManager.KEY_ACCOUNT_NAME, name)
-            putString(AccountManager.KEY_ACCOUNT_TYPE, type)
+            putString(AccountManager.KEY_ACCOUNT_TYPE, WORK_ACCOUNT_TYPE)
         }
     }
 
@@ -80,5 +83,7 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
 
     companion object {
         const val TAG = "WorkAccAuthenticator"
+        const val WORK_ACCOUNT_TYPE = "com.google.work"
+        const val KEY_ACCOUNT_CREATION_TOKEN = "creationToken"
     }
 }
