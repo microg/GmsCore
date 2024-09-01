@@ -5,6 +5,7 @@ import android.accounts.AccountManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcel
 import android.util.Log
@@ -49,10 +50,6 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
 
     override fun setWorkAuthenticatorEnabled(enabled: Boolean) {
         Log.d(TAG, "setWorkAuthenticatorEnabled with $enabled")
-        /*val devicePolicyManager = context.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val userManger = context.getSystemService(Context.USER_SERVICE) as UserManager
-        val sharedPreferences = context.getSharedPreferences("work_account_prefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putBoolean("enabled_by_admin", true).apply()*/
 
         val componentName = ComponentName(
             "com.google.android.gms",
@@ -79,29 +76,35 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
             null,
             null
         )
-        callback?.let {
-            Thread {
-                future.result.let { result ->
-                    it.onAccountAdded(
-                        Account(
-                            result.getString(AccountManager.KEY_ACCOUNT_NAME),
-                            result.getString(AccountManager.KEY_ACCOUNT_TYPE)
-                        )
+        Thread {
+            future.result.let { result ->
+                callback?.onAccountAdded(
+                    Account(
+                        result.getString(AccountManager.KEY_ACCOUNT_NAME),
+                        result.getString(AccountManager.KEY_ACCOUNT_TYPE)
                     )
-                }
-            }.start()
-        }
+                )
+            }
+        }.start()
     }
 
     override fun removeWorkAccount(
         callback: IWorkAccountCallback?,
         account: Account?
     ) {
-        // TODO: caller expects that the account is actually removed
         Log.d(TAG, "removeWorkAccount with account ${account?.name}")
-        Log.d(TAG, "stub implementation, not removing account; please remove manually!")
-        val noAccounts = accountManager.getAccountsByType("com.google.work").isEmpty()
-        callback?.onAccountRemoved(noAccounts)
-
+        account?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                val success = accountManager.removeAccountExplicitly(it)
+                callback?.onAccountRemoved(success)
+            } else {
+                val future = accountManager.removeAccount(it, null, null)
+                Thread {
+                    future.result.let { result ->
+                        callback?.onAccountRemoved(result)
+                    }
+                }.start()
+            }
+        }
     }
 }
