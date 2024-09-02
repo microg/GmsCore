@@ -83,9 +83,6 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
         token: String?
     ) {
         Log.d(TAG, "addWorkAccount with token $token")
-        if (accountManager.getAccountsByType(WORK_ACCOUNT_TYPE).isNotEmpty()) {
-            Log.w(TAG, "A work account already exists. Refusing to add a second one.")
-        }
         val future = accountManager.addAccount(
             WORK_ACCOUNT_TYPE,
             null,
@@ -97,7 +94,9 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
         )
         Thread {
             future.result.let { result ->
-                callback?.onAccountAdded(
+                if (result.containsKey(AccountManager.KEY_ERROR_CODE)) {
+                    Log.w(TAG, "could not add work account due to network error: ${result.getString(AccountManager.KEY_ERROR_MESSAGE)}")
+                } else callback?.onAccountAdded(
                     Account(
                         result.getString(AccountManager.KEY_ACCOUNT_NAME),
                         result.getString(AccountManager.KEY_ACCOUNT_TYPE)
