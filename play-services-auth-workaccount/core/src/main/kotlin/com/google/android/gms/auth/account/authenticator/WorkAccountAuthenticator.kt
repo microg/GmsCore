@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.auth.workaccount.R
+import org.microg.gms.auth.workaccount.AuthRequest
 
 class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthenticator(context) {
 
@@ -25,30 +26,75 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         authTokenType: String?,
         requiredFeatures: Array<out String>?,
         options: Bundle
-    ): Bundle {
-        if (!options.containsKey(KEY_ACCOUNT_CREATION_TOKEN)) {
-            Log.w(TAG, "refusing to add account without creation token: was likely manually initiated by user")
+    ): Bundle? {
+        if (
+            !options.containsKey(KEY_ACCOUNT_CREATION_TOKEN)
+            || options.getString(KEY_ACCOUNT_CREATION_TOKEN) == null
+            || options.getInt(AccountManager.KEY_CALLER_UID) != android.os.Process.myUid()) {
+            Log.e(TAG,
+                "refusing to add account without creation token or from external app: " +
+                        "could have been manually initiated by user (not supported) " +
+                        "or by unauthorized app (not allowed)"
+            )
 
             // TODO: The error message is not automatically displayed by the settings app as of now.
             // We can consider showing the error message through a popup instead.
 
             return Bundle().apply {
                 putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_UNSUPPORTED_OPERATION)
-                putString(AccountManager.KEY_ERROR_MESSAGE,
-                    context.getString(R.string.auth_work_authenticator_add_manual_error)
+                putString(AccountManager.KEY_ERROR_MESSAGE, context.getString(R.string.auth_work_authenticator_add_manual_error)
                 )
             }
         }
-        val name = "account${options.getInt(AccountManager.KEY_CALLER_UID)}"
-        val password = options.getString(KEY_ACCOUNT_CREATION_TOKEN).also { Log.d(TAG, "read token $it") }
 
-        AccountManager.get(context).addAccountExplicitly(
-            Account(name, WORK_ACCOUNT_TYPE), password, Bundle()
-        )
-        return Bundle().apply {
-            putString(AccountManager.KEY_ACCOUNT_NAME, name)
-            putString(AccountManager.KEY_ACCOUNT_TYPE, WORK_ACCOUNT_TYPE)
+        val oauthToken: String = options.getString(KEY_ACCOUNT_CREATION_TOKEN)!!
+
+        try {
+            val authResponse = AuthRequest().fromContext(context)
+                .appIsGms()
+                .callerIsGms()
+                .service("ac2dm")
+                .token(oauthToken).isAccessToken()
+                .addAccount()
+                .getAccountId()
+                .droidguardResults(null)
+                .response
+
+            val accountManager = AccountManager.get(context)
+            if (accountManager.addAccountExplicitly(
+                    Account(authResponse.email, WORK_ACCOUNT_TYPE),
+                    authResponse.token, Bundle().apply {
+                        // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
+                        if (authResponse.accountId.isNotBlank()) {
+                            putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
+                        }
+                        putString(KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
+                        putString(KEY_ACCOUNT_SERVICES, authResponse.services) // expected to be "android"
+                    }
+            )) {
+                // Report successful creation to caller
+                response.onResult(Bundle().apply {
+                    putString(AccountManager.KEY_ACCOUNT_NAME, authResponse.email)
+                    putString(AccountManager.KEY_ACCOUNT_TYPE, WORK_ACCOUNT_TYPE)
+                })
+            }
+
+        } catch (exception: Exception) {
+            response.onResult(Bundle().apply {
+                putInt(
+                    AccountManager.KEY_ERROR_CODE,
+                    AccountManager.ERROR_CODE_NETWORK_ERROR
+                )
+                putString(AccountManager.KEY_ERROR_MESSAGE, exception.message)
+            })
         }
+
+        /* Note: as is not documented, `null` must only be returned after `response.onResult` was
+         * already called, hence forcing the requests to be synchronous. They are still async to
+         * the caller's main thread because AccountManager forces potentially blocking operations,
+         * like waiting for a response upon `addAccount`, not to be on the main thread.
+         */
+        return null
     }
 
     override fun confirmCredentials(
@@ -115,5 +161,8 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         const val TAG = "WorkAccAuthenticator"
         const val WORK_ACCOUNT_TYPE = "com.google.work"
         const val KEY_ACCOUNT_CREATION_TOKEN = "creationToken"
+        private const val KEY_GOOGLE_USER_ID = "GoogleUserId" // TODO: use AuthConstants
+        private const val KEY_ACCOUNT_SERVICES = "services" // TODO: use AuthConstants
+        private const val KEY_ACCOUNT_CAPABILITIES = "capabilities"
     }
 }
