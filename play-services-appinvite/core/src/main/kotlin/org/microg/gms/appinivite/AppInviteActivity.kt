@@ -29,7 +29,6 @@ import okio.ByteString.Companion.decodeHex
 import org.microg.gms.appinvite.*
 import org.microg.gms.common.Constants
 import org.microg.gms.utils.singleInstanceOf
-import org.microg.gms.utils.toBase64
 import java.util.*
 
 private const val TAG = "AppInviteActivity"
@@ -73,12 +72,10 @@ class AppInviteActivity : AppCompatActivity() {
     }
 
     private fun open(appInviteLink: MutateAppInviteLinkResponse) {
-        Log.d(TAG, "open: $appInviteLink")
         val dynamicLinkData = DynamicLinkData(appInviteLink.metadata?.info?.url, appInviteLink.data_?.intentData,
             (appInviteLink.data_?.app?.minAppVersion ?: 0).toInt(), System.currentTimeMillis(), null, null)
-        Log.d(TAG, "open dynamicLinkData: $dynamicLinkData")
         val intent = Intent(Intent.ACTION_VIEW).apply {
-            addCategory(Intent.CATEGORY_LAUNCHER)
+            addCategory(Intent.CATEGORY_DEFAULT)
             data = appInviteLink.data_?.intentData?.let { Uri.parse(it) }
             `package` = appInviteLink.data_?.packageName
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -105,7 +102,7 @@ class AppInviteActivity : AppCompatActivity() {
         if (installedVersionCode != null && (appInviteLink.data_?.app?.minAppVersion == null || installedVersionCode >= appInviteLink.data_.app.minAppVersion)) {
             val componentName = intent.resolveActivity(packageManager)
             if (componentName == null) {
-                Log.d(TAG, "open resolve activity is null")
+                Log.w(TAG, "open resolve activity is null")
                 if (appInviteLink.data_?.packageName != null) {
                     val intentLaunch =
                         packageManager.getLaunchIntentForPackage(appInviteLink.data_.packageName)
