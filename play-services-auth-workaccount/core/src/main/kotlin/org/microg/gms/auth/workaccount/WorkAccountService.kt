@@ -38,7 +38,7 @@ class WorkAccountService : BaseService(TAG, GmsService.WORK_ACCOUNT) {
     ) {
         val packageName = PackageUtils.getAndCheckCallingPackage(this, request.packageName)
         val policyManager = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val authorized = policyManager.isDeviceOwnerApp(packageName) || policyManager.isProfileOwnerApp(packageName)
+        val authorized = policyManager.isDeviceAdminApp(packageName)
 
         if (authorized) {
             callback.onPostInitCompleteWithConnectionInfo(
@@ -56,6 +56,15 @@ class WorkAccountService : BaseService(TAG, GmsService.WORK_ACCOUNT) {
                     features = emptyArray()
                 })
         }
+    }
+}
+
+private fun DevicePolicyManager.isDeviceAdminApp(packageName: String?): Boolean {
+    if (packageName == null) return false
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        isDeviceOwnerApp(packageName) || isProfileOwnerApp(packageName)
+    } else {
+        isDeviceOwnerApp(packageName)
     }
 }
 
