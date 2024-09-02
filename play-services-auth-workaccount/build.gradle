@@ -32,11 +32,7 @@ android {
 
 apply from: '../gradle/publish-android.gradle'
 
-description = 'microG implementation of play-services-auth-api-phone'
+description = 'microG implementation of managed work account support'
 
 dependencies {
-    // Dependencies from play-services-auth-api-phone:18.0.1
-    api project(':play-services-base')
-    api project(':play-services-basement')
-    api project(':play-services-tasks')
 }

@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2024 e foundation
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 package org.microg.gms.auth.workaccount
 
 import android.accounts.Account

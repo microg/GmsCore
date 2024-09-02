@@ -18,8 +18,7 @@
 
     <permission
         android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"
-        android:label="read Google service configuration"
-        android:permissionGroup="android.permission-group.ACCOUNTS"
+        android:label="@string/perm_gsf_read_gservices_label"
         android:protectionLevel="normal" />
     <permission
         android:name="com.google.android.c2dm.permission.RECEIVE"
