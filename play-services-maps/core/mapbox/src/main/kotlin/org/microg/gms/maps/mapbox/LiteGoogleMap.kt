@@ -365,7 +365,7 @@ class LiteGoogleMapImpl(context: Context, var options: GoogleMapOptions) : Abstr
     }
 
     fun getMapAsync(callback: IOnMapReadyCallback) {
-        if (lastSnapshot == null) {
+        if (lastSnapshot != null) {
             Log.d(TAG, "Invoking callback instantly, as a snapshot is ready")
             callback.onMapReady(this)
         } else {
