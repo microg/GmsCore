@@ -777,7 +777,7 @@
         <activity
             android:name="org.microg.gms.googlehelp.ui.GoogleHelpRedirectActivity"
             android:process=":ui"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.googlehelp.HELP" />
