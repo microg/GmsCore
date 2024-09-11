@@ -24,7 +24,6 @@ import com.google.android.gms.auth.api.identity.internal.IGetSignInIntentCallbac
 import com.google.android.gms.auth.api.identity.internal.ISignInService
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.api.internal.IStatusCallback
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -46,9 +45,7 @@ import org.microg.gms.auth.credentials.FEATURES
 import org.microg.gms.auth.signin.CLIENT_PACKAGE_NAME
 import org.microg.gms.auth.signin.GOOGLE_SIGN_IN_OPTIONS
 import org.microg.gms.auth.signin.performSignOut
-import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
-import org.microg.gms.fido.core.ui.AuthenticatorActivity
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_OPTIONS
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SERVICE
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SOURCE
