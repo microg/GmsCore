@@ -6,6 +6,7 @@
 package org.microg.gms.googlehelp.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable.Creator
@@ -42,8 +43,6 @@ private const val HELP_URL = "https://www.google.com/tools/feedback/mobile/help-
 
 class GoogleHelpRedirectActivity : AppCompatActivity() {
 
-    private lateinit var webView: WebView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate begin")
@@ -59,43 +58,16 @@ class GoogleHelpRedirectActivity : AppCompatActivity() {
         if (googleHelp == null) {
             inProductHelp = getParcelableFromIntent<InProductHelp>(intent, PRODUCT_HELP_KEY, InProductHelp.CREATOR)
         }
-        Log.d(TAG, "onCreate: googleHelp: ${googleHelp ?: inProductHelp?.googleHelp}")
-
-        val layout = RelativeLayout(this)
-        layout.addView(ProgressBar(this).apply {
-            layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
-                addRule(RelativeLayout.CENTER_HORIZONTAL)
-                addRule(RelativeLayout.CENTER_VERTICAL)
-            }
-            isIndeterminate = true
-        })
-        webView = WebView(this).apply {
-            layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
-            visibility = View.INVISIBLE
-        }
-        layout.addView(webView)
-        setContentView(layout)
 
         lifecycleScope.launchWhenCreated {
-            val account = googleHelp?.account ?: inProductHelp?.googleHelp?.account
+            Log.d(TAG, "onCreate: googleHelp: ${googleHelp ?: inProductHelp?.googleHelp}")
             val searchId = googleHelp?.appContext ?: inProductHelp?.googleHelp?.appContext
-            Log.d(TAG, "loadHelpUrl: searchId: $searchId")
-            val answerUrl = requestHelpLink(callingPackage, searchId).content?.info?.answerUrl
-            Log.d(TAG, "answerUrl: $answerUrl")
-            val url = googleHelp?.uri?.toString() ?: inProductHelp?.googleHelp?.uri?.toString() ?: answerUrl
-            Log.d(TAG, "loadUrl: $url")
-            if (answerUrl != null) {
-                WebViewHelper(this@GoogleHelpRedirectActivity, webView).openWebView(url, account?.name)
-                setResult(RESULT_OK)
-            } else finish()
-        }
-    }
-
-    override fun onBackPressed() {
-        if (this::webView.isInitialized && webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
+            val answerUrl = runCatching { requestHelpLink(callingPackage, searchId).content?.info?.answerUrl }.getOrNull()
+            Log.d(TAG, "requestHelpLink answerUrl: $answerUrl")
+            val url = answerUrl ?: googleHelp?.uri?.toString() ?: inProductHelp?.googleHelp?.uri?.toString() ?: return@launchWhenCreated finish()
+            Log.d(TAG, "Open $url for $callingPackage in Browser")
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            finish()
         }
     }
 
