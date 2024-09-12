@@ -11,10 +11,6 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable.Creator
 import android.util.Log
-import android.view.View
-import android.webkit.WebView
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.android.volley.NetworkResponse
@@ -24,7 +20,6 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
 import com.google.android.gms.googlehelp.GoogleHelp
 import com.google.android.gms.googlehelp.InProductHelp
-import org.microg.gms.accountsettings.ui.WebViewHelper
 import org.microg.gms.googlehelp.CallerAppInfo
 import org.microg.gms.googlehelp.DeviceInfo
 import org.microg.gms.googlehelp.RequestBody
