@@ -776,7 +776,6 @@
 
         <activity
             android:name="org.microg.gms.googlehelp.ui.GoogleHelpRedirectActivity"
-            android:process=":ui"
             android:theme="@style/Theme.App.Translucent"
             android:exported="true">
             <intent-filter>
