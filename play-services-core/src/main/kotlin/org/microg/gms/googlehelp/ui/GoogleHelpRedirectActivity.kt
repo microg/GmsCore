@@ -61,7 +61,12 @@ class GoogleHelpRedirectActivity : AppCompatActivity() {
             Log.d(TAG, "requestHelpLink answerUrl: $answerUrl")
             val url = answerUrl ?: googleHelp?.uri?.toString() ?: inProductHelp?.googleHelp?.uri?.toString() ?: return@launchWhenCreated finish()
             Log.d(TAG, "Open $url for $callingPackage in Browser")
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            val targetIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            val resolveInfoList = packageManager.queryIntentActivities(targetIntent, 0)
+            Log.d(TAG, "resolveInfoList: $resolveInfoList")
+            if (resolveInfoList.isNotEmpty()) {
+                startActivity(targetIntent)
+            }
             finish()
         }
     }
