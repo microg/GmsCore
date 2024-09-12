@@ -184,7 +184,7 @@
         </service>
 
         <receiver
-            android:name="com.google.android.finsky.splitinstallservice.InstallResultReceiver"
+            android:name="com.google.android.finsky.splitinstallservice.SplitInstallManager$InstallResultReceiver"
             android:exported="true"/>
 
     </application>

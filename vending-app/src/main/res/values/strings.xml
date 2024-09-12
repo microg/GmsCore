@@ -28,5 +28,5 @@
     <string name="tips_forget_passwd">Forget password?</string>
     <string name="tips_more_details">Learn more</string>
     <string name="text_verify_button">Verify</string>
-    <string name="split_install">%s Downloading subpackages</string>
+    <string name="split_install">Downloading required components for %s</string>
 </resources>

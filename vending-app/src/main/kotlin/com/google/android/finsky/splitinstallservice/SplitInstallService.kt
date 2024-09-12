@@ -5,7 +5,6 @@
 
 package com.google.android.finsky.splitinstallservice
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
@@ -19,36 +18,36 @@ import com.google.android.play.core.splitinstall.protocol.ISplitInstallService
 import com.google.android.play.core.splitinstall.protocol.ISplitInstallServiceCallback
 import kotlinx.coroutines.launch
 import org.microg.gms.profile.ProfileManager
-import org.microg.vending.billing.core.HttpClient
 
-private const val TAG = "SplitInstallServiceImpl"
+private const val TAG = "SplitInstallService"
 
 class SplitInstallService : LifecycleService() {
 
-    private lateinit var httpClient: HttpClient
+    private lateinit var splitInstallManager: SplitInstallManager
 
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
         Log.d(TAG, "onBind: ")
         ProfileManager.ensureInitialized(this)
-        httpClient = HttpClient(this)
-        return SplitInstallServiceImpl(this.applicationContext, httpClient, lifecycle).asBinder()
+        splitInstallManager = SplitInstallManager(this)
+        return SplitInstallServiceImpl(splitInstallManager, lifecycle).asBinder()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         Log.d(TAG, "onUnbind: ")
-        httpClient.requestQueue.cancelAll(SPLIT_INSTALL_REQUEST_TAG)
+        splitInstallManager.release()
         return super.onUnbind(intent)
     }
 }
 
-class SplitInstallServiceImpl(private val context: Context, private val httpClient: HttpClient, override val lifecycle: Lifecycle) : ISplitInstallService.Stub(), LifecycleOwner {
+class SplitInstallServiceImpl(private val installManager: SplitInstallManager, override val lifecycle: Lifecycle) : ISplitInstallService.Stub(),
+    LifecycleOwner {
 
     override fun startInstall(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
         Log.d(TAG, "Method <startInstall> Called by package: $pkg")
         lifecycleScope.launch {
-            trySplitInstall(context, httpClient, pkg, splits)
-            Log.d(TAG, "onStartInstall SUCCESS")
+            val installStatus = installManager.startInstall(pkg, splits)
+            Log.d(TAG, "startInstall: installStatus -> $installStatus")
             callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle())
         }
     }
@@ -97,9 +96,6 @@ class SplitInstallServiceImpl(private val context: Context, private val httpClie
 
     override fun languageSplitInstall(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
         Log.d(TAG, "Method <languageSplitInstall> Called by package: $pkg")
-        lifecycleScope.launch {
-            trySplitInstall(context, httpClient, pkg, splits)
-        }
     }
 
     override fun languageSplitUninstall(pkg: String, splits: List<Bundle>, callback: ISplitInstallServiceCallback) {

@@ -2,20 +2,18 @@ package com.android.vending.licensing
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.accounts.AccountManagerFuture
 import android.accounts.AuthenticatorException
 import android.accounts.OperationCanceledException
 import android.content.pm.PackageInfo
-import android.os.Bundle
 import android.os.RemoteException
 import android.util.Log
+import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.LicenseResult
+import com.android.vending.buildRequestHeaders
+import com.android.vending.getAuthToken
 import com.android.volley.VolleyError
 import org.microg.vending.billing.core.HttpClient
 import java.io.IOException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 private const val TAG = "FakeLicenseChecker"
 
@@ -69,8 +67,6 @@ const val ERROR_INVALID_PACKAGE_NAME: Int = 0x102
  */
 const val ERROR_NON_MATCHING_UID: Int = 0x103
 
-const val AUTH_TOKEN_SCOPE: String = "oauth2:https://www.googleapis.com/auth/googleplay"
-
 sealed class LicenseRequestParameters
 data class V1Parameters(
     val nonce: Long
@@ -108,7 +104,7 @@ suspend fun HttpClient.checkLicense(
 ) : LicenseResponse {
 
     val auth = try {
-        accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false)
+        getAuthToken(accountManager, account, AUTH_TOKEN_SCOPE)
             .getString(AccountManager.KEY_AUTHTOKEN)
     } catch (e: AuthenticatorException) {
         Log.e(TAG, "Could not fetch auth token for account $account")
@@ -145,7 +141,7 @@ suspend fun HttpClient.makeLicenseV1Request(
     packageName: String, auth: String, versionCode: Int, nonce: Long, androidId: Long
 ): V1Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=$packageName&vc=$versionCode&nnc=$nonce",
-    headers = getLicenseRequestHeaders(auth, androidId),
+    headers = buildRequestHeaders(auth, androidId),
     adapter = LicenseResult.ADAPTER
 ).information?.v1?.let {
     if (it.result != null && it.signedData != null && it.signature != null) {
@@ -160,22 +156,9 @@ suspend fun HttpClient.makeLicenseV2Request(
     androidId: Long
 ): V2Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
-    headers = getLicenseRequestHeaders(auth, androidId),
+    headers = buildRequestHeaders(auth, androidId),
     adapter = LicenseResult.ADAPTER
 ).information?.v2?.license?.jwt?.let {
     // Field present ←→ user has license
     V2Response(LICENSED, it)
 }
-
-
-suspend fun AccountManager.getAuthToken(account: Account, authTokenType: String, notifyAuthFailure: Boolean) =
-    suspendCoroutine { continuation ->
-        getAuthToken(account, authTokenType, notifyAuthFailure, { future: AccountManagerFuture<Bundle> ->
-            try {
-                val result = future.result
-                continuation.resume(result)
-            } catch (e: Exception) {
-                continuation.resumeWithException(e)
-            }
-        }, null)
-    }

@@ -3,7 +3,7 @@ syntax = "proto2";
 option java_package = "com.android.vending";
 option java_multiple_files = true;
 
-message LicenseRequestHeader {
+message RequestHeader {
   optional StringWrapper encodedTimestamps = 1;
   optional EncodedTripleWrapper triple = 10;
   optional LocalityWrapper locality = 11;
