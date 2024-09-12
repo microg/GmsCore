@@ -113,7 +113,6 @@ class SplitInstallManager(val context: Context) {
             throw RuntimeException("installSplitPackage downloadSplitPackage has error")
         }
         Log.d(TAG, "installSplitPackage downloaded success")
-        NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
 
         val packageInstaller = context.packageManager.packageInstaller
         val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_INHERIT_EXISTING)
@@ -229,7 +228,7 @@ class SplitInstallManager(val context: Context) {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun checkSplitInstalled(callingPackage: String, splitName: String): Boolean {
-        if (!splitInstallRecord.containsKey(splitName)) return false
+        if (!splitInstallRecord.containsKey(callingPackage)) return false
         return splitInstallRecord[callingPackage]?.find { it.first == splitName }?.third != STATUS_UNKNOWN
     }
 
