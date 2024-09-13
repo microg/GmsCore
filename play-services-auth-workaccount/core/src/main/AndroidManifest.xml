@@ -18,9 +18,13 @@
 
     <application>
 
-        <service
-            android:name="org.microg.gms.auth.workaccount.WorkAccountService"
-            android:exported="true" />
+        <service android:name="org.microg.gms.auth.workaccount.WorkAccountService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.account.workaccount.START" />
+            </intent-filter>
+        </service>
+
         <service
             android:name="com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService"
             android:process=":persistent"

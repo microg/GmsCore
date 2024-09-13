@@ -493,14 +493,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <service android:name="org.microg.gms.auth.workaccount.WorkAccountService">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.account.workaccount.START" />
-            </intent-filter>
-        </service>
-
-        <!-- Games -->
-
 
         <service android:name="org.microg.gms.signin.SignInService">
             <intent-filter>
