@@ -15,6 +15,8 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.auth.workaccount.R
 import org.microg.gms.auth.workaccount.AuthRequest
+import org.microg.gms.auth.workaccount.AuthResponse
+import org.microg.gms.common.PackageUtils
 
 class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthenticator(context) {
 
@@ -114,11 +116,37 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
 
     override fun getAuthToken(
         response: AccountAuthenticatorResponse?,
-        account: Account?,
+        account: Account,
         authTokenType: String?,
         options: Bundle?
     ): Bundle {
-        TODO("Not yet implemented: getAuthToken")
+        val authResponse: AuthResponse =
+            AuthRequest().fromContext(context)
+                .source("android")
+                .app(context.packageName, PackageUtils.firstSignatureDigest(context, context.packageName))
+                .email(account.name)
+                .token(AccountManager.get(context).getPassword(account))
+                .service(authTokenType)
+                .delegation(0, null)
+//                .oauth2Foreground(oauth2Foreground)
+//                .oauth2Prompt(oauth2Prompt)
+//                .oauth2IncludeProfile(includeProfile)
+//                .oauth2IncludeEmail(includeEmail)
+//                .itCaveatTypes(itCaveatTypes)
+//                .tokenRequestOptions(tokenRequestOptions)
+                .systemPartition(true)
+                .hasPermission(true)
+//                .putDynamicFiledMap(dynamicFields)
+                .appIsGms()
+                .callerIsApp()
+                .response
+
+        return Bundle().apply {
+            putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
+            putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
+            putString(AccountManager.KEY_AUTHTOKEN, authResponse.auth)
+        }
+
     }
 
     override fun getAuthTokenLabel(authTokenType: String?): String {
