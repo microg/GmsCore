@@ -19,4 +19,9 @@
     <string name="fido_nfc_title">NFC güvenlik anahtarınızı bağlayın</string>
     <string name="fido_transport_selection_bluetooth">Bluetooth ile güvenlik anahtarınızı kullanın</string>
     <string name="fido_transport_usb_wait_connect_body">Lütfen USB güvenlik anahtarınızı bağlayın.</string>
+    <string name="fido_pin_title">Lütfen kimlik doğrulayıcınızın PIN kodunu girin</string>
+    <string name="fido_pin_hint">4 ile 63 karakter arasında</string>
+    <string name="fido_wrong_pin">Yanlış PIN girildi!</string>
+    <string name="fido_pin_ok">Tamam</string>
+    <string name="fido_pin_cancel">İptal</string>
 </resources>
