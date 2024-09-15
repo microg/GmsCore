@@ -110,6 +110,9 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
 
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
     //droidguard
     implementation project(':play-services-droidguard')
 

@@ -17,12 +17,22 @@
     <string name="license_notification_sign_in">Sign In</string>
     <string name="license_notification_ignore">Ignore</string>
 
+    <string name="vending_overview_enterprise_row_mandatory">Installation required</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Your administrator requires that you install these apps on your managed device.</string>
+    <string name="vending_overview_enterprise_row_mandatory_missing_hint">Your device is missing mandatory apps chosen by your administrator.</string>
+    <string name="vending_overview_enterprise_row_offered">Available apps</string>
+    <string name="vending_overview_enterprise_row_offered_hint">These are all the apps made available by your enterprise.</string>
+    <string name="vending_overview_enterprise_no_apps_available">No apps have been made available by your administrator</string>
+    <string name="vending_overview_row_update_available">Update available</string>
+    <string name="vending_overview_row_installed">Installed apps</string>
+
     <string name="pay_disabled">Pay currently not possible</string>
 
     <string name="confirm_purchase">Confirm Purchase</string>
     <string name="error_network">Not connected to the internet. Please make sure Wi-Fi or mobile network is turned on and try again.</string>
     <string name="error_passwd">The password you entered is incorrect.</string>
     <string name="error_unknown">Unknown error, please exit and try again.</string>
+    <string name="error_retry">Retry</string>
     <string name="tips_input_passwd">Enter your password</string>
     <string name="tips_remember_login_info">Remember my login on this device</string>
     <string name="tips_forget_passwd">Forget password?</string>

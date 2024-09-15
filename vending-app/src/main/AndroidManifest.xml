@@ -49,7 +49,8 @@
         androidx.compose.ui.unit,androidx.compose.ui.text,androidx.compose.ui.graphics,androidx.compose.ui.geometry,
         androidx.activity.compose,androidx.compose.runtime.saveable,
         androidx.compose.material.ripple,androidx.compose.foundation.layout,androidx.compose.animation.core,
-     coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics" />
+        coil.singleton, coil.base, androidx.compose.material3, com.google.accompanist.systemuicontroller, androidx.compose.animation.graphics,
+        androidx.compose.ui.tooling.data, androidx.compose.ui.tooling.preview" />
 
     <application
         android:forceQueryable="true"
@@ -185,7 +186,7 @@
         <receiver
             android:name="com.google.android.finsky.splitinstallservice.SplitInstallManager$InstallResultReceiver"
             android:exported="true"/>
-        <activity android:name="org.microg.vending.PlayDebugActivity"
+        <activity android:name="org.microg.vending.ui.VendingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

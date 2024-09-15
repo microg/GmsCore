@@ -17,6 +17,7 @@ import com.google.android.gms.auth.workaccount.R
 import org.microg.gms.auth.workaccount.AuthRequest
 import org.microg.gms.auth.workaccount.AuthResponse
 import org.microg.gms.common.PackageUtils
+import java.io.IOException
 
 class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthenticator(context) {
 
@@ -120,33 +121,42 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         authTokenType: String?,
         options: Bundle?
     ): Bundle {
-        val authResponse: AuthResponse =
-            AuthRequest().fromContext(context)
-                .source("android")
-                .app(context.packageName, PackageUtils.firstSignatureDigest(context, context.packageName))
-                .email(account.name)
-                .token(AccountManager.get(context).getPassword(account))
-                .service(authTokenType)
-                .delegation(0, null)
+        try {
+            val authResponse: AuthResponse =
+                AuthRequest().fromContext(context)
+                    .source("android")
+                    .app(
+                        context.packageName,
+                        PackageUtils.firstSignatureDigest(context, context.packageName)
+                    )
+                    .email(account.name)
+                    .token(AccountManager.get(context).getPassword(account))
+                    .service(authTokenType)
+                    .delegation(0, null)
 //                .oauth2Foreground(oauth2Foreground)
 //                .oauth2Prompt(oauth2Prompt)
 //                .oauth2IncludeProfile(includeProfile)
 //                .oauth2IncludeEmail(includeEmail)
 //                .itCaveatTypes(itCaveatTypes)
 //                .tokenRequestOptions(tokenRequestOptions)
-                .systemPartition(true)
-                .hasPermission(true)
+                    .systemPartition(true)
+                    .hasPermission(true)
 //                .putDynamicFiledMap(dynamicFields)
-                .appIsGms()
-                .callerIsApp()
-                .response
+                    .appIsGms()
+                    .callerIsApp()
+                    .response
 
-        return Bundle().apply {
-            putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
-            putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
-            putString(AccountManager.KEY_AUTHTOKEN, authResponse.auth)
+            return Bundle().apply {
+                putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
+                putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
+                putString(AccountManager.KEY_AUTHTOKEN, authResponse.auth)
+            }
+        } catch (e: IOException) {
+            return Bundle().apply {
+                putInt(AccountManager.KEY_ERROR_CODE, AccountManager.ERROR_CODE_NETWORK_ERROR)
+                putString(AccountManager.KEY_ERROR_MESSAGE, e.message)
+            }
         }
-
     }
 
     override fun getAuthTokenLabel(authTokenType: String?): String {
