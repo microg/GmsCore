@@ -60,7 +60,7 @@ fun buildRequestHeaders(auth: String, androidId: Long, language: List<String> ?=
         DeviceMeta.Builder().android(
             AndroidVersionMeta.Builder().androidSdk(Build.VERSION.SDK_INT).buildNumber(Build.ID).androidVersion(Build.VERSION.RELEASE).unknown(0).build()
         ).unknown1(
-            UnknownByte12.Builder().bytes(ByteString.EMPTY).build()
+            UnknownByte12.Builder().bytes(ByteString.EMPTY).build().toString()
         ).unknown2(1).build()
     ).userAgent(
         UserAgent.Builder().deviceName(Build.DEVICE).deviceHardware(Build.HARDWARE).deviceModelName(Build.MODEL).finskyVersion(FINSKY_VERSION)

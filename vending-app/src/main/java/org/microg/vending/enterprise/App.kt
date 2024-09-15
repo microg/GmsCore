@@ -4,7 +4,7 @@ open class App(
     val packageName: String,
     val displayName: String,
     val state: State,
-    val iconUrl: String
+    val iconUrl: String?
 ) {
     enum class State {
         /**

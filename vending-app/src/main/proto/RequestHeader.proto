@@ -43,7 +43,7 @@ message RequestLanguagePackage {
 
 message DeviceMeta {
   optional AndroidVersionMeta android = 1;
-  optional UnknownByte12 unknown1 = 2;
+  optional string unknown1 = 2; // inconsistent observations; a field of type "UnknownByte12" was observed as well
   optional uint32 unknown2 = 3; // observed value: 1
 
 }

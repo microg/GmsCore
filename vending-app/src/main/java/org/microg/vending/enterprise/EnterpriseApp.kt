@@ -6,6 +6,6 @@ class EnterpriseApp(
     packageName: String,
     displayName: String,
     state: State,
-    iconUrl: String,
+    iconUrl: String?,
     val policy: AppInstallPolicy,
 ) : App(packageName, displayName, state, iconUrl)

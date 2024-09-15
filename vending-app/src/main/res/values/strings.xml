@@ -17,6 +17,7 @@
     <string name="license_notification_sign_in">Sign In</string>
     <string name="license_notification_ignore">Ignore</string>
 
+    <string name="vending_activity_name">Work app store</string>
     <string name="vending_overview_enterprise_row_mandatory">Installation required</string>
     <string name="vending_overview_enterprise_row_mandatory_hint">Your administrator requires that you install these apps on your managed device.</string>
     <string name="vending_overview_enterprise_row_mandatory_missing_hint">Your device is missing mandatory apps chosen by your administrator.</string>

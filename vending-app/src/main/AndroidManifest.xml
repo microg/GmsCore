@@ -187,7 +187,9 @@
             android:name="com.google.android.finsky.splitinstallservice.SplitInstallManager$InstallResultReceiver"
             android:exported="true"/>
         <activity android:name="org.microg.vending.ui.VendingActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Material3.DayNight"
+            android:label="@string/vending_activity_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />

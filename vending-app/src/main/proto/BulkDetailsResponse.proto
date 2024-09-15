@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option java_package = "com.google.android.finsky";
+option java_multiple_files = true;
+
+message BulkAppDetailsResponse {
+    repeated AppDetail details = 1;
+}
+
+message AppDetail {
+    optional AppMetadata metadata = 1;
+}
+
+message AppMetadata {
+    optional string packageName = 1; // duplicated at ID 2
+    optional string displayName = 5;
+    optional string author = 6;
+    repeated Icon icon = 10;
+}
+
+message Icon {
+    optional Resolution resolution = 2;
+    string url = 5;
+}
+
+message Resolution {
+    optional uint32 width = 3;
+    optional uint32 height = 4;
+}
