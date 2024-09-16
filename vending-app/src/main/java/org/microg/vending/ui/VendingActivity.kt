@@ -43,9 +43,10 @@ import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CL
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
-import org.microg.vending.billing.proto.ResponseWrapper
 import org.microg.vending.enterprise.App
 import org.microg.vending.enterprise.EnterpriseApp
+import org.microg.vending.ui.components.EnterpriseList
+import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
 
 
@@ -154,8 +155,8 @@ class VendingActivity : ComponentActivity() {
                     }
                 ) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
-                        NetworkStateComponent(networkState, { TODO("reload") }) {
-                            EnterpriseListComponent(apps)
+                        NetworkState(networkState, { TODO("reload") }) {
+                            EnterpriseList(apps)
                         }
                     }
                 }

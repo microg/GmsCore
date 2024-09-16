@@ -26,6 +26,9 @@
     <string name="vending_overview_enterprise_no_apps_available">No apps have been made available by your administrator</string>
     <string name="vending_overview_row_update_available">Update available</string>
     <string name="vending_overview_row_installed">Installed apps</string>
+    <string name="vending_overview_row_action_install">Install</string>
+    <string name="vending_overview_row_action_update">Update</string>
+    <string name="vending_overview_row_action_uninstall">Uninstall</string>
 
     <string name="pay_disabled">Pay currently not possible</string>
 

@@ -1,4 +1,4 @@
-package org.microg.vending.ui
+package org.microg.vending.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,9 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.vending.R
+import org.microg.vending.ui.NetworkState
 
 @Composable
-fun NetworkStateComponent(networkState: NetworkState, retry: () -> Unit, content: @Composable () -> Unit) {
+fun NetworkState(networkState: NetworkState, retry: () -> Unit, content: @Composable () -> Unit) {
     when (networkState) {
         NetworkState.ACTIVE -> {
             Box(Modifier.fillMaxSize()) {
@@ -48,20 +49,20 @@ fun NetworkStateComponent(networkState: NetworkState, retry: () -> Unit, content
 
 @Preview
 @Composable
-fun NetworkStateComponentActivePreview() {
-    NetworkStateComponent(NetworkState.ACTIVE, { }) {}
+fun NetworkStateActivePreview() {
+    NetworkState(NetworkState.ACTIVE, { }) {}
 }
 
 @Preview
 @Composable
-fun NetworkStateComponentErrorPreview() {
-    NetworkStateComponent(NetworkState.ERROR, { }) {}
+fun NetworkStateErrorPreview() {
+    NetworkState(NetworkState.ERROR, { }) {}
 }
 
 @Preview
 @Composable
-fun NetworkStateComponentPassivePreview() {
-    NetworkStateComponent(NetworkState.PASSIVE, {}) {
+fun NetworkStatePassivePreview() {
+    NetworkState(NetworkState.PASSIVE, {}) {
         Text("Network operation complete.", Modifier.padding(16.dp))
     }
 }

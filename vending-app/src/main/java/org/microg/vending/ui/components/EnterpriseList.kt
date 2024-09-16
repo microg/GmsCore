@@ -1,17 +1,12 @@
-package org.microg.vending.ui
+package org.microg.vending.ui.components
 
-import android.util.Log
-import android.widget.Space
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,18 +23,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.android.vending.R
 import com.google.android.finsky.AppInstallPolicy
-import org.microg.gms.ui.TAG
 import org.microg.vending.enterprise.App
 import org.microg.vending.enterprise.EnterpriseApp
 
 
-
 @Composable
-fun EnterpriseListComponent(apps: List<EnterpriseApp>) {
-    if (apps.isNotEmpty()) LazyColumn(Modifier.padding(16.dp)) {
+fun EnterpriseList(apps: List<EnterpriseApp>) {
+    if (apps.isNotEmpty()) LazyColumn(Modifier.padding(horizontal = 16.dp)) {
 
         val requiredApps = apps.filter { it.policy == AppInstallPolicy.MANDATORY }
         if (requiredApps.isNotEmpty()) {
@@ -73,7 +65,7 @@ fun EnterpriseListComponent(apps: List<EnterpriseApp>) {
 fun InListHeading(@StringRes text: Int) {
     Text(
         stringResource(text),
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+        modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
         style = MaterialTheme.typography.headlineSmall
     )
 }
@@ -103,30 +95,10 @@ fun InListWarning(@StringRes text: Int) {
 
 }
 
-@Composable
-fun AppRow(app: App) {
-    Row(
-        Modifier.padding(top = 8.dp, bottom = 8.dp, end = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (app.iconUrl != null) {
-            AsyncImage(
-                model = app.iconUrl,
-                modifier = Modifier.size(48.dp),
-                contentDescription = null,
-            )
-        } else {
-            Spacer(Modifier.size(48.dp))
-        }
-        Text(app.displayName)
-    }
-}
-
 @Preview
 @Composable
-fun EnterpriseListComponentPreview() {
-    EnterpriseListComponent(
+fun EnterpriseListPreview() {
+    EnterpriseList(
         listOf(
             EnterpriseApp("com.android.vending", "Market", App.State.INSTALLED, null, AppInstallPolicy.MANDATORY),
             EnterpriseApp("org.mozilla.firefox", "Firefox", App.State.NOT_INSTALLED, null, AppInstallPolicy.OPTIONAL),
@@ -137,6 +109,6 @@ fun EnterpriseListComponentPreview() {
 
 @Preview
 @Composable
-fun EnterpriseListComponentEmptyPreview() {
-    EnterpriseListComponent(emptyList())
+fun EnterpriseListEmptyPreview() {
+    EnterpriseList(emptyList())
 }
