@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+import "GetItemsRequest.proto";
+
+message GetItemsResponse {
+    // technically this is a typical Google response containing the typical `GoogleApiResponse` fields,
+    // but field 1.145 only encodes some kind of index and the real content is at field 11
+    repeated ItemQuery items = 11;
+}
+
+message ItemQuery {
+    optional RequestApp query = 1;
+    optional ItemResponse response = 2;
+}
+
+message ItemResponse {
+    optional AppMeta meta = 1;
+    optional ItemAppDetail detail = 2;
+    optional ItemOffer offer = 3;
+}
+
+message ItemAppDetail {
+    optional Name name = 1;
+    optional ItemIcon icon = 2;
+}
+
+message Name {
+  optional string displayName = 1;
+}
+
+message ItemIcon {
+    optional IconVariant icon = 1;
+}
+
+message IconVariant {
+    optional IconPaint paint = 6;
+}
+
+message IconPaint {
+    optional string url = 1;
+}
+
+message ItemOffer {
+    optional ItemDelivery delivery = 28;
+}
+
+message ItemDelivery {
+    optional string key = 14;
+}

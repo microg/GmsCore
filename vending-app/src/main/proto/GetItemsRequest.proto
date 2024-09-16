@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+message GetItemsRequest {
+    repeated RequestItem items = 2;
+}
+
+// Reason for hierarchy is unknown.
+
+message RequestItem {
+    RequestApp app = 1;
+    LocalData local = 2;
+}
+
+message RequestApp {
+    AppMeta meta = 1;
+}
+
+message AppMeta {
+    optional string packageName = 1;
+}
+
+message LocalData {
+    // suspected to contain local version code and signature, if available
+}

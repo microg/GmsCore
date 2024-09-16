@@ -1,5 +1,10 @@
 package org.microg.vending.ui
 
+import AppMeta
+import GetItemsRequest
+import GetItemsResponse
+import RequestApp
+import RequestItem
 import android.accounts.AccountManager
 import android.os.Bundle
 import android.util.Log
@@ -39,6 +44,7 @@ import org.microg.vending.billing.AuthManager
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_BULK_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CLIENT_POLICY
+import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
 import org.microg.vending.billing.proto.ResponseWrapper
@@ -88,6 +94,26 @@ class VendingActivity : ComponentActivity() {
                     }
 
                     val details = client.post(
+                        url = URL_ITEM_DETAILS,
+                        // TODO: meaning unclear, but returns 400 without. constant? possible has influence on which fields are returned?
+                        headers = headers.plus("x-dfe-item-field-mask" to "GgJGCCIKBgIAXASAAAAAAQ"),
+                        adapter = GetItemsResponse.ADAPTER,
+                        payload = GetItemsRequest(
+                            apps.map {
+                                RequestItem(RequestApp(AppMeta(it.packageName!!)))
+                            }
+                        )
+                    ).items.map { it.response }.map { item ->
+                        EnterpriseApp(
+                            item!!.meta!!.packageName!!,
+                            item.detail!!.name!!.displayName!!,
+                            App.State.NOT_INSTALLED,
+                            item.detail?.icon?.icon?.paint?.url,
+                            apps.find { it.packageName!! == item.meta!!.packageName }!!.policy!!,
+                        )
+                    }
+
+                    /*val details = client.post(
                         url = URL_BULK_DETAILS,
                         headers = headers,
                         adapter = GoogleApiResponse.ADAPTER,
@@ -108,16 +134,18 @@ class VendingActivity : ComponentActivity() {
                                 app.icon.lastOrNull()?.url,
                                 apps.find { it.packageName!! == app.packageName }!!.policy!!,
                             )
-                        }
+                        }*/
 
                     this@VendingActivity.apps.apply {
                         clear()
-                        details?.let { addAll(it) }
+                        addAll(details)
                     }
                     networkState = NetworkState.PASSIVE
                 } catch (e: IOException) {
                     networkState = NetworkState.ERROR
                 } catch (e: VolleyError) {
+                    networkState = NetworkState.ERROR
+                } catch (e: NullPointerException) {
                     networkState = NetworkState.ERROR
                 }
             }

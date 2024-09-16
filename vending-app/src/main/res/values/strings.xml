@@ -19,7 +19,7 @@
 
     <string name="vending_activity_name">Work app store</string>
     <string name="vending_overview_enterprise_row_mandatory">Installation required</string>
-    <string name="vending_overview_enterprise_row_mandatory_hint">Your administrator requires that you install these apps on your managed device.</string>
+    <string name="vending_overview_enterprise_row_mandatory_hint">Your administrator requires these apps to be installed on your managed device.</string>
     <string name="vending_overview_enterprise_row_mandatory_missing_hint">Your device is missing mandatory apps chosen by your administrator.</string>
     <string name="vending_overview_enterprise_row_offered">Available apps</string>
     <string name="vending_overview_enterprise_row_offered_hint">These are all the apps made available by your enterprise.</string>

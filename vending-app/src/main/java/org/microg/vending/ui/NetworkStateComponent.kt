@@ -30,9 +30,9 @@ fun NetworkStateComponent(networkState: NetworkState, retry: () -> Unit, content
 
         NetworkState.ERROR -> {
             Box(Modifier.fillMaxSize().padding(24.dp)) {
-                Column(Modifier.align(Alignment.Center)) {
+                Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(stringResource(R.string.error_network))
-                    Button(retry, Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp)) {
+                    Button(retry, Modifier.padding(top = 8.dp)) {
                         Text(stringResource(R.string.error_retry))
                     }
                 }
