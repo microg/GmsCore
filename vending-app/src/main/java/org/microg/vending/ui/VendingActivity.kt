@@ -34,15 +34,11 @@ import androidx.compose.ui.unit.dp
 import com.android.vending.R
 import com.android.vending.buildRequestHeaders
 import com.android.volley.VolleyError
-import com.google.android.finsky.BulkDetailsRequest
-import com.google.android.finsky.DetailsRequest
 import com.google.android.finsky.GoogleApiResponse
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.ui.TAG
 import org.microg.vending.billing.AuthManager
-import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_BULK_DETAILS
-import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CLIENT_POLICY
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
@@ -93,9 +89,11 @@ class VendingActivity : ComponentActivity() {
                         return@runBlocking
                     }
 
+                    Log.v(TAG, "app policy: ${apps.joinToString { "${it.packageName}: ${it.policy}" }}")
+
                     val details = client.post(
                         url = URL_ITEM_DETAILS,
-                        // TODO: meaning unclear, but returns 400 without. constant? possible has influence on which fields are returned?
+                        // TODO: meaning unclear, but returns 400 without. constant? possibly has influence on which fields are returned?
                         headers = headers.plus("x-dfe-item-field-mask" to "GgJGCCIKBgIAXASAAAAAAQ"),
                         adapter = GetItemsResponse.ADAPTER,
                         payload = GetItemsRequest(
@@ -108,33 +106,10 @@ class VendingActivity : ComponentActivity() {
                             item!!.meta!!.packageName!!,
                             item.detail!!.name!!.displayName!!,
                             App.State.NOT_INSTALLED,
-                            item.detail?.icon?.icon?.paint?.url,
+                            item.detail.icon?.icon?.paint?.url,
                             apps.find { it.packageName!! == item.meta!!.packageName }!!.policy!!,
                         )
                     }
-
-                    /*val details = client.post(
-                        url = URL_BULK_DETAILS,
-                        headers = headers,
-                        adapter = GoogleApiResponse.ADAPTER,
-                        payload = BulkDetailsRequest(
-                            apps.map {
-                                DetailsRequest(
-                                    packageName = it.packageName!!,
-                                    versionCode = 0,
-                                    unknown0 = 0
-                                )
-                            }
-                        )).response?.bulkDetailsResponse?.details?.mapNotNull { it.metadata }
-                        ?.filter { it.packageName != null && it.displayName != null }?.map { app ->
-                            EnterpriseApp(
-                                app.packageName!!,
-                                app.displayName!!,
-                                App.State.NOT_INSTALLED,
-                                app.icon.lastOrNull()?.url,
-                                apps.find { it.packageName!! == app.packageName }!!.policy!!,
-                            )
-                        }*/
 
                     this@VendingActivity.apps.apply {
                         clear()

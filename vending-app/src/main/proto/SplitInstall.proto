@@ -3,7 +3,6 @@ option java_package = "com.google.android.finsky";
 option java_multiple_files = true;
 
 import "EnterpriseClientPolicy.proto";
-import "BulkDetailsResponse.proto";
 
 message GoogleApiResponse {
     optional ApiResponse response = 1;
@@ -17,7 +16,6 @@ message UnknownType {
 
 message ApiResponse {
     optional TocResponse tocApi = 6;
-    optional BulkAppDetailsResponse bulkDetailsResponse = 19;
     optional SplitResponse splitReqResult = 21;
     optional EnterpriseClientPolicyResponse enterpriseClientPolicyResult = 135;
 //    optional SyncApiResp syncResult = 183;
