@@ -1,6 +1,8 @@
 syntax = "proto3";
 
 import "GetItemsRequest.proto";
+option java_package = "com.android.vending";
+option java_multiple_files = true;
 
 message GetItemsResponse {
     // technically this is a typical Google response containing the typical `GoogleApiResponse` fields,
@@ -41,7 +43,13 @@ message IconPaint {
 }
 
 message ItemOffer {
+    optional ItemVersion version = 2;
     optional ItemDelivery delivery = 28;
+}
+
+message ItemVersion {
+    optional int32 versionCode = 1;
+    optional int32 versionName = 2;
 }
 
 message ItemDelivery {

@@ -9,6 +9,7 @@ import static org.microg.gms.common.HttpFormClient.RequestContent;
 import static org.microg.gms.common.HttpFormClient.RequestHeader;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
@@ -17,6 +18,7 @@ import org.microg.gms.profile.Build;
 import org.microg.gms.profile.ProfileManager;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Locale;
 import java.util.Map;
 
@@ -127,8 +129,9 @@ public class AuthRequest extends HttpFormClient.Request {
     public AuthRequest fromContext(Context context) {
         build(context);
         locale(Utils.getLocale(context));
-        if (false) {
-            //androidIdHex = Long.toHexString(LastCheckinInfo.read(context).getAndroidId());
+        if (true) {
+            androidIdHex = new BigInteger(GServices.INSTANCE.getString(context.getContentResolver(), "android_id", "0")).toString(16);
+            Log.d("gsf", androidIdHex);
         }
         if (false) {
             deviceName = "";

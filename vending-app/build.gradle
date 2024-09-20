@@ -91,6 +91,7 @@ dependencies {
     implementation project(':fake-signature')
     implementation project(':play-services-auth')
     implementation project(':play-services-base-core')
+    implementation project(':play-services-core-proto')
 
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "com.squareup.wire:wire-grpc-client:$wireVersion"

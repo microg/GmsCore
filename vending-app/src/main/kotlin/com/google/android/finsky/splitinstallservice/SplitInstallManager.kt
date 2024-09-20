@@ -38,6 +38,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.microg.vending.billing.DEFAULT_ACCOUNT_TYPE
+import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DELIVERY
 import org.microg.vending.billing.core.HttpClient
 import java.io.File
 import java.io.FileInputStream
@@ -180,7 +181,7 @@ class SplitInstallManager(val context: Context) {
     private suspend fun requestDownloadUrls(callingPackage: String, authToken: String, packs: MutableSet<String>): ArraySet<Triple<String, String, Int>> {
         val versionCode = PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(callingPackage, 0))
         val requestUrl =
-            StringBuilder("https://play-fe.googleapis.com/fdfe/delivery?doc=$callingPackage&ot=1&vc=$versionCode&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&da=4&bda=4&bf=4&fdcf=1&fdcf=2&ch=")
+            StringBuilder("$URL_DELIVERY?doc=$callingPackage&ot=1&vc=$versionCode&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&da=4&bda=4&bf=4&fdcf=1&fdcf=2&ch=")
         packs.forEach { requestUrl.append("&mn=").append(it) }
         Log.d(TAG, "requestDownloadUrls start")
         val languages = packs.filter { it.startsWith(SPLIT_LANGUAGE_TAG) }.map { it.replace(SPLIT_LANGUAGE_TAG, "") }

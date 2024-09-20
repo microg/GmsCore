@@ -2,13 +2,19 @@ package org.microg.vending.enterprise
 
 open class App(
     val packageName: String,
+    val versionCode: Int?,
     val displayName: String,
     val state: State,
-    val iconUrl: String?
+    val iconUrl: String?,
+    val deliveryToken: String?
 ) {
     enum class State {
         /**
-         * App is available, but not installed on the user's device.
+         * App cannot be installed on this user's device
+         */
+        NOT_COMPATIBLE,
+        /**
+        * App is available, but not installed on the user's device.
          */
         NOT_INSTALLED,
         /**

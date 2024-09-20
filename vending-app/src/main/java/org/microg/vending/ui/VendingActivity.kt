@@ -1,45 +1,46 @@
 package org.microg.vending.ui
 
-import AppMeta
-import GetItemsRequest
-import GetItemsResponse
-import RequestApp
-import RequestItem
+import android.accounts.Account
 import android.accounts.AccountManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import com.android.vending.R
+import com.android.vending.AppMeta
+import com.android.vending.GetItemsRequest
+import com.android.vending.GetItemsResponse
+import com.android.vending.RequestApp
+import com.android.vending.RequestItem
 import com.android.vending.buildRequestHeaders
 import com.android.volley.VolleyError
 import com.google.android.finsky.GoogleApiResponse
+import com.google.android.finsky.splitinstallservice.SplitInstallManager
 import kotlinx.coroutines.runBlocking
+import org.microg.gms.common.DeviceConfiguration
+import org.microg.gms.common.asProto
+import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.ui.TAG
+import org.microg.vending.UploadDeviceConfigRequest
 import org.microg.vending.billing.AuthManager
+import org.microg.vending.billing.core.AuthData
+import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DELIVERY
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CLIENT_POLICY
+import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_FDFE
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
@@ -49,25 +50,72 @@ import org.microg.vending.ui.components.EnterpriseList
 import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
 
-
+@RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
 class VendingActivity : ComponentActivity() {
 
     var apps: MutableList<EnterpriseApp> = mutableStateListOf()
     var networkState by mutableStateOf(NetworkState.ACTIVE)
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    var auth: AuthData? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         ProfileManager.ensureInitialized(this)
 
-        val am = AccountManager.get(this)
-        val account = am.getAccountsByType("com.google.work").first()!!
+        val accountManager = AccountManager.get(this)
+        val accounts = accountManager.getAccountsByType("com.google.work")
+        if (accounts.isEmpty()) {
+            TODO("App should only be visible if work accounts are added. Disable component and wonder why it was enabled in the first place")
+        } else if (accounts.size > 1) {
+            Log.w(TAG, "Multiple work accounts found. This is unexpected and could point " +
+                    "towards misuse of the work account service API by the DPC.")
+        }
+        val account = accounts.first()
+
+        load(account)
+
+        val install: (app: EnterpriseApp) -> Unit = { app ->
+            Toast.makeText(this, "installing ${app.displayName} / ${app.packageName}", Toast.LENGTH_SHORT).show()
+            Thread {
+                runBlocking {
+                    // Get download links for requested package
+                    val res = HttpClient(this@VendingActivity).get(
+                        url = URL_DELIVERY,
+                        headers = buildRequestHeaders(auth!!.authToken, auth!!.gsfId.toLong(16)),
+                        params = mapOf(
+                            "ot" to "1",
+                            "doc" to app.packageName,
+                            "vc" to app.versionCode!!.toString()
+                        ).plus(app.deliveryToken?.let { listOf("dtok" to it) } ?: emptyList()),
+                        adapter = GoogleApiResponse.ADAPTER
+                    )
+
+                    Log.d(TAG, res.toString())
+                    // TODO: install
+                    //SplitInstallManager(this@VendingActivity).startInstall(app.packageName, emptyList(), app.deliveryToken)
+                }
+            }.start()
+        }
+
+        val uninstall: (app: EnterpriseApp) -> Unit = {
+            TODO("uninstallation not yet implemented")
+        }
+
+        setContent {
+            VendingUi(account, install, uninstall)
+        }
+    }
+
+    private fun load(account: Account) {
+        networkState = NetworkState.ACTIVE
         Thread {
             runBlocking {
                 try {
-                    val authData = AuthManager.getAuthData(this@VendingActivity, account)
+                    // Authenticate
+                    auth = AuthManager.getAuthData(this@VendingActivity, account)
+                    val authData = auth
                     val deviceInfo = createDeviceEnvInfo(this@VendingActivity)
                     if (deviceInfo == null || authData == null) {
                         Log.e(TAG, "Unable to open play store when deviceInfo = $deviceInfo and authData = $authData")
@@ -78,6 +126,20 @@ class VendingActivity : ComponentActivity() {
                     val headers = buildRequestHeaders(authData.authToken, authData.gsfId.toLong(16))
                     val client = HttpClient(this@VendingActivity)
 
+                    // Register device for server-side compatibility checking
+                    val upload = client.post(
+                        url = "$URL_FDFE/uploadDeviceConfig",
+                        headers = headers.minus("X-PS-RH"),
+                        payload = UploadDeviceConfigRequest(
+                            DeviceConfiguration(this@VendingActivity).asProto(),
+                            manufacturer = Build.MANUFACTURER,
+                            //gcmRegistrationId = TODO: looks like remote-triggered app downloads may be announced through GCM?
+                        ),
+                        adapter = GoogleApiResponse.ADAPTER
+                    )
+                    Log.d(TAG, "uploaddc: ${upload.response!!.uploadDeviceConfigResponse}")
+
+                    // Fetch list of apps available to the scoped enterprise account
                     val apps = client.post(
                         url = URL_ENTERPRISE_CLIENT_POLICY,
                         headers = headers.plus("content-type" to "application/x-protobuf"),
@@ -92,24 +154,29 @@ class VendingActivity : ComponentActivity() {
 
                     Log.v(TAG, "app policy: ${apps.joinToString { "${it.packageName}: ${it.policy}" }}")
 
+                    // Fetch details about all available apps
                     val details = client.post(
                         url = URL_ITEM_DETAILS,
                         // TODO: meaning unclear, but returns 400 without. constant? possibly has influence on which fields are returned?
-                        headers = headers.plus("x-dfe-item-field-mask" to "GgJGCCIKBgIAXASAAAAAAQ"),
+                        headers = headers.plus("x-dfe-item-field-mask" to "GgWGHay3ByILPP/Avy+4A4YlCRM"),
                         adapter = GetItemsResponse.ADAPTER,
                         payload = GetItemsRequest(
                             apps.map {
-                                RequestItem(RequestApp(AppMeta(it.packageName!!)))
+                                RequestItem(RequestApp(AppMeta(it.packageName)))
                             }
                         )
                     ).items.map { it.response }.map { item ->
                         EnterpriseApp(
                             item!!.meta!!.packageName!!,
+                            item.offer?.version?.versionCode,
                             item.detail!!.name!!.displayName!!,
-                            App.State.NOT_INSTALLED,
+                            if (item.offer?.delivery == null) App.State.NOT_COMPATIBLE else App.State.NOT_INSTALLED,
                             item.detail.icon?.icon?.paint?.url,
+                            item.offer?.delivery?.key,
                             apps.find { it.packageName!! == item.meta!!.packageName }!!.policy!!,
                         )
+                    }.onEach {
+                        Log.v(TAG, "${it.packageName} delivery token: ${it.deliveryToken ?: "none acquired"}")
                     }
 
                     this@VendingActivity.apps.apply {
@@ -119,49 +186,41 @@ class VendingActivity : ComponentActivity() {
                     networkState = NetworkState.PASSIVE
                 } catch (e: IOException) {
                     networkState = NetworkState.ERROR
+                    Log.e(TAG, "Network error: ${e.message}")
+                    e.printStackTrace()
                 } catch (e: VolleyError) {
                     networkState = NetworkState.ERROR
+                    Log.e(TAG, "Network error: ${e.message}")
+                    e.printStackTrace()
                 } catch (e: NullPointerException) {
                     networkState = NetworkState.ERROR
+                    Log.e(TAG, "Unexpected network response, cannot process")
+                    e.printStackTrace()
                 }
             }
         }.start()
 
-        setContent {
-            MaterialTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Row {
-                                    Icon(
-                                        painterResource(R.drawable.ic_work),
-                                        contentDescription = null,
-                                        Modifier.align(Alignment.CenterVertically),
-                                        tint = LocalContentColor.current
-                                    )
-                                    Text(stringResource(R.string.vending_activity_name),
-                                        Modifier
-                                            .align(Alignment.CenterVertically)
-                                            .padding(start = 8.dp)
-                                    )
-                                }
-                            },
-                            colors = TopAppBarDefaults.smallTopAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                titleContentColor = MaterialTheme.colorScheme.primary
-                            )
-                        )
-                    }
-                ) { innerPadding ->
-                    Column(Modifier.padding(innerPadding)) {
-                        NetworkState(networkState, { TODO("reload") }) {
-                            EnterpriseList(apps)
-                        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun VendingUi(
+        account: Account,
+        install: (app: EnterpriseApp) -> Unit,
+        uninstall: (app: EnterpriseApp) -> Unit
+    ) {
+        MaterialTheme {
+            Scaffold(
+                topBar = {
+                    WorkVendingTopAppBar()
+                }
+            ) { innerPadding ->
+                Column(Modifier.padding(innerPadding)) {
+                    NetworkState(networkState, { load(account) }) {
+                        EnterpriseList(apps, install, uninstall)
                     }
                 }
             }
         }
-
     }
 }
