@@ -30,7 +30,12 @@ import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.R
 import com.android.vending.buildRequestHeaders
 import com.android.vending.getAuthToken
+import com.android.vending.installer.KEY_BYTES_DOWNLOADED
+import com.android.vending.installer.installPackages
+import com.android.vending.installer.packageDownloadLocation
 import com.google.android.finsky.GoogleApiResponse
+import com.google.android.finsky.splitinstallservice.SplitInstallManager.Companion.deferredMap
+import com.google.android.finsky.splitinstallservice.SplitInstallManager.InstallResultReceiver
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -53,7 +58,6 @@ private const val NOTIFY_CHANNEL_NAME = "Split Install"
 private const val KEY_LANGUAGE = "language"
 private const val KEY_LANGUAGES = "languages"
 private const val KEY_MODULE_NAME = "module_name"
-private const val KEY_BYTES_DOWNLOADED = "bytes_downloaded"
 private const val KEY_TOTAL_BYTES_TO_DOWNLOAD = "total_bytes_to_download"
 private const val KEY_STATUS = "status"
 private const val KEY_ERROR_CODE = "error_code"
@@ -62,7 +66,6 @@ private const val KEY_SESSION_STATE = "session_state"
 
 private const val ACTION_UPDATE_SERVICE = "com.google.android.play.core.splitinstall.receiver.SplitInstallUpdateIntentService"
 
-private const val FILE_SAVE_PATH = "phonesky-download-service"
 private const val TAG = "SplitInstallManager"
 
 class SplitInstallManager(val context: Context) {
@@ -107,7 +110,6 @@ class SplitInstallManager(val context: Context) {
     }
 
     internal suspend fun downloadAndInstall(forPackage: String, downloadList: List<PackageComponent>, isUpdate: Boolean = false): Intent? {
-        if (!context.splitSaveFile().exists()) context.splitSaveFile().mkdir()
         val packageFiles = downloadPackageComponents(context, downloadList)
         val installFiles = packageFiles.map {
             if (it.value == null) {
@@ -118,7 +120,7 @@ class SplitInstallManager(val context: Context) {
         Log.v(TAG, "splitInstallFlow downloaded success, downloaded ${installFiles.size} files")
 
         return runCatching {
-            installPackages(context, forPackage, installFiles, isUpdate)
+            installPackages(context, forPackage, installFiles, isUpdate, deferredMap)
         }.getOrNull()
 
     }
@@ -172,7 +174,7 @@ class SplitInstallManager(val context: Context) {
             Log.d(TAG, "downloadSplitPackage: $info")
             async {
                 info to runCatching {
-                    val file = File(context.splitSaveFile().toString(), info.componentName)
+                    val file = File(context.packageDownloadLocation().toString(), info.componentName)
                     httpClient.download(
                         url = info.url,
                         downloadFile = file,
@@ -186,64 +188,6 @@ class SplitInstallManager(val context: Context) {
                 }.getOrNull()
             }
         }.awaitAll().associate { it }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    internal suspend fun installPackages(context: Context, callingPackage: String, componentFiles: List<File>, isUpdate: Boolean = false): Intent {
-        Log.v(TAG, "installPackages start")
-
-        val packageInstaller = context.packageManager.packageInstaller
-        val installed = context.packageManager.getInstalledPackages(0).any {
-            it.applicationInfo.packageName == callingPackage
-        }
-        // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
-        val params = SessionParams(
-            if (!installed || isUpdate) SessionParams.MODE_FULL_INSTALL
-            else SessionParams.MODE_INHERIT_EXISTING
-        )
-        params.setAppPackageName(callingPackage)
-        params.setAppLabel(callingPackage + "Subcontracting")
-        params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
-        params.setRequireUserAction(SessionParams.USER_ACTION_NOT_REQUIRED)
-        try {
-            @SuppressLint("PrivateApi") val method = SessionParams::class.java.getDeclaredMethod(
-                "setDontKillApp", Boolean::class.javaPrimitiveType
-            )
-            method.invoke(params, true)
-        } catch (e: Exception) {
-            Log.w(TAG, "Error setting dontKillApp", e)
-        }
-        val sessionId: Int
-        var session: PackageInstaller.Session? = null
-        var totalDownloaded = 0L
-        try {
-            sessionId = packageInstaller.createSession(params)
-            session = packageInstaller.openSession(sessionId)
-            componentFiles.forEach { file ->
-                val pkgPath = File(context.splitSaveFile(), file.name)
-                session.openWrite(file.name, 0, -1).use { outputStream ->
-                    FileInputStream(pkgPath).use { inputStream -> inputStream.copyTo(outputStream) }
-                    session.fsync(outputStream)
-                }
-                totalDownloaded += pkgPath.length()
-                pkgPath.delete()
-            }
-            val deferred = CompletableDeferred<Intent>()
-            deferredMap[sessionId] = deferred
-            val intent = Intent(context, InstallResultReceiver::class.java).apply {
-                putExtra(KEY_BYTES_DOWNLOADED, totalDownloaded)
-            }
-            val pendingIntent = PendingIntent.getBroadcast(context, sessionId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
-            session.commit(pendingIntent.intentSender)
-            Log.d(TAG, "installPackages session commit")
-            return deferred.await()
-        } catch (e: IOException) {
-            Log.w(TAG, "Error installing packages", e)
-            throw e
-        } finally {
-            session?.close()
-        }
     }
 
     // TODO: use existing code
@@ -308,7 +252,6 @@ class SplitInstallManager(val context: Context) {
             }
     }
 
-    private fun Context.splitSaveFile() = File(filesDir, FILE_SAVE_PATH)
 
     private fun sendCompleteBroad(context: Context, packageName: String, intent: Intent) {
         Log.d(TAG, "sendCompleteBroadcast: intent:$intent")

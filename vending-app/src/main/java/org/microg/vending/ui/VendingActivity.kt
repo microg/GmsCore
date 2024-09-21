@@ -31,7 +31,7 @@ import com.google.android.finsky.GoogleApiResponse
 import com.google.android.finsky.splitinstallservice.DownloadStatus
 import com.google.android.finsky.splitinstallservice.PackageComponent
 import com.google.android.finsky.splitinstallservice.SplitInstallManager
-import com.google.android.finsky.splitinstallservice.uninstallPackage
+import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.DeviceConfiguration
 import org.microg.gms.common.asProto

@@ -1,4 +1,4 @@
-package com.google.android.finsky.splitinstallservice
+package com.android.vending.installer
 
 import android.app.PendingIntent
 import android.content.Context
