@@ -29,6 +29,7 @@ import com.android.vending.buildRequestHeaders
 import com.android.volley.VolleyError
 import com.google.android.finsky.GoogleApiResponse
 import com.google.android.finsky.splitinstallservice.SplitInstallManager
+import com.google.android.finsky.splitinstallservice.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.DeviceConfiguration
 import org.microg.gms.common.asProto
@@ -112,7 +113,7 @@ class VendingActivity : ComponentActivity() {
         }
 
         val uninstall: (app: EnterpriseApp) -> Unit = {
-            TODO("uninstallation not yet implemented")
+            uninstallPackage(it.packageName)
         }
 
         setContent {
