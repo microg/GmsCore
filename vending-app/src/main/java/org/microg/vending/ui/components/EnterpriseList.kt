@@ -30,20 +30,20 @@ import org.microg.vending.enterprise.EnterpriseApp
 
 
 @Composable
-fun EnterpriseList(apps: List<EnterpriseApp>, install: (app: EnterpriseApp) -> Unit, uninstall: (app: EnterpriseApp) -> Unit) {
+fun EnterpriseList(apps: List<EnterpriseApp>, install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit, uninstall: (app: EnterpriseApp) -> Unit) {
     if (apps.isNotEmpty()) LazyColumn(Modifier.padding(horizontal = 16.dp)) {
 
         val requiredApps = apps.filter { it.policy == AppInstallPolicy.MANDATORY }
         if (requiredApps.isNotEmpty()) {
             item { InListHeading(R.string.vending_overview_enterprise_row_mandatory) }
             item { InListWarning(R.string.vending_overview_enterprise_row_mandatory_hint) }
-            items(requiredApps) { AppRow(it, { install(it) }, { uninstall(it) }) }
+            items(requiredApps) { AppRow(it, { install(it, false) }, { install(it, true) }, { uninstall(it) }) }
         }
 
         val optionalApps = apps.filter { it.policy == AppInstallPolicy.OPTIONAL }
         if (optionalApps.isNotEmpty()) {
             item { InListHeading(R.string.vending_overview_enterprise_row_offered) }
-            items(optionalApps) { AppRow(it, { install(it) }, { uninstall(it) }) }
+            items(optionalApps) { AppRow(it, { install(it, false) }, { install(it, true) }, { uninstall(it) }) }
         }
 
     } else Box(
@@ -103,12 +103,12 @@ fun EnterpriseListPreview() {
             EnterpriseApp("com.android.vending", 0, "Market", App.State.INSTALLED, null, "", AppInstallPolicy.MANDATORY),
             EnterpriseApp("org.mozilla.firefox", 0, "Firefox", App.State.NOT_INSTALLED, null, "", AppInstallPolicy.OPTIONAL),
             EnterpriseApp("org.thoughtcrime.securesms", 0, "Signal", App.State.NOT_COMPATIBLE, null, "", AppInstallPolicy.OPTIONAL)
-        ), {}, {}
+        ), { _, _ -> }, {}
     )
 }
 
 @Preview
 @Composable
 fun EnterpriseListEmptyPreview() {
-    EnterpriseList(emptyList(), {}, {})
+    EnterpriseList(emptyList(), { _, _ -> }, {})
 }

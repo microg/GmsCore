@@ -76,7 +76,7 @@ class VendingActivity : ComponentActivity() {
 
         load(account)
 
-        val install: (app: EnterpriseApp) -> Unit = { app ->
+        val install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit = { app, isUpdate ->
             Toast.makeText(this, "installing ${app.displayName} / ${app.packageName}", Toast.LENGTH_SHORT).show()
             Thread {
                 runBlocking {
@@ -93,8 +93,20 @@ class VendingActivity : ComponentActivity() {
                     )
 
                     Log.d(TAG, res.toString())
-                    // TODO: install
-                    //SplitInstallManager(this@VendingActivity).startInstall(app.packageName, emptyList(), app.deliveryToken)
+                    val triples = setOf(Triple("base", res.response!!.splitReqResult!!.pkgList!!.baseUrl!!, 0)) +
+                            res.response!!.splitReqResult!!.pkgList!!.pkgDownLoadInfo!!.map {
+                                Triple(it.splitPkgName!!, it.downloadUrl!!, 0)
+                            }
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        SplitInstallManager(this@VendingActivity).apply {
+                            triples.forEach { updateSplitInstallRecord(app.packageName, it) }
+                            notify(this@VendingActivity)
+                            installSplitPackage(this@VendingActivity, app.packageName, triples, isUpdate)
+                        }
+                    } else {
+                        TODO("implement installation on Lollipop devices")
+                    }
                 }
             }.start()
         }
@@ -165,15 +177,32 @@ class VendingActivity : ComponentActivity() {
                                 RequestItem(RequestApp(AppMeta(it.packageName)))
                             }
                         )
-                    ).items.map { it.response }.map { item ->
+                    ).items.map { it.response }.filterNotNull().map { item ->
+                        val packageName = item.meta!!.packageName!!
+                        val installedDetails = this@VendingActivity.packageManager.getInstalledPackages(0).find {
+                            it.applicationInfo.packageName == packageName
+                        }
+
+                        val available = item.offer?.delivery != null
+
+                        val versionCode = if (available) {
+                            item.offer!!.version!!.versionCode!!
+                        } else null
+
+                        val state = if (!available && installedDetails == null) App.State.NOT_COMPATIBLE
+                        else if (!available && installedDetails != null) App.State.INSTALLED
+                        else if (available && installedDetails == null) App.State.NOT_INSTALLED
+                        else if (available && installedDetails != null && installedDetails.versionCode > versionCode!!) App.State.UPDATE_AVAILABLE
+                        else /* if (available && installedDetails != null) */ App.State.INSTALLED
+
                         EnterpriseApp(
-                            item!!.meta!!.packageName!!,
-                            item.offer?.version?.versionCode,
+                            packageName,
+                            versionCode,
                             item.detail!!.name!!.displayName!!,
-                            if (item.offer?.delivery == null) App.State.NOT_COMPATIBLE else App.State.NOT_INSTALLED,
+                            state,
                             item.detail.icon?.icon?.paint?.url,
                             item.offer?.delivery?.key,
-                            apps.find { it.packageName!! == item.meta!!.packageName }!!.policy!!,
+                            apps.find { it.packageName!! == item.meta.packageName }!!.policy!!,
                         )
                     }.onEach {
                         Log.v(TAG, "${it.packageName} delivery token: ${it.deliveryToken ?: "none acquired"}")
@@ -206,7 +235,7 @@ class VendingActivity : ComponentActivity() {
     @Composable
     fun VendingUi(
         account: Account,
-        install: (app: EnterpriseApp) -> Unit,
+        install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit,
         uninstall: (app: EnterpriseApp) -> Unit
     ) {
         MaterialTheme {

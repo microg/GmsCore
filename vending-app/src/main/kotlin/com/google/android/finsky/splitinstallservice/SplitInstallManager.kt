@@ -105,7 +105,7 @@ class SplitInstallManager(val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private suspend fun installSplitPackage(context: Context, callingPackage: String, downloadList: ArraySet<Triple<String, String, Int>>): Intent {
+    internal suspend fun installSplitPackage(context: Context, callingPackage: String, downloadList: Set<Triple<String, String, Int>>, isUpdate: Boolean = false): Intent {
         Log.d(TAG, "installSplitPackage start ")
         if (!context.splitSaveFile().exists()) context.splitSaveFile().mkdir()
         val downloadSplitPackage = downloadSplitPackage(context, callingPackage, downloadList)
@@ -116,7 +116,14 @@ class SplitInstallManager(val context: Context) {
         Log.d(TAG, "installSplitPackage downloaded success")
 
         val packageInstaller = context.packageManager.packageInstaller
-        val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_INHERIT_EXISTING)
+        val installed = context.packageManager.getInstalledPackages(0).any {
+            it.applicationInfo.packageName == callingPackage
+        }
+        // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
+        val params = PackageInstaller.SessionParams(
+            if (!installed || isUpdate) PackageInstaller.SessionParams.MODE_FULL_INSTALL
+            else PackageInstaller.SessionParams.MODE_INHERIT_EXISTING
+        )
         params.setAppPackageName(callingPackage)
         params.setAppLabel(callingPackage + "Subcontracting")
         params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
@@ -161,7 +168,7 @@ class SplitInstallManager(val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private suspend fun downloadSplitPackage(context: Context, callingPackage: String, downloadList: ArraySet<Triple<String, String, Int>>): Boolean =
+    private suspend fun downloadSplitPackage(context: Context, callingPackage: String, downloadList: Set<Triple<String, String, Int>>): Boolean =
         coroutineScope {
             val results = downloadList.map { info ->
                 Log.d(TAG, "downloadSplitPackage: $info")
@@ -234,7 +241,7 @@ class SplitInstallManager(val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun updateSplitInstallRecord(callingPackage: String, triple: Triple<String, String, Int>) {
+    internal fun updateSplitInstallRecord(callingPackage: String, triple: Triple<String, String, Int>) {
         splitInstallRecord[callingPackage]?.let { triples ->
             val find = triples.find { it.first == triple.first }
             find?.let { triples.remove(it) }
@@ -246,7 +253,7 @@ class SplitInstallManager(val context: Context) {
         }
     }
 
-    private fun notify(context: Context) {
+    internal fun notify(context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager.createNotificationChannel(

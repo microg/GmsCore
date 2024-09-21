@@ -26,7 +26,7 @@ import com.android.vending.R
 import org.microg.vending.enterprise.App
 
 @Composable
-fun AppRow(app: App, install: () -> Unit, uninstall: () -> Unit) {
+fun AppRow(app: App, install: () -> Unit, update: () -> Unit, uninstall: () -> Unit) {
     Row(
         Modifier.padding(top = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
@@ -55,7 +55,7 @@ fun AppRow(app: App, install: () -> Unit, uninstall: () -> Unit) {
             }
         }
         if (app.state == App.State.UPDATE_AVAILABLE) {
-            FilledIconButton(install, colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+            FilledIconButton(update, colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Icon(painterResource(R.drawable.ic_update), stringResource(R.string.vending_overview_row_action_update), tint = MaterialTheme.colorScheme.secondary)
             }
         }
@@ -69,24 +69,24 @@ fun AppRow(app: App, install: () -> Unit, uninstall: () -> Unit) {
 @Preview
 @Composable
 fun AppRowNotCompatiblePreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.NOT_COMPATIBLE, null, null), {}, {})
+    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.NOT_COMPATIBLE, null, null), {}, {}, {})
 }
 
 @Preview
 @Composable
 fun AppRowNotInstalledPreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.NOT_INSTALLED, null, ""), {}, {})
+    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.NOT_INSTALLED, null, ""), {}, {}, {})
 }
 
 @Preview
 @Composable
 fun AppRowUpdateablePreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.UPDATE_AVAILABLE, null, ""), {}, {})
+    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.UPDATE_AVAILABLE, null, ""), {}, {}, {})
 }
 
 @Preview
 @Composable
 fun AppRowInstalledPreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.INSTALLED, null, ""), {}, {})
+    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.INSTALLED, null, ""), {}, {}, {})
 }
 
