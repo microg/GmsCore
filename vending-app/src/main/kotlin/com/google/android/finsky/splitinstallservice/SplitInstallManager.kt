@@ -16,12 +16,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageInstaller
+import android.content.pm.PackageInstaller.SessionParams
+import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.os.Bundle
-import android.util.ArraySet
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.collection.arraySetOf
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -69,62 +69,144 @@ class SplitInstallManager(val context: Context) {
 
     private var httpClient: HttpClient = HttpClient(context)
 
-    suspend fun startInstall(callingPackage: String, splits: List<Bundle>): Boolean {
+    suspend fun splitInstallFlow(callingPackage: String, splits: List<Bundle>): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
 //        val callingPackage = runCatching { PackageUtils.getAndCheckCallingPackage(context, packageName) }.getOrNull() ?: return
         if (splits.all { it.getString(KEY_LANGUAGE) == null && it.getString(KEY_MODULE_NAME) == null }) return false
-        Log.d(TAG, "startInstall: start")
-        val needInstallSplitPack = arraySetOf<String>()
-        for (split in splits) {
-            val splitName = split.getString(KEY_LANGUAGE)?.let { "$SPLIT_LANGUAGE_TAG$it" } ?: split.getString(KEY_MODULE_NAME) ?: continue
-            val splitInstalled = checkSplitInstalled(callingPackage, splitName)
-            if (splitInstalled) continue
-            needInstallSplitPack.add(splitName)
-        }
-        Log.d(TAG, "startInstall needInstallSplitPack: $needInstallSplitPack")
-        if (needInstallSplitPack.isEmpty()) return false
-        val oauthToken = runCatching { withContext(Dispatchers.IO) { getOauthToken() } }.getOrNull()
-        Log.d(TAG, "startInstall oauthToken: $oauthToken")
+        Log.v(TAG, "splitInstallFlow: start")
+
+        val packagesToDownload = splits.mapNotNull { split ->
+            split.getString(KEY_LANGUAGE)?.let { "$SPLIT_LANGUAGE_TAG$it" }
+                ?: split.getString(KEY_MODULE_NAME)
+        }.filter { shouldDownload(callingPackage, it) }
+
+        Log.v(TAG, "splitInstallFlow will query for these packages: $packagesToDownload")
+        if (packagesToDownload.isEmpty()) return false
+
+        val oauthToken = runCatching { withContext(Dispatchers.IO) {
+            getOauthToken()
+        } }.getOrNull()
+        Log.v(TAG, "splitInstallFlow oauthToken: $oauthToken")
         if (oauthToken.isNullOrEmpty()) return false
-        notify(context)
-        val components = runCatching { requestDownloadUrls(callingPackage, oauthToken, needInstallSplitPack) }.getOrNull()
-        Log.w(TAG, "startInstall requestDownloadUrls triples: $components")
+
+        notify(callingPackage)
+
+        val components = runCatching { requestDownloadUrls(callingPackage, oauthToken, packagesToDownload) }.getOrNull()
+        Log.v(TAG, "splitInstallFlow requestDownloadUrls returned these components: $components")
         if (components.isNullOrEmpty()) {
             NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
             return false
         }
-        val intent = runCatching { installSplitPackage(context, callingPackage, components) }.getOrNull()
+
+        val intent = downloadAndInstall(callingPackage, components)
+
         NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
         if (intent == null) { return false }
         sendCompleteBroad(context, callingPackage, intent)
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    internal suspend fun installSplitPackage(context: Context, callingPackage: String, downloadList: List<PackageComponent>, isUpdate: Boolean = false): Intent {
-        Log.d(TAG, "installSplitPackage start ")
+    internal suspend fun downloadAndInstall(forPackage: String, downloadList: List<PackageComponent>, isUpdate: Boolean = false): Intent? {
         if (!context.splitSaveFile().exists()) context.splitSaveFile().mkdir()
-        val downloadSplitPackage = downloadSplitPackage(context, downloadList)
-        if (!downloadSplitPackage) {
-            Log.w(TAG, "installSplitPackage download failed")
-            throw RuntimeException("installSplitPackage downloadSplitPackage has error")
+        val packageFiles = downloadPackageComponents(context, downloadList)
+        val installFiles = packageFiles.map {
+            if (it.value == null) {
+                Log.w(TAG, "splitInstallFlow download failed, as ${it.key} was not downloaded")
+                throw RuntimeException("installSplitPackage downloadSplitPackage has error")
+            } else it.value!!
         }
-        Log.d(TAG, "installSplitPackage downloaded success")
+        Log.v(TAG, "splitInstallFlow downloaded success, downloaded ${installFiles.size} files")
+
+        return runCatching {
+            installPackages(context, forPackage, installFiles, isUpdate)
+        }.getOrNull()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private suspend fun requestDownloadUrls(callingPackage: String, authToken: String, requestSplitPackages: List<String>): List<PackageComponent> {
+        val versionCode = PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(callingPackage, 0))
+        val requestUrl =
+            StringBuilder("$URL_DELIVERY?doc=$callingPackage&ot=1&vc=$versionCode&bvc=$versionCode" +
+                    "&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&da=4&bda=4&bf=4&fdcf=1&fdcf=2&ch=")
+        requestSplitPackages.forEach { requestUrl.append("&mn=").append(it) }
+
+        Log.v(TAG, "requestDownloadUrls start")
+        val languages = requestSplitPackages.filter { it.startsWith(SPLIT_LANGUAGE_TAG) }.map { it.replace(SPLIT_LANGUAGE_TAG, "") }
+        Log.d(TAG, "requestDownloadUrls languages: $languages")
+
+        val response = httpClient.get(
+            url = requestUrl.toString(),
+            headers = buildRequestHeaders(authToken, 1, languages).onEach { Log.d(TAG, "key:${it.key}  value:${it.value}") },
+            adapter = GoogleApiResponse.ADAPTER
+        )
+        Log.d(TAG, "requestDownloadUrls end response -> $response")
+
+        val splitPackageResponses = response.response!!.splitReqResult!!.pkgList!!.pkgDownLoadInfo.filter {
+            !it.splitPkgName.isNullOrEmpty() && !it.downloadUrl.isNullOrEmpty()
+        }
+
+        val components: List<PackageComponent> = splitPackageResponses.mapNotNull { info ->
+            requestSplitPackages.firstOrNull {
+                it.contains(info.splitPkgName!!)
+            }?.let {
+                PackageComponent(callingPackage, it, info.downloadUrl!!)
+            }
+        }
+
+        Log.d(TAG, "requestDownloadUrls end -> $components")
+
+        components.forEach {
+            splitInstallRecord[it] = DownloadStatus.PENDING
+        }
+
+        return components
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private suspend fun downloadPackageComponents(
+        context: Context,
+        downloadList: List<PackageComponent>
+    ): Map<PackageComponent, File?> = coroutineScope {
+        downloadList.map { info ->
+            Log.d(TAG, "downloadSplitPackage: $info")
+            async {
+                info to runCatching {
+                    val file = File(context.splitSaveFile().toString(), info.componentName)
+                    httpClient.download(
+                        url = info.url,
+                        downloadFile = file,
+                        tag = SPLIT_INSTALL_REQUEST_TAG
+                    )
+                    file
+                }.onFailure {
+                    Log.w(TAG, "downloadSplitPackage failed to downlaod from url:${info.url} to be saved as `${info.componentName}`", it)
+                }.also {
+                    splitInstallRecord[info] = if (it.isSuccess) DownloadStatus.COMPLETE else DownloadStatus.FAILED
+                }.getOrNull()
+            }
+        }.awaitAll().associate { it }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    internal suspend fun installPackages(context: Context, callingPackage: String, componentFiles: List<File>, isUpdate: Boolean = false): Intent {
+        Log.v(TAG, "installPackages start")
 
         val packageInstaller = context.packageManager.packageInstaller
         val installed = context.packageManager.getInstalledPackages(0).any {
             it.applicationInfo.packageName == callingPackage
         }
         // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
-        val params = PackageInstaller.SessionParams(
-            if (!installed || isUpdate) PackageInstaller.SessionParams.MODE_FULL_INSTALL
-            else PackageInstaller.SessionParams.MODE_INHERIT_EXISTING
+        val params = SessionParams(
+            if (!installed || isUpdate) SessionParams.MODE_FULL_INSTALL
+            else SessionParams.MODE_INHERIT_EXISTING
         )
         params.setAppPackageName(callingPackage)
         params.setAppLabel(callingPackage + "Subcontracting")
         params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
+        params.setRequireUserAction(SessionParams.USER_ACTION_NOT_REQUIRED)
         try {
-            @SuppressLint("PrivateApi") val method = PackageInstaller.SessionParams::class.java.getDeclaredMethod(
+            @SuppressLint("PrivateApi") val method = SessionParams::class.java.getDeclaredMethod(
                 "setDontKillApp", Boolean::class.javaPrimitiveType
             )
             method.invoke(params, true)
@@ -137,9 +219,9 @@ class SplitInstallManager(val context: Context) {
         try {
             sessionId = packageInstaller.createSession(params)
             session = packageInstaller.openSession(sessionId)
-            downloadList.forEach { item ->
-                val pkgPath = File(context.splitSaveFile().toString(), item.componentName)
-                session.openWrite(item.componentName, 0, -1).use { outputStream ->
+            componentFiles.forEach { file ->
+                val pkgPath = File(context.splitSaveFile(), file.name)
+                session.openWrite(file.name, 0, -1).use { outputStream ->
                     FileInputStream(pkgPath).use { inputStream -> inputStream.copyTo(outputStream) }
                     session.fsync(outputStream)
                 }
@@ -154,72 +236,17 @@ class SplitInstallManager(val context: Context) {
             val pendingIntent = PendingIntent.getBroadcast(context, sessionId, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             session.commit(pendingIntent.intentSender)
-            Log.d(TAG, "installSplitPackage session commit")
+            Log.d(TAG, "installPackages session commit")
             return deferred.await()
         } catch (e: IOException) {
-            Log.w(TAG, "Error installing split", e)
+            Log.w(TAG, "Error installing packages", e)
             throw e
         } finally {
             session?.close()
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private suspend fun downloadSplitPackage(
-        context: Context,
-        downloadList: List<PackageComponent>
-    ): Boolean =
-        coroutineScope {
-            val results = downloadList.map { info ->
-                Log.d(TAG, "downloadSplitPackage: $info")
-                async {
-                    runCatching {
-                        httpClient.download(info.url, File(context.splitSaveFile().toString(), info.componentName), SPLIT_INSTALL_REQUEST_TAG)
-                    }.onFailure {
-                        Log.w(TAG, "downloadSplitPackage url:${info.url} save:${info.componentName}", it)
-                    }.isSuccess.also { downloadSuccessful ->
-                        splitInstallRecord[info] = if (downloadSuccessful) DownloadStatus.COMPLETE else DownloadStatus.FAILED
-                    }
-                }
-            }.awaitAll()
-            return@coroutineScope results.all { it }
-        }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private suspend fun requestDownloadUrls(callingPackage: String, authToken: String, packs: MutableSet<String>): MutableList<PackageComponent> {
-        val versionCode = PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(callingPackage, 0))
-        val requestUrl =
-            StringBuilder("$URL_DELIVERY?doc=$callingPackage&ot=1&vc=$versionCode&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&da=4&bda=4&bf=4&fdcf=1&fdcf=2&ch=")
-        packs.forEach { requestUrl.append("&mn=").append(it) }
-        Log.d(TAG, "requestDownloadUrls start")
-        val languages = packs.filter { it.startsWith(SPLIT_LANGUAGE_TAG) }.map { it.replace(SPLIT_LANGUAGE_TAG, "") }
-        Log.d(TAG, "requestDownloadUrls languages: $languages")
-        val response = httpClient.get(
-            url = requestUrl.toString(),
-            headers = buildRequestHeaders(authToken, 1, languages).onEach { Log.d(TAG, "key:${it.key}  value:${it.value}") },
-            adapter = GoogleApiResponse.ADAPTER
-        )
-        Log.d(TAG, "requestDownloadUrls end response -> $response")
-        val splitPkgInfoList = response.response?.splitReqResult?.pkgList?.pkgDownLoadInfo ?: throw RuntimeException("splitPkgInfoList is null")
-        val components: MutableList<PackageComponent> = mutableListOf();
-        splitPkgInfoList.filter {
-            !it.splitPkgName.isNullOrEmpty() && !it.downloadUrl.isNullOrEmpty()
-        }.forEach { info ->
-            packs.filter {
-                it.contains(info.splitPkgName!!)
-            }.forEach {
-                components.add(PackageComponent(callingPackage, it, info.downloadUrl!!))
-            }
-        }
-
-        Log.d(TAG, "requestDownloadUrls end -> $components")
-        components.forEach {
-            splitInstallRecord[it] = DownloadStatus.PENDING
-        }
-
-        return components
-    }
-
+    // TODO: use existing code
     private suspend fun getOauthToken(): String {
         val accounts = AccountManager.get(context).getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         var oauthToken: String? = null
@@ -240,23 +267,40 @@ class SplitInstallManager(val context: Context) {
         return oauthToken ?: throw RuntimeException("oauthToken is null")
     }
 
+    /**
+     * Tests if a split apk has already been requested in this session. Returns true if it is
+     * pending or downloaded, and returns false if download failed or it is not yet known.
+     */
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun checkSplitInstalled(callingPackage: String, splitName: String): Boolean {
+    private fun shouldDownload(callingPackage: String, splitName: String): Boolean {
         return splitInstallRecord.keys.find { it.packageName == callingPackage && it.componentName == splitName }
             ?.let {
-                splitInstallRecord[it] != DownloadStatus.FAILED
-        } ?: false
+                splitInstallRecord[it] == DownloadStatus.FAILED
+        } ?: true
     }
 
-    internal fun notify(context: Context) {
+    /**
+     * Tell user about the ongoing download.
+     * TODO: make persistent
+     */
+    internal fun notify(installForPackage: String) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager.createNotificationChannel(
                 NotificationChannel(NOTIFY_CHANNEL_ID, NOTIFY_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             )
         }
+
+        val label = try {
+            context.packageManager.getPackageInfo(installForPackage, 0).applicationInfo
+                .loadLabel(context.packageManager)
+        } catch (e: NameNotFoundException) {
+            Log.e(TAG, "Couldn't load label for $installForPackage (${e.message}). Is it not installed?")
+            return
+        }
+
         NotificationCompat.Builder(context, NOTIFY_CHANNEL_ID).setSmallIcon(android.R.drawable.stat_sys_download)
-            .setContentTitle(context.getString(R.string.split_install, context.getString(R.string.app_name))).setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentTitle(context.getString(R.string.split_install, label)).setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setDefaults(
                 NotificationCompat.DEFAULT_ALL
             ).build().also {

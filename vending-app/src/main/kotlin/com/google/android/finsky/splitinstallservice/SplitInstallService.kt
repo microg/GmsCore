@@ -46,7 +46,7 @@ class SplitInstallServiceImpl(private val installManager: SplitInstallManager, o
     override fun startInstall(pkg: String, splits: List<Bundle>, bundle0: Bundle, callback: ISplitInstallServiceCallback) {
         Log.d(TAG, "Method <startInstall> Called by package: $pkg")
         lifecycleScope.launch {
-            val installStatus = installManager.startInstall(pkg, splits)
+            val installStatus = installManager.splitInstallFlow(pkg, splits)
             Log.d(TAG, "startInstall: installStatus -> $installStatus")
             callback.onStartInstall(CommonStatusCodes.SUCCESS, Bundle())
         }

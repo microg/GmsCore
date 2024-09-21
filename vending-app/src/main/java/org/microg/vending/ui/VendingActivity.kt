@@ -107,8 +107,8 @@ class VendingActivity : ComponentActivity() {
                             components.forEach {
                                 SplitInstallManager.splitInstallRecord[it] = DownloadStatus.PENDING
                             }
-                            notify(this@VendingActivity)
-                            installSplitPackage(this@VendingActivity, app.packageName, components, isUpdate)
+                            notify(app.packageName)
+                            downloadAndInstall(app.packageName, components, isUpdate)
                         }
                     } else {
                         TODO("implement installation on Lollipop devices")
