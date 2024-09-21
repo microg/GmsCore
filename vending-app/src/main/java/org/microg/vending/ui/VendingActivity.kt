@@ -28,6 +28,8 @@ import com.android.vending.RequestItem
 import com.android.vending.buildRequestHeaders
 import com.android.volley.VolleyError
 import com.google.android.finsky.GoogleApiResponse
+import com.google.android.finsky.splitinstallservice.DownloadStatus
+import com.google.android.finsky.splitinstallservice.PackageComponent
 import com.google.android.finsky.splitinstallservice.SplitInstallManager
 import com.google.android.finsky.splitinstallservice.uninstallPackage
 import kotlinx.coroutines.runBlocking
@@ -94,16 +96,19 @@ class VendingActivity : ComponentActivity() {
                     )
 
                     Log.d(TAG, res.toString())
-                    val triples = setOf(Triple("base", res.response!!.splitReqResult!!.pkgList!!.baseUrl!!, 0)) +
-                            res.response!!.splitReqResult!!.pkgList!!.pkgDownLoadInfo!!.map {
-                                Triple(it.splitPkgName!!, it.downloadUrl!!, 0)
-                            }
+                    val components = listOf(
+                        PackageComponent(app.packageName, "base", res.response!!.splitReqResult!!.pkgList!!.baseUrl!!)
+                    ) + res.response.splitReqResult!!.pkgList!!.pkgDownLoadInfo.map {
+                            PackageComponent(app.packageName, it.splitPkgName!!, it.downloadUrl!!)
+                        }
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                         SplitInstallManager(this@VendingActivity).apply {
-                            triples.forEach { updateSplitInstallRecord(app.packageName, it) }
+                            components.forEach {
+                                SplitInstallManager.splitInstallRecord[it] = DownloadStatus.PENDING
+                            }
                             notify(this@VendingActivity)
-                            installSplitPackage(this@VendingActivity, app.packageName, triples, isUpdate)
+                            installSplitPackage(this@VendingActivity, app.packageName, components, isUpdate)
                         }
                     } else {
                         TODO("implement installation on Lollipop devices")

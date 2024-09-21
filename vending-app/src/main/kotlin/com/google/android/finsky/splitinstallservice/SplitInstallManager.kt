@@ -60,10 +60,6 @@ private const val KEY_ERROR_CODE = "error_code"
 private const val KEY_SESSION_ID = "session_id"
 private const val KEY_SESSION_STATE = "session_state"
 
-private const val STATUS_UNKNOWN = -1
-private const val STATUS_DOWNLOADING = 0
-private const val STATUS_DOWNLOADED = 1
-
 private const val ACTION_UPDATE_SERVICE = "com.google.android.play.core.splitinstall.receiver.SplitInstallUpdateIntentService"
 
 private const val FILE_SAVE_PATH = "phonesky-download-service"
@@ -91,13 +87,13 @@ class SplitInstallManager(val context: Context) {
         Log.d(TAG, "startInstall oauthToken: $oauthToken")
         if (oauthToken.isNullOrEmpty()) return false
         notify(context)
-        val triples = runCatching { requestDownloadUrls(callingPackage, oauthToken, needInstallSplitPack) }.getOrNull()
-        Log.w(TAG, "startInstall requestDownloadUrls triples: $triples")
-        if (triples.isNullOrEmpty()) {
+        val components = runCatching { requestDownloadUrls(callingPackage, oauthToken, needInstallSplitPack) }.getOrNull()
+        Log.w(TAG, "startInstall requestDownloadUrls triples: $components")
+        if (components.isNullOrEmpty()) {
             NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
             return false
         }
-        val intent = runCatching { installSplitPackage(context, callingPackage, triples) }.getOrNull()
+        val intent = runCatching { installSplitPackage(context, callingPackage, components) }.getOrNull()
         NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
         if (intent == null) { return false }
         sendCompleteBroad(context, callingPackage, intent)
@@ -105,10 +101,10 @@ class SplitInstallManager(val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    internal suspend fun installSplitPackage(context: Context, callingPackage: String, downloadList: Set<Triple<String, String, Int>>, isUpdate: Boolean = false): Intent {
+    internal suspend fun installSplitPackage(context: Context, callingPackage: String, downloadList: List<PackageComponent>, isUpdate: Boolean = false): Intent {
         Log.d(TAG, "installSplitPackage start ")
         if (!context.splitSaveFile().exists()) context.splitSaveFile().mkdir()
-        val downloadSplitPackage = downloadSplitPackage(context, callingPackage, downloadList)
+        val downloadSplitPackage = downloadSplitPackage(context, downloadList)
         if (!downloadSplitPackage) {
             Log.w(TAG, "installSplitPackage download failed")
             throw RuntimeException("installSplitPackage downloadSplitPackage has error")
@@ -142,8 +138,8 @@ class SplitInstallManager(val context: Context) {
             sessionId = packageInstaller.createSession(params)
             session = packageInstaller.openSession(sessionId)
             downloadList.forEach { item ->
-                val pkgPath = File(context.splitSaveFile().toString(), item.first)
-                session.openWrite(item.first, 0, -1).use { outputStream ->
+                val pkgPath = File(context.splitSaveFile().toString(), item.componentName)
+                session.openWrite(item.componentName, 0, -1).use { outputStream ->
                     FileInputStream(pkgPath).use { inputStream -> inputStream.copyTo(outputStream) }
                     session.fsync(outputStream)
                 }
@@ -155,7 +151,8 @@ class SplitInstallManager(val context: Context) {
             val intent = Intent(context, InstallResultReceiver::class.java).apply {
                 putExtra(KEY_BYTES_DOWNLOADED, totalDownloaded)
             }
-            val pendingIntent = PendingIntent.getBroadcast(context, sessionId, intent, 0)
+            val pendingIntent = PendingIntent.getBroadcast(context, sessionId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             session.commit(pendingIntent.intentSender)
             Log.d(TAG, "installSplitPackage session commit")
             return deferred.await()
@@ -168,24 +165,28 @@ class SplitInstallManager(val context: Context) {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private suspend fun downloadSplitPackage(context: Context, callingPackage: String, downloadList: Set<Triple<String, String, Int>>): Boolean =
+    private suspend fun downloadSplitPackage(
+        context: Context,
+        downloadList: List<PackageComponent>
+    ): Boolean =
         coroutineScope {
             val results = downloadList.map { info ->
                 Log.d(TAG, "downloadSplitPackage: $info")
                 async {
-                    val downloaded = runCatching {
-                        httpClient.download(info.second, File(context.splitSaveFile().toString(), info.first), SPLIT_INSTALL_REQUEST_TAG)
+                    runCatching {
+                        httpClient.download(info.url, File(context.splitSaveFile().toString(), info.componentName), SPLIT_INSTALL_REQUEST_TAG)
                     }.onFailure {
-                        Log.w(TAG, "downloadSplitPackage url:${info.second} save:${info.first}", it)
-                    }.getOrNull() != null
-                    downloaded.also { updateSplitInstallRecord(callingPackage, Triple(info.first, info.second, if (it) STATUS_DOWNLOADED else STATUS_UNKNOWN)) }
+                        Log.w(TAG, "downloadSplitPackage url:${info.url} save:${info.componentName}", it)
+                    }.isSuccess.also { downloadSuccessful ->
+                        splitInstallRecord[info] = if (downloadSuccessful) DownloadStatus.COMPLETE else DownloadStatus.FAILED
+                    }
                 }
             }.awaitAll()
             return@coroutineScope results.all { it }
         }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private suspend fun requestDownloadUrls(callingPackage: String, authToken: String, packs: MutableSet<String>): ArraySet<Triple<String, String, Int>> {
+    private suspend fun requestDownloadUrls(callingPackage: String, authToken: String, packs: MutableSet<String>): MutableList<PackageComponent> {
         val versionCode = PackageInfoCompat.getLongVersionCode(context.packageManager.getPackageInfo(callingPackage, 0))
         val requestUrl =
             StringBuilder("$URL_DELIVERY?doc=$callingPackage&ot=1&vc=$versionCode&bvc=$versionCode&pf=1&pf=2&pf=3&pf=4&pf=5&pf=7&pf=8&pf=9&pf=10&da=4&bda=4&bf=4&fdcf=1&fdcf=2&ch=")
@@ -200,18 +201,23 @@ class SplitInstallManager(val context: Context) {
         )
         Log.d(TAG, "requestDownloadUrls end response -> $response")
         val splitPkgInfoList = response.response?.splitReqResult?.pkgList?.pkgDownLoadInfo ?: throw RuntimeException("splitPkgInfoList is null")
-        val packSet = ArraySet<Triple<String, String, Int>>()
+        val components: MutableList<PackageComponent> = mutableListOf();
         splitPkgInfoList.filter {
             !it.splitPkgName.isNullOrEmpty() && !it.downloadUrl.isNullOrEmpty()
         }.forEach { info ->
             packs.filter {
                 it.contains(info.splitPkgName!!)
             }.forEach {
-                packSet.add(Triple(first = it, second = info.downloadUrl!!, STATUS_DOWNLOADING))
+                components.add(PackageComponent(callingPackage, it, info.downloadUrl!!))
             }
         }
-        Log.d(TAG, "requestDownloadUrls end packSet -> $packSet")
-        return packSet.onEach { updateSplitInstallRecord(callingPackage, it) }
+
+        Log.d(TAG, "requestDownloadUrls end -> $components")
+        components.forEach {
+            splitInstallRecord[it] = DownloadStatus.PENDING
+        }
+
+        return components
     }
 
     private suspend fun getOauthToken(): String {
@@ -236,21 +242,10 @@ class SplitInstallManager(val context: Context) {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun checkSplitInstalled(callingPackage: String, splitName: String): Boolean {
-        if (!splitInstallRecord.containsKey(callingPackage)) return false
-        return splitInstallRecord[callingPackage]?.find { it.first == splitName }?.third != STATUS_UNKNOWN
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    internal fun updateSplitInstallRecord(callingPackage: String, triple: Triple<String, String, Int>) {
-        splitInstallRecord[callingPackage]?.let { triples ->
-            val find = triples.find { it.first == triple.first }
-            find?.let { triples.remove(it) }
-            triples.add(triple)
-        } ?: run {
-            val triples = ArraySet<Triple<String, String, Int>>()
-            triples.add(triple)
-            splitInstallRecord[callingPackage] = triples
-        }
+        return splitInstallRecord.keys.find { it.packageName == callingPackage && it.componentName == splitName }
+            ?.let {
+                splitInstallRecord[it] != DownloadStatus.FAILED
+        } ?: false
     }
 
     internal fun notify(context: Context) {
@@ -338,8 +333,8 @@ class SplitInstallManager(val context: Context) {
     }
 
     companion object {
-        // Installation records, including subpackage name, download path, and installation status
-        private val splitInstallRecord = HashMap<String, ArraySet<Triple<String, String, Int>>>()
+        // Installation records, including (sub)package name, download path, and installation status
+        internal val splitInstallRecord: MutableMap<PackageComponent, DownloadStatus> = mutableMapOf()
         private val deferredMap = mutableMapOf<Int, CompletableDeferred<Intent>>()
     }
 }
