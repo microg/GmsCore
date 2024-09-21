@@ -234,7 +234,7 @@ class SplitInstallManager(val context: Context) {
                 putExtra(KEY_BYTES_DOWNLOADED, totalDownloaded)
             }
             val pendingIntent = PendingIntent.getBroadcast(context, sessionId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
             session.commit(pendingIntent.intentSender)
             Log.d(TAG, "installPackages session commit")
             return deferred.await()
