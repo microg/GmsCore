@@ -8,6 +8,6 @@ internal const val TAG = "GmsPackageInstaller"
 
 const val KEY_BYTES_DOWNLOADED = "bytes_downloaded"
 
-fun Context.packageDownloadLocation() = File(filesDir, FILE_SAVE_PATH).apply {
+fun Context.packageDownloadLocation() = File(cacheDir, FILE_SAVE_PATH).apply {
     if (!exists()) mkdir()
 }
