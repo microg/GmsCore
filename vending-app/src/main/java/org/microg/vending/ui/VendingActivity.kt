@@ -2,6 +2,7 @@ package org.microg.vending.ui
 
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -15,7 +16,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,6 +37,7 @@ import org.microg.gms.profile.Build
 import org.microg.gms.profile.ProfileManager
 import org.microg.gms.ui.TAG
 import org.microg.vending.UploadDeviceConfigRequest
+import org.microg.vending.WorkAccountChangedReceiver
 import org.microg.vending.billing.AuthManager
 import org.microg.vending.billing.core.AuthData
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CLIENT_POLICY
@@ -45,7 +46,6 @@ import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
 import org.microg.vending.delivery.downloadPackageComponents
-import org.microg.vending.enterprise.App
 import org.microg.vending.enterprise.EnterpriseApp
 import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.enterprise.AppState
@@ -70,6 +70,10 @@ class VendingActivity : ComponentActivity() {
         val accountManager = AccountManager.get(this)
         val accounts = accountManager.getAccountsByType("com.google.work")
         if (accounts.isEmpty()) {
+            // Component should not be enabled; disable through receiver, and redirect to main activity
+            WorkAccountChangedReceiver().onReceive(this, null)
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
             TODO("App should only be visible if work accounts are added. Disable component and wonder why it was enabled in the first place")
         } else if (accounts.size > 1) {
             Log.w(TAG, "Multiple work accounts found. This is unexpected and could point " +
@@ -217,7 +221,7 @@ class VendingActivity : ComponentActivity() {
                         val state = if (!available && installedDetails == null) AppState.NOT_COMPATIBLE
                         else if (!available && installedDetails != null) AppState.INSTALLED
                         else if (available && installedDetails == null) AppState.NOT_INSTALLED
-                        else if (available && installedDetails != null && installedDetails.versionCode > versionCode!!) AppState.UPDATE_AVAILABLE
+                        else if (available && installedDetails != null && installedDetails.versionCode < versionCode!!) AppState.UPDATE_AVAILABLE
                         else /* if (available && installedDetails != null) */ AppState.INSTALLED
 
                         EnterpriseApp(

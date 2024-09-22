@@ -10,6 +10,7 @@ import android.accounts.AccountManager
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +19,9 @@ import android.util.Log
 import com.google.android.gms.auth.account.IWorkAccountCallback
 import com.google.android.gms.auth.account.IWorkAccountService
 import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.KEY_ACCOUNT_CREATION_TOKEN
+import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.WORK_ACCOUNT_CHANGED_BOARDCAST
 import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.WORK_ACCOUNT_TYPE
+import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.internal.ConnectionInfo
@@ -68,7 +71,7 @@ private fun DevicePolicyManager.isDeviceAdminApp(packageName: String?): Boolean 
     }
 }
 
-class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
+class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() {
 
     val packageManager: PackageManager = context.packageManager
     val accountManager: AccountManager = AccountManager.get(context)
@@ -82,8 +85,8 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
         Log.d(TAG, "setWorkAuthenticatorEnabled with $enabled")
 
         val componentName = ComponentName(
-            "com.google.android.gms",
-            "com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService"
+            context,
+            WorkAccountAuthenticatorService::class.java
         )
         packageManager.setComponentEnabledSetting(
             componentName,
@@ -127,7 +130,14 @@ class WorkAccountServiceImpl(context: Context) : IWorkAccountService.Stub() {
         Log.d(TAG, "removeWorkAccount with account ${account?.name}")
         account?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+
                 val success = accountManager.removeAccountExplicitly(it)
+
+                // Notify vending package
+                context.sendBroadcast(
+                    Intent(WORK_ACCOUNT_CHANGED_BOARDCAST).setPackage("com.android.vending")
+                )
+
                 callback?.onAccountRemoved(success)
             } else {
                 val future = accountManager.removeAccount(it, null, null)

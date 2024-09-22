@@ -189,16 +189,25 @@
         <receiver
             android:name=".installer.SessionResultReceiver"
             android:exported="false"/>
+
+        <!-- Work account store -->
         <activity android:name="org.microg.vending.ui.VendingActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.DayNight"
-            android:label="@string/vending_activity_name">
+            android:label="@string/vending_activity_name"
+            android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name="org.microg.vending.WorkAccountChangedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.microg.vending.WORK_ACCOUNT_CHANGED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>

@@ -10,6 +10,7 @@ import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +81,12 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
                         putString(KEY_ACCOUNT_SERVICES, authResponse.services) // expected to be "android"
                     }
             )) {
+
+                // Notify vending package
+                context.sendBroadcast(
+                    Intent(WORK_ACCOUNT_CHANGED_BOARDCAST).setPackage("com.android.vending")
+                )
+
                 // Report successful creation to caller
                 response.onResult(Bundle().apply {
                     putString(AccountManager.KEY_ACCOUNT_NAME, authResponse.email)
@@ -203,6 +210,9 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
     companion object {
         const val TAG = "WorkAccAuthenticator"
         const val WORK_ACCOUNT_TYPE = "com.google.work"
+
+        const val WORK_ACCOUNT_CHANGED_BOARDCAST = "org.microg.vending.WORK_ACCOUNT_CHANGED"
+
         const val KEY_ACCOUNT_CREATION_TOKEN = "creationToken"
         private const val KEY_GOOGLE_USER_ID = "GoogleUserId" // TODO: use AuthConstants
         private const val KEY_ACCOUNT_SERVICES = "services" // TODO: use AuthConstants
