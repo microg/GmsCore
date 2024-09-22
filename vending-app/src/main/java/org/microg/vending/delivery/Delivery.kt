@@ -43,9 +43,19 @@ suspend fun HttpClient.requestDownloadUrls(
     }
     Log.d(TAG, "requestDownloadUrls languages: $languages")
 
+    val headers = buildRequestHeaders(
+        auth = auth.authToken,
+        // TODO: understand behavior. Using proper Android ID doesn't work when downloading split APKs
+        androidId = if (requestSplitPackages != null) 1 else auth.gsfId.toLong(16),
+        languages
+    ).minus(
+        // TODO: understand behavior. According to tests, these headers break split install queries but may be needed for normal ones
+        (if (requestSplitPackages != null) listOf("X-DFE-Encoded-Targets", "X-DFE-Phenotype", "X-DFE-Device-Id", "X-DFE-Client-Id") else emptyList()).toSet()
+    )
+
     val response = get(
         url = requestUrl.toString(),
-        headers = buildRequestHeaders(auth.authToken, auth.gsfId.toLong(16), languages),
+        headers = headers,
         adapter = GoogleApiResponse.ADAPTER
     )
     Log.d(TAG, "requestDownloadUrls end response -> $response")
@@ -71,7 +81,11 @@ suspend fun HttpClient.requestDownloadUrls(
         }
     }
 
-    val components = (listOf(basePackage) + splitComponents).filterNotNull()
+    val components = if (requestSplitPackages != null) {
+        splitComponents
+    } else {
+        listOf(basePackage) + splitComponents
+    }.filterNotNull()
 
     Log.d(TAG, "requestDownloadUrls end -> $components")
 
