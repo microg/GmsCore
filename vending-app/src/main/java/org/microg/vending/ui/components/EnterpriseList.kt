@@ -26,24 +26,30 @@ import androidx.compose.ui.unit.dp
 import com.android.vending.R
 import com.google.android.finsky.AppInstallPolicy
 import org.microg.vending.enterprise.App
+import org.microg.vending.enterprise.AppState
 import org.microg.vending.enterprise.EnterpriseApp
 
 
 @Composable
-fun EnterpriseList(apps: List<EnterpriseApp>, install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit, uninstall: (app: EnterpriseApp) -> Unit) {
-    if (apps.isNotEmpty()) LazyColumn(Modifier.padding(horizontal = 16.dp)) {
+fun EnterpriseList(appStates: Map<EnterpriseApp, AppState>, install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit, uninstall: (app: EnterpriseApp) -> Unit) {
+    if (appStates.isNotEmpty()) LazyColumn(Modifier.padding(horizontal = 16.dp)) {
 
+        val apps = appStates.keys
         val requiredApps = apps.filter { it.policy == AppInstallPolicy.MANDATORY }
         if (requiredApps.isNotEmpty()) {
             item { InListHeading(R.string.vending_overview_enterprise_row_mandatory) }
             item { InListWarning(R.string.vending_overview_enterprise_row_mandatory_hint) }
-            items(requiredApps) { AppRow(it, { install(it, false) }, { install(it, true) }, { uninstall(it) }) }
+            items(requiredApps.sortedBy { it.packageName }) {
+                AppRow(it, appStates[it]!!, { install(it, false) }, { install(it, true) }, { uninstall(it) })
+            }
         }
 
         val optionalApps = apps.filter { it.policy == AppInstallPolicy.OPTIONAL }
         if (optionalApps.isNotEmpty()) {
             item { InListHeading(R.string.vending_overview_enterprise_row_offered) }
-            items(optionalApps) { AppRow(it, { install(it, false) }, { install(it, true) }, { uninstall(it) }) }
+            items(optionalApps.sortedBy { it.packageName }) {
+                AppRow(it, appStates[it]!!, { install(it, false) }, { install(it, true) }, { uninstall(it) })
+            }
         }
 
     } else Box(
@@ -99,10 +105,10 @@ fun InListWarning(@StringRes text: Int) {
 @Composable
 fun EnterpriseListPreview() {
     EnterpriseList(
-        listOf(
-            EnterpriseApp("com.android.vending", 0, "Market", App.State.INSTALLED, null, "", AppInstallPolicy.MANDATORY),
-            EnterpriseApp("org.mozilla.firefox", 0, "Firefox", App.State.NOT_INSTALLED, null, "", AppInstallPolicy.OPTIONAL),
-            EnterpriseApp("org.thoughtcrime.securesms", 0, "Signal", App.State.NOT_COMPATIBLE, null, "", AppInstallPolicy.OPTIONAL)
+        mapOf(
+            EnterpriseApp("com.android.vending", 0, "Market", null, "", AppInstallPolicy.MANDATORY) to AppState.INSTALLED,
+            EnterpriseApp("org.mozilla.firefox", 0, "Firefox", null, "", AppInstallPolicy.OPTIONAL) to AppState.NOT_INSTALLED,
+            EnterpriseApp("org.thoughtcrime.securesms", 0, "Signal", null, "", AppInstallPolicy.OPTIONAL) to AppState.NOT_COMPATIBLE
         ), { _, _ -> }, {}
     )
 }
@@ -110,5 +116,5 @@ fun EnterpriseListPreview() {
 @Preview
 @Composable
 fun EnterpriseListEmptyPreview() {
-    EnterpriseList(emptyList(), { _, _ -> }, {})
+    EnterpriseList(emptyMap(), { _, _ -> }, {})
 }

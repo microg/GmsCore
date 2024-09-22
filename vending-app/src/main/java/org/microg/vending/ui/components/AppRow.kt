@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -24,9 +25,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.android.vending.R
 import org.microg.vending.enterprise.App
+import org.microg.vending.enterprise.AppState
 
 @Composable
-fun AppRow(app: App, install: () -> Unit, update: () -> Unit, uninstall: () -> Unit) {
+fun AppRow(app: App, state: AppState, install: () -> Unit, update: () -> Unit, uninstall: () -> Unit) {
     Row(
         Modifier.padding(top = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
@@ -45,48 +47,59 @@ fun AppRow(app: App, install: () -> Unit, update: () -> Unit, uninstall: () -> U
         Text(app.displayName)
 
         Spacer(Modifier.weight(1f))
-        if (app.state == App.State.NOT_COMPATIBLE) {
+        if (state == AppState.NOT_COMPATIBLE) {
             Icon(Icons.Default.Warning, null, Modifier.padding(end=8.dp), tint = MaterialTheme.colorScheme.secondary)
             // TODO better UI
         }
-        if (app.state == App.State.UPDATE_AVAILABLE || app.state == App.State.INSTALLED) {
+        if (state == AppState.UPDATE_AVAILABLE || state == AppState.INSTALLED) {
             IconButton(uninstall) {
                 Icon(Icons.Default.Delete, stringResource(R.string.vending_overview_row_action_uninstall), tint = MaterialTheme.colorScheme.secondary)
             }
         }
-        if (app.state == App.State.UPDATE_AVAILABLE) {
+        if (state == AppState.UPDATE_AVAILABLE) {
             FilledIconButton(update, colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                 Icon(painterResource(R.drawable.ic_update), stringResource(R.string.vending_overview_row_action_update), tint = MaterialTheme.colorScheme.secondary)
             }
         }
-        if (app.state == App.State.NOT_INSTALLED)
-        FilledIconButton(install, colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
-            Icon(painterResource(R.drawable.ic_download), stringResource(R.string.vending_overview_row_action_install), tint = MaterialTheme.colorScheme.secondary)
+        if (state == AppState.NOT_INSTALLED) {
+            FilledIconButton(install, colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
+                Icon(painterResource(R.drawable.ic_download), stringResource(R.string.vending_overview_row_action_install), tint = MaterialTheme.colorScheme.secondary)
+            }
+        }
+        if (state == AppState.PENDING) {
+            CircularProgressIndicator(Modifier.padding(4.dp))
         }
     }
+
 }
 
+private val previewApp = App("org.mozilla.firefox", 0, "Firefox", null, null)
 @Preview
 @Composable
 fun AppRowNotCompatiblePreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.NOT_COMPATIBLE, null, null), {}, {}, {})
+    AppRow(previewApp, AppState.NOT_COMPATIBLE, {}, {}, {})
 }
 
 @Preview
 @Composable
 fun AppRowNotInstalledPreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.NOT_INSTALLED, null, ""), {}, {}, {})
+    AppRow(previewApp, AppState.NOT_INSTALLED, {}, {}, {})
 }
 
 @Preview
 @Composable
 fun AppRowUpdateablePreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.UPDATE_AVAILABLE, null, ""), {}, {}, {})
+    AppRow(previewApp, AppState.UPDATE_AVAILABLE, {}, {}, {})
 }
 
 @Preview
 @Composable
 fun AppRowInstalledPreview() {
-    AppRow(App("org.mozilla.firefox", 0, "Firefox", App.State.INSTALLED, null, ""), {}, {}, {})
+    AppRow(previewApp, AppState.INSTALLED, {}, {}, {})
 }
 
+@Preview
+@Composable
+fun AppRowPendingPreview() {
+    AppRow(previewApp, AppState.PENDING, {}, {}, {})
+}

@@ -15,7 +15,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 
-@RequiresApi(Build.VERSION_CODES.M)
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 internal suspend fun Context.installPackages(
     callingPackage: String,
     componentFiles: List<File>,

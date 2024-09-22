@@ -14,7 +14,7 @@ import java.io.File
 
 private const val TAG = "GmsVendingComponentDl"
 
-@RequiresApi(Build.VERSION_CODES.M)
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 suspend fun HttpClient.downloadPackageComponents(
     context: Context,
     downloadList: List<PackageComponent>,

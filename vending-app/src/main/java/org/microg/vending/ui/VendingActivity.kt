@@ -4,7 +4,6 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -48,6 +48,7 @@ import org.microg.vending.delivery.downloadPackageComponents
 import org.microg.vending.enterprise.App
 import org.microg.vending.enterprise.EnterpriseApp
 import org.microg.vending.delivery.requestDownloadUrls
+import org.microg.vending.enterprise.AppState
 import org.microg.vending.ui.components.EnterpriseList
 import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
@@ -55,7 +56,7 @@ import java.io.IOException
 @RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
 class VendingActivity : ComponentActivity() {
 
-    var apps: MutableList<EnterpriseApp> = mutableStateListOf()
+    var apps: MutableMap<EnterpriseApp, AppState> = mutableStateMapOf()
     var networkState by mutableStateOf(NetworkState.ACTIVE)
 
     var auth: AuthData? = null
@@ -79,38 +80,45 @@ class VendingActivity : ComponentActivity() {
         load(account)
 
         val install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit = { app, isUpdate ->
-            Toast.makeText(this, "installing ${app.displayName} / ${app.packageName}", Toast.LENGTH_SHORT).show()
             Thread {
                 runBlocking {
+
+                    val previousState = apps[app]!!
+                    apps[app] = AppState.PENDING
 
                     val client = HttpClient(this@VendingActivity)
 
                     // Get download links for requested package
-                    val downloadUrls = client.requestDownloadUrls(
+                    val downloadUrls = runCatching { client.requestDownloadUrls(
                         app.packageName,
                         app.versionCode!!.toLong(),
                         auth!!,
                         deliveryToken = app.deliveryToken
-                    )
+                    ) }
 
-                    val packageFiles = client.downloadPackageComponents(this@VendingActivity, downloadUrls, Unit)
-                    if (packageFiles.values.any { it == null }) {
-                        Log.w(TAG, "Cannot proceed to installation as not all files were downloaded")
+                    if (downloadUrls.isFailure) {
+                        Log.w(TAG, "Failed to request download URLs: ${downloadUrls.exceptionOrNull()!!.message}")
+                        apps[app] = previousState
                         return@runBlocking
                     }
 
-                    val successfullyInstalled = runCatching {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                            installPackages(
-                                app.packageName,
-                                packageFiles.values.filterNotNull(),
-                                isUpdate
-                            )
-                        } else {
-                            TODO("implement installation on Lollipop installation")
-                        }
+                    val packageFiles = client.downloadPackageComponents(this@VendingActivity, downloadUrls.getOrThrow(), Unit)
+                    if (packageFiles.values.any { it == null }) {
+                        Log.w(TAG, "Cannot proceed to installation as not all files were downloaded")
+                        apps[app] = previousState
+                        return@runBlocking
+                    }
+
+                    runCatching {
+                        installPackages(
+                            app.packageName,
+                            packageFiles.values.filterNotNull(),
+                            isUpdate
+                        )
                     }.onSuccess {
-                        load(account)
+                        apps[app] = AppState.INSTALLED
+                    }.onFailure {
+                        apps[app] = previousState
                     }
                 }
             }.start()
@@ -120,8 +128,12 @@ class VendingActivity : ComponentActivity() {
             Thread {
                 runBlocking {
 
+                    val previousState = apps[app]!!
+                    apps[app] = AppState.PENDING
                     runCatching { uninstallPackage(app.packageName) }.onSuccess {
-                        load(account)
+                        apps[app] = AppState.NOT_INSTALLED
+                    }.onFailure {
+                        apps[app] = previousState
                     }
 
                 }
@@ -190,7 +202,7 @@ class VendingActivity : ComponentActivity() {
                                 RequestItem(RequestApp(AppMeta(it.packageName)))
                             }
                         )
-                    ).items.map { it.response }.filterNotNull().map { item ->
+                    ).items.map { it.response }.filterNotNull().associate { item ->
                         val packageName = item.meta!!.packageName!!
                         val installedDetails = this@VendingActivity.packageManager.getInstalledPackages(0).find {
                             it.applicationInfo.packageName == packageName
@@ -202,28 +214,27 @@ class VendingActivity : ComponentActivity() {
                             item.offer!!.version!!.versionCode!!
                         } else null
 
-                        val state = if (!available && installedDetails == null) App.State.NOT_COMPATIBLE
-                        else if (!available && installedDetails != null) App.State.INSTALLED
-                        else if (available && installedDetails == null) App.State.NOT_INSTALLED
-                        else if (available && installedDetails != null && installedDetails.versionCode > versionCode!!) App.State.UPDATE_AVAILABLE
-                        else /* if (available && installedDetails != null) */ App.State.INSTALLED
+                        val state = if (!available && installedDetails == null) AppState.NOT_COMPATIBLE
+                        else if (!available && installedDetails != null) AppState.INSTALLED
+                        else if (available && installedDetails == null) AppState.NOT_INSTALLED
+                        else if (available && installedDetails != null && installedDetails.versionCode > versionCode!!) AppState.UPDATE_AVAILABLE
+                        else /* if (available && installedDetails != null) */ AppState.INSTALLED
 
                         EnterpriseApp(
                             packageName,
                             versionCode,
                             item.detail!!.name!!.displayName!!,
-                            state,
                             item.detail.icon?.icon?.paint?.url,
                             item.offer?.delivery?.key,
                             apps.find { it.packageName!! == item.meta.packageName }!!.policy!!,
-                        )
+                        ) to state
                     }.onEach {
-                        Log.v(TAG, "${it.packageName} delivery token: ${it.deliveryToken ?: "none acquired"}")
+                        Log.v(TAG, "${it.key.packageName} (state: ${it.value}) delivery token: ${it.key.deliveryToken ?: "none acquired"}")
                     }
 
                     this@VendingActivity.apps.apply {
                         clear()
-                        addAll(details)
+                        putAll(details)
                     }
                     networkState = NetworkState.PASSIVE
                 } catch (e: IOException) {
