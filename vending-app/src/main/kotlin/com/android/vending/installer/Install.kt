@@ -10,18 +10,21 @@ import android.content.pm.PackageInstaller.SessionParams
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.google.android.finsky.splitinstallservice.SplitInstallManager.InstallResultReceiver
 import kotlinx.coroutines.CompletableDeferred
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.M)
-public suspend fun installPackages(context: Context, callingPackage: String, componentFiles: List<File>, isUpdate: Boolean = false, deferredMap: MutableMap<Int, CompletableDeferred<Intent>> = mutableMapOf()): Intent {
+internal suspend fun Context.installPackages(
+    callingPackage: String,
+    componentFiles: List<File>,
+    isUpdate: Boolean = false
+) {
     Log.v(TAG, "installPackages start")
 
-    val packageInstaller = context.packageManager.packageInstaller
-    val installed = context.packageManager.getInstalledPackages(0).any {
+    val packageInstaller = packageManager.packageInstaller
+    val installed = packageManager.getInstalledPackages(0).any {
         it.applicationInfo.packageName == callingPackage
     }
     // Contrary to docs, MODE_INHERIT_EXISTING cannot be used if package is not yet installed.
@@ -54,14 +57,18 @@ public suspend fun installPackages(context: Context, callingPackage: String, com
             totalDownloaded += file.length()
             file.delete()
         }
-        val deferred = CompletableDeferred<Intent>()
-        deferredMap[sessionId] = deferred
-        val intent = Intent(context, InstallResultReceiver::class.java).apply {
-            putExtra(KEY_BYTES_DOWNLOADED, totalDownloaded)
-        }
-        val pendingIntent = PendingIntent.getBroadcast(context, sessionId, intent,
+        val deferred = CompletableDeferred<Unit>()
+
+        SessionResultReceiver.pendingSessions[sessionId] = SessionResultReceiver.OnResult(
+            onSuccess = { deferred.complete(Unit) },
+            onFailure = { message -> deferred.completeExceptionally(RuntimeException(message)) }
+        )
+
+        val intent = Intent(this, SessionResultReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, sessionId, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
         session.commit(pendingIntent.intentSender)
+
         Log.d(TAG, "installPackages session commit")
         return deferred.await()
     } catch (e: IOException) {

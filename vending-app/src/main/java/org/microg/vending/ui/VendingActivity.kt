@@ -26,11 +26,9 @@ import com.android.vending.GetItemsResponse
 import com.android.vending.RequestApp
 import com.android.vending.RequestItem
 import com.android.vending.buildRequestHeaders
+import com.android.vending.installer.installPackages
 import com.android.volley.VolleyError
 import com.google.android.finsky.GoogleApiResponse
-import com.google.android.finsky.splitinstallservice.DownloadStatus
-import com.google.android.finsky.splitinstallservice.PackageComponent
-import com.google.android.finsky.splitinstallservice.SplitInstallManager
 import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.DeviceConfiguration
@@ -41,14 +39,15 @@ import org.microg.gms.ui.TAG
 import org.microg.vending.UploadDeviceConfigRequest
 import org.microg.vending.billing.AuthManager
 import org.microg.vending.billing.core.AuthData
-import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DELIVERY
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CLIENT_POLICY
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_FDFE
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
+import org.microg.vending.delivery.downloadPackageComponents
 import org.microg.vending.enterprise.App
 import org.microg.vending.enterprise.EnterpriseApp
+import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.ui.components.EnterpriseList
 import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
@@ -83,42 +82,50 @@ class VendingActivity : ComponentActivity() {
             Toast.makeText(this, "installing ${app.displayName} / ${app.packageName}", Toast.LENGTH_SHORT).show()
             Thread {
                 runBlocking {
+
+                    val client = HttpClient(this@VendingActivity)
+
                     // Get download links for requested package
-                    val res = HttpClient(this@VendingActivity).get(
-                        url = URL_DELIVERY,
-                        headers = buildRequestHeaders(auth!!.authToken, auth!!.gsfId.toLong(16)),
-                        params = mapOf(
-                            "ot" to "1",
-                            "doc" to app.packageName,
-                            "vc" to app.versionCode!!.toString()
-                        ).plus(app.deliveryToken?.let { listOf("dtok" to it) } ?: emptyList()),
-                        adapter = GoogleApiResponse.ADAPTER
+                    val downloadUrls = client.requestDownloadUrls(
+                        app.packageName,
+                        app.versionCode!!.toLong(),
+                        auth!!,
+                        deliveryToken = app.deliveryToken
                     )
 
-                    Log.d(TAG, res.toString())
-                    val components = listOf(
-                        PackageComponent(app.packageName, "base", res.response!!.splitReqResult!!.pkgList!!.baseUrl!!)
-                    ) + res.response.splitReqResult!!.pkgList!!.pkgDownLoadInfo.map {
-                            PackageComponent(app.packageName, it.splitPkgName!!, it.downloadUrl!!)
-                        }
+                    val packageFiles = client.downloadPackageComponents(this@VendingActivity, downloadUrls, Unit)
+                    if (packageFiles.values.any { it == null }) {
+                        Log.w(TAG, "Cannot proceed to installation as not all files were downloaded")
+                        return@runBlocking
+                    }
 
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                        SplitInstallManager(this@VendingActivity).apply {
-                            components.forEach {
-                                SplitInstallManager.splitInstallRecord[it] = DownloadStatus.PENDING
-                            }
-                            notify(app.packageName)
-                            downloadAndInstall(app.packageName, components, isUpdate)
+                    val successfullyInstalled = runCatching {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            installPackages(
+                                app.packageName,
+                                packageFiles.values.filterNotNull(),
+                                isUpdate
+                            )
+                        } else {
+                            TODO("implement installation on Lollipop installation")
                         }
-                    } else {
-                        TODO("implement installation on Lollipop devices")
+                    }.onSuccess {
+                        load(account)
                     }
                 }
             }.start()
         }
 
-        val uninstall: (app: EnterpriseApp) -> Unit = {
-            uninstallPackage(it.packageName)
+        val uninstall: (app: EnterpriseApp) -> Unit = { app ->
+            Thread {
+                runBlocking {
+
+                    runCatching { uninstallPackage(app.packageName) }.onSuccess {
+                        load(account)
+                    }
+
+                }
+            }.start()
         }
 
         setContent {

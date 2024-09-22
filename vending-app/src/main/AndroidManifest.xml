@@ -187,8 +187,8 @@
         </service>
 
         <receiver
-            android:name="com.google.android.finsky.splitinstallservice.SplitInstallManager$InstallResultReceiver"
-            android:exported="true"/>
+            android:name=".installer.SessionResultReceiver"
+            android:exported="false"/>
         <activity android:name="org.microg.vending.ui.VendingActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.DayNight"

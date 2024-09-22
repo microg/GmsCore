@@ -31,7 +31,7 @@ const val AUTH_TOKEN_SCOPE: String = "oauth2:https://www.googleapis.com/auth/goo
 private const val BASE64_FLAGS = Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING
 private const val FINSKY_VERSION = "Finsky/37.5.24-29%20%5B0%5D%20%5BPR%5D%20565477504"
 
-fun buildRequestHeaders(auth: String, androidId: Long, language: List<String> ?= null): Map<String, String> {
+fun buildRequestHeaders(auth: String, androidId: Long, language: List<String>? = null): Map<String, String> {
     var millis = System.currentTimeMillis()
     val timestamp = TimestampContainer.Builder().container2(
         TimestampContainer2.Builder().wrapper(TimestampWrapper.Builder().timestamp(makeTimestamp(millis)).build()).timestamp(makeTimestamp(millis)).build()

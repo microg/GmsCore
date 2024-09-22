@@ -15,7 +15,10 @@ import java.util.concurrent.TimeUnit
 
 object AuthManager {
     private const val TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/googleplay https://www.googleapis.com/auth/accounts.reauth"
-    fun getAuthData(context: Context, account: Account): AuthData? {
+    fun getAuthData(context: Context, account: Account? = AccountManager.get(context).getAccountsByType(DEFAULT_ACCOUNT_TYPE).firstOrNull()): AuthData? {
+
+        if (account == null) return null
+
         val deviceCheckInConsistencyToken = CheckinServiceClient.getConsistencyToken(context)
         val gsfId = GServices.getString(context.contentResolver, "android_id", "0")!!.toBigInteger().toString(16)
         if (Log.isLoggable(TAG, Log.DEBUG)) Log.d(TAG, "gsfId: $gsfId, deviceDataVersionInfo: $deviceCheckInConsistencyToken")

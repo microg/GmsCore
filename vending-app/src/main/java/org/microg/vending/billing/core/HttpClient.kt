@@ -23,7 +23,7 @@ class HttpClient(context: Context) {
 
     val requestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
 
-    suspend fun download(url: String, downloadFile: File, tag: String): String = suspendCoroutine { continuation ->
+    suspend fun download(url: String, downloadFile: File, tag: Any): String = suspendCoroutine { continuation ->
         val uriBuilder = Uri.parse(url).buildUpon()
         requestQueue.add(object : Request<String>(Method.GET, uriBuilder.build().toString(), null) {
             override fun parseNetworkResponse(response: NetworkResponse): Response<String> {
