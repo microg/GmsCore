@@ -23,9 +23,9 @@
     <string name="about_name_version_str">%1$s %2$s</string>
     <string name="about_default_license">Todos os direitos reservados.</string>
 
-    <string name="prefcat_setup">Configurar</string>
+    <string name="prefcat_setup">Configuração</string>
 
-    <string name="self_check_title">Autoverificação</string>
+    <string name="self_check_title">Auto-verificação</string>
     <string name="self_check_desc">Verifique se o sistema está configurado corretamente para usar o microG.</string>
 
     <string name="self_check_cat_permissions">Permissões concedidas</string>
@@ -39,6 +39,6 @@
 
     <string name="about_android_support_v4">Biblioteca de suporte v4</string>
     <string name="about_android_support_v7_appcompat">Biblioteca de suporte v7 appcompat</string>
-    <string name="about_android_support_v7_preference">Biblioteca de suporte de preferências v7 </string>
+    <string name="about_android_support_v7_preference">Biblioteca de suporte v7 preferences </string>
     <string name="about_android_support_license">Licença "Apache 2.0", Android Open Source Project</string>
 </resources>
