@@ -138,7 +138,12 @@ class PolylineImpl(private val polyline: Polyline, polylineOptions: PolylineOpti
     }
 
     override fun setTag(tag: IObjectWrapper?) {
-        polyline.tag = tag.unwrap()
+        val unwrap = tag.unwrap<Any>()
+        if (unwrap != null) {
+            polyline.tag = tag.unwrap()
+        } else {
+            Log.w(TAG, "setTag is null")
+        }
     }
 
     override fun setEndCap(endCap: Cap) {
