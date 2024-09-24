@@ -18,6 +18,7 @@ import org.microg.gms.maps.hms.utils.toGms
 import org.microg.gms.maps.hms.utils.toHms
 
 class GroundOverlayImpl(private val groundOverlay: GroundOverlay) : IGroundOverlayDelegate.Stub() {
+    private var tag: Any? = null
 
     override fun getId(): String {
         return groundOverlay.id
@@ -88,7 +89,7 @@ class GroundOverlayImpl(private val groundOverlay: GroundOverlay) : IGroundOverl
     }
 
     override fun getTag(): IObjectWrapper? {
-        return ObjectWrapper.wrap(groundOverlay.tag)
+        return ObjectWrapper.wrap(this.tag)
     }
 
     override fun isClickable(): Boolean = groundOverlay.isClickable
@@ -102,7 +103,7 @@ class GroundOverlayImpl(private val groundOverlay: GroundOverlay) : IGroundOverl
     }
 
     override fun setTag(tag: IObjectWrapper) {
-        groundOverlay.tag = tag.unwrap()
+        this.tag = tag.unwrap()
     }
 
     override fun equalsRemote(other: IGroundOverlayDelegate?): Boolean {
