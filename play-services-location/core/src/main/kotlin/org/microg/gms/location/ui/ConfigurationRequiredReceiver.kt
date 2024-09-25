@@ -7,7 +7,9 @@ package org.microg.gms.location.ui
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
 import org.microg.gms.location.ACTION_CONFIGURATION_REQUIRED
 import org.microg.gms.location.CONFIGURATION_FIELD_ONLINE_SOURCE
 import org.microg.gms.location.EXTRA_CONFIGURATION
@@ -20,6 +22,7 @@ import org.microg.gms.location.core.R
 class ConfigurationRequiredReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION_CONFIGURATION_REQUIRED) {
+            if (SDK_INT >= 23 && context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) return
             val channel = NotificationChannelCompat.Builder("location", NotificationManagerCompat.IMPORTANCE_DEFAULT)
                 .setName(context.getString(R.string.service_name_location)).build()
             NotificationManagerCompat.from(context).createNotificationChannel(channel)

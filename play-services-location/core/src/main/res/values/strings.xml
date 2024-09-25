@@ -60,6 +60,6 @@
     <string name="location_data_export_wifi_title">Export local Wi-Fi location database</string>
     <string name="location_data_export_cell_title">Export local cell tower location database</string>
     <string name="location_data_import_title">Import location data from file</string>
-    <string name="location_data_import_result_toast">Imported %1$s records.</string>
+    <string name="location_data_import_result_toast">Imported %1$d records.</string>
 
 </resources>

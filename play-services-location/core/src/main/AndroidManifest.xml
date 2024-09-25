@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <uses-permission
         android:name="android.permission.UPDATE_DEVICE_STATS"
@@ -56,15 +57,6 @@
             android:process=":ui"
             android:theme="@style/Theme.App.Translucent"
             android:exported="false" />
-
-        <activity
-            android:name="org.microg.gms.location.ui.ImportExportActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="org.microg.gms.location.network.ACTION_NETWORK_IMPORT_EXPORT" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <service
             android:name="org.microg.gms.location.manager.LocationManagerService"
