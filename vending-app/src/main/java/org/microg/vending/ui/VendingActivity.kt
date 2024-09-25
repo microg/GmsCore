@@ -21,7 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.android.vending.buildRequestHeaders
-import com.android.vending.installer.installPackages
+import com.android.vending.installer.installPackagesFromNetwork
 import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.DeviceConfiguration
@@ -39,7 +39,6 @@ import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
 import org.microg.vending.billing.proto.GoogleApiResponse
-import org.microg.vending.delivery.downloadPackageComponents
 import org.microg.vending.enterprise.EnterpriseApp
 import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.enterprise.AppState
@@ -104,22 +103,17 @@ class VendingActivity : ComponentActivity() {
                         return@runBlocking
                     }
 
-                    val packageFiles = client.downloadPackageComponents(this@VendingActivity, downloadUrls.getOrThrow(), Unit)
-                    if (packageFiles.values.any { it == null }) {
-                        Log.w(TAG, "Cannot proceed to installation as not all files were downloaded")
-                        apps[app] = previousState
-                        return@runBlocking
-                    }
-
                     runCatching {
-                        installPackages(
-                            app.packageName,
-                            packageFiles.values.filterNotNull(),
-                            isUpdate
+                        installPackagesFromNetwork(
+                            packageName = app.packageName,
+                            components = downloadUrls.getOrThrow(),
+                            httpClient = client,
+                            isUpdate = isUpdate
                         )
                     }.onSuccess {
                         apps[app] = AppState.INSTALLED
                     }.onFailure {
+                        Log.w(TAG, "Installation from network unsuccessful.")
                         apps[app] = previousState
                     }
                 }

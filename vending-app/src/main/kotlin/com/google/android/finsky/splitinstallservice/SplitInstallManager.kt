@@ -18,13 +18,12 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.pm.PackageInfoCompat
 import com.android.vending.R
 import com.android.vending.installer.KEY_BYTES_DOWNLOADED
-import com.android.vending.installer.installPackages
+import com.android.vending.installer.installPackagesFromNetwork
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.vending.billing.AuthManager
 import org.microg.vending.billing.core.HttpClient
-import org.microg.vending.delivery.downloadPackageComponents
 import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.splitinstall.SPLIT_LANGUAGE_TAG
 
@@ -92,29 +91,22 @@ class SplitInstallManager(val context: Context) {
             splitInstallRecord[it] = DownloadStatus.PENDING
         }
 
-        val packageFiles = httpClient.downloadPackageComponents(context, components, SPLIT_LANGUAGE_TAG)
-
-        packageFiles.forEach { (component, downloadFile) ->
-            splitInstallRecord[component] = if (downloadFile != null) DownloadStatus.COMPLETE else DownloadStatus.FAILED
-        }
-
-        val installFiles = packageFiles.map {
-            if (it.value == null) {
-                Log.w(TAG, "splitInstallFlow download failed, as ${it.key} was not downloaded")
-                throw RuntimeException("installSplitPackage downloadSplitPackage has error")
-            } else it.value!!
-        }
-        Log.v(TAG, "splitInstallFlow downloaded success, downloaded ${installFiles.size} files")
-
         val success = runCatching {
-            context.installPackages(callingPackage, installFiles, false)
+            context.installPackagesFromNetwork(
+                packageName = callingPackage,
+                components = components,
+                httpClient = httpClient,
+                isUpdate = false
+            )
         }.isSuccess
 
         NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
         return if (success) {
             sendCompleteBroad(context, callingPackage, components.sumOf { it.size.toLong() })
+            components.forEach { splitInstallRecord[it] = DownloadStatus.COMPLETE }
             true
         } else {
+            components.forEach { splitInstallRecord[it] = DownloadStatus.FAILED }
             false
         }
     }

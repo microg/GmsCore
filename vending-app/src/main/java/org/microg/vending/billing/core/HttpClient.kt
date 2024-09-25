@@ -26,6 +26,7 @@ import org.microg.gms.utils.singleInstanceOf
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStream
 
 private const val POST_TIMEOUT = 8000L
 
@@ -41,18 +42,24 @@ class HttpClient {
         url: String,
         downloadFile: File,
         params: Map<String, String> = emptyMap()
-    ): File {
-        client.prepareGet(url.asUrl(params)).execute { response ->
-            val parentDir = downloadFile.getParentFile()
-            if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
-                throw IOException("Failed to create directories: ${parentDir.absolutePath}")
-            }
-            val body: ByteReadChannel = response.body()
-            FileOutputStream(downloadFile).use { out ->
-                body.copyTo(out = out)
-            }
+    ): File = downloadFile.also { toFile ->
+        val parentDir = downloadFile.getParentFile()
+        if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
+            throw IOException("Failed to create directories: ${parentDir.absolutePath}")
         }
-        return downloadFile
+
+        FileOutputStream(toFile).use { download(url, it, params) }
+    }
+
+    suspend fun download(
+        url: String,
+        downloadTo: OutputStream,
+        params: Map<String, String> = emptyMap()
+    ) {
+        client.prepareGet(url.asUrl(params)).execute { response ->
+            val body: ByteReadChannel = response.body()
+            body.copyTo(out = downloadTo)
+        }
     }
 
     suspend fun <O> get(
