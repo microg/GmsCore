@@ -1,7 +1,6 @@
-
 syntax = "proto3";
 
-option java_package = "com.google.android.finsky";
+option java_package = "org.microg.vending.enterprise.proto";
 option java_multiple_files = true;
 
 message EnterpriseClientPolicyResponse {
@@ -20,6 +19,7 @@ message App {
     optional int32 unknownNumber = 9; // = 1
 }
 
+// TODO: could be inaccurate
 enum AppInstallPolicy {
     UNKNOWN = 0;
     OPTIONAL = 1;

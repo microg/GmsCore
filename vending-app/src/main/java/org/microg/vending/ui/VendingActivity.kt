@@ -20,15 +20,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.android.vending.AppMeta
-import com.android.vending.GetItemsRequest
-import com.android.vending.GetItemsResponse
-import com.android.vending.RequestApp
-import com.android.vending.RequestItem
 import com.android.vending.buildRequestHeaders
 import com.android.vending.installer.installPackages
 import com.android.volley.VolleyError
-import com.google.android.finsky.GoogleApiResponse
 import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.DeviceConfiguration
@@ -45,10 +39,15 @@ import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_FDFE
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
+import org.microg.vending.billing.proto.GoogleApiResponse
 import org.microg.vending.delivery.downloadPackageComponents
 import org.microg.vending.enterprise.EnterpriseApp
 import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.enterprise.AppState
+import org.microg.vending.proto.AppMeta
+import org.microg.vending.proto.GetItemsRequest
+import org.microg.vending.proto.RequestApp
+import org.microg.vending.proto.RequestItem
 import org.microg.vending.ui.components.EnterpriseList
 import org.microg.vending.ui.components.NetworkState
 import java.io.IOException
@@ -178,14 +177,14 @@ class VendingActivity : ComponentActivity() {
                         ),
                         adapter = GoogleApiResponse.ADAPTER
                     )
-                    Log.d(TAG, "uploaddc: ${upload.response!!.uploadDeviceConfigResponse}")
+                    Log.d(TAG, "uploaddc: ${upload.payload!!.uploadDeviceConfigResponse}")
 
                     // Fetch list of apps available to the scoped enterprise account
                     val apps = client.post(
                         url = URL_ENTERPRISE_CLIENT_POLICY,
                         headers = headers.plus("content-type" to "application/x-protobuf"),
                         adapter = GoogleApiResponse.ADAPTER
-                    ).response?.enterpriseClientPolicyResult?.policy?.apps?.filter { it.packageName != null && it.policy != null }
+                    ).payload?.enterpriseClientPolicyResponse?.policy?.apps?.filter { it.packageName != null && it.policy != null }
 
                     if (apps == null) {
                         Log.e(TAG, "unexpected network response: missing expected fields")
@@ -200,13 +199,13 @@ class VendingActivity : ComponentActivity() {
                         url = URL_ITEM_DETAILS,
                         // TODO: meaning unclear, but returns 400 without. constant? possibly has influence on which fields are returned?
                         headers = headers.plus("x-dfe-item-field-mask" to "GgWGHay3ByILPP/Avy+4A4YlCRM"),
-                        adapter = GetItemsResponse.ADAPTER,
                         payload = GetItemsRequest(
                             apps.map {
                                 RequestItem(RequestApp(AppMeta(it.packageName)))
                             }
-                        )
-                    ).items.map { it.response }.filterNotNull().associate { item ->
+                        ),
+                        adapter = GoogleApiResponse.ADAPTER
+                    ).getItemsResponses.mapNotNull { it.response }.associate { item ->
                         val packageName = item.meta!!.packageName!!
                         val installedDetails = this@VendingActivity.packageManager.getInstalledPackages(0).find {
                             it.applicationInfo.packageName == packageName

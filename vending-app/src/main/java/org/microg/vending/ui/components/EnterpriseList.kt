@@ -24,10 +24,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.vending.R
-import com.google.android.finsky.AppInstallPolicy
-import org.microg.vending.enterprise.App
 import org.microg.vending.enterprise.AppState
 import org.microg.vending.enterprise.EnterpriseApp
+import org.microg.vending.enterprise.proto.AppInstallPolicy
 
 
 @Composable

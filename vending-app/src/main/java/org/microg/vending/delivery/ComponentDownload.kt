@@ -32,7 +32,7 @@ suspend fun HttpClient.downloadPackageComponents(
                 )
                 file
             }.onFailure {
-                Log.w(TAG, "package component failed to downlaod from url ${info.url}, " +
+                Log.w(TAG, "package component failed to download from url ${info.url}, " +
                         "to be saved as `${info.componentName}`", it)
             }.getOrNull()
         }

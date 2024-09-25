@@ -2,11 +2,11 @@ package org.microg.vending.delivery
 
 import android.util.Log
 import com.android.vending.buildRequestHeaders
-import com.google.android.finsky.GoogleApiResponse
 import com.google.android.finsky.splitinstallservice.PackageComponent
 import org.microg.vending.billing.core.AuthData
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DELIVERY
 import org.microg.vending.billing.core.HttpClient
+import org.microg.vending.billing.proto.GoogleApiResponse
 import org.microg.vending.splitinstall.SPLIT_LANGUAGE_TAG
 
 private const val TAG = "GmsVendingDelivery"
@@ -60,24 +60,24 @@ suspend fun HttpClient.requestDownloadUrls(
     )
     Log.d(TAG, "requestDownloadUrls end response -> $response")
 
-    val basePackage = response.response!!.splitReqResult!!.pkgList?.let {
+    val basePackage = response.payload!!.deliveryResponse!!.deliveryData?.let {
         if (it.baseUrl != null && it.baseBytes != null) {
             PackageComponent(packageName, "base", it.baseUrl, it.baseBytes)
         } else null
     }
-    val splitComponents = response.response.splitReqResult!!.pkgList!!.pkgDownLoadInfo.filter {
-        !it.splitPkgName.isNullOrEmpty() && !it.downloadUrl.isNullOrEmpty()
+    val splitComponents = response.payload.deliveryResponse!!.deliveryData!!.splitPackages.filter {
+        !it.splitPackageName.isNullOrEmpty() && !it.downloadUrl.isNullOrEmpty()
     }.map {
         if (requestSplitPackages != null) {
             // Only download requested, if specific components were requested
             requestSplitPackages.firstOrNull { requestComponent ->
-                requestComponent.contains(it.splitPkgName!!)
+                requestComponent.contains(it.splitPackageName!!)
             }?.let { requestComponent ->
                 PackageComponent(packageName, requestComponent, it.downloadUrl!!, it.size!!)
             }
         } else {
             // Download all offered components (server chooses)
-            PackageComponent(packageName, it.splitPkgName!!, it.downloadUrl!!, it.size!!)
+            PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!)
         }
     }
 

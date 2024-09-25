@@ -1,16 +1,11 @@
 syntax = "proto3";
 
-import "GetItemsRequest.proto";
-option java_package = "com.android.vending";
+option java_package = "org.microg.vending.proto";
 option java_multiple_files = true;
 
-message GetItemsResponse {
-    // technically this is a typical Google response containing the typical `GoogleApiResponse` fields,
-    // but field 1.145 only encodes some kind of index and the real content is at field 11
-    repeated ItemQuery items = 11;
-}
+import "GetItemsRequest.proto";
 
-message ItemQuery {
+message GetItemsResponse {
     optional RequestApp query = 1;
     optional ItemResponse response = 2;
 }

@@ -8,11 +8,11 @@ import android.content.pm.PackageInfo
 import android.os.RemoteException
 import android.util.Log
 import com.android.vending.AUTH_TOKEN_SCOPE
-import com.android.vending.LicenseResult
 import com.android.vending.buildRequestHeaders
 import com.android.vending.getAuthToken
 import com.android.volley.VolleyError
 import org.microg.vending.billing.core.HttpClient
+import org.microg.vending.billing.proto.GoogleApiResponse
 import java.io.IOException
 
 private const val TAG = "FakeLicenseChecker"
@@ -142,8 +142,8 @@ suspend fun HttpClient.makeLicenseV1Request(
 ): V1Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicense?pkgn=$packageName&vc=$versionCode&nnc=$nonce",
     headers = buildRequestHeaders(auth, androidId),
-    adapter = LicenseResult.ADAPTER
-).information?.v1?.let {
+    adapter = GoogleApiResponse.ADAPTER
+).payload?.licenseV1Response?.let {
     if (it.result != null && it.signedData != null && it.signature != null) {
         V1Response(it.result, it.signedData, it.signature)
     } else null
@@ -157,8 +157,8 @@ suspend fun HttpClient.makeLicenseV2Request(
 ): V2Response? = get(
     url = "https://play-fe.googleapis.com/fdfe/apps/checkLicenseServerFallback?pkgn=$packageName&vc=$versionCode",
     headers = buildRequestHeaders(auth, androidId),
-    adapter = LicenseResult.ADAPTER
-).information?.v2?.license?.jwt?.let {
+    adapter = GoogleApiResponse.ADAPTER
+).payload?.licenseV2Response?.license?.jwt?.let {
     // Field present ←→ user has license
     V2Response(LICENSED, it)
 }

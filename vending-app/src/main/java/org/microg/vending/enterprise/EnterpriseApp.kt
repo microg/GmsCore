@@ -1,6 +1,6 @@
 package org.microg.vending.enterprise
 
-import com.google.android.finsky.AppInstallPolicy
+import org.microg.vending.enterprise.proto.AppInstallPolicy
 
 class EnterpriseApp(
     packageName: String,
