@@ -24,13 +24,11 @@ suspend fun HttpClient.downloadPackageComponents(
         Log.d(TAG, "downloadSplitPackage: $info")
         async {
             info to runCatching {
-                val file = File(context.packageDownloadLocation().toString(), info.componentName)
+                val file = File(context.packageDownloadLocation().toString(), "${info.packageName}-${info.componentName}")
                 download(
                     url = info.url,
-                    downloadFile = file,
-                    tag = tag
+                    downloadFile = file
                 )
-                file
             }.onFailure {
                 Log.w(TAG, "package component failed to download from url ${info.url}, " +
                         "to be saved as `${info.componentName}`", it)

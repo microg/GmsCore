@@ -19,7 +19,7 @@ class IAPCore(
     private val authData: AuthData
 ) {
     suspend fun requestAuthProofToken(password: String): String {
-        return HttpClient(context).post(
+        return HttpClient().post(
             GooglePlayApi.URL_AUTH_PROOF_TOKENS,
             headers = HeaderProvider.getBaseHeaders(authData, deviceInfo),
             payload = JSONObject().apply {
@@ -100,7 +100,7 @@ class IAPCore(
                 }
             }
             Log.d("IAPCore", "getSkuDetails: ")
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_SKU_DETAILS,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 payload = skuDetailsRequest,
@@ -240,7 +240,7 @@ class IAPCore(
                 }.build()
             }
         return try {
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_EES_ACQUIRE,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 params = mapOf("theme" to acquireRequest.theme.toString()),
@@ -265,7 +265,7 @@ class IAPCore(
         )
 
         return try {
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_CONSUME_PURCHASE,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 form = request,
@@ -286,7 +286,7 @@ class IAPCore(
         }.build()
 
         return try {
-            val response = HttpClient(context).post(
+            val response = HttpClient().post(
                 GooglePlayApi.URL_ACKNOWLEDGE_PURCHASE,
                 headers = HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 payload = acknowledgePurchaseRequest,
@@ -314,7 +314,7 @@ class IAPCore(
         }
 
         return try {
-            val response = HttpClient(context).get(
+            val response = HttpClient().get(
                 GooglePlayApi.URL_GET_PURCHASE_HISTORY,
                 HeaderProvider.getDefaultHeaders(authData, deviceInfo),
                 reqParams,

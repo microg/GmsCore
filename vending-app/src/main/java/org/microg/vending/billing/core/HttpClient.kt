@@ -1,55 +1,58 @@
 package org.microg.vending.billing.core
 
-import android.content.Context
-import android.net.Uri
-import com.android.volley.*
-import com.android.volley.toolbox.HttpHeaderParser
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.squareup.wire.Message
 import com.squareup.wire.ProtoAdapter
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.timeout
+import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.request.post
+import io.ktor.client.request.prepareGet
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.ParametersImpl
+import io.ktor.http.URLBuilder
+import io.ktor.http.Url
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.jvm.javaio.copyTo
 import org.json.JSONObject
 import org.microg.gms.utils.singleInstanceOf
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-private const val POST_TIMEOUT = 8000
+private const val POST_TIMEOUT = 8000L
 
-class HttpClient(context: Context) {
+class HttpClient {
 
-    val requestQueue = singleInstanceOf { Volley.newRequestQueue(context.applicationContext) }
+    private val client = singleInstanceOf { HttpClient(OkHttp) {
+        expectSuccess = true
+        //install(HttpCache)
+        install(HttpTimeout)
+    } }
 
-    suspend fun download(url: String, downloadFile: File, tag: Any): String = suspendCoroutine { continuation ->
-        val uriBuilder = Uri.parse(url).buildUpon()
-        requestQueue.add(object : Request<String>(Method.GET, uriBuilder.build().toString(), null) {
-            override fun parseNetworkResponse(response: NetworkResponse): Response<String> {
-                if (response.statusCode != 200) throw VolleyError(response)
-                return try {
-                    val parentDir = downloadFile.getParentFile()
-                    if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
-                        throw IOException("Failed to create directories: ${parentDir.absolutePath}")
-                    }
-                    val fos = FileOutputStream(downloadFile)
-                    fos.write(response.data)
-                    fos.close()
-                    Response.success(downloadFile.absolutePath, HttpHeaderParser.parseCacheHeaders(response))
-                } catch (e: Exception) {
-                    Response.error(VolleyError(e))
-                }
+    suspend fun download(
+        url: String,
+        downloadFile: File,
+        params: Map<String, String> = emptyMap()
+    ): File {
+        client.prepareGet(url.asUrl(params)).execute { response ->
+            val parentDir = downloadFile.getParentFile()
+            if (parentDir != null && !parentDir.exists() && !parentDir.mkdirs()) {
+                throw IOException("Failed to create directories: ${parentDir.absolutePath}")
             }
-
-            override fun deliverResponse(response: String) {
-                continuation.resume(response)
+            val body: ByteReadChannel = response.body()
+            FileOutputStream(downloadFile).use { out ->
+                body.copyTo(out = out)
             }
-
-            override fun deliverError(error: VolleyError) {
-                continuation.resumeWithException(error)
-            }
-        }.setShouldCache(false).setTag(tag))
+        }
+        return downloadFile
     }
 
     suspend fun <O> get(
@@ -57,117 +60,129 @@ class HttpClient(context: Context) {
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         adapter: ProtoAdapter<O>,
-        cache: Boolean = true
-    ): O = suspendCoroutine { continuation ->
-        val uriBuilder = Uri.parse(url).buildUpon()
-        params.forEach {
-            uriBuilder.appendQueryParameter(it.key, it.value)
+    ): O {
+
+        val response = client.get(url.asUrl(params)) {
+            headers {
+                headers.forEach {
+                    append(it.key, it.value)
+                }
+            }
         }
-        requestQueue.add(object : Request<O>(Method.GET, uriBuilder.build().toString(), null) {
-            override fun parseNetworkResponse(response: NetworkResponse): Response<O> {
-                if (response.statusCode != 200) throw VolleyError(response)
-                return Response.success(adapter.decode(response.data), HttpHeaderParser.parseCacheHeaders(response))
-            }
-
-            override fun deliverResponse(response: O) {
-                continuation.resume(response)
-            }
-
-            override fun deliverError(error: VolleyError) {
-                continuation.resumeWithException(error)
-            }
-
-            override fun getHeaders(): Map<String, String> = headers
-        }.setShouldCache(cache))
+        if (response.status != HttpStatusCode.OK) throw IOException("Server responded with status ${response.status}")
+        else return adapter.decode(response.body<ByteArray>())
     }
 
+    /**
+     * Post empty body.
+     */
+    suspend fun <I : Message<I, *>, O> post(
+        url: String,
+        headers: Map<String, String> = emptyMap(),
+        params: Map<String, String> = emptyMap(),
+        adapter: ProtoAdapter<O>,
+        cache: Boolean = false // TODO not implemented
+    ): O {
+        val response = client.post(url.asUrl(params)) {
+            setBody(ByteArray(0))
+            headers {
+                headers.forEach {
+                    append(it.key, it.value)
+                }
 
+                append(HttpHeaders.ContentType, "application/x-protobuf")
+            }
+            timeout {
+                requestTimeoutMillis = POST_TIMEOUT
+            }
+        }
+        return adapter.decode(response.body<ByteArray>())
+    }
 
+    /**
+     * Post protobuf-encoded body.
+     */
     suspend fun <I : Message<I, *>, O> post(
         url: String,
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         payload: I,
         adapter: ProtoAdapter<O>,
-        cache: Boolean = false
-    ): O = suspendCoroutine { continuation ->
-        val uriBuilder = Uri.parse(url).buildUpon()
-        params.forEach {
-            uriBuilder.appendQueryParameter(it.key, it.value)
+        cache: Boolean = false // TODO not implemented
+    ): O {
+        val response = client.post(url.asUrl(params)) {
+            setBody(ByteReadChannel(payload.encode()))
+            headers {
+                headers.forEach {
+                    append(it.key, it.value)
+                }
+
+                append(HttpHeaders.ContentType, "application/x-protobuf")
+            }
+            timeout {
+                requestTimeoutMillis = POST_TIMEOUT
+            }
         }
-        requestQueue.add(object : Request<O>(Method.POST, uriBuilder.build().toString(), null) {
-            override fun parseNetworkResponse(response: NetworkResponse): Response<O> {
-                if (response.statusCode != 200) throw VolleyError(response)
-                return Response.success(adapter.decode(response.data), HttpHeaderParser.parseCacheHeaders(response))
-            }
-
-            override fun deliverResponse(response: O) {
-                continuation.resume(response)
-            }
-
-            override fun deliverError(error: VolleyError) {
-                continuation.resumeWithException(error)
-            }
-
-            override fun getHeaders(): Map<String, String> = headers
-            override fun getBody(): ByteArray = payload.encode()
-            override fun getBodyContentType(): String = "application/x-protobuf"
-        }.setShouldCache(cache).setRetryPolicy(DefaultRetryPolicy(POST_TIMEOUT, 0, 0.0F)))
+        return adapter.decode(response.body<ByteArray>())
     }
 
+    /**
+     * Post JSON body.
+     */
     suspend fun post(
         url: String,
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         payload: JSONObject,
-        cache: Boolean = false
-    ): JSONObject = suspendCoroutine { continuation ->
-        val uriBuilder = Uri.parse(url).buildUpon()
-        params.forEach {
-            uriBuilder.appendQueryParameter(it.key, it.value)
+        cache: Boolean = false // TODO not implemented
+    ): JSONObject {
+        val response = client.post(url.asUrl(params)) {
+            setBody(payload.toString())
+            headers {
+                headers.forEach {
+                    append(it.key, it.value)
+                }
+
+                append(HttpHeaders.ContentType, "application/json")
+            }
+            timeout {
+                requestTimeoutMillis = POST_TIMEOUT
+            }
         }
-        requestQueue.add(object : JsonObjectRequest(Method.POST, uriBuilder.build().toString(), payload, null, null) {
-
-            override fun deliverResponse(response: JSONObject) {
-                continuation.resume(response)
-            }
-
-            override fun deliverError(error: VolleyError) {
-                continuation.resumeWithException(error)
-            }
-
-            override fun getHeaders(): Map<String, String> = headers
-        }.setShouldCache(cache).setRetryPolicy(DefaultRetryPolicy(POST_TIMEOUT, 0, 0.0F)))
+        return JSONObject(response.body<String>())
     }
 
+    /**
+     * Post form body.
+     */
     suspend fun <O> post(
         url: String,
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         form: Map<String, String> = emptyMap(),
         adapter: ProtoAdapter<O>,
-        cache: Boolean = false
-    ): O = suspendCoroutine { continuation ->
-        val uriBuilder = Uri.parse(url).buildUpon()
-        params.forEach {
-            uriBuilder.appendQueryParameter(it.key, it.value)
+        cache: Boolean = false // TODO not implemented
+    ): O {
+        val response = client.submitForm(
+            formParameters = ParametersImpl(form.mapValues { listOf(it.key) }),
+            encodeInQuery = false
+        ) {
+            url(url.asUrl(params))
+            headers { // Content-Type is set to `x-www-form-urlencode` automatically
+                headers.forEach {
+                    append(it.key, it.value)
+                }
+            }
+            timeout {
+                requestTimeoutMillis = POST_TIMEOUT
+            }
         }
-        requestQueue.add(object : Request<O>(Method.POST, uriBuilder.build().toString(), null) {
-            override fun parseNetworkResponse(response: NetworkResponse): Response<O> {
-                if (response.statusCode != 200) throw VolleyError(response)
-                return Response.success(adapter.decode(response.data), HttpHeaderParser.parseCacheHeaders(response))
-            }
-
-            override fun deliverResponse(response: O) {
-                continuation.resume(response)
-            }
-
-            override fun deliverError(error: VolleyError) {
-                continuation.resumeWithException(error)
-            }
-
-            override fun getHeaders(): Map<String, String> = headers
-            override fun getParams(): Map<String, String> = form
-        }.setShouldCache(cache).setRetryPolicy(DefaultRetryPolicy(POST_TIMEOUT, 0, 0.0F)))
+        return adapter.decode(response.body<ByteArray>())
     }
+
+    private fun String.asUrl(params: Map<String, String>): Url = URLBuilder(this).apply {
+        params.forEach {
+            parameters.append(it.key, it.value)
+        }
+    }.build()
 }

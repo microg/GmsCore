@@ -26,6 +26,7 @@ android {
                 removeUnusedResources false
                 obfuscate false
                 optimizeCode false
+                proguardFile 'proguard-rules.pro'
             }
         }
         release {
@@ -34,6 +35,7 @@ android {
                 removeUnusedResources true
                 obfuscate false
                 optimizeCode true
+                proguardFile 'proguard-rules.pro'
             }
         }
     }
@@ -96,7 +98,9 @@ dependencies {
     implementation "com.squareup.wire:wire-runtime:$wireVersion"
     implementation "com.squareup.wire:wire-grpc-client:$wireVersion"
 
-    implementation "com.android.volley:volley:$volleyVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "io.ktor:ktor-client-core:$ktorVersion"
+    implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
 
     implementation "androidx.webkit:webkit:$webkitVersion"
 

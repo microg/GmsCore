@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.android.vending.buildRequestHeaders
 import com.android.vending.installer.installPackages
-import com.android.volley.VolleyError
 import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.common.DeviceConfiguration
@@ -89,7 +88,7 @@ class VendingActivity : ComponentActivity() {
                     val previousState = apps[app]!!
                     apps[app] = AppState.PENDING
 
-                    val client = HttpClient(this@VendingActivity)
+                    val client = HttpClient()
 
                     // Get download links for requested package
                     val downloadUrls = runCatching { client.requestDownloadUrls(
@@ -164,7 +163,7 @@ class VendingActivity : ComponentActivity() {
                     }
 
                     val headers = buildRequestHeaders(authData.authToken, authData.gsfId.toLong(16))
-                    val client = HttpClient(this@VendingActivity)
+                    val client = HttpClient()
 
                     // Register device for server-side compatibility checking
                     val upload = client.post(
@@ -241,10 +240,6 @@ class VendingActivity : ComponentActivity() {
                     }
                     networkState = NetworkState.PASSIVE
                 } catch (e: IOException) {
-                    networkState = NetworkState.ERROR
-                    Log.e(TAG, "Network error: ${e.message}")
-                    e.printStackTrace()
-                } catch (e: VolleyError) {
                     networkState = NetworkState.ERROR
                     Log.e(TAG, "Network error: ${e.message}")
                     e.printStackTrace()

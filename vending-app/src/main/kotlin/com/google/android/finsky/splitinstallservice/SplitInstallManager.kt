@@ -29,7 +29,6 @@ import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.splitinstall.SPLIT_LANGUAGE_TAG
 
 private const val SPLIT_INSTALL_NOTIFY_ID = 111
-private const val SPLIT_INSTALL_REQUEST_TAG = "splitInstallRequestTag"
 
 private const val NOTIFY_CHANNEL_ID = "splitInstall"
 private const val NOTIFY_CHANNEL_NAME = "Split Install"
@@ -48,7 +47,7 @@ private const val TAG = "SplitInstallManager"
 
 class SplitInstallManager(val context: Context) {
 
-    private var httpClient: HttpClient = HttpClient(context)
+    private var httpClient: HttpClient = HttpClient()
 
     suspend fun splitInstallFlow(callingPackage: String, splits: List<Bundle>): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return false
@@ -181,7 +180,6 @@ class SplitInstallManager(val context: Context) {
     }
 
     fun release() {
-        httpClient.requestQueue.cancelAll(SPLIT_INSTALL_REQUEST_TAG)
         splitInstallRecord.clear()
         deferredMap.clear()
     }

@@ -10,7 +10,6 @@ import android.util.Log
 import com.android.vending.AUTH_TOKEN_SCOPE
 import com.android.vending.buildRequestHeaders
 import com.android.vending.getAuthToken
-import com.android.volley.VolleyError
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.proto.GoogleApiResponse
 import java.io.IOException
@@ -126,11 +125,8 @@ suspend fun HttpClient.checkLicense(
                 packageName, auth, packageInfo.versionCode, decodedAndroidId
             )
         } ?: ErrorResponse(NOT_LICENSED)
-    } catch (e: VolleyError) {
-        Log.e(TAG, "License request failed with $e")
-        ErrorResponse(ERROR_CONTACTING_SERVER)
     } catch (e: IOException) {
-        Log.e(TAG, "Encountered a network error during operation ($e)")
+        Log.e(TAG, "Encountered a network error during operation", e)
         ErrorResponse(ERROR_CONTACTING_SERVER)
     } catch (e: OperationCanceledException) {
         ErrorResponse(ERROR_CONTACTING_SERVER)

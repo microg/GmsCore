@@ -3,7 +3,7 @@ package org.microg.vending.billing
 import android.accounts.Account
 import android.content.Context
 import android.util.Log
-import com.android.volley.VolleyError
+import io.ktor.utils.io.errors.IOException
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_DETAILS
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_PURCHASE
 import org.microg.vending.billing.core.HeaderProvider
@@ -29,8 +29,8 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
             params = mapOf("doc" to packageName),
             adapter = GoogleApiResponse.ADAPTER
         ).payload?.detailsResponse
-    } catch (e: VolleyError) {
-        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response when gathering app data")
+    } catch (e: IOException) {
+        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response when gathering app data", e)
         return false
     }
 
@@ -67,8 +67,8 @@ suspend fun HttpClient.acquireFreeAppLicense(context: Context, account: Account,
             params = parameters,
             adapter = GoogleApiResponse.ADAPTER
         ).payload?.buyResponse
-    } catch (e: VolleyError) {
-        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during purchase")
+    } catch (e: IOException) {
+        Log.e(TAG, "Unable to auto-purchase $packageName because of a network error or unexpected response during purchase", e)
         return false
     }
 

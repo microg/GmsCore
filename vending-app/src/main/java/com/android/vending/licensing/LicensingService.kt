@@ -16,8 +16,6 @@ import android.os.RemoteException
 import android.util.Log
 import com.android.vending.VendingPreferences.isLicensingEnabled
 import com.android.vending.VendingPreferences.isLicensingPurchaseFreeAppsEnabled
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
 import kotlinx.coroutines.runBlocking
 import org.microg.gms.auth.AuthConstants
 import org.microg.gms.profile.ProfileManager.ensureInitialized
@@ -25,7 +23,6 @@ import org.microg.vending.billing.acquireFreeAppLicense
 import org.microg.vending.billing.core.HttpClient
 
 class LicensingService : Service() {
-    private lateinit var queue: RequestQueue
     private lateinit var accountManager: AccountManager
     private lateinit var androidId: String
     private lateinit var httpClient: HttpClient
@@ -199,9 +196,8 @@ class LicensingService : Service() {
                 androidId = java.lang.Long.toHexString(cursor.getLong(0))
             }
         }
-        queue = Volley.newRequestQueue(this)
         accountManager = AccountManager.get(this)
-        httpClient = HttpClient(this)
+        httpClient = HttpClient()
 
         return mLicenseService
     }
