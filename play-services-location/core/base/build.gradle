@@ -31,7 +31,7 @@ android {
         } else if (localProperties.get("ichnaea.endpoint", "") != "") {
             onlineSourcesString = "[{\"id\": \"default\", \"url\": \"${localProperties.get("ichnaea.endpoint", "")}\"},{\"id\": \"custom\", \"import\": true}]"
         } else {
-            onlineSourcesString = "[{\"id\": \"beacondb\", \"name\": \"BeaconDB\", \"url\": \"https://api.beacondb.net/\", \"host\": \"beacondb.net\", \"terms\": \"https://beacondb.net/privacy/\", \"import\": true, \"allowContribute\": true},{\"id\": \"custom\", \"import\": true}]"
+            onlineSourcesString = "[{\"id\": \"beacondb\", \"name\": \"beaconDB\", \"url\": \"https://api.beacondb.net/\", \"host\": \"beacondb.net\", \"terms\": \"https://beacondb.net/privacy/\", \"import\": true, \"allowContribute\": true},{\"id\": \"custom\", \"import\": true}]"
         }
         buildConfigField "java.util.List<org.microg.gms.location.network.OnlineSource>", "ONLINE_SOURCES", "org.microg.gms.location.network.OnlineSourceKt.parseOnlineSources(\"${onlineSourcesString.replaceAll("\"", "\\\\\"")}\")"
     }
