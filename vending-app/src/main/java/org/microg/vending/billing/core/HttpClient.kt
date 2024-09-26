@@ -6,6 +6,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
@@ -20,7 +21,6 @@ import io.ktor.http.ParametersImpl
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.jvm.javaio.copyTo
 import io.ktor.utils.io.pool.ByteArrayPool
 import org.json.JSONObject
 import org.microg.gms.utils.singleInstanceOf
@@ -35,7 +35,12 @@ class HttpClient {
 
     private val client = singleInstanceOf { HttpClient(OkHttp) {
         expectSuccess = true
-        //install(HttpCache)
+        install(HttpTimeout)
+    } }
+
+    private val clientWithCache = singleInstanceOf { HttpClient(OkHttp) {
+        expectSuccess = true
+        install(HttpCache)
         install(HttpTimeout)
     } }
 
@@ -87,9 +92,10 @@ class HttpClient {
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         adapter: ProtoAdapter<O>,
+        cache: Boolean = true
     ): O {
 
-        val response = client.get(url.asUrl(params)) {
+        val response = (if (cache) clientWithCache else client).get(url.asUrl(params)) {
             headers {
                 headers.forEach {
                     append(it.key, it.value)
@@ -108,9 +114,9 @@ class HttpClient {
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         adapter: ProtoAdapter<O>,
-        cache: Boolean = false // TODO not implemented
+        cache: Boolean = false
     ): O {
-        val response = client.post(url.asUrl(params)) {
+        val response = (if (cache) clientWithCache else client).post(url.asUrl(params)) {
             setBody(ByteArray(0))
             headers {
                 headers.forEach {
@@ -135,9 +141,9 @@ class HttpClient {
         params: Map<String, String> = emptyMap(),
         payload: I,
         adapter: ProtoAdapter<O>,
-        cache: Boolean = false // TODO not implemented
+        cache: Boolean = false
     ): O {
-        val response = client.post(url.asUrl(params)) {
+        val response = (if (cache) clientWithCache else client).post(url.asUrl(params)) {
             setBody(ByteReadChannel(payload.encode()))
             headers {
                 headers.forEach {
@@ -161,9 +167,9 @@ class HttpClient {
         headers: Map<String, String> = emptyMap(),
         params: Map<String, String> = emptyMap(),
         payload: JSONObject,
-        cache: Boolean = false // TODO not implemented
+        cache: Boolean = false
     ): JSONObject {
-        val response = client.post(url.asUrl(params)) {
+        val response = (if (cache) clientWithCache else client).post(url.asUrl(params)) {
             setBody(payload.toString())
             headers {
                 headers.forEach {
@@ -188,9 +194,9 @@ class HttpClient {
         params: Map<String, String> = emptyMap(),
         form: Map<String, String> = emptyMap(),
         adapter: ProtoAdapter<O>,
-        cache: Boolean = false // TODO not implemented
+        cache: Boolean = false
     ): O {
-        val response = client.submitForm(
+        val response = (if (cache) clientWithCache else client).submitForm(
             formParameters = ParametersImpl(form.mapValues { listOf(it.key) }),
             encodeInQuery = false
         ) {
