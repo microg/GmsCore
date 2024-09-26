@@ -102,10 +102,10 @@ private suspend fun Context.installPackagesInternal(
     try {
         sessionId = packageInstaller.createSession(params)
         session = packageInstaller.openSession(sessionId)
-        componentNames.forEach { component ->
+        for (component in componentNames) {
             session.openWrite(component, 0, -1).use { outputStream ->
                 writeComponent(component, outputStream)
-                session.fsync(outputStream)
+                session!!.fsync(outputStream)
             }
         }
         val deferred = CompletableDeferred<Unit>()
@@ -127,6 +127,8 @@ private suspend fun Context.installPackagesInternal(
 
         emitProgress(CommitingSession)
         session.commit(pendingIntent.intentSender)
+        // don't abandon if `finally` step is reached after this point
+        session = null
 
         Log.d(TAG, "installPackages session commit")
         return deferred.await()
@@ -134,6 +136,8 @@ private suspend fun Context.installPackagesInternal(
         Log.w(TAG, "Error installing packages", e)
         throw e
     } finally {
-        session?.close()
+        Log.d(TAG, "Discarding session after error")
+        // discard downloaded data
+        session?.abandon()
     }
 }
