@@ -43,5 +43,11 @@
     <string name="pref_location_source_terms">Условия / Конфиденциальность</string>
     <string name="pref_location_import_export_title">Импорт или экспорт данных о местоположении</string>
     <string name="pref_location_source_title">Выберите онлай службу определения местоположения</string>
-    <string name="pref_location_source_suggested">Предложенный</string>
+    <string name="pref_location_source_suggested">Рекомендованный</string>
+    <string name="notification_config_required_title">Требуется настройка</string>
+    <string name="location_data_export_wifi_title">Экспортировать локальную базу местоположений Wi-Fi</string>
+    <string name="location_data_export_cell_title">Экспортировать локальную базу местоположений сотовых вышек</string>
+    <string name="location_data_import_result_toast">Импортировано %1$d записей.</string>
+    <string name="notification_config_required_text_online_sources">Чтобы продолжить использование онлайн-сервисов определения местоположения, вам необходимо выбрать сервис определения местоположения.</string>
+    <string name="location_data_import_title">Импорт данных о местоположении из файла</string>
 </resources>

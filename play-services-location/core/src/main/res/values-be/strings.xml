@@ -35,4 +35,19 @@
     <string name="pref_location_custom_url_details">Шлях /v1/geocate будзе дададзены аўтаматычна. Калі правайдэру месцазнаходжання патрабуецца ключ, яго можна дадаць да каранёвага URL-адрасу ў якасці параметра запыту.</string>
     <string name="pref_location_custom_url_input_hint">Карыстальніцкі адрас службы</string>
     <string name="location_settings_dialog_message_grant_permissions">Дазволіць сэрвісам microG доступ да месцазнаходжання</string>
+    <string name="pref_location_cell_online_enabled_title">Апытваць анлайн сэрвіс</string>
+    <string name="pref_location_custom_source_title">Карыстальніцкі</string>
+    <string name="pref_location_source_terms">Умовы / Канфідэнцыяльнасць</string>
+    <string name="pref_location_source_suggested">Рэкамендаваны</string>
+    <string name="notification_config_required_title">Патрабуецца настройка</string>
+    <string name="location_data_export_wifi_title">Экспартаваць лакальную базу месцазнаходжання Wi-Fi</string>
+    <string name="location_data_export_cell_title">Экспартаваць лакальную базу месцазнаходжанняў сотавых вышак</string>
+    <string name="location_data_import_result_toast">Імпартавана %1$d запісаў.</string>
+    <string name="pref_location_wifi_online_enabled_title">Апытваць анлайн сэрвіс</string>
+    <string name="pref_location_cell_online_enabled_summary">Вызначаць месцазнаходжанне грунтуючыся на базах сотавых вышак анлайн-сэрвісу вызначэння месцазнаходжання.</string>
+    <string name="pref_location_wifi_online_enabled_summary">Вызначаць месцазнаходжанне грунтуючыся на базах Wi-Fi анлайн-сэрвісу вызначэння месцазнаходжання.</string>
+    <string name="pref_location_source_title">Абярыце онлай службу вызначэння месцазнаходжання</string>
+    <string name="pref_location_import_export_title">Імпарт або экспарт даных аб месцазнаходжанні</string>
+    <string name="notification_config_required_text_online_sources">Каб працягнуць выкарыстанне анлайн-сэрвісаў вызначэння месцазнаходжання, вам неабходна абраць сэрвіс вызначэння месцазнаходжання.</string>
+    <string name="location_data_import_title">Імпарт даных аб месцазнаходжанні з файла</string>
 </resources>
