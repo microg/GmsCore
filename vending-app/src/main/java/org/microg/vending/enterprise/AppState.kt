@@ -1,24 +1,28 @@
 package org.microg.vending.enterprise
 
-enum class AppState {
-    /**
-     * App cannot be installed on this user's device
-     */
-    NOT_COMPATIBLE,
-    /**
-     * App is available, but not installed on the user's device.
-     */
-    NOT_INSTALLED,
-    /**
-     * App is already installed on the device, but an update is available.
-     */
-    UPDATE_AVAILABLE,
-    /**
-     * An app operation is currently outstanding
-     */
-    PENDING,
-    /**
-     * App is installed on device and up to date.
-     */
-    INSTALLED
-}
+internal sealed interface AppState
+
+/**
+ * App cannot be installed on this user's device
+ */
+internal data object NotCompatible : AppState
+
+/**
+ * App is available, but not installed on the user's device.
+ */
+internal data object NotInstalled : AppState
+
+/**
+ * App is already installed on the device, but an update is available.
+ */
+internal data object UpdateAvailable : AppState
+
+/**
+ * An unspecific app operation is currently outstanding
+ */
+internal data object Pending : AppState
+
+/**
+ * App is installed on device and up to date.
+ */
+internal data object Installed : AppState

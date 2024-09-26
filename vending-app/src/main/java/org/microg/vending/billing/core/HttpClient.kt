@@ -21,6 +21,7 @@ import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.copyTo
+import io.ktor.utils.io.pool.ByteArrayPool
 import org.json.JSONObject
 import org.microg.gms.utils.singleInstanceOf
 import java.io.File
@@ -54,11 +55,30 @@ class HttpClient {
     suspend fun download(
         url: String,
         downloadTo: OutputStream,
-        params: Map<String, String> = emptyMap()
+        params: Map<String, String> = emptyMap(),
+        emitProgress: (bytesDownloaded: Long) -> Unit = {}
     ) {
         client.prepareGet(url.asUrl(params)).execute { response ->
             val body: ByteReadChannel = response.body()
-            body.copyTo(out = downloadTo)
+
+            // Modified version of `ByteReadChannel.copyTo(OutputStream, Long)` to indicate progress
+            val buffer = ByteArrayPool.borrow()
+            try {
+                var copied = 0L
+                val bufferSize = buffer.size
+
+                do {
+                    val rc = body.readAvailable(buffer, 0, bufferSize)
+                    copied += rc
+                    if (rc > 0) {
+                        downloadTo.write(buffer, 0, rc)
+                    }
+                    emitProgress(copied)
+                } while (rc > 0)
+            } finally {
+                ByteArrayPool.recycle(buffer)
+            }
+            // don't close `downloadTo` yet
         }
     }
 

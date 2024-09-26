@@ -42,6 +42,13 @@ import org.microg.vending.billing.proto.GoogleApiResponse
 import org.microg.vending.enterprise.EnterpriseApp
 import org.microg.vending.delivery.requestDownloadUrls
 import org.microg.vending.enterprise.AppState
+import org.microg.vending.enterprise.CommitingSession
+import org.microg.vending.enterprise.Downloading
+import org.microg.vending.enterprise.Installed
+import org.microg.vending.enterprise.NotCompatible
+import org.microg.vending.enterprise.NotInstalled
+import org.microg.vending.enterprise.Pending
+import org.microg.vending.enterprise.UpdateAvailable
 import org.microg.vending.proto.AppMeta
 import org.microg.vending.proto.GetItemsRequest
 import org.microg.vending.proto.RequestApp
@@ -53,10 +60,10 @@ import java.io.IOException
 @RequiresApi(android.os.Build.VERSION_CODES.LOLLIPOP)
 class VendingActivity : ComponentActivity() {
 
-    var apps: MutableMap<EnterpriseApp, AppState> = mutableStateMapOf()
-    var networkState by mutableStateOf(NetworkState.ACTIVE)
+    private var apps: MutableMap<EnterpriseApp, AppState> = mutableStateMapOf()
+    private var networkState by mutableStateOf(NetworkState.ACTIVE)
 
-    var auth: AuthData? = null
+    private var auth: AuthData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -85,7 +92,7 @@ class VendingActivity : ComponentActivity() {
                 runBlocking {
 
                     val previousState = apps[app]!!
-                    apps[app] = AppState.PENDING
+                    apps[app] = Pending
 
                     val client = HttpClient()
 
@@ -109,11 +116,14 @@ class VendingActivity : ComponentActivity() {
                             components = downloadUrls.getOrThrow(),
                             httpClient = client,
                             isUpdate = isUpdate
-                        )
+                        ) { progress ->
+                            if (progress is Downloading) apps[app] = progress
+                            else if (progress is CommitingSession) apps[app] = Pending
+                        }
                     }.onSuccess {
-                        apps[app] = AppState.INSTALLED
-                    }.onFailure {
-                        Log.w(TAG, "Installation from network unsuccessful.")
+                        apps[app] = Installed
+                    }.onFailure { exception ->
+                        Log.w(TAG, "Installation from network unsuccessful.", exception)
                         apps[app] = previousState
                     }
                 }
@@ -125,9 +135,9 @@ class VendingActivity : ComponentActivity() {
                 runBlocking {
 
                     val previousState = apps[app]!!
-                    apps[app] = AppState.PENDING
+                    apps[app] = Pending
                     runCatching { uninstallPackage(app.packageName) }.onSuccess {
-                        apps[app] = AppState.NOT_INSTALLED
+                        apps[app] = NotInstalled
                     }.onFailure {
                         apps[app] = previousState
                     }
@@ -210,11 +220,11 @@ class VendingActivity : ComponentActivity() {
                             item.offer!!.version!!.versionCode!!
                         } else null
 
-                        val state = if (!available && installedDetails == null) AppState.NOT_COMPATIBLE
-                        else if (!available && installedDetails != null) AppState.INSTALLED
-                        else if (available && installedDetails == null) AppState.NOT_INSTALLED
-                        else if (available && installedDetails != null && installedDetails.versionCode < versionCode!!) AppState.UPDATE_AVAILABLE
-                        else /* if (available && installedDetails != null) */ AppState.INSTALLED
+                        val state = if (!available && installedDetails == null) NotCompatible
+                        else if (!available && installedDetails != null) Installed
+                        else if (available && installedDetails == null) NotInstalled
+                        else if (available && installedDetails != null && installedDetails.versionCode < versionCode!!) UpdateAvailable
+                        else /* if (available && installedDetails != null) */ Installed
 
                         EnterpriseApp(
                             packageName,

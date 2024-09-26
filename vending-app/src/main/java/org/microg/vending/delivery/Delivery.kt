@@ -62,7 +62,7 @@ suspend fun HttpClient.requestDownloadUrls(
 
     val basePackage = response.payload!!.deliveryResponse!!.deliveryData?.let {
         if (it.baseUrl != null && it.baseBytes != null) {
-            PackageComponent(packageName, "base", it.baseUrl, it.baseBytes)
+            PackageComponent(packageName, "base", it.baseUrl, it.baseBytes.toLong())
         } else null
     }
     val splitComponents = response.payload.deliveryResponse!!.deliveryData!!.splitPackages.filter {
@@ -73,11 +73,11 @@ suspend fun HttpClient.requestDownloadUrls(
             requestSplitPackages.firstOrNull { requestComponent ->
                 requestComponent.contains(it.splitPackageName!!)
             }?.let { requestComponent ->
-                PackageComponent(packageName, requestComponent, it.downloadUrl!!, it.size!!)
+                PackageComponent(packageName, requestComponent, it.downloadUrl!!, it.size!!.toLong())
             }
         } else {
             // Download all offered components (server chooses)
-            PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!)
+            PackageComponent(packageName, it.splitPackageName!!, it.downloadUrl!!, it.size!!.toLong())
         }
     }
 

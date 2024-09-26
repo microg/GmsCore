@@ -7,5 +7,5 @@ data class PackageComponent(
     /**
      * Size in bytes
      */
-    val size: Int
+    val size: Long
 )

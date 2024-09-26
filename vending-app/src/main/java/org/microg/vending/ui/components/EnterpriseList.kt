@@ -26,11 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.android.vending.R
 import org.microg.vending.enterprise.AppState
 import org.microg.vending.enterprise.EnterpriseApp
+import org.microg.vending.enterprise.Installed
+import org.microg.vending.enterprise.NotCompatible
+import org.microg.vending.enterprise.NotInstalled
 import org.microg.vending.enterprise.proto.AppInstallPolicy
 
 
 @Composable
-fun EnterpriseList(appStates: Map<EnterpriseApp, AppState>, install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit, uninstall: (app: EnterpriseApp) -> Unit) {
+internal fun EnterpriseList(appStates: Map<EnterpriseApp, AppState>, install: (app: EnterpriseApp, isUpdate: Boolean) -> Unit, uninstall: (app: EnterpriseApp) -> Unit) {
     if (appStates.isNotEmpty()) LazyColumn(Modifier.padding(horizontal = 16.dp)) {
 
         val apps = appStates.keys
@@ -105,9 +108,9 @@ fun InListWarning(@StringRes text: Int) {
 fun EnterpriseListPreview() {
     EnterpriseList(
         mapOf(
-            EnterpriseApp("com.android.vending", 0, "Market", null, "", AppInstallPolicy.MANDATORY) to AppState.INSTALLED,
-            EnterpriseApp("org.mozilla.firefox", 0, "Firefox", null, "", AppInstallPolicy.OPTIONAL) to AppState.NOT_INSTALLED,
-            EnterpriseApp("org.thoughtcrime.securesms", 0, "Signal", null, "", AppInstallPolicy.OPTIONAL) to AppState.NOT_COMPATIBLE
+            EnterpriseApp("com.android.vending", 0, "Market", null, "", AppInstallPolicy.MANDATORY) to Installed,
+            EnterpriseApp("org.mozilla.firefox", 0, "Firefox", null, "", AppInstallPolicy.OPTIONAL) to NotInstalled,
+            EnterpriseApp("org.thoughtcrime.securesms", 0, "Signal", null, "", AppInstallPolicy.OPTIONAL) to NotCompatible
         ), { _, _ -> }, {}
     )
 }
