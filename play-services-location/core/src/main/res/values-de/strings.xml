@@ -35,4 +35,19 @@
     <string name="pref_location_custom_url_input_hint">Benutzerdefinierte Dienst-URL</string>
     <string name="pref_location_custom_url_summary">Dies ermöglicht die Einstellung einer benutzerdefinierten Dienst-URL. Ungültige Werte können dazu führen, dass Standortdienste nicht mehr reagieren oder gar nicht mehr verfügbar sind.</string>
     <string name="pref_location_custom_url_details">Der Pfad /v1/geolocate wird automatisch angehängt. Wenn der Standortdienstanbieter einen Schlüssel benötigt, kann dieser als Abfrageparameter an die Stamm-URL angehängt werden.</string>
+    <string name="pref_location_wifi_online_enabled_title">Online-Dienst abfragen</string>
+    <string name="pref_location_wifi_online_enabled_summary">Wi-Fi-Standort von einem Online-Standortdienst abrufen.</string>
+    <string name="pref_location_cell_online_enabled_title">Online-Dienst abfragen</string>
+    <string name="pref_location_cell_online_enabled_summary">Standorte von Mobilfunkmasten von einem Online-Standortdienst abrufen.</string>
+    <string name="pref_location_custom_source_title">Benutzerdefiniert</string>
+    <string name="pref_location_source_title">Online-Standortdienst auswählen</string>
+    <string name="pref_location_source_terms">Bedingungen / Datenschutz</string>
+    <string name="pref_location_source_suggested">Empfohlen</string>
+    <string name="pref_location_import_export_title">Standortdaten im- oder exportieren</string>
+    <string name="notification_config_required_title">Konfiguration erforderlich</string>
+    <string name="location_data_export_wifi_title">Lokale Wi-Fi-Standort-Datenbank exportieren</string>
+    <string name="location_data_import_result_toast">%1$d Einträge importiert.</string>
+    <string name="notification_config_required_text_online_sources">Um weiterhin den Online-Standortdienst zu nutzen, muss ein Standortdienst ausgewählt werden.</string>
+    <string name="location_data_export_cell_title">Lokale Funkzellen-Standort-Datenbank exportieren</string>
+    <string name="location_data_import_title">Standortdaten aus Datei importieren</string>
 </resources>
