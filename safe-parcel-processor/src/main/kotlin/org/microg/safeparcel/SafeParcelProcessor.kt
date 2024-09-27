@@ -337,7 +337,7 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
             "int[]" -> "$variableName = $SafeParcelReader.readIntArray(parcel, header)"
             "java.util.List<java.lang.String>", "java.util.ArrayList<java.lang.String>" -> when {
                 !useValueParcel -> "$variableName = $SafeParcelReader.readStringList(parcel, header)"
-                else -> "$variableName = $SafeParcelReader.readList(parcel, header, String.class.getClassloader())"
+                else -> "$variableName = $SafeParcelReader.readList(parcel, header, String.class.getClassLoader())"
             }
 //            "java.util.List<java.lang.Integer>", "java.util.ArrayList<java.lang.Integer>" -> "$variableName = $SafeParcelReader.readIntegerList(parcel, header)"
 //            "java.util.List<java.lang.Boolean>", "java.util.ArrayList<java.lang.Boolean>" -> "$variableName = $SafeParcelReader.readBooleanList(parcel, header)"
@@ -347,7 +347,7 @@ class FieldInfo(val clazz: ClassInfo, val fieldElement: VariableElement) {
             else -> when {
                 isList && isParcelable && !useValueParcel -> "$variableName = $SafeParcelReader.readParcelableList(parcel, header, $listItemType.CREATOR)"
                 isArray && isParcelable -> "$variableName = $SafeParcelReader.readParcelableArray(parcel, header, $listItemType.CREATOR)"
-                isList -> "$variableName = $SafeParcelReader.readList(parcel, header, $listItemType.class.getClassloader())"
+                isList -> "$variableName = $SafeParcelReader.readList(parcel, header, $listItemType.class.getClassLoader())"
                 isParcelable -> "$variableName = $SafeParcelReader.readParcelable(parcel, header, $type.CREATOR)"
                 !isList && isIInterface -> "$variableName = $type.Stub.asInterface($SafeParcelReader.readBinder(parcel, header))"
                 else -> throw UnsupportedOperationException("Field $name in ${clazz.fullName} has unsupported type $type.")
