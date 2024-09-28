@@ -61,7 +61,8 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
                 forceNow = false
                 intervalMillis = Long.MAX_VALUE
             }
-            val intent = Intent(context, NetworkLocationService::class.java)
+            val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
+            intent.`package` = context.packageName
             intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)
             intent.putExtra(EXTRA_ENABLE, true)
             intent.putExtra(EXTRA_INTERVAL_MILLIS, intervalMillis)
