@@ -260,4 +260,7 @@ Isso pode demorar alguns minutos."</string>
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> deseja acessar sua conta como se fosse <b><xliff:g example="F-Droid">%2$s</xliff:g> por <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Isto pode concede-lô acesso privilegiado à sua conta.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Automaticamente adicionar apps grátis à biblioteca</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Apps grátis podem verificar que foram baixados da Google Play. Automaticamente adicione apps grátis à sua biblioteca para que essas verificações passem pra você.</string>
+    <string name="limited_services_app_name">Serviços Limitados microG</string>
+    <string name="limited_services_dialog_information">Você está usando os Serviços Limitados microG. Diferente dos Serviços microG comum, esta variante só funciona com apps que usam as bibliotecas do microG, não aquelas do Google Play. Isto significa que a maioria dos aplicativos irão ignorar estes serviços.</string>
+    <string name="limited_services_dialog_information_ack">Eu entendo</string>
 </resources>
