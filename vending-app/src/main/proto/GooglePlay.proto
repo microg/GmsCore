@@ -248,7 +248,12 @@ message MultiOfferSkuDetail {
     string sv = 2;
     bool  bv = 3;
     int64 iv = 4;
+    SkuSerializedDocIds skuSerializedDocIds = 5;
   }
+}
+
+message SkuSerializedDocIds {
+  repeated string docIds = 1;
 }
 
 message OfferSku {
