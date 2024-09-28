@@ -45,9 +45,7 @@ import org.microg.gms.auth.credentials.FEATURES
 import org.microg.gms.auth.signin.CLIENT_PACKAGE_NAME
 import org.microg.gms.auth.signin.GOOGLE_SIGN_IN_OPTIONS
 import org.microg.gms.auth.signin.performSignOut
-import org.microg.gms.common.Constants
 import org.microg.gms.common.GmsService
-import org.microg.gms.fido.core.ui.AuthenticatorActivity
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_OPTIONS
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SERVICE
 import org.microg.gms.fido.core.ui.AuthenticatorActivity.Companion.KEY_SOURCE
@@ -76,6 +74,12 @@ class IdentitySignInServiceImpl(private val context: Context, private val client
         Log.d(TAG, "method 'beginSignIn' called")
         Log.d(TAG, "request-> $request")
         if (request.googleIdTokenRequestOptions.isSupported) {
+            val accounts = AccountManager.get(context).getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+            if (accounts.isEmpty()) {
+                Log.d(TAG, "accounts is empty, return CANCELED ")
+                callback.onResult(Status.CANCELED, null)
+                return
+            }
             if (request.googleIdTokenRequestOptions.serverClientId.isNullOrEmpty()) {
                 Log.d(TAG, "serverClientId is empty, return CANCELED ")
                 callback.onResult(Status.CANCELED, null)
