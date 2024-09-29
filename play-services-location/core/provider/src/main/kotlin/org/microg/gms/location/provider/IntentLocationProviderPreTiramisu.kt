@@ -7,9 +7,7 @@ package org.microg.gms.location.provider
 
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.content.Context
 import android.content.Intent
-import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
@@ -17,31 +15,28 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import android.os.WorkSource
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.PendingIntentCompat
 import androidx.core.content.getSystemService
 import com.android.location.provider.ProviderPropertiesUnbundled
 import com.android.location.provider.ProviderRequestUnbundled
-import org.microg.gms.location.*
-import org.microg.gms.location.network.LOCATION_EXTRA_PRECISION
-import org.microg.gms.location.network.NetworkLocationService
-import org.microg.gms.location.provider.NetworkLocationProviderService.Companion.ACTION_REPORT_LOCATION
+import org.microg.gms.location.elapsedMillis
+import org.microg.gms.location.formatRealtime
 import java.io.PrintWriter
 import kotlin.math.max
 
-class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
+class IntentLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     @Deprecated("Use only with SDK < 31")
-    constructor(context: Context, legacy: Unit) : super(properties) {
-        this.context = context
+    constructor(service: IntentLocationProviderService, properties: ProviderPropertiesUnbundled, legacy: Unit) : super(properties) {
+        this.service = service
     }
 
     @RequiresApi(31)
-    constructor(context: Context) : super(context, properties) {
-        this.context = context
+    constructor(service: IntentLocationProviderService, properties: ProviderPropertiesUnbundled) : super(service, properties) {
+        this.service = service
     }
 
-    private val context: Context
+    private val service: IntentLocationProviderService
     private var enabled = false
     private var currentRequest: ProviderRequestUnbundled? = null
     private var pendingIntent: PendingIntent? = null
@@ -52,29 +47,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
 
     private fun updateRequest() {
         if (enabled) {
-            val forceNow: Boolean
-            val intervalMillis: Long
-            if (currentRequest?.reportLocation == true) {
-                forceNow = true
-                intervalMillis = max(currentRequest?.interval ?: Long.MAX_VALUE, MIN_INTERVAL_MILLIS)
-            } else {
-                forceNow = false
-                intervalMillis = Long.MAX_VALUE
-            }
-            val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
-            intent.`package` = context.packageName
-            intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)
-            intent.putExtra(EXTRA_ENABLE, true)
-            intent.putExtra(EXTRA_INTERVAL_MILLIS, intervalMillis)
-            intent.putExtra(EXTRA_FORCE_NOW, forceNow)
-            if (SDK_INT >= 31) {
-                intent.putExtra(EXTRA_LOW_POWER, currentRequest?.isLowPower ?: false)
-                intent.putExtra(EXTRA_WORK_SOURCE, currentRequest?.workSource)
-            }
-            if (SDK_INT >= 29) {
-                intent.putExtra(EXTRA_BYPASS, currentRequest?.isLocationSettingsIgnored ?: false)
-            }
-            context.startService(intent)
+            service.requestIntentUpdated(currentRequest, pendingIntent)
             reportAgain()
         }
     }
@@ -96,9 +69,9 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     override fun enable() {
         synchronized(this) {
             if (enabled) throw IllegalStateException()
-            val intent = Intent(context, NetworkLocationProviderService::class.java)
+            val intent = Intent(service, service.javaClass)
             intent.action = ACTION_REPORT_LOCATION
-            pendingIntent = PendingIntentCompat.getService(context, 0, intent, FLAG_UPDATE_CURRENT, true)
+            pendingIntent = PendingIntentCompat.getService(service, 0, intent, FLAG_UPDATE_CURRENT, true)
             currentRequest = null
             enabled = true
             when {
@@ -107,7 +80,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
             }
             try {
                 if (lastReportedLocation == null) {
-                    lastReportedLocation = context.getSystemService<LocationManager>()?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    lastReportedLocation = service.getSystemService<LocationManager>()?.getLastKnownLocation(service.providerName)
                 }
             } catch (_: SecurityException) {
             } catch (_: Exception) {
@@ -118,10 +91,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     override fun disable() {
         synchronized(this) {
             if (!enabled) throw IllegalStateException()
-            val intent = Intent(context, NetworkLocationService::class.java)
-            intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)
-            intent.putExtra(EXTRA_ENABLE, false)
-            context.startService(intent)
+            service.stopIntentUpdated(pendingIntent)
             pendingIntent?.cancel()
             pendingIntent = null
             currentRequest = null
@@ -133,7 +103,7 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
     private fun reportAgain() {
         // Report location again if it's recent enough
         lastReportedLocation?.let {
-            if (it.elapsedMillis + max(currentRequest?.interval ?: 0, MIN_INTERVAL_MILLIS) > SystemClock.elapsedRealtime()) {
+            if (it.elapsedMillis + max(currentRequest?.interval ?: 0, service.minIntervalMillis) > SystemClock.elapsedRealtime()) {
                 reportLocationToSystem(it)
             }
         }
@@ -141,20 +111,13 @@ class NetworkLocationProviderPreTiramisu : AbstractLocationProviderPreTiramisu {
 
     override fun reportLocationToSystem(location: Location) {
         handler.removeCallbacks(reportAgainRunnable)
-        location.provider = LocationManager.NETWORK_PROVIDER
-        location.extras?.remove(LOCATION_EXTRA_PRECISION)
+        location.provider = service.providerName
         lastReportedLocation = location
         lastReportTime = SystemClock.elapsedRealtime()
         super.reportLocation(location)
-        val repeatInterval = max(MIN_REPORT_MILLIS, currentRequest?.interval ?: Long.MAX_VALUE)
-        if (repeatInterval < MIN_INTERVAL_MILLIS) {
+        val repeatInterval = max(service.minReportMillis, currentRequest?.interval ?: Long.MAX_VALUE)
+        if (repeatInterval < service.minIntervalMillis) {
             handler.postDelayed(reportAgainRunnable, repeatInterval)
         }
-    }
-
-    companion object {
-        private const val MIN_INTERVAL_MILLIS = 20000L
-        private const val MIN_REPORT_MILLIS = 1000L
-        private val properties = ProviderPropertiesUnbundled.create(false, false, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
     }
 }

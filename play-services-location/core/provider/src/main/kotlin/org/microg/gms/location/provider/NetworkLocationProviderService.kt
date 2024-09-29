@@ -5,73 +5,70 @@
 
 package org.microg.gms.location.provider
 
-import android.app.Service
+import android.app.PendingIntent
 import android.content.Intent
+import android.location.Criteria
 import android.location.Location
-import android.os.*
+import android.location.LocationManager
 import android.os.Build.VERSION.SDK_INT
-import org.microg.gms.location.EXTRA_LOCATION
-import java.io.FileDescriptor
-import java.io.PrintWriter
+import com.android.location.provider.ProviderPropertiesUnbundled
+import com.android.location.provider.ProviderRequestUnbundled
+import org.microg.gms.location.*
+import org.microg.gms.location.network.LOCATION_EXTRA_PRECISION
+import kotlin.math.max
 
-class NetworkLocationProviderService : Service() {
-    private lateinit var handlerThread: HandlerThread
-    private lateinit var handler: Handler
-    private var bound: Boolean = false
-    private var provider: GenericLocationProvider? = null
-
-    override fun onCreate() {
-        super.onCreate()
-        handlerThread = HandlerThread(NetworkLocationProviderService::class.java.simpleName)
-        handlerThread.start()
-        handler = Handler(handlerThread.looper)
+class NetworkLocationProviderService : IntentLocationProviderService() {
+    override fun extractLocation(intent: Intent): Location? = intent.getParcelableExtra<Location?>(EXTRA_LOCATION)?.apply {
+        extras?.remove(LOCATION_EXTRA_PRECISION)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (Binder.getCallingUid() == Process.myUid() && intent?.action == ACTION_REPORT_LOCATION) {
-            handler.post {
-                val location = intent.getParcelableExtra<Location>(EXTRA_LOCATION)
-                if (location != null) {
-                    provider?.reportLocationToSystem(location)
-                }
-            }
+    override fun requestIntentUpdated(currentRequest: ProviderRequestUnbundled?, pendingIntent: PendingIntent?) {
+        val forceNow: Boolean
+        val intervalMillis: Long
+        if (currentRequest?.reportLocation == true) {
+            forceNow = true
+            intervalMillis = max(currentRequest.interval ?: Long.MAX_VALUE, minIntervalMillis)
+        } else {
+            forceNow = false
+            intervalMillis = Long.MAX_VALUE
         }
-        return START_NOT_STICKY
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
-        bound = true
-        if (provider == null) {
-            provider = when {
-                // TODO: Migrate to Tiramisu provider. Not yet required thanks to backwards compat
-                // SDK_INT >= 33 ->
-                SDK_INT >= 31 ->
-                    NetworkLocationProviderPreTiramisu(this)
-
-                else ->
-                    @Suppress("DEPRECATION")
-                    (NetworkLocationProviderPreTiramisu(this, Unit))
-            }
-            provider?.enable()
+        val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
+        intent.`package` = packageName
+        intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)
+        intent.putExtra(EXTRA_ENABLE, true)
+        intent.putExtra(EXTRA_INTERVAL_MILLIS, intervalMillis)
+        intent.putExtra(EXTRA_FORCE_NOW, forceNow)
+        if (SDK_INT >= 31) {
+            intent.putExtra(EXTRA_LOW_POWER, currentRequest?.isLowPower ?: false)
+            intent.putExtra(EXTRA_WORK_SOURCE, currentRequest?.workSource)
         }
-        return provider?.getBinder()
+        if (SDK_INT >= 29) {
+            intent.putExtra(EXTRA_BYPASS, currentRequest?.isLocationSettingsIgnored ?: false)
+        }
+        startService(intent)
     }
 
-    override fun dump(fd: FileDescriptor, writer: PrintWriter, args: Array<out String>) {
-        writer.println("Bound: $bound")
-        provider?.dump(writer)
+    override fun stopIntentUpdated(pendingIntent: PendingIntent?) {
+        val intent = Intent(ACTION_NETWORK_LOCATION_SERVICE)
+        intent.`package` = packageName
+        intent.putExtra(EXTRA_PENDING_INTENT, pendingIntent)
+        intent.putExtra(EXTRA_ENABLE, false)
+        startService(intent)
     }
 
-    override fun onDestroy() {
-        if (SDK_INT >= 18) handlerThread.looper.quitSafely()
-        else handlerThread.looper.quit()
-        provider?.disable()
-        provider = null
-        bound = false
-        super.onDestroy()
-    }
+    override val minIntervalMillis: Long
+        get() = MIN_INTERVAL_MILLIS
+    override val minReportMillis: Long
+        get() = MIN_REPORT_MILLIS
+    override val properties: ProviderPropertiesUnbundled
+        get() = PROPERTIES
+    override val providerName: String
+        get() = LocationManager.NETWORK_PROVIDER
+
 
     companion object {
-        const val ACTION_REPORT_LOCATION = "org.microg.gms.location.provider.ACTION_REPORT_LOCATION"
+        private const val MIN_INTERVAL_MILLIS = 20000L
+        private const val MIN_REPORT_MILLIS = 1000L
+        private val PROPERTIES = ProviderPropertiesUnbundled.create(false, false, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
     }
 }

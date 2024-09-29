@@ -62,6 +62,17 @@
                 android:value="2" />
         </service>
         <service
+            android:name="org.microg.gms.location.provider.FusedLocationProviderService"
+            android:exported="true"
+            android:permission="android.permission.WRITE_SECURE_SETTINGS">
+            <intent-filter>
+                <action android:name="com.android.location.service.FusedLocationProvider" />
+            </intent-filter>
+            <meta-data
+                android:name="serviceVersion"
+                android:value="2" />
+        </service>
+        <service
             android:name="org.microg.gms.location.provider.GeocodeProviderService"
             android:exported="true"
             android:permission="android.permission.WRITE_SECURE_SETTINGS">
