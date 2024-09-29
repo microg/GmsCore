@@ -169,7 +169,7 @@
     <string name="gms_app_name">Služby microG</string>
     <string name="just_a_sec">Vteřinku…</string>
     <string name="ask_permission_tos">Pokračováním umožníte této aplikaci a společnosti Google používat vaše informace v souladu s jejich příslušnými smluvními podmínkami a zásadami ochrany osobních údajů.</string>
-    <string name="auth_before_connect">Aplikace ve vašem zařízení se pokouší přihlásit do účtu Google. \u0020Pokud to byl záměr, použijte tlačítko <b>Přihlásit se</b> pro připojení se na přihlašovací stránku společnosti Google. Pokud ne, klepněte na <b>Zrušit</b> pro návrat zpět do aplikace, která vyvolala tento dialog.</string>
+    <string name="auth_before_connect">Aplikace ve vašem zařízení se pokouší přihlásit do účtu Google.\n\nPokud to byl záměr, použijte tlačítko <b>Přihlásit se</b> pro připojení se na přihlašovací stránku společnosti Google. Pokud ne, klepněte na tlačítko <b>Zrušit</b> pro návrat zpět do aplikace, která vyvolala tento dialog.</string>
     <string name="no_network_error_desc">Nemáte přístup k síti.
 \n
 \nMůže se jednat o dočasný problém nebo vaše zařízení Android nemá přístup k mobilním datům. Zkuste to znovu, až budete připojeni k mobilní síti, nebo se připojte k síti Wi-Fi.</string>
@@ -242,4 +242,24 @@
     <string name="auth_package_override_request_message">Aplikace <b><xliff:g example="F-Droid">%1$s</xliff:g></b> žádá o přístup k vašemu účtu, jako by byla aplikací <b><xliff:g example="F-Droid">%2$s</xliff:g> od vývojáře <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Tímto jí můžete udělit privilegovaný přístup k vašemu účtu.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Automaticky přidávat bezplatné aplikace do knihovny</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Bezplatné aplikace mohou kontrolovat, zda byly staženy z Google Play. Automaticky přidávat bezplatné aplikace do knihovny vašeho účtu, abyste vždy prošli kontrolou u všech bezplatných aplikací, které máte aktuálně k dispozici.</string>
+    <string name="limited_services_app_name">Omezené služby microG</string>
+    <string name="limited_services_dialog_information">Používáte Omezené služby microG. Na rozdíl od klasických Služeb microG funguje tato varianta pouze s aplikacemi, které používají knihovny microG, nikoli ale s těmi, které používají Google Play. To znamená, že většina aplikací bude tyto služby ignorovat.</string>
+    <string name="limited_services_dialog_information_ack">Rozumím</string>
+    <string name="auth_action_notification_channel_name">Upozornění účtu Google</string>
+    <string name="auth_action_step_enable_gcm">Povolte cloudové zprávy</string>
+    <string name="auth_action_step_enable_gcm_description">Po dokončení nastavení účtu můžete cloudové zprávy zakázat.</string>
+    <string name="auth_action_step_allow_microg_gcm">Povolte cloudové zprávy pro microG</string>
+    <string name="auth_action_step_enable_checkin_description">Vaše zařízení se musí alespoň jednou zaregistrovat u společnosti Google.\n\nPo dokončení nastavení účtu můžete registraci zařízení Google zakázat.</string>
+    <string name="auth_action_notification_title">Vyžadována akce účtu</string>
+    <string name="auth_action_activity_explanation">Dokončete následující kroky, abyste mohli používat účet Google %s na tomto zařízení.</string>
+    <string name="auth_action_step_enable_checkin">Povolte registrace zařízení</string>
+    <string name="auth_action_notification_content">Váš účet Google potřebuje další nastavení.</string>
+    <string name="auth_action_notification_channel_description">Upozorní vás, pokud některý z účtů Google vyžaduje před použitím další nastavení nebo když účet není kompatibilní s microG.</string>
+    <string name="auth_action_activity_header">Dokončete nastavení svého účtu Google</string>
+    <string name="auth_action_activity_finish">Dokončit</string>
+    <string name="auth_action_step_completed_content_description">Krok dokončen</string>
+    <string name="auth_action_step_allow_microg_gcm_description">V závislosti na vašich předvolbách od vás potřebuje microG oprávnění, aby se mohl zaregistrovat do služby cloudových zpráv.</string>
+    <string name="auth_action_step_enable_lockscreen_description">Váš účet Google spravuje vaše pracoviště nebo vzdělávací instituce. Váš správce rozhodl, že zařízení musí mít před přístupem k datům účtu bezpečný zámek obrazovky.\n\nNastavte zámek obrazovky s heslem, kódem PIN nebo vzorem.</string>
+    <string name="auth_action_step_perform_content_description">Klepněte pro provedení kroku</string>
+    <string name="auth_action_step_enable_lockscreen">Nastavte bezpečný zámek obrazovky</string>
 </resources>
