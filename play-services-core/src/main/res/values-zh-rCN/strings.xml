@@ -241,4 +241,7 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; 想以 &lt;xliff:g example=\"F-Droid Inc.\"&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt; 的 &lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%2$s&lt;/xliff:g&gt; 访问你的账户。这可能授予访问你账户的权限。</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">自动添加免费应用到库中</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">免费应用可能会检查它们是否曾经从 Google Play 被下载过。自动添加免费应用到你的账户库中可以让你一直通过当前对你可用的所有免费应用的检查。</string>
+    <string name="limited_services_app_name">microG 有限服务</string>
+    <string name="limited_services_dialog_information_ack">我理解</string>
+    <string name="limited_services_dialog_information">你在使用 microG 有限服务版本。和通常的 microG 服务不同，此版本仅适用使用 microG 库的应用，而非在 Google Play 上的应用。 这意味着多数应用会忽略这些服务。</string>
 </resources>
