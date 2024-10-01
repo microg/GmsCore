@@ -77,8 +77,8 @@ class HttpClient {
                     copied += rc
                     if (rc > 0) {
                         downloadTo.write(buffer, 0, rc)
+                        emitProgress(copied)
                     }
-                    emitProgress(copied)
                 } while (rc > 0)
             } finally {
                 ByteArrayPool.recycle(buffer)

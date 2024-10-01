@@ -42,5 +42,13 @@
     <string name="tips_forget_passwd">Forget password?</string>
     <string name="tips_more_details">Learn more</string>
     <string name="text_verify_button">Verify</string>
-    <string name="split_install">Downloading required components for %s</string>
+
+    <string name="installer_notification_channel_description">Shows app and component installation progress.</string>
+    <string name="installer_notification_progress_downloading">Downloading \"%s\"</string>
+    <string name="installer_notification_progress_commiting">Installing \"%s\"</string>
+    <string name="installer_notification_progress_complete">Installed \"%s\"</string>
+    <string name="installer_notification_progress_failed">Failed to install \"%s\"</string>
+
+    <string name="installer_notification_progress_splitinstall_downloading">Downloading required components for %s</string>
+    <string name="installer_notification_progress_splitinstall_commiting">Installing required components for %s</string>
 </resources>

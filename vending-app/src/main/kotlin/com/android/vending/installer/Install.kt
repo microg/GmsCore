@@ -32,7 +32,7 @@ internal suspend fun Context.installPackages(
     packageName = packageName,
     componentNames = componentFiles.map { it.name },
     isUpdate = isUpdate
-) { fileName, to ->
+) { session, fileName, to ->
     val component = componentFiles.find { it.name == fileName }!!
     FileInputStream(component).use { it.copyTo(to) }
     component.delete()
@@ -44,7 +44,7 @@ internal suspend fun Context.installPackagesFromNetwork(
     components: List<PackageComponent>,
     httpClient: HttpClient = HttpClient(),
     isUpdate: Boolean = false,
-    emitProgress: (InstallProgress) -> Unit = {}
+    emitProgress: (session: Int, InstallProgress) -> Unit = { _, _ -> }
 ) {
 
     val downloadProgress = mutableMapOf<PackageComponent, Long>()
@@ -54,12 +54,12 @@ internal suspend fun Context.installPackagesFromNetwork(
         componentNames = components.map { it.componentName },
         isUpdate = isUpdate,
         emitProgress = emitProgress,
-    ) { fileName, to ->
+    ) { session, fileName, to ->
         val component = components.find { it.componentName == fileName }!!
         Log.v(TAG, "installing $fileName for $packageName from network")
         httpClient.download(component.url, to) { progress ->
             downloadProgress[component] = progress
-            emitProgress(Downloading(
+            emitProgress(session, Downloading(
                 bytesDownloaded = downloadProgress.values.sum(),
                 bytesTotal = components.sumOf { it.size }
             ))
@@ -72,8 +72,8 @@ private suspend fun Context.installPackagesInternal(
     packageName: String,
     componentNames: List<String>,
     isUpdate: Boolean = false,
-    emitProgress: (InstallProgress) -> Unit = {},
-    writeComponent: suspend (componentName: String, to: OutputStream) -> Unit
+    emitProgress: (session: Int, InstallProgress) -> Unit = { _, _ -> },
+    writeComponent: suspend (session: Int, componentName: String, to: OutputStream) -> Unit
 ) {
     Log.v(TAG, "installPackages start")
 
@@ -87,7 +87,7 @@ private suspend fun Context.installPackagesInternal(
         else SessionParams.MODE_INHERIT_EXISTING
     )
     params.setAppPackageName(packageName)
-    params.setAppLabel(packageName + "Subcontracting")
+    params.setAppLabel(packageName)
     params.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY)
     try {
         @SuppressLint("PrivateApi") val method = SessionParams::class.java.getDeclaredMethod(
@@ -104,7 +104,7 @@ private suspend fun Context.installPackagesInternal(
         session = packageInstaller.openSession(sessionId)
         for (component in componentNames) {
             session.openWrite(component, 0, -1).use { outputStream ->
-                writeComponent(component, outputStream)
+                writeComponent(sessionId, component, outputStream)
                 session!!.fsync(outputStream)
             }
         }
@@ -113,11 +113,11 @@ private suspend fun Context.installPackagesInternal(
         SessionResultReceiver.pendingSessions[sessionId] = SessionResultReceiver.OnResult(
             onSuccess = {
                 deferred.complete(Unit)
-                emitProgress(InstallComplete)
+                emitProgress(sessionId, InstallComplete)
                         },
             onFailure = { message ->
                 deferred.completeExceptionally(RuntimeException(message))
-                emitProgress(InstallError(message ?: "UNKNOWN"))
+                emitProgress(sessionId, InstallError(message ?: "UNKNOWN"))
             }
         )
 
@@ -125,7 +125,7 @@ private suspend fun Context.installPackagesInternal(
         val pendingIntent = PendingIntent.getBroadcast(this, sessionId, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
-        emitProgress(CommitingSession)
+        emitProgress(sessionId, CommitingSession)
         session.commit(pendingIntent.intentSender)
         // don't abandon if `finally` step is reached after this point
         session = null
@@ -136,8 +136,10 @@ private suspend fun Context.installPackagesInternal(
         Log.w(TAG, "Error installing packages", e)
         throw e
     } finally {
-        Log.d(TAG, "Discarding session after error")
         // discard downloaded data
-        session?.abandon()
+        session?.let {
+            Log.d(TAG, "Discarding session after error")
+            it.abandon()
+        }
     }
 }

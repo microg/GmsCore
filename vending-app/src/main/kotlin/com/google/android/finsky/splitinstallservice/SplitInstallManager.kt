@@ -4,19 +4,13 @@
  */
 package com.google.android.finsky.splitinstallservice
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.pm.PackageInfoCompat
-import com.android.vending.R
 import com.android.vending.installer.KEY_BYTES_DOWNLOADED
 import com.android.vending.installer.installPackagesFromNetwork
 import kotlinx.coroutines.CompletableDeferred
@@ -25,12 +19,10 @@ import kotlinx.coroutines.withContext
 import org.microg.vending.billing.AuthManager
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.delivery.requestDownloadUrls
+import org.microg.vending.enterprise.Downloading
 import org.microg.vending.splitinstall.SPLIT_LANGUAGE_TAG
+import org.microg.vending.ui.notifySplitInstallProgress
 
-private const val SPLIT_INSTALL_NOTIFY_ID = 111
-
-private const val NOTIFY_CHANNEL_ID = "splitInstall"
-private const val NOTIFY_CHANNEL_NAME = "Split Install"
 private const val KEY_LANGUAGE = "language"
 private const val KEY_LANGUAGES = "languages"
 private const val KEY_MODULE_NAME = "module_name"
@@ -69,7 +61,6 @@ class SplitInstallManager(val context: Context) {
         if (authData?.authToken.isNullOrEmpty()) return false
         authData!!
 
-        notify(callingPackage)
 
         val components = runCatching {
             httpClient.requestDownloadUrls(
@@ -83,7 +74,6 @@ class SplitInstallManager(val context: Context) {
         }.getOrNull()
         Log.v(TAG, "splitInstallFlow requestDownloadUrls returned these components: $components")
         if (components.isNullOrEmpty()) {
-            NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
             return false
         }
 
@@ -92,17 +82,24 @@ class SplitInstallManager(val context: Context) {
         }
 
         val success = runCatching {
+
+            var lastNotification = 0L
             context.installPackagesFromNetwork(
                 packageName = callingPackage,
                 components = components,
                 httpClient = httpClient,
                 isUpdate = false
-            )
+            ) { session, progress ->
+                // Android rate limits notification updates by some vague rule of "not too many in less than one second"
+                if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
+                    context.notifySplitInstallProgress(callingPackage, session, progress)
+                    lastNotification = System.currentTimeMillis()
+                }
+            }
         }.isSuccess
 
-        NotificationManagerCompat.from(context).cancel(SPLIT_INSTALL_NOTIFY_ID)
         return if (success) {
-            sendCompleteBroad(context, callingPackage, components.sumOf { it.size.toLong() })
+            sendCompleteBroad(context, callingPackage, components.sumOf { it.size })
             components.forEach { splitInstallRecord[it] = DownloadStatus.COMPLETE }
             true
         } else {
@@ -121,35 +118,6 @@ class SplitInstallManager(val context: Context) {
             ?.let {
                 splitInstallRecord[it] == DownloadStatus.FAILED
         } ?: true
-    }
-
-    /**
-     * Tell user about the ongoing download.
-     * TODO: make persistent
-     */
-    internal fun notify(installForPackage: String) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(
-                NotificationChannel(NOTIFY_CHANNEL_ID, NOTIFY_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-            )
-        }
-
-        val label = try {
-            context.packageManager.getPackageInfo(installForPackage, 0).applicationInfo
-                .loadLabel(context.packageManager)
-        } catch (e: NameNotFoundException) {
-            Log.e(TAG, "Couldn't load label for $installForPackage (${e.message}). Is it not installed?")
-            return
-        }
-
-        NotificationCompat.Builder(context, NOTIFY_CHANNEL_ID).setSmallIcon(android.R.drawable.stat_sys_download)
-            .setContentTitle(context.getString(R.string.split_install, label)).setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setDefaults(
-                NotificationCompat.DEFAULT_ALL
-            ).build().also {
-                notificationManager.notify(SPLIT_INSTALL_NOTIFY_ID, it)
-            }
     }
 
     private fun sendCompleteBroad(context: Context, packageName: String, bytes: Long) {

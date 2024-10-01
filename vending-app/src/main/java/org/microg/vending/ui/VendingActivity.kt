@@ -111,12 +111,22 @@ class VendingActivity : ComponentActivity() {
                     }
 
                     runCatching {
+
+                        var lastNotification = 0L
                         installPackagesFromNetwork(
                             packageName = app.packageName,
                             components = downloadUrls.getOrThrow(),
                             httpClient = client,
                             isUpdate = isUpdate
-                        ) { progress ->
+                        ) { session, progress ->
+
+
+                            // Android rate limits notification updates by some vague rule of "not too many in less than one second"
+                            if (progress !is Downloading || lastNotification + 250 < System.currentTimeMillis()) {
+                                notifyInstallProgress(app.displayName, session, progress)
+                                lastNotification = System.currentTimeMillis()
+                            }
+
                             if (progress is Downloading) apps[app] = progress
                             else if (progress is CommitingSession) apps[app] = Pending
                         }
