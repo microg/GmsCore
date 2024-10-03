@@ -100,4 +100,5 @@
     <string name="permission_scope_www.googleapis.com_auth_androidpublisher">Google Play Androd Developer へのアクセス</string>
     <string name="permission_scope_www.googleapis.com_auth_apps.groups.migration">Groups Migration API への読み取り/書き込みアクセス。</string>
     <string name="permission_scope_www.googleapis.com_auth_adsense.readonly">AdSense のデータを表示</string>
+    <string name="permission_scope_www.googleapis.com_auth_apps_reporting_audit.readonly">管理監査APIへの読み取り専用のアクセス</string>
 </resources>
