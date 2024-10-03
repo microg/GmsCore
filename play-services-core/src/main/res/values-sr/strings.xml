@@ -260,4 +260,7 @@
     <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> жели да приступе вашем налогу као да је <b><xliff:g example="F-Droid">%2$s</xliff:g> од <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ово би му могло дати привилеговани приступ вашем налогу.</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатне апликације могу да провере да ли су преузете са Google Play-а. Аутоматски додајте бесплатне апликације у библиотеку налога да бисте увек прошли проверу за све бесплатне апликације које су вам тренутно доступне.</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">Аутоматски додај бесплатне апликације у библиотеку</string>
+    <string name="limited_services_app_name">microG ограничене услуге</string>
+    <string name="limited_services_dialog_information_ack">Разумем</string>
+    <string name="limited_services_dialog_information">Користите microG ограничене услуге. За разлику од уобичајених microG услуга, ова верзија функционише само са апликацијама које користе microG библиотеке, а не са онима на Google Play-у. То значи да ће већина апликација занемарити ове услуге.</string>
 </resources>
