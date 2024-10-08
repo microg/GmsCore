@@ -11,11 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
+import com.google.android.gms.BuildConfig
 import com.google.android.gms.R
 import org.microg.gms.checkin.CheckinPreferences
 import org.microg.gms.gcm.GcmDatabase
 import org.microg.gms.gcm.GcmPrefs
-import org.microg.gms.vending.VendingPreferences
 import org.microg.gms.safetynet.SafetyNetPreferences
 import org.microg.gms.ui.settings.SettingsProvider
 import org.microg.gms.ui.settings.getAllSettingsProviders
@@ -26,6 +26,13 @@ class SettingsFragment : ResourceSettingsFragment() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
+
+        if(BuildConfig.PREFERERENCE_JUMP_NAVIGATION) {
+            findPreference<Preference>(PREF_SELF_CHECK)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                findNavController().navigate(requireContext(), R.id.openSelfcheck)
+                true
+            }
+        }
 
         findPreference<Preference>(PREF_ACCOUNTS)!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             findNavController().navigate(requireContext(), R.id.accountManagerFragment)
@@ -135,6 +142,7 @@ class SettingsFragment : ResourceSettingsFragment() {
         const val PREF_CHECKIN = "pref_checkin"
         const val PREF_VENDING = "pref_vending"
         const val PREF_ACCOUNTS = "pref_accounts"
+        const val PREF_SELF_CHECK = "pref_self_check"
     }
 
     init {

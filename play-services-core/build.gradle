@@ -121,6 +121,7 @@ android {
         buildConfigField "String", "RECAPTCHA_ENTERPRISE_PROJECT_ID", "\"${localProperties.get("recaptchaEnterpreise.projectId", "")}\""
         buildConfigField "String", "RECAPTCHA_ENTERPRISE_SITE_KEY", "\"${localProperties.get("recaptchaEnterpreise.siteKey", "")}\""
         buildConfigField "String", "RECAPTCHA_ENTERPRISE_API_KEY", "\"${localProperties.get("recaptchaEnterpreise.apiKey", "")}\""
+        buildConfigField "Boolean", "PREFERERENCE_JUMP_NAVIGATION", "false"
 
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
@@ -156,12 +157,14 @@ android {
         "huawei" {
             dimension 'target'
             versionNameSuffix "-hw"
+            buildConfigField "Boolean", "PREFERERENCE_JUMP_NAVIGATION", "true"
         }
         "huaweilh" {
             dimension 'target'
             versionNameSuffix "-lh"
             versionCode appVersionCode - 1000
             matchingFallbacks = ['huawei']
+            buildConfigField "Boolean", "PREFERERENCE_JUMP_NAVIGATION", "true"
         }
         "user" {
             dimension 'target'
