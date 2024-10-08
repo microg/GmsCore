@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import com.android.billingclient.api.BillingClient.BillingResponseCode
 import org.microg.gms.profile.Build
+import org.microg.gms.profile.ProfileManager
 import org.microg.gms.utils.digest
 import org.microg.gms.utils.getExtendedPackageInfo
 import org.microg.gms.utils.toBase64
@@ -299,6 +300,12 @@ fun getUserAgent(): String {
 
 fun createDeviceEnvInfo(context: Context): DeviceEnvInfo? {
     try {
+        if (Build.DEVICE == null || Build.PRODUCT == null || Build.MODEL == null || Build.MANUFACTURER == null
+            || Build.FINGERPRINT == null || Build.VERSION.RELEASE == null || Build.BRAND == null) {
+            Log.w(TAG, "createDeviceEnvInfo Build info some properties are null")
+            ProfileManager.resetActiveProfile()
+            ProfileManager.ensureInitialized(context)
+        }
         val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
         return DeviceEnvInfo(
             gpVersionCode = VENDING_VERSION_CODE,
