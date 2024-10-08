@@ -244,4 +244,10 @@ Questa operazione può richiedere alcuni secondi."</string>
     <string name="pref_vending_billing_note_licensing">Alcune applicazioni potrebbero richiedere anche di abilitare la verifica della licenza per verificare i tuoi acquisti.</string>
     <string name="pref_vending_billing_note_experimental">Questa funzionalità è ancora sperimentale e potrebbe comportare la perdita di denaro. Sei stato avvisato.</string>
     <string name="auth_package_override_request_title">Permetti a <b><xliff:g example="F-Droid">%1$s</xliff:g></b> l\'accesso privilegiato a <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="limited_services_app_name">microG Limited Services</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Aggiungi automaticamente app gratuite alla libreria</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Le app gratuite possono verificare se sono state scaricate da Google Play. Aggiungi automaticamente le app gratuite alla libreria del tuo account per superare sempre il controllo per tutte le app gratuite attualmente disponibili per te.</string>
+    <string name="limited_services_dialog_information_ack">Ho capito</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> wants to access your account as if it was <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ciò potrebbe garantirgli un accesso privilegiato al tuo account.</string>
+    <string name="limited_services_dialog_information">Stai utilizzando microG Limited Services. A differenza dei soliti servizi microG, questa versione funziona solo con le app che utilizzano le librerie microG, non quelle su Google Play. Ciò significa che la maggior parte delle applicazioni ignorerà questi servizi.</string>
 </resources>
