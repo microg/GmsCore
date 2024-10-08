@@ -300,12 +300,6 @@ fun getUserAgent(): String {
 
 fun createDeviceEnvInfo(context: Context): DeviceEnvInfo? {
     try {
-        if (Build.DEVICE == null || Build.PRODUCT == null || Build.MODEL == null || Build.MANUFACTURER == null
-            || Build.FINGERPRINT == null || Build.VERSION.RELEASE == null || Build.BRAND == null) {
-            Log.w(TAG, "createDeviceEnvInfo Build info some properties are null")
-            ProfileManager.resetActiveProfile()
-            ProfileManager.ensureInitialized(context)
-        }
         val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
         return DeviceEnvInfo(
             gpVersionCode = VENDING_VERSION_CODE,
@@ -321,15 +315,15 @@ fun createDeviceEnvInfo(context: Context): DeviceEnvInfo? {
             gpLastUpdateTime = packageInfo.lastUpdateTime,
             gpFirstInstallTime = packageInfo.firstInstallTime,
             gpSourceDir = packageInfo.applicationInfo.sourceDir!!,
-            device = Build.DEVICE!!,
+            device = Build.DEVICE ?: "",
             displayMetrics = getDisplayInfo(context),
             telephonyData = getTelephonyData(context),
-            product = Build.PRODUCT!!,
-            model = Build.MODEL!!,
-            manufacturer = Build.MANUFACTURER!!,
-            fingerprint = Build.FINGERPRINT!!,
-            release = Build.VERSION.RELEASE!!,
-            brand = Build.BRAND!!,
+            product = Build.PRODUCT ?: "",
+            model = Build.MODEL ?: "",
+            manufacturer = Build.MANUFACTURER ?: "",
+            fingerprint = Build.FINGERPRINT ?: "",
+            release = Build.VERSION.RELEASE ?: "",
+            brand = Build.BRAND ?: "",
             batteryLevel = getBatteryLevel(context),
             timeZoneOffset = if (SDK_INT >= 24) TimeZone.getDefault().rawOffset.toLong() else 0,
             locationData = getLocationData(context),
