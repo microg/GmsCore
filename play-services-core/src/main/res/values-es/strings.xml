@@ -24,7 +24,7 @@
     <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> quiere usar:</string>
     <string name="account_manager_title">Administrador de cuentas de Google</string>
     <string name="sorry">Lo sentimos…</string>
-    <string name="auth_before_connect">Una aplicación de tu dispositivo está intentando iniciar sesión en una cuenta de Google. \u0020Si esto fue intencional, use el botón <b>Iniciar sesión</b> para conectarse a la página de inicio de sesión de Google, si no, presione <b>Cancelar</b> para volver a la aplicación que hizo que apareciera este cuadro de diálogo.</string>
+    <string name="auth_before_connect">Una aplicación de tu dispositivo está intentando iniciar sesión en una cuenta de Google. \u0020Si esto fue intencional, usa el botón <b>Iniciar sesión</b> para conectarte a la página de inicio de sesión de Google, si no, presione <b>Cancelar</b> para volver a la aplicación que hizo que apareciera este cuadro de diálogo.</string>
     <string name="auth_sign_in">Iniciar sesión</string>
     <string name="auth_connecting">Tu dispositivo está estableciendo una conexión con los servidores de Google para iniciar sesión.
 \n
