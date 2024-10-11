@@ -550,6 +550,22 @@
         <!-- Games -->
 
         <activity
+            android:name="org.microg.gms.games.ui.InGameUiActivity"
+            android:process=":ui"
+            android:configChanges="keyboardHidden|keyboard|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog">
+            <intent-filter>
+                <action android:name="com.google.android.gms.games.SHOW_SELECT_SNAPSHOT"/>
+                <action android:name="com.google.android.gms.games.VIEW_ACHIEVEMENTS" />
+                <action android:name="com.google.android.gms.games.VIEW_LEADERBOARDS" />
+                <action android:name="com.google.android.gms.games.VIEW_LEADERBOARD_SCORES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="org.microg.gms.games.GamesSignInActivity"
             android:enabled="true"
             android:exported="false"

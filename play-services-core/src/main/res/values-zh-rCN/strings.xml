@@ -241,4 +241,23 @@ microG GmsCore 内置一套自由的 SafetyNet 实现，但是官方服务器要
     <string name="auth_package_override_request_message">&lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%1$s&lt;/xliff:g&gt;&lt;/b&gt; 想以 &lt;xliff:g example=\"F-Droid Inc.\"&gt;%3$s&lt;/xliff:g&gt;&lt;/b&gt; 的 &lt;b&gt;&lt;xliff:g example=\"F-Droid\"&gt;%2$s&lt;/xliff:g&gt; 访问你的账户。这可能授予访问你账户的权限。</string>
     <string name="pref_vending_licensing_purchase_free_apps_switch">自动添加免费应用到库中</string>
     <string name="pref_vending_licensing_purchase_free_apps_summary">免费应用可能会检查它们是否曾经从 Google Play 被下载过。自动添加免费应用到你的账户库中可以让你一直通过当前对你可用的所有免费应用的检查。</string>
+
+    <string name="games_achievement_list_title">成就</string>
+    <string name="games_achievements_empty_text">此游戏没有成就</string>
+    <string name="games_api_access_denied">此设备上没有可访问 Games API 的账号</string>
+    <string name="games_achievement_locked_content_description">未解锁</string>
+    <string name="games_achievement_unlocked_content_description">已解锁</string>
+    <string name="games_achievement_extra_text">%1$s XP</string>
+    <string name="games_leaderboard_empty_text">此游戏没有排行榜</string>
+    <string name="games_leaderboard_score_empty_text">不可思议！居然还没有人公开创下这个游戏的高分记录！</string>
+    <string name="games_leaderboard_list_title">排行榜</string>
+    <string name="games_leaderboards_score_label">得分：%1$s</string>
+    <string name="games_snapshot_empty_text">目前尚未保存任何游戏存档</string>
+    <string name="games_snapshot_choose_btn_text">选择</string>
+    <string name="games_snapshot_delete_btn_text">删除</string>
+    <string name="games_delete_snapshot_dialog_title">删除游戏存档</string>
+    <string name="games_delete_snapshot_dialog_message">确定要删除这个游戏存档吗?</string>
+    <string name="games_delete_snapshot_dialog_cancel">取消</string>
+    <string name="games_delete_snapshot_dialog_ok">确定</string>
+    <string name="games_delete_snapshot_error">删除失败，请稍后重试</string>
 </resources>
