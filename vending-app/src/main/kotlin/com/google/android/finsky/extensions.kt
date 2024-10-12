@@ -5,27 +5,38 @@
 
 package com.google.android.finsky
 
+import android.accounts.Account
+import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.collection.arrayMapOf
 import androidx.collection.arraySetOf
+import com.android.vending.licensing.AUTH_TOKEN_SCOPE
+import com.android.vending.licensing.getAuthToken
 import com.android.vending.licensing.getLicenseRequestHeaders
 import com.google.android.finsky.assetmoduleservice.ModuleData
 import com.google.android.finsky.assetmoduleservice.PackData
-import org.microg.gms.settings.SettingsContract
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.microg.gms.auth.AuthConstants
 import org.microg.vending.billing.core.HttpClient
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Collections
 
 const val STATUS_NOT_INSTALLED = 8
 const val STATUS_COMPLETED = 4
-const val STATUS_TRANSFERRING = 3
 const val STATUS_DOWNLOADING = 2
-const val STATUS_SUCCESS = 0
+const val STATUS_INITIAL_STATE = 1
+
+const val ERROR_CODE_SUCCESS = 0
+const val ERROR_CODE_FAIL = -5
 
 const val KEY_ERROR_CODE = "error_code"
 const val KEY_MODULE_NAME = "module_name"
@@ -78,21 +89,47 @@ fun getAppVersionCode(context: Context, packageName: String): String? {
     return runCatching { context.packageManager.getPackageInfo(packageName, 0).versionCode.toString() }.getOrNull()
 }
 
-suspend fun HttpClient.requestAssetModule(context: Context, auth: String, requestPayload: AssetModuleDeliveryRequest) = runCatching {
-    val androidId = SettingsContract.getSettings(
-        context, SettingsContract.CheckIn.getContentUri(context), arrayOf(SettingsContract.CheckIn.ANDROID_ID)
-    ) { cursor: Cursor -> cursor.getLong(0) }
-    Log.d(TAG, "auth->$auth")
-    Log.d(TAG, "androidId->$androidId")
-    Log.d(TAG, "requestPayload->$requestPayload")
-    post(
-        url = ASSET_MODULE_DELIVERY_URL, headers = getLicenseRequestHeaders(auth, 1), payload = requestPayload, adapter = AssetModuleDeliveryResponse.ADAPTER
-    ).wrapper?.deliveryInfo
-}.onFailure {
-    Log.d(TAG, "requestAssetModule: ", it)
-}.getOrNull()
+suspend fun HttpClient.initAssertModuleData(
+    context: Context,
+    packageName: String,
+    accountManager: AccountManager,
+    requestedAssetModuleNames: List<String?>,
+    playCoreVersionCode: Int,
+): ModuleData {
+    Log.d(TAG, "initAssertModuleData: requestedAssetModuleNames: $requestedAssetModuleNames")
+    val accounts = accountManager.getAccountsByType(AuthConstants.DEFAULT_ACCOUNT_TYPE)
+    var oauthToken: String? = null
+    if (accounts.isEmpty()) {
+        return ModuleData(errorCode = ERROR_CODE_FAIL)
+    } else for (account: Account in accounts) {
+        oauthToken = accountManager.getAuthToken(account, AUTH_TOKEN_SCOPE, false).getString(AccountManager.KEY_AUTHTOKEN)
+        if (oauthToken != null) {
+            break
+        }
+    }
+    if (oauthToken == null) {
+        return ModuleData(errorCode = ERROR_CODE_FAIL)
+    }
+    val requestPayload = AssetModuleDeliveryRequest.Builder().callerInfo(CallerInfo(getAppVersionCode(context, packageName)?.toInt())).packageName(packageName)
+        .playCoreVersion(playCoreVersionCode).pageSource(listOf(PageSource.UNKNOWN_SEARCH_TRAFFIC_SOURCE, PageSource.BOOKS_HOME_PAGE))
+        .callerState(listOf(CallerState.CALLER_APP_REQUEST, CallerState.CALLER_APP_DEBUGGABLE)).moduleInfo(ArrayList<AssetModuleInfo>().apply {
+            requestedAssetModuleNames.forEach { add(AssetModuleInfo.Builder().name(it).build()) }
+        }).build()
+    val moduleDeliveryInfo = runCatching {
+        post(
+            url = ASSET_MODULE_DELIVERY_URL,
+            headers = getLicenseRequestHeaders(oauthToken, 1),
+            payload = requestPayload,
+            adapter = AssetModuleDeliveryResponse.ADAPTER
+        ).wrapper?.deliveryInfo
+    }.onFailure {
+        Log.d(TAG, "initAssertModuleData: ", it)
+    }.getOrNull()
+    Log.d(TAG, "initAssertModuleData: moduleDeliveryInfo-> $moduleDeliveryInfo")
+    return initModuleDownloadInfo(context, packageName, moduleDeliveryInfo)
+}
 
-suspend fun HttpClient.downloadFile(context: Context, moduleName: String, moduleData: ModuleData, bundle: Bundle) {
+suspend fun downloadFile(context: Context, moduleName: String, moduleData: ModuleData, bundle: Bundle) {
     val resourcePackageName: String? = bundle.getString(KEY_RESOURCE_PACKAGE_NAME)
     val chunkName: String? = bundle.getString(KEY_CHUNK_NAME)
     val resourceLink: String? = bundle.getString(KEY_RESOURCE_LINK)
@@ -112,27 +149,69 @@ suspend fun HttpClient.downloadFile(context: Context, moduleName: String, module
     if (destination.exists()) {
         destination.delete()
     }
-    val path = runCatching { download(resourceLink, destination, TAG_REQUEST) }.onFailure { Log.w(TAG, "downloadFile: ", it) }.getOrNull()
+    val path = runCatching { download(context, resourceLink, destination, moduleName, moduleData) }.onFailure { Log.w(TAG, "downloadFile: ", it) }.getOrNull()
     if (path != null) {
         val file = File(path)
         if (file.exists() && file.length() == byteLength) {
-            moduleData.updateDownloadStatus(moduleName, STATUS_TRANSFERRING)
-            moduleData.incrementPackBytesDownloaded(moduleName, byteLength)
-            moduleData.incrementBytesDownloaded(moduleName)
             sendBroadcastForExistingFile(context, moduleData, moduleName, bundle, destination)
         }
     }
 }
 
-fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: ModuleDeliveryInfo): ModuleData {
+suspend fun download(
+    context: Context,
+    url: String,
+    destinationFile: File,
+    moduleName: String,
+    moduleData: ModuleData,
+): String = withContext(Dispatchers.IO) {
+    val uri = Uri.parse(url).toString()
+    val connection = URL(uri).openConnection() as HttpURLConnection
+    var bytebit:Long = 0
+    try {
+        connection.requestMethod = "GET"
+        connection.connectTimeout = 10000
+        connection.readTimeout = 10000
+        connection.connect()
+        if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+            throw IOException("Failed to download file: HTTP response code ${connection.responseCode}")
+        }
+        destinationFile.parentFile?.mkdirs()
+        connection.inputStream.use { input ->
+            FileOutputStream(destinationFile).use { output ->
+                val buffer = ByteArray(4096)
+                var bytesRead: Int
+                while (input.read(buffer).also { bytesRead = it } != -1) {
+                    output.write(buffer, 0, bytesRead)
+                    moduleData.incrementPackBytesDownloaded(context, moduleName, bytesRead.toLong())
+                    bytebit += bytesRead
+                    if (bytebit >= 1048576){
+                        sendBroadcastForExistingFile(context, moduleData, moduleName, null, null)
+                        bytebit = 0
+                    }
+                }
+            }
+        }
+        destinationFile.absolutePath
+    } catch (e: Exception) {
+        throw IOException("Download failed: ${e.message}", e)
+    } finally {
+        connection.disconnect()
+    }
+}
+
+fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: ModuleDeliveryInfo?): ModuleData {
+    if (deliveryInfo == null || deliveryInfo.status != null) {
+        return ModuleData(errorCode = ERROR_CODE_FAIL)
+    }
     val packNames: ArrayList<String> = arrayListOf()
     var moduleDownloadByteLength = 0L
-    var appVersionCode = 0
+    var appVersionCode = 0L
     val sessionIds = arrayMapOf<String, Int>()
     val packDataList = arrayMapOf<String, PackData>()
     for (deliveryIndex in deliveryInfo.res.indices) {
         val resource: ModuleResource = deliveryInfo.res[deliveryIndex]
-        appVersionCode = resource.versionCode?.toInt() ?: 0
+        appVersionCode = resource.versionCode ?: 0
         val resourceList: List<PackResource> = resource.packResource
         val resourcePackageName: String = resource.packName ?: continue
         var packDownloadByteLength = 0L
@@ -175,8 +254,8 @@ fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: 
             packVersion = appVersionCode,
             packBaseVersion = 0,
             sessionId = STATUS_NOT_INSTALLED,
-            errorCode = STATUS_SUCCESS,
-            status = STATUS_NOT_INSTALLED,
+            errorCode = ERROR_CODE_SUCCESS,
+            status = STATUS_INITIAL_STATE,
             bytesDownloaded = 0,
             totalBytesToDownload = packDownloadByteLength,
             bundleList = bundlePackageName,
@@ -188,10 +267,10 @@ fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: 
     }
     return ModuleData(
         packageName = packageName,
-        errorCode = 0,
+        errorCode = ERROR_CODE_SUCCESS,
         sessionIds = sessionIds,
         bytesDownloaded = 0,
-        status = STATUS_NOT_INSTALLED,
+        status = STATUS_INITIAL_STATE,
         packNames = packNames,
         appVersionCode = appVersionCode,
         totalBytesToDownload = moduleDownloadByteLength
@@ -200,20 +279,20 @@ fun initModuleDownloadInfo(context: Context, packageName: String, deliveryInfo: 
     }
 }
 
-fun buildDownloadBundle(packName: String, moduleData: ModuleData, isPack: Boolean = false, packNames: ArrayList<String>? = null) = Bundle().apply {
+fun buildDownloadBundle(packName: String, moduleData: ModuleData, isPack: Boolean = false, packNames: List<String?>? = null) = Bundle().apply {
     val packData = moduleData.getPackData(packName)
     packData?.run {
         putInt(combineModule(KEY_SESSION_ID, packName), sessionId)
         putInt(combineModule(KEY_STATUS, packName), status)
         putInt(combineModule(KEY_ERROR_CODE, packName), errorCode)
-        putInt(combineModule(KEY_PACK_VERSION, packName), packVersion)
-        putInt(combineModule(KEY_PACK_BASE_VERSION, packName), packBaseVersion)
+        putLong(combineModule(KEY_PACK_VERSION, packName), packVersion)
+        putLong(combineModule(KEY_PACK_BASE_VERSION, packName), packBaseVersion)
         putLong(combineModule(KEY_BYTES_DOWNLOADED, packName), bytesDownloaded)
         putLong(combineModule(KEY_TOTAL_BYTES_TO_DOWNLOAD, packName), totalBytesToDownload)
 
-        putStringArrayList(KEY_PACK_NAMES, packNames ?: if (isPack) arrayListOf(packName) else moduleData.packNames)
+        putStringArrayList(KEY_PACK_NAMES, packNames?.let { ArrayList(it) } ?: if (isPack) arrayListOf(packName) else moduleData.packNames)
         putInt(KEY_STATUS, moduleData.status)
-        putInt(KEY_APP_VERSION_CODE, moduleData.appVersionCode)
+        putInt(KEY_APP_VERSION_CODE, moduleData.appVersionCode.toInt())
         putLong(KEY_TOTAL_BYTES_TO_DOWNLOAD, if (isPack) totalBytesToDownload else moduleData.totalBytesToDownload)
         putInt(KEY_ERROR_CODE, if (isPack) errorCode else moduleData.errorCode)
         putInt(KEY_SESSION_ID, moduleData.sessionIds?.get(packName) ?: sessionId)
@@ -225,19 +304,19 @@ fun sendBroadcastForExistingFile(context: Context, moduleData: ModuleData, modul
     val packData = moduleData.getPackData(moduleName) ?: return
     try {
         val downloadBundle = Bundle()
-        downloadBundle.putInt(KEY_APP_VERSION_CODE, moduleData.appVersionCode)
-        downloadBundle.putInt(KEY_ERROR_CODE, STATUS_SUCCESS)
+        downloadBundle.putInt(KEY_APP_VERSION_CODE, moduleData.appVersionCode.toInt())
+        downloadBundle.putInt(KEY_ERROR_CODE, ERROR_CODE_SUCCESS)
         downloadBundle.putInt(KEY_SESSION_ID, moduleData.sessionIds?.get(moduleName) ?: moduleData.status)
         downloadBundle.putInt(KEY_STATUS, moduleData.status)
         downloadBundle.putStringArrayList(KEY_PACK_NAMES, arrayListOf(moduleName))
         downloadBundle.putLong(KEY_BYTES_DOWNLOADED, packData.bytesDownloaded)
         downloadBundle.putLong(KEY_TOTAL_BYTES_TO_DOWNLOAD, packData.totalBytesToDownload)
         downloadBundle.putLong(combineModule(KEY_TOTAL_BYTES_TO_DOWNLOAD, moduleName), packData.totalBytesToDownload)
-        downloadBundle.putInt(combineModule(KEY_PACK_VERSION, moduleName), packData.packVersion)
+        downloadBundle.putLong(combineModule(KEY_PACK_VERSION, moduleName), packData.packVersion)
         downloadBundle.putInt(combineModule(KEY_STATUS, moduleName), packData.status)
-        downloadBundle.putInt(combineModule(KEY_ERROR_CODE, moduleName), STATUS_SUCCESS)
+        downloadBundle.putInt(combineModule(KEY_ERROR_CODE, moduleName), ERROR_CODE_SUCCESS)
         downloadBundle.putLong(combineModule(KEY_BYTES_DOWNLOADED, moduleName), packData.bytesDownloaded)
-        downloadBundle.putInt(combineModule(KEY_PACK_BASE_VERSION, moduleName), packData.packBaseVersion)
+        downloadBundle.putLong(combineModule(KEY_PACK_BASE_VERSION, moduleName), packData.packBaseVersion)
         val resultList = arraySetOf<Bundle>()
         packData.bundleList?.forEach {
             val result = Bundle()
