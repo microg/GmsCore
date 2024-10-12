@@ -5,8 +5,10 @@
 
 package com.google.android.finsky.assetmoduleservice
 
+import android.content.Context
 import android.os.Bundle
 import androidx.collection.ArrayMap
+import com.google.android.finsky.sendBroadcastForExistingFile
 
 data class ModuleData(
     var packageName: String? = null,
@@ -15,8 +17,8 @@ data class ModuleData(
     var bytesDownloaded: Long = 0,
     var status: Int = 0,
     var packNames: ArrayList<String>? = null,
-    var appVersionCode: Int = 0,
-    var totalBytesToDownload: Long = 0
+    var appVersionCode: Long = 0,
+    var totalBytesToDownload: Long = 0,
 ) {
     private var mPackData = emptyMap<String, PackData>()
 
@@ -28,12 +30,9 @@ data class ModuleData(
         return mPackData[packName]
     }
 
-    fun incrementPackBytesDownloaded(packName: String, bytes: Long) {
+    fun incrementPackBytesDownloaded(context: Context, packName: String, bytes: Long) {
         mPackData[packName]?.incrementBytesDownloaded(bytes)
-    }
-
-    fun incrementBytesDownloaded(packName: String) {
-        bytesDownloaded += getPackData(packName)?.bytesDownloaded ?: 0
+        bytesDownloaded += bytes
     }
 
     fun updateDownloadStatus(packName: String, statusCode: Int) {
@@ -44,11 +43,15 @@ data class ModuleData(
     fun updateModuleDownloadStatus(statusCode: Int) {
         this.status = statusCode
     }
+
+    override fun toString(): String {
+        return "ModuleData(packageName=$packageName, errorCode=$errorCode, sessionIds=$sessionIds, bytesDownloaded=$bytesDownloaded, status=$status, packNames=$packNames, appVersionCode=$appVersionCode, totalBytesToDownload=$totalBytesToDownload, mPackData=$mPackData)"
+    }
 }
 
 data class PackData(
-    var packVersion: Int = 0,
-    var packBaseVersion: Int = 0,
+    var packVersion: Long = 0,
+    var packBaseVersion: Long = 0,
     var sessionId: Int = 0,
     var errorCode: Int = 0,
     var status: Int = 0,
@@ -62,5 +65,9 @@ data class PackData(
 ) {
     fun incrementBytesDownloaded(bytes: Long) {
         bytesDownloaded += bytes
+    }
+
+    override fun toString(): String {
+        return "PackData(packVersion=$packVersion, packBaseVersion=$packBaseVersion, sessionId=$sessionId, errorCode=$errorCode, status=$status, bytesDownloaded=$bytesDownloaded, totalBytesToDownload=$totalBytesToDownload, packVersionTag=$packVersionTag, bundleList=$bundleList, totalSumOfSubcontractedModules=$totalSumOfSubcontractedModules, subcontractingBaseUnit=$subcontractingBaseUnit, listOfSubcontractNames=$listOfSubcontractNames)"
     }
 }
