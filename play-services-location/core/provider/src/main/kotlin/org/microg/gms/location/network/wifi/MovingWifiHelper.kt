@@ -53,6 +53,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "Telekom_FlyNet",
     "Vestische WLAN",
     "agilis-Wifi",
+    "freeWIFIahead!",
     // Greece
     "AegeanWiFi",
     // Hong Kong
@@ -71,6 +72,7 @@ private val MOVING_WIFI_HOTSPOTS = setOf(
     "saswifi",
     // Switzerland
     "SBB-Free",
+    "SBB-FREE",
     "SWISS Connect",
     "Edelweiss Entertainment",
     // United Kingdom
