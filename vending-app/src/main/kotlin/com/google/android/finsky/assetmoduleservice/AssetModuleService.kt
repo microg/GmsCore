@@ -85,6 +85,12 @@ class AssetModuleServiceImpl(
             return
         }
         lifecycleScope.launchWhenStarted {
+            if (list.all { it.getString(KEY_MODULE_NAME) == null }) {
+                Log.d(TAG, "startDownload: module name is null")
+                val result = Bundle().apply { putStringArrayList(KEY_PACK_NAMES, arrayListOf<String>()) }
+                callback?.onStartDownload(-1, result)
+                return@launchWhenStarted
+            }
             if (moduleErrorRequested.contains(packageName)) {
                 Log.d(TAG, "startDownload: moduleData request error")
                 val result = Bundle().apply { putStringArrayList(KEY_PACK_NAMES, arrayListOf<String>()) }
