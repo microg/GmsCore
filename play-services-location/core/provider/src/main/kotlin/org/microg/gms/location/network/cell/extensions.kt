@@ -50,7 +50,7 @@ private fun GsmCellLocation.toCellDetails(mcc: Int? = null, mnc: Int? = null, ti
     mnc = mnc,
     lac = lac.takeIf { it != Int.MAX_VALUE && it != -1 },
     cid = cid.takeIf { it != Int.MAX_VALUE && it != -1 }?.toLong(),
-    psc = psc.takeIf { it != Int.MAX_VALUE && it != -1 },
+    pscOrPci = psc.takeIf { it != Int.MAX_VALUE && it != -1 },
     timestamp = timestamp
 )
 
@@ -60,7 +60,6 @@ internal fun CellLocation.toCellDetails(mcc: Int? = null, mnc: Int? = null, time
     else -> throw IllegalArgumentException("Unknown CellLocation type")
 }
 
-@RequiresApi(17)
 private fun CellIdentityCdma.toCellDetails() = CellDetails(
     type = CellDetails.Companion.Type.CDMA,
     sid = systemId,
@@ -69,7 +68,6 @@ private fun CellIdentityCdma.toCellDetails() = CellDetails(
     location = locationFromCdma(latitude, longitude)
 )
 
-@RequiresApi(17)
 private fun CellIdentityGsm.toCellDetails() = CellDetails(
     type = CellDetails.Companion.Type.GSM,
     mcc = if (SDK_INT >= 28) mccString?.toIntOrNull() else mcc.takeIf { it != Int.MAX_VALUE && it != -1 },
@@ -78,23 +76,22 @@ private fun CellIdentityGsm.toCellDetails() = CellDetails(
     cid = cid.takeIf { it != Int.MAX_VALUE && it != -1 }?.toLong()
 )
 
-@RequiresApi(18)
 private fun CellIdentityWcdma.toCellDetails() = CellDetails(
     type = CellDetails.Companion.Type.WCDMA,
     mcc = if (SDK_INT >= 28) mccString?.toIntOrNull() else mcc.takeIf { it != Int.MAX_VALUE && it != -1 },
     mnc = if (SDK_INT >= 28) mncString?.toIntOrNull() else mnc.takeIf { it != Int.MAX_VALUE && it != -1 },
     lac = lac.takeIf { it != Int.MAX_VALUE && it != -1 },
     cid = cid.takeIf { it != Int.MAX_VALUE && it != -1 }?.toLong(),
-    psc = psc.takeIf { it != Int.MAX_VALUE && it != -1 }
+    pscOrPci = psc.takeIf { it != Int.MAX_VALUE && it != -1 }
 )
 
-@RequiresApi(17)
 private fun CellIdentityLte.toCellDetails() = CellDetails(
     type = CellDetails.Companion.Type.LTE,
     mcc = if (SDK_INT >= 28) mccString?.toIntOrNull() else mcc.takeIf { it != Int.MAX_VALUE && it != -1 },
     mnc = if (SDK_INT >= 28) mncString?.toIntOrNull() else mnc.takeIf { it != Int.MAX_VALUE && it != -1 },
     tac = tac.takeIf { it != Int.MAX_VALUE && it != -1 },
-    cid = ci.takeIf { it != Int.MAX_VALUE && it != -1 }?.toLong()
+    cid = ci.takeIf { it != Int.MAX_VALUE && it != -1 }?.toLong(),
+    pscOrPci = pci.takeIf { it != Int.MAX_VALUE && it != -1 }
 )
 
 @RequiresApi(28)

@@ -5,6 +5,7 @@
   -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gms_app_name">microG Services</string>
+    <string name="limited_services_app_name">microG Limited Services</string>
     <string name="gms_settings_name">microG Settings</string>
     <string name="gms_settings_summary">Setup microG services.</string>
 
@@ -282,5 +283,8 @@ This can take a couple of minutes."</string>
     <string name="credentials_assisted_choose_account_label">Choose account</string>
     <string name="credentials_assisted_choose_account_subtitle">to continue to %1$s</string>
     <string name="credentials_assisted_signin_button_text_long">Sign in with Google</string>
+
+    <string name="limited_services_dialog_information">You are using the microG Limited Services. Unlike the usual microG Services, this flavor only works with apps using microG libraries, not those on Google Play. This means that most applications will ignore these services.</string>
+    <string name="limited_services_dialog_information_ack">I understand</string>
 
 </resources>

@@ -22,4 +22,9 @@
     <string name="fido_transport_selection_biometric">Выкарыстоўваць гэтую прыладу з заблакаваным экранам</string>
     <string name="fido_transport_usb_wait_connect_body">Калі ласка, падключыце ваш USB-ключ бяспекі.</string>
     <string name="fido_transport_usb_wait_confirm_body">Калі ласка, краніце залатога кальца або дыска на %1$s.</string>
+    <string name="fido_pin_ok">OK</string>
+    <string name="fido_wrong_pin">Няправільны PIN-код!</string>
+    <string name="fido_pin_title">Увядзіце PIN-код вашага аўтэнтыфікатара</string>
+    <string name="fido_pin_cancel">Адмена</string>
+    <string name="fido_pin_hint">Ад 4 да 63 сімвалаў</string>
 </resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_droidguard_mode_network_summary">Ceangail le ham rite DroidGuard tríd an líonra</string>
+    <string name="pref_droidguard_mode_network_title">Cianda</string>
+    <string name="prefcat_droidguard_mode">Modh oibríochta DroidGuard</string>
+    <string name="pref_droidguard_mode_embedded_title">Leabaithe</string>
+    <string name="pref_droidguard_mode_embedded_summary">Úsáid am rite áitiúil DroidGuard</string>
+</resources>

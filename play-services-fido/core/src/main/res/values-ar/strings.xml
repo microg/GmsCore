@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fido_welcome_title">استخدم مفتاح أمانك مع %1$s</string>
+    <string name="fido_welcome_body">استخدام مفتاح أمانك مع %1$s يساهم في حماية بياناتك الشخصية.</string>
+    <string name="fido_welcome_button_get_started">ابدأ</string>
+    <string name="fido_welcome_privileged_info">%1$s يعمل كمتصفح موثوق لاستخدام مفتاح أمانك مع %2$s.</string>
+    <string name="fido_welcome_privileged_check">نعم، %1$s متصفحي الموثوق ويجب السماح له باستخدام مفاتيح الأمان مع مواقع خارجية.</string>
+    <string name="fido_transport_selection_title">اختر كيف تستخدم مفتاح أمانك</string>
+    <string name="fido_transport_selection_body">مفاتيح الأمان تعمل مع البلوتوث وNFC وUSB. اختر كيف تريد استخدام مفتاحك.</string>
+    <string name="fido_usb_prompt_body">قم بتوصيل مفتاح أمانك إلى منفذ الـ USB أو وصله بسلك USB. إذا كان لمفتاحك زر أو قرص ذهبي، اضغط عليه الآن.</string>
+    <string name="fido_nfc_title">قم بتوصيل مفتاح أمان الـ NFC الخاص بك</string>
+    <string name="fido_transport_selection_bluetooth">استخدم مفتاح الأمان مع البلوتوث</string>
+    <string name="fido_transport_selection_nfc">استخدم مفتاح الأمان مع الـ NFC</string>
+    <string name="fido_transport_selection_biometric">استخدم هذا الجهاز بقفل الشاشة</string>
+    <string name="fido_transport_usb_wait_connect_body">يرجى توصيل مفتاح أمان الـ USB الخاص بك.</string>
+    <string name="fido_biometric_prompt_title">تحقق من هويتك</string>
+    <string name="fido_biometric_prompt_body">يحتاج %1$s إلى أن يتحقق من هويتك.</string>
+    <string name="fido_usb_title">قم بتوصيل مفتاح أمان الـ USB الخاص بك</string>
+    <string name="fido_transport_selection_usb">استخدم مفتاح الأمان مع الـ USB</string>
+    <string name="fido_nfc_prompt_body">امسك مفتاحك مستويًا على ظهر جهازك حتى يتوقف الاهتزاز</string>
+    <string name="fido_transport_usb_wait_confirm_body">يرجى الضغط على الحلقة الذهبية أو القرص على %1$s.</string>
+    <string name="fido_pin_hint">من 4 إلى 63 حرفًا</string>
+    <string name="fido_pin_ok">موافق</string>
+    <string name="fido_pin_cancel">إلغاء</string>
+    <string name="fido_wrong_pin">رقم سري خاطئ!</string>
+    <string name="fido_pin_title">يرجى إدخال الرقم السري لجهاز المصادقتك</string>
+</resources>

@@ -18,6 +18,7 @@ import org.microg.gms.maps.hms.utils.toGms
 import org.microg.gms.maps.hms.utils.toHms
 
 class CircleImpl(private val circle: Circle) : ICircleDelegate.Stub() {
+    private var tag: Any? = null
 
     override fun remove() {
         circle.remove()
@@ -50,11 +51,11 @@ class CircleImpl(private val circle: Circle) : ICircleDelegate.Stub() {
     override fun getStrokeColor(): Int = circle.strokeColor
 
     override fun setTag(tag: IObjectWrapper) {
-        circle.setTag<Any>(tag.unwrap())
+        this.tag = tag.unwrap()
     }
 
     override fun getTag(): IObjectWrapper? {
-        return ObjectWrapper.wrap(circle.tag)
+        return ObjectWrapper.wrap(this.tag)
     }
 
     override fun setStrokePattern(pattern: List<PatternItem>?) {

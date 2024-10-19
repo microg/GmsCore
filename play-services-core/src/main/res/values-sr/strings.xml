@@ -97,7 +97,7 @@
     <string name="pref_gcm_apps_title">Апликације које користе размену порука у облаку</string>
     <string name="pref_gcm_apps_summary">Листа апликација које су тренутно регистроване за размену порука у облаку.</string>
     <string name="pref_about_title">О microG услугама</string>
-    <string name="pref_about_summary">Информације о издању и коришћеним збиркама</string>
+    <string name="pref_about_summary">Информације о издању и коришћеним библиотекама</string>
     <string name="gcm_app_error_unregistering">Грешка при опозивању регистрације</string>
     <string name="gcm_app_not_installed_anymore">Апликација више није инсталирана</string>
     <string name="gcm_unregister_app">Опозови регистрацију</string>
@@ -245,4 +245,19 @@
     <string name="pref_vending_billing_note_licensing">Неке апликације могу захтевати да омогућите и верификацију лиценце да бисте верификовали своје куповине.</string>
     <string name="pref_vending_billing_enable_summary">Једном када је омогућено, неке апликације могу да доврше куповине или да започну претплате преко Google Play услуге наплате.</string>
     <string name="pref_vending_billing_enable_switch">Обрађуј захтеве за наплату</string>
+    <string name="credentials_assisted_cancel">Откажи</string>
+    <string name="credentials_assisted_continue">Настави</string>
+    <string name="credentials_assisted_confirmation_header">Пријављивање</string>
+    <string name="credentials_assisted_sign_back_title">Поновна пријава на %1$s помоћу Google налога</string>
+    <string name="credentials_assisted_signin_consent_header">Пријављивање као %1$s</string>
+    <string name="credentials_assisted_signin_description">Можете управљати пријављивањем помоћу Google налога у вашим Google налозима.</string>
+    <string name="credentials_assisted_choose_account_subtitle">за наставак на %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Пријава помоћу Google налога</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Настави као %1$s</string>
+    <string name="credentials_assisted_choose_account_label">Изабери налог</string>
+    <string name="credentials_assisted_signin_consent">Ако наставите, Google ће делити ваше име, имејл адресу и слику профила са %1$s. Погледајте политику приватности и услове коришћења услуге %1$s.</string>
+    <string name="auth_package_override_request_title">Омогући <b><xliff:g example="F-Droid">%1$s</xliff:g></b> привилеговани приступ за <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> жели да приступе вашем налогу као да је <b><xliff:g example="F-Droid">%2$s</xliff:g> од <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Ово би му могло дати привилеговани приступ вашем налогу.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Бесплатне апликације могу да провере да ли су преузете са Google Play-а. Аутоматски додајте бесплатне апликације у библиотеку налога да бисте увек прошли проверу за све бесплатне апликације које су вам тренутно доступне.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Аутоматски додај бесплатне апликације у библиотеку</string>
 </resources>

@@ -19,4 +19,5 @@
     <string name="license_notification_sign_in">登录</string>
     <string name="license_notification_ignore">忽略</string>
     <string name="installer_notification_progress_splitinstall_downloading">正在下载 %s 所需的组件</string>
+    <string name="app_name">microG Companion</string>
 </resources>

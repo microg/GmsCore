@@ -6,6 +6,7 @@
 package org.microg.gms.location.network.cell
 
 import android.location.Location
+import org.microg.gms.location.network.NetworkDetails
 
 data class CellDetails(
     val type: Type,
@@ -17,11 +18,11 @@ data class CellDetails(
     val sid: Int? = null,
     val nid: Int? = null,
     val bsid: Int? = null,
-    val timestamp: Long? = null,
-    val psc: Int? = null,
-    val signalStrength: Int? = null,
+    val pscOrPci: Int? = null,
+    override val timestamp: Long? = null,
+    override val signalStrength: Int? = null,
     val location: Location? = null
-) {
+) : NetworkDetails {
     companion object {
         enum class Type {
             CDMA, GSM, WCDMA, LTE, TDSCDMA, NR

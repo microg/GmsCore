@@ -29,4 +29,10 @@
     <string name="location_settings_dialog_message_details_end_paragraph">Gå till platsinställningarna för detaljerad info.</string>
     <string name="location_settings_dialog_btn_cancel">Nej tack!</string>
     <string name="location_settings_dialog_message_title_for_better_experience">För en bättre upplevelse, slå på enhetens platstjänst, som använder mikroG:s platsservice</string>
+    <string name="location_settings_dialog_message_grant_permissions">Tilldela platsbehörighet för microG Service</string>
+    <string name="pref_location_custom_url_title">Konfigurera service-URL</string>
+    <string name="pref_location_custom_url_details">Sökvägen /v1/geolocate läggs till automatiskt. Om leverantören av platsinformation kräver en nyckel, kan den läggas till som en frågeparameter i rot-URL:en.</string>
+    <string name="pref_location_custom_url_reset">Återställ</string>
+    <string name="pref_location_custom_url_summary">På detta sätt kan du ange en anpassad tjänst-URL. Ogiltiga värden kan leda till att platstjänster inte svarar eller är helt otillgängliga.</string>
+    <string name="pref_location_custom_url_input_hint">Anpassad service-URL</string>
 </resources>

@@ -3,23 +3,28 @@
   ~ SPDX-FileCopyrightText: 2022 microG Project Team
   ~ SPDX-License-Identifier: Apache-2.0
   --><resources>
-    <string name="fido_welcome_title">在 %1$s 上使用安全密钥</string>
-    <string name="fido_welcome_body">在 %1$s 上使用安全密钥有助于保护您的隐私数据。</string>
+    <string name="fido_welcome_title">为 %1$s 启用安全密钥</string>
+    <string name="fido_welcome_body">为 %1$s 启用安全密钥有助于保护您的个人数据。</string>
     <string name="fido_welcome_button_get_started">开始</string>
-    <string name="fido_welcome_privileged_info">%1$s 将充当您信任的浏览器，可将您的安全密钥用于 %2$s。</string>
-    <string name="fido_welcome_privileged_check">%1$s 是我信任的浏览器，允许其将安全密钥用于第三方网站。</string>
-    <string name="fido_transport_selection_title">选择如何使用您的安全密钥</string>
-    <string name="fido_transport_selection_body">安全密钥可通过蓝牙、NFC 或 USB 进行使用。请选择如何使用您的安全密钥。</string>
+    <string name="fido_welcome_privileged_info">确保 %1$s 是您信任的浏览器，以便为 %2$s 启用安全密钥。</string>
+    <string name="fido_welcome_privileged_check">是的，我信任 %1$s，请允许它为第三方网站使用安全密钥。</string>
+    <string name="fido_transport_selection_title">选择您使用安全密钥的方式</string>
+    <string name="fido_transport_selection_body">安全密钥可通过蓝牙、NFC 或 USB 方式使用。请选择您的使用方式。</string>
     <string name="fido_biometric_prompt_title">验证您的身份</string>
-    <string name="fido_biometric_prompt_body">"%1$s 需要验证您的身份。"</string>
+    <string name="fido_biometric_prompt_body">%1$s 需要确认是您本人在操作。</string>
     <string name="fido_usb_title">连接您的 USB 安全密钥</string>
-    <string name="fido_usb_prompt_body">将您的安全密钥插入到 USB 端口，或者用 USB 线缆连接。若您的密钥上有金色圆片或按钮，请点按它。</string>
+    <string name="fido_usb_prompt_body">请将安全密钥插入到 USB 端口，或通过 USB 线缆连接。若密钥上有按钮或金色圆片，请点按它。</string>
     <string name="fido_transport_selection_bluetooth">通过蓝牙使用安全密钥</string>
     <string name="fido_transport_selection_nfc">通过 NFC 使用安全密钥</string>
     <string name="fido_transport_selection_usb">通过 USB 使用安全密钥</string>
-    <string name="fido_transport_selection_biometric">将此设备的屏幕锁定用作安全密钥</string>
+    <string name="fido_transport_selection_biometric">使用当前设备的屏幕锁定选项</string>
     <string name="fido_transport_usb_wait_connect_body">请连接您的 USB 安全密钥。</string>
-    <string name="fido_transport_usb_wait_confirm_body">请点按 %1$s 上的金色圆环。</string>
+    <string name="fido_transport_usb_wait_confirm_body">请点按 %1$s 上的金色圆环或圆片。</string>
     <string name="fido_nfc_title">连接您的 NFC 安全密钥</string>
-    <string name="fido_nfc_prompt_body">将您的密钥贴在设备背部，直到其停止振动</string>
+    <string name="fido_nfc_prompt_body">请将安全密钥平贴在设备背部，直到振动停止</string>
+    <string name="fido_pin_ok">好</string>
+    <string name="fido_wrong_pin">输入了错误的 PIN 码！</string>
+    <string name="fido_pin_title">请输入 PIN 码以验证</string>
+    <string name="fido_pin_cancel">取消</string>
+    <string name="fido_pin_hint">4 到 63 个字符</string>
 </resources>

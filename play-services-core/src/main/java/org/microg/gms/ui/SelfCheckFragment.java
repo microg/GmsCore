@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import org.microg.gms.common.Constants;
 import org.microg.tools.selfcheck.InstalledPackagesChecks;
 //import org.microg.tools.selfcheck.NlpOsCompatChecks;
 //import org.microg.tools.selfcheck.NlpStatusChecks;
@@ -41,6 +42,7 @@ import org.microg.tools.ui.AbstractSettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -57,8 +59,10 @@ import static android.os.Build.VERSION_CODES.LOLLIPOP_MR1;
 public class SelfCheckFragment extends AbstractSelfCheckFragment {
 
     @Override
-    protected void prepareSelfCheckList(List<SelfCheckGroup> checks) {
-        checks.add(new RomSpoofSignatureChecks());
+    protected void prepareSelfCheckList(Context context, List<SelfCheckGroup> checks) {
+        if (Objects.equals(context.getPackageName(), Constants.GMS_PACKAGE_NAME)) {
+            checks.add(new RomSpoofSignatureChecks());
+        }
         checks.add(new InstalledPackagesChecks());
         if (SDK_INT >= 23) {
             List<String> permissions = new ArrayList<>();

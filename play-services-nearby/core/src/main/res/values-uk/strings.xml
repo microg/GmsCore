@@ -29,4 +29,40 @@
     <string name="pref_exposure_app_last_report_summary_encounters_no">Про випадки небезпечних контактів не повідомлялося.</string>
     <string name="pref_exposure_app_last_report_summary_encounters_suffix">Примітка: Оцінка ризику визначається застосунком. Високі показники можуть означати низький ризик або навпаки.</string>
     <string name="pref_exposure_app_api_usage_title">Використання API за останні 14 днів</string>
+    <string name="pref_exposure_rpis_histogram_legend_records"><xliff:g example="0 - 50">%1$s</xliff:g> ID на годину</string>
+    <string name="exposure_confirm_permission_description"><xliff:g example="microG Services">%1$s</xliff:g> потребує додаткових дозволів.</string>
+    <string name="prefcat_exposure_rpis_histogram_title"><xliff:g example="230">%1$d</xliff:g> ID зібрано</string>
+    <string name="exposure_confirm_stop_button">Вимкнути</string>
+    <string name="pref_exposure_rpis_details_summary">Коли API сповіщень про вплив увімкнено, ваш пристрій пасивно збирає ідентифікатори (так звані «рухомі ідентифікатори близькості», Rolling Proximity Identifiers, або RPI) з пристроїв, що знаходяться поруч.
+\n
+\nКоли власники пристроїв повідомляють про позитивний результат діагностики, їхні ідентифікатори можна використовувати спільно. Ваш пристрій перевіряє, чи збігається будь-який з відомих діагностованих ідентифікаторів з будь-яким із зібраних ідентифікаторів, і обчислює ризик зараження.</string>
+    <string name="exposure_confirm_start_button">Ввімкнути</string>
+    <string name="exposure_confirm_stop_title">Вимкнути сповіщення про вплив?</string>
+    <string name="exposure_confirm_stop_summary">Після вимкнення сповіщень про вплив ви більше не отримуватимете сповіщень, якщо ви контактували з людиною, яка повідомила про позитивний результат тесту.</string>
+    <string name="exposure_grant_background_location_description">Майже готово! Вам потрібно буде ввімкнути доступ до розташування у фоновому режимі, вибравши параметр «Дозволити постійно» на наступному екрані. Потім поверніться назад.</string>
+    <string name="pref_exposure_rpis_histogram_legend_no_records">Немає записів</string>
+    <string name="pref_exposure_rpi_delete_all_title">Видалити</string>
+    <string name="pref_exposure_rpi_delete_all_summary">Видалити всі зібрані ID</string>
+    <string name="pref_exposure_rpi_delete_all_warning">Видалення зібраних ідентифікаторів унеможливить сповіщення вас у випадку, якщо хтось із ваших контактів за останні 14 днів буде діагностований.</string>
+    <string name="pref_exposure_rpi_delete_all_warning_confirm_button">Всеодно видалити</string>
+    <string name="pref_exposure_rpi_export_title">Експортування</string>
+    <string name="pref_exposure_rpi_export_summary">Експортуйте зібрані ідентифікатори для розширеного аналізу за допомогою іншого застосунку.</string>
+    <string name="pref_exposure_info_summary">API сповіщень про контакт дозволяє застосункам сповіщати вас, якщо ви контактували з людиною, яка повідомила про позитивний результат тесту.
+\n
+\nДата, тривалість і рівень сигналу, пов\'язані з контактом, будуть передані відповідному застосунку.</string>
+    <string name="exposure_enable_switch">Використовувати сповіщення про вплив</string>
+    <string name="exposure_confirm_start_title">Увімкнути сповіщення про вплив?</string>
+    <string name="exposure_confirm_start_summary">Ваш телефон повинен використовувати Bluetooth для безпечного збору та обміну ідентифікаторами з іншими телефонами, які знаходяться поблизу. \u0020<xliff:g example="Corona-Warn">%1$s</xliff:g> може сповістити вас, якщо ви зазнали контакту з людиною, яка повідомила про позитивний діагноз. \u0020Дата, тривалість і рівень сигналу, пов\'язані з контактом, будуть передані застосунку.</string>
+    <string name="exposure_confirm_keys_title">Поділітися своїми ідентифікаторами з <xliff:g example="Corona-Warn">%1$s</xliff:g>\?</string>
+    <string name="exposure_confirm_keys_summary">Ваші ідентифікаційні дані за останні 14 днів будуть використані, щоби повідомити інших людей, які перебували поруч з вами, про потенційний ризик зараження.
+\n
+\nВаші дані або результати тесту не будуть передані іншим особам.</string>
+    <string name="exposure_confirm_keys_button">Поділитися</string>
+    <string name="exposure_confirm_permission_button">Надати дозвіл</string>
+    <string name="exposure_confirm_bluetooth_description">Bluetooth має бути ввімкнено.</string>
+    <string name="exposure_confirm_location_description">Доступ до розташування є обов\'язковим.</string>
+    <string name="exposure_confirm_button">Ввімкнути</string>
+    <string name="pref_exposure_error_nearby_not_granted_title">Потрібні нові дозволи</string>
+    <string name="pref_exposure_error_nearby_not_granted_description">Натисніть, щоб надати необхідні дозволи для сповіщень про вплив</string>
+    <string name="exposure_grant_background_location_button">Оновити налаштування</string>
 </resources>

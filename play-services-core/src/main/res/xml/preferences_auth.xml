@@ -20,20 +20,20 @@
         android:title="@string/prefs_account_security">
         <intent
             android:action="com.google.android.gms.accountsettings.SECURITY_SETTINGS"
-            android:targetPackage="com.google.android.gms" />
+            android:targetPackage="@string/package_id" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="k3"
         android:title="@string/prefs_account_privacy">
         <intent
             android:action="com.google.android.gms.accountsettings.PRIVACY_SETTINGS"
-            android:targetPackage="com.google.android.gms" />
+            android:targetPackage="@string/package_id" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="k4"
         android:title="@string/prefs_account">
         <intent
             android:action="com.google.android.gms.accountsettings.ACCOUNT_PREFERENCES_SETTINGS"
-            android:targetPackage="com.google.android.gms" />
+            android:targetPackage="@string/package_id" />
     </PreferenceScreen>
 </PreferenceScreen>

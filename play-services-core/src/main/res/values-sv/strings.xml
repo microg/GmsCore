@@ -227,4 +227,19 @@
     <string name="pref_vending_billing_note_licensing">Vissa appar kan kräva att du också aktiverar licensverifiering för att verifiera dina inköp.</string>
     <string name="backup_disabled">Säkerhetskopiering är för närvarande inte möjlig</string>
     <string name="perm_car_mileage_description">Få tillgång till din bils körsträcka</string>
+    <string name="credentials_assisted_continue">Fortsätt</string>
+    <string name="credentials_assisted_cancel">Avbryt</string>
+    <string name="credentials_assisted_confirmation_header">Loggar in dig</string>
+    <string name="credentials_assisted_continue_as_user_button_label">Fortsätt som %1$s</string>
+    <string name="credentials_assisted_sign_back_title">Logga in igen, på %1$s, med Google</string>
+    <string name="credentials_assisted_signin_consent_header">Loggar in som %1$s</string>
+    <string name="credentials_assisted_signin_description">Du kan hantera inloggning med Google i dina Google-konton.</string>
+    <string name="credentials_assisted_choose_account_label">Välj konto</string>
+    <string name="credentials_assisted_signin_consent">Genom att fortsätta kommer Google att dela ditt namn, din e-postadress och din profilbild med %1$s. Se %1$s:s sekretesspolicy och användarvillkor.</string>
+    <string name="credentials_assisted_choose_account_subtitle">för att fortsätta till %1$s</string>
+    <string name="credentials_assisted_signin_button_text_long">Logga in med Google</string>
+    <string name="auth_package_override_request_title">Tillåt <b><xliff:g example="F-Droid">%1$s</xliff:g></b> privilegierad åtkomst till <xliff:g example="account@example.com">%2$s</xliff:g>\?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> vill komma åt ditt konto som om det var <b><xliff:g example="F-Droid">%2$s</xliff:g> by <xliff:g example="F-Droid Inc.">%3$s</xliff:g></b>. Detta kan ge F-Droid privilegierad tillgång till ditt konto.</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Lägg automatiskt till gratisappar i biblioteket</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Gratisappar kan kontrollera om de har laddats ner från Google Play. Lägg automatiskt till gratisappar i ditt kontobibliotek för att alltid klara kontrollen för alla gratisappar som för närvarande är tillgängliga för dig.</string>
 </resources>

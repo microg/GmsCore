@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="allow">İzin ver</string>
+    <string name="perm_car_vendor_extension_label">Araç üreticisi kanalı</string>
+    <string name="service_name_checkin">Google cihaz kaydı</string>
+    <string name="self_check_name_perm_granted">Sistem imza sahteciliği desteği izni sağlandı mı:</string>
+    <string name="pref_auth_include_android_id_title">Cihaz kaydı ile kimlik doğrulama</string>
+    <string name="pref_push_app_wake_for_delivery_summary">Gelen anlık bildirimleri almak için uygulamayı arka plandayken başlatın.</string>
+    <string name="prefcat_push_apps_title">Anlık bildirim kullanan uygulamalar</string>
+    <string name="menu_clear_recent_requests">Önceki istekleri temizle</string>
+    <string name="safetynet_last_run_at">Son kullanım: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="pref_safetynet_recent_advice">Tavsiye</string>
+    <string name="pref_safetynet_recent_response_status">Yanıt kodu</string>
+    <string name="pref_safetynet_test_cts_failed">CTS başarısız</string>
+    <string name="pref_safetynet_test_integrity_failed">Bütünlük başarısız</string>
+    <string name="push_notifications_summary_values_minutes">%s dakika</string>
+    <string name="credentials_assisted_choose_account_subtitle">%1$s uygulamasına devam etmek için</string>
+    <string name="credentials_assisted_signin_button_text_long">Google ile oturum aç</string>
+    <string name="gms_app_name">microG Servisleri</string>
+    <string name="gms_settings_name">microG Ayarları</string>
+    <string name="gms_settings_summary">microG servislerini ayarlar.</string>
+    <string name="just_a_sec">Bir saniye…</string>
+    <string name="google_account_label">Google</string>
+    <string name="ask_permission_tos">Devam ederek, bu uygulamanın ve Google\'ın bilgilerinizi kendi hizmet şartları ve gizlilik politikalarına uygun olarak kullanmasına izin vermiş olursunuz.</string>
+    <string name="ask_scope_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> şunu istiyor:</string>
+    <string name="ask_service_permission_title"><xliff:g example="F-Droid">%1$s</xliff:g> şunu kullanmak istiyor:</string>
+    <string name="account_manager_title">Google Hesap Yöneticisi</string>
+    <string name="auth_before_connect">Cihazınızdaki bir uygulama, Google hesabına giriş yapmaya çalışıyor.
+\n
+\nEğer bu istediğiniz bir şey ise, <b>Oturum aç</b> tuşunu kullanarak Google\'ın oturum açma sayfasına bağlanın, eğer değilse, <b>İptal</b> tuşuna basarak bu menünün çıkmasına neden olan uygulamaya geri dönün.</string>
+    <string name="auth_sign_in">Oturum aç</string>
+    <string name="sorry">Hay aksi…</string>
+    <string name="auth_connecting">Cihazınız, oturum açmanız için Google sunucuları ile iletişim kuruyor.
+\n
+\nBu birkaç saniye sürebilir.</string>
+    <string name="no_network_error_desc">İnternet bağlantınız yok.
+\n
+\nBu geçici bir sorun olabilir veya Android cihazınızın veri hizmetleri sağlanmamış olabilir. Bir mobil ağa veya Wi-Fi ağına bağlandığınızda tekrar deneyin.</string>
+    <string name="auth_general_error_desc">Google sunucuları ile iletişime geçerken bir sorun oluştu.
+\n
+\nDaha sonra tekrar deneyin.</string>
+    <string name="auth_finalize">Cihazınız, bilgileri hesabınıza kaydetmek için Google ile iletişime geçiyor.
+\n
+\nBu birkaç dakika sürebilir.</string>
+    <string name="deny">Reddet</string>
+    <string name="auth_notification_title">Yetkilendirme gerekiyor</string>
+    <string name="auth_notification_content"><xliff:g example="F-Droid">%1$s</xliff:g>, Google hesabınıza erişmek için yetkinize ihtiyaç duyuyor.</string>
+    <string name="auth_package_override_request_title"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> uygulamasına <xliff:g example="account@example.com">%2$s</xliff:g> hesabının erişimine izin vermek istiyor musunuz?</string>
+    <string name="auth_package_override_request_message"><b><xliff:g example="F-Droid">%1$s</xliff:g></b> uygulaması, sanki <b><xliff:g example="F-Droid">%2$s</xliff:g> (yapımcısı <xliff:g example="F-Droid Inc.">%3$s</xliff:g> olan)</b> uygulamasıymış gibi hesabınıza erişmek istiyor. Bu, hesabınıza özel erişim sağlayabilir.</string>
+    <string name="signin_picker_title">Bir hesap seç</string>
+    <string name="signin_picker_subtitle">ve <xliff:g example="F-Droid">%1$s</xliff:g> uygulamasına devam et</string>
+    <string name="signin_picker_add_account_label">Başka bir hesap ekle</string>
+    <string name="signin_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> uygulamasına giriş yapmak istediğinizi onaylayın</string>
+    <string name="signin_confirm_button_text">Kabul et ve paylaş</string>
+    <string name="signin_subtext_sharing">Devam etmek için, microG, Google hesabınızın ismini, e-posta adresini ve profil resmini <xliff:g example="F-Droid">%1$s</xliff:g> ile paylaşacak.</string>
+    <string name="signin_subtext_policy">Bu uygulamayı kullanmadan önce, uygulamanın %1$s ve %2$s inceleyin.</string>
+    <string name="signin_subtext_policy_privacy">gizlilik politikasını</string>
+    <string name="signin_subtext_policy_terms">kullanım şartlarını</string>
+    <string name="perm_status_broadcast_label">özel durum yayınlarını alma</string>
+    <string name="perm_gsf_read_gservices_label">Google servis bilgisini okuma</string>
+    <string name="perm_c2dm_receive_label">C2DM mesajlarını okuma</string>
+    <string name="perm_c2dm_send_label">diğer uygulamalara C2DM mesajları gönderme</string>
+    <string name="perm_gtalk_svc_label">Google sunucularına mesaj gönderme ve senkronize etme bildirimlerini alma</string>
+    <string name="perm_extended_access_label">Google servislerine ek erişim</string>
+    <string name="perm_provision_label">microG servislerine erişim</string>
+    <string name="perm_provision_description">Uygulamanın, kullanıcıya sorulmadan microG servislerinin ayarlarını değiştirmesine izin verir</string>
+    <string name="perm_car_speed_label">Araç hızı</string>
+    <string name="perm_car_speed_description">Aracınızın hızına erişme</string>
+    <string name="perm_car_info_label">Araç bilgisi</string>
+    <string name="perm_car_info_description">Aracınızın bilgisine erişme</string>
+    <string name="perm_car_fuel_label">Araç yakıt bilgisi</string>
+    <string name="perm_car_fuel_description">Aracınızın yakıt seviyesinin bilgisine erişme</string>
+    <string name="perm_car_mileage_label">Araç mesafesi</string>
+    <string name="perm_car_mileage_description">Aracınızın mesafe bilgisine erişme</string>
+    <string name="perm_car_vendor_extension_description">Araca özel bilgi alışverişi yapmak için aracınızın üretici kanalına erişme</string>
+    <string name="service_name_mcs">Cloud Messaging</string>
+    <string name="service_name_snet">Google SafetyNet</string>
+    <string name="service_name_vending">Play Store servisleri</string>
+    <string name="games_info_content">Play Games\'i kullanmak için Google Play Games uygulamasını yüklemeniz gerekir. Uygulama Play Games olmadan çalışmaya devam edebilir, ancak beklenmedik şekilde davranabilir.</string>
+    <string name="games_title">Google Play Oyunlar</string>
+    <string name="pick_place_title">Bir yer seç</string>
+    <string name="games_info_title"><xliff:g example="F-Droid">%1$s</xliff:g> uygulaması Play Games\'e erişmek istiyor</string>
+    <string name="pick_place_desc">Yer seçici henüz mevcut değil.</string>
+    <string name="place_picker_select_title">Bu konumu seç</string>
+    <string name="place_picker_nearby_places">Yakındaki yerler</string>
+    <string name="place_picker_location_lat_lng">(%1$.7f, %2$.7f)</string>
+    <string name="lacking_permission_toast">microG Servisleri: Gerekli olan <xliff:g example="have full network acccess">%1$s</xliff:g> izni sağlanmadı</string>
+    <string name="network_type_mobile">Mobil ağ</string>
+    <string name="network_type_wifi">Wi-Fi</string>
+    <string name="network_type_roaming">Dolaşım</string>
+    <string name="network_type_other">Diğer ağlar</string>
+    <string name="self_check_cat_fake_sig">İmza sahteciliği desteği</string>
+    <string name="self_check_cat_gms_packages">Yüklü paketler</string>
+    <string name="self_check_cat_system">Sistem</string>
+    <string name="self_check_name_fake_sig_perm">Sistemde imza sahteciliği desteği var mı:</string>
+    <string name="self_check_resolution_fake_sig_perm">ROM\'unuzun imza sahteciliği için yerel desteği yoktur. Yine de imza sahteciliği için Xposed veya diğer sistemleri kullanabilirsiniz. Lütfen hangi ROM\'ların imza sahteciliğini desteklediğine ve desteklemeyen ROM\'larda microG\'nin nasıl kullanılacağına ilişkin rehbere göz atın.</string>
+    <string name="self_check_resolution_perm_granted">Bu, ROM\'un imza sahteciliğini desteklediğinin güçlü bir göstergesidir, ancak etkinleştirmek için daha fazla işlem yapılması gerekir. Lütfen hangi adımların gerekli olabileceğine dair rehbere göz atın.</string>
+    <string name="self_check_name_system_spoofs">Sistem imza sahteciliği yapıyor mu:</string>
+    <string name="self_check_resolution_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> uygulamasını veya uyumlu olanını yükleyin. Lütfen hangi uygulamaların uyumlu olduğuna dair rehbere göz atın.</string>
+    <string name="self_check_resolution_system_spoofs">Lütfen hangi adımların gerekli olabileceğine dair rehberi kontrol edin.</string>
+    <string name="self_check_pkg_gms">Play Servisleri (GmsCore)</string>
+    <string name="self_check_pkg_vending">Play Store (Phonesky)</string>
+    <string name="self_check_pkg_gsf">Servis Çerçevesi (GSF)</string>
+    <string name="self_check_name_app_installed"><xliff:g example="F-Droid">%1$s</xliff:g> yüklü mü: </string>
+    <string name="self_check_name_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> doğru imzaya sahip mi: </string>
+    <string name="self_check_resolution_correct_sig"><xliff:g example="F-Droid">%1$s</xliff:g> uygulaması uyumlu değil veya doğru imzaya sahip değil. Lütfen hangi uygulamaların ve ROM\'ların uyumlu olduğuna dair rehbere göz atın.</string>
+    <string name="self_check_name_battery_optimizations">Pil optimizasyonları devre dışı bırakıldı mı:</string>
+    <string name="self_check_resolution_battery_optimizations">Pil optimizasyonlarını devre dışı bırakmak için buraya dokunun. Bunu yapmamak uygulamaların hatalı çalışmasına neden olabilir.</string>
+    <string name="prefcat_about">Hakkında</string>
+    <string name="prefcat_components">Bileşenler</string>
+    <string name="prefcat_configuration">Seçenekler</string>
+    <string name="prefcat_google_services">Google Servisleri</string>
+    <string name="prefcat_location_service">Konum servisi</string>
+    <string name="prefcat_services">Hizmetler</string>
+    <string name="prefcat_test">Test</string>
+    <string name="cond_gcm_bat_title">Pil optimizasyonları açık</string>
+    <string name="cond_gcm_bat_action">Optimizasyonları kapat</string>
+    <string name="cond_gcm_bat_summary">Cloud Messaging\'i etkinleştirdiniz ancak microG Servisleri için pil optimizasyonları etkin. Anlık bildirimlerin gelmesi için pil optimizasyonlarını devre dışı bırakmalısınız.</string>
+    <string name="cond_perm_title">İzin eksik</string>
+    <string name="prefs_account">Hesap tercihleri</string>
+    <string name="prefs_account_privacy">Kişisel bilgiler &amp; gizlilik</string>
+    <string name="prefs_account_security">Oturum açma &amp; güvenlik</string>
+    <string name="pref_auth_trust_google_title">Uygulama izinleri için Google\'a güven</string>
+    <string name="pref_auth_trust_google_summary">Devre dışı bırakıldığında, bir uygulamanın yetkilendirme isteği Google\'a gönderilmeden önce kullanıcıya sorulur. Bu devre dışı bırakılırsa bazı uygulamalar Google hesabını kullanamaz.</string>
+    <string name="pref_auth_visible_title">Uygulamaların hesapları bulmasına izin ver</string>
+    <string name="pref_auth_visible_summary">Etkinleştirildiğinde, bu cihazdaki bütün uygulamalar size sormadan Google hesaplarınızın e-posta adresini görebilecektir.</string>
+    <string name="pref_auth_include_android_id_summary">Devre dışı bırakıldığında, kimlik doğrulama istekleri cihaz kaydıyla ilişkilendirilmez, bu da yetkisiz cihazların oturum açmasına izin verebilir, ancak öngörülemeyen sonuçları olabilir.</string>
+    <string name="pref_auth_strip_device_name_title">Kimlik doğrulama yaparken cihaz adını dahil etme</string>
+    <string name="pref_auth_strip_device_name_summary">Etkinleştirildiğinde, kimlik doğrulama istekleri cihazın adını içermez, bu da yetkisiz cihazların oturum açmasına izin verebilir, ancak öngörülemeyen sonuçları olabilir.</string>
+    <string name="pref_device_registration_android_id">Android kimliği</string>
+    <string name="pref_checkin_enable_summary">Cihazınızı Google servislerine kaydettirir ve benzersiz bir cihaz kimliği oluşturur. microG, kayıt verilerinden Google hesap adınız dışındaki diğer tanımlayıcı bilgileri çıkarır.</string>
+    <string name="checkin_not_registered">Kayıtlı değil</string>
+    <string name="checkin_last_registration">Son kayıt: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="checkin_enable_switch">Cihazı kaydettir</string>
+    <string name="pref_info_status">Durum</string>
+    <string name="pref_more_settings">Daha fazla</string>
+    <string name="pref_gcm_enable_mcs_summary">Cloud Messaging, birçok üçüncü parti uygulama tarafından kullanılan bir anlık bildirim sağlayıcısıdır. Bunu kullanabilmek için cihaz kaydını etkinleştirmeniz gerekir.</string>
+    <string name="pref_gcm_heartbeat_title">Cloud Messaging kontrol periyodu</string>
+    <string name="pref_accounts_title">Google hesapları</string>
+    <string name="pref_accounts_summary">Google hesaplarını bağla veya yönet</string>
+    <string name="prefcat_accounts_settings_title">Ayarlar</string>
+    <string name="prefcat_accounts_current_accounts_title">Hesaplar</string>
+    <string name="pref_add_account_title">Hesap</string>
+    <string name="pref_add_account_summary">Google hesabı ekle</string>
+    <string name="pref_gcm_apps_title">Cloud Messaging kullanan uygulamalar</string>
+    <string name="pref_gcm_apps_summary">Cloud Messaging servisine kayıtlı uygulamaların listesi.</string>
+    <string name="pref_gcm_confirm_new_apps_title">Yeni uygulamaları sor</string>
+    <string name="pref_gcm_heartbeat_summary">Sistemin Google sunucularını kontrol etmesi için saniye cinsinden aralık. Bu sayının artırılması pil tüketimini azaltır, ancak anlık bildirimlerde gecikmelere neden olabilir.
+\nKullanımdan kaldırılmak üzere, gelecek sürümde değiştirilecek.</string>
+    <string name="pref_gcm_confirm_new_apps_summary">Anlık bildirimleri almak üzere yeni bir uygulamayı kaydetmeden önce sorun</string>
+    <string name="pref_gcm_ping_interval">Ping aralığı: <xliff:g example="10 minutes">%1$s</xliff:g></string>
+    <string name="pref_about_title">microG Servisleri hakkında</string>
+    <string name="pref_about_summary">Sürüm bilgisi ve kullanılan kütüphaneler</string>
+    <string name="gcm_app_error_unregistering">Kaydı silerken hata</string>
+    <string name="gcm_app_not_installed_anymore">Artık yüklü değil</string>
+    <string name="gcm_unregister_app">Kaydı sil</string>
+    <string name="gcm_not_registered">Kayıtlı değil</string>
+    <string name="gcm_no_message_yet">Henüz mesaj gelmedi</string>
+    <string name="gcm_last_message_at">Son mesaj: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
+    <string name="gcm_registered">Kayıtlı</string>
+    <string name="gcm_registered_since"><xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g> zamanından beri kayıtlı</string>
+    <string name="gcm_unregister_confirm_title"><xliff:g example="F-Droid">%1$s</xliff:g> uygulamanın kaydını sil?</string>
+    <string name="gcm_unregister_confirm_message">Bazı uygulamalar otomatik olarak yeniden kaydolmaya çalışmaz ve/veya bunu manuel olarak yapmak için bir seçenek sunmaz. Bu uygulamalar kaydı kaldırıldıktan sonra düzgün çalışmayabilir.
+\nEmin misiniz?</string>
+    <string name="gcm_unregister_after_deny_message">Zaten kayıtlı olan bir uygulamanın anlık bildirimlere kaydolmasını reddettiniz.
+\nGelecekte de anlık bildirimleri almaması için şimdiki kaydını kaldırmak istiyor musunuz?</string>
+    <string name="gcm_messages_counter">Mesaj sayısı: <xliff:g example="123">%1$d</xliff:g> (<xliff:g example="12345">%2$d</xliff:g> bayt)</string>
+    <string name="gcm_network_state_disconnected">Bağlı değil</string>
+    <string name="gcm_network_state_connected"><xliff:g example="2 hours ago">%1$s</xliff:g> zamanından beri bağlı</string>
+    <string name="gcm_enable_switch">Anlık bildirimleri al</string>
+    <string name="gcm_allow_app_popup"><xliff:g example="F-Droid">%1$s</xliff:g> uygulamasının anlık bildirimlere kaydedilmesine izin vermek istiyor musunuz?</string>
+    <string name="pref_push_app_allow_register_title">Kaydetmeye izin ver</string>
+    <string name="pref_push_app_allow_register_summary">Uygulamanın anlık bildirimler için kaydedilmesine izin ver.</string>
+    <string name="pref_push_app_wake_for_delivery_title">Anlık bildirimde uygulamayı başlat</string>
+    <string name="prefcat_push_apps_registered_title">Kayıtlı uygulamalar</string>
+    <string name="prefcat_push_apps_unregistered_title">Kayıtlı olmayan uygulamalar</string>
+    <string name="safetynet_enable_switch">Cihazın doğrulanmasına izin ver</string>
+    <string name="prefcat_push_networks_title">Anlık bildirimler için kullanılacak ağlar</string>
+    <string name="safetynet_intro">Google SafetyNet, cihazın yeterince güvenli ve Android CTS ile uyumlu olduğunu doğrulayan bir cihaz sertifikasyon sistemidir. Bazı uygulamalar SafetyNet\'i güvenlik nedeniyle veya uygulamanın kurcalanmasına karşı korumak için kullanır.
+\n
+\nmicroG Servisleri, SafetyNet\'in özgür bir versiyonuna sahiptir, ancak resmi sunucu, SafetyNet isteklerinin sahipli DroidGuard sistemiyle imzalanmasını gerektirir.</string>
+    <string name="pref_safetynet_test_title">SafetyNet kontrolü yap</string>
+    <string name="pref_recaptcha_test_title">ReCAPTCHA\'yı test et</string>
+    <string name="profile_name_real">Gerçek</string>
+    <string name="pref_recaptcha_enterprise_test_title">ReCAPTCHA Enterprise\'ı test et</string>
+    <string name="pref_test_summary_passed">Tüm testleri geçti</string>
+    <string name="pref_test_summary_failed">Başarısız: %s</string>
+    <string name="pref_test_summary_warn">Uyarı: %s</string>
+    <string name="pref_test_summary_running">Çalışıyor…</string>
+    <string name="pref_droidguard_operation_mode">Çalışma modu</string>
+    <string name="pref_droidguard_unsupported_summary">DroidGuard çalıştırılması bu cihazda desteklenmiyor. SafetyNet hizmetleri yanlış davranabilir.</string>
+    <string name="prefcat_safetynet_apps_title">SafetyNet kullanan uygulamalar</string>
+    <string name="profile_name_native">Dahili</string>
+    <string name="profile_name_user">Özel: %s</string>
+    <string name="profile_name_auto">Otomatik: %s</string>
+    <string name="profile_name_system">Sistem: %s</string>
+    <string name="pref_device_registration_import_custom_profile_title">Özel profili içe aktar</string>
+    <string name="pref_device_registration_serial_title">Seri numarası</string>
+    <string name="pref_device_registration_import_custom_profile_summary">Dosyadan cihaz profili içe aktar</string>
+    <string name="pref_device_registration_select_profile_title">Profil seç</string>
+    <string name="pref_device_registration_device_profile_category">Cihaz profili</string>
+    <string name="pref_safetynet_recent_uses">Son kullanımlar</string>
+    <string name="pref_safetynet_recent_attestation_summary">Kontrol: %s</string>
+    <string name="pref_safetynet_recent_recaptcha_summary">ReCaptcha: %s</string>
+    <string name="pref_safetynet_recent_eval_type">Çalıştırma türü</string>
+    <string name="pref_safetynet_recent_cat_response">Yanıt verisi</string>
+    <string name="pref_safetynet_recent_recaptcha_enterprise_summary">ReCaptcha Enterprise: %s</string>
+    <string name="pref_safetynet_recent_copy_json">JSON olarak JWS verisini kopyala</string>
+    <string name="pref_safetynet_recent_cat_request">İstek verisi</string>
+    <string name="pref_safetynet_recent_nonce">Sağlama (Hex)</string>
+    <string name="pref_safetynet_recent_request_time">İstek zamanı</string>
+    <string name="pref_safetynet_recent_request_type">İstek türü</string>
+    <string name="pref_safetynet_recent_cat_basic">Basit veri</string>
+    <string name="pref_safetynet_recent_token">Jeton</string>
+    <string name="pref_safetynet_recent_copied">Panoya kopyalandı!</string>
+    <string name="pref_safetynet_test_integrity_cts_passed">Bütünlük and CTS geçti</string>
+    <string name="pref_safetynet_test_not_completed">Henüz tamamlanmadı</string>
+    <string name="pref_safetynet_test_no_result">Sonuç yok</string>
+    <string name="push_notifications_summary_values_seconds">%s saniye</string>
+    <string name="pref_safetynet_test_invalid_json">Geçersiz JSON</string>
+    <string name="push_notifications_summary_off">KAPALI</string>
+    <string name="pref_vending_summary_licensing_off">Lisanslama kapalı</string>
+    <string name="push_notifications_summary_automatic">AÇIK / Otomatik: %s</string>
+    <string name="push_notifications_summary_manual">AÇIK / Manuel: %s</string>
+    <string name="pref_vending_summary_licensing_on">Lisanslama açık</string>
+    <string name="pref_vending_licensing_category">Google Play Lisanslama</string>
+    <string name="pref_vending_licensing_enable_switch">Lisans doğrulama isteklerine cevap ver</string>
+    <string name="pref_vending_license_enable_summary">Bazı uygulamalar, kendilerinin gerçekten de Google Play\'den satın alındığının doğrulanmasını talep eder. Bir uygulama tarafından talep edilirse, microG, Google\'dan bir satın alma kanıtı indirebilir. Devre dışı bırakılırsa veya Google hesabı eklenmezse, lisans doğrulama istekleri görmezden gelinir.</string>
+    <string name="feedback_disabled">Geri bildirim henüz mevcut değil</string>
+    <string name="backup_disabled">Yedekleme henüz mevcut değil</string>
+    <string name="pref_vending_billing_category">Google Play Satın Alımları</string>
+    <string name="pref_vending_billing_enable_switch">Satın alım isteklerini gerçekleştir</string>
+    <string name="pref_vending_billing_enable_summary">Etkinleştirildikten sonra, bazı uygulamalar Google\'ın Play Satın Alım hizmeti aracılığıyla satın alma işlemlerini tamamlayabilir veya abonelik başlatabilir.</string>
+    <string name="pref_vending_billing_note_experimental">Uyarı, bu özellik deneyseldir ve paranızın kaybedilmesine yol açabilir.</string>
+    <string name="pref_vending_billing_note_licensing">Bazı uygulamalar, satın alma işlemlerinizi doğrulamak için lisans doğrulamayı da etkinleştirmenizi gerektirebilir.</string>
+    <string name="credentials_assisted_cancel">İptal</string>
+    <string name="credentials_assisted_continue">Devam et</string>
+    <string name="credentials_assisted_confirmation_header">Oturumunuz açılıyor</string>
+    <string name="credentials_assisted_continue_as_user_button_label">%1$s olarak devam et</string>
+    <string name="credentials_assisted_sign_back_title">Google ile %1$s uygulamasında tekrar oturum aç</string>
+    <string name="credentials_assisted_signin_consent_header">%1$s olarak oturum açılıyor</string>
+    <string name="credentials_assisted_signin_consent">Devam ettiğinizde Google, adınızı, e-posta adresinizi ve profil resminizi %1$s ile paylaşacaktır. %1$s uygulamasının gizlilik politikasına ve hizmet şartlarına göz atın.</string>
+    <string name="credentials_assisted_signin_description">Google ile oturum aç özelliğini Google hesaplarınızdan yönetebilirsiniz.</string>
+    <string name="credentials_assisted_choose_account_label">Hesap seç</string>
+    <string name="pref_vending_licensing_purchase_free_apps_switch">Özgür uygulamaları otomatik olarak kütüphaneye ekle</string>
+    <string name="pref_vending_licensing_purchase_free_apps_summary">Özgür uygulamalar Google Play\'den indirilip indirilmediklerini denetleyebilir. Şu anda kullanabileceğiniz tüm özgür uygulamaların denetimini her zaman geçmek için özgür uygulamaları otomatik olarak hesap kütüphanenize ekleyin.</string>
+</resources>

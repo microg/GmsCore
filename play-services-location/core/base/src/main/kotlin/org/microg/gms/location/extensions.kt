@@ -24,6 +24,21 @@ const val EXTRA_LOW_POWER = "low_power"
 const val EXTRA_WORK_SOURCE = "work_source"
 const val EXTRA_BYPASS = "bypass"
 
+const val ACTION_CONFIGURATION_REQUIRED = "org.microg.gms.location.network.ACTION_CONFIGURATION_REQUIRED"
+const val EXTRA_CONFIGURATION = "config"
+const val CONFIGURATION_FIELD_ONLINE_SOURCE = "online_source"
+
+const val ACTION_NETWORK_IMPORT_EXPORT = "org.microg.gms.location.network.ACTION_NETWORK_IMPORT_EXPORT"
+const val EXTRA_DIRECTION = "direction"
+const val DIRECTION_IMPORT = "import"
+const val DIRECTION_EXPORT = "export"
+const val EXTRA_NAME = "name"
+const val NAME_WIFI = "wifi"
+const val NAME_CELL = "cell"
+const val EXTRA_URI = "uri"
+const val EXTRA_MESSENGER = "messenger"
+const val EXTRA_REPLY_WHAT = "what"
+
 val Location.elapsedMillis: Long
     get() = LocationCompat.getElapsedRealtimeMillis(this)
 
@@ -49,11 +64,6 @@ fun Long.formatDuration(): CharSequence {
         }
     }
     return ret
-}
-
-fun Context.hasIchnaeaLocationServiceSupport(): Boolean {
-    if (!hasNetworkLocationServiceBuiltIn()) return false
-    return LocationSettings(this).ichneaeEndpoint.isNotBlank()
 }
 
 private var hasNetworkLocationServiceBuiltInFlag: Boolean? = null
