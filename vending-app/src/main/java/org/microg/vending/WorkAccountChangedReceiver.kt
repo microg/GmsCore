@@ -8,13 +8,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import org.microg.gms.auth.AuthConstants
 import org.microg.vending.ui.VendingActivity
 
 class WorkAccountChangedReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         val accountManager = AccountManager.get(context)
-        val hasWorkAccounts = accountManager.getAccountsByType("com.google.work").isNotEmpty()
+        val hasWorkAccounts = accountManager.getAccountsByType(AuthConstants.WORK_ACCOUNT_TYPE).isNotEmpty()
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.auth.workaccount.R
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.PackageUtils
 import org.microg.gms.auth.AuthRequest
 import org.microg.gms.auth.AuthResponse
@@ -71,14 +72,17 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
 
             val accountManager = AccountManager.get(context)
             if (accountManager.addAccountExplicitly(
-                    Account(authResponse.email, WORK_ACCOUNT_TYPE),
+                    Account(authResponse.email, AuthConstants.WORK_ACCOUNT_TYPE),
                     authResponse.token, Bundle().apply {
                         // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
                         if (authResponse.accountId.isNotBlank()) {
                             putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
                         }
-                        putString(KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
-                        putString(KEY_ACCOUNT_SERVICES, authResponse.services) // expected to be "android"
+                        putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
+                        putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
+                        if (authResponse.services != "android") {
+                            Log.i(TAG, "unexpected 'services' value ${authResponse.services} (usually 'android')")
+                        }
                     }
             )) {
 
@@ -90,7 +94,7 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
                 // Report successful creation to caller
                 response.onResult(Bundle().apply {
                     putString(AccountManager.KEY_ACCOUNT_NAME, authResponse.email)
-                    putString(AccountManager.KEY_ACCOUNT_TYPE, WORK_ACCOUNT_TYPE)
+                    putString(AccountManager.KEY_ACCOUNT_TYPE, AuthConstants.WORK_ACCOUNT_TYPE)
                 })
             }
 
@@ -209,13 +213,10 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
 
     companion object {
         const val TAG = "WorkAccAuthenticator"
-        const val WORK_ACCOUNT_TYPE = "com.google.work"
 
         const val WORK_ACCOUNT_CHANGED_BOARDCAST = "org.microg.vending.WORK_ACCOUNT_CHANGED"
 
         const val KEY_ACCOUNT_CREATION_TOKEN = "creationToken"
-        private const val KEY_GOOGLE_USER_ID = "GoogleUserId" // TODO: use AuthConstants
-        private const val KEY_ACCOUNT_SERVICES = "services" // TODO: use AuthConstants
-        private const val KEY_ACCOUNT_CAPABILITIES = "capabilities"
+        private const val KEY_GOOGLE_USER_ID = AuthConstants.GOOGLE_USER_ID
     }
 }

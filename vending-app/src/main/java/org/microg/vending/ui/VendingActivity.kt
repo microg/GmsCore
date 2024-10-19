@@ -24,6 +24,7 @@ import com.android.vending.buildRequestHeaders
 import com.android.vending.installer.installPackagesFromNetwork
 import com.android.vending.installer.uninstallPackage
 import kotlinx.coroutines.runBlocking
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.DeviceConfiguration
 import org.microg.gms.common.asProto
 import org.microg.gms.profile.Build
@@ -72,13 +73,12 @@ class VendingActivity : ComponentActivity() {
         ProfileManager.ensureInitialized(this)
 
         val accountManager = AccountManager.get(this)
-        val accounts = accountManager.getAccountsByType("com.google.work")
+        val accounts = accountManager.getAccountsByType(AuthConstants.WORK_ACCOUNT_TYPE)
         if (accounts.isEmpty()) {
             // Component should not be enabled; disable through receiver, and redirect to main activity
             WorkAccountChangedReceiver().onReceive(this, null)
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-            TODO("App should only be visible if work accounts are added. Disable component and wonder why it was enabled in the first place")
         } else if (accounts.size > 1) {
             Log.w(TAG, "Multiple work accounts found. This is unexpected and could point " +
                     "towards misuse of the work account service API by the DPC.")
