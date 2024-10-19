@@ -37,6 +37,7 @@ import org.microg.vending.billing.core.AuthData
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ENTERPRISE_CLIENT_POLICY
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_FDFE
 import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_ITEM_DETAILS
+import org.microg.vending.billing.core.GooglePlayApi.Companion.URL_PURCHASE
 import org.microg.vending.billing.core.HttpClient
 import org.microg.vending.billing.createDeviceEnvInfo
 import org.microg.vending.billing.proto.GoogleApiResponse
@@ -97,7 +98,22 @@ class VendingActivity : ComponentActivity() {
                     val client = HttpClient()
 
                     // Get download links for requested package
-                    val downloadUrls = runCatching { client.requestDownloadUrls(
+                    val downloadUrls = runCatching {
+
+                        // Purchase app (only needs to be done once, in theory)
+                        val parameters = mapOf(
+                            "ot" to "1",
+                            "doc" to app.packageName,
+                            "vc" to app.versionCode.toString()
+                        )
+                        client.post(
+                            url = URL_PURCHASE,
+                            headers = buildRequestHeaders(auth!!.authToken, auth!!.gsfId.toLong(16)),
+                            params = parameters,
+                            adapter = GoogleApiResponse.ADAPTER
+                        )
+
+                        client.requestDownloadUrls(
                         app.packageName,
                         app.versionCode!!.toLong(),
                         auth!!,
