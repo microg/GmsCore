@@ -13,7 +13,6 @@ import org.microg.gms.common.Constants;
 import org.microg.gms.common.HttpFormClient;
 import org.microg.gms.common.Utils;
 import org.microg.gms.profile.ProfileManager;
-import org.microg.gms.settings.SettingsContract;
 
 import java.io.IOException;
 import java.util.Locale;

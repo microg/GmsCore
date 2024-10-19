@@ -15,9 +15,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.auth.workaccount.R
-import org.microg.gms.auth.workaccount.AuthRequest
-import org.microg.gms.auth.workaccount.AuthResponse
 import org.microg.gms.common.PackageUtils
+import org.microg.gms.auth.AuthRequest
+import org.microg.gms.auth.AuthResponse
 import java.io.IOException
 
 class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthenticator(context) {

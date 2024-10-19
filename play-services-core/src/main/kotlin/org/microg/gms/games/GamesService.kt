@@ -22,7 +22,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.common.api.Scope
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.data.DataHolder
 import com.google.android.gms.common.internal.ConnectionInfo

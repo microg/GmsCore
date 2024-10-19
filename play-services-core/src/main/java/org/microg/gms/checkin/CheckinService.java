@@ -33,7 +33,6 @@ import android.util.Log;
 import androidx.core.app.PendingIntentCompat;
 import androidx.legacy.content.WakefulBroadcastReceiver;
 
-import com.google.android.gms.R;
 import com.google.android.gms.checkin.internal.ICheckinService;
 
 import org.microg.gms.auth.AuthConstants;
