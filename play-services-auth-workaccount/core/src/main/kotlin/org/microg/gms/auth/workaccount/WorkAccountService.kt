@@ -20,7 +20,6 @@ import com.google.android.gms.auth.account.IWorkAccountCallback
 import com.google.android.gms.auth.account.IWorkAccountService
 import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.KEY_ACCOUNT_CREATION_TOKEN
 import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.WORK_ACCOUNT_CHANGED_BOARDCAST
-import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticator.Companion.WORK_ACCOUNT_TYPE
 import com.google.android.gms.auth.account.authenticator.WorkAccountAuthenticatorService
 import com.google.android.gms.common.Feature
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -28,6 +27,7 @@ import com.google.android.gms.common.internal.ConnectionInfo
 import com.google.android.gms.common.internal.GetServiceRequest
 import com.google.android.gms.common.internal.IGmsCallbacks
 import org.microg.gms.BaseService
+import org.microg.gms.auth.AuthConstants
 import org.microg.gms.common.GmsService
 import org.microg.gms.common.PackageUtils
 
@@ -101,7 +101,7 @@ class WorkAccountServiceImpl(val context: Context) : IWorkAccountService.Stub() 
     ) {
         Log.d(TAG, "addWorkAccount with token $token")
         val future = accountManager.addAccount(
-            WORK_ACCOUNT_TYPE,
+            AuthConstants.WORK_ACCOUNT_TYPE,
             null,
             null,
             Bundle().apply { putString(KEY_ACCOUNT_CREATION_TOKEN, token) },
