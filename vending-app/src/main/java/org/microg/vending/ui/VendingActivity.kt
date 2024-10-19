@@ -207,6 +207,13 @@ class VendingActivity : ComponentActivity() {
 
                     Log.v(TAG, "app policy: ${apps.joinToString { "${it.packageName}: ${it.policy}" }}")
 
+                    if (apps.isEmpty()) {
+                        // Don't fetch details of empty app list (otherwise HTTP 400)
+                        networkState = NetworkState.PASSIVE
+                        this@VendingActivity.apps.clear()
+                        return@runBlocking
+                    }
+
                     // Fetch details about all available apps
                     val details = client.post(
                         url = URL_ITEM_DETAILS,
@@ -257,7 +264,7 @@ class VendingActivity : ComponentActivity() {
                     networkState = NetworkState.ERROR
                     Log.e(TAG, "Network error: ${e.message}")
                     e.printStackTrace()
-                } catch (e: NullPointerException) {
+                } catch (e: Exception) {
                     networkState = NetworkState.ERROR
                     Log.e(TAG, "Unexpected network response, cannot process")
                     e.printStackTrace()
