@@ -51,6 +51,7 @@ import org.microg.vending.enterprise.NotCompatible
 import org.microg.vending.enterprise.NotInstalled
 import org.microg.vending.enterprise.Pending
 import org.microg.vending.enterprise.UpdateAvailable
+import org.microg.vending.enterprise.proto.AppInstallPolicy
 import org.microg.vending.proto.AppMeta
 import org.microg.vending.proto.GetItemsRequest
 import org.microg.vending.proto.RequestApp
@@ -97,21 +98,30 @@ class VendingActivity : ComponentActivity() {
 
                     val client = HttpClient()
 
+                    // Purchase app (only needs to be done once, in theory – behaviour seems flaky)
+                    // Ignore failures
+                    runCatching {
+                        if (app.policy != AppInstallPolicy.MANDATORY) {
+                            val parameters = mapOf(
+                                "ot" to "1",
+                                "doc" to app.packageName,
+                                "vc" to app.versionCode.toString()
+                            )
+                            client.post(
+                                url = URL_PURCHASE,
+                                headers = buildRequestHeaders(
+                                    auth!!.authToken,
+                                    auth!!.gsfId.toLong(16)
+                                ),
+                                params = parameters,
+                                adapter = GoogleApiResponse.ADAPTER
+                            )
+                        }
+                    }.onFailure { Log.i(TAG, "couldn't purchase ${app.packageName}: ${it.message}") }
+                        .onSuccess { Log.d(TAG, "purchased ${app.packageName} successfully") }
+
                     // Get download links for requested package
                     val downloadUrls = runCatching {
-
-                        // Purchase app (only needs to be done once, in theory)
-                        val parameters = mapOf(
-                            "ot" to "1",
-                            "doc" to app.packageName,
-                            "vc" to app.versionCode.toString()
-                        )
-                        client.post(
-                            url = URL_PURCHASE,
-                            headers = buildRequestHeaders(auth!!.authToken, auth!!.gsfId.toLong(16)),
-                            params = parameters,
-                            adapter = GoogleApiResponse.ADAPTER
-                        )
 
                         client.requestDownloadUrls(
                         app.packageName,
@@ -213,7 +223,7 @@ class VendingActivity : ComponentActivity() {
                         url = URL_ENTERPRISE_CLIENT_POLICY,
                         headers = headers.plus("content-type" to "application/x-protobuf"),
                         adapter = GoogleApiResponse.ADAPTER
-                    ).payload?.enterpriseClientPolicyResponse?.policy?.apps?.filter { it.packageName != null && it.policy != null }
+                    ).payload?.enterpriseClientPolicyResponse?.policy?.apps?.filter { it.packageName != null }
 
                     if (apps == null) {
                         Log.e(TAG, "unexpected network response: missing expected fields")
@@ -265,7 +275,7 @@ class VendingActivity : ComponentActivity() {
                             item.detail!!.name!!.displayName!!,
                             item.detail.icon?.icon?.paint?.url,
                             item.offer?.delivery?.key,
-                            apps.find { it.packageName!! == item.meta.packageName }!!.policy!!,
+                            apps.find { it.packageName!! == item.meta.packageName }!!.policy ?: AppInstallPolicy.OPTIONAL,
                         ) to state
                     }.onEach {
                         Log.v(TAG, "${it.key.packageName} (state: ${it.value}) delivery token: ${it.key.deliveryToken ?: "none acquired"}")
