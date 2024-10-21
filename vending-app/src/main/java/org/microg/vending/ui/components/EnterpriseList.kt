@@ -2,15 +2,18 @@ package org.microg.vending.ui.components
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -59,11 +62,30 @@ internal fun EnterpriseList(appStates: Map<EnterpriseApp, AppState>, install: (a
             .fillMaxSize()
             .padding(24.dp)
     ) {
-        Column(Modifier.align(Alignment.Center)) {
+        Column(Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(32.dp)) {
             Text(
                 stringResource(R.string.vending_overview_enterprise_no_apps_available),
                 textAlign = TextAlign.Center
             )
+
+                Row(
+                    Modifier
+                        .clip(shape = RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.primaryContainer),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.Info,
+                        contentDescription = null,
+                        Modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 16.dp),
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                    Text(
+                        stringResource(R.string.vending_overview_enterprise_no_apps_available_wait),
+                        Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
         }
     }
 

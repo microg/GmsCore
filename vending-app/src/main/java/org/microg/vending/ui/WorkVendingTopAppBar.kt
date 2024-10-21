@@ -39,7 +39,7 @@ fun WorkVendingTopAppBar() = TopAppBar(
     },
     colors = TopAppBarDefaults.smallTopAppBarColors(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        titleContentColor = MaterialTheme.colorScheme.primary
+        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
     )
 )
 

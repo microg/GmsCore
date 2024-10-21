@@ -23,7 +23,8 @@
     <string name="vending_overview_enterprise_row_mandatory_missing_hint">Your device is missing mandatory apps chosen by your administrator.</string>
     <string name="vending_overview_enterprise_row_offered">Available apps</string>
     <string name="vending_overview_enterprise_row_offered_hint">These are all the apps made available by your enterprise.</string>
-    <string name="vending_overview_enterprise_no_apps_available">No apps have been made available by your administrator</string>
+    <string name="vending_overview_enterprise_no_apps_available">No apps have been made available by your administrator.</string>
+    <string name="vending_overview_enterprise_no_apps_available_wait">It may take a few hours after setting up your work profile before apps are ready to download.</string>
     <string name="vending_overview_row_update_available">Update available</string>
     <string name="vending_overview_row_installed">Installed apps</string>
     <string name="vending_overview_row_action_install">Install</string>
