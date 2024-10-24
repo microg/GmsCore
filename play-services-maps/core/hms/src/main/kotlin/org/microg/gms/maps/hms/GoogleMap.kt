@@ -102,7 +102,9 @@ class GoogleMapImpl(private val context: Context, var options: GoogleMapOptions)
         this.view = object : FrameLayout(mapContext) {}
     }
 
-    override fun getCameraPosition(): CameraPosition? = map?.cameraPosition?.toGms()
+    override fun getCameraPosition(): CameraPosition {
+        return map?.cameraPosition?.toGms() ?: CameraPosition(LatLng(0.0, 0.0), 0f, 0f, 0f)
+    }
     override fun getMaxZoomLevel(): Float = toHmsZoom(map?.maxZoomLevel ?: 18.toFloat())
     override fun getMinZoomLevel(): Float = toHmsZoom(map?.minZoomLevel ?: 3.toFloat())
 
