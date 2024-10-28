@@ -192,9 +192,7 @@
     <string name="pref_safetynet_recent_copied">Копирано у привремену меморију!</string>
     <string name="prefcat_push_apps_title">Апликације које користе push-обавештења</string>
     <string name="profile_name_user">Прилагођено: %s</string>
-    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог.
-\n
-\nАко је ово било намерно, користите дугме <b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
+    <string name="auth_before_connect">Апликација на вашем уређају покушава да се пријави на Google налог. \n \nАко је ово било намерно, користите дугме <b>Пријави се</b> да бисте се повезали са Google страницом за пријављивање, ако није, притисните <b>Откажи</b> да бисте се вратили на апликацију која је изазвала да се овај дијалог прикаже.</string>
     <string name="pref_recaptcha_test_title">Тестирај ReCAPTCHA</string>
     <string name="signin_subtext_sharing">Да бисте наставили, microG ће делити име, имејл адресу и слику профила вашег Google налога са <xliff:g example="F-Droid"> %1$s</xliff:g> .</string>
     <string name="pref_auth_include_android_id_title">Аутентификуј регистрацијом уређаја</string>
