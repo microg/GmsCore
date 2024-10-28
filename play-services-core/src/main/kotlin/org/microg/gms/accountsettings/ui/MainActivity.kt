@@ -80,6 +80,7 @@ private val SCREEN_ID_TO_URL = hashMapOf(
     530 to "https://fit.google.com/privacy/settings",
     547 to "https://myactivity.google.com/product/search",
     562 to "https://myaccount.google.com/yourdata/youtube",
+    580 to "https://families.google.com/kidonboarding",
     10003 to "https://myaccount.google.com/personal-info",
     10004 to "https://myaccount.google.com/data-and-privacy",
     10005 to "https://myaccount.google.com/people-and-sharing",
@@ -112,7 +113,8 @@ private val ALLOWED_WEB_PREFIXES = setOf(
     "https://policies.google.com/",
     "https://fit.google.com/privacy/settings",
     "https://maps.google.com/maps/timeline",
-    "https://myadcenter.google.com/controls"
+    "https://myadcenter.google.com/controls",
+    "https://families.google.com/kidonboarding"
 )
 
 private val ACTION_TO_SCREEN_ID = hashMapOf(
@@ -134,6 +136,7 @@ class MainActivity : AppCompatActivity() {
 
         val screenId = intent?.getIntExtra(EXTRA_SCREEN_ID, -1).takeIf { it != -1 } ?: ACTION_TO_SCREEN_ID[intent.action] ?: 1
         val product = intent?.getStringExtra(EXTRA_SCREEN_MY_ACTIVITY_PRODUCT)
+        val kidOnboardingParams = intent?.getStringExtra(EXTRA_SCREEN_KID_ONBOARDING_PARAMS)
 
         val screenOptions = intent.extras?.keySet().orEmpty()
             .filter { it.startsWith(EXTRA_SCREEN_OPTIONS_PREFIX) }
@@ -154,7 +157,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (screenId in SCREEN_ID_TO_URL) {
-            val screenUrl = SCREEN_ID_TO_URL[screenId]?.run { if (screenId == 547 && !product.isNullOrEmpty()) { replace("search", product) } else { this } }
+            val screenUrl = SCREEN_ID_TO_URL[screenId]?.run {
+                if (screenId == 547 && !product.isNullOrEmpty()) {
+                    replace("search", product)
+                } else if (screenId == 580 && !kidOnboardingParams.isNullOrEmpty()){
+                    "$this?params=$kidOnboardingParams"
+                } else { this }
+            }
             val layout = RelativeLayout(this)
             layout.addView(ProgressBar(this).apply {
                 layoutParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
