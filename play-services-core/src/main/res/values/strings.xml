@@ -139,6 +139,7 @@ Please set up a password, PIN, or pattern lock screen."</string>
     <string name="self_check_resolution_battery_optimizations">Touch here to disable battery optimizations. Not doing this may result in misbehaving applications.</string>
 
     <!-- Settings strings -->
+    <string name="data_na">No data available right now</string>
 
     <string name="prefcat_about">About</string>
     <string name="prefcat_components">Components</string>
@@ -168,6 +169,9 @@ Please set up a password, PIN, or pattern lock screen."</string>
 
     <string name="pref_checkin_enable_summary">Registers your device to Google services and creates a unique device identifier. microG strips identifying bits other than your Google account name from registration data.</string>
     <string name="pref_device_registration_android_id">Android ID</string>
+
+    <string name="pref_device_registration_data_title">Device registration data</string>
+    <string name="pref_device_registration_data_summary">Check data shared with Google servers for device registration</string>
 
     <string name="checkin_not_registered">Not registered</string>
     <string name="checkin_last_registration">Last registration: <xliff:g example="Yesterday, 02:20 PM">%1$s</xliff:g></string>
