@@ -62,23 +62,19 @@ class GamesConfigurationService : Service() {
                     }
 
                     MSG_GET_PLAYER -> {
-                        val packageName = msg.data?.getString(MSG_DATA_PACKAGE_NAME)
                         val account = msg.data?.getParcelable<Account>(MSG_DATA_ACCOUNT)
-                        val player = if (packageName != null && account != null) getPlayer(packageName, account) else null
+                        val player = if (account != null) getPlayer(account) else null
                         bundleOf(
-                            MSG_DATA_PACKAGE_NAME to packageName,
                             MSG_DATA_ACCOUNT to account,
                             MSG_DATA_PLAYER to player
                         )
                     }
 
                     MSG_SET_PLAYER -> {
-                        val packageName = msg.data?.getString(MSG_DATA_PACKAGE_NAME)
                         val account = msg.data?.getParcelable<Account>(MSG_DATA_ACCOUNT)
                         val player = msg.data?.getString(MSG_DATA_PLAYER)
-                        if (packageName != null && account != null) setPlayer(packageName, account, player)
+                        if (account != null) setPlayer(account, player)
                         bundleOf(
-                            MSG_DATA_PACKAGE_NAME to packageName,
                             MSG_DATA_ACCOUNT to account,
                             MSG_DATA_PLAYER to player
                         )
@@ -141,18 +137,18 @@ class GamesConfigurationService : Service() {
         return getPackageNameSuffix(packageName) + ":" + account.name
     }
 
-    private fun getPlayer(packageName: String, account: Account): String? {
-        val player = preferences.getString(PREF_PLAYER_PREFIX + getPackageAndAccountSuffix(packageName, account), null)
+    private fun getPlayer(account: Account): String? {
+        val player = preferences.getString(PREF_PLAYER_PREFIX + getPackageAndAccountSuffix(GAMES_PACKAGE_NAME, account), null)
         if (player.isNullOrBlank()) return null
         return player
     }
 
-    private fun setPlayer(packageName: String, account: Account, player: String?) {
+    private fun setPlayer(account: Account, player: String?) {
         val editor: SharedPreferences.Editor = preferences.edit()
         if (player.isNullOrBlank()) {
-            editor.remove(PREF_PLAYER_PREFIX + getPackageAndAccountSuffix(packageName, account))
+            editor.remove(PREF_PLAYER_PREFIX + getPackageAndAccountSuffix(GAMES_PACKAGE_NAME, account))
         } else {
-            editor.putString(PREF_PLAYER_PREFIX + getPackageAndAccountSuffix(packageName, account), player)
+            editor.putString(PREF_PLAYER_PREFIX + getPackageAndAccountSuffix(GAMES_PACKAGE_NAME, account), player)
         }
         editor.apply()
     }
@@ -208,21 +204,19 @@ class GamesConfigurationService : Service() {
             })
         }
 
-        suspend fun getPlayer(context: Context, packageName: String, account: Account): String? {
+        suspend fun getPlayer(context: Context, account: Account): String? {
             return singleRequest(context, Message.obtain().apply {
                 what = MSG_GET_PLAYER
                 data = bundleOf(
-                    MSG_DATA_PACKAGE_NAME to packageName,
                     MSG_DATA_ACCOUNT to account
                 )
             }).data?.getString(MSG_DATA_PLAYER)
         }
 
-        suspend fun setPlayer(context: Context, packageName: String, account: Account, player: String?) {
+        suspend fun setPlayer(context: Context, account: Account, player: String?) {
             singleRequest(context, Message.obtain().apply {
                 what = MSG_SET_PLAYER
                 data = bundleOf(
-                    MSG_DATA_PACKAGE_NAME to packageName,
                     MSG_DATA_ACCOUNT to account,
                     MSG_DATA_PLAYER to player
                 )

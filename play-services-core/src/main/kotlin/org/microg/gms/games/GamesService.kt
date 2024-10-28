@@ -91,7 +91,7 @@ class GamesService : BaseService(TAG, GmsService.GAMES) {
                     return@launchWhenStarted sendSignInRequired()
                 }
 
-                val player = JSONObject(GamesConfigurationService.getPlayer(this@GamesService, packageName, account)).toPlayer()
+                val player = JSONObject(GamesConfigurationService.getPlayer(this@GamesService, account)).toPlayer()
 
                 callback.onPostInitCompleteWithConnectionInfo(
                     CommonStatusCodes.SUCCESS,
