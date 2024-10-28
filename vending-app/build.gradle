@@ -112,6 +112,7 @@ dependencies {
 
     //droidguard
     implementation project(':play-services-droidguard')
+    implementation project(':play-services-tasks-ktx')
 
     //androidx
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
@@ -119,6 +120,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
     implementation "androidx.preference:preference-ktx:$preferenceVersion"
+
+    // tink
+    implementation "com.google.crypto.tink:tink-android:$tinkVersion"
 }
 
 wire {
