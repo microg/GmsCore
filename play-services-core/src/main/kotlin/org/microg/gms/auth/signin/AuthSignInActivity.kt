@@ -8,6 +8,7 @@ package org.microg.gms.auth.signin
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
@@ -24,7 +26,6 @@ import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.SignInAccount
 import com.google.android.gms.auth.api.signin.internal.SignInConfiguration
-import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.common.internal.safeparcel.SafeParcelableSerializer
@@ -36,7 +37,6 @@ import org.microg.gms.auth.AuthConstants
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT
 import org.microg.gms.auth.AuthConstants.DEFAULT_ACCOUNT_TYPE
 import org.microg.gms.auth.login.LoginActivity
-import org.microg.gms.people.DatabaseHelper
 import org.microg.gms.people.PeopleManager
 import org.microg.gms.utils.getApplicationLabel
 
@@ -53,7 +53,7 @@ class AuthSignInActivity : AppCompatActivity() {
             intent?.extras?.also { it.classLoader = SignInConfiguration::class.java.classLoader }?.getParcelable<SignInConfiguration>("config")
         }.getOrNull()
 
-    private val Int.px: Int get() = (this * resources.displayMetrics.density).toInt()
+    private lateinit var accountManager: AccountManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +64,12 @@ class AuthSignInActivity : AppCompatActivity() {
         val packageName = config?.packageName
         if (packageName == null || (packageName != callingActivity?.packageName && callingActivity?.packageName != this.packageName))
             return finishResult(CommonStatusCodes.DEVELOPER_ERROR, "package name mismatch")
-        val accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
+        accountManager = getSystemService<AccountManager>() ?: return finishResult(CommonStatusCodes.INTERNAL_ERROR, "No account manager")
 
+        initView()
+    }
+
+    private fun initView(){
         val accounts = accountManager.getAccountsByType(DEFAULT_ACCOUNT_TYPE)
         if (accounts.isNotEmpty()) {
             val account = config?.options?.account
@@ -121,17 +125,23 @@ class AuthSignInActivity : AppCompatActivity() {
 
     private fun openAccountPicker(packageName: String) {
         val binding = SigninPickerBinding.inflate(layoutInflater)
+        var accountListView: ListView = binding.pickerList
+        binding.isLand = (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE).also {
+            if (it) {
+                accountListView = binding.pickerListLand
+            }
+        }
         binding.appName = packageManager.getApplicationLabel(packageName).toString()
         binding.appIcon = packageManager.getApplicationIcon(packageName)
         val accounts = getSystemService<AccountManager>()!!.getAccountsByType(DEFAULT_ACCOUNT_TYPE) + Account(DEFAULT_ACCOUNT, DEFAULT_ACCOUNT_TYPE)
-        binding.pickerList.adapter = object : ArrayAdapter<Account>(this, 0, accounts) {
+        accountListView.adapter = object : ArrayAdapter<Account>(this, 0, accounts) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val v = convertView ?: layoutInflater.inflate(R.layout.signin_account_row, parent, false)
                 getItem(position)?.let { bindAccountRow(v, it) { _, _ -> notifyDataSetChanged() } }
                 return v
             }
         }
-        binding.pickerList.setOnItemClickListener { parent, view, position, id ->
+        accountListView.setOnItemClickListener { parent, view, position, id ->
             binding.listProgressSpinner = true
             if (accounts[position].name == DEFAULT_ACCOUNT) {
                 openAddAccount()
@@ -229,5 +239,10 @@ class AuthSignInActivity : AppCompatActivity() {
                 finishResult(CommonStatusCodes.CANCELED, "No account and creation cancelled")
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        initView()
     }
 }
