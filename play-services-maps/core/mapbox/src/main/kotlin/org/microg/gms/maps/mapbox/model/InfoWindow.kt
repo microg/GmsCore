@@ -39,7 +39,12 @@ import kotlin.math.*
  */
 
 fun IInfoWindowAdapter.getInfoWindowViewFor(marker: IMarkerDelegate, mapContext: MapContext): View? {
-    getInfoWindow(marker).unwrap<View?>()?.let { return it }
+    getInfoWindow(marker).unwrap<View?>()?.let { view ->
+        return view.apply {
+            // Remove any previous parents mistakenly added by the client
+            parent?.let { (it as ViewManager).removeView(this) }
+        }
+    }
 
     getInfoContents(marker).unwrap<View>()?.let { view ->
         // Detach from previous BubbleLayout parent, if exists
@@ -95,7 +100,7 @@ class InfoWindow internal constructor(
     /**
      * Close this [InfoWindow] if it is visible, otherwise calling this will do nothing.
      *
-     * @param silent `OnInfoWindowCloseListener` is only called if `silent` is not `false`
+     * @param silent `OnInfoWindowCloseListener` is only called if `silent` is `false`
      */
     fun close(silent: Boolean = false) {
         if (isVisible) {
