@@ -194,7 +194,7 @@
             android:exported="false"/>
 
         <!-- Work account store -->
-        <activity android:name="org.microg.vending.ui.VendingActivity"
+        <activity android:name="org.microg.vending.ui.WorkAppsActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.DayNight"
             android:label="@string/vending_activity_name"

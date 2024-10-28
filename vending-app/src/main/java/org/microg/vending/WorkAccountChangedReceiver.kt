@@ -9,7 +9,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import org.microg.gms.auth.AuthConstants
-import org.microg.vending.ui.VendingActivity
+import org.microg.vending.ui.WorkAppsActivity
 
 class WorkAccountChangedReceiver : BroadcastReceiver() {
 
@@ -23,7 +23,7 @@ class WorkAccountChangedReceiver : BroadcastReceiver() {
 
             val componentName = ComponentName(
                 context,
-                VendingActivity::class.java
+                WorkAppsActivity::class.java
             )
             context.packageManager.setComponentEnabledSetting(
                 componentName,

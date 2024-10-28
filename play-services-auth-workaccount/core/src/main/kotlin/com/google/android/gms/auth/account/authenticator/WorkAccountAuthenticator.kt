@@ -20,6 +20,7 @@ import org.microg.gms.common.PackageUtils
 import org.microg.gms.auth.AuthRequest
 import org.microg.gms.auth.AuthResponse
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthenticator(context) {
 
@@ -60,44 +61,7 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
         val oauthToken: String = options.getString(KEY_ACCOUNT_CREATION_TOKEN)!!
 
         try {
-            val authResponse = AuthRequest().fromContext(context)
-                .appIsGms()
-                .callerIsGms()
-                .service("ac2dm")
-                .token(oauthToken).isAccessToken()
-                .addAccount()
-                .getAccountId()
-                .droidguardResults(null)
-                .response
-
-            val accountManager = AccountManager.get(context)
-            if (accountManager.addAccountExplicitly(
-                    Account(authResponse.email, AuthConstants.WORK_ACCOUNT_TYPE),
-                    authResponse.token, Bundle().apply {
-                        // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
-                        if (authResponse.accountId.isNotBlank()) {
-                            putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
-                        }
-                        putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
-                        putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
-                        if (authResponse.services != "android") {
-                            Log.i(TAG, "unexpected 'services' value ${authResponse.services} (usually 'android')")
-                        }
-                    }
-            )) {
-
-                // Notify vending package
-                context.sendBroadcast(
-                    Intent(WORK_ACCOUNT_CHANGED_BOARDCAST).setPackage("com.android.vending")
-                )
-
-                // Report successful creation to caller
-                response.onResult(Bundle().apply {
-                    putString(AccountManager.KEY_ACCOUNT_NAME, authResponse.email)
-                    putString(AccountManager.KEY_ACCOUNT_TYPE, AuthConstants.WORK_ACCOUNT_TYPE)
-                })
-            }
-
+            tryAddAccount(oauthToken, response)
         } catch (exception: Exception) {
             response.onResult(Bundle().apply {
                 putInt(
@@ -114,6 +78,54 @@ class WorkAccountAuthenticator(val context: Context) : AbstractAccountAuthentica
          * like waiting for a response upon `addAccount`, not to be on the main thread.
          */
         return null
+    }
+
+    @Throws(Exception::class)
+    private fun tryAddAccount(
+        oauthToken: String,
+        response: AccountAuthenticatorResponse
+    ) {
+        val authResponse = AuthRequest().fromContext(context)
+            .appIsGms()
+            .callerIsGms()
+            .service("ac2dm")
+            .token(oauthToken).isAccessToken()
+            .addAccount()
+            .getAccountId()
+            .droidguardResults(null)
+            .response
+
+        val accountManager = AccountManager.get(context)
+        if (accountManager.addAccountExplicitly(
+                Account(authResponse.email, AuthConstants.WORK_ACCOUNT_TYPE),
+                authResponse.token, Bundle().apply {
+                    // Work accounts have no SID / LSID ("BAD_COOKIE") and no first/last name.
+                    if (authResponse.accountId.isNotBlank()) {
+                        putString(KEY_GOOGLE_USER_ID, authResponse.accountId)
+                    }
+                    putString(AuthConstants.KEY_ACCOUNT_CAPABILITIES, authResponse.capabilities)
+                    putString(AuthConstants.KEY_ACCOUNT_SERVICES, authResponse.services)
+                    if (authResponse.services != "android") {
+                        Log.i(
+                            TAG,
+                            "unexpected 'services' value ${authResponse.services} (usually 'android')"
+                        )
+                    }
+                }
+            )
+        ) {
+
+            // Notify vending package
+            context.sendBroadcast(
+                Intent(WORK_ACCOUNT_CHANGED_BOARDCAST).setPackage("com.android.vending")
+            )
+
+            // Report successful creation to caller
+            response.onResult(Bundle().apply {
+                putString(AccountManager.KEY_ACCOUNT_NAME, authResponse.email)
+                putString(AccountManager.KEY_ACCOUNT_TYPE, AuthConstants.WORK_ACCOUNT_TYPE)
+            })
+        }
     }
 
     override fun confirmCredentials(
