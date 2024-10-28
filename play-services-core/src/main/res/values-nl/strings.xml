@@ -15,9 +15,7 @@
     <string name="ask_permission_tos">Als u doorgaat, geeft u deze app en Google toestemming uw gegevens te gebruiken in overeenstemming met hun respectieve servicevoorwaarden en privacybeleid.</string>
     <string name="google_account_label">Google</string>
     <string name="sorry">Sorry…</string>
-    <string name="auth_before_connect">An app on your device is trying to sign in to a Google account.
-\n
-\nIf this was intentional, use the <b>Sign in</b> button to connect to Google’s sign-in page, if not, press <b>Cancel</b> to go back to the application that caused this dialog to show up.</string>
+    <string name="auth_before_connect">An app on your device is trying to sign in to a Google account. \n \nIf this was intentional, use the <b>Sign in</b> button to connect to Google’s sign-in page, if not, press <b>Cancel</b> to go back to the application that caused this dialog to show up.</string>
     <string name="auth_connecting">Your device is establishing a connection to Google’s servers to sign you in.
 \n
 \nThis can take a few seconds.</string>
