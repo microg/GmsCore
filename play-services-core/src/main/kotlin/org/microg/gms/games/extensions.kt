@@ -216,7 +216,7 @@ suspend fun performGamesSignIn(
     val authManager = AuthManager(context, account.name, packageName, "oauth2:${realScopes.joinToString(" ")}")
     if (realScopes.size == 1) authManager.setItCaveatTypes("2")
     if (permitted) authManager.isPermitted = true
-    val authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
+    var authResponse = withContext(Dispatchers.IO) { authManager.requestAuthWithBackgroundResolution(true) }
     if (authResponse.auth == null) return false
     if (authResponse.issueAdvice != "stored" || GamesConfigurationService.getPlayer(context, account) == null) {
         suspend fun fetchSelfPlayer() = suspendCoroutine<JSONObject> { continuation ->
